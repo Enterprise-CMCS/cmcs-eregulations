@@ -1,0 +1,13 @@
+diff --git a/regcore_write/views/document.py b/regcore_write/views/document.py
+index e7b80cc..e9ddf0f 100644
+--- a/regcore_write/views/document.py
++++ b/regcore_write/views/document.py
+@@ -17,7 +17,7 @@ REGULATION_SCHEMA = {
+         'children': {
+             'type': 'array',
+             'additionalItems': False,
+-            'items': {'$ref': 'reg_tree_node'}
++            'items': {'type': 'object'}
+         },
+         'label': {
+             'type': 'array',

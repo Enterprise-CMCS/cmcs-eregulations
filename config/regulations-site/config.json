@@ -1,0 +1,4 @@
+{
+    "testUrl": "http://localhost:8000",
+    "frontEndPath": "/app/src/regulations/static/regulations"
+}

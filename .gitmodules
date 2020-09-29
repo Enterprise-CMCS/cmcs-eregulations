@@ -1,0 +1,9 @@
+[submodule "regulations-parser"]
+	path = regulations-parser
+	url = https://github.com/kaitlin/regulations-parser.git
+[submodule "regulations-core"]
+	path = regulations-core
+	url = https://github.com/eregs/regulations-core.git
+[submodule "regulations-site"]
+	path = regulations-site
+	url = https://github.com/eregs/regulations-site.git

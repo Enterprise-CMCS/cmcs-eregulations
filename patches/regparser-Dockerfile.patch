@@ -1,0 +1,20 @@
+diff --git a/Dockerfile b/Dockerfile
+index cb9f59e1..702d80d0 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -1,4 +1,4 @@
+-FROM python:3.5-alpine
++FROM python:3.8-alpine
+ 
+ COPY ["regparser", "/app/src/regparser/"]
+ COPY ["interpparser", "/app/src/interpparser/"]
+@@ -8,8 +8,7 @@ VOLUME ["/app/cache", "/app/output"]
+ WORKDIR /app/src/
+ RUN apk add --update libxslt libxml2-dev libxslt-dev musl-dev gcc git \
+     && pip install --no-cache-dir -r requirements.txt \
+-    && apk del --purge libxml2-dev libxslt-dev musl-dev gcc \
+-    && rm -rf /var/cache/apk/*
++    && pip install --no-cache-dir .
+ 
+ ENV PYTHONUNBUFFERED="1" \
+     DATABASE_URL="sqlite:////app/cache/db.sqlite" \
