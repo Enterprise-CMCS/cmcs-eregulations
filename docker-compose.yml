@@ -1,0 +1,40 @@
+version: '3'
+services:
+  db:
+    image: postgres:9.4
+    environment:
+      POSTGRES_USER: eregs
+      POSTGRES_PASSWORD: sgere
+      POSTGRES_DB: eregs
+    ports:
+      - 5432:5432
+  regulations-core:
+    build:
+      context: ${CORE_CONTEXT:-./regulations-core}
+      dockerfile: ${PWD}/config/regulations-core/Dockerfile
+    volumes:
+      - ${CORE_CONTEXT:-./regulations-core}:/app/src
+      - ${PWD}/config/regulations-core/local_settings.py:/app/src/local_settings.py
+    environment:
+      DATABASE_URL: postgres://eregs:sgere@db/eregs
+      ALLOWED_HOST_LOCAL: regulations-core
+      DJANGO_SETTINGS_MODULE: regcore.settings.pgsql
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+  regulations-site:
+    build:
+      context: ${SITE_CONTEXT:-./regulations-site}
+      dockerfile: ${PWD}/config/regulations-site/Dockerfile
+    volumes:
+      - ${SITE_CONTEXT:-./regulations-site:/app/src}
+      - ${PWD}/config/regulations-site/local_settings.py:/app/src/regulations/local_settings.py
+      - ${PWD}/config/regulations-site/config.json:/app/src/regulations/static/config/config.json
+      - ${PWD}/config/regulations-site/build_static.sh:/usr/bin/build_static.sh
+    environment:
+      EREGS_API_BASE: http://regulations-core:8080/
+    ports:
+      - 8000:8000
+    depends_on:
+      - regulations-core
