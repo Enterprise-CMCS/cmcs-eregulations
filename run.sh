@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $# -eq 0 ]]; then
+  echo "Please enter in an API key as an argument and try again."
+  exit 1
+fi
+
 cd regulations-core
 git apply ../patches/regcore-jsonschema.patch
 cd ..
