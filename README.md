@@ -8,7 +8,7 @@
 **Getting the code**
 
 ```
-git clone --recurse-submodules http://github.com/cmsgov/cmcs-eregulations
+git clone --recurse-submodules https://github.com/cmsgov/cmcs-eregulations
 ```
 
 **Run the script to start eRegs:**
