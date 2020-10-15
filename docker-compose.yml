@@ -14,7 +14,7 @@ services:
       dockerfile: ${PWD}/config/regulations-core/Dockerfile
     volumes:
       - ${CORE_CONTEXT:-./regulations-core}:/app/src
-      - ${PWD}/config/regulations-core/local_settings.py:/app/src/local_settings.py
+      - ./config/regulations-core/local_settings.py:/app/src/local_settings.py
     environment:
       DATABASE_URL: postgres://eregs:sgere@db/eregs
       ALLOWED_HOST_LOCAL: regulations-core
@@ -28,12 +28,14 @@ services:
       context: ${SITE_CONTEXT:-./regulations-site}
       dockerfile: ${PWD}/config/regulations-site/Dockerfile
     volumes:
-      - ${SITE_CONTEXT:-./regulations-site:/app/src}
-      - ${PWD}/config/regulations-site/local_settings.py:/app/src/regulations/local_settings.py
-      - ${PWD}/config/regulations-site/config.json:/app/src/regulations/static/config/config.json
-      - ${PWD}/config/regulations-site/build_static.sh:/usr/bin/build_static.sh
+      - ${SITE_CONTEXT:-./regulations-site}:/app/src
+      - ./config/regulations-site/local_settings.py:/var/lib/eregs/local_settings.py
+      - ./config/regulations-site/config.json:/app/src/regulations/static/config/config.json
+      - ./config/regulations-site/build_static.sh:/usr/bin/build_static.sh
+      - ./guidance:/var/lib/eregs/guidance
     environment:
       EREGS_API_BASE: http://regulations-core:8080/
+      PYTHONPATH: /var/lib/eregs
     ports:
       - 8000:8000
     depends_on:
