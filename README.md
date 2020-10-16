@@ -17,7 +17,7 @@ git clone --recurse-submodules https://github.com/cmsgov/cmcs-eregulations
 ./run.sh <api key>
 ```
 
-** Visit eRegs locally: **
+**Visit eRegs locally:**
 Proceed to http://localhost:8000 in your browser.
 
 **Stopping eRegs**
