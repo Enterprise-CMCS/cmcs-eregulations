@@ -4,6 +4,13 @@ provider:
   name: aws
   runtime: python3.6
 
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+package:
+  individually: true
+
 functions:
   reg_core:
     environment: ${self:custom}
@@ -13,7 +20,7 @@ functions:
         - /app/src/handler.py
     events:
       - http: ANY /
-      - http: ANY {proxy+}
+      - http: 'ANY {proxy+}'
   reg_site:
     environment: ${self:custom}
     handler: handler.reg_site
@@ -22,7 +29,7 @@ functions:
         - /app/src/regulations/handler.py
     events:
       - http: ANY /
-      - http: ANY {proxy+}
+      - http: 'ANY {proxy+}'
 
 plugins:
   - serverless-python-requirements
