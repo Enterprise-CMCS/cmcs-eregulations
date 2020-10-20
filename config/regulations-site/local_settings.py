@@ -15,7 +15,7 @@ SIDEBARS = (
     'regulations.generator.sidebar.analyses.Analyses',
     'regulations.generator.sidebar.help.Help',
     'regulations.generator.sidebar.print_part.PrintPart',
-    'guidance.guidance.Guidance',
+    'cmcs.regulations.sidebar.guidance.Guidance',
 )
 
 TEMPLATES = [
@@ -43,7 +43,7 @@ TEMPLATES = [
         },
         "DIRS": [
             "%s/templates" % BASE_DIR,
-            "/var/lib/eregs/guidance/content",
+            "/var/lib/eregs/cmcs/regulations/sidebar/content",
         ],
     },
 ]
