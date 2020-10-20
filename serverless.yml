@@ -1,0 +1,29 @@
+service: cmcs-eregs
+
+provider:
+  name: aws
+  runtime: python3.6
+
+functions:
+  reg_core:
+    environment: ${self:custom}
+    handler: handler.reg_core
+    package:
+      include:
+        - /app/src/handler.py
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+  reg_site:
+    environment: ${self:custom}
+    handler: handler.reg_site
+    package:
+      include:
+        - /app/src/regulations/handler.py
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
