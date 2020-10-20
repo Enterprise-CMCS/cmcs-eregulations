@@ -1,0 +1,153 @@
+# ------------------------------------------------------------------------------
+# Environment Variables to set at the Project level in Circle CI
+# ------------------------------------------------------------------------------
+#
+# The following should be set for any and all installations using this quickstart.
+#   - CIRCLE_TOKEN:  Create a CircleCI project token with full permissions, and set the value to this value.  See https://circleci.com/docs/2.0/managing-api-tokens/
+#   - AWS_DEFAULT_REGION: Default region when interacting with AWS programmatically.  ex:  us-east-1
+#   - SES_SOURCE_EMAIL_ADDRESS: Email that has been verified in SES for sending notifications..  If you don't set this, email notifications won't work.  ex. myemail@collabralink.com
+#
+# If using cloudtamer.io and CTKey for AWS authentication, set all of the following:
+#   - CTKEY_URL: The url to the cloudtamer installation against which to authenticate; no trailing slash please.  ex. https://cloudtamer.abc.gov
+#   - CTKEY_USERNAME: The cloudtamer username for the deployment user.
+#   - CTKEY_PASSWORD: The password for the CTKEY_USERNAME user.
+#   - CTKEY_ACCOUNT_ID: The account number of the target AWS account.  ex:  1234566789
+#   - CTKEY_IAM_ROLE: The role the deployment user should ask to assume using CTKey.  ex:  ct-abcd-dev-admin
+#
+# If not using cloudtamer, and instead using AWS credentials directly, set all of the following:
+#   - AWS_ACCESS_KEY_ID
+#   - AWS_SECRET_ACCESS_KEY
+#
+# If the deployment user is restricted to a certain path in IAM, set all of the following.  This is not typically required, but is in Greenfield:
+#   - IAM_PATH: The IAM path in which to create all IAM objects; include trailing slash.  ex:  /my/allowed/path/
+#   - IAM_PERMISSIONS_BOUNDARY_POLICY: The name of the IAM policy to serve as the permissions boundary for roles.  ex:  my-delegated-perm-boundary-policy
+#
+# The following are optional, but may be set on a per branch level.  The format is <branchname>_ENV_VARIABLE_NAME.  The following will list variables if wanting to modify master.
+#   - master_ROUTE_53_DOMAIN_NAME: The domain name for the application.  ex: aps.cl-demo.com
+#   - master_ROUTE_53_HOSTED_ZONE_ID: The hosted zone ID backing the master_ROUTE_53_DOMAIN_NAME; required if specifying master_ROUTE_53_DOMAIN_NAME  ex:  ASDFUWEIVNAQWE
+#   - master_CLOUDFRONT_DOMAIN_NAME: The domain name that should be applied to Cloudfront as an alias.  If you specified master_ROUTE_53_DOMAIN_NAME, these should match.  ex:  aps.cl-demo.com
+#   - master_CLOUDFRONT_CERTIFICATE_ARN: The arn of the certificate in ACM that is valid for master_CLOUDFRONT_DOMAIN_NAME.
+# ------------------------------------------------------------------------------
+
+version: 2.0
+
+ignore_branches_that_begin_with_skipci: &ignore_branches_that_begin_with_skipci
+  filters:
+    branches:
+      ignore:
+        - /^skipci.*/ # Ignore any branch that begin with skipci
+
+jobs:
+  verify_branch:
+    docker:
+      - image: circleci/node:12
+        environment:
+          TERM: xterm
+    steps:
+      - run:
+          name: Check branch name is a legal serverless stage name
+          command: |
+            if [[ ! $CIRCLE_BRANCH =~ ^[a-zA-Z][a-zA-Z0-9-]*$ ]] || [[ ${#CIRCLE_BRANCH} -gt 128 ]]; then
+              echo """
+                ------------------------------------------------------------------------------------------------------------------------------
+                ERROR:  Please read below
+                ------------------------------------------------------------------------------------------------------------------------------
+                Bad branch name detected; cannot continue.
+
+                The Serverless Application Framework has a concept of stages that facilitate multiple deployments of the same service.
+                In this setup, the git branch name gets passed to Serverless to serve as the stage name.
+                The stage name (branch name in this case) is tacked onto the end of the service name by Serverless.
+                Therefore, the branch name must be a valid service name.
+
+                From Serverless:
+                  A service name should only contain alphanumeric (case sensitive) and hyphens. It should start with an alphabetic character and shouldnt exceed 128 characters.
+
+                For CircleCI support, please push your code to a new branch with a name that meets Serverless' service name requirements.
+                So, make a new branch with a name that begins with a letter and is made up of only letters, numbers, and hyphens... then delete this branch.
+                ------------------------------------------------------------------------------------------------------------------------------
+              """
+              exit 1
+            fi
+  lock:
+    docker:
+      - image: circleci/node:12
+        environment:
+          TERM: xterm
+    steps:
+      - checkout
+      - run:
+          name: lock this branch to prevent concurrent builds
+          command: |
+            ./.circleci/circle-lock.sh --branch $CIRCLE_BRANCH
+  build-frontend:
+    # Build front end assetts etc.
+  package:
+    # Build a package for deployment using sls package
+    # save for later and use if already exists (commit hash as ID?)
+    steps:
+      # Does this work with serverless? or will it just rebuild?
+      - restore_cache:
+          keys:
+            - serverless-cache3-{{ arch }}-{{ .Revision }}
+      - run:
+          name: package serverless function
+          # obviously needs to be updated to use correct everything
+          command: serverless package --stage $STAGE_PREFIX$CIRCLE_BRANCH
+      - save_cache:
+          key: serverless-cache3-{{ arch }}-{{ .Revision }}
+          paths:
+            - ./.serverless
+  deploy:
+    docker:
+      - image: circleci/node:12
+        environment:
+          TERM: xterm
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-tools-cache3-{{ arch }}-{{ .Branch }}-{{ checksum "./.circleci/yarn.lock" }}
+      - run:
+          name: install tools
+          command: |
+            pushd .circleci
+              if [ ! -d node_modules ]; then
+                npm ci
+              fi
+            popd
+            echo "export PATH=$(pwd)/.circleci/node_modules/.bin:\$PATH" >> $BASH_ENV
+      - save_cache:
+          key: npm-tools-cache3-{{ arch }}-{{ .Branch }}-{{ checksum "./.circleci/yarn.lock" }}
+          paths:
+            - ./.circleci/node_modules
+      - run:
+          name: set branch specific environment variables
+          command: ./.circleci/set_vars.sh
+      - run: ./.circleci/ctkey.sh
+      - run:
+          name: deploy
+          no_output_timeout: 60m
+          command: |
+            # When deploying multiple copies of this quickstart to the same AWS Account (not ideal), a prefix helps prevent stepping on each other.
+            # This can optionally be set as an environment variable in the CircleCI Project Settings
+            ./deploy.sh $STAGE_PREFIX$CIRCLE_BRANCH
+      - run:
+          name: Print the application endpoint
+          command: |
+            cd services
+            ./output.sh ui CloudFrontEndpointUrl $STAGE_PREFIX$CIRCLE_BRANCH
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - verify_branch:
+          <<: *ignore_branches_that_begin_with_skipci
+      - lock:
+          requires:
+          <<: *ignore_branches_that_begin_with_skipci
+      - deploy:
+          requires:
+            - lock
+            - verify_branch
+          <<: *ignore_branches_that_begin_with_skipci
