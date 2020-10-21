@@ -79,8 +79,27 @@ jobs:
           name: lock this branch to prevent concurrent builds
           command: |
             ./.circleci/circle-lock.sh --branch $CIRCLE_BRANCH
-  build-frontend:
+  build-static:
     # Build front end assetts etc.
+    steps:
+      - restore_cache:
+          keys:
+            - static-cache3-{{ .Revision }}
+      - run:
+          name: create static assetts
+          # good spot for a makefile
+          command: |
+            pushd regulations-site
+                npm install
+                pushd regulations/static/config
+                    npm install
+                    grunt
+                popd
+            popd
+      - save_cache:
+          key: static-cache3-{{ .Revision }}
+          paths:
+            - ./.serverless
   package:
     # Build a package for deployment using sls package
     # save for later and use if already exists (commit hash as ID?)
@@ -130,12 +149,10 @@ jobs:
           command: |
             # When deploying multiple copies of this quickstart to the same AWS Account (not ideal), a prefix helps prevent stepping on each other.
             # This can optionally be set as an environment variable in the CircleCI Project Settings
-            ./deploy.sh $STAGE_PREFIX$CIRCLE_BRANCH
+            serverless deploy -p .serverless --stage $STAGE_PREFIX$CIRCLE_BRANCH
       - run:
           name: Print the application endpoint
-          command: |
-            cd services
-            ./output.sh ui CloudFrontEndpointUrl $STAGE_PREFIX$CIRCLE_BRANCH
+          command: serverless info --stage $STAGE_PREFIX$CIRCLE_BRANCH -v
 
 workflows:
   version: 2
