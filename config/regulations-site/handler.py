@@ -13,4 +13,4 @@ def reg_site(event, context):
             raise ImportError(
                 "Couldn't import Django.
             )
-execute_from_command_line(sys.argv)
+execute_from_command_line(['manage.py', 'runserver')

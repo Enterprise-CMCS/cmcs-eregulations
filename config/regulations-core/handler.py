@@ -11,6 +11,6 @@ def reg_core(event, context):
             import django
         except ImportError:
             raise ImportError(
-                "Couldn't import Django.
+                "Couldn't import Django."
             )
 execute_from_command_line(['manage.py', 'runserver'])
