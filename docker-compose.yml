@@ -15,6 +15,7 @@ services:
     volumes:
       - ${CORE_CONTEXT:-./regulations-core}:/app/src
       - ./config/regulations-core/local_settings.py:/app/src/local_settings.py
+      - ./config/regulations-core/handler.py:/app/src/handler.py
     environment:
       DATABASE_URL: postgres://eregs:sgere@db/eregs
       ALLOWED_HOST_LOCAL: regulations-core
@@ -30,6 +31,7 @@ services:
     volumes:
       - ${SITE_CONTEXT:-./regulations-site}:/app/src
       - ./config/regulations-site/local_settings.py:/var/lib/eregs/local_settings.py
+      - ./config/regulations-site/handler.py:/app/src/regulations/handler.py
       - ./config/regulations-site/config.json:/app/src/regulations/static/config/config.json
       - ./config/regulations-site/build_static.sh:/usr/bin/build_static.sh
       - ./guidance:/var/lib/eregs/cmcs/regulations/sidebar
