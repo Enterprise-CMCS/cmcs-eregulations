@@ -42,3 +42,11 @@ services:
       - 8000:8000
     depends_on:
       - regulations-core
+  parser-frontend:
+    build:
+      context: ${PARSER_CONTEXT:-./parser-frontend}
+      dockerfile: ${PWD}/parser-frontend/Dockerfile
+    volumes:
+      - .:/code
+    ports:
+      - 5000:5000
