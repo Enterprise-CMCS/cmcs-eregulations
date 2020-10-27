@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>eRegs Parser</title>
+  </head>
+  <body>
+    <div class="formwrapper">
+      <h1>eRegs Parser</h1>
+      <form method="POST" action="/">
+        <div class="form-field">{{ form.api_key.label }} {{ form.api_key }}</div>
+        <div class="form-field">{{ form.title.label }} {{ form.title }}</div>
+        <div class="form-field">{{ form.part.label }} {{ form.part }}</div>
+        <div class="form-field">{{ form.output.label }} {{ form.output }}</div>
+        {{ form.submit }}
+      </form>
+    </div>
+  </body>
+</html>
