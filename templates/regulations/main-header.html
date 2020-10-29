@@ -2,7 +2,7 @@
     <div class="title">
         <h1 class="site-title"><a href="{% url 'universal_landing' %}"><span class="e">e</span>Regulations</a></h1>
         {% if meta.cfr_title_number %}
-        <h2 class="reg-title"><a href="{% url 'regulation_landing_view' reg_part %}">{{ meta.cfr_title_number }} CFR Part {{ reg_part }} {{ main_content_context.tree.children.0.children.0.title }} {% if meta.reg_letter %}(Regulation {{ meta.reg_letter }}){% endif %}</a></h2>
+        <h2 class="reg-title"><a href="{% url 'regulation_landing_view' reg_part %}">{{ meta.cfr_title_number }} CFR Part {% filter cut:"§ " %}{% firstof main_content_context.tree.children.0.children.0.title reg_part %}{% endfilter %} {% if meta.reg_letter %}(Regulation {{ meta.reg_letter }}){% endif %}</a></h2>
         {% endif %}
     </div> <!-- /reg-title -->
     <nav class="app-nav">
