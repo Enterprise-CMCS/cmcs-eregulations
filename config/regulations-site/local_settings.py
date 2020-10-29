@@ -43,6 +43,7 @@ TEMPLATES = [
         },
         "DIRS": [
             "%s/templates" % BASE_DIR,
+            "/var/lib/eregs/cmcs/templates",
             "/var/lib/eregs/cmcs/regulations/sidebar/content",
         ],
     },

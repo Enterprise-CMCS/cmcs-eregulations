@@ -35,6 +35,7 @@ services:
       - ./config/regulations-site/config.json:/app/src/regulations/static/config/config.json
       - ./config/regulations-site/build_static.sh:/usr/bin/build_static.sh
       - ./guidance:/var/lib/eregs/cmcs/regulations/sidebar
+      - ./templates:/var/lib/eregs/cmcs/templates
     environment:
       EREGS_API_BASE: http://regulations-core:8080/
       PYTHONPATH: /var/lib/eregs
