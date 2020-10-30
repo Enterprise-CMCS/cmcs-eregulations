@@ -1,0 +1,7 @@
+cached_property
+django==1.11
+django-mptt==0.8.6
+jsonschema
+six
+webargs
+psycopg2-binary

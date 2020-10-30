@@ -1,0 +1,87 @@
+service: cmcs-eregs
+
+provider:
+  name: aws
+  runtime: python3.6
+
+package:
+  individually: true
+
+functions:
+  reg_core:
+    environment: ${self:custom}
+    handler: handler.reg_core
+    package:
+      include:
+        - handler.py
+        - ../../regulations-core/**
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+
+resources:
+  # =============================================================================================
+  # Aurora DB
+  # =============================================================================================
+  AuroraRDSClusterParameter:
+    Type: AWS::RDS::DBClusterParameterGroup
+    Properties:
+      Description: Parameter group for the Serverless Aurora RDS DB.
+      Family: aurora5.7
+      Parameters:
+        character_set_database: "utf32"
+
+  AuroraRDSInstanceParameter:
+    Type: AWS::RDS::DBParameterGroup
+    Properties:
+      Description: Parameter group for the Serverless Aurora RDS DB.
+      Family: aurora5.7
+      Parameters:
+        sql_mode: IGNORE_SPACE
+        max_connections: 100
+        wait_timeout: 900
+        interactive_timeout: 900
+
+  AuroraRDSCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      MasterUsername: ${self:custom.settings.USERNAME}
+      MasterUserPassword: !Ref DbUserPasswordParameterStore
+      DBSubnetGroupName:
+        Ref: ServerlessSubnetGroup
+      Engine: aurora
+      EngineVersion: "5.7"
+      DatabaseName: ${self:custom.settings.DB_NAME}
+      BackupRetentionPeriod: 3
+      DBClusterParameterGroupName:
+        Ref: AuroraRDSClusterParameter
+      VpcSecurityGroupIds:
+        - !Ref 'ServerlessSecurityGroup'
+
+  AuroraRDSInstance:
+    DependsOn: ServerlessVPCGA
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t2.small
+      DBSubnetGroupName:
+        Ref: ServerlessSubnetGroup
+      Engine: aurora
+      EngineVersion: "5.7"
+      PubliclyAccessible: true
+      DBParameterGroupName:
+        Ref: AuroraRDSInstanceParameter
+      DBClusterIdentifier:
+        Ref: AuroraRDSCluster
+
+Outputs:
+  AuroraHost:
+      Value: !GetAtt [AuroraRDSCluster, Endpoint.Address]
+      Description: The host address of the Aurora Cluster
+
+  AuroraPort:
+      Value: !GetAtt [AuroraRDSCluster, Endpoint.Port]
+      Description: The port of the Aurora Cluster
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
