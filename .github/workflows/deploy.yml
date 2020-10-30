@@ -1,0 +1,40 @@
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths:
+      - 'regulations-*/**'
+      - 'config/**'
+      - 'guidance/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: cache tools
+        uses: actions/cache@v2
+        with:
+          path: |
+            .github/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('./.github/yarn.lock') }}
+      - name: install tools
+        run: |
+          pushd .github
+            if [ ! -d node_modules ]; then
+              yarn install --froze-lockfile
+            fi
+          popd
+          echo "PATH=$(pwd)/.github/node_modules/.bin:\$PATH" >> set.env.sh
+      # should build first and save the artifact
+      - name: deploy database
+        run: |
+          pushd config/database
+          serverless deploy
+          popd
