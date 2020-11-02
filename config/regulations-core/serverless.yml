@@ -2,85 +2,144 @@ service: cmcs-eregs
 
 provider:
   name: aws
-  runtime: python3.6
+  runtime: python3.8
+  region: us-east-1
 
 package:
   individually: true
 
+custom:
+  wsgi:
+    app: handler.application
+    packRequirements: false
+  settings:
+    DB_NAME: eregs
+    USERNAME: eregsuser
+
 functions:
   reg_core:
-    environment: ${self:custom}
-    handler: handler.reg_core
-    package:
-      include:
-        - handler.py
-        - ../../regulations-core/**
+    environment:
+      DB_NAME: ${self:custom.settings.DB_NAME}
+      DB_USER: ${self:custom.settings.USERNAME}
+      DB_PASSWORD: !Ref DbUserPasswordParameterStore
+      DB_HOST: !GetAtt [AuroraRDSCluster, Endpoint.Address]
+      DB_PORT: !GetAtt [AuroraRDSCluster, Endpoint.Port]
+    handler: wsgi.handler
+    #package:
+      #include:
+        #- handler.py
+        #- local_settings.py
+        #- ../../regulations-core/regcore/**
+        #- ../../regulations-core/regcore_pgsql/**
+        #- ../../regulations-core/regcore_read/**
+        #- ../../regulations-core/regcore_write/**
     events:
       - http: ANY /
       - http: ANY {proxy+}
 
 resources:
-  # =============================================================================================
-  # Aurora DB
-  # =============================================================================================
-  AuroraRDSClusterParameter:
-    Type: AWS::RDS::DBClusterParameterGroup
-    Properties:
-      Description: Parameter group for the Serverless Aurora RDS DB.
-      Family: aurora5.7
-      Parameters:
-        character_set_database: "utf32"
 
-  AuroraRDSInstanceParameter:
-    Type: AWS::RDS::DBParameterGroup
-    Properties:
-      Description: Parameter group for the Serverless Aurora RDS DB.
-      Family: aurora5.7
-      Parameters:
-        sql_mode: IGNORE_SPACE
-        max_connections: 100
-        wait_timeout: 900
-        interactive_timeout: 900
+  Parameters:
+    DbUserPasswordParameterStore:
+      Description: VCTool Database Password; Pulled from Parameter Store
+      Type: AWS::SSM::Parameter::Value<String>
+      #NoEcho: true
+      Default: /eregulations/db/password
 
-  AuroraRDSCluster:
-    Type: AWS::RDS::DBCluster
-    Properties:
-      MasterUsername: ${self:custom.settings.USERNAME}
-      MasterUserPassword: !Ref DbUserPasswordParameterStore
-      DBSubnetGroupName:
-        Ref: ServerlessSubnetGroup
-      Engine: aurora
-      EngineVersion: "5.7"
-      DatabaseName: ${self:custom.settings.DB_NAME}
-      BackupRetentionPeriod: 3
-      DBClusterParameterGroupName:
-        Ref: AuroraRDSClusterParameter
-      VpcSecurityGroupIds:
-        - !Ref 'ServerlessSecurityGroup'
+  Resources: 
+    ServerlessVPC:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: 10.0.0.0/16
+        EnableDnsSupport: true
+        EnableDnsHostnames: true
+        InstanceTenancy: default
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessVPC"
 
-  AuroraRDSInstance:
-    DependsOn: ServerlessVPCGA
-    Type: AWS::RDS::DBInstance
-    Properties:
-      DBInstanceClass: db.t2.small
-      DBSubnetGroupName:
-        Ref: ServerlessSubnetGroup
-      Engine: aurora
-      EngineVersion: "5.7"
-      PubliclyAccessible: true
-      DBParameterGroupName:
-        Ref: AuroraRDSInstanceParameter
-      DBClusterIdentifier:
-        Ref: AuroraRDSCluster
+    ServerlessSubnetA:
+      DependsOn: ServerlessVPC
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: ServerlessVPC
+        AvailabilityZone: ${self:provider.region}a
+        CidrBlock: 10.0.0.0/24
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSubnetA"
 
-Outputs:
-  AuroraHost:
-      Value: !GetAtt [AuroraRDSCluster, Endpoint.Address]
-      Description: The host address of the Aurora Cluster
+    ServerlessSubnetB:
+      DependsOn: ServerlessVPC
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: ServerlessVPC
+        AvailabilityZone: ${self:provider.region}b
+        CidrBlock: 10.0.1.0/24
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSubnetB"
 
-  AuroraPort:
-      Value: !GetAtt [AuroraRDSCluster, Endpoint.Port]
-      Description: The port of the Aurora Cluster
+    ServerlessSubnetGroup:
+      Type: AWS::RDS::DBSubnetGroup
+      Properties:
+        DBSubnetGroupDescription: "RDS Subnet Group"
+        SubnetIds:
+          - Ref: ServerlessSubnetA
+          - Ref: ServerlessSubnetB
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSubnetGroup"
+    # =============================================================================================
+    # Aurora DB
+    # =============================================================================================
+
+    AuroraRDSClusterParameter:
+      Type: AWS::RDS::DBClusterParameterGroup
+      Properties:
+        Description: Parameter group for the Serverless Aurora RDS DB.
+        Family: aurora5.6
+        Parameters:
+          character_set_database: "utf32"
+
+    AuroraRDSInstanceParameter:
+      Type: AWS::RDS::DBParameterGroup
+      Properties:
+        Description: Parameter group for the Serverless Aurora RDS DB.
+        Family: aurora5.6
+        Parameters:
+          sql_mode: IGNORE_SPACE
+          max_connections: 100
+          wait_timeout: 900
+          interactive_timeout: 900
+
+    AuroraRDSCluster:
+      Type: AWS::RDS::DBCluster
+      Properties:
+        MasterUsername: ${self:custom.settings.USERNAME}
+        MasterUserPassword: !Ref DbUserPasswordParameterStore
+        DBSubnetGroupName:
+          Ref: ServerlessSubnetGroup
+        Engine: aurora
+        EngineVersion: "5.6"
+        DatabaseName: ${self:custom.settings.DB_NAME}
+        BackupRetentionPeriod: 3
+        DBClusterParameterGroupName:
+          Ref: AuroraRDSClusterParameter
+
+    AuroraRDSInstance:
+      Type: AWS::RDS::DBInstance
+      Properties:
+        DBInstanceClass: db.t2.small
+        Engine: aurora
+        EngineVersion: "5.6"
+        PubliclyAccessible: false
+        DBParameterGroupName:
+          Ref: AuroraRDSInstanceParameter
+        DBClusterIdentifier:
+          Ref: AuroraRDSCluster
 
 plugins:
   - serverless-python-requirements

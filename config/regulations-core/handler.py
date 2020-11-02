@@ -1,16 +1,14 @@
-#!/usr/bin/env python
-import os
-import sys
+"""
+WSGI config for serverless_django project.
+It exposes the WSGI callable as a module-level variable named ``application``.
+For more information on this file, see
+https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/
+"""
 
-def reg_core(event, context):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "regcore.settings.base") 
-    try:
-        from django.core.management import excecute_from_command_line
-    except ImportError:
-        try:
-            import django
-        except ImportError:
-            raise ImportError(
-                "Couldn't import Django."
-            )
-execute_from_command_line(['manage.py', 'runserver'])
+import os
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "regcore.settings.pgsql") 
+
+application = get_wsgi_application()
