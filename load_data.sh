@@ -6,7 +6,7 @@ mkdir -p output
 # --rm removes the container after execution
 # -it makes the container interactive (particularly useful with --debug)
 # -v mounts volumes for cache, output, and copies in the local settings
-if [[ $# -ne 5 ]]; then
+if [[ $# -lt 5 ]]; then
   echo "Usage: ./load_data.sh [API-KEY] pipeline [TITLE] [PART] http://localhost:8080" 
   exit 1
 fi
