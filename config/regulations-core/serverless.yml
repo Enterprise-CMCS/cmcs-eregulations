@@ -15,6 +15,7 @@ custom:
   settings:
     DB_NAME: eregs
     USERNAME: eregsuser
+    ALLOWED_HOST: '.amazonaws.com'
 
 functions:
   reg_core:
@@ -22,20 +23,33 @@ functions:
       DB_NAME: ${self:custom.settings.DB_NAME}
       DB_USER: ${self:custom.settings.USERNAME}
       DB_PASSWORD: !Ref DbUserPasswordParameterStore
-      DB_HOST: !GetAtt [AuroraRDSCluster, Endpoint.Address]
-      DB_PORT: !GetAtt [AuroraRDSCluster, Endpoint.Port]
+      DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
+      DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+      ALLOWED_HOST: '.amazonaws.com'
     handler: wsgi.handler
-    #package:
-      #include:
-        #- handler.py
-        #- local_settings.py
-        #- ../../regulations-core/regcore/**
-        #- ../../regulations-core/regcore_pgsql/**
-        #- ../../regulations-core/regcore_read/**
-        #- ../../regulations-core/regcore_write/**
+    vpc:
+      securityGroupIds:
+        - !Ref ServerlessSecurityGroup
+      subnetIds:
+        - !Ref ServerlessSubnetA
+        - !Ref ServerlessSubnetB
     events:
       - http: ANY /
       - http: ANY {proxy+}
+  reg_core_migrate:
+    environment:
+      DB_NAME: ${self:custom.settings.DB_NAME}
+      DB_USER: ${self:custom.settings.USERNAME}
+      DB_PASSWORD: !Ref DbUserPasswordParameterStore
+      DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
+      DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+    vpc:
+      securityGroupIds:
+        - !Ref ServerlessSecurityGroup
+      subnetIds:
+        - !Ref ServerlessSubnetA
+        - !Ref ServerlessSubnetB
+    handler: migrate.handler
 
 resources:
 
@@ -47,6 +61,7 @@ resources:
       Default: /eregulations/db/password
 
   Resources: 
+
     ServerlessVPC:
       Type: AWS::EC2::VPC
       Properties:
@@ -57,6 +72,22 @@ resources:
         Tags:
           - Key: "Name"
             Value: "ServerlessVPC"
+
+    ServerlessSecurityGroup:
+      DependsOn: ServerlessVPC
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: SecurityGroup for Serverless Functions
+        VpcId:
+          Ref: ServerlessVPC
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: '0'
+            ToPort: '65535'
+            CidrIp: "0.0.0.0/0"
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSecurityGroup"
 
     ServerlessSubnetA:
       DependsOn: ServerlessVPC
@@ -96,50 +127,79 @@ resources:
     # Aurora DB
     # =============================================================================================
 
-    AuroraRDSClusterParameter:
-      Type: AWS::RDS::DBClusterParameterGroup
-      Properties:
-        Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora5.6
-        Parameters:
-          character_set_database: "utf32"
+    #AuroraRDSClusterParameter:
+    #  Type: AWS::RDS::DBClusterParameterGroup
+    #  Properties:
+    #    Description: Parameter group for the Serverless Aurora RDS DB.
+    #    Family: aurora-postgresql9.6
+    #    Parameters:
+    #      rds.force_ssl: 1
 
-    AuroraRDSInstanceParameter:
-      Type: AWS::RDS::DBParameterGroup
-      Properties:
-        Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora5.6
-        Parameters:
-          sql_mode: IGNORE_SPACE
-          max_connections: 100
-          wait_timeout: 900
-          interactive_timeout: 900
+    #AuroraRDSInstanceParameter:
+    #  Type: AWS::RDS::DBParameterGroup
+    #  Properties:
+    #    Description: Parameter group for the Serverless Aurora RDS DB.
+    #    Family: aurora-postgresql9.6
+    #    Parameters:
+    #      shared_preload_libraries: auto_explain,pg_stat_statements,pg_hint_plan,pgaudit
+    #      log_statement: "ddl"
+    #      log_connections: 1
+    #      log_disconnections: 1
+    #      log_lock_waits: 1
+    #      log_min_duration_statement: 5000
+    #      auto_explain.log_min_duration: 5000
+    #      auto_explain.log_verbose: 1
+    #      log_rotation_age: 1440
+    #      log_rotation_size: 102400
+    #      rds.log_retention_period: 10080
+    #      random_page_cost: 1
+    #      track_activity_query_size: 16384
+    #      idle_in_transaction_session_timeout: 7200000
+    #      statement_timeout: 7200000
+    #      search_path: '"$user",public'
 
-    AuroraRDSCluster:
-      Type: AWS::RDS::DBCluster
-      Properties:
-        MasterUsername: ${self:custom.settings.USERNAME}
-        MasterUserPassword: !Ref DbUserPasswordParameterStore
-        DBSubnetGroupName:
-          Ref: ServerlessSubnetGroup
-        Engine: aurora
-        EngineVersion: "5.6"
-        DatabaseName: ${self:custom.settings.DB_NAME}
-        BackupRetentionPeriod: 3
-        DBClusterParameterGroupName:
-          Ref: AuroraRDSClusterParameter
+    #RDSResource:
+    #  Type: AWS::RDS::DBCluster
+    #  Properties:
+    #    MasterUsername: ${self:custom.settings.USERNAME}
+    #    MasterUserPassword: !Ref DbUserPasswordParameterStore
+    #    DBSubnetGroupName:
+    #      Ref: ServerlessSubnetGroup
+    #    Engine: aurora-postgresql
+    #    EngineVersion: "9.6.16"
+    #    DatabaseName: ${self:custom.settings.DB_NAME}
+    #    BackupRetentionPeriod: 3
+    #    DBClusterParameterGroupName:
+    #      Ref: AuroraRDSClusterParameter
+    #    VpcSecurityGroupIds:
+    #      - !Ref 'ServerlessSecurityGroup'
 
-    AuroraRDSInstance:
+    #AuroraRDSInstance:
+    #  Type: AWS::RDS::DBInstance
+    #  Properties:
+    #    DBInstanceClass: db.r4.large
+    #    Engine: aurora-postgresql
+    #    EngineVersion: "9.6.16"
+    #    PubliclyAccessible: false
+    #    DBParameterGroupName:
+    #      Ref: AuroraRDSInstanceParameter
+    #    DBClusterIdentifier:
+    #      Ref: RDSResource
+
+    RDSResource:
       Type: AWS::RDS::DBInstance
       Properties:
-        DBInstanceClass: db.t2.small
-        Engine: aurora
-        EngineVersion: "5.6"
+        DBInstanceClass: db.t2.micro
+        MasterUsername: ${self:custom.settings.USERNAME}
+        MasterUserPassword: !Ref DbUserPasswordParameterStore
+        DBName: ${self:custom.settings.DB_NAME}
+        Engine: postgres
         PubliclyAccessible: false
-        DBParameterGroupName:
-          Ref: AuroraRDSInstanceParameter
-        DBClusterIdentifier:
-          Ref: AuroraRDSCluster
+        AllocatedStorage: 20
+        DBSubnetGroupName:
+          Ref: ServerlessSubnetGroup
+        VPCSecurityGroups:
+          - !Ref 'ServerlessSecurityGroup'
 
 plugins:
   - serverless-python-requirements

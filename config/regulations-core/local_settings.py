@@ -2,7 +2,7 @@ import os
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*.amazonaws.com',]
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),]
 
 DATABASES = {
     'default': {
