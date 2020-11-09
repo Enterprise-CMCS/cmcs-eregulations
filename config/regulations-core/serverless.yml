@@ -22,9 +22,11 @@ functions:
     environment:
       DB_NAME: ${self:custom.settings.DB_NAME}
       DB_USER: ${self:custom.settings.USERNAME}
-      DB_PASSWORD: !Ref DbUserPasswordParameterStore
+      DB_PASSWORD: ${ssm:/eregulations/db/password~true}
       DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
       DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+      HTTP_AUTH_USER: ${ssm:/eregulations/http/user~true}
+      HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password~true}
       ALLOWED_HOST: '.amazonaws.com'
     handler: wsgi.handler
     vpc:
@@ -40,7 +42,7 @@ functions:
     environment:
       DB_NAME: ${self:custom.settings.DB_NAME}
       DB_USER: ${self:custom.settings.USERNAME}
-      DB_PASSWORD: !Ref DbUserPasswordParameterStore
+      DB_PASSWORD: ${ssm:/eregulations/db/password~true}
       DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
       DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
     vpc:
@@ -52,13 +54,6 @@ functions:
     handler: migrate.handler
 
 resources:
-
-  Parameters:
-    DbUserPasswordParameterStore:
-      Description: VCTool Database Password; Pulled from Parameter Store
-      Type: AWS::SSM::Parameter::Value<String>
-      #NoEcho: true
-      Default: /eregulations/db/password
 
   Resources: 
 
@@ -191,7 +186,7 @@ resources:
       Properties:
         DBInstanceClass: db.t2.micro
         MasterUsername: ${self:custom.settings.USERNAME}
-        MasterUserPassword: !Ref DbUserPasswordParameterStore
+        MasterUserPassword: ${ssm:/eregulations/db/password~true}
         DBName: ${self:custom.settings.DB_NAME}
         Engine: postgres
         PubliclyAccessible: false
