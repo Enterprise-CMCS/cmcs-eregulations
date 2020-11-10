@@ -46,7 +46,6 @@ TEMPLATES = [
         },
         "DIRS": [
             "%s/templates" % BASE_DIR,
-            "/var/task/cmcs/regulations/sidebar/content",
             os.environ.get("SIDEBAR_CONTENT_DIR"),
         ],
     },
