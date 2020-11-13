@@ -2,7 +2,6 @@ from flask import Flask, request, render_template
 from wtforms import Form, IntegerField, StringField, SubmitField, validators
 from parsereg import ParseReg
 import os
-from subprocess import Popen, PIPE
 app = Flask(__name__)
 
 class ParserForm(Form):
