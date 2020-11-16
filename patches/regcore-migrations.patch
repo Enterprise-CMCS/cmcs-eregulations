@@ -1,0 +1,106 @@
+diff --git a/regcore/migrations/0001_initial.py b/regcore/migrations/0001_initial.py
+index 1ddc1c6..80859e8 100644
+--- a/regcore/migrations/0001_initial.py
++++ b/regcore/migrations/0001_initial.py
+@@ -70,14 +70,14 @@ class Migration(migrations.Migration):
+             name='regulation',
+             index_together=set([('version', 'label_string')]),
+         ),
+-        migrations.AlterUniqueTogether(
+-            name='layer',
+-            unique_together=set([('version', 'name', 'label')]),
+-        ),
+-        migrations.AlterIndexTogether(
+-            name='layer',
+-            index_together=set([('version', 'name', 'label')]),
+-        ),
++        # migrations.AlterUniqueTogether(
++        #     name='layer',
++        #     unique_together=set([('version', 'name', 'label')]),
++        # ),
++        # migrations.AlterIndexTogether(
++        #     name='layer',
++        #     index_together=set([('version', 'name', 'label')]),
++        # ),
+         migrations.AlterUniqueTogether(
+             name='diff',
+             unique_together=set([('label', 'old_version', 'new_version')]),
+diff --git a/regcore/migrations/0006_auto_20160314_1126.py b/regcore/migrations/0006_auto_20160314_1126.py
+index 8c24a7b..0d6c176 100644
+--- a/regcore/migrations/0006_auto_20160314_1126.py
++++ b/regcore/migrations/0006_auto_20160314_1126.py
+@@ -23,12 +23,12 @@ class Migration(migrations.Migration):
+             name='parent',
+             field=mptt.fields.TreeForeignKey(related_name='children', blank=True, to='regcore.Regulation', null=True),
+         ),
+-        migrations.AlterUniqueTogether(
+-            name='layer',
+-            unique_together=set()
+-        ),
+-        migrations.AlterIndexTogether(
+-            name='layer',
+-            index_together=set()
+-        ),
++        # migrations.AlterUniqueTogether(
++        #     name='layer',
++        #     unique_together=set()
++        # ),
++        # migrations.AlterIndexTogether(
++        #     name='layer',
++        #     index_together=set()
++        # ),
+     ]
+diff --git a/regcore/migrations/0008_auto_20160314_1144.py b/regcore/migrations/0008_auto_20160314_1144.py
+index 0206450..d161ac9 100644
+--- a/regcore/migrations/0008_auto_20160314_1144.py
++++ b/regcore/migrations/0008_auto_20160314_1144.py
+@@ -11,14 +11,14 @@ class Migration(migrations.Migration):
+     ]
+ 
+     operations = [
+-        migrations.AlterUniqueTogether(
+-            name='layer',
+-            unique_together=set([('name', 'reference')]),
+-        ),
+-        migrations.AlterIndexTogether(
+-            name='layer',
+-            index_together=set([('name', 'reference')]),
+-        ),
++        # migrations.AlterUniqueTogether(
++        #     name='layer',
++        #     unique_together=set([('name', 'reference')]),
++        # ),
++        # migrations.AlterIndexTogether(
++        #     name='layer',
++        #     index_together=set([('name', 'reference')]),
++        # ),
+         migrations.AlterField(
+             model_name='layer',
+             name='label',
+diff --git a/regcore/migrations/0013_remove_models.py b/regcore/migrations/0013_remove_models.py
+index 383497e..c7d1869 100644
+--- a/regcore/migrations/0013_remove_models.py
++++ b/regcore/migrations/0013_remove_models.py
+@@ -14,14 +14,14 @@ class Migration(migrations.Migration):
+         migrations.DeleteModel(
+             name='Preamble',
+         ),
+-        migrations.AlterUniqueTogether(
+-            name='regulation',
+-            unique_together=set([]),
+-        ),
+-        migrations.AlterIndexTogether(
+-            name='regulation',
+-            index_together=set([]),
+-        ),
++        # migrations.AlterUniqueTogether(
++        #     name='regulation',
++        #     unique_together=set([]),
++        # ),
++        # migrations.AlterIndexTogether(
++        #     name='regulation',
++        #     index_together=set([]),
++        # ),
+         migrations.RemoveField(
+             model_name='regulation',
+             name='parent',

@@ -18,6 +18,9 @@ SIDEBARS = (
     'cmcs.regulations.sidebar.guidance.Guidance',
 )
 
+STATIC_URL = os.environ.get("STATIC_URL", None)
+STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -43,7 +46,7 @@ TEMPLATES = [
         },
         "DIRS": [
             "%s/templates" % BASE_DIR,
-            "/var/lib/eregs/cmcs/regulations/sidebar/content",
+            os.environ.get("SIDEBAR_CONTENT_DIR"),
         ],
     },
 ]

@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: postgres:9.4
+    image: postgres:9.6
     environment:
       POSTGRES_USER: eregs
       POSTGRES_PASSWORD: sgere
@@ -14,12 +14,11 @@ services:
       dockerfile: ${PWD}/config/regulations-core/Dockerfile
     volumes:
       - ${CORE_CONTEXT:-./regulations-core}:/app/src
-      - ./config/regulations-core/local_settings.py:/app/src/local_settings.py
-      - ./config/regulations-core/handler.py:/app/src/handler.py
+      - ./config/regulations-core/local_settings.py:/var/lib/eregs/local_settings.py
     environment:
-      DATABASE_URL: postgres://eregs:sgere@db/eregs
-      ALLOWED_HOST_LOCAL: regulations-core
+      ALLOWED_HOST: regulations-core
       DJANGO_SETTINGS_MODULE: regcore.settings.pgsql
+      PYTHONPATH: /var/lib/eregs
     ports:
       - 8080:8080
     depends_on:

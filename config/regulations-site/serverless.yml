@@ -1,0 +1,29 @@
+service: cmcs-eregs-site
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+
+package:
+  individually: true
+
+custom:
+  wsgi:
+    app: handler.application
+    packRequirements: false
+  settings:
+    api_url: ${cf:cmcs-eregs-${self:provider.stage}.ServiceEndpoint}/
+
+functions:
+  reg_site:
+    environment:
+      EREGS_API_BASE: ${self:custom.settings.api_url}
+    handler: wsgi.handler
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi

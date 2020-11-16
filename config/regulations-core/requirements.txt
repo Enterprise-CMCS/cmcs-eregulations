@@ -1,0 +1,9 @@
+cached_property
+django==1.11
+django-mptt==0.8.6
+Werkzeug==0.14.1
+zappa-django-utils==0.4.0
+jsonschema
+six
+webargs
+psycopg2-binary
