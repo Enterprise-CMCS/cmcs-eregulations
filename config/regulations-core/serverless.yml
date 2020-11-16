@@ -1,0 +1,201 @@
+service: cmcs-eregs
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+
+package:
+  individually: true
+
+custom:
+  wsgi:
+    app: handler.application
+    packRequirements: false
+  settings:
+    DB_NAME: eregs
+    USERNAME: eregsuser
+    ALLOWED_HOST: '.amazonaws.com'
+
+functions:
+  reg_core:
+    environment:
+      DB_NAME: ${self:custom.settings.DB_NAME}
+      DB_USER: ${self:custom.settings.USERNAME}
+      DB_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
+      DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
+      DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+      HTTP_AUTH_USER: ${ssm:/eregulations/${self:provider.stage}/http/user~true}
+      HTTP_AUTH_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/http/password~true}
+      ALLOWED_HOST: '.amazonaws.com'
+    handler: wsgi.handler
+    vpc:
+      securityGroupIds:
+        - !Ref ServerlessSecurityGroup
+      subnetIds:
+        - !Ref ServerlessSubnetA
+        - !Ref ServerlessSubnetB
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+  reg_core_migrate:
+    environment:
+      DB_NAME: ${self:custom.settings.DB_NAME}
+      DB_USER: ${self:custom.settings.USERNAME}
+      DB_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
+      DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
+      DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+    vpc:
+      securityGroupIds:
+        - !Ref ServerlessSecurityGroup
+      subnetIds:
+        - !Ref ServerlessSubnetA
+        - !Ref ServerlessSubnetB
+    handler: migrate.handler
+
+resources:
+
+  Resources: 
+
+    ServerlessVPC:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: 10.0.0.0/16
+        EnableDnsSupport: true
+        EnableDnsHostnames: true
+        InstanceTenancy: default
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessVPC"
+
+    ServerlessSecurityGroup:
+      DependsOn: ServerlessVPC
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: SecurityGroup for Serverless Functions
+        VpcId:
+          Ref: ServerlessVPC
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: '0'
+            ToPort: '65535'
+            CidrIp: "0.0.0.0/0"
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSecurityGroup"
+
+    ServerlessSubnetA:
+      DependsOn: ServerlessVPC
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: ServerlessVPC
+        AvailabilityZone: ${self:provider.region}a
+        CidrBlock: 10.0.0.0/24
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSubnetA"
+
+    ServerlessSubnetB:
+      DependsOn: ServerlessVPC
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: ServerlessVPC
+        AvailabilityZone: ${self:provider.region}b
+        CidrBlock: 10.0.1.0/24
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSubnetB"
+
+    ServerlessSubnetGroup:
+      Type: AWS::RDS::DBSubnetGroup
+      Properties:
+        DBSubnetGroupDescription: "RDS Subnet Group"
+        SubnetIds:
+          - Ref: ServerlessSubnetA
+          - Ref: ServerlessSubnetB
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSubnetGroup"
+    # =============================================================================================
+    # Aurora DB
+    # =============================================================================================
+
+    #AuroraRDSClusterParameter:
+    #  Type: AWS::RDS::DBClusterParameterGroup
+    #  Properties:
+    #    Description: Parameter group for the Serverless Aurora RDS DB.
+    #    Family: aurora-postgresql9.6
+    #    Parameters:
+    #      rds.force_ssl: 1
+
+    #AuroraRDSInstanceParameter:
+    #  Type: AWS::RDS::DBParameterGroup
+    #  Properties:
+    #    Description: Parameter group for the Serverless Aurora RDS DB.
+    #    Family: aurora-postgresql9.6
+    #    Parameters:
+    #      shared_preload_libraries: auto_explain,pg_stat_statements,pg_hint_plan,pgaudit
+    #      log_statement: "ddl"
+    #      log_connections: 1
+    #      log_disconnections: 1
+    #      log_lock_waits: 1
+    #      log_min_duration_statement: 5000
+    #      auto_explain.log_min_duration: 5000
+    #      auto_explain.log_verbose: 1
+    #      log_rotation_age: 1440
+    #      log_rotation_size: 102400
+    #      rds.log_retention_period: 10080
+    #      random_page_cost: 1
+    #      track_activity_query_size: 16384
+    #      idle_in_transaction_session_timeout: 7200000
+    #      statement_timeout: 7200000
+    #      search_path: '"$user",public'
+
+    #RDSResource:
+    #  Type: AWS::RDS::DBCluster
+    #  Properties:
+    #    MasterUsername: ${self:custom.settings.USERNAME}
+    #    MasterUserPassword: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
+    #    DBSubnetGroupName:
+    #      Ref: ServerlessSubnetGroup
+    #    Engine: aurora-postgresql
+    #    EngineVersion: "9.6.16"
+    #    DatabaseName: ${self:custom.settings.DB_NAME}
+    #    BackupRetentionPeriod: 3
+    #    DBClusterParameterGroupName:
+    #      Ref: AuroraRDSClusterParameter
+    #    VpcSecurityGroupIds:
+    #      - !Ref 'ServerlessSecurityGroup'
+
+    #AuroraRDSInstance:
+    #  Type: AWS::RDS::DBInstance
+    #  Properties:
+    #    DBInstanceClass: db.r4.large
+    #    Engine: aurora-postgresql
+    #    EngineVersion: "9.6.16"
+    #    PubliclyAccessible: false
+    #    DBParameterGroupName:
+    #      Ref: AuroraRDSInstanceParameter
+    #    DBClusterIdentifier:
+    #      Ref: RDSResource
+
+    RDSResource:
+      Type: AWS::RDS::DBInstance
+      Properties:
+        DBInstanceClass: db.t2.micro
+        MasterUsername: ${self:custom.settings.USERNAME}
+        MasterUserPassword: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
+        DBName: ${self:custom.settings.DB_NAME}
+        Engine: postgres
+        PubliclyAccessible: false
+        AllocatedStorage: 20
+        DBSubnetGroupName:
+          Ref: ServerlessSubnetGroup
+        VPCSecurityGroups:
+          - !Ref 'ServerlessSecurityGroup'
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
