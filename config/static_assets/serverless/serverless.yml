@@ -1,0 +1,70 @@
+service: cmcs-eregs-static-assets
+
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+
+custom:
+  s3Sync:
+    - bucketName: eregs-${self:provider.stage}-site-assets
+      localDir: static
+
+plugins:
+  - serverless-s3-sync
+
+resources:
+  Resources:
+    AssetsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: eregs-${self:provider.stage}-site-assets
+
+    CloudFrontOriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: OAI to prevent direct public access to the bucket
+
+    CloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Comment: CloudFront Distro for the static website hosted in S3
+          Aliases:
+            - Ref: AWS::NoValue
+          Origins:
+            - DomainName:
+                Fn::GetAtt:
+                  - AssetsBucket
+                  - DomainName
+              Id: S3Origin
+              S3OriginConfig:
+                OriginAccessIdentity:
+                  Fn::Join:
+                  - ''
+                  - - origin-access-identity/cloudfront/
+                    - Ref: CloudFrontOriginAccessIdentity
+          Enabled: true
+          HttpVersion: 'http2'
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - GET
+              - HEAD
+            Compress: true
+            ForwardedValues:
+              QueryString: false
+            TargetOriginId: S3Origin
+            ViewerProtocolPolicy: redirect-to-https
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: true
+  Outputs:
+    StaticURL:
+      Value:
+        Fn::Join:
+          - ''
+          -
+            - https://
+            - Fn::GetAtt:
+              - CloudFrontDistribution
+              - DomainName
