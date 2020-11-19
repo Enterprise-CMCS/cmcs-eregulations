@@ -8,7 +8,7 @@ provider:
 custom:
   s3Sync:
     - bucketName: eregs-${self:provider.stage}-site-assets
-      localDir: static
+      localDir: ../static
 
 plugins:
   - serverless-s3-sync
@@ -25,6 +25,26 @@ resources:
       Properties:
         CloudFrontOriginAccessIdentityConfig:
           Comment: OAI to prevent direct public access to the bucket
+
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: 's3:GetObject'
+              Resource: !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref AssetsBucket
+                  - /*
+              Principal:
+                CanonicalUser:
+                  Fn::GetAtt:
+                  - CloudFrontOriginAccessIdentity
+                  - S3CanonicalUserId
+        Bucket: !Ref AssetsBucket
 
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
@@ -58,6 +78,7 @@ resources:
             ViewerProtocolPolicy: redirect-to-https
           ViewerCertificate:
             CloudFrontDefaultCertificate: true
+
   Outputs:
     StaticURL:
       Value:
