@@ -159,6 +159,6 @@ module.exports = function toExport(grunt) {
   grunt.registerTask('test', ['eslint', 'mocha_istanbul']);
   grunt.registerTask('test-js', ['eslint', 'mocha_istanbul']);
   grunt.registerTask('build-dev', ['env:dev', 'copy', 'browserify:dev', 'sass']);
-  grunt.registerTask('build-dist', ['env:dist', 'copy', 'browserify:dev', 'sass', 'cssmin']);
+  grunt.registerTask('build-dist', ['env:dist', 'copy', 'browserify:dist', 'sass', 'cssmin']);
   grunt.registerTask('default', ['build-dist']);
 };

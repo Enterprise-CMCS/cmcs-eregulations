@@ -7,17 +7,22 @@ if [[ $# -eq 0 ]]; then
   exit 1
 fi
 
-cd regulations-core
+pushd regulations-core
 if git apply --check ../patches/regcore-jsonschema.patch; then
   git apply ../patches/regcore-jsonschema.patch
 fi
-cd ..
+popd
 
-cd regulations-parser
+pushd regulations-parser
 if git apply --check ../patches/regparser-Dockerfile.patch; then
   git apply ../patches/regparser-Dockerfile.patch
 fi
-cd ..
+popd
+
+pushd config/static-assets
+make clean
+make build
+popd
 
 docker-compose up -d
 sleep 2

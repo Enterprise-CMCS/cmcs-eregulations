@@ -35,6 +35,7 @@ services:
       EREGS_API_BASE: http://regulations-core:8080/
       PYTHONPATH: /var/lib/eregs
       STATIC_URL: http://localhost:8888/
+      SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/regulations/sidebar/content
     ports:
       - 8000:8000
     depends_on:
