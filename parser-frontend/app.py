@@ -21,7 +21,7 @@ def main():
         output = form.output.data
         # return ("Regulation %s %s parsed to %s." % (title, part, output))
         parse = ParseReg()
-        return parse.parse(api_key, title, part, output)
+        return parse.parse_reg(api_key, title, part, output)
     return render_template('index.html', form=form)
 
 if __name__ == "__main__":

@@ -47,6 +47,7 @@ services:
       context: ${PARSER_CONTEXT:-./parser-frontend}
       dockerfile: ${PWD}/parser-frontend/Dockerfile
     volumes:
-      - .:/code
+      - ${PARSER_CONTEXT:-./parser-frontend}:/app/src
+      - ./regulations-parser/regparser:/app/src/regparser
     ports:
       - 5000:5000
