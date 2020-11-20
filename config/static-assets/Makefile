@@ -13,4 +13,4 @@ build: static node_modules config.json
 	npx grunt
 
 clean:
-	rm -r static
+	rm -rf static
