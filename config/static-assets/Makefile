@@ -1,4 +1,4 @@
-dir != pwd
+dir := ${CURDIR}
 
 node_modules:
 	npm install

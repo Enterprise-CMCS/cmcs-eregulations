@@ -23,7 +23,6 @@ docker-compose up -d
 sleep 2
 docker-compose exec regulations-core python manage.py migrate
 docker-compose restart regulations-core
-docker-compose exec regulations-site /usr/bin/build_static.sh
 
 docker build --tag eregs_parser_kaitlin regulations-parser
 

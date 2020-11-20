@@ -30,14 +30,18 @@ services:
     volumes:
       - ${SITE_CONTEXT:-./regulations-site}:/app/src
       - ./config/regulations-site/local_settings.py:/var/lib/eregs/local_settings.py
-      - ./config/regulations-site/handler.py:/app/src/regulations/handler.py
-      - ./config/regulations-site/config.json:/app/src/regulations/static/config/config.json
-      - ./config/regulations-site/build_static.sh:/usr/bin/build_static.sh
       - ./guidance:/var/lib/eregs/cmcs/regulations/sidebar
     environment:
       EREGS_API_BASE: http://regulations-core:8080/
       PYTHONPATH: /var/lib/eregs
+      STATIC_URL: http://localhost:8888/
     ports:
       - 8000:8000
     depends_on:
       - regulations-core
+  static-assets:
+    image: nginx
+    ports:
+        - 8888:80
+    volumes:
+        - ./config/static-assets/static:/usr/share/nginx/html
