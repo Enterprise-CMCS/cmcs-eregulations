@@ -52,6 +52,7 @@ functions:
         - ${ssm:/account_vars/vpc/subnets/private/a/id}
         - ${ssm:/account_vars/vpc/subnets/private/b/id}
     handler: migrate.handler
+    timeout: 15
 
 resources:
 
