@@ -1,40 +1,57 @@
-
 name: Deploy
 
 on:
   push:
     branches:
-      - 'master'
-    paths:
-      - 'regulations-*/**'
-      - 'config/**'
-      - 'guidance/**'
+      - 'gh-actions'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      # should build first and save the artifact
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '6.9.2'
+      - name: build static assets 
+        run: |
+          pushd config/static-assets
+          make clean
+          make build
+          popd
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - name: cache tools
-        uses: actions/cache@v2
-        with:
-          path: |
-            .github/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('./.github/yarn.lock') }}
-      - name: install tools
+      - name: deploy static assets
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd .github
-            if [ ! -d node_modules ]; then
-              yarn install --froze-lockfile
-            fi
+          pushd config/static-assets/serverless
+          npm install serverless
+          npm install
+          serverless deploy
           popd
-          echo "PATH=$(pwd)/.github/node_modules/.bin:\$PATH" >> set.env.sh
-      # should build first and save the artifact
-      - name: deploy database
+      - name: deploy regualtions core API
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd config/database
+          pushd config/regulations-core
+          npm install serverless
+          npm install
+          serverless deploy
+          popd
+      - name: deploy regualtions site server
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          pushd config/regulations-site
+          npm install serverless
+          npm install
           serverless deploy
           popd
