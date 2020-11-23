@@ -9,9 +9,14 @@ custom:
   s3Sync:
     - bucketName: eregs-${self:provider.stage}-site-assets
       localDir: ../static
+  cloudfrontInvalidate:
+    distributionId: ${cf:cmcs-eregs-static-assets-${self:provider.stage}.CloudFrontDistributionId}
+    items:
+      - "/*"
 
 plugins:
   - serverless-s3-sync
+  - serverless-cloudfront-invalidate
 
 resources:
   Resources:
@@ -80,6 +85,9 @@ resources:
             CloudFrontDefaultCertificate: true
 
   Outputs:
+    CloudFrontDistributionId:
+      Value:
+        Ref: CloudFrontDistribution
     StaticURL:
       Value:
         Fn::Join:
