@@ -1,9 +1,7 @@
 name: Deploy
 
 on:
-  push:
-    branches:
-      - 'gh-actions'
+  workflow_dispatch:
 
 jobs:
   deploy:
