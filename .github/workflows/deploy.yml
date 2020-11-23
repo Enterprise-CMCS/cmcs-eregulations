@@ -31,7 +31,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           pushd config/static-assets/serverless
-          npm install serverless
+          npm install serverless -g
           npm install
           serverless deploy
           popd
@@ -41,7 +41,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           pushd config/regulations-core
-          npm install serverless
+          npm install serverless -g
           npm install
           serverless deploy
           popd
@@ -51,7 +51,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           pushd config/regulations-site
-          npm install serverless
+          npm install serverless -g
           npm install
           serverless deploy
           popd
