@@ -14,12 +14,14 @@ custom:
     packRequirements: false
   settings:
     api_url: ${cf:cmcs-eregs-${self:provider.stage}.ServiceEndpoint}/
+    static_url: ${cf:cmcs-eregs-static-assets-${self:provider.stage}.StaticURL}/
 
 functions:
   reg_site:
     environment:
       EREGS_API_BASE: ${self:custom.settings.api_url}
-    handler: wsgi.handler
+      STATIC_URL: ${self:custom.settings.static_url}
+    handler: wsgi_handler.handler
     events:
       - http: ANY /
       - http: ANY {proxy+}
