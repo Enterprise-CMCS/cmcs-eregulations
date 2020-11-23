@@ -12,6 +12,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
+      - name: patch libraries
+        run: |
+          pushd regulations-core
+          git apply ../patches/regcore-jsonschema.patch
+          git apply ../patches/regcore-migrations.patch
+          popd
       # should build first and save the artifact
       - uses: actions/setup-node@v1
         with:
