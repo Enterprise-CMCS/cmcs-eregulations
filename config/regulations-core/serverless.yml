@@ -33,8 +33,8 @@ functions:
       securityGroupIds:
         - !Ref ServerlessSecurityGroup
       subnetIds:
-        - !Ref ServerlessSubnetA
-        - !Ref ServerlessSubnetB
+        - ${ssm:/account_vars/vpc/subnets/private/a/id}
+        - ${ssm:/account_vars/vpc/subnets/private/b/id}
     events:
       - http: ANY /
       - http: ANY {proxy+}
@@ -49,32 +49,19 @@ functions:
       securityGroupIds:
         - !Ref ServerlessSecurityGroup
       subnetIds:
-        - !Ref ServerlessSubnetA
-        - !Ref ServerlessSubnetB
+        - ${ssm:/account_vars/vpc/subnets/private/a/id}
+        - ${ssm:/account_vars/vpc/subnets/private/b/id}
     handler: migrate.handler
 
 resources:
 
   Resources: 
 
-    ServerlessVPC:
-      Type: AWS::EC2::VPC
-      Properties:
-        CidrBlock: 10.0.0.0/16
-        EnableDnsSupport: true
-        EnableDnsHostnames: true
-        InstanceTenancy: default
-        Tags:
-          - Key: "Name"
-            Value: "ServerlessVPC"
-
     ServerlessSecurityGroup:
-      DependsOn: ServerlessVPC
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
-        VpcId:
-          Ref: ServerlessVPC
+        VpcId: ${ssm:/account_vars/vpc/id}
         SecurityGroupIngress:
           - IpProtocol: tcp
             FromPort: '0'
@@ -84,37 +71,13 @@ resources:
           - Key: "Name"
             Value: "ServerlessSecurityGroup"
 
-    ServerlessSubnetA:
-      DependsOn: ServerlessVPC
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: ServerlessVPC
-        AvailabilityZone: ${self:provider.region}a
-        CidrBlock: 10.0.0.0/24
-        Tags:
-          - Key: "Name"
-            Value: "ServerlessSubnetA"
-
-    ServerlessSubnetB:
-      DependsOn: ServerlessVPC
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: ServerlessVPC
-        AvailabilityZone: ${self:provider.region}b
-        CidrBlock: 10.0.1.0/24
-        Tags:
-          - Key: "Name"
-            Value: "ServerlessSubnetB"
-
     ServerlessSubnetGroup:
       Type: AWS::RDS::DBSubnetGroup
       Properties:
         DBSubnetGroupDescription: "RDS Subnet Group"
         SubnetIds:
-          - Ref: ServerlessSubnetA
-          - Ref: ServerlessSubnetB
+          - ${ssm:/account_vars/vpc/subnets/private/a/id}
+          - ${ssm:/account_vars/vpc/subnets/private/b/id}
         Tags:
           - Key: "Name"
             Value: "ServerlessSubnetGroup"
