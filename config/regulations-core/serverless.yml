@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: python3.8
   region: us-east-1
-  rolePermissionsBoundary: 'arn:aws:iam::${self:custom.accountId}:policy${ssm:/account_vars/iam/permissions_boundary_policy~true}'
+  rolePermissionsBoundary: arn:aws:iam::${self:custom.accountId}:policy${ssm:/account_vars/iam/permissions_boundary_policy~true}
 
 package:
   individually: true
