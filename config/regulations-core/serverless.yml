@@ -73,7 +73,7 @@ resources:
               Action: sts:AssumeRole
         # note that these rights are needed if you want your function to be able to communicate with resources within your vpc
         PermissionsBoundary:
-          - Fn::Join:
+          Fn::Join:
             - ''
             -
               - 'arn:aws:iam::'
