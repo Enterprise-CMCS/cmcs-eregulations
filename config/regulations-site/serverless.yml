@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: python3.8
   region: us-east-1
+  role: ${cf:cmcs-eregs-${self:provider.stage}.LambdaFunctionRoleArn}
 
 package:
   individually: true

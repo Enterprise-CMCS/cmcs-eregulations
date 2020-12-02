@@ -209,6 +209,9 @@ resources:
     #      Ref: ServerlessSubnetGroup
     #    VPCSecurityGroups:
     #      - !Ref 'ServerlessSecurityGroup'
+  Outputs:
+    LambdaFunctionRoleArn:
+      Value: !GetAtt LambdaFunctionRole.Arn
 
 plugins:
   - serverless-python-requirements
