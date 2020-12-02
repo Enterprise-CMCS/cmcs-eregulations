@@ -75,8 +75,7 @@ resources:
         PermissionsBoundary:
           Fn::Join:
             - ''
-            -
-              - 'arn:aws:iam::'
+            - - 'arn:aws:iam::'
               - Ref: AWS::AccountId
               - ':policy'
               - ${ssm:/account_vars/iam/permissions_boundary_policy~true}
