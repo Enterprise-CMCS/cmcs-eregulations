@@ -33,8 +33,8 @@ functions:
       securityGroupIds:
         - !Ref ServerlessSecurityGroup
       subnetIds:
-        - ${ssm:/account_vars/vpc/subnets/private/a/id}
-        - ${ssm:/account_vars/vpc/subnets/private/b/id}
+        - ${ssm:/account_vars/vpc/subnets/private/a/id~true}
+        - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
     events:
       - http: ANY /
       - http: ANY {proxy+}
@@ -49,8 +49,8 @@ functions:
       securityGroupIds:
         - !Ref ServerlessSecurityGroup
       subnetIds:
-        - ${ssm:/account_vars/vpc/subnets/private/a/id}
-        - ${ssm:/account_vars/vpc/subnets/private/b/id}
+        - ${ssm:/account_vars/vpc/subnets/private/a/id~true}
+        - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
     handler: migrate.handler
     timeout: 15
 
@@ -62,7 +62,7 @@ resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
-        VpcId: ${ssm:/account_vars/vpc/id}
+        VpcId: ${ssm:/account_vars/vpc/id~true}
         SecurityGroupIngress:
           - IpProtocol: tcp
             FromPort: '0'
@@ -77,8 +77,8 @@ resources:
       Properties:
         DBSubnetGroupDescription: "RDS Subnet Group"
         SubnetIds:
-          - ${ssm:/account_vars/vpc/subnets/private/a/id}
-          - ${ssm:/account_vars/vpc/subnets/private/b/id}
+          - ${ssm:/account_vars/vpc/subnets/private/a/id~true}
+          - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
         Tags:
           - Key: "Name"
             Value: "ServerlessSubnetGroup"
