@@ -26,8 +26,8 @@ functions:
       DB_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
       DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
       DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
-      #HTTP_AUTH_USER: ${ssm:/eregulations/${self:provider.stage}/http/user~true}
-      #HTTP_AUTH_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/http/password~true}
+      HTTP_AUTH_USER: ${ssm:/eregulations/${self:provider.stage}/http/user~true}
+      HTTP_AUTH_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/http/password~true}
       ALLOWED_HOST: '.amazonaws.com'
     handler: wsgi.handler
     vpc:
