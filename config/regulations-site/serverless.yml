@@ -22,6 +22,7 @@ functions:
     environment:
       EREGS_API_BASE: ${self:custom.settings.api_url}
       STATIC_URL: ${self:custom.settings.static_url}
+      SIDEBAR_CONTENT_DIR: /var/task/cmcs/regulations/sidebar/content
     handler: wsgi_handler.handler
     events:
       - http: ANY /
