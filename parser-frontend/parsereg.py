@@ -1,8 +1,8 @@
 import os
 import pathlib
 from subprocess import Popen, PIPE
-from regparser.tasks import run_eregs_command
-# from regparser.web.management.runner import runner
+# from regparser.tasks import run_eregs_command
+from regparser.web.management.runner import runner
 
 class ParseReg():
     def parse(self, api_key, title, part, output):
@@ -15,9 +15,9 @@ class ParseReg():
         out = Popen(script, stdout=PIPE, shell=True)
         return out.stdout.read()
     def parse_reg(self, api_key, title, part, output):
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                          "regparser.web.settings.dev")
+        #os.environ.setdefault("DJANGO_SETTINGS_MODULE", "regparser.web.settings.dev")
         os.environ["REGS_GOV_KEY"] = api_key
-        args = ['pipeline', title, part, output];
-        # runner(args)
-        run_eregs_command(args)
+        # args = ['pipeline', title, part, output];
+        args = ['pipeline', 'eregs', title, part, output];
+        runner(args)
+        # run_eregs_command(args)
