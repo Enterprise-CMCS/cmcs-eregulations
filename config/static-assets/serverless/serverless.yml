@@ -24,6 +24,17 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:provider.stage}-site-assets
+      CorsConfiguration:
+        CorsRules:
+          -
+            AllowedOrigins:
+              - '*'
+            AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - HEAD
+            MaxAge: 3000
 
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
