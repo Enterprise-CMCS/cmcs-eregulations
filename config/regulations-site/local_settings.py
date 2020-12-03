@@ -49,3 +49,5 @@ TEMPLATES = [
         ],
     },
 ]
+
+GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")

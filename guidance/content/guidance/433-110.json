@@ -1,0 +1,24 @@
+[
+  {
+    "header": "Statutes/Executive Orders",
+    "links": [
+      {
+        "href": "https://www.ssa.gov/OP_Home/ssact/title19/1903.htm",
+        "name": "Social Security Act Section 1903(a)"
+      },
+      {
+        "href": "https://www.ssa.gov/OP_Home/ssact/title19/1903.htm",
+        "name": "Social Security Act Section 1903(r)"
+      }
+    ]
+  },
+  {
+    "header": "Notices of Proposed Rulemaking (NPRM)",
+    "links": [
+      {
+        "href": "https://www.govinfo.gov/content/pkg/FR-2015-04-16/pdf/2015-08754.pdf",
+        "name": "Medicaid Program; Mechanized Claims Processing and Information Retrieval Systems (90/10) (80 FR 20455), April 16 2015"
+      }
+    ]
+  }
+]
