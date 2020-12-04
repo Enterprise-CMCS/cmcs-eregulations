@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 from django.conf import settings
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template, select_template
@@ -9,6 +10,7 @@ from regulations.generator.sidebar.base import SidebarBase
 # @todo - seems like code in `generator` shouldn't reach in to `views`?
 from regulations.views.utils import layer_names
 
+logger = logging.getLogger(__name__)
 
 class Guidance(SidebarBase):
     """Help info; composed of subtemplates defined by the active layers"""
@@ -28,8 +30,10 @@ class Guidance(SidebarBase):
                     'sections': sections,
                 }),
             }
-        except:
+        except FileNotFoundError:
             pass
+        except Exception as e:
+            logger.error(e)
 
         t = get_template('guidance/blank.html')
         return {
