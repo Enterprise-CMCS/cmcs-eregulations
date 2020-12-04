@@ -20,5 +20,52 @@
         "name": "Medicaid Program; Mechanized Claims Processing and Information Retrieval Systems (90/10) (80 FR 20455), April 16 2015"
       }
     ]
+  },
+  {
+    "header": "Final Rules/Interim Final Rules",
+    "links": [
+      {
+        "name": "Redesignation and Rewrite, September 29, 1978 (43 FR 45176)",
+        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=359"
+      },
+      {
+        "name": "Conditions for Federal Financial Participation in the Cost of Automatic Data Processing (43 FR 44851), September 29, 1978",
+        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=359"
+      },
+      {
+        "name": "Medicaid Program; Medicaid Management Information Systems; Conditions of Approval and Reapproval and Procedures for Reduction of Federal Financial Participation (50 FR 30838), July 30, 1985",
+        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=359"
+      },
+      {
+        "name": "Medicaid Program; Medicaid Management Information System: Revised Definition of “Mechanized Claims Processing and Information Retrieval System” (54 FR 41966), October 13, 1989.",
+        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=359"
+      },
+      {
+        "name": "Medicaid Program; Federal Funding for Medicaid Eligibility Determination and Enrollment Activities (76 FR 21950), April 19, 2011",
+        "href": "https://www.govinfo.gov/content/pkg/FR-2011-04-19/pdf/2011-9340.pdf"
+      },
+      {
+        "name": "Medicaid Program; Mechanized Claims Processing and Information Retrieval Systems (90/10) (80 FR 75817), December 4, 2015",
+        "href": "https://www.govinfo.gov/content/pkg/FR-2015-12-04/pdf/2015-30591.pdf"
+      }
+    ]
+  },
+  {
+    "header": "Related Regulation Sections",
+    "links": [
+      {
+        "name": "42 CFR 400.203",
+        "href": "https://www.ecfr.gov/cgi-bin/text-idx?SID=102103b6b77c5223b2902aee7307b4fc&mc=true&node=pt42.2.400&rgn=div5#se42.2.400_1203"
+      }
+    ]
+  },
+  {
+    "header": "Sub-Regulatory Guidance",
+    "links": [
+      {
+        "name": "Chapter 11, Sections 11200-11260 Approval of MMIS Systems",
+        "href": "https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927"
+      }
+    ]
   }
 ]
