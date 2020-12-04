@@ -61,7 +61,7 @@
     "header": "State Medicaid Director Letter (SMDL)",
     "links": [
       {
-        "name":"SMD #16-009 Re: Mechanized Claims Processing and Information Retrieval Systems – APD Requirements, June 27, 2016.",
+        "name":"SMD #16-009 Re: Mechanized Claims Processing and Information Retrieval Systems - APD Requirements, June 27, 2016.",
         "href":"https://www.medicaid.gov/federal-policy-guidance/downloads/smd16009.pdf"
       },
       {
@@ -76,9 +76,5 @@
       "name": "Chapter 1, Section 11110- Definitions",
       "href": "https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927"
     }]
-  },
-  {
-    "header": "",
-    "links": []
   }
 ]

@@ -61,11 +61,11 @@
       },
       {
         "href": "https://www.govinfo.gov/content/pkg/FR-2016-11-30/pdf/2016-27844.pdf",
-        "name": "Medicaid and Children’s Health Insurance Programs: Eligibility Notices, Fair Hearing and Appeal Processes for Medicaid and Other Provisions Related to Eligibility and Enrollment for Medicaid and CHIP, November 30, 2016 (81 FR 86382)"
+        "name": "Medicaid and Children's Health Insurance Programs: Eligibility Notices, Fair Hearing and Appeal Processes for Medicaid and Other Provisions Related to Eligibility and Enrollment for Medicaid and CHIP, November 30, 2016 (81 FR 86382)"
       },
       {
         "href": "https://www.govinfo.gov/content/pkg/FR-2016-01-20/pdf/2015-32101.pdf",
-        "name": "Federal Awarding Agency Regulatory Implementation of Office of Management and Budget’s Uniform Administrative Requirements, Cost Principles, and Audit Requirements for Federal Awards; Technical Amendments (81 FR 3004), January, 20, 2016."
+        "name": "Federal Awarding Agency Regulatory Implementation of Office of Management and Budget's Uniform Administrative Requirements, Cost Principles, and Audit Requirements for Federal Awards; Technical Amendments (81 FR 3004), January, 20, 2016."
       }
     ]
   },
@@ -86,15 +86,15 @@
       },
       {
         "href": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd16009.pdf",
-        "name": "SMD #16-009 Re: Mechanized Claims Processing and Information Retrieval Systems – APD Requirements, June 27, 2016."
+        "name": "SMD #16-009 Re: Mechanized Claims Processing and Information Retrieval Systems - APD Requirements, June 27, 2016."
       },
       {
         "href": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd16010.pdf",
-        "name": "SMD 16-010 RE: CMS-2392-F Mechanized Claims Processing and Information Retrieval Systems – Modularity, August 16, 2016"
+        "name": "SMD 16-010 RE: CMS-2392-F Mechanized Claims Processing and Information Retrieval Systems - Modularity, August 16, 2016"
       },
       {
         "href": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd18005.pdf",
-        "name": "SMD # 18-005 CMS-2392-F Mechanized Claims Processing and Information Retrieval Systems – Reuse, April 18, 2018"
+        "name": "SMD # 18-005 CMS-2392-F Mechanized Claims Processing and Information Retrieval Systems - Reuse, April 18, 2018"
       }
     ]
   },
@@ -112,19 +112,19 @@
     "links": [
       {
         "href": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-11-15-11.pdf",
-        "name": "Medicaid Information Technology Architecture Guidance – Draft Version 3.0, November 15, 2011"
+        "name": "Medicaid Information Technology Architecture Guidance - Draft Version 3.0, November 15, 2011"
       },
       {
         "href": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib-03-28-12.pdf",
-        "name": "Medicaid Information Technology Architecture Guidance – Version 3.0, March 28, 2012"
+        "name": "Medicaid Information Technology Architecture Guidance - Version 3.0, March 28, 2012"
       },
       {
         "href": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-07-05-2013-MITA.pdf",
-        "name": "Medicaid Information Technology Architecture Guidance – Draft Eligibility and Enrollment Supplement, Version 3.0, July 5, 2013"
+        "name": "Medicaid Information Technology Architecture Guidance - Draft Eligibility and Enrollment Supplement, Version 3.0, July 5, 2013"
       },
       {
         "href": "https://www.medicaid.gov/medicaid/data-systems/medicaid-information-technology-architecture/medicaid-information-technology-architecture-framework/index.html",
-        "name": "Medicaid Information Technology Architecture (MITA) Guidance – Eligibility and Enrollment Supplement, Version 3.0, August 5, 2014"
+        "name": "Medicaid Information Technology Architecture (MITA) Guidance - Eligibility and Enrollment Supplement, Version 3.0, August 5, 2014"
       },
       {
         "href": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib031819.pdf",
@@ -158,15 +158,15 @@
     "header": "Toolkits",
     "links": [
       {
-        "href": "",
+        "href": "https://www.medicaid.gov/medicaid/data-systems/medicaid-information-technology-architecture/medicaid-information-technology-architecture-framework/index.html",
         "name": "MITA Framework"
       },
       {
-        "href": "",
+        "href": "https://www.medicaid.gov/medicaid/data-systems/medicaid-enterprise-certification-toolkit/index.html",
         "name": "Medicaid Enterprise Certification Toolkit (MECT)"
       },
       {
-        "href": "",
+        "href": "https://www.medicaid.gov/medicaid/data-systems/medicaid-eligibility-enrollment-toolkit/index.html",
         "name": "Medicaid Eligibility & Enrollment Toolkit (MEET)"
       }
     ]
