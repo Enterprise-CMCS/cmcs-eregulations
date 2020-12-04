@@ -12,10 +12,9 @@ INSTALLED_APPS = (
 )
 
 SIDEBARS = (
-    'regulations.generator.sidebar.analyses.Analyses',
+    'cmcs.regulations.sidebar.guidance.Guidance',
     'regulations.generator.sidebar.help.Help',
     'regulations.generator.sidebar.print_part.PrintPart',
-    'cmcs.regulations.sidebar.guidance.Guidance',
 )
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
@@ -50,3 +49,5 @@ TEMPLATES = [
         ],
     },
 ]
+
+GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
