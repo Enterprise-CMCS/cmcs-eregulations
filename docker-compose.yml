@@ -43,6 +43,6 @@ services:
   static-assets:
     image: nginx
     ports:
-        - 8888:80
+      - 8888:80
     volumes:
-        - ./config/static-assets/static:/usr/share/nginx/html
+      - ./config/static-assets/static:/usr/share/nginx/html
