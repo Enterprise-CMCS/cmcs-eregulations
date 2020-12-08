@@ -1,2 +1,14 @@
-static
 config.json
+# Minified assets #
+###############
+*.min.js
+*.min.css
+static/regulations/docs/*
+static/regulations/js/source/require.config.js
+static/regulations/js/source/lib/
+static/regulations/js/tests/browser/test.config.js
+static/regulations/js/unittests/coverage/
+static/regulations/js/built/*
+static/regulations/js/built/regulations.js
+static/regulations/css/style.css
+style.css.map
