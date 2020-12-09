@@ -9,7 +9,7 @@ This contains all of the styles specific to the TOC
 */
 
 .toc-nav__base {
-  padding-top: 60px;
+  padding-top: 50px;
 
   // Used in Notice & Comment, which displays Federal Register Notices
   &.toc-nav__fr-notice {
@@ -99,7 +99,8 @@ This contains all of the styles specific to the TOC
   #nav-433-1 {
     color: $medicare_blue_light;
     font-weight: bold;
-    margin-left: -111px;
+    margin-left: -110px;
+    padding-top: 15px;
 
     .toc-section-marker {      
       display: inline;
