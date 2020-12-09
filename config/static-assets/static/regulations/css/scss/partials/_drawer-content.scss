@@ -17,11 +17,6 @@ This contains all of the styles specific to the TOC
       text-indent: -15px;
     }
 
-    a:link,
-    a:visited {
-      @include border-bottom-light ($width: 0);
-    }
-
     a:hover,
     a:active,
     .current {
@@ -31,14 +26,12 @@ This contains all of the styles specific to the TOC
 
     .toc-entry-at-1,
     .toc-entry-at-1:hover {
-      border-top: 1px solid $panel_border_color;
       @include sans-font-bold;
       margin-left: -100px;
       padding: 9px 0 9px 110px;
     }
 
     .toc-depth-2 {
-      border-top: 1px solid $panel_border_color;
       margin-left: -100px;
       padding: 0 0 0 105px;
 
@@ -70,14 +63,14 @@ This contains all of the styles specific to the TOC
   }
 
   // Also used in N&C, specifically for displaying changes to the CFR
-  &.toc-nav__cfr-changes {
-    .toc-nav__divider {
-      @include border-top-light ($width: 1px);
-    }
-  }
+  // &.toc-nav__cfr-changes {
+  //   .toc-nav__divider {
+  //     @include border-top-light ($width: 1px);
+  //   }
+  // }
 
   ol {
-    margin: 0;
+    margin: 1em 0 0 0;
     padding: 0;
   }
 
@@ -85,11 +78,28 @@ This contains all of the styles specific to the TOC
     padding: 0 0 0 10px;
     margin: 0;
     text-indent: 0;
-  }
+
+    &:not([data-subpart-heading]) {
+      padding: 0 1.8em;
+      font-size: 14px;
+    }
+   } 
 
   .toc-section-marker {
     @include regulation-nav-section-marker-font;
     display: block;
+    color: $medicare_blue_light;
+  }
+
+  // Styles 433.1 Purpose a little differently 
+  #nav-433-1 {
+    color: $medicare_blue_light;
+    font-weight: bold;
+    margin-left: -115px;
+
+    .toc-section-marker {      
+      display: inline;
+    } 
   }
 
   // Interpretation Subparts in the TOC are styled differently
@@ -110,8 +120,7 @@ This contains all of the styles specific to the TOC
 
   a:link,
   a:visited {
-    color: $panel_text_color;
-    @include border-bottom-light ($width: 1px);
+    color: $white;
   }
 
   a:hover,
@@ -119,7 +128,7 @@ This contains all of the styles specific to the TOC
   .current {
     margin-left: -100px;
     padding-left: 105px;
-    color: $black;
+    color: $white;
     background-color: $panel_highlight_color;
   }
 
@@ -157,10 +166,8 @@ This contains all of the styles specific to the TOC
   display: block;
   line-height: 1.4;
   background-color: $panel_background_color;
-  @include border-bottom-light ($width: 1px);
   font-size: 1em;
-  text-transform: uppercase;
-  color: $gray_darker;
+  color: $medicare_blue_light;
 }
 
 // Highlight the History tab in diff view
@@ -192,7 +199,7 @@ This contains all of the styles specific to the history
   }
 
   .drawer-content {
-    padding-top: 40px;
+    padding-top: 70px;
   }
 
   .effective-label {
@@ -202,14 +209,6 @@ This contains all of the styles specific to the history
   }
 
   // TODO: unify link styles with TOC
-
-  .version-list {
-    border-top: 1px solid $gray_light;
-  }
-
-  .status-list {
-    border-bottom: 1px solid $gray_light;
-  }
 
   .version-link {
     display: block;
@@ -222,6 +221,8 @@ This contains all of the styles specific to the history
 
   // IE8 only respects the background color on the individual elements
   .current {
+    padding: 1em;
+
     .version-link {
       padding: 10px 15px 0 15px;
       background: $panel_highlight_color;
@@ -240,7 +241,7 @@ This contains all of the styles specific to the history
   .version-link,
   .version-link:link,
   .version-link:visited {
-    color: $black;
+    color: $white;
     text-decoration: none;
     position: relative;
   }
@@ -249,7 +250,7 @@ This contains all of the styles specific to the history
   .version-link:active,
   .version-link:target,
   .current {
-    color: $black;
+    color: $white;
     background: $panel_highlight_color;
     display: block;
   }
@@ -310,6 +311,18 @@ This contains all of the styles specific to the history
   .diff-button-wrapper {
     text-align: center;
     margin-bottom: 1em;
+
+    button {
+      background-color: $white;
+      color: $medicare_gray_dark;
+      padding: .5em 1.5em;
+
+      &:hover {
+        transition: .1s all ease;
+        background-color: $medicare_blue_dark;
+        color: $white;
+      }
+    }
   }
 }
 
@@ -421,12 +434,10 @@ This contains all of the styles specific to the search
   }
 
   .version-search {
-    border-bottom: 2px solid $gray_light;
     padding: 0 15px 20px 15px;
   }
 
   .search-box {
-    border-bottom: 1px solid $gray_light;
     padding: 20px 15px;
   }
 

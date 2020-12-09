@@ -9,41 +9,41 @@ Regulation Drawer
 // Universal drawer styles
 .panel {
   background-color: $panel_background_color;
-  border-right: 2px solid $panel_border_color;
   @include sans-font-regular;
   font-size: 1em * $sans_font_scale_factor;
-  overflow-y: scroll; // allow content to be scrollable
+  overflow-y: scroll; // allow content to be scrollable;
+  padding: 0 1em;
 }
 
 .toc-head {
-  border-right: 2px solid $panel_border_color;
-  transition: 0.1s;
+  transition: all 0.2s ease;
 
   a:link,
   a:visited {
-    color: $gray_darker;
+    color: $medicare_gray_mid;
     text-decoration: none;
-    height: 33px;
+    height: 60px;
+  }
+
+  svg {
+    height: 24px;
+    fill: $medicare_gray_mid;
   }
 
   a:active,
   a:hover,
   a.current {
-    background-color: $white;
-    color: $primary_color;
-    height: 34px;
+    background-color: $panel_background_color;
+    color: $white;
+    height: 60px;
+
+    svg {
+      fill: $white;
+    }
   }
 
   a:hover:not(.current) {
-    height: 33px;
-  }
-
-  svg {
-    height: 15px;
-    fill: $gray_darker;
-  }
-  .current svg {
-    fill: $primary_color;
+    height: 60px;
   }
 }
 
@@ -62,8 +62,6 @@ Drawer default state
 .drawer-header {
   position: fixed;
   background-color: $white;
-  border-right: 2px solid $panel_border_color;
-  border-bottom: 1px solid $panel_border_color;
   z-index: 100;
 
   .toc-type,
@@ -83,11 +81,9 @@ Drawer default state
   }
 
   h2 {
-    color: $primary_color;
+    color: $medicare_blue_light;
     font-size: 0.875em;
     text-transform: uppercase;
-    font-weight: bold;
-    @include sans-font-bold;
   }
 
   h3 {
@@ -105,8 +101,8 @@ Panel Slide Button
 
 .panel-slide {
   display: block;
-  height: 34px; // match height of main header
-  line-height: 34px;
+  height: 60px; // match height of main header
+  line-height: 60px;
   width: $closed_drawer_width;
   float: right;
   cursor: pointer;
@@ -161,13 +157,13 @@ currently these are TOC, History, and Search
   height: 100%;
   padding: 0;
   margin: 0;
-  width: 56px;
+  width: 60px;
   text-align: center;
-  background-color: $panel_background_color;
+  background-color: $white;
   color: $panel_text_color;
 
   &.current {
-    background-color: $white;
+    background-color: $panel_background_color;
     border-bottom: none;
   }
 
@@ -223,10 +219,9 @@ currently these are TOC, History, and Search
   .close & {
     position: absolute;
     width: $closed_drawer_width;
-    top: 33px;
-    border-top: 1px solid $panel_border_color;
+    top: 44px;
     right: 0;
-    left: 198px;
+    left: 281px;
   }
 }
 
@@ -234,22 +229,19 @@ currently these are TOC, History, and Search
   display: inline-block;
   zoom: 1;
   margin-left: -4px;
-  border-right: 1px solid $panel_border_color;
-  border-left: 1px solid $panel_border_color;
 
   .close & {
     margin-left: 0;
     display: list-item;
-    border-bottom: 1px solid $panel_border_color;
     border-right: none;
   }
 }
 
 // Drawer default closed state
 .panel.close {
-  left: -200px;
+  left: -280px;
   // Header, subheader, 3 TOC list items + 1px drawer-toggles border
-  top: $mainhead_height + $subhead_height + 3 * 34px + 1;
+  top: $mainhead_height + $subhead_height + 3 * 60px + 1;
   overflow-y: hidden;
 
   // slide content fully offscreen
@@ -259,7 +251,7 @@ currently these are TOC, History, and Search
   }
 
   .drawer-header {
-    left: -260px; // 60px extra to accomodate for stacked buttons
+    left: -320px; // 60px extra to accomodate for stacked buttons
 
     .toc-type {
       display: none;
@@ -267,8 +259,14 @@ currently these are TOC, History, and Search
   }
 }
 
+// Current open drawer
+
+.toc-container.current .drawer-header {
+  background: $panel_background_color;
+}
+
 .close .toc-head {
-  left: -200px;
+  left: -280px;
   margin-right: 15px;
   height: 150px; // extra height for TOC toggle buttons
 }

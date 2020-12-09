@@ -21,7 +21,7 @@
 }
 
 .main-head {
-  border-bottom: 2px solid $primary_color;
+  border-bottom: 1px solid $medicare_blue_mid;
   background: $white;
   position: fixed;
   top: 0;
@@ -107,11 +107,11 @@
   position: fixed;
   top: $mainhead_height;
   min-width: 100%;
-  background-color: $panel_background_color;
+  // background-color: $panel_background_color;
   color: $black;
-  line-height: 35px;
+  line-height: 60px;
   height: 2.125em;
-  @include border-bottom-medium($width: 1px);
+  // @include border-bottom-medium($width: 1px);
   z-index: 200;
 
   .main {
@@ -138,6 +138,8 @@
 
 #content-header {
   padding-left: 60px;
+  background: $white;
+  padding-top: 36px;   // Needs to adjust if the site header moves
 
   li {
     height: 2.125em;
@@ -145,26 +147,25 @@
   }
 
   .subpart {
-    @include sans-font-bold;
+    @include sans-font-semibold;
     display: inline;
+    color: $medicare_gray_mid;
+    margin-right: 1em;
   }
 
-  .with-subpart:before {
-    content: '|';
-    @include sans-font-regular;
-    color: $gray_light;
-    display: inline-block;
-    margin: 0 10px;
-  }
 }
 
 .header-label {
   @include reset;
   display: inline-block;
-  @include sans-font-bold;
-  font-style: normal;
+  @include sans-font-semibold;
   font-size: 1em;
   display: inline;
+  color: $medicare_gray_mid;
+
+  &:after {
+    content: ".";
+  }
 }
 
 .header-label.with-subpart {

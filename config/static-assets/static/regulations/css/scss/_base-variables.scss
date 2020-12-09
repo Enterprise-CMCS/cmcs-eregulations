@@ -68,7 +68,7 @@ $history_drawer_border_color: #D1D3D5;
 // Theme Variables
 
 $primary_color: $medicare_gray_mid; // Site title, Tab label text, Header stroke
-$primary_color_dark: $blue_dark; // Darker version of primary color often used for hover states
+$primary_color_dark: $medicare_gray_dark; // Darker version of primary color often used for hover states
 $action_color: $medicare_blue_mid; // Links and Buttons
 $action_color_dark: $medicare_blue_dark; // Darker version of action color often used for hover states
 $panel_background_color: $medicare_blue_dark; // Table of contents background, subhead color, drawer color
@@ -94,7 +94,7 @@ $sans_font_scale_factor: 1;
 // Layout Variables
 $closed_drawer_width: 40px;
 $mainhead_height: 56px; // Height of your .main-head element. Used to calculate the fixed offsets.
-$subhead_height: 34px;  // Height of your .sub-head element. Used to calculate the fixed offsets.
+$subhead_height: 44px;  // Height of your .sub-head element. Used to calculate the fixed offsets.
 
 
 // Mixins
@@ -107,6 +107,12 @@ $subhead_height: 34px;  // Height of your .sub-head element. Used to calculate t
 @mixin sans-font-regular {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
+  font-style: normal;
+}
+
+@mixin sans-font-semibold {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 500;
   font-style: normal;
 }
 
@@ -125,6 +131,12 @@ $subhead_height: 34px;  // Height of your .sub-head element. Used to calculate t
 @mixin serif-font-regular {
   font-family: "Merriweather", Georgia, serif;
   font-weight: 400;
+  font-style: normal;
+}
+
+@mixin serif-font-bold {
+  font-family: "Merriweather", Georgia, serif;
+  font-weight: 600;
   font-style: normal;
 }
 
