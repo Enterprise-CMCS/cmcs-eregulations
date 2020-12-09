@@ -93,6 +93,10 @@ Next/Previous Links
   @include sans-font-bold;
 }
 
+.next-prev-title {
+  font-weight: normal;
+}
+
 .pager {
   @include sans-font-regular;
   color: $gray_darker;
@@ -138,7 +142,7 @@ Link Styles
 
 .next-prev-link:link,
 .next-prev-link:visited {
-  color: $action_color;
+  color: $action_color_dark;
   text-decoration: none;
 }
 

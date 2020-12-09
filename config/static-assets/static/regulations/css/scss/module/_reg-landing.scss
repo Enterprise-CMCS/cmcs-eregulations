@@ -4,6 +4,10 @@ Reg-Landing.scss
 reg-landing.scss contains styles specific to the regulation landing page
 */
 
+.reg-homepage {
+  margin-top: 150px;
+}
+
 .banner-text {
   @include sans-font-regular;
   font-size: 2em;
@@ -93,6 +97,17 @@ reg-landing.scss contains styles specific to the regulation landing page
 
 // Sidebar
 .secondary-content {
+
+  .expandable.group {
+
+    &:hover h4 {
+      color: $primary_color;
+    }
+
+    h4 {
+      color: $primary_color_dark;
+    }
+  }  
 
   .landing-sidebar {
 

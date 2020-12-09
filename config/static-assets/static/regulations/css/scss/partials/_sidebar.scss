@@ -46,8 +46,16 @@ Sidebar Expandables
     background-color: $white;
     width: 100%;
 
+    &:hover h4 {
+      color: $primary_color;
+    }
+
     &.has-content {
       background-color: $white;
+    }
+
+    &.open h4 {
+      color: $primary_color_dark;
     }
 
     h4 {
@@ -87,9 +95,25 @@ Sidebar Expandables
   -------------------
   */
   .sidebar-subsection {
-    border-bottom: 1px solid $gray_light;
     padding-bottom: 28px;
     padding-top: 28px;
+
+    a {
+      color: $action_color_dark;
+      font-weight: 500;
+
+      &:hover {
+        color: $primary_color;
+      }
+    }
+
+    ul {
+      margin: 0 1em;
+    }
+
+    li {
+      margin: .5em 0;
+    }
   }
 
   .sidebar-subsection:first-child {
@@ -97,8 +121,7 @@ Sidebar Expandables
   }
 
   .sidebar-subsection:last-child {
-    border-bottom: none;
-    padding-bottom: 10px;
+    padding-bottom: 0;
   }
 }
 
@@ -137,7 +160,6 @@ Regs Meta contains the sub-content meta data found in the sidebar
     font-size: 1.15em * $sans_font_scale_factor;
     line-height: 40px;
     margin: 0;
-    letter-spacing: 1px;
     color: $action_color_dark;
     @include sans-font-semibold;
 
