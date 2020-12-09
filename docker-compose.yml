@@ -45,4 +45,5 @@ services:
     ports:
       - 8888:80
     volumes:
+      - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
       - ./config/static-assets/static:/usr/share/nginx/html
