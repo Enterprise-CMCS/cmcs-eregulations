@@ -4,8 +4,12 @@ Reg-Landing.scss
 reg-landing.scss contains styles specific to the regulation landing page
 */
 
-.reg-homepage {
-  margin-top: 150px;
+.reg-part-homepage {
+  margin-top: 170px;
+
+  h1 {
+    @include serif-font-bold;
+  }
 }
 
 .banner-text {
@@ -159,6 +163,38 @@ reg-landing.scss contains styles specific to the regulation landing page
 
 .effective-alert {
   padding: 10px;
+}
+
+// Important Topics
+
+.topics-include {
+  margin-top: 2em;
+
+  h4.topics {
+    color: $medicare_blue_dark;
+    @include serif-font-bold;
+    margin-bottom: .8em;
+  }
+
+  .list-header {
+    color: $action_color_dark;
+    transition: .1s;
+    font-weight: 400;
+
+    &:hover {
+      color: $primary_color;
+      cursor: pointer;
+    }
+  }
+
+  .toggle a {
+    color: $action_color_dark;
+    transition: .1s;
+
+    &:hover {
+      color: $primary_color;
+    }
+  }
 }
 
 @media only screen and (min-width: 1000px) {
