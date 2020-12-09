@@ -1,3 +1,7 @@
+.drawer-content {
+  padding: 80px 2%;
+}
+
 /*
 Table of Contents Drawer
 ========================
@@ -5,7 +9,7 @@ This contains all of the styles specific to the TOC
 */
 
 .toc-nav__base {
-  padding-top: 40px;
+  padding-top: 60px;
 
   // Used in Notice & Comment, which displays Federal Register Notices
   &.toc-nav__fr-notice {
@@ -95,7 +99,7 @@ This contains all of the styles specific to the TOC
   #nav-433-1 {
     color: $medicare_blue_light;
     font-weight: bold;
-    margin-left: -115px;
+    margin-left: -111px;
 
     .toc-section-marker {      
       display: inline;
@@ -193,13 +197,13 @@ This contains all of the styles specific to the history
 .history-drawer {
   @include sans-font-bold;
 
+  .drawer-content {
+    padding-top: 60px;
+  }
+
   ul,
   li {
     @include reset;
-  }
-
-  .drawer-content {
-    padding-top: 70px;
   }
 
   .effective-label {
@@ -265,7 +269,6 @@ This contains all of the styles specific to the history
   h3 {
     @include reset;
     font-size: 0.875em;
-    text-transform: uppercase;
     line-height: normal;
   }
 
@@ -313,14 +316,14 @@ This contains all of the styles specific to the history
     margin-bottom: 1em;
 
     button {
-      background-color: $white;
-      color: $medicare_gray_dark;
+      background-color: $medicare_blue_dark;
+      color: $white;
       padding: .5em 1.5em;
 
       &:hover {
         transition: .1s all ease;
-        background-color: $medicare_blue_dark;
-        color: $white;
+        background-color: $white; 
+        color: $action_color_dark;
       }
     }
   }
@@ -368,6 +371,12 @@ This contains all of the styles specific to the history
     margin-top: -1px;
     margin-bottom: -1px;
     height: 34px;
+    background-color: $action_color_dark;
+
+    &:hover {
+      background-color: $action_color;
+      color: $medicare_blue_dark;
+    }
   }
 }
 
@@ -421,7 +430,7 @@ This contains all of the styles specific to the search
   @include reset;
 
   .drawer-content {
-    padding-top: 40px;
+    padding-top: 60px;
   }
 
   h3 {
@@ -447,6 +456,7 @@ This contains all of the styles specific to the search
 
   button {
     width: 20%;
+    background-color: $action_color_dark;
   }
 }
 

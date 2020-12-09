@@ -34,11 +34,11 @@ Regulation Drawer
   a:hover,
   a.current {
     background-color: $panel_background_color;
-    color: $white;
+    color: $action_color;
     height: 60px;
 
     svg {
-      fill: $white;
+      fill: $action_color;
     }
   }
 
@@ -69,9 +69,9 @@ Drawer default state
     position: relative;
     margin: 0;
     width: 320px;
-    height: 60px;
-    line-height: 60px;
-    padding: 0 1.4em;
+    height: 80px;
+    line-height: 80px;
+    padding: 0 1.5em;
   }
 
   .toc-subheader {
