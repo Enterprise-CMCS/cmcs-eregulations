@@ -12,7 +12,7 @@ Regulation Drawer
   @include sans-font-regular;
   font-size: 1em * $sans_font_scale_factor;
   overflow-y: scroll; // allow content to be scrollable;
-  padding: 0 1em;
+  padding: 0;
 }
 
 .toc-head {
@@ -61,18 +61,17 @@ Drawer default state
 // Panel Header
 .drawer-header {
   position: fixed;
-  background-color: $white;
+  background-color: $panel_background_color;
   z-index: 100;
 
   .toc-type,
   .toc-subheader {
     position: relative;
     margin: 0;
-    width: 238px;
-    height: 40px;
-    line-height: 40px;
-    border-bottom: none;
-    padding: 0 15px;
+    width: 320px;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 1.4em;
   }
 
   .toc-subheader {
@@ -117,7 +116,7 @@ Panel Slide Button
   }
 
   .close & {
-    border-bottom: 1px solid $panel_border_color;
+    border-right: 1px solid $panel_border_color;
 
     svg:first-child {
       display: inline-block;
@@ -194,12 +193,21 @@ currently these are TOC, History, and Search
     &.current {
       background-color: $white;
       border-bottom: none;
-    }
+      color: $medicare_gray_mid;
+
+      svg {
+        fill: $medicare_gray_mid;
+      }
+    } 
   }
 
   .toc-nav-link:hover {
     background-color: $panel_background_color;
     border-bottom: none;
+
+    svg {
+      fill: $white;
+    }
   }
 }
 
@@ -219,9 +227,10 @@ currently these are TOC, History, and Search
   .close & {
     position: absolute;
     width: $closed_drawer_width;
-    top: 44px;
+    top: 50px;
     right: 0;
-    left: 281px;
+    left: 280px;
+    border-right: 1px solid $panel_border_color;
   }
 }
 
@@ -239,9 +248,9 @@ currently these are TOC, History, and Search
 
 // Drawer default closed state
 .panel.close {
-  left: -280px;
-  // Header, subheader, 3 TOC list items + 1px drawer-toggles border
-  top: $mainhead_height + $subhead_height + 3 * 60px + 1;
+  left: -281px;
+  // Header, subheader, 3 TOC list items 
+  top: $mainhead_height + $subhead_height + 3 * 50px;
   overflow-y: hidden;
 
   // slide content fully offscreen
@@ -266,7 +275,16 @@ currently these are TOC, History, and Search
 }
 
 .close .toc-head {
-  left: -280px;
+  left: -281px;
   margin-right: 15px;
   height: 150px; // extra height for TOC toggle buttons
+
+  a:link,
+  a:visited {
+    height: 50px;
+  }
+
+  svg {
+    height: 20px;
+  }
 }

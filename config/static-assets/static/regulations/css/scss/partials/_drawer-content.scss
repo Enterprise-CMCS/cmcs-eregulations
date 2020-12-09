@@ -75,12 +75,12 @@ This contains all of the styles specific to the TOC
   }
 
   li {
-    padding: 0 0 0 10px;
+    padding: 0 1rem;
     margin: 0;
     text-indent: 0;
 
     &:not([data-subpart-heading]) {
-      padding: 0 1.8em;
+      padding: 0 0 0 2em;
       font-size: 14px;
     }
    } 
