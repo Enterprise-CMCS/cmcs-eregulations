@@ -5,7 +5,6 @@ reg-main-content.scss defines styles for the regulation content in <main>
  */
 
 .reg-section {
-	padding-top: 40px;
 	min-height: 60vh;
 
 	a:link, a:visited {
@@ -14,6 +13,6 @@ reg-main-content.scss defines styles for the regulation content in <main>
 	}
 
 	h3.section-title {
-		margin-top: .8em;
+		margin-top: 60px;
 	}
 } 

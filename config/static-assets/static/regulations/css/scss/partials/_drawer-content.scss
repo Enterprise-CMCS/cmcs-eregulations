@@ -84,7 +84,7 @@ This contains all of the styles specific to the TOC
     text-indent: 0;
 
     &:not([data-subpart-heading]) {
-      padding: 0 0 0 2em;
+      padding: 0 1em 0 2.5em;
       font-size: 14px;
 
       &:hover {
@@ -107,7 +107,7 @@ This contains all of the styles specific to the TOC
   #nav-433-1 {
     color: $action_color;
     font-weight: bold;
-    margin-left: -114px;
+    margin-left: -117px;
     padding-top: 15px;
 
     &.current {
@@ -197,8 +197,9 @@ This contains all of the styles specific to the TOC
 
 
 .subpart-subhead {
-  @include sans-font-bold;
-  text-transform: none;
+  @include sans-font-regular;
+  display: block;
+  color: $white;
 }
 
 /*
