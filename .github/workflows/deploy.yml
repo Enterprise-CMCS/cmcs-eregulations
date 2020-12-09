@@ -26,7 +26,6 @@ jobs:
       - name: build static assets 
         run: |
           pushd config/static-assets
-          make clean
           make build
           popd
       - uses: actions/setup-node@v1
