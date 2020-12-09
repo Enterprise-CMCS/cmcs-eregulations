@@ -1,0 +1,18 @@
+/*
+Reg Main Content
+ ==========================================================================
+reg-main-content.scss defines styles for the regulation content in <main>
+ */
+
+.reg-section {
+	min-height: 60vh;
+
+	a:link, a:visited {
+		color: $action_color_dark;
+		text-decoration: underline;
+	}
+
+	h3.section-title {
+		margin-top: 60px;
+	}
+} 

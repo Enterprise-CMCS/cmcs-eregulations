@@ -20,7 +20,6 @@ fi
 popd
 
 pushd config/static-assets
-make clean
 make build
 popd
 
