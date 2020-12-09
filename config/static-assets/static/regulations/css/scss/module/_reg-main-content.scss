@@ -6,4 +6,9 @@ reg-main-content.scss defines styles for the regulation content in <main>
 
 .reg-section {
 	padding-top: 40px;
+
+	a:link, a:visited {
+		color: $action_color_dark;
+		text-decoration: underline;
+	}
 }

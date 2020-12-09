@@ -7,11 +7,11 @@ sidebar.scss styles all of the right sidebar content
 $icon_size: 18px;
 
 /*
-add a margin to sidebar content
-this offsets the persistent header & ensures long content is inside the viewport
+120px margin to sidebar content
+offsets the persistent header & ensures long content is inside the viewport
 */
 .sidebar-inner {
-  padding-bottom: 120px;
+  padding: 0 1.5em 120px 1.5em;
 }
 
 /* IE8 requires both the margin and padding to offset the header*/
@@ -43,11 +43,11 @@ Sidebar Expandables
   // @todo generalize this so that the id isn't required
   .expandable, #definition .group {
     cursor: pointer;
-    background-color: $gray_lightest;
+    background-color: $white;
     width: 100%;
 
     &.has-content {
-      background-color: $blue_lightest;
+      background-color: $white;
     }
 
     h4 {
@@ -129,22 +129,17 @@ Regs Meta
 Regs Meta contains the sub-content meta data found in the sidebar
 */
 
-.expand-drawer,
-.expandable {
-  @include border-bottom-light;
-}
-
 .regs-meta {
 
   // Headers within the sidebar should be <h4>
   h4 {
     padding: 0 10px;
-    font-size: 1em * $sans_font_scale_factor;
+    font-size: 1.15em * $sans_font_scale_factor;
     line-height: 40px;
     margin: 0;
     letter-spacing: 1px;
-    color: $gray_darkest;
-    @include sans-font-regular;
+    color: $action_color_dark;
+    @include sans-font-semibold;
 
     &.important {
       color: $red;
@@ -388,15 +383,20 @@ Styles for the UI help slide down
 
 #print_part {
   .group {
-    background-color: $gray_lightest;
-    @include border-bottom-light;
+    background-color: $white;
+  }
+
+  h4 {
+    text-transform: uppercase;
+    font-size: .8em;
+    @include sans-font-bold;
+    margin-top: 2em;
   }
 
   .cf-icon-print {
-    float: right;
-    color: $action_color;
+    color: $action_color_dark;
     // The print icon is a bit smaller than chevrons; enlarge it
-    font-size: $icon_size + 3;
+    // font-size: $icon_size + 3;
     line-height: 40px;
     margin-right: 15px;
   }
