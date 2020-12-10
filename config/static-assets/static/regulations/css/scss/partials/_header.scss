@@ -9,6 +9,10 @@
   position: absolute;
   height: $mainhead_height + $subhead_height;
 
+  &.site-homepage {
+    height: $site_homepage_height;
+  }
+
   ul {
     padding: 0;
     margin-top: 0;
@@ -30,42 +34,101 @@
   height: $mainhead_height;
 }
 
+.site-homepage .main-head {
+  height: $site_homepage_height;
+}
+
+.flash-demo {
+  height: 48px;
+  line-height: 44px;
+  background-color: $medicare_teal;
+  color: $white;
+  text-align: center;
+
+  img {
+    margin-right: .5em;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  button {
+    background-color: $white;
+    border-radius: 4px;
+    color: $medicare_blue_mid;
+    transition: 0.3s;
+    vertical-align: middle;
+    margin-left: .5em;
+    padding: 9px 20px;
+
+    &:hover {
+      background-color: $action_color;
+    }
+  }
+}
+
+.site-homepage .flash-demo {
+  display: none;
+}
+
 .title {
   display: inline-block;
   float: left;
-  line-height: 57px;
-  height: 57px;
+  line-height: 100px;
+  height: 100px;
   overflow: hidden;
+  padding: 1em;
+  margin-top: -1em;
 
-  a {
-    &:link,
-    &:visited {
-      color: $primary_color;
-    }
+  .site-logo {
+    padding-right: 1.5em;
+    border-right: 1px solid $medicare_gray_light;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
 
-    &:hover,
-    &:active {
-      color: $primary_color_dark;
+    img {
+      width: 100%;
+      max-width: 250px;
+
+      &:hover {
+        opacity: .8;  
+      }
     }
-  }
+  }  
 
   .reg-title,
   .site-title {
-    font-size: 1.325em;
+    font-size: 1.7em;
     @include reset;
-    display: inline;
+    display: inline-block;
   }
 
   .reg-title {
     @include sans-font-regular;
-    font-size: 1.125em;
-    max-height: 20px;
+    font-size: 1.7em;
+
+    a {
+      color: $medicare_gray_mid;
+
+      &:hover {
+        color: $medicare_teal;
+      }
+    }
   }
 
   .site-title {
-    @include sans-font-bold;
-    font-size: 1.375em;
-    padding-left: 15px;
+    @include sans-font-semibold;
+    font-size: 1.7em;
+    padding: 0 .5em 0 .8em;
+
+    a {
+      color: $medicare_teal;
+      font-weight: 500;
+
+      &:hover {
+        color: $primary_color_dark;
+      }
+    }
   }
 
   .e {
@@ -77,30 +140,6 @@
   .reg_part {
     display: none;
   }
-}
-
-@media only screen and (min-width: 480px) {
-
-  .main-head {
-    .reg-title:before {
-      content: '|';
-      @include sans-font-regular;
-      padding: 0 12px;
-      color: $gray_light;
-    }
-  }
-}
-
-.title a:link,
-.title a:visited {
-  border-bottom: none;
-  color: $primary_color;
-  text-decoration: none;
-}
-
-.title a:hover,
-.title a:active {
-  color: $primary_color_dark;
 }
 
 .sub-head {

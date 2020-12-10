@@ -141,12 +141,24 @@ This contains all of the styles specific to the TOC
   }
 
   a:hover,
-  a:active,
-  .current {
+  a:active {
     margin-left: -100px;
     padding-left: 102px;
     color: $white;
+    background-color: $medicare_blue_less_dark;
+  }
+
+  .current {    // I don't know why these values were set to be so weird
+    margin-left: -100px;
+    padding-left: 38px;  // .toc-nav__base a padding-left minus border-left 
+    border-left: 64px solid $medicare_blue_light;
+    color: $white;
     background-color: $panel_highlight_color;
+
+    &:hover,
+    &:active {
+      padding-left: 38px;
+    }
   }
 
   /*
@@ -335,7 +347,7 @@ This contains all of the styles specific to the history
       padding: .5em 1.5em;
 
       &:hover {
-        transition: .1s all ease;
+        transition: 0.3s;
         background-color: $white; 
         color: $action_color_dark;
       }

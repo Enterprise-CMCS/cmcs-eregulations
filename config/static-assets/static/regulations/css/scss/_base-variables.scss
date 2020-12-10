@@ -45,6 +45,7 @@ $gold_lightest: #FFF1D2;
 
 $medicare_teal: #026666;
 $medicare_blue_dark: #17415F;
+$medicare_blue_less_dark: #205982;
 $medicare_blue_mid: #046791;
 $medicare_blue_light: #A3E8FF;
 $medicare_blue_lightest: #EEFAFE;
@@ -93,9 +94,9 @@ $sans_font_scale_factor: 1;
 
 // Layout Variables
 $closed_drawer_width: 40px;
-$mainhead_height: 56px; // Height of your .main-head element. Used to calculate the fixed offsets.
+$mainhead_height: 140px; // Height of your .main-head element. Used to calculate the fixed offsets.
 $subhead_height: 44px;  // Height of your .sub-head element. Used to calculate the fixed offsets.
-
+$site_homepage_height: 100px; // Subtract .flash-demo from .main-head
 
 // Mixins
 @mixin sans-font-light {

@@ -165,9 +165,9 @@ a:visited {
   color: $action_color;
   text-decoration: none;
   border: none;
-  -webkit-transition: 0.1s;
-  -moz-transition: 0.1s;
-  transition: 0.1s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  transition: 0.3s;
 }
 
 /*  Internal Links
@@ -175,18 +175,18 @@ a:visited {
   <a href="#" class="internal">internal contents</a>
 */
 
-.internal,
-.internal:link,
-.internal:visited {
-  color: $black;
-  text-decoration: none;
-}
+// .internal,
+// .internal:link,
+// .internal:visited {
+//   color: $black;
+//   text-decoration: none;
+// }
 
-.internal:hover,
-.internal:active,
-.internal:focus {
-  color: $black_dark;
-}
+// .internal:hover,
+// .internal:active,
+// .internal:focus {
+//   color: $black_dark;
+// }
 
 /*  External Links
   --------------

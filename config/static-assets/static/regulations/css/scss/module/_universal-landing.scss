@@ -6,8 +6,16 @@
 
 /* offset the persistent header */
 .landing-content {
-  margin-top: 56px;
+  margin-top: $site_homepage_height;
   @include sans-font-regular;
+
+  a {
+    color: $action_color_dark;
+
+    &:hover {
+      color: $primary_color_dark;
+    }
+  }
 
   .disclaimer {
     margin-top: 1em;
