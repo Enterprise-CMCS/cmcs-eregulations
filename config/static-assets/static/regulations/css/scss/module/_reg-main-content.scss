@@ -7,9 +7,20 @@ reg-main-content.scss defines styles for the regulation content in <main>
 .reg-section {
 	min-height: 60vh;
 
-	a:link, a:visited {
-		color: $action_color_dark;
+	a {
 		text-decoration: underline;
+
+		&:link {
+			color: $action_color_dark;
+		}
+
+		&:visited {
+			color: $medicare_magenta;
+		}
+
+		&:hover {
+			color: $medicare_blue_dark;
+		}
 	}
 
 	h3.section-title {

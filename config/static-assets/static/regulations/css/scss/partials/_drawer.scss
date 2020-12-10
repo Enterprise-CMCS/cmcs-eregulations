@@ -44,6 +44,7 @@ Regulation Drawer
 
   a:hover:not(.current) {
     height: 60px;
+    background-color: $medicare_blue_less_dark;
   }
 }
 
@@ -249,8 +250,8 @@ currently these are TOC, History, and Search
 // Drawer default closed state
 .panel.close {
   left: -281px;
-  // Header, subheader, 3 TOC list items 
-  top: $mainhead_height + $subhead_height + 3 * 50px;
+  // Header, subheader, 3 TOC list items + 6px
+  top: $mainhead_height + $subhead_height + 3 * 50px + 6px;
   overflow-y: hidden;
 
   // slide content fully offscreen

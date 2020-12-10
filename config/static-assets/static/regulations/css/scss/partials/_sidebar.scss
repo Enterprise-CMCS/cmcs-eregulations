@@ -74,20 +74,20 @@ Sidebar Expandables
     &.expandable a:before {
       @extend .fa; // Font Awesome
       content: '\f078';
-      color: $blue_light;
+      color: $action_color_dark;
     }
 
     &.open a:before {
       @extend .fa; // fFont Awesome
       content: '\f077';
-      color: $blue_light;
+      color: $action_color_dark;
     }
   }
 
   .open-definition header a:before {
-    @extend .cf-icon;
-    content: '\e107';
-    color: $blue_light;
+    @extend .fa; // fFont Awesome
+    content: '\f00d';
+    color: $action_color_dark;
   }
 
   /*
@@ -125,13 +125,13 @@ Sidebar Expandables
   }
 }
 
-
 /*
 Sidebar Headers
 ===============
 */
 // @todo - this is used by definitions but _not_ by other sidebar headers.
 // Combine
+
 .open-definition {
 
   &.spinner {
@@ -241,6 +241,84 @@ Definitions
 When open definitions appear in the right sidebar
 */
 
+
+#definition {
+  background: $medicare_blue_lightest;
+
+  .open-definition {
+    border: 0;
+    margin-bottom: 2em;
+    padding: 0 2em .7em;
+    transition: 0.3s;
+
+    header.group {
+      background: $medicare_blue_lightest;
+      padding-top: 1.5em;
+    }
+
+    h4 {
+      @include serif-font-bold;
+      color: $primary_color_dark;
+    } 
+
+    p {
+      font-family: $body_font;
+      font-weight: normal;
+    }
+
+    & > p {
+      clear: left;
+    }
+
+    .definition-text,
+    .definition-warning {
+      padding: 1em;
+
+      p {
+        margin-top: 0;
+        line-height: 1.7em;
+      }
+
+      &.inactive,
+      &.inactive a.citation.definition {
+        color: $gray;
+      }
+    }
+
+    .definition-warning {
+      color: $red;
+      border-bottom: 1px solid $gray_light;
+      margin: 0 1em;
+      padding: 1em 0 0 0;
+
+      p {
+        @include sans-font-regular;
+        font-size: .9em;
+      }
+
+      .msg {
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+    }
+
+    .msg {
+      width: 85%;
+      float: left;
+      border-bottom: 1px solid $gray_dark;
+      padding-bottom: 1em;
+    }
+
+    .update-definition {
+      display: inline;
+    }
+  }
+
+  .error {
+    padding: 1em;
+  }
+}
+
 .sidebar-inner .open-definition,
 .spinner {
   @include border-bottom-light;
@@ -251,68 +329,13 @@ When open definitions appear in the right sidebar
   @include sans-font-bold;
 }
 
-.open-definition {
+.definition-text a {
+  color: $action_color_dark;
+  font-weight: 600;
 
-
-  p {
-    font-family: $body_font;
-    font-weight: normal;
+  &:hover {
+    color: $primary_color_dark;
   }
-
-  & > p {
-    clear: left;
-  }
-
-  header {
-    border-bottom: 1px solid $gray_light;
-  }
-
-  .definition-text,
-  .definition-warning {
-    padding: 1em;
-
-    p {
-      margin-top: 0;
-      line-height: 1.7em;
-    }
-
-    &.inactive,
-    &.inactive a.citation.definition {
-      color: $gray;
-    }
-  }
-
-  .definition-warning {
-    color: $red;
-    border-bottom: 1px solid $gray_light;
-    margin: 0 1em;
-    padding: 1em 0 0 0;
-
-    p {
-      @include sans-font-regular;
-      font-size: .9em;
-    }
-
-    .msg {
-      padding-bottom: 0;
-      border-bottom: none;
-    }
-  }
-
-  .msg {
-    width: 85%;
-    float: left;
-    border-bottom: 1px solid $gray_dark;
-    padding-bottom: 1em;
-  }
-
-  .update-definition {
-    display: inline;
-  }
-}
-
-#definition .error {
-  padding: 1em;
 }
 
 .js .expand-drawer.start-collapsed {
@@ -410,17 +433,18 @@ Styles for the UI help slide down
 
   h4 {
     text-transform: uppercase;
-    font-size: .8em;
+    font-size: .85em;
     @include sans-font-bold;
     margin-top: 2em;
+
+    &:hover {
+      color: $primary_color;
+    }
   }
 
   .cf-icon-print {
-    color: $action_color_dark;
-    // The print icon is a bit smaller than chevrons; enlarge it
-    // font-size: $icon_size + 3;
-    line-height: 40px;
-    margin-right: 15px;
+    margin-right: .5em;
+    font-size: 2.5em;
   }
 }
 

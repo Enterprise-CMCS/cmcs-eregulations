@@ -44,10 +44,6 @@ p.search-version {
   p:after {
     content: '”';
   }
-
-  .internal {
-    color: $action_color;
-  }
 }
 
 .search-nav {
@@ -56,8 +52,7 @@ p.search-version {
   a:link,
   a:visited {
     @include sans-font-bold;
-    color: $action_color;
-    text-decoration: none;
+    color: $action_color_dark;
   }
 
   a:hover,
