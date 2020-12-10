@@ -95,7 +95,7 @@ $sans_font_scale_factor: 1;
 $closed_drawer_width: 40px;
 $mainhead_height: 140px; // Height of your .main-head element. Used to calculate the fixed offsets.
 $subhead_height: 44px;  // Height of your .sub-head element. Used to calculate the fixed offsets.
-
+$site_homepage_height: 100px; // Subtract .flash-demo from .main-head
 
 // Mixins
 @mixin sans-font-light {

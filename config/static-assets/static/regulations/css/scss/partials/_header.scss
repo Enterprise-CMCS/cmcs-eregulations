@@ -9,6 +9,10 @@
   position: absolute;
   height: $mainhead_height + $subhead_height;
 
+  &.site-homepage {
+    height: $site_homepage_height;
+  }
+
   ul {
     padding: 0;
     margin-top: 0;
@@ -30,8 +34,35 @@
   height: $mainhead_height;
 }
 
+.site-homepage .main-head {
+  height: $site_homepage_height;
+}
+
 .flash-demo {
-  height: 40px;
+  height: 48px;
+  line-height: 44px;
+  background-color: $medicare_teal;
+  color: $white;
+  text-align: center;
+
+  button {
+    background-color: $white;
+    border-radius: 4px;
+    color: $medicare_blue_mid;
+    transition: .1s;
+    vertical-align: middle;
+    margin-left: .5em;
+    padding: 9px 20px;
+
+    &:hover {
+      background-color: $medicare_blue_dark;
+      color: $white;
+    }
+  }
+}
+
+.site-homepage .flash-demo {
+  display: none;
 }
 
 .title {
