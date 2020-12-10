@@ -63,7 +63,7 @@ const MainView = Backbone.View.extend({
     e.preventDefault();
 
     if ($collapsibleEl.is(':visible')) {
-      $collapsibleEl.hide();
+      $collapsibleEl.slideToggle(400);
       $collapsibleEl.attr('aria-hidden', true);
 
       $toggleButton.attr('aria-expanded', false);
@@ -73,7 +73,7 @@ const MainView = Backbone.View.extend({
       $toggleButtonClose.hide();
       $toggleButtonClose.attr('aria-hidden', true);
     } else {
-      $collapsibleEl.show();
+      $collapsibleEl.slideToggle(400);
       $collapsibleEl.attr('aria-hidden', false);
 
       $toggleButton.attr('aria-expanded', true);
