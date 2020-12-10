@@ -335,7 +335,7 @@ This contains all of the styles specific to the history
       padding: .5em 1.5em;
 
       &:hover {
-        transition: .1s all ease;
+        transition: 0.3s;
         background-color: $white; 
         color: $action_color_dark;
       }
