@@ -1,5 +1,14 @@
 [
   {
+    "header": "Statutes/Executive Orders",
+    "links": [
+      {
+        "href": "https://www.ssa.gov/OP_Home/ssact/title19/1903.htm",
+        "name": "Social Security Act Section 1903(a)(3)(A)"
+      }
+    ]
+  },
+  {
     "header": "Notices of Proposed Rulemaking (NPRM)",
     "links": [
       {
@@ -9,6 +18,10 @@
       {
         "href": "https://www.govinfo.gov/content/pkg/FR-2015-04-16/pdf/2015-08754.pdf",
         "name": "Medicaid Program; Mechanized Claims Processing and Information Retrieval Systems (90/10) (80 FR 20455), April 16, 2015"
+      },
+      {
+        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr053/fr053155/fr053155.pdf#page=83",
+        "name": "Medicaid Program; Medicaid Management Information System: Revised Definition of \"Mechanized Claims Processing and Information Retrieval System\" (53 FR 30317) August 11, 1988"
       }
     ]
   },
@@ -16,7 +29,7 @@
     "header": "Final Rules/Interim Final Rules",
     "links": [
       {
-        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=359",
+        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=334",
         "name": "Redesignation and Rewrite, September 29, 1978 (43 FR 45176)"
       },
       {
@@ -24,7 +37,7 @@
         "name": "Conditions for Federal Financial Participation in the Cost of Automatic Data Processing (43 FR 44851), September 29, 1978"
       },
       {
-        "href": "https://www.govinfo.gov/content/pkg/FR-1979-03-23/pdf/FR-1979-03-23.pdf#page=303",
+        "href": "https://www.govinfo.gov/content/pkg/FR-1979-03-23/pdf/FR-1979-03-23.pdf#page=286",
         "name": "Redesignation and Rewrite (44 FR 17926, March 23, 1979)"
       },
       {
@@ -44,8 +57,8 @@
         "name": "Medicaid Program; Medicaid Management Information System: Revised Definition of \"Mechanized Claims Processing and Information Retrieval System\" (54 FR 41966), October 13, 1989."
       },
       {
-        "href": "https://s3.amazonaws.com/archives.federalregister.gov/issue_slice/1990/1/19/1819-1823.pdf#page=1",
-        "name": "Medicare as Secondary Payer and Medicare Recovery Against Third Parties (55 FR 1819), January 19, 1990"
+        "href": "https://s3.amazonaws.com/archives.federalregister.gov/issue_slice/1990/1/19/1819-1823.pdf#page=2",
+        "name": "Medicaid Program; Medicaid Management Information System: Revised Definition of \"Mechanized Claims Processing and Information Retrieval System\" (55 FR 1820), January 19, 1990"
       },
       {
         "href": "https://s3.amazonaws.com/archives.federalregister.gov/issue_slice/1990/2/7/4304-4377.pdf#page=61",
@@ -56,8 +69,8 @@
         "name": "Medicaid Program; Federal Funding for Medicaid Eligibility Determination and Enrollment Activities (76 FR 21950), April 19, 2011"
       },
       {
-        "href": "https://www.federalregister.gov/documents/2015/12/04/2015-30591/medicaid-program-mechanized-claims-processing-and-information-retrieval-systems-9010",
-        "name": "Mechanized Claims Processing and Information Retrieval Systems (90/10), December 4, 2015"
+        "href": "https://www.govinfo.gov/content/pkg/FR-2015-12-04/pdf/2015-30591.pdf",
+        "name": "Mechanized Claims Processing and Information Retrieval Systems (90/10), (80 FR 75817), December 4, 2015"
       },
       {
         "href": "https://www.govinfo.gov/content/pkg/FR-2016-11-30/pdf/2016-27844.pdf",
