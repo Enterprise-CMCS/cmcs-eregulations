@@ -65,8 +65,8 @@ Sidebar Expandables
     a {
       float: right;
       font-size: $icon_size;
-      line-height: 40px;
       margin-right: 25px;
+      line-height: 1em;
     }
   }
 
@@ -98,6 +98,7 @@ Sidebar Expandables
     padding-bottom: 28px;
     padding-top: 28px;
     padding-right: 1.5em;
+    margin-top: -1.5em;
 
     a {
       color: $action_color_dark;
@@ -159,10 +160,12 @@ Regs Meta contains the sub-content meta data found in the sidebar
   h4 {
     padding: 0 10px;
     font-size: 1.15em * $sans_font_scale_factor;
-    line-height: 40px;
     margin: 0;
     color: $action_color_dark;
     @include sans-font-semibold;
+    line-height: 1.3em;
+    max-width: calc(100% - 60px);
+    margin-bottom: 1.5em;
 
     &.important {
       color: $red;
@@ -254,7 +257,7 @@ When open definitions appear in the right sidebar
 
     header.group {
       background: $medicare_blue_lightest;
-      padding-top: 1.5em;
+      padding-top: 2.5em;
     }
 
     h4 {
@@ -273,7 +276,7 @@ When open definitions appear in the right sidebar
 
     .definition-text,
     .definition-warning {
-      padding: 1em;
+      padding: 0 1em 1.5em 1em;
 
       p {
         margin-top: 0;
