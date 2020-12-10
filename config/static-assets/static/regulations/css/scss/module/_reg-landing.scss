@@ -100,46 +100,55 @@ reg-landing.scss contains styles specific to the regulation landing page
 }
 
 // Sidebar
-.secondary-content {
 
-  .expandable.group {
+
+.homepage-sidebar .regs-meta .expandable {
+  cursor: pointer;
+  background-color: $white;
+
+  &:hover h4 {
+    color: $primary_color;
+  }
+
+  h4 {
+    color: $primary_color_dark;
+  }
+
+  &.open h4 {
+    color: $action_color_dark;
 
     &:hover h4 {
       color: $primary_color;
     }
+  }
+}  
 
-    h4 {
-      color: $primary_color_dark;
-    }
-  }  
+.landing-sidebar {
 
-  .landing-sidebar {
+  .regs-meta {
+    border-bottom: none;
+  }
 
-    .regs-meta {
-      border-bottom: none;
-    }
+  h3 {
+    @include sans-font-regular;
+    font-size: 1.285714286em;
+    margin: 1.6em 0 1em 0;
+  }
 
-    h3 {
-      @include sans-font-regular;
-      font-size: 1.285714286em;
-      margin: 1.6em 0 1em 0;
-    }
+  h4 {
+    color: $black;
+    text-transform: none;
+    margin-bottom: 0.5em;
+    @include sans-font-bold;
+    letter-spacing: normal;
+  }
 
-    h4 {
-      color: $black;
-      text-transform: none;
-      margin-bottom: 0.5em;
-      @include sans-font-bold;
-      letter-spacing: normal;
-    }
+  ul {
+    margin-bottom: 2em;
+  }
 
-    ul {
-      margin-bottom: 2em;
-    }
-
-    li {
-      margin-top: 0.5em;
-    }
+  li {
+    margin-top: 0.5em;
   }
 }
 
@@ -169,6 +178,7 @@ reg-landing.scss contains styles specific to the regulation landing page
 
 .topics-include {
   margin-top: 2em;
+  max-width: 600px;
 
   h4.topics {
     color: $medicare_blue_dark;
@@ -178,7 +188,7 @@ reg-landing.scss contains styles specific to the regulation landing page
 
   .list-header {
     color: $action_color_dark;
-    transition: .1s;
+    transition: .3s;
     font-weight: 400;
 
     &:hover {
@@ -189,11 +199,20 @@ reg-landing.scss contains styles specific to the regulation landing page
 
   .toggle a {
     color: $action_color_dark;
-    transition: .1s;
+    transition: .3s;
 
     &:hover {
       color: $primary_color;
     }
+  }
+
+  .button[aria-expanded="true"] h4 {
+    color: $primary_color_dark;
+  }
+
+  .toggle-button-open, 
+  .toggle-button-close {
+    float: right;
   }
 }
 

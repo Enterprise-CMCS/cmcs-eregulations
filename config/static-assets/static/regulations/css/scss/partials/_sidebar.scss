@@ -72,14 +72,14 @@ Sidebar Expandables
 
   header {
     &.expandable a:before {
-      @extend .cf-icon;
-      content: '\e003';
+      @extend .fa; // Font Awesome
+      content: '\f078';
       color: $blue_light;
     }
 
     &.open a:before {
-      @extend .cf-icon;
-      content: '\e007';
+      @extend .fa; // fFont Awesome
+      content: '\f077';
       color: $blue_light;
     }
   }
