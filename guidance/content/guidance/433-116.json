@@ -1,5 +1,14 @@
 [
   {
+    "header": "Statutes/Executive Orders",
+    "links": [
+      {
+        "href": "https://www.ssa.gov/OP_Home/ssact/title19/1903.htm",
+        "name": "Social Security Act Section 1903(a)(3)(B)"
+      }
+    ]
+  },
+  {
     "header": "Notices of Proposed Rulemaking (NPRM)",
     "links": [
       {
@@ -16,7 +25,7 @@
     "header": "Final Rules",
     "links": [
       {
-        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=359",
+        "href": "https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043190/fr043190.pdf#page=334",
         "name": "Redesignation and Rewrite, September 29, 1978 (43 FR 45176)"
       },
       {
