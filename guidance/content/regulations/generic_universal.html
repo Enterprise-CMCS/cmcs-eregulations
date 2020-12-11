@@ -31,10 +31,10 @@
 <div class="hero">
     <div class="inner-wrap group">
       <div class="primary">
-        <h2 class="hero-header">A platform to read regulations.</h2>
-        <p class="hero-text">eRegulations makes regulations easier to find, read, and understand.</p>
-
-        <p class="read-more-link"><a href="{% url 'about' %}" class="go">About eRegulations</a></p>
+        <h2 class="hero-header">Join our user research for this tool</h2>
+        <p class="hero-text">This is a DSG pilot project to make it easier to research and draft regulations and subregulatory guidance for CMCS work.</p>
+        <p class="hero-text">Try this: go to <a href="/433-112/2016-27844#433-112">Part 433, Section 112</a>, and see the subregulatory guidance in the sidebar, or <a href="diff/433-112/E8-27810/2016-27844?from_version=2016-27844#433-112">see what changed from 2008 to 2017</a>.</p>
+        <p class="hero-text">If you work with CMCS regs, we want to make this work for you &mdash; <a href="mailto:britta.gustafson@a1msolutions.com">email Britta Gustafson</a> to sign up for a 30-minute interview.</p>
       </div>
     </div> <!-- /.inner-wrap -->
 </div> <!-- /.hero -->
@@ -89,15 +89,13 @@
 
       {% block about-eregs %}
       <section class="about bump group">
-        <h2 class="light-header">About eRegulations</h2>
+        <h2 class="light-header">About</h2>
         <div class="content-primary column-l">
 
-          <p>eRegulations is a web-based tool that makes regulations easier
-          to find, read and understand with features such as inline
-          official interpretations, highlighted defined terms, and a
-          revision comparison view.</p>
+          <p>This is a web-based tool that makes regulations easier
+          to find, read and understand with features such as highlighted defined terms and a revision comparison view.</p>
 
-          <p><a href="{% url 'about' %}" class="go">Learn more about eRegulations&#8217; features</a></p>
+          <p><a href="{% url 'about' %}" class="go">Learn more about its features</a></p>
         </div> <!-- /.primart -->
 
         {% block orgcontact %}

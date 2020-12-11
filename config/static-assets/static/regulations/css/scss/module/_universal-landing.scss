@@ -10,10 +10,11 @@
   @include sans-font-regular;
 
   a {
-    color: $action_color_dark;
+    color: $medicare_blue_light;
+    text-decoration: underline;
 
     &:hover {
-      color: $primary_color_dark;
+      color: $medicare_blue_lightest;
     }
   }
 
@@ -29,10 +30,11 @@
  */
 
 .hero {
-  background-color: $green_light;
+  background-color: $medicare_teal;
   overflow: hidden;
   @include sans-font-regular;
   @include border-bottom-light;
+  color: $white;
 
   .inner-wrap {
     background: url('../img/hero.png') 96% -100% no-repeat;
@@ -66,6 +68,7 @@
 .hero-text {
   font-size: 1.125em;
   margin-top: 0;
+  max-width: 600px;
 }
 
 .read-more-link {
