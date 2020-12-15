@@ -1,0 +1,3 @@
+<li class="toggle-toc-menu-sections subpart-{{item.index|last}}"><a href="{{sub_toc_item.url}}" data-section-id="{{sub_toc_item.section_id}}" id="nav-{{sub_toc_item.section_id}}">
+        <span class="toc-section-marker">{% if sub_toc_item.is_section_span%}§§&nbsp;{% else %}§&nbsp;{% endif %}{{sub_toc_item.label}}</span> {{sub_toc_item.sub_label|safe}}
+</a></li>
