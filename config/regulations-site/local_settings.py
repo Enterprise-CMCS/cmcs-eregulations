@@ -13,7 +13,6 @@ INSTALLED_APPS = (
 
 SIDEBARS = (
     'cmcs.regulations.sidebar.guidance.Guidance',
-    'regulations.generator.sidebar.help.Help',
     'regulations.generator.sidebar.print_part.PrintPart',
 )
 
