@@ -67,10 +67,13 @@
 }
 
 .hero-text {
-  font-size: 1.125em;
-  margin-top: 0;
   max-width: 600px;
-}
+
+  p {
+    font-size: 1.125em;
+    margin-top: 0;
+  }
+}  
 
 .read-more-link {
   margin-bottom: 2em;
@@ -253,7 +256,19 @@ Small screens
 -------------
 */
 
+@media only screen and (max-width: 900px) {
+
+  .hero-text {
+    max-width: 100%;
+  }
+
+  .landing-main .content-primary {
+    width: 100%;
+  }
+}
+
 @media only screen and (max-width: 480px) {
+
   .banner-text {
     margin-top: 50px;
     font-size: 1.625em;
@@ -268,19 +283,21 @@ Small screens
     }
   }
 
+  .landing-main .content-primary .small-header.light-header {
+    font-size: 1.9em;
+  }
+
   .reg-list {
     .title-num {
-      display: block;
       height: auto;
       float: none;
-      margin-right: 0;
-      padding-right: 0;
+      display: inline-block;
+      margin-right: .5em;
     }
 
     .reg-sub-title {
-      display: block;
+      display: inline-block;
       float: none;
-      width: 80%;
       margin-right: 0;
       padding-right: 0;
     }
@@ -294,15 +311,13 @@ Small screens
     }
 
     a {
-      height: 120px;
+      height: 60px;
       position: relative;
+      line-height: 30px;
     }
 
-    .cf-icon-right-round {
-      display: block;
-      position: absolute;
-      top: 25%;
-      right: 15px;
+    .fa-chevron-right {
+      line-height: 35px;
     }
   }
 }
