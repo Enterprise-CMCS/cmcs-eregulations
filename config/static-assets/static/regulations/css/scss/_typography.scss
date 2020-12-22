@@ -124,6 +124,12 @@ h6 {
   padding-right: 60px;
   color: $medicare_gray_mid;
   @include sans-font-semibold;
+
+  &.diff-dates {
+    color: $white;
+    padding: 0 80px;
+    background: $medicare_magenta;
+  }
 }
 
 /*  Lists

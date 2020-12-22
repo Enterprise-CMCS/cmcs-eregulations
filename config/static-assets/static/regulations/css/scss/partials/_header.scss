@@ -159,13 +159,6 @@
 
   &.non-current {
     background-color: $alert_color;
-
-    .effective-date:before {
-      font-family: 'CFPB Minicons';
-      content: '\e637';   // A clock
-      font-style: normal;
-      font-weight: normal;
-    }
   }
 
   .return-to-current {
