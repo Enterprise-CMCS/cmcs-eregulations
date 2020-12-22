@@ -51,6 +51,10 @@
         </h2>
         {% endblock %}
 
+        <h3>Chapter IV: Centers for Medicare & Medicaid Services, Department of Health and Human Services
+        <br />Subchapter C: Medical Assistance Programs
+        </h3>
+
         {% block reg-list %}
         <ul class="reg-list">
             {% for regulation in regulations %}
@@ -65,7 +69,7 @@
                                 <span class="reg-major-text">{{regulation.meta.statutory_name|title}}</span>
                             {% endif %}
                         </div>
-                        <span class="cf-icon cf-icon-right-round"></span>
+                        <span class="fa fa-chevron-right"></span>
                     </a>
 
                     {% for amendment in regulation.amendments %}
@@ -89,7 +93,6 @@
 
       {% block about-eregs %}
       <section class="about bump group">
-        <h2 class="light-header">About</h2>
         <div class="content-primary column-l">
 
           <p>This is a web-based tool that makes regulations easier
@@ -101,8 +104,17 @@
         {% block orgcontact %}
         {% endblock %}
 
-        {% block legal %}
-        {% endblock %}
+        <div class="disclaimer content-primary column-l">
+
+          <h5>Legal Limitations of This Tool</h5>
+        
+          <p>The CMS Regulations tool is an editorial compilation of material and not an official legal edition of the Code of Federal Regulations or the Federal Register. We have made every effort to ensure the material presented in this tool is accurate, but if you are relying on it for legal research you should consult the official editions of those sources to confirm your findings. Nothing in this tool binds CMS or creates any rights, benefits, or defenses, substantive or procedural, that are enforceable by any party in any manner.</p>
+
+        </div>
+
+
+        <!-- {% block legal %}
+        {% endblock %} -->
       </section> <!-- /.about -->
       {% endblock %}
   </div> <!-- /.inner-wrap -->

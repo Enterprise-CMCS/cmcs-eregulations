@@ -35,16 +35,17 @@
   @include sans-font-regular;
   @include border-bottom-light;
   color: $white;
+  padding: 2em 0;
 
   .inner-wrap {
-    background: url('../img/hero.png') 96% -100% no-repeat;
+    background: url('../img/talk.png') 96% 50% no-repeat;
   }
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .hero .inner-wrap {
-    background: url('../img/hero@2x.png') 96% -100% no-repeat;
-    background-size: 325px 206px;
+    background: url('../img/talk@2x.png') 96% 50% no-repeat;
+    background-size: 200px 200px;
   }
 }
 
@@ -80,15 +81,33 @@
  ================
 */
 
+.landing-main .content-primary {
+  color: $primary_color_dark;
+  width: 80%;
+
+  .small-header.light-header {
+    font-size: 2.2em;
+    @include serif-font-bold;
+  }
+
+  h3 {
+    @include sans-font-regular; 
+    font-size: 1em;
+    line-height: 1.4em;
+  }
+} 
+
 .reg-list {
   margin-top: 1em;
   @include reset;
-  @include border-top-light;
 
   li {
     display: block;
     margin: 0;
-    @include border-bottom-light;
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $medicare_gray_light;
+    }
   }
 
   a {
@@ -96,17 +115,18 @@
     height: 94px;
     width: 100%;
     padding: 15px;
+    line-height: 60px;
   }
 
   a:link,
   a:visited {
-    color: $black;
+    color: $action_color_dark;
   }
 
   a:hover,
   a:active,
   a:focus {
-    background-color: $gray_lightest;
+    background-color: $medicare_gray_lightest;
   }
 
   .title-num {
@@ -130,11 +150,11 @@
     font-size: 1.375em;
   }
 
-  .cf-icon-right-round {
+  .fa-chevron-right {
     display: block;
     float: right;
     line-height: 60px;
-    color: $blue_light;
+    color: $action_color_dark;
     font-size: 1.25em;
   }
 
@@ -182,8 +202,28 @@
 */
 
 .about {
+  padding-bottom: 3em;
+
   h3 {
     @include reset;
+  }
+
+  a {
+    color: $action_color_dark;
+
+    &:hover {
+      color: $primary_color_dark;
+    }
+  }
+}
+
+.landing-main .content-primary.disclaimer {
+  color: $primary_color;
+  margin-top: 4em;
+
+  h5 {
+    @include serif-font-bold;
+    text-transform: none;
   }
 }
 
