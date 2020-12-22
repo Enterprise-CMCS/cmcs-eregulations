@@ -79,23 +79,6 @@
   padding: 1em;
   margin-top: -1em;
 
-  .site-logo {
-    padding-right: 1.5em;
-    border-right: 1px solid $medicare_gray_light;
-    height: 100%;
-    display: inline-block;
-    vertical-align: middle;
-
-    img {
-      width: 100%;
-      max-width: 250px;
-
-      &:hover {
-        opacity: .8;  
-      }
-    }
-  }  
-
   .reg-title,
   .site-title {
     font-size: 1.7em;
@@ -135,6 +118,21 @@
     @include sans-font-regular;
   }
 }
+
+.site-logo {
+  max-width: 250px;
+  display: inline-block;
+  margin-top: 23px;
+  margin-right: 30px;
+
+  img {
+    width: 100%;
+
+    &:hover {
+      opacity: .8;  
+    }
+  }
+}  
 
 .js {
   .reg_part {
@@ -327,6 +325,12 @@ tiny screens
 */
 
 @media only screen and (max-width: 879px) {
+
+  .site-logo {
+    display: none;
+  }
+
+
   .org-title {
     display: block;
 
@@ -411,7 +415,7 @@ Small Screens
   .chrome-header {
     .title {
       .site-title {
-        display: none;
+        font-size: 1.4em;
       }
 
       .reg-title {
@@ -420,6 +424,21 @@ Small Screens
       }
     }
   }
+
+  .toc-head a:not(#panel-link) {
+    padding-top: 14px;
+  }
+
+  .close {
+
+    .toc-head a:link {
+      line-height: 50px;
+    }
+
+    .toc-head a:not(#panel-link) {
+      padding-top: 0;
+    }
+  } 
 
   /*
   Subhead Styles
@@ -446,6 +465,8 @@ Small Screens
 
   .effective-date {
     display: block;
+    padding-bottom: 20px;
+    background: $white;
 
     strong {
       @include sans-font-regular;
@@ -456,6 +477,32 @@ Small Screens
 @media only screen and (max-width: 600px) {
   .header-label {
     margin-left: 6px;
+  }
+
+  .flash-demo {
+    height: 90px;
+    line-height: 32px;
+    padding: 10px 4% 0 4%;
+  }
+
+  .main-head {
+    height: 182px;
+  }
+
+  .sub-head {
+    top: 182px;
+  }
+
+  .panel {
+    top: 232px;
+
+    &.close {
+      top: 382px !important;
+    }
+  }
+
+  .main-content {
+    margin-top: 230px;
   }
 }
 
