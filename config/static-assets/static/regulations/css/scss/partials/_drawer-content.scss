@@ -204,9 +204,16 @@ This contains all of the styles specific to the TOC
 .active-tab a:visited,
 .active-tab a:hover,
 .active-tab a:active {
-  color: #d14124;
+  color: $medicare_magenta;
 }
 
+.active-tab a .cf-icon-history {
+    font-size: 1.9em;
+}
+
+.active-tab a.current {
+    color: $medicare_magenta_light;
+}
 
 .subpart-subhead {
   @include sans-font-regular;
@@ -429,7 +436,7 @@ This contains all of the styles specific to the history
   -webkit-border-radius: 3px;
   border-radius: 3px;
   margin: 15px;
-  background-color: $red;
+  background-color: $medicare_magenta;
   padding: 10px;
   text-align: center;
 }
@@ -442,7 +449,7 @@ This contains all of the styles specific to the history
 .stop-button:hover,
 .stop-button:active,
 .stop-button:focus {
-  background-color: $red_lightest;
+  background-color: $medicare_magenta_light;
   color: $black;
 }
 
