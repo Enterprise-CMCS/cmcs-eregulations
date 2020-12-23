@@ -26,6 +26,7 @@ popd
 docker-compose up -d
 sleep 2
 docker-compose exec regulations-core python manage.py migrate
+docker-compose exec regulations-core python manage.py rebuild_pgsql_index
 docker-compose restart regulations-core
 
 docker build --tag eregs_parser_kaitlin regulations-parser
