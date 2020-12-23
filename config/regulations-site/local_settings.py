@@ -5,15 +5,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'regulations.apps.RegulationsConfig',
-    'notice_comment',
-    # TODO: can django be convinced it can live without the following?
-    'django.contrib.contenttypes',
-    'django.contrib.auth',
+)
+
+ROOT_URLCONF = 'regulations.urls'
+
+MIDDLEWARE_CLASSES = (
+    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
 SIDEBARS = (
     'cmcs.regulations.sidebar.guidance.Guidance',
-    'regulations.generator.sidebar.help.Help',
     'regulations.generator.sidebar.print_part.PrintPart',
 )
 
