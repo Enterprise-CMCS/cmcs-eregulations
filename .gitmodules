@@ -4,6 +4,7 @@
 [submodule "regulations-core"]
 	path = regulations-core
 	url = https://github.com/CMSgov/regulations-core.git
+	branch = main
 [submodule "regulations-site"]
 	path = regulations-site
 	url = https://github.com/CMSgov/regulations-site.git
