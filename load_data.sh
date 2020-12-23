@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 # Create a directory for the output
 mkdir -p output
