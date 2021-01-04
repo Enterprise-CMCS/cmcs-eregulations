@@ -13,6 +13,19 @@ Backbone.$ = $;
 const DrawerView = Backbone.View.extend({
   el: '#menu',
 
+  events: {
+    'click .section-subpart': 'toggleSection',
+  },
+
+  toggleSection: function toggleSection(e) {
+    const $target = $(e.target);
+    const $toggleEl = $('.toggle-toc-menu-sections');
+
+    e.preventDefault();
+
+    $toggleEl.slideToggle(400);
+  },
+
   initialize: function initialize(options) {
     storage().subscribe(this.handleReduxUpdate.bind(this));
 
@@ -31,6 +44,8 @@ const DrawerView = Backbone.View.extend({
     }
 
     this.setActivePane('table-of-contents');
+    const $tocMenuSections = $('.toggle-toc-menu-sections');
+    $tocMenuSections.hide();
   },
 
     // page types are more diverse and are named differently for
