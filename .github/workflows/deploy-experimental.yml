@@ -1,4 +1,4 @@
-name: DeployExperimental
+name: Deploy Experimental
 
 on:
   workflow_dispatch:

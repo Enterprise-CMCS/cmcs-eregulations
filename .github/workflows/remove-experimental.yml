@@ -1,4 +1,4 @@
-name: RemoveExperimental
+name: Remove Experimental
 
 on:
   workflow_dispatch:
