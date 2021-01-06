@@ -1,23 +1,19 @@
-name: Deploy
+name: Deploy Experimental
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: get branch name
+        run: |
+          lower_case=${GITHUB_REF,,}
+          echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: patch libraries
-        run: |
-          pushd regulations-core
-          git apply ../patches/regcore-jsonschema.patch
-          git apply ../patches/regcore-migrations.patch
-          popd
       # should build first and save the artifact
       - uses: actions/setup-node@v1
         with:
@@ -41,19 +37,7 @@ jobs:
           pushd config/static-assets/serverless
           npm install serverless -g
           npm install
-          serverless deploy
-          popd
-      - name: deploy regulations core API
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          pushd config/regulations-core
-          npm install serverless -g
-          npm install
-          serverless deploy
-          serverless invoke --function reg_core_migrate
-          serverless invoke --function reg_core_rebuild_index
+          serverless deploy --stage dev-$branch_name
           popd
       - name: deploy regulations site server
         env:
@@ -63,5 +47,5 @@ jobs:
           pushd config/regulations-site
           npm install serverless -g
           npm install
-          serverless deploy
+          serverless deploy --config ./serverless-experimental.yml --stage dev-$branch_name
           popd

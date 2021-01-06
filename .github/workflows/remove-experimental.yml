@@ -1,4 +1,4 @@
-name: Remove
+name: Remove Experimental
 
 on:
   workflow_dispatch:
@@ -7,6 +7,10 @@ jobs:
   remove:
     runs-on: ubuntu-latest
     steps:
+      - name: get branch name
+        run: |
+          lower_case=${GITHUB_REF,,}
+          echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           submodules: true
@@ -16,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-      - name: remove regualtions site server
+      - name: remove regulations site server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -24,7 +28,7 @@ jobs:
           pushd config/regulations-site
           npm install serverless -g
           npm install
-          serverless remove
+          serverless remove --config ./serverless-experimental.yml --stage dev-$branch_name
           popd
       - name: remove static assets
         env:
@@ -34,15 +38,5 @@ jobs:
           pushd config/static-assets/serverless
           npm install serverless -g
           npm install
-          serverless remove
-          popd
-      - name: remove regulations core API
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          pushd config/regulations-core
-          npm install serverless -g
-          npm install
-          serverless remove
+          serverless remove --stage dev-$branch_name
           popd
