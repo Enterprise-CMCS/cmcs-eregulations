@@ -6,11 +6,12 @@ provider:
   region: us-east-1
 
 custom:
+  stage: ${opt:stage, self:provider.stage}
   s3Sync:
-    - bucketName: eregs-${self:provider.stage}-site-assets
+    - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ../static
   cloudfrontInvalidate:
-    distributionId: ${cf:cmcs-eregs-static-assets-${self:provider.stage}.CloudFrontDistributionId, false}
+    distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId, false}
     items:
       - "/*"
 
@@ -23,7 +24,7 @@ resources:
     AssetsBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: eregs-${self:provider.stage}-site-assets
+        BucketName: eregs-${self:custom.stage}-site-assets
         CorsConfiguration:
           CorsRules:
             -
