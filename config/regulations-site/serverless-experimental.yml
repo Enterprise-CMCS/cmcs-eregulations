@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: python3.8
   region: us-east-1
-  role: ${cf:cmcs-eregs-dev.stage.LambdaFunctionRoleArn}
+  role: ${cf:cmcs-eregs-dev.LambdaFunctionRoleArn}
 
 package:
   individually: true
@@ -15,7 +15,7 @@ custom:
     app: handler.application
     packRequirements: false
   settings:
-    api_url: ${cf:cmcs-eregs-dev.stage}.ServiceEndpoint}/
+    api_url: ${cf:cmcs-eregs-dev}.ServiceEndpoint}/
     static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
 
 functions:
