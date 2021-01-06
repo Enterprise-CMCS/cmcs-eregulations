@@ -10,12 +10,13 @@ package:
   individually: true
 
 custom:
+  stage: ${opt:stage, self:provider.stage}
   wsgi:
     app: handler.application
     packRequirements: false
   settings:
     api_url: ${cf:cmcs-eregs-dev.stage}.ServiceEndpoint}/
-    static_url: ${cf:cmcs-eregs-static-assets-${self:provider.stage}.StaticURL}/
+    static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
 
 functions:
   reg_site:
