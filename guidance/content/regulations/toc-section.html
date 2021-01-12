@@ -1,7 +1,7 @@
-{% if item.index|length == 3 %}
-<li class="toggle-toc-menu-sections subpart-{{item.index|last}}">
+{% if not section %}
+<li>
 {% else %}
-<li class="subpart-{{item.index|last}}">
+<li class="toggle-toc-menu-sections {{section}}-{{group|last}}">
 {% endif %}
   <a href="{{sub_toc_item.url}}" data-section-id="{{sub_toc_item.section_id}}" id="nav-{{sub_toc_item.section_id}}">
         <span class="toc-section-marker">{% if sub_toc_item.is_section_span%}§§&nbsp;{% else %}§&nbsp;{% endif %}{{sub_toc_item.label}}</span> {{sub_toc_item.sub_label|safe}}
