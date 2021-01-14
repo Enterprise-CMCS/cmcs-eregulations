@@ -1,0 +1,14 @@
+<li data-subgroup="subjgrp-{{item.index|last}}" class="subjgrp-heading-{{item.index|last}} section-subjgrp" tabindex="0">
+  <h3 class="toc-nav__divider" data-section-id="{{item.section_id}}">{{item.label|safe|upper}}</h3>
+</li>
+
+{% if item.sub_toc %}
+    {% for sub_toc_item in item.sub_toc %}
+        {% if sub_toc_item.is_section %}
+        {% include "regulations/toc-section.html" with section="subjgrp" group=item.index %}
+        {% else %}
+            <li class="toggle-toc-menu-sections"><a href="{{item.url}}" data-section-id="{{item.section_id}}">{{item.label|safe}}</a></li>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
