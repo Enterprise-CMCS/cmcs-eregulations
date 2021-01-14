@@ -20,11 +20,10 @@ const DrawerView = Backbone.View.extend({
 
   toggleSection: function toggleSection(e) {
     const $target = $(e.currentTarget);
-    const $sectionClass = `.${$target.attr('class').split(' ')[0]}`;
+    const $sectionClass = `.${$target.attr('data-subgroup')}`;
     const $toggleEl = $('.toggle-toc-menu-sections').filter($sectionClass);
 
     e.preventDefault();
-
     $toggleEl.slideToggle(400);
   },
 
