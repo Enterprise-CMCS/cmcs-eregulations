@@ -2,12 +2,8 @@
   <h3 class="toc-nav__divider" data-section-id="{{item.section_id}}" id="nav-{{item.section_id}}">{{item.label|safe|upper}} - <span class="subpart-subhead">{{item.sub_label|safe}}</span></h3>
 </li>
 
+<li>
 {% if item.sub_toc %}
-    {% for sub_toc_item in item.sub_toc %}
-        {% if sub_toc_item.is_section %}
-            {% include "regulations/toc-section.html" with section="subpart" group=item.index %}
-        {% else %}
-        <li class="toggle-toc-menu-sections"><a href="{{sub_toc_item.url}}" data-section-id="{{sub_toc_item.section_id}}">{{item.label|safe}}</a></li>
-        {% endif %}
-    {% endfor %}
+  {% include "regulations/toc-sub-toc.html" with type="subpart" %}
 {% endif %}
+</li>
