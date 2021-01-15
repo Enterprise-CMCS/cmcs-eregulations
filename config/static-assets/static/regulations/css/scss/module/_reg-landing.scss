@@ -243,3 +243,53 @@ reg-landing.scss contains styles specific to the regulation landing page
     border-top: 1px solid $gray_light;
   }
 }
+
+.recent-changes {
+  margin-top: 50px;
+  width: 600px;
+  height: 175px;
+  
+  background: #F3F3F3;
+  border-radius: 3px;
+
+  padding: 30px;
+
+  p {
+    top: 26px;
+    left: 32px;
+
+    width: 480px;
+    height: 20px;
+    margin: 0px;
+    
+    font-family: Merriweather;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    
+    color: #212121;
+  }
+
+  ul {
+    list-style-type: none;
+    position: absolute;
+    width: 471px;
+    height: 84px;
+    margin: 0px;
+  }
+
+  li {
+    width: 471px;
+  }
+
+  a {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #046791;
+  }
+}

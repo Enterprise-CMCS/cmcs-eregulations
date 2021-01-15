@@ -321,3 +321,53 @@ Small screens
     }
   }
 }
+
+.recent-changes {
+  margin-top: 10px;
+  width: 794px;
+  height: 175px;
+  
+  background: #F3F3F3;
+  border-radius: 3px;
+
+  padding: 30px;
+
+  p {
+    top: 26px;
+    left: 32px;
+
+    width: 578px;
+    height: 20px;
+    margin: 0px;
+    
+    font-family: Merriweather;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    
+    color: #212121;
+  }
+
+  ul {
+    list-style-type: none;
+    position: absolute;
+    width: 656px;
+    height: 84px;
+    margin: 0px;
+  }
+
+  li {
+    width: 656px;
+  }
+
+  a {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+    color: #046791;
+  }
+}
