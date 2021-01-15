@@ -369,5 +369,14 @@ Small screens
     line-height: 24px;
 
     color: #046791;
+
+    text-decoration: none;
+    transition: none; 
+  }
+
+  a:hover,
+  a:active,
+  a:focus {
+    background-color: unset;
   }
 }
