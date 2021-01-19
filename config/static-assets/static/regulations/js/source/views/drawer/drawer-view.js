@@ -50,7 +50,7 @@ const DrawerView = Backbone.View.extend({
 
     const url = location.hash;
     const nav_el = `#nav-${url.slice(1)}`;
-    $(nav_el).parent().parent().slideToggle(400);
+    $(nav_el).parent().parent().show();
   },
 
     // page types are more diverse and are named differently for
