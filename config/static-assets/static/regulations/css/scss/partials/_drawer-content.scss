@@ -88,7 +88,6 @@ This contains all of the styles specific to the TOC
 
     &:not([data-subpart-heading]) {
       padding: 0 1em 0 20px;
-      // padding: 0 1em 0 2.5em;
       font-size: 14px;
     }
   }
@@ -162,6 +161,11 @@ This contains all of the styles specific to the TOC
     &:active {
       padding-left: 38px;
     }
+  }
+
+  .toggle-button-open,
+  .toggle-button-close {
+    float: right;
   }
 
   /*
@@ -313,7 +317,9 @@ This contains all of the styles specific to the history
     &.toc-subjgrp {
       color: $white;
     }
+
   }
+
 
   .final-rule {
     margin: 10px 15px 0 15px;

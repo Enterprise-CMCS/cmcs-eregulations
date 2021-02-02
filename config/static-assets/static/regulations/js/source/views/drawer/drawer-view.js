@@ -22,8 +22,12 @@ const DrawerView = Backbone.View.extend({
     const $target = $(e.currentTarget);
     const $sectionClass = `.${$target.attr('data-subgroup')}`;
     const $toggleEl = $('.toggle-toc-menu-sections').filter($sectionClass);
+    const $toggleButtonOpen = $target.find('.toggle-button-open');
+    const $toggleButtonClose = $target.find('.toggle-button-close');
 
     e.preventDefault();
+    $toggleButtonOpen.toggle();
+    $toggleButtonClose.toggle();
     $toggleEl.slideToggle(400);
   },
 
@@ -46,7 +50,9 @@ const DrawerView = Backbone.View.extend({
 
     this.setActivePane('table-of-contents');
     const $tocMenuSections = $('.toggle-toc-menu-sections');
+    const $toggleButtonClose = $('.toggle-button-close');
     $tocMenuSections.hide();
+    $toggleButtonClose.hide();
   },
 
     // page types are more diverse and are named differently for
