@@ -22,6 +22,7 @@ const DrawerView = Backbone.View.extend({
     const $target = $(e.currentTarget);
     const $sectionClass = `.${$target.attr('data-subgroup')}`;
     const $toggleEl = $('.toggle-toc-menu-sections').filter($sectionClass);
+    const $toggleSubgroup = $('.toggle-toc-menu-subgroups').filter($sectionClass);
     const $toggleButtonOpen = $target.find('.toggle-button-open');
     const $toggleButtonClose = $target.find('.toggle-button-close');
 
@@ -29,6 +30,7 @@ const DrawerView = Backbone.View.extend({
     $toggleButtonOpen.toggle();
     $toggleButtonClose.toggle();
     $toggleEl.slideToggle(400);
+    $toggleSubgroup.toggle();
   },
 
   initialize: function initialize(options) {
@@ -50,8 +52,10 @@ const DrawerView = Backbone.View.extend({
 
     this.setActivePane('table-of-contents');
     const $tocMenuSections = $('.toggle-toc-menu-sections');
+    const $tocMenuSubgroups = $('.toggle-toc-menu-subgroups');
     const $toggleButtonClose = $('.toggle-button-close');
     $tocMenuSections.hide();
+    $tocMenuSubgroups.hide();
     $toggleButtonClose.hide();
   },
 
