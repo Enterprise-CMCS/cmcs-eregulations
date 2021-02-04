@@ -24,7 +24,7 @@ This contains all of the styles specific to the TOC
     a:hover,
     a:active,
     .current {
-      padding-left: 102px;
+      padding-left: 100px;
       margin-left: -100px;
     }
 
@@ -86,9 +86,21 @@ This contains all of the styles specific to the TOC
       cursor: pointer;
     }
 
+    &.section-subpart:hover {
+      background: #046791;
+
+      h3 {
+        background: #046791;
+      }
+    }
+
     &:not([data-subpart-heading]) {
       padding: 0 1em 0 20px;
       font-size: 14px;
+      &.section-subjgrp {
+        padding: 0 1rem;
+	color: white;
+      }
     }
   }
 
@@ -131,10 +143,10 @@ This contains all of the styles specific to the TOC
 
   a {
     display: block;
-    // padding: 7px 15px 8px 102px;
-    padding: 7px 15px 8px 82px;
-    margin-left: -100px;
+    padding-top: 7px;
+    padding-bottom: 8px;
     line-height: 1.3;
+    padding-right: 10px;
   }
 
   a:link,
@@ -145,7 +157,7 @@ This contains all of the styles specific to the TOC
   a:hover,
   a:active {
     margin-left: -100px;
-    padding-left: 102px;
+    padding-left: 100px;
     color: $white;
     background-color: $medicare_blue_less_dark;
   }
@@ -204,8 +216,8 @@ This contains all of the styles specific to the TOC
   background-color: $panel_background_color;
   font-size: 1em;
   color: $medicare_blue_light;
-  &:hover {
-    cursor: pointer;
+  &.toc-subjgrp:hover {
+    cursor: default;
   }
 }
 
@@ -229,6 +241,7 @@ This contains all of the styles specific to the TOC
   @include sans-font-regular;
   display: block;
   color: $white;
+  width: 90%;
 }
 
 /*
