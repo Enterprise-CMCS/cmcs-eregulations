@@ -16,7 +16,6 @@ mixins.scss contains complex mixins to be used throughout the Sass files
 @mixin regulation-nav-section-marker-font {
   @include sans-font-bold;
   display: block;
-  font-size: 16px;
 }
 
 @mixin regulation-nav-interp-heading-font {

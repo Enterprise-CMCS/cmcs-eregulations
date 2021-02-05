@@ -24,7 +24,7 @@ This contains all of the styles specific to the TOC
     a:hover,
     a:active,
     .current {
-      padding-left: 102px;
+      padding-left: 100px;
       margin-left: -100px;
     }
 
@@ -82,16 +82,28 @@ This contains all of the styles specific to the TOC
     padding: 0 1rem;
     margin: 0;
     text-indent: 0;
+    &:hover {
+      cursor: pointer;
+    }
 
-    &:not([data-subpart-heading]) {
-      padding: 0 1em 0 2.5em;
-      font-size: 14px;
+    &.section-subpart:hover {
+      background: #046791;
 
-      &:hover {
-        cursor: pointer;
+      h3 {
+        background: #046791;
       }
     }
-   } 
+
+    &:not([data-subpart-heading]) {
+      padding: 0 1em 0 20px;
+      font-size: 14px;
+      &.section-subjgrp {
+        padding: 0 1rem;
+	color: white;
+      }
+    }
+  }
+
 
   .toc-section-marker {
     @include regulation-nav-section-marker-font;
@@ -103,20 +115,21 @@ This contains all of the styles specific to the TOC
     color: $white;
   }
 
-  // Styles 433.1 a little differently 
+  // Styles 433.1 a little differently
   #nav-433-1 {
     color: $action_color;
     font-weight: bold;
-    margin-left: -117px;
+    margin-left: -100px;
     padding-top: 15px;
+    padding-left: 102px;
 
     &.current {
       color: $white;
     }
 
-    .toc-section-marker {      
+    .toc-section-marker {
       display: inline;
-    } 
+    }
   }
 
   // Interpretation Subparts in the TOC are styled differently
@@ -130,9 +143,10 @@ This contains all of the styles specific to the TOC
 
   a {
     display: block;
-    padding: 7px 15px 8px 102px;
-    margin-left: -100px;
+    padding-top: 7px;
+    padding-bottom: 8px;
     line-height: 1.3;
+    padding-right: 10px;
   }
 
   a:link,
@@ -143,14 +157,14 @@ This contains all of the styles specific to the TOC
   a:hover,
   a:active {
     margin-left: -100px;
-    padding-left: 102px;
+    padding-left: 100px;
     color: $white;
     background-color: $medicare_blue_less_dark;
   }
 
   .current {    // I don't know why these values were set to be so weird
     margin-left: -100px;
-    padding-left: 38px;  // .toc-nav__base a padding-left minus border-left 
+    padding-left: 38px;  // .toc-nav__base a padding-left minus border-left
     border-left: 64px solid $medicare_blue_light;
     color: $white;
     background-color: $panel_highlight_color;
@@ -159,6 +173,11 @@ This contains all of the styles specific to the TOC
     &:active {
       padding-left: 38px;
     }
+  }
+
+  .toggle-button-open,
+  .toggle-button-close {
+    float: right;
   }
 
   /*
@@ -197,6 +216,9 @@ This contains all of the styles specific to the TOC
   background-color: $panel_background_color;
   font-size: 1em;
   color: $medicare_blue_light;
+  &.toc-subjgrp:hover {
+    cursor: default;
+  }
 }
 
 // Highlight the History tab in diff view
@@ -219,6 +241,7 @@ This contains all of the styles specific to the TOC
   @include sans-font-regular;
   display: block;
   color: $white;
+  width: 90%;
 }
 
 /*
@@ -303,7 +326,13 @@ This contains all of the styles specific to the history
     @include reset;
     font-size: 0.875em;
     line-height: normal;
+
+    &.toc-subjgrp {
+      color: $white;
+    }
+
   }
+
 
   .final-rule {
     margin: 10px 15px 0 15px;
@@ -355,7 +384,7 @@ This contains all of the styles specific to the history
 
       &:hover {
         transition: 0.3s;
-        background-color: $white; 
+        background-color: $white;
         color: $action_color_dark;
       }
     }
