@@ -57,6 +57,10 @@ const DrawerView = Backbone.View.extend({
     $tocMenuSections.hide();
     $tocMenuSubgroups.hide();
     $toggleButtonClose.hide();
+
+    const url = location.hash;
+    const navEl = `#nav-${url.slice(1)}`;
+    $(navEl).parent().parent().show();
   },
 
     // page types are more diverse and are named differently for
