@@ -22,9 +22,15 @@ const DrawerView = Backbone.View.extend({
     const $target = $(e.currentTarget);
     const $sectionClass = `.${$target.attr('data-subgroup')}`;
     const $toggleEl = $('.toggle-toc-menu-sections').filter($sectionClass);
+    const $toggleSubgroup = $('.toggle-toc-menu-subgroups').filter($sectionClass);
+    const $toggleButtonOpen = $target.find('.toggle-button-open');
+    const $toggleButtonClose = $target.find('.toggle-button-close');
 
     e.preventDefault();
+    $toggleButtonOpen.toggle();
+    $toggleButtonClose.toggle();
     $toggleEl.slideToggle(400);
+    $toggleSubgroup.toggle();
   },
 
   initialize: function initialize(options) {
@@ -46,11 +52,15 @@ const DrawerView = Backbone.View.extend({
 
     this.setActivePane('table-of-contents');
     const $tocMenuSections = $('.toggle-toc-menu-sections');
+    const $tocMenuSubgroups = $('.toggle-toc-menu-subgroups');
+    const $toggleButtonClose = $('.toggle-button-close');
     $tocMenuSections.hide();
+    $tocMenuSubgroups.hide();
+    $toggleButtonClose.hide();
 
     const url = location.hash;
-    const nav_el = `#nav-${url.slice(1)}`;
-    $(nav_el).parent().parent().show();
+    const navEl = `#nav-${url.slice(1)}`;
+    $(navEl).parent().parent().show();
   },
 
     // page types are more diverse and are named differently for
