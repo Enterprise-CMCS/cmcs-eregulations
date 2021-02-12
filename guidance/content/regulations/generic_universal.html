@@ -34,7 +34,7 @@
         <h2 class="hero-header">Join our user research for this tool</h2>
         <div class="hero-text">
           <p>This is a DSG pilot project to make it easier to research and draft regulations and subregulatory guidance for CMCS work.</p>
-          <p>Try this: go to <a href="{% url 'chrome_section_view' '433-112' '2016-27844' %}#433-112">Part 433, Section 112</a>, and see the subregulatory guidance in the sidebar, or <a href="{% url 'chrome_section_diff_view' '433-112' 'E8-27810' '2016-27844' %}?from_version=2016-27844#433-112">see what changed from 2008 to 2017</a>.</p>
+          <p>Try this: go to <a href="{% url 'reader_view' '433' '112' '2016-27844' %}#433-112">Part 433, Section 112</a>, and see the subregulatory guidance in the sidebar, or <a href="{% url 'chrome_section_diff_view' '433-112' 'E8-27810' '2016-27844' %}?from_version=2016-27844#433-112">see what changed from 2008 to 2017</a>.</p>
           <p>If you work with CMCS regs, we want to make this work for you &mdash; <a href="mailto:britta.gustafson@a1msolutions.com">email Britta Gustafson</a> to sign up for a 30-minute interview.</p>
         </div>  
       </div>
@@ -77,7 +77,7 @@
                     {% for amendment in regulation.amendments %}
                         <div class="mini-alert important">
                             New amendment effective {{amendment.by_date|date:'n/j/Y'}}
-                            <a href="{% url 'chrome_section_view' regulation.reg_first_section amendment.version %}" class="go">View new amendment</a>
+                            <a href="{% url 'reader_view' regulation.part regulation.reg_first_section amendment.version %}" class="go">View new amendment</a>
                         </div>
                     {% endfor %}
                 </li>
