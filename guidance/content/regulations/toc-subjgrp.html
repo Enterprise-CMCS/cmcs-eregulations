@@ -8,10 +8,6 @@
 
 <li>
 {% if item.sub_toc %}
-  {% if item.index.0 == '433' %}
-    {% include "regulations/toc-subgrp-toc.html" with type="subpart-D" %}
-  {% else %}
-    {% include "regulations/toc-sub-toc.html" with type="subjgrp" %}
-  {% endif%}
+  {% include "regulations/toc-subgrp-toc.html" with type="subjgrp" %}
 {% endif %}
 </li>
