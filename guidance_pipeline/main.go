@@ -9,6 +9,7 @@ type Guidance struct {
 	header string
 	name   string
 	link   string
+	regs   []string
 }
 
 func main() {
@@ -24,15 +25,19 @@ func main() {
 		return
 	}
 
+	var guidances []Guidance 
+
 	for _, record := range records {
-		regs := record[2:]
 		guidance := Guidance{
 			// for now header is the filename change this
 			header: "Final",
 			name:   record[0],
 			link:   record[1],
+			regs:   record[2:],
 		}
 
-		fmt.Printf("header: %s\n name: %s\n href: %s\n regs: %s\n", guidance.header, guidance.name, guidance.link, regs)
+		guidances = append(guidances, guidance)
 	}
+
+	toJSON(guidances)
 }
