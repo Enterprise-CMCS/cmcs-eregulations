@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/csv"
 	"fmt"
 	"os"
 )
@@ -36,29 +35,4 @@ func main() {
 
 		fmt.Printf("header: %s\n name: %s\n href: %s\n regs: %s\n", guidance.header, guidance.name, guidance.link, regs)
 	}
-}
-
-func readData(file string) ([][]string, error) {
-
-	guidanceFile, err := os.Open(file)
-
-	if err != nil {
-		return [][]string{}, err
-	}
-	defer guidanceFile.Close()
-
-	reader := csv.NewReader(guidanceFile)
-
-	// First line skip
-	if _, err := reader.Read(); err != nil {
-		return [][]string{}, err
-	}
-
-	records, err := reader.ReadAll()
-
-	if err != nil {
-		return [][]string{}, err
-	}
-
-	return records, nil
 }
