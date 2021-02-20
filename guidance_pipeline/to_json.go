@@ -16,7 +16,7 @@ type Regulation struct {
 	Regs   []string `json:"regs"`
 }
 
-func toJSON(guidances []Guidance) {
+func toJSON(guidances []Guidance) ([]byte, error) {
 
 	var regulations []Regulation
 
@@ -35,11 +35,11 @@ func toJSON(guidances []Guidance) {
 		regulations = append(regulations, res)
 	}
 
-	regsJSON, err := json.Marshal(regulations)
+	regsJSON, err := json.MarshalIndent(regulations, ""," ")
 	if err != nil {
 		fmt.Println("An error has occured :: ", err)
-		return
+		return []byte{}, err
 	}
 
-	fmt.Println(string(regsJSON))
+	return regsJSON, nil
 }

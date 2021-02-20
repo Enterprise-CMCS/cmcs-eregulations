@@ -39,5 +39,12 @@ func main() {
 		guidances = append(guidances, guidance)
 	}
 
-	toJSON(guidances)
+	dataJSON, err := toJSON(guidances)
+
+	if err != nil {
+		fmt.Println("An error has occured :: ", err)
+		return
+	}
+
+	fmt.Println(string(dataJSON))
 }
