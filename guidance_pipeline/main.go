@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 type Guidance struct {
@@ -17,7 +19,9 @@ func main() {
 		fmt.Println("Usage:", "./guidance", "FILE")
 		return
 	}
+
 	file := os.Args[1]
+	header := filepath.Base(file)
 	records, err := readData(file)
 
 	if err != nil {
@@ -28,15 +32,16 @@ func main() {
 	var guidances []Guidance 
 
 	for _, record := range records {
-		guidance := Guidance{
-			// for now header is the filename change this
-			header: "Final",
-			name:   record[0],
-			link:   record[1],
-			regs:   record[2:],
-		}
+		if(len(record[0]) > 0) {
+			guidance := Guidance{
+				header: header,
+				name:   record[0],
+				link:   record[1],
+				regs:   formatRegs(record[2:]),
+			}
 
-		guidances = append(guidances, guidance)
+			guidances = append(guidances, guidance)
+		}
 	}
 
 	dataJSON, err := toJSON(guidances)
@@ -47,4 +52,14 @@ func main() {
 	}
 
 	fmt.Println(string(dataJSON))
+}
+
+func formatRegs(regs []string) []string {
+	newRegs := make([]string, 0)
+	for _, reg := range regs {
+		if len(reg) > 0 {
+			newRegs = append(newRegs, strings.ReplaceAll(reg, ".", "-"))
+		} 
+	}
+	return newRegs
 }
