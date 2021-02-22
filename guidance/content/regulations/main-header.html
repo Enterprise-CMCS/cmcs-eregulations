@@ -1,22 +1,12 @@
 {% load static %}
-<div class="main-head">
 
-    <div class="flash-demo">
-        <img src="{% static "regulations/img/feedback.png" %}" alt="Feedback"><!-- replace this with the correct call -->
-        This is a demo for feedback - tell us what you think!
-        <a href="{% url 'universal_landing' %}"><button>Learn More</button></a>
-    </div>
 
-    <div class="title">
-        <h1 class="site-title"><a href="{% url 'universal_landing' %}">Regulations</a></h1>
-        {% if meta.cfr_title_number %}
-        <h2 class="reg-title"><a href="{% url 'regulation_landing_view' reg_part %}">{{ meta.cfr_title_number }} CFR Part {{ reg_part }} {% if meta.reg_letter %}(Regulation {{ meta.reg_letter }}){% endif %}</a></h2>
-        {% endif %}
-    </div> <!-- /reg-title -->
-
-    <nav class="app-nav">
-        <a href="https://www.medicaid.gov/" class="site-logo">
-            <img src="{% static "regulations/img/medicaid-logo@2x.png" %}" alt="Medicaid.gov">
-        </a>
-    </nav>
+<div class="site-title">
+    <a href="{% url 'universal_landing' %}">Medicaid &amp; CHIP Regulations</a>
 </div>
+
+<div class="reg-title">
+    {% if meta.cfr_title_number %}
+        <a href="{% url 'regulation_landing_view' reg_part %}">{{ meta.cfr_title_number }} CFR Part {{ reg_part }} {% if meta.reg_letter %}(Regulation {{ meta.reg_letter }}){% endif %}</a>
+    {% endif %}
+</div> 
