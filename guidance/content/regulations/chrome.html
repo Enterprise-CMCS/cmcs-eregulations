@@ -1,5 +1,5 @@
 {% extends "regulations/base.html" %}
-{% load static from staticfiles %}
+{% load static %}
 {% load macros %}
 
 
@@ -62,26 +62,6 @@
                 </li>
               {% endspaceless %}
             {% endblock %}
-            {% block sidebar-history-link %}
-              {% spaceless %}
-                <li>
-                  <a href="#timeline" id="timeline-link" class="toc-nav-link" title="Regulation Timeline">
-                    <span class="icon-text">Regulation Timeline</span>
-                    {% include "regulations/svgs/timeline.svg" %}
-                  </a>
-                </li>
-              {% endspaceless %}
-            {% endblock %}
-            {% block sidebar-search-link %}
-              {% spaceless %}
-                <li>
-                  <a href="#search" id="search-link" class="toc-nav-link" title="Search">
-                    <span class="icon-text">Search</span>
-                    {% include "regulations/svgs/search.svg" %}
-                  </a>
-                </li>
-              {% endspaceless %}
-            {% endblock %}
           {% endblock %}
         </ul>
     </div> <!-- /toc-head-->
@@ -131,93 +111,6 @@
                 {% include "regulations/toc.html" %}
             {% endwith %}
         {%endif%}
-    {% endblock %}
-    {% block drawer-history %}
-        <div id="timeline" class="history-drawer toc-container hidden">
-            <div class="drawer-header">
-                <h2 class="toc-type">Regulation Timeline</h2>
-            </div><!-- /.drawer-header -->
-            <div class="drawer-content">
-                <p class="effective-label">Find the regulation effective on this date:</p>
-                <div class="form-wrap group">
-                <form action="{% url 'redirect_by_date_get' label_id %}"
-                      method="GET" class="date-input">
-                  <input type="text" name="month" class="month-input" maxlength="2" value="{% now "m" %}" title="Effective month" />
-                  / <input type="text" name="day" class="day-input" maxlength="2" value="{% now "d" %}" title="Effective day"/>
-                  / <input type="text" name="year" class="year-input" maxlength="4" value="{% now "Y" %}" title="Effective year" />
-                  <button type="submit" class="find-button">Find</button>
-                </form>
-                </div><!--./date-form-->
-                {% comment %}TODO: Indentation here is all kinds of funky {% endcomment %}
-                <ul class="version-list" id="history-toc-list">
-                {% for version in history %}
-                    <li class="{% if version.version == active_version %}current {% endif %}status-list" data-base-version="{{version.version}}">
-                    <a href="{% url version_switch_view label_id version.version %}" class="version-link" data-version="{{ version.version }}" id="link-{{ version.version }}">
-                        {% if version.timeline.is_present %}
-                            <h3>Current Regulation</h3>
-                        {% endif %}
-                        <span class="version-date">{{ version.by_date|date:"n/j/Y" }}</span>
-                    </a>
-                        <div class="timeline-content-wrap">
-                            <h3 class="final-rule">Final Rule</h3>
-                            <ul class="rule-list">
-                            {% for notice in version.notices %}
-                              {% with pub_date=notice.publication_date|date:"n/j/Y" %}
-                                {% if notice.fr_url %}
-                                  <li>{% external_link classes="fr-notice" url=notice.fr_url text="Published "|add:pub_date %}</li>
-                                {% else %}
-                                  <li>Published {{pub_date}}</li>
-                                {% endif %}
-                              {% endwith %}
-                            {% endfor %}
-                            </ul>
-                            <div class="diff-selector group">
-                                <h3 class="compare-title">Compare {{reg_part}} effective on {{version.by_date|date:"n/j/Y"}} with</h3>
-                                <form action="{% url 'diff_redirect' diff_redirect_label active_version %}" method="GET">
-                                  <div class="select-content">
-                                    <select name="new_version" title="Compare version">
-                                        {% for version in history %}
-                                            {% if active_version != version.version %}
-                                                <option value="{{version.version}}">{{version.by_date|date:"n/j/Y"}}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                  </div> <!--/.select-content-->
-                                  <div class="diff-button-wrapper">
-                                      <button>Show Differences</button>
-                                  </div>
-                                </form>
-                            </div><!--/.diff-selector-->
-                        </div><!--/.timeline-content-wrap-->
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div> <!--/#history-->
-    {% endblock %}
-    {% block drawer-search %}
-    <div id="search" class="search-drawer toc-container hidden">
-        <div class="drawer-header">
-            <h2 class="toc-type">Search</h2>
-        </div><!-- /.drawer-header -->
-        <div class="drawer-content">
-            <form action="{% url 'chrome_search' reg_part %}" method="GET" role="search" data-doc-type="cfr">
-                <div class="search-box">
-                    <input type="text" name="q" value="{{ q }}" id="search-input" title="Search term"/><button type="submit"><span class="cf-icon cf-icon-search"></span><strong class="icon-text">Search</strong></button>
-                </div><!--/.search-box-->
-                <div class="version-search">
-                    <h3>Search in regulation effective:</h3>
-                    <div class="select-content">
-                        <select name="version" id="version-select" title="Effective version">
-                        {% for version in history %}
-                            <option value="{{version.version}}"{% if active_version == version.version %} selected="selected"{% endif %}>{{version.by_date|date:"n/j/Y"}}</option>
-                        {% endfor %}
-                        </select>
-                    </div> <!--/.select-content-->
-                </div><!--/.version-search-->
-            </form>
-        </div><!-- /.drawer-content -->
-    </div> <!--/#search-->
     {% endblock %}
 </div> <!-- /.panel -->
 {% endwith %}
