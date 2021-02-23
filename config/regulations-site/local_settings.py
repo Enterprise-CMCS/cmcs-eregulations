@@ -9,6 +9,8 @@ INSTALLED_APPS = (
 
 ROOT_URLCONF = 'regulations.urls'
 
+DATABASES = {}
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
