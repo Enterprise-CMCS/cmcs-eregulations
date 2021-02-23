@@ -44,7 +44,7 @@ functions:
     timeout: 15
   reg_core_rebuild_index:
     handler: rebuild_index.handler
-    timeout: 15
+    timeout: 120
 
 resources:
 
