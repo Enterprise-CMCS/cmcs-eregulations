@@ -6,36 +6,34 @@ import (
 )
 
 type Link struct {
-	Href string `json:"href"`
-	Name string `json:"name"`
+	Href string   `json:"href"`
+	Name string   `json:"name"`
+	Regs []string `json:"regs"`
 }
 
 type Regulation struct {
 	Header string `json:"header"`
-	Links  Link `json:"links"`
-	Regs   []string `json:"regs"`
+	Links  []Link `json:"links"`
 }
 
-func toJSON(guidances []Guidance) ([]byte, error) {
+func toJSON(header string, guidances []Guidance) ([]byte, error) {
 
-	var regulations []Regulation
-
+	links := make([]Link, 0)
 	for _, guidance := range guidances {
 		linkField := Link{
 			Href: guidance.link,
 			Name: guidance.name,
+			Regs: guidance.regs,
 		}
-
-		res := Regulation{
-			Header: guidance.header,
-			Links:  linkField,
-			Regs:   guidance.regs,
-		}
-
-		regulations = append(regulations, res)
+		links = append(links, linkField)
 	}
 
-	regsJSON, err := json.MarshalIndent(regulations, ""," ")
+	regulation := Regulation{
+		Header: header,
+		Links:  links,
+	}
+
+	regsJSON, err := json.MarshalIndent(regulation, "", " ")
 	if err != nil {
 		fmt.Println("An error has occured :: ", err)
 		return []byte{}, err

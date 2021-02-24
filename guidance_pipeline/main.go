@@ -29,29 +29,45 @@ func main() {
 		return
 	}
 
-	var guidances []Guidance 
+	// create a map for guidances
+	regMap := make(map[string][]Guidance)
 
 	for _, record := range records {
-		if(len(record[0]) > 0) {
-			guidance := Guidance{
-				header: header,
-				name:   record[0],
-				link:   record[1],
-				regs:   formatRegs(record[2:]),
-			}
+		if len(record[0]) > 0 {
+			// create files for each guidance
+			regs := formatRegs(record[2:])
 
-			guidances = append(guidances, guidance)
+			for _, reg := range regs {
+				regsFile := getFilename(reg)
+				err := checkFile(regsFile)
+				if err != nil {
+					fmt.Println("An error has occured :: ", err)
+				}
+
+				guidance := Guidance{
+					header: header,
+					name:   record[0],
+					link:   record[1],
+					regs:   regs,
+				}
+
+				regMap[reg] = append(regMap[reg], guidance)
+			}
 		}
 	}
 
-	dataJSON, err := toJSON(guidances)
+	// Write regs to file
+	for key, reg := range regMap {
+		dataJSON, err := toJSON(header, reg)
+		if err != nil {
+			fmt.Println("An error has occured :: ", err)
+			return
+		}
 
-	if err != nil {
-		fmt.Println("An error has occured :: ", err)
-		return
+		fmt.Println("Reg:", key, string(dataJSON))
+		filename := getFilename(key)
+		writeData(filename, dataJSON)
 	}
-
-	fmt.Println(string(dataJSON))
 }
 
 func formatRegs(regs []string) []string {
@@ -59,7 +75,11 @@ func formatRegs(regs []string) []string {
 	for _, reg := range regs {
 		if len(reg) > 0 {
 			newRegs = append(newRegs, strings.ReplaceAll(reg, ".", "-"))
-		} 
+		}
 	}
 	return newRegs
+}
+
+func getFilename(reg string) string {
+	return "guidance/" + reg + ".json"
 }

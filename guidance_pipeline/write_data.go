@@ -2,9 +2,21 @@ package main
 
 import (
 	"io/ioutil"
+	"os"
 )
 
-func writeData(fileName string, data []byte) {
-	filePath := "guidance/" + fileName + ".json"
-	_ = ioutil.WriteFile(filePath, data, 0644)
+func writeData(filename string, data []byte) {
+	_ = ioutil.WriteFile(filename, data, 0644)
+}
+
+func checkFile(filename string) error {
+	_, err := os.Stat(filename)
+
+	if os.IsNotExist(err) {
+		_, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
