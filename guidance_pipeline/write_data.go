@@ -1,22 +1,19 @@
 package main
 
 import (
-	"io/ioutil"
+	"fmt"
 	"os"
 )
 
 func writeData(filename string, data []byte) {
-	_ = ioutil.WriteFile(filename, data, 0644)
-}
-
-func checkFile(filename string) error {
-	_, err := os.Stat(filename)
-
-	if os.IsNotExist(err) {
-		_, err := os.Create(filename)
-		if err != nil {
-			return err
-		}
+	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("An error has occured :: ", err)
 	}
-	return nil
+	if _, err := f.Write(data); err != nil {
+		fmt.Println("An error has occured :: ", err)
+	}
+	if err := f.Close(); err != nil {
+		fmt.Println("An error has occured :: ", err)
+	}
 }

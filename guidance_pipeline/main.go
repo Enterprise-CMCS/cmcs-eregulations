@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -34,16 +35,9 @@ func main() {
 
 	for _, record := range records {
 		if len(record[0]) > 0 {
-			// create files for each guidance
 			regs := formatRegs(record[2:])
 
 			for _, reg := range regs {
-				regsFile := getFilename(reg)
-				err := checkFile(regsFile)
-				if err != nil {
-					fmt.Println("An error has occured :: ", err)
-				}
-
 				guidance := Guidance{
 					header: header,
 					name:   record[0],
@@ -58,16 +52,20 @@ func main() {
 
 	// Write regs to file
 	for key, reg := range regMap {
-		dataJSON, err := toJSON(header, reg)
+		filename := getFilename(key)
+		f, err := ioutil.ReadFile(filename)
+		dataJSON, err := toJSON(f, header, reg)
 		if err != nil {
 			fmt.Println("An error has occured :: ", err)
 			return
 		}
-
-		fmt.Println("Reg:", key, string(dataJSON))
-		filename := getFilename(key)
 		writeData(filename, dataJSON)
 	}
+}
+
+func formatHeader(header string) string {
+	newHeader := strings.Split(header, "-")
+	return newHeader[1]
 }
 
 func formatRegs(regs []string) []string {

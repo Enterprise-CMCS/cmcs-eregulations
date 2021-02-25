@@ -16,8 +16,7 @@ type Regulation struct {
 	Links  []Link `json:"links"`
 }
 
-func toJSON(header string, guidances []Guidance) ([]byte, error) {
-
+func buildRegulation(header string, guidances []Guidance) Regulation {
 	links := make([]Link, 0)
 	for _, guidance := range guidances {
 		linkField := Link{
@@ -33,7 +32,25 @@ func toJSON(header string, guidances []Guidance) ([]byte, error) {
 		Links:  links,
 	}
 
-	regsJSON, err := json.MarshalIndent(regulation, "", " ")
+	return regulation
+}
+
+func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
+	var regulations []Regulation
+
+	if len(file) > 0 {
+		err := json.Unmarshal(file, &regulations)
+		if err != nil {
+			fmt.Println(err)
+			return []byte{}, err
+		}
+	}
+
+	newReg := buildRegulation(header, guidances)
+	regulations = append(regulations, newReg)
+
+	regsJSON, err := json.MarshalIndent(regulations, "", " ")
+
 	if err != nil {
 		fmt.Println("An error has occured :: ", err)
 		return []byte{}, err
