@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
-	"strings"
 )
 
 type Guidance struct {
@@ -22,7 +20,7 @@ func main() {
 	}
 
 	file := os.Args[1]
-	header := filepath.Base(file)
+	header := formatHeader(file)
 	records, err := readData(file)
 
 	if err != nil {
@@ -52,7 +50,7 @@ func main() {
 
 	// Write regs to file
 	for key, reg := range regMap {
-		filename := getFilename(key)
+		filename := formatFilename(key)
 		f, err := ioutil.ReadFile(filename)
 		dataJSON, err := toJSON(f, header, reg)
 		if err != nil {
@@ -61,23 +59,4 @@ func main() {
 		}
 		writeData(filename, dataJSON)
 	}
-}
-
-func formatHeader(header string) string {
-	newHeader := strings.Split(header, "-")
-	return newHeader[1]
-}
-
-func formatRegs(regs []string) []string {
-	newRegs := make([]string, 0)
-	for _, reg := range regs {
-		if len(reg) > 0 {
-			newRegs = append(newRegs, strings.ReplaceAll(reg, ".", "-"))
-		}
-	}
-	return newRegs
-}
-
-func getFilename(reg string) string {
-	return "guidance/" + reg + ".json"
 }
