@@ -66,7 +66,9 @@ func writeRegsToFile(header string, regs map[string][]Guidance) error {
 		if err != nil {
 			return err
 		}
-		writeData(filename, dataJSON)
+		if err := writeData(filename, dataJSON); err != nil {
+			return err
+		}
 	}
 
 	return nil

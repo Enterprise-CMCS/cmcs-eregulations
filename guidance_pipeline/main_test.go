@@ -32,7 +32,6 @@ func TestMain(t *testing.T) {
 
 func dataToJSON(reg string) []byte {
 	file := "testdata/final_rules.csv"
-	// header := "Final Rules"
 	header := formatHeader(file)
 	records, _ := readData(file)
 
