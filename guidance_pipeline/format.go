@@ -7,8 +7,10 @@ import (
 
 func formatHeader(file string) string {
 	header := filepath.Base(file)
-	splitHeader := strings.Split(header, "- ")
-	newHeader := strings.ReplaceAll(splitHeader[1], ".csv", "")
+	if strings.Contains(header, "-") {
+		header = strings.Split(header, "- ")[1]
+	}
+	newHeader := strings.ReplaceAll(header, ".csv", "")
 	return newHeader
 }
 

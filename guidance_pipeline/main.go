@@ -28,7 +28,14 @@ func main() {
 		return
 	}
 
-	// create a map for guidances
+	regMap := makeMapOfRegs(header, records)
+
+	if err := writeRegsToFile(header, regMap); err != nil {
+		fmt.Println("An error has occured :: ", err)
+	}
+}
+
+func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 	regMap := make(map[string][]Guidance)
 
 	for _, record := range records {
@@ -47,16 +54,19 @@ func main() {
 			}
 		}
 	}
+	return regMap
+}
 
-	// Write regs to file
-	for key, reg := range regMap {
+func writeRegsToFile(header string, regs map[string][]Guidance) error {
+	for key, reg := range regs {
 		filename := formatFilename(key)
 		f, err := ioutil.ReadFile(filename)
 		dataJSON, err := toJSON(f, header, reg)
 		if err != nil {
-			fmt.Println("An error has occured :: ", err)
-			return
+			return err
 		}
 		writeData(filename, dataJSON)
 	}
+
+	return nil
 }
