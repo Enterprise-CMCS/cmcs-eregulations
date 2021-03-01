@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -24,14 +25,14 @@ func main() {
 	records, err := readData(file)
 
 	if err != nil {
-		fmt.Println("An error has occured :: ", err)
+		log.Fatal("An error has occured :: ", err)
 		return
 	}
 
 	regMap := makeMapOfRegs(header, records)
 
 	if err := writeRegsToFile(header, regMap); err != nil {
-		fmt.Println("An error has occured :: ", err)
+		log.Fatal("An error has occured :: ", err)
 	}
 }
 

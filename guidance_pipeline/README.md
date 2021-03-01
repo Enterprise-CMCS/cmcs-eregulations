@@ -1,5 +1,7 @@
 # Guidance Pipeline
+Guidance Pipeline take's the csv files guidances and output their respective parts in JSON.
 
+# Usage
 **Running the application**
 ```
 go run . csv/[FILE]

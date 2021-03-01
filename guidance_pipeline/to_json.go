@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 type Link struct {
@@ -41,7 +40,6 @@ func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
 	if len(file) > 0 {
 		err := json.Unmarshal(file, &regulations)
 		if err != nil {
-			fmt.Println(err)
 			return []byte{}, err
 		}
 	}
@@ -52,7 +50,6 @@ func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
 	regsJSON, err := json.MarshalIndent(regulations, "", " ")
 
 	if err != nil {
-		fmt.Println("An error has occured :: ", err)
 		return []byte{}, err
 	}
 
