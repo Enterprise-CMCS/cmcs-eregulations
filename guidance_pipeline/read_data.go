@@ -2,29 +2,21 @@ package main
 
 import (
 	"encoding/csv"
-	"os"
+	"io"
 )
 
-func readData(file string) ([][]string, error) {
-
-	guidanceFile, err := os.Open(file)
-
-	if err != nil {
-		return [][]string{}, err
-	}
-	defer guidanceFile.Close()
-
-	reader := csv.NewReader(guidanceFile)
+func readData(file io.Reader) ([][]string, error) {
+	reader := csv.NewReader(file)
 
 	// First line skip
 	if _, err := reader.Read(); err != nil {
-		return [][]string{}, err
+		return nil, err
 	}
 
 	records, err := reader.ReadAll()
 
 	if err != nil {
-		return [][]string{}, err
+		return nil, err
 	}
 
 	return records, nil

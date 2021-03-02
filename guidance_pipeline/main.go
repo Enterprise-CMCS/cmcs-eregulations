@@ -8,10 +8,9 @@ import (
 )
 
 type Guidance struct {
-	header string
-	name   string
-	link   string
-	regs   []string
+	Name string   `json:"name"`
+	Link string   `json:"href"`
+	Regs []string `json:"regs"`
 }
 
 func main() {
@@ -22,7 +21,14 @@ func main() {
 
 	file := os.Args[1]
 	header := formatHeader(file)
-	records, err := readData(file)
+
+	f, err := os.Open(file)
+	if err != nil {
+		log.Fatal("An error has occured :: ", err)
+	}
+	defer f.Close()
+
+	records, err := readData(f)
 
 	if err != nil {
 		log.Fatal("An error has occured :: ", err)
@@ -45,10 +51,9 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 
 			for _, reg := range regs {
 				guidance := Guidance{
-					header: header,
-					name:   record[0],
-					link:   record[1],
-					regs:   regs,
+					Name: record[0],
+					Link: record[1],
+					Regs: regs,
 				}
 
 				regMap[reg] = append(regMap[reg], guidance)
@@ -66,7 +71,12 @@ func writeRegsToFile(header string, regs map[string][]Guidance) error {
 		if err != nil {
 			return err
 		}
-		if err := writeData(filename, dataJSON); err != nil {
+		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		if err := writeData(file, dataJSON); err != nil {
 			return err
 		}
 	}

@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"flag"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"testing"
 )
 
 var update = flag.Bool("update", false, "update .golden files")
 
-func TestMain(t *testing.T) {
+func TestDataToJson(t *testing.T) {
 	reg := "433-110"
 	data := dataToJSON(reg)
 	gp := filepath.Join("testdata", reg+".golden")
@@ -33,7 +34,8 @@ func TestMain(t *testing.T) {
 func dataToJSON(reg string) []byte {
 	file := "testdata/final_rules.csv"
 	header := formatHeader(file)
-	records, _ := readData(file)
+	f, _ := os.Open(file)
+	records, _ := readData(f)
 
 	regMap := makeMapOfRegs(header, records)
 
