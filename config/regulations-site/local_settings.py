@@ -24,7 +24,6 @@ MIDDLEWARE_CLASSES = (
 
 SIDEBARS = (
     'cmcs.regulations.sidebar.guidance.Guidance',
-    'regulations.generator.sidebar.print_part.PrintPart',
 )
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
