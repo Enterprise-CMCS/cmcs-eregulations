@@ -1,5 +1,6 @@
 <li>
   <a href="{{item.url}}" data-section-id="{{item.section_id}}" id="nav-{{item.section_id}}">
-        <span class="toc-section-marker">§{% if item.is_section_span%}§{% endif %}&nbsp;{{item.label}}</span> {{item.sub_label|safe}}
+        <div class="toc-section-number">§{% if item.is_section_span%}§{% endif %}&nbsp;{{item.label}}</div> 
+        <div class="toc-section-name">{{item.sub_label|safe}}</div>
   </a>
 </li>
