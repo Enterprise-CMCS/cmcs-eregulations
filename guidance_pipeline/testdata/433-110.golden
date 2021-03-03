@@ -1,0 +1,36 @@
+[
+ {
+  "header": "final_rules",
+  "links": [
+   {
+    "name": "Medicaid Program; Mechanized Claims Processing and Information Retrieval Systems (90/10) (80 FR 75817), December 4, 2015",
+    "href": "https://www.federalregister.gov/documents/2015/12/04/2015-30591/medicaid-program-mechanized-claims-processing-and-information-retrieval-systems-9010",
+    "regs": [
+     "433-110",
+     "433-111",
+     "433-112",
+     "433-116",
+     "433-119",
+     "433-120"
+    ]
+   },
+   {
+    "name": "Medicaid Program; Federal Funding for Medicaid Eligibility Determination and Enrollment Activities (76 FR 21950), April 19, 2011",
+    "href": "https://www.govinfo.gov/content/pkg/FR-2011-04-19/pdf/2011-9340.pdf",
+    "regs": [
+     "433-110",
+     "433-111",
+     "433-112",
+     "433-114",
+     "433-116",
+     "433-117",
+     "433-119",
+     "433-120",
+     "433-121",
+     "433-130",
+     "433-131"
+    ]
+   }
+  ]
+ }
+]
