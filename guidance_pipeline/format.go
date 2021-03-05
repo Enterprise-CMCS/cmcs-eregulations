@@ -25,6 +25,6 @@ func formatRegs(regs []string) []string {
 	return newRegs
 }
 
-func formatFilename(reg string) string {
-	return "guidance/" + reg + ".json"
+func formatFilename(outputDirectory string, reg string) string {
+	return outputDirectory + "/" + reg + ".json"
 }

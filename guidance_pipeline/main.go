@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 type Guidance struct {
@@ -13,13 +15,40 @@ type Guidance struct {
 	Regs []string `json:"regs"`
 }
 
+var file = flag.String("f", "", "supply a file of URLs to download")
+var directory = flag.String("d", "", "give a directory to read from")
+var outputDirectory = flag.String("o", "guidance", "give the directory you want to output the files to.")
+
 func main() {
-	if len(os.Args) != 2 {
-		fmt.Println("Usage:", "./guidance", "FILE")
+	flag.Usage = func(){
+		fmt.Fprintf(os.Stderr, "Usage: %s [options] [file]\n", os.Args[0])
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+	if len(os.Args) < 2 {
+		fmt.Fprintf(os.Stderr, "Usage: %s [options] [file]\n", os.Args[0])
+		flag.PrintDefaults()
 		return
 	}
 
-	file := os.Args[1]
+	if(len(*directory) > 0) {
+		files, err := ioutil.ReadDir(*directory)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, file := range files {
+			if(filepath.Ext(file.Name()) == ".csv") {
+				path := filepath.Join(*directory, file.Name())
+				processDataFromFile(path)
+			}
+		}
+	} else {
+		processDataFromFile(*file)
+	}
+}
+
+func processDataFromFile(file string) {
 	header := formatHeader(file)
 
 	f, err := os.Open(file)
@@ -28,7 +57,7 @@ func main() {
 	}
 	defer f.Close()
 
-	records, err := readData(f)
+	records, err := readCSV(f)
 
 	if err != nil {
 		log.Fatal("An error has occured :: ", err)
@@ -65,7 +94,7 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 
 func writeRegsToFile(header string, regs map[string][]Guidance) error {
 	for key, reg := range regs {
-		filename := formatFilename(key)
+		filename := formatFilename(*outputDirectory, key)
 		f, err := ioutil.ReadFile(filename)
 		dataJSON, err := toJSON(f, header, reg)
 		if err != nil {
