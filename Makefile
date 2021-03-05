@@ -1,4 +1,5 @@
 
+regulations-site: regulations-site/regulations/static/regulations/css/main.css
 regulations-site/regulations/static/regulations/css/main.css: regulations-site/regulations/static/regulations/css/**/*.scss
 	cd regulations-site/regulations/static; \
 		npm run css;
