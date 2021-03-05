@@ -43,6 +43,16 @@ func main() {
 				processDataFromFile(path)
 			}
 		}
+	} else if (filepath.Ext(*file) == ".txt") {
+		f, err := os.Open(*file)
+		if err != nil {
+			log.Fatal("An error has occured :: ", err)
+		}
+		urls, err := readFile(f)
+		if err != nil {
+			log.Fatal("An error has occured :: ", err)
+		}
+		fmt.Println(urls)
 	} else {
 		processDataFromFile(*file)
 	}
