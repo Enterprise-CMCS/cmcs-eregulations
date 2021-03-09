@@ -17,7 +17,7 @@ func formatHeader(file string) string {
 func formatRegs(regs []string) []string {
 	newRegs := make([]string, 0)
 	for _, reg := range regs {
-		if len(reg) > 0 {
+		if len(reg) > 0 && len(reg) < 10 { //Look into related final rule field in NPRMs
 			removeSpace := strings.ReplaceAll(reg, " ", "")
 			newRegs = append(newRegs, strings.ReplaceAll(removeSpace, ".", "-"))
 		}

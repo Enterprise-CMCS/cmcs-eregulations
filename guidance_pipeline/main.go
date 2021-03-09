@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -40,7 +41,14 @@ func main() {
 		for _, file := range files {
 			if(filepath.Ext(file.Name()) == ".csv") {
 				path := filepath.Join(*directory, file.Name())
-				processDataFromFile(path)
+				header := formatHeader(path)
+
+				f, err := os.Open(path)
+				if err != nil {
+					log.Fatal("An error has occured :: ", err)
+				}
+				defer f.Close()
+				processDataFromFile(header, f)
 			}
 		}
 	} else if (filepath.Ext(*file) == ".txt") {
@@ -52,22 +60,29 @@ func main() {
 		if err != nil {
 			log.Fatal("An error has occured :: ", err)
 		}
-		fmt.Println(urls)
+		for _, url := range urls {
+			fmt.Println(url)
+			header := url
+			body, err := downloadCSV(url)
+			if err != nil {
+				log.Fatal("An error has occured :: ", err)
+			}
+			processDataFromFile(header, body)
+		}
 	} else {
-		processDataFromFile(*file)
+		header := formatHeader(*file)
+
+		f, err := os.Open(*file)
+		if err != nil {
+			log.Fatal("An error has occured :: ", err)
+		}
+		defer f.Close()
+		processDataFromFile(header, f)
 	}
 }
 
-func processDataFromFile(file string) {
-	header := formatHeader(file)
-
-	f, err := os.Open(file)
-	if err != nil {
-		log.Fatal("An error has occured :: ", err)
-	}
-	defer f.Close()
-
-	records, err := readCSV(f)
+func processDataFromFile(header string, file io.Reader) {
+	records, err := readCSV(file)
 
 	if err != nil {
 		log.Fatal("An error has occured :: ", err)
