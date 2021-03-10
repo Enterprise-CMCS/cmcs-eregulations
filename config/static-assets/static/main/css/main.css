@@ -346,6 +346,10 @@ a:hover {
   transition: all 0.1s ease-in;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 header {
   padding: 2em;
   border-bottom: 1px solid #17415F;
@@ -392,6 +396,10 @@ a:hover {
 }
 
 html {
+  scroll-behavior: smooth;
+}
+
+html {
   font-size: 1rem;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
@@ -406,13 +414,13 @@ body {
 }
 
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-family: "Merriweather", Georgia, serif;
   margin-bottom: 1.5em;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
   font-family: "Merriweather", Georgia, serif;
 }
@@ -424,6 +432,10 @@ a:hover {
   color: #17415F;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .switch-view {
@@ -441,6 +453,13 @@ a:hover {
 }
 .switch-view ul li a {
   font-weight: 500;
+}
+.switch-view ul li a.active {
+  font-weight: bold;
+  color: #17415F;
+}
+.switch-view ul li a.active:hover {
+  color: #046791;
 }
 
 header a {
@@ -469,6 +488,10 @@ a:hover {
   color: #17415F;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 aside.left-sidebar {
@@ -523,6 +546,10 @@ a:hover {
   transition: all 0.1s ease-in;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 a {
   color: #046791;
 }
@@ -532,12 +559,16 @@ a:hover {
   transition: all 0.1s ease-in;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .reg-text h1 {
   color: #17415F;
 }
 .reg-text > section > h1 {
   padding-top: 1em;
-  font-size: 1.9em;
+  font-size: 1.8em;
   color: #212121;
 }
 
@@ -583,6 +614,10 @@ a:hover {
   color: #17415F;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 /*# sourceMappingURL=main.css.map */
