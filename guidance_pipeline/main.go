@@ -61,13 +61,12 @@ func main() {
 			log.Fatal("An error has occured :: ", err)
 		}
 		for _, url := range urls {
-			fmt.Println(url)
-			header := url
-			body, err := downloadCSV(url)
+			header, body, err := downloadCSV(url)
 			if err != nil {
 				log.Fatal("An error has occured :: ", err)
 			}
-			processDataFromFile(header, body)
+			processDataFromFile(formatHeader(header), body)
+			body.Close()
 		}
 	} else {
 		header := formatHeader(*file)
