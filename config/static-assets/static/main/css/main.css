@@ -346,6 +346,12 @@ a:hover {
   transition: all 0.1s ease-in;
 }
 
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
+}
+
 header {
   padding: 2em;
   border-bottom: 1px solid #17415F;
@@ -391,6 +397,12 @@ a:hover {
   transition: all 0.1s ease-in;
 }
 
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
+}
+
 html {
   font-size: 1rem;
   line-height: 1.6;
@@ -406,13 +418,13 @@ body {
 }
 
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-family: "Merriweather", Georgia, serif;
   margin-bottom: 1.5em;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
   font-family: "Merriweather", Georgia, serif;
 }
@@ -424,6 +436,59 @@ a:hover {
   color: #17415F;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
+}
+
+.site-homepage .reg-title h1 {
+  margin-bottom: 0;
+  font-size: 1.7em;
+}
+
+.part-names {
+  display: block;
+  margin: 1em 0;
+  padding: 0;
+}
+.part-names li {
+  border-bottom: 1px solid #D6D7D9;
+  list-style: none;
+  margin: 0;
+  padding: 1em 0;
+}
+.part-names li:last-of-type {
+  border: 0;
+}
+.part-names li a {
+  text-decoration: none;
+  font-size: 1.2em;
+}
+.part-names li .part-number {
+  font-weight: bold;
+  display: table-cell;
+  padding-right: 0.3em;
+}
+.part-names li .part-title {
+  display: table-cell;
+}
+
+a {
+  color: #046791;
+}
+a:hover {
+  color: #17415F;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
 }
 
 .switch-view {
@@ -441,6 +506,13 @@ a:hover {
 }
 .switch-view ul li a {
   font-weight: 500;
+}
+.switch-view ul li a.active {
+  font-weight: bold;
+  color: #17415F;
+}
+.switch-view ul li a.active:hover {
+  color: #046791;
 }
 
 header a {
@@ -469,6 +541,12 @@ a:hover {
   color: #17415F;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
 }
 
 aside.left-sidebar {
@@ -523,6 +601,12 @@ a:hover {
   transition: all 0.1s ease-in;
 }
 
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
+}
+
 a {
   color: #046791;
 }
@@ -532,12 +616,18 @@ a:hover {
   transition: all 0.1s ease-in;
 }
 
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
+}
+
 .reg-text h1 {
   color: #17415F;
 }
 .reg-text > section > h1 {
   padding-top: 1em;
-  font-size: 1.9em;
+  font-size: 1.8em;
   color: #212121;
 }
 
@@ -583,6 +673,12 @@ a:hover {
   color: #17415F;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+
+.container {
+  max-width: 800px;
+  display: block;
+  margin: 0 auto;
 }
 
 /*# sourceMappingURL=main.css.map */
