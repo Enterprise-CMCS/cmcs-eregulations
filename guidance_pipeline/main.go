@@ -16,9 +16,10 @@ type Guidance struct {
 	Regs []string `json:"regs"`
 }
 
-var file = flag.String("f", "", "supply a file of URLs to download")
-var directory = flag.String("d", "", "give a directory to read from")
-var outputDirectory = flag.String("o", "guidance", "give the directory you want to output the files to.")
+var file = flag.String("f", "", "supply a file of URLs to download or a csv file")
+var directory = flag.String("d", "", "give a directory of csv files")
+var url = flag.String("u", "", "give a url to a csv file" )
+var outputDirectory = flag.String("o", "guidance", "give the directory with which you want to output json")
 
 func main() {
 	flag.Usage = func(){
@@ -26,62 +27,73 @@ func main() {
 		flag.PrintDefaults()
 	}
 	flag.Parse()
-	if len(os.Args) < 2 {
+	if flag.NFlag() == 0 {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options] [file]\n", os.Args[0])
 		flag.PrintDefaults()
 		return
 	}
 
 	if(len(*directory) > 0) {
-		files, err := ioutil.ReadDir(*directory)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		for _, file := range files {
-			if(filepath.Ext(file.Name()) == ".csv") {
-				path := filepath.Join(*directory, file.Name())
-				header := formatHeader(path)
-
-				f, err := os.Open(path)
-				if err != nil {
-					log.Fatal("An error has occured :: ", err)
-				}
-				defer f.Close()
-				processDataFromFile(header, f)
-			}
-		}
+		processDirectory(*directory)
 	} else if (filepath.Ext(*file) == ".txt") {
-		f, err := os.Open(*file)
-		if err != nil {
-			log.Fatal("An error has occured :: ", err)
-		}
-		urls, err := readFile(f)
-		if err != nil {
-			log.Fatal("An error has occured :: ", err)
-		}
-		for _, url := range urls {
-			header, body, err := downloadCSV(url)
-			if err != nil {
-				log.Fatal("An error has occured :: ", err)
-			}
-			processDataFromFile(formatHeader(header), body)
-			body.Close()
-		}
+		processURLsFromFile(*file)
+	} else if(len(*url) > 0) {
+		processURL(*url)
 	} else {
-		header := formatHeader(*file)
-
-		f, err := os.Open(*file)
-		if err != nil {
-			log.Fatal("An error has occured :: ", err)
-		}
-		defer f.Close()
-		processDataFromFile(header, f)
+		processFile(*file)
 	}
 }
 
-func processDataFromFile(header string, file io.Reader) {
-	records, err := readCSV(file)
+func processDirectory(directory string) {
+	files, err := ioutil.ReadDir(directory)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		if(filepath.Ext(file.Name()) == ".csv") {
+			path := filepath.Join(directory, file.Name())
+			processFile(path)
+		}
+	}
+}
+
+func processURLsFromFile(file string) {
+	f, err := os.Open(file)
+	if err != nil {
+		log.Fatal("An error has occured :: ", err)
+	}
+	urls, err := readFile(f)
+	if err != nil {
+		log.Fatal("An error has occured :: ", err)
+	}
+	for _, url := range urls {
+		processURL(url)
+	}
+}
+
+func processURL(url string) {
+	header, body, err := downloadCSV(url)
+	if err != nil {
+		log.Fatal("An error has occured :: ", err)
+	}
+	defer body.Close()
+	processData(formatHeader(header), body)
+}
+
+func processFile(file string) {
+	header := formatHeader(file)
+
+	f, err := os.Open(file)
+	if err != nil {
+		log.Fatal("An error has occured :: ", err)
+	}
+	defer f.Close()
+	processData(header, f)
+}
+
+func processData(header string, data io.Reader) {
+	records, err := readCSV(data)
 
 	if err != nil {
 		log.Fatal("An error has occured :: ", err)
