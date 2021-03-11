@@ -18,6 +18,15 @@ func buildRegulation(header string, guidances []Guidance) Regulation {
 	return regulation
 }
 
+func findReg(regulations []Regulation, reg Regulation) bool{
+	for _, el := range regulations {
+		if el.Header == reg.Header {
+			return true
+		}
+	}
+	return false
+}
+
 func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
 	var regulations []Regulation
 
@@ -29,7 +38,9 @@ func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
 	}
 
 	newReg := buildRegulation(header, guidances)
-	regulations = append(regulations, newReg)
+	if !findReg(regulations, newReg) {
+		regulations = append(regulations, newReg)
+	}
 
 	regsJSON, err := json.MarshalIndent(regulations, "", " ")
 
