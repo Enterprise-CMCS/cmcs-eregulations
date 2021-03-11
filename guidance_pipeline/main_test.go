@@ -40,7 +40,6 @@ func dataToJSON(reg string) []byte {
 		records, _ := readCSV(f)
 
 		regMap := makeMapOfRegs(header, records)
-		// dataJSON, _ := toJSON([]byte{}, header, regMap[reg])
 		dataJSON, _ = toJSON(dataJSON, header, regMap[reg])
 	}
 
