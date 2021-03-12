@@ -20,7 +20,7 @@ watch: ## Watch regulations-site static assets and rebuild when they're changed
 
 .PHONY: sync
 sync: ## Sync the submodules regualtions-site, core, parser
-	git submodules update --init
+	git submodule update --init
 
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: local.docker local.data.400 local.data.433
