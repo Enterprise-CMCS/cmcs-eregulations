@@ -8,6 +8,7 @@ Our related repositories with forks of eRegs code: [regulations-core](https://gi
 - Docker
 - Docker Compose
 - git
+- node >= v15 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
 
 # Getting setup
 
@@ -17,18 +18,18 @@ Our related repositories with forks of eRegs code: [regulations-core](https://gi
 git clone --recurse-submodules https://github.com/cmsgov/cmcs-eregulations
 ```
 
-**Run the script to start eRegs:**
+**Running eRegs:**
+A lot of tasks for local development can be accessed through the Makefile.
+Running `make` will provide some information about the available tasks.
 
+For example:
 ```
-./run.sh <api key>
+make local
 ```
+Will start a local docker environment and load Title 42 Parts 400 and 433 into it.
 
-**Visit eRegs locally:**
-Proceed to http://localhost:8000 in your browser.
+Proceed to http://localhost:8000 in your browser to see the results.
 
-**Stopping eRegs**
+To stop the local eRegs `make local.stop` will cause the running docker processes to stop without losing data.
 
-```
-docker-compose down
-```
-
+While `make local.clean` will remove the local environment completely, useful when you want to start fresh.
