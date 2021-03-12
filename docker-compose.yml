@@ -46,12 +46,15 @@ services:
     volumes:
       - ${SITE_CONTEXT:-./regulations-site}:/app/src
       - ./config/regulations-site/local_settings.py:/var/lib/eregs/local_settings.py
-      - ./guidance:/var/lib/eregs/cmcs/regulations/sidebar
+      - ./sidebars:/var/lib/eregs/cmcs/regulations/sidebars
+      - ./custom_templates:/var/lib/eregs/cmcs/custom_templates/regulations
+      - ./content/regulations_landing_pages:/var/lib/eregs/cmcs/landing_pages/regulations
+      - ./content/supplementary_content:/var/lib/eregs/cmcs/content
     environment:
       EREGS_API_BASE: http://regulations-core:8080/
       PYTHONPATH: /var/lib/eregs
       STATIC_URL: http://localhost:8888/
-      SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/regulations/sidebar/content
+      SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
     ports:
       - 8000:8000
     links:

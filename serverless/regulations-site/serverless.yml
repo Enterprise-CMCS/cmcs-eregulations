@@ -22,7 +22,8 @@ functions:
     environment:
       EREGS_API_BASE: ${self:custom.settings.api_url}
       STATIC_URL: ${self:custom.settings.static_url}
-      SIDEBAR_CONTENT_DIR: /var/task/cmcs/regulations/sidebar/content
+      SIDEBAR_CONTENT_DIR: /var/task/cmcs/supplementary_content
+      WORKING_DIR: /var/task
     handler: wsgi_handler.handler
     timeout: 15
     events:

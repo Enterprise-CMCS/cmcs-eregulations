@@ -21,7 +21,7 @@ jobs:
       - name: build static assets 
         run: |
           make regulations-site
-          cp -r regulations-site/regulations/static/regulations config/static-assets/static
+          cp -r regulations-site/regulations/static/regulations serverless/static-assets/static
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
@@ -33,7 +33,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd config/static-assets/serverless
+          pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install
           serverless deploy --stage dev-$branch_name
@@ -43,7 +43,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd config/regulations-site
+          pushd serverless/regulations-site
           npm install serverless -g
           npm install
           serverless deploy --config ./serverless-experimental.yml --stage dev-$branch_name
