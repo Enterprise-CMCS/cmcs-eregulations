@@ -21,6 +21,7 @@ jobs:
       - name: build static assets 
         run: |
           make regulations-site
+          cp -r regulations-site/regulations/static/regulations config/static-assets/static
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
