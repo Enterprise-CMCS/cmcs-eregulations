@@ -1,7 +1,6 @@
 version: '3'
 services:
   db:
-    network_mode: "bridge"
     image: postgres:9.6
     environment:
       POSTGRES_USER: eregs
@@ -10,7 +9,6 @@ services:
     ports:
       - 5432:5432
   regulations-parser:
-    network_mode: "bridge"
     build:
       context: ./regulations-parser
     volumes:
@@ -27,7 +25,6 @@ services:
     links:
       - regulations-core
   regulations-core:
-    network_mode: "bridge"
     build:
       context: ${CORE_CONTEXT:-./regulations-core}
       dockerfile: ${PWD}/config/regulations-core/Dockerfile
@@ -43,7 +40,6 @@ services:
     links:
       - db
   regulations-site:
-    network_mode: "bridge"
     build:
       context: ${SITE_CONTEXT:-./regulations-site}
       dockerfile: ${PWD}/config/regulations-site/Dockerfile
@@ -61,7 +57,6 @@ services:
     links:
       - regulations-core
   static-assets:
-    network_mode: "bridge"
     image: nginx
     ports:
       - 8888:80
