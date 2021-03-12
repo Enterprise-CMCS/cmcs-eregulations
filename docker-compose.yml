@@ -8,6 +8,22 @@ services:
       POSTGRES_DB: eregs
     ports:
       - 5432:5432
+  regulations-parser:
+    build:
+      context: ./regulations-parser
+    volumes:
+      - ./regulations-parser:/app/src
+      - ./output:/app/output
+      - eregs-cache:/app/cache
+    environment:
+      PYTHONUNBUFFERED: "1"
+      DATABASE_URL: sqlite:////app/cache/db.sqlite
+      EREGS_CACHE_DIR: /app/cache
+      EREGS_OUTPUT_DIR: /app/output
+    working_dir: /app/src
+    command: "tail -f /dev/null"
+    links:
+      - regulations-core
   regulations-core:
     build:
       context: ${CORE_CONTEXT:-./regulations-core}
@@ -21,7 +37,7 @@ services:
       PYTHONPATH: /var/lib/eregs
     ports:
       - 8080:8080
-    depends_on:
+    links:
       - db
   regulations-site:
     build:
@@ -38,7 +54,7 @@ services:
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/regulations/sidebar/content
     ports:
       - 8000:8000
-    depends_on:
+    links:
       - regulations-core
   static-assets:
     image: nginx
@@ -46,4 +62,7 @@ services:
       - 8888:80
     volumes:
       - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
-      - ./config/static-assets/static:/usr/share/nginx/html
+      - ./regulations-site/regulations/static/regulations:/usr/share/nginx/html
+
+volumes:
+  eregs-cache:

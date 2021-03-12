@@ -17,12 +17,11 @@ jobs:
       # should build first and save the artifact
       - uses: actions/setup-node@v1
         with:
-          node-version: '6.9.2'
+          node-version: '15.11.0'
       - name: build static assets 
         run: |
-          pushd config/static-assets
-          make build
-          popd
+          make regulations-site
+          cp -r regulations-site/regulations/static/regulations config/static-assets/static
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
