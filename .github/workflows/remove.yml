@@ -21,7 +21,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd config/regulations-site
+          pushd serverless/regulations-site
           npm install serverless -g
           npm install
           serverless remove
@@ -31,7 +31,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd config/static-assets/serverless
+          pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install
           serverless remove
@@ -41,7 +41,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd config/regulations-core
+          pushd serverless/regulations-core
           npm install serverless -g
           npm install
           serverless remove

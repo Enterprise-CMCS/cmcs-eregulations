@@ -23,12 +23,13 @@ MIDDLEWARE_CLASSES = (
 )
 
 SIDEBARS = (
-    'cmcs.regulations.sidebar.guidance.Guidance',
+    'cmcs.regulations.sidebars.guidance.Guidance',
 )
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
+WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -53,7 +54,9 @@ TEMPLATES = [
         },
         "DIRS": [
             "%s/templates" % BASE_DIR,
-            os.environ.get("SIDEBAR_CONTENT_DIR"),
+            '%s/cmcs/regulations/sidebars/guidance/templates' % WORKING_DIR,
+            '%s/cmcs/custom_templates' % WORKING_DIR,
+            '%s/cmcs/landing_pages' % WORKING_DIR,
         ],
     },
 ]
