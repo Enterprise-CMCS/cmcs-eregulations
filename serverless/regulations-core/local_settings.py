@@ -1,0 +1,1 @@
+../../config/regulations-core/local_settings.py

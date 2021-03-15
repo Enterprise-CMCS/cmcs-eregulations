@@ -18,7 +18,7 @@ class Guidance(SidebarBase):
 
     def context(self, http_client, request):
         try:
-            sections = json.load(open(os.path.join(settings.GUIDANCE_DIR, 'guidance/%s.json' % self.label_id)))
+            sections = json.load(open(os.path.join(settings.GUIDANCE_DIR, '%s.json' % self.label_id)))
             t = select_template([
                 'guidance/%s.html' % self.label_id,
                 'guidance/default.html',
@@ -30,7 +30,7 @@ class Guidance(SidebarBase):
                     'sections': sections,
                 }),
             }
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             pass
         except Exception as e:
             logger.error(e)
