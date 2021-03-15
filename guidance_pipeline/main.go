@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"net/url"
 	"os"
 	"path/filepath"
 )
@@ -18,7 +19,7 @@ type Guidance struct {
 
 var file = flag.String("f", "", "supply a file of URLs to download or a csv file")
 var directory = flag.String("d", "", "give a directory of csv files")
-var url = flag.String("u", "", "give a url to a csv file")
+var csvURL = flag.String("u", "", "give a url to a csv file")
 var outputDirectory = flag.String("o", "guidance", "give the directory with which you want to output json")
 
 func main() {
@@ -32,12 +33,19 @@ func main() {
 		return
 	}
 
+	logFile, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
+
 	if len(*directory) > 0 {
 		processDirectory(*directory)
 	} else if filepath.Ext(*file) == ".txt" {
 		processURLsFromFile(*file)
-	} else if len(*url) > 0 {
-		processURL(*url)
+	} else if len(*csvURL) > 0 {
+		processURL(*csvURL)
 	} else {
 		processFile(*file)
 	}
@@ -66,13 +74,13 @@ func processURLsFromFile(file string) {
 	if err != nil {
 		log.Fatal("An error has occured :: ", err)
 	}
-	for _, url := range urls {
-		processURL(url)
+	for _, u := range urls {
+		processURL(u)
 	}
 }
 
-func processURL(url string) {
-	header, body, err := downloadCSV(url)
+func processURL(csvURL string) {
+	header, body, err := downloadCSV(csvURL)
 	if err != nil {
 		log.Fatal("An error has occured :: ", err)
 	}
@@ -106,6 +114,15 @@ func processData(header string, data io.Reader) {
 	}
 }
 
+func validURL(header string, link string) string {
+	_, err := url.ParseRequestURI(link)
+	if err != nil {
+		err := fmt.Errorf("%s %s", header, err)
+		log.Println(err)
+	}
+	return link 
+}
+
 func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 	regMap := make(map[string][]Guidance)
 
@@ -116,7 +133,7 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 			for _, reg := range regs {
 				guidance := Guidance{
 					Name: record[0],
-					Link: record[1],
+					Link: validURL(header, record[1]),
 					Regs: regs,
 				}
 
