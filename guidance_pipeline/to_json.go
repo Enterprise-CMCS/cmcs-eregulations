@@ -18,7 +18,7 @@ func buildRegulation(header string, guidances []Guidance) Regulation {
 	return regulation
 }
 
-func findReg(regulations []Regulation, reg Regulation) bool{
+func findReg(regulations []Regulation, reg Regulation) bool {
 	for _, el := range regulations {
 		if el.Header == reg.Header {
 			return true
@@ -43,7 +43,6 @@ func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
 	}
 
 	regsJSON, err := json.MarshalIndent(regulations, "", " ")
-
 	if err != nil {
 		return nil, err
 	}

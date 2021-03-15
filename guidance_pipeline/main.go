@@ -18,26 +18,25 @@ type Guidance struct {
 
 var file = flag.String("f", "", "supply a file of URLs to download or a csv file")
 var directory = flag.String("d", "", "give a directory of csv files")
-var url = flag.String("u", "", "give a url to a csv file" )
+var url = flag.String("u", "", "give a url to a csv file")
 var outputDirectory = flag.String("o", "guidance", "give the directory with which you want to output json")
 
 func main() {
-	flag.Usage = func(){
+	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [options] [file]\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 	flag.Parse()
 	if flag.NFlag() == 0 {
-		fmt.Fprintf(os.Stderr, "Usage: %s [options] [file]\n", os.Args[0])
-		flag.PrintDefaults()
+		flag.Usage()
 		return
 	}
 
-	if(len(*directory) > 0) {
+	if len(*directory) > 0 {
 		processDirectory(*directory)
-	} else if (filepath.Ext(*file) == ".txt") {
+	} else if filepath.Ext(*file) == ".txt" {
 		processURLsFromFile(*file)
-	} else if(len(*url) > 0) {
+	} else if len(*url) > 0 {
 		processURL(*url)
 	} else {
 		processFile(*file)
@@ -51,7 +50,7 @@ func processDirectory(directory string) {
 	}
 
 	for _, file := range files {
-		if(filepath.Ext(file.Name()) == ".csv") {
+		if filepath.Ext(file.Name()) == ".csv" {
 			path := filepath.Join(directory, file.Name())
 			processFile(path)
 		}
@@ -138,10 +137,12 @@ func writeRegsToFile(header string, regs map[string][]Guidance) error {
 		}
 		file, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
+			err := fmt.Errorf("%s %s", filename, err)
 			return err
 		}
 		defer file.Close()
 		if err := writeData(file, dataJSON); err != nil {
+			err := fmt.Errorf("%s %s", filename, err)
 			return err
 		}
 	}
