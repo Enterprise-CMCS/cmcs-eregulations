@@ -15,8 +15,7 @@ jobs:
       - name: patch libraries
         run: |
           pushd regulations-core
-          git apply ../patches/regcore-jsonschema.patch
-          git apply ../patches/regcore-migrations.patch
+          git apply ../.patches/regcore-migrations.patch
           popd
       # should build first and save the artifact
       - uses: actions/setup-node@v1
