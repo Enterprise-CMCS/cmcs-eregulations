@@ -28,7 +28,9 @@ func main() {
 		flag.PrintDefaults()
 	}
 	flag.Parse()
-	if flag.NFlag() == 0 {
+	flags := make(map[string]bool)
+	flag.Visit(func(f *flag.Flag) { flags[f.Name]=true})
+	if !(flags["f"] || flags["d"] || flags["u"]) {
 		flag.Usage()
 		return
 	}
