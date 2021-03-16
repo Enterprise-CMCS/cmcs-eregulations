@@ -29,7 +29,7 @@ func main() {
 	}
 	flag.Parse()
 	flags := make(map[string]bool)
-	flag.Visit(func(f *flag.Flag) { flags[f.Name]=true})
+	flag.Visit(func(f *flag.Flag) { flags[f.Name] = true })
 	if !(flags["f"] || flags["d"] || flags["u"]) {
 		flag.Usage()
 		return
@@ -131,11 +131,12 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 
 	for _, record := range records {
 		if len(record[0]) > 0 {
-			regs := formatRegs(record[2:])
 			link, err := validURL(header, record[1])
 			if err != nil {
-				log.Fatal(err)
+				log.Println(err)
+				continue
 			}
+			regs := formatRegs(record[2:])
 
 			for _, reg := range regs {
 				guidance := Guidance{
