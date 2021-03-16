@@ -38,7 +38,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer logFile.Close()
-	log.SetOutput(logFile)
+	mw := io.MultiWriter(os.Stderr, logFile)
+	log.SetOutput(mw)
 
 	if len(*directory) > 0 {
 		processDirectory(*directory)
@@ -114,13 +115,13 @@ func processData(header string, data io.Reader) {
 	}
 }
 
-func validURL(header string, link string) string {
+func validURL(header string, link string) (string, error) {
 	_, err := url.ParseRequestURI(link)
 	if err != nil {
 		err := fmt.Errorf("%s %s", header, err)
-		log.Println(err)
+		return "", err
 	}
-	return link 
+	return link, nil
 }
 
 func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
@@ -129,11 +130,15 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 	for _, record := range records {
 		if len(record[0]) > 0 {
 			regs := formatRegs(record[2:])
+			link, err := validURL(header, record[1])
+			if err != nil {
+				log.Fatal(err)
+			}
 
 			for _, reg := range regs {
 				guidance := Guidance{
 					Name: record[0],
-					Link: validURL(header, record[1]),
+					Link: link,
 					Regs: regs,
 				}
 
