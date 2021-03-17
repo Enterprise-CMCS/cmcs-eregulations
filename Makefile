@@ -26,7 +26,11 @@ local: ## Start a local environment with parts 400 and 433 loaded.
 local: local.docker local.data.400 local.data.433
 	@echo Local environment started. Visit http://localhost:8000
 
+regulations-parser/Dockerfile.local: config/regulations-parser/Dockerfile
+	cp config/regulations-parser/Dockerfile regulations-parser/Dockerfile.local
+
 local.docker: ## Start a local environment
+local.docker: regulations-parser/Dockerfile.local
 	docker-compose up -d; \
 		sleep 5; \
 		make local.regulations-core; \
@@ -37,7 +41,7 @@ local.regulations-core: ## Run migrations and restart the regulations-core
 		docker-compose restart regulations-core;
 
 local.parser: ## Update the regulations-parser with the latest code
-	docker-compose exec regulations-parser pip install .;
+	docker-compose exec regulations-parser pip install -e .;
 
 local.data.%: ## Load a Part of Title 42. e.g. make load.data.435 will load Part 435
 local.data.%: local.parser
