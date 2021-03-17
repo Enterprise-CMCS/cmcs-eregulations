@@ -12,7 +12,7 @@ import (
 var update = flag.Bool("update", false, "update .golden files")
 
 func TestDataToJson(t *testing.T) {
-	reg := "433-110"
+	reg := "433-119"
 	data := dataToJSON(reg)
 	gp := filepath.Join("testdata", reg+".golden")
 
@@ -32,13 +32,16 @@ func TestDataToJson(t *testing.T) {
 }
 
 func dataToJSON(reg string) []byte {
-	file := "testdata/final_rules.csv"
-	header := formatHeader(file)
-	f, _ := os.Open(file)
-	records, _ := readData(f)
+	files := [2]string{"testdata/Final_Rules.csv", "testdata/NPRMs.csv"}
+	dataJSON := make([]byte, 0)
+	for _, file := range files {
+		header := formatHeader(file)
+		f, _ := os.Open(file)
+		records, _ := readCSV(f)
 
-	regMap := makeMapOfRegs(header, records)
+		regMap := makeMapOfRegs(header, records)
+		dataJSON, _ = toJSON(dataJSON, header, regMap[reg])
+	}
 
-	dataJSON, _ := toJSON([]byte{}, header, regMap[reg])
 	return dataJSON
 }

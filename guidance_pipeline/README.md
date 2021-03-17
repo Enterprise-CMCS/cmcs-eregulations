@@ -4,7 +4,8 @@ Guidance Pipeline take's the csv files guidances and output their respective par
 # Usage
 **Running the application**
 ```
-go run . csv/[FILE]
+go run . [OPTIONS] [ARGS] 
+
 ```
 
 **Building the application**

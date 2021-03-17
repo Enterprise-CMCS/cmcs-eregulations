@@ -1,11 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"encoding/csv"
 	"io"
 )
 
-func readData(file io.Reader) ([][]string, error) {
+func readCSV(file io.Reader) ([][]string, error) {
 	reader := csv.NewReader(file)
 
 	// First line skip
@@ -20,4 +21,13 @@ func readData(file io.Reader) ([][]string, error) {
 	}
 
 	return records, nil
+}
+
+func readFile(file io.Reader) ([]string, error) {
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
 }
