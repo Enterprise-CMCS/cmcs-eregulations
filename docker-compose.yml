@@ -11,6 +11,7 @@ services:
   regulations-parser:
     build:
       context: ./regulations-parser
+      dockerfile: Dockerfile.local
     volumes:
       - ./regulations-parser:/app/src
       - ./output:/app/output
