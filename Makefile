@@ -56,3 +56,6 @@ local.start: ## Start the local environment if stopped using `make local.stop`
 local.clean: ## Remove the local environment entirely.
 	docker-compose down
 	docker volume rm cmcs-eregulations_eregs-cache
+
+test: ## run the cypress e2e suite
+	docker-compose up e2e 
