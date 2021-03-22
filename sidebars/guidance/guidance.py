@@ -8,7 +8,6 @@ from regulations.generator.node_types import label_to_text
 
 from regulations.generator.sidebar.base import SidebarBase
 # @todo - seems like code in `generator` shouldn't reach in to `views`?
-from regulations.views.utils import layer_names
 
 logger = logging.getLogger(__name__)
 
