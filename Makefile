@@ -50,6 +50,9 @@ local.data.%: local.parser
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker-compose stop
 
+local.start: ## Start the local environment if stopped using `make local.stop`
+	docker-compose start
+
 local.clean: ## Remove the local environment entirely.
 	docker-compose down
 	docker volume rm cmcs-eregulations_eregs-cache
