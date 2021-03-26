@@ -104,16 +104,29 @@ resources:
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
         VpcId: ${ssm:/account_vars/vpc/id~true}
-        SecurityGroupIngress:
-          - IpProtocol: tcp
-            FromPort: '0'
-            ToPort: '65535'
-            CidrIp: "0.0.0.0/0"
         Tags:
           - Key: "Name"
             Value: "ServerlessSecurityGroup"
 
-    ServerlessSubnetGroup:
+    DBSecurityGroup:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: SecurityGroup for Serverless Functions
+        VpcId: ${ssm:/account_vars/vpc/id~true}
+        Tags:
+          - Key: "Name"
+            Value: "ServerlessSecurityGroup"
+
+    DBSecurityGroupIngress:
+      Type: AWS::EC2::SecurityGroupIngress
+      Properties:
+        GroupId: !Ref 'DBSecurityGroup'
+        IpProtocol: tcp
+        FromPort: 5432
+        ToPort: 5432
+        SourceSecurityGroupId: !Ref 'ServerlessSecurityGroup'
+
+    DBSubnetGroup:
       Type: AWS::RDS::DBSubnetGroup
       Properties:
         DBSubnetGroupDescription: "RDS Subnet Group"
@@ -122,7 +135,7 @@ resources:
           - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
         Tags:
           - Key: "Name"
-            Value: "ServerlessSubnetGroup"
+            Value: "DBSubnetGroup"
     # =============================================================================================
     # Aurora DB
     # =============================================================================================
@@ -164,7 +177,7 @@ resources:
         MasterUsername: ${self:custom.settings.USERNAME}
         MasterUserPassword: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
         DBSubnetGroupName:
-          Ref: ServerlessSubnetGroup
+          Ref: DBSubnetGroup
         Engine: aurora-postgresql
         EngineVersion: "9.6.16"
         DatabaseName: ${self:custom.settings.DB_NAME}
