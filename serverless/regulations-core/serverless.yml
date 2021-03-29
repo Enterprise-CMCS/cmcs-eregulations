@@ -122,8 +122,8 @@ resources:
       Properties:
         GroupId: !Ref 'DBSecurityGroup'
         IpProtocol: tcp
-        FromPort: 5432
-        ToPort: 5432
+        FromPort: !GetAtt [RDSResource, Endpoint.Port]
+        ToPort: !GetAtt [RDSResource, Endpoint.Port]
         SourceSecurityGroupId: !Ref 'ServerlessSecurityGroup'
 
     DBSubnetGroup:
