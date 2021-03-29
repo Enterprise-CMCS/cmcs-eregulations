@@ -34,7 +34,7 @@ describe("Part View", () => {
 
     cy.url().should("include", "#433-51");
     cy.get("#433").contains("PART 433—STATE FISCAL ADMINISTRATION").should("be.visible");
-    // cy.contains("433.10 Rates of FFP for program services.");
-    // cy.contains("433.50 Basis, scope, and applicibility.");
+    cy.contains("433.10 Rates of FFP for program services.").should("be.visible");
+    cy.contains("433.50 Basis, scope, and applicability.").should("be.visible");
   });
 });
