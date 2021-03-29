@@ -185,7 +185,7 @@ resources:
         DBClusterParameterGroupName:
           Ref: AuroraRDSClusterParameter
         VpcSecurityGroupIds:
-          - !Ref 'ServerlessSecurityGroup'
+          - !Ref 'DBSecurityGroup'
 
     AuroraRDSInstance:
       Type: AWS::RDS::DBInstance
@@ -199,20 +199,6 @@ resources:
         DBClusterIdentifier:
           Ref: RDSResource
 
-    #RDSResource:
-    #  Type: AWS::RDS::DBInstance
-    #  Properties:
-    #    DBInstanceClass: db.t2.micro
-    #    MasterUsername: ${self:custom.settings.USERNAME}
-    #    MasterUserPassword: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
-    #    DBName: ${self:custom.settings.DB_NAME}
-    #    Engine: postgres
-    #    PubliclyAccessible: false
-    #    AllocatedStorage: 20
-    #    DBSubnetGroupName:
-    #      Ref: ServerlessSubnetGroup
-    #    VPCSecurityGroups:
-    #      - !Ref 'ServerlessSecurityGroup'
   Outputs:
     LambdaFunctionRoleArn:
       Value: !GetAtt LambdaFunctionRole.Arn
