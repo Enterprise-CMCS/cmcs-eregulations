@@ -111,11 +111,11 @@ resources:
     DBSecurityGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
-        GroupDescription: SecurityGroup for Serverless Functions
+        GroupDescription: SecurityGroup for Database
         VpcId: ${ssm:/account_vars/vpc/id~true}
         Tags:
           - Key: "Name"
-            Value: "ServerlessSecurityGroup"
+            Value: "DBSecurityGroup"
 
     DBSecurityGroupIngress:
       Type: AWS::EC2::SecurityGroupIngress
