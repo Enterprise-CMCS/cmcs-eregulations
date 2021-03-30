@@ -67,6 +67,21 @@ services:
     volumes:
       - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
       - ./regulations-site/regulations/static/regulations:/usr/share/nginx/html
-
+  e2e:
+    image: cypress
+    build:
+      context: ./e2e
+      dockerfile: ${PWD}/e2e/Dockerfile
+    container_name: cypress
+    network_mode: host
+    depends_on:
+      - regulations-site
+    environment:
+      - CYPRESS_baseUrl=http://localhost:8000
+    working_dir: /app
+    command: npx cypress run
+    volumes:
+      - ./e2e/cypress:/app/cypress
+      - ./e2e/cypress.json:/app/cypress.json
 volumes:
   eregs-cache:
