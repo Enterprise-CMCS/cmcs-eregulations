@@ -58,4 +58,4 @@ local.clean: ## Remove the local environment entirely.
 	docker volume rm cmcs-eregulations_eregs-cache
 
 test: ## run the cypress e2e suite
-	docker-compose -f docker-compose.test.yml up e2e
+	docker-compose up e2e
