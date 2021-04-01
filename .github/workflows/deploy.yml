@@ -7,6 +7,13 @@ on:
       - master
 
 jobs:
+  strategy:
+    max-parallel: 1
+    matrix:
+      environment: ["dev", "val", "prod"]
+  environment: 
+    name: ${{ matrix.environment }}
+    url: ${{ steps.deploy-regulations-site-server.outputs.url }}
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +47,7 @@ jobs:
           pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install
-          serverless deploy
+          serverless deploy --stage ${{ matrix.environment }}
           popd
       - name: deploy regulations core API
         env:
@@ -50,9 +57,9 @@ jobs:
           pushd serverless/regulations-core
           npm install serverless -g
           npm install
-          serverless deploy
-          serverless invoke --function reg_core_migrate
-          serverless invoke --function reg_core_rebuild_index
+          serverless deploy --stage ${{ matrix.environment }}
+          serverless invoke --function reg_core_migrate  --stage ${{ matrix.environment }}
+          serverless invoke --function reg_core_rebuild_index  --stage ${{ matrix.environment }}
           popd
       - name: deploy regulations site server
         env:
@@ -62,5 +69,6 @@ jobs:
           pushd serverless/regulations-site
           npm install serverless -g
           npm install
-          serverless deploy
+          serverless deploy --stage ${{ matrix.environment }}
+          serverless info --stage ${{ matrix.environment }} --verbose | grep PublicDnsName | cut -c 16- | xargs echo "::set-output name=url::$1"
           popd
