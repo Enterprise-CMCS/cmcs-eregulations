@@ -71,5 +71,5 @@ jobs:
           npm install serverless -g
           npm install
           serverless deploy --stage ${{ matrix.environment }} | tee output.log
-          echo "::set-output name=url::$(cat output.log | grep -m1 ANY | cut -c 9-)"
+          echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
