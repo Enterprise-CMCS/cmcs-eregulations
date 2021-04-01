@@ -7,14 +7,14 @@ on:
       - master
 
 jobs:
-  strategy:
-    max-parallel: 1
-    matrix:
-      environment: ["dev", "val", "prod"]
-  environment: 
-    name: ${{ matrix.environment }}
-    url: ${{ steps.deploy-regulations-site-server.outputs.url }}
   deploy:
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ["dev", "val", "prod"]
+    environment: 
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
