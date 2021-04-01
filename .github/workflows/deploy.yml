@@ -62,6 +62,7 @@ jobs:
           serverless invoke --function reg_core_rebuild_index  --stage ${{ matrix.environment }}
           popd
       - name: deploy regulations site server
+        id: deploy-regulations-site-server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
