@@ -70,5 +70,5 @@ jobs:
           npm install serverless -g
           npm install
           serverless deploy --stage ${{ matrix.environment }}
-          serverless info --stage ${{ matrix.environment }} --verbose | grep PublicDnsName | cut -c 16- | xargs echo "::set-output name=url::$1"
+          echo "::set-output name=url::$(serverless info --stage ${{ matrix.environment }} | grep -m1 ANY | cut -c 9-)"
           popd
