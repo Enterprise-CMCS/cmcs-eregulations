@@ -8,6 +8,13 @@ on:
 
 jobs:
   deploy:
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ["dev", "val", "prod"]
+    environment: 
+      name: ${{ matrix.environment }}
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -40,7 +47,7 @@ jobs:
           pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install
-          serverless deploy
+          serverless deploy --stage ${{ matrix.environment }}
           popd
       - name: deploy regulations core API
         env:
@@ -50,11 +57,12 @@ jobs:
           pushd serverless/regulations-core
           npm install serverless -g
           npm install
-          serverless deploy
-          serverless invoke --function reg_core_migrate
-          serverless invoke --function reg_core_rebuild_index
+          serverless deploy --stage ${{ matrix.environment }}
+          serverless invoke --function reg_core_migrate  --stage ${{ matrix.environment }}
+          serverless invoke --function reg_core_rebuild_index  --stage ${{ matrix.environment }}
           popd
       - name: deploy regulations site server
+        id: deploy-regulations-site-server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -62,5 +70,6 @@ jobs:
           pushd serverless/regulations-site
           npm install serverless -g
           npm install
-          serverless deploy
+          serverless deploy --stage ${{ matrix.environment }} | tee output.log
+          echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd

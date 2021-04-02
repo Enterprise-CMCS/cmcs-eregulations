@@ -8,11 +8,11 @@ provider:
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}
-    DB_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
+    DB_PASSWORD: ${ssm:/eregulations/db/password~true}
     DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
     DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
-    HTTP_AUTH_USER: ${ssm:/eregulations/${self:provider.stage}/http/user~true}
-    HTTP_AUTH_PASSWORD: ${ssm:/eregulations/${self:provider.stage}/http/password~true}
+    HTTP_AUTH_USER: ${ssm:/eregulations/http/user~true}
+    HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password~true}
     ALLOWED_HOST: '.amazonaws.com'
   vpc:
     securityGroupIds:
@@ -25,6 +25,7 @@ package:
   individually: true
 
 custom:
+  stage: ${opt:stage, self:provider.stage}
   wsgi:
     app: handler.application
     packRequirements: false
@@ -175,7 +176,7 @@ resources:
       Type: AWS::RDS::DBCluster
       Properties:
         MasterUsername: ${self:custom.settings.USERNAME}
-        MasterUserPassword: ${ssm:/eregulations/${self:provider.stage}/db/password~true}
+        MasterUserPassword: ${ssm:/eregulations/db/password~true}
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
