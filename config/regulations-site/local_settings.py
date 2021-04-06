@@ -28,6 +28,7 @@ SIDEBARS = (
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
+DEBUG = os.environ.get("DEBUG", False)
 
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
