@@ -29,7 +29,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '15.11.0'
-      - name: build static assets 
+      - name: build static assets
         run: |
           make regulations-site
           cp -r regulations-site/regulations/static/regulations serverless/static-assets/static
@@ -73,3 +73,10 @@ jobs:
           serverless deploy --stage ${{ matrix.environment }} | tee output.log
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
+      - name: end-to-end tests
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: ./e2e
+        env:
+          CYPRESS_host: ${{ steps.deploy-regulations-site-server.outputs.url }}
+          CYPRESS_port: 80
