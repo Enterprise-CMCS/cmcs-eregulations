@@ -77,6 +77,4 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: e2e
-        env:
-          CYPRESS_host: ${{ steps.deploy-regulations-site-server.outputs.url }}
-          CYPRESS_port: 80
+          config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
