@@ -12,7 +12,7 @@ jobs:
       max-parallel: 1
       matrix:
         environment: ["dev", "val", "prod"]
-    environment: 
+    environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
       - name: end-to-end tests
         uses: cypress-io/github-action@v2
         with:
-          working-directory: ./e2e
+          working-directory: e2e
         env:
           CYPRESS_host: ${{ steps.deploy-regulations-site-server.outputs.url }}
           CYPRESS_port: 80
