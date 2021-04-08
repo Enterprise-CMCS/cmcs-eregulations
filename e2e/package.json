@@ -1,0 +1,14 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "end to end tests",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "npm run cypress:run"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^7.0.0"
+  }
+}
