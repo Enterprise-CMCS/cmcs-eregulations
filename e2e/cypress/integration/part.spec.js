@@ -4,11 +4,11 @@ describe("Part View", () => {
     cy.contains("State Fiscal Administration").should("be.visible");
   });
 
-  it("loads a section view", () => {
+  it("section view redirects", () => {
     cy.visit("/433/");
     cy.get(".toc-section-number").contains("433.50").click()
 
-    cy.url().should("include", Cypress.config().baseUrl + "/433/50");
+    cy.url().should("include", Cypress.config().baseUrl + "/433/Subpart-B");
     cy.get("h1.section-title")
       .contains("433.50 Basis, scope, and applicability.")
       .should("be.visible");
@@ -28,13 +28,13 @@ describe("Part View", () => {
 
   it("loads a part view", () => {
     cy.visit("/433/");
-    cy.contains("433.51").click()
+    cy.findByRole("link", { name: "§ 433.51 Public Funds as the State share of financial participation." }).click()
 
     cy.get("a").contains("Part View").click();
 
-    cy.url().should("include", "#433-51");
-    cy.get("#433").contains("PART 433—STATE FISCAL ADMINISTRATION").should("be.visible");
-    cy.get("#433-10").contains("433.10 Rates of FFP for program services.").should("be.visible");
-    cy.get("#433-50").contains("433.50 Basis, scope, and applicability.").should("be.visible");
+    // goes to first part of the appropriate subpart (this is odd)
+    cy.url().should("include", "#433-50");
+    cy.findByRole("heading", {level: 1, name: "§ 433.50 Basis, scope, and applicability."}).should("be.visible");
+    cy.findByRole("heading", {level: 1, name: "§ 433.10 Rates of FFP for program services."}).should("be.visible");
   });
 });

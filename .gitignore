@@ -3,3 +3,4 @@ node_modules
 .serverless
 __pycache__/
 e2e/cypress/videos
+.env
