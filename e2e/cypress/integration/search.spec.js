@@ -11,7 +11,7 @@ describe("Search flow", () => {
     
     it("displays results of the search", () => {
         cy.visit("/search/?q=State", { timeout: 10000 });
-        cy.findByText("734 results, displayed by relevance").should("be.visible");
+        cy.findByText(/\d+ results, displayed by relevance/).should("be.visible");
         cy.findByRole("link", {name: "§ 433.153 Incentive payments to States and political subdivisions."}).should("be.visible").and('have.attr', 'href');
         cy.findByRole("link", {name: "§ 433.153 Incentive payments to States and political subdivisions."}).click();
         cy.url().should("include", "/433/Subpart-D/2020-28567/#433-153");
