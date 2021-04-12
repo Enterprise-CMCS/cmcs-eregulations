@@ -34,6 +34,7 @@ describe("Part View", () => {
 
         // goes to first part of the appropriate subpart (this is odd)
         cy.url().should("include", "#433-50");
+        cy.findByRole("heading", {level: 1, name: "PART 433—STATE FISCAL ADMINISTRATION"}).should("be.visible");
         cy.findByRole("heading", {level: 1, name: "§ 433.50 Basis, scope, and applicability."}).should("be.visible");
         cy.findByRole("heading", {level: 1, name: "§ 433.10 Rates of FFP for program services."}).should("be.visible");
     });
