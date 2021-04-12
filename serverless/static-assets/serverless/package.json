@@ -1,10 +1,10 @@
 {
-    "name": "regulations-core-serverless",
-    "version": "0.0.0",
-    "description": "Serverless config for eRegs core",
-    "private": true,
-    "dependencies": {
-        "serverless-s3-sync": "^1.15.0",
-        "serverless-cloudfront-invalidate": "^1.5.0"
-    }
+  "name": "regulations-core-serverless",
+  "version": "0.0.0",
+  "description": "Serverless config for eRegs core",
+  "private": true,
+  "dependencies": {
+    "serverless-s3-sync": "^1.15.0",
+    "serverless-cloudfront-invalidate": "^1.5.0"
+  }
 }

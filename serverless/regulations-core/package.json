@@ -1,10 +1,10 @@
 {
-    "name": "regulations-core-serverless",
-    "version": "0.0.0",
-    "description": "Serverless config for eRegs core",
-    "private": true,
-    "devDependencies": {
-        "serverless-python-requirements": "^5.1.0",
-        "serverless-wsgi": "^1.7.6"
-    }
+  "name": "regulations-core-serverless",
+  "version": "0.0.0",
+  "description": "Serverless config for eRegs core",
+  "private": true,
+  "devDependencies": {
+    "serverless-python-requirements": "^5.1.0",
+    "serverless-wsgi": "^1.7.6"
+  }
 }
