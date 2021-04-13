@@ -1,4 +1,4 @@
-describe("Guidance", () => {
+describe.skip("Guidance", () => {
     it("checks guidances on section 433.111", () => {
         cy.visit("/433/");
         cy.get(".toc-section-number").contains("433.111").click()

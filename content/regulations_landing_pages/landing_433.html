@@ -13,10 +13,10 @@
             </div>
             <div class="collapsible" aria-hidden="true">
                 <ul>
-                    <li><a href="{% url 'section_reader_view' '433' '202' '2016-27844' %}#433-202">Expansion Population (Adult Group)</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '15' '2016-27844' %}#433-15">Administration</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '10' '2016-27844' %}#433-10">Family Planning Services</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '10' '2016-27844' %}#433-10">Indian Health Services</a></li>
+                    <li><a href="{% url 'reader_view' '433' '202' '2016-27844' %}#433-202">Expansion Population (Adult Group)</a></li>
+                    <li><a href="{% url 'reader_view' '433' '15' '2016-27844' %}#433-15">Administration</a></li>
+                    <li><a href="{% url 'reader_view' '433' '10' '2016-27844' %}#433-10">Family Planning Services</a></li>
+                    <li><a href="{% url 'reader_view' '433' '10' '2016-27844' %}#433-10">Indian Health Services</a></li>
                 </ul>
             </div>
         </div>
@@ -30,8 +30,8 @@
             </div>
             <div class="collapsible" aria-hidden="true">
                 <ul>
-                    <li><a href="{% url 'section_reader_view' '433' '112' '2016-27844' %}#433-112">Design and Implementation</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '116' '2016-27844' %}#433-116">Operations</a></li>
+                    <li><a href="{% url 'reader_view' '433' '112' '2016-27844' %}#433-112">Design and Implementation</a></li>
+                    <li><a href="{% url 'reader_view' '433' '116' '2016-27844' %}#433-116">Operations</a></li>
                 </ul>
             </div>
         </div>
@@ -45,9 +45,9 @@
             </div>
             <div class="collapsible" aria-hidden="true">
                 <ul>
-                    <li><a href="{% url 'section_reader_view' '433' '55' '2016-27844' %}#433-55">Healthcare-Related Taxes</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '54' '2016-27844' %}#433-54">Bona Fide Donations</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '51' '2016-27844' %}#433-51">Public Funds</a></li>
+                    <li><a href="{% url 'reader_view' '433' '55' '2016-27844' %}#433-55">Healthcare-Related Taxes</a></li>
+                    <li><a href="{% url 'reader_view' '433' '54' '2016-27844' %}#433-54">Bona Fide Donations</a></li>
+                    <li><a href="{% url 'reader_view' '433' '51' '2016-27844' %}#433-51">Public Funds</a></li>
                 </ul>
             </div>
         </div>
@@ -61,10 +61,10 @@
             </div>
             <div class="collapsible" aria-hidden="true">
                 <ul>
-                    <li><a href="{% url 'section_reader_view' '433' '145' '2016-27844' %}#433-145">Assignment of Rights</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '135' '2016-27844' %}#433-135">Liable Third Parties</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '147' '2016-27844' %}#433-147">Medical Support</a></li>
-                    <li><a href="{% url 'section_reader_view' '433' '151' '2016-27844' %}#433-151">Cooperation Agreements</a></li>
+                    <li><a href="{% url 'reader_view' '433' '145' '2016-27844' %}#433-145">Assignment of Rights</a></li>
+                    <li><a href="{% url 'reader_view' '433' '135' '2016-27844' %}#433-135">Liable Third Parties</a></li>
+                    <li><a href="{% url 'reader_view' '433' '147' '2016-27844' %}#433-147">Medical Support</a></li>
+                    <li><a href="{% url 'reader_view' '433' '151' '2016-27844' %}#433-151">Cooperation Agreements</a></li>
                 </ul>
             </div>
         </div>
@@ -78,7 +78,7 @@
             </div>
             <div class="collapsible" aria-hidden="true">
                 <ul>
-                    <li><a href="{% url 'section_reader_view' '433' '300' '2016-27844' %}#433-300">Overpayment to Providers</a></li>
+                    <li><a href="{% url 'reader_view' '433' '300' '2016-27844' %}#433-300">Overpayment to Providers</a></li>
                 </ul>
             </div>
         </div>
@@ -92,80 +92,77 @@
             </div>
             <div class="collapsible" aria-hidden="true">
                 <ul>
-                    <li><a href="{% url 'section_reader_view' '433' '400' '2016-27844' %}#433-400">FMAP Increase During COVID-19</a></li>
+                    <li><a href="{% url 'reader_view' '433' '400' '2016-27844' %}#433-400">FMAP Increase During COVID-19</a></li>
                 </ul>
             </div>
         </div>
-        
-        {% include "regulations/recent-changes.html" %}
-    </div>
+    </div> <!-- /.topics-include -->
 
-</div> <!-- /.topics-include -->
-
-<!-- SIDEBAR -->
-<div id="sidebar" class="secondary-content homepage-sidebar">
+    <!-- SIDEBAR -->
+    <div id="sidebar" class="secondary-content homepage-sidebar">
         <div id="sidebar-content" class="sidebar-inner">
-        <section id="statutes" class="regs-meta">
-            <header class="expandable group">
-                <h4 tabindex="0">Related Statutes</h4>
-                <a href="#" tabindex="0"><span class="icon-text">Show/Hide Contents</span></a>
-            </header>
-            <div class="chunk expand-drawer">
-                <div class="sidebar-subsection">
-                    <section id="guidance" class="regs-meta">
-                        <div class="sidebar-subsection">
-                            <ul class="guidance-list">
-                                <li>
-                                    <a target="_blank" href="https://www.ssa.gov/OP_Home/ssact/title19/1900.htm">Title XIX of Social Security Act</a>
-                                </li>
-                                <li>
-                                    <a target="_blank" href="https://www.hhs.gov/sites/default/files/ppacacon.pdf">Affordable Care Act</a>
-                                </li>
-                            </ul>
-                        </div> <!-- /.sidebar-subsection-->
-                    </section> <!-- /.regs-meta -->
-                </div> <!-- /.sidebar-subsection-->
-            </div> <!-- /.expand-drawer-->
-        </section> <!-- /.regs-meta -->
-        <section id="reg-tools" class="regs-meta">
-            <header class="expandable group">
-                <h4 tabindex="0">Additional Regulation Tools</h4>
-                <a href="#" tabindex="0"><span class="icon-text">Show/Hide Contents</span></a>
-            </header>
-            <div class="chunk expand-drawer">
-                <div class="sidebar-subsection">
-                    <section id="guidance" class="regs-meta">
-                        <div class="sidebar-subsection">
-                            <ul class="guidance-list">
-                                <li>
-                                    <a target="_blank" href="https://www.federalregister.gov/">Federal Register</a>:
-                                    Notices of Proposed Rulemaking, final rules, agency notices
-                                </li>
-                                <li>
-                                    <a target="_blank" href="https://www.regulations.gov/">Regulations.gov</a>:
-                                    Public comments, regulatory agendas, agency reports
-                                </li>
-                                <li>
-                                    <a target="_blank" href="https://beta.regulations.gov/">Beta Regulations.gov</a>:
-                                    Enhanced search, a simplified commenting process, and improved user experience
-                                </li>
-                                <li>
-                                    <a target="_blank" href="https://www.govinfo.gov/app/collection/cfr/2019/title42/">Reg Book</a>:
-                                    Official and complete text of regulations, updated annually
-                                </li>
-                                <li>
-                                    <a target="_blank" href="https://www.ecfr.gov/cgi-bin/text-idx?SID=431b53ada034549c71892750c7fe2149&mc=true&tpl=/ecfrbrowse/Title42/42tab_02.tpl">eCFR</a>:
-                                    Updated version of the Code of Federal Regulations
-                                </li>
-                                <li>
-                                    <a target="_blank" href="https://ecfr.federalregister.gov/current/title-42/">Beta eCFR</a>:
-                                    eCFR with additional tools (version history)
-                                </li>
-                            </ul>
-                        </div> <!-- /.sidebar-subsection-->
-                    </section> <!-- /.regs-meta -->
-                </div> <!-- /.sidebar-subsection-->
-            </div> <!-- /.expand-drawer-->
-        </section> <!-- /.regs-meta -->
+            <section id="statutes" class="regs-meta">
+                <header class="expandable group">
+                    <h4 tabindex="0">Related Statutes</h4>
+                    <a href="#" tabindex="0"><span class="icon-text">Show/Hide Contents</span></a>
+                </header>
+                <div class="chunk expand-drawer">
+                    <div class="sidebar-subsection">
+                        <section id="guidance" class="regs-meta">
+                            <div class="sidebar-subsection">
+                                <ul class="guidance-list">
+                                    <li>
+                                        <a target="_blank" href="https://www.ssa.gov/OP_Home/ssact/title19/1900.htm">Title XIX of Social Security Act</a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="https://www.hhs.gov/sites/default/files/ppacacon.pdf">Affordable Care Act</a>
+                                    </li>
+                                </ul>
+                            </div> <!-- /.sidebar-subsection-->
+                        </section> <!-- /.regs-meta -->
+                    </div> <!-- /.sidebar-subsection-->
+                </div> <!-- /.expand-drawer-->
+            </section> <!-- /.regs-meta -->
+            <section id="reg-tools" class="regs-meta">
+                <header class="expandable group">
+                    <h4 tabindex="0">Additional Regulation Tools</h4>
+                    <a href="#" tabindex="0"><span class="icon-text">Show/Hide Contents</span></a>
+                </header>
+                <div class="chunk expand-drawer">
+                    <div class="sidebar-subsection">
+                        <section id="guidance" class="regs-meta">
+                            <div class="sidebar-subsection">
+                                <ul class="guidance-list">
+                                    <li>
+                                        <a target="_blank" href="https://www.federalregister.gov/">Federal Register</a>:
+                                        Notices of Proposed Rulemaking, final rules, agency notices
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="https://www.regulations.gov/">Regulations.gov</a>:
+                                        Public comments, regulatory agendas, agency reports
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="https://beta.regulations.gov/">Beta Regulations.gov</a>:
+                                        Enhanced search, a simplified commenting process, and improved user experience
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="https://www.govinfo.gov/app/collection/cfr/2019/title42/">Reg Book</a>:
+                                        Official and complete text of regulations, updated annually
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="https://www.ecfr.gov/cgi-bin/text-idx?SID=431b53ada034549c71892750c7fe2149&mc=true&tpl=/ecfrbrowse/Title42/42tab_02.tpl">eCFR</a>:
+                                        Updated version of the Code of Federal Regulations
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="https://ecfr.federalregister.gov/current/title-42/">Beta eCFR</a>:
+                                        eCFR with additional tools (version history)
+                                    </li>
+                                </ul>
+                            </div> <!-- /.sidebar-subsection-->
+                        </section> <!-- /.regs-meta -->
+                    </div> <!-- /.sidebar-subsection-->
+                </div> <!-- /.expand-drawer-->
+            </section> <!-- /.regs-meta -->
         </div>
+    </div>
 </div>
