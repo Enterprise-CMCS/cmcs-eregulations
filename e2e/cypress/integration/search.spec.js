@@ -10,7 +10,7 @@ describe("Search flow", () => {
     });
     
     it("displays results of the search", () => {
-        cy.visit("/search/?q=State", { timeout: 10000 });
+        cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByText(/\d+ results, displayed by relevance/).should("be.visible");
         cy.findByRole("link", {name: "§ 433.153 Incentive payments to States and political subdivisions."}).should("be.visible").and('have.attr', 'href');
         cy.findByRole("link", {name: "§ 433.153 Incentive payments to States and political subdivisions."}).click();
@@ -18,12 +18,12 @@ describe("Search flow", () => {
     });
     
     it("links to a search in the eCFR", () => {
-        cy.visit("/search/?q=State", { timeout: 10000 });
+        cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByRole("link", {name: "State in Beta eCFR", exact: false}).should("have.attr", "href", "https://ecfr.federalregister.gov/search?search%5Bdate%5D=current&search%5Bhierarchy%5D%5Btitle%5D=42&search%5Bquery%5D=State&view=standard");
     });
     
     it("should have a working searchbox", () => {
-        cy.visit("/search/?q=State", { timeout: 10000 });
+        cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByPlaceholderText("State")
         .should("be.visible")
         .type("test");
@@ -32,7 +32,7 @@ describe("Search flow", () => {
     });
     
     it("should be able to clear the searchbox", () => {
-        cy.visit("/search/?q=State", { timeout: 10000 });
+        cy.visit("/search/?q=State", { timeout: 60000 });
         
         cy.findByPlaceholderText("State")
         .should("be.visible")
