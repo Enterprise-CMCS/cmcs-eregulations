@@ -4,58 +4,21 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
-	"net/url"
 	"os"
 	"time"
+
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 )
 
-func URLMustParse(s string) *url.URL {
-	u, err := url.Parse(s)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return u
-}
-
-var ecfrSite = URLMustParse("https://ecfr.federalregister.gov/api/versioner/v1/")
-var ecfrFullXML = "full/%s/title-%d.xml?part=%d"
-
 type Part struct {
-	Title     int
-	Name      int
-	Date      time.Time
+	XMLName   xml.Name     `xml:"DIV5"`
+	Name      string       `xml:"N,attr"`
+	Type      string       `xml:"TYPE,attr"`
 	Header    string       `xml:"HEAD"`
 	Authority string       `xml:"AUTH>PSPACE"`
 	Source    string       `xml:"SOURCE>PSPACE"`
 	Children  PartChildren `xml:",any"`
-}
-
-func (p *Part) url() (string, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, p.Date.Format("2006-01-02"), p.Title, p.Name))
-
-	if err != nil {
-		return "", err
-	}
-
-	u := ecfrSite.ResolveReference(path)
-
-	return u.String(), nil
-}
-
-func (p *Part) fetch() (io.ReadCloser, error) {
-	path, err := p.url()
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := http.Get(path)
-	if err != nil {
-		return nil, err
-	}
-	return resp.Body, nil
 }
 
 type PartChildren []interface{}
@@ -91,14 +54,10 @@ type Section struct {
 
 func main() {
 	today := time.Now()
-	p := &Part{
-		Title: 42,
-		Name:  433,
-		Date:  today,
-	}
+
 	start := time.Now()
 	log.Println("[DEBUG] fetching part")
-	body, err := p.fetch()
+	body, err := ecfr.FetchPart(today, 42, ecfr.Part(433))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -106,6 +65,7 @@ func main() {
 
 	d := xml.NewDecoder(body)
 
+	p := &Part{}
 	log.Println("[DEBUG] Decoding part")
 	if err := d.Decode(p); err != nil {
 		log.Fatal(err)
