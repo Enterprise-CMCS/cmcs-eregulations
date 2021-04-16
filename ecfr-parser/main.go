@@ -55,6 +55,27 @@ type Citation struct {
 	Content string `xml:",innerxml"`
 }
 
+type Source struct {
+	Type string
+	Header string `xml:"HED"`
+	Content string `xml:"PSPACE"`
+}
+
+type SectionAuthority struct {
+	Type string
+	Content string `xml:",innerxml"`
+}
+
+type FlushParagraph struct {
+	Type string
+	Content string `xml:",innerxml"`
+}
+
+type Image struct {
+	Type string
+	Source string `xml:"src,attr"`
+}
+
 type PartChildren []interface{}
 type SubpartChildren []interface{}
 type SectionChildren []interface{}
@@ -97,6 +118,12 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "SOURCE":
+		child := &Source{Type: "Source"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	default:
 		//return fmt.Errorf("Unknown XML type in Subpart: %+v", start)
 		fmt.Printf("Unknown XML type in Subpart: %+v\n", start)
@@ -129,6 +156,18 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "FP":
+		child := &FlushParagraph{ Type: "FlushParagraph"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "img":
+		child := &Image{ Type: "Image"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	case "EXTRACT":
 		child := &Extract{ Type: "Extract" }
 		if err := d.DecodeElement(child, &start); err != nil {
@@ -137,6 +176,12 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		*c = append(*c, child)
 	case "CITA":
 		child := &Citation{ Type: "Citation" }
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "SECAUTH":
+		child := &SectionAuthority{ Type: "SectionAuthority" }
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
