@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -22,7 +21,34 @@ type Part struct {
 	Children  PartChildren `xml:",any"`
 }
 
+type Subpart struct {
+	Header   string          `xml:"HEAD"`
+	Type     string          `xml:"TYPE,attr"`
+	Children SubpartChildren `xml:",any"`
+}
+
+// subpart > sections & subjgrps
+
+type Section struct {
+	Header   string          `xml:"HEAD"`
+	Children SectionChildren `xml:",any"`
+}
+
+type Paragraph struct {
+	Content string `xml:",innerxml"`
+}
+
+type Extract struct {
+	Content string `xml:",innerxml"`
+}
+
+type Citation string
+
+// section > paragraphs
+
 type PartChildren []interface{}
+type SubpartChildren []interface{}
+type SectionChildren []interface{}
 
 func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	switch start.Name.Local {
@@ -39,18 +65,54 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 		}
 		*c = append(*c, child)
 	default:
-		return fmt.Errorf("uknown xml type in Part: %+v", start)
+		//return fmt.Errorf("Unknown XML type in Part: %+v", start)
+		d.Skip()
 	}
 
 	return nil
 }
 
-type Subpart struct {
-	Header string `xml:"HEAD"`
+func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	switch start.Name.Local {
+	case "DIV8":
+		child := &Section{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	default:
+		//return fmt.Errorf("Unknown XML type in Subpart: %+v", start)
+		d.Skip()
+	}
+	return nil
 }
 
-type Section struct {
-	Header string `xml:"HEAD"`
+func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	switch start.Name.Local {
+	case "P":
+		child := &Paragraph{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "EXTRACT":
+		child := &Extract{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "CITA":
+		var child Citation
+		if err := d.DecodeElement(&child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	default:
+		//return fmt.Errorf("Unknown XML type in Section: %+v", start)
+		d.Skip()
+	}
+
+	return nil
 }
 
 func ParsePart(b io.ReadCloser) (*Part, error) {
