@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"time"
@@ -52,6 +53,17 @@ type Section struct {
 	Header string `xml:"HEAD"`
 }
 
+func ParsePart(b io.ReadCloser) (*Part, error) {
+	d := xml.NewDecoder(b)
+
+	p := &Part{}
+	log.Println("[DEBUG] Decoding part")
+	if err := d.Decode(p); err != nil {
+		return p, err
+	}
+	return p, nil
+}
+
 func main() {
 	today := time.Now()
 
@@ -63,11 +75,8 @@ func main() {
 	}
 	defer body.Close()
 
-	d := xml.NewDecoder(body)
-
-	p := &Part{}
-	log.Println("[DEBUG] Decoding part")
-	if err := d.Decode(p); err != nil {
+	p, err := ParsePart(body)
+	if err != nil {
 		log.Fatal(err)
 	}
 
