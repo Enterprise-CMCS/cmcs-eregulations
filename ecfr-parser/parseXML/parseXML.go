@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"strings"
 )
 
 type Part struct {
@@ -19,55 +20,88 @@ type Part struct {
 
 type Subpart struct {
 	Header   string          `xml:"HEAD"`
+	Name     string          `xml:"N,attr"`
 	Type     string          `xml:"TYPE,attr"`
 	Children SubpartChildren `xml:",any"`
 }
 
 type SubjectGroup struct {
-	Header string `xml:"HEAD"`
-	Type   string          `xml:"TYPE,attr"`
+	Header   string               `xml:"HEAD"`
+	Name     string               `xml:"N,attr"`
+	Type     string               `xml:"TYPE,attr"`
 	Children SubjectGroupChildren `xml:",any"`
 }
 
 type Section struct {
-	Type string `xml:"TYPE,attr"`
+	Type     string          `xml:"TYPE,attr"`
+	Name     SectionLabel    `xml:"N,attr"`
 	Header   string          `xml:"HEAD"`
 	Children SectionChildren `xml:",any"`
 }
 
+type SectionLabel []string
+
+func (sl *SectionLabel) UnmarshalText(data []byte) error {
+	*sl = strings.Split(string(data), ".")
+	return nil
+}
+
+func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	type postSection Section
+	ps := (*postSection)(s)
+	if err := d.DecodeElement(ps, &start); err != nil {
+		return err
+	}
+
+	for _, child := range s.Children {
+		switch c := child.(type) {
+		case *Paragraph:
+			createParagraphLabel(c, s)
+		default:
+			log.Printf("I don't know about type %T!\n", c)
+		}
+	}
+	return nil
+}
+
+func createParagraphLabel(p *Paragraph, s *Section) {
+	p.Name = append([]string{}, s.Name...)
+}
+
 type Paragraph struct {
-	Type string
+	Type    string
 	Content string `xml:",innerxml"`
+	Name    []string
 }
 
 type Extract struct {
-	Type string
+	Type    string
 	Content string `xml:",innerxml"`
 }
 
 type Citation struct {
-	Type string
+	Type    string
 	Content string `xml:",innerxml"`
 }
 
 type Source struct {
-	Type string
-	Header string `xml:"HED"`
+	Type    string
+	Header  string `xml:"HED"`
 	Content string `xml:"PSPACE"`
 }
 
 type SectionAuthority struct {
-	Type string
+	Type    string
 	Content string `xml:",innerxml"`
 }
 
 type FlushParagraph struct {
-	Type string
+	Type    string
 	Content string `xml:",innerxml"`
 }
 
 type Image struct {
-	Type string
+	Type   string
 	Source string `xml:"src,attr"`
 }
 
@@ -146,37 +180,37 @@ func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartEleme
 func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	switch start.Name.Local {
 	case "P":
-		child := &Paragraph{ Type: "Paragraph"}
+		child := &Paragraph{Type: "Paragraph"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
 		*c = append(*c, child)
 	case "FP":
-		child := &FlushParagraph{ Type: "FlushParagraph"}
+		child := &FlushParagraph{Type: "FlushParagraph"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
 		*c = append(*c, child)
 	case "img":
-		child := &Image{ Type: "Image"}
+		child := &Image{Type: "Image"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
 		*c = append(*c, child)
 	case "EXTRACT":
-		child := &Extract{ Type: "Extract" }
+		child := &Extract{Type: "Extract"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
 		*c = append(*c, child)
 	case "CITA":
-		child := &Citation{ Type: "Citation" }
+		child := &Citation{Type: "Citation"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
 		*c = append(*c, child)
 	case "SECAUTH":
-		child := &SectionAuthority{ Type: "SectionAuthority" }
+		child := &SectionAuthority{Type: "SectionAuthority"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
