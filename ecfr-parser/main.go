@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	today := time.Now()
 
 	start := time.Now()

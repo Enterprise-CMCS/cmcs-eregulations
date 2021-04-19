@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"regexp"
 	"strings"
 )
 
@@ -49,29 +50,159 @@ func (sl *SectionLabel) UnmarshalText(data []byte) error {
 func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	type postSection Section
 	ps := (*postSection)(s)
+
 	if err := d.DecodeElement(ps, &start); err != nil {
 		return err
 	}
 
 	for _, child := range s.Children {
-		switch c := child.(type) {
+		switch paragraph := child.(type) {
 		case *Paragraph:
-			createParagraphLabel(c, s)
+			if err := paragraph.GenerateLabel(s); err != nil {
+				return err
+			}
 		default:
-			log.Printf("I don't know about type %T!\n", c)
+			log.Printf("I don't know about type %T!\n", paragraph)
 		}
 	}
 	return nil
 }
 
-func createParagraphLabel(p *Paragraph, s *Section) {
-	p.Name = append([]string{}, s.Name...)
+// a, 1, roman, upper, italic int, italic roman
+var alpha = regexp.MustCompile(`([a-z])`)
+var num = regexp.MustCompile(`(\d+)`)
+var roman = regexp.MustCompile(`(ix|iv|v|vi{1,3}|i{1,3})`)
+var upper = regexp.MustCompile(`([A-Z])`)
+var italic_num = regexp.MustCompile(`(<I>\d+</I>)`)
+var italic_roman = regexp.MustCompile(`<I>(ix|iv|v|vi{1,3}|i{1,3})</I>`)
+
+var paragraphHeirarchy = []*regexp.Regexp{
+	alpha,
+	num,
+	roman,
+	upper,
+	italic_num,
+	italic_roman,
+}
+
+func matchLabelType(l string) int {
+	m := -1
+	for i, reg := range paragraphHeirarchy {
+		if reg.MatchString(l) {
+			m = i
+		}
+	}
+	return m
+}
+
+func extractIdentifier(l string) ([]string, error) {
+	// should handle cases of (a) or (a)(1)
+	re := regexp.MustCompile(`^\(([^\)]+)(?:\([^\)]+)?`)
+	pLabel := re.FindStringSubmatch(l)
+	if len(pLabel) == 0 {
+		return []string{}, nil
+	}
+	if len(pLabel) < 2 {
+
+		log.Println(pLabel)
+		return nil, fmt.Errorf("wrong number of labels")
+	}
+	if len(pLabel) > 2 && pLabel[2] == "" {
+		return nil, fmt.Errorf("wrong kind of labels")
+	}
+	pLabel = pLabel[1:]
+	return pLabel, nil
+}
+
+func firstParent(p *Paragraph, sibs []interface{}) *Paragraph {
+	pLevel := matchLabelType(p.Name[len(p.Name)-1])
+	for _, unknownSib := range sibs {
+		sib, ok := unknownSib.(*Paragraph)
+		if !ok {
+			continue
+		}
+		if len(sib.Name) == 0 {
+			continue
+		}
+		sibLabel := sib.Name[len(sib.Name)-1]
+		log.Println(sibLabel)
+		subLevel := matchLabelType(sibLabel)
+		/*
+			if subLevel == pLevel {
+				p.Name = append(sib.Name[:len(sib.Name)-1], p.Name...)
+				break
+			}
+		*/
+		if subLevel < pLevel {
+			return sib
+		}
+	}
+	return nil
+}
+
+func extractSiblings(p *Paragraph, allChildren SectionChildren) ([]interface{}, error) {
+	index := -1
+	for i, c := range allChildren {
+		if c == p {
+			index = i
+			break
+		}
+	}
+	if index < 0 {
+		return nil, fmt.Errorf("could not find paragraph in section")
+	}
+	sibs := []interface{}{}
+	for _, c := range allChildren[:index] {
+		sibs = append([]interface{}{c}, sibs...)
+	}
+	return sibs, nil
+}
+
+func (p *Paragraph) GenerateLabel(s *Section) error {
+
+	pLabel, err := extractIdentifier(p.Content)
+	if err != nil {
+		return err
+	}
+	if len(pLabel) == 0 {
+		return nil
+	}
+	p.Name = pLabel
+
+	pLevel := matchLabelType(pLabel[len(pLabel)-1])
+	if pLevel == 0 {
+		p.Name = append(s.Name, p.Name...)
+		log.Println("[DEBUG] top level paragraph", p.Name)
+		return nil
+	}
 	/*
 		parse out the label in parens e.g. (a)
-		parse out special cases of more than 1 e.g. (a)(1) or (a) some stuff in italics (2)
+		parse out special cases of more than 1 e.g. (a)(1) or (a) some stuff in italics (1)
+		edge case: no identifier, in this case we should be a hash or something e.g. definitions in 433.400
 		find position in sections children (should be a quick compare)
 		compute it's nested value e.g. a,1,i,A
+
+		a
+		b, 1
+		b, 2
+		b, 2, i
+
 	*/
+	sibs, err := extractSiblings(p, s.Children)
+	if err != nil {
+		return err
+	}
+
+	parent := firstParent(p, sibs)
+
+	if parent == nil {
+		log.Println("no parent found")
+		return nil
+	}
+
+	p.Name = append(parent.Name, p.Name...)
+
+	return nil
 }
 
 type Paragraph struct {
