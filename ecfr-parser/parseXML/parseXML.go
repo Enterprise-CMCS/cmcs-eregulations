@@ -66,6 +66,12 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 
 func createParagraphLabel(p *Paragraph, s *Section) {
 	p.Name = append([]string{}, s.Name...)
+	/*
+		parse out the label in parens e.g. (a)
+		parse out special cases of more than 1 e.g. (a)(1) or (a) some stuff in italics (2)
+		find position in sections children (should be a quick compare)
+		compute it's nested value e.g. a,1,i,A
+	*/
 }
 
 type Paragraph struct {
