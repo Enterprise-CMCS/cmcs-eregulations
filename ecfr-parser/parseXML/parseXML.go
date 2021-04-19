@@ -97,25 +97,23 @@ func matchLabelType(l string) int {
 
 func extractIdentifier(l string) ([]string, error) {
 	// should handle cases of (a) or (a)(1)
-	re := regexp.MustCompile(`^\(([^\)]+)(?:\([^\)]+)?`)
+	re := regexp.MustCompile(`^\(([^\)]+)(?:\)\(([^\)]+)+)?`)
 	pLabel := re.FindStringSubmatch(l)
 	if len(pLabel) == 0 {
 		return []string{}, nil
 	}
 	if len(pLabel) < 2 {
-
 		log.Println(pLabel)
 		return nil, fmt.Errorf("wrong number of labels")
 	}
-	if len(pLabel) > 2 && pLabel[2] == "" {
-		return nil, fmt.Errorf("wrong kind of labels")
+	if len(pLabel) == 3 && pLabel[2] == "" {
+		pLabel = pLabel[:2]
 	}
 	pLabel = pLabel[1:]
 	return pLabel, nil
 }
 
-func firstParent(p *Paragraph, sibs []interface{}) *Paragraph {
-	pLevel := matchLabelType(p.Name[len(p.Name)-1])
+func firstParent(pLevel int, sibs []interface{}) []string {
 	for _, unknownSib := range sibs {
 		sib, ok := unknownSib.(*Paragraph)
 		if !ok {
@@ -127,14 +125,13 @@ func firstParent(p *Paragraph, sibs []interface{}) *Paragraph {
 		sibLabel := sib.Name[len(sib.Name)-1]
 		log.Println(sibLabel)
 		subLevel := matchLabelType(sibLabel)
-		/*
-			if subLevel == pLevel {
-				p.Name = append(sib.Name[:len(sib.Name)-1], p.Name...)
-				break
-			}
-		*/
+
+		if subLevel == pLevel {
+			return sib.Name[:len(sib.Name)-1]
+		}
+
 		if subLevel < pLevel {
-			return sib
+			return sib.Name
 		}
 	}
 	return nil
@@ -159,7 +156,8 @@ func extractSiblings(p *Paragraph, allChildren SectionChildren) ([]interface{}, 
 }
 
 func (p *Paragraph) GenerateLabel(s *Section) error {
-
+	p.Name = []string{}
+	//p.Name = append([]string{}, s.Name...)
 	pLabel, err := extractIdentifier(p.Content)
 	if err != nil {
 		return err
@@ -167,11 +165,11 @@ func (p *Paragraph) GenerateLabel(s *Section) error {
 	if len(pLabel) == 0 {
 		return nil
 	}
-	p.Name = pLabel
 
-	pLevel := matchLabelType(pLabel[len(pLabel)-1])
+	pLevel := matchLabelType(pLabel[0])
 	if pLevel == 0 {
-		p.Name = append(s.Name, p.Name...)
+		p.Name = append(p.Name, s.Name...)
+		p.Name = append(p.Name, pLabel...)
 		log.Println("[DEBUG] top level paragraph", p.Name)
 		return nil
 	}
@@ -193,14 +191,15 @@ func (p *Paragraph) GenerateLabel(s *Section) error {
 		return err
 	}
 
-	parent := firstParent(p, sibs)
+	parent := firstParent(pLevel, sibs)
 
 	if parent == nil {
 		log.Println("no parent found")
 		return nil
 	}
 
-	p.Name = append(parent.Name, p.Name...)
+	p.Name = append(p.Name, parent...)
+	p.Name = append(p.Name, pLabel...)
 
 	return nil
 }
