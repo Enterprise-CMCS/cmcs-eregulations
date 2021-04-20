@@ -2,8 +2,79 @@ package parseXML
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 )
+
+func generateParagraphCitation(p *Paragraph, s *Section) ([]string, error) {
+	citation := []string{}
+	pLabel, err := p.Marker()
+	if err != nil {
+		return citation, err
+	}
+	if len(pLabel) == 0 {
+		return citation, nil
+	}
+	currentLevel := matchLabelType(pLabel[0])
+	if currentLevel == 0 {
+		citation = append(citation, s.Citation...)
+		citation = append(citation, pLabel...)
+		log.Println("[DEBUG] top level paragraph", citation)
+		return citation, nil
+	}
+
+	if currentLevel == 2 {
+		// then it might really be a level 0
+		sibs, err := extractOlderSiblings(p, s.Children)
+		if err != nil {
+			return citation, err
+		}
+
+		ps := firstParentOrSib(p, sibs)
+		if ps == nil {
+			return citation, ErrNoParents
+		}
+		parentOrFirstSib, ok := ps.(*Paragraph)
+		if !ok {
+			return citation, ErrWrongParent
+		}
+		if parentOrFirstSib.Level() == 0 {
+			p.Citation = append(p.Citation, s.Citation...)
+			p.Citation = append(p.Citation, pLabel...)
+			log.Println("[DEBUG] top level paragraph", p.Citation)
+			return citation, nil
+		}
+	}
+
+	sibs, err := extractOlderSiblings(p, s.Children)
+	if err != nil {
+		return citation, err
+	}
+
+	ps := firstParentOrSib(p, sibs)
+	if ps == nil {
+		return citation, ErrNoParents
+	}
+	parentOrFirstSib, ok := ps.(*Paragraph)
+	if !ok {
+		log.Printf("[ERROR] %+v \n", parentOrFirstSib)
+		return citation, ErrWrongParent
+	}
+
+	if len(parentOrFirstSib.Citation) == 0 {
+		return citation, nil
+	}
+
+	// if it's the direct parent, use the whole thing
+	if parentOrFirstSib.Level() < currentLevel {
+		citation = append(citation, parentOrFirstSib.Citation...)
+	} else if parentOrFirstSib.Level() == currentLevel {
+		// if it's the sib use all but the last element
+		citation = append(citation, parentOrFirstSib.Citation[:len(parentOrFirstSib.Citation)-1]...)
+	}
+
+	return append(citation, pLabel...), nil
+}
 
 type Leveled interface {
 	Level() int

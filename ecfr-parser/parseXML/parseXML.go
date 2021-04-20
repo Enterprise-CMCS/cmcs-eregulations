@@ -234,7 +234,6 @@ var ErrNoParents = errors.New("no parents found for this paragraph")
 var ErrWrongParent = errors.New("the parent found was of the wrong type")
 
 type Paragraph struct {
-	Parent   *Section
 	Type     string
 	Content  string `xml:",innerxml"`
 	Citation []string
@@ -257,76 +256,9 @@ func (p *Paragraph) Level() int {
 }
 
 // TODO: I'd like to get rid of the explicit dependency on Section
-func (p *Paragraph) PostProcess(s *Section) error {
-	p.Citation = []string{}
-	pLabel, err := p.Marker()
-	if err != nil {
-		return err
-	}
-	if len(pLabel) == 0 {
-		return nil
-	}
-
-	if p.Level() == 0 {
-		p.Citation = append(p.Citation, s.Citation...)
-		p.Citation = append(p.Citation, pLabel...)
-		log.Println("[DEBUG] top level paragraph", p.Citation)
-		return nil
-	}
-
-	if p.Level() == 2 {
-		// then it might really be a level 0
-		sibs, err := extractOlderSiblings(p, s.Children)
-		if err != nil {
-			return err
-		}
-
-		ps := firstParentOrSib(p, sibs)
-		if ps == nil {
-			return ErrNoParents
-		}
-		parentOrFirstSib, ok := ps.(*Paragraph)
-		if !ok {
-			return ErrWrongParent
-		}
-		if parentOrFirstSib.Level() == 0 {
-			p.Citation = append(p.Citation, s.Citation...)
-			p.Citation = append(p.Citation, pLabel...)
-			log.Println("[DEBUG] top level paragraph", p.Citation)
-			return nil
-		}
-	}
-
-	sibs, err := extractOlderSiblings(p, s.Children)
-	if err != nil {
-		return err
-	}
-
-	ps := firstParentOrSib(p, sibs)
-	if ps == nil {
-		return ErrNoParents
-	}
-	parentOrFirstSib, ok := ps.(*Paragraph)
-	if !ok {
-		log.Printf("[ERROR] %+v \n", parentOrFirstSib)
-		return ErrWrongParent
-	}
-
-	if len(parentOrFirstSib.Citation) == 0 {
-		return nil
-	}
-
-	// if it's the direct parent, use the whole thing
-	if parentOrFirstSib.Level() < p.Level() {
-		p.Citation = append(p.Citation, parentOrFirstSib.Citation...)
-	} else if parentOrFirstSib.Level() == p.Level() {
-		// if it's the sib use all but the last element
-		p.Citation = append(p.Citation, parentOrFirstSib.Citation[:len(parentOrFirstSib.Citation)-1]...)
-	}
-
-	p.Citation = append(p.Citation, pLabel...)
-
-	return nil
+func (p *Paragraph) PostProcess(s *Section) (err error) {
+	p.Citation, err = generateParagraphCitation(p, s)
+	return
 }
 
 type PostProcesser interface {
