@@ -231,6 +231,7 @@ type Image struct {
 }
 
 var ErrNoParents = errors.New("no parents found for this paragraph")
+var ErrWrongParent = errors.New("the parent found was of the wrong type")
 
 type Paragraph struct {
 	Parent   *Section
@@ -243,10 +244,21 @@ func (p *Paragraph) Marker() ([]string, error) {
 	return extractMarker(p.Content)
 }
 
+func (p *Paragraph) Level() int {
+	m, err := p.Marker()
+	if err != nil {
+		log.Println("[ERROR]", err.Error())
+		return -1
+	}
+	if m == nil {
+		return -1
+	}
+	return matchLabelType(m[len(m)-1])
+}
+
 // TODO: I'd like to get rid of the explicit dependency on Section
 func (p *Paragraph) PostProcess(s *Section) error {
 	p.Citation = []string{}
-	//p.Name = append([]string{}, s.Name...)
 	pLabel, err := p.Marker()
 	if err != nil {
 		return err
@@ -255,38 +267,63 @@ func (p *Paragraph) PostProcess(s *Section) error {
 		return nil
 	}
 
-	pLevel := matchLabelType(pLabel[0])
-	if pLevel == 0 {
+	if p.Level() == 0 {
 		p.Citation = append(p.Citation, s.Citation...)
 		p.Citation = append(p.Citation, pLabel...)
 		log.Println("[DEBUG] top level paragraph", p.Citation)
 		return nil
 	}
-	/*
-		parse out the label in parens e.g. (a)
-		parse out special cases of more than 1 e.g. (a)(1) or (a) some stuff in italics (1)
-		edge case: no identifier, in this case we should be a hash or something e.g. definitions in 433.400
-		find position in sections children (should be a quick compare)
-		compute it's nested value e.g. a,1,i,A
 
-		a
-		b, 1
-		b, 2
-		b, 2, i
+	if p.Level() == 2 {
+		// then it might really be a level 0
+		sibs, err := extractOlderSiblings(p, s.Children)
+		if err != nil {
+			return err
+		}
 
-	*/
+		ps := firstParentOrSib(p, sibs)
+		if ps == nil {
+			return ErrNoParents
+		}
+		parentOrFirstSib, ok := ps.(*Paragraph)
+		if !ok {
+			return ErrWrongParent
+		}
+		if parentOrFirstSib.Level() == 0 {
+			p.Citation = append(p.Citation, s.Citation...)
+			p.Citation = append(p.Citation, pLabel...)
+			log.Println("[DEBUG] top level paragraph", p.Citation)
+			return nil
+		}
+	}
+
 	sibs, err := extractOlderSiblings(p, s.Children)
 	if err != nil {
 		return err
 	}
 
-	parent := firstParent(pLevel, sibs)
-
-	if parent == nil {
+	ps := firstParentOrSib(p, sibs)
+	if ps == nil {
 		return ErrNoParents
 	}
+	parentOrFirstSib, ok := ps.(*Paragraph)
+	if !ok {
+		log.Printf("[ERROR] %+v \n", parentOrFirstSib)
+		return ErrWrongParent
+	}
 
-	p.Citation = append(p.Citation, parent...)
+	if len(parentOrFirstSib.Citation) == 0 {
+		return nil
+	}
+
+	// if it's the direct parent, use the whole thing
+	if parentOrFirstSib.Level() < p.Level() {
+		p.Citation = append(p.Citation, parentOrFirstSib.Citation...)
+	} else if parentOrFirstSib.Level() == p.Level() {
+		// if it's the sib use all but the last element
+		p.Citation = append(p.Citation, parentOrFirstSib.Citation[:len(parentOrFirstSib.Citation)-1]...)
+	}
+
 	p.Citation = append(p.Citation, pLabel...)
 
 	return nil

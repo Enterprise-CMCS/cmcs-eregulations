@@ -2,12 +2,11 @@ package parseXML
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 )
 
-type Markable interface {
-	Marker() ([]string, error)
+type Leveled interface {
+	Level() int
 }
 
 // a, 1, roman, upper, italic int, italic roman
@@ -37,58 +36,24 @@ func matchLabelType(l string) int {
 	return m
 }
 
-func firstParent(pLevel int, sibs []interface{}) []string {
-
+// assumes sibs are ordered starting with the closest to the element
+func firstParentOrSib(el Leveled, sibs []interface{}) interface{} {
+	pLevel := el.Level()
 	for _, unknownSib := range sibs {
-		sib, ok := unknownSib.(*Paragraph)
+		sib, ok := unknownSib.(Leveled)
 		if !ok {
 			continue
 		}
-		sibLabel, err := sib.Marker()
-		if err != nil {
-			log.Println("[ERROR]", err)
-			continue
-		}
+		l := sib.Level()
 
 		// handles cases of malformed identifiers (e.g. (1) with no parent (a))
-		if sibLabel == nil || len(sib.Citation) == 0 {
+		if l < 0 {
 			continue
 		}
 
-		l := sibLabel[len(sibLabel)-1]
-		// Note: the option is to look at the length of the citation to get the level
-		subLevel := matchLabelType(l)
-
-		if subLevel == pLevel {
-			// could also use this as a spot to do some error checking
-			// e.g. if it's a sibling and not in order
-			return sib.Citation[:len(sib.Citation)-1]
+		if l <= pLevel {
+			return sib
 		}
-
-		// TODO: should be specific, if it's not exactly one level up something's wrong
-		if subLevel == (pLevel - 1) {
-			return sib.Citation
-		}
-
-		if subLevel < (pLevel - 1) {
-			/* if one of these cases has happened it's acceptable
-			h
-			i
-
-			u
-			v
-
-			w
-			x
-			*/
-
-			if sibLabel[0] == "h" || sibLabel[0] == "u" || sibLabel[0] == "w" {
-				return sib.Citation[:len(sib.Citation)-1]
-			}
-
-			log.Fatal("An element had unordered older siblings", subLevel, pLevel, sibLabel)
-		}
-
 	}
 	return nil
 }

@@ -38,7 +38,7 @@ func TestExtractParagraphMarker(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		result, err := extractIdentifier(test.input)
+		result, err := extractMarker(test.input)
 		if err != test.err {
 			t.Errorf("unexpected error, got %s, expected %s", err, test.err)
 		}
