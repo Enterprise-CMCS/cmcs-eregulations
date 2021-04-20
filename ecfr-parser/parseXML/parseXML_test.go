@@ -31,6 +31,11 @@ func TestExtractParagraphMarker(t *testing.T) {
 			[]string{"b", "1"},
 			nil,
 		},
+		{
+			"(b)<I>Activities and rates.</I>(1) [Reserved]",
+			[]string{"b", "1"},
+			nil,
+		},
 	}
 	for _, test := range tests {
 		result, err := extractIdentifier(test.input)

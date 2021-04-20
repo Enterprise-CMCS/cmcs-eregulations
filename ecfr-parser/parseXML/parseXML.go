@@ -110,13 +110,18 @@ func firstParent(pLevel int, sibs []interface{}) []string {
 			log.Println("[ERROR]", err)
 			continue
 		}
+		if len(sib.Citation) == 0 {
+			continue
+		}
 
-		for i, l := range sibLabel {
-			subLevel := matchLabelType(l)
+		l := sibLabel[len(sibLabel)-1]
+		subLevel := matchLabelType(l)
+		if subLevel < pLevel {
+			return sib.Citation
+		}
 
-			if subLevel < pLevel {
-				return sib.Citation[:len(sib.Citation)-(len(sibLabel)-(i+1))]
-			}
+		if subLevel == pLevel {
+			return sib.Citation[:len(sib.Citation)-1]
 		}
 	}
 	return nil
@@ -142,10 +147,10 @@ func extractSiblings(p *Paragraph, allChildren SectionChildren) ([]interface{}, 
 
 var ErrNoParents = errors.New("no parents found for this paragraph")
 
-func (p *Paragraph) Identifier() ([]string, error) {
+func extractIdentifier(l string) ([]string, error) {
 	// should handle cases of (a) or (a)(1)
-	re := regexp.MustCompile(`^\(([^\)]+)(?:\)\(([^\)]+)+)?`)
-	pLabel := re.FindStringSubmatch(p.Content)
+	re := regexp.MustCompile(`^\(([^\)]+)\)(?:(?: ?<I>.+<\/I> ?)?\(([^\)]+)\))?`)
+	pLabel := re.FindStringSubmatch(l)
 	if len(pLabel) == 0 {
 		return []string{}, nil
 	}
@@ -157,6 +162,10 @@ func (p *Paragraph) Identifier() ([]string, error) {
 	}
 	pLabel = pLabel[1:]
 	return pLabel, nil
+}
+
+func (p *Paragraph) Identifier() ([]string, error) {
+	return extractIdentifier(p.Content)
 }
 
 func (p *Paragraph) PostProcess(s *Section) error {
