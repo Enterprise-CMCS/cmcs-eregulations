@@ -2,6 +2,7 @@ package parseXML
 
 import (
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -35,14 +36,18 @@ type SubjectGroup struct {
 
 type Section struct {
 	Type     string          `xml:"TYPE,attr"`
-	Name     SectionLabel    `xml:"N,attr"`
+	Citation SectionCitation `xml:"N,attr"`
 	Header   string          `xml:"HEAD"`
 	Children SectionChildren `xml:",any"`
 }
 
-type SectionLabel []string
+type PostProcesser interface {
+	PostProcess(s *Section) error
+}
 
-func (sl *SectionLabel) UnmarshalText(data []byte) error {
+type SectionCitation []string
+
+func (sl *SectionCitation) UnmarshalText(data []byte) error {
 	*sl = strings.Split(string(data), ".")
 	return nil
 }
@@ -56,13 +61,11 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	}
 
 	for _, child := range s.Children {
-		switch paragraph := child.(type) {
-		case *Paragraph:
-			if err := paragraph.GenerateLabel(s); err != nil {
+		c, ok := child.(PostProcesser)
+		if ok {
+			if err := c.PostProcess(s); err != nil && err != ErrNoParents {
 				return err
 			}
-		default:
-			log.Printf("I don't know about type %T!\n", paragraph)
 		}
 	}
 	return nil
@@ -95,43 +98,25 @@ func matchLabelType(l string) int {
 	return m
 }
 
-func extractIdentifier(l string) ([]string, error) {
-	// should handle cases of (a) or (a)(1)
-	re := regexp.MustCompile(`^\(([^\)]+)(?:\)\(([^\)]+)+)?`)
-	pLabel := re.FindStringSubmatch(l)
-	if len(pLabel) == 0 {
-		return []string{}, nil
-	}
-	if len(pLabel) < 2 {
-		log.Println(pLabel)
-		return nil, fmt.Errorf("wrong number of labels")
-	}
-	if len(pLabel) == 3 && pLabel[2] == "" {
-		pLabel = pLabel[:2]
-	}
-	pLabel = pLabel[1:]
-	return pLabel, nil
-}
-
 func firstParent(pLevel int, sibs []interface{}) []string {
+
 	for _, unknownSib := range sibs {
 		sib, ok := unknownSib.(*Paragraph)
 		if !ok {
 			continue
 		}
-		if len(sib.Name) == 0 {
+		sibLabel, err := sib.Identifier()
+		if err != nil {
+			log.Println("[ERROR]", err)
 			continue
 		}
-		sibLabel := sib.Name[len(sib.Name)-1]
-		log.Println(sibLabel)
-		subLevel := matchLabelType(sibLabel)
 
-		if subLevel == pLevel {
-			return sib.Name[:len(sib.Name)-1]
-		}
+		for i, l := range sibLabel {
+			subLevel := matchLabelType(l)
 
-		if subLevel < pLevel {
-			return sib.Name
+			if subLevel < pLevel {
+				return sib.Citation[:len(sib.Citation)-(len(sibLabel)-(i+1))]
+			}
 		}
 	}
 	return nil
@@ -155,10 +140,29 @@ func extractSiblings(p *Paragraph, allChildren SectionChildren) ([]interface{}, 
 	return sibs, nil
 }
 
-func (p *Paragraph) GenerateLabel(s *Section) error {
-	p.Name = []string{}
+var ErrNoParents = errors.New("no parents found for this paragraph")
+
+func (p *Paragraph) Identifier() ([]string, error) {
+	// should handle cases of (a) or (a)(1)
+	re := regexp.MustCompile(`^\(([^\)]+)(?:\)\(([^\)]+)+)?`)
+	pLabel := re.FindStringSubmatch(p.Content)
+	if len(pLabel) == 0 {
+		return []string{}, nil
+	}
+	if len(pLabel) < 2 {
+		return nil, fmt.Errorf("wrong number of labels")
+	}
+	if len(pLabel) == 3 && pLabel[2] == "" {
+		pLabel = pLabel[:2]
+	}
+	pLabel = pLabel[1:]
+	return pLabel, nil
+}
+
+func (p *Paragraph) PostProcess(s *Section) error {
+	p.Citation = []string{}
 	//p.Name = append([]string{}, s.Name...)
-	pLabel, err := extractIdentifier(p.Content)
+	pLabel, err := p.Identifier()
 	if err != nil {
 		return err
 	}
@@ -168,9 +172,9 @@ func (p *Paragraph) GenerateLabel(s *Section) error {
 
 	pLevel := matchLabelType(pLabel[0])
 	if pLevel == 0 {
-		p.Name = append(p.Name, s.Name...)
-		p.Name = append(p.Name, pLabel...)
-		log.Println("[DEBUG] top level paragraph", p.Name)
+		p.Citation = append(p.Citation, s.Citation...)
+		p.Citation = append(p.Citation, pLabel...)
+		log.Println("[DEBUG] top level paragraph", p.Citation)
 		return nil
 	}
 	/*
@@ -194,20 +198,20 @@ func (p *Paragraph) GenerateLabel(s *Section) error {
 	parent := firstParent(pLevel, sibs)
 
 	if parent == nil {
-		log.Println("no parent found")
-		return nil
+		return ErrNoParents
 	}
 
-	p.Name = append(p.Name, parent...)
-	p.Name = append(p.Name, pLabel...)
+	p.Citation = append(p.Citation, parent...)
+	p.Citation = append(p.Citation, pLabel...)
 
 	return nil
 }
 
 type Paragraph struct {
-	Type    string
-	Content string `xml:",innerxml"`
-	Name    []string
+	Parent   *Section
+	Type     string
+	Content  string `xml:",innerxml"`
+	Citation []string
 }
 
 type Extract struct {
