@@ -132,12 +132,14 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		return err
 	}
 
+	var prev *Paragraph
 	for _, child := range s.Children {
-		c, ok := child.(PostProcesser)
+		c, ok := child.(*Paragraph)
 		if ok {
-			if err := c.PostProcess(s); err != nil && err != ErrNoParents {
+			if err := c.PostProcess(prev); err != nil && err != ErrNoParents {
 				return err
 			}
+			prev = c
 		}
 	}
 	return nil
@@ -256,11 +258,7 @@ func (p *Paragraph) Level() int {
 }
 
 // TODO: I'd like to get rid of the explicit dependency on Section
-func (p *Paragraph) PostProcess(s *Section) (err error) {
-	p.Citation, err = generateParagraphCitation(p, s)
+func (p *Paragraph) PostProcess(prev *Paragraph) (err error) {
+	p.Citation, err = generateParagraphCitation(p, prev)
 	return
-}
-
-type PostProcesser interface {
-	PostProcess(s *Section) error
 }

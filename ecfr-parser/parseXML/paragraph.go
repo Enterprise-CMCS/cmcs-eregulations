@@ -2,82 +2,52 @@ package parseXML
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 )
 
-func generateParagraphCitation(p *Paragraph, s *Section) ([]string, error) {
+func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) {
 	citation := []string{}
 	pLabel, err := p.Marker()
 	if err != nil {
 		return citation, err
 	}
+
 	if len(pLabel) == 0 {
 		return citation, nil
 	}
+
+	if prev == nil || len(prev.Citation) == 0 {
+		//TODO: if this is not (a) error
+		return pLabel, nil
+	}
+
 	currentLevel := matchLabelType(pLabel[0])
 	if currentLevel == 0 {
-		citation = append(citation, s.Citation...)
 		citation = append(citation, pLabel...)
-		log.Println("[DEBUG] top level paragraph", citation)
 		return citation, nil
 	}
 
-	if currentLevel == 2 {
-		// then it might really be a level 0
-		sibs, err := extractOlderSiblings(p, s.Children)
-		if err != nil {
-			return citation, err
+	if prev.Level()-currentLevel < -1 {
+		if currentLevel == 2 {
+			if prev.Level() == 0 {
+				citation = append(p.Citation, pLabel...)
+				return citation, nil
+			}
 		}
+		return nil, fmt.Errorf("this paragrpah and it's neighbor are not in the right order %+v %+v", prev, p)
+	}
 
-		ps := firstParentOrSib(p, sibs)
-		if ps == nil {
-			return citation, ErrNoParents
+	l := currentLevel
+	if len(prev.Citation) < currentLevel {
+		if currentLevel-1 != len(prev.Citation) {
+			return nil, fmt.Errorf("this paragrpah and it's neighbor are not in the right order %+v %+v", prev, p)
 		}
-		parentOrFirstSib, ok := ps.(*Paragraph)
-		if !ok {
-			return citation, ErrWrongParent
-		}
-		if parentOrFirstSib.Level() == 0 {
-			p.Citation = append(p.Citation, s.Citation...)
-			p.Citation = append(p.Citation, pLabel...)
-			log.Println("[DEBUG] top level paragraph", p.Citation)
-			return citation, nil
-		}
+		l--
 	}
 
-	sibs, err := extractOlderSiblings(p, s.Children)
-	if err != nil {
-		return citation, err
-	}
-
-	ps := firstParentOrSib(p, sibs)
-	if ps == nil {
-		return citation, ErrNoParents
-	}
-	parentOrFirstSib, ok := ps.(*Paragraph)
-	if !ok {
-		log.Printf("[ERROR] %+v \n", parentOrFirstSib)
-		return citation, ErrWrongParent
-	}
-
-	if len(parentOrFirstSib.Citation) == 0 {
-		return citation, nil
-	}
-
-	// if it's the direct parent, use the whole thing
-	if parentOrFirstSib.Level() < currentLevel {
-		citation = append(citation, parentOrFirstSib.Citation...)
-	} else if parentOrFirstSib.Level() == currentLevel {
-		// if it's the sib use all but the last element
-		citation = append(citation, parentOrFirstSib.Citation[:len(parentOrFirstSib.Citation)-1]...)
-	}
+	citation = append(citation, prev.Citation[:l]...)
 
 	return append(citation, pLabel...), nil
-}
-
-type Leveled interface {
-	Level() int
 }
 
 // a, 1, roman, upper, italic int, italic roman
@@ -105,28 +75,6 @@ func matchLabelType(l string) int {
 		}
 	}
 	return m
-}
-
-// assumes sibs are ordered starting with the closest to the element
-func firstParentOrSib(el Leveled, sibs []interface{}) interface{} {
-	pLevel := el.Level()
-	for _, unknownSib := range sibs {
-		sib, ok := unknownSib.(Leveled)
-		if !ok {
-			continue
-		}
-		l := sib.Level()
-
-		// handles cases of malformed identifiers (e.g. (1) with no parent (a))
-		if l < 0 {
-			continue
-		}
-
-		if l <= pLevel {
-			return sib
-		}
-	}
-	return nil
 }
 
 func extractMarker(l string) ([]string, error) {
