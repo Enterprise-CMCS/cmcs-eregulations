@@ -1,14 +1,13 @@
 package parseXML
 
 import (
+	"crypto/md5"
 	"encoding/xml"
 	"errors"
 	"fmt"
 	"io"
 	"log"
 	"strings"
-
-	"github.com/google/uuid"
 )
 
 func ParsePart(b io.ReadCloser) (*Part, error) {
@@ -153,7 +152,7 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 			} else {
 				cit := append([]string{}, s.Citation...)
 				c.Citation = append(cit, c.Citation...)
-				c.Citation = append(c.Citation, uuid.New().String())
+				c.Citation = append(c.Citation, fmt.Sprintf("%x", md5.Sum([]byte(c.Content))))
 			}
 		}
 	}
@@ -212,6 +211,7 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 type SectionCitation []string
 
 func (sl *SectionCitation) UnmarshalText(data []byte) error {
+	// deal with the - case
 	*sl = strings.Split(string(data), ".")
 	return nil
 }

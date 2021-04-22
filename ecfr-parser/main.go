@@ -29,6 +29,7 @@ func main() {
 
 	log.Println("[DEBUG] Marshaling JSON of Part")
 	enc := json.NewEncoder(os.Stdout)
+	enc.SetEscapeHTML(false)
 	enc.SetIndent("", "  ")
 	if err := enc.Encode(p); err != nil {
 		log.Fatal(err)
