@@ -16,24 +16,28 @@ func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) 
 		return citation, nil
 	}
 
-	if prev == nil || len(prev.Citation) == 0 {
-		//TODO: if this is not (a) error
-		return pLabel, nil
-	}
-
 	currentLevel := matchLabelType(pLabel[0])
 	if currentLevel == 0 {
 		citation = append(citation, pLabel...)
 		return citation, nil
 	}
 
-	if prev.Level()-currentLevel < -1 {
-		if currentLevel == 2 {
-			if prev.Level() == 0 {
-				citation = append(p.Citation, pLabel...)
-				return citation, nil
-			}
+	if prev == nil || len(prev.Citation) == 0 {
+		if currentLevel != 0 {
+			return nil, nil
 		}
+		//TODO: if this is not (a) error
+		return pLabel, nil
+	}
+
+	if currentLevel == 2 {
+		if pLabel[0] == "i" && prev.Level() != 1 {
+			citation = append(p.Citation, pLabel...)
+			return citation, nil
+		}
+	}
+
+	if prev.Level()-currentLevel < -1 {
 		return nil, fmt.Errorf("this paragrpah and it's neighbor are not in the right order %+v %+v", prev, p)
 	}
 

@@ -7,6 +7,8 @@ import (
 	"io"
 	"log"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func ParsePart(b io.ReadCloser) (*Part, error) {
@@ -21,13 +23,13 @@ func ParsePart(b io.ReadCloser) (*Part, error) {
 }
 
 type Part struct {
-	XMLName   xml.Name     `xml:"DIV5"`
-	Name      string       `xml:"N,attr"`
-	Type      string       `xml:"TYPE,attr"`
-	Header    string       `xml:"HEAD"`
-	Authority string       `xml:"AUTH>PSPACE"`
-	Source    string       `xml:"SOURCE>PSPACE"`
-	Children  PartChildren `xml:",any"`
+	XMLName   xml.Name        `xml:"DIV5" json:"-"`
+	Citation  SectionCitation `xml:"N,attr" json:"label"`
+	Type      string          `xml:"TYPE,attr" json:"node_type"`
+	Header    string          `xml:"HEAD" json:"title"`
+	Authority string          `xml:"AUTH>PSPACE" json:"-"`
+	Source    string          `xml:"SOURCE>PSPACE" json:"-"`
+	Children  PartChildren    `xml:",any" json:"children"`
 }
 
 type PartChildren []interface{}
@@ -56,10 +58,10 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 }
 
 type Subpart struct {
-	Header   string          `xml:"HEAD"`
-	Name     string          `xml:"N,attr"`
-	Type     string          `xml:"TYPE,attr"`
-	Children SubpartChildren `xml:",any"`
+	Header   string          `xml:"HEAD" json:"title"`
+	Citation SectionCitation `xml:"N,attr" json:"label"`
+	Type     string          `xml:"TYPE,attr" json:"node_type"`
+	Children SubpartChildren `xml:",any" json:"children"`
 }
 
 type SubpartChildren []interface{}
@@ -93,10 +95,10 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 }
 
 type SubjectGroup struct {
-	Header   string               `xml:"HEAD"`
-	Name     string               `xml:"N,attr"`
-	Type     string               `xml:"TYPE,attr"`
-	Children SubjectGroupChildren `xml:",any"`
+	Header   string               `xml:"HEAD" json:"title"`
+	Citation SectionCitation      `xml:"N,attr" json:"label"`
+	Type     string               `xml:"TYPE,attr" json:"node_type"`
+	Children SubjectGroupChildren `xml:",any" json:"children"`
 }
 
 type SubjectGroupChildren []interface{}
@@ -118,10 +120,10 @@ func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartEleme
 }
 
 type Section struct {
-	Type     string          `xml:"TYPE,attr"`
-	Citation SectionCitation `xml:"N,attr"`
-	Header   string          `xml:"HEAD"`
-	Children SectionChildren `xml:",any"`
+	Type     string          `xml:"TYPE,attr" json:"node_type"`
+	Citation SectionCitation `xml:"N,attr" json:"label"`
+	Header   string          `xml:"HEAD" json:"title"`
+	Children SectionChildren `xml:",any" json:"children"`
 }
 
 func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -140,6 +142,19 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				return err
 			}
 			prev = c
+		}
+	}
+	for _, child := range s.Children {
+		c, ok := child.(*Paragraph)
+		if ok {
+			if len(c.Citation) > 0 {
+				cit := append([]string{}, s.Citation...)
+				c.Citation = append(cit, c.Citation...)
+			} else {
+				cit := append([]string{}, s.Citation...)
+				c.Citation = append(cit, c.Citation...)
+				c.Citation = append(c.Citation, uuid.New().String())
+			}
 		}
 	}
 	return nil
@@ -236,9 +251,9 @@ var ErrNoParents = errors.New("no parents found for this paragraph")
 var ErrWrongParent = errors.New("the parent found was of the wrong type")
 
 type Paragraph struct {
-	Type     string
-	Content  string `xml:",innerxml"`
-	Citation []string
+	Type     string   `json:"node_type"`
+	Content  string   `xml:",innerxml" json:"text"`
+	Citation []string `json:"label"`
 }
 
 func (p *Paragraph) Marker() ([]string, error) {
