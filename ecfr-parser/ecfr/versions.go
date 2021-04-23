@@ -1,5 +1,9 @@
 package ecfr
 
+import (
+	"encoding/json"
+)
+
 type Versions struct {
 	ContentVersions []Version `json:"content_versions"`
 }
@@ -23,4 +27,19 @@ func PartVersions(versions []Version) map[string]map[string]struct{} {
 		result[version.Part][version.Date] = struct{}{}
 	}
 	return result
+}
+
+func ExtractPartVersions(title int) (map[string]map[string]struct{}, error) {
+	vbody, err := FetchVersions(42)
+	if err != nil {
+		return nil, err
+	}
+	defer vbody.Close()
+	vs := &Versions{}
+	d := json.NewDecoder(vbody)
+	if err := d.Decode(vs); err != nil {
+		return nil, err
+	}
+	versions := PartVersions(vs.ContentVersions)
+	return versions, nil
 }

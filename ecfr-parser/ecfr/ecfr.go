@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 const dateFormat = "2006-01-02"
@@ -36,12 +37,7 @@ func buildQuery(opts []FetchOption) string {
 	return q.Encode()
 }
 
-func FetchFull(date string, title int, opts ...FetchOption) (io.ReadCloser, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date, title))
-	if err != nil {
-		return nil, err
-	}
-
+func fetch(path *url.URL, opts []FetchOption) (io.ReadCloser, error) {
 	path.RawQuery = buildQuery(opts)
 
 	u := ecfrSite.ResolveReference(path)
@@ -57,26 +53,20 @@ func FetchFull(date string, title int, opts ...FetchOption) (io.ReadCloser, erro
 	return resp.Body, nil
 }
 
-func FetchStructure(date string, title int, opts ...FetchOption) (io.ReadCloser, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date, title))
+func FetchFull(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, error) {
+	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date.Format("2006-01-02"), title))
 	if err != nil {
 		return nil, err
 	}
+	return fetch(path, opts)
+}
 
-	path.RawQuery = buildQuery(opts)
-
-	u := ecfrSite.ResolveReference(path)
-
-	resp, err := http.Get(u.String())
+func FetchStructure(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, error) {
+	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date.Format("2006-01-02"), title))
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode != 200 {
-		log.Println(u.String())
-		return nil, fmt.Errorf("%d", resp.StatusCode)
-	}
-
-	return resp.Body, nil
+	return fetch(path, opts)
 }
 
 func FetchVersions(title int, opts ...FetchOption) (io.ReadCloser, error) {
@@ -84,17 +74,7 @@ func FetchVersions(title int, opts ...FetchOption) (io.ReadCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	path.RawQuery = buildQuery(opts)
-
-	u := ecfrSite.ResolveReference(path)
-
-	resp, err := http.Get(u.String())
-	if err != nil {
-		return nil, err
-	}
-
-	return resp.Body, nil
+	return fetch(path, opts)
 }
 
 type FetchOption interface {

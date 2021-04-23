@@ -138,7 +138,8 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		if ok {
 			err := c.PostProcess(prev)
 			if err != nil && err != ErrNoParents {
-				log.Println("[ERROR]", prev, c, s.Citation)
+				e, l := c.Marker()
+				log.Println("[ERROR]", err, prev, c, e, l, s.Citation)
 			} else {
 				prev = c
 			}

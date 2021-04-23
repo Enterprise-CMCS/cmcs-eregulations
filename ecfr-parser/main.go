@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -12,24 +13,27 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
 )
 
+const TIMELIMIT = 60 * time.Second
+
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
+	title := 42
 
 	start := time.Now()
 
 	log.Println("[DEBUG] fetching Versions")
-	vbody, err := ecfr.FetchVersions(42)
+	versions, err := ecfr.ExtractPartVersions(title)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer vbody.Close()
-	vs := &ecfr.Versions{}
-	d := json.NewDecoder(vbody)
-	if err := d.Decode(vs); err != nil {
+	log.Println(versions)
+
+	parts, err := ecfr.ExtractSubchapterParts(start, title, "IV", "C")
+	if err != nil {
 		log.Fatal(err)
 	}
-	versions := ecfr.PartVersions(vs.ContentVersions)
-	log.Println(versions)
+	log.Println(parts)
+
 	var wg sync.WaitGroup
 	output := make(chan []byte)
 	go func() {
@@ -38,26 +42,19 @@ func main() {
 		}
 	}()
 
-	sbody, err := ecfr.FetchStructure("2021-04-20", 42, ecfr.Subchapter("C", "IV"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer sbody.Close()
-	s := &ecfr.Structure{}
-	sd := json.NewDecoder(sbody)
-	if err := sd.Decode(s); err != nil {
-		log.Fatal(err)
-	}
-	parts := ecfr.SubchapterParts(s)
-	log.Println(parts)
-
+	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
+	defer cancel()
 	for _, part := range parts {
 		for date, _ := range versions[part.Identifier] {
 			wg.Add(1)
-			go func(part string, date string, output chan []byte) {
+			go func(ctx context.Context, part string, dateString string, output chan []byte) {
 				defer wg.Done()
-				handlePart(part, date, output)
-			}(part.Identifier, date, output)
+				date, err := time.Parse("2006-01-02", dateString)
+				if err != nil {
+					log.Fatal(err)
+				}
+				handlePart(ctx, part, date, output)
+			}(ctx, part.Identifier, date, output)
 		}
 	}
 
@@ -67,12 +64,16 @@ func main() {
 	log.Println("Run time:", time.Since(start))
 }
 
-func handlePart(part string, date string, output chan []byte) {
+func handlePart(ctx context.Context, part string, date time.Time, output chan []byte) {
+	if ctx.Err() != nil {
+		log.Println("[ERROR]", ctx.Err())
+		return
+	}
 	body, err := ecfr.FetchFull(date, 42, ecfr.Part(part))
 	if err != nil {
 		if err.Error() == "429" {
 			time.Sleep(2 * time.Second)
-			handlePart(part, date, output)
+			handlePart(ctx, part, date, output)
 			return
 		}
 		if err.Error() == "404" {
@@ -93,7 +94,6 @@ func handlePart(part string, date string, output chan []byte) {
 	b := bytes.NewBuffer([]byte{})
 	enc := json.NewEncoder(b)
 	enc.SetEscapeHTML(false)
-	enc.SetIndent("", "  ")
 	if err := enc.Encode(p); err != nil {
 		log.Fatal(err)
 	}
