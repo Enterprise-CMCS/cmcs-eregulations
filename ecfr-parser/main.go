@@ -13,7 +13,7 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
 )
 
-const TIMELIMIT = 60 * time.Second
+const TIMELIMIT = 160 * time.Second
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
@@ -71,7 +71,7 @@ func handlePart(ctx context.Context, part string, date time.Time, output chan []
 	}
 	body, err := ecfr.FetchFull(date, 42, ecfr.Part(part))
 	if err != nil {
-		if err.Error() == "429" {
+		if err.Error() == "429" || err.Error() == "502" {
 			time.Sleep(2 * time.Second)
 			handlePart(ctx, part, date, output)
 			return
@@ -87,6 +87,11 @@ func handlePart(ctx context.Context, part string, date time.Time, output chan []
 	log.Println("[DEBUG] parsing", date, part)
 	p, err := parseXML.ParsePart(body)
 	if err != nil {
+		log.Fatal("[ERROR] ", err, date, part)
+		return
+	}
+
+	if err := p.PostProcess(); err != nil {
 		log.Fatal("[ERROR] ", err, date, part)
 		return
 	}

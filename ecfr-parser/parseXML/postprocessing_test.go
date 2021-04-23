@@ -61,6 +61,11 @@ func TestExtractParagraphMarker(t *testing.T) {
 			[]string{"c", "1", "i"},
 			nil,
 		},
+		{
+			"(3) <I>Publication of national limits.</I> If CMS determines under this paragraph (h)",
+			[]string{"3"},
+			nil,
+		},
 	}
 	for _, test := range tests {
 		result, err := extractMarker(test.input)

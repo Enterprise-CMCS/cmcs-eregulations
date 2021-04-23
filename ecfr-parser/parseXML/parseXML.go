@@ -10,6 +10,10 @@ import (
 	"strings"
 )
 
+type PostProcesser interface {
+	PostProcess() error
+}
+
 func ParsePart(b io.ReadCloser) (*Part, error) {
 	d := xml.NewDecoder(b)
 
@@ -28,6 +32,18 @@ type Part struct {
 	Authority string          `xml:"AUTH>PSPACE" json:"-"`
 	Source    string          `xml:"SOURCE>PSPACE" json:"-"`
 	Children  PartChildren    `xml:",any" json:"children"`
+}
+
+func (p *Part) PostProcess() error {
+	for _, child := range p.Children {
+		c, ok := child.(PostProcesser)
+		if ok {
+			if err := c.PostProcess(); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 type PartChildren []interface{}
@@ -60,6 +76,18 @@ type Subpart struct {
 	Citation SectionCitation `xml:"N,attr" json:"label"`
 	Type     string          `xml:"TYPE,attr" json:"node_type"`
 	Children SubpartChildren `xml:",any" json:"children"`
+}
+
+func (sp *Subpart) PostProcess() error {
+	for _, child := range sp.Children {
+		c, ok := child.(PostProcesser)
+		if ok {
+			if err := c.PostProcess(); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 type SubpartChildren []interface{}
@@ -99,6 +127,18 @@ type SubjectGroup struct {
 	Children SubjectGroupChildren `xml:",any" json:"children"`
 }
 
+func (sg *SubjectGroup) PostProcess() error {
+	for _, child := range sg.Children {
+		c, ok := child.(PostProcesser)
+		if ok {
+			if err := c.PostProcess(); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 type SubjectGroupChildren []interface{}
 
 func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
@@ -124,19 +164,13 @@ type Section struct {
 	Children SectionChildren `xml:",any" json:"children"`
 }
 
-func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	type postSection Section
-	ps := (*postSection)(s)
-
-	if err := d.DecodeElement(ps, &start); err != nil {
-		return err
-	}
-
+func (s *Section) PostProcess() error {
 	var prev *Paragraph
 	for _, child := range s.Children {
 		c, ok := child.(*Paragraph)
 		if ok {
-			err := c.PostProcess(prev)
+			var err error
+			c.Citation, err = generateParagraphCitation(c, prev)
 			if err != nil && err != ErrNoParents {
 				e, l := c.Marker()
 				log.Println("[ERROR]", err, prev, c, e, l, s.Citation)
@@ -156,6 +190,15 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 				cit := append([]string{}, s.Citation...)
 				c.Citation = append(cit, c.Citation...)
 				c.Citation = append(c.Citation, fmt.Sprintf("%x", md5.Sum([]byte(c.Content))))
+			}
+		}
+	}
+
+	for _, child := range s.Children {
+		c, ok := child.(PostProcesser)
+		if ok {
+			if err := c.PostProcess(); err != nil {
+				return err
 			}
 		}
 	}
@@ -276,10 +319,4 @@ func (p *Paragraph) Level() int {
 		return -1
 	}
 	return matchLabelType(m[len(m)-1])
-}
-
-// TODO: I'd like to get rid of the explicit dependency on Section
-func (p *Paragraph) PostProcess(prev *Paragraph) (err error) {
-	p.Citation, err = generateParagraphCitation(p, prev)
-	return
 }
