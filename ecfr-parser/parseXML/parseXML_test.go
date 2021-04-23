@@ -23,7 +23,7 @@ func TestExtractParagraphMarker(t *testing.T) {
 		},
 		{
 			"(6)(i)(1)",
-			[]string{"6", "i"},
+			[]string{"6", "i", "1"},
 			nil,
 		},
 		{
@@ -32,8 +32,28 @@ func TestExtractParagraphMarker(t *testing.T) {
 			nil,
 		},
 		{
-			"(b)<I>Activities and rates.</I>(1) [Reserved]",
+			"(b)<I>Activities and rates.</I>(1)(i) [Reserved]",
+			[]string{"b", "1", "i"},
+			nil,
+		},
+		{
+			"(b)<I>Activities and rates.</I> -(1) [Reserved]",
 			[]string{"b", "1"},
+			nil,
+		},
+		{
+			"(b) <I>Activities and rates.</I> - (1) [Reserved]",
+			[]string{"b", "1"},
+			nil,
+		},
+		{
+			"(b) <I>Activities and rates.</I>-(1) [Reserved]",
+			[]string{"b", "1"},
+			nil,
+		},
+		{
+			"(c) <I>Filing requirements</I> - (1) <I>Authority to file.</I> - (i) A",
+			[]string{"c", "1", "i"},
 			nil,
 		},
 	}

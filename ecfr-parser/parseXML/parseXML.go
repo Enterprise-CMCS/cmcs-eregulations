@@ -14,7 +14,6 @@ func ParsePart(b io.ReadCloser) (*Part, error) {
 	d := xml.NewDecoder(b)
 
 	p := &Part{}
-	log.Println("[DEBUG] Decoding part")
 	if err := d.Decode(p); err != nil {
 		return p, err
 	}
@@ -49,7 +48,7 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 		*c = append(*c, child)
 	default:
 		//return fmt.Errorf("Unknown XML type in Part: %+v", start)
-		fmt.Printf("Unknown XML type in Part: %+v\n", start)
+		log.Printf("[WARNING] Unknown XML type in Part: %+v\n", start)
 		d.Skip()
 	}
 
@@ -87,7 +86,7 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		*c = append(*c, child)
 	default:
 		//return fmt.Errorf("Unknown XML type in Subpart: %+v", start)
-		fmt.Printf("Unknown XML type in Subpart: %+v\n", start)
+		log.Printf("[WARNING] Unknown XML type in Subpart: %+v\n", start)
 		d.Skip()
 	}
 	return nil
@@ -112,7 +111,7 @@ func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartEleme
 		*c = append(*c, child)
 	default:
 		//return fmt.Errorf("Unknown XML type in Subpart: %+v", start)
-		fmt.Printf("Unknown XML type in Subject Group: %+v\n", start)
+		log.Printf("[WARNING] Unknown XML type in Subject Group: %+v\n", start)
 		d.Skip()
 	}
 	return nil
@@ -137,10 +136,13 @@ func (s *Section) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	for _, child := range s.Children {
 		c, ok := child.(*Paragraph)
 		if ok {
-			if err := c.PostProcess(prev); err != nil && err != ErrNoParents {
-				return err
+			err := c.PostProcess(prev)
+			if err != nil && err != ErrNoParents {
+				log.Println("[ERROR]", prev, c, s.Citation)
+			} else {
+				prev = c
 			}
-			prev = c
+
 		}
 	}
 	for _, child := range s.Children {
@@ -201,7 +203,7 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		*c = append(*c, child)
 	default:
 		//return fmt.Errorf("Unknown XML type in Section: %+v", start)
-		fmt.Printf("Unknown XML type in Section: %+v\n", start)
+		log.Printf("[WARNING] Unknown XML type in Section: %+v\n", start)
 		d.Skip()
 	}
 
@@ -261,6 +263,9 @@ func (p *Paragraph) Marker() ([]string, error) {
 }
 
 func (p *Paragraph) Level() int {
+	if p.Citation != nil {
+		return len(p.Citation) - 1
+	}
 	m, err := p.Marker()
 	if err != nil {
 		log.Println("[ERROR]", err.Error())
