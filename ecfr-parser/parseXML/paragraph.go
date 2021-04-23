@@ -31,9 +31,26 @@ func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) 
 	}
 
 	if currentLevel == 2 {
-		if pLabel[0] == "i" && prev.Level() != 1 {
-			citation = append(p.Citation, pLabel...)
-			return citation, nil
+		if len(pLabel) > 1 {
+			if matchLabelType(pLabel[1]) == 1 {
+				citation = append(p.Citation, pLabel...)
+				return citation, nil
+			}
+		}
+		if pLabel[0] == "i" {
+			if prev.Level() != 1 {
+				citation = append(p.Citation, pLabel...)
+				return citation, nil
+			}
+		}
+		if pLabel[0] == "v" {
+			if len(prev.Citation) < 3 {
+				citation = append(p.Citation, pLabel...)
+				return citation, nil
+			} else if prev.Citation[2] != "iv" {
+				citation = append(p.Citation, pLabel...)
+				return citation, nil
+			}
 		}
 	}
 
@@ -83,7 +100,7 @@ func matchLabelType(l string) int {
 
 func extractMarker(l string) ([]string, error) {
 	// TODO: This can be pulled out into a module level var
-	re := regexp.MustCompile(`^\(([^\)]+)\)(?:(?: ?<I>.+<\/I> ?)?\(([^\)]+)\))?`)
+	re := regexp.MustCompile(`^\(([^\)]{1,3})\)(?:(?: ?<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?(?: ?(?:<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?`)
 	pLabel := re.FindStringSubmatch(l)
 	if len(pLabel) == 0 {
 		return nil, nil
@@ -91,9 +108,16 @@ func extractMarker(l string) ([]string, error) {
 	if len(pLabel) < 2 {
 		return nil, fmt.Errorf("wrong number of labels")
 	}
-	// TODO: can this case really be reached still?
 	if len(pLabel) == 3 && pLabel[2] == "" {
 		pLabel = pLabel[:2]
+	}
+
+	if len(pLabel) == 4 {
+		if pLabel[2] == "" {
+			pLabel = pLabel[:2]
+		} else if pLabel[3] == "" {
+			pLabel = pLabel[:3]
+		}
 	}
 	pLabel = pLabel[1:]
 	return pLabel, nil

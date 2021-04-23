@@ -6,15 +6,16 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 	"time"
 )
 
 const dateFormat = "2006-01-02"
 
 var (
-	ecfrSite    = urlMustParse("https://ecfr.federalregister.gov/api/versioner/v1/")
-	ecfrFullXML = "full/%s/title-%d.xml"
+	ecfrSite         = urlMustParse("https://ecfr.federalregister.gov/api/versioner/v1/")
+	ecfrFullXML      = "full/%s/title-%d.xml"
+	ecfrVersionsXML  = "versions/title-%d.json"
+	ecfrStructureXML = "structure/%s/title-%d.json"
 )
 
 func urlMustParse(s string) *url.URL {
@@ -36,12 +37,7 @@ func buildQuery(opts []FetchOption) string {
 	return q.Encode()
 }
 
-func FetchPart(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date.Format(dateFormat), title))
-	if err != nil {
-		return nil, err
-	}
-
+func fetch(path *url.URL, opts []FetchOption) (io.ReadCloser, error) {
 	path.RawQuery = buildQuery(opts)
 
 	u := ecfrSite.ResolveReference(path)
@@ -50,8 +46,35 @@ func FetchPart(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, e
 	if err != nil {
 		return nil, err
 	}
+	if resp.StatusCode != 200 {
+		return nil, fmt.Errorf("%d", resp.StatusCode)
+	}
 
 	return resp.Body, nil
+}
+
+func FetchFull(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, error) {
+	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date.Format("2006-01-02"), title))
+	if err != nil {
+		return nil, err
+	}
+	return fetch(path, opts)
+}
+
+func FetchStructure(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, error) {
+	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date.Format("2006-01-02"), title))
+	if err != nil {
+		return nil, err
+	}
+	return fetch(path, opts)
+}
+
+func FetchVersions(title int, opts ...FetchOption) (io.ReadCloser, error) {
+	path, err := url.Parse(fmt.Sprintf(ecfrVersionsXML, title))
+	if err != nil {
+		return nil, err
+	}
+	return fetch(path, opts)
 }
 
 type FetchOption interface {
@@ -59,17 +82,36 @@ type FetchOption interface {
 }
 
 type partOption struct {
-	part int
+	part string
 }
 
 func (p *partOption) Values() url.Values {
 	v := url.Values{}
-	v.Set("part", strconv.Itoa(p.part))
+	v.Set("part", p.part)
 	return v
 }
 
-func Part(part int) FetchOption {
+func Part(part string) FetchOption {
 	return &partOption{
 		part: part,
+	}
+}
+
+type subchapterOption struct {
+	chapter    string
+	subchapter string
+}
+
+func (p *subchapterOption) Values() url.Values {
+	v := url.Values{}
+	v.Set("chapter", p.subchapter)
+	v.Set("subchapter", p.chapter)
+	return v
+}
+
+func Subchapter(chapter string, subchapter string) FetchOption {
+	return &subchapterOption{
+		chapter:    chapter,
+		subchapter: subchapter,
 	}
 }
