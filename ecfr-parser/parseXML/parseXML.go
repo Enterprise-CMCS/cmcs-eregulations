@@ -8,6 +8,8 @@ import (
 	"io"
 	"log"
 	"strings"
+
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 )
 
 type PostProcesser interface {
@@ -26,6 +28,7 @@ func ParsePart(b io.ReadCloser) (*Part, error) {
 
 type Part struct {
 	XMLName   xml.Name        `xml:"DIV5" json:"-"`
+	Structure *ecfr.Structure `xml:"-" json:"structure"`
 	Citation  SectionCitation `xml:"N,attr" json:"label"`
 	Type      string          `xml:"TYPE,attr" json:"node_type"`
 	Header    string          `xml:"HEAD" json:"title"`
@@ -34,7 +37,7 @@ type Part struct {
 	Children  PartChildren    `xml:",any" json:"children"`
 }
 
-func (p *Part) PostProcess() error {
+func (p *Part) PostProcess() (err error) {
 	for _, child := range p.Children {
 		c, ok := child.(PostProcesser)
 		if ok {

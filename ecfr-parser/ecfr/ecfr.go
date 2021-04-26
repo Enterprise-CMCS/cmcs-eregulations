@@ -1,6 +1,7 @@
 package ecfr
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -61,12 +62,26 @@ func FetchFull(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, e
 	return fetch(path, opts)
 }
 
-func FetchStructure(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, error) {
+func FetchStructure(date time.Time, title int, opts ...FetchOption) (*Structure, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date.Format("2006-01-02"), title))
 	if err != nil {
 		return nil, err
 	}
-	return fetch(path, opts)
+	sbody, err := fetch(path, opts)
+	if err != nil {
+		if err.Error() == "429" || err.Error() == "502" {
+			time.Sleep(2 * time.Second)
+			return FetchStructure(date, title, opts...)
+		}
+		return nil, err
+	}
+	defer sbody.Close()
+	s := &Structure{}
+	sd := json.NewDecoder(sbody)
+	if err := sd.Decode(s); err != nil {
+		return nil, err
+	}
+	return s, nil
 }
 
 func FetchVersions(title int, opts ...FetchOption) (io.ReadCloser, error) {
@@ -91,7 +106,7 @@ func (p *partOption) Values() url.Values {
 	return v
 }
 
-func Part(part string) FetchOption {
+func Part(part string) *partOption {
 	return &partOption{
 		part: part,
 	}
@@ -104,12 +119,12 @@ type subchapterOption struct {
 
 func (p *subchapterOption) Values() url.Values {
 	v := url.Values{}
-	v.Set("chapter", p.subchapter)
-	v.Set("subchapter", p.chapter)
+	v.Set("chapter", p.chapter)
+	v.Set("subchapter", p.subchapter)
 	return v
 }
 
-func Subchapter(chapter string, subchapter string) FetchOption {
+func Subchapter(chapter string, subchapter string) *subchapterOption {
 	return &subchapterOption{
 		chapter:    chapter,
 		subchapter: subchapter,
