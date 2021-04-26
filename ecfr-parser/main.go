@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -18,31 +20,77 @@ import (
 const TIMELIMIT = 160 * time.Second
 
 var (
-	title           = 42
-	chapter         = "IV"
-	subchapter      = "C"
-	individualParts = []string{
-		"457",
-		"460",
-	}
+	title           int
+	subchapter      SubchapterArg
+	individualParts PartsArg
 )
 
+type SubchapterArg []string
+
+func (sc *SubchapterArg) String() string {
+	return strings.Join(*sc, "-")
+}
+
+func (sc *SubchapterArg) Set(s string) error {
+	*sc = strings.Split(s, "-")
+	if len(*sc) != 2 {
+		return fmt.Errorf("Subchapter is expected to be of the form <Roman Numeral>-<Letter>")
+	}
+	return nil
+}
+
+type PartsArg []string
+
+func (pa *PartsArg) String() string {
+	return strings.Join(*pa, ",")
+}
+
+func (pa *PartsArg) Set(s string) error {
+	*pa = strings.Split(s, ",")
+
+	return nil
+}
+
+// ./a TITLE -s SUBCHAPTER-CHAPTER -p PART1,PART2,...
+// -title TITLE -subchapter CHAP-SUB -parts PART1, PART2
+
+func init() {
+	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
+	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
+	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
+	flag.Parse()
+
+	if title < 0 {
+		log.Fatal("Title flag is required and must be greater than 0.")
+	}
+}
+
 func main() {
+
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 
 	start := time.Now()
-	defer log.Println("Run time:", time.Since(start))
+	defer func() {
+		log.Println("Run time:", time.Since(start))
+	}()
 
 	today := time.Now()
 
 	log.Println("[DEBUG] fetching Parts")
 
-	parts, err := ecfr.ExtractSubchapterParts(today, title, ecfr.Subchapter(chapter, subchapter))
-	if err != nil {
-		log.Fatal(err)
+	var parts []string
+	if subchapter != nil {
+		var err error
+		parts, err = ecfr.ExtractSubchapterParts(today, title, ecfr.Subchapter(subchapter[0], subchapter[1]))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 	parts = append(parts, individualParts...)
-	log.Println(parts)
+
+	if len(parts) < 1 {
+		log.Fatal("Some number of parts must be specified")
+	}
 
 	var wg sync.WaitGroup
 

@@ -30,7 +30,7 @@ func PartVersions(versions []Version) map[string]map[string]struct{} {
 }
 
 func ExtractPartVersions(title int, po *partOption) (map[string]struct{}, error) {
-	vbody, err := FetchVersions(42, po)
+	vbody, err := FetchVersions(title, po)
 	if err != nil {
 		return nil, err
 	}
