@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -32,10 +31,13 @@ func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 
 	start := time.Now()
+	defer log.Println("Run time:", time.Since(start))
+
+	today := time.Now()
 
 	log.Println("[DEBUG] fetching Parts")
 
-	parts, err := ecfr.ExtractSubchapterParts(start, title, ecfr.Subchapter(chapter, subchapter))
+	parts, err := ecfr.ExtractSubchapterParts(today, title, ecfr.Subchapter(chapter, subchapter))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,12 +45,6 @@ func main() {
 	log.Println(parts)
 
 	var wg sync.WaitGroup
-	output := make(chan []byte)
-	go func() {
-		for obj := range output {
-			fmt.Println(string(obj))
-		}
-	}()
 
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
@@ -59,35 +55,33 @@ func main() {
 		}
 		for date, _ := range versions {
 			wg.Add(1)
-			go func(ctx context.Context, part string, dateString string, output chan []byte) {
+			go func(ctx context.Context, part string, dateString string) {
 				defer wg.Done()
 				date, err := time.Parse("2006-01-02", dateString)
 				if err != nil {
 					log.Fatal(err)
 				}
-				handlePart(ctx, part, date, output)
-			}(ctx, part, date, output)
+				handlePart(ctx, part, date)
+			}(ctx, part, date)
 		}
 	}
 
 	wg.Wait()
-	close(output)
-
-	log.Println("Run time:", time.Since(start))
 }
 
-func handlePart(ctx context.Context, part string, date time.Time, output chan []byte) {
+func printResults(output chan []byte) {
+	for obj := range output {
+		fmt.Println(string(obj))
+	}
+}
+
+func handlePart(ctx context.Context, part string, date time.Time) {
 	if ctx.Err() != nil {
 		log.Println("[ERROR]", ctx.Err())
 		return
 	}
 	body, err := ecfr.FetchFull(date, title, ecfr.Part(part))
 	if err != nil {
-		if err.Error() == "429" || err.Error() == "502" {
-			time.Sleep(2 * time.Second)
-			handlePart(ctx, part, date, output)
-			return
-		}
 		if err.Error() == "404" {
 			log.Println("[ERROR] not found", part, date)
 			return
@@ -157,14 +151,8 @@ func handlePart(ctx context.Context, part string, date time.Time, output chan []
 			log.Fatal(err)
 		}
 	}
-	defer resp.Body.Close()
-	result, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	if resp.StatusCode >= 400 {
 		log.Fatal(resp.StatusCode, string(b))
 	}
-
-	output <- result
 }

@@ -5,6 +5,8 @@ import (
 	"regexp"
 )
 
+var re = regexp.MustCompile(`^\(([^\)]{1,3})\)(?:(?: ?<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?(?: ?(?:<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?`)
+
 func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) {
 	citation := []string{}
 	pLabel, err := p.Marker()
@@ -99,8 +101,6 @@ func matchLabelType(l string) int {
 }
 
 func extractMarker(l string) ([]string, error) {
-	// TODO: This can be pulled out into a module level var
-	re := regexp.MustCompile(`^\(([^\)]{1,3})\)(?:(?: ?<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?(?: ?(?:<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?`)
 	pLabel := re.FindStringSubmatch(l)
 	if len(pLabel) == 0 {
 		return nil, nil

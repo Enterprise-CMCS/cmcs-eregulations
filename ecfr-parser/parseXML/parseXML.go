@@ -66,7 +66,6 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 		}
 		*c = append(*c, child)
 	default:
-		//return fmt.Errorf("Unknown XML type in Part: %+v", start)
 		log.Printf("[WARNING] Unknown XML type in Part: %+v\n", start)
 		d.Skip()
 	}
@@ -116,7 +115,6 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		}
 		*c = append(*c, child)
 	default:
-		//return fmt.Errorf("Unknown XML type in Subpart: %+v", start)
 		log.Printf("[WARNING] Unknown XML type in Subpart: %+v\n", start)
 		d.Skip()
 	}
@@ -153,7 +151,6 @@ func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartEleme
 		}
 		*c = append(*c, child)
 	default:
-		//return fmt.Errorf("Unknown XML type in Subpart: %+v", start)
 		log.Printf("[WARNING] Unknown XML type in Subject Group: %+v\n", start)
 		d.Skip()
 	}
@@ -175,8 +172,7 @@ func (s *Section) PostProcess() error {
 			var err error
 			c.Citation, err = generateParagraphCitation(c, prev)
 			if err != nil && err != ErrNoParents {
-				e, l := c.Marker()
-				log.Println("[ERROR]", err, prev, c, e, l, s.Citation)
+				log.Println("[ERROR] generating paragraph citation", err, prev, c)
 			} else {
 				prev = c
 			}
@@ -249,7 +245,6 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		}
 		*c = append(*c, child)
 	default:
-		//return fmt.Errorf("Unknown XML type in Section: %+v", start)
 		log.Printf("[WARNING] Unknown XML type in Section: %+v\n", start)
 		d.Skip()
 	}
@@ -261,7 +256,10 @@ type SectionCitation []string
 
 func (sl *SectionCitation) UnmarshalText(data []byte) error {
 	// deal with the - case
-	*sl = strings.Split(string(data), ".")
+	sections := strings.Split(string(data), "-")
+	for _, section := range sections {
+		*sl = append(*sl, strings.Split(section, ".")...)
+	}
 	return nil
 }
 

@@ -48,6 +48,10 @@ func fetch(path *url.URL, opts []FetchOption) (io.ReadCloser, error) {
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
+		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
+			time.Sleep(2 * time.Second)
+			return fetch(path, opts)
+		}
 		return nil, fmt.Errorf("%d", resp.StatusCode)
 	}
 
@@ -69,10 +73,6 @@ func FetchStructure(date time.Time, title int, opts ...FetchOption) (*Structure,
 	}
 	sbody, err := fetch(path, opts)
 	if err != nil {
-		if err.Error() == "429" || err.Error() == "502" {
-			time.Sleep(2 * time.Second)
-			return FetchStructure(date, title, opts...)
-		}
 		return nil, err
 	}
 	defer sbody.Close()
