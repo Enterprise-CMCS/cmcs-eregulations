@@ -38,4 +38,19 @@ describe("Part View", () => {
         cy.findByRole("heading", {level: 1, name: "§ 433.50 Basis, scope, and applicability."}).should("be.visible");
         cy.findByRole("heading", {level: 1, name: "§ 433.10 Rates of FFP for program services."}).should("be.visible");
     });
+
+    it("loads a different version of a subpart", () => {
+        cy.visit("/433/");
+        cy.contains("433.10").click()
+
+        cy.findByRole("button", {name: /View and Compare/i}).should("be.visible");
+        cy.findByRole("button", {name: /View and Compare/i}).click();
+        cy.get(".view-and-compare").should("be.visible");
+        
+        cy.get("#view-options").select("2019-10-01");
+        cy.url().should("include", "2019-annual-433")
+
+        cy.get(".close-button").click()
+        cy.get(".view-and-compare").should("not.be.visible");
+    });
 });
