@@ -2,6 +2,7 @@ package ecfr
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"time"
 )
@@ -31,8 +32,16 @@ func SubchapterParts(s *Structure) ([]*Structure, error) {
 }
 
 func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub *subchapterOption) ([]string, error) {
-	s, err := FetchStructure(ctx, date, title, sub)
+	sbody, err := FetchStructure(ctx, date.Format("2006-01-02"), title, sub)
 	if err != nil {
+		return nil, err
+	}
+	if err != nil {
+		return nil, err
+	}
+	s := &Structure{}
+	sd := json.NewDecoder(sbody)
+	if err := sd.Decode(s); err != nil {
 		return nil, err
 	}
 	partsStructure, err := SubchapterParts(s)

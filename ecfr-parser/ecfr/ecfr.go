@@ -3,7 +3,6 @@ package ecfr
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -22,7 +21,9 @@ var (
 	ecfrStructureXML = "structure/%s/title-%d.json"
 )
 
-var client = &http.Client{}
+var client = &http.Client{
+	Transport: &http.Transport{},
+}
 
 func urlMustParse(s string) *url.URL {
 	u, err := url.Parse(s)
@@ -77,29 +78,20 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	return body, nil
 }
 
-func FetchFull(ctx context.Context, date time.Time, title int, opts ...FetchOption) (io.Reader, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date.Format("2006-01-02"), title))
+func FetchFull(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
+	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date, title))
 	if err != nil {
 		return nil, err
 	}
 	return fetch(ctx, path, opts)
 }
 
-func FetchStructure(ctx context.Context, date time.Time, title int, opts ...FetchOption) (*Structure, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date.Format("2006-01-02"), title))
+func FetchStructure(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
+	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date, title))
 	if err != nil {
 		return nil, err
 	}
-	sbody, err := fetch(ctx, path, opts)
-	if err != nil {
-		return nil, err
-	}
-	s := &Structure{}
-	sd := json.NewDecoder(sbody)
-	if err := sd.Decode(s); err != nil {
-		return nil, err
-	}
-	return s, nil
+	return fetch(ctx, path, opts)
 }
 
 func FetchVersions(ctx context.Context, title int, opts ...FetchOption) (io.Reader, error) {
@@ -124,7 +116,7 @@ func (p *partOption) Values() url.Values {
 	return v
 }
 
-func Part(part string) *partOption {
+func PartOption(part string) *partOption {
 	return &partOption{
 		part: part,
 	}

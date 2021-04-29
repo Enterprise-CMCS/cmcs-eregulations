@@ -2,14 +2,13 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"encoding/xml"
 	"flag"
 	"fmt"
 	"io"
 	"log"
-	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
@@ -75,7 +74,7 @@ func main() {
 
 	start := time.Now()
 	defer func() {
-		log.Println("Run time:", time.Since(start))
+		log.Println("[DEBUG] run time:", time.Since(start))
 	}()
 
 	today := time.Now()
@@ -96,81 +95,64 @@ func main() {
 		log.Fatal("Some number of parts must be specified")
 	}
 
-	var wg sync.WaitGroup
-
+	versions, err := ecfr.ExtractVersions(ctx, title)
+	if err != nil {
+		log.Fatal(err)
+	}
 	for _, part := range parts {
-		versions, err := ecfr.ExtractPartVersions(ctx, title, ecfr.Part(part))
-		if err != nil {
-			log.Fatal(err)
-		}
-		for date, _ := range versions {
-			d, err := time.Parse("2006-01-02", date)
-			if err != nil {
+		for date := range versions[part] {
+			reg := &eregs.Part{
+				Title:     title,
+				Name:      part,
+				Date:      date,
+				Structure: &ecfr.Structure{},
+				Document:  &parseXML.Part{},
+			}
+			if err := handlePart(ctx, reg); err != nil {
 				log.Fatal(err)
 			}
-			wg.Add(1)
-			go func(ctx context.Context, part string, date time.Time) {
-				defer wg.Done()
-				handlePart(ctx, part, date)
-			}(ctx, part, d)
 		}
 	}
-
-	wg.Wait()
 }
 
-func handlePart(ctx context.Context, part string, date time.Time) {
+func handlePart(ctx context.Context, reg *eregs.Part) error {
 
-	s, err := ecfr.FetchStructure(ctx, date, title, ecfr.Part(part))
+	sbody, err := ecfr.FetchStructure(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
-		log.Fatal("[ERROR] ", err, date, part)
-		return
+		return err
 	}
 
-	reg := &eregs.Part{
-		Title:     strconv.Itoa(title),
-		Name:      part,
-		Date:      date.Format("2006-01-02"),
-		Structure: s,
-		Document:  &parseXML.Part{},
+	sd := json.NewDecoder(sbody)
+	if err := sd.Decode(reg.Structure); err != nil {
+		return err
 	}
 
-	body, err := ecfr.FetchFull(ctx, date, title, ecfr.Part(part))
+	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
-		if err.Error() == "404" {
-			log.Println("[ERROR] not found", part, date)
-			return
-		}
-		log.Fatal(err)
+		return err
 	}
 
 	d := xml.NewDecoder(body)
 
 	if err := d.Decode(reg.Document); err != nil {
-		log.Fatal(err)
-	}
-
-	if reg.Document == nil {
-		log.Fatal("[ERROR] nil part", date, part)
+		return err
 	}
 
 	if err := reg.Document.PostProcess(); err != nil {
-		log.Fatal("[ERROR] ", err, date, part)
-		return
+		return err
 	}
 
 	resp, err := eregs.PostPart(ctx, reg)
 	if err != nil {
-
 		if resp != nil {
 			defer resp.Body.Close()
-			response, err := io.ReadAll(resp.Body)
-			if err != nil {
-				log.Println("[ERROR]", err)
+			response, e := io.ReadAll(resp.Body)
+			if e != nil {
+				log.Println("[ERROR]", e)
 			}
-			log.Println(string(response))
+			return fmt.Errorf("%s | %s", err.Error(), string(response))
 		}
-		log.Fatal("[ERROR]", err, date, part)
+		return err
 	}
-
+	return nil
 }

@@ -13,10 +13,12 @@ import (
 
 var BaseURL string
 
-var client = &http.Client{}
+var client = &http.Client{
+	Transport: &http.Transport{},
+}
 
 type Part struct {
-	Title     string          `json:"title" xml:"-"`
+	Title     int             `json:"title,string" xml:"-"`
 	Name      string          `json:"name" xml:"-"`
 	Date      string          `json:"date" xml:"-"`
 	Structure *ecfr.Structure `json:"structure" xml:"-"`
@@ -31,8 +33,6 @@ func PostPart(ctx context.Context, p *Part) (*http.Response, error) {
 	if err := enc.Encode(p); err != nil {
 		return nil, err
 	}
-
-	// b := buff.Bytes()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, BaseURL, buff)
 	if err != nil {

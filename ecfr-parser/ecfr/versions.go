@@ -30,6 +30,20 @@ func PartVersions(versions []Version) map[string]map[string]struct{} {
 	return result
 }
 
+func ExtractVersions(ctx context.Context, title int) (map[string]map[string]struct{}, error) {
+	vbody, err := FetchVersions(ctx, title)
+	if err != nil {
+		return nil, err
+	}
+	vs := &Versions{}
+	d := json.NewDecoder(vbody)
+	if err := d.Decode(vs); err != nil {
+		return nil, err
+	}
+	versions := PartVersions(vs.ContentVersions)
+	return versions, nil
+}
+
 func ExtractPartVersions(ctx context.Context, title int, po *partOption) (map[string]struct{}, error) {
 	vbody, err := FetchVersions(ctx, title, po)
 	if err != nil {
