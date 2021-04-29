@@ -4,17 +4,33 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
 	"time"
 )
 
 type Structure struct {
-	Identifier       string       `json:"identifier"`
-	Label            string       `json:"label"`
-	LabelLevel       string       `json:"label_level"`
-	LabelDescription string       `json:"label_description"`
-	Reserved         bool         `json:"reserved"`
-	Type             string       `json:"type"`
-	Children         []*Structure `json:"children"`
+	Identifier       IdentifierString `json:"identifier"`
+	Label            string           `json:"label"`
+	LabelLevel       string           `json:"label_level"`
+	LabelDescription string           `json:"label_description"`
+	Reserved         bool             `json:"reserved"`
+	Type             string           `json:"type"`
+	Children         []*Structure     `json:"children"`
+	DescendantRange  RangeString      `json:"descendant_range"`
+}
+
+type RangeString []string
+
+func (rs *RangeString) UnmarshalText(data []byte) error {
+	*rs = strings.Split(string(data), " – ")
+	return nil
+}
+
+type IdentifierString []string
+
+func (is *IdentifierString) UnmarshalText(data []byte) error {
+	*is = strings.Split(string(data), ".")
+	return nil
 }
 
 var (
@@ -50,7 +66,7 @@ func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub 
 	}
 	parts := make([]string, len(partsStructure))
 	for i, part := range partsStructure {
-		parts[i] = part.Identifier
+		parts[i] = part.Identifier[0]
 	}
 	return parts, nil
 }
