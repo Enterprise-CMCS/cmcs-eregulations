@@ -16,7 +16,7 @@ type PostProcesser interface {
 	PostProcess() error
 }
 
-func ParsePart(b io.ReadCloser) (*Part, error) {
+func ParsePart(b io.Reader) (*Part, error) {
 	d := xml.NewDecoder(b)
 
 	p := &Part{}

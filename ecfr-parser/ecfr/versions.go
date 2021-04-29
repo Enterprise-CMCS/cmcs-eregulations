@@ -1,6 +1,7 @@
 package ecfr
 
 import (
+	"context"
 	"encoding/json"
 )
 
@@ -29,12 +30,11 @@ func PartVersions(versions []Version) map[string]map[string]struct{} {
 	return result
 }
 
-func ExtractPartVersions(title int, po *partOption) (map[string]struct{}, error) {
-	vbody, err := FetchVersions(title, po)
+func ExtractPartVersions(ctx context.Context, title int, po *partOption) (map[string]struct{}, error) {
+	vbody, err := FetchVersions(ctx, title, po)
 	if err != nil {
 		return nil, err
 	}
-	defer vbody.Close()
 	vs := &Versions{}
 	d := json.NewDecoder(vbody)
 	if err := d.Decode(vs); err != nil {

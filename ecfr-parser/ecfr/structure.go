@@ -1,6 +1,7 @@
 package ecfr
 
 import (
+	"context"
 	"time"
 )
 
@@ -18,8 +19,8 @@ func SubchapterParts(s *Structure) []*Structure {
 	return s.Children[0].Children[0].Children
 }
 
-func ExtractSubchapterParts(date time.Time, title int, sub *subchapterOption) ([]string, error) {
-	s, err := FetchStructure(date, title, sub)
+func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub *subchapterOption) ([]string, error) {
+	s, err := FetchStructure(ctx, date, title, sub)
 	if err != nil {
 		return nil, err
 	}

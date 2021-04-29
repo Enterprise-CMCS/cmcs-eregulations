@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -69,6 +70,9 @@ func main() {
 
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 
+	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
+	defer cancel()
+
 	start := time.Now()
 	defer func() {
 		log.Println("Run time:", time.Since(start))
@@ -81,7 +85,7 @@ func main() {
 	var parts []string
 	if subchapter != nil {
 		var err error
-		parts, err = ecfr.ExtractSubchapterParts(today, title, ecfr.Subchapter(subchapter[0], subchapter[1]))
+		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, ecfr.Subchapter(subchapter[0], subchapter[1]))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -94,22 +98,20 @@ func main() {
 
 	var wg sync.WaitGroup
 
-	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
-	defer cancel()
 	for _, part := range parts {
-		versions, err := ecfr.ExtractPartVersions(title, ecfr.Part(part))
+		versions, err := ecfr.ExtractPartVersions(ctx, title, ecfr.Part(part))
 		if err != nil {
 			log.Fatal(err)
 		}
 		for date, _ := range versions {
 			wg.Add(1)
-			go func(ctx context.Context, part string, dateString string) {
+			go func(ctx context.Context, part string, date string) {
 				defer wg.Done()
-				date, err := time.Parse("2006-01-02", dateString)
+				d, err := time.Parse("2006-01-02", date)
 				if err != nil {
 					log.Fatal(err)
 				}
-				handlePart(ctx, part, date)
+				handlePart(ctx, part, d)
 			}(ctx, part, date)
 		}
 	}
@@ -117,18 +119,9 @@ func main() {
 	wg.Wait()
 }
 
-func printResults(output chan []byte) {
-	for obj := range output {
-		fmt.Println(string(obj))
-	}
-}
-
 func handlePart(ctx context.Context, part string, date time.Time) {
-	if ctx.Err() != nil {
-		log.Println("[ERROR]", ctx.Err())
-		return
-	}
-	body, err := ecfr.FetchFull(date, title, ecfr.Part(part))
+
+	body, err := ecfr.FetchFull(ctx, date, title, ecfr.Part(part))
 	if err != nil {
 		if err.Error() == "404" {
 			log.Println("[ERROR] not found", part, date)
@@ -136,7 +129,6 @@ func handlePart(ctx context.Context, part string, date time.Time) {
 		}
 		log.Fatal(err)
 	}
-	defer body.Close()
 
 	log.Println("[DEBUG] parsing", date, part)
 	p, err := parseXML.ParsePart(body)
@@ -150,7 +142,7 @@ func handlePart(ctx context.Context, part string, date time.Time) {
 		return
 	}
 
-	s, err := ecfr.FetchStructure(date, title, ecfr.Part(part))
+	s, err := ecfr.FetchStructure(ctx, date, title, ecfr.Part(part))
 	if err != nil {
 		log.Fatal("[ERROR] ", err, date, part)
 		return
@@ -183,7 +175,7 @@ func handlePart(ctx context.Context, part string, date time.Time) {
 
 	b := buff.Bytes()
 
-	req, err := http.NewRequest(http.MethodPut, fmt.Sprintf("http://localhost:8080/v2/%s/title/%s/part/%s", reg.Date, reg.Title, reg.Name), bytes.NewReader(b))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "http://localhost:8080/v2/", bytes.NewReader(b))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -194,13 +186,11 @@ func handlePart(ctx context.Context, part string, date time.Time) {
 	}
 
 	if resp.StatusCode >= 400 {
-		resp, err = http.Post("http://localhost:8080/v2/", "application/json", bytes.NewReader(b))
+		respb, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Fatal(err)
 		}
-	}
-
-	if resp.StatusCode >= 400 {
-		log.Fatal(resp.StatusCode, string(b))
+		resp.Body.Close()
+		log.Fatal("[ERROR]", resp.StatusCode, string(respb))
 	}
 }

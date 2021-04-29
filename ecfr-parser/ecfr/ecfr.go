@@ -1,6 +1,8 @@
 package ecfr
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,6 +13,7 @@ import (
 )
 
 const dateFormat = "2006-01-02"
+const timeout = 10 * time.Second
 
 var (
 	ecfrSite         = urlMustParse("https://ecfr.federalregister.gov/api/versioner/v1/")
@@ -38,44 +41,57 @@ func buildQuery(opts []FetchOption) string {
 	return q.Encode()
 }
 
-func fetch(path *url.URL, opts []FetchOption) (io.ReadCloser, error) {
+func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, error) {
 	path.RawQuery = buildQuery(opts)
 
 	u := ecfrSite.ResolveReference(path)
 
-	resp, err := http.Get(u.String())
+	c, cancel := context.WithTimeout(ctx, timeout)
+	defer cancel()
+
+	req, err := http.NewRequestWithContext(c, http.MethodGet, u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
 		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
 			time.Sleep(2 * time.Second)
-			return fetch(path, opts)
+			return fetch(ctx, path, opts)
 		}
 		return nil, fmt.Errorf("%d", resp.StatusCode)
 	}
+	defer resp.Body.Close()
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	body := bytes.NewBuffer(b)
 
-	return resp.Body, nil
+	return body, nil
 }
 
-func FetchFull(date time.Time, title int, opts ...FetchOption) (io.ReadCloser, error) {
+func FetchFull(ctx context.Context, date time.Time, title int, opts ...FetchOption) (io.Reader, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date.Format("2006-01-02"), title))
 	if err != nil {
 		return nil, err
 	}
-	return fetch(path, opts)
+	return fetch(ctx, path, opts)
 }
 
-func FetchStructure(date time.Time, title int, opts ...FetchOption) (*Structure, error) {
+func FetchStructure(ctx context.Context, date time.Time, title int, opts ...FetchOption) (*Structure, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date.Format("2006-01-02"), title))
 	if err != nil {
 		return nil, err
 	}
-	sbody, err := fetch(path, opts)
+	sbody, err := fetch(ctx, path, opts)
 	if err != nil {
 		return nil, err
 	}
-	defer sbody.Close()
 	s := &Structure{}
 	sd := json.NewDecoder(sbody)
 	if err := sd.Decode(s); err != nil {
@@ -84,12 +100,12 @@ func FetchStructure(date time.Time, title int, opts ...FetchOption) (*Structure,
 	return s, nil
 }
 
-func FetchVersions(title int, opts ...FetchOption) (io.ReadCloser, error) {
+func FetchVersions(ctx context.Context, title int, opts ...FetchOption) (io.Reader, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrVersionsXML, title))
 	if err != nil {
 		return nil, err
 	}
-	return fetch(path, opts)
+	return fetch(ctx, path, opts)
 }
 
 type FetchOption interface {
