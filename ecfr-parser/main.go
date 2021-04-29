@@ -1,20 +1,19 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/xml"
 	"flag"
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
 )
 
@@ -104,15 +103,15 @@ func main() {
 			log.Fatal(err)
 		}
 		for date, _ := range versions {
+			d, err := time.Parse("2006-01-02", date)
+			if err != nil {
+				log.Fatal(err)
+			}
 			wg.Add(1)
-			go func(ctx context.Context, part string, date string) {
+			go func(ctx context.Context, part string, date time.Time) {
 				defer wg.Done()
-				d, err := time.Parse("2006-01-02", date)
-				if err != nil {
-					log.Fatal(err)
-				}
-				handlePart(ctx, part, d)
-			}(ctx, part, date)
+				handlePart(ctx, part, date)
+			}(ctx, part, d)
 		}
 	}
 
@@ -120,6 +119,20 @@ func main() {
 }
 
 func handlePart(ctx context.Context, part string, date time.Time) {
+
+	s, err := ecfr.FetchStructure(ctx, date, title, ecfr.Part(part))
+	if err != nil {
+		log.Fatal("[ERROR] ", err, date, part)
+		return
+	}
+
+	reg := &eregs.Part{
+		Title:     strconv.Itoa(title),
+		Name:      part,
+		Date:      date.Format("2006-01-02"),
+		Structure: s,
+		Document:  &parseXML.Part{},
+	}
 
 	body, err := ecfr.FetchFull(ctx, date, title, ecfr.Part(part))
 	if err != nil {
@@ -130,67 +143,33 @@ func handlePart(ctx context.Context, part string, date time.Time) {
 		log.Fatal(err)
 	}
 
-	log.Println("[DEBUG] parsing", date, part)
-	p, err := parseXML.ParsePart(body)
-	if err != nil {
+	d := xml.NewDecoder(body)
+
+	if err := d.Decode(reg.Document); err != nil {
+		log.Fatal(err)
+	}
+
+	if reg.Document == nil {
+		log.Fatal("[ERROR] nil part", date, part)
+	}
+
+	if err := reg.Document.PostProcess(); err != nil {
 		log.Fatal("[ERROR] ", err, date, part)
 		return
 	}
 
-	if err := p.PostProcess(); err != nil {
-		log.Fatal("[ERROR] ", err, date, part)
-		return
-	}
-
-	s, err := ecfr.FetchStructure(ctx, date, title, ecfr.Part(part))
+	resp, err := eregs.PostPart(ctx, reg)
 	if err != nil {
-		log.Fatal("[ERROR] ", err, date, part)
-		return
-	}
 
-	p.Structure = s
-
-	if p == nil {
-		log.Fatal("[ERROR] nil part", p, s, date, part)
-	}
-
-	buff := bytes.NewBuffer([]byte{})
-	enc := json.NewEncoder(buff)
-	enc.SetEscapeHTML(false)
-	reg := &struct {
-		Title    string         `json:"title"`
-		Name     string         `json:"name"`
-		Date     string         `json:"date"`
-		Document *parseXML.Part `json:"document"`
-	}{
-		strconv.Itoa(title),
-		part,
-		date.Format("2006-01-02"),
-		p,
-	}
-
-	if err := enc.Encode(reg); err != nil {
-		log.Fatal(err)
-	}
-
-	b := buff.Bytes()
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "http://localhost:8080/v2/", bytes.NewReader(b))
-	if err != nil {
-		log.Fatal(err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if resp.StatusCode >= 400 {
-		respb, err := io.ReadAll(resp.Body)
-		if err != nil {
-			log.Fatal(err)
+		if resp != nil {
+			defer resp.Body.Close()
+			response, err := io.ReadAll(resp.Body)
+			if err != nil {
+				log.Println("[ERROR]", err)
+			}
+			log.Println(string(response))
 		}
-		resp.Body.Close()
-		log.Fatal("[ERROR]", resp.StatusCode, string(respb))
+		log.Fatal("[ERROR]", err, date, part)
 	}
+
 }

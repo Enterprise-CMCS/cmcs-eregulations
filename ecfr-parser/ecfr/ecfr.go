@@ -22,6 +22,8 @@ var (
 	ecfrStructureXML = "structure/%s/title-%d.json"
 )
 
+var client = &http.Client{}
+
 func urlMustParse(s string) *url.URL {
 	u, err := url.Parse(s)
 	if err != nil {
@@ -54,7 +56,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		return nil, err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
