@@ -50,9 +50,6 @@ func (pa *PartsArg) Set(s string) error {
 	return nil
 }
 
-// ./a TITLE -s SUBCHAPTER-CHAPTER -p PART1,PART2,...
-// -title TITLE -subchapter CHAP-SUB -parts PART1, PART2
-
 func init() {
 	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")

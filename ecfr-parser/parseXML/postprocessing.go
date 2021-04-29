@@ -28,7 +28,6 @@ func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) 
 		if currentLevel != 0 {
 			return nil, nil
 		}
-		//TODO: if this is not (a) error
 		return pLabel, nil
 	}
 

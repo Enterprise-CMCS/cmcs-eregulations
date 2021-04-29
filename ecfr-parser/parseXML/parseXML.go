@@ -255,7 +255,6 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 type SectionCitation []string
 
 func (sl *SectionCitation) UnmarshalText(data []byte) error {
-	// deal with the - case
 	sections := strings.Split(string(data), "-")
 	for _, section := range sections {
 		*sl = append(*sl, strings.Split(section, ".")...)
