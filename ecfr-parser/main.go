@@ -58,6 +58,7 @@ func init() {
 	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
+	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8080/v2/", "A url specifying where to send eregs parts")
 	flag.Parse()
 
 	if title < 0 {

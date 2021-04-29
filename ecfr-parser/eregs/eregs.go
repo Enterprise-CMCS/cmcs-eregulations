@@ -11,6 +11,8 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
 )
 
+var BaseURL string
+
 var client = &http.Client{}
 
 type Part struct {
@@ -32,7 +34,7 @@ func PostPart(ctx context.Context, p *Part) (*http.Response, error) {
 
 	// b := buff.Bytes()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "http://localhost:8080/v2/", buff)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, BaseURL, buff)
 	if err != nil {
 		return nil, err
 	}
