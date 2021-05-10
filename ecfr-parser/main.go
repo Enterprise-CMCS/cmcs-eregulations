@@ -112,6 +112,20 @@ func main() {
 	}
 }
 
+func determineParents(node *ecfr.Structure, subpart string) {
+	node.ParentSubpart = subpart
+
+	if node.Type == "subpart" {
+		if node.Identifier != nil {
+			subpart = node.Identifier[0]
+		}
+	}
+
+	for _, child := range node.Children {
+		determineParents(child, subpart)
+	}
+}
+
 func handlePart(ctx context.Context, reg *eregs.Part) error {
 
 	sbody, err := ecfr.FetchStructure(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
@@ -123,6 +137,8 @@ func handlePart(ctx context.Context, reg *eregs.Part) error {
 	if err := sd.Decode(reg.Structure); err != nil {
 		return err
 	}
+
+	determineParents(reg.Structure, "")
 
 	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {

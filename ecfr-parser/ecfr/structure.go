@@ -17,6 +17,7 @@ type Structure struct {
 	Type             string           `json:"type"`
 	Children         []*Structure     `json:"children"`
 	DescendantRange  RangeString      `json:"descendant_range"`
+	ParentSubpart    string           `json:"parent_subpart"`
 }
 
 type RangeString []string
