@@ -16,7 +16,7 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
 )
 
-const TIMELIMIT = 160 * time.Second
+const TIMELIMIT = 600 * time.Second
 
 var (
 	title           int

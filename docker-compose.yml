@@ -10,26 +10,6 @@ services:
       - 5432:5432
     volumes:
       - eregs-data:/var/lib/postgresql/data
-  regulations-parser:
-    build:
-      context: ./regulations-parser
-      dockerfile: Dockerfile.local
-    volumes:
-      - ./regulations-parser:/app/src
-      - ./output:/app/output
-      - eregs-cache:/app/cache
-    environment:
-      PYTHONUNBUFFERED: "1"
-      CORE_USER: ${CORE_USER}
-      CORE_PASSWORD: ${CORE_PASSWORD}
-      REGS_GOV_KEY: ${REGS_GOV_KEY}
-      DATABASE_URL: sqlite:////app/cache/db.sqlite
-      EREGS_CACHE_DIR: /app/cache
-      EREGS_OUTPUT_DIR: /app/output
-    working_dir: /app/src
-    command: "tail -f /dev/null"
-    links:
-      - regulations-core
   regulations-core:
     build:
       context: ${CORE_CONTEXT:-./regulations-core}
