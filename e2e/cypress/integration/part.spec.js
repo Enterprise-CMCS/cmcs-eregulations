@@ -9,7 +9,7 @@ describe("Part View", () => {
         cy.get(".toc-section-number").contains("433.50").click()
 
         cy.url().should("include", Cypress.config().baseUrl + "/433/Subpart-B");
-        cy.get("h1.section-title")
+        cy.get("h2.section-title")
             .contains("433.50 Basis, scope, and applicability.")
             .should("be.visible");
     });
@@ -18,25 +18,20 @@ describe("Part View", () => {
         cy.visit("/433/");
         cy.contains("433.51").click()
 
-        cy.contains("Subpart View").click();
-
         cy.url().should("include", "Subpart-B");
-        cy.get("h1.section-title")
-            .contains("General Administrative Requirements State Financial Participation")
+        cy.findByRole("heading", {level: 1, name: "Subpart B - General Administrative Requirements State Financial Participation"})
             .should("be.visible");
     });
 
     it("loads a part view", () => {
         cy.visit("/433/");
-        cy.findByRole("link", { name: "§ 433.51 Public Funds as the State share of financial participation." }).click()
-
-        cy.get("a").contains("Part View").click();
+        cy.findByRole("link", { name: "433.1 Purpose." }).click()
 
         // goes to first part of the appropriate subpart (this is odd)
-        cy.url().should("include", "#433-50");
-        cy.findByRole("heading", {level: 1, name: "PART 433—STATE FISCAL ADMINISTRATION"}).should("be.visible");
-        cy.findByRole("heading", {level: 1, name: "§ 433.50 Basis, scope, and applicability."}).should("be.visible");
-        cy.findByRole("heading", {level: 1, name: "§ 433.10 Rates of FFP for program services."}).should("be.visible");
+        cy.url().should("include", "#433-1");
+        cy.findByRole("heading", {level: 1, name: "PART 433 - STATE FISCAL ADMINISTRATION"}).should("be.visible");
+        cy.findByRole("heading", {level: 2, name: "§ 433.50 Basis, scope, and applicability."}).should("be.visible");
+        cy.findByRole("heading", {level: 2, name: "§ 433.10 Rates of FFP for program services."}).should("be.visible");
     });
 
     it("loads a different version of a subpart", () => {
@@ -47,8 +42,8 @@ describe("Part View", () => {
         cy.findByRole("button", {name: /View and Compare/i}).click();
         cy.get(".view-and-compare").should("be.visible");
         
-        cy.get("#view-options").select("2019-10-01");
-        cy.url().should("include", "2019-annual-433")
+        cy.get("#view-options").select("2017-01-20");
+        cy.url().should("include", "2017-01-20")
 
         cy.get(".close-button").click()
         cy.get(".view-and-compare").should("not.be.visible");

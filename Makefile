@@ -34,7 +34,8 @@ local.docker:
 
 local.regulations-core: ## Run migrations and restart the regulations-core
 	docker-compose exec regulations-core python manage.py migrate; \
-		docker-compose restart regulations-core;
+		docker-compose restart regulations-core; \
+		sleep 5;
 
 ecfr-parser/build/ecfr-parser: ecfr-parser/*.go
 	cd ecfr-parser; go build -o build/ecfr-parser .
@@ -66,7 +67,7 @@ local.start: ## Start the local environment if stopped using `make local.stop`
 
 local.clean: ## Remove the local environment entirely.
 	docker-compose down
-	docker volume rm cmcs-eregulations_eregs-cache
+	docker volume rm cmcs-eregulations_eregs-data
 
 test: ## run the cypress e2e suite
-	docker-compose up e2e
+	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
