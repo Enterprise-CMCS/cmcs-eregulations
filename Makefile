@@ -51,12 +51,10 @@ data.dev: CORE_URL = https://w1tu417grc.execute-api.us-east-1.amazonaws.com/dev/
 
 data.local: ## Load a Part of Title 42. e.g. make data.local.435 will load Part 435
 data.local: CORE_URL = http://localhost:8080/v2/
-data.local: EREGS_USERNAME = RpSS01rhbx
-data.local: EREGS_PASSWORD = UkOAsfkItN
+data.local: export EREGS_USERNAME=RpSS01rhbx
+data.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%: ecfr-parser/build/ecfr-parser
-	EREGS_USERNAME=$(EREGS_USERNAME) \
-	EREGS_PASSWORD=$(EREGS_PASSWORD) \
 	./ecfr-parser/build/ecfr-parser -title 42 -subchapter IV-C -parts 457,460 -eregs-url $(CORE_URL)
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
