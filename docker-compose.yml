@@ -10,26 +10,6 @@ services:
       - 5432:5432
     volumes:
       - eregs-data:/var/lib/postgresql/data
-  regulations-parser:
-    build:
-      context: ./regulations-parser
-      dockerfile: Dockerfile.local
-    volumes:
-      - ./regulations-parser:/app/src
-      - ./output:/app/output
-      - eregs-cache:/app/cache
-    environment:
-      PYTHONUNBUFFERED: "1"
-      CORE_USER: ${CORE_USER}
-      CORE_PASSWORD: ${CORE_PASSWORD}
-      REGS_GOV_KEY: ${REGS_GOV_KEY}
-      DATABASE_URL: sqlite:////app/cache/db.sqlite
-      EREGS_CACHE_DIR: /app/cache
-      EREGS_OUTPUT_DIR: /app/output
-    working_dir: /app/src
-    command: "tail -f /dev/null"
-    links:
-      - regulations-core
   regulations-core:
     build:
       context: ${CORE_CONTEXT:-./regulations-core}
@@ -40,6 +20,8 @@ services:
     environment:
       ALLOWED_HOST: regulations-core
       DJANGO_SETTINGS_MODULE: regcore.settings.pgsql
+      HTTP_AUTH_USER: RpSS01rhbx
+      HTTP_AUTH_PASSWORD: UkOAsfkItN
       PYTHONPATH: /var/lib/eregs
     ports:
       - 8080:8080
@@ -61,6 +43,7 @@ services:
       PYTHONPATH: /var/lib/eregs
       STATIC_URL: http://localhost:8888/
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
+      DEBUG: "True"
     ports:
       - 8000:8000
     links:
@@ -72,18 +55,5 @@ services:
     volumes:
       - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
       - ./regulations-site/regulations/static/regulations:/usr/share/nginx/html
-  e2e:
-    image: cypress/included:7.0.1
-    container_name: cypress
-    network_mode: host
-    depends_on:
-      - regulations-site
-    environment:
-      - CYPRESS_baseUrl=http://localhost:8000
-    working_dir: /app
-    command: npx cypress run
-    volumes:
-      - ./e2e:/app
 volumes:
-  eregs-cache:
   eregs-data:
