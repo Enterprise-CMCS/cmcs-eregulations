@@ -41,13 +41,13 @@ ecfr-parser/build/ecfr-parser: ecfr-parser/*.go
 	cd ecfr-parser; go build -o build/ecfr-parser .
 
 data.prod: ## Load a Part of Title 42. e.g. make data.prod.435 will load Part 435 into prod
-data.prod: CORE_URL = https://5jk91taqo5.execute-api.us-east-1.amazonaws.com/prod
+data.prod: CORE_URL = https://5jk91taqo5.execute-api.us-east-1.amazonaws.com/prod/v2/
 
 data.val: ## Load a Part of Title 42. e.g. make data.val.435 will load Part 435 into val
-data.val: CORE_URL = https://0pu9rqbvjd.execute-api.us-east-1.amazonaws.com/val
+data.val: CORE_URL = https://0pu9rqbvjd.execute-api.us-east-1.amazonaws.com/val/v2/
 
 data.dev: ## Load a Part of Title 42. e.g. make dev.data.435 will load Part 435 into dev
-data.dev: CORE_URL = https://w1tu417grc.execute-api.us-east-1.amazonaws.com/dev
+data.dev: CORE_URL = https://w1tu417grc.execute-api.us-east-1.amazonaws.com/dev/v2/
 
 data.local: ## Load a Part of Title 42. e.g. make data.local.435 will load Part 435
 data.local: CORE_URL = http://localhost:8080/v2/
