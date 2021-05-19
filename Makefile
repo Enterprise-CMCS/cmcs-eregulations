@@ -18,6 +18,11 @@ watch: ## Watch regulations-site static assets and rebuild when they're changed
 	cd regulations-site/regulations/static; \
 		npm run watch-css;
 
+.PHONY: storybook
+storybook: ## Run storybook for regulations-site
+	cd regulations-site/regulations/static; \
+		npm run storybook
+
 .PHONY: sync
 sync: ## Sync the submodules regualtions-site, core, parser
 	git submodule update --init
