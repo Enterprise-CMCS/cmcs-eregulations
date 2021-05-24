@@ -50,7 +50,7 @@ local.regulations-core: ## Run migrations and restart the regulations-core
 		docker-compose restart regulations-core; \
 		sleep 5;
 
-ecfr-parser/build/ecfr-parser: ecfr-parser/*.go
+ecfr-parser/build/ecfr-parser: ecfr-parser/*.go ecfr-parser/**/*.go
 	cd ecfr-parser; go build -o build/ecfr-parser .
 
 data.prod: ## Load a Part of Title 42. e.g. make data.prod.435 will load Part 435 into prod
