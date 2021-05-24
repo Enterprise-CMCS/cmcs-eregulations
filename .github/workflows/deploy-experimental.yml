@@ -25,6 +25,7 @@ jobs:
         run: |
           make regulations-site
           cp -r regulations-site/regulations/static/regulations serverless/static-assets/static
+          rm -r regulations-site/regulations/static/node_modules
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
