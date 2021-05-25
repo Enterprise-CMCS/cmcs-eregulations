@@ -3,7 +3,7 @@ help: ## Show this help.
 	@egrep '^[a-zA-Z_\.%-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 regulations-site: ## Build regulations-site assets
-regulations-site: regulations-site/regulations/static/regulations/css/main.css
+regulations-site: regulations-site/regulations/static/regulations/css/main.css regulations-site/regulations/static/regulations/js/main.build.js
 
 regulations-site/regulations/static/node_modules: regulations-site/regulations/static/package.json
 	cd regulations-site/regulations/static; \
@@ -12,6 +12,14 @@ regulations-site/regulations/static/node_modules: regulations-site/regulations/s
 regulations-site/regulations/static/regulations/css/main.css: regulations-site/regulations/static/node_modules regulations-site/regulations/static/regulations/css/**/*.scss
 	cd regulations-site/regulations/static; \
 		npm run css;
+
+regulations-site/regulations/static/regulations/js/RelatedRule.js: regulations-site/regulations/static/components/*.vue
+	cd regulations-site/regulations/static; \
+		npm run vue;
+
+regulations-site/regulations/static/regulations/js/main.build.js: regulations-site/regulations/static/regulations/js/RelatedRule.js
+	cd regulations-site/regulations/static; \
+		npm run js;
 
 .PHONY: watch
 watch: ## Watch regulations-site static assets and rebuild when they're changed
