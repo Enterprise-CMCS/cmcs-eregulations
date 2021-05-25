@@ -66,6 +66,16 @@ func TestExtractParagraphMarker(t *testing.T) {
 			[]string{"3"},
 			nil,
 		},
+		{
+			"(<I>1</I>) A copy of the disallowance letter. ",
+			[]string{"<I>1</I>"},
+			nil,
+		},
+		{
+			"(<I>ix</I>) A copy of the disallowance letter. ",
+			[]string{"<I>ix</I>"},
+			nil,
+		},
 	}
 	for _, test := range tests {
 		result, err := extractMarker(test.input)
