@@ -34,7 +34,6 @@ services:
     volumes:
       - ${SITE_CONTEXT:-./regulations-site}:/app/src
       - ./config/regulations-site/local_settings.py:/var/lib/eregs/local_settings.py
-      - ./sidebars:/var/lib/eregs/cmcs/regulations/sidebars
       - ./custom_templates:/var/lib/eregs/cmcs/custom_templates/regulations
       - ./content/regulations_landing_pages:/var/lib/eregs/cmcs/landing_pages/regulations/partials
       - ./content/supplementary_content:/var/lib/eregs/cmcs/content
