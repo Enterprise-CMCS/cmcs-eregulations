@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-var re = regexp.MustCompile(`^\(([^\)]{1,3})\)(?:(?: ?<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?(?: ?(?:<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?`)
+var re = regexp.MustCompile(`^\(([^\)]+)\)(?:(?: ?<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?(?: ?(?:<I>[^<]+<\/I>(?: ?-)?)? ?\(([^\)]{1,3})\))?`)
 
 func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) {
 	citation := []string{}
@@ -77,8 +77,8 @@ var alpha = regexp.MustCompile(`([a-z])`)
 var num = regexp.MustCompile(`(\d+)`)
 var roman = regexp.MustCompile(`(x|ix|iv|v|vi{1,3}|i{1,3})`)
 var upper = regexp.MustCompile(`([A-Z])`)
-var italic_num = regexp.MustCompile(`(<I>\d+</I>)`)
-var italic_roman = regexp.MustCompile(`<I>(ix|iv|v|vi{1,3}|i{1,3})</I>`)
+var italic_num = regexp.MustCompile(`(<I>\d+<\/I>)`)
+var italic_roman = regexp.MustCompile(`<I>(ix|iv|v|vi{1,3}|i{1,3})<\/I>`)
 
 var paragraphHeirarchy = []*regexp.Regexp{
 	alpha,
