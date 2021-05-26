@@ -22,9 +22,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
-SIDEBARS = (
-    'cmcs.regulations.sidebars.guidance.Guidance',
-)
+SIDEBARS = ()
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
@@ -44,7 +42,6 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
-                "regulations.context.eregs_globals",
             ),
             # List of callables that know how to import templates from various
             # sources.
@@ -55,7 +52,6 @@ TEMPLATES = [
         },
         "DIRS": [
             "%s/templates" % BASE_DIR,
-            '%s/cmcs/regulations/sidebars/guidance/templates' % WORKING_DIR,
             '%s/cmcs/custom_templates' % WORKING_DIR,
             '%s/cmcs/landing_pages' % WORKING_DIR,
         ],
