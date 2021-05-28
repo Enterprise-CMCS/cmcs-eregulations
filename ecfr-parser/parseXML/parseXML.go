@@ -176,7 +176,7 @@ func (s *Section) PostProcess() error {
 			} else {
 				prev = c
 			}
-			c.Identifier, err = c.Marker()
+			c.Marker, err = c.marker()
 			if err != nil {
 				log.Println("[ERROR] generating paragraph marker", err, prev, c)
 			}
@@ -301,13 +301,13 @@ var ErrNoParents = errors.New("no parents found for this paragraph")
 var ErrWrongParent = errors.New("the parent found was of the wrong type")
 
 type Paragraph struct {
-	Type       string   `json:"node_type"`
-	Content    string   `xml:",innerxml" json:"text"`
-	Citation   []string `json:"label"`
-	Identifier []string `json:"marker"`
+	Type     string   `json:"node_type"`
+	Content  string   `xml:",innerxml" json:"text"`
+	Citation []string `json:"label"`
+	Marker   []string `json:"marker"`
 }
 
-func (p *Paragraph) Marker() ([]string, error) {
+func (p *Paragraph) marker() ([]string, error) {
 	return extractMarker(p.Content)
 }
 
@@ -315,7 +315,7 @@ func (p *Paragraph) Level() int {
 	if p.Citation != nil {
 		return len(p.Citation) - 1
 	}
-	m, err := p.Marker()
+	m, err := p.marker()
 	if err != nil {
 		log.Println("[ERROR]", err.Error())
 		return -1

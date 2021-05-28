@@ -9,7 +9,7 @@ var re = regexp.MustCompile(`^\(([^\)]+)\)(?:(?: ?<I>[^<]+<\/I>(?: ?-)?)? ?\(([^
 
 func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) {
 	citation := []string{}
-	pLabel, err := p.Marker()
+	pLabel, err := p.marker()
 	if err != nil {
 		return citation, err
 	}
