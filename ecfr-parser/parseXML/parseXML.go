@@ -176,6 +176,10 @@ func (s *Section) PostProcess() error {
 			} else {
 				prev = c
 			}
+			c.Marker, err = c.marker()
+			if err != nil {
+				log.Println("[ERROR] generating paragraph marker", err, prev, c)
+			}
 
 		}
 	}
@@ -268,8 +272,8 @@ type Extract struct {
 }
 
 type Citation struct {
-	Type    string
-	Content string `xml:",innerxml"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type Source struct {
@@ -300,9 +304,10 @@ type Paragraph struct {
 	Type     string   `json:"node_type"`
 	Content  string   `xml:",innerxml" json:"text"`
 	Citation []string `json:"label"`
+	Marker   []string `json:"marker"`
 }
 
-func (p *Paragraph) Marker() ([]string, error) {
+func (p *Paragraph) marker() ([]string, error) {
 	return extractMarker(p.Content)
 }
 
@@ -310,7 +315,7 @@ func (p *Paragraph) Level() int {
 	if p.Citation != nil {
 		return len(p.Citation) - 1
 	}
-	m, err := p.Marker()
+	m, err := p.marker()
 	if err != nil {
 		log.Println("[ERROR]", err.Error())
 		return -1
