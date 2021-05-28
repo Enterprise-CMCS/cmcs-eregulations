@@ -5,6 +5,9 @@ on:
 
 jobs:
   deploy:
+    environment:
+      name: "dev"
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     steps:
       - name: get branch name
@@ -22,6 +25,7 @@ jobs:
         run: |
           make regulations-site
           cp -r regulations-site/regulations/static/regulations serverless/static-assets/static
+          rm -r regulations-site/regulations/static/node_modules
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
@@ -46,5 +50,6 @@ jobs:
           pushd serverless/regulations-site
           npm install serverless -g
           npm install
-          serverless deploy --config ./serverless-experimental.yml --stage dev-$branch_name
+          serverless deploy --config ./serverless-experimental.yml --stage dev-$branch_name | tee output.log
+          echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd

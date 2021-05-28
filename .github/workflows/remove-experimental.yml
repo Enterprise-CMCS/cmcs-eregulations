@@ -5,6 +5,8 @@ on:
 
 jobs:
   remove:
+    environment:
+      name: "dev"
     runs-on: ubuntu-latest
     steps:
       - name: get branch name
