@@ -9,7 +9,7 @@ describe("Homepage", () => {
         cy.contains("430").click()
 
         cy.url().should('eq', Cypress.config().baseUrl + '/430/')
-        cy.contains("This is the default landing view content to be displayed if no overrides exist.")
+        cy.contains("Grants to States for Medical Assistance Programs")
     });
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
