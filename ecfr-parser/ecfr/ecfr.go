@@ -66,7 +66,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 			time.Sleep(2 * time.Second)
 			return fetch(ctx, path, opts)
 		}
-		return nil, fmt.Errorf("%d", resp.StatusCode)
+		return nil, fmt.Errorf("%s %d", u.String(), resp.StatusCode)
 	}
 	defer resp.Body.Close()
 	b, err := io.ReadAll(resp.Body)
