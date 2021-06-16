@@ -68,7 +68,7 @@ data.local: export EREGS_USERNAME=RpSS01rhbx
 data.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%: ecfr-parser/build/ecfr-parser
-	./ecfr-parser/build/ecfr-parser -title 42 -subchapter IV-C -parts 457,460 -eregs-url $(CORE_URL)
+	./ecfr-parser/build/ecfr-parser -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL)
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker-compose stop
