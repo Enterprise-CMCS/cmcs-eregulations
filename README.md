@@ -4,6 +4,8 @@ This is part of a one-year pilot project for the Center for Medicaid and CHIP Se
 
 Our related repositories with forks of eRegs code: [regulations-core](https://github.com/CMSgov/regulations-core), [regulations-parser](https://github.com/CMSgov/regulations-parser), [regulations-site](https://github.com/CMSgov/regulations-site).
 
+We have public documentation about our product, design, and research processes in [this repository wiki](https://github.com/CMSgov/cmcs-eregulations/wiki).
+
 # Prerequisites
 - Docker
 - Docker Compose
