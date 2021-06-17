@@ -19,7 +19,6 @@ services:
       - ./config/regulations-core/local_settings.py:/var/lib/eregs/local_settings.py
     environment:
       ALLOWED_HOST: regulations-core
-      DJANGO_SETTINGS_MODULE: regcore.settings.pgsql
       HTTP_AUTH_USER: RpSS01rhbx
       HTTP_AUTH_PASSWORD: UkOAsfkItN
       PYTHONPATH: /var/lib/eregs
