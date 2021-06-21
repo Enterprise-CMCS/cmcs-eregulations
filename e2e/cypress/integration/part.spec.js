@@ -38,8 +38,8 @@ describe("Part View", () => {
         cy.visit("/433/");
         cy.contains("433.10").click()
 
-        cy.findByRole("button", {name: /View and Compare/i}).should("be.visible");
-        cy.findByRole("button", {name: /View and Compare/i}).click();
+        cy.findByRole("button", {name: /View Past Versions/i}).should("be.visible");
+        cy.findByRole("button", {name: /View Past Version/i}).click();
         cy.get(".view-and-compare").should("be.visible");
         
         cy.get("#view-options").select("2017-01-20");
