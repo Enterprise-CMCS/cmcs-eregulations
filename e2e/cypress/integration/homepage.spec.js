@@ -3,7 +3,7 @@ describe("Homepage", () => {
         cy.visit("/");
         cy.injectAxe()
         cy.contains("Medicaid & CHIP Regulations");
-        cy.checkA11y();
+        cy.checkAccessibility();
     });
 
     it("clicks on part 430 and loads the page", () => {
