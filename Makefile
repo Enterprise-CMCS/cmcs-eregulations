@@ -28,6 +28,7 @@ watch: ## Watch regulations-site static assets and rebuild when they're changed
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations-site
+storybook: regulations-site/regulations/static/node_modules
 	cd regulations-site/regulations/static; \
 		npm run storybook
 
