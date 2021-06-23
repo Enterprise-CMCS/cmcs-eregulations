@@ -3,7 +3,7 @@ import os
 import sys
 
 def handler(event, context):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "regcore.settings.pgsql") 
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "regcore.settings") 
     import django
     django.setup()
 
