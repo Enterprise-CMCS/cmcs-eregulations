@@ -122,10 +122,18 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 }
 
 type SubjectGroup struct {
-	Header   string               `xml:"HEAD" json:"title"`
+	Header   XMLString            `xml:"HEAD" json:"title"`
 	Citation SectionCitation      `xml:"N,attr" json:"label"`
 	Type     string               `xml:"TYPE,attr" json:"node_type"`
 	Children SubjectGroupChildren `xml:",any" json:"children"`
+}
+
+type XMLString struct {
+	Content string `xml:",innerxml"`
+}
+
+func (xs XMLString) MarshalText() ([]byte, error) {
+	return []byte(xs.Content), nil
 }
 
 func (sg *SubjectGroup) PostProcess() error {
@@ -146,6 +154,12 @@ func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartEleme
 	switch start.Name.Local {
 	case "DIV8":
 		child := &Section{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "FTNT":
+		child := &FootNote{Type: "FootNote"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
@@ -248,6 +262,12 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "FTNT":
+		child := &FootNote{Type: "FootNote"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	default:
 		log.Printf("[WARNING] Unknown XML type in Section: %+v\n", start)
 		d.Skip()
@@ -295,6 +315,11 @@ type FlushParagraph struct {
 type Image struct {
 	Type   string
 	Source string `xml:"src,attr"`
+}
+
+type FootNote struct {
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 var ErrNoParents = errors.New("no parents found for this paragraph")
