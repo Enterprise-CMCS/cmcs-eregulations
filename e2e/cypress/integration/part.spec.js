@@ -1,7 +1,9 @@
 describe("Part View", () => {
     it("loads part 433", () => {
         cy.visit("/433/");
+        cy.injectAxe()
         cy.contains("State Fiscal Administration").should("be.visible");
+        cy.checkAccessibility();
     });
 
     it("section view redirects", () => {
