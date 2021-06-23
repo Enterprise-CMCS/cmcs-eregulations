@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
@@ -96,6 +97,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	var wg sync.WaitGroup
 	for _, part := range parts {
 		for date := range versions[part] {
 			reg := &eregs.Part{
@@ -105,11 +108,16 @@ func main() {
 				Structure: &ecfr.Structure{},
 				Document:  &parseXML.Part{},
 			}
-			if err := handlePart(ctx, reg); err != nil {
-				log.Fatal(err)
-			}
+			wg.Add(1)
+			go func(ctx context.Context, reg *eregs.Part) {
+				defer wg.Done()
+				if err := handlePart(ctx, reg); err != nil {
+					log.Println("[ERROR]", err)
+				}
+			}(ctx, reg)
 		}
 	}
+	wg.Wait()
 }
 
 func handlePart(ctx context.Context, reg *eregs.Part) error {

@@ -12,9 +12,9 @@ describe("Search flow", () => {
     it("displays results of the search", () => {
         cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByText(/\d+ results, displayed by relevance/).should("be.visible");
-        cy.findByRole("link", {name: "§ 438.12 Provider discrimination prohibited."}).should("be.visible").and('have.attr', 'href');
-        cy.findByRole("link", {name: "§ 438.12 Provider discrimination prohibited."}).click();
-        cy.url().should("include", "/438/Subpart-A/2021-04-29/#438-12-a-1");
+        cy.findByRole("link", {name: "§ 431.958 Definitions and use of terms."}).should("be.visible").and('have.attr', 'href');
+        cy.findByRole("link", {name: "§ 431.958 Definitions and use of terms."}).click({force: true});
+        cy.url().should("include", "/431/Subpart-Q/2020-06-30/#431-958");
     });
     
     it("links to a search in the eCFR", () => {
@@ -24,27 +24,32 @@ describe("Search flow", () => {
     
     it("should have a working searchbox", () => {
         cy.visit("/search/?q=State", { timeout: 60000 });
-        cy.findByPlaceholderText("State")
-        .should("be.visible")
-        .type("test");
+        cy.scrollTo("top");
+        cy.get(".search-reset").click({force: true});
+        cy.findByRole("textbox")
+          .should("be.visible")
+          .type("test", {force: true});
         cy.get("main .search-box").submit();
         cy.url().should("include", "/search/?q=test");
     });
     
     it("should be able to clear the searchbox", () => {
         cy.visit("/search/?q=State", { timeout: 60000 });
+        cy.scrollTo("top");
         
-        cy.findByPlaceholderText("State")
-        .should("be.visible")
-        .type("test");
+        cy.get(".search-reset").click({force: true});
+
+        cy.findByRole("textbox")
+          .should("be.visible")
+          .type("test", {force: true});
         
         cy.findByDisplayValue("test")
-        .should("be.visible")
-        .should("have.value", "test");
+          .should("be.visible")
+          .should("have.value", "test");
+
+        cy.get(".search-reset").click({force: true});
         
-        cy.get(".search-reset").click();
-        
-        cy.findByPlaceholderText("State")
-        .should("have.value", "");
+        cy.findByRole("textbox")
+          .should("have.value", "");
     });
 });
