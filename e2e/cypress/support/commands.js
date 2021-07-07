@@ -43,6 +43,6 @@ Cypress.Commands.add(
     prevSubject: 'optional',
   },
   (subject, { skipFailures = false } = {}) => {
-    cy.checkA11y(subject, null, printA11yViolations, skipFailures);
+    cy.checkA11y(subject, { includedImpacts: ['critical', 'serious']}, printA11yViolations, skipFailures);
   },
 );
