@@ -1,7 +1,9 @@
 describe("Homepage", () => {
     it("loads the homepage", () => {
         cy.visit("/");
+        cy.injectAxe()
         cy.contains("Medicaid & CHIP Regulations");
+        cy.checkAccessibility();
     });
 
     it("clicks on part 430 and loads the page", () => {
