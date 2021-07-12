@@ -39,7 +39,7 @@ INSTALLED_APPS = [
 
     'regcore',
     'regcore.search',
-    'regcore.supplementary_content',
+    'supplementary_content',
     'regulations',
 ]
 
