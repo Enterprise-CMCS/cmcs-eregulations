@@ -1,7 +1,9 @@
 describe("Part View", () => {
     it("loads part 433", () => {
         cy.visit("/42/433/");
+        cy.injectAxe()
         cy.contains("State Fiscal Administration").should("be.visible");
+        cy.checkAccessibility();
     });
 
     it("section view redirects", () => {
@@ -41,7 +43,6 @@ describe("Part View", () => {
         cy.findByRole("button", {name: /View Past Versions/i}).should("be.visible");
         cy.findByRole("button", {name: /View Past Versions/i}).click({force: true});
         cy.get(".view-and-compare").should("be.visible");
-        
         cy.get("#view-options").select("1/20/2017", {force: true});
         cy.url().should("include", "2017-01-20")
 
