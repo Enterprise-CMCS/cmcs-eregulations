@@ -23,7 +23,7 @@ describe("Search flow", () => {
     });
 
     it("checks a11y for search page", () => {
-        cy.visit("/search/?q=State", { timeout: 60000 });
+        cy.visit("/search/?q=FMAP", { timeout: 60000 });
         cy.injectAxe();
         cy.checkAccessibility();
     });

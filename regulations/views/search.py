@@ -3,6 +3,7 @@ from datetime import date
 from django.views.generic.base import TemplateView
 
 from regulations.generator.api_reader import ApiReader
+from regcore.models import Part
 from .utils import get_structure
 
 client = ApiReader()
@@ -16,7 +17,7 @@ class SearchView(TemplateView):
         context = super().get_context_data(**kwargs)
         results = get_data(self.request.GET.get("q"))
         today = date.today()
-        parts = client.effective_parts(today)
+        parts = Part.objects.effective(today)
         structure = get_structure(parts)
         c = {
             'parts': parts,

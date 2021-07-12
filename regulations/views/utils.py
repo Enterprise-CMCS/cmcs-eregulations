@@ -37,7 +37,7 @@ def merge_children(one, two):
 
 
 def get_structure(parts):
-    structure = [parts[0]['structure']]
+    structure = [parts[0].structure]
     for part in parts[1:]:
-        merge_children(structure, part['structure'])
+        merge_children(structure, part.structure)
     return structure
