@@ -77,18 +77,11 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
             ),
-            # List of callables that know how to import templates from various
-            # sources.
-            "loaders": [
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-            ],
         },
         "DIRS": [
-            "%s/templates" % BASE_DIR,
-            '%s/cmcs/custom_templates' % WORKING_DIR,
-            '%s/cmcs/landing_pages' % WORKING_DIR,
+            BASE_DIR / 'templates',
         ],
+        "APP_DIRS": True,
     },
 ]
 
