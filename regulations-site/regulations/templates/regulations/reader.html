@@ -1,0 +1,27 @@
+{% extends "regulations/base.html" %}
+{% load static %}
+{% load render_nested %}
+
+{% block body %}
+    <div class="content">
+        {% include "regulations/partials/view-and-compare.html" %}
+        <div class="flexbox">
+            <aside class="left-sidebar match-sides" data-state="expanded" data-state-name="left-sidebar">
+                {% include "regulations/partials/sidebar_left/subpart.html" %}
+            </aside>
+
+            <main class="reg-text match-middle">
+                {% include "regulations/partials/node_types/node.html" with node=tree %}
+                {% include "regulations/partials/navigation.html" %}
+            </main>
+
+            <aside class="right-sidebar match-sides">
+                {% include "regulations/partials/sidebar_right.html" %}
+            </aside>
+        </div>
+    </div>
+{% endblock %}
+
+{% block post_footer %}
+    <script src="{% static '/js/main.build.js' %}"></script>
+{% endblock %}

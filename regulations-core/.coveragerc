@@ -1,0 +1,12 @@
+[report]
+omit =
+    bin/*
+    develop-eggs/*
+    eggs/*
+    */site-packages/*
+exclude_lines = 
+    pragma: no cover
+
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError

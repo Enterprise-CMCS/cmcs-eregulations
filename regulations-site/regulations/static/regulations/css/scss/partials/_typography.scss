@@ -1,0 +1,37 @@
+
+//--------------------------------------------------
+// Typography
+//
+// Use CMS Design System Sizes, i.e. $font-size-2xl
+//--------------------------------------------------
+
+@import "../application_settings";
+
+html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: $white;
+    color: $primary_text_color;
+    font-family: $primary_site_font;
+    line-height: $base-line-height;
+}
+
+h1 {
+    font-size: $font-size-3xl;
+    font-family: $secondary_site_font;
+    margin-bottom: $spacer-5;
+    margin-top: 0;
+}
+
+h2 {
+    font-size: $font-size-2xl;
+    font-weight: bold;
+    font-family: $secondary_site_font;
+}
+
+su {
+   vertical-align: super
+}

@@ -1,0 +1,17 @@
+{% comment %}
+    Prototype for latest changes display
+{% endcomment %}
+
+{% load site_statistics %}
+
+<div class="last-update-external">Regulations last updated from <a href="https://ecfr.federalregister.gov" target="_blank" class="external">eCFR</a> on {% last_updated%}.</div>
+
+<div class="latest-changes">
+
+    <h3>Latest Changes to 42 CFR 430-460</h3>
+
+    <related-rules class="related-rules" title="42" part="430-460"></related-rules>
+
+    <p class="see-fr">For more changes, see the <a href="https://www.federalregister.gov/" target="_blank" class="external">Federal Register</a>.</p>
+
+</div>

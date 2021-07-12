@@ -1,0 +1,139 @@
+
+//-----------------------------------------------------------------------------------------
+// Layout
+//-----------------------------------------------------------------------------------------
+
+// We loosely use the CMS Design System grid: https://design.cms.gov/utilities/grid
+
+$collapsed-sidebar-width: 32px;       // Update here if the left sidebar collapsed width changes
+
+header {
+    padding: $spacer-4;
+    border-bottom: 1px solid $primary_color;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.site-container {          
+    display: block; 
+    margin: 0 auto;
+    position: relative;
+    padding: $spacer-3 $spacer-5;
+
+    @include screen-xl {
+        max-width: $width-xl;
+        padding: $spacer-3;
+    }
+
+    @include screen-xxl {
+        max-width: $width-xxl;
+    }
+}
+
+.container {                 
+    max-width: $text-max-width;
+    display: block; 
+    margin: 0 auto;
+}
+
+.flexbox {
+    display: flex;
+    width: 100%;
+}
+
+.match-sides {
+    display: table-cell;
+    width: 260px;
+
+    @include screen-lg {
+        width: 300px;
+    }
+
+    @include screen-xl {
+        width: 350px;
+    }
+
+    @include screen-3xl {
+        width: 500px;
+    }
+}
+
+.match-middle {
+    display: table-cell;
+    width: calc(100% - 520px);
+    padding: 0 $spacer-4;
+
+    @include screen-lg {
+        width: calc(100% - 600px);
+    }
+
+    @include screen-xl {
+        width: calc(100% - 700px);
+        padding: 0 $spacer-4;
+    }
+
+    @include screen-3xl {
+        width: calc(100% - 1000px);
+        padding: 0 $spacer-6;
+    }
+}
+
+main {
+    display: table-cell;
+}
+
+.homepage {
+    display: initial;
+}
+
+aside {
+
+    &.left-sidebar {
+        background: $reverse_background_color;
+        padding: 0;
+        flex-shrink: 0;
+        
+    }
+
+    &.right-sidebar {
+        padding: $spacer-2;
+        border-left: 1px solid $border_color;
+
+        @include screen-xl {
+            padding: $spacer-2 $spacer-4;
+        }
+    }
+
+    &[data-state="collapsed"] + .match-middle {
+        width: calc(100% - 260px - #{$collapsed-sidebar-width}); 
+        padding: 0 $spacer-4;
+
+        @include screen-lg {
+            width: calc(100% - 300px - #{$collapsed-sidebar-width});
+        }
+
+        @include screen-xl {
+            width: calc(100% - 400px - #{$collapsed-sidebar-width});
+            padding: 0 $spacer-6;
+        }
+
+        @include screen-3xl {
+            width: calc(100% - 500px - #{$collapsed-sidebar-width});
+        }
+    }
+}
+
+footer {
+
+    .footer-left {
+        padding: 0;
+    }
+}

@@ -1,0 +1,39 @@
+{% load static %}
+
+{% block controls %}
+    <div class="toc-controls">
+        <button data-set-state="collapsed" data-state-name="left-sidebar" aria-label="collapse the left sidebar">
+            <img src="{% static 'images/sidebar-collapse.svg' %}" alt="arrow pointing left" />
+            <span>Collapse</span>
+        </button>
+        <button data-set-state="expanded" data-state-name="left-sidebar" aria-label="expand the left sidebar">
+            <img src="{% static 'images/sidebar-expand.svg' %}" alt="arrow pointing right" />
+        </button>
+    </div>
+{% endblock %}
+
+{% block jump-to %}
+    <div class="jump-to">
+        <div class="jump-to-label">Jump to Regulation Section</div>
+
+        <form method="GET" action="{% url 'goto' %}">
+        <input name="{{ reg_part }}-version" type="hidden" required value={{ version }}>
+        <input name="title" type="hidden" required value={{ title }}>
+
+            <div class="jump-to-input">
+                § <select name="part" class="ds-c-field" aria-label="Regulation part number">
+                    {% for part in parts %}
+                    <option value="{{ part.name }}" {% if reg_part == part.name %}selected{% endif %}>{{ part.name }}</option>
+                    {% endfor %}
+                </select>
+                <span class="dot">.</span> <input class="number-box ds-c-field" name="section" placeholder="{{section}}" type="text" pattern="\d+" title="Regulation section number, i.e. 111" aria-label="Regulation section number, i.e. 111">
+            </div>
+
+            <input class="submit" type="submit" value="Go">
+        </form>
+    </div>
+{% endblock %}
+
+<nav role="navigation">
+    {% block navigation %}{% endblock %}
+</nav>

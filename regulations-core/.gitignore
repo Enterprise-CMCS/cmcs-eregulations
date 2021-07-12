@@ -1,0 +1,8 @@
+*.py[co]
+*.swp
+eregs.db
+regcore.egg-info/
+.coverage
+.tox
+local_settings.py
+docs/_build/

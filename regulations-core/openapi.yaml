@@ -1,0 +1,1366 @@
+openapi: "3.0.3"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "eRegs Core API"
+  termsOfService: ""
+  license:
+    name: "CC0"
+    url: ""
+servers:
+  - url: "http://localhost:8080"
+    description: "locally running api"
+tags:
+- name: "regulations"
+  description: "Getting whole things"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+paths:
+  /regulation:
+    get:
+      tags:
+      - "regulation"
+      summary: "List part versions"
+      description: "List part version"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionList"
+        "400":
+          description: "Invalid status value"
+  /regulation/{label_id}:
+    get:
+      parameters:
+        - name: "label_id"
+          in: "path"
+          description: "The part and section to lookup e.g. 400-110"
+          schema: 
+            type: "string"
+          required: true
+      tags:
+      - "regulation"
+      summary: "List versions for the given section"
+      description: "List section versions"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionList"
+        "400":
+          description: "Invalid status value"
+  /regulation/{label_id}/{version_id}:
+    get:
+      parameters:
+        - name: "label_id"
+          in: "path"
+          description: "The part and section to lookup e.g. 400-110"
+          schema: 
+            type: "string"
+          required: true
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema: 
+            type: "string"
+          required: true
+      tags:
+      - "regulation"
+      summary: "Return the regulation section json for the given version"
+      description: "Return the regulation section json for the given version"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Section"
+        "400":
+          description: "Invalid status value"
+  /diff/{label_id}/{old_version}/{new_version}:
+    get:
+      parameters:
+        - name: "label_id"
+          in: "path"
+          description: "The part to diff e.g. 400"
+          schema:
+            type: "string"
+          required: true
+        - name: "old_version"
+          in: "path"
+          description: "The old version to compare with e.g. 2016-09581"
+          schema:
+            type: "string"
+          required: true
+        - name: "new_version"
+          in: "path"
+          description: "The new version to compare with e.g. 2016-27844"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "diff"
+      summary: "Return the diff between two versions of a part"
+      description: "Return the diff between two versions of a part"
+      responses:
+        "200":
+          description: "Successful operation. The example below shows samples of the four possible objects returned, largely depending on the value of `op`. In the case where `op` is `modified`, the contents depend upon the existence of `child_ops`, as shown."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Diff"
+        "400":
+          description: "Invalid input"
+  /layer/{layer_id}/preamble/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "layer_id"
+          in: "path"
+          description: "The name of the layer to retrieve"
+          schema:
+            type: "string"
+          required: true
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve a preamble layer"
+      description: "Retrieve a preamble layer"
+      responses:
+        "200":
+          description: "Successful operation. Value returned depends on the `layer_id`."
+          content:
+            application/json:
+              schema:
+                type: "object"
+        "400":
+          description: "Invalid input"
+  /layer/toc/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve the table of contents for a part"
+      description: "Retrieve the table of contents for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TocLayer"
+        "400":
+          description: "Invalid input"
+  /layer/meta/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve metadata for a part"
+      description: "Retrieve metadata for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetaLayer"
+        "400":
+          description: "Invalid input"
+  /layer/terms/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve terms for a part"
+      description: "Retrieve terms for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TermsLayer"
+        "400":
+          description: "Invalid input"
+  /layer/external-citations/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve external citations for a part"
+      description: "Retrieve external citations for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExternalCitationsLayer"
+        "400":
+          description: "Invalid input"
+  /layer/formatting/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve formatting information for a part"
+      description: "Retrieve formatting information for a part"
+      responses:
+        "200":
+          description: "Successful operation. The existence of each field varies, check the schema for all possibilities."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FormattingLayer"
+        "400":
+          description: "Invalid input"
+  /layer/interpretations/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve interpretations for a part"
+      description: "Retrieve interpretations for a part. Interpretations are a concept specific to the Consumer Financial Protection Bureau, which includes Official Bureau Interpretations sections as appendices to many of its reg parts."
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                type: "object"
+        "400":
+          description: "Invalid input"
+  /layer/keyterms/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve key terms for a part"
+      description: "Retrieve key terms for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KeyTermsLayer"
+        "400":
+          description: "Invalid input"
+  /layer/graphics/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve graphics for a part"
+      description: "Retrieve graphics for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphicsLayer"
+        "400":
+          description: "Invalid input"
+  /layer/internal-citations/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve internal citations for a part"
+      description: "Retrieve internal citations for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalCitationsLayer"
+        "400":
+          description: "Invalid input"
+  /layer/paragraph-markers/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve paragraph markers for a part"
+      description: "Retrieve paragraph markers for a part"
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParagraphMarkersLayer"
+        "400":
+          description: "Invalid input"
+  /layer/analyses/cfr/{version_id}/{label_id}:
+    get:
+      parameters:
+        - name: "version_id"
+          in: "path"
+          description: "The version to lookup e.g. 2020-28567"
+          schema:
+            type: "string"
+          required: true
+        - name: "label_id"
+          in: "path"
+          description: "The part to lookup e.g. 433"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "layer"
+      summary: "Retrieve analyses for a part"
+      description: "Retrieve analyses for a part. This a concept specific to the Consumer Financial Protection Bureau, which includes Section-by-Section Analysis explanations as components of some of their Final Rule documents (within the preamble explaining the rule)."
+      responses:
+        "200":
+          description: "Successful operation."
+          content:
+            application/json:
+              schema:
+                type: "object"
+        "400":
+          description: "Invalid input"
+  /notice:
+      get:
+        tags:
+          - "notice"
+        summary: "Return an array of Notices"
+        description: "Return an array of Notices"
+        responses:
+          "200":
+            description: "Successful operation"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NoticeList"
+          "400":
+            description: "Invalid value"
+  /notice/{docnum}:
+    get:
+      parameters:
+        - name: "docnum"
+          in: "path"
+          description: "The document number for the notice"
+          schema:
+            type: "string"
+          required: true
+      tags:
+        - "notice"
+      summary: "Return a Notice"
+      description: "Return a Notice and a List of its Amendments"
+      responses:
+        "200":
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notice"
+  /preamble/{label_id}:
+    get:
+      parameters:
+        - name: "label_id"
+          in: "path"
+          description: "The part and section to lookup e.g. 400-110"
+          schema: 
+            type: "string"
+          required: true
+      tags:
+      - "preamble"
+      summary: "List versions for the given section"
+      description: "List section versions"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VersionList"
+        "404":
+          description: "Page not found"
+  /search:
+    get:
+      parameters:
+        - name: "q"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "version"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "regulation"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "is_root"
+          in: "query"
+          required: false
+          schema:
+            type: "boolean"
+        - name: "is_subpart"
+          in: "query"
+          required: false
+          schema:
+            type: "boolean"
+        - name: "page"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: 0
+        - name: "page_size"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: 50
+            minimum: 1
+      tags:
+      - "search"
+      responses:
+        "200":
+          $ref: "#/components/responses/SearchResponse"
+  /search/cfr:
+    get:
+      parameters:
+        - name: "q"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "version"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "regulation"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "is_root"
+          in: "query"
+          required: false
+          schema:
+            type: "boolean"
+        - name: "is_subpart"
+          in: "query"
+          required: false
+          schema:
+            type: "boolean"
+        - name: "page"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: 0
+        - name: "page_size"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: 50
+            minimum: 1
+      tags:
+      - "search"
+      responses:
+        "200":
+          $ref: "#/components/responses/SearchResponse"
+  /search/preamble:
+    get:
+      parameters:
+        - name: "q"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "version"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "regulation"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "is_root"
+          in: "query"
+          required: false
+          schema:
+            type: "boolean"
+        - name: "is_subpart"
+          in: "query"
+          required: false
+          schema:
+            type: "boolean"
+        - name: "page"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: 0
+        - name: "page_size"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: 50
+            minimum: 1
+      tags:
+      - "search"
+      responses:
+        "200":
+          $ref: "#/components/responses/SearchResponse"
+components:
+  responses:
+    SearchResponse:
+      description: ""
+      content:
+        application/json:
+          schema:
+            type: "object"
+            properties:
+              total_hits:
+                type: "integer"
+              results:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    text:
+                      type: "string"
+                    label:
+                      type: "string"
+                    version:
+                      type: "string"
+                    label_string:
+                      type: "string"
+                    match_title:
+                      type: "string"
+                    paragraph_title:
+                      type: "string"
+                    section_title:
+                      type: "string"
+                    title:
+                      type: "string"
+  schemas:
+    Section:
+      type: "object"
+      properties:
+        label:
+          type: "array"
+          items:
+            type: "string"
+        text:
+          type: "string"
+        node_type:
+          type: "string"
+        children:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Section"
+          example: [{
+            "label": ["433"],
+            "text": "(a) This subpart...",
+            "node_type": "reg_text",
+            "children": [],
+            "lft": 832
+          }]
+        lft: 
+          type: "integer"
+        title:
+          type: "string"
+        
+    VersionList:
+      type: "object"
+      properties:
+        versions:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Version"
+    Version:
+      type: "object"
+      properties:
+        version:
+          type: "string"
+          description: "The document identifier for the version of the regulation from the federal register e.g. 2020-28567"
+        by_date:
+          type: "string"
+          format: "date"
+          description: "The date the version was or will be effective."
+        regulation:
+          type: "string"
+          description: "The section of regulation e.g. 433"
+    NoticeList:
+      type: "object"
+      properties:
+        results:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              document_number:
+                type: "string"
+              effective_on:
+                type: "string"
+              fr_url:
+                type: "string"
+              publication_date:
+                type: "string"
+      example:
+        results:
+        - document_number: "01-1447"
+          effective_on: "2001-04-19"
+          fr_url: "https://www.federalregister.gov/documents/2001/01/19/01-1447/medicaid-program-medicaid-managed-care"
+          publication_date: "2001-01-19"
+        - document_number: "03-27742"
+          effective_on: "2003-12-08"
+          fr_url: "https://www.federalregister.gov/documents/2003/11/07/03-27742/medicare-program-review-of-national-coverage-determinations-and-local-coverage-determinations"
+          publication_date: "2003-11-07"
+    Notice:
+      type: "object"
+      properties:
+        amendments:
+          type: "array"
+          items:
+            type: "object"
+            oneOf:
+            - $ref: "#/components/schemas/NoticeAuthority"
+            - $ref: "#/components/schemas/NoticeChanges"
+    NoticeAuthority:
+      type: "object"
+      properties:
+        instruction:
+          type: "string"
+          example: "1. The authority citation for part 400 continues to read as follows"
+        cfr_part:
+          type: "string"
+          example: "400"
+        authority:
+          type: "string"
+          example: "Secs. 1102 and 1871 of the Social Security Act (42 U.S.C. 1302 and 1395hh)."
+    NoticeChanges:
+      type: "object"
+      properties:
+        instruction:
+          type: "string"
+          example: "2. In § 400.203, the following statements are added, in alphabetical order, and the definition of “provider” is revised to read as set forth below."
+        cfr_part:
+          type: "string"
+          example: "400"
+        changes:
+          $ref: "#/components/schemas/ChangesArray"
+    ChangesArray:
+      type: "array"
+      items:
+        oneOf:
+          - $ref: "#/components/schemas/ChangesAction"
+          - $ref: "#/components/schemas/ChangesNode"
+    ChangesAction:
+      type: "array"
+      items:
+        oneOf:
+          - type: "string"
+            example: "400-203-p2428883253-1"
+          - type: "array"
+            items:
+              type: "object"
+              properties:
+                action:
+                  type: "string"
+                  example: "DELETE"
+    ChangesNode:
+      type: "array"
+      items:
+        oneOf:
+          - type: "string"
+            example: "431-220-a"
+          - type: "array"
+            items:
+              type: "object"
+              properties:
+                node:
+                  type: "object"
+                  properties:
+                    text:
+                      type: "string"
+                      example: "(1) For the fee-for-service program, it means any individual or entity furnishing Medicaid services under an agreement with the Medicaid agency."
+                    label:
+                      type: "array"
+                      items:
+                        type: "string"
+                        example: "400"
+                    title:
+                      type: "string"
+                      example: "§ 431.200 Basis and scope."
+                    node_type:
+                      type: "string"
+                      example: "reg_text"
+                    tagged_text:
+                      type: "string"
+                      example: "(1) For the fee-for-service program, it means any individual or entity furnishing Medicaid services under an agreement with the Medicaid agency."
+                    child_labels:
+                      type: "array"
+                      items:
+                        type: "string"
+                        example: "400-203-p2428883253-1"
+                action:
+                  type: "string"
+                  example: "PUT"
+    Diff:
+      type: "object"
+      additionalProperties:
+        oneOf:
+          - $ref: "#/components/schemas/ModifiedDiff"
+          - $ref: "#/components/schemas/ModifiedDiffWithChildOps"
+          - $ref: "#/components/schemas/AddedDiff"
+          - $ref: "#/components/schemas/DeletedDiff"
+      example: {
+        "433-138-d-1": {
+          "op": "modified",
+          "text": [
+            [
+              [
+                "delete",
+                293,
+                306
+              ],
+              [
+                "insert",
+                293,
+                "435.948(a)(1)"
+              ]
+            ]
+          ]
+        },
+        "433-147": {
+          "op": "modified",
+          "child_ops": [
+            [
+              "equal",
+              0,
+              3
+            ],
+            [
+              "delete",
+              3,
+              4
+            ]
+          ],
+          "title": [
+            [
+              [
+                "delete",
+                38,
+                47
+              ],
+              [
+                "insert",
+                38,
+                "the identity of a child's parents"
+              ]
+            ]
+          ]
+        },
+        "433-152-b-1-ii": {
+          "op": "added",
+          "node": {
+            "child_labels": [],
+            "label": [
+              "433",
+              "152",
+              "b",
+              "1",
+              "ii"
+            ],
+            "node_type": "regtext",
+            "tagged_text": "(ii) [Reserved]",
+            "text": "(ii) [Reserved]",
+            "title": null
+          }
+        },
+        "433-147-d": {
+          "op": "deleted"
+        }
+      }
+    ModifiedDiff:
+      type: "object"
+      required:
+        - op
+      properties:
+        op:
+          type: "string"
+          description: "The operation performed: one of 'modified', 'added', or 'deleted'"
+          enum: [modified]
+        text:
+          $ref: "#/components/schemas/DiffArray"
+    ModifiedDiffWithChildOps:
+      type: "object"
+      required:
+        - op
+      properties:
+        op:
+          type: "string"
+          description: "The operation performed: one of 'modified', 'added', or 'deleted'"
+          enum: [modified]
+        child_ops:
+          type: "array"
+          items:
+            type: "array"
+            items:
+              oneOf:
+                - type: "string"
+                - type: "integer"
+                - type: "integer"
+        title:
+          $ref: "#/components/schemas/DiffArray"
+    AddedDiff:
+      type: "object"
+      required:
+        - op
+      properties:
+        op:
+          type: "string"
+          description: "The operation performed: one of 'modified', 'added', or 'deleted'"
+          enum: [added]
+        node:
+          type: "object"
+          properties:
+            child_labels:
+              type: "array"
+              items:
+                type: "string"
+            label:
+              type: "array"
+              items:
+                type: "string"
+            node_type:
+              type: "string"
+            tagged_text:
+              type: "string"
+            text:
+              type: "string"
+            title:
+              type: "string"
+    DeletedDiff:
+      type: "object"
+      required:
+        - op
+      properties:
+        op:
+          type: "string"
+          description: "The operation performed: one of 'modified', 'added', or 'deleted'"
+          enum: [deleted]
+    DiffArray:
+      type: "array"
+      items:
+        type: "array"
+        items:
+          type: "array"
+          items:
+            oneOf:
+              - type: "string"
+              - type: "integer"
+              - oneOf:
+                - type: "integer"
+                - type: "string"
+
+    TocLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            index:
+              type: "array"
+              items:
+                type: "string"
+              minItems: 2
+              maxItems: 3
+              description: "Can be e.g. `['433', '145']` or `['433', 'Subpart', 'C']`"
+            title:
+              type: "string"
+      example:
+        {
+          "433": [
+            {
+              "index": [
+                "433",
+                "1"
+              ],
+              "title": "§ 433.1 Purpose."
+            },
+            {
+              "index": [
+                "433",
+                "Subpart",
+                "A"
+              ],
+              "title": "Federal Matching and General Administration Provisions"
+            },
+            {
+              "index": [
+                "433",
+                "Subpart",
+                "B"
+              ],
+              "title": "General Administrative Requirements State Financial Participation"
+            }
+          ]
+        }
+    MetaLayer:
+      type: "object"
+      additionalProperties: 
+        type: "array"
+        items:
+          type: "object"
+          required:
+            - cfr_title_number
+            - cfr_title_text
+          properties:
+            cfr_title_number:
+              type: "integer"
+            cfr_title_text:
+              type: "string"
+            effective_date:
+              type: "string"
+              format: "date"
+            statutory_name:
+              type: "string"
+            reg_letter:
+              type: "string"
+      example:
+        {
+          "433": [
+            {
+              "cfr_title_number": 42,
+              "cfr_title_text": "Public Health",
+              "effective_date": "2017-01-20",
+              "statutory_name": "STATE FISCAL ADMINISTRATION"
+            }
+          ]
+        }
+    TermsLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            offset:
+              type: "array"
+              items:
+                type: "array"
+                items:
+                  type: "integer"
+                minItems: 2
+                maxItems: 2
+            ref:
+              type: "string"
+      example:
+        {
+          "433-10-c-6-i": [
+            {
+              "offsets": [
+                [
+                  212,
+                  227
+                ]
+              ],
+              "ref": "expansion state:433-204-b-1"
+            },
+            {
+              "offsets": [
+                [
+                  307,
+                  333
+                ]
+              ],
+              "ref": "newly eligible individual:433-204-a-1"
+            }
+          ]
+        }
+    ExternalCitationsLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            citation_type:
+              type: "string"
+            components:
+              type: "object"
+              additionalProperties:
+                type: "string"
+            locations:
+              type: "array"
+              items:
+                type: "integer"
+            text:
+              type: "string"
+            url:
+              type: "string"
+      example:
+        {
+          "433-110-a-1": [
+            {
+              "citation_type": "CFR",
+              "components": {
+                "cfr_title": "45",
+                "part": "75"
+              },
+              "locations": [
+                0
+              ],
+              "text": "45 CFR part 75",
+              "url": "http://api.fdsys.gov/link?collection=cfr..."
+            }
+          ]
+        }
+    FormattingLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          required:
+            - locations
+            - text
+          properties:
+            locations:
+              type: "array"
+              items:
+                type: "integer"
+            table_data:
+              type: "object"
+              properties:
+                header:
+                  type: "array"
+                  items:
+                    type: "array"
+                    items:
+                      type: "object"
+                      properties:
+                        colspan:
+                          type: "integer"
+                        rowspan:
+                          type: "integer"
+                        text:
+                          type: "string"
+                rows:
+                  type: "array"
+                  items:
+                    type: "array"
+                    items:
+                      type: "string"
+            superscript_data:
+              type: "object"
+              properties:
+                superscript:
+                  type: "string"
+            subscript_data:
+              type: "object"
+              properties:
+                subscript:
+                  type: "string"
+            dash_data:
+              type: "object"
+              properties:
+                text:
+                  type: "string"
+            footnote_data:
+              type: "object"
+              properties:
+                ref:
+                  type: "string"
+                note:
+                  type: "string"
+            text:
+              type: "string"
+      example:
+        {
+          "433-10-b-p1-p1": [
+            {
+              "locations": [
+                0,
+                1
+              ],
+              "superscript_data": {
+                "superscript": "2"
+              },
+              "text": "^{2}"
+            }
+          ]
+        }
+    KeyTermsLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            key_term:
+              type: "string"
+            locations:
+              type: "array"
+              items:
+                type: "integer"
+      example:
+        {
+          "400-200-p1002280129": [
+            {
+              "key_term": "Public Health Emergency (PHE)",
+              "locations": [
+                0
+              ]
+            }
+          ],
+          "400-200-p1348453195": [
+            {
+              "key_term": "CORF",
+              "locations": [
+                0
+              ]
+            }
+          ]
+        }
+    GraphicsLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            alt:
+              type: "string"
+            locations:
+              type: "array"
+              items:
+                type: "integer"
+            text:
+              type: "string"
+            url:
+              type: "string"
+      example:
+        {
+          "433-10-c-8-p1": [
+            {
+              "alt": "",
+              "locations": [
+                0
+              ],
+              "text": "![](ER02AP13.029)",
+              "url": "https://s3.amazonaws.com/images.federalregister.gov/ER02AP13.029/original.gif"
+            }
+          ]
+        }
+    InternalCitationsLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            citation:
+              type: "array"
+              items:
+                type: "string"
+            offsets:
+              type: "array"
+              items:
+                type: "array"
+                items:
+                  type: "integer"
+      example:
+        {
+          "433-10-c-4": [
+            {
+              "citation": [
+                "433",
+                "11",
+                "a"
+              ],
+              "offsets": [
+                [
+                  109,
+                  118
+                ]
+              ]
+            }
+          ]
+        }
+    ParagraphMarkersLayer:
+      type: "object"
+      additionalProperties:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            locations:
+              type: "array"
+              items:
+                type: "integer"
+            text:
+              type: "string"
+      example:
+        {
+          "433-10-a": [
+            {
+              "locations": [
+                0
+              ],
+              "text": "(a)"
+            }
+          ]
+        }
+    
+            
+
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

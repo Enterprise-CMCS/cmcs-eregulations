@@ -1,0 +1,94 @@
+{% extends "regulations/base.html" %}
+{% load static %}
+{% block body %}
+<div class="site-container">
+  <main class="about">
+
+    <h1>About This Tool</h1>
+
+    <section>
+      <h2>Contact</h2>
+      <p><b>Send questions and suggestions</b> about this website (including bug reports): <a href="https://docs.google.com/forms/d/e/1FAIpQLSdoovq7qgVRYsgLeZ7TrXNmnTU42iHCvr1x06CgcWQectlVAw/viewform" target="_blank" class="external">contact the team</a>.
+      <p><b>Try new features</b> and help make them better: <a href="https://docs.google.com/forms/d/e/1FAIpQLScesNzqS-Kgpcjq3AxESy1tP0zlcs3CdgkCVr3LBOiUTxxbvw/viewform" class="external">sign up for a feedback session</a>.</p>
+
+      <p><b>Get in touch directly:</b> email Product Owner <a href="mailto:swapna.gubbala@cms.hhs.gov" class="external">Swapna Gubbala</a>.</p>
+    </section>
+
+    <section id="automated-updates">
+      <h2>Automated Updates</h2>
+
+      <div class="ds-l-container">
+        
+        <div class="ds-l-row">
+          <div class="ds-l-col--6">
+            <h3>Regulation Text</h3>
+            <p>This tool displays regulation text from <a href="https://www.ecfr.gov/cgi-bin/ECFR?page=browse" class="external">eCFR</a>.</p>
+            <p>When new rules (changes to regulations) become effective, the Office of the Federal Register incorporates them into eCFR about <b>two business days</b> after their effective date.</p>
+            <p>This tool automatically syncs with eCFR <b>once a day</b>.</p>
+            <p>So, it can take up to <b>three business days</b> for new rules to be incorporated into this tool.</p>
+            <p class="note">Note: eCFR and this tool are <a href="https://www.ecfr.gov/cgi-bin/ECFR?SID=7b8aba05aa8d73ae4ea6e482994e1721&mc=true&page=faq#quest7" class="external">not official legal editions</a> of the CFR. See <a href="https://www.ecfr.gov/cgi-bin/ECFR?page=userinfo" class="external">eCFR User Information</a> for how to check against official materials (annual editions and Federal Register rules).</p>
+          </div>
+          <div class="ds-l-col--6">
+            <img src="{% static 'images/HowItWorksDiagram.svg' %}" alt="Diagram showing eCFR information going to this website" class="ecfr-graphic"/> 
+          </div>
+        </div>
+
+        <div class="ds-l-row">
+          <div class="ds-l-col--6">
+            <h3>Links to Federal Register Rules</h3>
+            <p>The lists of rules (proposed and final amendments to regulations) are pulled automatically from the Office of the Federal Register.</p>
+            <p>These lists are fetched every time you load a page that includes them, so they are always up-to-date.</p>
+          </div>
+          <div class="ds-l-col--6">
+            <img src="{% static 'images/FR Rules.svg' %}" alt="Screenshot of Rules with Preambles in the right sidebar of this site"/> 
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <h2>Subject Matter Expert Updates</h2>
+
+      <div class="ds-l-container">
+        <div class="ds-l-row">
+          <div class="ds-l-col--6">
+            <h3>Links to Additional Resources <span class="indicator">Coming Soon</span></h3> 
+            <p>Resource links are curated and updated by a Medicaid subject matter expert on our team.</p>
+            <p>For example, when Medicaid.gov publishes a new State Medicaid Director Letter, we add a link in the sidebar of each relevant subpart.</p>
+          </div>
+          <div class="ds-l-col--6">
+            <img src="{% static 'images/Additional Resources.svg' %}" alt="Screenshot of Sub-Regulatory Guidance in the right sidebar of this site" />
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="using-this-tool">
+      <h2>Using this Tool</h2>
+
+      <div id="sub-regulatory-guidance">
+        <h3>Sub-Regulatory Guidance <span class="indicator">Coming Soon</span></h3>
+      </div>
+      <div id="regulation-history">
+        <h3>Regulation History <span class="indicator">Coming Soon</span></h3>
+      </div>
+      <div id="cross-references">
+        <h3>Cross-References <span class="indicator">Coming Soon</span></h3>
+      </div>
+    </section>
+
+    <section>
+      <h2>Technical Details</h2>
+      <p>This tool has an <a href="https://github.com/CMSgov/cmcs-eregulations" class="external">open source code repository</a> available for reuse by other government teams.</p>
+      <p>It uses APIs maintained by the Office of the Federal Register and the Government Publishing Office:</p>
+      <ul>
+        <li><a href="https://ecfr.federalregister.gov/reader-aids/ecfr-developer-resources/rest-api-interactive-documentation" class="external">Federal Register regulation text</a></li>
+        <li><a href="https://www.federalregister.gov/developers/documentation/api/v1" class="external">Federal Register rules</a></li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+{% endblock %}

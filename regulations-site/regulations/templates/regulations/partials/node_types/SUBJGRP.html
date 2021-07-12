@@ -1,0 +1,9 @@
+<section id="{{node.label | join:'-'}}" class="reg-section">
+    <h2 tabindex="0"> {{node.title | safe}} </h2>
+    {{node.text | safe}}
+</section>
+
+{% for node in node.children %}
+    {% include "regulations/partials/node_types/node.html" %}
+{% endfor %}
+
