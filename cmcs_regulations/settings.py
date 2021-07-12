@@ -21,13 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n'
+SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost',]
 
 # Application definition
 
@@ -40,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
 
-    'regcore'
+    'regcore',
     'regcore.search',
     'regcore.supplementary_content',
     'regulations',
@@ -60,6 +57,8 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
 
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
@@ -74,6 +73,7 @@ TEMPLATES = [
                 "django.template.context_processors.media",
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
+                'django.contrib.auth.context_processors.auth',
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
             ),
@@ -91,8 +91,6 @@ TEMPLATES = [
         ],
     },
 ]
-
-GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 
 WSGI_APPLICATION = 'cmcs_regulations.wsgi.application'
 
@@ -140,11 +138,18 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+API_BASE = os.environ.get('EREGS_API_BASE', '')
+
+GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
+
+HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER") 
+HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD") 

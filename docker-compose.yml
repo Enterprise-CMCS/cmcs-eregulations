@@ -10,34 +10,19 @@ services:
       - 5432:5432
     volumes:
       - eregs-data:/var/lib/postgresql/data
-  regulations-core:
-    build:
-      context: ${CORE_CONTEXT:-./regulations-core}
-      dockerfile: ${PWD}/config/regulations-core/Dockerfile
+  regulations:
+    build: .
     volumes:
-      - ${CORE_CONTEXT:-./regulations-core}:/app/src
-      - ./config/regulations-core/local_settings.py:/var/lib/eregs/local_settings.py
-    environment:
-      ALLOWED_HOST: regulations-core
-      HTTP_AUTH_USER: RpSS01rhbx
-      HTTP_AUTH_PASSWORD: UkOAsfkItN
-      PYTHONPATH: /var/lib/eregs
-    ports:
-      - 8080:8080
-    links:
-      - db
-  regulations-site:
-    build:
-      context: ${SITE_CONTEXT:-./regulations-site}
-      dockerfile: ${PWD}/config/regulations-site/Dockerfile
-    volumes:
-      - ${SITE_CONTEXT:-./regulations-site}:/app/src
-      - ./config/regulations-site/local_settings.py:/var/lib/eregs/local_settings.py
+      - .:/app/src
       - ./custom_templates:/var/lib/eregs/cmcs/custom_templates/regulations
       - ./content/regulations_landing_pages:/var/lib/eregs/cmcs/landing_pages/regulations/partials
       - ./content/supplementary_content:/var/lib/eregs/cmcs/content
     environment:
-      EREGS_API_BASE: http://regulations-core:8080/
+      ALLOWED_HOST: regulations
+      HTTP_AUTH_USER: RpSS01rhbx
+      HTTP_AUTH_PASSWORD: UkOAsfkItN
+      PYTHONPATH: /var/lib/eregs
+      EREGS_API_BASE: http://regulations:8000/
       PYTHONPATH: /var/lib/eregs
       STATIC_URL: http://localhost:8888/
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
@@ -45,13 +30,13 @@ services:
     ports:
       - 8000:8000
     links:
-      - regulations-core
+      - db
   static-assets:
     image: nginx
     ports:
       - 8888:80
     volumes:
       - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
-      - ./regulations-site/regulations/static/regulations:/usr/share/nginx/html
+      - ./regulations/static/regulations:/usr/share/nginx/html
 volumes:
   eregs-data:

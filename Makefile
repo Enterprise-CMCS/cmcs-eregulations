@@ -47,8 +47,8 @@ local.docker:
 		make local.regulations-core;
 
 local.regulations-core: ## Run migrations and restart the regulations-core
-	docker-compose exec regulations-core python manage.py migrate; \
-		docker-compose restart regulations-core; \
+	docker-compose exec regulations python manage.py migrate; \
+		docker-compose restart regulations; \
 		sleep 5;
 
 ecfr-parser/build/ecfr-parser: ecfr-parser/*.go ecfr-parser/**/*.go
@@ -64,7 +64,7 @@ data.dev: ## Load a Part of Title 42. e.g. make dev.data.435 will load Part 435 
 data.dev: CORE_URL = https://w1tu417grc.execute-api.us-east-1.amazonaws.com/dev/v2/
 
 data.local: ## Load a Part of Title 42. e.g. make data.local.435 will load Part 435
-data.local: CORE_URL = http://localhost:8080/v2/
+data.local: CORE_URL = http://localhost:8000/v2/
 data.local: export EREGS_USERNAME=RpSS01rhbx
 data.local: export EREGS_PASSWORD=UkOAsfkItN
 
