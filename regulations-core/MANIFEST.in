@@ -1,3 +1,0 @@
-include README.md
-include TERMS.md
-recursive-include regcore/templates *.txt
