@@ -6,7 +6,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-from regulations.generator import api_reader
+from regcore.models import Part
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
@@ -18,7 +18,6 @@ class ReaderView(CitationContextMixin, TemplateView):
 
     sectional_links = True
 
-    client = api_reader.ApiReader()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -26,11 +25,11 @@ class ReaderView(CitationContextMixin, TemplateView):
         reg_version = context["version"]
         reg_part = context["part"]
         reg_title = context["title"]
-        tree = self.client.part(reg_version, reg_title, reg_part)
+        tree = Part.objects.full_part(reg_version, reg_title, reg_part)
         versions = self.get_versions(reg_title, reg_part)
-        parts = self.client.effective_title_parts(reg_version, reg_title)
-        document = tree['document']
-        toc = tree['toc']
+        parts = Part.objects.effective_title(reg_version, reg_title)
+        document = tree.document
+        toc = tree.toc
         part_label = toc['label_description']
 
         c = {
@@ -46,7 +45,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         return {**context, **c}
 
     def get_versions(self, title, part):
-        versions = self.client.regversions(title, part)
+        versions = Part.objects.versions(title, part)
         if versions is None:
             raise Http404
         return versions
@@ -87,16 +86,14 @@ class SectionReaderView(View):
             "version": kwargs.get("version"),
         }
 
-        client = api_reader.ApiReader()
-
         if url_kwargs['version'] is None:
-            versions = client.regversions(kwargs.get("title"), url_kwargs['part'])
+            versions = Part.objects.versions(kwargs.get("title"), url_kwargs['part'])
             if versions is None:
                 raise Http404
             url_kwargs['version'] = versions[0]['date']
 
         try:
-            toc = client.toc(url_kwargs['version'], kwargs.get("title"), url_kwargs['part'])['toc']
+            toc = Part.objects.full_part(url_kwargs['version'], kwargs.get("title"), url_kwargs['part']).toc
 
             subpart = find_subpart(kwargs.get("section"), toc)
             if subpart is not None:

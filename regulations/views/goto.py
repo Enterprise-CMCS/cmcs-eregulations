@@ -1,10 +1,6 @@
 from django.urls import reverse
 from django.views.generic.base import RedirectView
 
-from regulations.generator import api_reader
-
-client = api_reader.ApiReader()
-
 
 class GoToRedirectView(RedirectView):
 

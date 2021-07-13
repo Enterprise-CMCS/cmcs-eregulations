@@ -1,9 +1,39 @@
+from datetime import date
+
 from django.db import models
 
 from django.contrib.postgres.fields import ArrayField
-from django.contrib.postgres.search import SearchVector, SearchVectorField
+from django.contrib.postgres.search import (
+    SearchVector,
+    SearchVectorField,
+    SearchQuery,
+    SearchRank,
+    SearchHeadline,
+)
 
 from regcore.models import Part
+
+
+class SearchIndexQuerySet(models.QuerySet):
+    def search(self, query):
+        return self\
+            .filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))\
+            .filter(search_vector=SearchQuery(query))\
+            .annotate(rank=SearchRank("search_vector", SearchQuery(query)))\
+            .annotate(
+                headline=SearchHeadline(
+                    "content",
+                    SearchQuery(query),
+                    start_sel='<span class="search-highlight">',
+                    stop_sel='</span>',
+                ),
+            )\
+            .order_by('-rank')\
+            .values("type", "content", "headline", "label", "parent", "part__document__title", "part__title", "part__date")
+
+
+class SearchIndexManager(models.Manager.from_queryset(SearchIndexQuerySet)):
+    pass
 
 
 class SearchIndex(models.Model):
@@ -13,6 +43,8 @@ class SearchIndex(models.Model):
     parent = models.JSONField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     search_vector = SearchVectorField()
+
+    objects = SearchIndexManager()
 
     class Meta:
         unique_together = ['label', 'part']

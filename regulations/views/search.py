@@ -2,11 +2,9 @@ from datetime import date
 
 from django.views.generic.base import TemplateView
 
-from regulations.generator.api_reader import ApiReader
 from regcore.models import Part
+from regcore.search.models import SearchIndex
 from .utils import get_structure
-
-client = ApiReader()
 
 
 class SearchView(TemplateView):
@@ -28,4 +26,4 @@ class SearchView(TemplateView):
 
 
 def get_data(query):
-    return client.search(query)
+    return SearchIndex.objects.search(query)

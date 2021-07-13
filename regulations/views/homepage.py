@@ -4,14 +4,11 @@ import logging
 from django.views.generic.base import TemplateView
 from requests import HTTPError
 
-from regulations.generator import api_reader
 from regcore.models import Part
 from .utils import get_structure
 
 
 logger = logging.getLogger(__name__)
-
-client = api_reader.ApiReader()
 
 
 class HomepageView(TemplateView):

@@ -3,9 +3,7 @@ from requests import HTTPError
 from django.views.generic.base import TemplateView
 from django.http import Http404
 
-from regulations.generator import api_reader
-
-client = api_reader.ApiReader()
+from regcore.models import Part
 
 
 class RegulationLandingView(TemplateView):
@@ -20,13 +18,13 @@ class RegulationLandingView(TemplateView):
         reg_part = self.kwargs.get("part")
 
         try:
-            current = client.toc(date.today(), title, reg_part)
+            current = Part.objects.full_part(date.today(), title, reg_part)
         except HTTPError:
             raise Http404
 
-        parts = client.effective_title_parts(date.today(), title)
-        reg_version = current['date']
-        toc = current['toc']
+        parts = Part.objects.effective_title(date.today(), title)
+        reg_version = current.date
+        toc = current.toc
         part_label = toc['label_description']
 
         c = {
@@ -36,7 +34,7 @@ class RegulationLandingView(TemplateView):
             'part': reg_part,
             'part_label': part_label,
             'reg_part': reg_part, 'parts': parts,
-            'last_updated': datetime.fromisoformat(current['last_updated']),
+            'last_updated': current.last_updated,
             'content': [
                 'regulations/partials/landing_%s.html' % reg_part,
                 'regulations/partials/landing_default.html',
