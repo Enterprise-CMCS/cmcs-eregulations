@@ -1,4 +1,4 @@
-service: cmcs-eregs
+service: cmcs-eregs-site
 
 provider:
   name: aws
@@ -30,22 +30,24 @@ custom:
     app: handler.application
     packRequirements: false
   settings:
+    static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
     DB_NAME: eregs
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
 
 functions:
-  reg_core:
-    handler: wsgi.handler
+  reg_site:
+    environment:
+      STATIC_URL: ${self:custom.settings.static_url}
+      WORKING_DIR: /var/task
+    handler: wsgi_handler.handler
+    timeout: 15
     events:
       - http: ANY /
       - http: ANY {proxy+}
   reg_core_migrate:
     handler: migrate.handler
     timeout: 15
-  reg_core_rebuild_index:
-    handler: rebuild_index.handler
-    timeout: 120
 
 resources:
 
@@ -199,10 +201,6 @@ resources:
           Ref: AuroraRDSInstanceParameter
         DBClusterIdentifier:
           Ref: RDSResource
-
-  Outputs:
-    LambdaFunctionRoleArn:
-      Value: !GetAtt LambdaFunctionRole.Arn
 
 plugins:
   - serverless-python-requirements

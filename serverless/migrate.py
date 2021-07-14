@@ -3,7 +3,7 @@ import os
 import sys
 
 def handler(event, context):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "regcore.settings") 
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings") 
     import django
     django.setup()
 
@@ -13,4 +13,4 @@ def handler(event, context):
         raise Exception("database is unreachable")
 
     from django.core.management import call_command
-    call_command('rebuild_pgsql_index')
+    call_command('migrate')
