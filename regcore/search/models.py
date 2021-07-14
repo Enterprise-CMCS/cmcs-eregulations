@@ -15,9 +15,11 @@ from regcore.models import Part
 
 
 class SearchIndexQuerySet(models.QuerySet):
+    def effective(self, date):
+        return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
+
     def search(self, query):
         return self\
-            .filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))\
             .filter(search_vector=SearchQuery(query))\
             .annotate(rank=SearchRank("search_vector", SearchQuery(query)))\
             .annotate(
@@ -28,8 +30,7 @@ class SearchIndexQuerySet(models.QuerySet):
                     stop_sel='</span>',
                 ),
             )\
-            .order_by('-rank')\
-            .values("type", "content", "headline", "label", "parent", "part__document__title", "part__title", "part__date")
+            .order_by('-rank')
 
 
 class SearchIndexManager(models.Manager.from_queryset(SearchIndexQuerySet)):

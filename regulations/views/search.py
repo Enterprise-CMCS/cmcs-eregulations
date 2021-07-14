@@ -13,8 +13,8 @@ class SearchView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        results = get_data(self.request.GET.get("q"))
         today = date.today()
+        results = SearchIndex.objects.effective(today).search(self.request.GET.get("q"))
         parts = Part.objects.effective(today)
         structure = get_structure(parts)
         c = {
@@ -23,7 +23,3 @@ class SearchView(TemplateView):
             'results': results,
         }
         return {**context, **c, **self.request.GET.dict()}
-
-
-def get_data(query):
-    return SearchIndex.objects.search(query)
