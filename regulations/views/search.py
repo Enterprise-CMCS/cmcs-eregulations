@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.views.generic.base import TemplateView
+from django.http import Http404
 
 from regcore.models import Part
 from regcore.search.models import SearchIndex
@@ -16,6 +17,8 @@ class SearchView(TemplateView):
         today = date.today()
         results = SearchIndex.objects.effective(today).search(self.request.GET.get("q"))
         parts = Part.objects.effective(today)
+        if not parts:
+            raise Http404
         structure = get_structure(parts)
         c = {
             'parts': parts,
