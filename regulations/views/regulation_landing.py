@@ -18,11 +18,11 @@ class RegulationLandingView(TemplateView):
         reg_part = self.kwargs.get("part")
 
         try:
-            current = Part.objects.full_part(date.today(), title, reg_part)
+            current = Part.objects.effective(date.today()).get(title=title, name=reg_part)
         except HTTPError:
             raise Http404
 
-        parts = Part.objects.effective_title(date.today(), title)
+        parts = Part.objects.effective(date.today()).filter(title=title)
         reg_version = current.date
         toc = current.toc
         part_label = toc['label_description']

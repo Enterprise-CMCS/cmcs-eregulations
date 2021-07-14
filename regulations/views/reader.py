@@ -25,9 +25,11 @@ class ReaderView(CitationContextMixin, TemplateView):
         reg_version = context["version"]
         reg_part = context["part"]
         reg_title = context["title"]
-        tree = Part.objects.full_part(reg_version, reg_title, reg_part)
+
+        tree = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
+
         versions = self.get_versions(reg_title, reg_part)
-        parts = Part.objects.effective_title(reg_version, reg_title)
+        parts = Part.objects.filter(title=reg_title).effective(reg_version)
         document = tree.document
         toc = tree.toc
         part_label = toc['label_description']
@@ -93,7 +95,7 @@ class SectionReaderView(View):
             url_kwargs['version'] = versions[0]['date']
 
         try:
-            toc = Part.objects.full_part(url_kwargs['version'], kwargs.get("title"), url_kwargs['part']).toc
+            toc = Part.objects.effective(url_kwargs['version']).get(title=kwargs.get("title"), name=url_kwargs['part']).toc
 
             subpart = find_subpart(kwargs.get("section"), toc)
             if subpart is not None:
