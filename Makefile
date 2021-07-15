@@ -30,8 +30,7 @@ storybook: regulations/static/node_modules
 
 .PHONY: lint
 lint:
-	flake8; \
-	golint -set_exit_status tools/...;
+	flake8;
 
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: local.docker data.local
