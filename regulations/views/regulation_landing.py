@@ -23,7 +23,7 @@ class RegulationLandingView(TemplateView):
             raise Http404
 
         parts = Part.objects.effective(date.today()).filter(title=title)
-        reg_version = current.date
+        reg_version = current.date.isoformat()
         toc = current.toc
         part_label = toc['label_description']
 
