@@ -26,14 +26,39 @@
             height: 42px;           // Height of the search box
             position: relative;
             z-index: 2;
+
+            .search-header {
+                float: none;
+
+                @include screen-md {
+                    float: right;
+                }
+
+                .search-box {
+                    width: 100%;
+
+                    @include screen-md {
+                        width: 260px
+                    }
+                }
+            }
         }
 
         .hero-text {
-            width: 50%;
-            height: 276px;
+            width: 100%;
+            height: auto;
+            padding-top: $spacer-2;
             position: relative;
             z-index: 2;
             text-shadow: 3px 1px 5px $secondary_color;
+            font-size: $font-size-sm;
+
+            @include screen-md {
+                width: 50%;
+                height: 276px;
+                padding-top: 0;
+                font-size: $font-size-md;
+            }
 
             @include custom-min(1350) {
                 height: 260px;
@@ -53,69 +78,110 @@
         }
 
         .hero-image {
-            position: absolute;
-            right: 0;
-            width: 50%;
-            top: -85px;
-            text-align: right;
+            width: 100%;
+
+            @include screen-md {
+                width: 60%;
+                top: 35px;
+                text-align: right;
+                position: absolute;
+                right: 0;
+            }
 
             // All of these media queries are needed to get the overlapping effect without overlapping the text smoothly at different screen sizes (I know, I designed a mildly ridiculous-to-code homepage because it looked awesome)
+
+            @include custom-min(770) {
+                width: 58%;
+                top: 35px;
+            }
+
+            @include custom-min(800) {
+                top: 20px;
+            }
+
+            @include custom-min(830) {
+                top: 0;
+            }
+
+            @include custom-min(870) {
+                top: -5px;
+                width: 57%;
+            }
+
+            @include custom-min(894) {
+                top: -15px;
+            }
+
+            @include custom-min(920) {
+                top: -10px;
+                width: 55%;
+            }
+
+            @include custom-min(945) {
+                top: -20px;
+            }
+
+            @include custom-min(968) {
+                top: -30px;
+            }
+
+            @include custom-min(988) {
+                top: -45px;
+            }
 
             @include screen-lg {
                 width: 56%;
                 top: -60px;
-                right: -45px;
             }
 
             @include custom-min(1050) {
                 width: 54%;
-                right: -34px;
             }
 
-            @include custom-min(1100) {
+            @include custom-min(1090) {
                 width: 54%;
-                right: -40px;
                 top: -70px;
             }
 
-            @include custom-min(1120) {
+            @include custom-min(1114) {
                 width: 52%;
-                right: -30px;
                 top: -75px;
             }
 
-            @include custom-min(1170) {
+            @include custom-min(1165) {
                 width: 50%;
                 top: -60px;
             }
 
-            @include custom-min(1190) {
-                width: 50%;
+            @include custom-min(1184) {
                 top: -70px;
             }
 
+            @include custom-min(1200) {
+                top: -85px;
+            }
+
             @include custom-min(1235) {
-                width: 50%;
                 top: -86px;
-                right: -30px;
+            }
+
+            @include custom-min(1250) {
+                top: -106px;
             }
 
             @include screen-xl {
                 width: 49%;
                 top: -98px;
-                right: 0;
             }
 
             @include custom-min(1300) {
                 top: -98px;
                 width: 49%;
-                right: 0;
             }
 
             @include screen-xxl {
-                top: -85px;
+                top: -105px;
                 width: 50%;
-                right: 0;
             }
 
             img {
@@ -126,9 +192,13 @@
         h1 {
             margin-bottom: 0;
             font-family: $primary_site_font;
-            font-size: $font-size-4xl;
+            font-size: $font_size_xxl;
 
-            @include custom-max(1490) {     // Deliberately non-conforming
+            @include screen-lg {
+                font-size: $font-size-4xl;
+            }
+
+            @include custom-min(1490) {     // Deliberately non-conforming
                 font-size: 2.7em;        
                 line-height: 1.1em;
                 margin-bottom: $spacer-1;
@@ -145,14 +215,48 @@
 
     .site-features {
         background: $teritary_background_color;
+
+        .ds-l-row {
+            @include custom-max(768) {
+                display: block;
+            }
+        }
+
+        .site-container {
+            padding: $spacer-1 $spacer-3;
+
+            @include screen-md {
+                padding: $spacer-1 38px;
+            }
+        }
     }
 
     .feature {
-        padding: $spacer-2;
+        padding: 0 $spacer-4;
+
+        @include screen-md {
+            padding: 0 $spacer-2
+        }
+
+        @include custom-max(768) {
+            max-width: 100%;
+        }
+
+        @include screen-xl {
+            padding: $spacer-2;
+        }
 
         h3 {
             font-family: $secondary_site_font;
             font-weight: normal;
+        }
+
+        p {
+            font-size: $font-size-sm;
+
+            @include screen-xl {
+                font-size: $font-size-md;
+            }
         }
     }
 
@@ -183,11 +287,44 @@
 
 // Table of Contents
 
+
+.homepage-main-content {
+
+    .ds-l-row {
+        @include custom-max(1024) {
+            display: block;
+            margin: 0;
+        }
+    }
+}
+
+
 .homepage-toc {
     margin-top: $spacer-4;
 
+    @include custom-max(1024) {
+        max-width: 100%;
+        padding: 0;
+    }
+
     h1 {
         margin-bottom: 0;
+
+        @include custom-max(1024) {
+            font-size: $font-size-2xl;
+        }
+    }
+
+    h2 {
+        font-size: $font-size-lg;
+
+        @include screen-lg {
+            font-size: $font-size-xl;
+        }
+
+        @include screen-xl {
+            font-size: $font-size-2xl;
+        }
     }
 
     h4 {
@@ -210,9 +347,13 @@
 
     .part-names {
         display: flex;
-        margin: $spacer-3 0;
+        margin: $spacer-2 0;
         padding: 0;
-        font-size: $font-size-lg;
+        font-size: $font-size-md;
+
+        @include screen-lg {
+            font-size: $font-size-lg;
+        }
 
         a {
             text-decoration: none;
@@ -233,7 +374,15 @@
 // Aside - Latest Updates
 
 .homepage-updates {
-    padding-top: $spacer-6;
+    padding: 0 0 $spacer-2 0;
+
+    @include screen-lg {
+        padding-top: $spacer-4;
+    }
+
+    @include custom-max(1024) {
+        max-width: 100%;
+    }
 
     .last-update-external {
         font-style: italic;
@@ -244,7 +393,11 @@
 
     .latest-changes {
         background: $secondary_background_color;
-        padding: $spacer-4;
+        padding: $spacer-3 $spacer-4;
+
+        @include screen-lg {
+            padding: $spacer-4;
+        }
 
         @include screen-xl {
             padding: $spacer-4 $spacer-6;

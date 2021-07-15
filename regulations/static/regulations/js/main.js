@@ -1,17 +1,24 @@
-import RelatedRules from './RelatedRules.js';
-import Collapsible from './Collapsible.js';
-import CollapseButton from './CollapseButton.js';
+import RelatedRules from "./RelatedRules.js";
+import Collapsible from "./Collapsible.js";
+import CollapseButton from "./CollapseButton.js";
 import Vue from "../../node_modules/vue/dist/vue.esm.browser.min.js";
 import { goToVersion } from "./go-to-version.js";
 
-function isElementInViewport (el) {
-    var rect = el.getBoundingClientRect();
+Vue.config.devtools = true;
+
+function isElementInViewport(el) {
+var rect = el.getBoundingClientRect();
 
     return (
         rect.top >= 0 &&
         rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+        rect.bottom <=
+            (window.innerHeight ||
+                document.documentElement
+                    .clientHeight) /* or $(window).height() */ &&
+        rect.right <=
+            (window.innerWidth ||
+                document.documentElement.clientWidth) /* or $(window).width() */
     );
 }
 
@@ -41,12 +48,28 @@ function activateTOCLink() {
     }
 }
 
+// left sidebar defaults to collapsed on screens
+// narrower than 1024px
+const setResponsiveState = (el) => {
+    if (
+        el.dataset.stateName === "left-sidebar" &&
+        el.dataset.state === "expanded" &&
+        window.innerWidth < 1024
+    ) {
+        el.setAttribute("data-state", "collapsed");
+    }
+};
+
 function makeStateful(el) {
     const state_change_target = el.getAttribute("data-state-name");
-    const state_change_buttons = document.querySelectorAll(`[data-set-state][data-state-name='${state_change_target}']`);
+    const state_change_buttons = document.querySelectorAll(
+        `[data-set-state][data-state-name='${state_change_target}']`
+    );
+
+    setResponsiveState(el);
 
     for (const state_change_button of state_change_buttons) {
-        state_change_button.addEventListener('click', function() {
+        state_change_button.addEventListener("click", function () {
             const state = this.getAttribute("data-set-state");
             el.setAttribute("data-state", state);
         });
@@ -55,23 +78,22 @@ function makeStateful(el) {
 
 function viewButtonClose() {
     const viewButton = document.querySelector("#view-button");
-    if(!viewButton) {
+    if (!viewButton) {
         return;
     }
-    viewButton.addEventListener("click", function() {
-        if(this.getAttribute("data-state") === "show") {
-          this.setAttribute("data-set-state", "close"); 
+    viewButton.addEventListener("click", function () {
+        if (this.getAttribute("data-state") === "show") {
+            this.setAttribute("data-set-state", "close");
         }
 
-        if(this.getAttribute("data-state") === "close") {
-          const closeLink = document.querySelector('#close-link');
-          closeLink.click();
+        if (this.getAttribute("data-state") === "close") {
+            const closeLink = document.querySelector("#close-link");
+            closeLink.click();
         }
     });
 }
 
 function makeSticky(el) {
-
     // Sticky header
 
     if (!el) {
@@ -82,11 +104,11 @@ function makeSticky(el) {
 
     function stickyHeader() {
         if (window.pageYOffset > sticky) {
-          el.classList.add("sticky");
+            el.classList.add("sticky");
         } else {
-          el.classList.remove("sticky");
+            el.classList.remove("sticky");
         }
-    } 
+    }
 
     window.addEventListener("scroll", stickyHeader);
 }
@@ -97,10 +119,10 @@ function main() {
             RelatedRules,
             Collapsible,
             CollapseButton,
-        }
-    }).$mount("#vue-app")
+        },
+    }).$mount("#vue-app");
 
-    const stateful_elements = document.querySelectorAll("[data-state]")
+    const stateful_elements = document.querySelectorAll("[data-state]");
     for (const el of stateful_elements) {
         makeStateful(el);
     }
@@ -112,9 +134,9 @@ function main() {
     activateTOCLink();
 
     let reset_button = document.getElementById("search-reset");
-    if(reset_button) {
+    if (reset_button) {
         reset_button.addEventListener("click", (event) => {
-            document.getElementById("search-field").value = '';
+            document.getElementById("search-field").value = "";
             event.preventDefault();
         });
     }
@@ -124,4 +146,3 @@ function main() {
 }
 
 main();
-

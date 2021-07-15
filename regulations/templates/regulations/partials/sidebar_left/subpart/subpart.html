@@ -1,8 +1,8 @@
-<li id="{{ item_subpart }}" class="section-subpart {% if subpart and collapse_state == 'expanded' %}active{% endif %}" tabindex="0">
+<li id="Subpart-{{ item.identifier.0 }}" class="section-subpart {% if subpart and collapse_state == 'expanded' %}active{% endif %}" tabindex="0">
     <div class="flexbox">
         <a href="{% url 'reader_view' title reg_part item.identifier.0 version %}" class="subpart-info"> <!-- This is what should link to a new page that is the top of the relevant subpart -->
             <div class="toc-titles">
-                <h3 data-section-id="{{ item_subpart }}" id="nav-{{ item_subpart }}">
+                <h3 data-section-id="Subpart-{{ item.identifier.0 }}" id="nav-Subpart-{{ item.identifier.0 }}">
                     <span class="subpart-letter">{{item.label_level|safe}}</span> 
                     <span class="subpart-range">({{ item.descendant_range.0 }} - {{ item.descendant_range.1 }})</span>
                     <div class="subpart-name">{{item.label_description|safe}}</div>
@@ -11,14 +11,14 @@
         </a>
 
         {% if item.children %}
-            <collapse-button class="subpart-toggle" name="{{ item_subpart }}" state="{{ collapse_state }}">
+            <collapse-button class="subpart-toggle" name="Subpart-{{ item.identifier.0 }}" state="{{ collapse_state }}">
                 <template v-slot:expanded><i class="fa fa-chevron-up"></i></template>
                 <template v-slot:collapsed><i class="fa fa-chevron-down"></i></template>
             </collapse-button>
         {% endif %}
     </div>
 
-    <collapsible state="{{ collapse_state }}" name="{{ item_subpart }}" transition="0.5s" direction="vertical">
+    <collapsible state="{{ collapse_state }}" name="Subpart-{{ item.identifier.0 }}" transition="0.5s" direction="vertical">
         {% if item.children %}
             {% include "regulations/partials/sidebar_left/subpart/sub_toc.html" with type="subpart" %}
         {% endif %}

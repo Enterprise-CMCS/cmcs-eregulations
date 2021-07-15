@@ -8,7 +8,7 @@
 .reg-text {
 
     h1 {
-        color: $primary_color;
+        color: $black;
         font-size: $base-font-size * 1.5;
         line-height: 1.4;
 
@@ -18,8 +18,12 @@
         }
     }
 
+    .section-title {
+      color: $primary_color;
+    }
+
     h2 {
-       color: $primary_color; 
+       color: $black;
        font-size: $base-font-size * 1.2;
 
         @include screen-xxl {

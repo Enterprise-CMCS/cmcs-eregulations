@@ -4,25 +4,25 @@
 //
 //
 //
+//
+//
+//
+//
 
 var script = {
     name: "collapsible",
 
-    created: function() {
+    created: function () {
         this.visible = this.state === "expanded";
         this.isVertical = this.direction === "vertical";
         this.$root.$on("collapse-toggle", this.toggle);
-
     },
 
-    mounted: function() {
+    mounted: function () {
         window.addEventListener("resize", this.resize);
-        this.$nextTick(() => {
-            this.computeSize();
-        });
     },
 
-    destroyed: function() {
+    destroyed: function () {
         window.removeEventListener("resize", this.resize);
     },
 
@@ -31,7 +31,8 @@ var script = {
             type: String,
             required: true,
         },
-        state: { //expanded or collapsed
+        state: {
+            //expanded or collapsed
             type: String,
             required: true,
         },
@@ -40,13 +41,14 @@ var script = {
             required: false,
             default: "1s",
         },
-        direction: { //horizontal or vertical
+        direction: {
+            //horizontal or vertical
             type: String,
             required: true,
         },
     },
 
-    data: function() {
+    data: function () {
         return {
             size: 0,
             visible: true,
@@ -54,44 +56,57 @@ var script = {
             styles: {
                 overflow: "hidden",
                 transition: this.transition,
-            }
-        }
+            },
+        };
     },
 
     computed: {
-        sizeStyle: function() {
-            return this.isVertical ? 
-                { height: this.visible ? this.size : 0 } :
-                { width: this.visible ? this.size : 0 };
-        }
+        sizeStyle: function () {
+            return this.isVertical
+                ? { height: this.visible ? this.size : 0 }
+                : { width: this.visible ? this.size : 0 };
+        },
     },
 
     methods: {
-        resize: function(e) {
+        resize: function (e) {
             this.computeSize();
         },
-        toggle: function(target) {
-            if(this.name === target) {
-                this.visible = !this.visible;
+        toggle: function (target) {
+            if (this.name === target) {
+                if (!this.visible) {
+                    this.computeSize();
+                }
+                requestAnimationFrame(() => {
+                    this.visible = !this.visible;
+                });
             }
         },
-        computeSize: function() {
-            let setProps = (visibility, display, position, size) => {
-                this.$refs.target.style.visibility = visibility;
-                this.$refs.target.style.display = display;
-                this.$refs.target.style.position = position;
-                if(this.isVertical) {
-                    this.$refs.target.style.height = size;
-                }
-                else {
-                    this.$refs.target.style.width = size;
-                }
-            };
-            let getStyle = () => { return window.getComputedStyle(this.$refs.target); };
+        getStyle: function () {
+            return window.getComputedStyle(this.$refs.target);
+        },
+        setProps: function (visibility, display, position, size) {
+            this.$refs.target.style.visibility = visibility;
+            this.$refs.target.style.display = display;
+            this.$refs.target.style.position = position;
+            if (this.isVertical) {
+                this.$refs.target.style.height = size;
+            } else {
+                this.$refs.target.style.width = size;
+            }
+        },
+        computeSize: function () {
+            const prevSize = this.isVertical
+                ? this.getStyle().height
+                : this.getStyle().width;
 
-            setProps("hidden", "block", "absolute", "auto");
-            this.size = this.isVertical ? getStyle().height : getStyle().width;
-            setProps(null, null, null, 0);
+            this.setProps("hidden", "block", "absolute", "auto");
+
+            this.size = this.isVertical
+                ? this.getStyle().height
+                : this.getStyle().width;
+
+            this.setProps(null, null, null, prevSize);
         },
     },
 };

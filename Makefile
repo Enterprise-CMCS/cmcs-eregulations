@@ -13,11 +13,7 @@ regulations/static/regulations/css/main.css: regulations/static/node_modules reg
 	cd regulations/static; \
 		npm run css;
 
-regulations/static/regulations/js/RelatedRule.js: regulations/static/components/*.vue
-	cd regulations/static; \
-		npm run vue;
-
-regulations/static/regulations/js/main.build.js: regulations/static/regulations/js/RelatedRule.js
+regulations/static/regulations/js/main.build.js: regulations/static/regulations/js/main.js regulations/static/components/*.js
 	cd regulations/static; \
 		npm run js;
 
@@ -34,7 +30,8 @@ storybook: regulations/static/node_modules
 
 .PHONY: lint
 lint:
-	flake8;
+	flake8; \
+	golint -set_exit_status tools/...;
 
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: local.docker data.local

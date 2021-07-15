@@ -1,4 +1,3 @@
-
 //-----------------------------
 // Footer
 //-----------------------------
@@ -6,19 +5,27 @@
 @import "../application_settings";
 
 footer {
-    padding: $spacer-4;
+    padding: $spacer-4 0;
     border-top: 1px solid $border_color;
     background: $teritary_background_color;
 
     p {
+        margin: 0;
         font-size: $font-size-xs;
         color: $secondary_text_color;
+    }
+
+    h4 {
+        font-family: $secondary_site_font;
+        color: $secondary_text_color;
+        margin-top: 0;
+        margin-bottom: $spacer-2;
     }
 
     h5 {
         font-family: $secondary_site_font;
         color: $secondary_text_color;
-        margin: $spacer-1 0 0 0;
+        margin: 0;
         font-size: $font-size-sm;
     }
 
@@ -36,12 +43,25 @@ footer {
 
     .about-footer {
         font-size: $font-size-sm;
+        margin-bottom: $spacer-2;
     }
 
     .footer-left {
+        & > * {
+            padding: 0 $spacer-3 0 $spacer-4;
+            @include custom-max($mobile-max / 1px) {
+                padding: 0 $spacer-4;
+            }
+        }
 
-        a:hover {
-            opacity: .8;
+        a {
+            img {
+                margin-bottom: $spacer-2;
+            }
+
+            &:hover {
+                opacity: 0.8;
+            }
         }
 
         img {
@@ -50,16 +70,31 @@ footer {
         }
     }
 
-     .footer-middle {
+    .footer-middle {
+        & > * {
+            padding: 0;
 
-        h4 {
-            font-family: $secondary_site_font;
-            color: $secondary_text_color;
-            margin-top: 0;
+            @include custom-max($mobile-max / 1px) {
+                padding: 0 $spacer-4;
+            }
+
+            @include screen-lg {
+                max-width: 90%;
+            }
+        }
+
+        @include custom-max($mobile-max / 1px) {
+            padding: $spacer-4 0;
         }
     }
 
-     .footer-right {
+    .footer-right {
+        & > * {
+            padding: 0 $spacer-4 0 $spacer-3;
+            @include custom-max($mobile-max / 1px) {
+                padding: 0 $spacer-4;
+            }
+        }
 
         i {
             font-size: 30px;
@@ -72,6 +107,15 @@ footer {
                 cursor: pointer;
                 @include transition;
             }
+        }
+    }
+
+    // divide to strip unit (px)
+    // https://css-tricks.com/snippets/sass/strip-unit-function/
+    @include custom-max($mobile-max / 1px) {
+        & > div {
+            // stack footer elements on narrow screens
+            flex-direction: column;
         }
     }
 }
