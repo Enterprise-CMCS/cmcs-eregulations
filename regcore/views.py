@@ -1,5 +1,4 @@
 from rest_framework import generics, serializers
-from django.db import models
 from django.conf import settings
 
 from regcore.models import Part
@@ -10,8 +9,10 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
 from rest_framework import exceptions
 
+
 class SettingsUser:
     is_authenticated = False
+
 
 class SettingsAuthentication(authentication.BasicAuthentication):
     def authenticate_credentials(self, userid, password, request=None):

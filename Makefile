@@ -24,13 +24,17 @@ regulations/static/regulations/js/main.build.js: regulations/static/regulations/
 .PHONY: watch
 watch: ## Watch regulations static assets and rebuild when they're changed
 	cd regulations/static; \
-		npm run watch-css;
+		(trap 'kill 0' SIGINT; npm run watch-js & npm run watch-css);
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations
 storybook: regulations/static/node_modules
 	cd regulations/static; \
 		npm run storybook
+
+.PHONY: lint
+lint:
+	flake8;
 
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: local.docker data.local
@@ -47,8 +51,8 @@ local.regulations-core: ## Run migrations and restart the regulations-core
 		docker-compose restart regulations; \
 		sleep 5;
 
-ecfr-parser/build/ecfr-parser: ecfr-parser/*.go ecfr-parser/**/*.go
-	cd ecfr-parser; go build -o build/ecfr-parser .
+tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**/*.go
+	cd tools/ecfr-parser; go build -o build/ecfr-parser .
 
 data.prod: ## Load a Part of Title 42. e.g. make data.prod.435 will load Part 435 into prod
 data.prod: CORE_URL = https://5jk91taqo5.execute-api.us-east-1.amazonaws.com/prod/v2/
@@ -64,8 +68,8 @@ data.local: CORE_URL = http://localhost:8000/v2/
 data.local: export EREGS_USERNAME=RpSS01rhbx
 data.local: export EREGS_PASSWORD=UkOAsfkItN
 
-data.%: ecfr-parser/build/ecfr-parser
-	./ecfr-parser/build/ecfr-parser -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL)
+data.%: tools/ecfr-parser/build/ecfr-parser
+	./tools/ecfr-parser/build/ecfr-parser -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL)
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker-compose stop

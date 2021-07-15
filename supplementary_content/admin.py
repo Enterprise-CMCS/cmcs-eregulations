@@ -8,8 +8,10 @@ from .models import (
     RegulationSection,
 )
 
+
 class SectionsInline(admin.TabularInline):
     model = RegulationSection.supplementary_content.through
+
 
 @admin.register(SupplementaryContent)
 class SupplementaryContentAdmin(admin.ModelAdmin):

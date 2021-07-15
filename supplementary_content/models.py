@@ -2,10 +2,12 @@ from django.db import models
 
 
 class Category(models.Model):
-    parent = models.ForeignKey("self",
+    parent = models.ForeignKey(
+        "self",
         null=True,
         blank=True,
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+    )
     title = models.CharField(max_length=200)
     description = models.TextField()
 
@@ -28,6 +30,7 @@ class SupplementaryContent(models.Model):
     @property
     def truncated_description(self):
         return (self.description or [])[:50]
+
 
 class RegulationSection(models.Model):
     title = models.CharField(max_length=16)

@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import os
-import sys
+
 
 def handler(event, context):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings") 
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
     import django
     django.setup()
 

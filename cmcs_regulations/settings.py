@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
 
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost',]
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost']
 
 # Application definition
 
@@ -144,5 +144,5 @@ API_BASE = os.environ.get('EREGS_API_BASE', '')
 
 GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 
-HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER") 
-HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD") 
+HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
+HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")

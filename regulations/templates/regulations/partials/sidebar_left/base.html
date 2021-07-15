@@ -17,8 +17,8 @@
         <div class="jump-to-label">Jump to Regulation Section</div>
 
         <form method="GET" action="{% url 'goto' %}">
-        <input name="{{ reg_part }}-version" type="hidden" required value={{ version }}>
-        <input name="title" type="hidden" required value={{ title }}>
+        <input name="{{ reg_part }}-version" type="hidden" required value="{{ version }}">
+        <input name="title" type="hidden" required value="{{ title }}">
 
             <div class="jump-to-input">
                 § <select name="part" class="ds-c-field" aria-label="Regulation part number">

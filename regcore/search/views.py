@@ -1,15 +1,10 @@
 from datetime import date
-
 from rest_framework import generics, serializers
 from django.db import models
 
 from regcore.models import Part
-from .models import Part, SearchIndex
+from .models import SearchIndex
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchHeadline
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
 
 
 class SearchViewSerializer(serializers.ModelSerializer):

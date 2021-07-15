@@ -4,4 +4,4 @@ from .views import (
     SearchView,
 )
 
-urlpatterns = [path("search", SearchView.as_view()),]
+urlpatterns = [path("search", SearchView.as_view()), ]

@@ -17,5 +17,5 @@ def render_nested(*templates, context=None, **kwargs):
 def interpolate(value, arg):
     try:
         return value.format(**arg)
-    except:
+    except Exception:
         return value

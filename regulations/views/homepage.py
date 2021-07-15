@@ -2,7 +2,6 @@ from datetime import date
 import logging
 
 from django.views.generic.base import TemplateView
-from requests import HTTPError
 
 from regcore.models import Part
 from .utils import get_structure

@@ -1,5 +1,3 @@
-from datetime import date
-
 from django.db import models
 
 from django.contrib.postgres.fields import ArrayField
@@ -54,11 +52,11 @@ class SearchIndex(models.Model):
 def create_search(part, piece, memo, parent=None, ):
     if piece.get("node_type", None) == "SECTION":
         si = SearchIndex(
-            label = piece["label"],
-            part = part,
-            parent = piece,
-            type = piece["node_type"],
-            content = piece.get("title", piece.get("text", "")),
+            label=piece["label"],
+            part=part,
+            parent=piece,
+            type=piece["node_type"],
+            content=piece.get("title", piece.get("text", "")),
         )
         children = piece.pop("children", []) or []
         for child in children:

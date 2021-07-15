@@ -33,4 +33,11 @@ export default [
             vue()
         ],
     },
+    {
+        input: 'regulations/js/main.js',
+        output: {
+            file: 'regulations/js/main.build.js',
+            format: 'iife',
+        },
+    },
 ]
