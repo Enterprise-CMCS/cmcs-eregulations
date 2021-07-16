@@ -41,7 +41,6 @@ functions:
       STATIC_URL: ${self:custom.settings.static_url}
       WORKING_DIR: /var/task
     handler: wsgi_handler.handler
-    timeout: 15
     events:
       - http: ANY /
       - http: ANY {proxy+}
