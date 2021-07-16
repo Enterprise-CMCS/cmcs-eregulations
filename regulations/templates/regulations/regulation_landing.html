@@ -1,0 +1,22 @@
+{% extends "regulations/base.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="content">
+        <div class="flexbox">
+
+            <aside class="left-sidebar match-sides" data-state="expanded" data-state-name="left-sidebar">
+                {% include "regulations/partials/sidebar_left/subpart.html" %}
+            </aside>
+
+            <main class="reg-part-homepage match-middle">
+        	   {% include content %}              
+    	    </main>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block post_footer %}
+    <script src="{% static '/js/main.build.js' %}"></script>
+{% endblock %}

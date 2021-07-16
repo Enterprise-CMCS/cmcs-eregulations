@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="flexbox">
+
+    <div class="site-title">
+        <a href="{% url 'homepage' %}">Medicaid &amp; CHIP Regulations</a>
+    </div>
+
+    <div class="reg-title">
+        {% if part %}
+        <a href="{% url 'regulation_landing_view' title reg_part %}">
+            <strong>{{title}} CFR Part {{ part }}</strong>
+            <span class="header-part-name">
+            {% if part_label %}
+             - {{ part_label }}
+            {% endif %}
+            </span>
+        </a>
+        {% endif %}
+    </div>
+
+    {% include "regulations/partials/header-search.html" %}
+
+</div>

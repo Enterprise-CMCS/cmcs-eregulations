@@ -1,0 +1,55 @@
+//-----------------------------
+// Expanded Table of Contents
+//-----------------------------
+
+@import "../application_settings";
+
+ul.table-of-contents {
+    margin-left: 0;
+    padding-left: 0;
+    max-width: $text-max-width;
+
+    li {
+        list-style: none;
+        color: $secondary_text_color;
+        margin: $spacer-3 0;
+
+        .subpart-name {
+            font-weight: normal;
+        }
+    }
+
+    ul {
+        margin-left: 0;
+        padding-left: 0;
+
+        li {
+            margin: 0 0 $spacer-1 $spacer-2;
+
+            p {
+                margin-top: $spacer-3;
+                margin-bottom: $spacer-1;
+            }
+        }
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .menu-section {
+        text-decoration: none;
+        font-size: $font-size-md;
+    }
+
+    .toc-section-number {
+        font-weight: bold;
+        min-width: 70px;
+    }
+
+    .toc-section-name {
+        flex: 1;
+        margin-left: $spacer-2;
+    }
+
+}
