@@ -28,7 +28,8 @@ class SearchIndexQuerySet(models.QuerySet):
                     stop_sel='</span>',
                 ),
             )\
-            .order_by('-rank')
+            .order_by('-rank')\
+            .prefetch_related('part')
 
 
 class SearchIndexManager(models.Manager.from_queryset(SearchIndexQuerySet)):
