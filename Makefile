@@ -40,9 +40,9 @@ local.docker: ## Start a local environment
 local.docker:
 	docker-compose up -d; \
 		sleep 5; \
-		make local.regulations-core;
+		make local.regulations;
 
-local.regulations-core: ## Run migrations and restart the regulations-core
+local.regulations: ## Run migrations and restart the regulations-core
 	docker-compose exec regulations python manage.py migrate; \
 		docker-compose restart regulations; \
 		sleep 5;
