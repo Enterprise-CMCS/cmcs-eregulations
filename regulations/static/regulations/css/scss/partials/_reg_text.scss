@@ -1,0 +1,141 @@
+
+//-----------------------------
+// Main Reg Text View
+//-----------------------------
+
+@import "../application_settings";
+
+.reg-text {
+
+    h1 {
+        color: $black;
+        font-size: $base-font-size * 1.5;
+        line-height: 1.4;
+
+        @include screen-xxl {
+            font-size: $base-font-size * 1.9;
+            line-height: 1.5;
+        }
+    }
+
+    .section-title {
+      color: $primary_color;
+    }
+
+    h2 {
+       color: $black;
+       font-size: $base-font-size * 1.2;
+
+        @include screen-xxl {
+            font-size: $font-size-2xl;
+        }
+    }
+}
+
+article {
+    max-width: $text-max-width;
+    margin: $spacer-5 0 $spacer-4 $spacer-4;
+
+    @include screen-xxl {
+        margin: $spacer-5 $spacer-6;
+    }
+
+    i {
+        font-weight: bold;
+    }
+
+    h1 {
+        margin-left: -$spacer-6;
+        padding-left: $spacer-3;
+    }
+
+    p {
+        margin: $spacer-3 0;
+        padding: 0 $spacer-3 0 $spacer-3;
+
+        @for $i from 1 through 10 {
+            &.depth-#{$i} {
+                padding-left: $spacer-3 + $spacer-3 * ($i - 1);
+            }
+        }
+    }
+
+    .reg-section {
+        h2 {
+            margin-left: -$spacer-6;
+            padding-left: $spacer-3;
+        }
+    }
+
+    .paragraphs {
+        margin-left: -27px;
+        font-size: $font-size-sm;
+        line-height: 1.4;
+
+        @include screen-xl {
+            font-size: $font-size-md;
+            line-height: 1.5;
+        }
+    }
+
+    .reference {
+       position: absolute;
+       margin-left: -1.5em;
+       visibility: hidden;
+    }
+
+    h1 > .reference,
+    h2 > .reference {
+        margin-left: -1.2em;
+
+        @include screen-xxl {
+            margin-left: -1.4em;
+        }
+    }
+
+    :hover {
+        > .reference {
+            visibility: visible;
+        }
+    }
+
+
+   .section-text {
+        line-height: 1.8em;
+        display: inline;
+    }
+}
+
+.next-previous {
+    display: flex;
+    margin: $spacer-7 auto;
+
+    .next-prev {
+        direction: table-cell;
+        width: 50%;
+        text-decoration: none;
+
+        &.previous {
+            &:before {
+                background-image: url('/images/previous.svg');
+            }
+        }
+
+        &.next {
+            text-align: right;
+
+            &:before {
+                background-image: url('/images/next.svg');
+            }
+        }
+    }
+
+    .next-prev-label {
+        font-weight: bold;
+    }
+
+    .next-prev-title {
+        font-size: $font-size-sm;
+        color: $primary_text_color;
+    }
+}

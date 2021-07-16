@@ -1,0 +1,239 @@
+// NOTE: Our variables use _ between words. CMS Design System variables use - between words. Sass will treat this the same, but it will help at a glance to know where the variable is coming from.
+
+//--------------------------
+// Colors
+//--------------------------
+
+// Base Colors
+
+$teal: #026666;
+$darkest_blue: #102e43;
+$dark_blue: #17415f;
+$mid_dark_blue: #205982;
+$mid_blue: #046791;
+$light_blue: #a3e8ff;
+$lightest_blue: #eefafe;
+
+$dark_gray: #212121;
+$mid_gray: #5b616b;
+$mid_gray_2: #c4c4c4;
+$light_gray: #d6d7d9;
+$lightest_gray: #f3f3f3;
+
+$magenta: #862074;
+
+$white: #fff;
+$black: #000;
+
+//// Usage ////
+//// Call This Section in Your CSS, Not the Color Names ////
+
+// Colors
+
+$primary_color: $dark_blue;
+$secondary_color: $teal;
+
+// Links
+
+$primary_link_color: $mid_blue;
+$primary_link_hover: $dark_blue;
+
+$secondary_link_color: $teal;
+$secondary_link_hover: $mid_blue;
+
+$teritary_link_color: $dark_blue;
+$teritary_link_hover: $mid_blue;
+
+$reverse_link_color: $light_blue;
+$reverse_link_hover: $white;
+
+$secondary_reverse_link_color: $white;
+$secondary_reverse_link_hover: $light_blue;
+
+$visited_link_color: $magenta;
+
+// Forms
+
+$placeholder_color: $mid_gray_2;
+
+// Backgrounds
+
+$main_background_color: $white;
+$secondary_background_color: $lightest_gray;
+$teritary_background_color: $lightest_blue;
+$reverse_background_color: $dark_blue;
+$reverse_background_darker: $darkest_blue;
+$reverse_background_lighter: $mid_dark_blue;
+
+$hero_background_color: $teal;
+$hero_link_color: $white;
+$hero_link_hover: $light_blue;
+
+//Borders
+
+$border_color: $light_gray;
+$secondary_border_color: $mid_blue;
+$hover_border_color: $light_blue;
+
+// Text
+
+$primary_text_color: $dark_gray;
+$secondary_text_color: $mid_gray;
+$reverse_text_color: $white;
+
+// Indicators
+
+$primary_indicator_background: $teal;
+$primary_indicator_text: $white;
+
+//--------------------------
+// Fonts
+//--------------------------
+
+$primary_site_font: $font-sans; // Open Sans
+$secondary_site_font: "Merriweather", Georgia, serif;
+$font_size_xs: 12px;
+$font_size_xxl: 30px;      // Aligns with the CMS Design System, but their variable is depreciated
+
+//--------------------------
+// Breakpoints
+//--------------------------
+
+// Custom maxes
+$tablet-max: $width-lg - 1; // 1023px
+$mobile-max: $width-md - 1; // 767px
+
+// Uses CMS Design System + a larger screen size
+
+$width-xxl: 1440px;
+$width-3xl: 1920px; // The largest the site container will get
+
+// 544px
+@mixin screen-sm {
+    @media (min-width: #{$width-sm}) {
+        @content;
+    }
+}
+
+// 768px
+@mixin screen-md {
+    @media (min-width: #{$width-md}) {
+        @content;
+    }
+}
+
+// 1024px
+@mixin screen-lg {
+    @media (min-width: #{$width-lg}) {
+        @content;
+    }
+}
+
+// 1280px
+@mixin screen-xl {
+    @media (min-width: #{$width-xl}) {
+        @content;
+    }
+}
+
+// 1440px - eRegs-specific breakpoint
+@mixin screen-xxl {
+    @media (min-width: #{$width-xxl}) {
+        @content;
+    }
+}
+
+// 1440px - eRegs-specific breakpoint
+@mixin screen-3xl {
+    @media (min-width: #{$width-3xl}) {
+        @content;
+    }
+}
+
+// For adjustments that don't fit into the usual breakpoints
+@mixin custom-min($screen) {
+    @media (min-width: $screen+"px") {
+        @content;
+    }
+}
+
+@mixin custom-max($screen) {
+    @media (max-width: $screen+"px") {
+        @content;
+    }
+}
+
+@mixin custom-range($screen-start, $screen-end) {
+    @media (min-width: $screen-start+"px") and (max-width: $screen-end+"px") {
+        @content;
+    }
+}
+
+//--------------------------
+// Transitions
+//--------------------------
+
+@mixin transition {
+    transition: all 0.1s ease-in;
+}
+
+// -------------------------
+// Indicators
+// -------------------------
+
+.indicator {
+    background: $primary_indicator_background;
+    text-transform: uppercase;
+    color: $primary_indicator_text;
+    font-size: 11px;
+    padding: 2px 5px;
+    border-radius: $border-radius;
+    margin-right: 4px;
+}
+
+// -------------------------
+// External Links
+// -------------------------
+
+@mixin external-link {
+    content: url("../images/external-link.svg");
+    padding-left: 5px;
+}
+
+a {
+    &.external {
+        &:after {
+            @include external-link;
+        }
+    }
+}
+
+// -------------------------
+// General Settings
+// -------------------------
+
+// For margins and padding: From the CMS Design System, default to $spacer-* where * is a number between 1–7 (i.e. $spacer-2)
+
+$header-height: 105px; // Update if header height changes
+
+a {
+    color: $primary_link_color;
+
+    &:hover {
+        color: $primary_link_hover;
+        cursor: pointer;
+        @include transition;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+:target:before {
+    // Moves content down so it's not covered by the sticky header
+    content: "";
+    display: block;
+    height: $header-height;
+    margin: -$header-height 0 0;
+}

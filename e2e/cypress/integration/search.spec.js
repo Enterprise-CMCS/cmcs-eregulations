@@ -1,5 +1,6 @@
 describe("Search flow", () => {
     it("shows up on the homepage", () => {
+        cy.viewport('macbook-15');
         cy.visit("/");
         cy.findByPlaceholderText("Search Regulations")
         .should("be.visible")
@@ -10,6 +11,7 @@ describe("Search flow", () => {
     });
     
     it("displays results of the search", () => {
+        cy.viewport('macbook-15');
         cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByText(/\d+ results, displayed by relevance/).should("be.visible");
         cy.findByRole("link", {name: "§ 431.958 Definitions and use of terms."}).should("be.visible").and('have.attr', 'href');
@@ -18,17 +20,20 @@ describe("Search flow", () => {
     });
 
     it("links to a search in the eCFR", () => {
+        cy.viewport('macbook-15');
         cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByRole("link", {name: "State in Beta eCFR", exact: false}).should("have.attr", "href", "https://ecfr.federalregister.gov/search?search%5Bdate%5D=current&search%5Bhierarchy%5D%5Btitle%5D=42&search%5Bquery%5D=State&view=standard");
     });
 
     it("checks a11y for search page", () => {
-        cy.visit("/search/?q=State", { timeout: 60000 });
+        cy.viewport('macbook-15');
+        cy.visit("/search/?q=FMAP", { timeout: 60000 });
         cy.injectAxe();
         cy.checkAccessibility();
     });
     
     it("should have a working searchbox", () => {
+        cy.viewport('macbook-15');
         cy.visit("/search/?q=State", { timeout: 60000 });
         cy.scrollTo("top");
         cy.get(".search-reset").click({force: true});
@@ -40,6 +45,7 @@ describe("Search flow", () => {
     });
 
     it("should be able to clear the searchbox", () => {
+        cy.viewport('macbook-15');
         cy.visit("/search/?q=State", { timeout: 60000 });
         cy.scrollTo("top");
         

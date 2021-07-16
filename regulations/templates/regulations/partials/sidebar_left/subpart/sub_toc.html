@@ -1,0 +1,15 @@
+<ul class="toggle-toc-menu-sections {{type}}-{{item.label|last}}">
+    {% for sub_toc_item in item.children %}
+        {% if sub_toc_item.type == "section" %}
+            {% include "regulations/partials/sidebar_left/subpart/section.html" with item=sub_toc_item subpart=item.identifier.0 %}
+        {% elif sub_toc_item.type == "subject_group" %}
+            {% include "regulations/partials/sidebar_left/subpart/subjgrp.html" with item=sub_toc_item subpart=item.identifier.0 %}
+        {% else %}
+            <li class="toggle-toc-menu-sections">
+                <a href="{{sub_toc_item.url}}" data-section-id="{{sub_toc_item.section_id}}">
+                    {{sub_toc_item.label|safe}}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>

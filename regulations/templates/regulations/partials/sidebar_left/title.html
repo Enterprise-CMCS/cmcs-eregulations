@@ -1,0 +1,39 @@
+{% extends "regulations/partials/sidebar_left/base.html" %}
+{% load static %}
+
+{% block jump-to %}{% endblock %}
+
+{% block navigation %}
+    <ul>
+        {% for title in toc %}
+            <li class="search-sidebar-element">
+                <h2>{{ title.label }}</h2>
+            </li>
+            
+            {% for chapter in title.children %}
+                <li class="search-sidebar-element">
+                    <h3>{{ chapter.label }}</h3>
+                </li>
+
+                {% for subchapter in chapter.children %}
+                    <li class="search-sidebar-element">
+                        <h4>{{ subchapter.label }}</h4>
+                    </li>
+
+                    {% for part in subchapter.children %}
+                        <li>
+                          <a class="subpart-info" href="{% url 'reader_view' title.identifier.0 part.identifier.0 %}" aria-label="Go to {{part.label_level}}">
+                                <div class="toc-titles">
+                                    <h3>
+                                        <p class="subpart-letter">{{ part.label_level }}</p>
+                                        <p class="subpart-name">{{ part.label_description }}</p>
+                                    </h3>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,17 @@
+<li>
+    <h3>
+    {% if reserved %}
+        <span class="menu-section">
+            <span class="toc-section-number">§ {{identifier|join:'.' }}</span>
+            <span class="toc-section-name">[Reserved]</span>
+        </span>
+    {% else %}
+        <a class="menu-section" href="{{ url }}" data-section-id="{{identifier|join:'-' }}" id="landing-nav-{{identifier|join:'-'}}">
+          <div class="flexbox">
+            <span class="toc-section-number">§ {{identifier|join:'.' }}</span>
+            <span class="toc-section-name">{{label_description|safe}}</span>
+          </div>
+        </a>
+    {% endif %}
+    </h3>
+</li>

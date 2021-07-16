@@ -5,7 +5,7 @@ services:
         container_name: cypress
         network_mode: host
         depends_on:
-        - regulations-site
+        - regulations
         environment:
         - CYPRESS_baseUrl=http://localhost:8000
         working_dir: /app
