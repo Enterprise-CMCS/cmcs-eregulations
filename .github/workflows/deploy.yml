@@ -51,12 +51,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd serverless/regulations-site
+          pushd serverless
           npm install serverless -g
           npm install
           serverless deploy --stage ${{ matrix.environment }} | tee output.log
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
-          serverless invoke --function reg_core_migrate  --stage ${{ matrix.environment }}
+          serverless invoke --function reg_core_migrate --stage ${{ matrix.environment }}
           popd
       - name: end-to-end tests
         uses: cypress-io/github-action@v2
