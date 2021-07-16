@@ -45,7 +45,6 @@ jobs:
           npm install
           serverless deploy --stage ${{ matrix.environment }}
           popd
-          popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
         env:
