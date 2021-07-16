@@ -13,7 +13,7 @@ regulations/static/regulations/css/main.css: regulations/static/node_modules reg
 	cd regulations/static; \
 		npm run css;
 
-regulations/static/regulations/js/main.build.js: regulations/static/regulations/js/main.js regulations/static/components/*.js
+regulations/static/regulations/js/main.build.js: regulations/static/regulations/js/main.js regulations/static/components/*.vue
 	cd regulations/static; \
 		npm run js;
 
