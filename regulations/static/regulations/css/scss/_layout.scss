@@ -93,7 +93,7 @@ aside {
             padding: $spacer-2 $spacer-4;
         }
 
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max($mobile-max / 1px) {
             display: none;
         }
     }

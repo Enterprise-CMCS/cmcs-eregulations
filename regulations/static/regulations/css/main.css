@@ -13610,7 +13610,7 @@ aside.right-sidebar {
     padding: 16px 32px;
   }
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   aside.right-sidebar {
     display: none;
   }
