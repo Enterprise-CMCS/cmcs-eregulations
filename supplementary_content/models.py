@@ -22,7 +22,7 @@ class SupplementaryContent(models.Model):
     date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplementary_content")
 
     def __str__(self):
         return f'{self.date} {self.title} {self.truncated_description}...'
