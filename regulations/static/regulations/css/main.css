@@ -13617,6 +13617,7 @@ aside.right-sidebar {
 }
 aside + .match-middle {
   padding: 0 32px;
+  flex: 1;
 }
 @media (max-width: 767px) {
   aside[data-state=expanded] {
