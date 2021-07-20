@@ -17,7 +17,7 @@ class RegulationSectionSerializer(serializers.ModelSerializer):
 
 class SupplementaryContentSerializer(serializers.ModelSerializer):
     sections = RegulationSectionSerializer(many=True)
-    
+
     class Meta:
         model = SupplementaryContent
         fields = ("url", "title", "description", "date", "created_at", "updated_at", "category", "sections")
