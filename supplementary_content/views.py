@@ -2,9 +2,6 @@ import supplementary_content
 from rest_framework import serializers, generics
 from rest_framework.response import Response
 
-import logging
-logger = logging.getLogger(__name__)
-
 
 from .models import (
     Category,
@@ -16,7 +13,7 @@ from .models import (
 class RegulationSectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegulationSection
-        fields = ("title", "part", "subpart", "section", "supplementary_content")
+        fields = ("title", "part", "subpart", "section")
 
 
 class SupplementaryContentSerializer(serializers.ModelSerializer):
@@ -69,14 +66,6 @@ class SupplementaryContentView(generics.ListAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-
-        data = serializer.data
-
-        tree = []
-
-
-
-        #return Response(serializer.data)
         return Response(make_category_tree(serializer.data))
 
 
@@ -89,24 +78,30 @@ def add_category(category):
     }
 
 
+def remove_dicts(tree):
+    new_tree = []
+    for item in tree.values():
+        item['sub_categories'] = remove_dicts(item['sub_categories'])
+        new_tree.append(item)
+    return new_tree
+
+
 def make_category_tree(data):
     tree = {}
     for category in data:
         stack = []
         current = category
-        logger.warn("Processing {}".format(current['id']))
         while current['parent'] is not None:
-            logger.warn("Added {} to the stack".format(current['parent']['id']))
             stack.append(current['parent'])
             current = current['parent']
         node = tree
         while len(stack) > 0:
             current = stack.pop()
-            logger.warn("Removed {} from the stack".format(current['id']))
             if current['id'] not in node:
                 node[current['id']] = add_category(current)
             node = node[current['id']]['sub_categories']
         if category['id'] not in node:
             node[category['id']] = add_category(category)
-        node[category['id']]['supplementary_content'].append(category['supplementary_content'])
-    return tree
+        for content in category['supplementary_content']:
+            node[category['id']]['supplementary_content'].append(content)
+    return remove_dicts(tree)
