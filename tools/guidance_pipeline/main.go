@@ -12,9 +12,9 @@ import (
 )
 
 type Guidance struct {
-	Name string   `json:"name"`
-	Link string   `json:"href"`
-	Regs []string `json:"regs"`
+	Name string   `json:"title"`
+	Link string   `json:"url"`
+	Regs []string `json:"sections"`
 }
 
 var file = flag.String("f", "", "supply a file of URLs to download or a csv file")

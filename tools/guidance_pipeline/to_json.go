@@ -5,8 +5,8 @@ import (
 )
 
 type Regulation struct {
-	Header string     `json:"header"`
-	Links  []Guidance `json:"links"`
+	Header string     `json:"title"`
+	Links  []Guidance `json:"supplementary_content"`
 }
 
 func buildRegulation(header string, guidances []Guidance) Regulation {
