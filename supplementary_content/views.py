@@ -1,4 +1,3 @@
-import supplementary_content
 from rest_framework import serializers, generics
 from rest_framework.response import Response
 
@@ -18,6 +17,7 @@ class RegulationSectionSerializer(serializers.ModelSerializer):
 
 class SupplementaryContentSerializer(serializers.ModelSerializer):
     sections = RegulationSectionSerializer(many=True)
+    
     class Meta:
         model = SupplementaryContent
         fields = ("url", "title", "description", "date", "created_at", "updated_at", "category", "sections")
