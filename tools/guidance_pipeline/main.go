@@ -12,8 +12,8 @@ import (
 )
 
 type Guidance struct {
-	Name     string    `json:"title"`
-	Link     string    `json:"url"`
+	Title    string    `json:"title"`
+	Url      string    `json:"url"`
 	Sections []Section `json:"sections"`
 }
 
@@ -140,8 +140,8 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 
 			for _, section := range sections {
 				guidance := Guidance{
-					Name:     record[0],
-					Link:     link,
+					Title:    record[0],
+					Url:      link,
 					Sections: sections,
 				}
 				sectionString := section.Part + "-" + section.Section
