@@ -12,9 +12,9 @@ import (
 )
 
 type Guidance struct {
-	Name string   `json:"title"`
-	Link string   `json:"url"`
-	Regs []string `json:"sections"`
+	Name     string    `json:"title"`
+	Link     string    `json:"url"`
+	Sections []Section `json:"sections"`
 }
 
 var file = flag.String("f", "", "supply a file of URLs to download or a csv file")
@@ -136,16 +136,16 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 				log.Println(err)
 				continue
 			}
-			regs := formatRegs(record[2:])
+			sections := formatSections(record[2:])
 
-			for _, reg := range regs {
+			for _, section := range sections {
 				guidance := Guidance{
-					Name: record[0],
-					Link: link,
-					Regs: regs,
+					Name:     record[0],
+					Link:     link,
+					Sections: sections,
 				}
-
-				regMap[reg] = append(regMap[reg], guidance)
+				sectionString := section.Part + "-" + section.Section
+				regMap[sectionString] = append(regMap[sectionString], guidance)
 			}
 		}
 	}
