@@ -11,6 +11,10 @@ $toc_toggles_width: 64px;
 // Sidebar
 
 aside.left-sidebar {
+    .invisible {
+        height: 0px !important;
+    }
+
     color: $reverse_text_color;
     height: 100vh;
     overflow-y: scroll;

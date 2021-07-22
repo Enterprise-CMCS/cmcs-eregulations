@@ -14681,6 +14681,9 @@ aside.left-sidebar {
   z-index: 1;
   transition: flex-basis 0.25s ease-out;
 }
+aside.left-sidebar .invisible {
+  height: 0px !important;
+}
 aside.left-sidebar[data-state=collapsed] {
   width: 1em;
   padding: 0 1em 1em;

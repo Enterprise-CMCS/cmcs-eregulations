@@ -378,6 +378,7 @@
   //
   //
   //
+  //
 
   var script$1 = {
       name: "collapsible",
@@ -435,12 +436,9 @@
 
       computed: {
           sizeStyle: function () {
-              if (this.visible) {
-                  console.debug(this.size);
-              }
               return this.isVertical
-                  ? { height: this.visible ? this.size : 0 }
-                  : { width: this.visible ? this.size : 0 };
+                  ? { height: this.size }
+                  : { width: this.size };
           },
       },
 
@@ -450,7 +448,6 @@
           },
           toggle: function (target) {
               if (this.name === target) {
-                  this.computeSize();
                   requestAnimationFrame(() => {
                       this.visible = !this.visible;
                   });
@@ -470,17 +467,19 @@
               }
           },
           _computeSize: function() {
-              const prevSize = this.isVertical
-                  ? this.getStyle().height
-                  : this.getStyle().width;
-
+              this.$refs.target.classList.remove("invisible");
+              
               this.setProps("hidden", "block flow-root", "absolute", "auto");
 
               const size = this.isVertical
                   ? this.getStyle().height
                   : this.getStyle().width;
 
-              this.setProps(null, null, null, prevSize);
+              this.setProps(null, null, null, size);
+              if (!this.visible) {
+                  this.$refs.target.classList.add("invisible");
+              }
+              console.debug(size);
               return size;
           },
           computeSize: function () {
@@ -574,7 +573,11 @@
     var _c = _vm._self._c || _h;
     return _c(
       "div",
-      { ref: "target", style: [_vm.styles, _vm.sizeStyle] },
+      {
+        ref: "target",
+        class: { invisible: !_vm.visible },
+        style: [_vm.styles, _vm.sizeStyle]
+      },
       [_vm._t("default")],
       2
     )

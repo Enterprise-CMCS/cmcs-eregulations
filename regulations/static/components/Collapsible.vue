@@ -1,6 +1,7 @@
 <template>
     <div
         ref="target"
+        v-bind:class="{ invisible: !visible }"
         v-bind:style="[styles, sizeStyle]"
     >
         <slot></slot>
@@ -64,12 +65,9 @@ export default {
 
     computed: {
         sizeStyle: function () {
-            if (this.visible) {
-                console.debug(this.size);
-            }
             return this.isVertical
-                ? { height: this.visible ? this.size : 0 }
-                : { width: this.visible ? this.size : 0 };
+                ? { height: this.size }
+                : { width: this.size };
         },
     },
 
@@ -79,7 +77,6 @@ export default {
         },
         toggle: function (target) {
             if (this.name === target) {
-                this.computeSize();
                 requestAnimationFrame(() => {
                     this.visible = !this.visible;
                 });
@@ -99,17 +96,19 @@ export default {
             }
         },
         _computeSize: function() {
-            const prevSize = this.isVertical
-                ? this.getStyle().height
-                : this.getStyle().width;
-
+            this.$refs.target.classList.remove("invisible")
+            
             this.setProps("hidden", "block flow-root", "absolute", "auto");
 
             const size = this.isVertical
                 ? this.getStyle().height
                 : this.getStyle().width;
 
-            this.setProps(null, null, null, prevSize);
+            this.setProps(null, null, null, size);
+            if (!this.visible) {
+                this.$refs.target.classList.add("invisible")
+            }
+            console.debug(size);
             return size;
         },
         computeSize: function () {
