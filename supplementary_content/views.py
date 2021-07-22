@@ -66,42 +66,43 @@ class SupplementaryContentView(generics.ListAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(make_category_tree(serializer.data))
+        return Response(_make_category_tree(serializer.data))
 
 
-def add_category(category):
+def _add_category(category):
     return {
         'title': category['title'],
         'description': category['description'],
-        'supplementary_content': [],
+        'supplementary_content': category.get('supplementary_content', []),
         'sub_categories': {},
     }
 
 
-def remove_dicts(tree):
+def _remove_dicts(tree):
     new_tree = []
     for item in tree.values():
-        item['sub_categories'] = remove_dicts(item['sub_categories'])
+        item['sub_categories'] = _remove_dicts(item['sub_categories'])
         new_tree.append(item)
     return new_tree
 
 
-def make_category_tree(data):
+def _make_category_stack(category):
+    stack = [category]
+    current = category
+    while current['parent'] is not None:
+        stack.append(current['parent'])
+        current = current['parent']
+    return stack
+
+
+def _make_category_tree(data):
     tree = {}
     for category in data:
-        stack = []
-        current = category
-        while current['parent'] is not None:
-            stack.append(current['parent'])
-            current = current['parent']
+        stack = _make_category_stack(category)
         node = tree
         while len(stack) > 0:
             current = stack.pop()
             if current['id'] not in node:
-                node[current['id']] = add_category(current)
+                node[current['id']] = _add_category(current)
             node = node[current['id']]['sub_categories']
-        if category['id'] not in node:
-            node[category['id']] = add_category(category)
-        for content in category['supplementary_content']:
-            node[category['id']]['supplementary_content'].append(content)
-    return remove_dicts(tree)
+    return _remove_dicts(tree)
