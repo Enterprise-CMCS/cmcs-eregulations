@@ -71,19 +71,12 @@ class SupplementaryContentView(generics.ListAPIView):
 
 def _add_category(category):
     return {
+        'id': category['id'],
         'title': category['title'],
         'description': category['description'],
         'supplementary_content': category.get('supplementary_content', []),
-        'sub_categories': {},
+        'sub_categories': [],
     }
-
-
-def _remove_dicts(tree):
-    new_tree = []
-    for item in tree.values():
-        item['sub_categories'] = _remove_dicts(item['sub_categories'])
-        new_tree.append(item)
-    return new_tree
 
 
 def _make_category_stack(category):
@@ -95,14 +88,23 @@ def _make_category_stack(category):
     return stack
 
 
+def _get_category(tree, id):
+    for category in tree:
+        if category['id'] == id:
+            return category
+    return None
+
+
 def _make_category_tree(data):
-    tree = {}
+    tree = []
     for category in data:
         stack = _make_category_stack(category)
         node = tree
         while len(stack) > 0:
             current = stack.pop()
-            if current['id'] not in node:
-                node[current['id']] = _add_category(current)
-            node = node[current['id']]['sub_categories']
-    return _remove_dicts(tree)
+            sub_node = _get_category(node, current['id'])
+            if sub_node == None:
+                sub_node = _add_category(current)
+                node.append(sub_node)
+            node = sub_node['sub_categories']
+    return tree
