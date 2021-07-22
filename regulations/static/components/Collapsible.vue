@@ -1,7 +1,6 @@
 <template>
     <div
         ref="target"
-        v-bind:class="{ visible: visible }"
         v-bind:style="[styles, sizeStyle]"
     >
         <slot></slot>
@@ -13,8 +12,11 @@ export default {
     name: "collapsible",
 
     created: function () {
-        this.visible = this.state === "expanded";
-        this.isVertical = this.direction === "vertical";
+        requestAnimationFrame(() => {
+            this.computeSize();
+            this.visible = this.state === "expanded";
+            this.isVertical = this.direction === "vertical";
+        });
         this.$root.$on("collapse-toggle", this.toggle);
     },
 
@@ -51,7 +53,7 @@ export default {
     data: function () {
         return {
             size: 0,
-            visible: true,
+            visible: false,
             isVertical: true,
             styles: {
                 overflow: "hidden",
@@ -62,6 +64,9 @@ export default {
 
     computed: {
         sizeStyle: function () {
+            if (this.visible) {
+                console.debug(this.size);
+            }
             return this.isVertical
                 ? { height: this.visible ? this.size : 0 }
                 : { width: this.visible ? this.size : 0 };
@@ -74,9 +79,7 @@ export default {
         },
         toggle: function (target) {
             if (this.name === target) {
-                if (!this.visible) {
-                    this.computeSize();
-                }
+                this.computeSize();
                 requestAnimationFrame(() => {
                     this.visible = !this.visible;
                 });
@@ -95,18 +98,22 @@ export default {
                 this.$refs.target.style.width = size;
             }
         },
-        computeSize: function () {
+        _computeSize: function() {
             const prevSize = this.isVertical
                 ? this.getStyle().height
                 : this.getStyle().width;
 
-            this.setProps("hidden", "block", "absolute", "auto");
+            this.setProps("hidden", "block flow-root", "absolute", "auto");
 
-            this.size = this.isVertical
+            const size = this.isVertical
                 ? this.getStyle().height
                 : this.getStyle().width;
 
             this.setProps(null, null, null, prevSize);
+            return size;
+        },
+        computeSize: function () {
+            this.size = this._computeSize();
         },
     },
 };

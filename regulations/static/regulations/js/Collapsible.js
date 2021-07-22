@@ -7,14 +7,16 @@
 //
 //
 //
-//
 
 var script = {
     name: "collapsible",
 
     created: function () {
-        this.visible = this.state === "expanded";
-        this.isVertical = this.direction === "vertical";
+        requestAnimationFrame(() => {
+            this.computeSize();
+            this.visible = this.state === "expanded";
+            this.isVertical = this.direction === "vertical";
+        });
         this.$root.$on("collapse-toggle", this.toggle);
     },
 
@@ -51,7 +53,7 @@ var script = {
     data: function () {
         return {
             size: 0,
-            visible: true,
+            visible: false,
             isVertical: true,
             styles: {
                 overflow: "hidden",
@@ -62,6 +64,9 @@ var script = {
 
     computed: {
         sizeStyle: function () {
+            if (this.visible) {
+                console.debug(this.size);
+            }
             return this.isVertical
                 ? { height: this.visible ? this.size : 0 }
                 : { width: this.visible ? this.size : 0 };
@@ -74,9 +79,7 @@ var script = {
         },
         toggle: function (target) {
             if (this.name === target) {
-                if (!this.visible) {
-                    this.computeSize();
-                }
+                this.computeSize();
                 requestAnimationFrame(() => {
                     this.visible = !this.visible;
                 });
@@ -95,18 +98,22 @@ var script = {
                 this.$refs.target.style.width = size;
             }
         },
-        computeSize: function () {
+        _computeSize: function() {
             const prevSize = this.isVertical
                 ? this.getStyle().height
                 : this.getStyle().width;
 
-            this.setProps("hidden", "block", "absolute", "auto");
+            this.setProps("hidden", "block flow-root", "absolute", "auto");
 
-            this.size = this.isVertical
+            const size = this.isVertical
                 ? this.getStyle().height
                 : this.getStyle().width;
 
             this.setProps(null, null, null, prevSize);
+            return size;
+        },
+        computeSize: function () {
+            this.size = this._computeSize();
         },
     },
 };
@@ -196,11 +203,7 @@ var __vue_render__ = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    {
-      ref: "target",
-      class: { visible: _vm.visible },
-      style: [_vm.styles, _vm.sizeStyle]
-    },
+    { ref: "target", style: [_vm.styles, _vm.sizeStyle] },
     [_vm._t("default")],
     2
   )
