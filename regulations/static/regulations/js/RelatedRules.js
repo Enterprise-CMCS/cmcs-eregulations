@@ -143,7 +143,14 @@ var __vue_render__$2 = function() {
   return _c("div", { staticClass: "related-rule recent-change" }, [
     _c(
       "a",
-      { staticClass: "related-rule-title", attrs: { href: _vm.html_url } },
+      {
+        staticClass: "related-rule-title",
+        attrs: {
+          href: _vm.html_url,
+          target: "_blank",
+          rel: "noopener noreferrer"
+        }
+      },
       [
         _c("span", { staticClass: "recent-flag indicator" }, [
           _vm._v(_vm._s(_vm.expandedType))

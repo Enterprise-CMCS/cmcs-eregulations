@@ -1,6 +1,6 @@
 <template>
   <div class="related-rule recent-change">
-    <a class="related-rule-title" :href="html_url">
+    <a class="related-rule-title" :href="html_url" target="_blank" rel="noopener noreferrer">
       <span class="recent-flag indicator">{{ expandedType }}</span>
       <span class="recent-date" v-if="publication_date">{{ publication_date|formatDate }}</span> | <span class="recent-fr">{{ citation }}</span>
       <div class="recent-title">{{ title }}</div>
