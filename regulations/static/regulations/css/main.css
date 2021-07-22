@@ -14686,6 +14686,9 @@ aside.left-sidebar[data-state=collapsed] {
   padding: 0 1em 1em;
   scrollbar-width: none;
 }
+aside.left-sidebar[data-state=collapsed]::-webkit-scrollbar {
+  display: none;
+}
 aside.left-sidebar[data-state=collapsed] div {
   display: none;
 }
