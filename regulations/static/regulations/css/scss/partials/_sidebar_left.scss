@@ -24,6 +24,9 @@ aside.left-sidebar {
         width: 1em;
         padding: 0 1em 1em;
         scrollbar-width: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         div {
             display: none;
