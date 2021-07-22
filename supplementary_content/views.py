@@ -23,24 +23,17 @@ class SupplementaryContentSerializer(serializers.ModelSerializer):
         fields = ("url", "title", "description", "date", "created_at", "updated_at", "category", "sections")
 
 
-class ParentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ("id", "parent", "title", "description",)
-
-    def get_fields(self):
-        fields = super(ParentSerializer, self).get_fields()
-        fields['parent'] = ParentSerializer()
-        return fields
-
-
 class CategorySerializer(serializers.ModelSerializer):
     supplementary_content = SupplementaryContentSerializer(many=True)
-    parent = ParentSerializer()
 
     class Meta:
         model = Category
         fields = ("id", "parent", "title", "description", "supplementary_content")
+
+    def get_fields(self):
+        fields = super(CategorySerializer, self).get_fields()
+        fields['parent'] = CategorySerializer()
+        return fields
 
 
 class SupplementaryContentView(generics.ListAPIView):
