@@ -96,7 +96,7 @@ def _make_category_tree(data):
         while len(stack) > 0:
             current = stack.pop()
             sub_node = _get_category(node, current['id'])
-            if sub_node == None:
+            if sub_node is None:
                 sub_node = _add_category(current)
                 node.append(sub_node)
             node = sub_node['sub_categories']
