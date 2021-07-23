@@ -6,7 +6,11 @@
 @import "../application_settings";
 
 header {
-	height: calc($header-height - $spacer-4);
+	height: calc($header_height_mobile - $spacer-2);
+
+	@include screen-lg {
+		height: calc($header_height - $spacer-4);	
+	}
 
 	// Sticky Header and Content Adjustments
 
@@ -25,10 +29,18 @@ header {
 		}
 
 		+ .content {						// Moves content/aside down so they're not covered by the sticky header 
-			padding-top: $header-height; 	
+			padding-top: $header_height_mobile; 
+
+			@include screen-lg {
+				padding-top: $header_height; 
+			}	
 
 		  	aside {
-				top: $header-height;
+				top: $header_height_mobile;
+
+				@include screen-lg {
+					top: $header_height; 
+				}
 			}
 		}
 
@@ -49,21 +61,36 @@ header {
 
 	.flexbox {
 		align-items: center;
+		display: block;	
+
+		@include screen-lg {
+			display: flex;
+		}
 	}
 
 	.site-title {
-		display: inline-block;
-		border-right: 1px solid $border_color;
 		padding-right: $spacer-2;
 		margin-right: $spacer-2;
-		font-size: $font-size-2xl;
-		font-weight: bold;
+		font-size: $font_size_sm;
+		font-weight: normal;
+
+		@include screen-lg {
+			border-right: 1px solid $border_color;
+			font-size: $font-size-2xl;
+			font-weight: bold;
+			display: inline-block;
+		}
 	}
 
 	.reg-title {
-		display: inline-block;
+		display: block;
 		flex: 2;
 		padding-right: $spacer-2;
+		font-size: $font-size-lg;
+
+		@include screen-lg {
+			font-size: $font-size-md;
+		}
 
 		a {
 			max-width: $text-max-width;
@@ -81,12 +108,22 @@ header {
 
 .search-header {
 	float: right;
+	margin-top: -$spacer-4;
+
+	@include screen-lg {
+		margin-top: 0;
+
+		svg {
+			display: none;
+		}
+	}
 
 	.search-box {
-		width: 260px;
+		display: none;
 
 	    @include screen-lg {
 	        width: 250px;
+	        display: inline-block;
 	    }
 
 	    @include screen-xl {

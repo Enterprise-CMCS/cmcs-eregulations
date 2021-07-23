@@ -214,7 +214,8 @@ a {
 
 // For margins and padding: From the CMS Design System, default to $spacer-* where * is a number between 1–7 (i.e. $spacer-2)
 
-$header-height: 105px; // Update if header height changes
+$header_height: 105px; // Update if header height changes
+$header_height_mobile: 73px;
 
 a {
     color: $primary_link_color;
@@ -234,6 +235,11 @@ html {
     // Moves content down so it's not covered by the sticky header
     content: "";
     display: block;
-    height: $header-height;
-    margin: -$header-height 0 0;
+    height: $header_height_mobile;
+    margin: -$header_height_mobile 0 0;
+
+    @include screen-lg {
+        height: $header_height;
+        margin: -$header_height 0 0;
+    }
 }

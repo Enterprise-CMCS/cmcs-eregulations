@@ -13516,13 +13516,24 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 header {
-  padding: 32px;
+  padding: 16px 32px;
   border-bottom: 1px solid #17415f;
+}
+@media (min-width: 1024px) {
+  header {
+    padding: 32px;
+  }
 }
 
 html {
@@ -13693,8 +13704,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 html {
@@ -13763,8 +13780,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 .site-homepage {
@@ -14193,8 +14216,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 .search-page main {
@@ -14416,8 +14445,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 .view-and-compare {
@@ -14496,8 +14531,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 .flash-banner {
@@ -14550,12 +14591,23 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 header {
-  height: calc($header-height - $spacer-4);
+  height: calc($header_height_mobile - $spacer-2);
+}
+@media (min-width: 1024px) {
+  header {
+    height: calc($header_height - $spacer-4);
+  }
 }
 header.sticky {
   position: fixed;
@@ -14571,10 +14623,20 @@ header.sticky .search-header {
   margin-right: 64px;
 }
 header.sticky + .content {
-  padding-top: 105px;
+  padding-top: 73px;
+}
+@media (min-width: 1024px) {
+  header.sticky + .content {
+    padding-top: 105px;
+  }
 }
 header.sticky + .content aside {
-  top: 105px;
+  top: 73px;
+}
+@media (min-width: 1024px) {
+  header.sticky + .content aside {
+    top: 105px;
+  }
 }
 header a {
   text-decoration: none;
@@ -14588,19 +14650,37 @@ header a:hover {
 }
 header .flexbox {
   align-items: center;
+  display: block;
+}
+@media (min-width: 1024px) {
+  header .flexbox {
+    display: flex;
+  }
 }
 header .site-title {
-  display: inline-block;
-  border-right: 1px solid #d6d7d9;
   padding-right: 16px;
   margin-right: 16px;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: normal;
+}
+@media (min-width: 1024px) {
+  header .site-title {
+    border-right: 1px solid #d6d7d9;
+    font-size: 24px;
+    font-weight: bold;
+    display: inline-block;
+  }
 }
 header .reg-title {
-  display: inline-block;
+  display: block;
   flex: 2;
   padding-right: 16px;
+  font-size: 18px;
+}
+@media (min-width: 1024px) {
+  header .reg-title {
+    font-size: 16px;
+  }
 }
 header .reg-title a {
   max-width: 53rem;
@@ -14614,13 +14694,23 @@ header .reg-title a {
 
 .search-header {
   float: right;
+  margin-top: -32px;
+}
+@media (min-width: 1024px) {
+  .search-header {
+    margin-top: 0;
+  }
+  .search-header svg {
+    display: none;
+  }
 }
 .search-header .search-box {
-  width: 260px;
+  display: none;
 }
 @media (min-width: 1024px) {
   .search-header .search-box {
     width: 250px;
+    display: inline-block;
   }
 }
 @media (min-width: 1280px) {
@@ -14668,8 +14758,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 aside.left-sidebar {
@@ -14932,8 +15028,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 aside.right-sidebar {
@@ -15138,8 +15240,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 .reg-text h1 {
@@ -15311,8 +15419,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 .reg-part-homepage {
@@ -15375,8 +15489,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 footer {
@@ -15507,8 +15627,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 main.error-page {
@@ -15615,8 +15741,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 ul.table-of-contents {
@@ -15690,8 +15822,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 73px;
+  margin: -73px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 main.about {
