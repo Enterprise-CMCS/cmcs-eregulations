@@ -14674,7 +14674,7 @@ html {
 
 aside.left-sidebar {
   color: #fff;
-  height: 100vh;
+  height: calc(100vh - 105px);
   overflow-y: scroll;
   position: sticky;
   top: 0;
