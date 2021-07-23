@@ -156,6 +156,10 @@ header {
 
     &[data-state="expanded"] {
         display: block;
+
+        @include screen-lg {
+            display: none;
+        }
     }
 
 	svg {

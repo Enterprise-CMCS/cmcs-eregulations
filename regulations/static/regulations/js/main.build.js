@@ -869,9 +869,9 @@
       }
   }
 
-  // left sidebar defaults to collapsed on screens
-  // narrower than 1024px
   const setResponsiveState = (el) => {
+      // left sidebar defaults to collapsed on screens
+      // narrower than 1024px
       if (
           el.dataset.stateName === "left-sidebar" &&
           el.dataset.state === "expanded" &&

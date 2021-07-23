@@ -14748,6 +14748,11 @@ header .reg-title a {
 .search-header-mobile-open[data-state=expanded] {
   display: block;
 }
+@media (min-width: 1024px) {
+  .search-header-mobile-open[data-state=expanded] {
+    display: none;
+  }
+}
 .search-header-mobile-open svg {
   display: inline-block;
   vertical-align: middle;
