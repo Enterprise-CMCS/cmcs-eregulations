@@ -23,7 +23,7 @@ main.about {
     }
 
     h2 {
-        color: $primary_color; 
+        color: $primary_color;
     }
 
     .ecfr-graphic {
@@ -38,9 +38,9 @@ main.about {
         font-style: italic;
     }
 
-    :target::before {       // Removes accomodation for the sticky header - delete if this page gets a sticky header
+    :target::before {
+        // Removes accomodation for the sticky header - delete if this page gets a sticky header
         margin-top: 0;
         height: auto;
     }
-
 }

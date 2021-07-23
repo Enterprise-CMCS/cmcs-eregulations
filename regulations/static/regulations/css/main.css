@@ -13610,13 +13610,14 @@ aside.right-sidebar {
     padding: 16px 32px;
   }
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   aside.right-sidebar {
     display: none;
   }
 }
 aside + .match-middle {
   padding: 0 32px;
+  flex: 1;
 }
 @media (max-width: 767px) {
   aside[data-state=expanded] {
