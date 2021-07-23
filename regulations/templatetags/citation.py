@@ -6,7 +6,7 @@ from django.utils.html import conditional_escape
 
 register = template.Library()
 
-el = ('<a href="https://federalregister.gov/citation/', '">', '</a>')
+el = ('<a href="https://federalregister.gov/citation/', '" target="_blank" rel="noopener noreferrer">', '</a>')
 
 
 @register.filter(name='citation', needs_autoescape=True, is_safe=True)

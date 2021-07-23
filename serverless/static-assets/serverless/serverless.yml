@@ -11,9 +11,9 @@ custom:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ../static
   cloudfrontInvalidate:
-    distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId, false}
-    items:
-      - "/*"
+    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId, false}
+      items:
+        - "/*"
 
 plugins:
   - serverless-s3-sync
