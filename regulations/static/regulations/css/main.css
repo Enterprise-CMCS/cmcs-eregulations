@@ -14656,6 +14656,7 @@ header a:hover {
 header .flexbox {
   align-items: center;
   display: block;
+  position: relative;
 }
 @media (min-width: 1024px) {
   header .flexbox {
@@ -14730,6 +14731,28 @@ header .reg-title a {
 }
 .search-header .search-box input {
   border: 1px solid #d6d7d9;
+}
+
+.search-header-mobile-open {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: #fff;
+  z-index: 100;
+  display: none;
+}
+.search-header-mobile-open svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+.search-header-mobile-open .search-borderless {
+  margin: 0.7em 0 0 24px;
+  display: inline-block;
+}
+.search-header-mobile-open .search-borderless input {
+  border: 0;
 }
 
 .indicator {

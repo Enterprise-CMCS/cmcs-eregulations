@@ -62,6 +62,7 @@ header {
 	.flexbox {
 		align-items: center;
 		display: block;	
+		position: relative;
 
 		@include screen-lg {
 			display: flex;
@@ -136,6 +137,31 @@ header {
 
 		input {
 			border: 1px solid $border_color;
+		}
+	}
+}
+
+.search-header-mobile-open {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background: $main_background_color;
+	z-index: 100;
+	display: none;
+
+	svg {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.search-borderless {
+		margin: .7em 0 0 $spacer-3;
+		display: inline-block;
+
+		input {
+			border: 0;
 		}
 	}
 }
