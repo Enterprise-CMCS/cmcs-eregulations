@@ -19,6 +19,7 @@ regulations/static/regulations/js/main.build.js: regulations/static/regulations/
 
 .PHONY: watch
 watch: ## Watch regulations static assets and rebuild when they're changed
+watch: regulations/static/node_modules
 	cd regulations/static; \
 		(trap 'kill 0' SIGINT; npm run watch-js & npm run watch-css);
 

@@ -828,7 +828,7 @@
   yn.config.devtools = true;
 
   function isElementInViewport(el) {
-      var rect = el.getBoundingClientRect();
+  var rect = el.getBoundingClientRect();
 
       return (
           rect.top >= 0 &&
