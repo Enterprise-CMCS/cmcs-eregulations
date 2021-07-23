@@ -14223,31 +14223,8 @@ html {
 .search-page .container {
   margin: 0;
 }
-.search-page .search-back {
-  margin: 32px 0;
-}
-.search-page .search-back svg {
-  fill: #046791;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-.search-page .search-back a {
-  text-decoration: none;
-}
-.search-page .search-back a:visited {
-  color: #046791;
-}
-.search-page .search-back a:hover {
-  color: #17415f;
-}
-.search-page .search-back a:hover svg {
-  fill: #17415f;
-}
-.search-page .search-back a span {
-  vertical-align: middle;
-}
 .search-page .search-context {
-  margin-bottom: 16px;
+  margin: 32px 0 16px;
 }
 .search-page .search-displayed-by {
   font-size: 0.8em;
