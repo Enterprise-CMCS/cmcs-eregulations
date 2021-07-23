@@ -14741,7 +14741,12 @@ header .reg-title a {
   right: 0;
   background: #fff;
   z-index: 100;
+}
+.search-header-mobile-open[data-state=collapsed] {
   display: none;
+}
+.search-header-mobile-open[data-state=expanded] {
+  display: block;
 }
 .search-header-mobile-open svg {
   display: inline-block;

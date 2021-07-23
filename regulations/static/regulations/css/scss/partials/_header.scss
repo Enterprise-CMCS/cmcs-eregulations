@@ -149,7 +149,14 @@ header {
 	right: 0;
 	background: $main_background_color;
 	z-index: 100;
-	display: none;
+
+    &[data-state="collapsed"] {
+        display: none;
+    }
+
+    &[data-state="expanded"] {
+        display: block;
+    }
 
 	svg {
 		display: inline-block;
