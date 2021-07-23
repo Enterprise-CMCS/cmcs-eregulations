@@ -103,7 +103,11 @@ aside {
     }
 
     & + .match-middle {
-        padding: 0 $spacer-4;
+        padding: 0 $spacer-2;
+
+        @include screen-lg {
+            padding: 0 $spacer-4;
+        }
     }
 
     &[data-state="expanded"] {

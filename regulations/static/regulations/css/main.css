@@ -13627,7 +13627,12 @@ aside.right-sidebar {
   }
 }
 aside + .match-middle {
-  padding: 0 32px;
+  padding: 0 16px;
+}
+@media (min-width: 1024px) {
+  aside + .match-middle {
+    padding: 0 32px;
+  }
 }
 @media (max-width: 767px) {
   aside[data-state=expanded] {
@@ -15430,7 +15435,12 @@ html {
 }
 
 .reg-part-homepage {
-  margin: 40px 0 32px 32px;
+  margin: 24px;
+}
+@media (min-width: 1024px) {
+  .reg-part-homepage {
+    margin: 40px 0 32px 32px;
+  }
 }
 @media (min-width: 1440px) {
   .reg-part-homepage {
