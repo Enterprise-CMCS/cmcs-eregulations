@@ -14684,6 +14684,9 @@ aside.left-sidebar[data-state=collapsed] div.toc-controls [data-set-state=expand
 aside.left-sidebar[data-state=collapsed] ul li.subtoc.active {
   background: none;
 }
+aside.left-sidebar[data-state=collapsed] ul li.orphan {
+  display: none;
+}
 aside.left-sidebar .toc-titles {
   border-radius: 3px;
   padding: 8px 0;
