@@ -14,13 +14,14 @@ We have public documentation about our product, design, and research processes i
 
 # Getting setup
 
-**Getting the code**
+## Getting the code ##
 
 ```
 git clone https://github.com/cmsgov/cmcs-eregulations
 ```
 
-**Running eRegs:**
+## Running eRegs ##
+
 A lot of tasks for local development can be accessed through the Makefile.
 Running `make` will provide some information about the available tasks.
 
@@ -34,23 +35,27 @@ Will start a local docker environment and load parts of Title 42 into it.
 
 Proceed to <http://localhost:8000> in your browser to see the results.
 
-To stop the local eRegs `make local.stop` will cause the running docker processes to stop without losing data.
+`make local.stop` will cause the running docker processes to stop without losing data.
 
-While `make local.clean` will remove the local environment completely, useful when you want to start fresh.
+`make local.clean` will remove the local environment completely, useful when you want to start fresh.
 
-**Testing eRegs:**
-***Testing Setup***
+## Testing eRegs ##
+
+#### Testing Setup ####
+
 Before running the tests for the first time, you may need to install cypress dependencies.
 
 1. `cd e2e`
 2. `npm install`
 
-***Running the tests***
+#### Running the tests ####
+
 Running `make test` after `make local` will run the cypress suite of end to end tests.
 
 1. Navigate to project root
 2. If project is not already running locally, run `make local`
 3. `make test`
 
-**Working with assets:**
-scss and js files can be watched an automatically compiled with `make watch`.
+## Working with assets ##
+
+`make watch`: scss and js files can be watched an automatically compiled
