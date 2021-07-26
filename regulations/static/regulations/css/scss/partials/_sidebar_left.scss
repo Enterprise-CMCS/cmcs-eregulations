@@ -97,29 +97,24 @@ aside.left-sidebar {
 
     // Toggle Icons
 
-    .subpart-toggle {
+    button.subpart-toggle {
         width: $toc_toggles_width;
-        display: table-cell;
 
         &:hover {
-            button {
-                color: $reverse_link_hover;
-                background: $reverse_background_lighter;
-                @include transition;
-            }
+            color: $reverse_link_hover;
+            background: $reverse_background_lighter;
+            @include transition;
         }
 
-        button {
-            background: none;
-            border: none;
-            color: $reverse_link_color;
-            cursor: pointer;
-            margin-top: 4px;
-            display: block;
-            padding: $spacer-2; // Helps users by making the toggle target bigger, ~42px square
-            margin-right: $spacer-2;
-            border-radius: $border-radius;
-        }
+        background: none;
+        border: none;
+        color: $reverse_link_color;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        padding: $spacer-3 $spacer-2 $spacer-2; // Helps users by making the toggle target bigger, ~42px square
+        margin-right: $spacer-2;
+        border-radius: $border-radius;
     }
 
     // Ridiculous Nested Lists and Links

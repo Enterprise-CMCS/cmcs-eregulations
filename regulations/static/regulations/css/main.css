@@ -14740,25 +14740,22 @@ aside.left-sidebar .toc-section-name {
   font-weight: normal;
   font-size: 14px;
 }
-aside.left-sidebar .subpart-toggle {
+aside.left-sidebar button.subpart-toggle {
   width: 64px;
-  display: table-cell;
-}
-aside.left-sidebar .subpart-toggle:hover button {
-  color: #fff;
-  background: #205982;
-  transition: all 0.1s ease-in;
-}
-aside.left-sidebar .subpart-toggle button {
   background: none;
   border: none;
   color: #a3e8ff;
   cursor: pointer;
-  margin-top: 4px;
-  display: block;
-  padding: 16px;
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 16px;
   margin-right: 16px;
   border-radius: 3px;
+}
+aside.left-sidebar button.subpart-toggle:hover {
+  color: #fff;
+  background: #205982;
+  transition: all 0.1s ease-in;
 }
 aside.left-sidebar ul {
   padding: 0 0 16px 0;
