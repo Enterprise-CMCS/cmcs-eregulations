@@ -15134,8 +15134,33 @@ html {
     line-height: 1.5;
   }
 }
+.reg-text .reference {
+  position: absolute;
+  margin-left: -1.5em;
+  visibility: hidden;
+}
+.reg-text > .reg-section > h2, .reg-text > .reg-section > .paragraphs > p {
+  margin-left: -16px;
+  padding-left: 24px;
+}
+.reg-text h1 > .reference,
+.reg-text h2 > .reference {
+  margin-left: -1.2em;
+}
+@media (min-width: 1440px) {
+  .reg-text h1 > .reference,
+.reg-text h2 > .reference {
+    margin-left: -1.4em;
+  }
+}
+.reg-text :hover > .reference {
+  visibility: visible;
+}
 .reg-text .section-title {
   color: #17415f;
+}
+.reg-text .part-title {
+  margin: 40px 0 24px;
 }
 .reg-text h2 {
   color: #000;
@@ -15211,24 +15236,6 @@ article .paragraphs {
     font-size: 16px;
     line-height: 1.5;
   }
-}
-article .reference {
-  position: absolute;
-  margin-left: -1.5em;
-  visibility: hidden;
-}
-article h1 > .reference,
-article h2 > .reference {
-  margin-left: -1.2em;
-}
-@media (min-width: 1440px) {
-  article h1 > .reference,
-article h2 > .reference {
-    margin-left: -1.4em;
-  }
-}
-article :hover > .reference {
-  visibility: visible;
 }
 article .section-text {
   line-height: 1.8em;
