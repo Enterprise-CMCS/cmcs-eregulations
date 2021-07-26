@@ -14,7 +14,6 @@ export default {
 
     created: function () {
         requestAnimationFrame(() => {
-            this.computeSize();
             this.visible = this.state === "expanded";
             this.isVertical = this.direction === "vertical";
         });
@@ -53,7 +52,7 @@ export default {
 
     data: function () {
         return {
-            size: 0,
+            size: "auto",
             visible: false,
             isVertical: true,
             styles: {
@@ -78,7 +77,10 @@ export default {
         toggle: function (target) {
             if (this.name === target) {
                 requestAnimationFrame(() => {
-                    this.visible = !this.visible;
+                    this.computeSize();
+                    requestAnimationFrame(() => {
+                        this.visible = !this.visible;
+                    })
                 });
             }
         },
@@ -96,9 +98,13 @@ export default {
             }
         },
         _computeSize: function() {
+            if (this.getStyle().display === "none") {
+                return "auto";
+            }
+
             this.$refs.target.classList.remove("invisible")
             
-            this.setProps("hidden", "block flow-root", "absolute", "auto");
+            this.setProps("hidden", "block", "absolute", "auto");
 
             const size = this.isVertical
                 ? this.getStyle().height
@@ -108,7 +114,6 @@ export default {
             if (!this.visible) {
                 this.$refs.target.classList.add("invisible")
             }
-            console.debug(size);
             return size;
         },
         computeSize: function () {
