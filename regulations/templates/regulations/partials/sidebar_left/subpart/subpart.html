@@ -1,4 +1,4 @@
-<li id="Subpart-{{ item.identifier.0 }}" class="section-subpart {% if subpart and collapse_state == 'expanded' %}active{% endif %}" tabindex="0">
+<li id="Subpart-{{ item.identifier.0 }}" class="section-subpart {% if subpart and collapse_state == 'expanded' %}active{% endif %}" tabindex="-1">
     <div class="flexbox">
         <a href="{% url 'reader_view' title reg_part item.identifier.0 version %}" class="subpart-info"> <!-- This is what should link to a new page that is the top of the relevant subpart -->
             <div class="toc-titles">

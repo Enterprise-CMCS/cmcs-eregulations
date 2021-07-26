@@ -69,6 +69,13 @@ export default {
     },
 
     methods: {
+        toggleTabIndex: function (isVisible) {
+            const anchors = Array.from(this.$el.getElementsByTagName("a"));
+            anchors.map((anchor) => {
+                const tabIndexVal = isVisible ? "0" : "-1";
+                anchor.setAttribute("tabindex", tabIndexVal);
+            });
+        },
         resize: function (e) {
             this.computeSize();
         },
@@ -79,6 +86,7 @@ export default {
                 }
                 requestAnimationFrame(() => {
                     this.visible = !this.visible;
+                    this.toggleTabIndex(this.visible);
                 });
             }
         },
