@@ -15111,6 +15111,30 @@ aside.right-sidebar .resource-info {
   padding-left: 5px;
 }
 
+.supplementary-content-link:after {
+  content: url("../images/external-link.svg");
+  padding-left: 5px;
+}
+
+.supplementary-content-date {
+  color: #046791;
+  font-weight: bold;
+  padding-right: 8px;
+  margin-right: 8px;
+  border-right: 1px solid #000;
+}
+
+.supplementary-content-title {
+  color: #046791;
+  font-weight: bold;
+}
+
+.supplementary-content-description {
+  color: #046791;
+  text-decoration: none;
+  font-size: 14px;
+}
+
 .indicator {
   background: #026666;
   text-transform: uppercase;

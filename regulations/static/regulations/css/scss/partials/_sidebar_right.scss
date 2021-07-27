@@ -205,3 +205,28 @@ aside.right-sidebar {
         }
     }
 }
+
+.supplementary-content-link {
+	&:after {
+	    @include external-link;
+    }
+}
+
+.supplementary-content-date {
+    color: $primary_link_color;
+    font-weight: bold;
+    padding-right: $spacer-1;
+    margin-right: $spacer-1;
+    border-right: 1px solid $black;
+}
+
+.supplementary-content-title {
+    color: $primary_link_color;
+    font-weight: bold;
+}
+
+.supplementary-content-description {
+    color: $primary_link_color;
+    text-decoration: none;
+    font-size: $font-size-sm;
+}
