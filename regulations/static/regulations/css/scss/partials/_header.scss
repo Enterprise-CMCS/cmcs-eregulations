@@ -6,11 +6,6 @@
 @import "../application_settings";
 
 header {
-	height: calc($header_height_mobile - $spacer-2);
-
-	@include screen-lg {
-		height: calc($header_height - $spacer-4);	
-	}
 
 	// Sticky Header and Content Adjustments
 
@@ -170,7 +165,7 @@ header {
 	.search-borderless {
 		margin: .7em 0 0 $spacer-3;
 		display: inline-block;
-		width: calc(100% - 64px);
+		width: calc(100% - 100px);
 
 		input {
 			border: 0;
@@ -178,3 +173,27 @@ header {
 		}
 	}
 }
+
+// Search Results Page
+
+.search-page {
+
+	header {
+		height: calc(#{$header_height_mobile} - #{$spacer-4});
+
+		@include screen-lg {
+			height: auto;
+		}
+
+		.reg-title:after {
+			content: "Search Results";
+
+			@include screen-lg {
+				margin-top: 5px;
+				display: inline-block;
+			}
+		}
+	}
+
+}
+

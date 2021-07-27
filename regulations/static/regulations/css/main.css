@@ -14606,14 +14606,6 @@ html {
   }
 }
 
-header {
-  height: calc($header_height_mobile - $spacer-2);
-}
-@media (min-width: 1024px) {
-  header {
-    height: calc($header_height - $spacer-4);
-  }
-}
 header.sticky {
   position: fixed;
   top: 0;
@@ -14760,11 +14752,29 @@ header .reg-title a {
 .search-header-mobile-open .search-borderless {
   margin: 0.7em 0 0 24px;
   display: inline-block;
-  width: calc(100% - 64px);
+  width: calc(100% - 100px);
 }
 .search-header-mobile-open .search-borderless input {
   border: 0;
   width: 100%;
+}
+
+.search-page header {
+  height: calc(81px - 32px);
+}
+@media (min-width: 1024px) {
+  .search-page header {
+    height: auto;
+  }
+}
+.search-page header .reg-title:after {
+  content: "Search Results";
+}
+@media (min-width: 1024px) {
+  .search-page header .reg-title:after {
+    margin-top: 5px;
+    display: inline-block;
+  }
 }
 
 .indicator {
