@@ -20,6 +20,7 @@ export default {
 
     mounted: function () {
         window.addEventListener("resize", this.resize);
+        this.setTabIndex(this.childtag, this.visible);
     },
 
     destroyed: function () {
@@ -46,6 +47,11 @@ export default {
             type: String,
             required: true,
         },
+        childtag: {
+            //html element to show/hide tabindex
+            type: String,
+            required: false,
+        },
     },
 
     data: function () {
@@ -69,11 +75,16 @@ export default {
     },
 
     methods: {
-        toggleTabIndex: function (isVisible) {
-            const anchors = Array.from(this.$el.getElementsByTagName("a"));
-            anchors.map((anchor) => {
+        setTabIndex: function (childtag, isVisible) {
+            // collapsed content should have tabIndex="-1" when collapsed
+            // and tabIndex="0" when expanded.
+            // Pass in tag name to toggle
+            const children = Array.from(
+                this.$el.getElementsByTagName(childtag)
+            );
+            children.map((child) => {
                 const tabIndexVal = isVisible ? "0" : "-1";
-                anchor.setAttribute("tabindex", tabIndexVal);
+                child.setAttribute("tabindex", tabIndexVal);
             });
         },
         resize: function (e) {
@@ -86,7 +97,9 @@ export default {
                 }
                 requestAnimationFrame(() => {
                     this.visible = !this.visible;
-                    this.toggleTabIndex(this.visible);
+                    if (this.childtag) {
+                        this.setTabIndex(this.childtag, this.visible);
+                    }
                 });
             }
         },
