@@ -14280,7 +14280,12 @@ html {
   vertical-align: middle;
 }
 .search-page .search-context {
-  margin-bottom: 16px;
+  margin: 24px 0 16px;
+}
+@media (min-width: 1024px) {
+  .search-page .search-context {
+    margin: 48px 0 16px;
+  }
 }
 .search-page .search-displayed-by {
   font-size: 0.8em;

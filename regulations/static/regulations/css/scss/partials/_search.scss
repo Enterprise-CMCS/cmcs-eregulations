@@ -77,7 +77,11 @@
 	// Context for what parts we're searching
 
 	.search-context {
-		margin-bottom: $spacer-2;
+		margin: $spacer-3 0 $spacer-2;
+
+		@include screen-lg {
+			margin: $spacer-6 0 $spacer-2;
+		}
 	}
 
 	// i.e. "18 results, displayed by relevance"
