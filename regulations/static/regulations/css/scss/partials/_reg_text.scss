@@ -6,7 +6,7 @@
 
 .reg-text {
     h1 {
-        color: $black;
+        color: $title_color;
         font-size: $base-font-size * 1.5;
         line-height: 1.4;
 
@@ -52,7 +52,7 @@
     }
 
     h2 {
-        color: $black;
+        color: $title_color;
         font-size: $base-font-size * 1.2;
 
         @include screen-xxl {
