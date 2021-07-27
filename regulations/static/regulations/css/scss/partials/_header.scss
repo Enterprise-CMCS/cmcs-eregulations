@@ -185,6 +185,13 @@ header {
 			height: auto;
 		}
 
+		&.sticky + .content aside {
+
+			@include screen-lg {
+				top: calc(#{$header_height} - 5px)
+			}
+		}
+
 		.reg-title:after {
 			content: "Search Results";
 
@@ -194,6 +201,8 @@ header {
 			}
 		}
 	}
+
+
 
 }
 

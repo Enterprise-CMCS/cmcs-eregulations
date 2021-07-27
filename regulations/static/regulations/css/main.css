@@ -14772,6 +14772,11 @@ header .reg-title a {
     height: auto;
   }
 }
+@media (min-width: 1024px) {
+  .search-page header.sticky + .content aside {
+    top: calc(105px - 5px);
+  }
+}
 .search-page header .reg-title:after {
   content: "Search Results";
 }
