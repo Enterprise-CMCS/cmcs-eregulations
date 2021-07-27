@@ -170,9 +170,11 @@ header {
 	.search-borderless {
 		margin: .7em 0 0 $spacer-3;
 		display: inline-block;
+		width: calc(100% - 64px);
 
 		input {
 			border: 0;
+			width: 100%;
 		}
 	}
 }

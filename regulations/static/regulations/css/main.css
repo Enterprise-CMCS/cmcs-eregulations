@@ -14760,9 +14760,11 @@ header .reg-title a {
 .search-header-mobile-open .search-borderless {
   margin: 0.7em 0 0 24px;
   display: inline-block;
+  width: calc(100% - 64px);
 }
 .search-header-mobile-open .search-borderless input {
   border: 0;
+  width: 100%;
 }
 
 .indicator {
