@@ -8,5 +8,5 @@ section_depth = 2
 def pdepth(value):
     depth = len(value.get("label", []) or []) - section_depth
     if len(value.get("marker", []) or []) > 1:
-        depth = depth - len(value.get("marker", []) or [])
+        depth = depth - (len(value.get("marker", []) or []) - 1)
     return depth

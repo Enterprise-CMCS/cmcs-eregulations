@@ -5,14 +5,14 @@ import (
 )
 
 type Regulation struct {
-	Header string     `json:"header"`
-	Links  []Guidance `json:"links"`
+	Title                string     `json:"title"`
+	SupplementaryContent []Guidance `json:"supplementary_content"`
 }
 
-func buildRegulation(header string, guidances []Guidance) Regulation {
+func buildRegulation(title string, guidances []Guidance) Regulation {
 	regulation := Regulation{
-		Header: header,
-		Links:  guidances,
+		Title:                title,
+		SupplementaryContent: guidances,
 	}
 
 	return regulation
@@ -20,14 +20,14 @@ func buildRegulation(header string, guidances []Guidance) Regulation {
 
 func findReg(regulations []Regulation, reg Regulation) bool {
 	for _, el := range regulations {
-		if el.Header == reg.Header {
+		if el.Title == reg.Title {
 			return true
 		}
 	}
 	return false
 }
 
-func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
+func toJSON(file []byte, title string, guidances []Guidance) ([]byte, error) {
 	var regulations []Regulation
 
 	if len(file) > 0 {
@@ -37,7 +37,7 @@ func toJSON(file []byte, header string, guidances []Guidance) ([]byte, error) {
 		}
 	}
 
-	newReg := buildRegulation(header, guidances)
+	newReg := buildRegulation(title, guidances)
 	if !findReg(regulations, newReg) {
 		regulations = append(regulations, newReg)
 	}

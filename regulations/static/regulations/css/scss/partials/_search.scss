@@ -46,6 +46,10 @@
 
 	.search-context {
 		margin: $spacer-4 0 $spacer-2;
+
+		@include screen-lg {
+			margin: $spacer-6 0 $spacer-2;
+		}
 	}
 
 	// i.e. "18 results, displayed by relevance"
