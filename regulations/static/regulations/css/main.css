@@ -13621,13 +13621,14 @@ aside.right-sidebar {
     padding: 16px 32px;
   }
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   aside.right-sidebar {
     display: none;
   }
 }
 aside + .match-middle {
   padding: 0 16px;
+  flex: 1;
 }
 @media (min-width: 1024px) {
   aside + .match-middle {
@@ -14830,7 +14831,7 @@ html {
 
 aside.left-sidebar {
   color: #fff;
-  height: 100vh;
+  height: calc(100vh - 105px);
   overflow-y: scroll;
   position: sticky;
   top: 0;
@@ -14841,6 +14842,9 @@ aside.left-sidebar[data-state=collapsed] {
   width: 1em;
   padding: 0 1em 1em;
   scrollbar-width: none;
+}
+aside.left-sidebar[data-state=collapsed]::-webkit-scrollbar {
+  display: none;
 }
 aside.left-sidebar[data-state=collapsed] div {
   display: none;
