@@ -1,7 +1,7 @@
 <template>
     <div>
         <related-rule-list :rules="limitedRules"></related-rule-list>
-        <show-more-button :count="rulesCount"></show-more-button>
+        <show-more-button :showMore="showMore" :count="rulesCount"></show-more-button>
     </div>
 </template>
 

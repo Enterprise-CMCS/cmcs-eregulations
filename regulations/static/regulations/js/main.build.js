@@ -303,8 +303,9 @@
       count: {
         type: Number,
         default: 1
-      }
-    } 
+      },
+      showMore: { type: Function },
+    }
   };
 
   /* script */
@@ -315,10 +316,11 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("button", { staticClass: "show-more-button" }, [
-      _c("b", [_vm._v("+ Show More")]),
-      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
-    ])
+    return _c(
+      "button",
+      { staticClass: "show-more-button", on: { click: _vm.showMore } },
+      [_c("b", [_vm._v("+ Show More")]), _vm._v(" (" + _vm._s(_vm.count) + ")\n")]
+    )
   };
   var __vue_staticRenderFns__$1$1 = [];
   __vue_render__$1$1._withStripped = true;
@@ -422,7 +424,9 @@
       [
         _c("related-rule-list", { attrs: { rules: _vm.limitedRules } }),
         _vm._v(" "),
-        _c("show-more-button", { attrs: { count: _vm.rulesCount } })
+        _c("show-more-button", {
+          attrs: { showMore: _vm.showMore, count: _vm.rulesCount }
+        })
       ],
       1
     )

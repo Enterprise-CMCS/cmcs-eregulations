@@ -1,5 +1,5 @@
 <template>
-  <button class="show-more-button">
+  <button @click="showMore" class="show-more-button">
     <b>+ Show More</b> ({{count}})
   </button>
 </template>
@@ -11,7 +11,8 @@ export default {
     count: {
       type: Number,
       default: 1
-    }
-  } 
+    },
+    showMore: { type: Function },
+  }
 };
 </script>
