@@ -11,8 +11,12 @@ $toc_toggles_width: 64px;
 // Sidebar
 
 aside.left-sidebar {
+    .invisible {
+        height: 0px !important;
+    }
+
     color: $reverse_text_color;
-    height: 100vh;
+    height: calc(100vh - #{$header-height});
     overflow-y: scroll;
     position: sticky;
     top: 0;
@@ -24,6 +28,9 @@ aside.left-sidebar {
         width: 1em;
         padding: 0 1em 1em;
         scrollbar-width: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         div {
             display: none;
@@ -46,6 +53,10 @@ aside.left-sidebar {
 
         ul li.subtoc.active {
             background: none;
+        }
+
+        ul li.orphan {
+            display: none;
         }
     }
 

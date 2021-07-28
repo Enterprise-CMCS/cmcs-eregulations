@@ -7,8 +7,12 @@
 $collapsed-sidebar-width: 32px; // Update here if the left sidebar collapsed width changes
 
 header {
-    padding: $spacer-4;
+    padding: $spacer-2 $spacer-4;
     border-bottom: 1px solid $primary_color;
+
+    @include screen-lg {
+        padding: $spacer-4;
+    }
 }
 
 html {
@@ -93,13 +97,19 @@ aside {
             padding: $spacer-2 $spacer-4;
         }
 
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max($mobile-max / 1px) {
             display: none;
         }
     }
 
     & + .match-middle {
-        padding: 0 $spacer-4;
+        padding: 0 $spacer-2;
+        flex: 1;
+      
+        @include screen-lg {
+            padding: 0 $spacer-4;
+        }
+        
     }
 
     &[data-state="expanded"] {
