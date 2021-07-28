@@ -15107,6 +15107,12 @@ aside.right-sidebar .resource-info {
   padding-left: 5px;
 }
 
+.show-more-button {
+  color: #026666;
+  border: none;
+  background: none;
+}
+
 .indicator {
   background: #026666;
   text-transform: uppercase;

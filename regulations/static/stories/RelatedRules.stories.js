@@ -15,4 +15,5 @@ export const Basic = Template.bind({});
 Basic.args = {
     "title": "42",
     "part": "433",
+    "limit": "5"
 };
