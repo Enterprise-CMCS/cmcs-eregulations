@@ -5,7 +5,11 @@
 @import "../application_settings";
 
 .reg-part-homepage {
-    margin: $spacer-5 0 $spacer-4 $spacer-4;
+    margin: $spacer-3;
+
+    @include screen-lg {
+        margin: $spacer-5 0 $spacer-4 $spacer-4;
+    }
 
     @include screen-xxl {
         margin: $spacer-5 $spacer-6;
