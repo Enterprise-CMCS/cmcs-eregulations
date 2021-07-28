@@ -456,7 +456,7 @@
 
       methods: {
           setTabIndex: function (childtag, isVisible) {
-              if (!childTag) return;
+              if (!childtag) return;
 
               // collapsed content should have tabIndex="-1" when collapsed
               // and tabIndex="0" when expanded.
