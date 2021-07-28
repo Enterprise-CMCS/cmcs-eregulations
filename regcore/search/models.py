@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.search import (
     SearchVector,
-    SearchVectorField,
     SearchQuery,
     SearchRank,
     SearchHeadline,
@@ -18,8 +17,15 @@ class SearchIndexQuerySet(models.QuerySet):
 
     def search(self, query):
         return self\
-            .filter(search_vector=SearchQuery(query))\
-            .annotate(rank=SearchRank("search_vector", SearchQuery(query)))\
+            .annotate(rank=SearchRank(
+                SearchVector('label', weight='A')
+                + SearchVector(models.functions.Concat('label__0', models.Value('.'), 'label__1'), weight='A')
+                + SearchVector('parent__title', weight='A')
+                + SearchVector('part__document__title', weight='B')
+                + SearchVector('content', weight='C'),
+                SearchQuery(query))
+            )\
+            .filter(rank__gte=0.3)\
             .annotate(
                 headline=SearchHeadline(
                     "content",
@@ -42,7 +48,6 @@ class SearchIndex(models.Model):
     content = models.TextField()
     parent = models.JSONField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
-    search_vector = SearchVectorField()
 
     objects = SearchIndexManager()
 
@@ -75,4 +80,3 @@ def update_search(sender, instance, created, **kwargs):
     SearchIndex.objects.filter(part=instance).delete()
     contexts = create_search(instance, instance.document, [])
     SearchIndex.objects.bulk_create(contexts, ignore_conflicts=True)
-    SearchIndex.objects.filter(part=instance).update(search_vector=SearchVector('content'))
