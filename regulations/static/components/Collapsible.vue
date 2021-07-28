@@ -1,7 +1,7 @@
 <template>
     <div
         ref="target"
-        v-bind:class="{ visible: visible }"
+        v-bind:class="{ invisible: !visible }"
         v-bind:style="[styles, sizeStyle]"
     >
         <slot></slot>
@@ -13,8 +13,10 @@ export default {
     name: "collapsible",
 
     created: function () {
-        this.visible = this.state === "expanded";
-        this.isVertical = this.direction === "vertical";
+        requestAnimationFrame(() => {
+            this.visible = this.state === "expanded";
+            this.isVertical = this.direction === "vertical";
+        });
         this.$root.$on("collapse-toggle", this.toggle);
     },
 
@@ -50,8 +52,8 @@ export default {
 
     data: function () {
         return {
-            size: 0,
-            visible: true,
+            size: "auto",
+            visible: false,
             isVertical: true,
             styles: {
                 overflow: "hidden",
@@ -63,8 +65,8 @@ export default {
     computed: {
         sizeStyle: function () {
             return this.isVertical
-                ? { height: this.visible ? this.size : 0 }
-                : { width: this.visible ? this.size : 0 };
+                ? { height: this.size }
+                : { width: this.size };
         },
     },
 
@@ -74,11 +76,11 @@ export default {
         },
         toggle: function (target) {
             if (this.name === target) {
-                if (!this.visible) {
-                    this.computeSize();
-                }
                 requestAnimationFrame(() => {
-                    this.visible = !this.visible;
+                    this.computeSize();
+                    requestAnimationFrame(() => {
+                        this.visible = !this.visible;
+                    })
                 });
             }
         },
@@ -95,18 +97,27 @@ export default {
                 this.$refs.target.style.width = size;
             }
         },
-        computeSize: function () {
-            const prevSize = this.isVertical
-                ? this.getStyle().height
-                : this.getStyle().width;
+        _computeSize: function() {
+            if (this.getStyle().display === "none") {
+                return "auto";
+            }
 
+            this.$refs.target.classList.remove("invisible")
+            
             this.setProps("hidden", "block", "absolute", "auto");
 
-            this.size = this.isVertical
+            const size = this.isVertical
                 ? this.getStyle().height
                 : this.getStyle().width;
 
-            this.setProps(null, null, null, prevSize);
+            this.setProps(null, null, null, size);
+            if (!this.visible) {
+                this.$refs.target.classList.add("invisible")
+            }
+            return size;
+        },
+        computeSize: function () {
+            this.size = this._computeSize();
         },
     },
 };
