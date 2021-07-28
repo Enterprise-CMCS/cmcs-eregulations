@@ -78,6 +78,8 @@ var script = {
 
     methods: {
         setTabIndex: function (childtag, isVisible) {
+            if (!childTag) return;
+
             // collapsed content should have tabIndex="-1" when collapsed
             // and tabIndex="0" when expanded.
             // Pass in tag name to toggle
@@ -98,9 +100,7 @@ var script = {
                     this.computeSize();
                     requestAnimationFrame(() => {
                         this.visible = !this.visible;
-                        if (this.childtag) {
-                            this.setTabIndex(this.childtag, this.visible);
-                        }
+                        this.setTabIndex(this.childtag, this.visible);
                     });
                 });
             }
