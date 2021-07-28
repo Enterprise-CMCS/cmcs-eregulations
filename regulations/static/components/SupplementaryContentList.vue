@@ -19,19 +19,10 @@ export default {
     },
 
     props: {
-        supplementary_content: Array,
-    },
-
-    computed: {
-
-    },
-
-    methods: {
-
-    },
-
-    filters: {
-
+        supplementary_content: {
+            type: Array,
+            required: true,
+        },
     },
 };
 </script>

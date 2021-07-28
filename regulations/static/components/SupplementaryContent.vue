@@ -30,12 +30,7 @@ export default {
       required: true,
     },
   },
-
-  computed: {
-
-  },
-
-  methods: {},
+  
   filters: {
     formatDate: function(value) {
       const date = new Date(value);
