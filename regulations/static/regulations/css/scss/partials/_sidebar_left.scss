@@ -108,7 +108,8 @@ aside.left-sidebar {
     button.subpart-toggle {
         width: $toc_toggles_width;
 
-        &:hover {
+        &:hover,
+        &:focus {
             color: $reverse_link_hover;
             background: $reverse_background_lighter;
             @include transition;
@@ -132,7 +133,7 @@ aside.left-sidebar {
 
         li {
             list-style: none;
-            overflow: hidden;
+            //overflow: hidden;
 
             &.active {
                 background: $reverse_background_darker;
@@ -159,7 +160,8 @@ aside.left-sidebar {
     a {
         color: $reverse_link_color;
 
-        &:hover {
+        &:hover,
+        &:focus {
             color: $reverse_link_hover;
         }
 
@@ -167,7 +169,8 @@ aside.left-sidebar {
             display: table-cell;
             width: calc(100% - #{$toc_toggles_width});
 
-            &:hover {
+            &:hover,
+            &:focus {
                 .toc-titles {
                     background: $reverse_background_lighter;
                     @include transition;
@@ -187,7 +190,8 @@ aside.left-sidebar {
         }
 
         &:not(li.active ul a.menu-section) {
-            &:hover {
+            &:hover,
+            &:focus {
                 background: $reverse_background_lighter;
             }
         }
@@ -203,7 +207,8 @@ aside.left-sidebar {
         }
     }
 
-    li.active ul a.menu-section:hover {
+    li.active ul a.menu-section:hover,
+    li.active ul a.menu-section:focus {
         background: $reverse_background_lighter;
     }
 }
@@ -224,7 +229,8 @@ aside.left-sidebar {
         padding: $spacer-2;
         border-radius: 0;
 
-        &:hover {
+        &:hover,
+        &:focus {
             background: $secondary_link_hover;
             color: $reverse_text_color;
             @include transition;
@@ -292,7 +298,8 @@ aside.left-sidebar {
             border-radius: $border-radius;
             cursor: pointer;
 
-            &:hover {
+            &:hover,
+            &:focus {
                 background: $reverse_link_hover;
                 @include transition;
             }
