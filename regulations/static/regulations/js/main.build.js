@@ -394,13 +394,13 @@
           requestAnimationFrame(() => {
               this.visible = this.state === "expanded";
               this.isVertical = this.direction === "vertical";
+              this.setTabIndex(this.childtag, this.visible);
           });
           this.$root.$on("collapse-toggle", this.toggle);
       },
 
       mounted: function () {
           window.addEventListener("resize", this.resize);
-          this.setTabIndex(this.childtag, this.visible);
       },
 
       destroyed: function () {
