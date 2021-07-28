@@ -22,10 +22,10 @@ class SearchIndexQuerySet(models.QuerySet):
                 + SearchVector(models.functions.Concat('label__0', models.Value('.'), 'label__1'), weight='A')
                 + SearchVector('parent__title', weight='A')
                 + SearchVector('part__document__title', weight='B')
-                + SearchVector('content', weight='C'),
+                + SearchVector('content', weight='B'),
                 SearchQuery(query))
             )\
-            .filter(rank__gte=0.3)\
+            .filter(rank__gte=0.2)\
             .annotate(
                 headline=SearchHeadline(
                     "content",
