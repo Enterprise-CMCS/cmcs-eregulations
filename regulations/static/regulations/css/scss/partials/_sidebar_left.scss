@@ -50,6 +50,10 @@ aside.left-sidebar {
         ul li.subtoc.active {
             background: none;
         }
+
+        ul li.orphan {
+            display: none;
+        }
     }
 
     // Titles, Numbers

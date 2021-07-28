@@ -158,7 +158,7 @@ textarea {
   /* 1 */
   font-size: 100%;
   /* 1 */
-  line-height: 1.15;
+  line-height: 1.2;
   /* 1 */
   margin: 0;
   /* 2 */
@@ -14257,31 +14257,8 @@ html {
 .search-page .container {
   margin: 0;
 }
-.search-page .search-back {
-  margin: 32px 0;
-}
-.search-page .search-back svg {
-  fill: #046791;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-.search-page .search-back a {
-  text-decoration: none;
-}
-.search-page .search-back a:visited {
-  color: #046791;
-}
-.search-page .search-back a:hover {
-  color: #17415f;
-}
-.search-page .search-back a:hover svg {
-  fill: #17415f;
-}
-.search-page .search-back a span {
-  vertical-align: middle;
-}
 .search-page .search-context {
-  margin: 24px 0 16px;
+  margin: 32px 0 16px;
 }
 @media (min-width: 1024px) {
   .search-page .search-context {
@@ -14863,6 +14840,9 @@ aside.left-sidebar[data-state=collapsed] div.toc-controls [data-set-state=expand
 aside.left-sidebar[data-state=collapsed] ul li.subtoc.active {
   background: none;
 }
+aside.left-sidebar[data-state=collapsed] ul li.orphan {
+  display: none;
+}
 aside.left-sidebar .toc-titles {
   border-radius: 3px;
   padding: 8px 0;
@@ -15325,8 +15305,33 @@ html {
     line-height: 1.5;
   }
 }
+.reg-text .reference {
+  position: absolute;
+  margin-left: -1.5em;
+  visibility: hidden;
+}
+.reg-text > .reg-section > h2, .reg-text > .reg-section > .paragraphs > p {
+  margin-left: -16px;
+  padding-left: 24px;
+}
+.reg-text h1 > .reference,
+.reg-text h2 > .reference {
+  margin-left: -1.2em;
+}
+@media (min-width: 1440px) {
+  .reg-text h1 > .reference,
+.reg-text h2 > .reference {
+    margin-left: -1.4em;
+  }
+}
+.reg-text :hover > .reference {
+  visibility: visible;
+}
 .reg-text .section-title {
   color: #17415f;
+}
+.reg-text .part-title {
+  margin: 40px 0 24px;
 }
 .reg-text h2 {
   color: #000;
@@ -15402,24 +15407,6 @@ article .paragraphs {
     font-size: 16px;
     line-height: 1.5;
   }
-}
-article .reference {
-  position: absolute;
-  margin-left: -1.5em;
-  visibility: hidden;
-}
-article h1 > .reference,
-article h2 > .reference {
-  margin-left: -1.2em;
-}
-@media (min-width: 1440px) {
-  article h1 > .reference,
-article h2 > .reference {
-    margin-left: -1.4em;
-  }
-}
-article :hover > .reference {
-  visibility: visible;
 }
 article .section-text {
   line-height: 1.8em;
