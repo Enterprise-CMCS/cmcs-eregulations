@@ -134,15 +134,7 @@ var __vue_render__ = function() {
   return _c(
     "button",
     {
-      directives: [
-        {
-          name: "bing",
-          rawName: "v-bing:class",
-          value: { visible: _vm.visible },
-          expression: "{ visible: visible }",
-          arg: "class"
-        }
-      ],
+      class: { visible: _vm.visible },
       attrs: { "aria-label": "expand or collapse a subpart" },
       on: { click: _vm.click }
     },

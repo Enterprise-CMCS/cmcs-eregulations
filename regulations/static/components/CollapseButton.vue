@@ -1,6 +1,6 @@
 <template>
     <button
-        v-bing:class="{ visible: visible }"
+        v-bind:class="{ visible: visible }"
         v-on:click="click"
         aria-label="expand or collapse a subpart"
     >
