@@ -14826,7 +14826,7 @@ aside.left-sidebar[data-state=collapsed] {
 aside.left-sidebar[data-state=collapsed]::-webkit-scrollbar {
   display: none;
 }
-aside.left-sidebar[data-state=collapsed] div {
+aside.left-sidebar[data-state=collapsed] div, aside.left-sidebar[data-state=collapsed] h2, aside.left-sidebar[data-state=collapsed] h3, aside.left-sidebar[data-state=collapsed] h4, aside.left-sidebar[data-state=collapsed] li > a {
   display: none;
 }
 aside.left-sidebar[data-state=collapsed] div.toc-controls {
