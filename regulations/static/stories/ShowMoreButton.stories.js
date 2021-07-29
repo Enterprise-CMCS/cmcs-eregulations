@@ -13,5 +13,6 @@ const Template = (args, { argTypes }) => ({
 
 export const Basic = Template.bind({});
 Basic.args = {
-  count: 5 
+  showMore: function() {},
+  count: 5
 };

@@ -302,6 +302,21 @@ var script$1 = {
       default: 1
     },
     showMore: { type: Function },
+  },
+  data() {
+    return {
+      toggle: false,
+    }
+  },
+  computed: {
+    buttonText(){
+      return this.toggle ? '- Show Less' : '+ Show More';
+    }
+  },
+  methods: {
+    toggleButton() {
+      this.toggle = !this.toggle;
+    }
   }
 };
 
@@ -315,8 +330,18 @@ var __vue_render__$1 = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "button",
-    { staticClass: "show-more-button", on: { click: _vm.showMore } },
-    [_c("b", [_vm._v("+ Show More")]), _vm._v(" (" + _vm._s(_vm.count) + ")\n")]
+    {
+      staticClass: "show-more-button",
+      on: {
+        click: function($event) {
+          _vm.showMore(), _vm.toggleButton();
+        }
+      }
+    },
+    [
+      _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+    ]
   )
 };
 var __vue_staticRenderFns__$1 = [];

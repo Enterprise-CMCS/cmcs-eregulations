@@ -1,6 +1,6 @@
 <template>
-  <button @click="showMore" class="show-more-button">
-    <b>+ Show More</b> ({{count}})
+  <button @click="showMore(), toggleButton()" class="show-more-button">
+    <b>{{ buttonText }}</b> ({{count}})
   </button>
 </template>
 
@@ -13,6 +13,21 @@ export default {
       default: 1
     },
     showMore: { type: Function },
+  },
+  data() {
+    return {
+      toggle: false,
+    }
+  },
+  computed: {
+    buttonText(){
+      return this.toggle ? '- Show Less' : '+ Show More';
+    }
+  },
+  methods: {
+    toggleButton() {
+      this.toggle = !this.toggle
+    }
   }
 };
 </script>
