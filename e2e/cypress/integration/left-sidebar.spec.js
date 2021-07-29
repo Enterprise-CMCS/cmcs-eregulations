@@ -13,13 +13,25 @@ describe("Left sidebar", () => {
             "data-state",
             "expanded"
         );
+
         cy.get(".toc-controls > button[data-set-state=collapsed").click({
             force: true,
         });
+
         cy.get("aside[data-state-name=left-sidebar]").should(
             "have.attr",
             "data-state",
             "collapsed"
+        );
+
+        cy.get(".toc-controls > button[data-set-state=expanded").click({
+            force: true,
+        });
+
+        cy.get("aside[data-state-name=left-sidebar]").should(
+            "have.attr",
+            "data-state",
+            "expanded"
         );
     });
 
