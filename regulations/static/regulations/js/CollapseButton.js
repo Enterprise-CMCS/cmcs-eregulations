@@ -9,6 +9,7 @@
 //
 //
 //
+//
 
 var script = {
     name: "collapse-button",
@@ -32,6 +33,7 @@ var script = {
 
     data: function () {
         return {
+            name: this.name,
             visible: true,
         };
     },
@@ -135,7 +137,10 @@ var __vue_render__ = function() {
     "button",
     {
       class: { visible: _vm.visible },
-      attrs: { "aria-label": "expand or collapse a subpart" },
+      attrs: {
+        "data-test": _vm.name,
+        "aria-label": "expand or collapse a subpart"
+      },
       on: { click: _vm.click }
     },
     [

@@ -1,6 +1,7 @@
 <template>
     <button
         v-bind:class="{ visible: visible }"
+        v-bind:data-test="name"
         v-on:click="click"
         aria-label="expand or collapse a subpart"
     >
@@ -32,6 +33,7 @@ export default {
 
     data: function () {
         return {
+            name: this.name,
             visible: true,
         };
     },

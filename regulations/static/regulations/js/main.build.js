@@ -464,6 +464,7 @@
               const children = Array.from(
                   this.$el.getElementsByTagName(childtag)
               );
+
               children.map((child) => {
                   const tabIndexVal = isVisible ? "0" : "-1";
                   child.setAttribute("tabindex", tabIndexVal);
@@ -658,6 +659,7 @@
   //
   //
   //
+  //
 
   var script = {
       name: "collapse-button",
@@ -681,6 +683,7 @@
 
       data: function () {
           return {
+              name: this.name,
               visible: true,
           };
       },
@@ -784,7 +787,10 @@
       "button",
       {
         class: { visible: _vm.visible },
-        attrs: { "aria-label": "expand or collapse a subpart" },
+        attrs: {
+          "data-test": _vm.name,
+          "aria-label": "expand or collapse a subpart"
+        },
         on: { click: _vm.click }
       },
       [

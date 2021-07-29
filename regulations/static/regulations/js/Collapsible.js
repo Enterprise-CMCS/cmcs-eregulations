@@ -86,6 +86,7 @@ var script = {
             const children = Array.from(
                 this.$el.getElementsByTagName(childtag)
             );
+
             children.map((child) => {
                 const tabIndexVal = isVisible ? "0" : "-1";
                 child.setAttribute("tabindex", tabIndexVal);
