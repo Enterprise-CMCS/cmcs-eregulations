@@ -74,23 +74,25 @@ describe("Left sidebar", () => {
             });
     });
 
-    it("sets tabindex properly for subsections when subpart is expanded or collapsed", () => {
+    it("sets correct classes for child when subpart is expanded or collapsed", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);
 
-        cy.get(`li#${testId}`).within(($li) => {
-            // get collapsed tabindex
-            cy.get($li)
-                .find("ul.toggle-toc-menu-sections a")
-                .should("have.attr", "tabindex", "-1");
+        // ensure child has classes that set 0 height and display: none
+        cy.get(`div[data-test=${testId}]`)
+            .should("have.class", "invisible")
+            .and("have.class", "display-none");
 
-            // toggle open collapse content
-            cy.get(`button[data-test=${testId}]`).click({ force: true });
+        // toggle open collapse content
+        cy.get(`button[data-test=${testId}]`).click({ force: true });
 
-            // get expanded tabindex
-            cy.get($li)
-                .find("ul.toggle-toc-menu-sections a")
-                .should("have.attr", "tabindex", "0");
-        });
+        // wait for duration of transition
+        cy.wait(0.5)
+
+        // ensure collapse conteng no longer has classes
+        // that set 0 height and display: none
+        cy.get(`div[data-test=${testId}]`)
+            .should("not.have.class", "invisible")
+            .and("not.have.class", "display-none");
     });
 });
