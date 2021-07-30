@@ -10,7 +10,7 @@
 //
 
 
-var script$2 = {
+var script$3 = {
   name: 'related-rule',
 
   props: {
@@ -133,10 +133,10 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
 }
 
 /* script */
-const __vue_script__$2 = script$2;
+const __vue_script__$3 = script$3;
 
 /* template */
-var __vue_render__$2 = function() {
+var __vue_render__$3 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -171,6 +171,90 @@ var __vue_render__$2 = function() {
     )
   ])
 };
+var __vue_staticRenderFns__$3 = [];
+__vue_render__$3._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$3 = undefined;
+  /* scoped */
+  const __vue_scope_id__$3 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$3 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+var script$2 = {
+    name: 'related-rule-list',
+
+    components: {
+        RelatedRule: __vue_component__$3,
+    },
+
+    props: {
+        rules: Array,
+    },
+
+    computed: {
+
+    },
+
+    methods: {
+
+    },
+
+    filters: {
+
+    },
+};
+
+/* script */
+const __vue_script__$2 = script$2;
+
+/* template */
+var __vue_render__$2 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "related-rule-list" },
+    _vm._l(_vm.rules, function(rule, index) {
+      return _c("related-rule", {
+        key: index,
+        attrs: {
+          title: rule.title,
+          type: rule.type,
+          citation: rule.citation,
+          publication_date: rule.publication_date,
+          document_number: rule.document_number,
+          html_url: rule.html_url
+        }
+      })
+    }),
+    1
+  )
+};
 var __vue_staticRenderFns__$2 = [];
 __vue_render__$2._withStripped = true;
 
@@ -204,28 +288,36 @@ __vue_render__$2._withStripped = true;
   );
 
 //
+//
+//
+//
+//
+//
+
 var script$1 = {
-    name: 'related-rule-list',
-
-    components: {
-        RelatedRule: __vue_component__$2,
+  name: 'show-more-button',
+  props: {
+    count: {
+      type: Number,
+      default: 1
     },
-
-    props: {
-        rules: Array,
-    },
-
-    computed: {
-
-    },
-
-    methods: {
-
-    },
-
-    filters: {
-
-    },
+    showMore: { type: Function },
+  },
+  data() {
+    return {
+      toggle: false,
+    }
+  },
+  computed: {
+    buttonText(){
+      return this.toggle ? '- Show Less' : '+ Show More';
+    }
+  },
+  methods: {
+    toggleButton() {
+      this.toggle = !this.toggle;
+    }
+  }
 };
 
 /* script */
@@ -237,22 +329,19 @@ var __vue_render__$1 = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c(
-    "div",
-    { staticClass: "related-rule-list" },
-    _vm._l(_vm.rules, function(rule, index) {
-      return _c("related-rule", {
-        key: index,
-        attrs: {
-          title: rule.title,
-          type: rule.type,
-          citation: rule.citation,
-          publication_date: rule.publication_date,
-          document_number: rule.document_number,
-          html_url: rule.html_url
+    "button",
+    {
+      staticClass: "show-more-button",
+      on: {
+        click: function($event) {
+          _vm.showMore(), _vm.toggleButton();
         }
-      })
-    }),
-    1
+      }
+    },
+    [
+      _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+    ]
   )
 };
 var __vue_staticRenderFns__$1 = [];
@@ -290,7 +379,8 @@ __vue_render__$1._withStripped = true;
 //
 var script = {
     components: {
-        RelatedRuleList: __vue_component__$1,
+        RelatedRuleList: __vue_component__$2,
+        ShowMoreButton: __vue_component__$1,
     },
 
     props: {
@@ -304,25 +394,41 @@ var script = {
         },
         limit: {
             type: Number,
-            default: 3,
+            default: 5,
         },
     },
 
     data() {
         return {
-            rules: null,
+            rules: [],
+            limitedList: true,
         }
     },
 
+    computed: {
+      limitedRules() {
+        if(this.limitedList) {
+          return this.rules.slice(0, this.limit);
+        }
+        return this.rules;
+      },
+      rulesCount() {
+        return this.rules.length;
+      }
+    },
+
     async created() {
-        this.rules = await this.fetch_rules(this.title, this.part, this.limit);
+        this.rules = await this.fetch_rules(this.title, this.part);
     },
 
     methods: {
-        async fetch_rules(title, part, limit) {
-            const response = await fetch(`https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[type][]=RULE&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}&per_page=${limit}`);
+        async fetch_rules(title, part) {
+            const response = await fetch(`https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[type][]=RULE&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`);
             const rules = await response.json();
             return rules.results;
+        },
+        showMore() {
+          this.limitedList = !this.limitedList;
         }
     }
 };
@@ -337,7 +443,13 @@ var __vue_render__ = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    [_c("related-rule-list", { attrs: { rules: _vm.rules } })],
+    [
+      _c("related-rule-list", { attrs: { rules: _vm.limitedRules } }),
+      _vm._v(" "),
+      _c("show-more-button", {
+        attrs: { showMore: _vm.showMore, count: _vm.rulesCount }
+      })
+    ],
     1
   )
 };
