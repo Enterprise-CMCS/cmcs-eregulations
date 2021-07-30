@@ -15,6 +15,10 @@ aside.left-sidebar {
         height: 0px !important;
     }
 
+    .display-none {
+        display: none !important;
+    }
+
     color: $reverse_text_color;
     height: calc(100vh - #{$header-height});
     overflow-y: scroll;

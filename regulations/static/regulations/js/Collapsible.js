@@ -16,17 +16,18 @@ var script = {
         requestAnimationFrame(() => {
             this.visible = this.state === "expanded";
             this.isVertical = this.direction === "vertical";
-            this.setTabIndex(this.childtag, this.visible);
         });
         this.$root.$on("collapse-toggle", this.toggle);
     },
 
     mounted: function () {
         window.addEventListener("resize", this.resize);
+        window.addEventListener("transitionend", this.toggleDisplay);
     },
 
     destroyed: function () {
         window.removeEventListener("resize", this.resize);
+        window.removeEventListener("transitionend", this.toggleDisplay);
     },
 
     props: {
@@ -48,11 +49,6 @@ var script = {
             //horizontal or vertical
             type: String,
             required: true,
-        },
-        childtag: {
-            //html element to show/hide tabindex
-            type: String,
-            required: false,
         },
     },
 
@@ -77,31 +73,21 @@ var script = {
     },
 
     methods: {
-        setTabIndex: function (childtag, isVisible) {
-            if (!childtag) return;
-
-            // collapsed content should have tabIndex="-1" when collapsed
-            // and tabIndex="0" when expanded.
-            // Pass in tag name to toggle
-            const children = Array.from(
-                this.$el.getElementsByTagName(childtag)
-            );
-
-            children.map((child) => {
-                const tabIndexVal = isVisible ? "0" : "-1";
-                child.setAttribute("tabindex", tabIndexVal);
-            });
-        },
         resize: function (e) {
             this.computeSize();
         },
+        toggleDisplay: function (e) {
+            if (!this.visible && e.propertyName === "height") {
+                this.$refs.target.classList.add("display-none");
+            }
+        },
         toggle: function (target) {
             if (this.name === target) {
+                this.$refs.target.classList.remove("display-none");
                 requestAnimationFrame(() => {
                     this.computeSize();
                     requestAnimationFrame(() => {
                         this.visible = !this.visible;
-                        this.setTabIndex(this.childtag, this.visible);
                     });
                 });
             }

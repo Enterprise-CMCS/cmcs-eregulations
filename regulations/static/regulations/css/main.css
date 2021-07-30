@@ -14818,6 +14818,9 @@ aside.left-sidebar {
 aside.left-sidebar .invisible {
   height: 0px !important;
 }
+aside.left-sidebar .display-none {
+  display: none !important;
+}
 aside.left-sidebar[data-state=collapsed] {
   width: 1em;
   padding: 0 1em 1em;
