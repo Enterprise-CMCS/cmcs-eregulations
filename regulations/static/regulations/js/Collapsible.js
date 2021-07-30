@@ -8,6 +8,7 @@
 //
 //
 //
+//
 
 var script = {
     name: "collapsible",
@@ -16,6 +17,10 @@ var script = {
         requestAnimationFrame(() => {
             this.visible = this.state === "expanded";
             this.isVertical = this.direction === "vertical";
+
+            if (!this.visible) {
+                this.$refs.target.classList.add("display-none");
+            }
         });
         this.$root.$on("collapse-toggle", this.toggle);
     },
@@ -54,6 +59,7 @@ var script = {
 
     data: function () {
         return {
+            name: this.name,
             size: "auto",
             visible: false,
             isVertical: true,
@@ -218,7 +224,8 @@ var __vue_render__ = function() {
     {
       ref: "target",
       class: { invisible: !_vm.visible },
-      style: [_vm.styles, _vm.sizeStyle]
+      style: [_vm.styles, _vm.sizeStyle],
+      attrs: { "data-test": _vm.name }
     },
     [_vm._t("default")],
     2
