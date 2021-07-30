@@ -93,7 +93,7 @@ $primary_indicator_text: $white;
 $primary_site_font: $font-sans; // Open Sans
 $secondary_site_font: "Merriweather", Georgia, serif;
 $font_size_xs: 12px;
-$font_size_xxl: 30px;      // Aligns with the CMS Design System, but their variable is depreciated
+$font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable is depreciated
 
 //--------------------------
 // Breakpoints
@@ -220,6 +220,7 @@ $header_height_mobile: 81px;
 a {
     color: $primary_link_color;
 
+    &:focus,
     &:hover {
         color: $primary_link_hover;
         cursor: pointer;

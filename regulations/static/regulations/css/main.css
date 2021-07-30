@@ -13503,7 +13503,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -13697,7 +13697,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -13773,7 +13773,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14209,7 +14209,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14420,7 +14420,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14506,7 +14506,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14566,7 +14566,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14783,7 +14783,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15062,7 +15062,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15282,7 +15282,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15319,7 +15319,10 @@ html {
 .reg-text .reference {
   position: absolute;
   margin-left: -1.5em;
-  visibility: hidden;
+  opacity: 0;
+}
+.reg-text .reference:focus {
+  opacity: 1;
 }
 .reg-text > .reg-section > h2, .reg-text > .reg-section > .paragraphs > p {
   margin-left: -16px;
@@ -15336,7 +15339,7 @@ html {
   }
 }
 .reg-text :hover > .reference {
-  visibility: visible;
+  opacity: 1;
 }
 .reg-text .section-title {
   color: #17415f;
@@ -15468,7 +15471,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15543,7 +15546,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15681,7 +15684,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15795,7 +15798,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15876,7 +15879,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
