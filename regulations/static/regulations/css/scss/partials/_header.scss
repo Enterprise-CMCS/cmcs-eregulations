@@ -1,4 +1,3 @@
-
 //-----------------------------
 // Header
 //-----------------------------
@@ -6,144 +5,161 @@
 @import "../application_settings";
 
 header {
+    // Sticky Header and Content Adjustments
 
-	// Sticky Header and Content Adjustments
+    &.sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: $main_background_color;
+        z-index: 9999999;
+        box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
+        -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
+        -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
 
-	&.sticky {
-		position: fixed;
-		top: 0;
-		width: 100%;
-		background: $main_background_color;
-		z-index: 9999999;
-		box-shadow: 0 3px 10px 0px rgba(0,0,0,0.08);
-		-webkit-box-shadow: 0 3px 10px 0px rgba(0,0,0,0.08);
-		-moz-box-shadow: 0 3px 10px 0px rgba(0,0,0,0.08);
+        .search-header {
+            margin-right: 64px;
+        }
 
-		.search-header {
-			margin-right: 64px;
-		}
+        + .content {
+            // Moves content/aside down so they're not covered by the sticky header
+            padding-top: $header_height_mobile;
 
-		+ .content {						// Moves content/aside down so they're not covered by the sticky header 
-			padding-top: $header_height_mobile; 
+            @include screen-lg {
+                padding-top: $header_height;
+            }
 
-			@include screen-lg {
-				padding-top: $header_height; 
-			}	
+            aside {
+                top: $header_height_mobile;
 
-		  	aside {
-				top: $header_height_mobile;
+                @include screen-lg {
+                    top: $header_height;
+                }
+            }
+        }
+    }
 
-				@include screen-lg {
-					top: $header_height; 
-				}
-			}
-		}
+    a {
+        text-decoration: none;
+        color: $secondary_link_color;
 
-	}
+        &:visited {
+            color: $secondary_link_color;
+        }
 
-	a {
-		text-decoration: none;
-		color: $secondary_link_color;
+        &:hover {
+            color: $secondary_link_hover;
+        }
+    }
 
-		&:visited {
-			color: $secondary_link_color;
-		}
+    .flexbox {
+        align-items: center;
+        display: flex;
+        position: relative;
+    }
 
-		&:hover {
-			color: $secondary_link_hover;
-		}
-	}
+    .title-container {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        align-items: flex-start;
 
-	.flexbox {
-		align-items: center;
-		display: block;	
-		position: relative;
+        @include screen-lg {
+            align-items: center;
+            flex-direction: row;
+        }
+    }
 
-		@include screen-lg {
-			display: flex;
-		}
-	}
+    .site-title {
+        padding-right: $spacer-2;
+        margin-right: $spacer-2;
+        font-size: $font_size_sm;
+        font-weight: normal;
 
-	.site-title {
-		padding-right: $spacer-2;
-		margin-right: $spacer-2;
-		font-size: $font_size_sm;
-		font-weight: normal;
+        @include screen-lg {
+            border-right: 1px solid $border_color;
+            font-size: $font-size-2xl;
+            font-weight: bold;
+            display: inline-block;
+        }
+    }
 
-		@include screen-lg {
-			border-right: 1px solid $border_color;
-			font-size: $font-size-2xl;
-			font-weight: bold;
-			display: inline-block;
-		}
-	}
+    .reg-title {
+        display: block;
+        flex: 2;
+        padding-right: $spacer-2;
+        font-size: $font-size-lg;
 
-	.reg-title {
-		display: block;
-		flex: 2;
-		padding-right: $spacer-2;
-		font-size: $font-size-lg;
+        @include screen-lg {
+            font-size: $font-size-md;
+        }
 
-		@include screen-lg {
-			font-size: $font-size-md;
-		}
+        a {
+            max-width: $text-max-width;
+            display: inline-block;
+        }
+    }
 
-		a {
-			max-width: $text-max-width;
-			display: inline-block;
-		}
-	}
-
-	.header-part-name {
-
-		@include custom-max(1290) {
-			display: none;
-		}
-	}
+    .header-part-name {
+        @include custom-max(1290) {
+            display: none;
+        }
+    }
 }
 
 .search-header {
-	float: right;
-	margin-top: -$spacer-4;
+    flex: 0 0 48px;
+    height: 48px;
 
-	@include screen-lg {
-		margin-top: 0;
+    @include screen-lg {
+        flex: 0 0 250px;
+        height: auto;
 
-		svg {
-			display: none;
-		}
-	}
+        svg {
+            display: none;
+        }
+    }
 
-	.search-box {
-		display: none;
+    .search-box {
+        display: none;
 
-	    @include screen-lg {
-	        width: 250px;
-	        display: inline-block;
-	    }
+        @include screen-lg {
+            width: 250px;
+            display: inline-block;
+        }
 
-	    @include screen-xl {
-	        width: 310px;
-	    }
+        @include screen-xl {
+            width: 310px;
+        }
 
-	    @include screen-xxl {
-	        width: 330px;
-	    }
+        @include screen-xxl {
+            width: 330px;
+        }
 
-		input {
-			border: 1px solid $border_color;
-		}
-	}
+        input {
+            border: 1px solid $border_color;
+        }
+    }
+
+    a {
+        @include custom-max($tablet-max / 1px) {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
 }
 
 .search-header-mobile-open {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	background: $main_background_color;
-	z-index: 100;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: $main_background_color;
+    z-index: 100;
 
     &[data-state="collapsed"] {
         display: none;
@@ -157,52 +173,46 @@ header {
         }
     }
 
-	svg {
-		display: inline-block;
-		vertical-align: middle;
-	}
+    svg {
+        display: inline-block;
+        vertical-align: middle;
+    }
 
-	.search-borderless {
-		margin: .7em 0 0 $spacer-3;
-		display: inline-block;
-		width: calc(100% - 100px);
+    .search-borderless {
+        margin: 0.7em 0 0 $spacer-3;
+        display: inline-block;
+        width: calc(100% - 100px);
 
-		input {
-			border: 0;
-			width: 100%;
-		}
-	}
+        input {
+            border: 0;
+            width: 100%;
+        }
+    }
 }
 
 // Search Results Page
 
 .search-page {
+    header {
+        height: calc(#{$header_height_mobile} - #{$spacer-4});
 
-	header {
-		height: calc(#{$header_height_mobile} - #{$spacer-4});
+        @include screen-lg {
+            height: auto;
+        }
 
-		@include screen-lg {
-			height: auto;
-		}
+        &.sticky + .content aside {
+            @include screen-lg {
+                top: calc(#{$header_height} - 5px);
+            }
+        }
 
-		&.sticky + .content aside {
+        .reg-title:after {
+            content: "Search Results";
 
-			@include screen-lg {
-				top: calc(#{$header_height} - 5px)
-			}
-		}
-
-		.reg-title:after {
-			content: "Search Results";
-
-			@include screen-lg {
-				margin-top: 5px;
-				display: inline-block;
-			}
-		}
-	}
-
-
-
+            @include screen-lg {
+                margin-top: 5px;
+                display: inline-block;
+            }
+        }
+    }
 }
-

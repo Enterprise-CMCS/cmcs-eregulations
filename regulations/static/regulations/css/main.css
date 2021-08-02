@@ -13534,7 +13534,7 @@ select:focus-visible {
 }
 
 header {
-  padding: 16px 32px;
+  padding: 16px 24px 16px 32px;
   border-bottom: 1px solid #17415f;
 }
 @media (min-width: 1024px) {
@@ -14679,12 +14679,19 @@ header a:hover {
 }
 header .flexbox {
   align-items: center;
-  display: block;
+  display: flex;
   position: relative;
 }
+header .title-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+}
 @media (min-width: 1024px) {
-  header .flexbox {
-    display: flex;
+  header .title-container {
+    align-items: center;
+    flex-direction: row;
   }
 }
 header .site-title {
@@ -14723,12 +14730,13 @@ header .reg-title a {
 }
 
 .search-header {
-  float: right;
-  margin-top: -32px;
+  flex: 0 0 48px;
+  height: 48px;
 }
 @media (min-width: 1024px) {
   .search-header {
-    margin-top: 0;
+    flex: 0 0 250px;
+    height: auto;
   }
   .search-header svg {
     display: none;
@@ -14755,6 +14763,15 @@ header .reg-title a {
 }
 .search-header .search-box input {
   border: 1px solid #d6d7d9;
+}
+@media (max-width: 1023px) {
+  .search-header a {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .search-header-mobile-open {
