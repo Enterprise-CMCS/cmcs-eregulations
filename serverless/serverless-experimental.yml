@@ -48,6 +48,9 @@ functions:
   reg_core_migrate:
     handler: migrate.handler
     timeout: 15
+  create_su:
+    handler: createsu.handler
+    timeout: 15
 
 resources:
 
