@@ -13513,6 +13513,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -13707,6 +13714,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -13781,6 +13795,13 @@ a:focus, a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -14219,6 +14240,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -14430,6 +14458,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -14516,6 +14551,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -14574,6 +14616,13 @@ a:focus, a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -14793,6 +14842,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -15005,6 +15061,11 @@ aside.left-sidebar li.active ul a.menu-section:hover {
   padding: 16px 0 32px;
   margin: 0 32px;
 }
+.jump-to form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
 .jump-to .jump-to-label {
   margin: 16px 0 8px 0;
   font-size: 18px;
@@ -15023,7 +15084,9 @@ aside.left-sidebar li.active ul a.menu-section:hover {
 }
 .jump-to input.submit {
   display: inline-block;
-  padding: 10px 16px;
+  line-height: 1.3;
+  padding: 8px 16px;
+  margin: 4px 0 4px 4px;
   background: #a3e8ff;
   border: none;
   border-radius: 3px;
@@ -15070,6 +15133,13 @@ a:focus, a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15292,6 +15362,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -15481,6 +15558,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -15554,6 +15638,13 @@ a:focus, a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15694,6 +15785,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -15808,6 +15906,13 @@ html {
   scroll-behavior: smooth;
 }
 
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
 :target:before {
   content: "";
   display: block;
@@ -15887,6 +15992,13 @@ a:focus, a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {

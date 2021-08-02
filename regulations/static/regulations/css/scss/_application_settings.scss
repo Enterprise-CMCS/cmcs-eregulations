@@ -232,6 +232,14 @@ html {
     scroll-behavior: smooth;
 }
 
+select {
+    cursor: pointer;
+
+    &:focus-visible {
+        box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+    }
+}
+
 :target:before {
     // Moves content down so it's not covered by the sticky header
     content: "";
