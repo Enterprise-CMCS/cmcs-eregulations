@@ -17,19 +17,16 @@ Basic.args = {
   "description": "Supplementary content example category A",
   "supplementary_content": [
     {
-      "title": "Medicaid Program; Medicaid Management Information System: Revised Definition of “Mechanized Claims Processing and Information Retrieval System” (54 FR 41966), October 13, 1989.",
+      "date": "1989-10-13",
+      "title": "Medicaid Management Information System",
+      "description": "Medicaid Program; Medicaid Management Information System: Revised Definition of “Mechanized Claims Processing and Information Retrieval System” (54 FR 41966), October 13, 1989.",
       "url": "https://s3.amazonaws.com/archives.federalregister.gov/issue_slice/1989/10/13/41964-41974.pdf#page=3",
       "sections": [
-       {
-        "title": "42",
-        "part": "433",
-        "section": "111"
-       },
-       {
-        "title": "42",
-        "part": "433",
-        "section": "112"
-       },
+        {
+          "title": "42",
+          "part": "433",
+          "section": "111"
+        },
       ]
      },
      {
@@ -55,15 +52,17 @@ Basic.args = {
       "description": "Example supplementary content sub-category A-A",
       "supplementary_content": [
         {
-          "title": "Supplementary content example 1",
-          "url": "example1",
+          "date": "1989-10-13",
+          "title": "Medicaid Management Information System",
+          "description": "Medicaid Program; Medicaid Management Information System: Revised Definition of “Mechanized Claims Processing and Information Retrieval System” (54 FR 41966), October 13, 1989.",
+          "url": "https://s3.amazonaws.com/archives.federalregister.gov/issue_slice/1989/10/13/41964-41974.pdf#page=3",
           "sections": [
             {
               "title": "42",
               "part": "433",
-              "section": "110",
-            }
-          ],
+              "section": "111"
+            },
+          ]
         },
         {
           "title": "Supplementary content example 2",
@@ -84,15 +83,17 @@ Basic.args = {
       "description": "Example supplementary content sub-category A-B",
       "supplementary_content": [
         {
-          "title": "Supplementary content example 3",
-          "url": "example3",
+          "date": "1989-10-13",
+          "title": "Medicaid Management Information System",
+          "description": "Medicaid Program; Medicaid Management Information System: Revised Definition of “Mechanized Claims Processing and Information Retrieval System” (54 FR 41966), October 13, 1989.",
+          "url": "https://s3.amazonaws.com/archives.federalregister.gov/issue_slice/1989/10/13/41964-41974.pdf#page=3",
           "sections": [
             {
               "title": "42",
               "part": "433",
-              "section": "130",
-            }
-          ],
+              "section": "111"
+            },
+          ]
         },
         {
           "title": "Supplementary content example 4",

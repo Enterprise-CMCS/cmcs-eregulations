@@ -5,10 +5,11 @@
             <template v-slot:collapsed><i class="fa fa-chevron-down"></i></template>
         </collapse-button>
         <div class="category">
-            <h3 class="category-title">{{ title }}</h3>
+            <h3 class="category-title" v-bind:class="{ subcategory: subcategory }">{{ title }}</h3>
             <span class="category-description">{{ description }}</span>
-            <collapsible :name="title" state="collapsed" direction="vertical">
+            <collapsible :name="title" state="collapsed" direction="vertical" class="category-content">
                 <supplementary-content-category v-for="(category, index) in sub_categories" :key="index"
+                    :subcategory="true"
                     :title="category.title"
                     :description="category.description"
                     :supplementary_content="category.supplementary_content"
@@ -35,6 +36,11 @@ export default {
     },
 
     props: {
+        subcategory: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
         title: {
             type: String,
             required: true,

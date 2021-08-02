@@ -208,6 +208,7 @@ aside.right-sidebar {
 
 .supplementary-content {
     .supplementary-content-link {
+        text-decoration: none;
         &:after {
             @include external-link;
         }
@@ -219,11 +220,13 @@ aside.right-sidebar {
         padding-right: $spacer-1;
         margin-right: $spacer-1;
         border-right: 1px solid black;
+        font-size: $font-size-sm;
     }
 
     .supplementary-content-title {
         color: $primary_link_color;
         font-weight: bold;
+        font-size: $font-size-sm;
     }
 
     .supplementary-content-description {
@@ -244,8 +247,11 @@ aside.right-sidebar {
     .category-title {
         margin: auto 0 auto 0;
         color: $primary_link_color;
-        //font-weight: ;
         font-size: $font-size-lg;
+
+        &.subcategory {
+            font-size: $font-size-md;
+        }
     }
 
     .category-description {
@@ -275,6 +281,10 @@ aside.right-sidebar {
             display: block;
             border-radius: $border-radius;
         }
+    }
+
+    .category-content {
+        padding-top: 1em;
     }
 }
 
