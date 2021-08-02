@@ -206,27 +206,74 @@ aside.right-sidebar {
     }
 }
 
-.supplementary-content-link {
-	&:after {
-	    @include external-link;
+.supplementary-content {
+    .supplementary-content-link {
+        &:after {
+            @include external-link;
+        }
+    }
+
+    .supplementary-content-date {
+        color: $primary_link_color;
+        font-weight: bold;
+        padding-right: $spacer-1;
+        margin-right: $spacer-1;
+        border-right: 1px solid $black;
+    }
+
+    .supplementary-content-title {
+        color: $primary_link_color;
+        font-weight: bold;
+    }
+
+    .supplementary-content-description {
+        color: $primary_link_color;
+        text-decoration: none;
+        font-size: $font-size-sm;
     }
 }
 
-.supplementary-content-date {
-    color: $primary_link_color;
-    font-weight: bold;
-    padding-right: $spacer-1;
-    margin-right: $spacer-1;
-    border-right: 1px solid $black;
-}
+.supplementary-content-category {
+    width: 500px;
+    display: table;
 
-.supplementary-content-title {
-    color: $primary_link_color;
-    font-weight: bold;
-}
+    .category {
+        display: table-cell;
+    }
 
-.supplementary-content-description {
-    color: $primary_link_color;
-    text-decoration: none;
-    font-size: $font-size-sm;
+    .category-title {
+        margin: auto 0 auto 0;
+        color: $primary_link_color;
+        //font-weight: ;
+        font-size: $font-size-lg;
+    }
+
+    .category-description {
+        font-size: $font-size-sm;
+        font-weight: normal;
+        color: $primary_text_color;
+        padding-right: $spacer-4;
+    }
+
+    .category-toggle {
+        display: table-cell;
+
+        &:hover {
+            button {
+                color: $reverse_link_hover;
+                background: $reverse_background_lighter;
+                @include transition;
+            }
+        }
+
+        button {
+            background: none;
+            border: none;
+            color: $reverse_link_color;
+            cursor: pointer;
+            margin-top: 4px;
+            display: block;
+            border-radius: $border-radius;
+        }
+    }
 }
