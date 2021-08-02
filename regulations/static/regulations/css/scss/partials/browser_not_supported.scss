@@ -1,0 +1,53 @@
+
+//-----------------------------
+// Browser Not Supported
+//-----------------------------
+
+@import "../application_settings";
+
+.browser-not-supported {
+    text-align: center;
+    font-size: $font-size-sm;
+    padding: $spacer-2 $spacer-4;
+    position: relative;
+    z-index: 100;
+    margin: 0 auto;
+    border-bottom: 2px solid $border_color;
+    box-shadow: $shadow-base;
+
+    .ds-l-container {
+    	max-width: 600px;
+    }
+
+    img {
+    	max-width: 100%;
+    	margin-top: -10px;
+
+    	&:hover {
+    		opacity: .8;
+    	}
+    }
+
+    a {
+        text-decoration: none;
+        font-weight: bold;
+
+        &:visited {
+            color: $primary_link_color;
+
+            &:hover {
+                color: $primary_link_hover; 
+            }
+        }
+    }
+
+    h3 {
+    	margin: $spacer-4 0 0 0;
+    }
+
+    p {
+    	max-width: $text-max-width;
+    	margin: 0 auto;
+    }
+
+}

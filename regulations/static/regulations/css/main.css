@@ -15730,4 +15730,77 @@ main.about :target::before {
   height: auto;
 }
 
+.indicator {
+  background: #026666;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+a.external:after {
+  content: url("../images/external-link.svg");
+  padding-left: 5px;
+}
+
+a {
+  color: #046791;
+}
+a:hover {
+  color: #17415f;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:target:before {
+  content: "";
+  display: block;
+  height: 105px;
+  margin: -105px 0 0;
+}
+
+.browser-not-supported {
+  text-align: center;
+  font-size: 14px;
+  padding: 16px 32px;
+  position: relative;
+  z-index: 100;
+  margin: 0 auto;
+  border-bottom: 2px solid #d6d7d9;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.browser-not-supported .ds-l-container {
+  max-width: 600px;
+}
+.browser-not-supported img {
+  max-width: 100%;
+  margin-top: -10px;
+}
+.browser-not-supported img:hover {
+  opacity: 0.8;
+}
+.browser-not-supported a {
+  text-decoration: none;
+  font-weight: bold;
+}
+.browser-not-supported a:visited {
+  color: #046791;
+}
+.browser-not-supported a:visited:hover {
+  color: #17415f;
+}
+.browser-not-supported h3 {
+  margin: 32px 0 0 0;
+}
+.browser-not-supported p {
+  max-width: 53rem;
+  margin: 0 auto;
+}
+
 /*# sourceMappingURL=main.css.map */
