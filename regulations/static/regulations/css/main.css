@@ -15962,8 +15962,14 @@ html {
 :target:before {
   content: "";
   display: block;
-  height: 105px;
-  margin: -105px 0 0;
+  height: 81px;
+  margin: -81px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
 }
 
 #browser-unsupported-modal .ds-c-dialog {
