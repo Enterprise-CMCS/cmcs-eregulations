@@ -62,7 +62,7 @@ aside.right-sidebar {
             color: $primary_text_color;
         }
 
-        &:hover, 
+        &:hover,
         &[data-state="show"] {
             color: $reverse_text_color;
             background: $secondary_link_color;
@@ -152,7 +152,7 @@ aside.right-sidebar {
     font-weight: bold;
     padding-right: $spacer-1;
     margin-right: $spacer-1;
-    border-right: 1px solid $black;
+    border-right: 1px solid $title-color;
 }
 
 .related-rule-citation {
@@ -218,7 +218,7 @@ aside.right-sidebar {
         font-weight: bold;
         padding-right: $spacer-1;
         margin-right: $spacer-1;
-        border-right: 1px solid $black;
+        border-right: 1px solid black;
     }
 
     .supplementary-content-title {
@@ -276,4 +276,12 @@ aside.right-sidebar {
             border-radius: $border-radius;
         }
     }
+}
+
+.show-more-button {
+    color: $primary-link-color;
+    border: none;
+    background: none;
+    font-size: $font-size-sm;
+    cursor: pointer;
 }

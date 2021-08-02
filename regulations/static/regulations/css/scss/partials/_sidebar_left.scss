@@ -11,6 +11,10 @@ $toc_toggles_width: 64px;
 // Sidebar
 
 aside.left-sidebar {
+    .invisible {
+        height: 0px !important;
+    }
+
     color: $reverse_text_color;
     height: calc(100vh - #{$header-height});
     overflow-y: scroll;
@@ -49,6 +53,10 @@ aside.left-sidebar {
 
         ul li.subtoc.active {
             background: none;
+        }
+
+        ul li.orphan {
+            display: none;
         }
     }
 
