@@ -1,38 +1,49 @@
 {% load static %}
 
-<div class="browser-not-supported">
+<div id="browser-unsupported-modal" class="ds-c-dialog-wrap" aria-labelledby="dialog-heading" role="dialog">
+    <div class="ds-c-dialog" role="document">
+        <button
+          class="ds-c-button ds-c-button--transparent ds-c-dialog__close"
+          aria-label="Close modal dialog"
+        >
+            Close
+        </button>
 
-    <h2>Browser Not Supported</h2>
-    <p>You seem to be using a browser we don't support. We strongly recommend using one of these options for a better experience.</p>
+        <div class="browser-not-supported">
+            <h2>Browser Not Supported</h2>
+            <p>You seem to be using a browser we don't support. We strongly recommend using one of these options for a better experience.</p>
+            <div class="ds-l-container">
+                <div class="ds-l-row">
+                    <div class="ds-l-col">
 
-    <div class="ds-l-container">
-        <div class="ds-l-row">
-            <div class="ds-l-col">
+                        <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">
+                            <h3>Firefox</h3>
+                            <img src="{% static 'images/firefox.svg' %}" alt="Mozilla Firefox" />
+                        </a>
 
-                <a href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">
-                    <h3>Firefox</h3>
-                    <img src="{% static 'images/firefox.svg' %}" alt="Mozilla Firefox" />
-                </a>
+                    </div>
 
-            </div>
+                    <div class="ds-l-col">
 
-            <div class="ds-l-col">
+                         <a href="https://www.google.com/chrome/" target="_blank">
+                            <h3>Chrome</h3>
+                            <img src="{% static 'images/chrome.svg' %}" alt="Google Chrome" />
+                        </a>
 
-                 <a href="https://www.google.com/chrome/" target="_blank">
-                    <h3>Chrome</h3>
-                    <img src="{% static 'images/chrome.svg' %}" alt="Google Chrome" />
-                </a>
+                    </div>
 
-            </div>
+                    <div class="ds-l-col">
 
-            <div class="ds-l-col">
+                        <a href="https://www.microsoft.com/en-us/edge" target="_blank">
+                            <h3>Edge</h3>
+                            <img src="{% static 'images/edge.svg' %}" alt="Microsoft Edge" />
+                        </a>
 
-                <a href="https://www.microsoft.com/en-us/edge" target="_blank">
-                    <h3>Edge</h3>
-                    <img src="{% static 'images/edge.svg' %}" alt="Microsoft Edge" />
-                </a>
+                    </div>
+                </div>     
+            </div>   
+        </div> <!-- / .browser-not-supported  -->
 
-            </div>
-        </div>     
-    </div>   
+    </div>
 </div>
+

@@ -15765,6 +15765,16 @@ html {
   margin: -105px 0 0;
 }
 
+#browser-unsupported-modal .ds-c-dialog {
+  margin-top: 12%;
+}
+#browser-unsupported-modal .ds-c-dialog__close {
+  float: right;
+  cursor: pointer;
+  z-index: 1000;
+  position: relative;
+}
+
 .browser-not-supported {
   text-align: center;
   font-size: 14px;
@@ -15772,15 +15782,10 @@ html {
   position: relative;
   z-index: 100;
   margin: 0 auto;
-  border-bottom: 2px solid #d6d7d9;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
-}
-.browser-not-supported .ds-l-container {
-  max-width: 600px;
 }
 .browser-not-supported img {
   max-width: 100%;
-  margin-top: -10px;
+  margin-top: -5px;
 }
 .browser-not-supported img:hover {
   opacity: 0.8;
