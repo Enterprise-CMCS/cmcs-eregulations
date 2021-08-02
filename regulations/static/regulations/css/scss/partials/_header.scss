@@ -111,6 +111,10 @@ header {
     flex: 0 0 48px;
     height: 48px;
 
+    @include custom-max($iphoneSE-max / 1px) {
+        flex: 0 0 36px;
+    }
+
     @include screen-lg {
         flex: 0 0 250px;
         height: auto;
@@ -141,14 +145,15 @@ header {
         }
     }
 
-    a {
-        @include custom-max($tablet-max / 1px) {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    button {
+        cursor: pointer;
+        border: none;
+        background: none;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -176,6 +181,11 @@ header {
     svg {
         display: inline-block;
         vertical-align: middle;
+    }
+
+    button {
+        border: none;
+        background: none;
     }
 
     .search-borderless {

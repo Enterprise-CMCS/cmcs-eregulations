@@ -102,11 +102,29 @@ $font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable i
 // Custom maxes
 $tablet-max: $width-lg - 1; // 1023px
 $mobile-max: $width-md - 1; // 767px
+$iphoneSE-max: $width-xs - 1; // 374px
 
 // Uses CMS Design System + a larger screen size
 
+$width-xxs: 320px;
+$width-xs: 375px;
+
 $width-xxl: 1440px;
 $width-3xl: 1920px; // The largest the site container will get
+
+// 320px, or iPhone 5/iPhone SE (1st gen)
+@mixin screen-xxs {
+    @media (min-width: #{$width-xxs}) {
+        @content;
+    }
+}
+
+// 375px, or iPhone X
+@mixin screen-xs {
+    @media (min-width: #{$width-xs}) {
+        @content;
+    }
+}
 
 // 544px
 @mixin screen-sm {
