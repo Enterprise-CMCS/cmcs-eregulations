@@ -14733,6 +14733,11 @@ header .reg-title a {
   flex: 0 0 48px;
   height: 48px;
 }
+@media (max-width: 374px) {
+  .search-header {
+    flex: 0 0 36px;
+  }
+}
 @media (min-width: 1024px) {
   .search-header {
     flex: 0 0 250px;
@@ -14764,14 +14769,15 @@ header .reg-title a {
 .search-header .search-box input {
   border: 1px solid #d6d7d9;
 }
-@media (max-width: 1023px) {
-  .search-header a {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.search-header button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-header-mobile-open {
@@ -14797,6 +14803,10 @@ header .reg-title a {
 .search-header-mobile-open svg {
   display: inline-block;
   vertical-align: middle;
+}
+.search-header-mobile-open button {
+  border: none;
+  background: none;
 }
 .search-header-mobile-open .search-borderless {
   margin: 0.7em 0 0 24px;
