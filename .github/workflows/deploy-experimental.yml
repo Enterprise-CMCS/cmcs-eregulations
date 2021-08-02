@@ -53,5 +53,6 @@ jobs:
           npm install
           serverless deploy --config ./serverless-experimental.yml --stage dev-$branch_name | tee output.log
           serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev-$branch_name
+          serverless invoke --config ./serverless-experimental.yml --function createsu --stage dev-$branch_name
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
