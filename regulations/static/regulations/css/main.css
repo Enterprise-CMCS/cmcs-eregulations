@@ -13500,6 +13500,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -13694,6 +13704,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -13768,6 +13788,16 @@ su {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -13860,6 +13890,9 @@ html {
 }
 .site-homepage .hero-banner .hero-text a:hover {
   color: #a3e8ff;
+}
+.site-homepage .hero-banner .hero-text button {
+  margin-top: 8px;
 }
 .site-homepage .hero-banner .hero-image {
   width: 100%;
@@ -14206,6 +14239,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -14417,6 +14460,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -14503,6 +14556,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -14561,6 +14624,16 @@ html {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -14778,6 +14851,16 @@ header .reg-title a {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -15059,6 +15142,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -15279,6 +15372,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -15465,6 +15568,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -15538,6 +15651,16 @@ html {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -15678,6 +15801,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -15792,6 +15925,16 @@ a.external:after {
   padding-left: 5px;
 }
 
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -15871,6 +16014,16 @@ ul.table-of-contents .toc-section-name {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {

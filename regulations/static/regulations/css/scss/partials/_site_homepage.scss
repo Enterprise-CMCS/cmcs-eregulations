@@ -75,6 +75,10 @@
                     color: $hero_link_hover;
                 }
             }
+
+            button {
+                margin-top: $spacer-1;
+            }
         }
 
         .hero-image {
