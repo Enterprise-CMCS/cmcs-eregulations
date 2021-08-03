@@ -498,6 +498,7 @@
   //
   //
   //
+  //
 
   var script$1 = {
       name: "collapsible",
@@ -506,16 +507,22 @@
           requestAnimationFrame(() => {
               this.visible = this.state === "expanded";
               this.isVertical = this.direction === "vertical";
+
+              if (!this.visible) {
+                  this.$refs.target.classList.add("display-none");
+              }
           });
           this.$root.$on("collapse-toggle", this.toggle);
       },
 
       mounted: function () {
           window.addEventListener("resize", this.resize);
+          window.addEventListener("transitionend", this.toggleDisplay);
       },
 
       destroyed: function () {
           window.removeEventListener("resize", this.resize);
+          window.removeEventListener("transitionend", this.toggleDisplay);
       },
 
       props: {
@@ -542,6 +549,7 @@
 
       data: function () {
           return {
+              name: this.name,
               size: "auto",
               visible: false,
               isVertical: true,
@@ -564,8 +572,14 @@
           resize: function (e) {
               this.computeSize();
           },
+          toggleDisplay: function (e) {
+              if (!this.visible && e.propertyName === "height") {
+                  this.$refs.target.classList.add("display-none");
+              }
+          },
           toggle: function (target) {
               if (this.name === target) {
+                  this.$refs.target.classList.remove("display-none");
                   requestAnimationFrame(() => {
                       this.computeSize();
                       requestAnimationFrame(() => {
@@ -587,13 +601,13 @@
                   this.$refs.target.style.width = size;
               }
           },
-          _computeSize: function() {
+          _computeSize: function () {
               if (this.getStyle().display === "none") {
                   return "auto";
               }
 
               this.$refs.target.classList.remove("invisible");
-              
+
               this.setProps("hidden", "block", "absolute", "auto");
 
               const size = this.isVertical
@@ -700,7 +714,8 @@
       {
         ref: "target",
         class: { invisible: !_vm.visible },
-        style: [_vm.styles, _vm.sizeStyle]
+        style: [_vm.styles, _vm.sizeStyle],
+        attrs: { "data-test": _vm.name }
       },
       [_vm._t("default")],
       2
@@ -747,11 +762,14 @@
   //
   //
   //
+  //
+  //
+  //
 
   var script = {
       name: "collapse-button",
 
-      created: function() {
+      created: function () {
           this.visible = this.state === "expanded";
           this.$root.$on("collapse-toggle", this.toggle);
       },
@@ -761,24 +779,26 @@
               type: String,
               required: true,
           },
-          state: { //expanded or collapsed
+          state: {
+              //expanded or collapsed
               type: String,
               required: true,
           },
       },
 
-      data: function() {
+      data: function () {
           return {
+              name: this.name,
               visible: true,
-          }
+          };
       },
 
       methods: {
-          click: function(event) {
+          click: function (event) {
               this.$root.$emit("collapse-toggle", this.name);
           },
-          toggle: function(target) {
-              if(this.name === target) {
+          toggle: function (target) {
+              if (this.name === target) {
                   this.visible = !this.visible;
               }
           },
@@ -868,21 +888,23 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("div", { class: { visible: _vm.visible } }, [
-      _c(
-        "button",
-        {
-          attrs: { "aria-label": "expand or collapse a subpart" },
-          on: { click: _vm.click }
+    return _c(
+      "button",
+      {
+        class: { visible: _vm.visible },
+        attrs: {
+          "data-test": _vm.name,
+          "aria-label": "expand or collapse a subpart"
         },
-        [
-          _vm.visible ? _vm._t("expanded", [_vm._v("Hide")]) : _vm._e(),
-          _vm._v(" "),
-          !_vm.visible ? _vm._t("collapsed", [_vm._v("Show")]) : _vm._e()
-        ],
-        2
-      )
-    ])
+        on: { click: _vm.click }
+      },
+      [
+        _vm.visible ? _vm._t("expanded", [_vm._v("Hide")]) : _vm._e(),
+        _vm._v(" "),
+        !_vm.visible ? _vm._t("collapsed", [_vm._v("Show")]) : _vm._e()
+      ],
+      2
+    )
   };
   var __vue_staticRenderFns__ = [];
   __vue_render__._withStripped = true;

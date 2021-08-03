@@ -14888,6 +14888,9 @@ aside.left-sidebar {
 aside.left-sidebar .invisible {
   height: 0px !important;
 }
+aside.left-sidebar .display-none {
+  display: none !important;
+}
 aside.left-sidebar[data-state=collapsed] {
   width: 1em;
   padding: 0 1em 1em;
@@ -14896,7 +14899,7 @@ aside.left-sidebar[data-state=collapsed] {
 aside.left-sidebar[data-state=collapsed]::-webkit-scrollbar {
   display: none;
 }
-aside.left-sidebar[data-state=collapsed] div {
+aside.left-sidebar[data-state=collapsed] div, aside.left-sidebar[data-state=collapsed] h2, aside.left-sidebar[data-state=collapsed] h3, aside.left-sidebar[data-state=collapsed] h4, aside.left-sidebar[data-state=collapsed] li > a {
   display: none;
 }
 aside.left-sidebar[data-state=collapsed] div.toc-controls {
@@ -14949,32 +14952,28 @@ aside.left-sidebar .toc-section-name {
   font-weight: normal;
   font-size: 14px;
 }
-aside.left-sidebar .subpart-toggle {
+aside.left-sidebar button.subpart-toggle {
   width: 64px;
-  display: table-cell;
-}
-aside.left-sidebar .subpart-toggle:hover button {
-  color: #fff;
-  background: #205982;
-  transition: all 0.1s ease-in;
-}
-aside.left-sidebar .subpart-toggle button {
   background: none;
   border: none;
   color: #a3e8ff;
   cursor: pointer;
-  margin-top: 4px;
-  display: block;
-  padding: 16px;
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 16px;
   margin-right: 16px;
   border-radius: 3px;
+}
+aside.left-sidebar button.subpart-toggle:hover, aside.left-sidebar button.subpart-toggle:focus {
+  color: #fff;
+  background: #205982;
+  transition: all 0.1s ease-in;
 }
 aside.left-sidebar ul {
   padding: 0 0 16px 0;
 }
 aside.left-sidebar ul li {
   list-style: none;
-  overflow: hidden;
 }
 aside.left-sidebar ul li.active {
   background: #102e43;
@@ -14993,14 +14992,14 @@ aside.left-sidebar ul li.orphan .menu-section {
 aside.left-sidebar a {
   color: #a3e8ff;
 }
-aside.left-sidebar a:hover {
+aside.left-sidebar a:hover, aside.left-sidebar a:focus {
   color: #fff;
 }
 aside.left-sidebar a.subpart-info {
   display: table-cell;
   width: calc(100% - 64px);
 }
-aside.left-sidebar a.subpart-info:hover .toc-titles {
+aside.left-sidebar a.subpart-info:hover .toc-titles, aside.left-sidebar a.subpart-info:focus .toc-titles {
   background: #205982;
   transition: all 0.1s ease-in;
 }
@@ -15015,7 +15014,7 @@ aside.left-sidebar .menu-section {
     padding: 8px 32px;
   }
 }
-aside.left-sidebar .menu-section:not(li.active ul a.menu-section):hover {
+aside.left-sidebar .menu-section:not(li.active ul a.menu-section):hover, aside.left-sidebar .menu-section:not(li.active ul a.menu-section):focus {
   background: #205982;
 }
 aside.left-sidebar .menu-section.active {
@@ -15026,7 +15025,8 @@ aside.left-sidebar .menu-section.active {
 aside.left-sidebar .menu-section li {
   padding: 0 16px;
 }
-aside.left-sidebar li.active ul a.menu-section:hover {
+aside.left-sidebar li.active ul a.menu-section:hover,
+aside.left-sidebar li.active ul a.menu-section:focus {
   background: #205982;
 }
 
@@ -15044,7 +15044,7 @@ aside.left-sidebar li.active ul a.menu-section:hover {
   padding: 16px;
   border-radius: 0;
 }
-.toc-controls button:hover {
+.toc-controls button:hover, .toc-controls button:focus {
   background: #046791;
   color: #fff;
   transition: all 0.1s ease-in;
@@ -15106,7 +15106,7 @@ aside.left-sidebar li.active ul a.menu-section:hover {
   border-radius: 3px;
   cursor: pointer;
 }
-.jump-to input.submit:hover {
+.jump-to input.submit:hover, .jump-to input.submit:focus {
   background: #fff;
   transition: all 0.1s ease-in;
 }
@@ -15454,7 +15454,8 @@ article {
 }
 @media (min-width: 1440px) {
   article {
-    margin: 40px 48px;
+    margin: 40px auto;
+    padding: 0 48px;
   }
 }
 article i {
