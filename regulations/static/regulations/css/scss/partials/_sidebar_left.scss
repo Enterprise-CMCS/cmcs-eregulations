@@ -28,7 +28,7 @@ aside.left-sidebar {
             display: none;
         }
 
-        div {
+        div, h2, h3, h4, li > a {
             display: none;
         }
 
@@ -101,29 +101,25 @@ aside.left-sidebar {
 
     // Toggle Icons
 
-    .subpart-toggle {
+    button.subpart-toggle {
         width: $toc_toggles_width;
-        display: table-cell;
 
-        &:hover {
-            button {
-                color: $reverse_link_hover;
-                background: $reverse_background_lighter;
-                @include transition;
-            }
+        &:hover,
+        &:focus {
+            color: $reverse_link_hover;
+            background: $reverse_background_lighter;
+            @include transition;
         }
 
-        button {
-            background: none;
-            border: none;
-            color: $reverse_link_color;
-            cursor: pointer;
-            margin-top: 4px;
-            display: block;
-            padding: $spacer-2; // Helps users by making the toggle target bigger, ~42px square
-            margin-right: $spacer-2;
-            border-radius: $border-radius;
-        }
+        background: none;
+        border: none;
+        color: $reverse_link_color;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        padding: $spacer-3 $spacer-2 $spacer-2; // Helps users by making the toggle target bigger, ~42px square
+        margin-right: $spacer-2;
+        border-radius: $border-radius;
     }
 
     // Ridiculous Nested Lists and Links
@@ -133,7 +129,7 @@ aside.left-sidebar {
 
         li {
             list-style: none;
-            overflow: hidden;
+            //overflow: hidden;
 
             &.active {
                 background: $reverse_background_darker;
@@ -160,7 +156,8 @@ aside.left-sidebar {
     a {
         color: $reverse_link_color;
 
-        &:hover {
+        &:hover,
+        &:focus {
             color: $reverse_link_hover;
         }
 
@@ -168,7 +165,8 @@ aside.left-sidebar {
             display: table-cell;
             width: calc(100% - #{$toc_toggles_width});
 
-            &:hover {
+            &:hover,
+            &:focus {
                 .toc-titles {
                     background: $reverse_background_lighter;
                     @include transition;
@@ -188,7 +186,8 @@ aside.left-sidebar {
         }
 
         &:not(li.active ul a.menu-section) {
-            &:hover {
+            &:hover,
+            &:focus {
                 background: $reverse_background_lighter;
             }
         }
@@ -204,7 +203,8 @@ aside.left-sidebar {
         }
     }
 
-    li.active ul a.menu-section:hover {
+    li.active ul a.menu-section:hover,
+    li.active ul a.menu-section:focus {
         background: $reverse_background_lighter;
     }
 }
@@ -225,7 +225,8 @@ aside.left-sidebar {
         padding: $spacer-2;
         border-radius: 0;
 
-        &:hover {
+        &:hover,
+        &:focus {
             background: $secondary_link_hover;
             color: $reverse_text_color;
             @include transition;
@@ -293,7 +294,8 @@ aside.left-sidebar {
             border-radius: $border-radius;
             cursor: pointer;
 
-            &:hover {
+            &:hover,
+            &:focus {
                 background: $reverse_link_hover;
                 @include transition;
             }
