@@ -1,26 +1,31 @@
-{% load static %}
-
-<div class="flexbox">
-
+<!-- desktop -->
+<div class="flexbox header-large">
     <div class="title-container">
-        <div class="site-title">
-            <a href="{% url 'homepage' %}">Medicaid &amp; CHIP Regulations</a>
-        </div>
+        {% include "regulations/partials/header/site-title.html" %}
+        {% include "regulations/partials/header/reg-title.html" %}
+    </div>
 
-        <div class="reg-title">
-            {% if part %}
-            <a href="{% url 'regulation_landing_view' title reg_part %}">
-                <strong>{{title}} CFR Part {{ part }}</strong>
-                <span class="header-part-name">
-                {% if part_label %}
-                 - {{ part_label }}
-                {% endif %}
-                </span>
-            </a>
-            {% endif %}
+    <div class="search-header">
+        {% include "regulations/partials/header/search-input.html" with class="search-box"%}
+    </div>
+</div>
+
+<!-- mobile -->
+<div class="flexbox header-mobile">
+    <!-- titles -->
+    <div class="mobile-titles" data-state-name="header-mobile-titles" data-state="expanded">
+        <div class="title-container">
+            {% include "regulations/partials/header/site-title.html" %}
+            {% include "regulations/partials/header/reg-title.html" %}
         </div>
     </div>
 
-    {% include "regulations/partials/header-search.html" %}
+    <!-- open search button -->
+    {% include "regulations/partials/header/toggle-button.html" with set_state="collapsed" state_name="header-mobile-titles" action="open" title="Search" %}
 
+    <!-- close search button -->
+    {% include "regulations/partials/header/toggle-button.html" with set_state="expanded" state_name="header-mobile-titles" action="close" title="Leave Search" %}
+
+    <!-- search input -->
+    {% include "regulations/partials/header/search-input.html" with class="search-borderless"%}
 </div>

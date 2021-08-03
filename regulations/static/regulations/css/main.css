@@ -13534,7 +13534,7 @@ select:focus-visible {
 }
 
 header {
-  padding: 16px 24px 16px 32px;
+  padding: 16px 24px;
   border-bottom: 1px solid #17415f;
 }
 @media (min-width: 1024px) {
@@ -14681,6 +14681,36 @@ header .flexbox {
   align-items: center;
   display: flex;
   position: relative;
+  flex-direction: row;
+}
+@media (min-width: 1024px) {
+  header .flexbox.header-mobile {
+    display: none;
+  }
+}
+header .flexbox.header-mobile button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header .flexbox.header-mobile button#mobile-search-open[data-state=collapsed] {
+  display: none;
+}
+header .flexbox.header-mobile button#mobile-search-open[data-state=expanded] ~ #mobile-search-close,
+header .flexbox.header-mobile button#mobile-search-open[data-state=expanded] ~ .search-borderless {
+  display: none;
+}
+@media (max-width: 1023px) {
+  header .flexbox.header-large {
+    display: none;
+  }
+}
+header .mobile-titles[data-state=collapsed] {
+  display: none;
 }
 header .title-container {
   display: flex;
@@ -14728,6 +14758,16 @@ header .reg-title a {
     display: none;
   }
 }
+header .search-borderless {
+  flex: 1;
+  height: 100%;
+  display: flex;
+}
+header .search-borderless input {
+  padding: 0 8px;
+  border: 0;
+  width: 100%;
+}
 
 .search-header {
   flex: 0 0 48px;
@@ -14769,16 +14809,6 @@ header .reg-title a {
 .search-header .search-box input {
   border: 1px solid #d6d7d9;
 }
-.search-header button {
-  cursor: pointer;
-  border: none;
-  background: none;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .search-header-mobile-open {
   position: absolute;
@@ -14793,7 +14823,10 @@ header .reg-title a {
   display: none;
 }
 .search-header-mobile-open[data-state=expanded] {
-  display: block;
+  display: flex;
+}
+.search-header-mobile-open[data-state=expanded] + .title-container {
+  display: none;
 }
 @media (min-width: 1024px) {
   .search-header-mobile-open[data-state=expanded] {
@@ -14805,17 +14838,10 @@ header .reg-title a {
   vertical-align: middle;
 }
 .search-header-mobile-open button {
+  cursor: pointer;
+  flex: 0 0 48px;
   border: none;
   background: none;
-}
-.search-header-mobile-open .search-borderless {
-  margin: 0.7em 0 0 24px;
-  display: inline-block;
-  width: calc(100% - 100px);
-}
-.search-header-mobile-open .search-borderless input {
-  border: 0;
-  width: 100%;
 }
 
 .search-page header {

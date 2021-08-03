@@ -56,6 +56,49 @@ header {
         align-items: center;
         display: flex;
         position: relative;
+        flex-direction: row;
+
+        &.header-mobile {
+            @include screen-lg {
+                display: none;
+            }
+
+            button {
+                cursor: pointer;
+                border: none;
+                background: none;
+                height: 100%;
+                //width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                &#mobile-search-open {
+                    &[data-state="collapsed"] {
+                        display: none;
+                    }
+
+                    &[data-state="expanded"] {
+                        ~ #mobile-search-close,
+                        ~ .search-borderless {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.header-large {
+            @include custom-max($tablet-max / 1px) {
+                display: none;
+            }
+        }
+    }
+
+    .mobile-titles {
+        &[data-state="collapsed"] {
+            display: none;
+        }
     }
 
     .title-container {
@@ -105,6 +148,18 @@ header {
             display: none;
         }
     }
+
+    .search-borderless {
+        flex: 1;
+        height: 100%;
+        display: flex;
+
+        input {
+            padding: 0 $spacer-1;
+            border: 0;
+            width: 100%;
+        }
+    }
 }
 
 .search-header {
@@ -144,17 +199,6 @@ header {
             border: 1px solid $border_color;
         }
     }
-
-    button {
-        cursor: pointer;
-        border: none;
-        background: none;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 }
 
 .search-header-mobile-open {
@@ -171,7 +215,11 @@ header {
     }
 
     &[data-state="expanded"] {
-        display: block;
+        display: flex;
+
+        + .title-container {
+            display: none;
+        }
 
         @include screen-lg {
             display: none;
@@ -184,19 +232,10 @@ header {
     }
 
     button {
+        cursor: pointer;
+        flex: 0 0 48px;
         border: none;
         background: none;
-    }
-
-    .search-borderless {
-        margin: 0.7em 0 0 $spacer-3;
-        display: inline-block;
-        width: calc(100% - 100px);
-
-        input {
-            border: 0;
-            width: 100%;
-        }
     }
 }
 
