@@ -1,6 +1,7 @@
 <template>
     <div
         ref="target"
+        v-bind:data-test="name"
         v-bind:class="{ invisible: !visible }"
         v-bind:style="[styles, sizeStyle]"
     >
@@ -16,16 +17,22 @@ export default {
         requestAnimationFrame(() => {
             this.visible = this.state === "expanded";
             this.isVertical = this.direction === "vertical";
+
+            if (!this.visible) {
+                this.$refs.target.classList.add("display-none");
+            }
         });
         this.$root.$on("collapse-toggle", this.toggle);
     },
 
     mounted: function () {
         window.addEventListener("resize", this.resize);
+        window.addEventListener("transitionend", this.toggleDisplay);
     },
 
     destroyed: function () {
         window.removeEventListener("resize", this.resize);
+        window.removeEventListener("transitionend", this.toggleDisplay);
     },
 
     props: {
@@ -52,6 +59,7 @@ export default {
 
     data: function () {
         return {
+            name: this.name,
             size: "auto",
             visible: false,
             isVertical: true,
@@ -74,13 +82,19 @@ export default {
         resize: function (e) {
             this.computeSize();
         },
+        toggleDisplay: function (e) {
+            if (!this.visible && e.propertyName === "height") {
+                this.$refs.target.classList.add("display-none");
+            }
+        },
         toggle: function (target) {
             if (this.name === target) {
+                this.$refs.target.classList.remove("display-none");
                 requestAnimationFrame(() => {
                     this.computeSize();
                     requestAnimationFrame(() => {
                         this.visible = !this.visible;
-                    })
+                    });
                 });
             }
         },
@@ -97,13 +111,13 @@ export default {
                 this.$refs.target.style.width = size;
             }
         },
-        _computeSize: function() {
+        _computeSize: function () {
             if (this.getStyle().display === "none") {
                 return "auto";
             }
 
-            this.$refs.target.classList.remove("invisible")
-            
+            this.$refs.target.classList.remove("invisible");
+
             this.setProps("hidden", "block", "absolute", "auto");
 
             const size = this.isVertical
@@ -112,7 +126,7 @@ export default {
 
             this.setProps(null, null, null, size);
             if (!this.visible) {
-                this.$refs.target.classList.add("invisible")
+                this.$refs.target.classList.add("invisible");
             }
             return size;
         },
