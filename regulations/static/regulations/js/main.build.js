@@ -1046,7 +1046,7 @@
       _c(
         "a",
         {
-          staticClass: "supplementary-content-link external-link",
+          staticClass: "supplementary-content-link",
           attrs: { href: _vm.url, target: "_blank", rel: "noopener noreferrer" }
         },
         [
@@ -1060,7 +1060,7 @@
             _vm._v(_vm._s(_vm.title))
           ]),
           _vm._v(" "),
-          _c("span", { staticClass: "supplementary-content-description" }, [
+          _c("div", { staticClass: "supplementary-content-description" }, [
             _vm._v(_vm._s(_vm.description))
           ])
         ]

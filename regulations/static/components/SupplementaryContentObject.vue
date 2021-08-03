@@ -1,8 +1,8 @@
 <template>
   <div class="supplementary-content">
-    <a class="supplementary-content-link external-link" :href="url" target="_blank" rel="noopener noreferrer">
+    <a class="supplementary-content-link" :href="url" target="_blank" rel="noopener noreferrer">
       <span class="supplementary-content-date" v-if="date">{{ date|formatDate }}</span> <span class="supplementary-content-title">{{ title }}</span>
-      <span class="supplementary-content-description">{{ description }}</span>
+      <div class="supplementary-content-description">{{ description }}</div>
     </a>
   </div>
 </template>

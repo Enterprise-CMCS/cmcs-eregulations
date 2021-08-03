@@ -198,20 +198,19 @@ aside.right-sidebar {
     }
 
     .recent-title {
-	margin-top: .2em;
+        margin-top: .2em;
 
-	&:after {
-	    @include external-link;
+        &:after {
+            @include external-link;
         }
     }
 }
 
 .supplementary-content {
+    margin-bottom: 1em;
+    
     .supplementary-content-link {
         text-decoration: none;
-        &:after {
-            @include external-link;
-        }
     }
 
     .supplementary-content-date {
@@ -233,6 +232,9 @@ aside.right-sidebar {
         color: $primary_link_color;
         text-decoration: none;
         font-size: $font-size-sm;
+        &:after {
+            @include external-link;
+        }
     }
 }
 
@@ -276,7 +278,7 @@ aside.right-sidebar {
         button {
             background: none;
             border: none;
-            color: $reverse_link_color;
+            color: $primary_link_color;
             cursor: pointer;
             margin-top: 4px;
             display: block;

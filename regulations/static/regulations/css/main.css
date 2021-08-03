@@ -15257,12 +15257,11 @@ aside.right-sidebar .resource-info {
   padding-left: 5px;
 }
 
+.supplementary-content {
+  margin-bottom: 1em;
+}
 .supplementary-content .supplementary-content-link {
   text-decoration: none;
-}
-.supplementary-content .supplementary-content-link:after {
-  content: url("../images/external-link.svg");
-  padding-left: 5px;
 }
 .supplementary-content .supplementary-content-date {
   color: #046791;
@@ -15281,6 +15280,10 @@ aside.right-sidebar .resource-info {
   color: #046791;
   text-decoration: none;
   font-size: 14px;
+}
+.supplementary-content .supplementary-content-description:after {
+  content: url("../images/external-link.svg");
+  padding-left: 5px;
 }
 
 .supplementary-content-category {
@@ -15314,7 +15317,7 @@ aside.right-sidebar .resource-info {
 .supplementary-content-category .category-toggle button {
   background: none;
   border: none;
-  color: #a3e8ff;
+  color: #046791;
   cursor: pointer;
   margin-top: 4px;
   display: block;
