@@ -47,8 +47,7 @@ export default {
             const joinedSections = sections.join("&sections=");
             const response = await fetch(`http://localhost:8000/v2/title/${title}/part/${part}/supplementary_content?&sections=${joinedSections}`);
             const content = await response.json();
-            console.log(content);
-            return content.results;
+            return content;
         },
     }
 };

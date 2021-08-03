@@ -15284,7 +15284,6 @@ aside.right-sidebar .resource-info {
 }
 
 .supplementary-content-category {
-  width: 500px;
   display: table;
 }
 .supplementary-content-category .category {
@@ -15304,7 +15303,7 @@ aside.right-sidebar .resource-info {
   color: #212121;
   padding-right: 32px;
 }
-.supplementary-content-category .category-toggle {
+.supplementary-content-category .category-toggle-container {
   display: table-cell;
 }
 .supplementary-content-category .category-toggle:hover button {

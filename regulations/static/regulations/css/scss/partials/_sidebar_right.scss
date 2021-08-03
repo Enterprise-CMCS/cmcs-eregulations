@@ -237,7 +237,6 @@ aside.right-sidebar {
 }
 
 .supplementary-content-category {
-    width: 500px;
     display: table;
 
     .category {
@@ -261,9 +260,11 @@ aside.right-sidebar {
         padding-right: $spacer-4;
     }
 
-    .category-toggle {
+    .category-toggle-container {
         display: table-cell;
+    }
 
+    .category-toggle {
         &:hover {
             button {
                 color: $reverse_link_hover;

@@ -5,7 +5,7 @@
 
     <h2>Subpart Resources</h2>
 
-    <ul>
+    <!--<ul>
         <li data-state="expanded" data-state-name="rules-with-preambles">
             <h3>
                 <span>Rules with Preambles</span>
@@ -15,7 +15,9 @@
         <li id ="related-rules" class="rules-with-preamble" data-state="expanded" data-state-name="rules-with-preambles">
           <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}"></related-rules>
         </li>
-    </ul>
+    </ul>-->
+
+    <supplementary-content title="{{ title }}" part="{{ reg_part }}" :sections="['10', '11', '15']" />
 
     {% for sidebar in sidebars %}
         {% render_nested sidebar.template_name context=sidebar %}
