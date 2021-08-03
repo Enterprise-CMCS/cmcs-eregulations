@@ -1658,14 +1658,27 @@
         "div",
         { staticClass: "category" },
         [
-          _c(
-            "h3",
-            {
-              staticClass: "category-title",
-              class: { subcategory: _vm.subcategory }
-            },
-            [_vm._v(_vm._s(_vm.title))]
-          ),
+          _c("collapse-button", {
+            staticClass: "category-title",
+            class: { subcategory: _vm.subcategory },
+            attrs: { name: _vm.title, state: "collapsed" },
+            scopedSlots: _vm._u([
+              {
+                key: "expanded",
+                fn: function() {
+                  return [_vm._v(_vm._s(_vm.title))]
+                },
+                proxy: true
+              },
+              {
+                key: "collapsed",
+                fn: function() {
+                  return [_vm._v(_vm._s(_vm.title))]
+                },
+                proxy: true
+              }
+            ])
+          }),
           _vm._v(" "),
           _c("span", { staticClass: "category-description" }, [
             _vm._v(_vm._s(_vm.description))

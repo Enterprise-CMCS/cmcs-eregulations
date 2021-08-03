@@ -7,7 +7,10 @@
             </collapse-button>
         </div>
         <div class="category">
-            <h3 class="category-title" v-bind:class="{ subcategory: subcategory }">{{ title }}</h3>
+            <collapse-button v-bind:class="{ subcategory: subcategory }" :name="title" state="collapsed" class="category-title">
+                <template v-slot:expanded>{{ title }}</template>
+                <template v-slot:collapsed>{{ title }}</template>
+            </collapse-button>
             <span class="category-description">{{ description }}</span>
             <collapsible :name="title" state="collapsed" direction="vertical" class="category-content">
                 <supplementary-content-category v-for="(category, index) in sub_categories" :key="index"

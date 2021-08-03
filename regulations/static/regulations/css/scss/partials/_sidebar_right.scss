@@ -246,12 +246,23 @@ aside.right-sidebar {
     }
 
     .category-title {
-        margin: auto 0 auto 0;
-        color: $primary_link_color;
-        font-size: $font-size-lg;
-
         &.subcategory {
-            font-size: $font-size-md;
+            button {
+                font-size: $font-size-md;
+            }
+        }
+
+        button {
+            font-size: $font-size-lg;
+            font-weight: bold;
+            padding-left: 0;
+            background: none;
+            border: none;
+            color: $primary_link_color;
+            cursor: pointer;
+            margin-top: 4px;
+            display: block;
+            border-radius: $border-radius;
         }
     }
 

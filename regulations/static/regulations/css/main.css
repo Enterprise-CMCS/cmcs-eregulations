@@ -15292,13 +15292,20 @@ aside.right-sidebar .resource-info {
 .supplementary-content-category .category {
   display: table-cell;
 }
-.supplementary-content-category .category-title {
-  margin: auto 0 auto 0;
-  color: #046791;
-  font-size: 18px;
-}
-.supplementary-content-category .category-title.subcategory {
+.supplementary-content-category .category-title.subcategory button {
   font-size: 16px;
+}
+.supplementary-content-category .category-title button {
+  font-size: 18px;
+  font-weight: bold;
+  padding-left: 0;
+  background: none;
+  border: none;
+  color: #046791;
+  cursor: pointer;
+  margin-top: 4px;
+  display: block;
+  border-radius: 3px;
 }
 .supplementary-content-category .category-description {
   font-size: 14px;
