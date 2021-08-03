@@ -2,8 +2,8 @@ describe("Search flow", () => {
     it("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".search-box > input").should("be.visible").type("State");
-        cy.get(".search-header .search-box").submit();
+        cy.get(".search-header > input").should("be.visible").type("State");
+        cy.get(".search-header").submit();
 
         cy.url().should("include", "/search/?q=State");
     });
@@ -11,19 +11,19 @@ describe("Search flow", () => {
     it("is hidden on the homepage on mobile devices", () => {
         cy.viewport("iphone-x");
         cy.visit("/");
-        cy.get(".search-borderless > input").should("not.be.visible");
+        cy.get(".hero-search").should("not.be.visible");
     });
 
     it("shows when mobile search open icon is clicked", () => {
         cy.viewport("iphone-x");
         cy.visit("/42/400/");
-        cy.get(".search-header > a")
+        cy.get("button#mobile-search-open")
             .should("be.visible")
             .click({ force: true });
-        cy.get(".search-borderless > input").should("be.visible")
+        cy.get("form.search-borderless > input").should("be.visible")
             .type("State");
 
-        cy.get(".search-header-mobile-open .search-borderless").submit();
+        cy.get("form.search-borderless").submit();
 
         cy.url().should("include", "/search/?q=State");
     });
