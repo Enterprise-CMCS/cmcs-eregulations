@@ -13,6 +13,8 @@ provider:
     DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user~true}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password~true}
+    DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user~true}
+    DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password~true}
     ALLOWED_HOST: '.amazonaws.com'
   vpc:
     securityGroupIds:
@@ -54,7 +56,7 @@ functions:
 
 resources:
 
-  Resources: 
+  Resources:
 
     LambdaFunctionRole:
       Type: AWS::IAM::Role
