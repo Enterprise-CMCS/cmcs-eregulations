@@ -15289,7 +15289,7 @@ aside.right-sidebar .resource-info {
 
 .supplementary-content-category {
   display: table;
-  padding-bottom: 1em;
+  margin-bottom: 1em;
 }
 .supplementary-content-category .category {
   display: table-cell;
@@ -15333,7 +15333,7 @@ aside.right-sidebar .resource-info {
   transition: all 0.1s ease-in;
 }
 .supplementary-content-category .category-content {
-  padding-top: 1em;
+  margin-top: 1em;
 }
 
 .show-more-button {
