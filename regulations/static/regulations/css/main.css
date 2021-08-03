@@ -15360,7 +15360,8 @@ article {
 }
 @media (min-width: 1440px) {
   article {
-    margin: 40px 48px;
+    margin: 40px auto;
+    padding: 0 48px;
   }
 }
 article i {
