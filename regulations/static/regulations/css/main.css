@@ -13849,6 +13849,11 @@ select:focus-visible {
     width: 260px;
   }
 }
+@media (max-width: 1023px) {
+  .site-homepage .hero-banner .hero-search {
+    visibility: hidden;
+  }
+}
 .site-homepage .hero-banner .hero-text {
   width: 100%;
   height: auto;

@@ -38,6 +38,10 @@
                     width: 260px;
                 }
             }
+
+            @include custom-max($tablet-max / 1px) {
+                visibility: hidden;
+            }
         }
 
         .hero-text {
