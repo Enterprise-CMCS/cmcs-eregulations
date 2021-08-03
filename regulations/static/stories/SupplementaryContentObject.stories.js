@@ -1,14 +1,14 @@
-import SupplementaryContent from '../components/SupplementaryContent.vue';
+import SupplementaryContentObject from '../components/SupplementaryContentObject.vue';
 
 export default {
-  title: 'SupplementaryContent/SupplementaryContent',
-  component: SupplementaryContent,
+  title: 'SupplementaryContent/SupplementaryContentObject',
+  component: SupplementaryContentObject,
 };
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { SupplementaryContent },
-  template: '<supplementary-content v-bind="$props" ></supplementary-content>',
+  components: { SupplementaryContentObject },
+  template: '<supplementary-content-object v-bind="$props" ></supplementary-content-object>',
 });
 
 export const Basic = Template.bind({});

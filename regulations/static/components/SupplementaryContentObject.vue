@@ -10,7 +10,7 @@
 <script>
 
 export default {
-  name: 'supplementary-content',
+  name: 'supplementary-content-object',
 
   props: {
     title: {
