@@ -14639,25 +14639,13 @@ select:focus-visible {
 }
 
 header.sticky {
-  position: fixed;
+  position: sticky;
   top: 0;
-  width: 100%;
   background: #fff;
   z-index: 9999999;
   box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
   -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
-}
-header.sticky .search-header {
-  margin-right: 64px;
-}
-header.sticky + .content {
-  padding-top: 81px;
-}
-@media (min-width: 1024px) {
-  header.sticky + .content {
-    padding-top: 105px;
-  }
 }
 header.sticky + .content aside {
   top: 81px;

@@ -8,27 +8,15 @@ header {
     // Sticky Header and Content Adjustments
 
     &.sticky {
-        position: fixed;
+        position: sticky;
         top: 0;
-        width: 100%;
         background: $main_background_color;
         z-index: 9999999;
         box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
         -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
         -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
 
-        .search-header {
-            margin-right: 64px;
-        }
-
         + .content {
-            // Moves content/aside down so they're not covered by the sticky header
-            padding-top: $header_height_mobile;
-
-            @include screen-lg {
-                padding-top: $header_height;
-            }
-
             aside {
                 top: $header_height_mobile;
 
