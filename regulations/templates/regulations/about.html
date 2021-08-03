@@ -1,5 +1,6 @@
 {% extends "regulations/base.html" %}
 {% load static %}
+{% block title %}About This Tool | Medicaid & CHIP Regulations{% endblock %}
 {% block body %}
 <div class="site-container">
   <main class="about">
@@ -18,7 +19,6 @@
       <h2>Automated Updates</h2>
 
       <div class="ds-l-container">
-        
         <div class="ds-l-row">
           <div class="ds-l-col--6">
             <h3>Regulation Text</h3>
@@ -29,7 +29,7 @@
             <p class="note">Note: eCFR and this tool are <a href="https://www.ecfr.gov/cgi-bin/ECFR?SID=7b8aba05aa8d73ae4ea6e482994e1721&mc=true&page=faq#quest7" class="external" target="_blank" rel="noopener noreferrer">not official legal editions</a> of the CFR. See <a href="https://www.ecfr.gov/cgi-bin/ECFR?page=userinfo" class="external" target="_blank" rel="noopener noreferrer">eCFR User Information</a> for how to check against official materials (annual editions and Federal Register rules).</p>
           </div>
           <div class="ds-l-col--6">
-            <img src="{% static 'images/HowItWorksDiagram.svg' %}" alt="Diagram showing eCFR information going to this website" class="ecfr-graphic"/> 
+            <img src="{% static 'images/HowItWorksDiagram.svg' %}" alt="Diagram showing eCFR information going to this website" class="ecfr-graphic"/>
           </div>
         </div>
 
@@ -40,7 +40,7 @@
             <p>These lists are fetched every time you load a page that includes them, so they are always up-to-date.</p>
           </div>
           <div class="ds-l-col--6">
-            <img src="{% static 'images/FR Rules.svg' %}" alt="Screenshot of Rules with Preambles in the right sidebar of this site"/> 
+            <img src="{% static 'images/FR Rules.svg' %}" alt="Screenshot of Rules with Preambles in the right sidebar of this site"/>
           </div>
         </div>
 
@@ -53,7 +53,7 @@
       <div class="ds-l-container">
         <div class="ds-l-row">
           <div class="ds-l-col--6">
-            <h3>Links to Additional Resources <span class="indicator">Coming Soon</span></h3> 
+            <h3>Links to Additional Resources <span class="indicator">Coming Soon</span></h3>
             <p>Resource links are curated and updated by a Medicaid subject matter expert on our team.</p>
             <p>For example, when Medicaid.gov publishes a new State Medicaid Director Letter, we add a link in the sidebar of each relevant subpart.</p>
           </div>

@@ -62,7 +62,7 @@ aside.right-sidebar {
             color: $primary_text_color;
         }
 
-        &:hover, 
+        &:hover,
         &[data-state="show"] {
             color: $reverse_text_color;
             background: $secondary_link_color;
@@ -204,4 +204,12 @@ aside.right-sidebar {
 	    @include external-link;
         }
     }
+}
+
+.show-more-button {
+    color: $primary-link-color;
+    border: none;
+    background: none;
+    font-size: $font-size-sm;
+    cursor: pointer;
 }
