@@ -59,19 +59,25 @@ header {
         flex-direction: row;
 
         &.header-mobile {
+            height: 48px;
+
             @include screen-lg {
                 display: none;
             }
 
             button {
+                flex: 0 0 48px;
+                height: 48px;
                 cursor: pointer;
                 border: none;
                 background: none;
-                height: 100%;
-                //width: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
+                @include custom-max($iphoneSE-max / 1px) {
+                    flex: 0 0 36px;
+                }
 
                 &#mobile-search-open {
                     &[data-state="collapsed"] {
@@ -96,6 +102,8 @@ header {
     }
 
     .mobile-titles {
+        flex: 1;
+
         &[data-state="collapsed"] {
             display: none;
         }
@@ -166,10 +174,6 @@ header {
     flex: 0 0 48px;
     height: 48px;
 
-    @include custom-max($iphoneSE-max / 1px) {
-        flex: 0 0 36px;
-    }
-
     @include screen-lg {
         flex: 0 0 250px;
         height: auto;
@@ -198,44 +202,6 @@ header {
         input {
             border: 1px solid $border_color;
         }
-    }
-}
-
-.search-header-mobile-open {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: $main_background_color;
-    z-index: 100;
-
-    &[data-state="collapsed"] {
-        display: none;
-    }
-
-    &[data-state="expanded"] {
-        display: flex;
-
-        + .title-container {
-            display: none;
-        }
-
-        @include screen-lg {
-            display: none;
-        }
-    }
-
-    svg {
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    button {
-        cursor: pointer;
-        flex: 0 0 48px;
-        border: none;
-        background: none;
     }
 }
 
