@@ -13500,6 +13500,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -13704,6 +13708,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -13790,6 +13798,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -13835,11 +13847,10 @@ html {
   }
 }
 .site-homepage .toc-down {
-  position: absolute;
+  position: fixed;
   bottom: 4vh;
   right: 3vw;
   z-index: 99999;
-  scroll-behavior: smooth;
 }
 .site-homepage .hero-banner {
   background: #026666;
@@ -14246,6 +14257,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -14467,6 +14482,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -14563,6 +14582,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -14631,6 +14654,10 @@ html {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
 }
 
 .main-button {
@@ -14858,6 +14885,10 @@ header .reg-title a {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
 }
 
 .main-button {
@@ -15149,6 +15180,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -15379,6 +15414,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -15575,6 +15614,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -15658,6 +15701,10 @@ html {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
 }
 
 .main-button {
@@ -15808,6 +15855,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -15932,6 +15983,10 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
 .main-button {
   background: #a3e8ff;
   color: #17415f;
@@ -16021,6 +16076,10 @@ ul.table-of-contents .toc-section-name {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
 }
 
 .main-button {

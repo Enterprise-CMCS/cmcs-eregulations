@@ -11,9 +11,10 @@
 {% block body %}
     <main class="homepage">
 
-        <div class="toc-down">
-            <a href="#homepage-toc"><img src="{% static 'images/down-arrow.svg' %}" alt="Down to Table of Contents"/></a>
-        </div>
+        <!-- Scroll down button - temporarily commenting out for demo purposes -->
+        <!-- <div class="toc-down smooth-scroll">
+            <a href="#homepage-toc" id="toc-down-arrow"><img src="{% static 'images/down-arrow.svg' %}" alt="Down to Table of Contents"/></a>
+        </div> -->
 
         <div class="hero-banner">
             <div class="site-container">
@@ -26,7 +27,7 @@
                     <h1>Medicaid &amp; CHIP Regulations</h1>
                     <h4>Look up policy with context.</h4>
                     <p>This is a pilot project in the Center for Medicaid and CHIP Services (CMCS). Learn more about <a href="/about">using this tool</a> and <a href="/about/#automated-updates">how this tool is updated</a>, or explore the site as a supplement to existing policy tools.</p>
-                    <button type="button" class="ds-c-button main-button">View Table of Contents</button>
+                    <a href="#homepage-toc"><button type="button" class="ds-c-button main-button">View Table of Contents</button></a>
                 </div>
 
                 <div class="hero-image">

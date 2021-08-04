@@ -198,7 +198,7 @@ $width-3xl: 1920px; // The largest the site container will get
 }
 
 // -------------------------
-// External Links
+// Links
 // -------------------------
 
 @mixin external-link {
@@ -212,6 +212,10 @@ a {
             @include external-link;
         }
     }
+}
+
+.smooth-scroll {
+    scroll-behavior: smooth;
 }
 
 // -------------------------
