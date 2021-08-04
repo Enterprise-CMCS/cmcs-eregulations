@@ -1,5 +1,6 @@
 describe("Homepage", () => {
     it("loads the homepage", () => {
+        cy.viewport("macbook-15");
         cy.visit("/");
         cy.injectAxe()
         cy.contains("Medicaid & CHIP Regulations");
@@ -7,6 +8,7 @@ describe("Homepage", () => {
     });
 
     it("clicks on part 430 and loads the page", () => {
+        cy.viewport("macbook-15");
         cy.visit("/");
         cy.contains("430").click()
 
@@ -15,6 +17,7 @@ describe("Homepage", () => {
     });
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
+        cy.viewport("macbook-15");
         cy.visit("/42/430/");
         cy.contains("Medicaid & CHIP Regulations").click();
 
