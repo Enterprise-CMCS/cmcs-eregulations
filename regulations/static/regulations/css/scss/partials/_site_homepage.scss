@@ -15,6 +15,16 @@
         }
     }
 
+    // Down to Table of Contents
+
+    .toc-down {
+        position: absolute;
+        bottom: 4vh;
+        right: 3vw;
+        z-index: 99999;
+        scroll-behavior: smooth;
+    }
+
     // Hero Banner
 
     .hero-banner {

@@ -13834,6 +13834,13 @@ html {
     padding-top: 0;
   }
 }
+.site-homepage .toc-down {
+  position: absolute;
+  bottom: 4vh;
+  right: 3vw;
+  z-index: 99999;
+  scroll-behavior: smooth;
+}
 .site-homepage .hero-banner {
   background: #026666;
   color: #fff;

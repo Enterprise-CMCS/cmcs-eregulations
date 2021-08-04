@@ -10,6 +10,11 @@
 
 {% block body %}
     <main class="homepage">
+
+        <div class="toc-down">
+            <a href="#homepage-toc"><img src="{% static 'images/down-arrow.svg' %}" alt="Down to Table of Contents"/></a>
+        </div>
+
         <div class="hero-banner">
             <div class="site-container">
 
@@ -33,7 +38,7 @@
         <div class="site-container homepage-main-content">
             <div class="ds-l-row">
 
-                <div class="homepage-toc ds-l-col--8">
+                <div class="homepage-toc ds-l-col--8" id="homepage-toc">
 
                     {% for title in structure %}
 
