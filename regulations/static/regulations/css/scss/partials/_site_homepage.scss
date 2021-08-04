@@ -27,14 +27,10 @@
 
             .search-header {
                 float: none;
-
-                @include screen-lg {
-                    float: right;
-                }
-
                 width: 100%;
 
                 @include screen-lg {
+                    float: right;
                     width: 260px;
                 }
             }

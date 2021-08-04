@@ -13842,10 +13842,6 @@ select:focus-visible {
 @media (min-width: 1024px) {
   .site-homepage .hero-banner .hero-search .search-header {
     float: right;
-  }
-}
-@media (min-width: 1024px) {
-  .site-homepage .hero-banner .hero-search .search-header {
     width: 260px;
   }
 }
