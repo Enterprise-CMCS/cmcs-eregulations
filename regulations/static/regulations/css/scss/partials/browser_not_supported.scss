@@ -1,4 +1,3 @@
-
 //-----------------------------
 // Browser Not Supported
 //-----------------------------
@@ -6,18 +5,23 @@
 @import "../application_settings";
 
 #browser-unsupported-modal {
+    display: none;
 
-	.ds-c-dialog {
-		margin-top: 12%;
-	}
+    // IE 10 and 11
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        display: block;
+    }
 
-	.ds-c-dialog__close {
-		float: right;
-		cursor: pointer;
-		z-index: 1000;
-		position: relative;
-	}
+    .ds-c-dialog {
+        margin-top: 12%;
+    }
 
+    .ds-c-dialog__close {
+        float: right;
+        cursor: pointer;
+        z-index: 1000;
+        position: relative;
+    }
 }
 
 .browser-not-supported {
@@ -28,13 +32,17 @@
     z-index: 100;
     margin: 0 auto;
 
-    img {
-    	max-width: 100%;
-    	margin-top: -5px;
+    @include custom-max(($width-sm - 1) / 1px) {
+        padding: $spacer-2 0;
+    }
 
-    	&:hover {
-    		opacity: .8;
-    	}
+    img {
+        max-width: 100%;
+        margin-top: -5px;
+
+        &:hover {
+            opacity: 0.8;
+        }
     }
 
     a {
@@ -45,18 +53,17 @@
             color: $primary_link_color;
 
             &:hover {
-                color: $primary_link_hover; 
+                color: $primary_link_hover;
             }
         }
     }
 
     h3 {
-    	margin: $spacer-4 0 0 0;
+        margin: $spacer-4 0 0 0;
     }
 
     p {
-    	max-width: $text-max-width;
-    	margin: 0 auto;
+        max-width: $text-max-width;
+        margin: 0 auto;
     }
-
 }

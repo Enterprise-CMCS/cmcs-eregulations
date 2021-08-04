@@ -16195,6 +16195,14 @@ html {
   }
 }
 
+#browser-unsupported-modal {
+  display: none;
+}
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  #browser-unsupported-modal {
+    display: block;
+  }
+}
 #browser-unsupported-modal .ds-c-dialog {
   margin-top: 12%;
 }
@@ -16212,6 +16220,11 @@ html {
   position: relative;
   z-index: 100;
   margin: 0 auto;
+}
+@media (max-width: 543px) {
+  .browser-not-supported {
+    padding: 16px 0;
+  }
 }
 .browser-not-supported img {
   max-width: 100%;
