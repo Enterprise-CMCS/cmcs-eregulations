@@ -15238,21 +15238,22 @@ aside.right-sidebar #view-button .button-subheader {
   font-size: 12px;
   color: #212121;
 }
-aside.right-sidebar #view-button:hover, aside.right-sidebar #view-button[data-state=show] {
+aside.right-sidebar #view-button:hover, aside.right-sidebar #view-button:focus, aside.right-sidebar #view-button[data-state=show] {
   color: #fff;
   background: #026666;
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
-aside.right-sidebar #view-button:hover .button-subheader, aside.right-sidebar #view-button[data-state=show] .button-subheader {
+aside.right-sidebar #view-button:hover .button-subheader, aside.right-sidebar #view-button:focus .button-subheader, aside.right-sidebar #view-button[data-state=show] .button-subheader {
   color: #fff;
 }
 aside.right-sidebar #view-button:hover svg rect,
-aside.right-sidebar #view-button:hover svg line, aside.right-sidebar #view-button[data-state=show] svg rect,
+aside.right-sidebar #view-button:hover svg line, aside.right-sidebar #view-button:focus svg rect,
+aside.right-sidebar #view-button:focus svg line, aside.right-sidebar #view-button[data-state=show] svg rect,
 aside.right-sidebar #view-button[data-state=show] svg line {
   stroke: #fff;
 }
-aside.right-sidebar #view-button:hover svg path, aside.right-sidebar #view-button[data-state=show] svg path {
+aside.right-sidebar #view-button:hover svg path, aside.right-sidebar #view-button:focus svg path, aside.right-sidebar #view-button[data-state=show] svg path {
   fill: #fff;
 }
 aside.right-sidebar #view-button[data-state=show]:hover {
