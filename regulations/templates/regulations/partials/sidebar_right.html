@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <supplementary-content title="{{ title }}" part="{{ reg_part }}" :sections="{{ sections }}" />
+    <supplementary-content api_url="{% url 'regcore' %}" title="{{ title }}" part="{{ reg_part }}" :sections="{{ sections }}" />
 
     {% for sidebar in sidebars %}
         {% render_nested sidebar.template_name context=sidebar %}
