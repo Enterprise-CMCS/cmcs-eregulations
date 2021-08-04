@@ -7,7 +7,7 @@
 $collapsed-sidebar-width: 32px; // Update here if the left sidebar collapsed width changes
 
 header {
-    padding: $spacer-2 $spacer-4;
+    padding: $spacer-2 $spacer-3;
     border-bottom: 1px solid $primary_color;
 
     @include screen-lg {
@@ -105,11 +105,11 @@ aside {
     & + .match-middle {
         padding: 0 $spacer-2;
         flex: 1;
-      
+
         @include screen-lg {
             padding: 0 $spacer-4;
         }
-        
+
     }
 
     &[data-state="expanded"] {
@@ -156,4 +156,12 @@ footer {
     .footer-left {
         padding: 0;
     }
+}
+
+.invisible {
+    height: 0px !important;
+}
+
+.display-none {
+    display: none !important;
 }

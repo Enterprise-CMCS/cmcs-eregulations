@@ -5,6 +5,7 @@
 @import "../application_settings";
 
 .reg-text {
+
     h1 {
         color: $title_color;
         font-size: $base-font-size * 1.5;
@@ -19,7 +20,11 @@
     .reference {
         position: absolute;
         margin-left: -1.5em;
-        visibility: hidden;
+        opacity: 0;
+
+        &:focus {
+            opacity: 1;
+        }
     }
 
     & > .reg-section > h2,
@@ -39,7 +44,7 @@
 
     :hover {
         > .reference {
-            visibility: visible;
+            opacity: 1;
         }
     }
 
@@ -66,7 +71,8 @@ article {
     margin: $spacer-5 0 $spacer-4 $spacer-4;
 
     @include screen-xxl {
-        margin: $spacer-5 $spacer-6;
+        margin: $spacer-5 auto;
+        padding: 0 $spacer-6;
     }
 
     i {

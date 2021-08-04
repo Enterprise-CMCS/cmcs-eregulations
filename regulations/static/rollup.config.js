@@ -34,6 +34,16 @@ export default [
         ],
     },
     {
+        input: 'components/SupplementaryContent.vue',
+        output: {
+            format: 'esm',
+            file: 'regulations/js/SupplementaryContent.js'
+        },
+        plugins: [
+            vue()
+        ],
+    },
+    {
         input: 'regulations/js/main.js',
         output: {
             file: 'regulations/js/main.build.js',

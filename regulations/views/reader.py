@@ -25,22 +25,25 @@ class ReaderView(CitationContextMixin, TemplateView):
         reg_part = context["part"]
         reg_title = context["title"]
 
-        tree = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
+        query = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
 
         versions = self.get_versions(reg_title, reg_part)
         parts = Part.objects.filter(title=reg_title).effective(reg_version)
-        document = tree.document
-        toc = tree.toc
+        document = query.document
+        toc = query.toc
         part_label = toc['label_description']
+        tree = self.get_content(context, document, toc)
+        sections = self.get_sections([tree])
 
         c = {
-            'tree':         self.get_content(context, document, toc),
+            'tree':         tree,
             'title':        reg_title,
             'reg_part':     reg_part,
             'part_label':   part_label,
             'toc':          toc,
             'parts':        parts,
             'versions':     versions,
+            'sections':     sections,
         }
 
         return {**context, **c}
@@ -53,6 +56,15 @@ class ReaderView(CitationContextMixin, TemplateView):
 
     def get_content(self, context, document, toc):
         raise NotImplementedError()
+
+    def get_sections(self, tree):
+        sections = []
+        for node in tree:
+            if node['node_type'] == "SECTION":
+                sections.append(node['label'][1])
+            elif node['children'] is not None and len(node['children']) > 0:
+                sections = sections + self.get_sections(node['children'])
+        return sections
 
 
 class PartReaderView(ReaderView):
