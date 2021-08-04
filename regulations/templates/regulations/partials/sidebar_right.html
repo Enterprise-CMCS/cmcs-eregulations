@@ -3,26 +3,11 @@
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
 
-    <h2>Subpart Resources</h2>
+    <h2>Part {{ reg_part }} Final Rules</h2>
 
-    <div class="supplementary-content-category">
-        <div class="category-toggle-container">
-            <collapse-button name="related_rules" state="collapsed" class="category-toggle">
-                <template v-slot:expanded><i class="fa fa-chevron-up"></i></template>
-                <template v-slot:collapsed><i class="fa fa-chevron-down"></i></template>
-            </collapse-button>
-        </div>
-        <div class="category">
-            <collapse-button name="related_rules" state="collapsed" class="category-title">
-                <template v-slot:expanded>Rules with Preambles</template>
-                <template v-slot:collapsed>Rules with Preambles</template>
-            </collapse-button>
-            <span class="category-description">Final Rules</span>
-            <collapsible name="related_rules" state="collapsed" direction="vertical" class="category-content">
-                <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}"></related-rules>
-            </collapsible>
-        </div>
-    </div>
+    <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2"></related-rules>
+
+    <h2>Subpart Resources</h2>
 
     <supplementary-content api_url="{% url 'regcore' %}" title="{{ title }}" part="{{ reg_part }}" :sections="{{ sections }}" />
 
