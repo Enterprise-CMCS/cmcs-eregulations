@@ -34,7 +34,7 @@
         .hero-search {
             height: 42px;           // Height of the search box
             position: relative;
-            z-index: 2;
+            z-index: 20;
 
             .search-header {
                 float: none;
@@ -61,6 +61,7 @@
             z-index: 2;
             text-shadow: 3px 1px 5px $secondary_color;
             font-size: $font-size-sm;
+            z-index: 30;
 
             @include screen-md {
                 width: 50%;
@@ -69,7 +70,7 @@
                 font-size: $font-size-md;
             }
 
-            @include custom-min(1350) {
+            @include custom-min(1440) {
                 height: 260px;
             }
 
@@ -199,6 +200,8 @@
 
             img {
                 max-width: 100%;
+                z-index: 10;
+                position: relative;
             }
         }
 
@@ -208,7 +211,7 @@
             font-size: $font_size_xxl;
 
             @include screen-lg {
-                font-size: $font-size-4xl;
+                font-size: 2.3em;   // Deliberately non-conforming
             }
 
             @include custom-min(1490) {     // Deliberately non-conforming

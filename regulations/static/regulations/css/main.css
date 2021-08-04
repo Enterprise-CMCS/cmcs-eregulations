@@ -13860,7 +13860,7 @@ html {
 .site-homepage .hero-banner .hero-search {
   height: 42px;
   position: relative;
-  z-index: 2;
+  z-index: 20;
 }
 .site-homepage .hero-banner .hero-search .search-header {
   float: none;
@@ -13886,6 +13886,7 @@ html {
   z-index: 2;
   text-shadow: 3px 1px 5px #026666;
   font-size: 14px;
+  z-index: 30;
 }
 @media (min-width: 768px) {
   .site-homepage .hero-banner .hero-text {
@@ -13895,7 +13896,7 @@ html {
     font-size: 16px;
   }
 }
-@media (min-width: 1350px) {
+@media (min-width: 1440px) {
   .site-homepage .hero-banner .hero-text {
     height: 260px;
   }
@@ -14041,6 +14042,8 @@ html {
 }
 .site-homepage .hero-banner .hero-image img {
   max-width: 100%;
+  z-index: 10;
+  position: relative;
 }
 .site-homepage .hero-banner h1 {
   margin-bottom: 0;
@@ -14049,7 +14052,7 @@ html {
 }
 @media (min-width: 1024px) {
   .site-homepage .hero-banner h1 {
-    font-size: 48px;
+    font-size: 2.3em;
   }
 }
 @media (min-width: 1490px) {
