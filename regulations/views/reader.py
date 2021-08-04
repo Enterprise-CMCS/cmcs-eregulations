@@ -56,7 +56,7 @@ class ReaderView(CitationContextMixin, TemplateView):
 
     def get_content(self, context, document, toc):
         raise NotImplementedError()
-    
+
     def get_sections(self, tree):
         sections = []
         for node in tree:
