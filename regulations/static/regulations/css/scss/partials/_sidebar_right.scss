@@ -63,6 +63,7 @@ aside.right-sidebar {
         }
 
         &:hover,
+        &:focus,
         &[data-state="show"] {
             color: $reverse_text_color;
             background: $secondary_link_color;

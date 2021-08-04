@@ -13503,7 +13503,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -13511,6 +13511,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -13527,7 +13534,7 @@ html {
 }
 
 header {
-  padding: 16px 32px;
+  padding: 16px 24px;
   border-bottom: 1px solid #17415f;
 }
 @media (min-width: 1024px) {
@@ -13705,7 +13712,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -13713,6 +13720,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -13781,7 +13795,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -13789,6 +13803,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -13824,18 +13845,17 @@ html {
 }
 .site-homepage .hero-banner .hero-search .search-header {
   float: none;
-}
-@media (min-width: 768px) {
-  .site-homepage .hero-banner .hero-search .search-header {
-    float: right;
-  }
-}
-.site-homepage .hero-banner .hero-search .search-header .search-box {
   width: 100%;
 }
-@media (min-width: 768px) {
-  .site-homepage .hero-banner .hero-search .search-header .search-box {
+@media (min-width: 1024px) {
+  .site-homepage .hero-banner .hero-search .search-header {
+    float: right;
     width: 260px;
+  }
+}
+@media (max-width: 1023px) {
+  .site-homepage .hero-banner .hero-search {
+    visibility: hidden;
   }
 }
 .site-homepage .hero-banner .hero-text {
@@ -14217,7 +14237,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14225,6 +14245,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -14342,11 +14369,13 @@ html {
   font-size: 14px;
 }
 
+.search-header,
 .search-box {
   width: 100%;
   position: relative;
   display: flex;
 }
+.search-header input,
 .search-box input {
   width: 100%;
   border: 1px solid #d6d7d9;
@@ -14355,24 +14384,30 @@ html {
   border-radius: 3px 0 0 3px;
   outline: none;
 }
+.search-header input:focus,
 .search-box input:focus {
   color: #17415f;
 }
+.search-header input::placeholder,
 .search-box input::placeholder {
   color: #c4c4c4;
 }
+.search-header input::-webkit-input-placeholder,
 .search-box input::-webkit-input-placeholder {
   /* Chrome/Opera/Safari */
   color: #c4c4c4;
 }
+.search-header input::-moz-placeholder,
 .search-box input::-moz-placeholder {
   /* Firefox 19+ */
   color: #c4c4c4;
 }
+.search-header input:-ms-input-placeholder,
 .search-box input:-ms-input-placeholder {
   /* IE 10+ */
   color: #c4c4c4;
 }
+.search-header .search-reset,
 .search-box .search-reset {
   border: 1px solid #d6d7d9;
   border-right: none;
@@ -14386,12 +14421,15 @@ html {
   width: 68px;
   height: 58px;
 }
+.search-header .search-reset:hover .fa,
 .search-box .search-reset:hover .fa {
   color: #17415f;
 }
+.search-header .search-reset .fa,
 .search-box .search-reset .fa {
   color: #5b616b;
 }
+.search-header .search-submit,
 .search-box .search-submit {
   border: 1px solid #d6d7d9;
   background: none;
@@ -14403,9 +14441,11 @@ html {
   width: 68px;
   height: 58px;
 }
+.search-header .search-submit:hover .fa,
 .search-box .search-submit:hover .fa {
   color: #17415f;
 }
+.search-header .search-submit .fa,
 .search-box .search-submit .fa {
   color: #046791;
 }
@@ -14428,7 +14468,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14436,6 +14476,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -14514,7 +14561,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14522,6 +14569,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -14574,7 +14628,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14582,6 +14636,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -14598,25 +14659,13 @@ html {
 }
 
 header.sticky {
-  position: fixed;
+  position: sticky;
   top: 0;
-  width: 100%;
   background: #fff;
   z-index: 9999999;
   box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
   -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
-}
-header.sticky .search-header {
-  margin-right: 64px;
-}
-header.sticky + .content {
-  padding-top: 81px;
-}
-@media (min-width: 1024px) {
-  header.sticky + .content {
-    padding-top: 105px;
-  }
 }
 header.sticky + .content aside {
   top: 81px;
@@ -14638,12 +14687,61 @@ header a:hover {
 }
 header .flexbox {
   align-items: center;
-  display: block;
+  display: flex;
   position: relative;
+  flex-direction: row;
+}
+header .flexbox.header-mobile {
+  height: 48px;
 }
 @media (min-width: 1024px) {
-  header .flexbox {
-    display: flex;
+  header .flexbox.header-mobile {
+    display: none;
+  }
+}
+header .flexbox.header-mobile button {
+  flex: 0 0 48px;
+  height: 48px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 374px) {
+  header .flexbox.header-mobile button {
+    flex: 0 0 36px;
+  }
+}
+header .flexbox.header-mobile button#mobile-search-open[data-state=collapsed] {
+  display: none;
+}
+header .flexbox.header-mobile button#mobile-search-open[data-state=expanded] ~ #mobile-search-close,
+header .flexbox.header-mobile button#mobile-search-open[data-state=expanded] ~ .search-borderless {
+  display: none;
+}
+@media (max-width: 1023px) {
+  header .flexbox.header-large {
+    display: none;
+  }
+}
+header .mobile-titles {
+  flex: 1;
+}
+header .mobile-titles[data-state=collapsed] {
+  display: none;
+}
+header .title-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+}
+@media (min-width: 1024px) {
+  header .title-container {
+    align-items: center;
+    flex-direction: row;
   }
 }
 header .site-title {
@@ -14680,14 +14778,25 @@ header .reg-title a {
     display: none;
   }
 }
+header .search-borderless {
+  flex: 1;
+  height: 100%;
+  display: flex;
+}
+header .search-borderless input {
+  padding: 0 8px;
+  border: 0;
+  width: 100%;
+}
 
 .search-header {
-  float: right;
-  margin-top: -32px;
+  flex: 0 0 48px;
+  height: 48px;
 }
 @media (min-width: 1024px) {
   .search-header {
-    margin-top: 0;
+    flex: 0 0 250px;
+    height: auto;
   }
   .search-header svg {
     display: none;
@@ -14714,40 +14823,6 @@ header .reg-title a {
 }
 .search-header .search-box input {
   border: 1px solid #d6d7d9;
-}
-
-.search-header-mobile-open {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: #fff;
-  z-index: 100;
-}
-.search-header-mobile-open[data-state=collapsed] {
-  display: none;
-}
-.search-header-mobile-open[data-state=expanded] {
-  display: block;
-}
-@media (min-width: 1024px) {
-  .search-header-mobile-open[data-state=expanded] {
-    display: none;
-  }
-}
-.search-header-mobile-open svg {
-  display: inline-block;
-  vertical-align: middle;
-}
-.search-header-mobile-open .search-borderless {
-  margin: 0.7em 0 0 24px;
-  display: inline-block;
-  width: calc(100% - 100px);
-}
-.search-header-mobile-open .search-borderless input {
-  border: 0;
-  width: 100%;
 }
 
 .search-page header {
@@ -14791,7 +14866,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -14799,6 +14874,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15007,6 +15089,11 @@ aside.left-sidebar li.active ul a.menu-section:focus {
   padding: 16px 0 32px;
   margin: 0 32px;
 }
+.jump-to form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
 .jump-to .jump-to-label {
   margin: 16px 0 8px 0;
   font-size: 18px;
@@ -15025,7 +15112,9 @@ aside.left-sidebar li.active ul a.menu-section:focus {
 }
 .jump-to input.submit {
   display: inline-block;
-  padding: 10px 16px;
+  line-height: 1.3;
+  padding: 8px 16px;
+  margin: 4px 0 4px 4px;
   background: #a3e8ff;
   border: none;
   border-radius: 3px;
@@ -15064,7 +15153,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15072,6 +15161,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15140,21 +15236,22 @@ aside.right-sidebar #view-button .button-subheader {
   font-size: 12px;
   color: #212121;
 }
-aside.right-sidebar #view-button:hover, aside.right-sidebar #view-button[data-state=show] {
+aside.right-sidebar #view-button:hover, aside.right-sidebar #view-button:focus, aside.right-sidebar #view-button[data-state=show] {
   color: #fff;
   background: #026666;
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
-aside.right-sidebar #view-button:hover .button-subheader, aside.right-sidebar #view-button[data-state=show] .button-subheader {
+aside.right-sidebar #view-button:hover .button-subheader, aside.right-sidebar #view-button:focus .button-subheader, aside.right-sidebar #view-button[data-state=show] .button-subheader {
   color: #fff;
 }
 aside.right-sidebar #view-button:hover svg rect,
-aside.right-sidebar #view-button:hover svg line, aside.right-sidebar #view-button[data-state=show] svg rect,
+aside.right-sidebar #view-button:hover svg line, aside.right-sidebar #view-button:focus svg rect,
+aside.right-sidebar #view-button:focus svg line, aside.right-sidebar #view-button[data-state=show] svg rect,
 aside.right-sidebar #view-button[data-state=show] svg line {
   stroke: #fff;
 }
-aside.right-sidebar #view-button:hover svg path, aside.right-sidebar #view-button[data-state=show] svg path {
+aside.right-sidebar #view-button:hover svg path, aside.right-sidebar #view-button:focus svg path, aside.right-sidebar #view-button[data-state=show] svg path {
   fill: #fff;
 }
 aside.right-sidebar #view-button[data-state=show]:hover {
@@ -15362,7 +15459,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15370,6 +15467,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15399,7 +15503,10 @@ html {
 .reg-text .reference {
   position: absolute;
   margin-left: -1.5em;
-  visibility: hidden;
+  opacity: 0;
+}
+.reg-text .reference:focus {
+  opacity: 1;
 }
 .reg-text > .reg-section > h2, .reg-text > .reg-section > .paragraphs > p {
   margin-left: -16px;
@@ -15416,7 +15523,7 @@ html {
   }
 }
 .reg-text :hover > .reference {
-  visibility: visible;
+  opacity: 1;
 }
 .reg-text .section-title {
   color: #17415f;
@@ -15549,7 +15656,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15557,6 +15664,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15624,7 +15738,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15632,6 +15746,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15762,7 +15883,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15770,6 +15891,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15876,7 +16004,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15884,6 +16012,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
@@ -15957,7 +16092,7 @@ a.external:after {
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -15965,6 +16100,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {

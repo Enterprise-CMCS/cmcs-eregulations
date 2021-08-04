@@ -1,4 +1,3 @@
-
 //-----------------------------
 // Header
 //-----------------------------
@@ -6,203 +5,217 @@
 @import "../application_settings";
 
 header {
+    // Sticky Header and Content Adjustments
 
-	// Sticky Header and Content Adjustments
+    &.sticky {
+        position: sticky;
+        top: 0;
+        background: $main_background_color;
+        z-index: 9999999;
+        box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
+        -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
+        -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
 
-	&.sticky {
-		position: fixed;
-		top: 0;
-		width: 100%;
-		background: $main_background_color;
-		z-index: 9999999;
-		box-shadow: 0 3px 10px 0px rgba(0,0,0,0.08);
-		-webkit-box-shadow: 0 3px 10px 0px rgba(0,0,0,0.08);
-		-moz-box-shadow: 0 3px 10px 0px rgba(0,0,0,0.08);
+        + .content {
+            aside {
+                top: $header_height_mobile;
 
-		.search-header {
-			margin-right: 64px;
-		}
-
-		+ .content {						// Moves content/aside down so they're not covered by the sticky header 
-			padding-top: $header_height_mobile; 
-
-			@include screen-lg {
-				padding-top: $header_height; 
-			}	
-
-		  	aside {
-				top: $header_height_mobile;
-
-				@include screen-lg {
-					top: $header_height; 
-				}
-			}
-		}
-
-	}
-
-	a {
-		text-decoration: none;
-		color: $secondary_link_color;
-
-		&:visited {
-			color: $secondary_link_color;
-		}
-
-		&:hover {
-			color: $secondary_link_hover;
-		}
-	}
-
-	.flexbox {
-		align-items: center;
-		display: block;	
-		position: relative;
-
-		@include screen-lg {
-			display: flex;
-		}
-	}
-
-	.site-title {
-		padding-right: $spacer-2;
-		margin-right: $spacer-2;
-		font-size: $font_size_sm;
-		font-weight: normal;
-
-		@include screen-lg {
-			border-right: 1px solid $border_color;
-			font-size: $font-size-2xl;
-			font-weight: bold;
-			display: inline-block;
-		}
-	}
-
-	.reg-title {
-		display: block;
-		flex: 2;
-		padding-right: $spacer-2;
-		font-size: $font-size-lg;
-
-		@include screen-lg {
-			font-size: $font-size-md;
-		}
-
-		a {
-			max-width: $text-max-width;
-			display: inline-block;
-		}
-	}
-
-	.header-part-name {
-
-		@include custom-max(1290) {
-			display: none;
-		}
-	}
-}
-
-.search-header {
-	float: right;
-	margin-top: -$spacer-4;
-
-	@include screen-lg {
-		margin-top: 0;
-
-		svg {
-			display: none;
-		}
-	}
-
-	.search-box {
-		display: none;
-
-	    @include screen-lg {
-	        width: 250px;
-	        display: inline-block;
-	    }
-
-	    @include screen-xl {
-	        width: 310px;
-	    }
-
-	    @include screen-xxl {
-	        width: 330px;
-	    }
-
-		input {
-			border: 1px solid $border_color;
-		}
-	}
-}
-
-.search-header-mobile-open {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	background: $main_background_color;
-	z-index: 100;
-
-    &[data-state="collapsed"] {
-        display: none;
+                @include screen-lg {
+                    top: $header_height;
+                }
+            }
+        }
     }
 
-    &[data-state="expanded"] {
-        display: block;
+    a {
+        text-decoration: none;
+        color: $secondary_link_color;
 
-        @include screen-lg {
+        &:visited {
+            color: $secondary_link_color;
+        }
+
+        &:hover {
+            color: $secondary_link_hover;
+        }
+    }
+
+    .flexbox {
+        align-items: center;
+        display: flex;
+        position: relative;
+        flex-direction: row;
+
+        &.header-mobile {
+            height: 48px;
+
+            @include screen-lg {
+                display: none;
+            }
+
+            button {
+                flex: 0 0 48px;
+                height: 48px;
+                cursor: pointer;
+                border: none;
+                background: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                @include custom-max($iphoneSE-max / 1px) {
+                    flex: 0 0 36px;
+                }
+
+                &#mobile-search-open {
+                    &[data-state="collapsed"] {
+                        display: none;
+                    }
+
+                    &[data-state="expanded"] {
+                        ~ #mobile-search-close,
+                        ~ .search-borderless {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.header-large {
+            @include custom-max($tablet-max / 1px) {
+                display: none;
+            }
+        }
+    }
+
+    .mobile-titles {
+        flex: 1;
+
+        &[data-state="collapsed"] {
             display: none;
         }
     }
 
-	svg {
-		display: inline-block;
-		vertical-align: middle;
-	}
+    .title-container {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        align-items: flex-start;
 
-	.search-borderless {
-		margin: .7em 0 0 $spacer-3;
-		display: inline-block;
-		width: calc(100% - 100px);
+        @include screen-lg {
+            align-items: center;
+            flex-direction: row;
+        }
+    }
 
-		input {
-			border: 0;
-			width: 100%;
-		}
-	}
+    .site-title {
+        padding-right: $spacer-2;
+        margin-right: $spacer-2;
+        font-size: $font_size_sm;
+        font-weight: normal;
+
+        @include screen-lg {
+            border-right: 1px solid $border_color;
+            font-size: $font-size-2xl;
+            font-weight: bold;
+            display: inline-block;
+        }
+    }
+
+    .reg-title {
+        display: block;
+        flex: 2;
+        padding-right: $spacer-2;
+        font-size: $font-size-lg;
+
+        @include screen-lg {
+            font-size: $font-size-md;
+        }
+
+        a {
+            max-width: $text-max-width;
+            display: inline-block;
+        }
+    }
+
+    .header-part-name {
+        @include custom-max(1290) {
+            display: none;
+        }
+    }
+
+    .search-borderless {
+        flex: 1;
+        height: 100%;
+        display: flex;
+
+        input {
+            padding: 0 $spacer-1;
+            border: 0;
+            width: 100%;
+        }
+    }
+}
+
+.search-header {
+    flex: 0 0 48px;
+    height: 48px;
+
+    @include screen-lg {
+        flex: 0 0 250px;
+        height: auto;
+
+        svg {
+            display: none;
+        }
+    }
+
+    .search-box {
+        display: none;
+
+        @include screen-lg {
+            width: 250px;
+            display: inline-block;
+        }
+
+        @include screen-xl {
+            width: 310px;
+        }
+
+        @include screen-xxl {
+            width: 330px;
+        }
+
+        input {
+            border: 1px solid $border_color;
+        }
+    }
 }
 
 // Search Results Page
 
 .search-page {
+    header {
+        height: calc(#{$header_height_mobile} - #{$spacer-4});
 
-	header {
-		height: calc(#{$header_height_mobile} - #{$spacer-4});
+        @include screen-lg {
+            height: auto;
+        }
 
-		@include screen-lg {
-			height: auto;
-		}
+        &.sticky + .content aside {
+            @include screen-lg {
+                top: calc(#{$header_height} - 5px);
+            }
+        }
 
-		&.sticky + .content aside {
+        .reg-title:after {
+            content: "Search Results";
 
-			@include screen-lg {
-				top: calc(#{$header_height} - 5px)
-			}
-		}
-
-		.reg-title:after {
-			content: "Search Results";
-
-			@include screen-lg {
-				margin-top: 5px;
-				display: inline-block;
-			}
-		}
-	}
-
-
-
+            @include screen-lg {
+                margin-top: 5px;
+                display: inline-block;
+            }
+        }
+    }
 }
-

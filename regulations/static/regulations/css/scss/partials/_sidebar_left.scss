@@ -265,6 +265,12 @@ aside.left-sidebar {
     padding: $spacer-2 0 $spacer-4;
     margin: 0 $spacer-4;
 
+    form {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
     .jump-to-label {
         margin: $spacer-2 0 $spacer-1 0;
         font-size: $font-size-lg;
@@ -288,7 +294,9 @@ aside.left-sidebar {
     input {
         &.submit {
             display: inline-block;
-            padding: 10px $spacer-2;
+            line-height: 1.3;
+            padding: $spacer-1 $spacer-2;
+            margin: 4px 0 4px 4px;
             background: $reverse_link_color;
             border: none;
             border-radius: $border-radius;

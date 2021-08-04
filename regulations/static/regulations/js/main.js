@@ -58,6 +58,7 @@ const setResponsiveState = (el) => {
         window.innerWidth < 1024
     ) {
         el.setAttribute("data-state", "collapsed");
+        return;
     }
 };
 

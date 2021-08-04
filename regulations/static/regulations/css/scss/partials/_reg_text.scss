@@ -20,7 +20,11 @@
     .reference {
         position: absolute;
         margin-left: -1.5em;
-        visibility: hidden;
+        opacity: 0;
+
+        &:focus {
+            opacity: 1;
+        }
     }
 
     & > .reg-section > h2,
@@ -40,7 +44,7 @@
 
     :hover {
         > .reference {
-            visibility: visible;
+            opacity: 1;
         }
     }
 
