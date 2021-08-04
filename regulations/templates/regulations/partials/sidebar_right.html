@@ -3,19 +3,13 @@
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
 
+    <h2>Part {{ reg_part }} Final Rules</h2>
+
+    <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2"></related-rules>
+
     <h2>Subpart Resources</h2>
 
-    <ul>
-        <li data-state="expanded" data-state-name="rules-with-preambles">
-            <h3>
-                <span>Rules with Preambles</span>
-                <div class="resource-info">Final Rules</div>
-            </h3>
-        </li>
-        <li id ="related-rules" class="rules-with-preamble" data-state="expanded" data-state-name="rules-with-preambles">
-          <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}"></related-rules>
-        </li>
-    </ul>
+    <supplementary-content api_url="{% url 'regcore' %}" title="{{ title }}" part="{{ reg_part }}" :sections="{{ sections }}" />
 
     {% for sidebar in sidebars %}
         {% render_nested sidebar.template_name context=sidebar %}
