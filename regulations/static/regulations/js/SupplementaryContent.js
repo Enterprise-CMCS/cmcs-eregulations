@@ -884,11 +884,13 @@ var script = {
     },
 
     async created() {
+        console.log("created");
         this.categories = await this.fetch_content(this.title, this.part, this.sections);
     },
 
     methods: {
         async fetch_content(title, part, sections) {
+            console.log(sections);
             const joinedSections = sections.join("&sections=");
             const response = await fetch(`http://localhost:8000/v2/title/${title}/part/${part}/supplementary_content?&sections=${joinedSections}`);
             const content = await response.json();
