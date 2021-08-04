@@ -1,4 +1,3 @@
-
 //-----------------------------
 // Site Homepage
 //-----------------------------
@@ -9,9 +8,8 @@
     overflow-x: hidden;
 
     .site-container {
-
         @include custom-max(1350) {
-            padding-top: 0; 
+            padding-top: 0;
         }
     }
 
@@ -32,24 +30,22 @@
         padding: $spacer-4 0;
 
         .hero-search {
-            height: 42px;           // Height of the search box
+            height: 42px; // Height of the search box
             position: relative;
             z-index: 20;
 
             .search-header {
                 float: none;
+                width: 100%;
 
-                @include screen-md {
+                @include screen-lg {
                     float: right;
+                    width: 260px;
                 }
+            }
 
-                .search-box {
-                    width: 100%;
-
-                    @include screen-md {
-                        width: 260px
-                    }
-                }
+            @include custom-max($tablet-max / 1px) {
+                visibility: hidden;
             }
         }
 
@@ -214,8 +210,9 @@
                 font-size: 2.3em;   // Deliberately non-conforming
             }
 
-            @include custom-min(1490) {     // Deliberately non-conforming
-                font-size: 2.7em;        
+            @include custom-min(1490) {
+                // Deliberately non-conforming
+                font-size: 2.7em;
                 line-height: 1.1em;
                 margin-bottom: $spacer-1;
             }
@@ -224,7 +221,6 @@
         h4 {
             margin-top: 0;
         }
-
     }
 
     // Features
@@ -251,7 +247,7 @@
         padding: 0 $spacer-4;
 
         @include screen-md {
-            padding: 0 $spacer-2
+            padding: 0 $spacer-2;
         }
 
         @include custom-max(768) {
@@ -276,10 +272,9 @@
         }
     }
 
-    // Footer 
+    // Footer
 
     footer {
-
         .flexbox {
             margin: $spacer-3 auto;
 
@@ -293,7 +288,6 @@
         }
 
         .footer-middle {
-
             @include screen-xl {
                 width: 100%;
             }
@@ -303,9 +297,7 @@
 
 // Table of Contents
 
-
 .homepage-main-content {
-
     .ds-l-row {
         @include custom-max(1024) {
             display: block;
@@ -313,7 +305,6 @@
         }
     }
 }
-
 
 .homepage-toc {
     margin-top: $spacer-4;
@@ -382,7 +373,6 @@
             .part-title {
                 display: inline;
             }
-
         }
     }
 }
@@ -405,7 +395,6 @@
         font-weight: 600;
         margin: 0 0 $spacer-5 0;
     }
-
 
     .latest-changes {
         background: $secondary_background_color;
@@ -430,5 +419,4 @@
             font-size: $font-size-xs;
         }
     }
-
 }

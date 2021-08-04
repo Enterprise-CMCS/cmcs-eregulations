@@ -99,7 +99,7 @@ $main_button_hover_background: $white;
 $primary_site_font: $font-sans; // Open Sans
 $secondary_site_font: "Merriweather", Georgia, serif;
 $font_size_xs: 12px;
-$font_size_xxl: 30px;      // Aligns with the CMS Design System, but their variable is depreciated
+$font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable is depreciated
 
 //--------------------------
 // Breakpoints
@@ -108,11 +108,29 @@ $font_size_xxl: 30px;      // Aligns with the CMS Design System, but their varia
 // Custom maxes
 $tablet-max: $width-lg - 1; // 1023px
 $mobile-max: $width-md - 1; // 767px
+$iphoneSE-max: $width-xs - 1; // 374px
 
 // Uses CMS Design System + a larger screen size
 
+$width-xxs: 320px;
+$width-xs: 375px;
+
 $width-xxl: 1440px;
 $width-3xl: 1920px; // The largest the site container will get
+
+// 320px, or iPhone 5/iPhone SE (1st gen)
+@mixin screen-xxs {
+    @media (min-width: #{$width-xxs}) {
+        @content;
+    }
+}
+
+// 375px, or iPhone X
+@mixin screen-xs {
+    @media (min-width: #{$width-xs}) {
+        @content;
+    }
+}
 
 // 544px
 @mixin screen-sm {
@@ -245,6 +263,7 @@ $header_height_mobile: 81px;
 a {
     color: $primary_link_color;
 
+    &:focus,
     &:hover {
         color: $primary_link_hover;
         cursor: pointer;
@@ -254,6 +273,14 @@ a {
 
 html {
     scroll-behavior: smooth;
+}
+
+select {
+    cursor: pointer;
+
+    &:focus-visible {
+        box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+    }
 }
 
 :target:before {

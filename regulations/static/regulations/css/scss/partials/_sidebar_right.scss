@@ -63,6 +63,7 @@ aside.right-sidebar {
         }
 
         &:hover,
+        &:focus,
         &[data-state="show"] {
             color: $reverse_text_color;
             background: $secondary_link_color;
@@ -198,11 +199,100 @@ aside.right-sidebar {
     }
 
     .recent-title {
-	margin-top: .2em;
+        margin-top: .2em;
 
-	&:after {
-	    @include external-link;
+        &:after {
+            @include external-link;
         }
+    }
+}
+
+.supplementary-content {
+    margin-bottom: 1em;
+    
+    .supplementary-content-link {
+        text-decoration: none;
+    }
+
+    .supplementary-content-date {
+        color: $primary_link_color;
+        font-weight: bold;
+        padding-right: $spacer-1;
+        margin-right: $spacer-1;
+        border-right: 1px solid black;
+        font-size: $font-size-sm;
+    }
+
+    .supplementary-content-title {
+        color: $primary_link_color;
+        font-weight: bold;
+        font-size: $font-size-sm;
+    }
+
+    .supplementary-content-description {
+        color: $primary_link_color;
+        text-decoration: none;
+        font-size: $font-size-sm;
+        &:after {
+            @include external-link;
+        }
+    }
+}
+
+.supplementary-content-category {
+    display: table;
+    margin-bottom: 1em;
+
+    .category {
+        display: table-cell;
+    }
+
+    button.category-title {
+        font-size: $font-size-lg;
+        font-weight: bold;
+        padding-left: 0;
+        background: none;
+        border: none;
+        color: $primary_link_color;
+        cursor: pointer;
+        margin-top: 4px;
+        display: block;
+        border-radius: $border-radius;
+
+        &.subcategory {
+            font-size: $font-size-md;
+        }
+    }
+
+    .category-description {
+        font-size: $font-size-sm;
+        font-weight: normal;
+        color: $primary_text_color;
+        padding-right: $spacer-4;
+    }
+
+    .category-toggle-container {
+        display: table-cell;
+    }
+
+    button.category-toggle {
+        background: none;
+        border: none;
+        color: $primary_link_color;
+        cursor: pointer;
+        margin-top: 4px;
+        display: block;
+        border-radius: $border-radius;
+
+        &:hover {
+            color: $reverse_link_hover;
+            background: $reverse_background_lighter;
+            @include transition;
+        }
+    }
+
+    .category-content {
+        margin-top: 1em;
     }
 }
 

@@ -2,7 +2,7 @@
     Used once per section. Contained by subparts at the top level.
 {% endcomment %}
 
-<h1 tabindex="0" class="part-title"> {{node.title | title}} </h1>
+<h1 class="part-title"> {{node.title | title}} </h1>
 {{node.text | safe}}
 {% for node in node.children %}
     {% include "regulations/partials/node_types/node.html" %}
