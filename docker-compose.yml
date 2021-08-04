@@ -36,6 +36,5 @@ services:
     volumes:
       - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
       - ./regulations/static/regulations:/usr/share/nginx/html
-      - ./regulations/static:/usr/share/nginx/html
 volumes:
   eregs-data:
