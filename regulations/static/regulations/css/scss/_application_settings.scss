@@ -86,6 +86,12 @@ $reverse_text_color: $white;
 $primary_indicator_background: $teal;
 $primary_indicator_text: $white;
 
+// Buttons
+
+$main_button_background: $light_blue;
+$main_button_color: $dark_blue;
+$main_button_hover_background: $white;
+
 //--------------------------
 // Fonts
 //--------------------------
@@ -210,7 +216,7 @@ $width-3xl: 1920px; // The largest the site container will get
 }
 
 // -------------------------
-// External Links
+// Links
 // -------------------------
 
 @mixin external-link {
@@ -223,6 +229,25 @@ a {
         &:after {
             @include external-link;
         }
+    }
+}
+
+.smooth-scroll {
+    scroll-behavior: smooth;
+}
+
+// -------------------------
+// Buttons
+// -------------------------
+
+.main-button {
+    background: $main_button_background;
+    color: $main_button_color;
+    border: none;
+    @include transition;
+
+    &:hover {
+        background: $main_button_hover_background;
     }
 }
 
