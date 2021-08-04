@@ -22,6 +22,7 @@ services:
       EREGS_API_BASE: http://regulations:8000/
       PYTHONPATH: /var/lib/eregs
       STATIC_URL: http://localhost:8888/
+      STATIC_ROOT: /app/src/regulations/static
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
       DEBUG: "True"
     ports:
@@ -35,5 +36,6 @@ services:
     volumes:
       - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
       - ./regulations/static/regulations:/usr/share/nginx/html
+      - ./regulations/static:/usr/share/nginx/html
 volumes:
   eregs-data:
