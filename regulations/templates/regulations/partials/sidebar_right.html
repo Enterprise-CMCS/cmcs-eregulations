@@ -7,8 +7,10 @@
 
     <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2"></related-rules>
 
+    {% if sections %}
     <h2>Subpart Resources</h2>
 
-    <supplementary-content api_url="{% url 'regcore' %}" title="{{ title }}" part="{{ reg_part }}" {% if sections %}:sections="{{ sections }}"{% endif %}></supplementary-content>
+    <supplementary-content api_url="{% url 'regcore' %}" title="{{ title }}" part="{{ reg_part }}" :sections="{{ sections }}"></supplementary-content>
+    {% endif %}
 
 </section>
