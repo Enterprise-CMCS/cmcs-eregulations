@@ -7,6 +7,11 @@
             data-set-state="dismissed"
             class="ds-c-button ds-c-button--transparent ds-c-dialog__close"
             aria-label="Close modal dialog"
+            onClick="(function(){ // inline JS for IE
+                var element = document.getElementById('browser-unsupported-modal');
+                element.style.display = 'none';
+                return false;
+            })();return false;"
         >
             Close
         </button>
