@@ -11,13 +11,6 @@
     // display for IE 10 and 11 users
     @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
         display: block;
-
-        // dismiss popup when user clicks "Close"
-        // Note - this will only dismiss for current page.
-        // Every page load on IE will re-trigger the dialog
-        &[data-state="dismissed"] {
-            display: none;
-        }
     }
 
     .ds-c-dialog {

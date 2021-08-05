@@ -16391,10 +16391,24 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
-a:hover {
+a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
@@ -16402,6 +16416,13 @@ a:hover {
 
 html {
   scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
 :target:before {
