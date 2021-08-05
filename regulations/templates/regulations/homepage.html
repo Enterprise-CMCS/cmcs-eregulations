@@ -10,6 +10,12 @@
 
 {% block body %}
     <main class="homepage">
+
+        <!-- Scroll down button - temporarily commenting out for demo purposes -->
+        <!-- <div class="toc-down smooth-scroll">
+            <a href="#homepage-toc" id="toc-down-arrow"><img src="{% static 'images/down-arrow.svg' %}" alt="Down to Table of Contents"/></a>
+        </div> -->
+
         <div class="hero-banner">
             <div class="site-container">
 
@@ -21,6 +27,7 @@
                     <h1>Medicaid &amp; CHIP Regulations</h1>
                     <h4>Look up policy with context.</h4>
                     <p>This is a pilot project in the Center for Medicaid and CHIP Services (CMCS). Learn more about <a href="/about">using this tool</a> and <a href="/about/#automated-updates">how this tool is updated</a>, or explore the site as a supplement to existing policy tools.</p>
+                    <a href="#homepage-toc"><button type="button" class="ds-c-button main-button">View Table of Contents</button></a>
                 </div>
 
                 <div class="hero-image">
@@ -29,31 +36,10 @@
             </div>
         </div>
 
-        <div class="site-features">
-            <div class="site-container">
-                <div class="ds-l-row">
-                    <div class="feature ds-l-col--4">
-                        <h3>Subregulatory Guidance</h3>
-                        <p>See related State Medicaid Director Letters, CMCS Informational Bulletins, and more. <a href="{% url 'about' %}#subregulatory-guidance">Learn more.</a></p>
-                    </div>
-
-                    <div class="feature ds-l-col--4">
-                        <h3>Regulation History</h3>
-                        <p>View current and past versions and compare them to find changes over time. <a href="{% url 'about' %}#regulation-history">Learn more.</a></p>
-                    </div>
-
-                    <div class="feature ds-l-col--4">
-                        <h3>Cross-References</h3>
-                        <p>Use direct links to jump to cited statutes, regulations, and rules. <a href="{% url 'about' %}#cross-references">Learn more.</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="site-container homepage-main-content">
             <div class="ds-l-row">
 
-                <div class="homepage-toc ds-l-col--8">
+                <div class="homepage-toc ds-l-col--8" id="homepage-toc">
 
                     {% for title in structure %}
 

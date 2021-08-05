@@ -13500,6 +13500,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -13709,6 +13723,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -13792,6 +13820,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -13833,6 +13875,12 @@ select:focus-visible {
     padding-top: 0;
   }
 }
+.site-homepage .toc-down {
+  position: fixed;
+  bottom: 4vh;
+  right: 3vw;
+  z-index: 99999;
+}
 .site-homepage .hero-banner {
   background: #026666;
   color: #fff;
@@ -13841,7 +13889,7 @@ select:focus-visible {
 .site-homepage .hero-banner .hero-search {
   height: 42px;
   position: relative;
-  z-index: 2;
+  z-index: 20;
 }
 .site-homepage .hero-banner .hero-search .search-header {
   float: none;
@@ -13866,6 +13914,7 @@ select:focus-visible {
   z-index: 2;
   text-shadow: 3px 1px 5px #026666;
   font-size: 14px;
+  z-index: 30;
 }
 @media (min-width: 768px) {
   .site-homepage .hero-banner .hero-text {
@@ -13875,7 +13924,7 @@ select:focus-visible {
     font-size: 16px;
   }
 }
-@media (min-width: 1350px) {
+@media (min-width: 1440px) {
   .site-homepage .hero-banner .hero-text {
     height: 260px;
   }
@@ -13888,6 +13937,9 @@ select:focus-visible {
 }
 .site-homepage .hero-banner .hero-text a:hover {
   color: #a3e8ff;
+}
+.site-homepage .hero-banner .hero-text button {
+  margin-top: 8px;
 }
 .site-homepage .hero-banner .hero-image {
   width: 100%;
@@ -14018,6 +14070,8 @@ select:focus-visible {
 }
 .site-homepage .hero-banner .hero-image img {
   max-width: 100%;
+  z-index: 10;
+  position: relative;
 }
 .site-homepage .hero-banner h1 {
   margin-bottom: 0;
@@ -14026,7 +14080,7 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   .site-homepage .hero-banner h1 {
-    font-size: 48px;
+    font-size: 2.3em;
   }
 }
 @media (min-width: 1490px) {
@@ -14232,6 +14286,20 @@ select:focus-visible {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -14465,6 +14533,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -14558,6 +14640,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -14623,6 +14719,20 @@ select:focus-visible {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -14861,6 +14971,20 @@ header .search-borderless input {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -15148,6 +15272,20 @@ aside.left-sidebar li.active ul a.menu-section:focus {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -15456,6 +15594,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -15653,6 +15805,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -15733,6 +15899,20 @@ select:focus-visible {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
@@ -15880,6 +16060,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -16001,6 +16195,20 @@ a.external:after {
   padding-left: 5px;
 }
 
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
 a {
   color: #046791;
 }
@@ -16087,6 +16295,20 @@ ul.table-of-contents .toc-section-name {
 a.external:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
 }
 
 a {
