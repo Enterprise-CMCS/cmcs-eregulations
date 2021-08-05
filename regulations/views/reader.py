@@ -33,7 +33,6 @@ class ReaderView(CitationContextMixin, TemplateView):
         toc = query.toc
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
-        sections = self.get_sections([tree])
 
         c = {
             'tree':         tree,
@@ -43,7 +42,6 @@ class ReaderView(CitationContextMixin, TemplateView):
             'toc':          toc,
             'parts':        parts,
             'versions':     versions,
-            'sections':     sections,
         }
 
         return {**context, **c}
@@ -60,9 +58,9 @@ class ReaderView(CitationContextMixin, TemplateView):
     def get_sections(self, tree):
         sections = []
         for node in tree:
-            if node['node_type'] == "SECTION":
+            if node.get('node_type') == "SECTION":
                 sections.append(node['label'][1])
-            elif node['children'] is not None and len(node['children']) > 0:
+            elif node.get('children') is not None and len(node['children']) > 0:
                 sections = sections + self.get_sections(node['children'])
         return sections
 
@@ -74,6 +72,15 @@ class PartReaderView(ReaderView):
 
 
 class SubpartReaderView(ReaderView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        sections = self.get_sections([context['tree']])
+        c = {
+            "sections": sections,
+        }
+        return {**context, **c}
+
     def get_content(self, context, document, toc):
         # using tree['structure'] find subpart requested then extract that data
         subpart = context['subpart']
