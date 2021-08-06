@@ -24,6 +24,8 @@ CSS/Javascript etc., should inherit from this template.
         <div id="vue-app">
             {% block pre_header %}{% endblock %}
 
+            {% include "../browser_not_supported.html" %}
+
             {% include "regulations/partials/flash_banner.html" %}
 
             {% block header %}
