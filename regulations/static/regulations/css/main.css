@@ -16450,8 +16450,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
