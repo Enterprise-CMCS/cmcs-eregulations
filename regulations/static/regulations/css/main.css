@@ -15894,6 +15894,15 @@ select:focus-visible {
   font-weight: 600;
 }
 
+.reg-part-toc {
+  max-width: 53rem;
+}
+@media (min-width: 1440px) {
+  .reg-part-toc {
+    margin: 0 auto;
+  }
+}
+
 .indicator {
   background: #026666;
   text-transform: uppercase;
@@ -16382,6 +16391,124 @@ main.about .note {
 main.about :target::before {
   margin-top: 0;
   height: auto;
+}
+
+.indicator {
+  background: #026666;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+a.external:after {
+  content: url("../images/external-link.svg");
+  padding-left: 5px;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
+a {
+  color: #046791;
+}
+a:focus, a:hover {
+  color: #17415f;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
+:target:before {
+  content: "";
+  display: block;
+  height: 81px;
+  margin: -81px 0 0;
+}
+@media (min-width: 1024px) {
+  :target:before {
+    height: 105px;
+    margin: -105px 0 0;
+  }
+}
+
+#browser-unsupported-modal {
+  display: none;
+}
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  #browser-unsupported-modal {
+    display: block;
+  }
+}
+#browser-unsupported-modal .ds-c-dialog {
+  margin-top: 12%;
+}
+#browser-unsupported-modal .ds-c-dialog__close {
+  float: right;
+  cursor: pointer;
+  z-index: 1000;
+  position: relative;
+}
+
+.browser-not-supported {
+  text-align: center;
+  font-size: 14px;
+  padding: 16px 32px;
+  position: relative;
+  z-index: 100;
+  margin: 0 auto;
+}
+@media (max-width: 543px) {
+  .browser-not-supported {
+    padding: 16px 0;
+  }
+}
+.browser-not-supported img {
+  max-width: 100%;
+  margin-top: -5px;
+}
+.browser-not-supported img:hover {
+  opacity: 0.8;
+}
+.browser-not-supported a {
+  text-decoration: none;
+  font-weight: bold;
+}
+.browser-not-supported a:visited {
+  color: #046791;
+}
+.browser-not-supported a:visited:hover {
+  color: #17415f;
+}
+.browser-not-supported h3 {
+  margin: 32px 0 0 0;
+}
+.browser-not-supported p {
+  max-width: 53rem;
+  margin: 0 auto;
 }
 
 /*# sourceMappingURL=main.css.map */
