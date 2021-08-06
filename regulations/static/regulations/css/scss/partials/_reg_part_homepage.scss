@@ -37,3 +37,11 @@
         font-weight: 600;
     }
 }
+
+.reg-part-toc {
+    max-width: $text-max-width;
+
+    @include screen-xxl {
+        margin: 0 auto;
+    }
+}
