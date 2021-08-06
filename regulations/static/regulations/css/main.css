@@ -15886,6 +15886,15 @@ select:focus-visible {
   font-weight: 600;
 }
 
+.reg-part-toc {
+  max-width: 53rem;
+}
+@media (min-width: 1440px) {
+  .reg-part-toc {
+    margin: 0 auto;
+  }
+}
+
 .indicator {
   background: #026666;
   text-transform: uppercase;
