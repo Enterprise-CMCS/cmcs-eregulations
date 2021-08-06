@@ -2021,6 +2021,9 @@
       }
       viewButton.addEventListener("click", function () {
           if (this.getAttribute("data-state") === "show") {
+              // focus on select
+              document.querySelector("#view-options").focus();
+
               this.setAttribute("data-set-state", "close");
           }
 
@@ -2033,7 +2036,6 @@
 
   function makeSticky(el) {
       // Sticky header
-
       if (!el) {
           return;
       }

@@ -4,6 +4,14 @@
     padding: $spacer-2 $spacer-4;
     background-color: $secondary_color;
     color: $reverse_text_color;
+    position: sticky;
+    z-index: 2;
+
+    top: $header_height_mobile;
+
+    @include screen-lg {
+        top: $header_height;
+    }
 
     &[data-state="hide"] {
         display: none;
@@ -29,7 +37,7 @@
 
         select {
             border: none;
-            padding: .8em $spacer-4 .8em $spacer-3;
+            padding: 0.8em $spacer-4 0.8em $spacer-3;
             border-radius: 0;
         }
     }
@@ -45,13 +53,13 @@
         }
 
         a {
-          color: $secondary_reverse_link_color;
+            color: $secondary_reverse_link_color;
 
-          &:hover {
-            svg path {
-                fill: $secondary_reverse_link_hover;
+            &:hover {
+                svg path {
+                    fill: $secondary_reverse_link_hover;
+                }
             }
-          }
         }
     }
 }

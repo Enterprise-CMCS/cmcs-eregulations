@@ -13542,8 +13542,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -13765,8 +13765,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -13862,8 +13862,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -14330,8 +14330,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -14575,8 +14575,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -14584,6 +14584,14 @@ select:focus-visible {
   padding: 16px 32px;
   background-color: #026666;
   color: #fff;
+  position: sticky;
+  z-index: 2;
+  top: 81px;
+}
+@media (min-width: 1024px) {
+  .view-and-compare {
+    top: 102px;
+  }
 }
 .view-and-compare[data-state=hide] {
   display: none;
@@ -14682,8 +14690,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -14763,8 +14771,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -14782,7 +14790,7 @@ header.sticky + .content aside {
 }
 @media (min-width: 1024px) {
   header.sticky + .content aside {
-    top: 105px;
+    top: 102px;
   }
 }
 header a {
@@ -14945,7 +14953,7 @@ header .search-borderless input {
 }
 @media (min-width: 1024px) {
   .search-page header.sticky + .content aside {
-    top: calc(105px - 5px);
+    top: calc(102px - 5px);
   }
 }
 .search-page header .reg-title:after {
@@ -15015,14 +15023,14 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
 aside.left-sidebar {
   color: #fff;
-  height: calc(100vh - 105px);
+  height: calc(100vh - 102px);
   overflow-y: scroll;
   position: sticky;
   top: 0;
@@ -15316,8 +15324,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -15636,8 +15644,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -15847,8 +15855,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -15952,8 +15960,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -16111,8 +16119,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -16246,8 +16254,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -16348,8 +16356,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
@@ -16442,8 +16450,8 @@ select:focus-visible {
 }
 @media (min-width: 1024px) {
   :target:before {
-    height: 105px;
-    margin: -105px 0 0;
+    height: 102px;
+    margin: -102px 0 0;
   }
 }
 
