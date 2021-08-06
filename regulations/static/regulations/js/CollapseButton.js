@@ -139,7 +139,9 @@ var __vue_render__ = function() {
       class: { visible: _vm.visible },
       attrs: {
         "data-test": _vm.name,
-        "aria-label": "expand or collapse a subpart"
+        "aria-label": _vm.visible
+          ? "collapse " + _vm.name
+          : "expand " + _vm.name
       },
       on: { click: _vm.click }
     },

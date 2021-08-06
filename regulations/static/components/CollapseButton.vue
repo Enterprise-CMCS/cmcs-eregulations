@@ -2,8 +2,8 @@
     <button
         v-bind:class="{ visible: visible }"
         v-bind:data-test="name"
+        v-bind:aria-label="visible ? `collapse ${name}` : `expand ${name}`"
         v-on:click="click"
-        aria-label="expand or collapse a subpart"
     >
         <slot name="expanded" v-if="visible">Hide</slot>
         <slot name="collapsed" v-if="!visible">Show</slot>
