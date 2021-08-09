@@ -2,7 +2,7 @@
     Used once per section. Contained by subparts at the top level.
 {% endcomment %}
 
-<section id="{{node.label | join:'-'}}" class="reg-section">
+<section tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section">
     <h2 class="section-title">
     <a class="reference" href="#{{node.label | join:'-'}}"><i class="fa fa-link"></i></a>
     {{node.title}} </h2>
