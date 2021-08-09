@@ -582,8 +582,13 @@ var script$2 = {
             this.computeSize();
         },
         toggleDisplay: function (e) {
-            if (!this.visible && e.propertyName === "height") {
-                this.$refs.target.classList.add("display-none");
+            if (e.propertyName === "height") {
+                if (this.visible) {
+                    this.$refs.target.style.height = "auto";
+                }
+                else {
+                    this.$refs.target.classList.add("display-none");
+                }
             }
         },
         toggle: function (target) {
