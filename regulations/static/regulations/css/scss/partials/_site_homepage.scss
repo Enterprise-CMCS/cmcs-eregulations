@@ -82,7 +82,9 @@
                 }
             }
 
-            button {
+            a[role=button] {
+                color: $main_button_color;
+                text-shadow: none;
                 margin-top: $spacer-1;
             }
         }
