@@ -1,5 +1,7 @@
 {% load paragraphs %}
 <p tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section depth-{{node|pdepth}}">
-    <a class="reference" href="#{{node.label | join:'-'}}"><i class="fa fa-link"></i></a>
+    <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
+        <i class="fa fa-link"></i>
+    </a>
     {{node.text | safe}}
 </p>

@@ -5,7 +5,9 @@
 {% endcomment %}
 <article>
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
-        <a class="reference" href="#{{node.label | join:'-'}}"><i class="fa fa-link"></i></a>
+        <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
+            <i class="fa fa-link"></i>
+        </a>
         {{node.title}}
     </h1>
     {{node.text | safe}}
