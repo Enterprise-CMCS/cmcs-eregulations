@@ -515,8 +515,6 @@ var script$2 = {
     created: function () {
         requestAnimationFrame(() => {
             this.visible = this.state === "expanded";
-            this.isVertical = this.direction === "vertical";
-
             if (!this.visible) {
                 this.$refs.target.classList.add("display-none");
             }
@@ -549,11 +547,6 @@ var script$2 = {
             required: false,
             default: "1s",
         },
-        direction: {
-            //horizontal or vertical
-            type: String,
-            required: true,
-        },
     },
 
     data: function () {
@@ -561,7 +554,6 @@ var script$2 = {
             name: this.name,
             size: "auto",
             visible: false,
-            isVertical: true,
             styles: {
                 overflow: "hidden",
                 transition: this.transition,
@@ -571,9 +563,7 @@ var script$2 = {
 
     computed: {
         sizeStyle: function () {
-            return this.isVertical
-                ? { height: this.size }
-                : { width: this.size };
+            return { height: this.size }
         },
     },
 
@@ -582,13 +572,11 @@ var script$2 = {
             this.computeSize();
         },
         toggleDisplay: function (e) {
-            if (e.propertyName === "height") {
-                if (this.visible) {
-                    this.$refs.target.style.height = "auto";
-                }
-                else {
-                    this.$refs.target.classList.add("display-none");
-                }
+            if (this.visible) {
+                this.$refs.target.style.height = "auto";
+            }
+            else {
+                this.$refs.target.classList.add("display-none");
             }
         },
         toggle: function (target) {
@@ -609,11 +597,7 @@ var script$2 = {
             this.$refs.target.style.visibility = visibility;
             this.$refs.target.style.display = display;
             this.$refs.target.style.position = position;
-            if (this.isVertical) {
-                this.$refs.target.style.height = size;
-            } else {
-                this.$refs.target.style.width = size;
-            }
+            this.$refs.target.style.height = size;
         },
         _computeSize: function () {
             if (this.getStyle().display === "none") {
@@ -624,9 +608,7 @@ var script$2 = {
 
             this.setProps("hidden", "block", "absolute", "auto");
 
-            const size = this.isVertical
-                ? this.getStyle().height
-                : this.getStyle().width;
+            const size = this.getStyle().height;
 
             this.setProps(null, null, null, size);
             if (!this.visible) {
