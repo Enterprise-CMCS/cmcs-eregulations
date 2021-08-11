@@ -536,7 +536,7 @@
           transition: {
               type: String,
               required: false,
-              default: "1s",
+              default: "0.5s",
           },
       },
 
@@ -1474,7 +1474,7 @@
           transition: {
               type: String,
               required: false,
-              default: "1s",
+              default: "0.5s",
           },
       },
 
@@ -1710,11 +1710,7 @@
             "collapsible",
             {
               staticClass: "category-content",
-              attrs: {
-                name: _vm.title,
-                state: "collapsed",
-                direction: "vertical"
-              }
+              attrs: { name: _vm.title, state: "collapsed" }
             },
             [
               _vm._l(_vm.sub_categories, function(category, index) {

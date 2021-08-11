@@ -46,7 +46,7 @@ export default {
         transition: {
             type: String,
             required: false,
-            default: "1s",
+            default: "0.5s",
         },
     },
 

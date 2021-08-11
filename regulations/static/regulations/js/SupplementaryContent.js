@@ -545,7 +545,7 @@ var script$2 = {
         transition: {
             type: String,
             required: false,
-            default: "1s",
+            default: "0.5s",
         },
     },
 
@@ -781,11 +781,7 @@ var __vue_render__$1 = function() {
           "collapsible",
           {
             staticClass: "category-content",
-            attrs: {
-              name: _vm.title,
-              state: "collapsed",
-              direction: "vertical"
-            }
+            attrs: { name: _vm.title, state: "collapsed" }
           },
           [
             _vm._l(_vm.sub_categories, function(category, index) {

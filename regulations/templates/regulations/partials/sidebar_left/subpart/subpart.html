@@ -18,12 +18,7 @@
         {% endif %}
     </div>
 
-    <collapsible
-        state="{{ collapse_state }}"
-        name="Subpart-{{ item.identifier.0 }}"
-        transition="0.5s"
-        direction="vertical"
-    >
+    <collapsible state="{{ collapse_state }}" name="Subpart-{{ item.identifier.0 }}">
         {% if item.children %}
             {% include "regulations/partials/sidebar_left/subpart/sub_toc.html" with type="subpart" %}
         {% endif %}
