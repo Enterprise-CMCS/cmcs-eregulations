@@ -1,7 +1,6 @@
 name: LoadSupplementaryContent
 
-on:
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   load:
@@ -21,9 +20,9 @@ jobs:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
       - run: make supplementary_content
       - name: add supplementary content to database
-          run: |
-            pushd serverless
-            npm install serverless -g
-            npm install
-            serverless invoke --function populate_content --stage ${{ matrix.environment }}
-            popd
+        run: |
+          pushd serverless
+          npm install serverless -g
+          npm install
+          serverless invoke --function populate_content --stage ${{ matrix.environment }}
+          popd
