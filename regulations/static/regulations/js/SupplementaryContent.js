@@ -397,6 +397,7 @@ __vue_render__$4._withStripped = true;
 //
 //
 //
+//
 
 var script$3 = {
     name: "collapse-button",
@@ -415,6 +416,11 @@ var script$3 = {
             //expanded or collapsed
             type: String,
             required: true,
+        },
+        'keep-contents-on-toggle': {
+            type: Boolean,
+            required: false,
+            default: false,
         },
     },
 
@@ -458,9 +464,17 @@ var __vue_render__$3 = function() {
       on: { click: _vm.click }
     },
     [
-      _vm.visible ? _vm._t("expanded", [_vm._v("Hide")]) : _vm._e(),
+      _vm.visible && !_vm.keepContentsOnToggle
+        ? _vm._t("expanded", [_vm._v("Hide")])
+        : _vm._e(),
       _vm._v(" "),
-      !_vm.visible ? _vm._t("collapsed", [_vm._v("Show")]) : _vm._e()
+      !_vm.visible && !_vm.keepContentsOnToggle
+        ? _vm._t("collapsed", [_vm._v("Show")])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.keepContentsOnToggle
+        ? _vm._t("contents", [_vm._v("Click here")])
+        : _vm._e()
     ],
     2
   )
@@ -552,7 +566,7 @@ var script$2 = {
     data: function () {
         return {
             name: this.name,
-            size: "auto",
+            height: "auto",
             visible: false,
             styles: {
                 overflow: "hidden",
@@ -562,14 +576,14 @@ var script$2 = {
     },
 
     computed: {
-        sizeStyle: function () {
-            return { height: this.size }
+        heightStyle: function () {
+            return { height: this.height }
         },
     },
 
     methods: {
         resize: function (e) {
-            this.computeSize();
+            this.computeHeight();
         },
         toggleDisplay: function (e) {
             if (this.visible) {
@@ -583,7 +597,7 @@ var script$2 = {
             if (this.name === target) {
                 this.$refs.target.classList.remove("display-none");
                 requestAnimationFrame(() => {
-                    this.computeSize();
+                    this.computeHeight();
                     requestAnimationFrame(() => {
                         this.visible = !this.visible;
                     });
@@ -593,13 +607,13 @@ var script$2 = {
         getStyle: function () {
             return window.getComputedStyle(this.$refs.target);
         },
-        setProps: function (visibility, display, position, size) {
+        setProps: function (visibility, display, position, height) {
             this.$refs.target.style.visibility = visibility;
             this.$refs.target.style.display = display;
             this.$refs.target.style.position = position;
-            this.$refs.target.style.height = size;
+            this.$refs.target.style.height = height;
         },
-        _computeSize: function () {
+        _computeHeight: function () {
             if (this.getStyle().display === "none") {
                 return "auto";
             }
@@ -608,16 +622,16 @@ var script$2 = {
 
             this.setProps("hidden", "block", "absolute", "auto");
 
-            const size = this.getStyle().height;
+            const height = this.getStyle().height;
 
-            this.setProps(null, null, null, size);
+            this.setProps(null, null, null, height);
             if (!this.visible) {
                 this.$refs.target.classList.add("invisible");
             }
-            return size;
+            return height;
         },
-        computeSize: function () {
-            this.size = this._computeSize();
+        computeHeight: function () {
+            this.height = this._computeHeight();
         },
     },
 };

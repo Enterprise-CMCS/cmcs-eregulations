@@ -10,6 +10,7 @@
 //
 //
 //
+//
 
 var script = {
     name: "collapse-button",
@@ -28,6 +29,11 @@ var script = {
             //expanded or collapsed
             type: String,
             required: true,
+        },
+        'keep-contents-on-toggle': {
+            type: Boolean,
+            required: false,
+            default: false,
         },
     },
 
@@ -146,9 +152,17 @@ var __vue_render__ = function() {
       on: { click: _vm.click }
     },
     [
-      _vm.visible ? _vm._t("expanded", [_vm._v("Hide")]) : _vm._e(),
+      _vm.visible && !_vm.keepContentsOnToggle
+        ? _vm._t("expanded", [_vm._v("Hide")])
+        : _vm._e(),
       _vm._v(" "),
-      !_vm.visible ? _vm._t("collapsed", [_vm._v("Show")]) : _vm._e()
+      !_vm.visible && !_vm.keepContentsOnToggle
+        ? _vm._t("collapsed", [_vm._v("Show")])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.keepContentsOnToggle
+        ? _vm._t("contents", [_vm._v("Click here")])
+        : _vm._e()
     ],
     2
   )
