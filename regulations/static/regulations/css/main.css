@@ -13938,7 +13938,9 @@ select:focus-visible {
 .site-homepage .hero-banner .hero-text a:hover {
   color: #a3e8ff;
 }
-.site-homepage .hero-banner .hero-text button {
+.site-homepage .hero-banner .hero-text a[role=button] {
+  color: #17415f;
+  text-shadow: none;
   margin-top: 8px;
 }
 .site-homepage .hero-banner .hero-image {

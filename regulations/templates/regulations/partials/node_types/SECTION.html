@@ -2,10 +2,13 @@
     Used once per section. Contained by subparts at the top level.
 {% endcomment %}
 
-<section id="{{node.label | join:'-'}}" class="reg-section">
-    <h2 class="section-title">
-    <a class="reference" href="#{{node.label | join:'-'}}"><i class="fa fa-link"></i></a>
-    {{node.title}} </h2>
+<section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section">
+    <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
+        <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
+            <i class="fa fa-link"></i>
+        </a>
+        {{node.title}}
+    </h2>
 
     <div class="paragraphs">
         {{node.text | safe}}
