@@ -285,9 +285,9 @@ select {
 
 :target {
     // Moves content down so it's not covered by the sticky header
-    scroll-margin-top: $header_height_mobile;
+    scroll-margin-top: $header_height_mobile + 5px;
 
     @include screen-lg {
-        scroll-margin-top: $header_height;
+        scroll-margin-top: $header_height + 5px;
     }
 }

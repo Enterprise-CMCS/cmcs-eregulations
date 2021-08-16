@@ -5,6 +5,15 @@
 @import "../application_settings";
 
 .reg-text {
+    section,
+    h1,
+    h2,
+    p {
+        padding-left: 5px;
+        &:focus {
+            background: #eefafe;
+        }
+    }
 
     h1 {
         color: $title_color;
