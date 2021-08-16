@@ -954,6 +954,7 @@
   //
   //
   //
+  //
 
 
   var script$6 = {
@@ -985,7 +986,13 @@
         const format = new Intl.DateTimeFormat("en-US", options);
         return format.format(date);
       }
-    }
+    },
+
+    computed: {
+      showDescription: function() {
+        return (this.description && !/^\s*$/.test(this.description));
+      },
+    },
   };
 
   function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -1085,13 +1092,27 @@
               ])
             : _vm._e(),
           _vm._v(" "),
-          _c("span", { staticClass: "supplementary-content-title" }, [
-            _vm._v(_vm._s(_vm.title))
-          ]),
+          _c(
+            "span",
+            {
+              staticClass: "supplementary-content-title",
+              class: {
+                "supplementary-content-external-link": !_vm.showDescription
+              }
+            },
+            [_vm._v(_vm._s(_vm.title))]
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "supplementary-content-description" }, [
-            _vm._v(_vm._s(_vm.description))
-          ])
+          _vm.showDescription
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "supplementary-content-description supplementary-content-external-link"
+                },
+                [_vm._v(_vm._s(_vm.description))]
+              )
+            : _vm._e()
         ]
       )
     ])
