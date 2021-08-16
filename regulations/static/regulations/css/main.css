@@ -15630,10 +15630,6 @@ select:focus-visible {
 .reg-text .reference:focus {
   opacity: 1;
 }
-.reg-text > .reg-section > h2, .reg-text > .reg-section > .paragraphs > p {
-  margin-left: -16px;
-  padding-left: 24px;
-}
 .reg-text h1 > .reference,
 .reg-text h2 > .reference {
   margin-left: -1.2em;
@@ -15665,7 +15661,8 @@ select:focus-visible {
 
 article {
   max-width: 53rem;
-  margin: 40px 0 32px 32px;
+  margin-top: 40px;
+  margin-bottom: 32px;
 }
 @media (min-width: 1440px) {
   article {
@@ -15676,12 +15673,7 @@ article {
 article i {
   font-weight: bold;
 }
-article h1 {
-  margin-left: -48px;
-  padding-left: 24px;
-}
 article p {
-  margin: 24px 0;
   padding: 0 24px 0 24px;
 }
 article p.depth-1 {
@@ -15714,12 +15706,7 @@ article p.depth-9 {
 article p.depth-10 {
   padding-left: 240px;
 }
-article .reg-section h2 {
-  margin-left: -48px;
-  padding-left: 24px;
-}
 article .paragraphs {
-  margin-left: -27px;
   font-size: 14px;
   line-height: 1.4;
 }
