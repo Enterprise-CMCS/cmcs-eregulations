@@ -66,7 +66,7 @@ export default {
 
     computed: {
         showDescription: function() {
-            return this.description.length > 0;
+            return (this.description && !/^\s*$/.test(this.description));
         },
     },
 };
