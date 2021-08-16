@@ -85,6 +85,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
+                "cmcs_regulations.context_processors.google_analytics"
             ),
         },
         "DIRS": [
@@ -155,3 +156,5 @@ GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 
 HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
 HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
+
+GA_ID = os.environ.get("GA_ID")
