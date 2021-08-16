@@ -1673,6 +1673,12 @@
               required: false,
           },
       },
+
+      computed: {
+          showDescription: function() {
+              return this.description.length > 0;
+          },
+      },
   };
 
   /* script */
@@ -1738,9 +1744,11 @@
             ])
           }),
           _vm._v(" "),
-          _c("span", { staticClass: "category-description" }, [
-            _vm._v(_vm._s(_vm.description))
-          ]),
+          _vm.showDescription
+            ? _c("span", { staticClass: "category-description" }, [
+                _vm._v(_vm._s(_vm.description))
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "collapsible",

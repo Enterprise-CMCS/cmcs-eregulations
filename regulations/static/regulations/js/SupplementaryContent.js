@@ -726,6 +726,12 @@ var script$1 = {
             required: false,
         },
     },
+
+    computed: {
+        showDescription: function() {
+            return this.description.length > 0;
+        },
+    },
 };
 
 /* script */
@@ -791,9 +797,11 @@ var __vue_render__$1 = function() {
           ])
         }),
         _vm._v(" "),
-        _c("span", { staticClass: "category-description" }, [
-          _vm._v(_vm._s(_vm.description))
-        ]),
+        _vm.showDescription
+          ? _c("span", { staticClass: "category-description" }, [
+              _vm._v(_vm._s(_vm.description))
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _c(
           "collapsible",
