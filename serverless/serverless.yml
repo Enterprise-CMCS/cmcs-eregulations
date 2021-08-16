@@ -11,6 +11,7 @@ provider:
     DB_PASSWORD: ${ssm:/eregulations/db/password~true}
     DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
     DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+    GA_ID: ${ssm:/eregulations/http/google_analytics}
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user~true}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password~true}
     DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user~true}
