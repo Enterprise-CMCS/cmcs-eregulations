@@ -13534,16 +13534,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -13757,16 +13753,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -13854,16 +13846,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -14324,16 +14312,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -14569,16 +14553,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -14684,16 +14664,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -14765,16 +14741,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -15017,16 +14989,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -15318,16 +15286,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -15638,16 +15602,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -15849,16 +15809,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -15954,16 +15910,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -16113,16 +16065,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -16248,16 +16196,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -16350,16 +16294,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 
@@ -16444,16 +16384,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 81px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 102px;
   }
 }
 

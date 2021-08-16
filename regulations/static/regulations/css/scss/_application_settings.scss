@@ -283,15 +283,11 @@ select {
     }
 }
 
-:target:before {
+:target {
     // Moves content down so it's not covered by the sticky header
-    content: "";
-    display: block;
-    height: $header_height_mobile;
-    margin: -$header_height_mobile 0 0;
+    scroll-margin-top: $header_height_mobile;
 
     @include screen-lg {
-        height: $header_height;
-        margin: -$header_height 0 0;
+        scroll-margin-top: $header_height;
     }
 }
