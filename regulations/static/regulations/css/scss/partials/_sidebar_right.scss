@@ -233,9 +233,12 @@ aside.right-sidebar {
         color: $primary_link_color;
         text-decoration: none;
         font-size: $font-size-sm;
+    }
+
+    .supplementary-content-external-link {
         &:after {
             @include external-link;
-        }
+        }   
     }
 }
 
