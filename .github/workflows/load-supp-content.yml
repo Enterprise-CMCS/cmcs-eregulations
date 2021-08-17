@@ -1,6 +1,7 @@
-name: LoadSupplementaryContent
+name: Load Supplementary Content
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
 
 jobs:
   load:

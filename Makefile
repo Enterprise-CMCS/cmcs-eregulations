@@ -71,6 +71,7 @@ data.%: tools/ecfr-parser/build/ecfr-parser
 tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 	cd tools/guidance_pipeline; go build -o build/ .
 
+supplementary_content: ## Load old supplementary content into a folder
 supplementary_content: tools/guidance_pipeline/build/guidance_pipeline
 	./tools/guidance_pipeline/build/guidance_pipeline -f tools/guidance_pipeline/guidances.txt -o tools/guidance_pipeline/guidance
 

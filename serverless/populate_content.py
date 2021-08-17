@@ -8,7 +8,7 @@ def handler(self):
     import django
     django.setup()
 
-    content_path = '../tools/guidance_pipeline/guidance'
+    content_path = os.environ.get('SUPPLEMENTARY_CONTENT_PATH')
     content_list = os.listdir(content_path)
     for file in content_list:
         f = open(file)
@@ -17,18 +17,13 @@ def handler(self):
 
 
 def populate(self, data):
-    from supplementary_content.views import CategorySerializer
-    from supplementary_content.views import SupplementaryContentSerializer
-    from supplementary_content.views import RegulationSectionSerializer
+    for category in data:
+        populate_category(category)
 
-    category = CategorySerializer(data=data)
+
+def populate_category(category_data):
+    from supplementary_content.views import CategorySerializer
+
+    category = CategorySerializer(data=category_data)
     if category.is_valid():
         category.save()
-
-    supplementary_content = SupplementaryContentSerializer(data=data['supplementary_content'])
-    if supplementary_content.is_valid():
-        supplementary_content.save()
-
-    section = RegulationSectionSerializer(data=data['supplementary_content']['sections'])
-    if section.is_valid():
-        section.save()

@@ -36,11 +36,24 @@ class ParentSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     supplementary_content = SupplementaryContentSerializer(many=True)
-    parent = ParentSerializer()
+    parent = ParentSerializer(allow_null=True, required=False)
+    description = serializers.CharField(allow_null=True, required=False)
 
     class Meta:
         model = Category
         fields = ("id", "parent", "title", "description", "supplementary_content")
+
+    def create(self, validated_data):
+        supplementary_contents_data = validated_data.pop('supplementary_content')
+        category = Category.objects.create(**validated_data)
+        for supplementary_content_data in supplementary_contents_data:
+            sections = supplementary_content_data.pop('sections')
+            supplementary_content = SupplementaryContent.objects.create(category=category, **supplementary_content_data)
+
+            for section in sections:
+                regulation_section = RegulationSection.objects.create(**section)
+                regulation_section.supplementary_content.set(supplementary_content)
+        return category
 
 
 class SupplementaryContentView(generics.ListAPIView):
