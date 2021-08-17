@@ -11,7 +11,7 @@
                 <template v-slot:expanded>{{ title }}</template>
                 <template v-slot:collapsed>{{ title }}</template>
             </collapse-button>
-            <span class="category-description">{{ description }}</span>
+            <span v-if="showDescription" class="category-description">{{ description }}</span>
             <collapsible :name="title" state="collapsed" direction="vertical" class="category-content">
                 <supplementary-content-category v-for="(category, index) in sub_categories" :key="index"
                     :subcategory="true"
@@ -61,6 +61,12 @@ export default {
         sub_categories: {
             type: Array,
             required: false,
+        },
+    },
+
+    computed: {
+        showDescription: function() {
+            return (this.description && !/^\s*$/.test(this.description));
         },
     },
 };
