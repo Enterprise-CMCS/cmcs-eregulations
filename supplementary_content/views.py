@@ -46,14 +46,16 @@ class CategorySerializer(serializers.ModelSerializer):
 class SupplementaryContentView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
+    section_list = []
+
     def get_queryset(self):
-        section_list = self.request.GET.getlist("sections")
+        self.section_list = self.request.GET.getlist("sections")
         title = self.kwargs.get("title")
         part = self.kwargs.get("part")
         query = Category.objects.filter(
             supplementary_content__sections__title=title,
             supplementary_content__sections__part=part,
-            supplementary_content__sections__section__in=section_list,
+            supplementary_content__sections__section__in=self.section_list,
         ).distinct()
         return query
 
@@ -66,7 +68,15 @@ class SupplementaryContentView(generics.ListAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(_make_category_tree(serializer.data))
+        category_tree = _make_category_tree(serializer.data)
+        _filter_content(category_tree, self.section_list)
+        return Response(category_tree)
+
+
+# The following functions are related to generating a JSON structure for SupplementaryContentView.
+# This involves taking the 'parent = X' relationship of existing categories and reversing it so
+# that each category instead has sub-categories. We also include a function for filtering out
+# supplementary content from the resulting tree that does not match the requested sections.
 
 
 def _add_category(category):
@@ -93,6 +103,20 @@ def _get_category(tree, id):
         if category['id'] == id:
             return category
     return None
+
+
+def _matches_sections(content, sections):
+    for section in content['sections']:
+        if section['section'] in sections:
+            return True
+    return False
+
+
+def _filter_content(tree, sections):
+    for category in tree:
+        new_content = [content for content in category['supplementary_content'] if _matches_sections(content, sections)]
+        category['supplementary_content'] = new_content
+        _filter_content(category['sub_categories'], sections)
 
 
 def _make_category_tree(data):

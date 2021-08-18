@@ -7,6 +7,7 @@
 //
 //
 //
+//
 
 
 var script$6 = {
@@ -38,7 +39,13 @@ var script$6 = {
       const format = new Intl.DateTimeFormat("en-US", options);
       return format.format(date);
     }
-  }
+  },
+
+  computed: {
+    showDescription: function() {
+      return (this.description && !/^\s*$/.test(this.description));
+    },
+  },
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -138,13 +145,27 @@ var __vue_render__$6 = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _c("span", { staticClass: "supplementary-content-title" }, [
-          _vm._v(_vm._s(_vm.title))
-        ]),
+        _c(
+          "span",
+          {
+            staticClass: "supplementary-content-title",
+            class: {
+              "supplementary-content-external-link": !_vm.showDescription
+            }
+          },
+          [_vm._v(_vm._s(_vm.title))]
+        ),
         _vm._v(" "),
-        _c("div", { staticClass: "supplementary-content-description" }, [
-          _vm._v(_vm._s(_vm.description))
-        ])
+        _vm.showDescription
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "supplementary-content-description supplementary-content-external-link"
+              },
+              [_vm._v(_vm._s(_vm.description))]
+            )
+          : _vm._e()
       ]
     )
   ])
@@ -722,6 +743,12 @@ var script$1 = {
             required: false,
         },
     },
+
+    computed: {
+        showDescription: function() {
+            return (this.description && !/^\s*$/.test(this.description));
+        },
+    },
 };
 
 /* script */
@@ -787,9 +814,11 @@ var __vue_render__$1 = function() {
           ])
         }),
         _vm._v(" "),
-        _c("span", { staticClass: "category-description" }, [
-          _vm._v(_vm._s(_vm.description))
-        ]),
+        _vm.showDescription
+          ? _c("span", { staticClass: "category-description" }, [
+              _vm._v(_vm._s(_vm.description))
+            ])
+          : _vm._e(),
         _vm._v(" "),
         _c(
           "collapsible",
