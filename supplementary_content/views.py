@@ -47,14 +47,16 @@ class SupplementaryContentView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
     section_list = []
+    title = None
+    part = None
 
     def get_queryset(self):
         self.section_list = self.request.GET.getlist("sections")
-        title = self.kwargs.get("title")
-        part = self.kwargs.get("part")
+        self.title = self.kwargs.get("title")
+        self.part = self.kwargs.get("part")
         query = Category.objects.filter(
-            supplementary_content__sections__title=title,
-            supplementary_content__sections__part=part,
+            supplementary_content__sections__title=self.title,
+            supplementary_content__sections__part=self.part,
             supplementary_content__sections__section__in=self.section_list,
         ).distinct()
         return query
@@ -69,7 +71,7 @@ class SupplementaryContentView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         category_tree = _make_category_tree(serializer.data)
-        _filter_content(category_tree, self.section_list)
+        _filter_content(category_tree, self.title, self.part, self.section_list)
         return Response(category_tree)
 
 
@@ -105,18 +107,18 @@ def _get_category(tree, id):
     return None
 
 
-def _matches_sections(content, sections):
+def _matches_sections(content, title, part, sections):
     for section in content['sections']:
-        if section['section'] in sections:
+        if section['section'] in sections and section['title'] == title and section['part'] == part:
             return True
     return False
 
 
-def _filter_content(tree, sections):
+def _filter_content(tree, title, part, sections):
     for category in tree:
-        new_content = [content for content in category['supplementary_content'] if _matches_sections(content, sections)]
+        new_content = [content for content in category['supplementary_content'] if _matches_sections(content, title, part, sections)]
         category['supplementary_content'] = new_content
-        _filter_content(category['sub_categories'], sections)
+        _filter_content(category['sub_categories'], title, part, sections)
 
 
 def _make_category_tree(data):
