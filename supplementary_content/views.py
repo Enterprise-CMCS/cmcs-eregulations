@@ -116,7 +116,7 @@ def _matches_sections(content, title, part, sections):
 
 def _filter_content(tree, title, part, sections):
     for category in tree:
-        new_content = [content for content in category['supplementary_content'] if _matches_sections(content, title, part, sections)]
+        new_content = [item for item in category['supplementary_content'] if _matches_sections(item, title, part, sections)]
         category['supplementary_content'] = new_content
         _filter_content(category['sub_categories'], title, part, sections)
 
