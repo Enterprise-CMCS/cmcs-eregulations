@@ -23,7 +23,9 @@ $lightest_gray: #f3f3f3;
 $magenta: #862074;
 
 $white: #fff;
+
 $title_color: #000;
+$reg_text_highlight_color: #eefafe;
 
 //// Usage ////
 //// Call This Section in Your CSS, Not the Color Names ////
@@ -283,15 +285,11 @@ select {
     }
 }
 
-:target:before {
+:target {
     // Moves content down so it's not covered by the sticky header
-    content: "";
-    display: block;
-    height: $header_height_mobile;
-    margin: -$header_height_mobile 0 0;
+    scroll-margin-top: $header_height_mobile + 5px;
 
     @include screen-lg {
-        height: $header_height;
-        margin: -$header_height 0 0;
+        scroll-margin-top: $header_height + 5px;
     }
 }
