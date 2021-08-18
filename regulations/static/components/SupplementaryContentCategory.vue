@@ -12,7 +12,7 @@
                 <template v-slot:collapsed>{{ title }}</template>
             </collapse-button>
             <span v-if="showDescription" class="category-description">{{ description }}</span>
-            <collapsible :name="title" state="collapsed" direction="vertical" class="category-content">
+            <collapsible :name="title" state="collapsed" class="category-content">
                 <supplementary-content-category v-for="(category, index) in sub_categories" :key="index"
                     :subcategory="true"
                     :title="category.title"
