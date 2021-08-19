@@ -219,8 +219,11 @@ aside.right-sidebar {
         font-weight: bold;
         padding-right: $spacer-1;
         margin-right: $spacer-1;
-        border-right: 1px solid black;
         font-size: $font-size-sm;
+    }
+
+    .supplementary-content-mid-bar {
+        border-right: 1px solid black;
     }
 
     .supplementary-content-title {

@@ -984,9 +984,9 @@
       }
     },
 
-    computed: {
-      showDescription: function() {
-        return (this.description && !/^\s*$/.test(this.description));
+    methods: {
+      isBlank: function(str) {
+        return (!str || /^\s*$/.test(str));
       },
     },
   };
@@ -1083,23 +1083,34 @@
         },
         [
           _vm.date
-            ? _c("span", { staticClass: "supplementary-content-date" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.date)))
-              ])
+            ? _c(
+                "span",
+                {
+                  staticClass: "supplementary-content-date",
+                  class: {
+                    "supplementary-content-mid-bar": !_vm.isBlank(_vm.title)
+                  }
+                },
+                [_vm._v(_vm._s(_vm._f("formatDate")(_vm.date)))]
+              )
             : _vm._e(),
           _vm._v(" "),
-          _c(
-            "span",
-            {
-              staticClass: "supplementary-content-title",
-              class: {
-                "supplementary-content-external-link": !_vm.showDescription
-              }
-            },
-            [_vm._v(_vm._s(_vm.title))]
-          ),
+          !_vm.isBlank(_vm.title)
+            ? _c(
+                "span",
+                {
+                  staticClass: "supplementary-content-title",
+                  class: {
+                    "supplementary-content-external-link": _vm.isBlank(
+                      _vm.description
+                    )
+                  }
+                },
+                [_vm._v(_vm._s(_vm.title))]
+              )
+            : _vm._e(),
           _vm._v(" "),
-          _vm.showDescription
+          !_vm.isBlank(_vm.description)
             ? _c(
                 "div",
                 {
