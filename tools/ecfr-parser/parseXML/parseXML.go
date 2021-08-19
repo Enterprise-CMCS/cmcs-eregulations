@@ -363,8 +363,8 @@ type FlushParagraph struct {
 }
 
 type Image struct {
-	Type   string
-	Source string `xml:"src,attr"`
+	Type   string `json:"node_type"`
+	Source string `xml:"src,attr" json:"src"`
 }
 
 type FootNote struct {
