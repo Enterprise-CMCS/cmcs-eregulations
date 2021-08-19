@@ -108,6 +108,12 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "DIV9":
+		child := &Appendix{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	case "SOURCE":
 		child := &Source{Type: "Source"}
 		if err := d.DecodeElement(child, &start); err != nil {
@@ -292,6 +298,44 @@ func (sl *SectionCitation) UnmarshalText(data []byte) error {
 	return nil
 }
 
+type Appendix struct {
+	Type     string          `xml:"TYPE,attr" json:"node_type"`
+	Citation AppendixCitation `xml:"N,attr" json:"label"`
+	Header   string          `xml:"HEAD" json:"title"`
+	Children AppendixChildren `xml:",any" json:"children"`
+}
+
+type AppendixChildren []interface{}
+
+func (c *AppendixChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	switch start.Name.Local {
+	case "P":
+		child := &Paragraph{Type: "Paragraph"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "HD1":
+		child := &Heading{Type: "Heading"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	default:
+		log.Printf("[WARNING] Unknown XML type in Appendix: %+v\n", start)
+		d.Skip()
+	}
+
+	return nil
+}
+
+type AppendixCitation []string
+
+func (sl *AppendixCitation) UnmarshalText(data []byte) error {
+	*sl = strings.Split(string(data), " ")
+	return nil
+}
+
 type Extract struct {
 	Type    string `json:"node_type"`
 	Content string `xml:",innerxml" json:"content"`
@@ -329,6 +373,11 @@ type FootNote struct {
 }
 
 type Division struct {
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
+}
+
+type Heading struct {
 	Type    string `json:"node_type"`
 	Content string `xml:",innerxml" json:"content"`
 }
