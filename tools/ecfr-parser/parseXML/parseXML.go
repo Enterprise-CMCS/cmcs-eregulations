@@ -268,6 +268,12 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "DIV":
+		child := &Division{Type: "Division"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	default:
 		log.Printf("[WARNING] Unknown XML type in Section: %+v\n", start)
 		d.Skip()
@@ -318,6 +324,11 @@ type Image struct {
 }
 
 type FootNote struct {
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
+}
+
+type Division struct {
 	Type    string `json:"node_type"`
 	Content string `xml:",innerxml" json:"content"`
 }
