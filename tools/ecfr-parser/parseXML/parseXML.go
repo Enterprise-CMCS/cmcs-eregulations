@@ -287,8 +287,8 @@ func (sl *SectionCitation) UnmarshalText(data []byte) error {
 }
 
 type Extract struct {
-	Type    string
-	Content string `xml:",innerxml"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type Citation struct {
@@ -303,13 +303,13 @@ type Source struct {
 }
 
 type SectionAuthority struct {
-	Type    string
-	Content string `xml:",innerxml"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type FlushParagraph struct {
-	Type    string
-	Content string `xml:",innerxml"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type Image struct {
