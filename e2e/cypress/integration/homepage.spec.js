@@ -3,7 +3,7 @@ describe("Homepage", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.injectAxe()
-        cy.contains("Medicaid & CHIP Regulations");
+        cy.contains("Medicaid & CHIP eRegulations");
         cy.checkAccessibility();
     });
 
@@ -19,7 +19,7 @@ describe("Homepage", () => {
     it("allows a user to go back to the homepage by clicking the top left link", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/430/");
-        cy.contains("Medicaid & CHIP Regulations").click();
+        cy.contains("Medicaid & CHIP eRegulations").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/");
     });
