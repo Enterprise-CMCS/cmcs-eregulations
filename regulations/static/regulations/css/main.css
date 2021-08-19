@@ -13864,7 +13864,7 @@ select:focus-visible {
 }
 @media (max-width: 1350px) {
   .site-homepage .site-container {
-    padding-top: 0;
+    padding-top: 16px;
   }
 }
 .site-homepage .toc-down {
@@ -14160,7 +14160,7 @@ select:focus-visible {
 }
 
 .homepage-toc {
-  margin-top: 32px;
+  margin-top: 16px;
 }
 @media (max-width: 1024px) {
   .homepage-toc {
@@ -14168,8 +14168,12 @@ select:focus-visible {
     padding: 0;
   }
 }
+.homepage-toc .toc-container {
+  max-width: 53rem;
+}
 .homepage-toc h1 {
   margin-bottom: 0;
+  font-size: 28.8px;
 }
 @media (max-width: 1024px) {
   .homepage-toc h1 {
@@ -14179,21 +14183,16 @@ select:focus-visible {
 .homepage-toc h2 {
   font-size: 18px;
 }
-@media (min-width: 1024px) {
-  .homepage-toc h2 {
-    font-size: 21px;
-  }
-}
 @media (min-width: 1280px) {
   .homepage-toc h2 {
-    font-size: 24px;
+    font-size: 21px;
   }
 }
 .homepage-toc h4 {
   font-family: "Merriweather", Georgia, serif;
 }
 .homepage-toc h4 + .toc-external-ref {
-  margin: 32px 0 0;
+  margin: 16px 0 0;
 }
 .homepage-toc .toc-external-ref {
   font-style: italic;
@@ -14201,18 +14200,12 @@ select:focus-visible {
 }
 .homepage-toc .subchapter {
   border-bottom: 1px solid #d6d7d9;
-  padding: 1em 0;
 }
 .homepage-toc .part-names {
   display: flex;
   margin: 16px 0;
   padding: 0;
   font-size: 16px;
-}
-@media (min-width: 1024px) {
-  .homepage-toc .part-names {
-    font-size: 18px;
-  }
 }
 .homepage-toc .part-names a {
   text-decoration: none;
