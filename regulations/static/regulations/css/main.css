@@ -15487,8 +15487,10 @@ aside.right-sidebar .resource-info {
   font-weight: bold;
   padding-right: 8px;
   margin-right: 8px;
-  border-right: 1px solid black;
   font-size: 14px;
+}
+.supplementary-content .supplementary-content-mid-bar {
+  border-right: 1px solid black;
 }
 .supplementary-content .supplementary-content-title {
   color: #046791;
