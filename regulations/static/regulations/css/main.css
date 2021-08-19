@@ -14072,7 +14072,7 @@ select:focus-visible {
   font-family: "Open Sans", Helvetica, sans-serif;
   font-size: 30px;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1180px) {
   .site-homepage .hero-banner h1 {
     font-size: 2.3em;
   }

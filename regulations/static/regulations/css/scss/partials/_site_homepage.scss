@@ -208,7 +208,7 @@
             font-family: $primary_site_font;
             font-size: $font_size_xxl;
 
-            @include screen-lg {
+            @include custom-min(1180) {
                 font-size: 2.3em;   // Deliberately non-conforming
             }
 
