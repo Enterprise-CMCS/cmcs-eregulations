@@ -15676,6 +15676,9 @@ select:focus-visible {
     font-size: 24px;
   }
 }
+.reg-text fp-2 {
+  display: block;
+}
 
 article {
   max-width: 53rem;
