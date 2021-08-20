@@ -15676,8 +15676,22 @@ select:focus-visible {
     font-size: 24px;
   }
 }
-.reg-text fp-2 {
+.reg-text fp-1,
+.reg-text fp-2,
+.reg-text fp-3,
+.reg-text fp-4,
+.reg-text fp-5,
+.reg-text fp-6 {
   display: block;
+  margin-bottom: 1em;
+}
+.reg-text fp-1 su,
+.reg-text fp-2 su,
+.reg-text fp-3 su,
+.reg-text fp-4 su,
+.reg-text fp-5 su,
+.reg-text fp-6 su {
+  font-size: 70%;
 }
 
 article {
@@ -15694,45 +15708,119 @@ article {
 article i {
   font-weight: bold;
 }
-article p {
+article p, article section {
   padding: 0 24px 0 24px;
 }
-article p.depth-1 {
+article p.depth-1, article section.depth-1 {
   padding-left: 24px;
 }
-article p.depth-2 {
+article p.depth-1 + section, article section.depth-1 + section {
+  padding-left: 24px;
+}
+article p.depth-1 + section + section, article section.depth-1 + section + section {
+  padding-left: 24px;
+}
+article p.depth-2, article section.depth-2 {
   padding-left: 48px;
 }
-article p.depth-3 {
+article p.depth-2 + section, article section.depth-2 + section {
+  padding-left: 48px;
+}
+article p.depth-2 + section + section, article section.depth-2 + section + section {
+  padding-left: 48px;
+}
+article p.depth-3, article section.depth-3 {
   padding-left: 72px;
 }
-article p.depth-4 {
+article p.depth-3 + section, article section.depth-3 + section {
+  padding-left: 72px;
+}
+article p.depth-3 + section + section, article section.depth-3 + section + section {
+  padding-left: 72px;
+}
+article p.depth-4, article section.depth-4 {
   padding-left: 96px;
 }
-article p.depth-5 {
+article p.depth-4 + section, article section.depth-4 + section {
+  padding-left: 96px;
+}
+article p.depth-4 + section + section, article section.depth-4 + section + section {
+  padding-left: 96px;
+}
+article p.depth-5, article section.depth-5 {
   padding-left: 120px;
 }
-article p.depth-6 {
+article p.depth-5 + section, article section.depth-5 + section {
+  padding-left: 120px;
+}
+article p.depth-5 + section + section, article section.depth-5 + section + section {
+  padding-left: 120px;
+}
+article p.depth-6, article section.depth-6 {
   padding-left: 144px;
 }
-article p.depth-7 {
+article p.depth-6 + section, article section.depth-6 + section {
+  padding-left: 144px;
+}
+article p.depth-6 + section + section, article section.depth-6 + section + section {
+  padding-left: 144px;
+}
+article p.depth-7, article section.depth-7 {
   padding-left: 168px;
 }
-article p.depth-8 {
+article p.depth-7 + section, article section.depth-7 + section {
+  padding-left: 168px;
+}
+article p.depth-7 + section + section, article section.depth-7 + section + section {
+  padding-left: 168px;
+}
+article p.depth-8, article section.depth-8 {
   padding-left: 192px;
 }
-article p.depth-9 {
+article p.depth-8 + section, article section.depth-8 + section {
+  padding-left: 192px;
+}
+article p.depth-8 + section + section, article section.depth-8 + section + section {
+  padding-left: 192px;
+}
+article p.depth-9, article section.depth-9 {
   padding-left: 216px;
 }
-article p.depth-10 {
+article p.depth-9 + section, article section.depth-9 + section {
+  padding-left: 216px;
+}
+article p.depth-9 + section + section, article section.depth-9 + section + section {
+  padding-left: 216px;
+}
+article p.depth-10, article section.depth-10 {
   padding-left: 240px;
 }
-article .paragraphs {
+article p.depth-10 + section, article section.depth-10 + section {
+  padding-left: 240px;
+}
+article p.depth-10 + section + section, article section.depth-10 + section + section {
+  padding-left: 240px;
+}
+article .paragraphs,
+article .paragraphs section,
+article .paragraphs fp-1,
+article .paragraphs fp-2,
+article .paragraphs fp-3,
+article .paragraphs fp-4,
+article .paragraphs fp-5,
+article .paragraphs fp-6 {
   font-size: 14px;
   line-height: 1.4;
 }
 @media (min-width: 1280px) {
-  article .paragraphs {
+  article .paragraphs,
+article .paragraphs section,
+article .paragraphs fp-1,
+article .paragraphs fp-2,
+article .paragraphs fp-3,
+article .paragraphs fp-4,
+article .paragraphs fp-5,
+article .paragraphs fp-6 {
     font-size: 16px;
     line-height: 1.5;
   }

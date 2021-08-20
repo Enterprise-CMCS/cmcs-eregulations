@@ -68,8 +68,18 @@
         }
     }
 
-    fp-2 {
+    fp-1,
+    fp-2,
+    fp-3,
+    fp-4,
+    fp-5,
+    fp-6 {
         display: block;
+        margin-bottom: 1em;
+
+        su {
+            font-size: 70%;
+        }
     }
 }
 
@@ -87,17 +97,34 @@ article {
         font-weight: bold;
     }
 
-    p {
+    p, section {
         padding: 0 $spacer-3 0 $spacer-3;
 
         @for $i from 1 through 10 {
             &.depth-#{$i} {
-                padding-left: $spacer-3 + $spacer-3 * ($i - 1);
+                $left-indent: $spacer-3 + $spacer-3 * ($i - 1);
+
+                padding-left: $left-indent;
+
+                & + section {
+                    padding-left: $left-indent;
+
+                    & + section {
+                        padding-left: $left-indent;
+                    }
+                }
             }
         }
     }
 
-    .paragraphs {
+    .paragraphs,
+    .paragraphs section,
+    .paragraphs fp-1,
+    .paragraphs fp-2,
+    .paragraphs fp-3,
+    .paragraphs fp-4,
+    .paragraphs fp-5,
+    .paragraphs fp-6 {
         font-size: $font-size-sm;
         line-height: 1.4;
 
