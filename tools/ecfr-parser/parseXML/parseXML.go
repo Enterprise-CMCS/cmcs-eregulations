@@ -305,6 +305,49 @@ type Appendix struct {
 	Children AppendixChildren `xml:",any" json:"children"`
 }
 
+func (s *Appendix) PostProcess() error {
+	var prev *Paragraph
+	for _, child := range s.Children {
+		c, ok := child.(*Paragraph)
+		if ok {
+			var err error
+			c.Citation, err = generateParagraphCitation(c, prev)
+			if err != nil && err != ErrNoParents {
+				log.Println("[ERROR] generating paragraph citation", err, prev, c)
+			} else {
+				prev = c
+			}
+			c.Marker, err = c.marker()
+			if err != nil {
+				log.Println("[ERROR] generating paragraph marker", err, prev, c)
+			}
+		}
+	}
+	for _, child := range s.Children {
+		c, ok := child.(*Paragraph)
+		if ok {
+			if len(c.Citation) > 0 {
+				cit := append([]string{}, s.Citation...)
+				c.Citation = append(cit, c.Citation...)
+			} else {
+				cit := append([]string{}, s.Citation...)
+				c.Citation = append(cit, c.Citation...)
+				c.Citation = append(c.Citation, fmt.Sprintf("%x", md5.Sum([]byte(c.Content))))
+			}
+		}
+	}
+
+	for _, child := range s.Children {
+		c, ok := child.(PostProcesser)
+		if ok {
+			if err := c.PostProcess(); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 type AppendixChildren []interface{}
 
 func (c *AppendixChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
