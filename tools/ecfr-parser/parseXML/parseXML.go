@@ -238,7 +238,9 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
-	case "FP":
+	case "FP": fallthrough
+	case "FP-1": fallthrough
+	case "FP-2":
 		child := &FlushParagraph{Type: "FlushParagraph"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
