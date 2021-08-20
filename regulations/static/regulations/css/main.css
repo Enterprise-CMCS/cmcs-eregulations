@@ -15801,26 +15801,12 @@ article p.depth-10 + section, article section.depth-10 + section {
 article p.depth-10 + section + section, article section.depth-10 + section + section {
   padding-left: 240px;
 }
-article .paragraphs,
-article .paragraphs section,
-article .paragraphs fp-1,
-article .paragraphs fp-2,
-article .paragraphs fp-3,
-article .paragraphs fp-4,
-article .paragraphs fp-5,
-article .paragraphs fp-6 {
+article .paragraphs {
   font-size: 14px;
   line-height: 1.4;
 }
 @media (min-width: 1280px) {
-  article .paragraphs,
-article .paragraphs section,
-article .paragraphs fp-1,
-article .paragraphs fp-2,
-article .paragraphs fp-3,
-article .paragraphs fp-4,
-article .paragraphs fp-5,
-article .paragraphs fp-6 {
+  article .paragraphs {
     font-size: 16px;
     line-height: 1.5;
   }
