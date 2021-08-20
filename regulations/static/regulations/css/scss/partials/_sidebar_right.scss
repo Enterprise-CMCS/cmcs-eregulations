@@ -9,8 +9,12 @@ aside.right-sidebar {
     padding-top: $spacer-5;
     max-width: 400px;
     position: sticky;
-    height: 100vh;
+    height: calc(100vh - #{$header_height_mobile} - #{$spacer-5});
     overflow-y: scroll;
+
+    @include screen-lg {
+        height: calc(100vh - #{$header_height} - #{$spacer-5});
+    }
 
     h2 {
         font-size: $font-size-xl;
