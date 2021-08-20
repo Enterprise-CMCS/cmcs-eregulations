@@ -97,7 +97,8 @@ article {
         font-weight: bold;
     }
 
-    p, section {
+    p,
+    section {
         padding: 0 $spacer-3 0 $spacer-3;
 
         @for $i from 1 through 10 {
@@ -106,8 +107,26 @@ article {
 
                 padding-left: $left-indent;
 
-                & ~ section {
+                // poor assumption: five contiguous section/img tags
+                & + section,
+                & + img {
                     padding-left: $left-indent;
+                    & + section,
+                    & + img {
+                        padding-left: $left-indent;
+                        & + section,
+                        & + img {
+                            padding-left: $left-indent;
+                            & + section,
+                            & + img {
+                                padding-left: $left-indent;
+                                & + section,
+                                & + img {
+                                    padding-left: $left-indent;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
