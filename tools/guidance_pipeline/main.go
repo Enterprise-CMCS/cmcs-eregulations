@@ -42,6 +42,7 @@ func main() {
 	defer logFile.Close()
 	mw := io.MultiWriter(os.Stderr, logFile)
 	log.SetOutput(mw)
+	log.SetFlags(log.LstdFlags | log.Llongfile)
 
 	if len(*directory) > 0 {
 		processDirectory(*directory)
@@ -85,7 +86,8 @@ func processURLsFromFile(file string) {
 func processURL(csvURL string) {
 	header, body, err := downloadCSV(csvURL)
 	if err != nil {
-		log.Fatal("An error has occured :: ", err)
+		log.Println("An error has occured :: ", csvURL, err)
+		return
 	}
 	defer body.Close()
 	processData(formatHeader(header), body)
@@ -120,7 +122,7 @@ func processData(header string, data io.Reader) {
 func validURL(header string, link string) (string, error) {
 	_, err := url.ParseRequestURI(link)
 	if err != nil {
-		err := fmt.Errorf("%s %s", header, err)
+		err := fmt.Errorf("%s %s %s", link, header, err)
 		return "", err
 	}
 	return link, nil
@@ -133,7 +135,7 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 		if len(record[0]) > 0 {
 			link, err := validURL(header, record[1])
 			if err != nil {
-				log.Println(err)
+				log.Println(err, record[1])
 				continue
 			}
 			sections := formatSections(record[2:])

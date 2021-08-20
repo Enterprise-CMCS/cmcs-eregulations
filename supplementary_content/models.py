@@ -8,7 +8,7 @@ class Category(models.Model):
         blank=True,
         on_delete=models.CASCADE,
     )
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -16,8 +16,8 @@ class Category(models.Model):
 
 
 class SupplementaryContent(models.Model):
-    url = models.URLField(unique=True)
-    title = models.CharField(max_length=200, null=True, blank=True)
+    url = models.URLField(unique=True, max_length=512)
+    title = models.CharField(max_length=512, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
