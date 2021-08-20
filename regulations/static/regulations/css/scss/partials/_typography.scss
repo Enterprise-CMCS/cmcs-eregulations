@@ -37,6 +37,30 @@ h2 {
     font-family: $secondary_site_font;
 }
 
-su {
-   vertical-align: super
+su,
+e[t="51"] {
+   vertical-align: super;
+}
+
+sub,
+e[t="52"] {
+    vertical-align: sub;
+    font-size: 70%;
+}
+
+e[t="01"] {
+    text-transform: uppercase;
+}
+
+e[t="02"] {
+    font-weight: bold;
+}
+
+e[t="03"] {
+    font-style: italic;
+}
+
+e[t="04"],
+e[t="05"] {
+    font-variant: small-caps;
 }
