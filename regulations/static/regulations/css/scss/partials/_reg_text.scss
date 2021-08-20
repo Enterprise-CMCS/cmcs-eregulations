@@ -106,12 +106,8 @@ article {
 
                 padding-left: $left-indent;
 
-                & + section {
+                & ~ section {
                     padding-left: $left-indent;
-
-                    & + section {
-                        padding-left: $left-indent;
-                    }
                 }
             }
         }
