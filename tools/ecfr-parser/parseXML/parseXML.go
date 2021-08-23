@@ -108,6 +108,12 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "DIV9":
+		child := &Appendix{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	case "SOURCE":
 		child := &Source{Type: "Source"}
 		if err := d.DecodeElement(child, &start); err != nil {
@@ -194,7 +200,6 @@ func (s *Section) PostProcess() error {
 			if err != nil {
 				log.Println("[ERROR] generating paragraph marker", err, prev, c)
 			}
-
 		}
 	}
 	for _, child := range s.Children {
@@ -232,7 +237,9 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
-	case "FP":
+	case "FP": fallthrough
+	case "FP-1": fallthrough
+	case "FP-2":
 		child := &FlushParagraph{Type: "FlushParagraph"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
@@ -268,6 +275,12 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "DIV":
+		child := &Division{Type: "Division"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	default:
 		log.Printf("[WARNING] Unknown XML type in Section: %+v\n", start)
 		d.Skip()
@@ -286,9 +299,47 @@ func (sl *SectionCitation) UnmarshalText(data []byte) error {
 	return nil
 }
 
+type Appendix struct {
+	Type     string          `xml:"TYPE,attr" json:"node_type"`
+	Citation AppendixCitation `xml:"N,attr" json:"label"`
+	Header   string          `xml:"HEAD" json:"title"`
+	Children AppendixChildren `xml:",any" json:"children"`
+}
+
+type AppendixChildren []interface{}
+
+func (c *AppendixChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	switch start.Name.Local {
+	case "P":
+		child := &Paragraph{Type: "Paragraph"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "HD1":
+		child := &Heading{Type: "Heading"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	default:
+		log.Printf("[WARNING] Unknown XML type in Appendix: %+v\n", start)
+		d.Skip()
+	}
+
+	return nil
+}
+
+type AppendixCitation []string
+
+func (sl *AppendixCitation) UnmarshalText(data []byte) error {
+	*sl = strings.Split(string(data), " ")
+	return nil
+}
+
 type Extract struct {
-	Type    string
-	Content string `xml:",innerxml"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type Citation struct {
@@ -303,21 +354,31 @@ type Source struct {
 }
 
 type SectionAuthority struct {
-	Type    string
-	Content string `xml:",innerxml"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type FlushParagraph struct {
-	Type    string
-	Content string `xml:",innerxml"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type Image struct {
-	Type   string
-	Source string `xml:"src,attr"`
+	Type   string `json:"node_type"`
+	Source string `xml:"src,attr" json:"src"`
 }
 
 type FootNote struct {
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
+}
+
+type Division struct {
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
+}
+
+type Heading struct {
 	Type    string `json:"node_type"`
 	Content string `xml:",innerxml" json:"content"`
 }

@@ -67,6 +67,20 @@
             font-size: $font-size-2xl;
         }
     }
+
+    fp-1,
+    fp-2,
+    fp-3,
+    fp-4,
+    fp-5,
+    fp-6 {
+        display: block;
+        margin-bottom: 1em;
+
+        su {
+            font-size: 70%;
+        }
+    }
 }
 
 article {
@@ -83,12 +97,37 @@ article {
         font-weight: bold;
     }
 
-    p {
+    p,
+    section {
         padding: 0 $spacer-3 0 $spacer-3;
 
         @for $i from 1 through 10 {
             &.depth-#{$i} {
-                padding-left: $spacer-3 + $spacer-3 * ($i - 1);
+                $left-indent: $spacer-3 + $spacer-3 * ($i - 1);
+
+                padding-left: $left-indent;
+
+                // poor assumption: five contiguous section/img tags
+                & + section,
+                & + img {
+                    padding-left: $left-indent;
+                    & + section,
+                    & + img {
+                        padding-left: $left-indent;
+                        & + section,
+                        & + img {
+                            padding-left: $left-indent;
+                            & + section,
+                            & + img {
+                                padding-left: $left-indent;
+                                & + section,
+                                & + img {
+                                    padding-left: $left-indent;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
