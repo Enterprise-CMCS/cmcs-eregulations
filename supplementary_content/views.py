@@ -1,5 +1,6 @@
 from rest_framework import serializers, generics
 from rest_framework.response import Response
+from django.db.models import Prefetch, Count, Q
 
 
 from .models import (
@@ -20,7 +21,7 @@ class SupplementaryContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SupplementaryContent
-        fields = ("url", "title", "description", "date", "created_at", "updated_at", "category", "sections")
+        fields = ("id", "url", "title", "description", "date", "created_at", "updated_at", "category", "sections", "approved")
 
 
 class ParentSerializer(serializers.ModelSerializer):
@@ -36,11 +37,12 @@ class ParentSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     supplementary_content = SupplementaryContentSerializer(many=True, read_only=True)
+    content_count = serializers.IntegerField()
     parent = ParentSerializer()
 
     class Meta:
         model = Category
-        fields = ("id", "parent", "title", "description", "supplementary_content")
+        fields = ("id", "title", "description", "supplementary_content", "content_count", "parent")
         
 
 class SupplementaryContentView(generics.ListAPIView):
@@ -50,11 +52,25 @@ class SupplementaryContentView(generics.ListAPIView):
         section_list = self.request.GET.getlist("sections")
         title = self.kwargs.get("title")
         part = self.kwargs.get("part")
-        query = Category.objects.filter(
-            supplementary_content__sections__title=title,
-            supplementary_content__sections__part=part,
-            supplementary_content__sections__section__in=section_list,
-        ).distinct()
+        query = Category.objects.prefetch_related(
+            Prefetch(
+                'supplementary_content',
+                queryset=SupplementaryContent.objects.filter(approved=True).prefetch_related(
+                    Prefetch(
+                        'sections',
+                        queryset=RegulationSection.objects.filter(
+                            title=title,
+                            part=part,
+                            section__in=section_list,
+                        )
+                    )
+                ).distinct(),
+            )
+        ).annotate(content_count=Count('supplementary_content', distinct=True, filter=Q(supplementary_content__approved=True,
+                    supplementary_content__sections__title=title,
+                    supplementary_content__sections__part=part,
+                    supplementary_content__sections__section__in=section_list,
+                ))).filter(content_count__gt=0)
         return query
 
     def list(self, request, *args, **kwargs):
