@@ -23,14 +23,11 @@ def populate(data):
         populate_category(category)
 
 
-
-
 def populate_category(category_data):
     from django.core.exceptions import ObjectDoesNotExist
     from rest_framework import serializers
     from supplementary_content.models import Category
     from supplementary_content.views import SupplementaryContentSerializer
-
 
     class CategorySerializer(serializers.ModelSerializer):
         supplementary_content = SupplementaryContentSerializer(many=True, read_only=True)
