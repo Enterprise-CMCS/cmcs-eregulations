@@ -13,9 +13,7 @@ const Template = (args, { argTypes }) => ({
   template: `
     <div>
       <collapse-button v-bind="$props" />
-      <collapsible name="default" state="collapsed" direction="vertical">Hello, world!</collapsible>
-      <hr />
-      <collapsible name="default" state="collapsed" direction="horizontal">Hello world in horizontal</collapsible>
+      <collapsible name="default" state="collapsed">Hello, world!</collapsible>
     </div>`,
 });
 

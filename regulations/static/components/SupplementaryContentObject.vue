@@ -1,8 +1,9 @@
 <template>
   <div class="supplementary-content">
     <a class="supplementary-content-link" :href="url" target="_blank" rel="noopener noreferrer">
-      <span class="supplementary-content-date" v-if="date">{{ date|formatDate }}</span> <span class="supplementary-content-title">{{ title }}</span>
-      <div class="supplementary-content-description">{{ description }}</div>
+      <span class="supplementary-content-date" v-bind:class="{ 'supplementary-content-mid-bar': !isBlank(title) }" v-if="date">{{ date|formatDate }}</span>
+      <span class="supplementary-content-title" v-bind:class="{ 'supplementary-content-external-link': isBlank(description) }" v-if="!isBlank(title)">{{ title }}</span>
+      <div v-if="!isBlank(description)" class="supplementary-content-description supplementary-content-external-link">{{ description }}</div>
     </a>
   </div>
 </template>
@@ -38,6 +39,12 @@ export default {
       const format = new Intl.DateTimeFormat("en-US", options);
       return format.format(date);
     }
-  }
+  },
+
+  methods: {
+    isBlank: function(str) {
+      return (!str || /^\s*$/.test(str));
+    },
+  },
 };
 </script>

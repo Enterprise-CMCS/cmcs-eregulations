@@ -2,7 +2,7 @@
 {% load static %}
 {% load render_nested %}
 
-{% block title %}Medicaid &amp; CHIP Regulations - A CMCS Pilot Project{% endblock %}
+{% block title %}Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project{% endblock %}
 
 {% block body_class %}site-homepage{% endblock %}
 
@@ -24,10 +24,12 @@
                 </div>
 
                 <div class="hero-text">
-                    <h1>Medicaid &amp; CHIP Regulations</h1>
+                    <h1>Medicaid &amp; CHIP eRegulations</h1>
                     <h4>Look up policy with context.</h4>
                     <p>This is a pilot project in the Center for Medicaid and CHIP Services (CMCS). Learn more about <a href="/about">using this tool</a> and <a href="/about/#automated-updates">how this tool is updated</a>, or explore the site as a supplement to existing policy tools.</p>
-                    <a href="#homepage-toc"><button type="button" class="ds-c-button main-button">View Table of Contents</button></a>
+                    <a href="#homepage-toc" id="view-toc-button" role="button" class="ds-c-button main-button">
+                        View Table of Contents
+                    </a>
                 </div>
 
                 <div class="hero-image">
@@ -41,17 +43,21 @@
 
                 <div class="homepage-toc ds-l-col--8" id="homepage-toc">
 
-                    {% for title in structure %}
+                    <div class="toc-container">
 
-                        <h1> {{title.label}} </h1>
+                        {% for title in structure %}
 
-                        {% for child in title.children %}
-                            {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title.identifier.0 %}
+                            <h1> {{title.label}} </h1>
+
+                            {% for child in title.children %}
+                                {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title.identifier.0 %}
+                            {% endfor %}
+
                         {% endfor %}
 
-                    {% endfor %}
+                        <p class="toc-external-ref">For subsequent subchapters (F-I), see <a href="https://ecfr.federalregister.gov/current/title-42/chapter-IV" target="_blank" class="external" aria-label="link to Federal Register Title 42 Chapter 4">Title 42 Chapter IV in eCFR</a></p>
 
-                    <p class="toc-external-ref">For subsequent subchapters (F-I), see <a href="https://ecfr.federalregister.gov/current/title-42/chapter-IV" target="_blank" class="external" aria-label="link to Federal Register Title 42 Chapter 4">Title 42 Chapter IV in eCFR</a></p>
+                    </div>    
 
                 </div>
 

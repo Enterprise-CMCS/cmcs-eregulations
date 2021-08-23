@@ -5,6 +5,15 @@
 @import "../application_settings";
 
 .reg-text {
+    section,
+    h1,
+    h2,
+    p {
+        padding-left: 5px;
+        &:focus {
+            background: $reg_text_highlight_color;
+        }
+    }
 
     h1 {
         color: $title_color;
@@ -25,12 +34,6 @@
         &:focus {
             opacity: 1;
         }
-    }
-
-    & > .reg-section > h2,
-    & > .reg-section > .paragraphs > p {
-        margin-left: -$spacer-2;
-        padding-left: $spacer-3;
     }
 
     h1 > .reference,
@@ -64,11 +67,26 @@
             font-size: $font-size-2xl;
         }
     }
+
+    fp-1,
+    fp-2,
+    fp-3,
+    fp-4,
+    fp-5,
+    fp-6 {
+        display: block;
+        margin-bottom: 1em;
+
+        su {
+            font-size: 70%;
+        }
+    }
 }
 
 article {
     max-width: $text-max-width;
-    margin: $spacer-5 0 $spacer-4 $spacer-4;
+    margin-top: $spacer-5;
+    margin-bottom: $spacer-4;
 
     @include screen-xxl {
         margin: $spacer-5 auto;
@@ -79,31 +97,42 @@ article {
         font-weight: bold;
     }
 
-    h1 {
-        margin-left: -$spacer-6;
-        padding-left: $spacer-3;
-    }
-
-    p {
-        margin: $spacer-3 0;
+    p,
+    section {
         padding: 0 $spacer-3 0 $spacer-3;
 
         @for $i from 1 through 10 {
             &.depth-#{$i} {
-                padding-left: $spacer-3 + $spacer-3 * ($i - 1);
+                $left-indent: $spacer-3 + $spacer-3 * ($i - 1);
+
+                padding-left: $left-indent;
+
+                // poor assumption: five contiguous section/img tags
+                & + section,
+                & + img {
+                    padding-left: $left-indent;
+                    & + section,
+                    & + img {
+                        padding-left: $left-indent;
+                        & + section,
+                        & + img {
+                            padding-left: $left-indent;
+                            & + section,
+                            & + img {
+                                padding-left: $left-indent;
+                                & + section,
+                                & + img {
+                                    padding-left: $left-indent;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
-    .reg-section {
-        h2 {
-            margin-left: -$spacer-6;
-            padding-left: $spacer-3;
-        }
-    }
-
     .paragraphs {
-        margin-left: -27px;
         font-size: $font-size-sm;
         line-height: 1.4;
 

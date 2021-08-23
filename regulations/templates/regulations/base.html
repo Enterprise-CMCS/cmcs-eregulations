@@ -8,12 +8,21 @@ CSS/Javascript etc., should inherit from this template.
 <!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_ID }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+
+        gtag("config", "{{ GA_ID }}");
+    </script>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=11; IE=EDGE">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
             {% block title %}
-                {{meta.cfr_title_number}} CFR Part {{reg_part}} | Medicaid &amp; CHIP Regulations
+                {{meta.cfr_title_number}} CFR Part {{reg_part}} | Medicaid &amp; CHIP eRegulations
             {% endblock %}
         </title>
         {% include "regulations/partials/favicon.html" %}

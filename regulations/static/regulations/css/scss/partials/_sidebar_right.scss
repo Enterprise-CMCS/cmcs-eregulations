@@ -9,8 +9,12 @@ aside.right-sidebar {
     padding-top: $spacer-5;
     max-width: 400px;
     position: sticky;
-    height: 100vh;
+    height: calc(100vh - #{$header_height_mobile} - #{$spacer-5});
     overflow-y: scroll;
+
+    @include screen-lg {
+        height: calc(100vh - #{$header_height} - #{$spacer-5});
+    }
 
     h2 {
         font-size: $font-size-xl;
@@ -219,8 +223,11 @@ aside.right-sidebar {
         font-weight: bold;
         padding-right: $spacer-1;
         margin-right: $spacer-1;
-        border-right: 1px solid black;
         font-size: $font-size-sm;
+    }
+
+    .supplementary-content-mid-bar {
+        border-right: 1px solid black;
     }
 
     .supplementary-content-title {
@@ -233,9 +240,12 @@ aside.right-sidebar {
         color: $primary_link_color;
         text-decoration: none;
         font-size: $font-size-sm;
+    }
+
+    .supplementary-content-external-link {
         &:after {
             @include external-link;
-        }
+        }   
     }
 }
 

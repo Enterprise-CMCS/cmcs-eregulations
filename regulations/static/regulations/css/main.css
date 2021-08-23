@@ -13534,16 +13534,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -13702,6 +13698,10 @@ footer .footer-left {
 
 .invisible {
   height: 0px !important;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 
 .display-none {
@@ -13757,16 +13757,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -13801,8 +13797,38 @@ h2 {
   font-family: "Merriweather", Georgia, serif;
 }
 
-su {
+su,
+e[t="51"] {
   vertical-align: super;
+  font-size: 70%;
+}
+
+sub,
+e[t="52"] {
+  vertical-align: sub;
+  font-size: 70%;
+}
+
+e[t="01"] {
+  text-transform: uppercase;
+}
+
+e[t="02"] {
+  font-weight: bold;
+}
+
+e[t="03"] {
+  font-style: italic;
+}
+
+e[t="04"],
+e[t="05"] {
+  font-variant: small-caps;
+}
+
+.heading1 {
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .indicator {
@@ -13854,16 +13880,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -13872,7 +13894,7 @@ select:focus-visible {
 }
 @media (max-width: 1350px) {
   .site-homepage .site-container {
-    padding-top: 0;
+    padding-top: 16px;
   }
 }
 .site-homepage .toc-down {
@@ -13938,7 +13960,9 @@ select:focus-visible {
 .site-homepage .hero-banner .hero-text a:hover {
   color: #a3e8ff;
 }
-.site-homepage .hero-banner .hero-text button {
+.site-homepage .hero-banner .hero-text a[role=button] {
+  color: #17415f;
+  text-shadow: none;
   margin-top: 8px;
 }
 .site-homepage .hero-banner .hero-image {
@@ -14078,7 +14102,7 @@ select:focus-visible {
   font-family: "Open Sans", Helvetica, sans-serif;
   font-size: 30px;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1180px) {
   .site-homepage .hero-banner h1 {
     font-size: 2.3em;
   }
@@ -14166,7 +14190,7 @@ select:focus-visible {
 }
 
 .homepage-toc {
-  margin-top: 32px;
+  margin-top: 16px;
 }
 @media (max-width: 1024px) {
   .homepage-toc {
@@ -14174,8 +14198,12 @@ select:focus-visible {
     padding: 0;
   }
 }
+.homepage-toc .toc-container {
+  max-width: 53rem;
+}
 .homepage-toc h1 {
   margin-bottom: 0;
+  font-size: 28.8px;
 }
 @media (max-width: 1024px) {
   .homepage-toc h1 {
@@ -14185,21 +14213,16 @@ select:focus-visible {
 .homepage-toc h2 {
   font-size: 18px;
 }
-@media (min-width: 1024px) {
-  .homepage-toc h2 {
-    font-size: 21px;
-  }
-}
 @media (min-width: 1280px) {
   .homepage-toc h2 {
-    font-size: 24px;
+    font-size: 21px;
   }
 }
 .homepage-toc h4 {
   font-family: "Merriweather", Georgia, serif;
 }
 .homepage-toc h4 + .toc-external-ref {
-  margin: 32px 0 0;
+  margin: 16px 0 0;
 }
 .homepage-toc .toc-external-ref {
   font-style: italic;
@@ -14207,18 +14230,12 @@ select:focus-visible {
 }
 .homepage-toc .subchapter {
   border-bottom: 1px solid #d6d7d9;
-  padding: 1em 0;
 }
 .homepage-toc .part-names {
   display: flex;
   margin: 16px 0;
   padding: 0;
   font-size: 16px;
-}
-@media (min-width: 1024px) {
-  .homepage-toc .part-names {
-    font-size: 18px;
-  }
 }
 .homepage-toc .part-names a {
   text-decoration: none;
@@ -14322,16 +14339,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -14567,16 +14580,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -14682,16 +14691,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -14763,16 +14768,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -15015,16 +15016,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -15316,16 +15313,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -15333,8 +15326,13 @@ aside.right-sidebar {
   padding-top: 40px;
   max-width: 400px;
   position: sticky;
-  height: 100vh;
+  height: calc(100vh - 81px - 40px);
   overflow-y: scroll;
+}
+@media (min-width: 1024px) {
+  aside.right-sidebar {
+    height: calc(100vh - 102px - 40px);
+  }
 }
 aside.right-sidebar h2 {
   font-size: 21px;
@@ -15512,8 +15510,10 @@ aside.right-sidebar .resource-info {
   font-weight: bold;
   padding-right: 8px;
   margin-right: 8px;
-  border-right: 1px solid black;
   font-size: 14px;
+}
+.supplementary-content .supplementary-content-mid-bar {
+  border-right: 1px solid black;
 }
 .supplementary-content .supplementary-content-title {
   color: #046791;
@@ -15525,7 +15525,7 @@ aside.right-sidebar .resource-info {
   text-decoration: none;
   font-size: 14px;
 }
-.supplementary-content .supplementary-content-description:after {
+.supplementary-content .supplementary-content-external-link:after {
   content: url("../images/external-link.svg");
   padding-left: 5px;
 }
@@ -15636,19 +15636,27 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
+.reg-text section,
+.reg-text h1,
+.reg-text h2,
+.reg-text p {
+  padding-left: 5px;
+}
+.reg-text section:focus,
+.reg-text h1:focus,
+.reg-text h2:focus,
+.reg-text p:focus {
+  background: #eefafe;
+}
 .reg-text h1 {
   color: #000;
   font-size: 24px;
@@ -15667,10 +15675,6 @@ select:focus-visible {
 }
 .reg-text .reference:focus {
   opacity: 1;
-}
-.reg-text > .reg-section > h2, .reg-text > .reg-section > .paragraphs > p {
-  margin-left: -16px;
-  padding-left: 24px;
 }
 .reg-text h1 > .reference,
 .reg-text h2 > .reference {
@@ -15700,10 +15704,28 @@ select:focus-visible {
     font-size: 24px;
   }
 }
+.reg-text fp-1,
+.reg-text fp-2,
+.reg-text fp-3,
+.reg-text fp-4,
+.reg-text fp-5,
+.reg-text fp-6 {
+  display: block;
+  margin-bottom: 1em;
+}
+.reg-text fp-1 su,
+.reg-text fp-2 su,
+.reg-text fp-3 su,
+.reg-text fp-4 su,
+.reg-text fp-5 su,
+.reg-text fp-6 su {
+  font-size: 70%;
+}
 
 article {
   max-width: 53rem;
-  margin: 40px 0 32px 32px;
+  margin-top: 40px;
+  margin-bottom: 32px;
 }
 @media (min-width: 1440px) {
   article {
@@ -15714,50 +15736,821 @@ article {
 article i {
   font-weight: bold;
 }
-article h1 {
-  margin-left: -48px;
-  padding-left: 24px;
-}
-article p {
-  margin: 24px 0;
+article p,
+article section {
   padding: 0 24px 0 24px;
 }
-article p.depth-1 {
+article p.depth-1,
+article section.depth-1 {
   padding-left: 24px;
 }
-article p.depth-2 {
+article p.depth-1 + section, article p.depth-1 + img,
+article section.depth-1 + section,
+article section.depth-1 + img {
+  padding-left: 24px;
+}
+article p.depth-1 + section + section, article p.depth-1 + section + img, article p.depth-1 + img + section, article p.depth-1 + img + img,
+article section.depth-1 + section + section,
+article section.depth-1 + section + img,
+article section.depth-1 + img + section,
+article section.depth-1 + img + img {
+  padding-left: 24px;
+}
+article p.depth-1 + section + section + section, article p.depth-1 + section + section + img, article p.depth-1 + section + img + section, article p.depth-1 + section + img + img, article p.depth-1 + img + section + section, article p.depth-1 + img + section + img, article p.depth-1 + img + img + section, article p.depth-1 + img + img + img,
+article section.depth-1 + section + section + section,
+article section.depth-1 + section + section + img,
+article section.depth-1 + section + img + section,
+article section.depth-1 + section + img + img,
+article section.depth-1 + img + section + section,
+article section.depth-1 + img + section + img,
+article section.depth-1 + img + img + section,
+article section.depth-1 + img + img + img {
+  padding-left: 24px;
+}
+article p.depth-1 + section + section + section + section, article p.depth-1 + section + section + section + img, article p.depth-1 + section + section + img + section, article p.depth-1 + section + section + img + img, article p.depth-1 + section + img + section + section, article p.depth-1 + section + img + section + img, article p.depth-1 + section + img + img + section, article p.depth-1 + section + img + img + img, article p.depth-1 + img + section + section + section, article p.depth-1 + img + section + section + img, article p.depth-1 + img + section + img + section, article p.depth-1 + img + section + img + img, article p.depth-1 + img + img + section + section, article p.depth-1 + img + img + section + img, article p.depth-1 + img + img + img + section, article p.depth-1 + img + img + img + img,
+article section.depth-1 + section + section + section + section,
+article section.depth-1 + section + section + section + img,
+article section.depth-1 + section + section + img + section,
+article section.depth-1 + section + section + img + img,
+article section.depth-1 + section + img + section + section,
+article section.depth-1 + section + img + section + img,
+article section.depth-1 + section + img + img + section,
+article section.depth-1 + section + img + img + img,
+article section.depth-1 + img + section + section + section,
+article section.depth-1 + img + section + section + img,
+article section.depth-1 + img + section + img + section,
+article section.depth-1 + img + section + img + img,
+article section.depth-1 + img + img + section + section,
+article section.depth-1 + img + img + section + img,
+article section.depth-1 + img + img + img + section,
+article section.depth-1 + img + img + img + img {
+  padding-left: 24px;
+}
+article p.depth-1 + section + section + section + section + section, article p.depth-1 + section + section + section + section + img, article p.depth-1 + section + section + section + img + section, article p.depth-1 + section + section + section + img + img, article p.depth-1 + section + section + img + section + section, article p.depth-1 + section + section + img + section + img, article p.depth-1 + section + section + img + img + section, article p.depth-1 + section + section + img + img + img, article p.depth-1 + section + img + section + section + section, article p.depth-1 + section + img + section + section + img, article p.depth-1 + section + img + section + img + section, article p.depth-1 + section + img + section + img + img, article p.depth-1 + section + img + img + section + section, article p.depth-1 + section + img + img + section + img, article p.depth-1 + section + img + img + img + section, article p.depth-1 + section + img + img + img + img, article p.depth-1 + img + section + section + section + section, article p.depth-1 + img + section + section + section + img, article p.depth-1 + img + section + section + img + section, article p.depth-1 + img + section + section + img + img, article p.depth-1 + img + section + img + section + section, article p.depth-1 + img + section + img + section + img, article p.depth-1 + img + section + img + img + section, article p.depth-1 + img + section + img + img + img, article p.depth-1 + img + img + section + section + section, article p.depth-1 + img + img + section + section + img, article p.depth-1 + img + img + section + img + section, article p.depth-1 + img + img + section + img + img, article p.depth-1 + img + img + img + section + section, article p.depth-1 + img + img + img + section + img, article p.depth-1 + img + img + img + img + section, article p.depth-1 + img + img + img + img + img,
+article section.depth-1 + section + section + section + section + section,
+article section.depth-1 + section + section + section + section + img,
+article section.depth-1 + section + section + section + img + section,
+article section.depth-1 + section + section + section + img + img,
+article section.depth-1 + section + section + img + section + section,
+article section.depth-1 + section + section + img + section + img,
+article section.depth-1 + section + section + img + img + section,
+article section.depth-1 + section + section + img + img + img,
+article section.depth-1 + section + img + section + section + section,
+article section.depth-1 + section + img + section + section + img,
+article section.depth-1 + section + img + section + img + section,
+article section.depth-1 + section + img + section + img + img,
+article section.depth-1 + section + img + img + section + section,
+article section.depth-1 + section + img + img + section + img,
+article section.depth-1 + section + img + img + img + section,
+article section.depth-1 + section + img + img + img + img,
+article section.depth-1 + img + section + section + section + section,
+article section.depth-1 + img + section + section + section + img,
+article section.depth-1 + img + section + section + img + section,
+article section.depth-1 + img + section + section + img + img,
+article section.depth-1 + img + section + img + section + section,
+article section.depth-1 + img + section + img + section + img,
+article section.depth-1 + img + section + img + img + section,
+article section.depth-1 + img + section + img + img + img,
+article section.depth-1 + img + img + section + section + section,
+article section.depth-1 + img + img + section + section + img,
+article section.depth-1 + img + img + section + img + section,
+article section.depth-1 + img + img + section + img + img,
+article section.depth-1 + img + img + img + section + section,
+article section.depth-1 + img + img + img + section + img,
+article section.depth-1 + img + img + img + img + section,
+article section.depth-1 + img + img + img + img + img {
+  padding-left: 24px;
+}
+article p.depth-2,
+article section.depth-2 {
   padding-left: 48px;
 }
-article p.depth-3 {
+article p.depth-2 + section, article p.depth-2 + img,
+article section.depth-2 + section,
+article section.depth-2 + img {
+  padding-left: 48px;
+}
+article p.depth-2 + section + section, article p.depth-2 + section + img, article p.depth-2 + img + section, article p.depth-2 + img + img,
+article section.depth-2 + section + section,
+article section.depth-2 + section + img,
+article section.depth-2 + img + section,
+article section.depth-2 + img + img {
+  padding-left: 48px;
+}
+article p.depth-2 + section + section + section, article p.depth-2 + section + section + img, article p.depth-2 + section + img + section, article p.depth-2 + section + img + img, article p.depth-2 + img + section + section, article p.depth-2 + img + section + img, article p.depth-2 + img + img + section, article p.depth-2 + img + img + img,
+article section.depth-2 + section + section + section,
+article section.depth-2 + section + section + img,
+article section.depth-2 + section + img + section,
+article section.depth-2 + section + img + img,
+article section.depth-2 + img + section + section,
+article section.depth-2 + img + section + img,
+article section.depth-2 + img + img + section,
+article section.depth-2 + img + img + img {
+  padding-left: 48px;
+}
+article p.depth-2 + section + section + section + section, article p.depth-2 + section + section + section + img, article p.depth-2 + section + section + img + section, article p.depth-2 + section + section + img + img, article p.depth-2 + section + img + section + section, article p.depth-2 + section + img + section + img, article p.depth-2 + section + img + img + section, article p.depth-2 + section + img + img + img, article p.depth-2 + img + section + section + section, article p.depth-2 + img + section + section + img, article p.depth-2 + img + section + img + section, article p.depth-2 + img + section + img + img, article p.depth-2 + img + img + section + section, article p.depth-2 + img + img + section + img, article p.depth-2 + img + img + img + section, article p.depth-2 + img + img + img + img,
+article section.depth-2 + section + section + section + section,
+article section.depth-2 + section + section + section + img,
+article section.depth-2 + section + section + img + section,
+article section.depth-2 + section + section + img + img,
+article section.depth-2 + section + img + section + section,
+article section.depth-2 + section + img + section + img,
+article section.depth-2 + section + img + img + section,
+article section.depth-2 + section + img + img + img,
+article section.depth-2 + img + section + section + section,
+article section.depth-2 + img + section + section + img,
+article section.depth-2 + img + section + img + section,
+article section.depth-2 + img + section + img + img,
+article section.depth-2 + img + img + section + section,
+article section.depth-2 + img + img + section + img,
+article section.depth-2 + img + img + img + section,
+article section.depth-2 + img + img + img + img {
+  padding-left: 48px;
+}
+article p.depth-2 + section + section + section + section + section, article p.depth-2 + section + section + section + section + img, article p.depth-2 + section + section + section + img + section, article p.depth-2 + section + section + section + img + img, article p.depth-2 + section + section + img + section + section, article p.depth-2 + section + section + img + section + img, article p.depth-2 + section + section + img + img + section, article p.depth-2 + section + section + img + img + img, article p.depth-2 + section + img + section + section + section, article p.depth-2 + section + img + section + section + img, article p.depth-2 + section + img + section + img + section, article p.depth-2 + section + img + section + img + img, article p.depth-2 + section + img + img + section + section, article p.depth-2 + section + img + img + section + img, article p.depth-2 + section + img + img + img + section, article p.depth-2 + section + img + img + img + img, article p.depth-2 + img + section + section + section + section, article p.depth-2 + img + section + section + section + img, article p.depth-2 + img + section + section + img + section, article p.depth-2 + img + section + section + img + img, article p.depth-2 + img + section + img + section + section, article p.depth-2 + img + section + img + section + img, article p.depth-2 + img + section + img + img + section, article p.depth-2 + img + section + img + img + img, article p.depth-2 + img + img + section + section + section, article p.depth-2 + img + img + section + section + img, article p.depth-2 + img + img + section + img + section, article p.depth-2 + img + img + section + img + img, article p.depth-2 + img + img + img + section + section, article p.depth-2 + img + img + img + section + img, article p.depth-2 + img + img + img + img + section, article p.depth-2 + img + img + img + img + img,
+article section.depth-2 + section + section + section + section + section,
+article section.depth-2 + section + section + section + section + img,
+article section.depth-2 + section + section + section + img + section,
+article section.depth-2 + section + section + section + img + img,
+article section.depth-2 + section + section + img + section + section,
+article section.depth-2 + section + section + img + section + img,
+article section.depth-2 + section + section + img + img + section,
+article section.depth-2 + section + section + img + img + img,
+article section.depth-2 + section + img + section + section + section,
+article section.depth-2 + section + img + section + section + img,
+article section.depth-2 + section + img + section + img + section,
+article section.depth-2 + section + img + section + img + img,
+article section.depth-2 + section + img + img + section + section,
+article section.depth-2 + section + img + img + section + img,
+article section.depth-2 + section + img + img + img + section,
+article section.depth-2 + section + img + img + img + img,
+article section.depth-2 + img + section + section + section + section,
+article section.depth-2 + img + section + section + section + img,
+article section.depth-2 + img + section + section + img + section,
+article section.depth-2 + img + section + section + img + img,
+article section.depth-2 + img + section + img + section + section,
+article section.depth-2 + img + section + img + section + img,
+article section.depth-2 + img + section + img + img + section,
+article section.depth-2 + img + section + img + img + img,
+article section.depth-2 + img + img + section + section + section,
+article section.depth-2 + img + img + section + section + img,
+article section.depth-2 + img + img + section + img + section,
+article section.depth-2 + img + img + section + img + img,
+article section.depth-2 + img + img + img + section + section,
+article section.depth-2 + img + img + img + section + img,
+article section.depth-2 + img + img + img + img + section,
+article section.depth-2 + img + img + img + img + img {
+  padding-left: 48px;
+}
+article p.depth-3,
+article section.depth-3 {
   padding-left: 72px;
 }
-article p.depth-4 {
+article p.depth-3 + section, article p.depth-3 + img,
+article section.depth-3 + section,
+article section.depth-3 + img {
+  padding-left: 72px;
+}
+article p.depth-3 + section + section, article p.depth-3 + section + img, article p.depth-3 + img + section, article p.depth-3 + img + img,
+article section.depth-3 + section + section,
+article section.depth-3 + section + img,
+article section.depth-3 + img + section,
+article section.depth-3 + img + img {
+  padding-left: 72px;
+}
+article p.depth-3 + section + section + section, article p.depth-3 + section + section + img, article p.depth-3 + section + img + section, article p.depth-3 + section + img + img, article p.depth-3 + img + section + section, article p.depth-3 + img + section + img, article p.depth-3 + img + img + section, article p.depth-3 + img + img + img,
+article section.depth-3 + section + section + section,
+article section.depth-3 + section + section + img,
+article section.depth-3 + section + img + section,
+article section.depth-3 + section + img + img,
+article section.depth-3 + img + section + section,
+article section.depth-3 + img + section + img,
+article section.depth-3 + img + img + section,
+article section.depth-3 + img + img + img {
+  padding-left: 72px;
+}
+article p.depth-3 + section + section + section + section, article p.depth-3 + section + section + section + img, article p.depth-3 + section + section + img + section, article p.depth-3 + section + section + img + img, article p.depth-3 + section + img + section + section, article p.depth-3 + section + img + section + img, article p.depth-3 + section + img + img + section, article p.depth-3 + section + img + img + img, article p.depth-3 + img + section + section + section, article p.depth-3 + img + section + section + img, article p.depth-3 + img + section + img + section, article p.depth-3 + img + section + img + img, article p.depth-3 + img + img + section + section, article p.depth-3 + img + img + section + img, article p.depth-3 + img + img + img + section, article p.depth-3 + img + img + img + img,
+article section.depth-3 + section + section + section + section,
+article section.depth-3 + section + section + section + img,
+article section.depth-3 + section + section + img + section,
+article section.depth-3 + section + section + img + img,
+article section.depth-3 + section + img + section + section,
+article section.depth-3 + section + img + section + img,
+article section.depth-3 + section + img + img + section,
+article section.depth-3 + section + img + img + img,
+article section.depth-3 + img + section + section + section,
+article section.depth-3 + img + section + section + img,
+article section.depth-3 + img + section + img + section,
+article section.depth-3 + img + section + img + img,
+article section.depth-3 + img + img + section + section,
+article section.depth-3 + img + img + section + img,
+article section.depth-3 + img + img + img + section,
+article section.depth-3 + img + img + img + img {
+  padding-left: 72px;
+}
+article p.depth-3 + section + section + section + section + section, article p.depth-3 + section + section + section + section + img, article p.depth-3 + section + section + section + img + section, article p.depth-3 + section + section + section + img + img, article p.depth-3 + section + section + img + section + section, article p.depth-3 + section + section + img + section + img, article p.depth-3 + section + section + img + img + section, article p.depth-3 + section + section + img + img + img, article p.depth-3 + section + img + section + section + section, article p.depth-3 + section + img + section + section + img, article p.depth-3 + section + img + section + img + section, article p.depth-3 + section + img + section + img + img, article p.depth-3 + section + img + img + section + section, article p.depth-3 + section + img + img + section + img, article p.depth-3 + section + img + img + img + section, article p.depth-3 + section + img + img + img + img, article p.depth-3 + img + section + section + section + section, article p.depth-3 + img + section + section + section + img, article p.depth-3 + img + section + section + img + section, article p.depth-3 + img + section + section + img + img, article p.depth-3 + img + section + img + section + section, article p.depth-3 + img + section + img + section + img, article p.depth-3 + img + section + img + img + section, article p.depth-3 + img + section + img + img + img, article p.depth-3 + img + img + section + section + section, article p.depth-3 + img + img + section + section + img, article p.depth-3 + img + img + section + img + section, article p.depth-3 + img + img + section + img + img, article p.depth-3 + img + img + img + section + section, article p.depth-3 + img + img + img + section + img, article p.depth-3 + img + img + img + img + section, article p.depth-3 + img + img + img + img + img,
+article section.depth-3 + section + section + section + section + section,
+article section.depth-3 + section + section + section + section + img,
+article section.depth-3 + section + section + section + img + section,
+article section.depth-3 + section + section + section + img + img,
+article section.depth-3 + section + section + img + section + section,
+article section.depth-3 + section + section + img + section + img,
+article section.depth-3 + section + section + img + img + section,
+article section.depth-3 + section + section + img + img + img,
+article section.depth-3 + section + img + section + section + section,
+article section.depth-3 + section + img + section + section + img,
+article section.depth-3 + section + img + section + img + section,
+article section.depth-3 + section + img + section + img + img,
+article section.depth-3 + section + img + img + section + section,
+article section.depth-3 + section + img + img + section + img,
+article section.depth-3 + section + img + img + img + section,
+article section.depth-3 + section + img + img + img + img,
+article section.depth-3 + img + section + section + section + section,
+article section.depth-3 + img + section + section + section + img,
+article section.depth-3 + img + section + section + img + section,
+article section.depth-3 + img + section + section + img + img,
+article section.depth-3 + img + section + img + section + section,
+article section.depth-3 + img + section + img + section + img,
+article section.depth-3 + img + section + img + img + section,
+article section.depth-3 + img + section + img + img + img,
+article section.depth-3 + img + img + section + section + section,
+article section.depth-3 + img + img + section + section + img,
+article section.depth-3 + img + img + section + img + section,
+article section.depth-3 + img + img + section + img + img,
+article section.depth-3 + img + img + img + section + section,
+article section.depth-3 + img + img + img + section + img,
+article section.depth-3 + img + img + img + img + section,
+article section.depth-3 + img + img + img + img + img {
+  padding-left: 72px;
+}
+article p.depth-4,
+article section.depth-4 {
   padding-left: 96px;
 }
-article p.depth-5 {
+article p.depth-4 + section, article p.depth-4 + img,
+article section.depth-4 + section,
+article section.depth-4 + img {
+  padding-left: 96px;
+}
+article p.depth-4 + section + section, article p.depth-4 + section + img, article p.depth-4 + img + section, article p.depth-4 + img + img,
+article section.depth-4 + section + section,
+article section.depth-4 + section + img,
+article section.depth-4 + img + section,
+article section.depth-4 + img + img {
+  padding-left: 96px;
+}
+article p.depth-4 + section + section + section, article p.depth-4 + section + section + img, article p.depth-4 + section + img + section, article p.depth-4 + section + img + img, article p.depth-4 + img + section + section, article p.depth-4 + img + section + img, article p.depth-4 + img + img + section, article p.depth-4 + img + img + img,
+article section.depth-4 + section + section + section,
+article section.depth-4 + section + section + img,
+article section.depth-4 + section + img + section,
+article section.depth-4 + section + img + img,
+article section.depth-4 + img + section + section,
+article section.depth-4 + img + section + img,
+article section.depth-4 + img + img + section,
+article section.depth-4 + img + img + img {
+  padding-left: 96px;
+}
+article p.depth-4 + section + section + section + section, article p.depth-4 + section + section + section + img, article p.depth-4 + section + section + img + section, article p.depth-4 + section + section + img + img, article p.depth-4 + section + img + section + section, article p.depth-4 + section + img + section + img, article p.depth-4 + section + img + img + section, article p.depth-4 + section + img + img + img, article p.depth-4 + img + section + section + section, article p.depth-4 + img + section + section + img, article p.depth-4 + img + section + img + section, article p.depth-4 + img + section + img + img, article p.depth-4 + img + img + section + section, article p.depth-4 + img + img + section + img, article p.depth-4 + img + img + img + section, article p.depth-4 + img + img + img + img,
+article section.depth-4 + section + section + section + section,
+article section.depth-4 + section + section + section + img,
+article section.depth-4 + section + section + img + section,
+article section.depth-4 + section + section + img + img,
+article section.depth-4 + section + img + section + section,
+article section.depth-4 + section + img + section + img,
+article section.depth-4 + section + img + img + section,
+article section.depth-4 + section + img + img + img,
+article section.depth-4 + img + section + section + section,
+article section.depth-4 + img + section + section + img,
+article section.depth-4 + img + section + img + section,
+article section.depth-4 + img + section + img + img,
+article section.depth-4 + img + img + section + section,
+article section.depth-4 + img + img + section + img,
+article section.depth-4 + img + img + img + section,
+article section.depth-4 + img + img + img + img {
+  padding-left: 96px;
+}
+article p.depth-4 + section + section + section + section + section, article p.depth-4 + section + section + section + section + img, article p.depth-4 + section + section + section + img + section, article p.depth-4 + section + section + section + img + img, article p.depth-4 + section + section + img + section + section, article p.depth-4 + section + section + img + section + img, article p.depth-4 + section + section + img + img + section, article p.depth-4 + section + section + img + img + img, article p.depth-4 + section + img + section + section + section, article p.depth-4 + section + img + section + section + img, article p.depth-4 + section + img + section + img + section, article p.depth-4 + section + img + section + img + img, article p.depth-4 + section + img + img + section + section, article p.depth-4 + section + img + img + section + img, article p.depth-4 + section + img + img + img + section, article p.depth-4 + section + img + img + img + img, article p.depth-4 + img + section + section + section + section, article p.depth-4 + img + section + section + section + img, article p.depth-4 + img + section + section + img + section, article p.depth-4 + img + section + section + img + img, article p.depth-4 + img + section + img + section + section, article p.depth-4 + img + section + img + section + img, article p.depth-4 + img + section + img + img + section, article p.depth-4 + img + section + img + img + img, article p.depth-4 + img + img + section + section + section, article p.depth-4 + img + img + section + section + img, article p.depth-4 + img + img + section + img + section, article p.depth-4 + img + img + section + img + img, article p.depth-4 + img + img + img + section + section, article p.depth-4 + img + img + img + section + img, article p.depth-4 + img + img + img + img + section, article p.depth-4 + img + img + img + img + img,
+article section.depth-4 + section + section + section + section + section,
+article section.depth-4 + section + section + section + section + img,
+article section.depth-4 + section + section + section + img + section,
+article section.depth-4 + section + section + section + img + img,
+article section.depth-4 + section + section + img + section + section,
+article section.depth-4 + section + section + img + section + img,
+article section.depth-4 + section + section + img + img + section,
+article section.depth-4 + section + section + img + img + img,
+article section.depth-4 + section + img + section + section + section,
+article section.depth-4 + section + img + section + section + img,
+article section.depth-4 + section + img + section + img + section,
+article section.depth-4 + section + img + section + img + img,
+article section.depth-4 + section + img + img + section + section,
+article section.depth-4 + section + img + img + section + img,
+article section.depth-4 + section + img + img + img + section,
+article section.depth-4 + section + img + img + img + img,
+article section.depth-4 + img + section + section + section + section,
+article section.depth-4 + img + section + section + section + img,
+article section.depth-4 + img + section + section + img + section,
+article section.depth-4 + img + section + section + img + img,
+article section.depth-4 + img + section + img + section + section,
+article section.depth-4 + img + section + img + section + img,
+article section.depth-4 + img + section + img + img + section,
+article section.depth-4 + img + section + img + img + img,
+article section.depth-4 + img + img + section + section + section,
+article section.depth-4 + img + img + section + section + img,
+article section.depth-4 + img + img + section + img + section,
+article section.depth-4 + img + img + section + img + img,
+article section.depth-4 + img + img + img + section + section,
+article section.depth-4 + img + img + img + section + img,
+article section.depth-4 + img + img + img + img + section,
+article section.depth-4 + img + img + img + img + img {
+  padding-left: 96px;
+}
+article p.depth-5,
+article section.depth-5 {
   padding-left: 120px;
 }
-article p.depth-6 {
+article p.depth-5 + section, article p.depth-5 + img,
+article section.depth-5 + section,
+article section.depth-5 + img {
+  padding-left: 120px;
+}
+article p.depth-5 + section + section, article p.depth-5 + section + img, article p.depth-5 + img + section, article p.depth-5 + img + img,
+article section.depth-5 + section + section,
+article section.depth-5 + section + img,
+article section.depth-5 + img + section,
+article section.depth-5 + img + img {
+  padding-left: 120px;
+}
+article p.depth-5 + section + section + section, article p.depth-5 + section + section + img, article p.depth-5 + section + img + section, article p.depth-5 + section + img + img, article p.depth-5 + img + section + section, article p.depth-5 + img + section + img, article p.depth-5 + img + img + section, article p.depth-5 + img + img + img,
+article section.depth-5 + section + section + section,
+article section.depth-5 + section + section + img,
+article section.depth-5 + section + img + section,
+article section.depth-5 + section + img + img,
+article section.depth-5 + img + section + section,
+article section.depth-5 + img + section + img,
+article section.depth-5 + img + img + section,
+article section.depth-5 + img + img + img {
+  padding-left: 120px;
+}
+article p.depth-5 + section + section + section + section, article p.depth-5 + section + section + section + img, article p.depth-5 + section + section + img + section, article p.depth-5 + section + section + img + img, article p.depth-5 + section + img + section + section, article p.depth-5 + section + img + section + img, article p.depth-5 + section + img + img + section, article p.depth-5 + section + img + img + img, article p.depth-5 + img + section + section + section, article p.depth-5 + img + section + section + img, article p.depth-5 + img + section + img + section, article p.depth-5 + img + section + img + img, article p.depth-5 + img + img + section + section, article p.depth-5 + img + img + section + img, article p.depth-5 + img + img + img + section, article p.depth-5 + img + img + img + img,
+article section.depth-5 + section + section + section + section,
+article section.depth-5 + section + section + section + img,
+article section.depth-5 + section + section + img + section,
+article section.depth-5 + section + section + img + img,
+article section.depth-5 + section + img + section + section,
+article section.depth-5 + section + img + section + img,
+article section.depth-5 + section + img + img + section,
+article section.depth-5 + section + img + img + img,
+article section.depth-5 + img + section + section + section,
+article section.depth-5 + img + section + section + img,
+article section.depth-5 + img + section + img + section,
+article section.depth-5 + img + section + img + img,
+article section.depth-5 + img + img + section + section,
+article section.depth-5 + img + img + section + img,
+article section.depth-5 + img + img + img + section,
+article section.depth-5 + img + img + img + img {
+  padding-left: 120px;
+}
+article p.depth-5 + section + section + section + section + section, article p.depth-5 + section + section + section + section + img, article p.depth-5 + section + section + section + img + section, article p.depth-5 + section + section + section + img + img, article p.depth-5 + section + section + img + section + section, article p.depth-5 + section + section + img + section + img, article p.depth-5 + section + section + img + img + section, article p.depth-5 + section + section + img + img + img, article p.depth-5 + section + img + section + section + section, article p.depth-5 + section + img + section + section + img, article p.depth-5 + section + img + section + img + section, article p.depth-5 + section + img + section + img + img, article p.depth-5 + section + img + img + section + section, article p.depth-5 + section + img + img + section + img, article p.depth-5 + section + img + img + img + section, article p.depth-5 + section + img + img + img + img, article p.depth-5 + img + section + section + section + section, article p.depth-5 + img + section + section + section + img, article p.depth-5 + img + section + section + img + section, article p.depth-5 + img + section + section + img + img, article p.depth-5 + img + section + img + section + section, article p.depth-5 + img + section + img + section + img, article p.depth-5 + img + section + img + img + section, article p.depth-5 + img + section + img + img + img, article p.depth-5 + img + img + section + section + section, article p.depth-5 + img + img + section + section + img, article p.depth-5 + img + img + section + img + section, article p.depth-5 + img + img + section + img + img, article p.depth-5 + img + img + img + section + section, article p.depth-5 + img + img + img + section + img, article p.depth-5 + img + img + img + img + section, article p.depth-5 + img + img + img + img + img,
+article section.depth-5 + section + section + section + section + section,
+article section.depth-5 + section + section + section + section + img,
+article section.depth-5 + section + section + section + img + section,
+article section.depth-5 + section + section + section + img + img,
+article section.depth-5 + section + section + img + section + section,
+article section.depth-5 + section + section + img + section + img,
+article section.depth-5 + section + section + img + img + section,
+article section.depth-5 + section + section + img + img + img,
+article section.depth-5 + section + img + section + section + section,
+article section.depth-5 + section + img + section + section + img,
+article section.depth-5 + section + img + section + img + section,
+article section.depth-5 + section + img + section + img + img,
+article section.depth-5 + section + img + img + section + section,
+article section.depth-5 + section + img + img + section + img,
+article section.depth-5 + section + img + img + img + section,
+article section.depth-5 + section + img + img + img + img,
+article section.depth-5 + img + section + section + section + section,
+article section.depth-5 + img + section + section + section + img,
+article section.depth-5 + img + section + section + img + section,
+article section.depth-5 + img + section + section + img + img,
+article section.depth-5 + img + section + img + section + section,
+article section.depth-5 + img + section + img + section + img,
+article section.depth-5 + img + section + img + img + section,
+article section.depth-5 + img + section + img + img + img,
+article section.depth-5 + img + img + section + section + section,
+article section.depth-5 + img + img + section + section + img,
+article section.depth-5 + img + img + section + img + section,
+article section.depth-5 + img + img + section + img + img,
+article section.depth-5 + img + img + img + section + section,
+article section.depth-5 + img + img + img + section + img,
+article section.depth-5 + img + img + img + img + section,
+article section.depth-5 + img + img + img + img + img {
+  padding-left: 120px;
+}
+article p.depth-6,
+article section.depth-6 {
   padding-left: 144px;
 }
-article p.depth-7 {
+article p.depth-6 + section, article p.depth-6 + img,
+article section.depth-6 + section,
+article section.depth-6 + img {
+  padding-left: 144px;
+}
+article p.depth-6 + section + section, article p.depth-6 + section + img, article p.depth-6 + img + section, article p.depth-6 + img + img,
+article section.depth-6 + section + section,
+article section.depth-6 + section + img,
+article section.depth-6 + img + section,
+article section.depth-6 + img + img {
+  padding-left: 144px;
+}
+article p.depth-6 + section + section + section, article p.depth-6 + section + section + img, article p.depth-6 + section + img + section, article p.depth-6 + section + img + img, article p.depth-6 + img + section + section, article p.depth-6 + img + section + img, article p.depth-6 + img + img + section, article p.depth-6 + img + img + img,
+article section.depth-6 + section + section + section,
+article section.depth-6 + section + section + img,
+article section.depth-6 + section + img + section,
+article section.depth-6 + section + img + img,
+article section.depth-6 + img + section + section,
+article section.depth-6 + img + section + img,
+article section.depth-6 + img + img + section,
+article section.depth-6 + img + img + img {
+  padding-left: 144px;
+}
+article p.depth-6 + section + section + section + section, article p.depth-6 + section + section + section + img, article p.depth-6 + section + section + img + section, article p.depth-6 + section + section + img + img, article p.depth-6 + section + img + section + section, article p.depth-6 + section + img + section + img, article p.depth-6 + section + img + img + section, article p.depth-6 + section + img + img + img, article p.depth-6 + img + section + section + section, article p.depth-6 + img + section + section + img, article p.depth-6 + img + section + img + section, article p.depth-6 + img + section + img + img, article p.depth-6 + img + img + section + section, article p.depth-6 + img + img + section + img, article p.depth-6 + img + img + img + section, article p.depth-6 + img + img + img + img,
+article section.depth-6 + section + section + section + section,
+article section.depth-6 + section + section + section + img,
+article section.depth-6 + section + section + img + section,
+article section.depth-6 + section + section + img + img,
+article section.depth-6 + section + img + section + section,
+article section.depth-6 + section + img + section + img,
+article section.depth-6 + section + img + img + section,
+article section.depth-6 + section + img + img + img,
+article section.depth-6 + img + section + section + section,
+article section.depth-6 + img + section + section + img,
+article section.depth-6 + img + section + img + section,
+article section.depth-6 + img + section + img + img,
+article section.depth-6 + img + img + section + section,
+article section.depth-6 + img + img + section + img,
+article section.depth-6 + img + img + img + section,
+article section.depth-6 + img + img + img + img {
+  padding-left: 144px;
+}
+article p.depth-6 + section + section + section + section + section, article p.depth-6 + section + section + section + section + img, article p.depth-6 + section + section + section + img + section, article p.depth-6 + section + section + section + img + img, article p.depth-6 + section + section + img + section + section, article p.depth-6 + section + section + img + section + img, article p.depth-6 + section + section + img + img + section, article p.depth-6 + section + section + img + img + img, article p.depth-6 + section + img + section + section + section, article p.depth-6 + section + img + section + section + img, article p.depth-6 + section + img + section + img + section, article p.depth-6 + section + img + section + img + img, article p.depth-6 + section + img + img + section + section, article p.depth-6 + section + img + img + section + img, article p.depth-6 + section + img + img + img + section, article p.depth-6 + section + img + img + img + img, article p.depth-6 + img + section + section + section + section, article p.depth-6 + img + section + section + section + img, article p.depth-6 + img + section + section + img + section, article p.depth-6 + img + section + section + img + img, article p.depth-6 + img + section + img + section + section, article p.depth-6 + img + section + img + section + img, article p.depth-6 + img + section + img + img + section, article p.depth-6 + img + section + img + img + img, article p.depth-6 + img + img + section + section + section, article p.depth-6 + img + img + section + section + img, article p.depth-6 + img + img + section + img + section, article p.depth-6 + img + img + section + img + img, article p.depth-6 + img + img + img + section + section, article p.depth-6 + img + img + img + section + img, article p.depth-6 + img + img + img + img + section, article p.depth-6 + img + img + img + img + img,
+article section.depth-6 + section + section + section + section + section,
+article section.depth-6 + section + section + section + section + img,
+article section.depth-6 + section + section + section + img + section,
+article section.depth-6 + section + section + section + img + img,
+article section.depth-6 + section + section + img + section + section,
+article section.depth-6 + section + section + img + section + img,
+article section.depth-6 + section + section + img + img + section,
+article section.depth-6 + section + section + img + img + img,
+article section.depth-6 + section + img + section + section + section,
+article section.depth-6 + section + img + section + section + img,
+article section.depth-6 + section + img + section + img + section,
+article section.depth-6 + section + img + section + img + img,
+article section.depth-6 + section + img + img + section + section,
+article section.depth-6 + section + img + img + section + img,
+article section.depth-6 + section + img + img + img + section,
+article section.depth-6 + section + img + img + img + img,
+article section.depth-6 + img + section + section + section + section,
+article section.depth-6 + img + section + section + section + img,
+article section.depth-6 + img + section + section + img + section,
+article section.depth-6 + img + section + section + img + img,
+article section.depth-6 + img + section + img + section + section,
+article section.depth-6 + img + section + img + section + img,
+article section.depth-6 + img + section + img + img + section,
+article section.depth-6 + img + section + img + img + img,
+article section.depth-6 + img + img + section + section + section,
+article section.depth-6 + img + img + section + section + img,
+article section.depth-6 + img + img + section + img + section,
+article section.depth-6 + img + img + section + img + img,
+article section.depth-6 + img + img + img + section + section,
+article section.depth-6 + img + img + img + section + img,
+article section.depth-6 + img + img + img + img + section,
+article section.depth-6 + img + img + img + img + img {
+  padding-left: 144px;
+}
+article p.depth-7,
+article section.depth-7 {
   padding-left: 168px;
 }
-article p.depth-8 {
+article p.depth-7 + section, article p.depth-7 + img,
+article section.depth-7 + section,
+article section.depth-7 + img {
+  padding-left: 168px;
+}
+article p.depth-7 + section + section, article p.depth-7 + section + img, article p.depth-7 + img + section, article p.depth-7 + img + img,
+article section.depth-7 + section + section,
+article section.depth-7 + section + img,
+article section.depth-7 + img + section,
+article section.depth-7 + img + img {
+  padding-left: 168px;
+}
+article p.depth-7 + section + section + section, article p.depth-7 + section + section + img, article p.depth-7 + section + img + section, article p.depth-7 + section + img + img, article p.depth-7 + img + section + section, article p.depth-7 + img + section + img, article p.depth-7 + img + img + section, article p.depth-7 + img + img + img,
+article section.depth-7 + section + section + section,
+article section.depth-7 + section + section + img,
+article section.depth-7 + section + img + section,
+article section.depth-7 + section + img + img,
+article section.depth-7 + img + section + section,
+article section.depth-7 + img + section + img,
+article section.depth-7 + img + img + section,
+article section.depth-7 + img + img + img {
+  padding-left: 168px;
+}
+article p.depth-7 + section + section + section + section, article p.depth-7 + section + section + section + img, article p.depth-7 + section + section + img + section, article p.depth-7 + section + section + img + img, article p.depth-7 + section + img + section + section, article p.depth-7 + section + img + section + img, article p.depth-7 + section + img + img + section, article p.depth-7 + section + img + img + img, article p.depth-7 + img + section + section + section, article p.depth-7 + img + section + section + img, article p.depth-7 + img + section + img + section, article p.depth-7 + img + section + img + img, article p.depth-7 + img + img + section + section, article p.depth-7 + img + img + section + img, article p.depth-7 + img + img + img + section, article p.depth-7 + img + img + img + img,
+article section.depth-7 + section + section + section + section,
+article section.depth-7 + section + section + section + img,
+article section.depth-7 + section + section + img + section,
+article section.depth-7 + section + section + img + img,
+article section.depth-7 + section + img + section + section,
+article section.depth-7 + section + img + section + img,
+article section.depth-7 + section + img + img + section,
+article section.depth-7 + section + img + img + img,
+article section.depth-7 + img + section + section + section,
+article section.depth-7 + img + section + section + img,
+article section.depth-7 + img + section + img + section,
+article section.depth-7 + img + section + img + img,
+article section.depth-7 + img + img + section + section,
+article section.depth-7 + img + img + section + img,
+article section.depth-7 + img + img + img + section,
+article section.depth-7 + img + img + img + img {
+  padding-left: 168px;
+}
+article p.depth-7 + section + section + section + section + section, article p.depth-7 + section + section + section + section + img, article p.depth-7 + section + section + section + img + section, article p.depth-7 + section + section + section + img + img, article p.depth-7 + section + section + img + section + section, article p.depth-7 + section + section + img + section + img, article p.depth-7 + section + section + img + img + section, article p.depth-7 + section + section + img + img + img, article p.depth-7 + section + img + section + section + section, article p.depth-7 + section + img + section + section + img, article p.depth-7 + section + img + section + img + section, article p.depth-7 + section + img + section + img + img, article p.depth-7 + section + img + img + section + section, article p.depth-7 + section + img + img + section + img, article p.depth-7 + section + img + img + img + section, article p.depth-7 + section + img + img + img + img, article p.depth-7 + img + section + section + section + section, article p.depth-7 + img + section + section + section + img, article p.depth-7 + img + section + section + img + section, article p.depth-7 + img + section + section + img + img, article p.depth-7 + img + section + img + section + section, article p.depth-7 + img + section + img + section + img, article p.depth-7 + img + section + img + img + section, article p.depth-7 + img + section + img + img + img, article p.depth-7 + img + img + section + section + section, article p.depth-7 + img + img + section + section + img, article p.depth-7 + img + img + section + img + section, article p.depth-7 + img + img + section + img + img, article p.depth-7 + img + img + img + section + section, article p.depth-7 + img + img + img + section + img, article p.depth-7 + img + img + img + img + section, article p.depth-7 + img + img + img + img + img,
+article section.depth-7 + section + section + section + section + section,
+article section.depth-7 + section + section + section + section + img,
+article section.depth-7 + section + section + section + img + section,
+article section.depth-7 + section + section + section + img + img,
+article section.depth-7 + section + section + img + section + section,
+article section.depth-7 + section + section + img + section + img,
+article section.depth-7 + section + section + img + img + section,
+article section.depth-7 + section + section + img + img + img,
+article section.depth-7 + section + img + section + section + section,
+article section.depth-7 + section + img + section + section + img,
+article section.depth-7 + section + img + section + img + section,
+article section.depth-7 + section + img + section + img + img,
+article section.depth-7 + section + img + img + section + section,
+article section.depth-7 + section + img + img + section + img,
+article section.depth-7 + section + img + img + img + section,
+article section.depth-7 + section + img + img + img + img,
+article section.depth-7 + img + section + section + section + section,
+article section.depth-7 + img + section + section + section + img,
+article section.depth-7 + img + section + section + img + section,
+article section.depth-7 + img + section + section + img + img,
+article section.depth-7 + img + section + img + section + section,
+article section.depth-7 + img + section + img + section + img,
+article section.depth-7 + img + section + img + img + section,
+article section.depth-7 + img + section + img + img + img,
+article section.depth-7 + img + img + section + section + section,
+article section.depth-7 + img + img + section + section + img,
+article section.depth-7 + img + img + section + img + section,
+article section.depth-7 + img + img + section + img + img,
+article section.depth-7 + img + img + img + section + section,
+article section.depth-7 + img + img + img + section + img,
+article section.depth-7 + img + img + img + img + section,
+article section.depth-7 + img + img + img + img + img {
+  padding-left: 168px;
+}
+article p.depth-8,
+article section.depth-8 {
   padding-left: 192px;
 }
-article p.depth-9 {
+article p.depth-8 + section, article p.depth-8 + img,
+article section.depth-8 + section,
+article section.depth-8 + img {
+  padding-left: 192px;
+}
+article p.depth-8 + section + section, article p.depth-8 + section + img, article p.depth-8 + img + section, article p.depth-8 + img + img,
+article section.depth-8 + section + section,
+article section.depth-8 + section + img,
+article section.depth-8 + img + section,
+article section.depth-8 + img + img {
+  padding-left: 192px;
+}
+article p.depth-8 + section + section + section, article p.depth-8 + section + section + img, article p.depth-8 + section + img + section, article p.depth-8 + section + img + img, article p.depth-8 + img + section + section, article p.depth-8 + img + section + img, article p.depth-8 + img + img + section, article p.depth-8 + img + img + img,
+article section.depth-8 + section + section + section,
+article section.depth-8 + section + section + img,
+article section.depth-8 + section + img + section,
+article section.depth-8 + section + img + img,
+article section.depth-8 + img + section + section,
+article section.depth-8 + img + section + img,
+article section.depth-8 + img + img + section,
+article section.depth-8 + img + img + img {
+  padding-left: 192px;
+}
+article p.depth-8 + section + section + section + section, article p.depth-8 + section + section + section + img, article p.depth-8 + section + section + img + section, article p.depth-8 + section + section + img + img, article p.depth-8 + section + img + section + section, article p.depth-8 + section + img + section + img, article p.depth-8 + section + img + img + section, article p.depth-8 + section + img + img + img, article p.depth-8 + img + section + section + section, article p.depth-8 + img + section + section + img, article p.depth-8 + img + section + img + section, article p.depth-8 + img + section + img + img, article p.depth-8 + img + img + section + section, article p.depth-8 + img + img + section + img, article p.depth-8 + img + img + img + section, article p.depth-8 + img + img + img + img,
+article section.depth-8 + section + section + section + section,
+article section.depth-8 + section + section + section + img,
+article section.depth-8 + section + section + img + section,
+article section.depth-8 + section + section + img + img,
+article section.depth-8 + section + img + section + section,
+article section.depth-8 + section + img + section + img,
+article section.depth-8 + section + img + img + section,
+article section.depth-8 + section + img + img + img,
+article section.depth-8 + img + section + section + section,
+article section.depth-8 + img + section + section + img,
+article section.depth-8 + img + section + img + section,
+article section.depth-8 + img + section + img + img,
+article section.depth-8 + img + img + section + section,
+article section.depth-8 + img + img + section + img,
+article section.depth-8 + img + img + img + section,
+article section.depth-8 + img + img + img + img {
+  padding-left: 192px;
+}
+article p.depth-8 + section + section + section + section + section, article p.depth-8 + section + section + section + section + img, article p.depth-8 + section + section + section + img + section, article p.depth-8 + section + section + section + img + img, article p.depth-8 + section + section + img + section + section, article p.depth-8 + section + section + img + section + img, article p.depth-8 + section + section + img + img + section, article p.depth-8 + section + section + img + img + img, article p.depth-8 + section + img + section + section + section, article p.depth-8 + section + img + section + section + img, article p.depth-8 + section + img + section + img + section, article p.depth-8 + section + img + section + img + img, article p.depth-8 + section + img + img + section + section, article p.depth-8 + section + img + img + section + img, article p.depth-8 + section + img + img + img + section, article p.depth-8 + section + img + img + img + img, article p.depth-8 + img + section + section + section + section, article p.depth-8 + img + section + section + section + img, article p.depth-8 + img + section + section + img + section, article p.depth-8 + img + section + section + img + img, article p.depth-8 + img + section + img + section + section, article p.depth-8 + img + section + img + section + img, article p.depth-8 + img + section + img + img + section, article p.depth-8 + img + section + img + img + img, article p.depth-8 + img + img + section + section + section, article p.depth-8 + img + img + section + section + img, article p.depth-8 + img + img + section + img + section, article p.depth-8 + img + img + section + img + img, article p.depth-8 + img + img + img + section + section, article p.depth-8 + img + img + img + section + img, article p.depth-8 + img + img + img + img + section, article p.depth-8 + img + img + img + img + img,
+article section.depth-8 + section + section + section + section + section,
+article section.depth-8 + section + section + section + section + img,
+article section.depth-8 + section + section + section + img + section,
+article section.depth-8 + section + section + section + img + img,
+article section.depth-8 + section + section + img + section + section,
+article section.depth-8 + section + section + img + section + img,
+article section.depth-8 + section + section + img + img + section,
+article section.depth-8 + section + section + img + img + img,
+article section.depth-8 + section + img + section + section + section,
+article section.depth-8 + section + img + section + section + img,
+article section.depth-8 + section + img + section + img + section,
+article section.depth-8 + section + img + section + img + img,
+article section.depth-8 + section + img + img + section + section,
+article section.depth-8 + section + img + img + section + img,
+article section.depth-8 + section + img + img + img + section,
+article section.depth-8 + section + img + img + img + img,
+article section.depth-8 + img + section + section + section + section,
+article section.depth-8 + img + section + section + section + img,
+article section.depth-8 + img + section + section + img + section,
+article section.depth-8 + img + section + section + img + img,
+article section.depth-8 + img + section + img + section + section,
+article section.depth-8 + img + section + img + section + img,
+article section.depth-8 + img + section + img + img + section,
+article section.depth-8 + img + section + img + img + img,
+article section.depth-8 + img + img + section + section + section,
+article section.depth-8 + img + img + section + section + img,
+article section.depth-8 + img + img + section + img + section,
+article section.depth-8 + img + img + section + img + img,
+article section.depth-8 + img + img + img + section + section,
+article section.depth-8 + img + img + img + section + img,
+article section.depth-8 + img + img + img + img + section,
+article section.depth-8 + img + img + img + img + img {
+  padding-left: 192px;
+}
+article p.depth-9,
+article section.depth-9 {
   padding-left: 216px;
 }
-article p.depth-10 {
+article p.depth-9 + section, article p.depth-9 + img,
+article section.depth-9 + section,
+article section.depth-9 + img {
+  padding-left: 216px;
+}
+article p.depth-9 + section + section, article p.depth-9 + section + img, article p.depth-9 + img + section, article p.depth-9 + img + img,
+article section.depth-9 + section + section,
+article section.depth-9 + section + img,
+article section.depth-9 + img + section,
+article section.depth-9 + img + img {
+  padding-left: 216px;
+}
+article p.depth-9 + section + section + section, article p.depth-9 + section + section + img, article p.depth-9 + section + img + section, article p.depth-9 + section + img + img, article p.depth-9 + img + section + section, article p.depth-9 + img + section + img, article p.depth-9 + img + img + section, article p.depth-9 + img + img + img,
+article section.depth-9 + section + section + section,
+article section.depth-9 + section + section + img,
+article section.depth-9 + section + img + section,
+article section.depth-9 + section + img + img,
+article section.depth-9 + img + section + section,
+article section.depth-9 + img + section + img,
+article section.depth-9 + img + img + section,
+article section.depth-9 + img + img + img {
+  padding-left: 216px;
+}
+article p.depth-9 + section + section + section + section, article p.depth-9 + section + section + section + img, article p.depth-9 + section + section + img + section, article p.depth-9 + section + section + img + img, article p.depth-9 + section + img + section + section, article p.depth-9 + section + img + section + img, article p.depth-9 + section + img + img + section, article p.depth-9 + section + img + img + img, article p.depth-9 + img + section + section + section, article p.depth-9 + img + section + section + img, article p.depth-9 + img + section + img + section, article p.depth-9 + img + section + img + img, article p.depth-9 + img + img + section + section, article p.depth-9 + img + img + section + img, article p.depth-9 + img + img + img + section, article p.depth-9 + img + img + img + img,
+article section.depth-9 + section + section + section + section,
+article section.depth-9 + section + section + section + img,
+article section.depth-9 + section + section + img + section,
+article section.depth-9 + section + section + img + img,
+article section.depth-9 + section + img + section + section,
+article section.depth-9 + section + img + section + img,
+article section.depth-9 + section + img + img + section,
+article section.depth-9 + section + img + img + img,
+article section.depth-9 + img + section + section + section,
+article section.depth-9 + img + section + section + img,
+article section.depth-9 + img + section + img + section,
+article section.depth-9 + img + section + img + img,
+article section.depth-9 + img + img + section + section,
+article section.depth-9 + img + img + section + img,
+article section.depth-9 + img + img + img + section,
+article section.depth-9 + img + img + img + img {
+  padding-left: 216px;
+}
+article p.depth-9 + section + section + section + section + section, article p.depth-9 + section + section + section + section + img, article p.depth-9 + section + section + section + img + section, article p.depth-9 + section + section + section + img + img, article p.depth-9 + section + section + img + section + section, article p.depth-9 + section + section + img + section + img, article p.depth-9 + section + section + img + img + section, article p.depth-9 + section + section + img + img + img, article p.depth-9 + section + img + section + section + section, article p.depth-9 + section + img + section + section + img, article p.depth-9 + section + img + section + img + section, article p.depth-9 + section + img + section + img + img, article p.depth-9 + section + img + img + section + section, article p.depth-9 + section + img + img + section + img, article p.depth-9 + section + img + img + img + section, article p.depth-9 + section + img + img + img + img, article p.depth-9 + img + section + section + section + section, article p.depth-9 + img + section + section + section + img, article p.depth-9 + img + section + section + img + section, article p.depth-9 + img + section + section + img + img, article p.depth-9 + img + section + img + section + section, article p.depth-9 + img + section + img + section + img, article p.depth-9 + img + section + img + img + section, article p.depth-9 + img + section + img + img + img, article p.depth-9 + img + img + section + section + section, article p.depth-9 + img + img + section + section + img, article p.depth-9 + img + img + section + img + section, article p.depth-9 + img + img + section + img + img, article p.depth-9 + img + img + img + section + section, article p.depth-9 + img + img + img + section + img, article p.depth-9 + img + img + img + img + section, article p.depth-9 + img + img + img + img + img,
+article section.depth-9 + section + section + section + section + section,
+article section.depth-9 + section + section + section + section + img,
+article section.depth-9 + section + section + section + img + section,
+article section.depth-9 + section + section + section + img + img,
+article section.depth-9 + section + section + img + section + section,
+article section.depth-9 + section + section + img + section + img,
+article section.depth-9 + section + section + img + img + section,
+article section.depth-9 + section + section + img + img + img,
+article section.depth-9 + section + img + section + section + section,
+article section.depth-9 + section + img + section + section + img,
+article section.depth-9 + section + img + section + img + section,
+article section.depth-9 + section + img + section + img + img,
+article section.depth-9 + section + img + img + section + section,
+article section.depth-9 + section + img + img + section + img,
+article section.depth-9 + section + img + img + img + section,
+article section.depth-9 + section + img + img + img + img,
+article section.depth-9 + img + section + section + section + section,
+article section.depth-9 + img + section + section + section + img,
+article section.depth-9 + img + section + section + img + section,
+article section.depth-9 + img + section + section + img + img,
+article section.depth-9 + img + section + img + section + section,
+article section.depth-9 + img + section + img + section + img,
+article section.depth-9 + img + section + img + img + section,
+article section.depth-9 + img + section + img + img + img,
+article section.depth-9 + img + img + section + section + section,
+article section.depth-9 + img + img + section + section + img,
+article section.depth-9 + img + img + section + img + section,
+article section.depth-9 + img + img + section + img + img,
+article section.depth-9 + img + img + img + section + section,
+article section.depth-9 + img + img + img + section + img,
+article section.depth-9 + img + img + img + img + section,
+article section.depth-9 + img + img + img + img + img {
+  padding-left: 216px;
+}
+article p.depth-10,
+article section.depth-10 {
   padding-left: 240px;
 }
-article .reg-section h2 {
-  margin-left: -48px;
-  padding-left: 24px;
+article p.depth-10 + section, article p.depth-10 + img,
+article section.depth-10 + section,
+article section.depth-10 + img {
+  padding-left: 240px;
+}
+article p.depth-10 + section + section, article p.depth-10 + section + img, article p.depth-10 + img + section, article p.depth-10 + img + img,
+article section.depth-10 + section + section,
+article section.depth-10 + section + img,
+article section.depth-10 + img + section,
+article section.depth-10 + img + img {
+  padding-left: 240px;
+}
+article p.depth-10 + section + section + section, article p.depth-10 + section + section + img, article p.depth-10 + section + img + section, article p.depth-10 + section + img + img, article p.depth-10 + img + section + section, article p.depth-10 + img + section + img, article p.depth-10 + img + img + section, article p.depth-10 + img + img + img,
+article section.depth-10 + section + section + section,
+article section.depth-10 + section + section + img,
+article section.depth-10 + section + img + section,
+article section.depth-10 + section + img + img,
+article section.depth-10 + img + section + section,
+article section.depth-10 + img + section + img,
+article section.depth-10 + img + img + section,
+article section.depth-10 + img + img + img {
+  padding-left: 240px;
+}
+article p.depth-10 + section + section + section + section, article p.depth-10 + section + section + section + img, article p.depth-10 + section + section + img + section, article p.depth-10 + section + section + img + img, article p.depth-10 + section + img + section + section, article p.depth-10 + section + img + section + img, article p.depth-10 + section + img + img + section, article p.depth-10 + section + img + img + img, article p.depth-10 + img + section + section + section, article p.depth-10 + img + section + section + img, article p.depth-10 + img + section + img + section, article p.depth-10 + img + section + img + img, article p.depth-10 + img + img + section + section, article p.depth-10 + img + img + section + img, article p.depth-10 + img + img + img + section, article p.depth-10 + img + img + img + img,
+article section.depth-10 + section + section + section + section,
+article section.depth-10 + section + section + section + img,
+article section.depth-10 + section + section + img + section,
+article section.depth-10 + section + section + img + img,
+article section.depth-10 + section + img + section + section,
+article section.depth-10 + section + img + section + img,
+article section.depth-10 + section + img + img + section,
+article section.depth-10 + section + img + img + img,
+article section.depth-10 + img + section + section + section,
+article section.depth-10 + img + section + section + img,
+article section.depth-10 + img + section + img + section,
+article section.depth-10 + img + section + img + img,
+article section.depth-10 + img + img + section + section,
+article section.depth-10 + img + img + section + img,
+article section.depth-10 + img + img + img + section,
+article section.depth-10 + img + img + img + img {
+  padding-left: 240px;
+}
+article p.depth-10 + section + section + section + section + section, article p.depth-10 + section + section + section + section + img, article p.depth-10 + section + section + section + img + section, article p.depth-10 + section + section + section + img + img, article p.depth-10 + section + section + img + section + section, article p.depth-10 + section + section + img + section + img, article p.depth-10 + section + section + img + img + section, article p.depth-10 + section + section + img + img + img, article p.depth-10 + section + img + section + section + section, article p.depth-10 + section + img + section + section + img, article p.depth-10 + section + img + section + img + section, article p.depth-10 + section + img + section + img + img, article p.depth-10 + section + img + img + section + section, article p.depth-10 + section + img + img + section + img, article p.depth-10 + section + img + img + img + section, article p.depth-10 + section + img + img + img + img, article p.depth-10 + img + section + section + section + section, article p.depth-10 + img + section + section + section + img, article p.depth-10 + img + section + section + img + section, article p.depth-10 + img + section + section + img + img, article p.depth-10 + img + section + img + section + section, article p.depth-10 + img + section + img + section + img, article p.depth-10 + img + section + img + img + section, article p.depth-10 + img + section + img + img + img, article p.depth-10 + img + img + section + section + section, article p.depth-10 + img + img + section + section + img, article p.depth-10 + img + img + section + img + section, article p.depth-10 + img + img + section + img + img, article p.depth-10 + img + img + img + section + section, article p.depth-10 + img + img + img + section + img, article p.depth-10 + img + img + img + img + section, article p.depth-10 + img + img + img + img + img,
+article section.depth-10 + section + section + section + section + section,
+article section.depth-10 + section + section + section + section + img,
+article section.depth-10 + section + section + section + img + section,
+article section.depth-10 + section + section + section + img + img,
+article section.depth-10 + section + section + img + section + section,
+article section.depth-10 + section + section + img + section + img,
+article section.depth-10 + section + section + img + img + section,
+article section.depth-10 + section + section + img + img + img,
+article section.depth-10 + section + img + section + section + section,
+article section.depth-10 + section + img + section + section + img,
+article section.depth-10 + section + img + section + img + section,
+article section.depth-10 + section + img + section + img + img,
+article section.depth-10 + section + img + img + section + section,
+article section.depth-10 + section + img + img + section + img,
+article section.depth-10 + section + img + img + img + section,
+article section.depth-10 + section + img + img + img + img,
+article section.depth-10 + img + section + section + section + section,
+article section.depth-10 + img + section + section + section + img,
+article section.depth-10 + img + section + section + img + section,
+article section.depth-10 + img + section + section + img + img,
+article section.depth-10 + img + section + img + section + section,
+article section.depth-10 + img + section + img + section + img,
+article section.depth-10 + img + section + img + img + section,
+article section.depth-10 + img + section + img + img + img,
+article section.depth-10 + img + img + section + section + section,
+article section.depth-10 + img + img + section + section + img,
+article section.depth-10 + img + img + section + img + section,
+article section.depth-10 + img + img + section + img + img,
+article section.depth-10 + img + img + img + section + section,
+article section.depth-10 + img + img + img + section + img,
+article section.depth-10 + img + img + img + img + section,
+article section.depth-10 + img + img + img + img + img {
+  padding-left: 240px;
 }
 article .paragraphs {
-  margin-left: -27px;
   font-size: 14px;
   line-height: 1.4;
 }
@@ -15847,16 +16640,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -15952,16 +16741,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -16111,16 +16896,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -16246,16 +17027,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -16348,16 +17125,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 
@@ -16442,16 +17215,12 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target:before {
-  content: "";
-  display: block;
-  height: 81px;
-  margin: -81px 0 0;
+:target {
+  scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target:before {
-    height: 102px;
-    margin: -102px 0 0;
+  :target {
+    scroll-margin-top: 107px;
   }
 }
 

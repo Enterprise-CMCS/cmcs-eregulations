@@ -21,7 +21,7 @@ class SupplementaryContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SupplementaryContent
-        fields = ("id", "url", "title", "description", "date", "created_at", "updated_at", "category", "sections", "approved")
+        fields = ("url", "title", "description", "date", "created_at", "updated_at", "category", "sections")
 
 
 class ParentSerializer(serializers.ModelSerializer):
@@ -36,14 +36,13 @@ class ParentSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    supplementary_content = SupplementaryContentSerializer(many=True, read_only=True)
-    content_count = serializers.IntegerField()
+    supplementary_content = SupplementaryContentSerializer(many=True)
     parent = ParentSerializer()
 
     class Meta:
         model = Category
-        fields = ("id", "title", "description", "supplementary_content", "content_count", "parent")
-        
+        fields = ("id", "parent", "title", "description", "supplementary_content")
+
 
 class SupplementaryContentView(generics.ListAPIView):
     serializer_class = CategorySerializer
@@ -83,6 +82,12 @@ class SupplementaryContentView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(_make_category_tree(serializer.data))
+
+
+# The following functions are related to generating a JSON structure for SupplementaryContentView.
+# This involves taking the 'parent = X' relationship of existing categories and reversing it so
+# that each category instead has sub-categories. We also include a function for filtering out
+# supplementary content from the resulting tree that does not match the requested sections.
 
 
 def _add_category(category):

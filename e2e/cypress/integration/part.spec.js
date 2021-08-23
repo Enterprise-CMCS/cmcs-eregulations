@@ -24,8 +24,11 @@ describe("Part View", () => {
         cy.contains("433.51").click({force: true})
 
         cy.url().should("include", "Subpart-B");
-        cy.findByRole("heading", {level: 1, name: "Subpart B - General Administrative Requirements State Financial Participation"})
+        cy.get("#433-51-title")
             .should("be.visible");
+        cy.focused().then(($el) => {
+            cy.get($el).should("have.id", "433-51")
+        })
     });
 
     it("loads a part view", () => {
@@ -35,9 +38,11 @@ describe("Part View", () => {
 
         // goes to first part of the appropriate subpart (this is odd)
         cy.url().should("include", "#433-1");
-        cy.findByRole("heading", {level: 1, name: "Part 433 - State Fiscal Administration"}).should("be.visible");
-        cy.findByRole("heading", {level: 2, name: "§ 433.50 Basis, scope, and applicability."}).should("be.visible");
-        cy.findByRole("heading", {level: 2, name: "§ 433.10 Rates of FFP for program services."}).should("be.visible");
+        cy.get("#433-1-title")
+            .should("be.visible");
+        cy.focused().then(($el) => {
+            cy.get($el).should("have.id", "433-1")
+        })
     });
 
     it("loads a different version of a subpart", () => {

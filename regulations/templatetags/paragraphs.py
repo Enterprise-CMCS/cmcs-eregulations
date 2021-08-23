@@ -6,7 +6,13 @@ section_depth = 2
 
 @register.filter(name='pdepth')
 def pdepth(value):
-    depth = len(value.get("label", []) or []) - section_depth
-    if len(value.get("marker", []) or []) > 1:
-        depth = depth - (len(value.get("marker", []) or []) - 1)
+    label_len = len(value.get("label", []) or [])
+    marker_len = len(value.get("marker", []) or [])
+    depth = label_len - section_depth
+
+    if marker_len > 1:
+        depth = depth - (marker_len - 1)
+
+    if depth < 1:
+        return 1
     return depth
