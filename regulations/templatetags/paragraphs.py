@@ -6,10 +6,14 @@ section_depth = 2
 
 @register.filter(name='pdepth')
 def pdepth(value):
-    if value.get("parent_type", "") == "appendix":
+    parent_type = value.get("parent_type", "")
+    label_len = len(value.get("label", []))
+    marker_len = len(value.get("marker", []) or [])
+
+    if parent_type == "appendix" or label_len == 0:
         return 1
     else:
-        depth = len(value.get("label", []) or []) - section_depth
-        if len(value.get("marker", []) or []) > 1:
-            depth = depth - (len(value.get("marker", []) or []) - 1)
+        depth = label_len - section_depth
+        if marker_len > 1:
+            depth = depth - (marker_len - 1)
         return depth
