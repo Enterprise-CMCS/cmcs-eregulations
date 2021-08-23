@@ -43,17 +43,21 @@
 
                 <div class="homepage-toc ds-l-col--8" id="homepage-toc">
 
-                    {% for title in structure %}
+                    <div class="toc-container">
 
-                        <h1> {{title.label}} </h1>
+                        {% for title in structure %}
 
-                        {% for child in title.children %}
-                            {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title.identifier.0 %}
+                            <h1> {{title.label}} </h1>
+
+                            {% for child in title.children %}
+                                {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title.identifier.0 %}
+                            {% endfor %}
+
                         {% endfor %}
 
-                    {% endfor %}
+                        <p class="toc-external-ref">For subsequent subchapters (F-I), see <a href="https://ecfr.federalregister.gov/current/title-42/chapter-IV" target="_blank" class="external" aria-label="link to Federal Register Title 42 Chapter 4">Title 42 Chapter IV in eCFR</a></p>
 
-                    <p class="toc-external-ref">For subsequent subchapters (F-I), see <a href="https://ecfr.federalregister.gov/current/title-42/chapter-IV" target="_blank" class="external" aria-label="link to Federal Register Title 42 Chapter 4">Title 42 Chapter IV in eCFR</a></p>
+                    </div>    
 
                 </div>
 
