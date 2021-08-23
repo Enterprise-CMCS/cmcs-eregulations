@@ -9,7 +9,7 @@
 
     .site-container {
         @include custom-max(1350) {
-            padding-top: 0;
+            padding-top: $spacer-2;
         }
     }
 
@@ -208,7 +208,7 @@
             font-family: $primary_site_font;
             font-size: $font_size_xxl;
 
-            @include screen-lg {
+            @include custom-min(1180) {
                 font-size: 2.3em;   // Deliberately non-conforming
             }
 
@@ -309,15 +309,20 @@
 }
 
 .homepage-toc {
-    margin-top: $spacer-4;
+    margin-top: $spacer-2;
 
     @include custom-max(1024) {
         max-width: 100%;
         padding: 0;
     }
 
+    .toc-container {
+        max-width: $text-max-width;
+    }
+
     h1 {
         margin-bottom: 0;
+        font-size: $base-font-size * 1.8;
 
         @include custom-max(1024) {
             font-size: $font-size-2xl;
@@ -327,12 +332,8 @@
     h2 {
         font-size: $font-size-lg;
 
-        @include screen-lg {
-            font-size: $font-size-xl;
-        }
-
         @include screen-xl {
-            font-size: $font-size-2xl;
+            font-size: $font-size-xl;
         }
     }
 
@@ -341,7 +342,7 @@
     }
 
     h4 + .toc-external-ref {
-        margin: $spacer-4 0 0;
+        margin: $spacer-2 0 0;
     }
 
     .toc-external-ref {
@@ -351,7 +352,6 @@
 
     .subchapter {
         border-bottom: 1px solid $border_color;
-        padding: 1em 0;
     }
 
     .part-names {
@@ -359,10 +359,6 @@
         margin: $spacer-2 0;
         padding: 0;
         font-size: $font-size-md;
-
-        @include screen-lg {
-            font-size: $font-size-lg;
-        }
 
         a {
             text-decoration: none;
