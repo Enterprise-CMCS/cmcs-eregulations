@@ -15296,8 +15296,13 @@ aside.right-sidebar {
   padding-top: 40px;
   max-width: 400px;
   position: sticky;
-  height: 100vh;
+  height: calc(100vh - 81px - 40px);
   overflow-y: scroll;
+}
+@media (min-width: 1024px) {
+  aside.right-sidebar {
+    height: calc(100vh - 102px - 40px);
+  }
 }
 aside.right-sidebar h2 {
   font-size: 21px;
