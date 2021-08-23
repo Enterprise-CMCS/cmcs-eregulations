@@ -200,7 +200,6 @@ func (s *Section) PostProcess() error {
 			if err != nil {
 				log.Println("[ERROR] generating paragraph marker", err, prev, c)
 			}
-			c.ParentType = "section"
 		}
 	}
 	for _, child := range s.Children {
@@ -392,7 +391,6 @@ type Paragraph struct {
 	Content  string   `xml:",innerxml" json:"text"`
 	Citation []string `json:"label"`
 	Marker   []string `json:"marker"`
-	ParentType string `json:"parent_type"`
 }
 
 func (p *Paragraph) marker() ([]string, error) {
