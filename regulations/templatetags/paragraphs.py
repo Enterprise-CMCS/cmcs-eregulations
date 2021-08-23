@@ -12,6 +12,7 @@ def pdepth(value):
 
     if marker_len > 1:
         depth = depth - (marker_len - 1)
+
     if depth < 1:
         return 1
     return depth
