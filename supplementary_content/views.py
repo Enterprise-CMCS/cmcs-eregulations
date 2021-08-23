@@ -69,7 +69,8 @@ class SupplementaryContentView(generics.ListAPIView):
             content_count=Count(
                 'supplementary_content',
                 distinct=True,
-                filter=Q(supplementary_content__approved=True,
+                filter=Q(
+                    supplementary_content__approved=True,
                     supplementary_content__sections__title=title,
                     supplementary_content__sections__part=part,
                     supplementary_content__sections__section__in=section_list,

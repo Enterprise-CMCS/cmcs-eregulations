@@ -54,7 +54,14 @@ def update_relations(category, supplementary_contents_data):
     for supplementary_content_data in supplementary_contents_data:
         sections = supplementary_content_data.pop('sections')
         url = supplementary_content_data.pop('url')
-        supplementary_content, _created = SupplementaryContent.objects.get_or_create(url=url, defaults={'category': category, 'approved': False, **supplementary_content_data})
+        supplementary_content, _created = SupplementaryContent.objects.get_or_create(
+            url=url,
+            defaults={
+                'category': category,
+                'approved': False,
+                **supplementary_content_data
+            }
+        )
 
         for section in sections:
             regulation_section, _created = RegulationSection.objects.get_or_create(**section)
