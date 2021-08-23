@@ -7,7 +7,7 @@ section_depth = 2
 @register.filter(name='pdepth')
 def pdepth(value):
     parent_type = value.get("parent_type", "")
-    label_len = len(value.get("label", []))
+    label_len = len(value.get("label", []) or [])
     marker_len = len(value.get("marker", []) or [])
     depth = label_len - section_depth
 
