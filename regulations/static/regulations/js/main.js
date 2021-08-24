@@ -146,8 +146,25 @@ function main() {
         });
     }
 
-    let header = document.getElementById("header");
-    makeSticky(header);
+    //let header = document.getElementById("header");
+    //makeSticky(header);
+
+    /* Scroll to anchor */
+    function pgshow(e) {
+        console.log("Event", e)
+        const elId = window.location.hash;
+        console.log("elId", elId)
+        if (elId.length > 1) {
+            const el = document.getElementById(elId.substr(1));
+            console.log(el.offsetTop)
+            console.log(el)
+            let position = el.getBoundingClientRect();
+            console.log("top", position.y)
+            if (el) window.scrollTo(position.x, el.offsetTop - 106)
+        }
+    }
+    // pageshow fires after load and on Back/Forward
+    window.addEventListener("pageshow", pgshow);
 }
 
 main();
