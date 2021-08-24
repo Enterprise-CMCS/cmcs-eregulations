@@ -98,25 +98,6 @@ function viewButtonClose() {
     });
 }
 
-function makeSticky(el) {
-    // Sticky header
-    if (!el) {
-        return;
-    }
-
-    var sticky = el.offsetTop;
-
-    function stickyHeader() {
-        if (window.pageYOffset > sticky) {
-            el.classList.add("sticky");
-        } else {
-            el.classList.remove("sticky");
-        }
-    }
-
-    window.addEventListener("scroll", stickyHeader);
-}
-
 function main() {
     new Vue({
         components: {
@@ -145,9 +126,6 @@ function main() {
             event.preventDefault();
         });
     }
-
-    //let header = document.getElementById("header");
-    //makeSticky(header);
 
     /* Scroll to anchor */
     function pgshow(e) {

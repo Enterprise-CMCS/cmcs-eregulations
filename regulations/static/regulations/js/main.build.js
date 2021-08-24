@@ -2101,9 +2101,6 @@
           });
       }
 
-      //let header = document.getElementById("header");
-      //makeSticky(header);
-
       /* Scroll to anchor */
       function pgshow(e) {
           console.log("Event", e);
