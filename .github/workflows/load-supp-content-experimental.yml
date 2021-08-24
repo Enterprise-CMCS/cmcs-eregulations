@@ -2,18 +2,17 @@ name: Load Supplementary Content
 
 on: 
   workflow_dispatch:
-    inputs:
-      env:
-        description: 'Environment'
-        required: true
-        default: 'dev'
 
 jobs:
   load:
     environment:
-      name: ${{ github.event.inputs.env }}
+      name: 'dev'
     runs-on: ubuntu-latest
     steps:
+      - name: get branch name
+        run: |
+          lower_case=${GITHUB_REF,,}
+          echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           submodules: false
@@ -26,5 +25,5 @@ jobs:
           pushd serverless
           npm install serverless -g
           npm install
-          serverless invoke --function populate_content --stage ${{ github.event.inputs.env }}
+          serverless invoke --function populate_content --stage ${{ github.event.inputs.env }}-$branch_name
           popd

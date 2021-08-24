@@ -37,12 +37,20 @@ func main() {
 
 	logFile, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("An error has occured :: ", err)
 	}
 	defer logFile.Close()
 	mw := io.MultiWriter(os.Stderr, logFile)
 	log.SetOutput(mw)
-	log.SetFlags(log.LstdFlags | log.Llongfile)
+
+	if _, err := os.Stat(*outputDirectory); err != nil {
+		if !os.IsNotExist(err) {
+			log.Fatal("An error has occured :: ", err, *outputDirectory)
+		}
+		if err := os.MkdirAll(*outputDirectory, os.ModePerm); err != nil {
+			log.Fatal("An error has occured :: ", err, *outputDirectory)
+		}
+	}
 
 	if len(*directory) > 0 {
 		processDirectory(*directory)
@@ -58,7 +66,7 @@ func main() {
 func processDirectory(directory string) {
 	files, err := ioutil.ReadDir(directory)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("An error has occured :: ", err)
 	}
 
 	for _, file := range files {
@@ -84,9 +92,10 @@ func processURLsFromFile(file string) {
 }
 
 func processURL(csvURL string) {
+	log.Println("[INFO] Processing", csvURL)
 	header, body, err := downloadCSV(csvURL)
 	if err != nil {
-		log.Println("An error has occured :: ", csvURL, err)
+		log.Println("[WARNING]", csvURL, err)
 		return
 	}
 	defer body.Close()
@@ -122,7 +131,7 @@ func processData(header string, data io.Reader) {
 func validURL(header string, link string) (string, error) {
 	_, err := url.ParseRequestURI(link)
 	if err != nil {
-		err := fmt.Errorf("%s %s %s", link, header, err)
+		err := fmt.Errorf("%s : %s : %s", header, link, err)
 		return "", err
 	}
 	return link, nil
@@ -135,7 +144,7 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 		if len(record[0]) > 0 {
 			link, err := validURL(header, record[1])
 			if err != nil {
-				log.Println(err, record[1])
+				log.Println("[ERROR]", err)
 				continue
 			}
 			sections := formatSections(record[2:])

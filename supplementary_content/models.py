@@ -7,6 +7,7 @@ class Category(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE,
+        related_name='sub_categories',
     )
     title = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
