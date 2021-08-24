@@ -1997,6 +1997,28 @@
       );
   }
 
+  // scroll to anchor to accommodate FF's bad behavior
+  function onPageShow() {
+      // some magic number constants
+      // investigate pulling in SCSS variables instead
+      const HEADER_HEIGHT = 102;
+      const HEADER_HEIGHT_MOBILE = 81;
+
+      const elId = window.location.hash;
+
+      if (elId.length > 1) {
+          const el = document.getElementById(elId.substr(1));
+          if (el) {
+              const position = el.getBoundingClientRect();
+              const headerHeight =
+                  window.innerWidth >= 1024
+                      ? HEADER_HEIGHT
+                      : HEADER_HEIGHT_MOBILE;
+              window.scrollTo(position.x, el.offsetTop - headerHeight);
+          }
+      }
+  }
+
   function deactivateAllTOCLinks() {
       const active_els = document.querySelectorAll(".menu-section.active");
       for (let active_el of active_els) {
@@ -2072,25 +2094,6 @@
       });
   }
 
-  function makeSticky(el) {
-      // Sticky header
-      if (!el) {
-          return;
-      }
-
-      var sticky = el.offsetTop;
-
-      function stickyHeader() {
-          if (window.pageYOffset > sticky) {
-              el.classList.add("sticky");
-          } else {
-              el.classList.remove("sticky");
-          }
-      }
-
-      window.addEventListener("scroll", stickyHeader);
-  }
-
   function main() {
       new yn({
           components: {
@@ -2120,8 +2123,7 @@
           });
       }
 
-      let header = document.getElementById("header");
-      makeSticky(header);
+      window.addEventListener("pageshow", onPageShow);
   }
 
   main();
