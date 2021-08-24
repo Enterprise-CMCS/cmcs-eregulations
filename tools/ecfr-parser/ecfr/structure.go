@@ -29,7 +29,10 @@ func (rs *RangeString) UnmarshalText(data []byte) error {
 type IdentifierString []string
 
 func (is *IdentifierString) UnmarshalText(data []byte) error {
-	*is = strings.Split(string(data), ".")
+	pieces := strings.Split(string(data), ".")
+	for _, piece := range pieces {
+		*is = append(*is, strings.Split(piece, " ")...)
+	}
 	return nil
 }
 
