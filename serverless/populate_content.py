@@ -3,7 +3,7 @@ import os
 import json
 
 
-def handler(self):
+def handler(event, context):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
     import django
     django.setup()
