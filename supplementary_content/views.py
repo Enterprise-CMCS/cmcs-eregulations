@@ -112,8 +112,6 @@ def _category_arrays(tree):
 
 
 def _sort_categories(tree):
-    if len(tree) == 0:
-        return tree
     tree = sorted(tree, key=lambda category: (category['order'], category['title']))
     for category in tree:
         category['sub_categories'] = _sort_categories(category['sub_categories'])
