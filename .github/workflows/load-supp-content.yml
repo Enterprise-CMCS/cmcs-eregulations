@@ -1,0 +1,26 @@
+name: Load Supplementary Content
+
+on: 
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment'
+        required: true
+        default: 'dev'
+
+jobs:
+  load:
+    environment:
+      name: ${{ github.event.inputs.env }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: false
+      - name: add supplementary content to database
+        run: |
+          pushd serverless
+          npm install serverless -g
+          npm install
+          serverless invoke --function populate_content --stage ${{ github.event.inputs.env }}
+          popd

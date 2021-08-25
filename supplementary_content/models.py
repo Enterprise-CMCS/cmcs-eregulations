@@ -7,8 +7,9 @@ class Category(models.Model):
         null=True,
         blank=True,
         on_delete=models.CASCADE,
+        related_name='sub_categories',
     )
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -16,13 +17,14 @@ class Category(models.Model):
 
 
 class SupplementaryContent(models.Model):
-    url = models.URLField(unique=True)
-    title = models.CharField(max_length=200, null=True, blank=True)
+    url = models.URLField(unique=True, max_length=512)
+    title = models.CharField(max_length=512, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplementary_content")
+    approved = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.date} {self.title} {self.truncated_description}...'

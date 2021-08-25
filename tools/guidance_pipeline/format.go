@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"path/filepath"
 	"strings"
 )
@@ -26,6 +27,10 @@ func formatSections(sections []string) []Section {
 		if len(section) > 0 && len(section) < 10 { //Look into related final rule field in NPRMs
 			removeSpace := strings.ReplaceAll(section, " ", "")
 			partSection := strings.Split(removeSpace, ".")
+			if len(partSection) != 2 {
+				log.Println("[ERROR]", partSection, "is malformed")
+				continue
+			}
 			sec := Section{
 				Title:   "42",
 				Part:    partSection[0],
