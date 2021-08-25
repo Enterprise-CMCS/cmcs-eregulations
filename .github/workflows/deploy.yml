@@ -45,6 +45,10 @@ jobs:
           npm install
           serverless deploy --stage ${{ matrix.environment }}
           popd
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16' # The Go version to download (if necessary) and use.
+      - run: make supplementary_content
       - name: deploy regulations site server
         id: deploy-regulations-site-server
         env:
