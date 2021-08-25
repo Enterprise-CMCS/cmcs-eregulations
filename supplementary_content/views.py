@@ -68,7 +68,7 @@ class SupplementaryContentView(generics.ListAPIView):
                         section__in=section_list,
                     )
                 )
-            ).distinct()
+            ).distinct().order_by('-date', 'title')
         return query
 
 
