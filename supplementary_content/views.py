@@ -1,10 +1,8 @@
 from rest_framework import serializers, generics
-from rest_framework.response import Response
-from django.db.models import Prefetch, Count, Q
+from django.db.models import Prefetch
 
 
 from .models import (
-    Category,
     SupplementaryContent,
     RegulationSection,
 )
@@ -70,7 +68,7 @@ class SupplementaryContentView(generics.ListAPIView):
                         section__in=section_list,
                     )
                 )
-           ).distinct()
+            ).distinct()
         return query
 
 
@@ -86,6 +84,7 @@ def _get_parents(category, memo):
 
     memo.append(category)
     return _get_parents(category.pop('parent', None), memo)
+
 
 def _make_parent_tree(parents, tree):
     if len(parents) < 1:
@@ -103,11 +102,13 @@ def _make_parent_tree(parents, tree):
 
     return _make_parent_tree(parents, tree[parent['id']]['sub_categories'])
 
+
 def _category_arrays(tree):
     t = tree.values()
     for category in t:
-       category['sub_categories'] = _category_arrays(category['sub_categories'])
+        category['sub_categories'] = _category_arrays(category['sub_categories'])
     return t
+
 
 def _make_category_tree(data):
     tree = {}
