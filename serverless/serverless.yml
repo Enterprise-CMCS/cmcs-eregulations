@@ -53,6 +53,11 @@ functions:
   create_su:
     handler: createsu.handler
     timeout: 15
+  populate_content:
+    environment:
+      SUPPLEMENTARY_CONTENT_PATH: /var/task/guidance
+    handler: populate_content.handler
+    timeout: 15
 
 
 resources:
