@@ -74,8 +74,7 @@ class SupplementaryContentView(generics.ListAPIView):
 
 # The following functions are related to generating a JSON structure for SupplementaryContentView.
 # This involves taking the 'parent = X' relationship of existing categories and reversing it so
-# that each category instead has sub-categories. We also include a function for filtering out
-# supplementary content from the resulting tree that does not match the requested sections.
+# that each category instead has sub-categories and applicable supplementary content.
 
 
 def _get_parents(category, memo):
