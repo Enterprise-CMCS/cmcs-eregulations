@@ -56,6 +56,7 @@ class SupplementaryContentView(generics.ListAPIView):
         query = SupplementaryContent.objects \
             .filter(
                 approved=True,
+                category__isnull=False,
                 sections__title=title,
                 sections__part=part,
                 sections__section__in=section_list,
