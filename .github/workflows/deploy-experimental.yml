@@ -56,10 +56,10 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev-$branch_name
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
-      - name: load regulations
-        uses: actions/setup-go@v2
+      - uses: actions/setup-go@v2
         with:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
+      - name: load regulations
         run: make data.experimental URL=${{ steps.deploy-regulations-site-server.outputs.url }}
         env:
           EREGS_USERNAME: ${{ secrets.EREGS_USERNAME }}
