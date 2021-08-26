@@ -18,6 +18,7 @@ class CategorySerializer(serializers.Serializer):
     description = serializers.CharField()
     title = serializers.CharField()
     id = serializers.IntegerField()
+    order = serializers.IntegerField()
 
     def get_fields(self):
         fields = super().get_fields()
@@ -109,10 +110,18 @@ def _category_arrays(tree):
     return t
 
 
+def _sort_categories(tree):
+    tree = sorted(tree, key=lambda category: (category['order'], category['title']))
+    for category in tree:
+        category['sub_categories'] = _sort_categories(category['sub_categories'])
+    return tree
+
+
 def _make_category_tree(data):
     tree = {}
     for content in data:
         parents = _get_parents(content.pop('category'), [])
         parent = _make_parent_tree(parents, tree)
         parent['supplementary_content'].append(content)
-    return _category_arrays(tree)
+    tree = _category_arrays(tree)
+    return _sort_categories(tree)
