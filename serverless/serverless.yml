@@ -57,7 +57,7 @@ functions:
     environment:
       SUPPLEMENTARY_CONTENT_PATH: /var/task/guidance
     handler: populate_content.handler
-    timeout: 15
+    timeout: 300
 
 
 resources:
