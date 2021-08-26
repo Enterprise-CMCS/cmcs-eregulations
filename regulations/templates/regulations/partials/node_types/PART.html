@@ -5,5 +5,9 @@
 <h1 class="part-title"> {{node.title | title}} </h1>
 {{node.text | safe}}
 {% for node in node.children %}
-    {% include "regulations/partials/node_types/node.html" %}
+    {% if node.node_type == "SECTION" %}
+        {% include "regulations/partials/node_types/orphan.html" %}
+    {% else %}
+        {% include "regulations/partials/node_types/node.html" %}
+    {% endif %}
 {% endfor %}
