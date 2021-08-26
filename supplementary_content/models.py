@@ -11,6 +11,7 @@ class Category(models.Model):
     )
     title = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
+    order = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return self.title
