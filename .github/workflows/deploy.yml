@@ -68,3 +68,5 @@ jobs:
         with:
           working-directory: e2e
           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
+        env:
+          AUTOMATED_TEST: "true"

@@ -85,7 +85,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
-                "cmcs_regulations.context_processors.google_analytics"
+                "cmcs_regulations.context_processors.google_analytics",
+                "cmcs_regulations.context_processors.automated_testing"
             ),
         },
         "DIRS": [
@@ -158,3 +159,4 @@ HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
 HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 
 GA_ID = os.environ.get("GA_ID")
+AUTOMATED_TEST = os.environ.get("AUTOMATED_TEST")

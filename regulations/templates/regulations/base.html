@@ -11,10 +11,12 @@ CSS/Javascript etc., should inherit from this template.
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_ID }}"></script>
     <script>
+        if ( "{{ AUTOMATED_TEST }}" === "true" ) {
+            window["ga-disable-{{ GA_ID }}"] = true;
+        }
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag("js", new Date());
-
         gtag("config", "{{ GA_ID }}");
     </script>
         <meta charset="utf-8">
