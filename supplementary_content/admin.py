@@ -1,11 +1,15 @@
 from django.contrib import admin
-
-# Register your models here.
+from django.db.models import Q
 
 from .models import (
     SupplementaryContent,
     Category,
     RegulationSection,
+)
+from .filters import (
+    TitleFilter,
+    PartFilter,
+    SectionFilter,
 )
 
 
@@ -18,7 +22,12 @@ class SupplementaryContentAdmin(admin.ModelAdmin):
     inlines = [
         SectionsInline,
     ]
-    list_filter = ('approved',)
+    list_filter = (
+        "approved",
+        TitleFilter,
+        PartFilter,
+        SectionFilter,
+    )
 
 
 class ChildCategory(admin.StackedInline):
