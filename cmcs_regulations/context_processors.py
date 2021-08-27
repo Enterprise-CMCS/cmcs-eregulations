@@ -9,5 +9,5 @@ def google_analytics(request):
 
 def automated_testing(request):
     return {
-        "AUTOMATED_TEST": settings.AUTOMATED_TEST,
+        "AUTOMATED_TEST": request.META.get("HTTP_X_AUTOMATED_TEST") == "true"
     }
