@@ -15548,6 +15548,7 @@ aside.right-sidebar .resource-info {
   margin-top: 4px;
   display: block;
   border-radius: 3px;
+  text-align: left;
 }
 .supplementary-content-category button.category-title.subcategory {
   font-size: 16px;
