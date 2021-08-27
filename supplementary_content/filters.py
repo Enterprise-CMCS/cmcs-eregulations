@@ -24,7 +24,7 @@ class ParameterFilter(InputFilter):
     def queryset(self, request, queryset):
         if self.value() is not None and self.parameter_name is not None and self.title is not None:
             value = self.value()
-            filter = { self.parameter_name: value }
+            filter = {self.parameter_name: value}
             return queryset.filter(**filter)
 
 
