@@ -18,6 +18,7 @@ class SupplementaryContentAdmin(admin.ModelAdmin):
     inlines = [
         SectionsInline,
     ]
+    list_filter = ('approved',)
 
 
 class ChildCategory(admin.StackedInline):
