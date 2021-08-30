@@ -11,10 +11,10 @@ CSS/Javascript etc., should inherit from this template.
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_ID }}"></script>
     <script>
+        window["ga-disable-{{ GA_ID }}"] = {{ AUTOMATED_TEST | yesno:"true,false" }};
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag("js", new Date());
-
         gtag("config", "{{ GA_ID }}");
     </script>
         <meta charset="utf-8">
@@ -42,9 +42,9 @@ CSS/Javascript etc., should inherit from this template.
                     {% include "regulations/partials/header.html" %}
                 </header>
             {% endblock %}
-            
+
             {% block body %}{% endblock %}
-        
+
             {% block footer %}
                 <footer>
                     {% include "regulations/partials/footer.html" %}

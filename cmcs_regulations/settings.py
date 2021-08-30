@@ -85,7 +85,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
-                "cmcs_regulations.context_processors.google_analytics"
+                "cmcs_regulations.context_processors.google_analytics",
+                "cmcs_regulations.context_processors.automated_testing"
             ),
         },
         "DIRS": [

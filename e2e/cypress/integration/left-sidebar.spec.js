@@ -5,6 +5,14 @@ describe("Left sidebar", () => {
     const destination = "/42/431/";
     const testId = "Subpart-A";
 
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.config().DEPLOYING_TO_PROD;
+        });
+
+    })
+
     it("collapses and expands on button click", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);
