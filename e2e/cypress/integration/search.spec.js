@@ -1,13 +1,15 @@
 describe("Search flow", () => {
-    const options = {
-        headers: {
-            "x-automated-test": Cypress.config().DEPLOYING_TO_PROD,
-        },
-    };
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.config().DEPLOYING_TO_PROD;
+        });
+
+    })
 
     it("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
-        cy.visit("/", options);
+        cy.visit("/");
         cy.get(".search-header > input").should("be.visible").type("State");
         cy.get(".search-header").submit();
 
@@ -16,13 +18,13 @@ describe("Search flow", () => {
 
     it("is hidden on the homepage on mobile devices", () => {
         cy.viewport("iphone-x");
-        cy.visit("/", options);
+        cy.visit("/");
         cy.get(".hero-search").should("not.be.visible");
     });
 
     it("shows when mobile search open icon is clicked", () => {
         cy.viewport("iphone-x");
-        cy.visit("/42/400/", options);
+        cy.visit("/42/400/");
         cy.get("button#mobile-search-open")
             .should("be.visible")
             .click({ force: true });
@@ -37,10 +39,7 @@ describe("Search flow", () => {
 
     it("displays results of the search", () => {
         cy.viewport("macbook-15");
-        cy.visit(
-            "/search/?q=State",
-            Object.assign(options, { timeout: 60000 })
-        );
+        cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByText(/\d+ results, displayed by relevance/).should(
             "be.visible"
         );
@@ -57,10 +56,7 @@ describe("Search flow", () => {
 
     it("links to a search in the eCFR", () => {
         cy.viewport("macbook-15");
-        cy.visit(
-            "/search/?q=State",
-            Object.assign(options, { timeout: 60000 })
-        );
+        cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByRole("link", {
             name: "State in Beta eCFR",
             exact: false,
@@ -73,17 +69,14 @@ describe("Search flow", () => {
 
     it("checks a11y for search page", () => {
         cy.viewport("macbook-15");
-        cy.visit("/search/?q=FMAP", Object.assign(options, { timeout: 60000 }));
+        cy.visit("/search/?q=FMAP", { timeout: 60000 });
         cy.injectAxe();
         cy.checkAccessibility();
     });
 
     it("should have a working searchbox", () => {
         cy.viewport("macbook-15");
-        cy.visit(
-            "/search/?q=State",
-            Object.assign(options, { timeout: 60000 })
-        );
+        cy.visit("/search/?q=State", { timeout: 60000 });
         cy.scrollTo("top");
         cy.get(".search-reset").click({ force: true });
         cy.findByRole("textbox")
@@ -95,10 +88,7 @@ describe("Search flow", () => {
 
     it("should be able to clear the searchbox", () => {
         cy.viewport("macbook-15");
-        cy.visit(
-            "/search/?q=State",
-            Object.assign(options, { timeout: 60000 })
-        );
+        cy.visit("/search/?q=State", { timeout: 60000 });
         cy.scrollTo("top");
 
         cy.get(".search-reset").click({ force: true });

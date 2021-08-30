@@ -5,15 +5,17 @@ describe("Left sidebar", () => {
     const destination = "/42/431/";
     const testId = "Subpart-A";
 
-    const options = {
-        headers: {
-            "x-automated-test": Cypress.config().DEPLOYING_TO_PROD,
-        },
-    };
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.config().DEPLOYING_TO_PROD;
+        });
+
+    })
 
     it("collapses and expands on button click", () => {
         cy.viewport("macbook-15");
-        cy.visit(destination, options);
+        cy.visit(destination);
         cy.get("aside[data-state-name=left-sidebar]").should(
             "have.attr",
             "data-state",
@@ -43,7 +45,7 @@ describe("Left sidebar", () => {
 
     it("is EXPANDED on page load for viewports >= 1024px width", () => {
         cy.viewport(desktopMin, 768);
-        cy.visit(destination, options);
+        cy.visit(destination);
         cy.get("aside[data-state-name=left-sidebar]").should(
             "have.attr",
             "data-state",
@@ -53,7 +55,7 @@ describe("Left sidebar", () => {
 
     it("is COLLAPSED on page load for viewports < 1024px width", () => {
         cy.viewport(desktopMin - 1, 768);
-        cy.visit(destination, options);
+        cy.visit(destination);
         cy.get("aside[data-state-name=left-sidebar]").should(
             "have.attr",
             "data-state",
@@ -68,7 +70,7 @@ describe("Left sidebar", () => {
                 return doc.documentElement.getBoundingClientRect();
             })
             .then((viewportRect) => {
-                cy.visit(destination, options);
+                cy.visit(destination);
                 cy.get(".toc-controls > button[data-set-state=expanded]").click(
                     {
                         force: true,
@@ -82,7 +84,7 @@ describe("Left sidebar", () => {
 
     it("sets correct classes for child when subpart is expanded or collapsed", () => {
         cy.viewport("macbook-15");
-        cy.visit(destination, options);
+        cy.visit(destination);
 
         // ensure child has classes that set 0 height and display: none
         cy.get(`div[data-test=${testId}]`)

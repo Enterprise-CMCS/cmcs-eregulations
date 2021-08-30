@@ -1,13 +1,15 @@
 describe("Part View", () => {
-    const options = {
-        headers: {
-            "x-automated-test": Cypress.config().DEPLOYING_TO_PROD,
-        },
-    };
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.config().DEPLOYING_TO_PROD;
+        });
+
+    })
 
     it("loads part 433", () => {
         cy.viewport('macbook-15');
-        cy.visit("/42/433/", options);
+        cy.visit("/42/433/");
         cy.injectAxe()
         cy.contains("State Fiscal Administration").should("be.visible");
         cy.checkAccessibility();
@@ -15,7 +17,7 @@ describe("Part View", () => {
 
     it("section view redirects", () => {
         cy.viewport('macbook-15');
-        cy.visit("/42/433/", options);
+        cy.visit("/42/433/");
         cy.get(".toc-section-number").contains("433.50").click({force: true})
 
         cy.url().should("include", Cypress.config().baseUrl + "/42/433/Subpart-B");
@@ -26,7 +28,7 @@ describe("Part View", () => {
 
     it("loads a subpart view", () => {
         cy.viewport('macbook-15');
-        cy.visit("/42/433/", options);
+        cy.visit("/42/433/");
         cy.contains("433.51").click({force: true})
 
         cy.url().should("include", "Subpart-B");
@@ -39,7 +41,7 @@ describe("Part View", () => {
 
     it("loads a part view", () => {
         cy.viewport('macbook-15');
-        cy.visit("/42/433/", options);
+        cy.visit("/42/433/");
         cy.findByRole("link", { name: "433.1 Purpose." }).click({force: true})
 
         // goes to first part of the appropriate subpart (this is odd)
@@ -53,7 +55,7 @@ describe("Part View", () => {
 
     it("loads a different version of a subpart", () => {
         cy.viewport('macbook-15');
-        cy.visit("/42/433/", options);
+        cy.visit("/42/433/");
         cy.contains("433.10").click({force: true})
 
         cy.findByRole("button", {name: /View Past Versions/i}).should("be.visible");
