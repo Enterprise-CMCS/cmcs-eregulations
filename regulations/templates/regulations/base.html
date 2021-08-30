@@ -11,9 +11,7 @@ CSS/Javascript etc., should inherit from this template.
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_ID }}"></script>
     <script>
-        if ( "{{ AUTOMATED_TEST }}" === "True" ) {
-            window["ga-disable-{{ GA_ID }}"] = true;
-        }
+        window["ga-disable-{{ GA_ID }}"] = {{ AUTOMATED_TEST | yesno:"true,false" }};
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag("js", new Date());
