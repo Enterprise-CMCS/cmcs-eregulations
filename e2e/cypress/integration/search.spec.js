@@ -1,4 +1,12 @@
 describe("Search flow", () => {
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.config().DEPLOYING_TO_PROD;
+        });
+
+    })
+
     it("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
@@ -20,7 +28,8 @@ describe("Search flow", () => {
         cy.get("button#mobile-search-open")
             .should("be.visible")
             .click({ force: true });
-        cy.get("form.search-borderless > input").should("be.visible")
+        cy.get("form.search-borderless > input")
+            .should("be.visible")
             .type("State");
 
         cy.get("form.search-borderless").submit();

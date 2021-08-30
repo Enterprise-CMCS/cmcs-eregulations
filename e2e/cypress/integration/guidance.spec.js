@@ -1,4 +1,12 @@
 describe.skip("Guidance", () => {
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.config().DEPLOYING_TO_PROD;
+        });
+
+    })
+
     it("checks guidances on section 433.111", () => {
         cy.visit("/433/");
         cy.get(".toc-section-number").contains("433.111").click()
