@@ -159,4 +159,3 @@ HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
 HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 
 GA_ID = os.environ.get("GA_ID")
-AUTOMATED_TEST = os.environ.get("AUTOMATED_TEST")
