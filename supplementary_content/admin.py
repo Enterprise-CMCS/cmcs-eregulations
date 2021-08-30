@@ -9,6 +9,11 @@ from .models import (
     Category,
     RegulationSection,
 )
+from .filters import (
+    TitleFilter,
+    PartFilter,
+    SectionFilter,
+)
 
 
 class SectionsInline(admin.TabularInline):
@@ -29,6 +34,12 @@ class SupplementaryContentAdmin(admin.ModelAdmin):
     inlines = [
         SectionsInline,
     ]
+    list_filter = (
+        "approved",
+        TitleFilter,
+        PartFilter,
+        SectionFilter,
+    )
 
 
 class ChildCategory(admin.StackedInline):
