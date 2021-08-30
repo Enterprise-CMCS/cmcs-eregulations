@@ -40,7 +40,7 @@ class RegulationSection(models.Model):
     part = models.CharField(max_length=16)
     subpart = models.CharField(max_length=32, null=True, blank=True)
     section = models.CharField(max_length=16)
-    supplementary_content = models.ManyToManyField(SupplementaryContent, related_name="sections")
+    supplementary_content = models.ManyToManyField(SupplementaryContent, related_name="sections", blank=True)
 
     def __str__(self):
         return f'{self.title} {self.part}.{self.section}'
