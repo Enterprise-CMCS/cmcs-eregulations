@@ -222,7 +222,7 @@ $width-3xl: 1920px; // The largest the site container will get
 // -------------------------
 
 @mixin external-link {
-    content: url("../images/external-link.svg");
+    content: "\00a0" url("../images/external-link.svg");
     padding-left: 5px;
 }
 

@@ -13496,7 +13496,7 @@ readers do not read off random characters that represent icons */
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -13719,7 +13719,7 @@ footer .footer-left {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -13842,7 +13842,7 @@ e[t="05"] {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -14301,7 +14301,7 @@ select:focus-visible {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -14542,7 +14542,7 @@ select:focus-visible {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -14653,7 +14653,7 @@ select:focus-visible {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -14730,7 +14730,7 @@ select:focus-visible {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -14978,7 +14978,7 @@ header .search-borderless input {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -15275,7 +15275,7 @@ aside.left-sidebar li.active ul a.menu-section:focus {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -15467,6 +15467,10 @@ aside.right-sidebar .resource-info {
   text-decoration: none;
   font-size: 14px;
 }
+.related-rule-title .link-heading:after {
+  content: " " url("../images/external-link.svg");
+  padding-left: 5px;
+}
 
 .rules-with-preamble {
   max-height: 1000em;
@@ -15493,10 +15497,10 @@ aside.right-sidebar .resource-info {
 }
 .recent-change .recent-title {
   margin-top: 0.2em;
-}
-.recent-change .recent-title:after {
-  content: url("../images/external-link.svg");
-  padding-left: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 9;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .supplementary-content {
@@ -15526,7 +15530,7 @@ aside.right-sidebar .resource-info {
   font-size: 14px;
 }
 .supplementary-content .supplementary-content-external-link:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -15599,7 +15603,7 @@ aside.right-sidebar .resource-info {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -16603,7 +16607,7 @@ article .section-text {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -16704,7 +16708,7 @@ select:focus-visible {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -16859,7 +16863,7 @@ footer .footer-right i:hover {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -16990,7 +16994,7 @@ main.error-page img.error-image {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -17088,7 +17092,7 @@ ul.table-of-contents .toc-section-name {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
@@ -17178,7 +17182,7 @@ main.about :target::before {
 }
 
 a.external:after {
-  content: url("../images/external-link.svg");
+  content: " " url("../images/external-link.svg");
   padding-left: 5px;
 }
 
