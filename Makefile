@@ -60,6 +60,9 @@ data.val: CORE_URL = https://qavc1ytrff.execute-api.us-east-1.amazonaws.com/val/
 data.dev: ## Load a Part of Title 42. e.g. make dev.data.435 will load Part 435 into dev
 data.dev: CORE_URL = https://hittwbzqah.execute-api.us-east-1.amazonaws.com/dev/v2/
 
+data.experimental: ## Load a Part of Title 42. e.g. make data.experimental URL=[experimental lambda URL] into dev-experimental
+data.experimental: CORE_URL = $(URL)/v2/
+
 data.local: ## Load a Part of Title 42. e.g. make data.local.435 will load Part 435
 data.local: CORE_URL = http://localhost:8000/v2/
 data.local: export EREGS_USERNAME=RpSS01rhbx
