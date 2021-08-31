@@ -33,14 +33,14 @@ class SupplementaryContent(models.Model):
     approved = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.date} {self.title} {self.truncated_description}...'
+        return f'{self.date_string} {self.title} {self.truncated_description}...'
 
     @property
     def truncated_description(self):
         return (self.description or [])[:50]
     
     @property
-    def date(self):
+    def date_string(self):
         return (f'{self.year}-' if self.year else '') + \
             (f'{self.month:02d}-' if self.month else '') + \
             (f'{self.day:02d}' if self.day else '')
