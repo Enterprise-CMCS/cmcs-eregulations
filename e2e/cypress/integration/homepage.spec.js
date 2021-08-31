@@ -2,7 +2,7 @@ describe("Homepage", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] =
-                Cypress.config().DEPLOYING_TO_PROD;
+                Cypress.env("DEPLOYING");
         });
 
     })

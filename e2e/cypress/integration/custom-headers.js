@@ -2,7 +2,7 @@ describe("Custom Request Headers", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] =
-                Cypress.config().DEPLOYING_TO_PROD;
+                Cypress.env("DEPLOYING");
         }).as("headers");
     });
 
@@ -16,7 +16,7 @@ describe("Custom Request Headers", () => {
             .should(
                 "have.property",
                 "x-automated-test",
-                Cypress.config().DEPLOYING_TO_PROD
+                Cypress.env("DEPLOYING")
             );
 
         // test custom header after form submit directs to new URL
@@ -26,7 +26,7 @@ describe("Custom Request Headers", () => {
             .should(
                 "have.property",
                 "x-automated-test",
-                Cypress.config().DEPLOYING_TO_PROD
+                Cypress.env("DEPLOYING")
             );
     });
 });

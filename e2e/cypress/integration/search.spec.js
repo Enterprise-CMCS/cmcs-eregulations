@@ -2,9 +2,8 @@ describe("Search flow", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] =
-                Cypress.config().DEPLOYING_TO_PROD;
+                Cypress.env("DEPLOYING");
         });
-
     })
 
     it("shows up on the homepage on desktop", () => {
