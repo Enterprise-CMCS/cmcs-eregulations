@@ -42,6 +42,7 @@ class SupplementaryContentSerializer(serializers.Serializer):
     year = serializers.IntegerField()
     month = serializers.IntegerField()
     day = serializers.IntegerField()
+    date = serializers.CharField()
 
     class Meta:
         list_serializer_class = ApplicableSupplementaryContentSerializer
