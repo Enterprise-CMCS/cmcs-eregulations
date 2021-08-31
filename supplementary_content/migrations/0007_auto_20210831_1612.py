@@ -3,6 +3,16 @@
 from django.db import migrations, models
 
 
+def split_dates(apps, schema_editor):
+    SupplementaryContent = apps.get_model("supplementary_content", "SupplementaryContent")
+    for content in SupplementaryContent.objects.all():
+        if content.date is not None:
+            content.year = content.date.year
+            content.month = content.date.month
+            content.day = content.date.day
+        content.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -24,5 +34,10 @@ class Migration(migrations.Migration):
             model_name='supplementarycontent',
             name='year',
             field=models.IntegerField(blank=True, null=True),
+        ),
+        migrations.RunPython(split_dates),
+        migrations.RemoveField(
+            model_name='supplementarycontent',
+            name='date',
         ),
     ]
