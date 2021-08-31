@@ -15463,12 +15463,19 @@ aside.right-sidebar .resource-info {
 }
 
 .related-rule-title {
-  color: #046791;
   text-decoration: none;
   font-size: 14px;
 }
-.related-rule-title .link-heading:after {
+.related-rule-title:link .link-heading::after {
   content: " " url("../images/external-link.svg");
+  padding-left: 5px;
+}
+.related-rule-title:visited .link-heading::after {
+  content: " " url("../images/external-link-hover.svg");
+  padding-left: 5px;
+}
+.related-rule-title:hover .link-heading::after {
+  content: " " url("../images/external-link-hover.svg");
   padding-left: 5px;
 }
 

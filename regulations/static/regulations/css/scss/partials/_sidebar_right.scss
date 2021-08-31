@@ -162,14 +162,19 @@ aside.right-sidebar {
 }
 
 .related-rule-title {
-    color: $primary_link_color;
     text-decoration: none;
     font-size: $font-size-sm;
 
-    .link-heading {
-        &:after {
-            @include external-link;
-        }
+    &:link .link-heading::after {
+        @include external-link;
+    }
+
+    &:visited .link-heading::after {
+        @include external-link-hover;
+    }
+
+    &:hover .link-heading::after {
+        @include external-link-hover;
     }
 }
 
