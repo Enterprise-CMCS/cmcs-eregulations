@@ -38,7 +38,7 @@ class SupplementaryContent(models.Model):
     @property
     def truncated_description(self):
         return (self.description or [])[:50]
-    
+
     @property
     def date(self):
         return (f'{self.year}' if self.year else '') + \
