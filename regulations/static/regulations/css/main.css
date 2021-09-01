@@ -16836,7 +16836,12 @@ footer .footer-middle > * {
 }
 footer .footer-right > * {
   padding: 0 40px 0 0;
-  margin-left: -32px;
+  margin-left: -16px;
+}
+@media (min-width: 1280px) {
+  footer .footer-right > * {
+    margin-left: -32px;
+  }
 }
 @media (max-width: 1023px) {
   footer .footer-right > * {

@@ -104,7 +104,11 @@ footer {
 
         & > * {
             padding: 0 $spacer-5 0 0;
-            margin-left: -$spacer-4;
+            margin-left: -$spacer-2;
+
+            @include screen-xl {
+                margin-left: -$spacer-4;
+            }
 
             @include custom-max($tablet-max / 1px) {
                 padding: 0 $spacer-4;
