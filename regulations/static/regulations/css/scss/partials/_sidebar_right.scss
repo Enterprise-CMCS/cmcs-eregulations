@@ -169,10 +169,6 @@ aside.right-sidebar {
         @include external-link;
     }
 
-    &:visited .link-heading::after {
-        @include external-link-hover;
-    }
-
     &:hover .link-heading::after {
         @include external-link-hover;
     }
