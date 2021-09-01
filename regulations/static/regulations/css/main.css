@@ -16787,10 +16787,15 @@ footer .about-footer {
   font-size: 14px;
   margin-bottom: 16px;
 }
+@media (max-width: 1023px) {
+  footer .footer-left {
+    flex: none;
+  }
+}
 footer .footer-left > * {
   padding: 0 24px 0 32px;
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   footer .footer-left > * {
     padding: 0 32px;
   }
@@ -16808,27 +16813,35 @@ footer .footer-left img {
 footer .footer-middle > * {
   padding: 0;
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   footer .footer-middle > * {
     padding: 0 32px;
   }
 }
 @media (min-width: 1024px) {
   footer .footer-middle > * {
-    max-width: 90%;
+    max-width: calc(90% - 24px);
+    padding-left: 24px;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   footer .footer-middle {
     padding: 32px 0;
   }
 }
-footer .footer-right > * {
-  padding: 0 32px 0 24px;
+@media (max-width: 1023px) {
+  footer .footer-right {
+    flex: none;
+  }
 }
-@media (max-width: 767px) {
+footer .footer-right > * {
+  padding: 0 40px 0 0;
+  margin-left: -32px;
+}
+@media (max-width: 1023px) {
   footer .footer-right > * {
     padding: 0 32px;
+    margin-left: 0;
   }
 }
 footer .footer-right i {
@@ -16842,7 +16855,7 @@ footer .footer-right i:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   footer > div {
     flex-direction: column;
   }
