@@ -1,7 +1,5 @@
-from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models.lookups import Regex
 
 
 class Category(models.Model):
@@ -27,7 +25,7 @@ class SupplementaryContent(models.Model):
 
     date = models.CharField(max_length=10, null=True, blank=True, validators=[
         RegexValidator(
-            regex="^\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
+            regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
             message="Date must be of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"!",
         ),
     ])
