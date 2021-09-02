@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.lookups import Regex
 
 
 class Category(models.Model):
@@ -23,9 +25,12 @@ class SupplementaryContent(models.Model):
     title = models.CharField(max_length=512, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
-    year = models.IntegerField(null=True, blank=True)
-    month = models.IntegerField(null=True, blank=True)
-    day = models.IntegerField(null=True, blank=True)
+    date = models.CharField(max_length=10, null=True, blank=True, validators=[
+        RegexValidator(
+            regex="^\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
+            message="Date must be of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"!",
+        ),
+    ])
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -38,19 +43,6 @@ class SupplementaryContent(models.Model):
     @property
     def truncated_description(self):
         return (self.description or [])[:50]
-
-    @property
-    def date(self):
-        return (f'{self.year}' if self.year else '') + \
-            (f'-{self.month:02d}' if self.month else '') + \
-            (f'-{self.day:02d}' if self.day else '')
-
-    def clean(self):
-        super().clean()
-        if self.day is not None and (self.month is None or self.year is None):
-            raise ValidationError("When day is defined, month and year must also be defined!")
-        elif self.month is not None and self.year is None:
-            raise ValidationError("When month is defined, year must also be defined!")
 
 
 class RegulationSection(models.Model):
