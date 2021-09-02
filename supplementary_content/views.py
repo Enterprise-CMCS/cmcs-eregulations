@@ -39,9 +39,6 @@ class SupplementaryContentSerializer(serializers.Serializer):
     url = serializers.URLField()
     description = serializers.CharField()
     title = serializers.CharField()
-    year = serializers.IntegerField()
-    month = serializers.IntegerField()
-    day = serializers.IntegerField()
     date = serializers.CharField()
 
     class Meta:
@@ -72,7 +69,7 @@ class SupplementaryContentView(generics.ListAPIView):
                         section__in=section_list,
                     )
                 )
-            ).distinct().order_by('-year', '-month', '-day', 'title')
+            ).distinct().order_by('-date', 'title')
         return query
 
 

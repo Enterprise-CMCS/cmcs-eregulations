@@ -9,6 +9,7 @@ def migrate_dates(apps, schema_editor):
     SupplementaryContent = apps.get_model("supplementary_content", "SupplementaryContent")
     for content in SupplementaryContent.objects.all():
         if content.old_date is not None:
+            # Note: Prior to this migration, year month and date must all exist or date would be None.
             year = content.old_date.year
             month = content.old_date.month
             day = content.old_date.day
