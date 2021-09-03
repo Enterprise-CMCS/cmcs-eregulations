@@ -32,12 +32,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='supplementarycontent',
             name='date',
-            field=models.CharField(blank=True, max_length=10, null=True, validators=[
-                django.core.validators.RegexValidator(
-                    message='Date must be of format "YYYY", "YYYY-MM", or "YYYY-MM-DD"!',
+            field=models.CharField(
+                blank=True,
+                max_length=10,
+                null=True,
+                help_text='Enter one of: "YYYY", "YYYY-MM", or "YYYY-MM-DD".',
+                validators=[django.core.validators.RegexValidator(
+                    message='Date must be of format "YYYY", "YYYY-MM", or "YYYY-MM-DD"! For example: 2021, 2021-01, or 2021-01-31.',
                     regex='^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$'
-                )
-            ]),
+                )]
+            ),
         ),
         migrations.RunPython(migrate_dates),
         migrations.RemoveField(
