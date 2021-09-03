@@ -47,13 +47,14 @@ class SupplementaryContent(models.Model):
 
     def clean(self):
         # If a day is entered into the date field, validate for months with less than 31 days.
-        date_fields = self.date.split("-")
-        if len(date_fields) == 3:
-            (year, month, day) = date_fields
-            try:
-                _ = datetime.date(int(year), int(month), int(day))
-            except ValueError:
-                raise ValidationError(f'{day} is not a valid day for the month of {month}!')
+        if self.date is not None:
+            date_fields = self.date.split("-")
+            if len(date_fields) == 3:
+                (year, month, day) = date_fields
+                try:
+                    _ = datetime.date(int(year), int(month), int(day))
+                except ValueError:
+                    raise ValidationError(f'{day} is not a valid day for the month of {month}!')
 
     @property
     def truncated_description(self):
