@@ -1,4 +1,3 @@
-
 //-----------------------------
 // Right Sidebar
 //-----------------------------
@@ -19,7 +18,7 @@ aside.right-sidebar {
     h2 {
         font-size: $font-size-xl;
 
-       @include screen-xl {
+        @include screen-xl {
             font-size: $base-font-size * 1.4;
         }
 
@@ -79,7 +78,6 @@ aside.right-sidebar {
             }
 
             svg {
-
                 rect,
                 line {
                     stroke: $reverse_text_color;
@@ -102,7 +100,6 @@ aside.right-sidebar {
             }
 
             svg {
-
                 rect,
                 line {
                     stroke: $primary_link_color;
@@ -117,7 +114,7 @@ aside.right-sidebar {
 
     ul {
         list-style: none;
-        padding: 0  0 $spacer-2 0;
+        padding: 0 0 $spacer-2 0;
 
         li {
             font-size: $font-size-sm;
@@ -136,7 +133,6 @@ aside.right-sidebar {
         color: $primary_text_color;
         padding-right: $spacer-4;
     }
-
 }
 
 .related-rule-type {
@@ -166,11 +162,17 @@ aside.right-sidebar {
 }
 
 .related-rule-title {
-    color: $primary_link_color;
     text-decoration: none;
     font-size: $font-size-sm;
-}
 
+    &:link .link-heading::after {
+        @include external-link;
+    }
+
+    &:hover .link-heading::after {
+        @include external-link-hover;
+    }
+}
 
 .rules-with-preamble {
     max-height: 1000em;
@@ -188,32 +190,33 @@ aside.right-sidebar {
     font-size: $font-size-sm;
 
     a {
-	text-decoration: none;
+        text-decoration: none;
     }
 
     .recent-flag {
     }
 
     .recent-date {
-	font-weight: bold;
+        font-weight: bold;
     }
 
     .recent-fr {
-	font-weight: bold;
+        font-weight: bold;
     }
 
     .recent-title {
-        margin-top: .2em;
+        margin-top: 0.2em;
 
-        &:after {
-            @include external-link;
-        }
+        display: -webkit-box;
+        -webkit-line-clamp: 9;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 }
 
 .supplementary-content {
     margin-bottom: 1em;
-    
+
     .supplementary-content-link {
         text-decoration: none;
     }
@@ -245,7 +248,7 @@ aside.right-sidebar {
     .supplementary-content-external-link {
         &:after {
             @include external-link;
-        }   
+        }
     }
 }
 
