@@ -978,7 +978,14 @@
     filters: {
       formatDate: function(value) {
         const date = new Date(value);
-        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+        let options = { year: 'numeric', timeZone: 'UTC' };
+        const raw_date = value.split('-');
+        if(raw_date.length > 1) {
+          options.month = 'long';
+        }
+        if(raw_date.length > 2) {
+          options.day = 'numeric';
+        }
         const format = new Intl.DateTimeFormat("en-US", options);
         return format.format(date);
       }
