@@ -1985,6 +1985,20 @@
       });
 
       const closeBtn = document.getElementById("close-link");
+
+      // Do not reload page if closing version select bar from latest version;
+      // just re-hide version select bar
+      closeBtn.addEventListener("click", (e) => {
+          if( e.currentTarget.href === location.href ) {
+              const versionSelectBar = document.getElementById(
+                  "view-and-compare"
+              );
+              versionSelectBar.setAttribute("data-state", "hide");
+          }
+      });
+
+      // append current hash to end of closeBtn a href
+      // on load and on hashchange
       window.addEventListener("pageshow", () => {
           closeBtn.href = closeBtn.href.split("#")[0] + location.hash;
       });
@@ -2132,6 +2146,8 @@
           }
 
           if (this.getAttribute("data-state") === "close") {
+              // reset data-set-state in case on latest version
+              this.setAttribute("data-set-state", "show");
               const closeLink = document.querySelector("#close-link");
               closeLink.click();
           }

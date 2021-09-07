@@ -123,6 +123,8 @@ function viewButtonClose() {
         }
 
         if (this.getAttribute("data-state") === "close") {
+            // reset data-set-state in case on latest version
+            this.setAttribute("data-set-state", "show");
             const closeLink = document.querySelector("#close-link");
             closeLink.click();
         }
