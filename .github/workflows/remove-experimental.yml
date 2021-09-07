@@ -2,6 +2,7 @@ name: Remove Experimental
 
 on:
   workflow_dispatch:
+  delete:
 
 jobs:
   remove:
@@ -9,10 +10,15 @@ jobs:
       name: "dev"
     runs-on: ubuntu-latest
     steps:
-      - name: get branch name
+      - name: get branch name manually
+        if: github.event_name == 'workflow_dispatch'
         run: |
           lower_case=${GITHUB_REF,,}
           echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
+      - name: get branch name for deleted branch
+        if: github.event.name == 'delete' && github.event.ref.type == 'branch'
+        run: |
+          echo "branch_name=${{ github.event.ref }}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           submodules: true
@@ -22,7 +28,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-      - name: remove regulations site server
+      - name: remove experimental regulations site server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
