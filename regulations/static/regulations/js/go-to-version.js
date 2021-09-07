@@ -16,6 +16,9 @@ export function goToVersion() {
     // just re-hide version select bar
     closeBtn.addEventListener("click", (e) => {
         if (e.currentTarget.href === location.href) {
+            const viewButton = document.querySelector("#view-button");
+            viewButton.setAttribute("data-set-state", "show");
+            viewButton.setAttribute("data-state", "not-selected");
             const versionSelectBar = document.getElementById(
                 "view-and-compare"
             );
@@ -46,8 +49,8 @@ export function goToVersion() {
 
         // add class to content container for scroll-margin-top
         // when go to version bar is visible
-        const contentContainer = document.querySelector(".content")
-        contentContainer.classList.add("go-to-version")
+        const contentContainer = document.querySelector(".content");
+        contentContainer.classList.add("go-to-version");
     }
 
     for (const option of options) {
