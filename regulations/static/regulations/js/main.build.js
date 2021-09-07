@@ -1981,7 +1981,7 @@
       const options = document.querySelectorAll("#view-options [data-url]");
 
       select.addEventListener("change", function () {
-          location.href = this.options[this.selectedIndex].dataset.url;
+          location.href = this.options[this.selectedIndex].dataset.url + location.hash;
       });
 
       // if not latest version show view div
