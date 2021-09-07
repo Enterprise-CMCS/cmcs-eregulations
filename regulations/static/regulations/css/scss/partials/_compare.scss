@@ -1,6 +1,7 @@
 @import "../application_settings";
 
 .view-and-compare {
+    height: $view_compare_height;
     padding: $spacer-2 $spacer-4;
     background-color: $secondary_color;
     color: $reverse_text_color;

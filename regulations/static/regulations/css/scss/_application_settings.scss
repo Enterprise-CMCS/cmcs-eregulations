@@ -267,6 +267,8 @@ a {
 $header_height: 102px; // Update if header height changes
 $header_height_mobile: 81px;
 
+$view_compare_height: 54px;
+
 a {
     color: $primary_link_color;
 
@@ -290,11 +292,20 @@ select {
     }
 }
 
-:target {
+.content :target {
     // Moves content down so it's not covered by the sticky header
     scroll-margin-top: $header_height_mobile + 5px;
 
     @include screen-lg {
         scroll-margin-top: $header_height + 5px;
+    }
+}
+
+.content.go-to-version :target {
+    // Moves content down so it's not covered by the sticky header
+    scroll-margin-top: $header_height_mobile + $view_compare_height + 5px;
+
+    @include screen-lg {
+        scroll-margin-top: $header_height + $view_compare_height + 5px;
     }
 }

@@ -13534,12 +13534,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -13757,12 +13766,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -13880,12 +13898,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -14339,12 +14366,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -14580,16 +14616,26 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
   }
 }
 
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
+  }
+}
+
 .view-and-compare {
+  height: 54px;
   padding: 16px 32px;
   background-color: #026666;
   color: #fff;
@@ -14695,12 +14741,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -14772,12 +14827,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -15020,12 +15084,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -15317,12 +15390,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -15648,12 +15730,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -16652,12 +16743,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -16753,12 +16853,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -16908,12 +17017,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -17039,12 +17157,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -17137,12 +17264,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 
@@ -17227,12 +17363,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 140px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 161px;
   }
 }
 

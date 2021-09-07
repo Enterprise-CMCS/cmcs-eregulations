@@ -15,13 +15,13 @@ export function goToVersion() {
     // Do not reload page if closing version select bar from latest version;
     // just re-hide version select bar
     closeBtn.addEventListener("click", (e) => {
-        if( e.currentTarget.href === location.href ) {
+        if (e.currentTarget.href === location.href) {
             const versionSelectBar = document.getElementById(
                 "view-and-compare"
             );
             versionSelectBar.setAttribute("data-state", "hide");
         }
-    })
+    });
 
     // append current hash to end of closeBtn a href
     // on load and on hashchange
@@ -43,6 +43,11 @@ export function goToVersion() {
         for (const el of view_elements) {
             el.setAttribute("data-state", "show");
         }
+
+        // add class to content container for scroll-margin-top
+        // when go to version bar is visible
+        const contentContainer = document.querySelector(".content")
+        contentContainer.classList.add("go-to-version")
     }
 
     for (const option of options) {
