@@ -39,7 +39,7 @@ class SupplementaryContentSerializer(serializers.Serializer):
     url = serializers.URLField()
     description = serializers.CharField()
     title = serializers.CharField()
-    date = serializers.DateField()
+    date = serializers.CharField()
 
     class Meta:
         list_serializer_class = ApplicableSupplementaryContentSerializer

@@ -11,53 +11,67 @@
   //
   //
   //
-
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   var script$3$1 = {
-    name: 'related-rule',
+      name: "related-rule",
 
-    props: {
-      title: {
-        type: String,
-        required: true,
+      props: {
+          title: {
+              type: String,
+              required: true,
+          },
+          type: {
+              type: String,
+              required: true,
+          },
+          citation: {
+              type: String,
+              required: true,
+          },
+          publication_date: String,
+          document_number: {
+              type: String,
+              required: true,
+          },
+          html_url: {
+              type: String,
+              required: true,
+          },
       },
-      type: {
-        type: String,
-        required: true,
-      },
-      citation: {
-        type: String,
-        required: true,
-      },
-      publication_date: String,
-      document_number: {
-        type: String,
-        required: true,
-      },
-      html_url: {
-        type: String,
-        required: true,
-      },
-    },
 
-    computed: {
-      expandedType: function() {
-        if(this.type === "Rule") {
-          return "Final";
-        }
-        return "Unknown";
+      computed: {
+          expandedType: function () {
+              if (this.type === "Rule") {
+                  return "Final";
+              }
+              return "Unknown";
+          },
       },
-    },
 
-    methods: {},
-    filters: {
-      formatDate: function(value) {
-        const date = new Date(value);
-        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
-        const format = new Intl.DateTimeFormat("en-US", options);
-        return format.format(date);
-      }
-    }
+      methods: {},
+      filters: {
+          formatDate: function (value) {
+              const date = new Date(value);
+              const options = {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  timeZone: "UTC",
+              };
+              const format = new Intl.DateTimeFormat("en-US", options);
+              return format.format(date);
+          },
+      },
   };
 
   function normalizeComponent$3(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -155,18 +169,20 @@
           }
         },
         [
-          _c("span", { staticClass: "recent-flag indicator" }, [
-            _vm._v(_vm._s(_vm.expandedType))
-          ]),
-          _vm._v(" "),
-          _vm.publication_date
-            ? _c("span", { staticClass: "recent-date" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.publication_date)))
-              ])
-            : _vm._e(),
-          _vm._v(" | "),
-          _c("span", { staticClass: "recent-fr" }, [
-            _vm._v(_vm._s(_vm.citation))
+          _c("span", { staticClass: "link-heading" }, [
+            _c("span", { staticClass: "recent-flag indicator" }, [
+              _vm._v(_vm._s(_vm.expandedType))
+            ]),
+            _vm._v(" "),
+            _vm.publication_date
+              ? _c("span", { staticClass: "recent-date" }, [
+                  _vm._v(_vm._s(_vm._f("formatDate")(_vm.publication_date)))
+                ])
+              : _vm._e(),
+            _vm._v("\n            | "),
+            _c("span", { staticClass: "recent-fr" }, [
+              _vm._v(_vm._s(_vm.citation))
+            ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "recent-title" }, [_vm._v(_vm._s(_vm.title))])
@@ -405,19 +421,19 @@
           return {
               rules: [],
               limitedList: true,
-          }
+          };
       },
 
       computed: {
-        limitedRules() {
-          if(this.limitedList) {
-            return this.rules.slice(0, this.limit);
-          }
-          return this.rules;
-        },
-        rulesCount() {
-          return this.rules.length;
-        }
+          limitedRules() {
+              if (this.limitedList) {
+                  return this.rules.slice(0, this.limit);
+              }
+              return this.rules;
+          },
+          rulesCount() {
+              return this.rules.length;
+          },
       },
 
       async created() {
@@ -426,14 +442,16 @@
 
       methods: {
           async fetch_rules(title, part) {
-              const response = await fetch(`https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[type][]=RULE&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`);
+              const response = await fetch(
+                  `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[type][]=RULE&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`
+              );
               const rules = await response.json();
               return rules.results;
           },
           showMore() {
-            this.limitedList = !this.limitedList;
-          }
-      }
+              this.limitedList = !this.limitedList;
+          },
+      },
   };
 
   /* script */
@@ -978,7 +996,14 @@
     filters: {
       formatDate: function(value) {
         const date = new Date(value);
-        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+        let options = { year: 'numeric', timeZone: 'UTC' };
+        const raw_date = value.split('-');
+        if(raw_date.length > 1) {
+          options.month = 'long';
+        }
+        if(raw_date.length > 2) {
+          options.day = 'numeric';
+        }
         const format = new Intl.DateTimeFormat("en-US", options);
         return format.format(date);
       }
