@@ -30,6 +30,8 @@ function onPageShow() {
     const HEADER_HEIGHT = 102;
     const HEADER_HEIGHT_MOBILE = 81;
 
+    // if version select is open, get its height
+    // and adjust scrollTo position
     const versionSelectBar = document.getElementsByClassName(
         "view-and-compare"
     );

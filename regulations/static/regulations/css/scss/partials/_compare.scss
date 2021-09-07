@@ -47,18 +47,21 @@
         right: $spacer-4;
         cursor: pointer;
         height: auto;
+        border: none;
+        background: none;
+        height: 36px;
+        width: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         svg path {
             fill: $secondary_reverse_link_color;
         }
 
-        a {
-            color: $secondary_reverse_link_color;
-
-            &:hover {
-                svg path {
-                    fill: $secondary_reverse_link_hover;
-                }
+        &:hover {
+            svg path {
+                fill: $secondary_reverse_link_hover;
             }
         }
     }

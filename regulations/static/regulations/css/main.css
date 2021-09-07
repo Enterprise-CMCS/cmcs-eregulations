@@ -14631,14 +14631,18 @@ select:focus-visible {
   right: 32px;
   cursor: pointer;
   height: auto;
+  border: none;
+  background: none;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .view-and-compare .close-button svg path {
   fill: #fff;
 }
-.view-and-compare .close-button a {
-  color: #fff;
-}
-.view-and-compare .close-button a:hover svg path {
+.view-and-compare .close-button:hover svg path {
   fill: #a3e8ff;
 }
 

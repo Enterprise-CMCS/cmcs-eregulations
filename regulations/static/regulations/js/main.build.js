@@ -1979,9 +1979,17 @@
       }
 
       const options = document.querySelectorAll("#view-options [data-url]");
-
       select.addEventListener("change", function () {
-          location.href = this.options[this.selectedIndex].dataset.url + location.hash;
+          location.href =
+              this.options[this.selectedIndex].dataset.url + location.hash;
+      });
+
+      const closeBtn = document.getElementById("close-link");
+      window.addEventListener("pageshow", () => {
+          closeBtn.href = closeBtn.href.split("#")[0] + location.hash;
+      });
+      window.addEventListener("hashchange", () => {
+          closeBtn.href = closeBtn.href.split("#")[0] + location.hash;
       });
 
       // if not latest version show view div
@@ -2031,6 +2039,8 @@
       const HEADER_HEIGHT = 102;
       const HEADER_HEIGHT_MOBILE = 81;
 
+      // if version select is open, get its height
+      // and adjust scrollTo position
       const versionSelectBar = document.getElementsByClassName(
           "view-and-compare"
       );
