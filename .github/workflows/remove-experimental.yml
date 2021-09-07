@@ -2,10 +2,7 @@ name: Remove Experimental
 
 on:
   workflow_dispatch:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  delete:
 
 jobs:
   remove:
@@ -18,10 +15,10 @@ jobs:
         run: |
           lower_case=${GITHUB_REF,,}
           echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
-      - name: get branch name for closed PR
-        if: github.event.pull_request.merged == true
+      - name: get branch name for deleted branch
+        if: github.event.name == 'delete' && github.event.ref.type == 'branch'
         run: |
-          echo "branch_name=${{ github.head_ref }}" >> $GITHUB_ENV
+          echo "branch_name=${{ github.event.ref }}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           submodules: true
