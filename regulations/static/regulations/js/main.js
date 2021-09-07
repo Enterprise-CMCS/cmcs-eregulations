@@ -30,6 +30,13 @@ function onPageShow() {
     const HEADER_HEIGHT = 102;
     const HEADER_HEIGHT_MOBILE = 81;
 
+    const versionSelectBar = document.getElementsByClassName(
+        "view-and-compare"
+    );
+    const versionSelectHeight = versionSelectBar.length
+        ? versionSelectBar[0].offsetHeight
+        : 0;
+
     const elId = window.location.hash;
 
     if (elId.length > 1) {
@@ -40,7 +47,7 @@ function onPageShow() {
                 window.innerWidth >= 1024
                     ? HEADER_HEIGHT
                     : HEADER_HEIGHT_MOBILE;
-            window.scrollTo(position.x, el.offsetTop - headerHeight);
+            window.scrollTo(position.x, el.offsetTop - headerHeight - versionSelectHeight);
         }
     }
 }
