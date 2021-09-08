@@ -303,9 +303,10 @@ select {
 
 .content.go-to-version :target {
     // Moves content down so it's not covered by the sticky header
-    scroll-margin-top: $header_height_mobile + $view_compare_height + 5px;
+    // or by go-to-version bar
+    scroll-margin-top: $header_height_mobile + $view_compare_height + 37px;
 
     @include screen-lg {
-        scroll-margin-top: $header_height + $view_compare_height + 5px;
+        scroll-margin-top: $header_height + $view_compare_height + 37px;
     }
 }
