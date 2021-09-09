@@ -14635,6 +14635,8 @@ select:focus-visible {
 }
 
 .view-and-compare {
+  display: flex;
+  justify-content: center;
   height: 54px;
   padding: 16px 32px;
   background-color: #026666;
