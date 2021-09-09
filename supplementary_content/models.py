@@ -73,3 +73,4 @@ class RegulationSection(models.Model):
 
     class Meta:
         unique_together = ("title", "part", "section")
+        ordering = ["title", "part", "section"]
