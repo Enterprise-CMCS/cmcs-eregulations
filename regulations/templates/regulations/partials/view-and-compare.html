@@ -2,9 +2,13 @@
 <div id="view-and-compare" class="view-and-compare" data-state="hide" data-state-name="view">
     <div class="view-container">
         <!-- <span class="view-title">View Versions</span> -->
-        View Regulations Effective on
+        <label for="view-options">View Regulations Effective on</label>
         <span class="view-select">
-            <select class="ds-c-field" name="view-options" id="view-options">
+            <select
+                class="ds-c-field"
+                name="view-options"
+                id="view-options"
+            >
                 <option value="" disabled>Select Date</option>
                 {% for version in versions %}
                     {% if citation.1 %}
@@ -17,9 +21,19 @@
             </select>
         </span>
         {% if citation.1 %}
-        <a id="close-link" class="close-button" href="{% url 'reader_view' title citation.0 citation.1 versions.0.date  %}">
+        <a
+            id="close-link"
+            class="close-button"
+            href="{% url 'reader_view' title citation.0 citation.1 versions.0.date  %}"
+            aria-label="close view past versions"
+        >
         {% else %}
-        <a id="close-link" class="close-button" href="{% url 'reader_view' title citation.0 versions.0.date  %}">
+        <a
+            id="close-link"
+            class="close-button"
+            href="{% url 'reader_view' title citation.0 versions.0.date  %}"
+            aria-label="close view past versions"
+        >
         {% endif %}
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <title>Close</title>
