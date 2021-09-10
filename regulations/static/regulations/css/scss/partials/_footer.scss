@@ -97,18 +97,20 @@ footer {
     }
 
     .footer-right {
+        padding: 0 $spacer-2;
+
+        @include screen-xl {
+            padding: 0 $spacer-4 0 0;
+        }
 
         @include custom-max($tablet-max / 1px) {
             flex: none;
+            padding: 0;
         }
 
         & > * {
             padding: 0 $spacer-5 0 0;
-            margin-left: -$spacer-2;
 
-            @include screen-xl {
-                margin-left: -$spacer-4;
-            }
 
             @include custom-max($tablet-max / 1px) {
                 padding: 0 $spacer-4;
