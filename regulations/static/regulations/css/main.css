@@ -15653,6 +15653,10 @@ select:focus-visible {
   }
 }
 
+.reg-text {
+  overflow-wrap: break-word;
+  overflow: auto;
+}
 .reg-text section,
 .reg-text h1,
 .reg-text h2,
