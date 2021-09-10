@@ -17,7 +17,7 @@ const timeout = 10 * time.Second
 var (
 	ecfrSite         = urlMustParse("https://ecfr.federalregister.gov/api/versioner/v1/")
 	ecfrFullXML      = "full/%s/title-%d.xml"
-	ecfrVersionsXML  = "versions/title-%d.json"
+	ecfrVersionsXML  = "versions/title-%d"
 	ecfrStructureXML = "structure/%s/title-%d.json"
 )
 
