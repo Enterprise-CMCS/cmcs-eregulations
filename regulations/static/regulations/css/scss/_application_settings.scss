@@ -223,19 +223,19 @@ $width-3xl: 1920px; // The largest the site container will get
 
 @mixin external-link {
     content: "\00a0" url("../images/external-link.svg");
-    padding-left: 5px;
 }
 
 @mixin external-link-hover {
     content: "\00a0" url("../images/external-link-hover.svg");
-    padding-left: 5px;
 }
 
 a {
-    &.external {
-        &:after {
-            @include external-link;
-        }
+    &:link.external::after {
+        @include external-link;
+    }
+
+    &:hover.external::after {
+        @include external-link-hover;
     }
 }
 

@@ -47,9 +47,15 @@ footer {
     }
 
     .footer-left {
+
+        @include custom-max($tablet-max / 1px) {
+            flex: none;
+        }
+
         & > * {
             padding: 0 $spacer-3 0 $spacer-4;
-            @include custom-max($mobile-max / 1px) {
+
+            @include custom-max($tablet-max / 1px) {
                 padding: 0 $spacer-4;
             }
         }
@@ -70,29 +76,45 @@ footer {
         }
     }
 
-    .footer-middle {
+    .footer-middle {    
+
         & > * {
             padding: 0;
 
-            @include custom-max($mobile-max / 1px) {
+            @include custom-max($tablet-max / 1px) {
                 padding: 0 $spacer-4;
             }
 
             @include screen-lg {
-                max-width: 90%;
+                max-width: calc(90% - #{$spacer-3});
+                padding-left: $spacer-3;
             }
         }
 
-        @include custom-max($mobile-max / 1px) {
+        @include custom-max($tablet-max / 1px) {
             padding: $spacer-4 0;
         }
     }
 
     .footer-right {
+        padding: 0 $spacer-2;
+
+        @include screen-xl {
+            padding: 0 $spacer-4 0 0;
+        }
+
+        @include custom-max($tablet-max / 1px) {
+            flex: none;
+            padding: 0;
+        }
+
         & > * {
-            padding: 0 $spacer-4 0 $spacer-3;
-            @include custom-max($mobile-max / 1px) {
+            padding: 0 $spacer-5 0 0;
+
+
+            @include custom-max($tablet-max / 1px) {
                 padding: 0 $spacer-4;
+                margin-left: 0;
             }
         }
 
@@ -112,7 +134,7 @@ footer {
 
     // divide to strip unit (px)
     // https://css-tricks.com/snippets/sass/strip-unit-function/
-    @include custom-max($mobile-max / 1px) {
+    @include custom-max($tablet-max / 1px) {
         & > div {
             // stack footer elements on narrow screens
             flex-direction: column;
