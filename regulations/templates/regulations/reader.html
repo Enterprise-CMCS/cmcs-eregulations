@@ -1,6 +1,7 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 {% load render_nested %}
+{% load version_date %}
 
 {% block body %}
     <div class="content">
@@ -11,6 +12,9 @@
             </aside>
 
             <main class="reg-text match-middle">
+                {% if version|version_date == versions.0.date|version_date %}
+                    <span>{{ versions.0.date }}<span/>
+                {% endif %}
                 {% include "regulations/partials/node_types/node.html" with node=tree %}
                 {% include "regulations/partials/navigation.html" %}
             </main>
