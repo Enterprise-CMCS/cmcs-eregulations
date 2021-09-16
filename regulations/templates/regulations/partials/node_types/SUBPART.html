@@ -1,10 +1,12 @@
-
 {% load render_nested %}
 {% comment %}
     Used once per section. Contained by subparts at the top level.
 {% endcomment %}
 
 <article>
+    {% if node.isLatestVersion %}
+        <span>{{ node.latestVersion }}<span/>
+    {% endif %}
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
         <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
             <i class="fa fa-link"></i>

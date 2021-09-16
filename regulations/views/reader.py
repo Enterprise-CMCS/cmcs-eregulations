@@ -11,6 +11,8 @@ from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
 
+from datetime import datetime
+
 
 class ReaderView(CitationContextMixin, TemplateView):
 
@@ -95,7 +97,21 @@ class SubpartReaderView(ReaderView):
         if subpart_index == -1:
             raise Http404
 
-        return document['children'][subpart_index]
+        reg_part = context["part"]
+        reg_title = context["title"]
+        versions = self.get_versions(reg_title, reg_part)
+
+        content = document['children'][subpart_index]
+
+        version = context['version']
+        latestVersion = versions[0]['date']
+        latestVersionString = datetime.strftime(latestVersion, "%Y-%m-%d")
+
+        content['version'] = version
+        content['latestVersion'] = latestVersion
+        content['isLatestVersion'] = version == latestVersionString
+
+        return content
 
 
 class SectionReaderView(View):
