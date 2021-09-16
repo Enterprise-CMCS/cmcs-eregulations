@@ -5,6 +5,9 @@
 @import "../application_settings";
 
 .reg-text {
+    overflow-wrap: break-word;
+    overflow: auto;
+
     section,
     h1,
     h2,
