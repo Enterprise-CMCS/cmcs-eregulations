@@ -15750,6 +15750,11 @@ select:focus-visible {
 .reg-text fp-6 su {
   font-size: 70%;
 }
+.reg-text .latest-version {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #5b616b;
+}
 
 article {
   max-width: 53rem;

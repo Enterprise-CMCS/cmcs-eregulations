@@ -5,7 +5,9 @@
 
 <article>
     {% if node.isLatestVersion %}
-        <span>{{ node.latestVersion }}<span/>
+        <p class="latest-version">
+            <b>Latest Version</b> as of {{ node.latestVersion }}
+        </p>
     {% endif %}
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
         <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">

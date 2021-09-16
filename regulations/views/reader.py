@@ -97,11 +97,11 @@ class SubpartReaderView(ReaderView):
         if subpart_index == -1:
             raise Http404
 
-        reg_part = context["part"]
-        reg_title = context["title"]
-        versions = self.get_versions(reg_title, reg_part)
-
         content = document['children'][subpart_index]
+
+        reg_title = context["title"]
+        reg_part = context["part"]
+        versions = self.get_versions(reg_title, reg_part)
 
         version = context['version']
         latestVersion = versions[0]['date']

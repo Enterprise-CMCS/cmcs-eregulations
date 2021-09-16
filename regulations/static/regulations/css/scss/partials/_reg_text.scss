@@ -84,6 +84,12 @@
             font-size: 70%;
         }
     }
+
+    .latest-version {
+        margin: 0 0 10px;
+        font-size: $font-size-sm;
+        color: $mid_gray;
+    }
 }
 
 article {
