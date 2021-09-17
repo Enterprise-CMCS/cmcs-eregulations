@@ -72,6 +72,7 @@ class PartReaderView(ReaderView):
         versioned_content = add_version_info(context, document, self.get_versions)
         return versioned_content
 
+
 class SubpartReaderView(ReaderView):
 
     def get_context_data(self, **kwargs):
@@ -99,6 +100,7 @@ class SubpartReaderView(ReaderView):
         content = document['children'][subpart_index]
         versioned_content = add_version_info(context, content, self.get_versions)
         return versioned_content
+
 
 class SectionReaderView(View):
     def get(self, request, *args, **kwargs):
