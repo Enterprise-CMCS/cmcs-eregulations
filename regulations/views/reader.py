@@ -9,9 +9,8 @@ from django.http import HttpResponseRedirect
 from regcore.models import Part
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
+from regulations.views.utils import add_version_info
 from regulations.views.errors import NotInSubpart
-
-from datetime import datetime
 
 
 class ReaderView(CitationContextMixin, TemplateView):
@@ -70,8 +69,8 @@ class ReaderView(CitationContextMixin, TemplateView):
 class PartReaderView(ReaderView):
 
     def get_content(self, context, document, structure):
-        return document
-
+        versioned_content = add_version_info(context, document, self.get_versions)
+        return versioned_content
 
 class SubpartReaderView(ReaderView):
 
@@ -98,21 +97,8 @@ class SubpartReaderView(ReaderView):
             raise Http404
 
         content = document['children'][subpart_index]
-
-        reg_title = context["title"]
-        reg_part = context["part"]
-        versions = self.get_versions(reg_title, reg_part)
-
-        version = context['version']
-        latestVersion = versions[0]['date']
-        latestVersionString = datetime.strftime(latestVersion, "%Y-%m-%d")
-
-        content['version'] = version
-        content['formattedLatestVersion'] = datetime.strftime(latestVersion, "%b %-d, %Y")
-        content['isLatestVersion'] = version == latestVersionString
-
-        return content
-
+        versioned_content = add_version_info(context, content, self.get_versions)
+        return versioned_content
 
 class SectionReaderView(View):
     def get(self, request, *args, **kwargs):
