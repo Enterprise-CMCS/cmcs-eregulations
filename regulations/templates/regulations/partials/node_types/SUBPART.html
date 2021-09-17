@@ -5,9 +5,7 @@
 
 <article>
     {% if node.isLatestVersion %}
-        <p class="latest-version">
-            <b>Latest Version</b> as of {{ node.formattedLatestVersion }}
-        </p>
+        {% include "regulations/partials/latest_version_label.html" with latestVersion=node.formattedLatestVersion %}
     {% endif %}
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
         <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">

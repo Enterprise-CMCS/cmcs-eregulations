@@ -4,9 +4,7 @@
 
 <div class="part-title">
     {% if node.isLatestVersion %}
-        <p class="latest-version">
-            <b>Latest Version</b> as of {{ node.formattedLatestVersion }}
-        </p>
+        {% include "regulations/partials/latest_version_label.html" with latestVersion=node.formattedLatestVersion %}
     {% endif %}
     <h1> {{node.title | title}} </h1>
 </div>
