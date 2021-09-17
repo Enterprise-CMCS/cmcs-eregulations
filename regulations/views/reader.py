@@ -8,8 +8,7 @@ from django.http import HttpResponseRedirect
 
 from regcore.models import Part
 from regulations.views.mixins import CitationContextMixin
-from regulations.views.utils import find_subpart
-from regulations.views.utils import add_version_info
+from regulations.views.utils import find_subpart, add_version_info
 from regulations.views.errors import NotInSubpart
 
 
