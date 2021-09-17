@@ -13536,12 +13536,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -13761,12 +13770,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -13886,12 +13904,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -14347,12 +14374,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -14590,16 +14626,28 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
   }
 }
 
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
+  }
+}
+
 .view-and-compare {
+  display: flex;
+  justify-content: center;
+  height: 54px;
   padding: 16px 32px;
   background-color: #026666;
   color: #fff;
@@ -14641,14 +14689,18 @@ select:focus-visible {
   right: 32px;
   cursor: pointer;
   height: auto;
+  border: none;
+  background: none;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .view-and-compare .close-button svg path {
   fill: #fff;
 }
-.view-and-compare .close-button a {
-  color: #fff;
-}
-.view-and-compare .close-button a:hover svg path {
+.view-and-compare .close-button:hover svg path {
   fill: #a3e8ff;
 }
 
@@ -14703,12 +14755,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -14782,12 +14843,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -15032,12 +15102,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -15331,12 +15410,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -15661,12 +15749,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -16676,12 +16773,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -16779,12 +16885,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -16957,12 +17072,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -17090,12 +17214,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -17190,12 +17323,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
@@ -17282,12 +17424,21 @@ select:focus-visible {
   box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
 }
 
-:target {
+.content :target {
   scroll-margin-top: 86px;
 }
 @media (min-width: 1024px) {
-  :target {
+  .content :target {
     scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
   }
 }
 
