@@ -108,7 +108,7 @@ class SubpartReaderView(ReaderView):
         latestVersionString = datetime.strftime(latestVersion, "%Y-%m-%d")
 
         content['version'] = version
-        content['latestVersion'] = latestVersion
+        content['formattedLatestVersion'] = datetime.strftime(latestVersion, "%b %-d, %Y")
         content['isLatestVersion'] = version == latestVersionString
 
         return content

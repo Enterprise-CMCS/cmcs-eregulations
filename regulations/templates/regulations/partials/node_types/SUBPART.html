@@ -6,7 +6,7 @@
 <article>
     {% if node.isLatestVersion %}
         <p class="latest-version">
-            <b>Latest Version</b> as of {{ node.latestVersion }}
+            <b>Latest Version</b> as of {{ node.formattedLatestVersion }}
         </p>
     {% endif %}
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
