@@ -15,7 +15,7 @@ const dateFormat = "2006-01-02"
 const timeout = 10 * time.Second
 
 var (
-	ecfrSite         = urlMustParse("https://ecfr.federalregister.gov/api/versioner/v1/")
+	ecfrSite         = urlMustParse("https://ecfr.gov/api/versioner/v1/")
 	ecfrFullXML      = "full/%s/title-%d.xml"
 	ecfrVersionsXML  = "versions/title-%d"
 	ecfrStructureXML = "structure/%s/title-%d.json"
