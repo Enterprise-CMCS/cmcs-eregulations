@@ -2,8 +2,6 @@ import logging
 
 from regulations.views.errors import NotInSubpart
 
-from datetime import datetime
-
 
 logger = logging.getLogger(__name__)
 
@@ -43,19 +41,3 @@ def get_structure(parts):
     for part in parts[1:]:
         merge_children(structure, part.structure)
     return structure
-
-
-def add_version_info(context, content, getVersions):
-    reg_title = context["title"]
-    reg_part = context["part"]
-    versions = getVersions(reg_title, reg_part)
-
-    version = context['version']
-    latestVersion = versions[0]['date']
-    latestVersionString = datetime.strftime(latestVersion, "%Y-%m-%d")
-
-    content['version'] = version
-    content['formattedLatestVersion'] = datetime.strftime(latestVersion, "%b %-d, %Y")
-    content['isLatestVersion'] = version == latestVersionString
-
-    return content

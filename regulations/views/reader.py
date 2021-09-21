@@ -8,8 +8,10 @@ from django.http import HttpResponseRedirect
 
 from regcore.models import Part
 from regulations.views.mixins import CitationContextMixin
-from regulations.views.utils import find_subpart, add_version_info
+from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
+
+from datetime import datetime
 
 
 class ReaderView(CitationContextMixin, TemplateView):
@@ -64,12 +66,24 @@ class ReaderView(CitationContextMixin, TemplateView):
                 sections = sections + self.get_sections(node['children'])
         return sections
 
+    def get_version_info(self, version, title, part):
+        versions = self.get_versions(title, part)
+
+        latestVersion = versions[0]['date']
+        latestVersionString = datetime.strftime(latestVersion, "%Y-%m-%d")
+
+        return {
+            'version': version,
+            'formattedLatestVersion': datetime.strftime(latestVersion, "%b %-d, %Y"),
+            'isLatestVersion': version == latestVersionString
+        }
+
 
 class PartReaderView(ReaderView):
 
     def get_content(self, context, document, structure):
-        versioned_content = add_version_info(context, document, self.get_versions)
-        return versioned_content
+        version_info = self.get_version_info(context['version'], context['title'], context['part'])
+        return {**document, **version_info}
 
 
 class SubpartReaderView(ReaderView):
@@ -97,8 +111,8 @@ class SubpartReaderView(ReaderView):
             raise Http404
 
         content = document['children'][subpart_index]
-        versioned_content = add_version_info(context, content, self.get_versions)
-        return versioned_content
+        version_info = self.get_version_info(context['version'], context['title'], context['part'])
+        return {**content, **version_info}
 
 
 class SectionReaderView(View):
