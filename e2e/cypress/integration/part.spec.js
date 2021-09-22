@@ -35,6 +35,7 @@ describe("Part View", () => {
 
         cy.url().should("include", "Subpart-B");
         cy.get("#433-51-title").should("be.visible");
+        cy.get(".latest-version").should("exist");
         cy.get("#subpart-resources-heading").contains("Subpart B Resources");
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "433-51");
@@ -50,6 +51,7 @@ describe("Part View", () => {
 
         // goes to first part of the appropriate subpart (this is odd)
         cy.url().should("include", "#433-1");
+        cy.get(".latest-version").should("exist");
         cy.get("#433-1-title").should("be.visible");
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "433-1");
@@ -61,6 +63,7 @@ describe("Part View", () => {
         cy.visit("/42/433/");
         cy.contains("433.10").click({ force: true });
 
+        cy.get(".latest-version").should("exist");
         cy.findByRole("button", { name: /View Past Versions/i }).should(
             "be.visible"
         );
@@ -70,8 +73,10 @@ describe("Part View", () => {
         cy.get(".view-and-compare").should("be.visible");
         cy.get("#view-options").select("1/20/2017", { force: true });
         cy.url().should("include", "2017-01-20");
+        cy.get(".latest-version").should("not.exist");
 
         cy.get("#close-link").click({ force: true });
         cy.get(".view-and-compare").should("not.be.visible");
+        cy.get(".latest-version").should("exist");
     });
 });
