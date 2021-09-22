@@ -1,8 +1,7 @@
 describe("Part View", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] =
-                Cypress.env("DEPLOYING");
+            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         }).as("headers");
     });
 
@@ -11,7 +10,7 @@ describe("Part View", () => {
         cy.visit("/42/433/");
 
         cy.injectAxe();
-        cy.contains("State Fiscal Administration").should("be.visible");
+        cy.contains("Part 433 - State Fiscal Administration").should("be.visible");
         cy.checkAccessibility();
     });
 
@@ -37,6 +36,7 @@ describe("Part View", () => {
         cy.url().should("include", "Subpart-B");
         cy.get("#433-51-title").should("be.visible");
         cy.get(".latest-version").should("exist");
+        cy.get("#subpart-resources-heading").contains("Subpart B Resources");
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "433-51");
         });
