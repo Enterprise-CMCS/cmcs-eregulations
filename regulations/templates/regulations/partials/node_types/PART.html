@@ -3,9 +3,6 @@
 {% endcomment %}
 
 <div class="part-title">
-    {% if node.isLatestVersion %}
-        {% include "regulations/partials/latest_version_label.html" with latestVersion=node.formattedLatestVersion %}
-    {% endif %}
     <h1> {{node.title | title}} </h1>
 </div>
 {{node.text | safe}}

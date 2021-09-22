@@ -4,9 +4,6 @@
 {% endcomment %}
 
 <article>
-    {% if node.isLatestVersion %}
-        {% include "regulations/partials/latest_version_label.html" with latestVersion=node.formattedLatestVersion %}
-    {% endif %}
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
         <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
             <i class="fa fa-link"></i>

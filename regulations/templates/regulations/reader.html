@@ -11,6 +11,9 @@
             </aside>
 
             <main class="reg-text match-middle">
+                {% if isLatestVersion %}
+                    {% include "regulations/partials/latest_version_label.html" with latestVersion=formattedLatestVersion %}
+                {% endif %}
                 {% include "regulations/partials/node_types/node.html" with node=tree %}
                 {% include "regulations/partials/navigation.html" %}
             </main>

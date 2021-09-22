@@ -30,6 +30,8 @@ class ReaderView(CitationContextMixin, TemplateView):
         query = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
 
         versions = self.get_versions(reg_title, reg_part)
+        version_info = self.get_version_info(reg_version, reg_title, reg_part)
+
         parts = Part.objects.filter(title=reg_title).effective(reg_version)
         document = query.document
         toc = query.toc
@@ -46,7 +48,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'versions':     versions,
         }
 
-        return {**context, **c}
+        return {**context, **c, **version_info}
 
     def get_versions(self, title, part):
         versions = Part.objects.versions(title, part)
@@ -82,8 +84,7 @@ class ReaderView(CitationContextMixin, TemplateView):
 class PartReaderView(ReaderView):
 
     def get_content(self, context, document, structure):
-        version_info = self.get_version_info(context['version'], context['title'], context['part'])
-        return {**document, **version_info}
+        return document
 
 
 class SubpartReaderView(ReaderView):
@@ -111,8 +112,7 @@ class SubpartReaderView(ReaderView):
             raise Http404
 
         content = document['children'][subpart_index]
-        version_info = self.get_version_info(context['version'], context['title'], context['part'])
-        return {**content, **version_info}
+        return content
 
 
 class SectionReaderView(View):
