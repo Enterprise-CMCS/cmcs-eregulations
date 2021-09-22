@@ -12,7 +12,9 @@
 
             <main class="reg-text match-middle">
                 {% if isLatestVersion %}
-                    {% include "regulations/partials/latest_version_label.html" with latestVersion=formattedLatestVersion %}
+                    <p class="latest-version{{ subpart|yesno:" subpart," }}">
+                        <b>Latest Version</b> as of {{ formattedLatestVersion }}
+                    </p>
                 {% endif %}
                 {% include "regulations/partials/node_types/node.html" with node=tree %}
                 {% include "regulations/partials/navigation.html" %}

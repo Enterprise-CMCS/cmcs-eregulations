@@ -15848,9 +15848,23 @@ select:focus-visible {
   font-size: 70%;
 }
 .reg-text .latest-version {
-  margin: 0 0 10px;
+  margin: 40px 0 10px;
   font-size: 14px;
   color: #5b616b;
+}
+@media (min-width: 1440px) {
+  .reg-text .latest-version {
+    padding: 0 48px 0 5px;
+  }
+  .reg-text .latest-version.subpart {
+    padding: 0 53px;
+  }
+}
+.reg-text .latest-version + article {
+  margin: 0 auto 40px;
+}
+.reg-text .latest-version + .part-title {
+  margin: 0 auto 24px;
 }
 
 article {
