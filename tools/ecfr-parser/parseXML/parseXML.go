@@ -281,6 +281,12 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
+	case "EFFDNOT":
+		child := &EffectiveDateNote{Type: "EffectiveDateNote"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	default:
 		log.Printf("[WARNING] Unknown XML type in Section: %+v\n", start)
 		d.Skip()
@@ -381,6 +387,12 @@ type Division struct {
 type Heading struct {
 	Type    string `json:"node_type"`
 	Content string `xml:",innerxml" json:"content"`
+}
+
+type EffectiveDateNote struct {
+	Type	string `json:"node_type"`
+	Header	string `xml:"HED" json:"header"`
+	Content	string `xml:"PSPACE" json:"content"`
 }
 
 var ErrNoParents = errors.New("no parents found for this paragraph")
