@@ -222,11 +222,23 @@ $width-3xl: 1920px; // The largest the site container will get
 // -------------------------
 
 @mixin external-link {
-    content: "\00a0" url("../images/external-link.svg");
+    content: "";
+    background-image: url("../images/external-link.svg");
+    margin-left: 0.2em;
+    padding-left: 0.8em;
+    background-size: 0.8em 0.8em;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 @mixin external-link-hover {
-    content: "\00a0" url("../images/external-link-hover.svg");
+    content: "";
+    background-image: url("../images/external-link-hover.svg");
+    margin-left: 0.2em;
+    padding-left: 0.8em;
+    background-size: 0.8em 0.8em;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 a {
