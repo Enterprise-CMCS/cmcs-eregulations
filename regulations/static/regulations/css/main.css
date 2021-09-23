@@ -16736,6 +16736,16 @@ article .section-text {
   color: #212121;
 }
 
+.effective-date-note {
+  font-size: 12px;
+  line-height: 18px;
+  color: #5b616b;
+}
+.effective-date-note .effective-date-note-header {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
 .indicator {
   background: #026666;
   text-transform: uppercase;

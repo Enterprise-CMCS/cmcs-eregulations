@@ -206,3 +206,14 @@ article {
         color: $primary_text_color;
     }
 }
+
+.effective-date-note {
+    font-size: 12px;
+    line-height: 18px;
+    color: $secondary_text_color;
+
+    .effective-date-note-header {
+        font-weight: bold;
+        text-transform: capitalize;
+    }
+}
