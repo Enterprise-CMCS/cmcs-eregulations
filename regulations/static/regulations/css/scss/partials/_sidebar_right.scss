@@ -273,6 +273,10 @@ aside.right-sidebar {
         &.subcategory {
             font-size: $font-size-md;
         }
+
+        &.visible {
+            color: $dark-gray;
+        }
     }
 
     .category-description {
