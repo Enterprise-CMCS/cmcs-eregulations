@@ -15642,7 +15642,9 @@ aside.right-sidebar .resource-info {
 
 .supplementary-content-category {
   display: table;
-  margin-bottom: 1em;
+  border-bottom: 1px solid #d6d7d9;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
 }
 .supplementary-content-category .category {
   display: table-cell;

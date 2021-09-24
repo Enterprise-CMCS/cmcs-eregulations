@@ -254,7 +254,9 @@ aside.right-sidebar {
 
 .supplementary-content-category {
     display: table;
-    margin-bottom: 1em;
+    border-bottom: 1px solid $light_gray;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
 
     .category {
         display: table-cell;
