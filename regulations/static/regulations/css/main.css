@@ -13498,18 +13498,20 @@ readers do not read off random characters that represent icons */
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -13742,18 +13744,20 @@ footer .footer-left {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -13886,18 +13890,20 @@ e[t="05"] {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -14366,18 +14372,20 @@ select:focus-visible {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -14628,18 +14636,20 @@ select:focus-visible {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -14767,18 +14777,20 @@ select:focus-visible {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -14865,18 +14877,20 @@ select:focus-visible {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -15134,18 +15148,20 @@ header .search-borderless input {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -15452,18 +15468,20 @@ aside.left-sidebar li.active ul a.menu-section:focus {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -15665,18 +15683,20 @@ aside.right-sidebar .resource-info {
 .related-rule-title:link .link-heading::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 .related-rule-title:hover .link-heading::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .rules-with-preamble {
@@ -15739,10 +15759,11 @@ aside.right-sidebar .resource-info {
 .supplementary-content .supplementary-content-external-link:after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .supplementary-content-category {
@@ -15816,18 +15837,20 @@ aside.right-sidebar .resource-info {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -16864,18 +16887,20 @@ article .section-text {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -16986,18 +17011,20 @@ select:focus-visible {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -17183,18 +17210,20 @@ footer .footer-right i:hover {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -17335,18 +17364,20 @@ main.error-page img.error-image {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -17454,18 +17485,20 @@ ul.table-of-contents .toc-section-name {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
@@ -17565,18 +17598,20 @@ main.about :target::before {
 a:link.external::after {
   content: "";
   background-image: url("../images/external-link.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 a:hover.external::after {
   content: "";
   background-image: url("../images/external-link-hover.svg");
-  margin-left: 0.2em;
+  margin-left: 0.1em;
   padding-left: 1em;
   background-position: center center;
   background-repeat: no-repeat;
+  background-size: 0.8em;
 }
 
 .smooth-scroll {
