@@ -15663,6 +15663,9 @@ aside.right-sidebar .resource-info {
 .supplementary-content-category button.category-title.subcategory {
   font-size: 16px;
 }
+.supplementary-content-category button.category-title.visible {
+  color: #212121;
+}
 .supplementary-content-category .category-description {
   font-size: 14px;
   font-weight: normal;
