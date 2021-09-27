@@ -31,6 +31,7 @@ class SectionsInline(admin.TabularInline):
 
 @admin.register(SupplementaryContent)
 class SupplementaryContentAdmin(admin.ModelAdmin):
+    list_display = ("date", "title", "description", "created_at", "updated_at")
     inlines = [
         SectionsInline,
     ]
