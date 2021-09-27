@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db.models.functions import Cast
-from django.db.models import IntegerField
+from django.db.models import IntegerField, ManyToManyField
+from django.contrib.admin.widgets import FilteredSelectMultiple
 
 # Register your models here.
 
@@ -19,6 +20,11 @@ from .filters import (
 @admin.register(RegulationSection)
 class RegulationSectionAdmin(admin.ModelAdmin):
     list_display = ("title", "part", "subpart", "section")
+    formfield_overrides = {
+        ManyToManyField: {
+            "widget": FilteredSelectMultiple("Supplementary Content", is_stacked=False),
+        }
+    }
 
 
 class SectionsInline(admin.TabularInline):
