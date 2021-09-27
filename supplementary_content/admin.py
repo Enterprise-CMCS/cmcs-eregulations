@@ -16,6 +16,11 @@ from .filters import (
 )
 
 
+@admin.register(RegulationSection)
+class RegulationSectionAdmin(admin.ModelAdmin):
+    list_display = ("title", "part", "subpart", "section")
+
+
 class SectionsInline(admin.TabularInline):
     model = RegulationSection.supplementary_content.through
 
@@ -56,6 +61,3 @@ class CategoryAdmin(admin.ModelAdmin):
         ChildCategory,
     ]
     list_display = ("title", "parent")
-
-
-admin.site.register(RegulationSection)
