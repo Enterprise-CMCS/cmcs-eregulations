@@ -193,9 +193,6 @@ aside.right-sidebar {
         text-decoration: none;
     }
 
-    .recent-flag {
-    }
-
     .recent-date {
         font-weight: bold;
     }
@@ -275,6 +272,10 @@ aside.right-sidebar {
 
         &.subcategory {
             font-size: $font-size-md;
+        }
+
+        &.visible {
+            color: $dark-gray;
         }
     }
 

@@ -2,7 +2,9 @@
     Used once per section. Contained by subparts at the top level.
 {% endcomment %}
 
-<h1 class="part-title"> {{node.title | title}} </h1>
+<div class="part-title">
+    <h1> {{node.title | title}} </h1>
+</div>
 {{node.text | safe}}
 {% for node in node.children %}
     {% if node.node_type == "SECTION" %}
