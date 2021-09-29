@@ -20,6 +20,7 @@ from .filters import (
 @admin.register(RegulationSection)
 class RegulationSectionAdmin(admin.ModelAdmin):
     list_display = ("title", "part", "subpart", "section")
+    search_fields = ["title", "part", "section"]
     formfield_overrides = {
         ManyToManyField: {
             "widget": FilteredSelectMultiple("Supplementary Content", is_stacked=False),
@@ -43,6 +44,7 @@ class SectionsInline(admin.TabularInline):
 @admin.register(SupplementaryContent)
 class SupplementaryContentAdmin(admin.ModelAdmin):
     list_display = ("date", "title", "description", "category", "created_at", "updated_at")
+    search_fields = ["title", "description"]
     inlines = [
         SectionsInline,
     ]
