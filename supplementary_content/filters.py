@@ -25,7 +25,7 @@ class ParameterFilter(InputFilter):
         if self.value() is not None and self.parameter_name is not None and self.title is not None:
             value = self.value()
             filter = {self.parameter_name: value}
-            return queryset.filter(**filter)
+            return queryset.filter(**filter).distinct()
 
 
 class TitleFilter(ParameterFilter):
