@@ -90,5 +90,8 @@ local.clean: ## Remove the local environment entirely.
 	docker-compose down
 	docker volume rm cmcs-eregulations_eregs-data
 
+local.createadmin: ## Create a local admin account.
+	docker-compose exec regulations python manage.py createsuperuser
+
 test: ## run the cypress e2e suite
 	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
