@@ -20,10 +20,10 @@ from .filters import (
     SectionFilter,
 )
 
-admin.register(SupplementalContent)
-admin.register(Category)
-admin.register(SubCategory)
-admin.register(SubSubCategory)
-admin.register(Section)
-admin.register(SubjectGroup)
-admin.register(Subpart)
+admin.site.register(SupplementalContent)
+admin.site.register(Category)
+admin.site.register(SubCategory)
+admin.site.register(SubSubCategory)
+admin.site.register(Section)
+admin.site.register(SubjectGroup)
+admin.site.register(Subpart)
