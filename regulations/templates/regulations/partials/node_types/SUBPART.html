@@ -5,9 +5,7 @@
 
 <article>
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
-        <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
-            <i class="fa fa-link"></i>
-        </a>
+        {% include "regulations/partials/anchor-link.html" with label=node.label %}
         {{node.title}}
     </h1>
     {{node.text | safe}}

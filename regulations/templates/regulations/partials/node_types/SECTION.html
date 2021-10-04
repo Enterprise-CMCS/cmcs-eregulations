@@ -4,9 +4,7 @@
 
 <section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section">
     <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
-        <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
-            <i class="fa fa-link"></i>
-        </a>
+        {% include "regulations/partials/anchor-link.html" with label=node.label %}
         {{node.title}}
     </h2>
 
