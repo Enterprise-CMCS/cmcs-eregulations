@@ -15,10 +15,10 @@ const dateFormat = "2006-01-02"
 const timeout = 10 * time.Second
 
 var (
-	ecfrSite         = urlMustParse("https://ecfr.gov/api/versioner/v1/")
-	ecfrFullXML      = "full/%s/title-%d.xml"
-	ecfrVersionsXML  = "versions/title-%d"
-	ecfrStructureXML = "structure/%s/title-%d.json"
+	ecfrSite          = urlMustParse("https://ecfr.gov/api/versioner/v1/")
+	ecfrFullXML       = "full/%s/title-%d.xml"
+	ecfrVersionsXML   = "versions/title-%d"
+	ecfrStructureJSON = "structure/%s/title-%d.json"
 )
 
 var client = &http.Client{
@@ -87,7 +87,7 @@ func FetchFull(ctx context.Context, date string, title int, opts ...FetchOption)
 }
 
 func FetchStructure(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrStructureXML, date, title))
+	path, err := url.Parse(fmt.Sprintf(ecfrStructureJSON, date, title))
 	if err != nil {
 		return nil, err
 	}

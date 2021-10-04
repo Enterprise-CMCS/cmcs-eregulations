@@ -111,7 +111,7 @@ func main() {
 			wg.Add(1)
 			go func(ctx context.Context, reg *eregs.Part) {
 				defer wg.Done()
-				if err := handlePart(ctx, reg); err != nil {
+				if err := handlePart(ctx, today, reg); err != nil {
 					log.Println("[ERROR]", err)
 				}
 			}(ctx, reg)
@@ -120,9 +120,8 @@ func main() {
 	wg.Wait()
 }
 
-func handlePart(ctx context.Context, reg *eregs.Part) error {
-
-	sbody, err := ecfr.FetchStructure(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
+func handlePart(ctx context.Context, date time.Time, reg *eregs.Part) error {
+	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
 		return err
 	}
