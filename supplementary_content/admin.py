@@ -6,9 +6,13 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 # Register your models here.
 
 from .models import (
-    SupplementaryContent,
+    SupplementalContent,
     Category,
-    RegulationSection,
+    SubCategory,
+    SubSubCategory,
+    Section,
+    SubjectGroup,
+    Subpart,
 )
 from .filters import (
     TitleFilter,
@@ -16,56 +20,10 @@ from .filters import (
     SectionFilter,
 )
 
-
-@admin.register(RegulationSection)
-class RegulationSectionAdmin(admin.ModelAdmin):
-    list_display = ("title", "part", "subpart", "section")
-    search_fields = ["title", "part", "section"]
-    formfield_overrides = {
-        ManyToManyField: {
-            "widget": FilteredSelectMultiple("Supplementary Content", is_stacked=False),
-        }
-    }
-
-
-class SectionsInline(admin.TabularInline):
-    model = RegulationSection.supplementary_content.through
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "regulationsection":
-            kwargs["queryset"] = RegulationSection.objects.all().annotate(
-                title_int=Cast('title', IntegerField()),
-                part_int=Cast('part', IntegerField()),
-                section_int=Cast('section', IntegerField())
-            ).order_by('title_int', 'part_int', 'section_int')
-        return super(SectionsInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-@admin.register(SupplementaryContent)
-class SupplementaryContentAdmin(admin.ModelAdmin):
-    list_display = ("date", "title", "description", "category", "created_at", "updated_at")
-    search_fields = ["title", "description"]
-    inlines = [
-        SectionsInline,
-    ]
-    list_filter = (
-        "approved",
-        TitleFilter,
-        PartFilter,
-        SectionFilter,
-    )
-
-
-class ChildCategory(admin.StackedInline):
-    model = Category
-    fk_name = "parent"
-    extra = 1
-    verbose_name_plural = "Sub-Categories"
-
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    inlines = [
-        ChildCategory,
-    ]
-    list_display = ("title", "parent")
+admin.register(SupplementalContent)
+admin.register(Category)
+admin.register(SubCategory)
+admin.register(SubSubCategory)
+admin.register(Section)
+admin.register(SubjectGroup)
+admin.register(Subpart)
