@@ -1,11 +1,11 @@
 <template>
-    <span
+    <button
         :class="[className]"
         :title="title"
     >
         <i class="fa fa-link"></i>
         <span v-if="label">{{ label }}</span>
-    </span>
+    </button>
 </template>
 
 <script>

@@ -30,6 +30,10 @@
     }
 
     .reference {
+        border: none;
+        background: none;
+        padding: 0;
+        cursor: pointer;
         position: absolute;
         margin-left: -1.5em;
         opacity: 0;

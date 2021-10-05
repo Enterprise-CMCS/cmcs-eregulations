@@ -2082,7 +2082,7 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("span", { class: [_vm.className], attrs: { title: _vm.title } }, [
+    return _c("button", { class: [_vm.className], attrs: { title: _vm.title } }, [
       _c("i", { staticClass: "fa fa-link" }),
       _vm._v(" "),
       _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e()

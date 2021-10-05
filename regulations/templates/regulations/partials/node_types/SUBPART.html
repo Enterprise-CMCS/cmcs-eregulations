@@ -5,7 +5,7 @@
 
 <article>
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
-        {% include "regulations/partials/anchor-link.html" with title=node.label class="reference" %}
+        {% include "regulations/partials/copy-btn.html" with title=node.label class="reference" %}
         {{node.title}}
     </h1>
     {{node.text | safe}}
