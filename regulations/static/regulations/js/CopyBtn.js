@@ -8,6 +8,11 @@
 //
 //
 //
+//
+//
+//
+//
+//
 
 var script = {
     name: "copy-btn",
@@ -24,12 +29,33 @@ var script = {
         label: String,
     },
 
-    data: function() {
+    data: function () {
         return {
             className: this.class,
-            title: this.title
-        }
-    }
+            title: this.title,
+        };
+    },
+
+    methods: {
+        handleFocusIn() {
+            console.log("focused!");
+        },
+        handleFocusOut() {
+            console.log("unfocused!");
+        },
+        handleMouseEnter() {
+            // state change
+            console.log("mouse entered!");
+        },
+        handleMouseLeave() {
+            // state change
+            console.log("mouse left!");
+        },
+        handleClick() {
+            // state change
+            console.log("clicked!");
+        },
+    },
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -115,11 +141,35 @@ var __vue_render__ = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("button", { class: [_vm.className], attrs: { title: _vm.title } }, [
-    _c("i", { staticClass: "fa fa-link" }),
-    _vm._v(" "),
-    _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e()
-  ])
+  return _c(
+    "button",
+    {
+      class: [_vm.className],
+      attrs: { title: _vm.title },
+      on: {
+        focusin: function($event) {
+          return _vm.handleFocusIn()
+        },
+        focusout: function($event) {
+          return _vm.handleFocusOut()
+        },
+        mouseenter: function($event) {
+          return _vm.handleMouseEnter()
+        },
+        mouseleave: function($event) {
+          return _vm.handleMouseLeave()
+        },
+        click: function($event) {
+          return _vm.handleClick()
+        }
+      }
+    },
+    [
+      _c("i", { staticClass: "fa fa-link" }),
+      _vm._v(" "),
+      _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e()
+    ]
+  )
 };
 var __vue_staticRenderFns__ = [];
 __vue_render__._withStripped = true;
