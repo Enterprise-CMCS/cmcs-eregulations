@@ -12,7 +12,7 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 )
 
-type PostProcesser interface {
+type PostProcessor interface {
 	PostProcess() error
 }
 
@@ -39,7 +39,7 @@ type Part struct {
 
 func (p *Part) PostProcess() (err error) {
 	for _, child := range p.Children {
-		c, ok := child.(PostProcesser)
+		c, ok := child.(PostProcessor)
 		if ok {
 			if err := c.PostProcess(); err != nil {
 				return err
@@ -82,7 +82,7 @@ type Subpart struct {
 
 func (sp *Subpart) PostProcess() error {
 	for _, child := range sp.Children {
-		c, ok := child.(PostProcesser)
+		c, ok := child.(PostProcessor)
 		if ok {
 			if err := c.PostProcess(); err != nil {
 				return err
@@ -144,7 +144,7 @@ func (xs XMLString) MarshalText() ([]byte, error) {
 
 func (sg *SubjectGroup) PostProcess() error {
 	for _, child := range sg.Children {
-		c, ok := child.(PostProcesser)
+		c, ok := child.(PostProcessor)
 		if ok {
 			if err := c.PostProcess(); err != nil {
 				return err
@@ -217,7 +217,7 @@ func (s *Section) PostProcess() error {
 	}
 
 	for _, child := range s.Children {
-		c, ok := child.(PostProcesser)
+		c, ok := child.(PostProcessor)
 		if ok {
 			if err := c.PostProcess(); err != nil {
 				return err
@@ -237,8 +237,10 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 			return err
 		}
 		*c = append(*c, child)
-	case "FP": fallthrough
-	case "FP-1": fallthrough
+	case "FP":
+		fallthrough
+	case "FP-1":
+		fallthrough
 	case "FP-2":
 		child := &FlushParagraph{Type: "FlushParagraph"}
 		if err := d.DecodeElement(child, &start); err != nil {
@@ -306,9 +308,9 @@ func (sl *SectionCitation) UnmarshalText(data []byte) error {
 }
 
 type Appendix struct {
-	Type     string          `xml:"TYPE,attr" json:"node_type"`
+	Type     string           `xml:"TYPE,attr" json:"node_type"`
 	Citation AppendixCitation `xml:"N,attr" json:"label"`
-	Header   string          `xml:"HEAD" json:"title"`
+	Header   string           `xml:"HEAD" json:"title"`
 	Children AppendixChildren `xml:",any" json:"children"`
 }
 
@@ -390,9 +392,9 @@ type Heading struct {
 }
 
 type EffectiveDateNote struct {
-	Type	string `json:"node_type"`
-	Header	string `xml:"HED" json:"header"`
-	Content	string `xml:"PSPACE" json:"content"`
+	Type    string `json:"node_type"`
+	Header  string `xml:"HED" json:"header"`
+	Content string `xml:"PSPACE" json:"content"`
 }
 
 var ErrNoParents = errors.New("no parents found for this paragraph")
