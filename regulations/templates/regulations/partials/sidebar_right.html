@@ -3,9 +3,8 @@
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
 
-    <div>
-        {% include "regulations/partials/copy-btn.html" with title=node.label class="right-sidebar" label="Copy Link or Citation" %}
-    </div>
+        {% include "regulations/partials/copy-btn.html" with title=node.label class="copy-link-btn" label="Copy Link or Citation" %}
+        <hr />
 
     <h2 id="final-rules-heading">Part {{ reg_part }} Final Rules</h2>
 

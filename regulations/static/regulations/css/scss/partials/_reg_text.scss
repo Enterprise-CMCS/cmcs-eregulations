@@ -33,6 +33,7 @@
         border: none;
         background: none;
         padding: 0;
+        color: $mid_blue;
         cursor: pointer;
         position: absolute;
         margin-left: -1.5em;
@@ -40,6 +41,11 @@
 
         &:focus {
             opacity: 1;
+            color: $dark_blue;
+        }
+
+        &:hover {
+            color: $dark_blue;
         }
     }
 

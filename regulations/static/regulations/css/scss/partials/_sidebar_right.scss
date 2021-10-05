@@ -36,6 +36,7 @@ aside.right-sidebar {
         padding: $spacer-2 $spacer-3;
         border-radius: $border-radius;
         margin: 0 auto $spacer-2 auto;
+        width: 100%;
 
         svg {
             display: inline-block;
@@ -110,6 +111,35 @@ aside.right-sidebar {
                 }
             }
         }
+    }
+
+    .copy-link-btn {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: $mid_blue;
+        height: 30px;
+        padding: 0;
+
+        & span {
+            padding: 0 5px;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: $font-size-xxs;
+        }
+
+        &:hover,
+        &:focus {
+            color: $dark_blue;
+        }
+         + hr {
+             height: 1px;
+             background: $light_gray;
+             border: none;
+             margin: 15px 0;
+         }
     }
 
     ul {
