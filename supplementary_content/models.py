@@ -4,12 +4,17 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 
+## Category types
+# Current choice is one model per level due to constraint of exactly 3 levels.
 
 class Category(models.Model):
     title = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
 
 
 class SubCategory(Category):
@@ -19,38 +24,47 @@ class SubCategory(Category):
 class SubSubCategory(Category):
     parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
 
+## Location models
+# Defines where supplemental content is located. All locations must inherit from AbstractLocation.
 
-class Location(models.Model):
+class AbstractLocation(models.Model):
     title = models.IntegerField()
     part = models.IntegerField()
 
-    def __str__(self):
-        return f'{self.title} {self.part}'
 
-
-class Subpart(Location):
+class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
 
     def __str__(self):
         return f'{self.title} {self.part} Subpart {self.subpart_id}'
 
 
-class SubjectGroup(Location):
+class SubjectGroup(AbstractLocation):
     subject_group_id = models.CharField(max_length=512)
 
     def __str__(self):
         return f'{self.title} {self.part} - {self.subject_group_id}'
 
 
-class Section(Location):
+class Section(AbstractLocation):
     section_id = models.IntegerField()
-    parent = models.ForeignKey(Location, on_delete=models.CASCADE, related_name="children")
+    parent = models.ForeignKey(AbstractLocation, on_delete=models.CASCADE, related_name="children")
 
     def __str__(self):
         return f'{self.title} {self.part}.{self.section_id}'
 
+## Supplemental content models
+# All supplemental content types must inherit from AbstractSupplementalContent.
 
-class SupplementalContent(models.Model):
+class AbstractSupplementalContent(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    approved = models.BooleanField(default=False)
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content")
+    locations = models.ManyToManyField(AbstractLocation, null=True, blank=True, related_name="supplemental_content")
+
+
+class SupplementalContent(AbstractSupplementalContent):
     title = models.CharField(max_length=512, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     url = models.URLField(max_length=512, null=True, blank=True)
@@ -59,19 +73,12 @@ class SupplementalContent(models.Model):
         max_length=10,
         null=True,
         blank=True,
-        help_text="Enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
+        help_text="Leave blank or enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
         validators=[RegexValidator(
             regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
-            message="Date must be of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"! For example: 2021, 2021-01, or 2021-01-31.",
+            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"! For example: 2021, 2021-01, or 2021-01-31.",
         )],
     )
-
-    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content")
-    approved = models.BooleanField(default=False)
-    locations = models.ManyToManyField(Location, null=True, blank=True, related_name="supplemental_content")
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self):
         # If a day is entered into the date field, validate for months with less than 31 days.
