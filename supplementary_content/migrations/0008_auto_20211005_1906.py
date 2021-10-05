@@ -5,6 +5,16 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
+def make_category(id, title, description, order):
+    return {
+        "id": id,
+        "title": title,
+        "description": description,
+        "order": order,
+        "children": [],        
+    }
+
+
 def migrate_categories(apps, schema_editor):
     OldCategory = apps.get_model("supplementary_content", "OldCategory")
     Category = apps.get_model("supplementary_content", "Category")
@@ -18,22 +28,15 @@ def migrate_categories(apps, schema_editor):
 
     # construct tree of old parent categories
     for category in parent_categories:
-        new_categories[category.id] = {
-            "id": category.id,
-            "title": category.title,
-            "description": category.description,
-            "order": category.order,
-            "children": [],
-        }
+        new_categories[category.id] = make_category(
+            category.id, category.title, category.description, category.order
+        )
     # append child categories
     for child in child_categories:
         try:
-            new_categories[child.parent.id]["children"].append({
-                "id": child.id,
-                "title": child.title,
-                "description": child.description,
-                "order": child.order,
-            })
+            new_categories[child.parent.id]["children"].append(make_category(
+                child.id, child.title, child.description, child.order
+            ))
         except KeyError:
             pass
     
@@ -90,6 +93,7 @@ def migrate_supplemental_content(apps, schema_editor):
             except IndexError:
                 pass
 
+        # build new supplemental content object
         new_content = SupplementalContent.objects.create(
             title=content.title,
             description=content.description,
