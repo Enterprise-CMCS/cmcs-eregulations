@@ -48,7 +48,7 @@ class SubjectGroup(AbstractLocation):
 
 class Section(AbstractLocation):
     section_id = models.IntegerField()
-    parent = models.ForeignKey(AbstractLocation, on_delete=models.CASCADE, related_name="children")
+    parent = models.ForeignKey(AbstractLocation, null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
 
     def __str__(self):
         return f'{self.title} {self.part}.{self.section_id}'
