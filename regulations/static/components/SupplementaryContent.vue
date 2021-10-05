@@ -3,7 +3,7 @@
         <supplementary-content-category v-for="(category, index) in categories" :key="index"
             :title="category.title"
             :description="category.description"
-            :supplementary_content="category.supplementary_content"
+            :supplemental_content="category.supplemental_content"
             :sub_categories="category.sub_categories">
         </supplementary-content-category>
     </div>
@@ -49,7 +49,7 @@ export default {
     methods: {
         async fetch_content(title, part, sections) {
             const joinedSections = sections.join("&sections=");
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplementary_content?&sections=${joinedSections}`);
+            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?&sections=${joinedSections}`);
             const content = await response.json();
             return content;
         },

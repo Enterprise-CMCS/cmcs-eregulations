@@ -15,7 +15,7 @@ export const Basic = Template.bind({});
 Basic.args = {
   "title": "Category A",
   "description": "Supplementary content example category A",
-  "supplementary_content": [
+  "supplemental_content": [
     {
       "date": "1989-10-13",
       "title": "Medicaid Management Information System",
@@ -50,7 +50,7 @@ Basic.args = {
     {
       "title": "Sub-category A-A",
       "description": "Example supplementary content sub-category A-A",
-      "supplementary_content": [
+      "supplemental_content": [
         {
           "date": "1989-10-13",
           "title": "Medicaid Management Information System",
@@ -81,7 +81,7 @@ Basic.args = {
     {
       "title": "Sub-category A-B",
       "description": "Example supplementary content sub-category A-B",
-      "supplementary_content": [
+      "supplemental_content": [
         {
           "date": "1989-10-13",
           "title": "Medicaid Management Information System",

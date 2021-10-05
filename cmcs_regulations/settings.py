@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'regcore',
     'regcore.search',
-    'supplementary_content',
+    'supplemental_content',
     'regulations',
 ]
 

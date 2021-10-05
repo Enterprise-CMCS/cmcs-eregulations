@@ -17,10 +17,10 @@
                     :subcategory="true"
                     :title="category.title"
                     :description="category.description"
-                    :supplementary_content="category.supplementary_content"
+                    :supplemental_content="category.supplemental_content"
                     :sub_categories="category.sub_categories">
                 </supplementary-content-category>
-                <supplementary-content-list :supplementary_content="supplementary_content" />
+                <supplementary-content-list :supplemental_content="supplemental_content" />
             </collapsible>
         </div>
     </div>
@@ -54,7 +54,7 @@ export default {
             type: String,
             required: true,
         },
-        supplementary_content: {
+        supplemental_content: {
             type: Array,
             required: false,
         },

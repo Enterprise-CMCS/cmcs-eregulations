@@ -6,7 +6,7 @@ import (
 
 type Regulation struct {
 	Title                string     `json:"title"`
-	SupplementaryContent []Guidance `json:"supplementary_content"`
+	SupplementaryContent []Guidance `json:"supplemental_content"`
 }
 
 func buildRegulation(title string, guidances []Guidance) Regulation {

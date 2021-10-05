@@ -95,7 +95,7 @@ def _make_parent_tree(parents, tree):
     if parent['id'] not in tree.keys():
         tree[parent['id']] = parent
         tree[parent['id']]['sub_categories'] = {}
-        tree[parent['id']]['supplementary_content'] = []
+        tree[parent['id']]['supplemental_content'] = []
 
     if len(parents) < 1:
         return tree[parent['id']]
@@ -122,6 +122,6 @@ def _make_category_tree(data):
     for content in data:
         parents = _get_parents(content.pop('category'), [])
         parent = _make_parent_tree(parents, tree)
-        parent['supplementary_content'].append(content)
+        parent['supplemental_content'].append(content)
     tree = _category_arrays(tree)
     return _sort_categories(tree)

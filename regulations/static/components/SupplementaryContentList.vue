@@ -23,7 +23,7 @@ export default {
     },
 
     props: {
-        supplementary_content: {
+        supplemental_content: {
             type: Array,
             required: true,
         },
@@ -43,12 +43,12 @@ export default {
     computed: {
         limitedContent() {
             if(this.limitedList) {
-                return this.supplementary_content.slice(0, this.limit);
+                return this.supplemental_content.slice(0, this.limit);
             }
-            return this.supplementary_content;
+            return this.supplemental_content;
         },
         contentCount() {
-            return this.supplementary_content.length;
+            return this.supplemental_content.length;
         },
         showMoreNeeded() {
             return this.contentCount > this.limit;

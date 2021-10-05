@@ -8,7 +8,7 @@ def handler(event, context):
     import django
     django.setup()
 
-    content_path = os.environ.get('SUPPLEMENTARY_CONTENT_PATH')
+    content_path = os.environ.get('SUPPLEMENTAL_CONTENT_PATH')
     content_list = os.listdir(content_path)
     for file in content_list:
         print(f'loading {file}...')
@@ -26,17 +26,17 @@ def populate(data):
 def populate_category(category_data):
     from django.core.exceptions import ObjectDoesNotExist
     from rest_framework import serializers
-    from supplementary_content.models import Category
-    from supplementary_content.views import SupplementaryContentSerializer
+    from supplemental_content.models import Category
+    from supplemental_content.views import SupplementaryContentSerializer
 
     class CategorySerializer(serializers.ModelSerializer):
-        supplementary_content = SupplementaryContentSerializer(many=True, read_only=True)
+        supplemental_content = SupplementaryContentSerializer(many=True, read_only=True)
 
         class Meta:
             model = Category
-            fields = ("id", "title", "description", "supplementary_content")
+            fields = ("id", "title", "description", "supplemental_content")
 
-    supplementary_contents_data = category_data.pop('supplementary_content')
+    supplemental_contents_data = category_data.pop('supplemental_content')
 
     try:
         category = Category.objects.get(title=category_data['title'])
@@ -45,24 +45,24 @@ def populate_category(category_data):
         if category_serializer.is_valid(raise_exception=True):
             category = category_serializer.save()
 
-    update_relations(category, supplementary_contents_data)
+    update_relations(category, supplemental_contents_data)
 
 
-def update_relations(category, supplementary_contents_data):
-    from supplementary_content.models import SupplementaryContent, RegulationSection
+def update_relations(category, supplemental_contents_data):
+    from supplemental_content.models import SupplementaryContent, RegulationSection
 
-    for supplementary_content_data in supplementary_contents_data:
-        sections = supplementary_content_data.pop('sections')
-        url = supplementary_content_data.pop('url')
-        supplementary_content, _created = SupplementaryContent.objects.get_or_create(
+    for supplemental_content_data in supplemental_contents_data:
+        sections = supplemental_content_data.pop('sections')
+        url = supplemental_content_data.pop('url')
+        supplemental_content, _created = SupplementaryContent.objects.get_or_create(
             url=url,
             defaults={
                 'category': category,
                 'approved': False,
-                **supplementary_content_data
+                **supplemental_content_data
             }
         )
 
         for section in sections:
             regulation_section, _created = RegulationSection.objects.get_or_create(**section)
-            regulation_section.supplementary_content.add(supplementary_content)
+            regulation_section.supplemental_content.add(supplemental_content)
