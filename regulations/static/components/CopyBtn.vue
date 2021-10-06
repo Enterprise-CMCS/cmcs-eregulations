@@ -11,12 +11,15 @@
     >
         <i class="fa fa-link"></i>
         <span v-if="label">{{ label }}</span>
-        <div v-if="entered" class="copy-tooltip hovered">Entered</div>
-        <div v-if="clicked" class="copy-tooltip clicked">Clicked</div>
+        <div v-show="entered" class="copy-tooltip hovered" :style="styleObject">
+            Entered
+        </div>
     </button>
 </template>
 
 <script>
+const appendPxSuffix = (int) => `${int}px`;
+
 export default {
     name: "copy-btn",
 
@@ -36,6 +39,7 @@ export default {
         return {
             entered: false,
             clicked: false,
+            leftAnchorPos: undefined,
         };
     },
 
@@ -45,18 +49,29 @@ export default {
                 "copy-btn-labeled": this.btn_type === "labeled-icon",
             };
         },
+        styleObject: function () {
+            return {
+                left: this.leftAnchorPos,
+                transform: "translate(-50%, 0)",
+            };
+        },
     },
 
     methods: {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
+            this.leftAnchorPos = appendPxSuffix(e.currentTarget.offsetWidth / 2);
         },
         handleExit(e) {
-            this.entered = false;
+            if (!this.clicked) {
+                this.entered = false;
+                this.leftAnchorPos = undefined;
+            }
         },
         handleClick(e) {
             this.entered = false;
             this.clicked = true;
+            this.leftAnchorPos = appendPxSuffix(e.currentTarget.offsetWidth / 2);
         },
     },
 };

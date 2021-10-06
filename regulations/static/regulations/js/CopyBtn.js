@@ -16,6 +16,9 @@
 //
 //
 //
+//
+
+const appendPxSuffix = (int) => `${int}px`;
 
 var script = {
     name: "copy-btn",
@@ -36,6 +39,7 @@ var script = {
         return {
             entered: false,
             clicked: false,
+            leftAnchorPos: undefined,
         };
     },
 
@@ -45,18 +49,29 @@ var script = {
                 "copy-btn-labeled": this.btn_type === "labeled-icon",
             };
         },
+        styleObject: function () {
+            return {
+                left: this.leftAnchorPos,
+                transform: "translate(-50%, 0)",
+            };
+        },
     },
 
     methods: {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
+            this.leftAnchorPos = appendPxSuffix(e.currentTarget.offsetWidth / 2);
         },
         handleExit(e) {
-            this.entered = false;
+            if (!this.clicked) {
+                this.entered = false;
+                this.leftAnchorPos = undefined;
+            }
         },
         handleClick(e) {
             this.entered = false;
             this.clicked = true;
+            this.leftAnchorPos = appendPxSuffix(e.currentTarget.offsetWidth / 2);
         },
     },
 };
@@ -163,17 +178,22 @@ var __vue_render__ = function() {
       _vm._v(" "),
       _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e(),
       _vm._v(" "),
-      _vm.entered
-        ? _c("div", { staticClass: "copy-tooltip hovered" }, [
-            _vm._v("Entered")
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.clicked
-        ? _c("div", { staticClass: "copy-tooltip clicked" }, [
-            _vm._v("Clicked")
-          ])
-        : _vm._e()
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.entered,
+              expression: "entered"
+            }
+          ],
+          staticClass: "copy-tooltip hovered",
+          style: _vm.styleObject
+        },
+        [_vm._v("\n        Entered\n    ")]
+      )
     ]
   )
 };
