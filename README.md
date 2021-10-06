@@ -35,6 +35,10 @@ Will start a local docker environment and load parts of Title 42 into it.
 
 Proceed to <http://localhost:8000> in your browser to see the results.
 
+`make local.createadmin` will create an admin superuser for the admin portion of the site.
+
+Proceed to <http://localhost:8000/admin> to access the admin portion and login with the credentials you created in the previous step
+
 `make local.stop` will cause the running docker processes to stop without losing data.
 
 `make local.clean` will remove the local environment completely, useful when you want to start fresh.
