@@ -50,6 +50,8 @@ export default {
         expandedType: function () {
             if (this.type === "Rule") {
                 return "Final";
+            } else if(this.type === "Proposed Rule"){
+              return "Proposed Rule"
             }
             return "Unknown";
         },

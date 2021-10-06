@@ -1,11 +1,8 @@
-{% load render_nested %}
-
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
+    <h2>Part {{ reg_part}} Federal Register Documents</h2>
 
-    <h2 id="final-rules-heading">Part {{ reg_part }} Final Rules</h2>
-
-    <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2"></related-rules>
+    <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2" ruletype="RULE"></related-rules>
 
     {% if sections %}
     <h2 id="subpart-resources-heading">Subpart {{ subpart }} Resources</h2>
