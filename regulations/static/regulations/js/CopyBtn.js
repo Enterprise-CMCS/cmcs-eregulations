@@ -16,7 +16,6 @@
 //
 //
 //
-//
 
 var script = {
     name: "copy-btn",
@@ -43,8 +42,7 @@ var script = {
     computed: {
         classObject: function () {
             return {
-                reference: this.btn_type === "icon",
-                "copy-link-btn": this.btn_type === "labeled-icon",
+                "copy-btn-labeled": this.btn_type === "labeled-icon",
             };
         },
     },
@@ -146,35 +144,38 @@ var __vue_render__ = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", [
-    _vm.entered
-      ? _c("div", { staticClass: "hover-item" }, [_vm._v("Entered")])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.clicked
-      ? _c("div", { staticClass: "clicked-item" }, [_vm._v("Clicked")])
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        class: _vm.classObject,
-        attrs: { title: _vm.title },
-        on: {
-          focus: _vm.handleEnter,
-          focusout: _vm.handleExit,
-          mouseenter: _vm.handleEnter,
-          mouseleave: _vm.handleExit,
-          click: _vm.handleClick
-        }
-      },
-      [
-        _c("i", { staticClass: "fa fa-link" }),
-        _vm._v(" "),
-        _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e()
-      ]
-    )
-  ])
+  return _c(
+    "button",
+    {
+      staticClass: "copy-btn",
+      class: _vm.classObject,
+      attrs: { title: _vm.title },
+      on: {
+        focus: _vm.handleEnter,
+        focusout: _vm.handleExit,
+        mouseenter: _vm.handleEnter,
+        mouseleave: _vm.handleExit,
+        click: _vm.handleClick
+      }
+    },
+    [
+      _c("i", { staticClass: "fa fa-link" }),
+      _vm._v(" "),
+      _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e(),
+      _vm._v(" "),
+      _vm.entered
+        ? _c("div", { staticClass: "copy-tooltip hovered" }, [
+            _vm._v("Entered")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.clicked
+        ? _c("div", { staticClass: "copy-tooltip clicked" }, [
+            _vm._v("Clicked")
+          ])
+        : _vm._e()
+    ]
+  )
 };
 var __vue_staticRenderFns__ = [];
 __vue_render__._withStripped = true;

@@ -1,20 +1,19 @@
 <template>
-    <div>
-        <div v-if="entered" class="hover-item">Entered</div>
-        <div v-if="clicked" class="clicked-item">Clicked</div>
-        <button
-            :class="classObject"
-            :title="title"
-            @focus="handleEnter"
-            @focusout="handleExit"
-            @mouseenter="handleEnter"
-            @mouseleave="handleExit"
-            @click="handleClick"
-        >
-            <i class="fa fa-link"></i>
-            <span v-if="label">{{ label }}</span>
-        </button>
-    </div>
+    <button
+        class="copy-btn"
+        :class="classObject"
+        :title="title"
+        @focus="handleEnter"
+        @focusout="handleExit"
+        @mouseenter="handleEnter"
+        @mouseleave="handleExit"
+        @click="handleClick"
+    >
+        <i class="fa fa-link"></i>
+        <span v-if="label">{{ label }}</span>
+        <div v-if="entered" class="copy-tooltip hovered">Entered</div>
+        <div v-if="clicked" class="copy-tooltip clicked">Clicked</div>
+    </button>
 </template>
 
 <script>
@@ -43,8 +42,7 @@ export default {
     computed: {
         classObject: function () {
             return {
-                reference: this.btn_type === "icon",
-                "copy-link-btn": this.btn_type === "labeled-icon",
+                "copy-btn-labeled": this.btn_type === "labeled-icon",
             };
         },
     },

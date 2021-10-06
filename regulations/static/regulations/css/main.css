@@ -15629,37 +15629,6 @@ aside.right-sidebar #view-button[data-state=show]:hover svg line {
 aside.right-sidebar #view-button[data-state=show]:hover svg path {
   fill: #046791;
 }
-aside.right-sidebar .copy-btn-container {
-  min-height: 40px;
-}
-aside.right-sidebar .copy-btn-container .copy-link-btn {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border: none;
-  background: none;
-  color: #046791;
-  padding: 0;
-  height: 30px;
-}
-aside.right-sidebar .copy-btn-container .copy-link-btn i {
-  min-width: 16px;
-}
-aside.right-sidebar .copy-btn-container .copy-link-btn span {
-  padding: 0 5px;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 10px;
-}
-aside.right-sidebar .copy-btn-container .copy-link-btn:hover, aside.right-sidebar .copy-btn-container .copy-link-btn:focus {
-  color: #17415f;
-}
-aside.right-sidebar .copy-btn-container .copy-link-btn + hr {
-  height: 1px;
-  background: #d6d7d9;
-  border: none;
-  margin: 15px 0;
-}
 aside.right-sidebar ul {
   list-style: none;
   padding: 0 0 16px 0;
@@ -15966,36 +15935,6 @@ select:focus-visible {
     font-size: 30.4px;
     line-height: 1.5;
   }
-}
-.reg-text .reference {
-  border: none;
-  background: none;
-  padding: 0;
-  color: #046791;
-  cursor: pointer;
-  position: absolute;
-  margin-left: -1.5em;
-  opacity: 0;
-}
-.reg-text .reference:focus {
-  opacity: 1;
-  color: #17415f;
-}
-.reg-text .reference:hover {
-  color: #17415f;
-}
-.reg-text h1 > .reference,
-.reg-text h2 > .reference {
-  margin-left: -1.2em;
-}
-@media (min-width: 1440px) {
-  .reg-text h1 > .reference,
-.reg-text h2 > .reference {
-    margin-left: -1.4em;
-  }
-}
-.reg-text :hover > .reference {
-  opacity: 1;
 }
 .reg-text .section-title {
   color: #17415f;
@@ -17774,6 +17713,156 @@ select:focus-visible {
 .browser-not-supported p {
   max-width: 53rem;
   margin: 0 auto;
+}
+
+.indicator {
+  background: #026666;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+a:link.external::after {
+  content: "";
+  background-image: url("../images/external-link.svg");
+  margin-left: 0.1em;
+  padding-left: 1em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 0.8em;
+}
+a:hover.external::after {
+  content: "";
+  background-image: url("../images/external-link-hover.svg");
+  margin-left: 0.1em;
+  padding-left: 1em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 0.8em;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
+a {
+  color: #046791;
+}
+a:focus, a:hover {
+  color: #17415f;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
+.content :target {
+  scroll-margin-top: 86px;
+}
+@media (min-width: 1024px) {
+  .content :target {
+    scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
+  }
+}
+
+.copy-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  color: #046791;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.copy-btn:focus {
+  color: #17415f;
+}
+.copy-btn:hover {
+  color: #17415f;
+}
+.copy-btn .copy-tooltip {
+  position: absolute;
+  top: -1rem;
+}
+
+.reg-text .copy-btn {
+  display: flex;
+  align-items: end;
+  height: 1.2em;
+  position: absolute;
+  margin-left: -1.5em;
+  opacity: 0;
+}
+.reg-text .copy-btn:focus {
+  opacity: 1;
+}
+.reg-text h1 > .copy-btn,
+.reg-text h2 > .copy-btn {
+  margin-left: -1.2em;
+}
+@media (min-width: 1440px) {
+  .reg-text h1 > .copy-btn,
+.reg-text h2 > .copy-btn {
+    margin-left: -1.4em;
+  }
+}
+.reg-text :hover > .copy-btn {
+  opacity: 1;
+}
+
+aside.right-sidebar .copy-btn-container {
+  min-height: 40px;
+  position: relative;
+}
+aside.right-sidebar .copy-btn-container .copy-btn-labeled {
+  display: flex;
+  align-items: center;
+  height: 30px;
+}
+aside.right-sidebar .copy-btn-container .copy-btn-labeled i {
+  min-width: 16px;
+}
+aside.right-sidebar .copy-btn-container .copy-btn-labeled span {
+  padding: 0 5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 10px;
+}
+aside.right-sidebar .copy-btn-container .copy-btn-labeled + hr {
+  height: 1px;
+  background: #d6d7d9;
+  border: none;
+  margin: 15px 0;
 }
 
 /*# sourceMappingURL=main.css.map */
