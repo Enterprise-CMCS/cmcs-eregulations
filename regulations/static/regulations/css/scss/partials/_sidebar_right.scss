@@ -113,33 +113,41 @@ aside.right-sidebar {
         }
     }
 
-    .copy-link-btn {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        border: none;
-        background: none;
-        color: $mid_blue;
-        height: 30px;
-        padding: 0;
+    .copy-btn-container {
+        min-height: 40px;
 
-        & span {
-            padding: 0 5px;
-            text-transform: uppercase;
-            font-weight: 700;
-            font-size: $font-size-xxs;
-        }
+        .copy-link-btn {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: $mid_blue;
+            padding: 0;
+            height: 30px;
 
-        &:hover,
-        &:focus {
-            color: $dark_blue;
+            i {
+                min-width: 16px;
+            }
+
+            & span {
+                padding: 0 5px;
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: $font-size-xxs;
+            }
+
+            &:hover,
+            &:focus {
+                color: $dark_blue;
+            }
+            + hr {
+                height: 1px;
+                background: $light_gray;
+                border: none;
+                margin: 15px 0;
+            }
         }
-         + hr {
-             height: 1px;
-             background: $light_gray;
-             border: none;
-             margin: 15px 0;
-         }
     }
 
     ul {

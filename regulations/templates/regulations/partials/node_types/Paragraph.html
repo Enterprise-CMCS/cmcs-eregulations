@@ -1,7 +1,7 @@
 {% load paragraphs %}
 <p tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section depth-{{node|pdepth}}">
     {% if node.label and node.label|length > 0 %}
-        {% include "regulations/partials/copy-btn.html" with title=node.label class="reference" %}
+        {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="icon" %}
     {% endif %}
     {{node.text | safe}}
 </p>

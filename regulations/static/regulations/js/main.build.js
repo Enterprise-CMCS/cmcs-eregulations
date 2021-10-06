@@ -1980,12 +1980,16 @@
   //
   //
   //
+  //
+  //
+  //
+  //
 
   var script = {
       name: "copy-btn",
 
       props: {
-          class: {
+          btn_type: {
               type: String,
               required: true,
           },
@@ -1998,29 +2002,30 @@
 
       data: function () {
           return {
-              className: this.class,
-              title: this.title,
+              entered: false,
+              clicked: false,
           };
       },
 
+      computed: {
+          classObject: function () {
+              return {
+                  reference: this.btn_type === "icon",
+                  "copy-link-btn": this.btn_type === "labeled-icon",
+              };
+          },
+      },
+
       methods: {
-          handleFocusIn() {
-              console.log("focused!");
+          handleEnter(e) {
+              if (!this.entered && !this.clicked) this.entered = true;
           },
-          handleFocusOut() {
-              console.log("unfocused!");
+          handleExit(e) {
+              this.entered = false;
           },
-          handleMouseEnter() {
-              // state change
-              console.log("mouse entered!");
-          },
-          handleMouseLeave() {
-              // state change
-              console.log("mouse left!");
-          },
-          handleClick() {
-              // state change
-              console.log("clicked!");
+          handleClick(e) {
+              this.entered = false;
+              this.clicked = true;
           },
       },
   };
@@ -2108,35 +2113,35 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c(
-      "button",
-      {
-        class: [_vm.className],
-        attrs: { title: _vm.title },
-        on: {
-          focusin: function($event) {
-            return _vm.handleFocusIn()
-          },
-          focusout: function($event) {
-            return _vm.handleFocusOut()
-          },
-          mouseenter: function($event) {
-            return _vm.handleMouseEnter()
-          },
-          mouseleave: function($event) {
-            return _vm.handleMouseLeave()
-          },
-          click: function($event) {
-            return _vm.handleClick()
+    return _c("div", [
+      _vm.entered
+        ? _c("div", { staticClass: "hover-item" }, [_vm._v("Entered")])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.clicked
+        ? _c("div", { staticClass: "clicked-item" }, [_vm._v("Clicked")])
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          class: _vm.classObject,
+          attrs: { title: _vm.title },
+          on: {
+            focus: _vm.handleEnter,
+            focusout: _vm.handleExit,
+            mouseenter: _vm.handleEnter,
+            mouseleave: _vm.handleExit,
+            click: _vm.handleClick
           }
-        }
-      },
-      [
-        _c("i", { staticClass: "fa fa-link" }),
-        _vm._v(" "),
-        _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e()
-      ]
-    )
+        },
+        [
+          _c("i", { staticClass: "fa fa-link" }),
+          _vm._v(" "),
+          _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e()
+        ]
+      )
+    ])
   };
   var __vue_staticRenderFns__ = [];
   __vue_render__._withStripped = true;

@@ -1,16 +1,20 @@
 <template>
-    <button
-        :class="[className]"
-        :title="title"
-        @focusin="handleFocusIn()"
-        @focusout="handleFocusOut()"
-        @mouseenter="handleMouseEnter()"
-        @mouseleave="handleMouseLeave()"
-        @click="handleClick()"
-    >
-        <i class="fa fa-link"></i>
-        <span v-if="label">{{ label }}</span>
-    </button>
+    <div>
+        <div v-if="entered" class="hover-item">Entered</div>
+        <div v-if="clicked" class="clicked-item">Clicked</div>
+        <button
+            :class="classObject"
+            :title="title"
+            @focus="handleEnter"
+            @focusout="handleExit"
+            @mouseenter="handleEnter"
+            @mouseleave="handleExit"
+            @click="handleClick"
+        >
+            <i class="fa fa-link"></i>
+            <span v-if="label">{{ label }}</span>
+        </button>
+    </div>
 </template>
 
 <script>
@@ -18,7 +22,7 @@ export default {
     name: "copy-btn",
 
     props: {
-        class: {
+        btn_type: {
             type: String,
             required: true,
         },
@@ -31,29 +35,30 @@ export default {
 
     data: function () {
         return {
-            className: this.class,
-            title: this.title,
+            entered: false,
+            clicked: false,
         };
     },
 
+    computed: {
+        classObject: function () {
+            return {
+                reference: this.btn_type === "icon",
+                "copy-link-btn": this.btn_type === "labeled-icon",
+            };
+        },
+    },
+
     methods: {
-        handleFocusIn() {
-            console.log("focused!");
+        handleEnter(e) {
+            if (!this.entered && !this.clicked) this.entered = true;
         },
-        handleFocusOut() {
-            console.log("unfocused!");
+        handleExit(e) {
+            this.entered = false;
         },
-        handleMouseEnter() {
-            // state change
-            console.log("mouse entered!");
-        },
-        handleMouseLeave() {
-            // state change
-            console.log("mouse left!");
-        },
-        handleClick() {
-            // state change
-            console.log("clicked!");
+        handleClick(e) {
+            this.entered = false;
+            this.clicked = true;
         },
     },
 };
