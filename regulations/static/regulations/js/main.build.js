@@ -972,7 +972,7 @@
 
 
   var script$6 = {
-    name: 'supplementary-content-object',
+    name: 'supplemental-content-object',
 
     props: {
       title: {
@@ -1099,11 +1099,11 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "supplementary-content" }, [
+    return _c("div", { staticClass: "supplemental-content" }, [
       _c(
         "a",
         {
-          staticClass: "supplementary-content-link",
+          staticClass: "supplemental-content-link",
           attrs: { href: _vm.url, target: "_blank", rel: "noopener noreferrer" }
         },
         [
@@ -1111,9 +1111,9 @@
             ? _c(
                 "span",
                 {
-                  staticClass: "supplementary-content-date",
+                  staticClass: "supplemental-content-date",
                   class: {
-                    "supplementary-content-mid-bar": !_vm.isBlank(_vm.title)
+                    "supplemental-content-mid-bar": !_vm.isBlank(_vm.title)
                   }
                 },
                 [_vm._v(_vm._s(_vm._f("formatDate")(_vm.date)))]
@@ -1124,9 +1124,9 @@
             ? _c(
                 "span",
                 {
-                  staticClass: "supplementary-content-title",
+                  staticClass: "supplemental-content-title",
                   class: {
-                    "supplementary-content-external-link": _vm.isBlank(
+                    "supplemental-content-external-link": _vm.isBlank(
                       _vm.description
                     )
                   }
@@ -1140,7 +1140,7 @@
                 "div",
                 {
                   staticClass:
-                    "supplementary-content-description supplementary-content-external-link"
+                    "supplemental-content-description supplemental-content-external-link"
                 },
                 [_vm._v(_vm._s(_vm.description))]
               )
@@ -1273,15 +1273,15 @@
   //
 
   var script$4 = {
-      name: 'supplementary-content-list',
+      name: 'supplemental-content-list',
 
       components: {
-          SupplementaryContentObject: __vue_component__$6,
+          SupplementalContentObject: __vue_component__$6,
           ShowMoreButton: __vue_component__$5,
       },
 
       props: {
-          supplementary_content: {
+          supplemental_content: {
               type: Array,
               required: true,
           },
@@ -1301,12 +1301,12 @@
       computed: {
           limitedContent() {
               if(this.limitedList) {
-                  return this.supplementary_content.slice(0, this.limit);
+                  return this.supplemental_content.slice(0, this.limit);
               }
-              return this.supplementary_content;
+              return this.supplemental_content;
           },
           contentCount() {
-              return this.supplementary_content.length;
+              return this.supplemental_content.length;
           },
           showMoreNeeded() {
               return this.contentCount > this.limit;
@@ -1330,10 +1330,10 @@
     var _c = _vm._self._c || _h;
     return _c(
       "div",
-      { staticClass: "supplementary-content-list" },
+      { staticClass: "supplemental-content-list" },
       [
         _vm._l(_vm.limitedContent, function(content, index) {
-          return _c("supplementary-content-object", {
+          return _c("supplemental-content-object", {
             key: index,
             attrs: {
               title: content.title,
@@ -1691,10 +1691,10 @@
   //
 
   var script$1 = {
-      name: 'supplementary-content-category',
+      name: 'supplemental-content-category',
 
       components: {
-          SupplementaryContentList: __vue_component__$4,
+          SupplementalContentList: __vue_component__$4,
           CollapseButton: __vue_component__$3,
           Collapsible: __vue_component__$2,
       },
@@ -1713,7 +1713,7 @@
               type: String,
               required: true,
           },
-          supplementary_content: {
+          supplemental_content: {
               type: Array,
               required: false,
           },
@@ -1738,7 +1738,7 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "supplementary-content-category" }, [
+    return _c("div", { staticClass: "supplemental-content-category" }, [
       _c(
         "div",
         { staticClass: "category-toggle-container" },
@@ -1807,20 +1807,20 @@
             },
             [
               _vm._l(_vm.sub_categories, function(category, index) {
-                return _c("supplementary-content-category", {
+                return _c("supplemental-content-category", {
                   key: index,
                   attrs: {
                     subcategory: true,
                     title: category.title,
                     description: category.description,
-                    supplementary_content: category.supplementary_content,
+                    supplemental_content: category.supplemental_content,
                     sub_categories: category.sub_categories
                   }
                 })
               }),
               _vm._v(" "),
-              _c("supplementary-content-list", {
-                attrs: { supplementary_content: _vm.supplementary_content }
+              _c("supplemental-content-list", {
+                attrs: { supplemental_content: _vm.supplemental_content }
               })
             ],
             2
@@ -1866,7 +1866,7 @@
 
   var script = {
       components: {
-          SupplementaryContentCategory: __vue_component__$1,
+          SupplementalContentCategory: __vue_component__$1,
       },
 
       props: {
@@ -1901,7 +1901,7 @@
       methods: {
           async fetch_content(title, part, sections) {
               const joinedSections = sections.join("&sections=");
-              const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplementary_content?&sections=${joinedSections}`);
+              const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?&sections=${joinedSections}`);
               const content = await response.json();
               return content;
           },
@@ -1918,14 +1918,14 @@
     var _c = _vm._self._c || _h;
     return _c(
       "div",
-      { staticClass: "supplementary-content-container" },
+      { staticClass: "supplemental-content-container" },
       _vm._l(_vm.categories, function(category, index) {
-        return _c("supplementary-content-category", {
+        return _c("supplemental-content-category", {
           key: index,
           attrs: {
             title: category.title,
             description: category.description,
-            supplementary_content: category.supplementary_content,
+            supplemental_content: category.supplemental_content,
             sub_categories: category.sub_categories
           }
         })
@@ -2166,7 +2166,7 @@
               RelatedRules: __vue_component__$9,
               Collapsible: __vue_component__$8,
               CollapseButton: __vue_component__$7,
-              SupplementaryContent: __vue_component__,
+              SupplementalContent: __vue_component__,
           },
       }).$mount("#vue-app");
 

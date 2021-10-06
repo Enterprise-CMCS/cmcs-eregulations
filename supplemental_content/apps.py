@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class SupplementaryContentConfig(AppConfig):
+class SupplementalContentConfig(AppConfig):
     name = "supplemental_content"
-    verbose_name = "Supplementary content for regulations"
+    verbose_name = "Supplemental content for regulations"

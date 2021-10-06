@@ -27,10 +27,10 @@ def populate_category(category_data):
     from django.core.exceptions import ObjectDoesNotExist
     from rest_framework import serializers
     from supplemental_content.models import Category
-    from supplemental_content.views import SupplementaryContentSerializer
+    from supplemental_content.views import SupplementalContentSerializer
 
     class CategorySerializer(serializers.ModelSerializer):
-        supplemental_content = SupplementaryContentSerializer(many=True, read_only=True)
+        supplemental_content = SupplementalContentSerializer(many=True, read_only=True)
 
         class Meta:
             model = Category
@@ -49,12 +49,12 @@ def populate_category(category_data):
 
 
 def update_relations(category, supplemental_contents_data):
-    from supplemental_content.models import SupplementaryContent, RegulationSection
+    from supplemental_content.models import SupplementalContent, RegulationSection
 
     for supplemental_content_data in supplemental_contents_data:
         sections = supplemental_content_data.pop('sections')
         url = supplemental_content_data.pop('url')
-        supplemental_content, _created = SupplementaryContent.objects.get_or_create(
+        supplemental_content, _created = SupplementalContent.objects.get_or_create(
             url=url,
             defaults={
                 'category': category,

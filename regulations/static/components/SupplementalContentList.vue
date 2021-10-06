@@ -1,24 +1,24 @@
 <template>
-    <div class="supplementary-content-list">
-        <supplementary-content-object v-for="(content, index) in limitedContent" :key="index"
+    <div class="supplemental-content-list">
+        <supplemental-content-object v-for="(content, index) in limitedContent" :key="index"
             :title="content.title"
             :description="content.description"
             :date="content.date"
             :url="content.url">
-        </supplementary-content-object>
+        </supplemental-content-object>
         <show-more-button v-if="showMoreNeeded" :showMore="showMore" :count="contentCount"></show-more-button>
     </div>
 </template>
 
 <script>
-import SupplementaryContentObject from './SupplementaryContentObject.vue'
+import SupplementalContentObject from './SupplementalContentObject.vue'
 import ShowMoreButton from './ShowMoreButton.vue'
 
 export default {
-    name: 'supplementary-content-list',
+    name: 'supplemental-content-list',
 
     components: {
-        SupplementaryContentObject,
+        SupplementalContentObject,
         ShowMoreButton,
     },
 

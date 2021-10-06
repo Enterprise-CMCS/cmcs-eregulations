@@ -34,10 +34,10 @@ export default [
         ],
     },
     {
-        input: 'components/SupplementaryContent.vue',
+        input: 'components/SupplementalContent.vue',
         output: {
             format: 'esm',
-            file: 'regulations/js/SupplementaryContent.js'
+            file: 'regulations/js/SupplementalContent.js'
         },
         plugins: [
             vue()

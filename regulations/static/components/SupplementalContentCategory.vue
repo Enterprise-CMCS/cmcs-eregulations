@@ -1,5 +1,5 @@
 <template>
-    <div class="supplementary-content-category">
+    <div class="supplemental-content-category">
         <div class="category-toggle-container">
             <collapse-button :name="title" state="collapsed" class="category-toggle">
                 <template v-slot:expanded><i class="fa fa-chevron-up"></i></template>
@@ -13,29 +13,29 @@
             </collapse-button>
             <span v-if="showDescription" class="category-description">{{ description }}</span>
             <collapsible :name="title" state="collapsed" class="category-content">
-                <supplementary-content-category v-for="(category, index) in sub_categories" :key="index"
+                <supplemental-content-category v-for="(category, index) in sub_categories" :key="index"
                     :subcategory="true"
                     :title="category.title"
                     :description="category.description"
                     :supplemental_content="category.supplemental_content"
                     :sub_categories="category.sub_categories">
-                </supplementary-content-category>
-                <supplementary-content-list :supplemental_content="supplemental_content" />
+                </supplemental-content-category>
+                <supplemental-content-list :supplemental_content="supplemental_content" />
             </collapsible>
         </div>
     </div>
 </template>
 
 <script>
-import SupplementaryContentList from './SupplementaryContentList.vue'
+import SupplementalContentList from './SupplementalContentList.vue'
 import CollapseButton from './CollapseButton.vue'
 import Collapsible from './Collapsible.vue'
 
 export default {
-    name: 'supplementary-content-category',
+    name: 'supplemental-content-category',
 
     components: {
-        SupplementaryContentList,
+        SupplementalContentList,
         CollapseButton,
         Collapsible,
     },

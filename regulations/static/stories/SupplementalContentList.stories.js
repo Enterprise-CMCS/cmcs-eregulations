@@ -1,14 +1,14 @@
-import SupplementaryContentList from '../components/SupplementaryContentList.vue';
+import SupplementalContentList from '../components/SupplementalContentList.vue';
 
 export default {
-  title: 'SupplementaryContent/SupplementaryContentList',
-  component: SupplementaryContentList,
+  title: 'SupplementalContent/SupplementalContentList',
+  component: SupplementalContentList,
 };
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { SupplementaryContentList },
-  template: '<supplementary-content-list v-bind="$props" ></supplementary-content-list>',
+  components: { SupplementalContentList },
+  template: '<supplemental-content-list v-bind="$props" ></supplemental-content-list>',
 });
 
 export const Basic = Template.bind({});

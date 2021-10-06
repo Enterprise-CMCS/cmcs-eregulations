@@ -1,20 +1,20 @@
 <template>
-    <div class="supplementary-content-container">
-        <supplementary-content-category v-for="(category, index) in categories" :key="index"
+    <div class="supplemental-content-container">
+        <supplemental-content-category v-for="(category, index) in categories" :key="index"
             :title="category.title"
             :description="category.description"
             :supplemental_content="category.supplemental_content"
             :sub_categories="category.sub_categories">
-        </supplementary-content-category>
+        </supplemental-content-category>
     </div>
 </template>
 
 <script>
-import SupplementaryContentCategory from './SupplementaryContentCategory.vue'
+import SupplementalContentCategory from './SupplementalContentCategory.vue'
 
 export default {
     components: {
-        SupplementaryContentCategory,
+        SupplementalContentCategory,
     },
 
     props: {

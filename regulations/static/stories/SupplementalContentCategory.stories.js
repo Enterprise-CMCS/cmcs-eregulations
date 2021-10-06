@@ -1,20 +1,20 @@
-import SupplementaryContentCategory from '../components/SupplementaryContentCategory.vue';
+import SupplementalContentCategory from '../components/SupplementalContentCategory.vue';
 
 export default {
-  title: 'SupplementaryContent/SupplementaryContentCategory',
-  component: SupplementaryContentCategory,
+  title: 'SupplementalContent/SupplementalContentCategory',
+  component: SupplementalContentCategory,
 };
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { SupplementaryContentCategory },
-  template: '<supplementary-content-category v-bind="$props" ></supplementary-content-category>',
+  components: { SupplementalContentCategory },
+  template: '<supplemental-content-category v-bind="$props" ></supplemental-content-category>',
 });
 
 export const Basic = Template.bind({});
 Basic.args = {
   "title": "Category A",
-  "description": "Supplementary content example category A",
+  "description": "Supplemental content example category A",
   "supplemental_content": [
     {
       "date": "1989-10-13",
@@ -49,7 +49,7 @@ Basic.args = {
   "sub_categories": [
     {
       "title": "Sub-category A-A",
-      "description": "Example supplementary content sub-category A-A",
+      "description": "Example supplemental content sub-category A-A",
       "supplemental_content": [
         {
           "date": "1989-10-13",
@@ -65,7 +65,7 @@ Basic.args = {
           ]
         },
         {
-          "title": "Supplementary content example 2",
+          "title": "Supplemental content example 2",
           "url": "example2",
           "sections": [
             {
@@ -80,7 +80,7 @@ Basic.args = {
     },
     {
       "title": "Sub-category A-B",
-      "description": "Example supplementary content sub-category A-B",
+      "description": "Example supplemental content sub-category A-B",
       "supplemental_content": [
         {
           "date": "1989-10-13",
@@ -96,7 +96,7 @@ Basic.args = {
           ]
         },
         {
-          "title": "Supplementary content example 4",
+          "title": "Supplemental content example 4",
           "url": "example4",
           "sections": [
             {

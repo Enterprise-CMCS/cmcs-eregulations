@@ -15730,33 +15730,33 @@ aside.right-sidebar .resource-info {
   overflow: hidden;
 }
 
-.supplementary-content {
+.supplemental-content {
   margin-bottom: 1em;
 }
-.supplementary-content .supplementary-content-link {
+.supplemental-content .supplemental-content-link {
   text-decoration: none;
 }
-.supplementary-content .supplementary-content-date {
+.supplemental-content .supplemental-content-date {
   color: #046791;
   font-weight: bold;
   padding-right: 8px;
   margin-right: 8px;
   font-size: 14px;
 }
-.supplementary-content .supplementary-content-mid-bar {
+.supplemental-content .supplemental-content-mid-bar {
   border-right: 1px solid black;
 }
-.supplementary-content .supplementary-content-title {
+.supplemental-content .supplemental-content-title {
   color: #046791;
   font-weight: bold;
   font-size: 14px;
 }
-.supplementary-content .supplementary-content-description {
+.supplemental-content .supplemental-content-description {
   color: #046791;
   text-decoration: none;
   font-size: 14px;
 }
-.supplementary-content .supplementary-content-external-link:after {
+.supplemental-content .supplemental-content-external-link:after {
   content: "";
   background-image: url("../images/external-link.svg");
   margin-left: 0.1em;
@@ -15766,14 +15766,14 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
-.supplementary-content-category {
+.supplemental-content-category {
   display: table;
   margin-bottom: 1em;
 }
-.supplementary-content-category .category {
+.supplemental-content-category .category {
   display: table-cell;
 }
-.supplementary-content-category button.category-title {
+.supplemental-content-category button.category-title {
   font-size: 18px;
   font-weight: bold;
   padding-left: 0;
@@ -15786,22 +15786,22 @@ aside.right-sidebar .resource-info {
   border-radius: 3px;
   text-align: left;
 }
-.supplementary-content-category button.category-title.subcategory {
+.supplemental-content-category button.category-title.subcategory {
   font-size: 16px;
 }
-.supplementary-content-category button.category-title.visible {
+.supplemental-content-category button.category-title.visible {
   color: #212121;
 }
-.supplementary-content-category .category-description {
+.supplemental-content-category .category-description {
   font-size: 14px;
   font-weight: normal;
   color: #212121;
   padding-right: 32px;
 }
-.supplementary-content-category .category-toggle-container {
+.supplemental-content-category .category-toggle-container {
   display: table-cell;
 }
-.supplementary-content-category button.category-toggle {
+.supplemental-content-category button.category-toggle {
   background: none;
   border: none;
   color: #046791;
@@ -15810,12 +15810,12 @@ aside.right-sidebar .resource-info {
   display: block;
   border-radius: 3px;
 }
-.supplementary-content-category button.category-toggle:hover {
+.supplemental-content-category button.category-toggle:hover {
   color: #fff;
   background: #205982;
   transition: all 0.1s ease-in;
 }
-.supplementary-content-category .category-content {
+.supplemental-content-category .category-content {
   margin-top: 1em;
 }
 

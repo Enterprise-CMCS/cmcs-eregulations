@@ -211,14 +211,14 @@ aside.right-sidebar {
     }
 }
 
-.supplementary-content {
+.supplemental-content {
     margin-bottom: 1em;
 
-    .supplementary-content-link {
+    .supplemental-content-link {
         text-decoration: none;
     }
 
-    .supplementary-content-date {
+    .supplemental-content-date {
         color: $primary_link_color;
         font-weight: bold;
         padding-right: $spacer-1;
@@ -226,30 +226,30 @@ aside.right-sidebar {
         font-size: $font-size-sm;
     }
 
-    .supplementary-content-mid-bar {
+    .supplemental-content-mid-bar {
         border-right: 1px solid black;
     }
 
-    .supplementary-content-title {
+    .supplemental-content-title {
         color: $primary_link_color;
         font-weight: bold;
         font-size: $font-size-sm;
     }
 
-    .supplementary-content-description {
+    .supplemental-content-description {
         color: $primary_link_color;
         text-decoration: none;
         font-size: $font-size-sm;
     }
 
-    .supplementary-content-external-link {
+    .supplemental-content-external-link {
         &:after {
             @include external-link;
         }
     }
 }
 
-.supplementary-content-category {
+.supplemental-content-category {
     display: table;
     margin-bottom: 1em;
 

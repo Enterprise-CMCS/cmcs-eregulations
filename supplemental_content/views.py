@@ -3,7 +3,7 @@ from django.db.models import Prefetch
 
 
 from .models import (
-    SupplementaryContent,
+    SupplementalContent,
     RegulationSection,
 )
 
@@ -26,14 +26,14 @@ class CategorySerializer(serializers.Serializer):
         return fields
 
 
-class ApplicableSupplementaryContentSerializer(serializers.ListSerializer):
+class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
         return _make_category_tree(data)
 
 
-class SupplementaryContentSerializer(serializers.Serializer):
+class SupplementalContentSerializer(serializers.Serializer):
     sections = RegulationSectionSerializer(many=True)
     category = CategorySerializer()
     url = serializers.URLField()
@@ -42,17 +42,17 @@ class SupplementaryContentSerializer(serializers.Serializer):
     date = serializers.CharField()
 
     class Meta:
-        list_serializer_class = ApplicableSupplementaryContentSerializer
+        list_serializer_class = ApplicableSupplementalContentSerializer
 
 
-class SupplementaryContentView(generics.ListAPIView):
-    serializer_class = SupplementaryContentSerializer
+class SupplementalContentView(generics.ListAPIView):
+    serializer_class = SupplementalContentSerializer
 
     def get_queryset(self):
         section_list = self.request.GET.getlist("sections")
         title = self.kwargs.get("title")
         part = self.kwargs.get("part")
-        query = SupplementaryContent.objects \
+        query = SupplementalContent.objects \
             .filter(
                 approved=True,
                 category__isnull=False,
@@ -73,9 +73,9 @@ class SupplementaryContentView(generics.ListAPIView):
         return query
 
 
-# The following functions are related to generating a JSON structure for SupplementaryContentView.
+# The following functions are related to generating a JSON structure for SupplementalContentView.
 # This involves taking the 'parent = X' relationship of existing categories and reversing it so
-# that each category instead has sub-categories and applicable supplementary content.
+# that each category instead has sub-categories and applicable supplemental content.
 
 
 def _get_parents(category, memo):

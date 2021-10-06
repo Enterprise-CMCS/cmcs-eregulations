@@ -1,9 +1,9 @@
 <template>
-  <div class="supplementary-content">
-    <a class="supplementary-content-link" :href="url" target="_blank" rel="noopener noreferrer">
-      <span class="supplementary-content-date" v-bind:class="{ 'supplementary-content-mid-bar': !isBlank(title) }" v-if="date">{{ date|formatDate }}</span>
-      <span class="supplementary-content-title" v-bind:class="{ 'supplementary-content-external-link': isBlank(description) }" v-if="!isBlank(title)">{{ title }}</span>
-      <div v-if="!isBlank(description)" class="supplementary-content-description supplementary-content-external-link">{{ description }}</div>
+  <div class="supplemental-content">
+    <a class="supplemental-content-link" :href="url" target="_blank" rel="noopener noreferrer">
+      <span class="supplemental-content-date" v-bind:class="{ 'supplemental-content-mid-bar': !isBlank(title) }" v-if="date">{{ date|formatDate }}</span>
+      <span class="supplemental-content-title" v-bind:class="{ 'supplemental-content-external-link': isBlank(description) }" v-if="!isBlank(title)">{{ title }}</span>
+      <div v-if="!isBlank(description)" class="supplemental-content-description supplemental-content-external-link">{{ description }}</div>
     </a>
   </div>
 </template>
@@ -11,7 +11,7 @@
 <script>
 
 export default {
-  name: 'supplementary-content-object',
+  name: 'supplemental-content-object',
 
   props: {
     title: {
