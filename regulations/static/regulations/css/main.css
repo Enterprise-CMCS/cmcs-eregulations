@@ -15225,6 +15225,11 @@ aside.left-sidebar {
   z-index: 1;
   transition: flex-basis 0.25s ease-out;
 }
+@media (max-width: 1023px) {
+  aside.left-sidebar[data-state=expanded] {
+    z-index: 2;
+  }
+}
 aside.left-sidebar[data-state=collapsed] {
   width: 1em;
   padding: 0 1em 1em;
@@ -15912,6 +15917,7 @@ select:focus-visible {
 .reg-text {
   overflow-wrap: break-word;
   overflow: auto;
+  z-index: 1;
 }
 .reg-text section,
 .reg-text h1,
@@ -17812,7 +17818,32 @@ select:focus-visible {
 }
 .copy-btn .copy-tooltip {
   position: absolute;
-  top: -1rem;
+  top: -45px;
+  background: #eefafe;
+  padding: 0 10px;
+  box-shadow: 0px 0px 20px 0px #00000040;
+}
+.copy-btn .copy-tooltip .hover-msg {
+  font-family: "Open Sans", Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #212121;
+  line-height: 16px;
+  white-space: nowrap;
+  padding: 0;
+}
+.copy-btn .copy-tooltip::after {
+  border-right: solid 5px transparent;
+  border-left: solid 5px transparent;
+  border-top: solid 5px #eefafe;
+  transform: translateX(-50%);
+  position: absolute;
+  z-index: -1;
+  content: "";
+  top: 100%;
+  left: 50%;
+  height: 0;
+  width: 0;
 }
 
 .reg-text .copy-btn {

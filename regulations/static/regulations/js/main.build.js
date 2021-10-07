@@ -1984,6 +1984,10 @@
   //
   //
   //
+  //
+  //
+  //
+  //
 
   const appendPxSuffix = (int) => `${int}px`;
 
@@ -2011,12 +2015,12 @@
       },
 
       computed: {
-          classObject: function () {
+          classObject() {
               return {
                   "copy-btn-labeled": this.btn_type === "labeled-icon",
               };
           },
-          styleObject: function () {
+          enteredStyles() {
               return {
                   left: this.leftAnchorPos,
                   transform: "translate(-50%, 0)",
@@ -2027,7 +2031,9 @@
       methods: {
           handleEnter(e) {
               if (!this.entered && !this.clicked) this.entered = true;
-              this.leftAnchorPos = appendPxSuffix(e.currentTarget.offsetWidth / 2);
+              this.leftAnchorPos = appendPxSuffix(
+                  e.currentTarget.offsetWidth / 2
+              );
           },
           handleExit(e) {
               if (!this.clicked) {
@@ -2038,7 +2044,9 @@
           handleClick(e) {
               this.entered = false;
               this.clicked = true;
-              this.leftAnchorPos = appendPxSuffix(e.currentTarget.offsetWidth / 2);
+              this.leftAnchorPos = appendPxSuffix(
+                  e.currentTarget.offsetWidth / 2
+              );
           },
       },
   };
@@ -2157,9 +2165,13 @@
               }
             ],
             staticClass: "copy-tooltip hovered",
-            style: _vm.styleObject
+            style: _vm.enteredStyles
           },
-          [_vm._v("\n        Entered\n    ")]
+          [
+            _c("p", { staticClass: "hover-msg" }, [
+              _vm._v("Copy Link or Citation")
+            ])
+          ]
         )
       ]
     )
