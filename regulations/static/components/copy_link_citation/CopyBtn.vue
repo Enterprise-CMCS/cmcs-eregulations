@@ -1,6 +1,6 @@
 <template>
     <button
-        class="copy-btn"
+        class="copy-btn text-btn"
         :class="classObject"
         :title="title"
         :aria-label="btn_type === 'icon' ? label : false"
@@ -19,6 +19,32 @@
         >
             <p class="hover-msg">{{ label }}</p>
         </div>
+        <div v-if="clicked" class="copy-tooltip clicked" :style="enteredStyles">
+            <button
+                class="close-btn text-btn"
+                aria-label="close copy link or citation dialog"
+                @click="handleCloseClick"
+            >
+                <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 11 11"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M1.47149 1.08383L5.49969 5.11209L9.52851 1.08383C9.63637 0.975965 9.81124 0.975965 9.91911 1.08383C10.027 1.19169 10.027 1.36656 9.91911 1.47442L5.89023 5.50262L9.91911 9.53144C10.027 9.6393 10.027 9.81417 9.91911 9.92204C9.81124 10.0299 9.63637 10.0299 9.52851 9.92204L5.49969 5.89316L1.47149 9.92204C1.36363 10.0299 1.18876 10.0299 1.0809 9.92204C0.973035 9.81417 0.973035 9.6393 1.0809 9.53144L5.10916 5.50262L1.0809 1.47442C0.973035 1.36656 0.973035 1.19169 1.0809 1.08383C1.18876 0.975965 1.36363 0.975965 1.47149 1.08383Z"
+                    />
+                </svg>
+            </button>
+            <p class="citation-title">{{ label }}</p>
+            <div class="btn-row">
+                <button>One</button>
+                <button>Two</button>
+            </div>
+        </div>
     </button>
 </template>
 
@@ -29,6 +55,7 @@ const getAnchorPos = (el, elType) => {
         ? el.offsetWidth / 2
         : el.offsetWidth * 0.7;
 };
+
 const appendPxSuffix = (int) => `${int}px`;
 
 export default {
@@ -87,6 +114,10 @@ export default {
             this.leftAnchorPos = appendPxSuffix(
                 getAnchorPos(e.currentTarget, this.btn_type)
             );
+        },
+        handleCloseClick() {
+            this.clicked = false;
+            this.entered = true;
         },
     },
 };

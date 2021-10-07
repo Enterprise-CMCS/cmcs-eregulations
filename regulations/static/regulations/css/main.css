@@ -17795,10 +17795,13 @@ select:focus-visible {
   }
 }
 
-.copy-btn {
+.text-btn {
   border: none;
   background: none;
   padding: 0;
+}
+
+.copy-btn {
   color: #046791;
   cursor: pointer;
   line-height: 1.2;
@@ -17810,21 +17813,56 @@ select:focus-visible {
   color: #17415f;
 }
 .copy-btn .copy-tooltip {
+  cursor: default;
   z-index: 3;
   position: absolute;
-  top: -48px;
+  bottom: 25px;
   background: #eefafe;
-  padding: 0 15px;
   box-shadow: 0px 0px 20px 0px #00000040;
 }
-.copy-btn .copy-tooltip .hover-msg {
+.copy-btn .copy-tooltip p {
+  color: #212121;
+  padding: 0;
+  white-space: nowrap;
+}
+.copy-btn .copy-tooltip.hovered {
+  padding: 0 15px;
+}
+.copy-btn .copy-tooltip.hovered .hover-msg {
   font-family: "Open Sans", Helvetica, sans-serif;
   font-size: 12px;
   font-weight: 600;
-  color: #212121;
   line-height: 16px;
-  white-space: nowrap;
-  padding: 0;
+}
+.copy-btn .copy-tooltip.clicked {
+  width: 285px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.copy-btn .copy-tooltip.clicked .close-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 30px;
+  width: 30px;
+}
+.copy-btn .copy-tooltip.clicked .close-btn path {
+  stroke: #046791;
+  fill: #046791;
+}
+.copy-btn .copy-tooltip.clicked .close-btn:hover path {
+  stroke: #17415f;
+  fill: #17415f;
+}
+.copy-btn .copy-tooltip.clicked .citation-title {
+  font-family: "Merriweather", Georgia, serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  margin: 0 0 18px 0;
 }
 .copy-btn .copy-tooltip::after {
   border-right: solid 5px transparent;
@@ -17875,7 +17913,7 @@ aside.right-sidebar .copy-btn-container .copy-btn-labeled {
   height: 30px;
 }
 aside.right-sidebar .copy-btn-container .copy-btn-labeled .copy-tooltip {
-  top: -45px;
+  bottom: 50px;
 }
 aside.right-sidebar .copy-btn-container .copy-btn-labeled i {
   min-width: 16px;
