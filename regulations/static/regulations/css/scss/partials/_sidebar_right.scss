@@ -9,7 +9,6 @@ aside.right-sidebar {
     max-width: 400px;
     position: sticky;
     height: calc(100vh - #{$header_height_mobile} - #{$spacer-5});
-    overflow-y: scroll;
 
     @include screen-lg {
         height: calc(100vh - #{$header_height} - #{$spacer-5});
