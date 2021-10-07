@@ -16,9 +16,9 @@ def make_category(id, title, description, order):
 
 
 def migrate_categories(apps, schema_editor):
-    OldCategory = apps.get_model("supplementary_content", "OldCategory")
-    Category = apps.get_model("supplementary_content", "Category")
-    SubCategory = apps.get_model("supplementary_content", "SubCategory")
+    OldCategory = apps.get_model("supplemental_content", "OldCategory")
+    Category = apps.get_model("supplemental_content", "Category")
+    SubCategory = apps.get_model("supplemental_content", "SubCategory")
 
     # no cases of 3-level depth before now, so deal with 2 levels only
     old_categories = OldCategory.objects.all()
@@ -59,8 +59,8 @@ def migrate_categories(apps, schema_editor):
 
 
 def migrate_sections(apps, schema_editor):
-    OldRegulationSection = apps.get_model("supplementary_content", "OldRegulationSection")
-    Section = apps.get_model("supplementary_content", "Section")
+    OldRegulationSection = apps.get_model("supplemental_content", "OldRegulationSection")
+    Section = apps.get_model("supplemental_content", "Section")
     for section in OldRegulationSection.objects.all():
         Section.objects.create(
             title=int(section.title),
@@ -71,10 +71,10 @@ def migrate_sections(apps, schema_editor):
 
 
 def migrate_supplemental_content(apps, schema_editor):
-    OldSupplementaryContent = apps.get_model("supplementary_content", "OldSupplementaryContent")
-    SupplementalContent = apps.get_model("supplementary_content", "SupplementalContent")
-    Category = apps.get_model("supplementary_content", "Category")
-    Section = apps.get_model("supplementary_content", "Section")
+    OldSupplementaryContent = apps.get_model("supplemental_content", "OldSupplementaryContent")
+    SupplementalContent = apps.get_model("supplemental_content", "SupplementalContent")
+    Category = apps.get_model("supplemental_content", "Category")
+    Section = apps.get_model("supplemental_content", "Section")
 
     for content in OldSupplementaryContent.objects.all():
         # acquire category from old ID
@@ -111,7 +111,7 @@ def migrate_supplemental_content(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplementary_content', '0007_auto_20210831_1612'),
+        ('supplemental_content', '0007_auto_20210831_1612'),
     ]
 
     operations = [
@@ -162,65 +162,65 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Section',
             fields=[
-                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplementary_content.abstractlocation')),
+                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractlocation')),
                 ('section_id', models.IntegerField()),
-                ('parent', models.ForeignKey(null=True, blank=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='supplementary_content.abstractlocation')),
+                ('parent', models.ForeignKey(null=True, blank=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='supplemental_content.abstractlocation')),
                 ('old_id', models.IntegerField()),
             ],
-            bases=('supplementary_content.abstractlocation',),
+            bases=('supplemental_content.abstractlocation',),
         ),
         migrations.CreateModel(
             name='SubCategory',
             fields=[
-                ('category_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplementary_content.category')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_categories', to='supplementary_content.category')),
+                ('category_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.category')),
+                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_categories', to='supplemental_content.category')),
             ],
-            bases=('supplementary_content.category',),
+            bases=('supplemental_content.category',),
         ),
         migrations.CreateModel(
             name='SubjectGroup',
             fields=[
-                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplementary_content.abstractlocation')),
+                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractlocation')),
                 ('subject_group_id', models.CharField(max_length=512)),
             ],
-            bases=('supplementary_content.abstractlocation',),
+            bases=('supplemental_content.abstractlocation',),
         ),
         migrations.CreateModel(
             name='Subpart',
             fields=[
-                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplementary_content.abstractlocation')),
+                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractlocation')),
                 ('subpart_id', models.CharField(max_length=12)),
             ],
-            bases=('supplementary_content.abstractlocation',),
+            bases=('supplemental_content.abstractlocation',),
         ),
         migrations.CreateModel(
             name='SubSubCategory',
             fields=[
-                ('category_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplementary_content.category')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_sub_categories', to='supplementary_content.subcategory')),
+                ('category_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.category')),
+                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_sub_categories', to='supplemental_content.subcategory')),
             ],
-            bases=('supplementary_content.category',),
+            bases=('supplemental_content.category',),
         ),
         migrations.CreateModel(
             name='SupplementalContent',
             fields=[
-                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplementary_content.abstractsupplementalcontent')),
+                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractsupplementalcontent')),
                 ('title', models.CharField(blank=True, max_length=512, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, max_length=512, null=True)),
                 ('date', models.CharField(blank=True, help_text='Leave blank or enter one of: "YYYY", "YYYY-MM", or "YYYY-MM-DD".', max_length=10, null=True, validators=[django.core.validators.RegexValidator(message='Date field must be blank or of format "YYYY", "YYYY-MM", or "YYYY-MM-DD"! For example: 2021, 2021-01, or 2021-01-31.', regex='^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$')])),
             ],
-            bases=('supplementary_content.abstractsupplementalcontent',),
+            bases=('supplemental_content.abstractsupplementalcontent',),
         ),
         migrations.AddField(
             model_name='abstractsupplementalcontent',
             name='category',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supplemental_content', to='supplementary_content.category'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supplemental_content', to='supplemental_content.category'),
         ),
         migrations.AddField(
             model_name='abstractsupplementalcontent',
             name='locations',
-            field=models.ManyToManyField(blank=True, null=True, related_name='supplemental_content', to='supplementary_content.AbstractLocation'),
+            field=models.ManyToManyField(blank=True, null=True, related_name='supplemental_content', to='supplemental_content.AbstractLocation'),
         ),
         migrations.RunPython(migrate_sections),
         migrations.RunPython(migrate_categories),
