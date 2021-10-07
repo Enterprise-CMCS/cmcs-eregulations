@@ -44,14 +44,20 @@ export default {
             type: String,
             required: true,
         },
+        action: {
+            type: String,
+            required: true,
+        },
     },
 
     computed: {
         expandedType: function () {
             if (this.type === "Rule") {
                 return "Final";
-            } else if(this.type === "Proposed Rule"){
-              return "Proposed Rule"
+            } else if(this.type === "Proposed Rule" && this.action === "Proposed rule."){
+              return "NPRM"
+            } else if(this.type === "Proposed Rule" && this.action === "Request for information."){
+              return "RFI"
             }
             return "Unknown";
         },

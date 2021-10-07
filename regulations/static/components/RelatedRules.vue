@@ -2,15 +2,17 @@
 
     <div>
       <div v-for="category in categoryList">
-        <button @click="showCategory(category)" :class="buttonClass(category)" style="width:100%; text-align:left">
+        <button @click="showCategory(category)" :class="buttonClass(category)">
           {{categories[category].title}}
-          <i v-if="activeCategory === category" class="fa fa-chevron-up" style="float:right"></i>
-          <i v-else class="fa fa-chevron-down" style="float:right"></i>
+          <i v-if="activeCategory === category" class="fa fa-chevron-up"></i>
+          <i v-else class="fa fa-chevron-down"></i>
         </button>
-        <div v-if="activeCategory === category">
-          <related-rule-list v-if="getRules(category).length > 0" :rules="getRules(category)"></related-rule-list>
-          <div v-else>No {{categories[category].title}} found in the Federal Register from 1994 to present.</div>
-        </div>
+        <related-rule-list
+            v-if="activeCategory === category"
+            :rules="getRules(category)"
+            :limit="limit"
+            :title="categories[category].title"
+        ></related-rule-list>
       </div>
 
 
@@ -19,7 +21,6 @@
 
 <script>
 import RelatedRuleList from "./RelatedRuleList.vue";
-import ShowMoreButton from "./ShowMoreButton.vue";
 
 export default {
     components: {
@@ -90,15 +91,6 @@ export default {
     },
 
     computed: {
-        finalRules(){
-          return this.categories.FINAL.getRules(this.rules)
-        },
-        proposedRules(){
-            return this.categories.PROPOSED.getRules(this.rules)
-        },
-        RFIRules(){
-            return this.categories.RFI.getRules(this.rules)
-        },
 
     },
 
@@ -117,6 +109,7 @@ export default {
             results = results.concat(rules.results)
             url = rules.next_page_url
           }
+          console.log("Pulled: ", results.length)
           return results
 
         },

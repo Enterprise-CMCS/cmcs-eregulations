@@ -173,12 +173,13 @@ aside.right-sidebar {
         @include external-link-hover;
     }
 }
-
+.related-rule-list {
+    padding-left: $spacer-2;
+}
 .rules-with-preamble {
     max-height: 1000em;
 
     .related-rule-list {
-        padding-left: $spacer-2;
         .related-rule {
             margin-bottom: $spacer-3;
         }
@@ -317,4 +318,15 @@ aside.right-sidebar {
     background: none;
     font-size: $font-size-sm;
     cursor: pointer;
+    width: 100%;
+    text-align: left;
+
+    i{
+        float:right
+    }
+}
+
+.show-more-inactive {
+    color: $secondary_text_color;
+    font-size: $font-size-sm;
 }

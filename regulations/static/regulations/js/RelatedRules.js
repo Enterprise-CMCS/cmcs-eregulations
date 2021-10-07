@@ -44,12 +44,20 @@ var script$3 = {
             type: String,
             required: true,
         },
+        action: {
+            type: String,
+            required: true,
+        },
     },
 
     computed: {
         expandedType: function () {
             if (this.type === "Rule") {
                 return "Final";
+            } else if(this.type === "Proposed Rule" && this.action === "Proposed rule."){
+              return "NPRM"
+            } else if(this.type === "Proposed Rule" && this.action === "Request for information."){
+              return "RFI"
             }
             return "Unknown";
         },
@@ -220,28 +228,36 @@ __vue_render__$3._withStripped = true;
   );
 
 //
+//
+//
+//
+//
+//
+
 var script$2 = {
-    name: 'related-rule-list',
-
-    components: {
-        RelatedRule: __vue_component__$3,
+  name: 'show-more-button',
+  props: {
+    count: {
+      type: Number,
+      default: 1
     },
-
-    props: {
-        rules: Array,
-    },
-
-    computed: {
-
-    },
-
-    methods: {
-
-    },
-
-    filters: {
-
-    },
+    showMore: { type: Function },
+  },
+  data() {
+    return {
+      toggle: false,
+    }
+  },
+  computed: {
+    buttonText(){
+      return this.toggle ? '- Show Less' : '+ Show More';
+    }
+  },
+  methods: {
+    toggleButton() {
+      this.toggle = !this.toggle;
+    }
+  }
 };
 
 /* script */
@@ -253,22 +269,19 @@ var __vue_render__$2 = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c(
-    "div",
-    { staticClass: "related-rule-list" },
-    _vm._l(_vm.rules, function(rule, index) {
-      return _c("related-rule", {
-        key: index,
-        attrs: {
-          title: rule.title,
-          type: rule.type,
-          citation: rule.citation,
-          publication_date: rule.publication_date,
-          document_number: rule.document_number,
-          html_url: rule.html_url
+    "button",
+    {
+      staticClass: "show-more-button",
+      on: {
+        click: function($event) {
+          _vm.showMore(), _vm.toggleButton();
         }
-      })
-    }),
-    1
+      }
+    },
+    [
+      _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+    ]
   )
 };
 var __vue_staticRenderFns__$2 = [];
@@ -304,36 +317,53 @@ __vue_render__$2._withStripped = true;
   );
 
 //
-//
-//
-//
-//
-//
-
 var script$1 = {
-  name: 'show-more-button',
-  props: {
-    count: {
-      type: Number,
-      default: 1
+    name: 'related-rule-list',
+
+    components: {
+        RelatedRule: __vue_component__$3,
+        ShowMoreButton: __vue_component__$2
     },
-    showMore: { type: Function },
-  },
-  data() {
-    return {
-      toggle: false,
-    }
-  },
-  computed: {
-    buttonText(){
-      return this.toggle ? '- Show Less' : '+ Show More';
-    }
-  },
-  methods: {
-    toggleButton() {
-      this.toggle = !this.toggle;
-    }
-  }
+
+    props: {
+        rules: Array,
+        limit: {
+          type: Number,
+          default: 5
+        },
+        title: {
+          type: String,
+        }
+
+    },
+
+    computed: {
+        limitedRules() {
+            if (this.limitedList) {
+                return this.rules.slice(0, this.limit);
+            }
+            return this.rules;
+        },
+        rulesCount() {
+            return this.rules.length;
+        },
+    },
+
+    data() {
+      return {
+          limitedList: true,
+      };
+    },
+
+    methods: {
+        showMore() {
+            this.limitedList = !this.limitedList;
+        },
+    },
+
+    filters: {
+
+    },
 };
 
 /* script */
@@ -344,21 +374,41 @@ var __vue_render__$1 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "button",
-    {
-      staticClass: "show-more-button",
-      on: {
-        click: function($event) {
-          _vm.showMore(), _vm.toggleButton();
-        }
-      }
-    },
-    [
-      _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
-      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
-    ]
-  )
+  return _vm.rules.length
+    ? _c(
+        "div",
+        { staticClass: "related-rule-list" },
+        [
+          _vm._l(_vm.limitedRules, function(rule, index) {
+            return _c("related-rule", {
+              key: index,
+              attrs: {
+                title: rule.title,
+                type: rule.type,
+                citation: rule.citation,
+                publication_date: rule.publication_date,
+                document_number: rule.document_number,
+                html_url: rule.html_url,
+                action: rule.action
+              }
+            })
+          }),
+          _vm._v(" "),
+          _vm.rules.length > _vm.limit
+            ? _c("show-more-button", {
+                attrs: { showMore: _vm.showMore, count: _vm.rules.length }
+              })
+            : _vm._e()
+        ],
+        2
+      )
+    : _c("div", { staticClass: "related-rule-list show-more-inactive" }, [
+        _vm._v(
+          "No " +
+            _vm._s(_vm.title) +
+            " found in the Federal Register from 1994 to present."
+        )
+      ])
 };
 var __vue_staticRenderFns__$1 = [];
 __vue_render__$1._withStripped = true;
@@ -393,10 +443,10 @@ __vue_render__$1._withStripped = true;
   );
 
 //
+
 var script = {
     components: {
-        RelatedRuleList: __vue_component__$2,
-        ShowMoreButton: __vue_component__$1,
+        RelatedRuleList: __vue_component__$1
     },
 
     props: {
@@ -412,6 +462,47 @@ var script = {
             type: Number,
             default: 5,
         },
+        activeCategory: {
+          type: String,
+          default: ''
+        },
+        categoryList: {
+          type: Array,
+          default: ['FINAL', 'PROPOSED', 'RFI']
+        },
+        categories: {
+          type: Object,
+          default: {
+            FINAL: {
+              getRules: (rules) => {
+                return rules.filter(rule => {
+                      return rule.type === 'Rule'
+                    }
+                )
+              },
+              title: "Final Rules"
+            },
+            PROPOSED: {
+              getRules: (rules) => {
+                return rules.filter(rule => {
+                      return rule.type === 'Proposed Rule' && rule.action === "Proposed rule."
+                    }
+                )
+              },
+              title: "Notification of Proposed Rulemaking"
+            },
+            RFI: {
+              getRules: (rules) => {
+                return rules.filter(rule => {
+                      return rule.type === 'Proposed Rule' && rule.action === "Request for information."
+                    }
+                )
+              },
+              title: "Request for Information"
+            }
+          }
+        },
+
     },
 
     data() {
@@ -422,15 +513,7 @@ var script = {
     },
 
     computed: {
-        limitedRules() {
-            if (this.limitedList) {
-                return this.rules.slice(0, this.limit);
-            }
-            return this.rules;
-        },
-        rulesCount() {
-            return this.rules.length;
-        },
+
     },
 
     async created() {
@@ -439,15 +522,29 @@ var script = {
 
     methods: {
         async fetch_rules(title, part) {
-            const response = await fetch(
-                `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[type][]=RULE&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`
-            );
+          let url = `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`;
+          let results = [];
+
+          while(url){
+            const response = await fetch(url);
             const rules = await response.json();
-            return rules.results;
+            results = results.concat(rules.results);
+            url = rules.next_page_url;
+          }
+          console.log("Pulled: ", results.length);
+          return results
+
         },
-        showMore() {
-            this.limitedList = !this.limitedList;
+        showCategory(category) {
+          category === this.activeCategory ? this.activeCategory = '': this.activeCategory = category;
         },
+        buttonClass(category){
+          return this.categories[category].getRules(this.rules).length > 0 ? "show-more-button": "show-more-button show-more-inactive"
+        },
+        getRules(category){
+          return this.categories[category].getRules(this.rules)
+        }
+
     },
 };
 
@@ -461,14 +558,44 @@ var __vue_render__ = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    [
-      _c("related-rule-list", { attrs: { rules: _vm.limitedRules } }),
-      _vm._v(" "),
-      _c("show-more-button", {
-        attrs: { showMore: _vm.showMore, count: _vm.rulesCount }
-      })
-    ],
-    1
+    _vm._l(_vm.categoryList, function(category) {
+      return _c(
+        "div",
+        [
+          _c(
+            "button",
+            {
+              class: _vm.buttonClass(category),
+              on: {
+                click: function($event) {
+                  return _vm.showCategory(category)
+                }
+              }
+            },
+            [
+              _vm._v(
+                "\n      " + _vm._s(_vm.categories[category].title) + "\n      "
+              ),
+              _vm.activeCategory === category
+                ? _c("i", { staticClass: "fa fa-chevron-up" })
+                : _c("i", { staticClass: "fa fa-chevron-down" })
+            ]
+          ),
+          _vm._v(" "),
+          _vm.activeCategory === category
+            ? _c("related-rule-list", {
+                attrs: {
+                  rules: _vm.getRules(category),
+                  limit: _vm.limit,
+                  title: _vm.categories[category].title
+                }
+              })
+            : _vm._e()
+        ],
+        1
+      )
+    }),
+    0
   )
 };
 var __vue_staticRenderFns__ = [];
