@@ -13,7 +13,7 @@
         <i class="fa fa-link"></i>
         <span v-if="btn_type === 'labeled-icon'">{{ label }}</span>
         <div
-            v-show="entered"
+            v-show="entered && btn_type === 'icon'"
             class="copy-tooltip hovered"
             :style="enteredStyles"
         >

@@ -205,8 +205,8 @@ var __vue_render__ = function() {
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.entered,
-              expression: "entered"
+              value: _vm.entered && _vm.btn_type === "icon",
+              expression: "entered && btn_type === 'icon'"
             }
           ],
           staticClass: "copy-tooltip hovered",
