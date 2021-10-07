@@ -19,12 +19,6 @@ aside.left-sidebar {
     z-index: 1;
     transition: flex-basis 0.25s ease-out;
 
-    &[data-state="expanded"] {
-        @include custom-max($tablet-max / 1px) {
-            z-index: 2;
-        }
-    }
-
     // Entire Sidebar Collapsed
     &[data-state="collapsed"] {
         width: 1em;

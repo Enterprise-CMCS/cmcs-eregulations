@@ -14949,7 +14949,7 @@ header.sticky {
   position: sticky;
   top: 0;
   background: #fff;
-  z-index: 9999999;
+  z-index: 3;
   box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
   -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
@@ -15224,11 +15224,6 @@ aside.left-sidebar {
   top: 0;
   z-index: 1;
   transition: flex-basis 0.25s ease-out;
-}
-@media (max-width: 1023px) {
-  aside.left-sidebar[data-state=expanded] {
-    z-index: 2;
-  }
 }
 aside.left-sidebar[data-state=collapsed] {
   width: 1em;
@@ -15916,7 +15911,6 @@ select:focus-visible {
 .reg-text {
   overflow-wrap: break-word;
   overflow: auto;
-  z-index: 1;
 }
 .reg-text section,
 .reg-text h1,
@@ -17816,6 +17810,7 @@ select:focus-visible {
   color: #17415f;
 }
 .copy-btn .copy-tooltip {
+  z-index: 3;
   position: absolute;
   top: -48px;
   background: #eefafe;

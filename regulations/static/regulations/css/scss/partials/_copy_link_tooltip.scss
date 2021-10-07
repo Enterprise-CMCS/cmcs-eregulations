@@ -21,6 +21,7 @@
     }
 
     .copy-tooltip {
+        z-index: 3;
         position: absolute;
         top: -48px;
         background: $lightest_blue;
