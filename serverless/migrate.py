@@ -11,6 +11,12 @@ def handler(event, context):
     connection.ensure_connection()
     if not connection.is_usable():
         raise Exception("database is unreachable")
+    
+    from django.apps import apps
+    installed_apps = []
+    for app in apps.get_app_configs():
+        installed_apps.append(app.label)
 
     from django.core.management import call_command
-    call_command('migrate')
+    for app in installed_apps:
+        call_command(f'migrate {app}')
