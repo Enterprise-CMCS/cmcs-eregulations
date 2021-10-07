@@ -15699,11 +15699,12 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
+.related-rule-list {
+  padding-left: 16px;
+}
+
 .rules-with-preamble {
   max-height: 1000em;
-}
-.rules-with-preamble .related-rule-list {
-  padding-left: 16px;
 }
 .rules-with-preamble .related-rule-list .related-rule {
   margin-bottom: 24px;
@@ -15825,6 +15826,16 @@ aside.right-sidebar .resource-info {
   background: none;
   font-size: 14px;
   cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.show-more-button i {
+  float: right;
+}
+
+.show-more-inactive {
+  color: #5b616b;
+  font-size: 14px;
 }
 
 .indicator {
