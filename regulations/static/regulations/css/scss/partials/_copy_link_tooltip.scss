@@ -22,7 +22,7 @@
 
     .copy-tooltip {
         position: absolute;
-        top: -45px;
+        top: -48px;
         background: $lightest_blue;
         padding: 0 10px;
         box-shadow: 0px 0px 20px 0px #00000040;
@@ -92,6 +92,10 @@ aside.right-sidebar {
             display: flex;
             align-items: center;
             height: 30px;
+
+            .copy-tooltip {
+                top: -45px;
+            }
 
             i {
                 min-width: 16px;

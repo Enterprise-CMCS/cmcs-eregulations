@@ -3,6 +3,7 @@
         class="copy-btn"
         :class="classObject"
         :title="title"
+        :aria-label="btn_type === 'icon' ? label : false"
         @focus="handleEnter"
         @focusout="handleExit"
         @mouseenter="handleEnter"
@@ -10,18 +11,24 @@
         @click="handleClick"
     >
         <i class="fa fa-link"></i>
-        <span v-if="label">{{ label }}</span>
+        <span v-if="btn_type === 'labeled-icon'">{{ label }}</span>
         <div
             v-show="entered"
             class="copy-tooltip hovered"
             :style="enteredStyles"
         >
-            <p class="hover-msg">Copy Link or Citation</p>
+            <p class="hover-msg">{{ label }}</p>
         </div>
     </button>
 </template>
 
 <script>
+const getAnchorPos = (el, elType) => {
+    if (!el) return 0;
+    return elType === "labeled-icon"
+        ? el.offsetWidth / 2
+        : el.offsetWidth * 0.7;
+};
 const appendPxSuffix = (int) => `${int}px`;
 
 export default {
@@ -36,7 +43,6 @@ export default {
             type: String,
             required: true,
         },
-        label: String,
     },
 
     data: function () {
@@ -44,6 +50,7 @@ export default {
             entered: false,
             clicked: false,
             leftAnchorPos: undefined,
+            label: "Copy Link or Citation",
         };
     },
 
@@ -65,7 +72,7 @@ export default {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
             this.leftAnchorPos = appendPxSuffix(
-                e.currentTarget.offsetWidth / 2
+                getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
         handleExit(e) {
@@ -78,7 +85,7 @@ export default {
             this.entered = false;
             this.clicked = true;
             this.leftAnchorPos = appendPxSuffix(
-                e.currentTarget.offsetWidth / 2
+                getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
     },

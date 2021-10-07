@@ -21,7 +21,14 @@
 //
 //
 //
+//
 
+const getAnchorPos = (el, elType) => {
+    if (!el) return 0;
+    return elType === "labeled-icon"
+        ? el.offsetWidth / 2
+        : el.offsetWidth * 0.7;
+};
 const appendPxSuffix = (int) => `${int}px`;
 
 var script = {
@@ -36,7 +43,6 @@ var script = {
             type: String,
             required: true,
         },
-        label: String,
     },
 
     data: function () {
@@ -44,6 +50,7 @@ var script = {
             entered: false,
             clicked: false,
             leftAnchorPos: undefined,
+            label: "Copy Link or Citation",
         };
     },
 
@@ -65,7 +72,7 @@ var script = {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
             this.leftAnchorPos = appendPxSuffix(
-                e.currentTarget.offsetWidth / 2
+                getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
         handleExit(e) {
@@ -78,7 +85,7 @@ var script = {
             this.entered = false;
             this.clicked = true;
             this.leftAnchorPos = appendPxSuffix(
-                e.currentTarget.offsetWidth / 2
+                getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
     },
@@ -172,7 +179,10 @@ var __vue_render__ = function() {
     {
       staticClass: "copy-btn",
       class: _vm.classObject,
-      attrs: { title: _vm.title },
+      attrs: {
+        title: _vm.title,
+        "aria-label": _vm.btn_type === "icon" ? _vm.label : false
+      },
       on: {
         focus: _vm.handleEnter,
         focusout: _vm.handleExit,
@@ -184,7 +194,9 @@ var __vue_render__ = function() {
     [
       _c("i", { staticClass: "fa fa-link" }),
       _vm._v(" "),
-      _vm.label ? _c("span", [_vm._v(_vm._s(_vm.label))]) : _vm._e(),
+      _vm.btn_type === "labeled-icon"
+        ? _c("span", [_vm._v(_vm._s(_vm.label))])
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -200,11 +212,7 @@ var __vue_render__ = function() {
           staticClass: "copy-tooltip hovered",
           style: _vm.enteredStyles
         },
-        [
-          _c("p", { staticClass: "hover-msg" }, [
-            _vm._v("Copy Link or Citation")
-          ])
-        ]
+        [_c("p", { staticClass: "hover-msg" }, [_vm._v(_vm._s(_vm.label))])]
       )
     ]
   )

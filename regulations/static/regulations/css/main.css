@@ -17817,7 +17817,7 @@ select:focus-visible {
 }
 .copy-btn .copy-tooltip {
   position: absolute;
-  top: -45px;
+  top: -48px;
   background: #eefafe;
   padding: 0 10px;
   box-shadow: 0px 0px 20px 0px #00000040;
@@ -17878,6 +17878,9 @@ aside.right-sidebar .copy-btn-container .copy-btn-labeled {
   display: flex;
   align-items: center;
   height: 30px;
+}
+aside.right-sidebar .copy-btn-container .copy-btn-labeled .copy-tooltip {
+  top: -45px;
 }
 aside.right-sidebar .copy-btn-container .copy-btn-labeled i {
   min-width: 16px;
