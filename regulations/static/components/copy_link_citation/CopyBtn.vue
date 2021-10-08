@@ -3,8 +3,7 @@
         <button
             class="copy-btn text-btn"
             :class="buttonClasses"
-            :title="title"
-            :aria-label="btn_type === 'icon' ? label : false"
+            :aria-label="btn_type === 'icon' ? ariaLabel : false"
             @focus="handleEnter"
             @focusout="handleExit"
             @mouseenter="handleEnter"
@@ -47,7 +46,7 @@
                     />
                 </svg>
             </button>
-            <p class="citation-title">{{ label }}</p>
+            <p class="citation-title">{{ titleFormatted }}</p>
             <div class="btn-row">
                 <button>One</button>
                 <button>Two</button>
@@ -69,6 +68,8 @@ const appendPxSuffix = (int) => `${int}px`;
 
 const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
+const parseArrString = (arrString) => JSON.parse(arrString.replace(/'/g, '"'));
+
 export default {
     name: "copy-btn",
 
@@ -78,6 +79,18 @@ export default {
             required: true,
         },
         title: {
+            type: String,
+            required: true,
+        },
+        citation: {
+            type: Array,
+            required: true,
+        },
+        cfr_title: {
+            type: String,
+            required: true,
+        },
+        version: {
             type: String,
             required: true,
         },
@@ -94,6 +107,25 @@ export default {
     },
 
     computed: {
+        titleArr() {
+            return parseArrString(this.title);
+        },
+        titleDotted() {
+            return this.titleArr.join(".");
+        },
+        citationArr() {
+            return parseArrString(this.citation)
+        },
+        titleFormatted() {
+            console.log(this.cfr_title)
+            console.log(this.version)
+            console.log(this.titleArr)
+            console.log(this.citationArr)
+            return `${this.cfr_title} CFR § ${this.citationArr[0]}.x(x)`
+        },
+        ariaLabel() {
+            return `${this.label} for ${this.titleDotted}`;
+        },
         buttonClasses() {
             return {
                 "copy-btn-labeled": this.btn_type === "labeled-icon",
@@ -102,8 +134,8 @@ export default {
         tooltipClasses() {
             return {
                 "tooltip-caret": this.leftSafe,
-                "tooltip-caret-left": !this.leftSafe
-            }
+                "tooltip-caret-left": !this.leftSafe,
+            };
         },
         tooltipStyles() {
             return {
@@ -117,13 +149,13 @@ export default {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
             if (leftWarning(e.currentTarget)) {
-                this.leftSafe = false
+                this.leftSafe = false;
             }
             this.anchorPos = appendPxSuffix(
                 getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
-        handleExit(e) {
+        handleExit() {
             if (!this.clicked) {
                 this.entered = false;
                 this.anchorPos = undefined;
@@ -135,7 +167,7 @@ export default {
                 this.entered = false;
                 this.clicked = true;
                 if (leftWarning(e.currentTarget)) {
-                    this.leftSafe = false
+                    this.leftSafe = false;
                 }
                 this.anchorPos = appendPxSuffix(
                     getAnchorPos(e.currentTarget, this.btn_type)

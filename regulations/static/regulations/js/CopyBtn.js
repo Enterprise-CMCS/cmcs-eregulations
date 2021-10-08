@@ -55,7 +55,6 @@
 //
 //
 //
-//
 
 const getAnchorPos = (el, elType) => {
     if (!el) return 0;
@@ -69,6 +68,8 @@ const appendPxSuffix = (int) => `${int}px`;
 
 const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
+const parseArrString = (arrString) => JSON.parse(arrString.replace(/'/g, '"'));
+
 var script = {
     name: "copy-btn",
 
@@ -78,6 +79,18 @@ var script = {
             required: true,
         },
         title: {
+            type: String,
+            required: true,
+        },
+        citation: {
+            type: Array,
+            required: true,
+        },
+        cfr_title: {
+            type: String,
+            required: true,
+        },
+        version: {
             type: String,
             required: true,
         },
@@ -94,6 +107,25 @@ var script = {
     },
 
     computed: {
+        titleArr() {
+            return parseArrString(this.title);
+        },
+        titleDotted() {
+            return this.titleArr.join(".");
+        },
+        citationArr() {
+            return parseArrString(this.citation)
+        },
+        titleFormatted() {
+            console.log(this.cfr_title);
+            console.log(this.version);
+            console.log(this.titleArr);
+            console.log(this.citationArr);
+            return `${this.cfr_title} CFR § ${this.citationArr[0]}.x(x)`
+        },
+        ariaLabel() {
+            return `${this.label} for ${this.titleDotted}`;
+        },
         buttonClasses() {
             return {
                 "copy-btn-labeled": this.btn_type === "labeled-icon",
@@ -102,8 +134,8 @@ var script = {
         tooltipClasses() {
             return {
                 "tooltip-caret": this.leftSafe,
-                "tooltip-caret-left": !this.leftSafe
-            }
+                "tooltip-caret-left": !this.leftSafe,
+            };
         },
         tooltipStyles() {
             return {
@@ -123,7 +155,7 @@ var script = {
                 getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
-        handleExit(e) {
+        handleExit() {
             if (!this.clicked) {
                 this.entered = false;
                 this.anchorPos = undefined;
@@ -243,8 +275,7 @@ var __vue_render__ = function() {
         staticClass: "copy-btn text-btn",
         class: _vm.buttonClasses,
         attrs: {
-          title: _vm.title,
-          "aria-label": _vm.btn_type === "icon" ? _vm.label : false
+          "aria-label": _vm.btn_type === "icon" ? _vm.ariaLabel : false
         },
         on: {
           focus: _vm.handleEnter,
@@ -324,7 +355,7 @@ var __vue_render__ = function() {
             ),
             _vm._v(" "),
             _c("p", { staticClass: "citation-title" }, [
-              _vm._v(_vm._s(_vm.label))
+              _vm._v(_vm._s(_vm.titleFormatted))
             ]),
             _vm._v(" "),
             _vm._m(0)

@@ -15550,6 +15550,8 @@ aside.right-sidebar {
   max-width: 400px;
   position: sticky;
   height: calc(100vh - 81px - 40px);
+  overflow-y: scroll;
+  overflow-x: auto;
 }
 @media (min-width: 1024px) {
   aside.right-sidebar {
