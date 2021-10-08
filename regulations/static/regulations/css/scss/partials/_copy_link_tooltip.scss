@@ -54,7 +54,7 @@
     }
 
     &.clicked {
-        width: 285px;
+        width: 245px;
         padding: 20px;
         display: flex;
         flex-direction: column;
@@ -89,7 +89,9 @@
             margin: 0 0 18px 0;
         }
     }
+}
 
+.tooltip-caret {
     &::after {
         border-right: solid 5px transparent;
         border-left: solid 5px transparent;
@@ -102,6 +104,13 @@
         left: 50%;
         height: 0;
         width: 0;
+    }
+}
+
+.tooltip-caret-left {
+    @extend .tooltip-caret;
+    &::after {
+        left: 20%;
     }
 }
 

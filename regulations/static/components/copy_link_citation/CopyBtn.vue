@@ -2,7 +2,7 @@
     <div class="copy-btn-container">
         <button
             class="copy-btn text-btn"
-            :class="classObject"
+            :class="buttonClasses"
             :title="title"
             :aria-label="btn_type === 'icon' ? label : false"
             @focus="handleEnter"
@@ -17,11 +17,17 @@
         <div
             v-show="entered && btn_type === 'icon'"
             class="copy-tooltip hovered"
-            :style="enteredStyles"
+            :class="tooltipClasses"
+            :style="tooltipStyles"
         >
             <p class="hover-msg">{{ label }}</p>
         </div>
-        <div v-if="clicked" class="copy-tooltip clicked" :style="enteredStyles">
+        <div
+            v-if="clicked"
+            class="copy-tooltip clicked"
+            :class="tooltipClasses"
+            :style="tooltipStyles"
+        >
             <button
                 class="close-btn text-btn"
                 aria-label="close copy link or citation dialog"
@@ -53,12 +59,15 @@
 <script>
 const getAnchorPos = (el, elType) => {
     if (!el) return 0;
+
     return elType === "labeled-icon"
         ? el.offsetWidth / 2
         : el.offsetWidth * 0.7;
 };
 
 const appendPxSuffix = (int) => `${int}px`;
+
+const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
 export default {
     name: "copy-btn",
@@ -78,21 +87,28 @@ export default {
         return {
             entered: false,
             clicked: false,
-            leftAnchorPos: undefined,
+            leftSafe: true,
+            anchorPos: undefined,
             label: "Copy Link or Citation",
         };
     },
 
     computed: {
-        classObject() {
+        buttonClasses() {
             return {
                 "copy-btn-labeled": this.btn_type === "labeled-icon",
             };
         },
-        enteredStyles() {
+        tooltipClasses() {
             return {
-                left: this.leftAnchorPos,
-                transform: "translate(-50%, 0)",
+                "tooltip-caret": this.leftSafe,
+                "tooltip-caret-left": !this.leftSafe
+            }
+        },
+        tooltipStyles() {
+            return {
+                left: this.anchorPos,
+                transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
             };
         },
     },
@@ -100,21 +116,28 @@ export default {
     methods: {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
-            this.leftAnchorPos = appendPxSuffix(
+            if (leftWarning(e.currentTarget)) {
+                this.leftSafe = false
+            }
+            this.anchorPos = appendPxSuffix(
                 getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
         handleExit(e) {
             if (!this.clicked) {
                 this.entered = false;
-                this.leftAnchorPos = undefined;
+                this.anchorPos = undefined;
+                this.leftSafe = true;
             }
         },
         handleClick(e) {
             if (!this.clicked) {
                 this.entered = false;
                 this.clicked = true;
-                this.leftAnchorPos = appendPxSuffix(
+                if (leftWarning(e.currentTarget)) {
+                    this.leftSafe = false
+                }
+                this.anchorPos = appendPxSuffix(
                     getAnchorPos(e.currentTarget, this.btn_type)
                 );
             }
@@ -122,6 +145,9 @@ export default {
         handleCloseClick() {
             if (this.clicked) {
                 this.clicked = false;
+                this.entered = false;
+                this.anchorPos = undefined;
+                this.leftSafe = true;
             }
         },
     },

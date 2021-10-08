@@ -50,15 +50,24 @@
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 const getAnchorPos = (el, elType) => {
     if (!el) return 0;
+
     return elType === "labeled-icon"
         ? el.offsetWidth / 2
         : el.offsetWidth * 0.7;
 };
 
 const appendPxSuffix = (int) => `${int}px`;
+
+const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
 var script = {
     name: "copy-btn",
@@ -78,21 +87,28 @@ var script = {
         return {
             entered: false,
             clicked: false,
-            leftAnchorPos: undefined,
+            leftSafe: true,
+            anchorPos: undefined,
             label: "Copy Link or Citation",
         };
     },
 
     computed: {
-        classObject() {
+        buttonClasses() {
             return {
                 "copy-btn-labeled": this.btn_type === "labeled-icon",
             };
         },
-        enteredStyles() {
+        tooltipClasses() {
             return {
-                left: this.leftAnchorPos,
-                transform: "translate(-50%, 0)",
+                "tooltip-caret": this.leftSafe,
+                "tooltip-caret-left": !this.leftSafe
+            }
+        },
+        tooltipStyles() {
+            return {
+                left: this.anchorPos,
+                transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
             };
         },
     },
@@ -100,21 +116,28 @@ var script = {
     methods: {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
-            this.leftAnchorPos = appendPxSuffix(
+            if (leftWarning(e.currentTarget)) {
+                this.leftSafe = false;
+            }
+            this.anchorPos = appendPxSuffix(
                 getAnchorPos(e.currentTarget, this.btn_type)
             );
         },
         handleExit(e) {
             if (!this.clicked) {
                 this.entered = false;
-                this.leftAnchorPos = undefined;
+                this.anchorPos = undefined;
+                this.leftSafe = true;
             }
         },
         handleClick(e) {
             if (!this.clicked) {
                 this.entered = false;
                 this.clicked = true;
-                this.leftAnchorPos = appendPxSuffix(
+                if (leftWarning(e.currentTarget)) {
+                    this.leftSafe = false;
+                }
+                this.anchorPos = appendPxSuffix(
                     getAnchorPos(e.currentTarget, this.btn_type)
                 );
             }
@@ -122,6 +145,9 @@ var script = {
         handleCloseClick() {
             if (this.clicked) {
                 this.clicked = false;
+                this.entered = false;
+                this.anchorPos = undefined;
+                this.leftSafe = true;
             }
         },
     },
@@ -215,7 +241,7 @@ var __vue_render__ = function() {
       "button",
       {
         staticClass: "copy-btn text-btn",
-        class: _vm.classObject,
+        class: _vm.buttonClasses,
         attrs: {
           title: _vm.title,
           "aria-label": _vm.btn_type === "icon" ? _vm.label : false
@@ -249,7 +275,8 @@ var __vue_render__ = function() {
           }
         ],
         staticClass: "copy-tooltip hovered",
-        style: _vm.enteredStyles
+        class: _vm.tooltipClasses,
+        style: _vm.tooltipStyles
       },
       [_c("p", { staticClass: "hover-msg" }, [_vm._v(_vm._s(_vm.label))])]
     ),
@@ -257,7 +284,11 @@ var __vue_render__ = function() {
     _vm.clicked
       ? _c(
           "div",
-          { staticClass: "copy-tooltip clicked", style: _vm.enteredStyles },
+          {
+            staticClass: "copy-tooltip clicked",
+            class: _vm.tooltipClasses,
+            style: _vm.tooltipStyles
+          },
           [
             _c(
               "button",

@@ -17840,7 +17840,7 @@ select:focus-visible {
   line-height: 16px;
 }
 .copy-tooltip.clicked {
-  width: 285px;
+  width: 245px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -17869,7 +17869,8 @@ select:focus-visible {
   font-weight: 700;
   margin: 0 0 18px 0;
 }
-.copy-tooltip::after {
+
+.tooltip-caret::after, .tooltip-caret-left::after {
   border-right: solid 5px transparent;
   border-left: solid 5px transparent;
   border-top: solid 5px #eefafe;
@@ -17881,6 +17882,10 @@ select:focus-visible {
   left: 50%;
   height: 0;
   width: 0;
+}
+
+.tooltip-caret-left::after {
+  left: 20%;
 }
 
 .reg-text .copy-btn-container {
