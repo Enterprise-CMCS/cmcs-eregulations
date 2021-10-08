@@ -1,17 +1,19 @@
 <template>
-    <button
-        class="copy-btn text-btn"
-        :class="classObject"
-        :title="title"
-        :aria-label="btn_type === 'icon' ? label : false"
-        @focus="handleEnter"
-        @focusout="handleExit"
-        @mouseenter="handleEnter"
-        @mouseleave="handleExit"
-        @click="handleClick"
-    >
-        <i class="fa fa-link"></i>
-        <span v-if="btn_type === 'labeled-icon'">{{ label }}</span>
+    <div class="copy-btn-container">
+        <button
+            class="copy-btn text-btn"
+            :class="classObject"
+            :title="title"
+            :aria-label="btn_type === 'icon' ? label : false"
+            @focus="handleEnter"
+            @focusout="handleExit"
+            @mouseenter="handleEnter"
+            @mouseleave="handleExit"
+            @click="handleClick"
+        >
+            <i class="fa fa-link"></i>
+            <span v-if="btn_type === 'labeled-icon'">{{ label }}</span>
+        </button>
         <div
             v-show="entered && btn_type === 'icon'"
             class="copy-tooltip hovered"
@@ -45,7 +47,7 @@
                 <button>Two</button>
             </div>
         </div>
-    </button>
+    </div>
 </template>
 
 <script>
@@ -109,15 +111,18 @@ export default {
             }
         },
         handleClick(e) {
-            this.entered = false;
-            this.clicked = true;
-            this.leftAnchorPos = appendPxSuffix(
-                getAnchorPos(e.currentTarget, this.btn_type)
-            );
+            if (!this.clicked) {
+                this.entered = false;
+                this.clicked = true;
+                this.leftAnchorPos = appendPxSuffix(
+                    getAnchorPos(e.currentTarget, this.btn_type)
+                );
+            }
         },
         handleCloseClick() {
-            this.clicked = false;
-            this.entered = true;
+            if (this.clicked) {
+                this.clicked = false;
+            }
         },
     },
 };

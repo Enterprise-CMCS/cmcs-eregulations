@@ -48,6 +48,8 @@
 //
 //
 //
+//
+//
 
 const getAnchorPos = (el, elType) => {
     if (!el) return 0;
@@ -109,15 +111,18 @@ var script = {
             }
         },
         handleClick(e) {
-            this.entered = false;
-            this.clicked = true;
-            this.leftAnchorPos = appendPxSuffix(
-                getAnchorPos(e.currentTarget, this.btn_type)
-            );
+            if (!this.clicked) {
+                this.entered = false;
+                this.clicked = true;
+                this.leftAnchorPos = appendPxSuffix(
+                    getAnchorPos(e.currentTarget, this.btn_type)
+                );
+            }
         },
         handleCloseClick() {
-            this.clicked = false;
-            this.entered = true;
+            if (this.clicked) {
+                this.clicked = false;
+            }
         },
     },
 };
@@ -205,95 +210,97 @@ var __vue_render__ = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "button",
-    {
-      staticClass: "copy-btn text-btn",
-      class: _vm.classObject,
-      attrs: {
-        title: _vm.title,
-        "aria-label": _vm.btn_type === "icon" ? _vm.label : false
-      },
-      on: {
-        focus: _vm.handleEnter,
-        focusout: _vm.handleExit,
-        mouseenter: _vm.handleEnter,
-        mouseleave: _vm.handleExit,
-        click: _vm.handleClick
-      }
-    },
-    [
-      _c("i", { staticClass: "fa fa-link" }),
-      _vm._v(" "),
-      _vm.btn_type === "labeled-icon"
-        ? _c("span", [_vm._v(_vm._s(_vm.label))])
-        : _vm._e(),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.entered && _vm.btn_type === "icon",
-              expression: "entered && btn_type === 'icon'"
-            }
-          ],
-          staticClass: "copy-tooltip hovered",
-          style: _vm.enteredStyles
+  return _c("div", { staticClass: "copy-btn-container" }, [
+    _c(
+      "button",
+      {
+        staticClass: "copy-btn text-btn",
+        class: _vm.classObject,
+        attrs: {
+          title: _vm.title,
+          "aria-label": _vm.btn_type === "icon" ? _vm.label : false
         },
-        [_c("p", { staticClass: "hover-msg" }, [_vm._v(_vm._s(_vm.label))])]
-      ),
-      _vm._v(" "),
-      _vm.clicked
-        ? _c(
-            "div",
-            { staticClass: "copy-tooltip clicked", style: _vm.enteredStyles },
-            [
-              _c(
-                "button",
-                {
-                  staticClass: "close-btn text-btn",
-                  attrs: { "aria-label": "close copy link or citation dialog" },
-                  on: { click: _vm.handleCloseClick }
-                },
-                [
-                  _c(
-                    "svg",
-                    {
+        on: {
+          focus: _vm.handleEnter,
+          focusout: _vm.handleExit,
+          mouseenter: _vm.handleEnter,
+          mouseleave: _vm.handleExit,
+          click: _vm.handleClick
+        }
+      },
+      [
+        _c("i", { staticClass: "fa fa-link" }),
+        _vm._v(" "),
+        _vm.btn_type === "labeled-icon"
+          ? _c("span", [_vm._v(_vm._s(_vm.label))])
+          : _vm._e()
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.entered && _vm.btn_type === "icon",
+            expression: "entered && btn_type === 'icon'"
+          }
+        ],
+        staticClass: "copy-tooltip hovered",
+        style: _vm.enteredStyles
+      },
+      [_c("p", { staticClass: "hover-msg" }, [_vm._v(_vm._s(_vm.label))])]
+    ),
+    _vm._v(" "),
+    _vm.clicked
+      ? _c(
+          "div",
+          { staticClass: "copy-tooltip clicked", style: _vm.enteredStyles },
+          [
+            _c(
+              "button",
+              {
+                staticClass: "close-btn text-btn",
+                attrs: { "aria-label": "close copy link or citation dialog" },
+                on: { click: _vm.handleCloseClick }
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    attrs: {
+                      width: "11",
+                      height: "11",
+                      viewBox: "0 0 11 11",
+                      fill: "none",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c("path", {
                       attrs: {
-                        width: "11",
-                        height: "11",
-                        viewBox: "0 0 11 11",
-                        fill: "none",
-                        xmlns: "http://www.w3.org/2000/svg"
+                        "fill-rule": "evenodd",
+                        "clip-rule": "evenodd",
+                        d:
+                          "M1.47149 1.08383L5.49969 5.11209L9.52851 1.08383C9.63637 0.975965 9.81124 0.975965 9.91911 1.08383C10.027 1.19169 10.027 1.36656 9.91911 1.47442L5.89023 5.50262L9.91911 9.53144C10.027 9.6393 10.027 9.81417 9.91911 9.92204C9.81124 10.0299 9.63637 10.0299 9.52851 9.92204L5.49969 5.89316L1.47149 9.92204C1.36363 10.0299 1.18876 10.0299 1.0809 9.92204C0.973035 9.81417 0.973035 9.6393 1.0809 9.53144L5.10916 5.50262L1.0809 1.47442C0.973035 1.36656 0.973035 1.19169 1.0809 1.08383C1.18876 0.975965 1.36363 0.975965 1.47149 1.08383Z"
                       }
-                    },
-                    [
-                      _c("path", {
-                        attrs: {
-                          "fill-rule": "evenodd",
-                          "clip-rule": "evenodd",
-                          d:
-                            "M1.47149 1.08383L5.49969 5.11209L9.52851 1.08383C9.63637 0.975965 9.81124 0.975965 9.91911 1.08383C10.027 1.19169 10.027 1.36656 9.91911 1.47442L5.89023 5.50262L9.91911 9.53144C10.027 9.6393 10.027 9.81417 9.91911 9.92204C9.81124 10.0299 9.63637 10.0299 9.52851 9.92204L5.49969 5.89316L1.47149 9.92204C1.36363 10.0299 1.18876 10.0299 1.0809 9.92204C0.973035 9.81417 0.973035 9.6393 1.0809 9.53144L5.10916 5.50262L1.0809 1.47442C0.973035 1.36656 0.973035 1.19169 1.0809 1.08383C1.18876 0.975965 1.36363 0.975965 1.47149 1.08383Z"
-                        }
-                      })
-                    ]
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c("p", { staticClass: "citation-title" }, [
-                _vm._v(_vm._s(_vm.label))
-              ]),
-              _vm._v(" "),
-              _vm._m(0)
-            ]
-          )
-        : _vm._e()
-    ]
-  )
+                    })
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("p", { staticClass: "citation-title" }, [
+              _vm._v(_vm._s(_vm.label))
+            ]),
+            _vm._v(" "),
+            _vm._m(0)
+          ]
+        )
+      : _vm._e()
+  ])
 };
 var __vue_staticRenderFns__ = [
   function() {
