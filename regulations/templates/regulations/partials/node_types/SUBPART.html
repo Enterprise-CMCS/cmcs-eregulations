@@ -1,11 +1,13 @@
 {% load render_nested %}
+{% load string_formatters %}
 {% comment %}
     Used once per section. Contained by subparts at the top level.
 {% endcomment %}
 
 <article>
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
-        {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="icon" %}
+        {% subpart_formatter cfr_title citation node.label as formatted_citation %}
+        {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="icon" formatted_citation=formatted_citation %}
         {{node.title}}
     </h1>
     {{node.text | safe}}

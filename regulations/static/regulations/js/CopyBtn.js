@@ -68,8 +68,6 @@ const appendPxSuffix = (int) => `${int}px`;
 
 const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
-const parseArrString = (arrString) => JSON.parse(arrString.replace(/'/g, '"'));
-
 var script = {
     name: "copy-btn",
 
@@ -82,15 +80,7 @@ var script = {
             type: String,
             required: true,
         },
-        citation: {
-            type: Array,
-            required: true,
-        },
-        cfr_title: {
-            type: String,
-            required: true,
-        },
-        version: {
+        formatted_citation: {
             type: String,
             required: true,
         },
@@ -107,24 +97,8 @@ var script = {
     },
 
     computed: {
-        titleArr() {
-            return parseArrString(this.title);
-        },
-        titleDotted() {
-            return this.titleArr.join(".");
-        },
-        citationArr() {
-            return parseArrString(this.citation)
-        },
-        titleFormatted() {
-            console.log(this.cfr_title);
-            console.log(this.version);
-            console.log(this.titleArr);
-            console.log(this.citationArr);
-            return `${this.cfr_title} CFR § ${this.citationArr[0]}.x(x)`
-        },
         ariaLabel() {
-            return `${this.label} for ${this.titleDotted}`;
+            return `${this.label} for ${this.title}`;
         },
         buttonClasses() {
             return {
@@ -355,7 +329,7 @@ var __vue_render__ = function() {
             ),
             _vm._v(" "),
             _c("p", { staticClass: "citation-title" }, [
-              _vm._v(_vm._s(_vm.titleFormatted))
+              _vm._v(_vm._s(this.formatted_citation))
             ]),
             _vm._v(" "),
             _vm._m(0)
