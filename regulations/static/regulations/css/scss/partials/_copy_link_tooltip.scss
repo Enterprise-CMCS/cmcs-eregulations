@@ -39,7 +39,6 @@
     p {
         color: $dark_gray;
         padding: 0;
-        white-space: nowrap;
     }
 
     &.hovered {
@@ -50,6 +49,7 @@
             font-size: $font_size_xs;
             font-weight: 600;
             line-height: 16px;
+            white-space: nowrap;
         }
     }
 

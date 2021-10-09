@@ -17839,7 +17839,6 @@ select:focus-visible {
 .copy-tooltip p {
   color: #212121;
   padding: 0;
-  white-space: nowrap;
 }
 .copy-tooltip.hovered {
   padding: 0 15px;
@@ -17849,6 +17848,7 @@ select:focus-visible {
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
+  white-space: nowrap;
 }
 .copy-tooltip.clicked {
   width: 245px;
