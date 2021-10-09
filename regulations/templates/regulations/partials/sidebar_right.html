@@ -1,8 +1,10 @@
 {% load render_nested %}
+{% load string_formatters %}
 
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
 
+    {% sidebar_formatter title reg_part subpart as formatted_citation %}
     {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="labeled-icon" %}
     <hr />
 
