@@ -50,7 +50,10 @@ function onPageShow() {
                 window.innerWidth >= 1024
                     ? HEADER_HEIGHT
                     : HEADER_HEIGHT_MOBILE;
-            window.scrollTo(position.x, el.offsetTop - headerHeight - versionSelectHeight);
+            window.scrollTo(
+                position.x,
+                el.offsetTop - headerHeight - versionSelectHeight
+            );
         }
     }
 }
@@ -137,7 +140,7 @@ function main() {
             Collapsible,
             CollapseButton,
             SupplementaryContent,
-            CopyBtn
+            CopyBtn,
         },
     }).$mount("#vue-app");
 

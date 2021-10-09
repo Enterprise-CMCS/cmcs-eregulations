@@ -2022,6 +2022,7 @@
   //
   //
   //
+  //
 
   const getAnchorPos = (el, elType) => {
       if (!el) return 0;
@@ -2086,6 +2087,35 @@
           },
       },
 
+      // https://www.vuesnippets.com/posts/click-away/
+      // https://dev.to/jamus/clicking-outside-the-box-making-your-vue-app-aware-of-events-outside-its-world-53nh
+      directives: {
+          clickaway: {
+              bind(el, { value }) {
+                  if (typeof value !== "function") {
+                      console.warn(`Expect a function, got ${value}`);
+                      return;
+                  }
+
+                  const clickawayHandler = (e) => {
+                      const elementsOfInterest = Array.from(el.parentElement.children);
+                      const clickedInside = elementsOfInterest.filter(el => el.contains(e.target));
+                      return clickedInside.length || value();
+                  };
+
+                  el.__clickawayEventHandler__ = clickawayHandler;
+
+                  document.addEventListener("click", clickawayHandler);
+              },
+              unbind(el) {
+                  document.removeEventListener(
+                      "click",
+                      el.__clickawayEventHandler__
+                  );
+              },
+          },
+      },
+
       methods: {
           handleEnter(e) {
               if (!this.entered && !this.clicked) this.entered = true;
@@ -2116,6 +2146,14 @@
               }
           },
           handleCloseClick() {
+              if (this.clicked) {
+                  this.clicked = false;
+                  this.entered = false;
+                  this.anchorPos = undefined;
+                  this.leftSafe = true;
+              }
+          },
+          handleClickAway() {
               if (this.clicked) {
                   this.clicked = false;
                   this.entered = false;
@@ -2257,6 +2295,14 @@
         ? _c(
             "div",
             {
+              directives: [
+                {
+                  name: "clickaway",
+                  rawName: "v-clickaway",
+                  value: _vm.handleClickAway,
+                  expression: "handleClickAway"
+                }
+              ],
               staticClass: "copy-tooltip clicked",
               class: _vm.tooltipClasses,
               style: _vm.tooltipStyles
@@ -2463,7 +2509,10 @@
                   window.innerWidth >= 1024
                       ? HEADER_HEIGHT
                       : HEADER_HEIGHT_MOBILE;
-              window.scrollTo(position.x, el.offsetTop - headerHeight - versionSelectHeight);
+              window.scrollTo(
+                  position.x,
+                  el.offsetTop - headerHeight - versionSelectHeight
+              );
           }
       }
   }
@@ -2550,7 +2599,7 @@
               Collapsible: __vue_component__$9,
               CollapseButton: __vue_component__$8,
               SupplementaryContent: __vue_component__$7,
-              CopyBtn: __vue_component__
+              CopyBtn: __vue_component__,
           },
       }).$mount("#vue-app");
 

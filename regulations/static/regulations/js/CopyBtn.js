@@ -55,6 +55,7 @@
 //
 //
 //
+//
 
 const getAnchorPos = (el, elType) => {
     if (!el) return 0;
@@ -119,6 +120,35 @@ var script = {
         },
     },
 
+    // https://www.vuesnippets.com/posts/click-away/
+    // https://dev.to/jamus/clicking-outside-the-box-making-your-vue-app-aware-of-events-outside-its-world-53nh
+    directives: {
+        clickaway: {
+            bind(el, { value }) {
+                if (typeof value !== "function") {
+                    console.warn(`Expect a function, got ${value}`);
+                    return;
+                }
+
+                const clickawayHandler = (e) => {
+                    const elementsOfInterest = Array.from(el.parentElement.children);
+                    const clickedInside = elementsOfInterest.filter(el => el.contains(e.target));
+                    return clickedInside.length || value();
+                };
+
+                el.__clickawayEventHandler__ = clickawayHandler;
+
+                document.addEventListener("click", clickawayHandler);
+            },
+            unbind(el) {
+                document.removeEventListener(
+                    "click",
+                    el.__clickawayEventHandler__
+                );
+            },
+        },
+    },
+
     methods: {
         handleEnter(e) {
             if (!this.entered && !this.clicked) this.entered = true;
@@ -149,6 +179,14 @@ var script = {
             }
         },
         handleCloseClick() {
+            if (this.clicked) {
+                this.clicked = false;
+                this.entered = false;
+                this.anchorPos = undefined;
+                this.leftSafe = true;
+            }
+        },
+        handleClickAway() {
             if (this.clicked) {
                 this.clicked = false;
                 this.entered = false;
@@ -290,6 +328,14 @@ var __vue_render__ = function() {
       ? _c(
           "div",
           {
+            directives: [
+              {
+                name: "clickaway",
+                rawName: "v-clickaway",
+                value: _vm.handleClickAway,
+                expression: "handleClickAway"
+              }
+            ],
             staticClass: "copy-tooltip clicked",
             class: _vm.tooltipClasses,
             style: _vm.tooltipStyles
