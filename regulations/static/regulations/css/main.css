@@ -17831,6 +17831,20 @@ select:focus-visible {
   background: #205982;
 }
 
+.success-btn {
+  display: flex;
+  background: none;
+  color: #2a7a3b;
+  border: 1px solid #2a7a3b;
+}
+.success-btn > svg {
+  padding-right: 5px;
+}
+.success-btn path {
+  stroke: #2a7a3b;
+  fill: #2a7a3b;
+}
+
 .component-container {
   position: relative;
 }

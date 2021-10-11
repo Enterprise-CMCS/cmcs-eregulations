@@ -25,8 +25,25 @@
     color: white;
     background: $mid-blue;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         background: $mid-dark-blue;
+    }
+}
+
+.success-btn {
+    display: flex;
+    background: none;
+    color: $copy_button_success;
+    border: 1px solid $copy_button_success;
+
+    > svg {
+        padding-right: 5px;
+    }
+
+    path {
+        stroke: $copy_button_success;
+        fill: $copy_button_success;
     }
 }
 
