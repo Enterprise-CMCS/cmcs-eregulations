@@ -5,8 +5,8 @@
     {% include "regulations/partials/view-button.html" %}
 
     {% sidebar_formatter title reg_part subpart as formatted_citation %}
-    {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="labeled-icon" %}
-    <hr />
+    {% comment %}{% include "regulations/partials/copy-btn.html" with title=node.label btn_type="labeled-icon" %}{% endcomment %}
+    {% comment %}<hr />{% endcomment %}
 
     <h2 id="final-rules-heading">Part {{ reg_part }} Final Rules</h2>
 
