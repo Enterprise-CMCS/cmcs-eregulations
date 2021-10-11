@@ -10,6 +10,26 @@
     padding: 0;
 }
 
+.action-btn {
+    font-family: $primary_site_font;
+    font-size: $font-size-sm;
+    line-height: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 12px 12px;
+    cursor: pointer;
+}
+
+.default-btn {
+    color: white;
+    background: $mid-blue;
+
+    &:hover, &:focus {
+        background: $mid-dark-blue;
+    }
+}
+
 .component-container {
     position: relative;
 }
@@ -177,6 +197,16 @@ aside.right-sidebar {
 
         .copy-tooltip {
             bottom: 35px;
+        }
+    }
+}
+
+.action-btns {
+    margin-bottom: 8px;
+
+    .action-btn {
+        &:first-child {
+            margin-right: 15px;
         }
     }
 }

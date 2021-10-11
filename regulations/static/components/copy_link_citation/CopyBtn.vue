@@ -48,15 +48,17 @@
                 </svg>
             </button>
             <p class="citation-title">{{ this.formatted_citation }}</p>
-            <div class="btn-row">
-                <button>One</button>
-                <button>Two</button>
+            <div class="action-btns">
+                <ActionBtn label="Copy Link"></ActionBtn>
+                <ActionBtn label="Copy Citation"></ActionBtn>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import ActionBtn from "./ActionBtn.vue"
+
 const getAnchorPos = (el, elType) => {
     if (!el) return 0;
 
@@ -71,6 +73,10 @@ const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
 export default {
     name: "copy-btn",
+
+    components: {
+        ActionBtn,
+    },
 
     props: {
         btn_type: {

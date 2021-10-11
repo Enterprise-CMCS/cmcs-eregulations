@@ -17812,6 +17812,25 @@ select:focus-visible {
   padding: 0;
 }
 
+.action-btn {
+  font-family: "Open Sans", Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  padding: 10px 12px 12px;
+  cursor: pointer;
+}
+
+.default-btn {
+  color: white;
+  background: #046791;
+}
+.default-btn:hover, .default-btn:focus {
+  background: #205982;
+}
+
 .component-container {
   position: relative;
 }
@@ -17951,6 +17970,13 @@ aside.right-sidebar .copy-btn-container + hr {
 }
 aside.right-sidebar .copy-btn-container .copy-tooltip {
   bottom: 35px;
+}
+
+.action-btns {
+  margin-bottom: 8px;
+}
+.action-btns .action-btn:first-child {
+  margin-right: 15px;
 }
 
 /*# sourceMappingURL=main.css.map */
