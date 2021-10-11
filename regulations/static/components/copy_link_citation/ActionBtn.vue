@@ -1,6 +1,6 @@
 <template>
-    <button class="action-btn success-btn">
-        <svg width="17" height="17" viewBox="0 0 17 17">
+    <button class="action-btn" :class="buttonClasses" @click="handleClick">
+        <svg v-if="selected" width="17" height="17" viewBox="0 0 17 17">
             <svg width="17" height="17">
                 <path
                     fill-rule="evenodd"
@@ -25,18 +25,49 @@
         {{ label }}
     </button>
 </template>
+
 <script>
 export default {
     name: "action-button",
 
     props: {
-        label: String,
-        required: true,
+        actionType: {
+            type: String,
+            required: true,
+        },
+        selectedAction: {
+            type: String,
+            required: true,
+        },
     },
 
-    computed: {},
+    data() {},
 
-    methods: {},
+    computed: {
+        selected() {
+            return this.selectedAction === this.actionType;
+        },
+        labelState() {
+            return this.selected ? "copied" : "copy";
+        },
+        label() {
+            return `${this.labelState} ${this.actionType}`;
+        },
+        buttonClasses() {
+            return {
+                "selected-btn": this.selected,
+                "default-btn": !this.selected,
+            };
+        },
+    },
+
+    methods: {
+        handleClick() {
+            this.$emit("action-btn-click", {
+                actionType: this.actionType,
+            });
+        },
+    },
 
     filters: {},
 };

@@ -25,18 +25,49 @@
 //
 //
 //
+//
 
 var script$1 = {
     name: "action-button",
 
     props: {
-        label: String,
-        required: true,
+        actionType: {
+            type: String,
+            required: true,
+        },
+        selectedAction: {
+            type: String,
+            required: true,
+        },
     },
 
-    computed: {},
+    data() {},
 
-    methods: {},
+    computed: {
+        selected() {
+            return this.selectedAction === this.actionType;
+        },
+        labelState() {
+            return this.selected ? "copied" : "copy";
+        },
+        label() {
+            return `${this.labelState} ${this.actionType}`;
+        },
+        buttonClasses() {
+            return {
+                "selected-btn": this.selected,
+                "default-btn": !this.selected,
+            };
+        },
+    },
+
+    methods: {
+        handleClick() {
+            this.$emit("action-btn-click", {
+                actionType: this.actionType,
+            });
+        },
+    },
 
     filters: {},
 };
@@ -124,38 +155,56 @@ var __vue_render__$1 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("button", { staticClass: "action-btn success-btn" }, [
-    _c("svg", { attrs: { width: "17", height: "17", viewBox: "0 0 17 17" } }, [
-      _c("svg", { attrs: { width: "17", height: "17" } }, [
-        _c("path", {
-          attrs: {
-            "fill-rule": "evenodd",
-            "clip-rule": "evenodd",
-            d:
-              "M8.50007 16C4.36452 16 1 12.6355 1 8.50007C1 4.36452 4.36452 1 8.50007 1C12.6355 1 15.9999 4.36452 15.9999 8.50007C15.9999 12.6355 12.6355 16 8.50007 16ZM8.50007 2.02937C4.93206 2.02937 2.02922 4.93221 2.02922 8.50007C2.02922 12.0681 4.93206 14.9708 8.50007 14.9708C12.0679 14.9708 14.9706 12.0681 14.9706 8.50007C14.9706 4.93221 12.0679 2.02937 8.50007 2.02937Z",
-            fill: "#2A7A3B",
-            stroke: "#2A7A3B",
-            "stroke-width": "0.25"
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("svg", { attrs: { width: "17", height: "17", x: "4", y: "5" } }, [
-        _c("path", {
-          attrs: {
-            "fill-rule": "evenodd",
-            "clip-rule": "evenodd",
-            d:
-              "M3.48221 5.98237C3.34562 5.98237 3.21476 5.92812 3.11831 5.83166L1.2191 3.93246C1.01811 3.73161 1.01811 3.40565 1.2191 3.2048C1.4201 3.00366 1.74577 3.00366 1.94676 3.2048L3.48221 4.73996L7.05287 1.1693C7.25357 0.968307 7.57954 0.968307 7.78053 1.1693C7.98152 1.37014 7.98152 1.69611 7.78053 1.89696L3.84597 5.83166C3.74951 5.92812 3.61866 5.98237 3.48221 5.98237Z",
-            fill: "#2A7A3B",
-            stroke: "#2A7A3B",
-            "stroke-width": "0.25"
-          }
-        })
-      ])
-    ]),
-    _vm._v("\n    " + _vm._s(_vm.label) + "\n")
-  ])
+  return _c(
+    "button",
+    {
+      staticClass: "action-btn",
+      class: _vm.buttonClasses,
+      on: { click: _vm.handleClick }
+    },
+    [
+      _vm.selected
+        ? _c(
+            "svg",
+            { attrs: { width: "17", height: "17", viewBox: "0 0 17 17" } },
+            [
+              _c("svg", { attrs: { width: "17", height: "17" } }, [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    "clip-rule": "evenodd",
+                    d:
+                      "M8.50007 16C4.36452 16 1 12.6355 1 8.50007C1 4.36452 4.36452 1 8.50007 1C12.6355 1 15.9999 4.36452 15.9999 8.50007C15.9999 12.6355 12.6355 16 8.50007 16ZM8.50007 2.02937C4.93206 2.02937 2.02922 4.93221 2.02922 8.50007C2.02922 12.0681 4.93206 14.9708 8.50007 14.9708C12.0679 14.9708 14.9706 12.0681 14.9706 8.50007C14.9706 4.93221 12.0679 2.02937 8.50007 2.02937Z",
+                    fill: "#2A7A3B",
+                    stroke: "#2A7A3B",
+                    "stroke-width": "0.25"
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c(
+                "svg",
+                { attrs: { width: "17", height: "17", x: "4", y: "5" } },
+                [
+                  _c("path", {
+                    attrs: {
+                      "fill-rule": "evenodd",
+                      "clip-rule": "evenodd",
+                      d:
+                        "M3.48221 5.98237C3.34562 5.98237 3.21476 5.92812 3.11831 5.83166L1.2191 3.93246C1.01811 3.73161 1.01811 3.40565 1.2191 3.2048C1.4201 3.00366 1.74577 3.00366 1.94676 3.2048L3.48221 4.73996L7.05287 1.1693C7.25357 0.968307 7.57954 0.968307 7.78053 1.1693C7.98152 1.37014 7.98152 1.69611 7.78053 1.89696L3.84597 5.83166C3.74951 5.92812 3.61866 5.98237 3.48221 5.98237Z",
+                      fill: "#2A7A3B",
+                      stroke: "#2A7A3B",
+                      "stroke-width": "0.25"
+                    }
+                  })
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v("\n    " + _vm._s(_vm.label) + "\n")
+    ]
+  )
 };
 var __vue_staticRenderFns__$1 = [];
 __vue_render__$1._withStripped = true;
@@ -225,13 +274,14 @@ var script = {
         },
     },
 
-    data: function () {
+    data() {
         return {
             entered: false,
             clicked: false,
             leftSafe: true,
             anchorPos: undefined,
             label: "Copy Link or Citation",
+            selectedAction: null,
         };
     },
 
@@ -269,8 +319,12 @@ var script = {
                 }
 
                 const clickawayHandler = (e) => {
-                    const elementsOfInterest = Array.from(el.parentElement.children);
-                    const clickedInside = elementsOfInterest.filter(el => el.contains(e.target));
+                    const elementsOfInterest = Array.from(
+                        el.parentElement.children
+                    );
+                    const clickedInside = elementsOfInterest.filter((el) =>
+                        el.contains(e.target)
+                    );
                     return clickedInside.length || value();
                 };
 
@@ -322,15 +376,12 @@ var script = {
                 this.entered = false;
                 this.anchorPos = undefined;
                 this.leftSafe = true;
+                this.selectedAction = null;
             }
         },
-        handleClickAway() {
-            if (this.clicked) {
-                this.clicked = false;
-                this.entered = false;
-                this.anchorPos = undefined;
-                this.leftSafe = true;
-            }
+        handleActionClick(payload) {
+            console.log(payload);
+            this.selectedAction = payload.actionType;
         },
     },
 };
@@ -395,8 +446,8 @@ var __vue_render__ = function() {
               {
                 name: "clickaway",
                 rawName: "v-clickaway",
-                value: _vm.handleClickAway,
-                expression: "handleClickAway"
+                value: _vm.handleCloseClick,
+                expression: "handleCloseClick"
               }
             ],
             staticClass: "copy-tooltip clicked",
@@ -445,9 +496,21 @@ var __vue_render__ = function() {
               "div",
               { staticClass: "action-btns" },
               [
-                _c("ActionBtn", { attrs: { label: "Copy Link" } }),
+                _c("ActionBtn", {
+                  attrs: {
+                    selectedAction: _vm.selectedAction,
+                    actionType: "link"
+                  },
+                  on: { "action-btn-click": _vm.handleActionClick }
+                }),
                 _vm._v(" "),
-                _c("ActionBtn", { attrs: { label: "Copy Citation" } })
+                _c("ActionBtn", {
+                  attrs: {
+                    selectedAction: _vm.selectedAction,
+                    actionType: "citation"
+                  },
+                  on: { "action-btn-click": _vm.handleActionClick }
+                })
               ],
               1
             )

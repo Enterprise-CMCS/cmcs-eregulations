@@ -19,11 +19,15 @@
     border-radius: 3px;
     padding: 10px 12px 12px;
     cursor: pointer;
+    text-transform: capitalize;
+    border: 1px;
+    border-style: solid;
 }
 
 .default-btn {
     color: white;
     background: $mid-blue;
+    border-color: rgba(0, 0, 0, 0);
 
     &:hover,
     &:focus {
@@ -31,11 +35,11 @@
     }
 }
 
-.success-btn {
+.selected-btn {
     display: flex;
     background: none;
     color: $copy_button_success;
-    border: 1px solid $copy_button_success;
+    border-color: $copy_button_success;
 
     > svg {
         padding-right: 5px;
@@ -91,7 +95,7 @@
     }
 
     &.clicked {
-        width: 245px;
+        width: 260px;
         padding: 20px;
         display: flex;
         flex-direction: column;
@@ -219,6 +223,7 @@ aside.right-sidebar {
 }
 
 .action-btns {
+    display: flex;
     margin-bottom: 8px;
 
     .action-btn {

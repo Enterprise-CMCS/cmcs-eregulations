@@ -26,7 +26,7 @@
             class="copy-tooltip clicked"
             :class="tooltipClasses"
             :style="tooltipStyles"
-            v-clickaway="handleClickAway"
+            v-clickaway="handleCloseClick"
         >
             <button
                 class="close-btn text-btn"
@@ -49,15 +49,23 @@
             </button>
             <p class="citation-title">{{ this.formatted_citation }}</p>
             <div class="action-btns">
-                <ActionBtn label="Copy Link"></ActionBtn>
-                <ActionBtn label="Copy Citation"></ActionBtn>
+                <ActionBtn
+                    @action-btn-click="handleActionClick"
+                    :selectedAction="selectedAction"
+                    actionType="link"
+                ></ActionBtn>
+                <ActionBtn
+                    @action-btn-click="handleActionClick"
+                    :selectedAction="selectedAction"
+                    actionType="citation"
+                ></ActionBtn>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import ActionBtn from "./ActionBtn.vue"
+import ActionBtn from "./ActionBtn.vue";
 
 const getAnchorPos = (el, elType) => {
     if (!el) return 0;
@@ -93,13 +101,14 @@ export default {
         },
     },
 
-    data: function () {
+    data() {
         return {
             entered: false,
             clicked: false,
             leftSafe: true,
             anchorPos: undefined,
             label: "Copy Link or Citation",
+            selectedAction: null,
         };
     },
 
@@ -137,8 +146,12 @@ export default {
                 }
 
                 const clickawayHandler = (e) => {
-                    const elementsOfInterest = Array.from(el.parentElement.children);
-                    const clickedInside = elementsOfInterest.filter(el => el.contains(e.target));
+                    const elementsOfInterest = Array.from(
+                        el.parentElement.children
+                    );
+                    const clickedInside = elementsOfInterest.filter((el) =>
+                        el.contains(e.target)
+                    );
                     return clickedInside.length || value();
                 };
 
@@ -190,15 +203,12 @@ export default {
                 this.entered = false;
                 this.anchorPos = undefined;
                 this.leftSafe = true;
+                this.selectedAction = null;
             }
         },
-        handleClickAway() {
-            if (this.clicked) {
-                this.clicked = false;
-                this.entered = false;
-                this.anchorPos = undefined;
-                this.leftSafe = true;
-            }
+        handleActionClick(payload) {
+            console.log(payload);
+            this.selectedAction = payload.actionType;
         },
     },
 };

@@ -17821,26 +17821,30 @@ select:focus-visible {
   border-radius: 3px;
   padding: 10px 12px 12px;
   cursor: pointer;
+  text-transform: capitalize;
+  border: 1px;
+  border-style: solid;
 }
 
 .default-btn {
   color: white;
   background: #046791;
+  border-color: rgba(0, 0, 0, 0);
 }
 .default-btn:hover, .default-btn:focus {
   background: #205982;
 }
 
-.success-btn {
+.selected-btn {
   display: flex;
   background: none;
   color: #2a7a3b;
-  border: 1px solid #2a7a3b;
+  border-color: #2a7a3b;
 }
-.success-btn > svg {
+.selected-btn > svg {
   padding-right: 5px;
 }
-.success-btn path {
+.selected-btn path {
   stroke: #2a7a3b;
   fill: #2a7a3b;
 }
@@ -17884,7 +17888,7 @@ select:focus-visible {
   white-space: nowrap;
 }
 .copy-tooltip.clicked {
-  width: 245px;
+  width: 260px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -17987,6 +17991,7 @@ aside.right-sidebar .copy-btn-container .copy-tooltip {
 }
 
 .action-btns {
+  display: flex;
   margin-bottom: 8px;
 }
 .action-btns .action-btn:first-child {
