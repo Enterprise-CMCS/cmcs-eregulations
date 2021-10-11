@@ -19,4 +19,4 @@ def handler(event, context):
 
     from django.core.management import call_command
     for app in installed_apps:
-        call_command(f'migrate {app}')
+        call_command("migrate", app)
