@@ -26,6 +26,16 @@
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var script$1 = {
     name: "action-button",
@@ -39,16 +49,23 @@ var script$1 = {
             type: String,
             required: true,
         },
+        status: {
+            type: String,
+            required: true,
+        },
     },
-
-    data() {},
 
     computed: {
         selected() {
-            return this.selectedAction === this.actionType;
+            return (
+                this.selectedAction === this.actionType &&
+                this.status !== "idle"
+            );
         },
         labelState() {
-            return this.selected ? "copied" : "copy";
+            return this.selected && this.status === "success"
+                ? "copied"
+                : "copy";
         },
         label() {
             return `${this.labelState} ${this.actionType}`;
@@ -160,10 +177,11 @@ var __vue_render__$1 = function() {
     {
       staticClass: "action-btn",
       class: _vm.buttonClasses,
+      attrs: { disabled: _vm.selected && this.status === "success" },
       on: { click: _vm.handleClick }
     },
     [
-      _vm.selected
+      _vm.selected && this.status === "success"
         ? _c(
             "svg",
             { attrs: { width: "17", height: "17", viewBox: "0 0 17 17" } },
@@ -282,6 +300,7 @@ var script = {
             anchorPos: undefined,
             label: "Copy Link or Citation",
             selectedAction: null,
+            copyStatus: "idle",
         };
     },
 
@@ -305,6 +324,24 @@ var script = {
                 left: this.anchorPos,
                 transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
             };
+        },
+    },
+
+    watch: {
+        copyStatus: async function (newStatus, oldStatus) {
+            if (
+                newStatus === "pending" &&
+                (oldStatus === "idle" || oldStatus === "success")
+            ) {
+                try {
+                    // async write to clipboard
+                    await navigator.clipboard.writeText(this.getCopyText());
+                    this.copyStatus = "success";
+                } catch (err) {
+                    console.log("Error copying to clipboard", err);
+                    this.copyStatus = "idle";
+                }
+            }
         },
     },
 
@@ -380,8 +417,12 @@ var script = {
             }
         },
         handleActionClick(payload) {
-            console.log(payload);
             this.selectedAction = payload.actionType;
+            this.copyStatus = "pending";
+        },
+        getCopyText() {
+            console.log(this.selectedAction);
+            return this.selectedAction;
         },
     },
 };
@@ -502,13 +543,18 @@ var __vue_render__ = function() {
           { staticClass: "action-btns" },
           [
             _c("ActionBtn", {
-              attrs: { selectedAction: _vm.selectedAction, actionType: "link" },
+              attrs: {
+                selectedAction: _vm.selectedAction,
+                status: _vm.copyStatus,
+                actionType: "link"
+              },
               on: { "action-btn-click": _vm.handleActionClick }
             }),
             _vm._v(" "),
             _c("ActionBtn", {
               attrs: {
                 selectedAction: _vm.selectedAction,
+                status: _vm.copyStatus,
                 actionType: "citation"
               },
               on: { "action-btn-click": _vm.handleActionClick }

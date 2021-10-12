@@ -1,6 +1,16 @@
 <template>
-    <button class="action-btn" :class="buttonClasses" @click="handleClick">
-        <svg v-if="selected" width="17" height="17" viewBox="0 0 17 17">
+    <button
+        class="action-btn"
+        :class="buttonClasses"
+        @click="handleClick"
+        :disabled="selected && this.status === 'success'"
+    >
+        <svg
+            v-if="selected && this.status === 'success'"
+            width="17"
+            height="17"
+            viewBox="0 0 17 17"
+        >
             <svg width="17" height="17">
                 <path
                     fill-rule="evenodd"
@@ -39,16 +49,23 @@ export default {
             type: String,
             required: true,
         },
+        status: {
+            type: String,
+            required: true,
+        },
     },
-
-    data() {},
 
     computed: {
         selected() {
-            return this.selectedAction === this.actionType;
+            return (
+                this.selectedAction === this.actionType &&
+                this.status !== "idle"
+            );
         },
         labelState() {
-            return this.selected ? "copied" : "copy";
+            return this.selected && this.status === "success"
+                ? "copied"
+                : "copy";
         },
         label() {
             return `${this.labelState} ${this.actionType}`;

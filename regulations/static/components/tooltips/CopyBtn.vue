@@ -52,11 +52,13 @@
                 <ActionBtn
                     @action-btn-click="handleActionClick"
                     :selectedAction="selectedAction"
+                    :status="copyStatus"
                     actionType="link"
                 ></ActionBtn>
                 <ActionBtn
                     @action-btn-click="handleActionClick"
                     :selectedAction="selectedAction"
+                    :status="copyStatus"
                     actionType="citation"
                 ></ActionBtn>
             </div>
@@ -109,6 +111,7 @@ export default {
             anchorPos: undefined,
             label: "Copy Link or Citation",
             selectedAction: null,
+            copyStatus: "idle",
         };
     },
 
@@ -132,6 +135,24 @@ export default {
                 left: this.anchorPos,
                 transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
             };
+        },
+    },
+
+    watch: {
+        copyStatus: async function (newStatus, oldStatus) {
+            if (
+                newStatus === "pending" &&
+                (oldStatus === "idle" || oldStatus === "success")
+            ) {
+                try {
+                    // async write to clipboard
+                    await navigator.clipboard.writeText(this.getCopyText());
+                    this.copyStatus = "success";
+                } catch (err) {
+                    console.log("Error copying to clipboard", err);
+                    this.copyStatus = "idle";
+                }
+            }
         },
     },
 
@@ -207,8 +228,12 @@ export default {
             }
         },
         handleActionClick(payload) {
-            console.log(payload);
             this.selectedAction = payload.actionType;
+            this.copyStatus = "pending";
+        },
+        getCopyText() {
+            console.log(this.selectedAction);
+            return this.selectedAction;
         },
     },
 };

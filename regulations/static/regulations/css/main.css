@@ -17827,6 +17827,7 @@ select:focus-visible {
 }
 
 .default-btn {
+  display: flex;
   color: white;
   background: #046791;
   border-color: rgba(0, 0, 0, 0);
@@ -17847,6 +17848,10 @@ select:focus-visible {
 .selected-btn path {
   stroke: #2a7a3b;
   fill: #2a7a3b;
+}
+
+.loading-icon {
+  padding-right: 5px;
 }
 
 .component-container {
@@ -17888,7 +17893,7 @@ select:focus-visible {
   white-space: nowrap;
 }
 .copy-tooltip.clicked {
-  width: 260px;
+  width: 265px;
   padding: 20px;
   display: flex;
   flex-direction: column;

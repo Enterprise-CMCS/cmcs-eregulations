@@ -44,7 +44,7 @@ export default [
         ],
     },
     {
-        input: 'components/copy_link_citation/CopyBtn.vue',
+        input: 'components/tooltips/CopyBtn.vue',
         output: {
             format: 'esm',
             file: 'regulations/js/CopyBtn.js'

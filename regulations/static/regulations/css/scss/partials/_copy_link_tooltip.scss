@@ -25,6 +25,7 @@
 }
 
 .default-btn {
+    display: flex;
     color: white;
     background: $mid-blue;
     border-color: rgba(0, 0, 0, 0);
@@ -49,6 +50,10 @@
         stroke: $copy_button_success;
         fill: $copy_button_success;
     }
+}
+
+.loading-icon {
+    padding-right: 5px;
 }
 
 .component-container {
@@ -95,7 +100,7 @@
     }
 
     &.clicked {
-        width: 260px;
+        width: 265px;
         padding: 20px;
         display: flex;
         flex-direction: column;
