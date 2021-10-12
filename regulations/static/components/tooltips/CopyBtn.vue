@@ -22,7 +22,7 @@
             <p class="hover-msg">{{ label }}</p>
         </div>
         <div
-            v-show="clicked"
+            v-if="clicked"
             class="copy-tooltip clicked"
             :class="tooltipClasses"
             :style="tooltipStyles"

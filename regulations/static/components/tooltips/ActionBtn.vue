@@ -72,7 +72,7 @@ export default {
         },
         buttonClasses() {
             return {
-                "selected-btn": this.selected,
+                "selected-btn": this.selected && this.status === "success",
                 "default-btn": !this.selected,
             };
         },

@@ -2039,7 +2039,7 @@
           },
           buttonClasses() {
               return {
-                  "selected-btn": this.selected,
+                  "selected-btn": this.selected && this.status === "success",
                   "default-btn": !this.selected,
               };
           },
@@ -2453,91 +2453,87 @@
         [_c("p", { staticClass: "hover-msg" }, [_vm._v(_vm._s(_vm.label))])]
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
+      _vm.clicked
+        ? _c(
+            "div",
             {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.clicked,
-              expression: "clicked"
-            },
-            {
-              name: "clickaway",
-              rawName: "v-clickaway",
-              value: _vm.handleCloseClick,
-              expression: "handleCloseClick"
-            }
-          ],
-          staticClass: "copy-tooltip clicked",
-          class: _vm.tooltipClasses,
-          style: _vm.tooltipStyles
-        },
-        [
-          _c(
-            "button",
-            {
-              staticClass: "close-btn text-btn",
-              attrs: { "aria-label": "close copy link or citation dialog" },
-              on: { click: _vm.handleCloseClick }
+              directives: [
+                {
+                  name: "clickaway",
+                  rawName: "v-clickaway",
+                  value: _vm.handleCloseClick,
+                  expression: "handleCloseClick"
+                }
+              ],
+              staticClass: "copy-tooltip clicked",
+              class: _vm.tooltipClasses,
+              style: _vm.tooltipStyles
             },
             [
               _c(
-                "svg",
+                "button",
                 {
-                  attrs: {
-                    width: "11",
-                    height: "11",
-                    viewBox: "0 0 11 11",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
+                  staticClass: "close-btn text-btn",
+                  attrs: { "aria-label": "close copy link or citation dialog" },
+                  on: { click: _vm.handleCloseClick }
                 },
                 [
-                  _c("path", {
-                    attrs: {
-                      "fill-rule": "evenodd",
-                      "clip-rule": "evenodd",
-                      d:
-                        "M1.47149 1.08383L5.49969 5.11209L9.52851 1.08383C9.63637 0.975965 9.81124 0.975965 9.91911 1.08383C10.027 1.19169 10.027 1.36656 9.91911 1.47442L5.89023 5.50262L9.91911 9.53144C10.027 9.6393 10.027 9.81417 9.91911 9.92204C9.81124 10.0299 9.63637 10.0299 9.52851 9.92204L5.49969 5.89316L1.47149 9.92204C1.36363 10.0299 1.18876 10.0299 1.0809 9.92204C0.973035 9.81417 0.973035 9.6393 1.0809 9.53144L5.10916 5.50262L1.0809 1.47442C0.973035 1.36656 0.973035 1.19169 1.0809 1.08383C1.18876 0.975965 1.36363 0.975965 1.47149 1.08383Z"
-                    }
-                  })
+                  _c(
+                    "svg",
+                    {
+                      attrs: {
+                        width: "11",
+                        height: "11",
+                        viewBox: "0 0 11 11",
+                        fill: "none",
+                        xmlns: "http://www.w3.org/2000/svg"
+                      }
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          "fill-rule": "evenodd",
+                          "clip-rule": "evenodd",
+                          d:
+                            "M1.47149 1.08383L5.49969 5.11209L9.52851 1.08383C9.63637 0.975965 9.81124 0.975965 9.91911 1.08383C10.027 1.19169 10.027 1.36656 9.91911 1.47442L5.89023 5.50262L9.91911 9.53144C10.027 9.6393 10.027 9.81417 9.91911 9.92204C9.81124 10.0299 9.63637 10.0299 9.52851 9.92204L5.49969 5.89316L1.47149 9.92204C1.36363 10.0299 1.18876 10.0299 1.0809 9.92204C0.973035 9.81417 0.973035 9.6393 1.0809 9.53144L5.10916 5.50262L1.0809 1.47442C0.973035 1.36656 0.973035 1.19169 1.0809 1.08383C1.18876 0.975965 1.36363 0.975965 1.47149 1.08383Z"
+                        }
+                      })
+                    ]
+                  )
                 ]
+              ),
+              _vm._v(" "),
+              _c("p", { staticClass: "citation-title" }, [
+                _vm._v(_vm._s(this.formatted_citation))
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "action-btns" },
+                [
+                  _c("ActionBtn", {
+                    attrs: {
+                      selectedAction: _vm.selectedAction,
+                      status: _vm.copyStatus,
+                      actionType: "link"
+                    },
+                    on: { "action-btn-click": _vm.handleActionClick }
+                  }),
+                  _vm._v(" "),
+                  _c("ActionBtn", {
+                    attrs: {
+                      selectedAction: _vm.selectedAction,
+                      status: _vm.copyStatus,
+                      actionType: "citation"
+                    },
+                    on: { "action-btn-click": _vm.handleActionClick }
+                  })
+                ],
+                1
               )
             ]
-          ),
-          _vm._v(" "),
-          _c("p", { staticClass: "citation-title" }, [
-            _vm._v(_vm._s(this.formatted_citation))
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "action-btns" },
-            [
-              _c("ActionBtn", {
-                attrs: {
-                  selectedAction: _vm.selectedAction,
-                  status: _vm.copyStatus,
-                  actionType: "link"
-                },
-                on: { "action-btn-click": _vm.handleActionClick }
-              }),
-              _vm._v(" "),
-              _c("ActionBtn", {
-                attrs: {
-                  selectedAction: _vm.selectedAction,
-                  status: _vm.copyStatus,
-                  actionType: "citation"
-                },
-                on: { "action-btn-click": _vm.handleActionClick }
-              })
-            ],
-            1
           )
-        ]
-      )
+        : _vm._e()
     ])
   };
   var __vue_staticRenderFns__ = [];
