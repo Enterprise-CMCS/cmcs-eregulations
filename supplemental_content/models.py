@@ -15,14 +15,26 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 
 
 class SubCategory(Category):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
 
+    class Meta:
+        verbose_name = "Sub-category"
+        verbose_name_plural = "Sub-categories"
+
 
 class SubSubCategory(Category):
     parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
+
+    class Meta:
+        verbose_name = "Sub-sub-category"
+        verbose_name_plural = "Sub-sub-categories"    
 
 ## Location models
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
@@ -45,12 +57,20 @@ class Subpart(AbstractLocation):
     def __str__(self):
         return f'{self.title} {self.part} Subpart {self.subpart_id}'
 
+    class Meta:
+        verbose_name = "Subpart"
+        verbose_name_plural = "Subparts"
+
 
 class SubjectGroup(AbstractLocation):
     subject_group_id = models.CharField(max_length=512)
 
     def __str__(self):
         return f'{self.title} {self.part} - {self.subject_group_id}'
+
+    class Meta:
+        verbose_name = "Subject Group"
+        verbose_name_plural = "Subject Groups"
 
 
 class Section(AbstractLocation):
@@ -59,6 +79,10 @@ class Section(AbstractLocation):
 
     def __str__(self):
         return f'{self.title} {self.part}.{self.section_id}'
+
+    class Meta:
+        verbose_name = "Section"
+        verbose_name_plural = "Sections"
 
 ## Supplemental content models
 # All supplemental content types must inherit from AbstractSupplementalContent.
@@ -111,3 +135,7 @@ class SupplementalContent(AbstractSupplementalContent):
     @property
     def truncated_description(self):
         return (self.description or [])[:50]
+
+    class Meta:
+        verbose_name = "Supplemental Content"
+        verbose_name_plural = "Supplemental Content"

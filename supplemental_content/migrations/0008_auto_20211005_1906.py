@@ -254,4 +254,32 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name='OldSupplementaryContent',
         ),
+        migrations.AlterModelOptions(
+            name='category',
+            options={'verbose_name': 'Category', 'verbose_name_plural': 'Categories'},
+        ),
+        migrations.AlterModelOptions(
+            name='section',
+            options={'verbose_name': 'Section', 'verbose_name_plural': 'Sections'},
+        ),
+        migrations.AlterModelOptions(
+            name='subcategory',
+            options={'verbose_name': 'Sub-category', 'verbose_name_plural': 'Sub-categories'},
+        ),
+        migrations.AlterModelOptions(
+            name='subjectgroup',
+            options={'verbose_name': 'Subject Group', 'verbose_name_plural': 'Subject Groups'},
+        ),
+        migrations.AlterModelOptions(
+            name='subpart',
+            options={'verbose_name': 'Subpart', 'verbose_name_plural': 'Subparts'},
+        ),
+        migrations.AlterModelOptions(
+            name='subsubcategory',
+            options={'verbose_name': 'Sub-sub-category', 'verbose_name_plural': 'Sub-sub-categories'},
+        ),
+        migrations.AlterModelOptions(
+            name='supplementalcontent',
+            options={'verbose_name': 'Supplemental Content', 'verbose_name_plural': 'Supplemental Content'},
+        ),
     ]
