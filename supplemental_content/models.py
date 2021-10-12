@@ -70,6 +70,13 @@ class AbstractSupplementalContent(models.Model):
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content")
     locations = models.ManyToManyField(AbstractLocation, null=True, blank=True, related_name="supplemental_content")
 
+    def __str__(self):
+        for subclass in AbstractSupplementalContent.__subclasses__():
+            attr = getattr(self, subclass.__name__.lower(), None)
+            if attr:
+                return str(attr)
+        return super().__str__()
+
 
 class SupplementalContent(AbstractSupplementalContent):
     title = models.CharField(max_length=512, null=True, blank=True)
