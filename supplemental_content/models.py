@@ -31,6 +31,13 @@ class AbstractLocation(models.Model):
     title = models.IntegerField()
     part = models.IntegerField()
 
+    def __str__(self):
+        for subclass in AbstractLocation.__subclasses__():
+            attr = getattr(self, subclass.__name__.lower(), None)
+            if attr:
+                return str(attr)
+        return super().__str__()
+
 
 class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
