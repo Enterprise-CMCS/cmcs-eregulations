@@ -2253,6 +2253,10 @@
               type: String,
               required: true,
           },
+          hash: {
+              type: String,
+              required: true,
+          },
           formatted_citation: {
               type: String,
               required: true,
@@ -2388,8 +2392,11 @@
               this.copyStatus = "pending";
           },
           getCopyText() {
-              console.log(this.selectedAction);
-              return this.selectedAction;
+              return this.selectedAction === "citation"
+                  ? this.formatted_citation
+                  : `${new URL(window.location.href.split("#")[0]).toString()}#${
+                      this.hash
+                  }`;
           },
       },
   };
