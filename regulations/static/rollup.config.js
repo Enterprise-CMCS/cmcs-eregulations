@@ -2,6 +2,11 @@ import vue from 'rollup-plugin-vue'
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 
+const plugins = [
+    nodeResolve(),
+    commonjs(),
+    vue()
+]
 export default [
     {
         // ...
@@ -10,13 +15,7 @@ export default [
             format: 'esm',
             file: 'regulations/js/RelatedRules.js'
         },
-        plugins: [
-            // ...
-            nodeResolve(),
-            commonjs(),
-            vue(/* options */),
-
-        ]
+        plugins,
     },
     {
         input: 'components/CollapseButton.vue',
@@ -24,9 +23,7 @@ export default [
             format: 'esm',
             file: 'regulations/js/CollapseButton.js'
         },
-        plugins: [
-            vue()
-        ],
+        plugins,
     },
     {
         input: 'components/Collapsible.vue',
@@ -34,9 +31,7 @@ export default [
             format: 'esm',
             file: 'regulations/js/Collapsible.js'
         },
-        plugins: [
-            vue()
-        ],
+        plugins,
     },
     {
         input: 'components/SupplementaryContent.vue',
@@ -44,9 +39,7 @@ export default [
             format: 'esm',
             file: 'regulations/js/SupplementaryContent.js'
         },
-        plugins: [
-            vue()
-        ],
+        plugins,
     },
     {
         input: 'regulations/js/main.js',
