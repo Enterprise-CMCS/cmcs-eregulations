@@ -15,6 +15,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def truncated_description(self):
+        return (self.description or [])[:50]
     
     class Meta:
         verbose_name = "Category"
