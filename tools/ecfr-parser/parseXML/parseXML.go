@@ -65,6 +65,18 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 			return err
 		}
 		*c = append(*c, child)
+	case "AUTH":
+		child := &Authority{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "SOURCE":
+		child := &Source{Type: "Source"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	default:
 		log.Printf("[WARNING] Unknown XML type in Part: %+v\n", start)
 		d.Skip()
@@ -357,6 +369,12 @@ type Citation struct {
 
 type Source struct {
 	Type    string
+	Header  string `xml:"HED"`
+	Content string `xml:"PSPACE"`
+}
+
+type Authority struct {
+	Type    string `json:"node_type"`
 	Header  string `xml:"HED"`
 	Content string `xml:"PSPACE"`
 }
