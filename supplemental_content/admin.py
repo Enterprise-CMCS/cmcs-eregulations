@@ -1,7 +1,4 @@
 from django.contrib import admin
-from django.db.models.functions import Cast
-from django.db.models import IntegerField, ManyToManyField
-from django.contrib.admin.widgets import FilteredSelectMultiple
 
 # Register your models here.
 
@@ -18,7 +15,13 @@ from .filters import (
     TitleFilter,
     PartFilter,
     SectionFilter,
+    SubpartFilter,
+    SubjectGroupFilter,
 )
+
+
+class SupplementalContentInline(admin.TabularInline):
+    model = SupplementalContent.locations.through
 
 
 class BaseAdmin(admin.ModelAdmin):
@@ -29,6 +32,7 @@ class BaseAdmin(admin.ModelAdmin):
 class SectionAdmin(BaseAdmin):
     list_display = ("title", "part", "section_id", "parent")
     search_fields = ["title", "part", "section_id"]
+    inlines = [SupplementalContentInline]
 
 
 @admin.register(Subpart)
@@ -63,3 +67,12 @@ class SubSubCategoryAdmin(CategoryAdmin):
 class SupplementalContentAdmin(BaseAdmin):
     list_display = ("date", "title", "truncated_description", "category", "created_at", "updated_at")
     search_fields = ["date", "title", "truncated_description"]
+    filter_horizontal = ("locations",)
+    list_filter = [
+        "approved",
+        TitleFilter,
+        PartFilter,
+        SectionFilter,
+        SubpartFilter,
+        SubjectGroupFilter,
+    ]
