@@ -1,4 +1,6 @@
 import vue from 'rollup-plugin-vue'
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
 export default [
     {
@@ -10,7 +12,10 @@ export default [
         },
         plugins: [
             // ...
-            vue(/* options */)
+            nodeResolve(),
+            commonjs(),
+            vue(/* options */),
+
         ]
     },
     {
