@@ -2225,12 +2225,18 @@
 
   //
 
-  const getAnchorPos = (el, elType) => {
+  const getAnchorY = (el, elType) => {
       if (!el) return 0;
 
       return elType === "labeled-icon"
           ? el.offsetWidth / 2
           : el.offsetWidth * 0.7;
+  };
+
+  const getAnchorX = (el, elType) => {
+      if (!el) return 0;
+
+      return parseInt(window.getComputedStyle(el).fontSize) + 20;
   };
 
   const appendPxSuffix = (int) => `${int}px`;
@@ -2268,7 +2274,8 @@
               entered: false,
               clicked: false,
               leftSafe: true,
-              anchorPos: undefined,
+              anchorY: 0,
+              anchorX: 0,
               label: "Copy Link or Citation",
               selectedAction: null,
               copyStatus: "idle",
@@ -2292,7 +2299,8 @@
           },
           tooltipStyles() {
               return {
-                  left: this.anchorPos,
+                  left: this.anchorY,
+                  bottom: this.anchorX,
                   transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
               };
           },
@@ -2355,14 +2363,15 @@
               if (leftWarning(e.currentTarget)) {
                   this.leftSafe = false;
               }
-              this.anchorPos = appendPxSuffix(
-                  getAnchorPos(e.currentTarget, this.btn_type)
+              this.anchorY = appendPxSuffix(
+                  getAnchorY(e.currentTarget, this.btn_type)
               );
+              this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
           },
           handleExit() {
               if (!this.clicked) {
                   this.entered = false;
-                  this.anchorPos = undefined;
+                  this.anchorY = undefined;
                   this.leftSafe = true;
               }
           },
@@ -2373,16 +2382,17 @@
                   if (leftWarning(e.currentTarget)) {
                       this.leftSafe = false;
                   }
-                  this.anchorPos = appendPxSuffix(
-                      getAnchorPos(e.currentTarget, this.btn_type)
+                  this.anchorY = appendPxSuffix(
+                      getAnchorY(e.currentTarget, this.btn_type)
                   );
+                  this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
               }
           },
           handleCloseClick() {
               if (this.clicked) {
                   this.clicked = false;
                   this.entered = false;
-                  this.anchorPos = undefined;
+                  this.anchorY = undefined;
                   this.leftSafe = true;
                   this.selectedAction = null;
               }
@@ -2802,3 +2812,4 @@
   main();
 
 }());
+//# sourceMappingURL=main.build.js.map

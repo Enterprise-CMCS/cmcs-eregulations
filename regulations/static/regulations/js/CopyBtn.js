@@ -258,12 +258,18 @@ __vue_render__$1._withStripped = true;
 
 //
 
-const getAnchorPos = (el, elType) => {
+const getAnchorY = (el, elType) => {
     if (!el) return 0;
 
     return elType === "labeled-icon"
         ? el.offsetWidth / 2
         : el.offsetWidth * 0.7;
+};
+
+const getAnchorX = (el, elType) => {
+    if (!el) return 0;
+
+    return parseInt(window.getComputedStyle(el).fontSize) + 20;
 };
 
 const appendPxSuffix = (int) => `${int}px`;
@@ -301,7 +307,8 @@ var script = {
             entered: false,
             clicked: false,
             leftSafe: true,
-            anchorPos: undefined,
+            anchorY: 0,
+            anchorX: 0,
             label: "Copy Link or Citation",
             selectedAction: null,
             copyStatus: "idle",
@@ -325,7 +332,8 @@ var script = {
         },
         tooltipStyles() {
             return {
-                left: this.anchorPos,
+                left: this.anchorY,
+                bottom: this.anchorX,
                 transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
             };
         },
@@ -388,14 +396,15 @@ var script = {
             if (leftWarning(e.currentTarget)) {
                 this.leftSafe = false;
             }
-            this.anchorPos = appendPxSuffix(
-                getAnchorPos(e.currentTarget, this.btn_type)
+            this.anchorY = appendPxSuffix(
+                getAnchorY(e.currentTarget, this.btn_type)
             );
+            this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
         },
         handleExit() {
             if (!this.clicked) {
                 this.entered = false;
-                this.anchorPos = undefined;
+                this.anchorY = undefined;
                 this.leftSafe = true;
             }
         },
@@ -406,16 +415,17 @@ var script = {
                 if (leftWarning(e.currentTarget)) {
                     this.leftSafe = false;
                 }
-                this.anchorPos = appendPxSuffix(
-                    getAnchorPos(e.currentTarget, this.btn_type)
+                this.anchorY = appendPxSuffix(
+                    getAnchorY(e.currentTarget, this.btn_type)
                 );
+                this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
             }
         },
         handleCloseClick() {
             if (this.clicked) {
                 this.clicked = false;
                 this.entered = false;
-                this.anchorPos = undefined;
+                this.anchorY = undefined;
                 this.leftSafe = true;
                 this.selectedAction = null;
             }
@@ -602,3 +612,4 @@ __vue_render__._withStripped = true;
   );
 
 export default __vue_component__;
+//# sourceMappingURL=CopyBtn.js.map

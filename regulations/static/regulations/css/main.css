@@ -17874,7 +17874,6 @@ select:focus-visible {
   cursor: default;
   z-index: 3;
   position: absolute;
-  bottom: 30px;
   background: #eefafe;
   box-shadow: 0px 0px 20px 0px #00000040;
 }
@@ -17990,9 +17989,6 @@ aside.right-sidebar .copy-btn-container + hr {
   background: #d6d7d9;
   border: none;
   margin: 15px 0;
-}
-aside.right-sidebar .copy-btn-container .copy-tooltip {
-  bottom: 35px;
 }
 
 .action-btns {

@@ -78,7 +78,6 @@
     cursor: default;
     z-index: 3;
     position: absolute;
-    bottom: 30px;
     background: $lightest_blue;
     box-shadow: 0px 0px 20px 0px #00000040;
 
@@ -219,10 +218,6 @@ aside.right-sidebar {
             background: $light_gray;
             border: none;
             margin: 15px 0;
-        }
-
-        .copy-tooltip {
-            bottom: 35px;
         }
     }
 }
