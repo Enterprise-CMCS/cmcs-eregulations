@@ -258,28 +258,6 @@ aside.right-sidebar {
         display: table-cell;
     }
 
-    button.category-title {
-        font-size: $font-size-lg;
-        font-weight: bold;
-        padding-left: 0;
-        background: none;
-        border: none;
-        color: $primary_link_color;
-        cursor: pointer;
-        margin-top: 4px;
-        display: block;
-        border-radius: $border-radius;
-        text-align: left;
-
-        &.subcategory {
-            font-size: $font-size-md;
-        }
-
-        &.visible {
-            color: $dark-gray;
-        }
-    }
-
     .category-description {
         font-size: $font-size-sm;
         font-weight: normal;
@@ -291,26 +269,33 @@ aside.right-sidebar {
         display: table-cell;
     }
 
-    button.category-toggle {
-        background: none;
-        border: none;
-        color: $primary_link_color;
-        cursor: pointer;
-        margin-top: 4px;
-        display: block;
-        border-radius: $border-radius;
-
-        &:hover {
-            color: $reverse_link_hover;
-            background: $reverse_background_lighter;
-            @include transition;
-        }
-    }
-
     .category-content {
         margin-top: 1em;
     }
 }
+
+button.collapsible-title {
+    font-size: $font-size-lg;
+    font-weight: bold;
+    padding-left: 0;
+    background: none;
+    border: none;
+    color: $primary_link_color;
+    cursor: pointer;
+    margin-top: 4px;
+    display: block;
+    border-radius: $border-radius;
+    text-align: left;
+
+    &.subcategory {
+        font-size: $font-size-md;
+    }
+
+    &.visible {
+        color: $dark-gray;
+    }
+}
+
 
 .show-more-button {
     color: $primary-link-color;

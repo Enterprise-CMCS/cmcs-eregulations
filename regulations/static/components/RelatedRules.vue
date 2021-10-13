@@ -2,17 +2,22 @@
 
     <div>
       <div v-for="category in categoryList">
-        <button @click="showCategory(category)" :class="buttonClass(category)">
-          {{categories[category].title}}
-          <i v-if="activeCategory === category" class="fa fa-chevron-up"></i>
-          <i v-else class="fa fa-chevron-down"></i>
-        </button>
-        <related-rule-list
-            v-if="activeCategory === category"
-            :rules="getRules(category)"
-            :limit="limit"
-            :title="categories[category].title"
-        ></related-rule-list>
+        <div class="category">
+        <collapse-button v-bind:class="{ category: category }" :name="category" state="collapsed" class="related-rules-title">
+            <template v-slot:expanded>{{categories[category].title}} <i class="fa fa-chevron-up category-toggle"></i></template>
+            <template v-slot:collapsed>{{categories[category].title}} <i class="fa fa-chevron-down category-toggle"></i></template>
+        </collapse-button>
+        <collapsible
+          :name="category"
+          :state="activeCategory === category ? 'expanded':'collapsed'"
+        >
+          <related-rule-list
+              :rules="getRules(category)"
+              :limit="limit"
+              :title="categories[category].title"
+          ></related-rule-list>
+        </collapsible>
+        </div>
       </div>
 
 
@@ -21,10 +26,14 @@
 
 <script>
 import RelatedRuleList from "./RelatedRuleList.vue";
+import Collapsible from "./Collapsible.vue";
+import CollapseButton from "./CollapseButton.vue";
 
 export default {
     components: {
-        RelatedRuleList
+      Collapsible,
+      RelatedRuleList,
+      CollapseButton,
     },
 
     props: {
@@ -109,7 +118,6 @@ export default {
             results = results.concat(rules.results)
             url = rules.next_page_url
           }
-          console.log("Pulled: ", results.length)
           return results
 
         },
