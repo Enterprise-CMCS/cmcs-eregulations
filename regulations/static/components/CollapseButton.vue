@@ -4,6 +4,7 @@
         v-bind:data-test="name"
         v-bind:aria-label="visible ? `collapse ${name}` : `expand ${name}`"
         v-on:click="click"
+        class="collapsible-title"
     >
         <slot name="expanded" v-if="visible && !keepContentsOnToggle">Hide</slot>
         <slot name="collapsed" v-if="!visible && !keepContentsOnToggle">Show</slot>
