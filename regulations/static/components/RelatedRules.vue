@@ -85,7 +85,7 @@ export default {
                     }
                 )
               },
-              title: "Request for Information"
+              title: "Requests for Information"
             }
           }
         },

@@ -88,6 +88,9 @@ $reverse_text_color: $white;
 $primary_indicator_background: $teal;
 $primary_indicator_text: $white;
 
+$secondary_indicator_background: $mid_gray_2;
+$secondary_indicator_text: $title_color;
+
 // Buttons
 
 $main_button_background: $light_blue;
@@ -215,6 +218,11 @@ $width-3xl: 1920px; // The largest the site container will get
     padding: 2px 5px;
     border-radius: $border-radius;
     margin-right: 4px;
+}
+
+.secondary-indicator {
+    background: $secondary_indicator_background;
+    color: $secondary_indicator_text;
 }
 
 // -------------------------
