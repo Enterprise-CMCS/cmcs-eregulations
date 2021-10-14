@@ -1,17 +1,69 @@
 from rest_framework import serializers, generics
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 
+from .serializers import PolymorphicSerializer
 
 from .models import (
     SupplementalContent,
-    RegulationSection,
+    AbstractLocation,
+    Section,
+    Subpart,
+    SubjectGroup,
 )
 
 
-class RegulationSectionSerializer(serializers.Serializer):
+class SubpartSerializer(serializers.Serializer):
+    subpart_id = serializers.CharField()
+    class Meta:
+        model = Subpart
+        fields = "__all__"
+
+
+class SubjectGroupSerializer(serializers.Serializer):
+    subject_group_id = serializers.CharField()
+    class Meta:
+        model = SubjectGroup
+
+
+class SectionSerializer(serializers.Serializer):
+    section_id = serializers.IntegerField()
+    class Meta:
+        model = Subpart
+
+
+class AbstractLocationSerializer(PolymorphicSerializer):
     title = serializers.IntegerField()
     part = serializers.IntegerField()
-    section = serializers.IntegerField()
+
+    def get_serializer_map(self):
+        return {
+            "subpart": SubpartSerializer,
+            "subjectgroup": SubjectGroupSerializer,
+            "section": SectionSerializer,
+        }
+
+    class Meta:
+        model = AbstractLocation
+
+
+# class AbstractLocationSerializer(serializers.Serializer):
+#     title = serializers.IntegerField()
+#     part = serializers.IntegerField()
+
+#     def to_representation(self, obj):
+#         data = super().to_representation(obj)
+#         for subclass in self.Meta.model.__subclasses__():
+#             name = subclass.__name__
+#             lower_name = name.lower()
+#             if hasattr(obj, lower_name):
+#                 data["type"] = lower_name
+#                 serializer_class = globals()[f"{name}Serializer"]
+#                 child = getattr(obj, lower_name)
+#                 return {**data, **(serializer_class(obj, context=self.context).to_representation(child))}
+#         return data
+
+#     class Meta:
+#         model = AbstractLocation
 
 
 class CategorySerializer(serializers.Serializer):
@@ -34,7 +86,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
 
 
 class SupplementalContentSerializer(serializers.Serializer):
-    sections = RegulationSectionSerializer(many=True)
+    locations = AbstractLocationSerializer(many=True)
     category = CategorySerializer()
     url = serializers.URLField()
     description = serializers.CharField()
@@ -45,25 +97,40 @@ class SupplementalContentSerializer(serializers.Serializer):
         list_serializer_class = ApplicableSupplementalContentSerializer
 
 
+class AbstractLocationView(generics.ListAPIView):
+    serializer_class = AbstractLocationSerializer
+    def get_queryset(self):
+        query = AbstractLocation.objects.all()
+        return query
+
+
 class SupplementalContentView(generics.ListAPIView):
     serializer_class = SupplementalContentSerializer
 
     def get_queryset(self):
-        section_list = self.request.GET.getlist("sections")
         title = self.kwargs.get("title")
         part = self.kwargs.get("part")
+        section_list = self.request.GET.getlist("sections")
+        subpart_list = self.request.GET.getlist("subparts")
+        subjgrp_list = self.request.GET.getlist("subjectgroups")
+
         query = SupplementalContent.objects \
             .filter(
+                Q(locations__section__section_id_in=section_list) |
+                Q(locations__subpart__subpart_id_in=subpart_list) |
+                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
                 approved=True,
                 category__isnull=False,
-                sections__title=title,
-                sections__part=part,
-                sections__section__in=section_list,
+                locations__title=title,
+                locations__part=part,
             )\
             .prefetch_related(
                 Prefetch(
-                    'sections',
-                    queryset=RegulationSection.objects.filter(
+                    'locations',
+                    queryset=AbstractLocation.objects.filter(
+                        Q(section__section_id_in=section_list) |
+                        Q(subpart__subpart_id_in=subpart_list) |
+                        Q(subjectgroup__subject_group_id__in=subjgrp_list),
                         title=title,
                         part=part,
                         section__in=section_list,
