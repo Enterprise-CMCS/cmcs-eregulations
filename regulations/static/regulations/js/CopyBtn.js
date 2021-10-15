@@ -418,7 +418,9 @@ var script = {
                 this.anchorY = appendPxSuffix(
                     getAnchorY(e.currentTarget, this.btn_type)
                 );
-                this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
+                this.anchorX = appendPxSuffix(
+                    getAnchorX(this.$el, this.btn_type)
+                );
             }
         },
         handleCloseClick() {
@@ -612,4 +614,3 @@ __vue_render__._withStripped = true;
   );
 
 export default __vue_component__;
-//# sourceMappingURL=CopyBtn.js.map

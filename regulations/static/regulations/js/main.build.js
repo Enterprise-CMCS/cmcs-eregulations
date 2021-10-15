@@ -2385,7 +2385,9 @@
                   this.anchorY = appendPxSuffix(
                       getAnchorY(e.currentTarget, this.btn_type)
                   );
-                  this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
+                  this.anchorX = appendPxSuffix(
+                      getAnchorX(this.$el, this.btn_type)
+                  );
               }
           },
           handleCloseClick() {
@@ -2812,4 +2814,3 @@
   main();
 
 }());
-//# sourceMappingURL=main.build.js.map
