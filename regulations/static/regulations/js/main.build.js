@@ -22,7 +22,7 @@
   //
   //
 
-  var script$3$1 = {
+  var script$5$1 = {
       name: "related-rule",
 
       props: {
@@ -47,12 +47,20 @@
               type: String,
               required: true,
           },
+          action: {
+              type: String,
+              required: true,
+          },
       },
 
       computed: {
           expandedType: function () {
               if (this.type === "Rule") {
                   return "Final";
+              } else if(this.type === "Proposed Rule" && this.action === "Proposed rule."){
+                return "NPRM"
+              } else if(this.type === "Proposed Rule" && this.action === "Request for information."){
+                return "RFI"
               }
               return "Unknown";
           },
@@ -150,10 +158,10 @@
   }
 
   /* script */
-  const __vue_script__$3$1 = script$3$1;
+  const __vue_script__$5$1 = script$5$1;
 
   /* template */
-  var __vue_render__$3$1 = function() {
+  var __vue_render__$5$1 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -190,6 +198,221 @@
       )
     ])
   };
+  var __vue_staticRenderFns__$5$1 = [];
+  __vue_render__$5$1._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$5$1 = undefined;
+    /* scoped */
+    const __vue_scope_id__$5$1 = undefined;
+    /* module identifier */
+    const __vue_module_identifier__$5$1 = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$5$1 = false;
+    /* style inject */
+    
+    /* style inject SSR */
+    
+    /* style inject shadow dom */
+    
+
+    
+    const __vue_component__$5$1 = /*#__PURE__*/normalizeComponent$4(
+      { render: __vue_render__$5$1, staticRenderFns: __vue_staticRenderFns__$5$1 },
+      __vue_inject_styles__$5$1,
+      __vue_script__$5$1,
+      __vue_scope_id__$5$1,
+      __vue_is_functional_template__$5$1,
+      __vue_module_identifier__$5$1,
+      false,
+      undefined,
+      undefined,
+      undefined
+    );
+
+  //
+  //
+  //
+  //
+  //
+  //
+
+  var script$4$1 = {
+    name: 'show-more-button',
+    props: {
+      count: {
+        type: Number,
+        default: 1
+      },
+      showMore: { type: Function },
+    },
+    data() {
+      return {
+        toggle: false,
+      }
+    },
+    computed: {
+      buttonText(){
+        return this.toggle ? '- Show Less' : '+ Show More';
+      }
+    },
+    methods: {
+      toggleButton() {
+        this.toggle = !this.toggle;
+      }
+    }
+  };
+
+  /* script */
+  const __vue_script__$4$1 = script$4$1;
+
+  /* template */
+  var __vue_render__$4$1 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "button",
+      {
+        staticClass: "show-more-button",
+        on: {
+          click: function($event) {
+            _vm.showMore(), _vm.toggleButton();
+          }
+        }
+      },
+      [
+        _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+        _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+      ]
+    )
+  };
+  var __vue_staticRenderFns__$4$1 = [];
+  __vue_render__$4$1._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$4$1 = undefined;
+    /* scoped */
+    const __vue_scope_id__$4$1 = undefined;
+    /* module identifier */
+    const __vue_module_identifier__$4$1 = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$4$1 = false;
+    /* style inject */
+    
+    /* style inject SSR */
+    
+    /* style inject shadow dom */
+    
+
+    
+    const __vue_component__$4$1 = /*#__PURE__*/normalizeComponent$4(
+      { render: __vue_render__$4$1, staticRenderFns: __vue_staticRenderFns__$4$1 },
+      __vue_inject_styles__$4$1,
+      __vue_script__$4$1,
+      __vue_scope_id__$4$1,
+      __vue_is_functional_template__$4$1,
+      __vue_module_identifier__$4$1,
+      false,
+      undefined,
+      undefined,
+      undefined
+    );
+
+  //
+  var script$3$1 = {
+      name: 'related-rule-list',
+
+      components: {
+          RelatedRule: __vue_component__$5$1,
+          ShowMoreButton: __vue_component__$4$1
+      },
+
+      props: {
+          rules: Array,
+          limit: {
+            type: Number,
+            default: 5
+          },
+          title: {
+            type: String,
+          }
+
+      },
+
+      computed: {
+          limitedRules() {
+              if (this.limitedList) {
+                  return this.rules.slice(0, this.limit);
+              }
+              return this.rules;
+          },
+          rulesCount() {
+              return this.rules.length;
+          },
+      },
+
+      data() {
+        return {
+            limitedList: true,
+        };
+      },
+
+      methods: {
+          showMore() {
+              this.limitedList = !this.limitedList;
+          },
+      },
+
+      filters: {
+
+      },
+  };
+
+  /* script */
+  const __vue_script__$3$1 = script$3$1;
+
+  /* template */
+  var __vue_render__$3$1 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm.rules.length
+      ? _c(
+          "div",
+          { staticClass: "related-rule-list" },
+          [
+            _vm._l(_vm.limitedRules, function(rule, index) {
+              return _c("related-rule", {
+                key: index,
+                attrs: {
+                  title: rule.title,
+                  type: rule.type,
+                  citation: rule.citation,
+                  publication_date: rule.publication_date,
+                  document_number: rule.document_number,
+                  html_url: rule.html_url,
+                  action: rule.action
+                }
+              })
+            }),
+            _vm._v(" "),
+            _vm.rules.length > _vm.limit
+              ? _c("show-more-button", {
+                  attrs: { showMore: _vm.showMore, count: _vm.rules.length }
+                })
+              : _vm._e()
+          ],
+          2
+        )
+      : _c("div", { staticClass: "related-rule-list show-more-inactive" }, [
+          _vm._v(
+            "No " +
+              _vm._s(_vm.title) +
+              " found in the Federal Register from 1994 to present."
+          )
+        ])
+  };
   var __vue_staticRenderFns__$3$1 = [];
   __vue_render__$3$1._withStripped = true;
 
@@ -223,27 +446,127 @@
     );
 
   //
-  var script$2$1 = {
-      name: 'related-rule-list',
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-      components: {
-          RelatedRule: __vue_component__$3$1,
+  var script$2$1 = {
+      name: "collapsible",
+
+      created: function () {
+          requestAnimationFrame(() => {
+              this.visible = this.state === "expanded";
+              if (!this.visible) {
+                  this.$refs.target.classList.add("display-none");
+              }
+          });
+          this.$root.$on("collapse-toggle", this.toggle);
+      },
+
+      mounted: function () {
+          window.addEventListener("resize", this.resize);
+          window.addEventListener("transitionend", this.toggleDisplay);
+      },
+
+      destroyed: function () {
+          window.removeEventListener("resize", this.resize);
+          window.removeEventListener("transitionend", this.toggleDisplay);
       },
 
       props: {
-          rules: Array,
+          name: {
+              type: String,
+              required: true,
+          },
+          state: {
+              //expanded or collapsed
+              type: String,
+              required: true,
+          },
+          transition: {
+              type: String,
+              required: false,
+              default: "0.5s",
+          },
+      },
+
+      data: function () {
+          return {
+              name: this.name,
+              height: "auto",
+              visible: false,
+              styles: {
+                  overflow: "hidden",
+                  transition: this.transition,
+              },
+          };
       },
 
       computed: {
-
+          heightStyle: function () {
+              return { height: this.height }
+          },
       },
 
       methods: {
+          resize: function (e) {
+              this.computeHeight();
+          },
+          toggleDisplay: function (e) {
+              if (this.visible) {
+                  this.$refs.target.style.height = "auto";
+              }
+              else {
+                  this.$refs.target.classList.add("display-none");
+              }
+          },
+          toggle: function (target) {
+              if (this.name === target) {
+                  this.$refs.target.classList.remove("display-none");
+                  requestAnimationFrame(() => {
+                      this.computeHeight();
+                      requestAnimationFrame(() => {
+                          this.visible = !this.visible;
+                      });
+                  });
+              }
+          },
+          getStyle: function () {
+              return window.getComputedStyle(this.$refs.target);
+          },
+          setProps: function (visibility, display, position, height) {
+              this.$refs.target.style.visibility = visibility;
+              this.$refs.target.style.display = display;
+              this.$refs.target.style.position = position;
+              this.$refs.target.style.height = height;
+          },
+          _computeHeight: function () {
+              if (this.getStyle().display === "none") {
+                  return "auto";
+              }
 
-      },
+              this.$refs.target.classList.remove("invisible");
 
-      filters: {
+              this.setProps("hidden", "block", "absolute", "auto");
 
+              const height = this.getStyle().height;
+
+              this.setProps(null, null, null, height);
+              if (!this.visible) {
+                  this.$refs.target.classList.add("invisible");
+              }
+              return height;
+          },
+          computeHeight: function () {
+              this.height = this._computeHeight();
+          },
       },
   };
 
@@ -257,21 +580,14 @@
     var _c = _vm._self._c || _h;
     return _c(
       "div",
-      { staticClass: "related-rule-list" },
-      _vm._l(_vm.rules, function(rule, index) {
-        return _c("related-rule", {
-          key: index,
-          attrs: {
-            title: rule.title,
-            type: rule.type,
-            citation: rule.citation,
-            publication_date: rule.publication_date,
-            document_number: rule.document_number,
-            html_url: rule.html_url
-          }
-        })
-      }),
-      1
+      {
+        ref: "target",
+        class: { invisible: !_vm.visible },
+        style: [_vm.styles, _vm.sizeStyle],
+        attrs: { "data-test": _vm.name }
+      },
+      [_vm._t("default")],
+      2
     )
   };
   var __vue_staticRenderFns__$2$1 = [];
@@ -312,31 +628,57 @@
   //
   //
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   var script$1$2 = {
-    name: 'show-more-button',
-    props: {
-      count: {
-        type: Number,
-        default: 1
+      name: "collapse-button",
+
+      created: function () {
+          this.visible = this.state === "expanded";
+          this.$root.$on("collapse-toggle", this.toggle);
       },
-      showMore: { type: Function },
-    },
-    data() {
-      return {
-        toggle: false,
-      }
-    },
-    computed: {
-      buttonText(){
-        return this.toggle ? '- Show Less' : '+ Show More';
-      }
-    },
-    methods: {
-      toggleButton() {
-        this.toggle = !this.toggle;
-      }
-    }
+
+      props: {
+          name: {
+              type: String,
+              required: true,
+          },
+          state: {
+              //expanded or collapsed
+              type: String,
+              required: true,
+          },
+          'keep-contents-on-toggle': {
+              type: Boolean,
+              required: false,
+              default: false,
+          },
+      },
+
+      data: function () {
+          return {
+              name: this.name,
+              visible: true,
+          };
+      },
+
+      methods: {
+          click: function (event) {
+              this.$root.$emit("collapse-toggle", this.name);
+          },
+          toggle: function (target) {
+              if (this.name === target) {
+                  this.visible = !this.visible;
+              }
+          },
+      },
   };
 
   /* script */
@@ -350,17 +692,30 @@
     return _c(
       "button",
       {
-        staticClass: "show-more-button",
-        on: {
-          click: function($event) {
-            _vm.showMore(), _vm.toggleButton();
-          }
-        }
+        staticClass: "collapsible-title",
+        class: { visible: _vm.visible },
+        attrs: {
+          "data-test": _vm.name,
+          "aria-label": _vm.visible
+            ? "collapse " + _vm.name
+            : "expand " + _vm.name
+        },
+        on: { click: _vm.click }
       },
       [
-        _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
-        _vm._v(" (" + _vm._s(_vm.count) + ")\n")
-      ]
+        _vm.visible && !_vm.keepContentsOnToggle
+          ? _vm._t("expanded", [_vm._v("Hide")])
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.visible && !_vm.keepContentsOnToggle
+          ? _vm._t("collapsed", [_vm._v("Show")])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.keepContentsOnToggle
+          ? _vm._t("contents", [_vm._v("Click here")])
+          : _vm._e()
+      ],
+      2
     )
   };
   var __vue_staticRenderFns__$1$2 = [];
@@ -396,10 +751,12 @@
     );
 
   //
+
   var script$a = {
       components: {
-          RelatedRuleList: __vue_component__$2$1,
-          ShowMoreButton: __vue_component__$1$2,
+        Collapsible: __vue_component__$2$1,
+        RelatedRuleList: __vue_component__$3$1,
+        CollapseButton: __vue_component__$1$2,
       },
 
       props: {
@@ -415,6 +772,47 @@
               type: Number,
               default: 5,
           },
+          activeCategory: {
+            type: String,
+            default: ''
+          },
+          categoryList: {
+            type: Array,
+            default: ['FINAL', 'PROPOSED', 'RFI']
+          },
+          categories: {
+            type: Object,
+            default: {
+              FINAL: {
+                getRules: (rules) => {
+                  return rules.filter(rule => {
+                        return rule.type === 'Rule'
+                      }
+                  )
+                },
+                title: "Final Rules"
+              },
+              PROPOSED: {
+                getRules: (rules) => {
+                  return rules.filter(rule => {
+                        return rule.type === 'Proposed Rule' && rule.action === "Proposed rule."
+                      }
+                  )
+                },
+                title: "Notification of Proposed Rulemaking"
+              },
+              RFI: {
+                getRules: (rules) => {
+                  return rules.filter(rule => {
+                        return rule.type === 'Proposed Rule' && rule.action === "Request for information."
+                      }
+                  )
+                },
+                title: "Request for Information"
+              }
+            }
+          },
+
       },
 
       data() {
@@ -425,15 +823,7 @@
       },
 
       computed: {
-          limitedRules() {
-              if (this.limitedList) {
-                  return this.rules.slice(0, this.limit);
-              }
-              return this.rules;
-          },
-          rulesCount() {
-              return this.rules.length;
-          },
+
       },
 
       async created() {
@@ -442,15 +832,28 @@
 
       methods: {
           async fetch_rules(title, part) {
-              const response = await fetch(
-                  `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[type][]=RULE&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`
-              );
+            let url = `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`;
+            let results = [];
+
+            while(url){
+              const response = await fetch(url);
               const rules = await response.json();
-              return rules.results;
+              results = results.concat(rules.results);
+              url = rules.next_page_url;
+            }
+            return results
+
           },
-          showMore() {
-              this.limitedList = !this.limitedList;
+          showCategory(category) {
+            category === this.activeCategory ? this.activeCategory = '': this.activeCategory = category;
           },
+          buttonClass(category){
+            return this.categories[category].getRules(this.rules).length > 0 ? "show-more-button": "show-more-button show-more-inactive"
+          },
+          getRules(category){
+            return this.categories[category].getRules(this.rules)
+          }
+
       },
   };
 
@@ -464,14 +867,74 @@
     var _c = _vm._self._c || _h;
     return _c(
       "div",
-      [
-        _c("related-rule-list", { attrs: { rules: _vm.limitedRules } }),
-        _vm._v(" "),
-        _c("show-more-button", {
-          attrs: { showMore: _vm.showMore, count: _vm.rulesCount }
-        })
-      ],
-      1
+      _vm._l(_vm.categoryList, function(category) {
+        return _c("div", [
+          _c(
+            "div",
+            { staticClass: "category" },
+            [
+              _c("collapse-button", {
+                staticClass: "related-rules-title",
+                class: { category: category },
+                attrs: { name: category, state: "collapsed" },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "expanded",
+                      fn: function() {
+                        return [
+                          _vm._v(_vm._s(_vm.categories[category].title) + " "),
+                          _c("i", {
+                            staticClass: "fa fa-chevron-up category-toggle"
+                          })
+                        ]
+                      },
+                      proxy: true
+                    },
+                    {
+                      key: "collapsed",
+                      fn: function() {
+                        return [
+                          _vm._v(_vm._s(_vm.categories[category].title) + " "),
+                          _c("i", {
+                            staticClass: "fa fa-chevron-down category-toggle"
+                          })
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  true
+                )
+              }),
+              _vm._v(" "),
+              _c(
+                "collapsible",
+                {
+                  attrs: {
+                    name: category,
+                    state:
+                      _vm.activeCategory === category ? "expanded" : "collapsed"
+                  }
+                },
+                [
+                  _c("related-rule-list", {
+                    attrs: {
+                      rules: _vm.getRules(category),
+                      limit: _vm.limit,
+                      title: _vm.categories[category].title
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      }),
+      0
     )
   };
   var __vue_staticRenderFns__$a = [];
@@ -771,6 +1234,7 @@
   //
   //
   //
+  //
 
   var script$8 = {
       name: "collapse-button",
@@ -902,6 +1366,7 @@
     return _c(
       "button",
       {
+        staticClass: "collapsible-title",
         class: { visible: _vm.visible },
         attrs: {
           "data-test": _vm.name,
@@ -1398,6 +1863,7 @@
   //
   //
   //
+  //
 
   var script$3 = {
       name: "collapse-button",
@@ -1454,6 +1920,7 @@
     return _c(
       "button",
       {
+        staticClass: "collapsible-title",
         class: { visible: _vm.visible },
         attrs: {
           "data-test": _vm.name,
