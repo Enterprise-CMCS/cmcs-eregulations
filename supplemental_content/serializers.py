@@ -12,7 +12,7 @@ class PolymorphicSerializer(serializers.Serializer):
             child = getattr(obj, name, None)
             if child:
                 data["type"] = name
-                serializer = self.get_serializer_map().get(name, None)
+                serializer = self.get_serializer_map().get(subclass, None)
                 if serializer:
                     return {**data, **(serializer(child, context=self.context).to_representation(child))}
         return data

@@ -12,6 +12,8 @@ from .models import (
 )
 
 
+# Serializers for children of AbstractLocation
+
 class SubpartSerializer(serializers.Serializer):
     subpart_id = serializers.CharField()
     class Meta:
@@ -37,34 +39,15 @@ class AbstractLocationSerializer(PolymorphicSerializer):
 
     def get_serializer_map(self):
         return {
-            "subpart": SubpartSerializer,
-            "subjectgroup": SubjectGroupSerializer,
-            "section": SectionSerializer,
+            Subpart: SubpartSerializer,
+            SubjectGroup: SubjectGroupSerializer,
+            Section: SectionSerializer,
         }
 
     class Meta:
         model = AbstractLocation
 
-
-# class AbstractLocationSerializer(serializers.Serializer):
-#     title = serializers.IntegerField()
-#     part = serializers.IntegerField()
-
-#     def to_representation(self, obj):
-#         data = super().to_representation(obj)
-#         for subclass in self.Meta.model.__subclasses__():
-#             name = subclass.__name__
-#             lower_name = name.lower()
-#             if hasattr(obj, lower_name):
-#                 data["type"] = lower_name
-#                 serializer_class = globals()[f"{name}Serializer"]
-#                 child = getattr(obj, lower_name)
-#                 return {**data, **(serializer_class(obj, context=self.context).to_representation(child))}
-#         return data
-
-#     class Meta:
-#         model = AbstractLocation
-
+# Serializers for children of Category
 
 class CategorySerializer(serializers.Serializer):
     description = serializers.CharField()
@@ -77,6 +60,7 @@ class CategorySerializer(serializers.Serializer):
         fields['parent'] = CategorySerializer()
         return fields
 
+# Serializers for children of AbstractSupplementalContent
 
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
 
