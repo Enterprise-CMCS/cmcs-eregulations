@@ -3,7 +3,7 @@
         <button
             class="copy-btn text-btn"
             :class="buttonClasses"
-            :aria-label=ariaLabel
+            :aria-label="ariaLabel"
             @focus="handleEnter"
             @focusout="handleExit"
             @mouseenter="handleEnter"
