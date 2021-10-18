@@ -80,7 +80,7 @@ const getAnchorY = (el, elType) => {
 const getAnchorX = (el, elType) => {
     if (!el) return 0;
 
-    return parseInt(window.getComputedStyle(el).fontSize) + 20;
+    return parseInt(window.getComputedStyle(el).fontSize, 10) + 20;
 };
 
 const appendPxSuffix = (int) => `${int}px`;
