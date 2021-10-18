@@ -32,8 +32,8 @@ type Part struct {
 	Citation  SectionCitation `xml:"N,attr" json:"label"`
 	Type      string          `xml:"TYPE,attr" json:"node_type"`
 	Header    string          `xml:"HEAD" json:"title"`
-	Authority string          `xml:"AUTH>PSPACE" json:"-"`
-	Source    string          `xml:"SOURCE>PSPACE" json:"-"`
+	Authority Authority       `xml:"AUTH" json:"authority"`
+	Source    Source          `xml:"SOURCE" json:"source"`
 	Children  PartChildren    `xml:",any" json:"children"`
 }
 
@@ -61,18 +61,6 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 		*c = append(*c, child)
 	case "DIV8":
 		child := &Section{}
-		if err := d.DecodeElement(child, &start); err != nil {
-			return err
-		}
-		*c = append(*c, child)
-	case "AUTH":
-		child := &Authority{}
-		if err := d.DecodeElement(child, &start); err != nil {
-			return err
-		}
-		*c = append(*c, child)
-	case "SOURCE":
-		child := &Source{Type: "Source"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
@@ -368,15 +356,15 @@ type Citation struct {
 }
 
 type Source struct {
-	Type    string
-	Header  string `xml:"HED"`
-	Content string `xml:"PSPACE"`
+	Type    string `json:"node_type"`
+	Header  string `xml:"HED" json:"header"`
+	Content string `xml:"PSPACE" json:"content"`
 }
 
 type Authority struct {
 	Type    string `json:"node_type"`
-	Header  string `xml:"HED"`
-	Content string `xml:"PSPACE"`
+	Header  string `xml:"HED" json:"header"`
+	Content string `xml:"PSPACE" json:"content"`
 }
 
 type SectionAuthority struct {
