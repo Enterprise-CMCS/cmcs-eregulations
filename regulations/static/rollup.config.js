@@ -1,53 +1,46 @@
-import vue from 'rollup-plugin-vue'
+import vue from "rollup-plugin-vue";
+
+const plugins = [vue({ needMap: false })];
 
 export default [
     {
         // ...
-        input: 'components/RelatedRules.vue',
+        input: "components/RelatedRules.vue",
         output: {
-            format: 'esm',
-            file: 'regulations/js/RelatedRules.js'
+            format: "esm",
+            file: "regulations/js/RelatedRules.js",
         },
-        plugins: [
-            // ...
-            vue(/* options */)
-        ]
+        plugins,
     },
     {
-        input: 'components/CollapseButton.vue',
+        input: "components/CollapseButton.vue",
         output: {
-            format: 'esm',
-            file: 'regulations/js/CollapseButton.js'
+            format: "esm",
+            file: "regulations/js/CollapseButton.js",
         },
-        plugins: [
-            vue()
-        ],
+        plugins,
     },
     {
-        input: 'components/Collapsible.vue',
+        input: "components/Collapsible.vue",
         output: {
-            format: 'esm',
-            file: 'regulations/js/Collapsible.js'
+            format: "esm",
+            file: "regulations/js/Collapsible.js",
         },
-        plugins: [
-            vue()
-        ],
+        plugins,
     },
     {
-        input: 'components/SupplementaryContent.vue',
+        input: "components/SupplementaryContent.vue",
         output: {
-            format: 'esm',
-            file: 'regulations/js/SupplementaryContent.js'
+            format: "esm",
+            file: "regulations/js/SupplementaryContent.js",
         },
-        plugins: [
-            vue()
-        ],
+        plugins,
     },
     {
-        input: 'regulations/js/main.js',
+        input: "regulations/js/main.js",
         output: {
-            file: 'regulations/js/main.build.js',
-            format: 'iife',
+            file: "regulations/js/main.build.js",
+            format: "iife",
         },
     },
-]
+];
