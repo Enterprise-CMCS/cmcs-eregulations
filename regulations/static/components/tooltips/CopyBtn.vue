@@ -205,10 +205,8 @@ export default {
 
     methods: {
         handleEnter(e) {
-            if (!this.entered && !this.clicked) this.entered = true;
-            if (leftWarning(e.currentTarget)) {
-                this.leftSafe = false;
-            }
+            this.entered = !this.entered && !this.clicked;
+            this.leftSafe = !leftWarning(e.currentTarget);
             this.anchorY = appendPxSuffix(
                 getAnchorY(e.currentTarget, this.btn_type)
             );
