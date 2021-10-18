@@ -3,7 +3,7 @@
         <button
             class="copy-btn text-btn"
             :class="buttonClasses"
-            :aria-label="btn_type === 'icon' ? ariaLabel : false"
+            :aria-label=ariaLabel
             @focus="handleEnter"
             @focusout="handleExit"
             @mouseenter="handleEnter"
@@ -128,7 +128,9 @@ export default {
 
     computed: {
         ariaLabel() {
-            return `${this.label} for ${this.title}`;
+            return this.btn_type === "icon"
+                ? `${this.label} for ${this.title}`
+                : false;
         },
         buttonClasses() {
             return {

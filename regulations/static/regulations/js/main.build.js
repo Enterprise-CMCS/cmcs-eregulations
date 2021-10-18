@@ -2751,7 +2751,9 @@
 
       computed: {
           ariaLabel() {
-              return `${this.label} for ${this.title}`;
+              return this.btn_type === "icon"
+                  ? `${this.label} for ${this.title}`
+                  : false;
           },
           buttonClasses() {
               return {
@@ -2894,9 +2896,7 @@
         {
           staticClass: "copy-btn text-btn",
           class: _vm.buttonClasses,
-          attrs: {
-            "aria-label": _vm.btn_type === "icon" ? _vm.ariaLabel : false
-          },
+          attrs: { "aria-label": _vm.ariaLabel },
           on: {
             focus: _vm.handleEnter,
             focusout: _vm.handleExit,
