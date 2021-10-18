@@ -61,6 +61,9 @@ var script$5 = {
             }
             return "Unknown";
         },
+        getClassList: function(){
+          return this.expandedType === "Final" ? "recent-flag indicator" : "recent-flag indicator secondary-indicator"
+        }
     },
 
     methods: {},
@@ -175,7 +178,7 @@ var __vue_render__$5 = function() {
       },
       [
         _c("span", { staticClass: "link-heading" }, [
-          _c("span", { staticClass: "recent-flag indicator" }, [
+          _c("span", { class: _vm.getClassList }, [
             _vm._v(_vm._s(_vm.expandedType))
           ]),
           _vm._v(" "),
@@ -402,7 +405,7 @@ var __vue_render__$3 = function() {
         ],
         2
       )
-    : _c("div", { staticClass: "related-rule-list show-more-inactive" }, [
+    : _c("div", { staticClass: "show-more-inactive" }, [
         _vm._v(
           "No " +
             _vm._s(_vm.title) +
@@ -796,7 +799,7 @@ var script = {
                     }
                 )
               },
-              title: "Notification of Proposed Rulemaking"
+              title: "Notices of Proposed Rulemaking"
             },
             RFI: {
               getRules: (rules) => {
@@ -805,7 +808,7 @@ var script = {
                     }
                 )
               },
-              title: "Request for Information"
+              title: "Requests for Information"
             }
           }
         },
@@ -831,7 +834,6 @@ var script = {
         async fetch_rules(title, part) {
           let url = `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`;
           let results = [];
-
           while(url){
             const response = await fetch(url);
             const rules = await response.json();
