@@ -42,7 +42,6 @@ class RegulationSectionAdmin(admin.ModelAdmin, ExportCsvMixin):
     actions = ["export_as_csv"]
 
 
-
 class SectionsInline(admin.TabularInline):
     model = RegulationSection.supplementary_content.through
 
