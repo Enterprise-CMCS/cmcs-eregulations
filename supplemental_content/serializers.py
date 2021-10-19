@@ -107,7 +107,6 @@ class SubSubCategorySerializer(serializers.Serializer):
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
     def to_representation(self, instance):
         supplemental_content = super().to_representation(instance)
-        raise Exception(supplemental_content)
         categories = self._get_categories(supplemental_content)
         tree, flat_tree = self._make_category_trees(categories)
         self._add_supplemental_content(flat_tree, supplemental_content)
@@ -184,56 +183,3 @@ class SupplementalContentSerializer(serializers.Serializer):
 
     class Meta:
         model = SupplementalContent
-
-# The following functions are related to generating a JSON structure for SupplementalContentView.
-# This involves taking the 'parent = X' relationship of existing categories and reversing it so
-# that each category instead has sub-categories and applicable supplemental content.
-
-
-def _get_parents(category, memo):
-    if category is None:
-        return memo
-
-    memo.append(category)
-    return _get_parents(category.pop('parent', None), memo)
-
-
-def _make_parent_tree(parents, tree):
-    if len(parents) < 1:
-        return
-
-    parent = parents.pop()
-
-    if parent['id'] not in tree.keys():
-        tree[parent['id']] = parent
-        tree[parent['id']]['sub_categories'] = {}
-        tree[parent['id']]['supplemental_content'] = []
-
-    if len(parents) < 1:
-        return tree[parent['id']]
-
-    return _make_parent_tree(parents, tree[parent['id']]['sub_categories'])
-
-
-def _category_arrays(tree):
-    t = tree.values()
-    for category in t:
-        category['sub_categories'] = _category_arrays(category['sub_categories'])
-    return t
-
-
-def _sort_categories(tree):
-    tree = sorted(tree, key=lambda category: (category['order'], category['title']))
-    for category in tree:
-        category['sub_categories'] = _sort_categories(category['sub_categories'])
-    return tree
-
-
-def _make_category_tree(data, categories):
-    tree = {}
-    for content in data:
-        parents = _get_parents(content.pop('category'), [])
-        parent = _make_parent_tree(parents, tree)
-        parent['supplemental_content'].append(content)
-    tree = _category_arrays(tree)
-    return _sort_categories(tree)

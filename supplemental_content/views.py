@@ -80,8 +80,7 @@ class SupplementalContentView(generics.ListAPIView):
                         Q(subjectgroup__subject_group_id__in=subjgrp_list),
                         title=title,
                         part=part,
-                        section__in=section_list,
                     )
                 )
-            ).distinct().order_by('-supplementalcontent__date', 'supplementalcontent__title')
+            ).distinct()
         return query
