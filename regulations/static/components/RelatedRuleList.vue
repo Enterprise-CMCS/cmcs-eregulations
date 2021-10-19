@@ -16,7 +16,7 @@
           :count="rules.length"
         ></show-more-button>
     </div>
-    <div v-else class="related-rule-list show-more-inactive">No {{title}} found in the Federal Register from 1994 to present.</div>
+    <div v-else class="show-more-inactive">No {{title}} found in the Federal Register from 1994 to present.</div>
 
 </template>
 

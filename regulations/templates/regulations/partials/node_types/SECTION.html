@@ -1,12 +1,12 @@
 {% comment %}
     Used once per section. Contained by subparts at the top level.
 {% endcomment %}
+{% load string_formatters %}
 
 <section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section">
     <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
-        <a class="reference" title="{{node.label | join:'.'}}" href="#{{node.label | join:'-'}}">
-            <i class="fa fa-link"></i>
-        </a>
+        {% section_formatter cfr_title node.label as formatted_citation %}
+        {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="icon" formatted_citation=formatted_citation%}
         {{node.title}}
     </h2>
 
@@ -18,4 +18,3 @@
     </div>
 
 </section>
-
