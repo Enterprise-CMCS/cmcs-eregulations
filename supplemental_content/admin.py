@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
+from django.urls import path
 
 # Register your models here.
 
@@ -13,6 +14,7 @@ from .models import (
     SubjectGroup,
     Subpart,
 )
+
 from .filters import (
     TitleFilter,
     PartFilter,
@@ -21,10 +23,21 @@ from .filters import (
     SubjectGroupFilter,
 )
 
+from .mixins import ExportCsvMixin
 
-class BaseAdmin(admin.ModelAdmin):
+
+class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
+    change_list_template = "admin/export_all_csv.html"
     list_per_page = 500
     admin_priority = 20
+    actions = ["export_as_csv"]
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('export_all_csv/', self.export_all_as_csv),
+        ]
+        return my_urls + urls
 
 
 @admin.register(Section)

@@ -7,7 +7,7 @@
             rel="noopener noreferrer"
         >
             <span class="link-heading">
-                <span class="recent-flag indicator">{{ expandedType }}</span>
+                <span :class="getClassList">{{ expandedType }}</span>
                 <span class="recent-date" v-if="publication_date">{{
                     publication_date | formatDate
                 }}</span>
@@ -44,15 +44,26 @@ export default {
             type: String,
             required: true,
         },
+        action: {
+            type: String,
+            required: true,
+        },
     },
 
     computed: {
         expandedType: function () {
             if (this.type === "Rule") {
                 return "Final";
+            } else if(this.type === "Proposed Rule" && this.action === "Proposed rule."){
+              return "NPRM"
+            } else if(this.type === "Proposed Rule" && this.action === "Request for information."){
+              return "RFI"
             }
             return "Unknown";
         },
+        getClassList: function(){
+          return this.expandedType === "Final" ? "recent-flag indicator" : "recent-flag indicator secondary-indicator"
+        }
     },
 
     methods: {},

@@ -437,6 +437,7 @@ __vue_render__$4._withStripped = true;
 //
 //
 //
+//
 
 var script$3 = {
     name: "collapse-button",
@@ -493,6 +494,7 @@ var __vue_render__$3 = function() {
   return _c(
     "button",
     {
+      staticClass: "collapsible-title",
       class: { visible: _vm.visible },
       attrs: {
         "data-test": _vm.name,

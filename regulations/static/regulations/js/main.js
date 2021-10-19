@@ -2,6 +2,7 @@ import RelatedRules from "./RelatedRules.js";
 import Collapsible from "./Collapsible.js";
 import CollapseButton from "./CollapseButton.js";
 import SupplementalContent from "./SupplementalContent.js";
+import CopyBtn from "./CopyBtn.js";
 import Vue from "../../node_modules/vue/dist/vue.esm.browser.min.js";
 import { goToVersion } from "./go-to-version.js";
 
@@ -49,7 +50,10 @@ function onPageShow() {
                 window.innerWidth >= 1024
                     ? HEADER_HEIGHT
                     : HEADER_HEIGHT_MOBILE;
-            window.scrollTo(position.x, el.offsetTop - headerHeight - versionSelectHeight);
+            window.scrollTo(
+                position.x,
+                el.offsetTop - headerHeight - versionSelectHeight
+            );
         }
     }
 }
@@ -136,6 +140,7 @@ function main() {
             Collapsible,
             CollapseButton,
             SupplementalContent,
+            CopyBtn,
         },
     }).$mount("#vue-app");
 
