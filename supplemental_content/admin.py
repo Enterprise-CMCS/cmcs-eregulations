@@ -105,4 +105,5 @@ def get_app_list(self, request):
         app['models'].sort(key=lambda x: model_priority[x['object_name']])
         yield app
 
+
 admin.AdminSite.get_app_list = get_app_list
