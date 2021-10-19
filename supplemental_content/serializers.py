@@ -110,7 +110,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
         categories = self._get_categories(supplemental_content)
         tree, flat_tree = self._make_category_trees(categories)
         self._add_supplemental_content(flat_tree, supplemental_content)
-        return self._to_array(tree)
+        return self._sort_categories(self._to_array(tree))
     
     def _add_supplemental_content(self, flat_tree, supplemental_content):
         for content in supplemental_content:
@@ -156,6 +156,12 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
         for category in t:
             category["sub_categories"] = self._to_array(category["sub_categories"])
         return t
+    
+    def _sort_categories(self, tree):
+        tree = sorted(tree, key=lambda category: (category["order"], category["title"]))
+        for category in tree:
+            category["sub_categories"] = self._sort_categories(category["sub_categories"])
+        return tree
 
 
 class AbstractSupplementalContentSerializer(PolymorphicSerializer):
