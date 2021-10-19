@@ -1,3 +1,4 @@
+from django.db.models.fields import IntegerField
 from rest_framework import serializers
 
 from .models import (
@@ -7,6 +8,7 @@ from .models import (
     Section,
     Subpart,
     SubjectGroup,
+    AbstractCategory,
     Category,
     SubCategory,
     SubSubCategory,
@@ -67,39 +69,85 @@ class SectionSerializer(serializers.Serializer):
 
 # Serializers for children of Category
 
-class CategorySerializer(PolymorphicSerializer):
+class AbstractCategorySerializer(PolymorphicSerializer):
     title = serializers.CharField()
     description = serializers.CharField()
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
+    id = serializers.IntegerField()
 
     def get_serializer_map(self):
         return {
+            Category: CategorySerializer,
             SubCategory: SubCategorySerializer,
             SubSubCategory: SubSubCategorySerializer,
         }
 
     class Meta:
+        model = AbstractCategory
+
+
+class CategorySerializer(serializers.Serializer):
+    class Meta:
         model = Category
 
 
 class SubCategorySerializer(serializers.Serializer):
-    parent = CategorySerializer()
+    parent = AbstractCategorySerializer()
     class Meta:
         model = SubCategory
 
 
 class SubSubCategorySerializer(serializers.Serializer):
-    parent = SubCategorySerializer()
+    parent = AbstractCategorySerializer()
     class Meta:
         model = SubSubCategory
 
 # Serializers for children of AbstractSupplementalContent
 
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
+    max_category_depth = 3
+
     def to_representation(self, instance):
-        data = super().to_representation(instance)
-        return _make_category_tree(data)
+        supplemental_content = super().to_representation(instance)
+        categories = self._get_categories()
+        tree = self._make_category_tree(categories)
+        return self._to_array(tree)
+    
+    def _get_categories(self):
+        raw_categories = AbstractCategory.objects.filter(show_if_empty=True).distinct()
+        categories = AbstractCategorySerializer(raw_categories, many=True).to_representation(raw_categories)
+        return categories
+    
+    def _make_category_tree(self, categories):
+        tree = {}
+        for category in categories:
+            stack = [category]
+            while "parent" in category:
+                category = category["parent"]
+                stack.append(category)
+            self._unwind_stack(tree, stack)
+        return tree
+
+    def _unwind_stack(self, tree, stack):
+        if len(stack) < 1:
+            return
+        node = stack.pop()
+        if node["id"] not in tree:
+            tree[node["id"]] = {
+                "title": node["title"],
+                "description": node["description"],
+                "order": node["order"],
+                "show_if_empty": node["show_if_empty"],
+                "sub_categories": {},
+            }
+        self._unwind_stack(tree[node["id"]]["sub_categories"], stack)
+    
+    def _to_array(self, tree):
+        t = tree.values()
+        for category in t:
+            category["sub_categories"] = self._to_array(category["sub_categories"])
+        return t
 
 
 class AbstractSupplementalContentSerializer(PolymorphicSerializer):
@@ -116,7 +164,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
     
     class Meta:
         model = AbstractSupplementalContent
-        #list_serializer_class = ApplicableSupplementalContentSerializer
+        list_serializer_class = ApplicableSupplementalContentSerializer
 
 
 class SupplementalContentSerializer(serializers.Serializer):
@@ -172,7 +220,7 @@ def _sort_categories(tree):
     return tree
 
 
-def _make_category_tree(data):
+def _make_category_tree(data, categories):
     tree = {}
     for content in data:
         parents = _get_parents(content.pop('category'), [])

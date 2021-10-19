@@ -10,6 +10,7 @@ from .models import (
     Section,
     Subpart,
     SubjectGroup,
+    AbstractCategory,
     Category,
 )
 
@@ -19,6 +20,7 @@ from .serializers import (
     SubpartSerializer,
     SubjectGroupSerializer,
     SectionSerializer,
+    AbstractCategorySerializer,
     CategorySerializer,
     SubCategorySerializer,
     SubSubCategorySerializer,
@@ -36,10 +38,11 @@ class AbstractLocationView(generics.ListAPIView):
 
 
 class CategoryView(generics.ListAPIView):
-    serializer_class = CategorySerializer
+    serializer_class = AbstractCategorySerializer
     def get_queryset(self):
-        query = Category.objects.all()
+        query = AbstractCategory.objects.all()
         return query
+
 
 class SupplementalContentTestView(generics.ListAPIView):
     serializer_class = AbstractSupplementalContentSerializer
@@ -49,7 +52,7 @@ class SupplementalContentTestView(generics.ListAPIView):
 
 
 class SupplementalContentView(generics.ListAPIView):
-    serializer_class = SupplementalContentSerializer
+    serializer_class = AbstractSupplementalContentSerializer
 
     def get_queryset(self):
         title = self.kwargs.get("title")
@@ -58,10 +61,10 @@ class SupplementalContentView(generics.ListAPIView):
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
 
-        query = SupplementalContent.objects \
+        query = AbstractSupplementalContent.objects \
             .filter(
-                Q(locations__section__section_id_in=section_list) |
-                Q(locations__subpart__subpart_id_in=subpart_list) |
+                Q(locations__section__section_id__in=section_list) |
+                Q(locations__subpart__subpart_id__in=subpart_list) |
                 Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
                 approved=True,
                 category__isnull=False,
@@ -72,13 +75,13 @@ class SupplementalContentView(generics.ListAPIView):
                 Prefetch(
                     'locations',
                     queryset=AbstractLocation.objects.filter(
-                        Q(section__section_id_in=section_list) |
-                        Q(subpart__subpart_id_in=subpart_list) |
+                        Q(section__section_id__in=section_list) |
+                        Q(subpart__subpart_id__in=subpart_list) |
                         Q(subjectgroup__subject_group_id__in=subjgrp_list),
                         title=title,
                         part=part,
                         section__in=section_list,
                     )
                 )
-            ).distinct().order_by('-date', 'title')
+            ).distinct().order_by('-supplementalcontent__date', 'supplementalcontent__title')
         return query
