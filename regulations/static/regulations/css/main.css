@@ -16011,6 +16011,31 @@ select:focus-visible {
     font-size: 24px;
   }
 }
+.reg-text table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid #d6d7d9;
+  table-layout: auto;
+  width: 100%;
+}
+.reg-text table th, .reg-text table th ~ td {
+  table-layout: fixed;
+}
+.reg-text table th,
+.reg-text table td {
+  border: 1px solid #d6d7d9;
+  padding: 9px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: left;
+  vertical-align: top;
+}
+.reg-text table th {
+  background: #f3f3f3;
+}
+.reg-text table th[colspan] {
+  text-align: center;
+}
 .reg-text fp-1,
 .reg-text fp-2,
 .reg-text fp-3,
