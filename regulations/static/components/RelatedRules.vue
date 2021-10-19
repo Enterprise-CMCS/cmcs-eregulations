@@ -76,7 +76,7 @@ export default {
                     }
                 )
               },
-              title: "Notification of Proposed Rulemaking"
+              title: "Notices of Proposed Rulemaking"
             },
             RFI: {
               getRules: (rules) => {
@@ -85,7 +85,7 @@ export default {
                     }
                 )
               },
-              title: "Request for Information"
+              title: "Requests for Information"
             }
           }
         },
@@ -111,7 +111,6 @@ export default {
         async fetch_rules(title, part) {
           let url = `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`
           let results = []
-
           while(url){
             const response = await fetch(url);
             const rules = await response.json();

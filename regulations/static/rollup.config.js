@@ -42,6 +42,16 @@ export default [
         plugins,
     },
     {
+        input: 'components/tooltips/CopyBtn.vue',
+        output: {
+            format: 'esm',
+            file: 'regulations/js/CopyBtn.js'
+        },
+        plugins: [
+            vue()
+        ],
+    },
+    {
         input: 'regulations/js/main.js',
         output: {
             file: 'regulations/js/main.build.js',

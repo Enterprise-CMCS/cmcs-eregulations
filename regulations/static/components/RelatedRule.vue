@@ -7,7 +7,7 @@
             rel="noopener noreferrer"
         >
             <span class="link-heading">
-                <span class="recent-flag indicator">{{ expandedType }}</span>
+                <span :class="getClassList">{{ expandedType }}</span>
                 <span class="recent-date" v-if="publication_date">{{
                     publication_date | formatDate
                 }}</span>
@@ -61,6 +61,9 @@ export default {
             }
             return "Unknown";
         },
+        getClassList: function(){
+          return this.expandedType === "Final" ? "recent-flag indicator" : "recent-flag indicator secondary-indicator"
+        }
     },
 
     methods: {},
