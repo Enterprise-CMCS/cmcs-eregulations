@@ -1,6 +1,14 @@
+{% load string_formatters %}
+
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
     <h2>Part {{ reg_part}} Federal Register Documents</h2>
+
+    {% sidebar_formatter title reg_part subpart as formatted_citation %}
+    {% comment %}{% include "regulations/partials/copy-btn.html" with title=node.label btn_type="labeled-icon" %}{% endcomment %}
+    {% comment %}<hr />{% endcomment %}
+
+    <h2 id="final-rules-heading">Part {{ reg_part }} Final Rules</h2>
 
     <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2" ruletype="RULE"></related-rules>
 

@@ -24,6 +24,8 @@ $magenta: #862074;
 
 $white: #fff;
 
+$green: #2a7a3b;
+
 $title_color: #000;
 $reg_text_highlight_color: #eefafe;
 
@@ -97,12 +99,15 @@ $main_button_background: $light_blue;
 $main_button_color: $dark_blue;
 $main_button_hover_background: $white;
 
+$copy_button_success: $green;
+
 //--------------------------
 // Fonts
 //--------------------------
 
 $primary_site_font: $font-sans; // Open Sans
 $secondary_site_font: "Merriweather", Georgia, serif;
+$font_size_xxs: 10px;
 $font_size_xs: 12px;
 $font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable is depreciated
 
