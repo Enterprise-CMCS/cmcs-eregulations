@@ -53,7 +53,6 @@ class SubpartSerializer(serializers.Serializer):
     subpart_id = serializers.CharField()
     class Meta:
         model = Subpart
-        fields = "__all__"
 
 
 class SubjectGroupSerializer(serializers.Serializer):
@@ -106,30 +105,38 @@ class SubSubCategorySerializer(serializers.Serializer):
 # Serializers for children of AbstractSupplementalContent
 
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
-    max_category_depth = 3
-
     def to_representation(self, instance):
         supplemental_content = super().to_representation(instance)
-        categories = self._get_categories()
-        tree = self._make_category_tree(categories)
+        raise Exception(supplemental_content)
+        categories = self._get_categories(supplemental_content)
+        tree, flat_tree = self._make_category_trees(categories)
+        self._add_supplemental_content(flat_tree, supplemental_content)
         return self._to_array(tree)
     
-    def _get_categories(self):
+    def _add_supplemental_content(self, flat_tree, supplemental_content):
+        for content in supplemental_content:
+            category = flat_tree[content["category"]["id"]]
+            category["supplemental_content"].append(content)
+    
+    def _get_categories(self, supplemental_content):
         raw_categories = AbstractCategory.objects.filter(show_if_empty=True).distinct()
         categories = AbstractCategorySerializer(raw_categories, many=True).to_representation(raw_categories)
+        for content in supplemental_content:
+            categories.append(content["category"])
         return categories
     
-    def _make_category_tree(self, categories):
+    def _make_category_trees(self, categories):
         tree = {}
+        flat_tree = {}
         for category in categories:
             stack = [category]
             while "parent" in category:
                 category = category["parent"]
                 stack.append(category)
-            self._unwind_stack(tree, stack)
-        return tree
+            self._unwind_stack(tree, flat_tree, stack)
+        return tree, flat_tree
 
-    def _unwind_stack(self, tree, stack):
+    def _unwind_stack(self, tree, flat_tree, stack):
         if len(stack) < 1:
             return
         node = stack.pop()
@@ -140,8 +147,10 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
                 "order": node["order"],
                 "show_if_empty": node["show_if_empty"],
                 "sub_categories": {},
+                "supplemental_content": [],
             }
-        self._unwind_stack(tree[node["id"]]["sub_categories"], stack)
+            flat_tree[node["id"]] = tree[node["id"]]
+        self._unwind_stack(tree[node["id"]]["sub_categories"], flat_tree, stack)
     
     def _to_array(self, tree):
         t = tree.values()
@@ -154,7 +163,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
     approved = serializers.BooleanField()
-    category = CategorySerializer()
+    category = AbstractCategorySerializer()
     locations = AbstractLocationSerializer(many=True)
 
     def get_serializer_map(self):
