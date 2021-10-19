@@ -4,10 +4,19 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 
+
+class AbstractModel:
+    def __str__(self):
+        for subclass in self.__class__.__subclasses__():
+            attr = getattr(self, subclass.__name__.lower(), None)
+            if attr:
+                return str(attr)
+        return super().__str__()
+
 ## Category types
 # Current choice is one model per level due to constraint of exactly 3 levels.
 
-class Category(models.Model):
+class AbstractCategory(models.Model, AbstractModel):
     title = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
@@ -16,16 +25,14 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def truncated_description(self):
-        return (self.description or [])[:50]
-    
+
+class Category(AbstractCategory):
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
 
-class SubCategory(Category):
+class SubCategory(AbstractCategory):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
 
     class Meta:
@@ -33,7 +40,7 @@ class SubCategory(Category):
         verbose_name_plural = "Sub-categories"
 
 
-class SubSubCategory(Category):
+class SubSubCategory(AbstractCategory):
     parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
 
     class Meta:
@@ -43,16 +50,9 @@ class SubSubCategory(Category):
 ## Location models
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
 
-class AbstractLocation(models.Model):
+class AbstractLocation(models.Model, AbstractModel):
     title = models.IntegerField()
     part = models.IntegerField()
-
-    def __str__(self):
-        for subclass in AbstractLocation.__subclasses__():
-            attr = getattr(self, subclass.__name__.lower(), None)
-            if attr:
-                return str(attr)
-        return super().__str__()
 
 
 class Subpart(AbstractLocation):
@@ -91,19 +91,12 @@ class Section(AbstractLocation):
 ## Supplemental content models
 # All supplemental content types must inherit from AbstractSupplementalContent.
 
-class AbstractSupplementalContent(models.Model):
+class AbstractSupplementalContent(models.Model, AbstractModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content")
+    category = models.ForeignKey(AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content")
     locations = models.ManyToManyField(AbstractLocation, null=True, blank=True, related_name="supplemental_content")
-
-    def __str__(self):
-        for subclass in AbstractSupplementalContent.__subclasses__():
-            attr = getattr(self, subclass.__name__.lower(), None)
-            if attr:
-                return str(attr)
-        return super().__str__()
 
 
 class SupplementalContent(AbstractSupplementalContent):

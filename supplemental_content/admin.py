@@ -49,24 +49,24 @@ class SubjectGroupAdmin(BaseAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(BaseAdmin):
-    list_display = ("title", "truncated_description", "order", "show_if_empty")
+    list_display = ("title", "description", "order", "show_if_empty")
     search_fields = ["title", "description"]
 
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(CategoryAdmin):
-    list_display = ("title", "truncated_description", "order", "show_if_empty", "parent")
+    list_display = ("title", "description", "order", "show_if_empty", "parent")
 
 
 @admin.register(SubSubCategory)
 class SubSubCategoryAdmin(CategoryAdmin):
-    list_display = ("title", "truncated_description", "order", "show_if_empty", "parent")
+    list_display = ("title", "description", "order", "show_if_empty", "parent")
 
 
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(BaseAdmin):
-    list_display = ("date", "title", "truncated_description", "category", "created_at", "updated_at")
-    search_fields = ["date", "title", "truncated_description"]
+    list_display = ("date", "title", "description", "category", "created_at", "updated_at")
+    search_fields = ["date", "title", "description"]
     filter_horizontal = ("locations",)
     list_filter = [
         "approved",
