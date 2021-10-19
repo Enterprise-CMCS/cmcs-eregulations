@@ -17,7 +17,8 @@ aside.right-sidebar {
     }
 
     h2 {
-        font-size: $font-size-xl;
+        font-size: $font-size-lg;
+        font-family: $primary_site_font;
 
         @include screen-xl {
             font-size: $base-font-size * 1.4;
@@ -277,14 +278,14 @@ aside.right-sidebar {
 }
 
 button.collapsible-title {
-    font-size: $font-size-lg;
+    font-size: $font-size-md;
     font-weight: bold;
     padding-left: 0;
     background: none;
     border: none;
     color: $primary_link_color;
     cursor: pointer;
-    margin-top: 4px;
+    margin-top: $spacer-2;
     display: block;
     border-radius: $border-radius;
     text-align: left;
@@ -316,4 +317,5 @@ button.collapsible-title {
 .show-more-inactive {
     color: $secondary_text_color;
     font-size: $font-size-sm;
+    margin-top:$spacer-2
 }
