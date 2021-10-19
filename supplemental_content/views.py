@@ -30,27 +30,6 @@ from .serializers import (
 )
 
 
-class AbstractLocationView(generics.ListAPIView):
-    serializer_class = AbstractLocationSerializer
-    def get_queryset(self):
-        query = AbstractLocation.objects.all()
-        return query
-
-
-class CategoryView(generics.ListAPIView):
-    serializer_class = AbstractCategorySerializer
-    def get_queryset(self):
-        query = AbstractCategory.objects.all()
-        return query
-
-
-class SupplementalContentTestView(generics.ListAPIView):
-    serializer_class = AbstractSupplementalContentSerializer
-    def get_queryset(self):
-        query = AbstractSupplementalContent.objects.all()
-        return query
-
-
 class SupplementalContentView(generics.ListAPIView):
     serializer_class = AbstractSupplementalContentSerializer
 
