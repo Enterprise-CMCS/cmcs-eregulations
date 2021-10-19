@@ -46,6 +46,22 @@
         }
     }
 
+    .table_head {
+        margin: 15px 0 25px;
+
+        p {
+            margin: 0;
+        }
+
+        p:first-child {
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 700;
+            font-family: $secondary_site_font;
+            margin-bottom: 5px;
+        }
+    }
+
     table {
         border-spacing: 0;
         border-collapse: collapse;
