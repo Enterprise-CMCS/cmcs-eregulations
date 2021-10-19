@@ -1,6 +1,8 @@
 from django.db.models.fields import IntegerField
 from rest_framework import serializers
 
+from .utils import reverse_sort
+
 from .models import (
     AbstractSupplementalContent,
     SupplementalContent,
@@ -110,7 +112,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
         categories = self._get_categories(supplemental_content)
         tree, flat_tree = self._make_category_trees(categories)
         self._add_supplemental_content(flat_tree, supplemental_content)
-        return self._sort_categories(self._to_array(tree))
+        return self._sort(self._to_array(tree))
     
     def _add_supplemental_content(self, flat_tree, supplemental_content):
         for content in supplemental_content:
@@ -157,10 +159,17 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
             category["sub_categories"] = self._to_array(category["sub_categories"])
         return t
     
-    def _sort_categories(self, tree):
+    def _sort(self, tree):
         tree = sorted(tree, key=lambda category: (category["order"], category["title"]))
         for category in tree:
-            category["sub_categories"] = self._sort_categories(category["sub_categories"])
+            category["supplemental_content"] = sorted(
+                category["supplemental_content"],
+                key=lambda content: (
+                    reverse_sort(content["date"] or ""),
+                    content["title"] or "",
+                ),
+            )
+            category["sub_categories"] = self._sort(category["sub_categories"])
         return tree
 
 
