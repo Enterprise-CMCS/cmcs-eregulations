@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.db.models.functions import Cast
 from django.db.models import IntegerField, ManyToManyField
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.urls import path
+from .mixins import ExportCsvMixin
 
 # Register your models here.
 
@@ -18,7 +20,8 @@ from .filters import (
 
 
 @admin.register(RegulationSection)
-class RegulationSectionAdmin(admin.ModelAdmin):
+class RegulationSectionAdmin(admin.ModelAdmin, ExportCsvMixin):
+    change_list_template = "admin/export_all_csv.html"
     list_per_page = 500
     list_display = ("title", "part", "subpart", "section")
     search_fields = ["title", "part", "section"]
@@ -27,6 +30,16 @@ class RegulationSectionAdmin(admin.ModelAdmin):
             "widget": FilteredSelectMultiple("Supplementary Content", is_stacked=False),
         }
     }
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('export_all_csv/', self.export_all_as_csv),
+
+        ]
+        return my_urls + urls
+
+    actions = ["export_as_csv"]
 
 
 class SectionsInline(admin.TabularInline):
@@ -43,7 +56,8 @@ class SectionsInline(admin.TabularInline):
 
 
 @admin.register(SupplementaryContent)
-class SupplementaryContentAdmin(admin.ModelAdmin):
+class SupplementaryContentAdmin(admin.ModelAdmin, ExportCsvMixin):
+    change_list_template = "admin/export_all_csv.html"
     list_per_page = 500
     list_display = ("date", "title", "description", "category", "created_at", "updated_at")
     search_fields = ["title", "description"]
@@ -57,6 +71,16 @@ class SupplementaryContentAdmin(admin.ModelAdmin):
         SectionFilter,
     )
 
+    actions = ["export_as_csv"]
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('export_all_csv/', self.export_all_as_csv),
+
+        ]
+        return my_urls + urls
+
 
 class ChildCategory(admin.StackedInline):
     model = Category
@@ -66,9 +90,19 @@ class ChildCategory(admin.StackedInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin, ExportCsvMixin):
+    change_list_template = "admin/export_all_csv.html"
     list_per_page = 500
     inlines = [
         ChildCategory,
     ]
     list_display = ("title", "parent")
+    actions = ["export_as_csv"]
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('export_all_csv/', self.export_all_as_csv),
+
+        ]
+        return my_urls + urls
