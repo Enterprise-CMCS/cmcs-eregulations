@@ -13,8 +13,10 @@ class AbstractModel:
                 return str(attr)
         return super().__str__()
 
-## Category types
+
+# Category types
 # Current choice is one model per level due to constraint of exactly 3 levels.
+
 
 class AbstractCategory(models.Model, AbstractModel):
     title = models.CharField(max_length=512, unique=True)
@@ -54,10 +56,12 @@ class SubSubCategory(AbstractCategory):
 
     class Meta:
         verbose_name = "Sub-sub-category"
-        verbose_name_plural = "Sub-sub-categories"    
+        verbose_name_plural = "Sub-sub-categories"
 
-## Location models
+
+# Location models
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
+
 
 class AbstractLocation(models.Model, AbstractModel):
     title = models.IntegerField()
@@ -100,14 +104,18 @@ class Section(AbstractLocation):
         verbose_name = "Section"
         verbose_name_plural = "Sections"
 
-## Supplemental content models
+
+# Supplemental content models
 # All supplemental content types must inherit from AbstractSupplementalContent.
+
 
 class AbstractSupplementalContent(models.Model, AbstractModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=False)
-    category = models.ForeignKey(AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content")
+    category = models.ForeignKey(
+        AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content"
+    )
     locations = models.ManyToManyField(AbstractLocation, null=True, blank=True, related_name="supplemental_content")
 
     def __str__(self):
@@ -126,7 +134,8 @@ class SupplementalContent(AbstractSupplementalContent):
         help_text="Leave blank or enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
         validators=[RegexValidator(
             regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
-            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"! For example: 2021, 2021-01, or 2021-01-31.",
+            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"!"\
+                "For example: 2021, 2021-01, or 2021-01-31.",
         )],
     )
 

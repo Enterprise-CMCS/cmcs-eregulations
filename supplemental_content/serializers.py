@@ -1,4 +1,3 @@
-from django.db.models.fields import IntegerField
 from rest_framework import serializers
 
 from .utils import reverse_sort
@@ -34,7 +33,9 @@ class PolymorphicSerializer(serializers.Serializer):
                     return {**data, **(serializer(child, context=self.context).to_representation(child))}
         return data
 
+
 # Serializers for children of AbstractLocation
+
 
 class AbstractLocationSerializer(PolymorphicSerializer):
     title = serializers.IntegerField()
@@ -53,22 +54,27 @@ class AbstractLocationSerializer(PolymorphicSerializer):
 
 class SubpartSerializer(serializers.Serializer):
     subpart_id = serializers.CharField()
+
     class Meta:
         model = Subpart
 
 
 class SubjectGroupSerializer(serializers.Serializer):
     subject_group_id = serializers.CharField()
+
     class Meta:
         model = SubjectGroup
 
 
 class SectionSerializer(serializers.Serializer):
     section_id = serializers.IntegerField()
+
     class Meta:
         model = Subpart
 
+
 # Serializers for children of Category
+
 
 class AbstractCategorySerializer(PolymorphicSerializer):
     title = serializers.CharField()
@@ -104,7 +110,9 @@ class SubSubCategorySerializer(serializers.Serializer):
     class Meta:
         model = SubSubCategory
 
+
 # Serializers for children of AbstractSupplementalContent
+
 
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
     def to_representation(self, instance):
@@ -113,19 +121,19 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
         tree, flat_tree = self._make_category_trees(categories)
         self._add_supplemental_content(flat_tree, supplemental_content)
         return self._sort(self._to_array(tree))
-    
+
     def _add_supplemental_content(self, flat_tree, supplemental_content):
         for content in supplemental_content:
             category = flat_tree[content["category"]["id"]]
             category["supplemental_content"].append(content)
-    
+
     def _get_categories(self, supplemental_content):
         raw_categories = AbstractCategory.objects.filter(show_if_empty=True).distinct()
         categories = AbstractCategorySerializer(raw_categories, many=True).to_representation(raw_categories)
         for content in supplemental_content:
             categories.append(content["category"])
         return categories
-    
+
     def _make_category_trees(self, categories):
         tree = {}
         flat_tree = {}
@@ -152,13 +160,13 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
             }
             flat_tree[node["id"]] = tree[node["id"]]
         self._unwind_stack(tree[node["id"]]["sub_categories"], flat_tree, stack)
-    
+
     def _to_array(self, tree):
         t = tree.values()
         for category in t:
             category["sub_categories"] = self._to_array(category["sub_categories"])
         return t
-    
+
     def _sort(self, tree):
         tree = sorted(tree, key=lambda category: (category["order"], category["title"]))
         for category in tree:
@@ -184,7 +192,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
         return {
             SupplementalContent: SupplementalContentSerializer,
         }
-    
+
     class Meta:
         model = AbstractSupplementalContent
         list_serializer_class = ApplicableSupplementalContentSerializer

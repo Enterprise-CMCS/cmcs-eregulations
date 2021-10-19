@@ -1,33 +1,12 @@
-from rest_framework import serializers, generics
+from rest_framework import generics
 from django.db.models import Prefetch, Q
-
-from .serializers import PolymorphicSerializer
 
 from .models import (
     AbstractSupplementalContent,
-    SupplementalContent,
     AbstractLocation,
-    Section,
-    Subpart,
-    SubjectGroup,
-    AbstractCategory,
-    Category,
 )
 
-from .serializers import (
-    PolymorphicSerializer,
-    AbstractLocationSerializer,
-    SubpartSerializer,
-    SubjectGroupSerializer,
-    SectionSerializer,
-    AbstractCategorySerializer,
-    CategorySerializer,
-    SubCategorySerializer,
-    SubSubCategorySerializer,
-    ApplicableSupplementalContentSerializer,
-    AbstractSupplementalContentSerializer,
-    SupplementalContentSerializer,
-)
+from .serializers import AbstractSupplementalContentSerializer
 
 
 class SupplementalContentView(generics.ListAPIView):
