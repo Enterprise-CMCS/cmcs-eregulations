@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin.sites import site
+from django.apps import apps
 
 # Register your models here.
 
@@ -22,44 +24,52 @@ from .filters import (
 
 class BaseAdmin(admin.ModelAdmin):
     list_per_page = 500
+    admin_priority = 20
 
 
 @admin.register(Section)
 class SectionAdmin(BaseAdmin):
+    admin_priority = 40
     list_display = ("title", "part", "section_id", "parent")
     search_fields = ["title", "part", "section_id"]
 
 
 @admin.register(Subpart)
 class SubpartAdmin(BaseAdmin):
+    admin_priority = 50
     list_display = ("title", "part", "subpart_id")
     search_fields = ["title", "part", "subpart_id"]
 
 
 @admin.register(SubjectGroup)
 class SubjectGroupAdmin(BaseAdmin):
+    admin_priority = 60
     list_display = ("title", "part", "subject_group_id")
     search_fields = ["title", "part", "subject_group_id"]
 
 
 @admin.register(Category)
 class CategoryAdmin(BaseAdmin):
+    admin_priority = 10
     list_display = ("title", "description", "order", "show_if_empty")
     search_fields = ["title", "description"]
 
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(CategoryAdmin):
+    admin_priority = 20
     list_display = ("title", "description", "order", "show_if_empty", "parent")
 
 
 @admin.register(SubSubCategory)
 class SubSubCategoryAdmin(CategoryAdmin):
+    admin_priority = 30
     list_display = ("title", "description", "order", "show_if_empty", "parent")
 
 
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(BaseAdmin):
+    admin_priority = 0
     list_display = ("date", "title", "description", "category", "created_at", "updated_at")
     search_fields = ["date", "title", "description"]
     filter_horizontal = ("locations",)
@@ -71,3 +81,21 @@ class SupplementalContentAdmin(BaseAdmin):
         SubpartFilter,
         SubjectGroupFilter,
     ]
+
+
+def get_app_list(self, request):
+    app_dict = self._build_app_dict(request)
+    for app_name in app_dict.keys():
+        app = app_dict[app_name]
+        model_priority = {
+            model['object_name']: getattr(
+                site._registry[apps.get_model(app_name, model['object_name'])],
+                'admin_priority',
+                20
+            )
+            for model in app['models']
+        }
+        app['models'].sort(key=lambda x: model_priority[x['object_name']])
+        yield app
+
+admin.AdminSite.get_app_list = get_app_list
