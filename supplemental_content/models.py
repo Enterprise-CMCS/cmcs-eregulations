@@ -134,8 +134,8 @@ class SupplementalContent(AbstractSupplementalContent):
         help_text="Leave blank or enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
         validators=[RegexValidator(
             regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
-            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"!"\
-                "For example: 2021, 2021-01, or 2021-01-31.",
+            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"!"
+                    "For example: 2021, 2021-01, or 2021-01-31.",
         )],
     )
 

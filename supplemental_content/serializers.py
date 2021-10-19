@@ -101,12 +101,14 @@ class CategorySerializer(serializers.Serializer):
 
 class SubCategorySerializer(serializers.Serializer):
     parent = AbstractCategorySerializer()
+
     class Meta:
         model = SubCategory
 
 
 class SubSubCategorySerializer(serializers.Serializer):
     parent = AbstractCategorySerializer()
+
     class Meta:
         model = SubSubCategory
 
