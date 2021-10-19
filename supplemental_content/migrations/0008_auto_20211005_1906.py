@@ -253,6 +253,22 @@ class Migration(migrations.Migration):
         migrations.RunPython(migrate_sections),
         migrations.RunPython(migrate_categories),
         migrations.RunPython(migrate_supplemental_content),
+        migrations.AlterModelOptions(
+            name='section',
+            options={'ordering': ['title', 'part', 'section_id'], 'verbose_name': 'Section', 'verbose_name_plural': 'Sections'},
+        ),
+        migrations.AlterModelOptions(
+            name='subjectgroup',
+            options={'ordering': ['title', 'part', 'subject_group_id'], 'verbose_name': 'Subject Group', 'verbose_name_plural': 'Subject Groups'},
+        ),
+        migrations.AlterModelOptions(
+            name='subpart',
+            options={'ordering': ['title', 'part', 'subpart_id'], 'verbose_name': 'Subpart', 'verbose_name_plural': 'Subparts'},
+        ),
+        migrations.AlterModelOptions(
+            name='abstractlocation',
+            options={'ordering': ['title', 'part', 'section__section_id', 'subpart__subpart_id', 'subjectgroup__subject_group_id']},
+        ),
         migrations.RemoveField(
             model_name='AbstractCategory',
             name='old_id',

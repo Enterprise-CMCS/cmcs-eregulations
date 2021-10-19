@@ -32,6 +32,7 @@ class SectionAdmin(BaseAdmin):
     admin_priority = 40
     list_display = ("title", "part", "section_id", "parent")
     search_fields = ["title", "part", "section_id"]
+    ordering = ("title", "part", "section_id", "parent")
 
 
 @admin.register(Subpart)
@@ -39,6 +40,7 @@ class SubpartAdmin(BaseAdmin):
     admin_priority = 50
     list_display = ("title", "part", "subpart_id")
     search_fields = ["title", "part", "subpart_id"]
+    ordering = ("title", "part", "subpart_id")
 
 
 @admin.register(SubjectGroup)
@@ -46,6 +48,7 @@ class SubjectGroupAdmin(BaseAdmin):
     admin_priority = 60
     list_display = ("title", "part", "subject_group_id")
     search_fields = ["title", "part", "subject_group_id"]
+    ordering = ("title", "part", "subject_group_id")
 
 
 @admin.register(Category)
@@ -53,18 +56,21 @@ class CategoryAdmin(BaseAdmin):
     admin_priority = 10
     list_display = ("title", "description", "order", "show_if_empty")
     search_fields = ["title", "description"]
+    ordering = ("title", "description", "order")
 
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(CategoryAdmin):
     admin_priority = 20
     list_display = ("title", "description", "order", "show_if_empty", "parent")
+    ordering = ("title", "description", "order", "parent")
 
 
 @admin.register(SubSubCategory)
 class SubSubCategoryAdmin(CategoryAdmin):
     admin_priority = 30
     list_display = ("title", "description", "order", "show_if_empty", "parent")
+    ordering = ("title", "description", "order", "parent")
 
 
 @admin.register(SupplementalContent)
@@ -72,6 +78,7 @@ class SupplementalContentAdmin(BaseAdmin):
     admin_priority = 0
     list_display = ("date", "title", "description", "category", "created_at", "updated_at")
     search_fields = ["date", "title", "description"]
+    ordering = ("-date", "title", "category", "-created_at", "-updated_at")
     filter_horizontal = ("locations",)
     list_filter = [
         "approved",

@@ -70,6 +70,9 @@ class AbstractLocation(models.Model, AbstractModel):
     def __str__(self):
         return self._get_string_repr()
 
+    class Meta:
+        ordering = ["title", "part", "section__section_id", "subpart__subpart_id", "subjectgroup__subject_group_id"]
+
 
 class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
@@ -80,6 +83,7 @@ class Subpart(AbstractLocation):
     class Meta:
         verbose_name = "Subpart"
         verbose_name_plural = "Subparts"
+        ordering = ["title", "part", "subpart_id"]
 
 
 class SubjectGroup(AbstractLocation):
@@ -91,6 +95,7 @@ class SubjectGroup(AbstractLocation):
     class Meta:
         verbose_name = "Subject Group"
         verbose_name_plural = "Subject Groups"
+        ordering = ["title", "part", "subject_group_id"]
 
 
 class Section(AbstractLocation):
@@ -103,6 +108,7 @@ class Section(AbstractLocation):
     class Meta:
         verbose_name = "Section"
         verbose_name_plural = "Sections"
+        ordering = ["title", "part", "section_id"]
 
 
 # Supplemental content models
@@ -134,7 +140,7 @@ class SupplementalContent(AbstractSupplementalContent):
         help_text="Leave blank or enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
         validators=[RegexValidator(
             regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
-            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"!"
+            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"! "
                     "For example: 2021, 2021-01, or 2021-01-31.",
         )],
     )
