@@ -20,10 +20,6 @@ from .filters import (
 )
 
 
-class SupplementalContentInline(admin.TabularInline):
-    model = SupplementalContent.locations.through
-
-
 class BaseAdmin(admin.ModelAdmin):
     list_per_page = 500
 
@@ -32,7 +28,6 @@ class BaseAdmin(admin.ModelAdmin):
 class SectionAdmin(BaseAdmin):
     list_display = ("title", "part", "section_id", "parent")
     search_fields = ["title", "part", "section_id"]
-    inlines = [SupplementalContentInline]
 
 
 @admin.register(Subpart)
