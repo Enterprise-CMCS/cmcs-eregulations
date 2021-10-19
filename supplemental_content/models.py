@@ -6,7 +6,7 @@ from django.db import models
 
 
 class AbstractModel:
-    def __str__(self):
+    def _get_string_repr(self):
         for subclass in self.__class__.__subclasses__():
             attr = getattr(self, subclass.__name__.lower(), None)
             if attr:
@@ -23,10 +23,13 @@ class AbstractCategory(models.Model, AbstractModel):
     show_if_empty = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.title
+        return self._get_string_repr()
 
 
 class Category(AbstractCategory):
+    def __str__(self):
+        return f"Category '{self.title}'"
+
     class Meta:
         verbose_name = "Category"
         verbose_name_plural = "Categories"
@@ -35,6 +38,9 @@ class Category(AbstractCategory):
 class SubCategory(AbstractCategory):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
 
+    def __str__(self):
+        return f"Sub-category '{self.title}'"
+
     class Meta:
         verbose_name = "Sub-category"
         verbose_name_plural = "Sub-categories"
@@ -42,6 +48,9 @@ class SubCategory(AbstractCategory):
 
 class SubSubCategory(AbstractCategory):
     parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
+
+    def __str__(self):
+        return f"Sub-sub-category '{self.title}'"
 
     class Meta:
         verbose_name = "Sub-sub-category"
@@ -53,6 +62,9 @@ class SubSubCategory(AbstractCategory):
 class AbstractLocation(models.Model, AbstractModel):
     title = models.IntegerField()
     part = models.IntegerField()
+
+    def __str__(self):
+        return self._get_string_repr()
 
 
 class Subpart(AbstractLocation):
@@ -97,6 +109,9 @@ class AbstractSupplementalContent(models.Model, AbstractModel):
     approved = models.BooleanField(default=False)
     category = models.ForeignKey(AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content")
     locations = models.ManyToManyField(AbstractLocation, null=True, blank=True, related_name="supplemental_content")
+
+    def __str__(self):
+        return self._get_string_repr()
 
 
 class SupplementalContent(AbstractSupplementalContent):
