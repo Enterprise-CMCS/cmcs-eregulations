@@ -46,52 +46,57 @@
         }
     }
 
-    .table_head {
-        margin: 15px 0 25px;
+    .table-section {
+        .table_head {
+            margin: 15px 0 25px;
 
-        p {
-            margin: 0;
+            p {
+                margin: 0;
+            }
+
+            p:first-child {
+                font-size: 16px;
+                line-height: 24px;
+                font-weight: 700;
+                font-family: $secondary_site_font;
+                margin-bottom: 5px;
+            }
         }
 
-        p:first-child {
-            font-size: 16px;
-            line-height: 24px;
-            font-weight: 700;
-            font-family: $secondary_site_font;
-            margin-bottom: 5px;
-        }
-    }
+        .gpotbl_div {
+            table {
+                border-spacing: 0;
+                border-collapse: collapse;
+                border: 1px solid $table_border_color;
+                table-layout: auto;
+                width: 100%;
 
-    table {
-        border-spacing: 0;
-        border-collapse: collapse;
-        border: 1px solid $table_border_color;
-        table-layout: auto;
-        width: 100%;
+                th,
+                th ~ td {
+                    table-layout: fixed;
+                }
 
-        th, th ~ td {
-            table-layout: fixed;
-        }
+                th,
+                td {
+                    border: 1px solid $table_border_color;
+                    padding: 9px 12px;
+                    font-size: 14px;
+                    line-height: 20px;
+                    text-align: left;
+                    vertical-align: top;
+                }
 
-        th,
-        td {
-            border: 1px solid $table_border_color;
-            padding: 9px 12px;
-            font-size: 14px;
-            line-height: 20px;
-            text-align: left;
-            vertical-align: top;
-        }
+                th {
+                    background: $table_header_background_color;
+                }
 
-        th {
-            background: $table_header_background_color;
-        }
+                th[rowspan] {
+                }
 
-        th[rowspan] {
-        }
-
-        th[colspan] {
-            text-align: center;
+                th[colspan] {
+                    text-align: center;
+                }
+            }
         }
     }
 
