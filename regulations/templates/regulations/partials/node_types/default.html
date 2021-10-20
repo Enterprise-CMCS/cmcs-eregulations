@@ -1,9 +1,5 @@
 <section>
-    {% if node.node_type == "Source" %}
-      <b>{{node.header}}</b> {{node.content}}
-    {% else %}
-      {{node.content | safe}}
-    {% endif %}
+    {{node.content | safe}}
 </section>
 
 {% for node in node.children %}
