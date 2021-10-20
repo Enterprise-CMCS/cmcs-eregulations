@@ -54,6 +54,16 @@ export default [
         ],
     },
     {
+        input: 'components/TableComponent.vue',
+        output: {
+            format: 'esm',
+            file: 'regulations/js/TableComponent.js'
+        },
+        plugins: [
+            vue()
+        ],
+    },
+    {
         input: 'regulations/js/main.js',
         output: {
             file: 'regulations/js/main.build.js',

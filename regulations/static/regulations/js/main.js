@@ -3,6 +3,7 @@ import Collapsible from "./Collapsible.js";
 import CollapseButton from "./CollapseButton.js";
 import SupplementaryContent from "./SupplementaryContent.js";
 import CopyBtn from "./CopyBtn.js";
+import TableComponent from "./TableComponent.js";
 import Vue from "../../node_modules/vue/dist/vue.esm.browser.min.js";
 import { goToVersion } from "./go-to-version.js";
 
@@ -141,6 +142,7 @@ function main() {
             CollapseButton,
             SupplementaryContent,
             CopyBtn,
+            TableComponent
         },
     }).$mount("#vue-app");
 
