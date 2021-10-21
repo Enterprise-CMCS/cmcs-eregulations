@@ -80,6 +80,7 @@ $border_color: $light_gray;
 $secondary_border_color: $mid_blue;
 $hover_border_color: $light_blue;
 $table_border_color: $light_gray;
+$formula_left_border: $light_blue;
 
 // Text
 
@@ -94,6 +95,13 @@ $primary_indicator_text: $white;
 
 $secondary_indicator_background: $mid_gray_2;
 $secondary_indicator_text: $title_color;
+
+// Formulae
+
+.formula-border {
+    padding-left: 20px;
+    border-left: 2px solid $formula_left_border;
+}
 
 // Buttons
 

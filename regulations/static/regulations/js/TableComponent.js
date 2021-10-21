@@ -151,3 +151,4 @@ __vue_render__._withStripped = true;
   );
 
 export default __vue_component__;
+//# sourceMappingURL=TableComponent.js.map
