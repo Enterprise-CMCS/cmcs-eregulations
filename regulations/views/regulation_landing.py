@@ -28,6 +28,7 @@ class RegulationLandingView(TemplateView):
         part_label = toc['label_description']
         authority = current.document['authority']
         source = current.document['source']
+        editorial_note = current.document['editorial_note']
 
         c = {
             'toc': toc,
@@ -39,6 +40,7 @@ class RegulationLandingView(TemplateView):
             'last_updated': current.last_updated,
             'authority': authority,
             'source': source,
+            'editorial_note': editorial_note,
             'content': [
                 'regulations/partials/landing_%s.html' % reg_part,
                 'regulations/partials/landing_default.html',

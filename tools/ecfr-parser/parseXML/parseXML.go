@@ -34,6 +34,7 @@ type Part struct {
 	Header    string          `xml:"HEAD" json:"title"`
 	Authority Authority       `xml:"AUTH" json:"authority"`
 	Source    Source          `xml:"SOURCE" json:"source"`
+	EdNote    EdNote          `xml:"EDNOTE" json:"editorial_note"`
 	Children  PartChildren    `xml:",any" json:"children"`
 }
 
@@ -362,6 +363,12 @@ type Source struct {
 }
 
 type Authority struct {
+	Type    string `json:"node_type"`
+	Header  string `xml:"HED" json:"header"`
+	Content string `xml:"PSPACE" json:"content"`
+}
+
+type EdNote struct {
 	Type    string `json:"node_type"`
 	Header  string `xml:"HED" json:"header"`
 	Content string `xml:"PSPACE" json:"content"`
