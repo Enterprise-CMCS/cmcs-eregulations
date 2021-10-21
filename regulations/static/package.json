@@ -6,8 +6,8 @@
     "watch-css": "npx sass --watch -I node_modules regulations/css/scss/main.scss regulations/css/main.css",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "watch-js": "npx rollup -c --watch",
-    "js": "npx rollup -c"
+    "watch-js": "npx rollup -c --watch --sourcemap",
+    "js": "npx rollup -c --sourcemap"
   },
   "license": "CC",
   "private": true,
