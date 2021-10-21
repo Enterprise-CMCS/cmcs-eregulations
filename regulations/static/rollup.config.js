@@ -1,6 +1,8 @@
 import vue from "rollup-plugin-vue";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 
-const plugins = [vue({ needMap: false })];
+const plugins = [nodeResolve(), commonjs(), vue({ needMap: false })];
 
 export default [
     {
@@ -33,6 +35,14 @@ export default [
         output: {
             format: "esm",
             file: "regulations/js/SupplementaryContent.js",
+        },
+        plugins,
+    },
+    {
+        input: "components/tooltips/CopyBtn.vue",
+        output: {
+            format: "esm",
+            file: "regulations/js/CopyBtn.js",
         },
         plugins,
     },

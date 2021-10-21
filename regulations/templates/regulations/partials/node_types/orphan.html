@@ -2,6 +2,6 @@
 
 <article>
     {% with template="regulations/partials/node_types/{node_type}.html"|interpolate:node %}
-        {% render_nested template "regulations/partials/node_types/default.html" node=node %}
+        {% render_nested template "regulations/partials/node_types/default.html" node=node cfr_title=cfr_title citation=citation version=version %}
     {% endwith %}
 </article>

@@ -16,7 +16,7 @@
                         <b>Latest Version</b> as of {{ formattedLatestVersion }}
                     </p>
                 {% endif %}
-                {% include "regulations/partials/node_types/node.html" with node=tree %}
+                {% include "regulations/partials/node_types/node.html" with node=tree cfr_title=title citation=citation version=version %}
                 {% include "regulations/partials/navigation.html" %}
             </main>
 

@@ -19,6 +19,14 @@ aside.left-sidebar {
     z-index: 1;
     transition: flex-basis 0.25s ease-out;
 
+    &[data-state="expanded"] {
+        @include custom-max($tablet-max / 1px) {
+            + .reg-text .copy-tooltip {
+                z-index: 0;
+            }
+        }
+    }
+
     // Entire Sidebar Collapsed
     &[data-state="collapsed"] {
         width: 1em;
@@ -28,7 +36,11 @@ aside.left-sidebar {
             display: none;
         }
 
-        div, h2, h3, h4, li > a {
+        div,
+        h2,
+        h3,
+        h4,
+        li > a {
             display: none;
         }
 
