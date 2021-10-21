@@ -8,9 +8,9 @@
 </h1>
 <p class="last-updated">{{ toc.label_level }} last updated from <a href="https://ecfr.federalregister.gov/" class="external" target="_blank" rel="noopener noreferrer">eCFR</a> on {{ last_updated|date:"M d, Y" }}.</p>
 
-<section><b>{{ authority.header }}</b> {{ authority.content }}</section>
-<section><b>{{ source.header }}</b> {{ source.content | citation }}</section>
-<section><b>{{ editorial_note.header }}</b> {{ editorial_note.content | citation }}</section>
+<section class="part-meta"><b>{{ authority.header }}</b> {{ authority.content }}</section>
+<section class="part-meta"><b>{{ source.header }}</b> {{ source.content | citation }}</section>
+<section class="part-meta"><b>{{ editorial_note.header }}</b> {{ editorial_note.content | citation }}</section>
 
 <h2>Table of Contents</h2>
 

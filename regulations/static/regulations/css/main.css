@@ -17445,6 +17445,10 @@ select:focus-visible {
   }
 }
 
+section.part-meta {
+  font-size: 14px;
+}
+
 ul.table-of-contents {
   margin-left: 0;
   padding-left: 0;
