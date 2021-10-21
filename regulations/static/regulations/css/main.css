@@ -17001,6 +17001,9 @@ select:focus-visible {
   font-style: italic;
   font-weight: 600;
 }
+.reg-part-homepage section.part-meta {
+  font-size: 14px;
+}
 
 .reg-part-toc {
   max-width: 53rem;
@@ -17443,10 +17446,6 @@ select:focus-visible {
   .content.go-to-version :target {
     scroll-margin-top: 193px;
   }
-}
-
-section.part-meta {
-  font-size: 14px;
 }
 
 ul.table-of-contents {
