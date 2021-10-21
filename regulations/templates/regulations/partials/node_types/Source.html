@@ -1,3 +1,4 @@
+{% load citation %}
 <section>
-    <b>{{node.header}}</b> {{node.content}}
+    <b>{{node.header}}</b> {{node.content | citation}}
 </section>
