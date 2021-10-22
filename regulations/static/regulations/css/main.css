@@ -16660,6 +16660,11 @@ select:focus-visible {
 .reg-text .table-section .gpotbl_div table th[colspan] {
   text-align: center;
 }
+.reg-text .footnote-section {
+  font-size: 12px;
+  line-height: 18px;
+  color: #5b616b;
+}
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,

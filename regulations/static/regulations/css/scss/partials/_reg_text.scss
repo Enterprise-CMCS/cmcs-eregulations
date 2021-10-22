@@ -90,14 +90,17 @@
                     background: $table_header_background_color;
                 }
 
-                th[rowspan] {
-                }
-
                 th[colspan] {
                     text-align: center;
                 }
             }
         }
+    }
+
+    .footnote-section {
+        font-size: $font_size_xs;
+        line-height: 18px;
+        color: $secondary_text_color;
     }
 
     fp-1,
