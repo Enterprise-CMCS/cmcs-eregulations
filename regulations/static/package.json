@@ -6,8 +6,8 @@
     "watch-css": "npx sass --watch -I node_modules regulations/css/scss/main.scss regulations/css/main.css",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "watch-js": "npx rollup -c --watch",
-    "js": "npx rollup -c"
+    "watch-js": "npx rollup -c --watch --sourcemap",
+    "js": "npx rollup -c --sourcemap"
   },
   "license": "CC",
   "private": true,
@@ -17,6 +17,7 @@
   "dependencies": {
     "@cmsgov/design-system": "^2.5.0",
     "@fortawesome/fontawesome-free": "^5.15.3",
+    "lodash": "^4.17.21",
     "react": "16.x",
     "react-dom": "16.x",
     "rollup": "^2.48.0",
@@ -29,6 +30,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
+    "@rollup/plugin-commonjs": "^21.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
     "@storybook/addon-actions": "^6.2.9",
     "@storybook/addon-essentials": "^6.2.9",
     "@storybook/addon-links": "^6.2.9",
