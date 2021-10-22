@@ -782,34 +782,6 @@ var __vue_render__$1 = function() {
   return _c("div", { staticClass: "supplementary-content-category" }, [
     _c(
       "div",
-      { staticClass: "category-toggle-container" },
-      [
-        _c("collapse-button", {
-          staticClass: "category-toggle",
-          attrs: { name: _vm.title, state: "collapsed" },
-          scopedSlots: _vm._u([
-            {
-              key: "expanded",
-              fn: function() {
-                return [_c("i", { staticClass: "fa fa-chevron-up" })]
-              },
-              proxy: true
-            },
-            {
-              key: "collapsed",
-              fn: function() {
-                return [_c("i", { staticClass: "fa fa-chevron-down" })]
-              },
-              proxy: true
-            }
-          ])
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
       { staticClass: "category" },
       [
         _c("collapse-button", {
@@ -820,14 +792,20 @@ var __vue_render__$1 = function() {
             {
               key: "expanded",
               fn: function() {
-                return [_vm._v(_vm._s(_vm.title))]
+                return [
+                  _vm._v(_vm._s(_vm.title)),
+                  _c("i", { staticClass: "fa fa-chevron-up" })
+                ]
               },
               proxy: true
             },
             {
               key: "collapsed",
               fn: function() {
-                return [_vm._v(_vm._s(_vm.title))]
+                return [
+                  _vm._v(_vm._s(_vm.title)),
+                  _c("i", { staticClass: "fa fa-chevron-down" })
+                ]
               },
               proxy: true
             }
@@ -1007,4 +985,3 @@ __vue_render__._withStripped = true;
   );
 
 export default __vue_component__;
-//# sourceMappingURL=SupplementaryContent.js.map

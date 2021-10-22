@@ -15827,6 +15827,7 @@ aside.right-sidebar .resource-info {
 .supplementary-content-category {
   display: table;
   margin-bottom: 1em;
+  width: 100%;
 }
 .supplementary-content-category .category {
   display: table-cell;
@@ -15856,12 +15857,16 @@ button.collapsible-title {
   display: block;
   border-radius: 3px;
   text-align: left;
+  width: 100%;
 }
 button.collapsible-title.subcategory {
   font-size: 16px;
 }
 button.collapsible-title.visible {
   color: #212121;
+}
+button.collapsible-title .fa {
+  float: right;
 }
 
 .show-more-button {

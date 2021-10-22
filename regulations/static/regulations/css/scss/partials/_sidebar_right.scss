@@ -256,6 +256,7 @@ aside.right-sidebar {
 .supplementary-content-category {
     display: table;
     margin-bottom: 1em;
+    width:100%;
 
     .category {
         display: table-cell;
@@ -289,6 +290,7 @@ button.collapsible-title {
     display: block;
     border-radius: $border-radius;
     text-align: left;
+    width:100%;
 
     &.subcategory {
         font-size: $font-size-md;
@@ -296,6 +298,10 @@ button.collapsible-title {
 
     &.visible {
         color: $dark-gray;
+    }
+
+    .fa {
+        float:right;
     }
 }
 
