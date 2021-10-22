@@ -35,6 +35,7 @@ class RegulationSectionAdmin(admin.ModelAdmin, ExportCsvMixin):
         urls = super().get_urls()
         my_urls = [
             path('export_all_csv/', self.export_all_as_csv),
+            path('export_all_json/', self.export_all_as_json),
 
         ]
         return my_urls + urls
@@ -77,6 +78,7 @@ class SupplementaryContentAdmin(admin.ModelAdmin, ExportCsvMixin):
         urls = super().get_urls()
         my_urls = [
             path('export_all_csv/', self.export_all_as_csv),
+            path('export_all_json/', self.export_all_as_json),
 
         ]
         return my_urls + urls
@@ -103,6 +105,7 @@ class CategoryAdmin(admin.ModelAdmin, ExportCsvMixin):
         urls = super().get_urls()
         my_urls = [
             path('export_all_csv/', self.export_all_as_csv),
+            path('export_all_json/', self.export_all_as_json),
 
         ]
         return my_urls + urls
