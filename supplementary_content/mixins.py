@@ -1,6 +1,6 @@
 import csv
 from django.core import serializers
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.db.models.constants import LOOKUP_SEP
 
 
