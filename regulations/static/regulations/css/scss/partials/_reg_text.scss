@@ -103,6 +103,7 @@
         color: $secondary_text_color;
     }
 
+    fp,
     fp-1,
     fp1-2,
     fp-2,
@@ -114,11 +115,12 @@
         color: $secondary_text_color;
         display: block;
 
-        &:not(:last-child) {
+        &:not(:last-child),
+        &:only-child {
             padding-bottom: 1em;
         }
 
-        &:last-child {
+        &:last-child:not(:only-child) {
             margin-bottom: 1em;
         }
 
