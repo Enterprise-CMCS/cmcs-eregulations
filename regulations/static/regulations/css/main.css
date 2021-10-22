@@ -15943,6 +15943,9 @@ select:focus-visible {
 .reg-text .reference:focus {
   opacity: 1;
 }
+.reg-text section.part-meta {
+  font-size: 14px;
+}
 .reg-text h1 > .reference,
 .reg-text h2 > .reference {
   margin-left: -1.2em;

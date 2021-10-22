@@ -39,6 +39,10 @@
         }
     }
 
+    section.part-meta {
+        font-size: $font-size-sm;
+    }
+
     h1 > .reference,
     h2 > .reference {
         margin-left: -1.2em;
