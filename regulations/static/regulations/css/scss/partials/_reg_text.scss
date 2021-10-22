@@ -97,6 +97,35 @@
         }
     }
 
+    .appendix-section {
+        @extend .formula-special-border;
+        margin-left: 10px;
+        color: $secondary_text_color;
+
+        h2.section-title {
+            padding: 0px;
+            color: $secondary_text_color;
+            font-size: $font-size-md;
+            line-height: 1.4;
+
+            @include screen-xl {
+                font-size: $font-size-lg;
+                line-height: 1.5;
+            }
+        }
+
+        .paragraphs {
+            p {
+                padding: 0px;
+
+                e {
+                    font-variant: normal;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
     .footnote-section {
         font-size: $font_size_xs;
         line-height: 18px;
@@ -111,7 +140,7 @@
     fp-4,
     fp-5,
     fp-6 {
-        @extend .formula-border;
+        @extend .formula-special-border;
         color: $secondary_text_color;
         display: block;
 
@@ -194,19 +223,19 @@ article {
                 }
 
                 & + img {
-                    @extend .formula-border;
+                    @extend .formula-special-border;
                     margin-left: $left-indent;
                     & + img {
-                        @extend .formula-border;
+                        @extend .formula-special-border;
                         margin-left: $left-indent;
                         & + img {
-                            @extend .formula-border;
+                            @extend .formula-special-border;
                             margin-left: $left-indent;
                             & + img {
-                                @extend .formula-border;
+                                @extend .formula-special-border;
                                 margin-left: $left-indent;
                                 & + img {
-                                    @extend .formula-border;
+                                    @extend .formula-special-border;
                                     margin-left: $left-indent;
                                 }
                             }

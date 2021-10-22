@@ -13485,7 +13485,7 @@ readers do not read off random characters that represent icons */
   font-weight: 400;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -13542,7 +13542,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -13798,7 +13798,7 @@ footer .footer-left {
   display: none !important;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -13855,7 +13855,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -14011,7 +14011,7 @@ e[t="05"] {
   text-align: center;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -14068,7 +14068,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -14560,7 +14560,7 @@ select:focus-visible {
   font-size: 12px;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -14617,7 +14617,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -14891,7 +14891,7 @@ select:focus-visible {
   color: #046791;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -14948,7 +14948,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -15099,7 +15099,7 @@ select:focus-visible {
   fill: #a3e8ff;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -15156,7 +15156,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -15266,7 +15266,7 @@ select:focus-visible {
   color: #17415f;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -15323,7 +15323,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -15604,7 +15604,7 @@ header .search-borderless input {
   }
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -15661,7 +15661,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -16000,7 +16000,7 @@ aside.left-sidebar li.active ul a.menu-section:focus {
   font-size: 18px;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -16057,7 +16057,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -16441,7 +16441,7 @@ button.collapsible-title.visible {
   margin-top: 16px;
 }
 
-.formula-border, article p.depth-10 + img + img + img + img + img,
+.formula-special-border, article p.depth-10 + img + img + img + img + img,
 article section.depth-10 + img + img + img + img + img, article p.depth-10 + img + img + img + img,
 article section.depth-10 + img + img + img + img, article p.depth-10 + img + img + img,
 article section.depth-10 + img + img + img, article p.depth-10 + img + img,
@@ -16498,7 +16498,7 @@ article section.depth-1 + img, .reg-text fp,
 .reg-text fp-3,
 .reg-text fp-4,
 .reg-text fp-5,
-.reg-text fp-6 {
+.reg-text fp-6, .reg-text .appendix-section {
   padding-left: 20px;
   border-left: 2px solid #a3e8ff;
 }
@@ -16669,6 +16669,29 @@ select:focus-visible {
 }
 .reg-text .table-section .gpotbl_div table th[colspan] {
   text-align: center;
+}
+.reg-text .appendix-section {
+  margin-left: 10px;
+  color: #5b616b;
+}
+.reg-text .appendix-section h2.section-title {
+  padding: 0px;
+  color: #5b616b;
+  font-size: 16px;
+  line-height: 1.4;
+}
+@media (min-width: 1280px) {
+  .reg-text .appendix-section h2.section-title {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+}
+.reg-text .appendix-section .paragraphs p {
+  padding: 0px;
+}
+.reg-text .appendix-section .paragraphs p e {
+  font-variant: normal;
+  font-weight: 700;
 }
 .reg-text .footnote-section {
   font-size: 12px;
@@ -17252,7 +17275,7 @@ article .section-text {
   text-transform: capitalize;
 }
 
-.formula-border, .reg-text fp,
+.formula-special-border, .reg-text .appendix-section, .reg-text fp,
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,
@@ -17443,7 +17466,7 @@ select:focus-visible {
   }
 }
 
-.formula-border, .reg-text fp,
+.formula-special-border, .reg-text .appendix-section, .reg-text fp,
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,
@@ -17709,7 +17732,7 @@ footer .footer-right i:hover {
   }
 }
 
-.formula-border, .reg-text fp,
+.formula-special-border, .reg-text .appendix-section, .reg-text fp,
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,
@@ -17930,7 +17953,7 @@ main.error-page img.error-image {
   font-size: 1em;
 }
 
-.formula-border, .reg-text fp,
+.formula-special-border, .reg-text .appendix-section, .reg-text fp,
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,
@@ -18118,7 +18141,7 @@ ul.table-of-contents .toc-section-name {
   margin-left: 16px;
 }
 
-.formula-border, .reg-text fp,
+.formula-special-border, .reg-text .appendix-section, .reg-text fp,
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,
@@ -18298,7 +18321,7 @@ main.about :target::before {
   height: auto;
 }
 
-.formula-border, .reg-text fp,
+.formula-special-border, .reg-text .appendix-section, .reg-text fp,
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,
@@ -18502,7 +18525,7 @@ select:focus-visible {
   margin: 0 auto;
 }
 
-.formula-border, .reg-text fp,
+.formula-special-border, .reg-text .appendix-section, .reg-text fp,
 .reg-text fp-1,
 .reg-text fp1-2,
 .reg-text fp-2,

@@ -3,7 +3,7 @@
 {% endcomment %}
 {% load string_formatters %}
 
-<section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section">
+<section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="appendix-section">
     <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
         {% appendix_formatter cfr_title node.label as formatted_citation %}
         {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="icon" formatted_citation=formatted_citation %}
