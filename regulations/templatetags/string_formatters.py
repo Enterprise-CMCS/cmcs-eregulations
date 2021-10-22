@@ -47,6 +47,7 @@ def paragraph_formatter(title, node_label):
 
     return strip_tags(return_string)
 
+
 @register.simple_tag
 @stringfilter
 def appendix_formatter(title, node_label):
