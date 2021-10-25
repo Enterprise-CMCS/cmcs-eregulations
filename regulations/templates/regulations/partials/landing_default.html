@@ -1,4 +1,5 @@
 {% load render_nested %}
+{% load citation %}
 <h1>
     {% if toc.label_level %}
         <span>{{ toc.label_level }} - </span>
@@ -6,6 +7,10 @@
     {{ toc.label_description }}
 </h1>
 <p class="last-updated">{{ toc.label_level }} last updated from <a href="https://ecfr.federalregister.gov/" class="external" target="_blank" rel="noopener noreferrer">eCFR</a> on {{ last_updated|date:"M d, Y" }}.</p>
+
+<section class="part-meta"><b>{{ authority.header }}</b> {{ authority.content }}</section>
+<section class="part-meta"><b>{{ source.header }}</b> {{ source.content | citation }}</section>
+<section class="part-meta"><b>{{ editorial_note.header }}</b> {{ editorial_note.content | citation }}</section>
 
 <h2>Table of Contents</h2>
 
