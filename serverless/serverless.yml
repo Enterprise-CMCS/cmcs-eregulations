@@ -49,10 +49,10 @@ functions:
       - http: ANY {proxy+}
   reg_core_migrate:
     handler: migrate.handler
-    timeout: 15
+    timeout: 300
   create_su:
     handler: createsu.handler
-    timeout: 15
+    timeout: 300
   populate_content:
     environment:
       SUPPLEMENTAL_CONTENT_PATH: /var/task/guidance
