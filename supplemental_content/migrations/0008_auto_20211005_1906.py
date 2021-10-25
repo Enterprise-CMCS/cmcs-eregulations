@@ -80,20 +80,23 @@ def migrate_supplemental_content(apps, schema_editor):
 
     for content in OldSupplementaryContent.objects.all():
         # acquire category from old ID
+        new_category = None
         try:
-            new_category = AbstractCategory.objects.filter(old_id=content.category.id)[0]
+            if content.category:
+                new_category = AbstractCategory.objects.filter(old_id=content.category.id)[0]
         except IndexError:
-            new_category = None
+            pass
         
         # acquire list of sections from old ID's
         new_sections = []
-        for section in content.sections.all():
-            try:
-                new_sections.append(
-                    Section.objects.filter(old_id=section.id)[0]
-                )
-            except IndexError:
-                pass
+        if content.sections:
+            for section in content.sections.all():
+                try:
+                    new_sections.append(
+                        Section.objects.filter(old_id=section.id)[0]
+                    )
+                except IndexError:
+                    pass
 
         # build new supplemental content object
         new_content = SupplementalContent.objects.create(
