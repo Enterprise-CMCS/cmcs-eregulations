@@ -24,4 +24,3 @@ def handler(event, context):
             call_command("migrate", app)
         except CommandError:
             pass
-
