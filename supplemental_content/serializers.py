@@ -77,7 +77,7 @@ class SectionSerializer(serializers.Serializer):
 
 
 class AbstractCategorySerializer(PolymorphicSerializer):
-    title = serializers.CharField()
+    name = serializers.CharField()
     description = serializers.CharField()
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
@@ -153,7 +153,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
         node = stack.pop()
         if node["id"] not in tree:
             tree[node["id"]] = {
-                "title": node["title"],
+                "name": node["name"],
                 "description": node["description"],
                 "order": node["order"],
                 "show_if_empty": node["show_if_empty"],
@@ -170,13 +170,13 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
         return t
 
     def _sort(self, tree):
-        tree = sorted(tree, key=lambda category: (category["order"], category["title"]))
+        tree = sorted(tree, key=lambda category: (category["order"], category["name"]))
         for category in tree:
             category["supplemental_content"] = sorted(
                 category["supplemental_content"],
                 key=lambda content: (
                     reverse_sort(content["date"] or ""),
-                    content["title"] or "",
+                    content["name"] or "",
                 ),
             )
             category["sub_categories"] = self._sort(category["sub_categories"])
@@ -203,7 +203,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
 class SupplementalContentSerializer(serializers.Serializer):
     url = serializers.URLField()
     description = serializers.CharField()
-    title = serializers.CharField()
+    name = serializers.CharField()
     date = serializers.CharField()
 
     class Meta:

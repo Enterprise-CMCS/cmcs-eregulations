@@ -46,14 +46,14 @@ def migrate_categories(apps, schema_editor):
     for category in list(new_categories.values()):
         parent = Category.objects.create(
             old_id=category["id"],
-            title=category["title"],
+            name=category["title"],
             description=category["description"],
             order=category["order"],
         )
         for child in category["children"]:
             SubCategory.objects.create(
                 old_id=child["id"],
-                title=child["title"],
+                name=child["title"],
                 description=child["description"],
                 order=child["order"],
                 parent=parent,
@@ -97,7 +97,7 @@ def migrate_supplemental_content(apps, schema_editor):
 
         # build new supplemental content object
         new_content = SupplementalContent.objects.create(
-            title=content.title,
+            name=content.title,
             description=content.description,
             url=content.url,
             date=content.date,
@@ -133,7 +133,7 @@ class Migration(migrations.Migration):
             name='AbstractCategory',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=512, unique=True)),
+                ('name', models.CharField(max_length=512, unique=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('order', models.IntegerField(blank=True, default=0)),
                 ('show_if_empty', models.BooleanField(default=False)),
@@ -239,7 +239,7 @@ class Migration(migrations.Migration):
             name='SupplementalContent',
             fields=[
                 ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractsupplementalcontent')),
-                ('title', models.CharField(blank=True, max_length=512, null=True)),
+                ('name', models.CharField(blank=True, max_length=512, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, max_length=512, null=True)),
                 ('date', models.CharField(blank=True, help_text='Leave blank or enter one of: "YYYY", "YYYY-MM", or "YYYY-MM-DD".', max_length=10, null=True, validators=[django.core.validators.RegexValidator(message='Date field must be blank or of format "YYYY", "YYYY-MM", or "YYYY-MM-DD"! For example: 2021, 2021-01, or 2021-01-31.', regex='^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$')])),

@@ -19,7 +19,7 @@ class AbstractModel:
 
 
 class AbstractCategory(models.Model, AbstractModel):
-    title = models.CharField(max_length=512, unique=True)
+    name = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
@@ -30,7 +30,7 @@ class AbstractCategory(models.Model, AbstractModel):
 
 class Category(AbstractCategory):
     def __str__(self):
-        return f"Category '{self.title}'"
+        return f"Category '{self.name}'"
 
     class Meta:
         verbose_name = "Category"
@@ -41,7 +41,7 @@ class SubCategory(AbstractCategory):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
 
     def __str__(self):
-        return f"Sub-category '{self.title}'"
+        return f"Sub-category '{self.name}'"
 
     class Meta:
         verbose_name = "Sub-category"
@@ -52,7 +52,7 @@ class SubSubCategory(AbstractCategory):
     parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
 
     def __str__(self):
-        return f"Sub-sub-category '{self.title}'"
+        return f"Sub-sub-category '{self.name}'"
 
     class Meta:
         verbose_name = "Sub-sub-category"
@@ -129,7 +129,7 @@ class AbstractSupplementalContent(models.Model, AbstractModel):
 
 
 class SupplementalContent(AbstractSupplementalContent):
-    title = models.CharField(max_length=512, null=True, blank=True)
+    name = models.CharField(max_length=512, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     url = models.URLField(max_length=512, null=True, blank=True)
 
@@ -157,7 +157,7 @@ class SupplementalContent(AbstractSupplementalContent):
                     raise ValidationError(f'{day} is not a valid day for the month of {month}!')
 
     def __str__(self):
-        return f'{self.date} {self.title} {self.truncated_description}...'
+        return f'{self.date} {self.name} {self.truncated_description}...'
 
     @property
     def truncated_description(self):

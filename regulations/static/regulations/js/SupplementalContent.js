@@ -14,7 +14,7 @@ var script$6 = {
   name: 'supplemental-content-object',
 
   props: {
-    title: {
+    name: {
       type: String,
       required: true,
     },
@@ -152,14 +152,14 @@ var __vue_render__$6 = function() {
               {
                 staticClass: "supplemental-content-date",
                 class: {
-                  "supplemental-content-mid-bar": !_vm.isBlank(_vm.title)
+                  "supplemental-content-mid-bar": !_vm.isBlank(_vm.name)
                 }
               },
               [_vm._v(_vm._s(_vm._f("formatDate")(_vm.date)))]
             )
           : _vm._e(),
         _vm._v(" "),
-        !_vm.isBlank(_vm.title)
+        !_vm.isBlank(_vm.name)
           ? _c(
               "span",
               {
@@ -170,7 +170,7 @@ var __vue_render__$6 = function() {
                   )
                 }
               },
-              [_vm._v(_vm._s(_vm.title))]
+              [_vm._v(_vm._s(_vm.name))]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -375,7 +375,7 @@ var __vue_render__$4 = function() {
         return _c("supplemental-content-object", {
           key: index,
           attrs: {
-            title: content.title,
+            name: content.name,
             description: content.description,
             date: content.date,
             url: content.url
@@ -746,7 +746,7 @@ var script$1 = {
             required: false,
             default: false,
         },
-        title: {
+        name: {
             type: String,
             required: true,
         },
@@ -786,7 +786,7 @@ var __vue_render__$1 = function() {
       [
         _c("collapse-button", {
           staticClass: "category-toggle",
-          attrs: { name: _vm.title, state: "collapsed" },
+          attrs: { name: _vm.name, state: "collapsed" },
           scopedSlots: _vm._u([
             {
               key: "expanded",
@@ -815,19 +815,19 @@ var __vue_render__$1 = function() {
         _c("collapse-button", {
           staticClass: "category-title",
           class: { subcategory: _vm.subcategory },
-          attrs: { name: _vm.title, state: "collapsed" },
+          attrs: { name: _vm.name, state: "collapsed" },
           scopedSlots: _vm._u([
             {
               key: "expanded",
               fn: function() {
-                return [_vm._v(_vm._s(_vm.title))]
+                return [_vm._v(_vm._s(_vm.name))]
               },
               proxy: true
             },
             {
               key: "collapsed",
               fn: function() {
-                return [_vm._v(_vm._s(_vm.title))]
+                return [_vm._v(_vm._s(_vm.name))]
               },
               proxy: true
             }
@@ -844,7 +844,7 @@ var __vue_render__$1 = function() {
           "collapsible",
           {
             staticClass: "category-content",
-            attrs: { name: _vm.title, state: "collapsed" }
+            attrs: { name: _vm.name, state: "collapsed" }
           },
           [
             _vm._l(_vm.sub_categories, function(category, index) {
@@ -852,7 +852,7 @@ var __vue_render__$1 = function() {
                 key: index,
                 attrs: {
                   subcategory: true,
-                  title: category.title,
+                  name: category.name,
                   description: category.description,
                   supplemental_content: category.supplemental_content,
                   sub_categories: category.sub_categories
@@ -964,7 +964,7 @@ var __vue_render__ = function() {
       return _c("supplemental-content-category", {
         key: index,
         attrs: {
-          title: category.title,
+          name: category.name,
           description: category.description,
           supplemental_content: category.supplemental_content,
           sub_categories: category.sub_categories

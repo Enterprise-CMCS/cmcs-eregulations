@@ -1,7 +1,7 @@
 <template>
     <div class="supplemental-content-list">
         <supplemental-content-object v-for="(content, index) in limitedContent" :key="index"
-            :title="content.title"
+            :name="content.name"
             :description="content.description"
             :date="content.date"
             :url="content.url">

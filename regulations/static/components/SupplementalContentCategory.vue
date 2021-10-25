@@ -1,21 +1,21 @@
 <template>
     <div class="supplemental-content-category">
         <div class="category-toggle-container">
-            <collapse-button :name="title" state="collapsed" class="category-toggle">
+            <collapse-button :name="name" state="collapsed" class="category-toggle">
                 <template v-slot:expanded><i class="fa fa-chevron-up"></i></template>
                 <template v-slot:collapsed><i class="fa fa-chevron-down"></i></template>
             </collapse-button>
         </div>
         <div class="category">
-            <collapse-button v-bind:class="{ subcategory: subcategory }" :name="title" state="collapsed" class="category-title">
-                <template v-slot:expanded>{{ title }}</template>
-                <template v-slot:collapsed>{{ title }}</template>
+            <collapse-button v-bind:class="{ subcategory: subcategory }" :name="name" state="collapsed" class="category-title">
+                <template v-slot:expanded>{{ name }}</template>
+                <template v-slot:collapsed>{{ name }}</template>
             </collapse-button>
             <span v-if="showDescription" class="category-description">{{ description }}</span>
-            <collapsible :name="title" state="collapsed" class="category-content">
+            <collapsible :name="name" state="collapsed" class="category-content">
                 <supplemental-content-category v-for="(category, index) in sub_categories" :key="index"
                     :subcategory="true"
-                    :title="category.title"
+                    :name="category.name"
                     :description="category.description"
                     :supplemental_content="category.supplemental_content"
                     :sub_categories="category.sub_categories">
@@ -46,7 +46,7 @@ export default {
             required: false,
             default: false,
         },
-        title: {
+        name: {
             type: String,
             required: true,
         },

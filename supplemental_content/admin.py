@@ -67,31 +67,31 @@ class SubjectGroupAdmin(BaseAdmin):
 @admin.register(Category)
 class CategoryAdmin(BaseAdmin):
     admin_priority = 10
-    list_display = ("title", "description", "order", "show_if_empty")
-    search_fields = ["title", "description"]
-    ordering = ("title", "description", "order")
+    list_display = ("name", "description", "order", "show_if_empty")
+    search_fields = ["name", "description"]
+    ordering = ("name", "description", "order")
 
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(CategoryAdmin):
     admin_priority = 20
-    list_display = ("title", "description", "order", "show_if_empty", "parent")
-    ordering = ("title", "description", "order", "parent")
+    list_display = ("name", "description", "order", "show_if_empty", "parent")
+    ordering = ("name", "description", "order", "parent")
 
 
 @admin.register(SubSubCategory)
 class SubSubCategoryAdmin(CategoryAdmin):
     admin_priority = 30
-    list_display = ("title", "description", "order", "show_if_empty", "parent")
-    ordering = ("title", "description", "order", "parent")
+    list_display = ("name", "description", "order", "show_if_empty", "parent")
+    ordering = ("name", "description", "order", "parent")
 
 
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(BaseAdmin):
     admin_priority = 0
-    list_display = ("date", "title", "description", "category", "created_at", "updated_at")
-    search_fields = ["date", "title", "description"]
-    ordering = ("-date", "title", "category", "-created_at", "-updated_at")
+    list_display = ("date", "name", "description", "category", "created_at", "updated_at")
+    search_fields = ["date", "name", "description"]
+    ordering = ("-date", "name", "category", "-created_at", "-updated_at")
     filter_horizontal = ("locations",)
     list_filter = [
         "approved",
