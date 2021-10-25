@@ -1,7 +1,7 @@
 import RelatedRules from '../components/RelatedRules.vue';
 
 export default {
-  title: 'SupplementaryContent/Related Rules',
+  title: 'SupplementalContent/Related Rules',
   component: RelatedRules,
 };
 
