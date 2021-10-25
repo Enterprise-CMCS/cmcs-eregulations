@@ -1,0 +1,234 @@
+//-------------------------------
+// Copy Link or Citation Tooltip
+//-------------------------------
+
+@import "../application_settings";
+
+.text-btn {
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+.action-btn {
+    font-family: $primary_site_font;
+    font-size: $font-size-sm;
+    line-height: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 12px 12px;
+    cursor: pointer;
+    text-transform: capitalize;
+    border: 1px;
+    border-style: solid;
+}
+
+.default-btn {
+    display: flex;
+    color: white;
+    background: $mid-blue;
+    border-color: rgba(0, 0, 0, 0);
+
+    &:hover,
+    &:focus {
+        background: $mid-dark-blue;
+    }
+}
+
+.selected-btn {
+    display: flex;
+    background: none;
+    color: $copy_button_success;
+    border-color: $copy_button_success;
+
+    > svg {
+        padding-right: 5px;
+    }
+
+    path {
+        stroke: $copy_button_success;
+        fill: $copy_button_success;
+    }
+}
+
+.loading-icon {
+    padding-right: 5px;
+}
+
+.component-container {
+    position: relative;
+}
+
+.copy-btn {
+    color: $mid_blue;
+    cursor: pointer;
+    line-height: 1.2;
+
+    &:focus {
+        color: $dark_blue;
+    }
+
+    &:hover {
+        color: $dark_blue;
+    }
+}
+
+.copy-tooltip {
+    cursor: default;
+    z-index: 3;
+    position: absolute;
+    background: $lightest_blue;
+    box-shadow: 0px 0px 20px 0px #00000040;
+
+    p {
+        color: $dark_gray;
+        padding: 0;
+    }
+
+    &.hovered {
+        padding: 0 15px;
+
+        .hover-msg {
+            font-family: $primary_site_font;
+            font-size: $font_size_xs;
+            font-weight: 600;
+            line-height: 16px;
+            white-space: nowrap;
+        }
+    }
+
+    &.clicked {
+        width: 265px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .close-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 30px;
+            width: 30px;
+
+            path {
+                stroke: $mid_blue;
+                fill: $mid_blue;
+            }
+
+            &:hover {
+                path {
+                    stroke: $dark_blue;
+                    fill: $dark_blue;
+                }
+            }
+        }
+
+        .citation-title {
+            font-family: $secondary_site_font;
+            font-size: $font_size_md;
+            line-height: 24px;
+            font-weight: 700;
+            margin: 0 0 18px 0;
+        }
+    }
+}
+
+.tooltip-caret {
+    &::after {
+        border-right: solid 5px transparent;
+        border-left: solid 5px transparent;
+        border-top: solid 5px $lightest_blue;
+        transform: translateX(-50%);
+        position: absolute;
+        z-index: -1;
+        content: "";
+        top: 100%;
+        left: 50%;
+        height: 0;
+        width: 0;
+    }
+}
+
+.tooltip-caret-left {
+    @extend .tooltip-caret;
+    &::after {
+        left: 20%;
+    }
+}
+
+.reg-text {
+    .copy-btn-container {
+        height: 1.2em;
+        margin-left: -1.5em;
+        position: absolute;
+
+        .copy-btn {
+            display: flex;
+            align-items: end;
+            opacity: 0;
+
+            &:focus {
+                opacity: 1;
+            }
+        }
+    }
+
+    h1 > .copy-btn-container,
+    h2 > .copy-btn-container {
+        margin-left: -1.2em;
+
+        @include screen-xxl {
+            margin-left: -1.4em;
+        }
+    }
+
+    :hover {
+        > .copy-btn-container .copy-btn {
+            opacity: 1;
+        }
+    }
+}
+
+aside.right-sidebar {
+    .copy-btn-container {
+        position: relative;
+
+        .copy-btn-labeled {
+            display: flex;
+            align-items: center;
+            height: 30px;
+
+            i {
+                min-width: 16px;
+            }
+
+            & span {
+                padding: 0 5px;
+                text-transform: uppercase;
+                font-weight: 700;
+                font-size: $font-size-xxs;
+            }
+        }
+
+        + hr {
+            height: 1px;
+            background: $light_gray;
+            border: none;
+            margin: 15px 0;
+        }
+    }
+}
+
+.action-btns {
+    display: flex;
+    margin-bottom: 8px;
+
+    .action-btn {
+        &:first-child {
+            margin-right: 15px;
+        }
+    }
+}

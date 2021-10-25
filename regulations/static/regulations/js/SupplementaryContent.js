@@ -437,6 +437,7 @@ __vue_render__$4._withStripped = true;
 //
 //
 //
+//
 
 var script$3 = {
     name: "collapse-button",
@@ -493,6 +494,7 @@ var __vue_render__$3 = function() {
   return _c(
     "button",
     {
+      staticClass: "collapsible-title",
       class: { visible: _vm.visible },
       attrs: {
         "data-test": _vm.name,
@@ -1005,3 +1007,4 @@ __vue_render__._withStripped = true;
   );
 
 export default __vue_component__;
+//# sourceMappingURL=SupplementaryContent.js.map

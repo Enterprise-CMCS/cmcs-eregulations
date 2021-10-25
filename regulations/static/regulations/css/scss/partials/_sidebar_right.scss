@@ -10,13 +10,15 @@ aside.right-sidebar {
     position: sticky;
     height: calc(100vh - #{$header_height_mobile} - #{$spacer-5});
     overflow-y: scroll;
+    overflow-x: auto;
 
     @include screen-lg {
         height: calc(100vh - #{$header_height} - #{$spacer-5});
     }
 
     h2 {
-        font-size: $font-size-xl;
+        font-size: $font-size-lg;
+        font-family: $primary_site_font;
 
         @include screen-xl {
             font-size: $base-font-size * 1.4;
@@ -36,6 +38,7 @@ aside.right-sidebar {
         padding: $spacer-2 $spacer-3;
         border-radius: $border-radius;
         margin: 0 auto $spacer-2 auto;
+        width: 100%;
 
         svg {
             display: inline-block;
@@ -173,12 +176,13 @@ aside.right-sidebar {
         @include external-link-hover;
     }
 }
-
+.related-rule-list {
+    padding-left: $spacer-2;
+}
 .rules-with-preamble {
     max-height: 1000em;
 
     .related-rule-list {
-        padding-left: $spacer-2;
         .related-rule {
             margin-bottom: $spacer-3;
         }
@@ -257,28 +261,6 @@ aside.right-sidebar {
         display: table-cell;
     }
 
-    button.category-title {
-        font-size: $font-size-lg;
-        font-weight: bold;
-        padding-left: 0;
-        background: none;
-        border: none;
-        color: $primary_link_color;
-        cursor: pointer;
-        margin-top: 4px;
-        display: block;
-        border-radius: $border-radius;
-        text-align: left;
-
-        &.subcategory {
-            font-size: $font-size-md;
-        }
-
-        &.visible {
-            color: $dark-gray;
-        }
-    }
-
     .category-description {
         font-size: $font-size-sm;
         font-weight: normal;
@@ -290,26 +272,33 @@ aside.right-sidebar {
         display: table-cell;
     }
 
-    button.category-toggle {
-        background: none;
-        border: none;
-        color: $primary_link_color;
-        cursor: pointer;
-        margin-top: 4px;
-        display: block;
-        border-radius: $border-radius;
-
-        &:hover {
-            color: $reverse_link_hover;
-            background: $reverse_background_lighter;
-            @include transition;
-        }
-    }
-
     .category-content {
         margin-top: 1em;
     }
 }
+
+button.collapsible-title {
+    font-size: $font-size-md;
+    font-weight: bold;
+    padding-left: 0;
+    background: none;
+    border: none;
+    color: $primary_link_color;
+    cursor: pointer;
+    margin-top: $spacer-2;
+    display: block;
+    border-radius: $border-radius;
+    text-align: left;
+
+    &.subcategory {
+        font-size: $font-size-md;
+    }
+
+    &.visible {
+        color: $dark-gray;
+    }
+}
+
 
 .show-more-button {
     color: $primary-link-color;
@@ -317,4 +306,16 @@ aside.right-sidebar {
     background: none;
     font-size: $font-size-sm;
     cursor: pointer;
+    width: 100%;
+    text-align: left;
+
+    i{
+        float:right
+    }
+}
+
+.show-more-inactive {
+    color: $secondary_text_color;
+    font-size: $font-size-sm;
+    margin-top:$spacer-2
 }
