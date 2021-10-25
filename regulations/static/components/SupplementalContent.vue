@@ -1,20 +1,20 @@
 <template>
-    <div class="supplementary-content-container">
-        <supplementary-content-category v-for="(category, index) in categories" :key="index"
-            :title="category.title"
+    <div class="supplemental-content-container">
+        <supplemental-content-category v-for="(category, index) in categories" :key="index"
+            :name="category.name"
             :description="category.description"
-            :supplementary_content="category.supplementary_content"
+            :supplemental_content="category.supplemental_content"
             :sub_categories="category.sub_categories">
-        </supplementary-content-category>
+        </supplemental-content-category>
     </div>
 </template>
 
 <script>
-import SupplementaryContentCategory from './SupplementaryContentCategory.vue'
+import SupplementalContentCategory from './SupplementalContentCategory.vue'
 
 export default {
     components: {
-        SupplementaryContentCategory,
+        SupplementalContentCategory,
     },
 
     props: {
@@ -49,7 +49,7 @@ export default {
     methods: {
         async fetch_content(title, part, sections) {
             const joinedSections = sections.join("&sections=");
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplementary_content?&sections=${joinedSections}`);
+            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?&sections=${joinedSections}`);
             const content = await response.json();
             return content;
         },

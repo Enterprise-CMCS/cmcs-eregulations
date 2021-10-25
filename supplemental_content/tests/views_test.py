@@ -1,5 +1,5 @@
 from django.test import TestCase
-from supplementary_content.views import _make_category_tree
+from supplemental_content.views import _make_category_tree
 
 
 class CategoryTreeTestCase(TestCase):
@@ -13,7 +13,7 @@ class CategoryTreeTestCase(TestCase):
                 "parent": None,
                 "title": "A",
                 "description": "Category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 1},
                     {"content_id": 2},
                 ],
@@ -23,7 +23,7 @@ class CategoryTreeTestCase(TestCase):
                 "parent": None,
                 "title": "B",
                 "description": "Category B",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 3},
                     {"content_id": 4},
                 ],
@@ -33,7 +33,7 @@ class CategoryTreeTestCase(TestCase):
                 "parent": None,
                 "title": "C",
                 "description": "Category C",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 5},
                     {"content_id": 6},
                 ],
@@ -45,7 +45,7 @@ class CategoryTreeTestCase(TestCase):
                 "id": 1,
                 "title": "A",
                 "description": "Category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 1},
                     {"content_id": 2},
                 ],
@@ -55,7 +55,7 @@ class CategoryTreeTestCase(TestCase):
                 "id": 2,
                 "title": "B",
                 "description": "Category B",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 3},
                     {"content_id": 4},
                 ],
@@ -65,7 +65,7 @@ class CategoryTreeTestCase(TestCase):
                 "id": 3,
                 "title": "C",
                 "description": "Category C",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 5},
                     {"content_id": 6},
                 ],
@@ -82,7 +82,7 @@ class CategoryTreeTestCase(TestCase):
                 "parent": None,
                 "title": "A",
                 "description": "Category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 1},
                     {"content_id": 2},
                 ],
@@ -92,7 +92,7 @@ class CategoryTreeTestCase(TestCase):
                 "parent": None,
                 "title": "B",
                 "description": "Category B",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 3},
                     {"content_id": 4},
                 ],
@@ -107,7 +107,7 @@ class CategoryTreeTestCase(TestCase):
                 },
                 "title": "A-A",
                 "description": "Category A Sub-category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 5},
                     {"content_id": 6},
                 ],
@@ -122,7 +122,7 @@ class CategoryTreeTestCase(TestCase):
                 },
                 "title": "B-A",
                 "description": "Category B Sub-category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 7},
                     {"content_id": 8},
                 ],
@@ -134,7 +134,7 @@ class CategoryTreeTestCase(TestCase):
                 "id": 1,
                 "title": "A",
                 "description": "Category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 1},
                     {"content_id": 2},
                 ],
@@ -143,7 +143,7 @@ class CategoryTreeTestCase(TestCase):
                         "id": 3,
                         "title": "A-A",
                         "description": "Category A Sub-category A",
-                        "supplementary_content": [
+                        "supplemental_content": [
                             {"content_id": 5},
                             {"content_id": 6},
                         ],
@@ -155,7 +155,7 @@ class CategoryTreeTestCase(TestCase):
                 "id": 2,
                 "title": "B",
                 "description": "Category B",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 3},
                     {"content_id": 4},
                 ],
@@ -164,7 +164,7 @@ class CategoryTreeTestCase(TestCase):
                         "id": 4,
                         "title": "B-A",
                         "description": "Category B Sub-category A",
-                        "supplementary_content": [
+                        "supplemental_content": [
                             {"content_id": 7},
                             {"content_id": 8},
                         ],
@@ -188,7 +188,7 @@ class CategoryTreeTestCase(TestCase):
                 },
                 "title": "A",
                 "description": "Category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 1},
                     {"content_id": 2},
                 ],
@@ -198,7 +198,7 @@ class CategoryTreeTestCase(TestCase):
                 "parent": None,
                 "title": "B",
                 "description": "Category B",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 3},
                     {"content_id": 4},
                 ],
@@ -218,7 +218,7 @@ class CategoryTreeTestCase(TestCase):
                 },
                 "title": "A-A",
                 "description": "Category A Sub-category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 5},
                     {"content_id": 6},
                 ],
@@ -233,7 +233,7 @@ class CategoryTreeTestCase(TestCase):
                 },
                 "title": "B-A",
                 "description": "Category B Sub-category A",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 7},
                     {"content_id": 8},
                 ],
@@ -245,7 +245,7 @@ class CategoryTreeTestCase(TestCase):
                 "id": 2,
                 "title": "B",
                 "description": "Category B",
-                "supplementary_content": [
+                "supplemental_content": [
                     {"content_id": 3},
                     {"content_id": 4},
                 ],
@@ -254,7 +254,7 @@ class CategoryTreeTestCase(TestCase):
                         "id": 1,
                         "title": "A",
                         "description": "Category A",
-                        "supplementary_content": [
+                        "supplemental_content": [
                             {"content_id": 1},
                             {"content_id": 2},
                         ],
@@ -263,7 +263,7 @@ class CategoryTreeTestCase(TestCase):
                                 "id": 3,
                                 "title": "A-A",
                                 "description": "Category A Sub-category A",
-                                "supplementary_content": [
+                                "supplemental_content": [
                                     {"content_id": 5},
                                     {"content_id": 6},
                                 ],
@@ -275,7 +275,7 @@ class CategoryTreeTestCase(TestCase):
                         "id": 4,
                         "title": "B-A",
                         "description": "Category B Sub-category A",
-                        "supplementary_content": [
+                        "supplemental_content": [
                             {"content_id": 7},
                             {"content_id": 8},
                         ],

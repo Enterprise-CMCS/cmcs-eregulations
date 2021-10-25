@@ -6,7 +6,7 @@ from django.db.migrations.operations.fields import RenameField
 
 
 def migrate_dates(apps, schema_editor):
-    SupplementaryContent = apps.get_model("supplementary_content", "SupplementaryContent")
+    SupplementaryContent = apps.get_model("supplemental_content", "SupplementaryContent")
     for content in SupplementaryContent.objects.all():
         if content.old_date is not None:
             # Note: Prior to this migration, year month and date must all exist or date would be None.
@@ -20,7 +20,7 @@ def migrate_dates(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplementary_content', '0006_alter_regulationsection_supplementary_content'),
+        ('supplemental_content', '0006_alter_regulationsection_supplementary_content'),
     ]
 
     operations = [
