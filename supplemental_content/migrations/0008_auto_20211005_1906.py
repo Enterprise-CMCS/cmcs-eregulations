@@ -75,13 +75,13 @@ def migrate_sections(apps, schema_editor):
 def migrate_supplemental_content(apps, schema_editor):
     OldSupplementaryContent = apps.get_model("supplemental_content", "OldSupplementaryContent")
     SupplementalContent = apps.get_model("supplemental_content", "SupplementalContent")
-    Category = apps.get_model("supplemental_content", "Category")
+    AbstractCategory = apps.get_model("supplemental_content", "AbstractCategory")
     Section = apps.get_model("supplemental_content", "Section")
 
     for content in OldSupplementaryContent.objects.all():
         # acquire category from old ID
         try:
-            new_category = Category.objects.filter(old_id=content.category.id)[0]
+            new_category = AbstractCategory.objects.filter(old_id=content.category.id)[0]
         except IndexError:
             new_category = None
         
