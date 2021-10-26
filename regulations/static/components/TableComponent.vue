@@ -21,12 +21,5 @@ export default {
         }
 
     },
-
-    methods: {
-
-    },
-
-    filters: {}
-
 }
 </script>

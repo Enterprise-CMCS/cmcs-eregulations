@@ -21,13 +21,6 @@ var script = {
         }
 
     },
-
-    methods: {
-
-    },
-
-    filters: {}
-
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
