@@ -84,8 +84,8 @@
             }
 
             p:first-child {
-                font-size: 16px;
-                line-height: 24px;
+                font-size: $font-size-md;
+                line-height: 1.5;
                 font-weight: 700;
                 font-family: $secondary_site_font;
                 margin-bottom: 5px;
@@ -109,8 +109,8 @@
                 td {
                     border: 1px solid $table_border_color;
                     padding: 9px 12px;
-                    font-size: 14px;
-                    line-height: 20px;
+                    font-size: $font-size-sm;
+                    line-height: 1.4;
                     text-align: left;
                     vertical-align: top;
                 }
@@ -131,7 +131,7 @@
     }
 
     .appendix-section {
-        @extend .formula-special-border;
+        @include formula-special-border;
 
         margin-left: 10px;
         color: $secondary_text_color;
@@ -180,7 +180,7 @@
 
     .footnote-section {
         font-size: $font_size_xs;
-        line-height: 18px;
+        line-height: 1.5;
         color: $secondary_text_color;
     }
 
@@ -192,7 +192,7 @@
     fp-4,
     fp-5,
     fp-6 {
-        @extend .formula-special-border;
+        @include formula-special-border;
 
         color: $secondary_text_color;
         display: block;
@@ -276,19 +276,19 @@ article {
                 }
 
                 & + img {
-                    @extend .formula-special-border;
+                    @include formula-special-border;
                     margin-left: $left-indent;
                     & + img {
-                        @extend .formula-special-border;
+                        @include formula-special-border;
                         margin-left: $left-indent;
                         & + img {
-                            @extend .formula-special-border;
+                            @include formula-special-border;
                             margin-left: $left-indent;
                             & + img {
-                                @extend .formula-special-border;
+                                @include formula-special-border;
                                 margin-left: $left-indent;
                                 & + img {
-                                    @extend .formula-special-border;
+                                    @include formula-special-border;
                                     margin-left: $left-indent;
                                 }
                             }

@@ -52,7 +52,7 @@ export default [
             format: "esm",
             file: "regulations/js/TableComponent.js",
         },
-        plugins: [vue()],
+        plugins,
     },
     {
         input: "regulations/js/main.js",
