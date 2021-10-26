@@ -21,12 +21,20 @@ def migrate_supplemental_content_app(apps, schema_editor):
     with connection.cursor() as cursor:
         cursor.execute(
             f"SELECT * FROM django_content_type "
+            f"WHERE app_label='{app_name[0]}'"
+        )
+        has_original = cursor.fetchone()
+        cursor.execute(
+            f"SELECT * FROM django_content_type "
             f"WHERE app_label='{app_name[1]}'"
         )
-        already_ran = cursor.fetchone()
-        if already_ran:
-            logger.info("Rename has already been done.")
+        has_renamed = cursor.fetchone()
+
+        if has_renamed or not has_original:
+            logger.info("New database or rename has already been done.")
             return
+
+
         cursor.execute(
             f"UPDATE django_content_type SET app_label='{app_name[1]}' "
             f"WHERE app_label='{app_name[0]}'"
