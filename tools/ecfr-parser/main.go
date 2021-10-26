@@ -20,7 +20,7 @@ import (
 const TIMELIMIT = 5000 * time.Second
 
 var (
-	attempts		int
+	attempts        int
 	title           int
 	subchapter      SubchapterArg
 	individualParts PartsArg
@@ -131,7 +131,7 @@ func run() error {
 		}
 	}
 	wg.Wait()
-	
+
 	return nil
 }
 
