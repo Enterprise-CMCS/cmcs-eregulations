@@ -1,14 +1,14 @@
-import SupplementaryContentObject from '../components/SupplementaryContentObject.vue';
+import SupplementalContentObject from '../components/SupplementalContentObject.vue';
 
 export default {
-  title: 'SupplementaryContent/SupplementaryContentObject',
-  component: SupplementaryContentObject,
+  title: 'SupplementalContent/SupplementalContentObject',
+  component: SupplementalContentObject,
 };
 
 const Template = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
-  components: { SupplementaryContentObject },
-  template: '<supplementary-content-object v-bind="$props" ></supplementary-content-object>',
+  components: { SupplementalContentObject },
+  template: '<supplemental-content-object v-bind="$props" ></supplemental-content-object>',
 });
 
 export const Basic = Template.bind({});
@@ -27,7 +27,7 @@ Basic.args = {
 export const AllFields = Template.bind({});
 AllFields.args = {
   "date": "1989-10-13",
-  "title": "Medicaid Management Information System",
+  "name": "Medicaid Management Information System",
   "description": "Medicaid Program; Medicaid Management Information System: Revised Definition of “Mechanized Claims Processing and Information Retrieval System” (54 FR 41966), October 13, 1989.",
   "url": "https://s3.amazonaws.com/archives.federalregister.gov/issue_slice/1989/10/13/41964-41974.pdf#page=3",
   "sections": [

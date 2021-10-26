@@ -1,7 +1,7 @@
 import RelatedRules from "./RelatedRules.js";
 import Collapsible from "./Collapsible.js";
 import CollapseButton from "./CollapseButton.js";
-import SupplementaryContent from "./SupplementaryContent.js";
+import SupplementalContent from "./SupplementalContent.js";
 import CopyBtn from "./CopyBtn.js";
 import Vue from "../../node_modules/vue/dist/vue.esm.browser.min.js";
 import { goToVersion } from "./go-to-version.js";
@@ -139,7 +139,7 @@ function main() {
             RelatedRules,
             Collapsible,
             CollapseButton,
-            SupplementaryContent,
+            SupplementalContent,
             CopyBtn,
         },
     }).$mount("#vue-app");

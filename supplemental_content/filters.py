@@ -29,15 +29,25 @@ class ParameterFilter(InputFilter):
 
 
 class TitleFilter(ParameterFilter):
-    parameter_name = "sections__title"
+    parameter_name = "locations__title"
     title = "Title"
 
 
 class PartFilter(ParameterFilter):
-    parameter_name = "sections__part"
+    parameter_name = "locations__part"
     title = "Part"
 
 
 class SectionFilter(ParameterFilter):
-    parameter_name = "sections__section"
+    parameter_name = "locations__section__section_id"
     title = "Section"
+
+
+class SubpartFilter(ParameterFilter):
+    parameter_name = "locations__subpart__subpart_id"
+    title = "Subpart"
+
+
+class SubjectGroupFilter(ParameterFilter):
+    parameter_name = "locations__subjectgroup__subject_group_id"
+    title = "Subject Group"

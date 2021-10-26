@@ -77,8 +77,8 @@ tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 serverless/guidance/*.json: tools/guidance_pipeline/build/guidance_pipeline
 	./tools/guidance_pipeline/build/guidance_pipeline -f tools/guidance_pipeline/guidances.txt -o serverless/guidance
 
-supplementary_content: ## Load old supplementary content into a folder
-supplementary_content: serverless/guidance/*.json
+supplemental_content: ## Load old supplemental content into a folder
+supplemental_content: serverless/guidance/*.json
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker-compose stop
