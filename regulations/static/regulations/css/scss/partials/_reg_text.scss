@@ -119,6 +119,10 @@
                     background: $table_header_background_color;
                 }
 
+                th[rowspan] {
+                    vertical-align: middle;
+                }
+
                 th[colspan] {
                     text-align: center;
                 }

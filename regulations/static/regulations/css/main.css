@@ -16691,6 +16691,9 @@ select:focus-visible {
 .reg-text .table-section .gpotbl_div table th {
   background: #f3f3f3;
 }
+.reg-text .table-section .gpotbl_div table th[rowspan] {
+  vertical-align: middle;
+}
 .reg-text .table-section .gpotbl_div table th[colspan] {
   text-align: center;
 }
