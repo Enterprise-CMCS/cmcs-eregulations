@@ -31,10 +31,10 @@ export default [
         plugins,
     },
     {
-        input: "components/SupplementaryContent.vue",
+        input: 'components/SupplementalContent.vue',
         output: {
-            format: "esm",
-            file: "regulations/js/SupplementaryContent.js",
+            format: 'esm',
+            file: 'regulations/js/SupplementalContent.js'
         },
         plugins,
     },

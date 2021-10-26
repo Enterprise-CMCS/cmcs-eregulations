@@ -29,6 +29,35 @@
         }
     }
 
+    .reference {
+        position: absolute;
+        margin-left: -1.5em;
+        opacity: 0;
+
+        &:focus {
+            opacity: 1;
+        }
+    }
+
+    section.part-meta {
+        font-size: $font-size-sm;
+    }
+
+    h1 > .reference,
+    h2 > .reference {
+        margin-left: -1.2em;
+
+        @include screen-xxl {
+            margin-left: -1.4em;
+        }
+    }
+
+    :hover {
+        > .reference {
+            opacity: 1;
+        }
+    }
+
     .section-title {
         color: $primary_color;
     }

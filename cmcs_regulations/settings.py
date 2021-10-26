@@ -37,10 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'rest_framework',
+    'regulations',
     'regcore',
     'regcore.search',
-    'supplementary_content',
-    'regulations',
+    'supplemental_content',
 ]
 
 MIDDLEWARE = [

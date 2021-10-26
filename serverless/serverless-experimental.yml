@@ -43,19 +43,19 @@ functions:
       STATIC_URL: ${self:custom.settings.static_url}
       WORKING_DIR: /var/task
     handler: wsgi_handler.handler
-    timeout: 15
+    timeout: 300
     events:
       - http: ANY /
       - http: ANY {proxy+}
   reg_core_migrate:
     handler: migrate.handler
-    timeout: 15
+    timeout: 300
   create_su:
     handler: createsu.handler
-    timeout: 15
+    timeout: 300
   populate_content:
     handler: populate_content.handler
-    timeout: 15
+    timeout: 300
 
 resources:
 
