@@ -95,3 +95,7 @@ local.createadmin: ## Create a local admin account.
 
 test: ## run the cypress e2e suite
 	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
+test.local: ## run cypress tests locally without docker
+	cd e2e; \
+		npm install; \
+		npm run cypress:run;
