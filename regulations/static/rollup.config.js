@@ -47,6 +47,14 @@ export default [
         plugins,
     },
     {
+        input: "components/TableComponent.vue",
+        output: {
+            format: "esm",
+            file: "regulations/js/TableComponent.js",
+        },
+        plugins,
+    },
+    {
         input: "regulations/js/main.js",
         output: {
             file: "regulations/js/main.build.js",
