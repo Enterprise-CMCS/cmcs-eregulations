@@ -12,7 +12,7 @@ import (
 )
 
 const dateFormat = "2006-01-02"
-const timeout = 10 * time.Second
+const timeout = 30 * time.Second
 
 var (
 	ecfrSite          = urlMustParse("https://ecfr.gov/api/versioner/v1/")

@@ -20,6 +20,7 @@ import (
 const TIMELIMIT = 5000 * time.Second
 
 var (
+	attempts        int
 	title           int
 	subchapter      SubchapterArg
 	individualParts PartsArg
@@ -56,6 +57,7 @@ func init() {
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
 	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8080/v2/", "A url specifying where to send eregs parts")
+	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.Parse()
 
 	if title < 0 {
@@ -64,9 +66,20 @@ func init() {
 }
 
 func main() {
-
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 
+	for i := 0; i < attempts; i++ {
+		if err := run(); err == nil {
+			break
+		} else if i == attempts - 1 {
+			log.Fatal("Failed to load regulations ", attempts, " times. Error: ", err)
+		} else {
+			log.Println("[ERROR] Failed to load regulations. Retrying", attempts - i - 1, "more times. Error: ", err)
+		}
+	}
+}
+
+func run() error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
@@ -84,7 +97,7 @@ func main() {
 		var err error
 		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, ecfr.Subchapter(subchapter[0], subchapter[1]))
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
 	parts = append(parts, individualParts...)
@@ -95,7 +108,7 @@ func main() {
 
 	versions, err := ecfr.ExtractVersions(ctx, title)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	var wg sync.WaitGroup
@@ -118,6 +131,8 @@ func main() {
 		}
 	}
 	wg.Wait()
+
+	return nil
 }
 
 func handlePart(ctx context.Context, date time.Time, reg *eregs.Part) error {
