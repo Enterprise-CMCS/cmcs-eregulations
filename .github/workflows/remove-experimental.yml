@@ -14,6 +14,7 @@ jobs:
       - name: get branch name
         run: |
           lower_case=${GITHUB_REF,,}
+          echo "Branch Name: ${lower_case#refs/heads/}"
           echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
