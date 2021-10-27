@@ -85,7 +85,7 @@
       },
   };
 
-  function normalizeComponent$4(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$5(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -220,7 +220,7 @@
     
 
     
-    const __vue_component__$5$1 = /*#__PURE__*/normalizeComponent$4(
+    const __vue_component__$5$1 = /*#__PURE__*/normalizeComponent$5(
       { render: __vue_render__$5$1, staticRenderFns: __vue_staticRenderFns__$5$1 },
       __vue_inject_styles__$5$1,
       __vue_script__$5$1,
@@ -309,7 +309,7 @@
     
 
     
-    const __vue_component__$4$1 = /*#__PURE__*/normalizeComponent$4(
+    const __vue_component__$4$1 = /*#__PURE__*/normalizeComponent$5(
       { render: __vue_render__$4$1, staticRenderFns: __vue_staticRenderFns__$4$1 },
       __vue_inject_styles__$4$1,
       __vue_script__$4$1,
@@ -435,7 +435,7 @@
     
 
     
-    const __vue_component__$3$1 = /*#__PURE__*/normalizeComponent$4(
+    const __vue_component__$3$1 = /*#__PURE__*/normalizeComponent$5(
       { render: __vue_render__$3$1, staticRenderFns: __vue_staticRenderFns__$3$1 },
       __vue_inject_styles__$3$1,
       __vue_script__$3$1,
@@ -460,7 +460,7 @@
   //
   //
 
-  var script$2$1 = {
+  var script$2$2 = {
       name: "collapsible",
 
       created: function () {
@@ -574,10 +574,10 @@
   };
 
   /* script */
-  const __vue_script__$2$1 = script$2$1;
+  const __vue_script__$2$2 = script$2$2;
 
   /* template */
-  var __vue_render__$2$1 = function() {
+  var __vue_render__$2$2 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -593,17 +593,17 @@
       2
     )
   };
-  var __vue_staticRenderFns__$2$1 = [];
-  __vue_render__$2$1._withStripped = true;
+  var __vue_staticRenderFns__$2$2 = [];
+  __vue_render__$2$2._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$2$1 = undefined;
+    const __vue_inject_styles__$2$2 = undefined;
     /* scoped */
-    const __vue_scope_id__$2$1 = undefined;
+    const __vue_scope_id__$2$2 = undefined;
     /* module identifier */
-    const __vue_module_identifier__$2$1 = undefined;
+    const __vue_module_identifier__$2$2 = undefined;
     /* functional template */
-    const __vue_is_functional_template__$2$1 = false;
+    const __vue_is_functional_template__$2$2 = false;
     /* style inject */
     
     /* style inject SSR */
@@ -612,13 +612,13 @@
     
 
     
-    const __vue_component__$2$1 = /*#__PURE__*/normalizeComponent$4(
-      { render: __vue_render__$2$1, staticRenderFns: __vue_staticRenderFns__$2$1 },
-      __vue_inject_styles__$2$1,
-      __vue_script__$2$1,
-      __vue_scope_id__$2$1,
-      __vue_is_functional_template__$2$1,
-      __vue_module_identifier__$2$1,
+    const __vue_component__$2$2 = /*#__PURE__*/normalizeComponent$5(
+      { render: __vue_render__$2$2, staticRenderFns: __vue_staticRenderFns__$2$2 },
+      __vue_inject_styles__$2$2,
+      __vue_script__$2$2,
+      __vue_scope_id__$2$2,
+      __vue_is_functional_template__$2$2,
+      __vue_module_identifier__$2$2,
       false,
       undefined,
       undefined,
@@ -740,7 +740,7 @@
     
 
     
-    const __vue_component__$1$2 = /*#__PURE__*/normalizeComponent$4(
+    const __vue_component__$1$2 = /*#__PURE__*/normalizeComponent$5(
       { render: __vue_render__$1$2, staticRenderFns: __vue_staticRenderFns__$1$2 },
       __vue_inject_styles__$1$2,
       __vue_script__$1$2,
@@ -757,7 +757,7 @@
 
   var script$a = {
       components: {
-        Collapsible: __vue_component__$2$1,
+        Collapsible: __vue_component__$2$2,
         RelatedRuleList: __vue_component__$3$1,
         CollapseButton: __vue_component__$1$2,
       },
@@ -958,7 +958,7 @@
     
 
     
-    const __vue_component__$a = /*#__PURE__*/normalizeComponent$4(
+    const __vue_component__$a = /*#__PURE__*/normalizeComponent$5(
       { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
       __vue_inject_styles__$a,
       __vue_script__$a,
@@ -1096,7 +1096,7 @@
       },
   };
 
-  function normalizeComponent$3(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$4(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -1210,7 +1210,7 @@
     
 
     
-    const __vue_component__$9 = /*#__PURE__*/normalizeComponent$3(
+    const __vue_component__$9 = /*#__PURE__*/normalizeComponent$4(
       { render: __vue_render__$9, staticRenderFns: __vue_staticRenderFns__$9 },
       __vue_inject_styles__$9,
       __vue_script__$9,
@@ -1282,7 +1282,7 @@
       },
   };
 
-  function normalizeComponent$2(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$3(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -1413,7 +1413,7 @@
     
 
     
-    const __vue_component__$8 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$8 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$8, staticRenderFns: __vue_staticRenderFns__$8 },
       __vue_inject_styles__$8,
       __vue_script__$8,
@@ -1483,7 +1483,7 @@
     },
   };
 
-  function normalizeComponent$1(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$2(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -1635,7 +1635,7 @@
     
 
     
-    const __vue_component__$6 = /*#__PURE__*/normalizeComponent$1(
+    const __vue_component__$6 = /*#__PURE__*/normalizeComponent$2(
       { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
       __vue_inject_styles__$6,
       __vue_script__$6,
@@ -1724,7 +1724,7 @@
     
 
     
-    const __vue_component__$5 = /*#__PURE__*/normalizeComponent$1(
+    const __vue_component__$5 = /*#__PURE__*/normalizeComponent$2(
       { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
       __vue_inject_styles__$5,
       __vue_script__$5,
@@ -1839,7 +1839,7 @@
     
 
     
-    const __vue_component__$4 = /*#__PURE__*/normalizeComponent$1(
+    const __vue_component__$4 = /*#__PURE__*/normalizeComponent$2(
       { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
       __vue_inject_styles__$4,
       __vue_script__$4,
@@ -1967,7 +1967,7 @@
     
 
     
-    const __vue_component__$3 = /*#__PURE__*/normalizeComponent$1(
+    const __vue_component__$3 = /*#__PURE__*/normalizeComponent$2(
       { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
       __vue_inject_styles__$3,
       __vue_script__$3,
@@ -1992,7 +1992,7 @@
   //
   //
 
-  var script$2 = {
+  var script$2$1 = {
       name: "collapsible",
 
       created: function () {
@@ -2106,10 +2106,10 @@
   };
 
   /* script */
-  const __vue_script__$2 = script$2;
+  const __vue_script__$2$1 = script$2$1;
 
   /* template */
-  var __vue_render__$2 = function() {
+  var __vue_render__$2$1 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -2125,17 +2125,17 @@
       2
     )
   };
-  var __vue_staticRenderFns__$2 = [];
-  __vue_render__$2._withStripped = true;
+  var __vue_staticRenderFns__$2$1 = [];
+  __vue_render__$2$1._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$2 = undefined;
+    const __vue_inject_styles__$2$1 = undefined;
     /* scoped */
-    const __vue_scope_id__$2 = undefined;
+    const __vue_scope_id__$2$1 = undefined;
     /* module identifier */
-    const __vue_module_identifier__$2 = undefined;
+    const __vue_module_identifier__$2$1 = undefined;
     /* functional template */
-    const __vue_is_functional_template__$2 = false;
+    const __vue_is_functional_template__$2$1 = false;
     /* style inject */
     
     /* style inject SSR */
@@ -2144,13 +2144,13 @@
     
 
     
-    const __vue_component__$2 = /*#__PURE__*/normalizeComponent$1(
-      { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
-      __vue_inject_styles__$2,
-      __vue_script__$2,
-      __vue_scope_id__$2,
-      __vue_is_functional_template__$2,
-      __vue_module_identifier__$2,
+    const __vue_component__$2$1 = /*#__PURE__*/normalizeComponent$2(
+      { render: __vue_render__$2$1, staticRenderFns: __vue_staticRenderFns__$2$1 },
+      __vue_inject_styles__$2$1,
+      __vue_script__$2$1,
+      __vue_scope_id__$2$1,
+      __vue_is_functional_template__$2$1,
+      __vue_module_identifier__$2$1,
       false,
       undefined,
       undefined,
@@ -2165,7 +2165,7 @@
       components: {
           SupplementalContentList: __vue_component__$4,
           CollapseButton: __vue_component__$3,
-          Collapsible: __vue_component__$2,
+          Collapsible: __vue_component__$2$1,
       },
 
       props: {
@@ -2318,7 +2318,7 @@
     
 
     
-    const __vue_component__$1$1 = /*#__PURE__*/normalizeComponent$1(
+    const __vue_component__$1$1 = /*#__PURE__*/normalizeComponent$2(
       { render: __vue_render__$1$1, staticRenderFns: __vue_staticRenderFns__$1$1 },
       __vue_inject_styles__$1$1,
       __vue_script__$1$1,
@@ -2421,7 +2421,7 @@
     
 
     
-    const __vue_component__$7 = /*#__PURE__*/normalizeComponent$1(
+    const __vue_component__$7 = /*#__PURE__*/normalizeComponent$2(
       { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
       __vue_inject_styles__$7,
       __vue_script__$7,
@@ -2525,7 +2525,7 @@
       filters: {},
   };
 
-  function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$1(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -2679,7 +2679,7 @@
     
 
     
-    const __vue_component__$1 = /*#__PURE__*/normalizeComponent(
+    const __vue_component__$1 = /*#__PURE__*/normalizeComponent$1(
       { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
       __vue_inject_styles__$1,
       __vue_script__$1,
@@ -2712,7 +2712,7 @@
 
   const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
-  var script = {
+  var script$2 = {
       name: "copy-btn",
 
       components: {
@@ -2883,10 +2883,10 @@
   };
 
   /* script */
-  const __vue_script__ = script;
+  const __vue_script__$2 = script$2;
 
   /* template */
-  var __vue_render__ = function() {
+  var __vue_render__$2 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -3014,6 +3014,151 @@
           )
         : _vm._e()
     ])
+  };
+  var __vue_staticRenderFns__$2 = [];
+  __vue_render__$2._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$2 = undefined;
+    /* scoped */
+    const __vue_scope_id__$2 = undefined;
+    /* module identifier */
+    const __vue_module_identifier__$2 = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$2 = false;
+    /* style inject */
+    
+    /* style inject SSR */
+    
+    /* style inject shadow dom */
+    
+
+    
+    const __vue_component__$2 = /*#__PURE__*/normalizeComponent$1(
+      { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
+      __vue_inject_styles__$2,
+      __vue_script__$2,
+      __vue_scope_id__$2,
+      __vue_is_functional_template__$2,
+      __vue_module_identifier__$2,
+      false,
+      undefined,
+      undefined,
+      undefined
+    );
+
+  //
+  //
+  //
+  //
+  //
+
+  var script = {
+      name: "table-component",
+
+      props: {
+          table_markup: {
+              type: String,
+              required: true,
+          }
+
+      },
+
+      computed: {
+          table() {
+              return this.table_markup;
+          }
+
+      },
+  };
+
+  function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+      if (typeof shadowMode !== 'boolean') {
+          createInjectorSSR = createInjector;
+          createInjector = shadowMode;
+          shadowMode = false;
+      }
+      // Vue.extend constructor export interop.
+      const options = typeof script === 'function' ? script.options : script;
+      // render functions
+      if (template && template.render) {
+          options.render = template.render;
+          options.staticRenderFns = template.staticRenderFns;
+          options._compiled = true;
+          // functional template
+          if (isFunctionalTemplate) {
+              options.functional = true;
+          }
+      }
+      // scopedId
+      if (scopeId) {
+          options._scopeId = scopeId;
+      }
+      let hook;
+      if (moduleIdentifier) {
+          // server build
+          hook = function (context) {
+              // 2.3 injection
+              context =
+                  context || // cached call
+                      (this.$vnode && this.$vnode.ssrContext) || // stateful
+                      (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
+              // 2.2 with runInNewContext: true
+              if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+                  context = __VUE_SSR_CONTEXT__;
+              }
+              // inject component styles
+              if (style) {
+                  style.call(this, createInjectorSSR(context));
+              }
+              // register component module identifier for async chunk inference
+              if (context && context._registeredComponents) {
+                  context._registeredComponents.add(moduleIdentifier);
+              }
+          };
+          // used by ssr in case component is cached and beforeCreate
+          // never gets called
+          options._ssrRegister = hook;
+      }
+      else if (style) {
+          hook = shadowMode
+              ? function (context) {
+                  style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
+              }
+              : function (context) {
+                  style.call(this, createInjector(context));
+              };
+      }
+      if (hook) {
+          if (options.functional) {
+              // register for functional component in vue file
+              const originalRender = options.render;
+              options.render = function renderWithStyleInjection(h, context) {
+                  hook.call(context);
+                  return originalRender(h, context);
+              };
+          }
+          else {
+              // inject component registration as beforeCreate hook
+              const existing = options.beforeCreate;
+              options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+          }
+      }
+      return script;
+  }
+
+  /* script */
+  const __vue_script__ = script;
+
+  /* template */
+  var __vue_render__ = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("section", {
+      staticClass: "table-section",
+      domProps: { innerHTML: _vm._s(_vm.table) }
+    })
   };
   var __vue_staticRenderFns__ = [];
   __vue_render__._withStripped = true;
@@ -3252,7 +3397,8 @@
               Collapsible: __vue_component__$9,
               CollapseButton: __vue_component__$8,
               SupplementalContent: __vue_component__$7,
-              CopyBtn: __vue_component__,
+              CopyBtn: __vue_component__$2,
+              TableComponent: __vue_component__
           },
       }).$mount("#vue-app");
 
