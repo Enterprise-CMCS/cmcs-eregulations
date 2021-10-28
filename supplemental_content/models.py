@@ -118,7 +118,7 @@ class Section(AbstractLocation):
 class AbstractSupplementalContent(models.Model, AbstractModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    approved = models.BooleanField(default=False)
+    approved = models.BooleanField(default=True)
     category = models.ForeignKey(
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content"
     )
