@@ -25,49 +25,25 @@
     // Hero Banner
 
     .hero-banner {
-        background: $hero_background_color;
+        display: flex;
+        height: 230px;
         color: $reverse_text_color;
-        padding: $spacer-4 0;
+        z-index: 2;
 
-        .hero-search {
-            height: 42px; // Height of the search box
-            position: relative;
-            z-index: 20;
+        background: $hero_background_color;
+        background-image: url("../images/hero-graphic-updated.svg");
+        background-repeat: no-repeat;
+        background-position: right;
 
-            .search-header {
-                float: none;
-                width: 100%;
-
-                @include screen-lg {
-                    float: right;
-                    width: 260px;
-                }
-            }
-
-            @include custom-max($tablet-max / 1px) {
-                visibility: hidden;
-            }
-        }
-
-        .hero-text {
-            width: 100%;
-            height: auto;
-            padding-top: $spacer-2;
-            position: relative;
-            z-index: 2;
+        .hero-content {
             text-shadow: 3px 1px 5px $secondary_color;
             font-size: $font-size-sm;
-            z-index: 30;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            flex: 1;
 
             @include screen-md {
-                width: 50%;
-                height: 276px;
-                padding-top: 0;
                 font-size: $font-size-md;
-            }
-
-            @include custom-min(1440) {
-                height: 260px;
             }
 
             a {
@@ -89,139 +65,10 @@
             }
         }
 
-        .hero-image {
-            width: 100%;
-
-            @include screen-md {
-                width: 60%;
-                top: 35px;
-                text-align: right;
-                position: absolute;
-                right: 0;
-            }
-
-            // All of these media queries are needed to get the overlapping effect without overlapping the text smoothly at different screen sizes (I know, I designed a mildly ridiculous-to-code homepage because it looked awesome)
-
-            @include custom-min(770) {
-                width: 58%;
-                top: 35px;
-            }
-
-            @include custom-min(800) {
-                top: 20px;
-            }
-
-            @include custom-min(830) {
-                top: 0;
-            }
-
-            @include custom-min(870) {
-                top: -5px;
-                width: 57%;
-            }
-
-            @include custom-min(894) {
-                top: -15px;
-            }
-
-            @include custom-min(920) {
-                top: -10px;
-                width: 55%;
-            }
-
-            @include custom-min(945) {
-                top: -20px;
-            }
-
-            @include custom-min(968) {
-                top: -30px;
-            }
-
-            @include custom-min(988) {
-                top: -45px;
-            }
-
-            @include screen-lg {
-                width: 56%;
-                top: -60px;
-            }
-
-            @include custom-min(1050) {
-                width: 54%;
-            }
-
-            @include custom-min(1090) {
-                width: 54%;
-                top: -70px;
-            }
-
-            @include custom-min(1114) {
-                width: 52%;
-                top: -75px;
-            }
-
-            @include custom-min(1165) {
-                width: 50%;
-                top: -60px;
-            }
-
-            @include custom-min(1184) {
-                top: -70px;
-            }
-
-            @include custom-min(1200) {
-                top: -85px;
-            }
-
-            @include custom-min(1235) {
-                top: -86px;
-            }
-
-            @include custom-min(1250) {
-                top: -106px;
-            }
-
-            @include screen-xl {
-                width: 49%;
-                top: -98px;
-            }
-
-            @include custom-min(1300) {
-                top: -98px;
-                width: 49%;
-            }
-
-            @include screen-xxl {
-                top: -105px;
-                width: 50%;
-            }
-
-            img {
-                max-width: 100%;
-                z-index: 10;
-                position: relative;
-            }
-        }
-
         h1 {
-            margin-bottom: 0;
             font-family: $primary_site_font;
-            font-size: $font_size_xxl;
-
-            @include custom-min(1180) {
-                font-size: 2.3em;   // Deliberately non-conforming
-            }
-
-            @include custom-min(1490) {
-                // Deliberately non-conforming
-                font-size: 2.7em;
-                line-height: 1.1em;
-                margin-bottom: $spacer-1;
-            }
-        }
-
-        h4 {
-            margin-top: 0;
+            font-size: $font_size_hero_h1;
+            margin-bottom: 20px;
         }
     }
 
