@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
+from django.db.models import Q
 
 # Register your models here.
 
@@ -10,6 +11,7 @@ from .models import (
     Category,
     SubCategory,
     SubSubCategory,
+    AbstractLocation,
     Section,
     SubjectGroup,
     Subpart,
@@ -47,6 +49,11 @@ class SectionAdmin(BaseAdmin):
     list_display = ("title", "part", "section_id", "parent")
     search_fields = ["title", "part", "section_id"]
     ordering = ("title", "part", "section_id", "parent")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "parent":
+            kwargs["queryset"] = AbstractLocation.objects.filter(Q(subpart__isnull=False) | Q(subjectgroup__isnull=False))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Subpart)
