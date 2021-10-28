@@ -15,4 +15,9 @@ class Migration(migrations.Migration):
             name='approved',
             field=models.BooleanField(default=True),
         ),
+        migrations.AlterField(
+            model_name='abstractsupplementalcontent',
+            name='locations',
+            field=models.ManyToManyField(blank=True, related_name='supplemental_content', to='supplemental_content.AbstractLocation'),
+        ),
     ]

@@ -24,6 +24,7 @@ from .filters import (
 )
 
 from .mixins import ExportCsvMixin
+from . import actions
 
 
 class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
@@ -89,10 +90,11 @@ class SubSubCategoryAdmin(CategoryAdmin):
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(BaseAdmin):
     admin_priority = 0
-    list_display = ("date", "name", "description", "category", "created_at", "updated_at")
+    list_display = ("date", "name", "description", "category", "updated_at", "approved")
     search_fields = ["date", "name", "description"]
     ordering = ("-date", "name", "category", "-created_at", "-updated_at")
     filter_horizontal = ("locations",)
+    actions = [actions.mark_approved, actions.mark_not_approved]
     list_filter = [
         "approved",
         TitleFilter,
