@@ -163,7 +163,6 @@
                 font-size: $font-size-md;
                 line-height: 1.4;
             }
-
         }
 
         .paragraphs {
@@ -212,7 +211,8 @@
     }
 
     .latest-version {
-        margin: $spacer-5 0 10px;
+        max-width: $text-max-width;
+        margin: $spacer-5 auto 10px;
         font-size: $font-size-sm;
         color: $mid_gray;
 
@@ -220,7 +220,11 @@
             padding: 0 $spacer-6 0 5px;
 
             &.subpart {
-                padding: 0 $spacer-6 + 5px;
+                padding: 0 $spacer-6;
+
+                b {
+                    padding-left: 5px;
+                }
             }
         }
 

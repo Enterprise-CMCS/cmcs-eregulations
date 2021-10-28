@@ -16175,7 +16175,8 @@ select:focus-visible {
   font-size: 70%;
 }
 .reg-text .latest-version {
-  margin: 40px 0 10px;
+  max-width: 53rem;
+  margin: 40px auto 10px;
   font-size: 14px;
   color: #5b616b;
 }
@@ -16184,7 +16185,10 @@ select:focus-visible {
     padding: 0 48px 0 5px;
   }
   .reg-text .latest-version.subpart {
-    padding: 0 53px;
+    padding: 0 48px;
+  }
+  .reg-text .latest-version.subpart b {
+    padding-left: 5px;
   }
 }
 .reg-text .latest-version + article {
