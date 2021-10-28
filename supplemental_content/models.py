@@ -30,7 +30,7 @@ class AbstractCategory(models.Model, AbstractModel):
 
 class Category(AbstractCategory):
     def __str__(self):
-        return f"Category '{self.name}'"
+        return f"{self.name} (Category)"
 
     class Meta:
         verbose_name = "Category"
@@ -41,7 +41,7 @@ class SubCategory(AbstractCategory):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
 
     def __str__(self):
-        return f"Sub-category '{self.name}'"
+        return f"{self.name} (Sub-category)"
 
     class Meta:
         verbose_name = "Sub-category"
@@ -52,7 +52,7 @@ class SubSubCategory(AbstractCategory):
     parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
 
     def __str__(self):
-        return f"Sub-sub-category '{self.name}'"
+        return f"{self.name} (Sub-sub-category)"
 
     class Meta:
         verbose_name = "Sub-sub-category"
@@ -122,7 +122,7 @@ class AbstractSupplementalContent(models.Model, AbstractModel):
     category = models.ForeignKey(
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content"
     )
-    locations = models.ManyToManyField(AbstractLocation, null=True, blank=True, related_name="supplemental_content")
+    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="supplemental_content")
 
     def __str__(self):
         return self._get_string_repr()
