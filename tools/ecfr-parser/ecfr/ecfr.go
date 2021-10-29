@@ -5,10 +5,11 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const dateFormat = "2006-01-02"
@@ -49,6 +50,9 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 
 	u := ecfrSite.ResolveReference(path)
 
+	log.Trace("[ECFR] Attempting fetch from ", u.String())
+	start := time.Now()
+
 	c, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
@@ -57,11 +61,13 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		return nil, err
 	}
 
+	log.Trace("[ECFR] Connecting to ", u.String())
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	if resp.StatusCode != 200 {
+		log.Trace("[ECFR] Received status code ", resp.StatusCode, " from ", u.String())
 		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
 			time.Sleep(2 * time.Second)
 			return fetch(ctx, path, opts)
@@ -75,6 +81,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	}
 	body := bytes.NewBuffer(b)
 
+	log.Trace("[ECFR] Received ", len(b), " bytes in ", time.Since(start), " from ", u.String())
 	return body, nil
 }
 
