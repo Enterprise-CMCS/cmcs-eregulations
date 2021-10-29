@@ -58,13 +58,13 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 
 	req, err := http.NewRequestWithContext(c, http.MethodGet, u.String(), nil)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
 	}
 
 	log.Trace("[ECFR] Connecting to ", u.String())
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("from `client.Do`: %+v", err)
 	}
 	if resp.StatusCode != 200 {
 		log.Trace("[ECFR] Received status code ", resp.StatusCode, " from ", u.String())
@@ -77,7 +77,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	defer resp.Body.Close()
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("from `io.ReadAll`: %+v", err)
 	}
 	body := bytes.NewBuffer(b)
 
