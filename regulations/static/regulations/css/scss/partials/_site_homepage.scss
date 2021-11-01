@@ -36,15 +36,13 @@
         background-position: right;
 
         .hero-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             text-shadow: 3px 1px 5px $secondary_color;
-            font-size: $font-size-sm;
             padding-top: 50px;
             padding-bottom: 50px;
             flex: 1;
-
-            @include screen-md {
-                font-size: $font-size-md;
-            }
 
             a {
                 color: $hero_link_color;
@@ -69,6 +67,11 @@
             font-family: $primary_site_font;
             font-size: $font_size_hero_h1;
             margin-bottom: 20px;
+        }
+
+        p.hero-text {
+            margin: 0;
+            font-size: $font-size-sm;
         }
     }
 

@@ -13998,16 +13998,13 @@ select:focus-visible {
   background-position: right;
 }
 .site-homepage .hero-banner .hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-shadow: 3px 1px 5px #026666;
-  font-size: 14px;
   padding-top: 50px;
   padding-bottom: 50px;
   flex: 1;
-}
-@media (min-width: 768px) {
-  .site-homepage .hero-banner .hero-content {
-    font-size: 16px;
-  }
 }
 .site-homepage .hero-banner .hero-content a {
   color: #fff;
@@ -14027,6 +14024,10 @@ select:focus-visible {
   font-family: "Open Sans", Helvetica, sans-serif;
   font-size: 26px;
   margin-bottom: 20px;
+}
+.site-homepage .hero-banner p.hero-text {
+  margin: 0;
+  font-size: 14px;
 }
 .site-homepage .site-features {
   background: #eefafe;
@@ -15278,57 +15279,6 @@ aside.left-sidebar li.active ul a.menu-section:focus {
 .toc-controls button[data-set-state=expanded] {
   margin: 0 auto;
   display: none;
-}
-
-.jump-to {
-  border-bottom: 1px solid #046791;
-  padding: 16px 0 32px;
-  margin: 0 32px;
-}
-.jump-to form {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.jump-to .jump-to-label {
-  margin: 16px 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-}
-.jump-to .jump-to-input {
-  display: inline-block;
-}
-.jump-to .jump-to-input select {
-  display: inline-block;
-  width: 70px;
-  border: none;
-}
-.jump-to .dot {
-  font-size: 24px;
-}
-.jump-to input.submit {
-  display: inline-block;
-  line-height: 1.3;
-  padding: 8px 16px;
-  margin: 4px 0 4px 4px;
-  background: #a3e8ff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-.jump-to input.submit:hover, .jump-to input.submit:focus {
-  background: #fff;
-  transition: all 0.1s ease-in;
-}
-.jump-to input.number-box {
-  width: 60px;
-  border: 0;
-  display: inline-block;
-  margin-right: 8px;
-}
-.jump-to label {
-  font-weight: 600;
-  font-size: 18px;
 }
 
 .indicator {
@@ -17788,6 +17738,163 @@ aside.right-sidebar .copy-btn-container + hr {
 }
 .action-btns .action-btn:first-child {
   margin-right: 15px;
+}
+
+.indicator {
+  background: #026666;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+
+.secondary-indicator {
+  background: #c4c4c4;
+  color: #000;
+}
+
+a:link.external::after {
+  content: "";
+  background-image: url("../images/external-link.svg");
+  margin-left: 0.1em;
+  padding-left: 1em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 0.8em;
+}
+a:hover.external::after {
+  content: "";
+  background-image: url("../images/external-link-hover.svg");
+  margin-left: 0.1em;
+  padding-left: 1em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 0.8em;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+.main-button {
+  background: #a3e8ff;
+  color: #17415f;
+  border: none;
+  transition: all 0.1s ease-in;
+}
+.main-button:hover {
+  background: #fff;
+}
+
+a {
+  color: #046791;
+}
+a:focus, a:hover {
+  color: #17415f;
+  cursor: pointer;
+  transition: all 0.1s ease-in;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+select {
+  cursor: pointer;
+}
+select:focus-visible {
+  box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+}
+
+.content :target {
+  scroll-margin-top: 86px;
+}
+@media (min-width: 1024px) {
+  .content :target {
+    scroll-margin-top: 107px;
+  }
+}
+
+.content.go-to-version :target {
+  scroll-margin-top: 172px;
+}
+@media (min-width: 1024px) {
+  .content.go-to-version :target {
+    scroll-margin-top: 193px;
+  }
+}
+
+.left-sidebar .jump-to {
+  margin: 0 32px;
+  padding: 16px 0 32px;
+  border-bottom: 1px solid #046791;
+}
+.left-sidebar .jump-to .jump-to-label {
+  margin: 16px 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.hero-content .jump-to .jump-to-label {
+  font-family: "Open Sans", Helvetica, sans-serif;
+  font-size: 26px;
+  line-height: 1;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+.hero-content .jump-to form .jump-to-input {
+  margin-right: 16px;
+}
+.hero-content .jump-to form select,
+.hero-content .jump-to form input,
+.hero-content .jump-to form input .submit {
+  margin: 0;
+  height: 36px;
+  font-size: 14px;
+}
+
+.jump-to form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.jump-to .jump-to-input {
+  display: inline-block;
+}
+.jump-to .jump-to-input select {
+  display: inline-block;
+  width: 70px;
+  border: none;
+}
+.jump-to .dot {
+  font-size: 24px;
+  line-height: 1;
+}
+.jump-to input.submit {
+  display: inline-block;
+  line-height: 1.3;
+  padding: 8px 16px;
+  margin: 4px 0 4px 4px;
+  background: #a3e8ff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.jump-to input.submit:hover, .jump-to input.submit:focus {
+  background: #fff;
+  transition: all 0.1s ease-in;
+}
+.jump-to input.number-box {
+  width: 60px;
+  border: 0;
+  display: inline-block;
+  margin-right: 8px;
+}
+.jump-to label {
+  font-weight: 600;
+  font-size: 18px;
 }
 
 /*# sourceMappingURL=main.css.map */
