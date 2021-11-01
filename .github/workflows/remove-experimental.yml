@@ -2,7 +2,8 @@ name: Remove Experimental
 
 on:
   workflow_dispatch:
-  delete:
+  pull_request:
+    types: [ closed ]
 
 jobs:
   remove:
@@ -11,16 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: get branch name manually
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event.name == 'workflow_dispatch'
         run: |
           lower_case=${GITHUB_REF,,}
+          echo "Branch Name: ${lower_case#refs/heads/}"
           echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
-      - name: get branch name for deleted branch
-        if: github.event.name == 'delete' && github.event.ref.type == 'branch'
+      - name: get branch name from PR
+        if: github.event.pull_request.closed == true
         run: |
-          echo "branch_name=${{ github.event.ref }}" >> $GITHUB_ENV
+          echo "Branch Name: ${{ github.event.pull_request.ref }}"
+          echo "branch_name=${{ github.event.pull_request.ref }}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
+          ref: $branch_name
           submodules: true
       - uses: actions/setup-node@v1
         with:

@@ -29,6 +29,35 @@
         }
     }
 
+    .reference {
+        position: absolute;
+        margin-left: -1.5em;
+        opacity: 0;
+
+        &:focus {
+            opacity: 1;
+        }
+    }
+
+    section.part-meta {
+        font-size: $font-size-sm;
+    }
+
+    h1 > .reference,
+    h2 > .reference {
+        margin-left: -1.2em;
+
+        @include screen-xxl {
+            margin-left: -1.4em;
+        }
+    }
+
+    :hover {
+        > .reference {
+            opacity: 1;
+        }
+    }
+
     .section-title {
         color: $primary_color;
     }
@@ -46,14 +75,136 @@
         }
     }
 
+    .table-section {
+        .table_head {
+            margin: 15px 0 25px;
+
+            p {
+                margin: 0;
+            }
+
+            p:first-child {
+                font-size: $font-size-md;
+                line-height: 1.5;
+                font-weight: 700;
+                font-family: $secondary_site_font;
+                margin-bottom: 5px;
+            }
+        }
+
+        .gpotbl_div {
+            table {
+                border-spacing: 0;
+                border-collapse: collapse;
+                border: 1px solid $table_border_color;
+                table-layout: auto;
+                width: 100%;
+
+                th,
+                th ~ td {
+                    table-layout: fixed;
+                }
+
+                th,
+                td {
+                    border: 1px solid $table_border_color;
+                    padding: 9px 12px;
+                    font-size: $font-size-sm;
+                    line-height: 1.4;
+                    text-align: left;
+                    vertical-align: top;
+                }
+
+                th {
+                    background: $table_header_background_color;
+                }
+
+                th[rowspan] {
+                    vertical-align: middle;
+                }
+
+                th[colspan] {
+                    text-align: center;
+                }
+            }
+        }
+    }
+
+    .appendix-section {
+        @include formula-special-border;
+
+        margin-left: 10px;
+        color: $secondary_text_color;
+
+        h2.section-title {
+            padding: 0px;
+            color: $secondary_text_color;
+            font-size: $font-size-md;
+            line-height: 1.4;
+            margin-top: 25px;
+
+            @include screen-xl {
+                font-size: $font-size-lg;
+                line-height: 1.5;
+            }
+        }
+
+        h3.heading1 {
+            padding: 0px;
+            color: $secondary_text_color;
+            font-family: $secondary_site_font;
+            font-size: $font-size-sm;
+            line-height: 1.3;
+            text-transform: capitalize;
+            text-align: left;
+            margin-top: 25px;
+
+            @include screen-xl {
+                font-size: $font-size-md;
+                line-height: 1.4;
+            }
+
+        }
+
+        .paragraphs {
+            p {
+                padding: 0px;
+
+                e {
+                    font-variant: normal;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
+    .footnote-section {
+        font-size: $font_size_xs;
+        line-height: 1.5;
+        color: $secondary_text_color;
+    }
+
+    fp,
     fp-1,
+    fp1-2,
     fp-2,
     fp-3,
     fp-4,
     fp-5,
     fp-6 {
+        @include formula-special-border;
+
+        color: $secondary_text_color;
         display: block;
-        margin-bottom: 1em;
+
+        &:not(:last-child),
+        &:only-child {
+            padding-bottom: 1em;
+        }
+
+        &:last-child:not(:only-child) {
+            margin-bottom: 1em;
+        }
 
         su {
             font-size: 70%;
@@ -108,21 +259,37 @@ article {
                 padding-left: $left-indent;
 
                 // poor assumption: five contiguous section/img tags
-                & + section,
-                & + img {
+                & + section {
                     padding-left: $left-indent;
-                    & + section,
-                    & + img {
+                    & + section {
                         padding-left: $left-indent;
-                        & + section,
-                        & + img {
+                        & + section {
                             padding-left: $left-indent;
-                            & + section,
-                            & + img {
+                            & + section {
                                 padding-left: $left-indent;
-                                & + section,
-                                & + img {
+                                & + section {
                                     padding-left: $left-indent;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                & + img {
+                    @include formula-special-border;
+                    margin-left: $left-indent;
+                    & + img {
+                        @include formula-special-border;
+                        margin-left: $left-indent;
+                        & + img {
+                            @include formula-special-border;
+                            margin-left: $left-indent;
+                            & + img {
+                                @include formula-special-border;
+                                margin-left: $left-indent;
+                                & + img {
+                                    @include formula-special-border;
+                                    margin-left: $left-indent;
                                 }
                             }
                         }

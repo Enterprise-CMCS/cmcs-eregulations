@@ -13,7 +13,7 @@
     {% if sections %}
     <h2 id="subpart-resources-heading">Subpart {{ subpart }} Resources</h2>
 
-    <supplementary-content api_url="{% url 'regcore' %}" title="{{ title }}" part="{{ reg_part }}" :sections="{{ sections }}"></supplementary-content>
+    <supplemental-content api_url="{% url 'regcore' %}" title="{{ title }}" part="{{ reg_part }}" :sections="{{ sections }}"></supplemental-content>
     {% endif %}
 
 </section>

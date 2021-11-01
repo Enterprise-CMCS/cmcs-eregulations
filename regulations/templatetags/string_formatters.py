@@ -46,3 +46,10 @@ def paragraph_formatter(title, node_label):
         else title_part_section + "".join(map(surround, subsection_list))
 
     return strip_tags(return_string)
+
+
+@register.simple_tag
+@stringfilter
+def appendix_formatter(title, node_label):
+    citation = " ".join(node_label)
+    return strip_tags(f"{title} CFR {citation}")

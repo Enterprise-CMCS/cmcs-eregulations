@@ -69,7 +69,7 @@ data.local: export EREGS_USERNAME=RpSS01rhbx
 data.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%: tools/ecfr-parser/build/ecfr-parser
-	./tools/ecfr-parser/build/ecfr-parser -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL)
+	./tools/ecfr-parser/build/ecfr-parser -loglevel trace -log-parse-errors=false -attempts 3 -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL)
 
 tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 	cd tools/guidance_pipeline; go build -o build/ .
@@ -77,8 +77,8 @@ tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 serverless/guidance/*.json: tools/guidance_pipeline/build/guidance_pipeline
 	./tools/guidance_pipeline/build/guidance_pipeline -f tools/guidance_pipeline/guidances.txt -o serverless/guidance
 
-supplementary_content: ## Load old supplementary content into a folder
-supplementary_content: serverless/guidance/*.json
+supplemental_content: ## Load old supplemental content into a folder
+supplemental_content: serverless/guidance/*.json
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker-compose stop
@@ -95,3 +95,7 @@ local.createadmin: ## Create a local admin account.
 
 test: ## run the cypress e2e suite
 	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
+test.local: ## run cypress tests locally without docker
+	cd e2e; \
+		npm install; \
+		npm run cypress:run;

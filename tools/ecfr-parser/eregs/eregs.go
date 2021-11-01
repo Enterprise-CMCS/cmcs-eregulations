@@ -7,9 +7,12 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var BaseURL string
@@ -32,13 +35,19 @@ type Part struct {
 }
 
 func PostPart(ctx context.Context, p *Part) (*http.Response, error) {
+	log.Debug("[EREGS] Beginning post of part ", p.Name, " to ", BaseURL)
+	start := time.Now()
+
 	buff := bytes.NewBuffer([]byte{})
 	enc := json.NewEncoder(buff)
 	enc.SetEscapeHTML(false)
 
+	log.Trace("[EREGS] Encoding part ", p.Name, " to JSON")
 	if err := enc.Encode(p); err != nil {
 		return nil, err
 	}
+
+	length := buff.Len()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, BaseURL, buff)
 	if err != nil {
@@ -46,6 +55,7 @@ func PostPart(ctx context.Context, p *Part) (*http.Response, error) {
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.SetBasicAuth(username, password)
+	log.Trace("[EREGS] Posting part ", p.Name)
 	resp, err := client.Do(req)
 	if err != nil {
 		return resp, err
@@ -54,5 +64,7 @@ func PostPart(ctx context.Context, p *Part) (*http.Response, error) {
 	if resp.StatusCode >= 400 {
 		return resp, fmt.Errorf("%d", resp.StatusCode)
 	}
+
+	log.Debug("[EREGS] Posted ", length, " bytes for part ", p.Name, " in ", time.Since(start))
 	return resp, nil
 }

@@ -31,10 +31,10 @@ export default [
         plugins,
     },
     {
-        input: "components/SupplementaryContent.vue",
+        input: 'components/SupplementalContent.vue',
         output: {
-            format: "esm",
-            file: "regulations/js/SupplementaryContent.js",
+            format: 'esm',
+            file: 'regulations/js/SupplementalContent.js'
         },
         plugins,
     },
@@ -43,6 +43,14 @@ export default [
         output: {
             format: "esm",
             file: "regulations/js/CopyBtn.js",
+        },
+        plugins,
+    },
+    {
+        input: "components/TableComponent.vue",
+        output: {
+            format: "esm",
+            file: "regulations/js/TableComponent.js",
         },
         plugins,
     },

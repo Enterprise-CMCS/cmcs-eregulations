@@ -43,19 +43,19 @@ functions:
       STATIC_URL: ${self:custom.settings.static_url}
       WORKING_DIR: /var/task
     handler: wsgi_handler.handler
-    timeout: 15
+    timeout: 300
     events:
       - http: ANY /
       - http: ANY {proxy+}
   reg_core_migrate:
     handler: migrate.handler
-    timeout: 15
+    timeout: 300
   create_su:
     handler: createsu.handler
-    timeout: 15
+    timeout: 300
   populate_content:
     handler: populate_content.handler
-    timeout: 15
+    timeout: 300
 
 resources:
 
@@ -155,7 +155,7 @@ resources:
       Type: AWS::RDS::DBClusterParameterGroup
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql9.6
+        Family: aurora-postgresql11.6
         Parameters:
           rds.force_ssl: 1
 
@@ -163,7 +163,7 @@ resources:
       Type: AWS::RDS::DBParameterGroup
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql9.6
+        Family: aurora-postgresql11.6
         Parameters:
           shared_preload_libraries: auto_explain,pg_stat_statements,pg_hint_plan,pgaudit
           log_statement: "ddl"
@@ -190,7 +190,7 @@ resources:
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
-        EngineVersion: "9.6.16"
+        EngineVersion: "11.6"
         DatabaseName: ${self:custom.settings.DB_NAME}
         BackupRetentionPeriod: 3
         DBClusterParameterGroupName:
@@ -201,9 +201,9 @@ resources:
     AuroraRDSInstance:
       Type: AWS::RDS::DBInstance
       Properties:
-        DBInstanceClass: db.r4.large
+        DBInstanceClass: db.r5.large
         Engine: aurora-postgresql
-        EngineVersion: "9.6.16"
+        EngineVersion: "11.6"
         PubliclyAccessible: false
         DBParameterGroupName:
           Ref: AuroraRDSInstanceParameter
