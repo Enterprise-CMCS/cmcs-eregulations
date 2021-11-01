@@ -287,10 +287,11 @@ button.collapsible-title {
     color: $primary_link_color;
     cursor: pointer;
     margin-top: $spacer-2;
-    display: block;
+    display: flex;
     border-radius: $border-radius;
     text-align: left;
     width:100%;
+    justify-content: space-between;
 
     &.subcategory {
         font-size: $font-size-md;
