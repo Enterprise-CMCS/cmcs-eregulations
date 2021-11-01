@@ -6,11 +6,20 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"strings"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
+
+	log "github.com/sirupsen/logrus"
 )
+
+var LogParseErrors bool
+
+func log_parse_error(err string) {
+	if LogParseErrors {
+		log.Warn("[PARSER] ", err)
+	}
+}
 
 type PostProcessor interface {
 	PostProcess() error
@@ -67,7 +76,7 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 		}
 		*c = append(*c, child)
 	default:
-		log.Printf("[WARNING] Unknown XML type in Part: %+v\n", start)
+		log_parse_error(fmt.Sprintf("Unknown XML type in part %+v", start))
 		d.Skip()
 	}
 
@@ -122,7 +131,7 @@ func (c *SubpartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		}
 		*c = append(*c, child)
 	default:
-		log.Printf("[WARNING] Unknown XML type in Subpart: %+v\n", start)
+		log_parse_error(fmt.Sprintf("Unknown XML type in Subpart: %+v", start))
 		d.Skip()
 	}
 	return nil
@@ -172,7 +181,7 @@ func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartEleme
 		}
 		*c = append(*c, child)
 	default:
-		log.Printf("[WARNING] Unknown XML type in Subject Group: %+v\n", start)
+		log_parse_error(fmt.Sprintf("Unknown XML type in Subject Group: %+v", start))
 		d.Skip()
 	}
 	return nil
@@ -193,13 +202,13 @@ func (s *Section) PostProcess() error {
 			var err error
 			c.Citation, err = generateParagraphCitation(c, prev)
 			if err != nil && err != ErrNoParents {
-				log.Println("[ERROR] generating paragraph citation", err, prev, c)
+				log_parse_error(fmt.Sprintf("Error generating paragraph citation", err, prev, c))
 			} else {
 				prev = c
 			}
 			c.Marker, err = c.marker()
 			if err != nil {
-				log.Println("[ERROR] generating paragraph marker", err, prev, c)
+				log_parse_error(fmt.Sprintf("Error generating paragraph marker", err, prev, c))
 			}
 		}
 	}
@@ -291,7 +300,7 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		}
 		*c = append(*c, child)
 	default:
-		log.Printf("[WARNING] Unknown XML type in Section: %+v\n", start)
+		log_parse_error(fmt.Sprintf("Unknown XML type in Section: %+v", start))
 		d.Skip()
 	}
 
@@ -332,7 +341,7 @@ func (c *AppendixChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) 
 		}
 		*c = append(*c, child)
 	default:
-		log.Printf("[WARNING] Unknown XML type in Appendix: %+v\n", start)
+		log_parse_error(fmt.Sprintf("Unknown XML type in Appendix: %+v", start))
 		d.Skip()
 	}
 
@@ -390,8 +399,8 @@ type Image struct {
 }
 
 type FootNote struct {
-	Type    string `json:"node_type"`
-	Content string `xml:",innerxml" json:"content"`
+	Type     string `json:"node_type"`
+	Content	 string `xml:",innerxml" json:"content"`
 }
 
 type Division struct {
@@ -430,7 +439,7 @@ func (p *Paragraph) Level() int {
 	}
 	m, err := p.marker()
 	if err != nil {
-		log.Println("[ERROR]", err.Error())
+		log_parse_error(err.Error())
 		return -1
 	}
 	if m == nil {
