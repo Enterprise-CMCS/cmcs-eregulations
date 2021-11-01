@@ -1,6 +1,5 @@
 import csv
 from django.http import HttpResponse
-from django.db import models
 from django.db.models.constants import LOOKUP_SEP
 from django.core import serializers
 
@@ -45,12 +44,17 @@ class ExportCsvMixin:
         queryset = model.objects.all()
         objects = list(queryset)
         parents = []
-        # retrieve one level of parent.  If we need 2 or more, we will figure that out later.
-        for base in objects[0].__class__.__bases__:
-            parents.extend(list(base.objects.all()))
+        if len(objects[0].__class__.__bases__):
+            base = objects[0].__class__.__bases__[0]
+            # Model is the top level class that everything derives from
+            while base.__name__ != 'Model':
+                print(base.__class__.__name__)
+                r = list(base.objects.all())
+                base = r[0].__class__.__bases__[0]
+                parents = r + parents
 
         parents.extend(objects)
         stream = serializers.serialize(format, parents, indent=indent)
         response = HttpResponse(stream, content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename={}.json'.format('foo')
+        response['Content-Disposition'] = 'attachment; filename={}.json'.format(model._meta)
         return response
