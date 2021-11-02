@@ -65,7 +65,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	req_start := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("from `client.Do`: %+v", err)
+		return nil, fmt.Errorf("from `client.Do`: %+v, took %+v", err, time.Since(req_start))
 	}
 	log.Trace("[ECFR] client.Do took ", time.Since(req_start))
 	if resp.StatusCode != 200 {
