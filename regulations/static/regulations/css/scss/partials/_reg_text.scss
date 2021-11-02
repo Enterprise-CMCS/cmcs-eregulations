@@ -63,6 +63,7 @@
     }
 
     .part-title {
+        max-width: $text-max-width;
         margin: $spacer-5 0 $spacer-3;
     }
 
@@ -217,7 +218,7 @@
         color: $mid_gray;
 
         @include screen-xxl {
-            padding: 0 $spacer-6 0 5px;
+            padding: 0 0 0 10px;
 
             &.subpart {
                 padding: 0 $spacer-6;
@@ -225,6 +226,10 @@
                 b {
                     padding-left: 5px;
                 }
+            }
+
+            & + .part-title {
+                margin: 0 $spacer-6;
             }
         }
 

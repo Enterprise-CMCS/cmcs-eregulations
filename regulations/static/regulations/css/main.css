@@ -16024,6 +16024,7 @@ select:focus-visible {
   color: #17415f;
 }
 .reg-text .part-title {
+  max-width: 53rem;
   margin: 40px 0 24px;
 }
 .reg-text h2 {
@@ -16182,13 +16183,16 @@ select:focus-visible {
 }
 @media (min-width: 1440px) {
   .reg-text .latest-version {
-    padding: 0 48px 0 5px;
+    padding: 0 0 0 10px;
   }
   .reg-text .latest-version.subpart {
     padding: 0 48px;
   }
   .reg-text .latest-version.subpart b {
     padding-left: 5px;
+  }
+  .reg-text .latest-version + .part-title {
+    margin: 0 48px;
   }
 }
 .reg-text .latest-version + article {
