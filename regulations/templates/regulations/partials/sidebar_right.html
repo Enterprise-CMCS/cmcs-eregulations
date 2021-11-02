@@ -8,8 +8,6 @@
     {% comment %}{% include "regulations/partials/copy-btn.html" with title=node.label btn_type="labeled-icon" %}{% endcomment %}
     {% comment %}<hr />{% endcomment %}
 
-    <h2 id="final-rules-heading">Part {{ reg_part }} Final Rules</h2>
-
     <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2" ruletype="RULE"></related-rules>
 
     {% if sections %}
