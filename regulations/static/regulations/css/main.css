@@ -14825,6 +14825,22 @@ header.sticky + .content aside {
     top: 102px;
   }
 }
+header.home-page {
+  display: flex;
+  flex-direction: row;
+}
+header.home-page .search-header input::placeholder {
+  color: #5b616b;
+}
+@media (min-width: 1024px) {
+  header.home-page {
+    height: 80px;
+    padding: 0 25px;
+  }
+  header.home-page .search-header input {
+    height: 45px;
+  }
+}
 header a {
   text-decoration: none;
   color: #026666;
@@ -14844,7 +14860,7 @@ header .flexbox {
 header .flexbox.header-mobile {
   height: 48px;
 }
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   header .flexbox.header-mobile {
     display: none;
   }
@@ -14871,7 +14887,7 @@ header .flexbox.header-mobile button#mobile-search-open[data-state=expanded] ~ #
 header .flexbox.header-mobile button#mobile-search-open[data-state=expanded] ~ .search-borderless {
   display: none;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   header .flexbox.header-large {
     display: none;
   }
@@ -14895,17 +14911,26 @@ header .title-container {
   }
 }
 header .site-title {
-  padding-right: 16px;
-  margin-right: 16px;
   font-size: 14px;
   font-weight: normal;
 }
 @media (min-width: 1024px) {
   header .site-title {
-    border-right: 1px solid #d6d7d9;
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 700;
+    line-height: 36px;
     display: inline-block;
+  }
+}
+@media (min-width: 1024px) {
+  header .site-title.homepage-site-title {
+    font-size: 21px;
+  }
+}
+@media (max-width: 1023px) {
+  header .site-title.homepage-site-title {
+    font-size: 16px;
+    font-weight: 700;
   }
 }
 header .reg-title {
@@ -14917,6 +14942,10 @@ header .reg-title {
 @media (min-width: 1024px) {
   header .reg-title {
     font-size: 16px;
+    line-height: 36px;
+    padding-left: 16px;
+    margin-left: 16px;
+    border-left: 1px solid #d6d7d9;
   }
 }
 header .reg-title a {
@@ -14943,9 +14972,9 @@ header .search-borderless input {
   flex: 0 0 48px;
   height: 48px;
 }
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .search-header {
-    flex: 0 0 250px;
+    flex: 0 0 230px;
     height: auto;
   }
   .search-header svg {
@@ -14954,6 +14983,12 @@ header .search-borderless input {
 }
 .search-header .search-box {
   display: none;
+}
+@media (min-width: 768px) {
+  .search-header .search-box {
+    width: 230px;
+    display: inline-block;
+  }
 }
 @media (min-width: 1024px) {
   .search-header .search-box {
