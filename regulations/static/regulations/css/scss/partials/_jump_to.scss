@@ -26,6 +26,14 @@
             line-height: 1;
             margin-bottom: 15px;
             font-weight: 700;
+
+            @include custom-max($tablet-max / 1px) {
+                font-size: $font_size_hero_h1_tablet;
+            }
+
+            @include custom-max($iphoneSE-max / 1px) {
+                font-size: $font-size-lg;
+            }
         }
 
         form {

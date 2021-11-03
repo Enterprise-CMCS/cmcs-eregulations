@@ -13993,9 +13993,11 @@ select:focus-visible {
   color: #fff;
   z-index: 2;
   background: #026666;
-  background-image: url("../images/hero-graphic-updated.svg");
-  background-repeat: no-repeat;
-  background-position: right;
+}
+@media (max-width: 767px) {
+  .site-homepage .hero-banner {
+    height: 312px;
+  }
 }
 .site-homepage .hero-banner .hero-content {
   display: flex;
@@ -14005,6 +14007,42 @@ select:focus-visible {
   padding-top: 50px;
   padding-bottom: 50px;
   flex: 1;
+  background-image: url("../images/hero-graphic-updated.svg");
+  background-repeat: no-repeat;
+  background-position: bottom 0px right 25px;
+}
+@media (max-width: 1023px) {
+  .site-homepage .hero-banner .hero-content {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    justify-content: flex-start;
+    background-size: 55%;
+    background-position: bottom 50% right 25px;
+  }
+  .site-homepage .hero-banner .hero-content > * {
+    width: 40%;
+  }
+}
+@media (max-width: 767px) {
+  .site-homepage .hero-banner .hero-content {
+    background-image: url("../images/hero-graphic-updated-mobile.svg");
+    background-size: auto 45%;
+    background-position: bottom 0px right 50%;
+  }
+  .site-homepage .hero-banner .hero-content > * {
+    width: 100%;
+  }
+}
+@media (max-width: 374px) {
+  .site-homepage .hero-banner .hero-content {
+    padding: 25px 20px;
+    background-image: url("../images/hero-graphic-updated-mobile.svg");
+    background-size: auto;
+    background-position: bottom 0px right 50%;
+  }
+  .site-homepage .hero-banner .hero-content > * {
+    width: 100%;
+  }
 }
 .site-homepage .hero-banner .hero-content a {
   color: #fff;
@@ -14028,6 +14066,11 @@ select:focus-visible {
 .site-homepage .hero-banner p.hero-text {
   margin: 0;
   font-size: 14px;
+}
+@media (max-width: 1023px) {
+  .site-homepage .hero-banner p.hero-text {
+    margin-top: 20px;
+  }
 }
 .site-homepage .site-features {
   background: #eefafe;
@@ -14858,7 +14901,7 @@ header.home-page .search-header input::placeholder {
   header.home-page {
     align-items: center;
     height: 60px;
-    padding: 0 12px 0 25px;
+    padding: 0 7px 0 20px;
   }
   header.home-page .search-header input {
     height: 40px;
@@ -17904,6 +17947,16 @@ select:focus-visible {
   line-height: 1;
   margin-bottom: 15px;
   font-weight: 700;
+}
+@media (max-width: 1023px) {
+  .hero-content .jump-to .jump-to-label {
+    font-size: 20px;
+  }
+}
+@media (max-width: 374px) {
+  .hero-content .jump-to .jump-to-label {
+    font-size: 18px;
+  }
 }
 .hero-content .jump-to form .jump-to-input {
   margin-right: 16px;

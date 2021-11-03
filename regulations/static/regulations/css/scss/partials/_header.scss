@@ -61,7 +61,7 @@ header {
         @include custom-max($mobile-max / 1px) {
             align-items: center;
             height: 60px;
-            padding: 0 12px 0 25px;
+            padding: 0 7px 0 20px;
 
             .search-header input {
                 height: 40px;
