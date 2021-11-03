@@ -1,11 +1,9 @@
-describe("Homepage", () => {
+describe("Homepage", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] =
-                Cypress.env("DEPLOYING");
+            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
-
-    })
+    });
 
     it("loads the homepage", () => {
         cy.viewport("macbook-15");
@@ -18,7 +16,7 @@ describe("Homepage", () => {
     it("clicks on part 430 and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.contains("430").click();
+        cy.get("#homepage-toc").contains("Part 430").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/430/");
         cy.contains("Grants to States for Medical Assistance Programs");
