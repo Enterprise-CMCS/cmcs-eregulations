@@ -33,6 +33,7 @@ header {
 
         .search-header input::placeholder {
             color: $secondary_text_color;
+            font-weight: 600;
         }
 
         @include screen-lg {
@@ -41,6 +42,33 @@ header {
 
             .search-header input {
                 height: 45px;
+            }
+        }
+
+        @include custom-max($tablet-max / 1px) {
+            height: 70px;
+            padding: 0 25px;
+
+            .search-header input {
+                height: 40px;
+
+                &::placeholder {
+                    font-size: $font_size_sm;
+                }
+            }
+        }
+
+        @include custom-max($mobile-max / 1px) {
+            align-items: center;
+            height: 60px;
+            padding: 0 12px 0 25px;
+
+            .search-header input {
+                height: 40px;
+
+                &::placeholder {
+                    font-size: $font_size_sm;
+                }
             }
         }
     }
