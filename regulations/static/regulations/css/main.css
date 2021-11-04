@@ -15708,6 +15708,7 @@ aside.right-sidebar .resource-info {
 .supplemental-content-category {
   display: table;
   margin-bottom: 1em;
+  width: 100%;
 }
 .supplemental-content-category .category {
   display: table-cell;
@@ -15734,15 +15735,20 @@ button.collapsible-title {
   color: #046791;
   cursor: pointer;
   margin-top: 16px;
-  display: block;
+  display: flex;
   border-radius: 3px;
   text-align: left;
+  width: 100%;
+  justify-content: space-between;
 }
 button.collapsible-title.subcategory {
   font-size: 16px;
 }
 button.collapsible-title.visible {
   color: #212121;
+}
+button.collapsible-title .fa {
+  float: right;
 }
 
 .show-more-button {
@@ -15905,6 +15911,7 @@ select:focus-visible {
   color: #17415f;
 }
 .reg-text .part-title {
+  max-width: 53rem;
   margin: 40px 0 24px;
 }
 .reg-text h2 {
@@ -16056,16 +16063,23 @@ select:focus-visible {
   font-size: 70%;
 }
 .reg-text .latest-version {
-  margin: 40px 0 10px;
+  max-width: 53rem;
+  margin: 40px auto 10px;
   font-size: 14px;
   color: #5b616b;
 }
 @media (min-width: 1440px) {
   .reg-text .latest-version {
-    padding: 0 48px 0 5px;
+    padding: 0 0 0 10px;
   }
   .reg-text .latest-version.subpart {
-    padding: 0 53px;
+    padding: 0 48px;
+  }
+  .reg-text .latest-version.subpart b {
+    padding-left: 5px;
+  }
+  .reg-text .latest-version + .part-title {
+    margin: 0 48px;
   }
 }
 .reg-text .latest-version + article {
