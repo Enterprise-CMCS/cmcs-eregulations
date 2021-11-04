@@ -155,7 +155,7 @@ resources:
       Type: AWS::RDS::DBClusterParameterGroup
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql11.6
+        Family: aurora-postgresql10.18
         Parameters:
           rds.force_ssl: 1
 
