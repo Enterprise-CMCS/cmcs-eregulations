@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -14,6 +15,7 @@ import (
 
 const dateFormat = "2006-01-02"
 const timeout = 300 * time.Second
+
 
 var (
 	ecfrSite          = urlMustParse("https://ecfr.gov/api/versioner/v1/")
@@ -60,6 +62,9 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	if err != nil {
 		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
 	}
+
+	req.Header.Set("User-Agent", "E-regs for " + os.Getenv("name"))
+    log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
 
 	log.Trace("[ECFR] Connecting to ", u.String())
 	req_start := time.Now()
