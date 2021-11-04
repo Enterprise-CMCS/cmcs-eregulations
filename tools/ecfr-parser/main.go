@@ -26,6 +26,7 @@ var (
 	subchapter      SubchapterArg
 	individualParts PartsArg
 	loglevel        string
+	threads         int
 )
 
 type SubchapterArg []string
@@ -59,6 +60,7 @@ func init() {
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
 	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8080/v2/", "A url specifying where to send eregs parts")
+	flag.IntVar(&threads, "threads", 3, "Number of parts to process simultaneously.")
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
 	flag.BoolVar(&parseXML.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
@@ -131,10 +133,15 @@ func run() error {
 	}
 
 	log.Info("[MAIN] Fetching and processing parts...")
+	ch := make(chan *eregs.Part)
 	var wg sync.WaitGroup
+	for i := 0; i < threads; i++ {
+		wg.Add(1)
+		go startHandlePartWorker(i, ch, &wg, ctx, today)
+	}
+
 	for _, part := range parts {
 		for date := range versions[part] {
-			log.Debug("[MAIN] Processing part ", part, " version ", date, "...")
 			reg := &eregs.Part{
 				Title:     title,
 				Name:      part,
@@ -142,24 +149,33 @@ func run() error {
 				Structure: &ecfr.Structure{},
 				Document:  &parseXML.Part{},
 			}
-			wg.Add(1)
-			go func(ctx context.Context, reg *eregs.Part) {
-				defer wg.Done()
-				if err := handlePart(ctx, today, reg); err != nil {
-					log.Error(err)
-				}
-			}(ctx, reg)
+			ch <- reg
 		}
 	}
+
 	log.Debug("[MAIN] Waiting until all parts are finished processing.")
+	close(ch)
 	wg.Wait()
 	log.Info("[MAIN] All parts finished processing!")
 
 	return nil
 }
 
-func handlePart(ctx context.Context, date time.Time, reg *eregs.Part) error {
-	log.Debug("[MAIN] Fetching structure for part ", reg.Name)
+func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, ctx context.Context, date time.Time) {
+	for reg := range ch {
+		log.Debug("[Worker ", thread, "] Processing part ", reg.Name)
+		err := handlePart(thread, ctx, date, reg)
+		if err != nil {
+			log.Error("[Worker ", thread, "] Error processing part ", reg.Name, ": ", err)
+		}
+		time.Sleep(1 * time.Second)
+	}
+
+	wg.Done()
+}
+
+func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part) error {
+	log.Trace("[MAIN] Fetching structure for part ", reg.Name)
 	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
 		return err
@@ -171,7 +187,7 @@ func handlePart(ctx context.Context, date time.Time, reg *eregs.Part) error {
 		return err
 	}
 
-	log.Debug("[MAIN] Fetching full document for part ", reg.Name)
+	log.Trace("[MAIN] Fetching full document for part ", reg.Name)
 	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
 		return err
@@ -188,7 +204,7 @@ func handlePart(ctx context.Context, date time.Time, reg *eregs.Part) error {
 		return err
 	}
 
-	log.Debug("[MAIN] Posting part ", reg.Name, " to eRegs")
+	log.Trace("[MAIN] Posting part ", reg.Name, " to eRegs")
 	resp, err := eregs.PostPart(ctx, reg)
 	if err != nil {
 		if resp != nil {
@@ -202,6 +218,6 @@ func handlePart(ctx context.Context, date time.Time, reg *eregs.Part) error {
 		return err
 	}
 
-	log.Debug("[MAIN] Finished processing part ", reg.Name)
+	log.Debug("[MAIN] Successfully processed part ", reg.Name)
 	return nil
 }
