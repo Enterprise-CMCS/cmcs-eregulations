@@ -6,7 +6,7 @@
     {% endif %}
     {{ toc.label_description }}
 </h1>
-<p class="last-updated">{{ toc.label_level }} last updated from <a href="https://ecfr.federalregister.gov/" class="external" target="_blank" rel="noopener noreferrer">eCFR</a> on {{ last_updated|date:"M d, Y" }}.</p>
+<p class="last-updated">{{ toc.label_level }} last updated from <a href="https://www.ecfr.gov/" class="external" target="_blank" rel="noopener noreferrer">eCFR</a> on {{ last_updated|date:"M d, Y" }}.</p>
 
 <section class="part-meta"><b>{{ authority.header }}</b> {{ authority.content }}</section>
 <section class="part-meta"><b>{{ source.header }}</b> {{ source.content | citation }}</section>
