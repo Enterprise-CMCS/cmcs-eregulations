@@ -93,7 +93,7 @@ func main() {
 		} else if i == attempts - 1 {
 			log.Fatal("[main] Failed to load regulations ", attempts, " times. Error: ", err)
 		} else {
-			log.Error("[main] Failed to load regulations. Retrying", attempts - i - 1, "more times. Error: ", err)
+			log.Error("[main] Failed to load regulations. Retrying ", attempts - i - 1, " more times. Error: ", err)
 		}
 	}
 }
@@ -175,6 +175,8 @@ func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, 
 }
 
 func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part) error {
+	start := time.Now()
+
 	log.Debug("[worker ", thread, "] Fetching structure for part ", reg.Name)
 	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
@@ -218,6 +220,6 @@ func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name)
+	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " in ", time.Since(start))
 	return nil
 }
