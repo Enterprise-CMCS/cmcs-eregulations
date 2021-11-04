@@ -14749,10 +14749,11 @@ select:focus-visible {
 .flash-banner {
   background: #eefafe;
   text-align: center;
-  font-size: 14px;
-  padding: 8px 16px;
+  font-size: 12px;
+  padding: 2px;
   position: relative;
   z-index: 100;
+  line-height: 1;
 }
 .flash-banner a {
   text-decoration: none;
