@@ -67,7 +67,7 @@ func init() {
 	flag.Parse()
 
 	if title < 0 {
-		log.Fatal("[MAIN] Title flag is required and must be greater than 0.")
+		log.Fatal("[main] Title flag is required and must be greater than 0.")
 	}
 
 	level := log.WarnLevel
@@ -91,9 +91,9 @@ func main() {
 		if err := run(); err == nil {
 			break
 		} else if i == attempts - 1 {
-			log.Fatal("[MAIN] Failed to load regulations ", attempts, " times. Error: ", err)
+			log.Fatal("[main] Failed to load regulations ", attempts, " times. Error: ", err)
 		} else {
-			log.Error("[MAIN] Failed to load regulations. Retrying", attempts - i - 1, "more times. Error: ", err)
+			log.Error("[main] Failed to load regulations. Retrying", attempts - i - 1, "more times. Error: ", err)
 		}
 	}
 }
@@ -104,16 +104,16 @@ func run() error {
 
 	start := time.Now()
 	defer func() {
-		log.Debug("[MAIN] Run time:", time.Since(start))
+		log.Debug("[main] Run time:", time.Since(start))
 	}()
 
 	today := time.Now()
 
-	log.Info("[MAIN] Fetching parts list...")
+	log.Info("[main] Fetching parts list...")
 
 	var parts []string
 	if subchapter != nil {
-		log.Debug("[MAIN] Fetching subchapter ", subchapter, " parts list...")
+		log.Debug("[main] Fetching subchapter ", subchapter, " parts list...")
 		var err error
 		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, ecfr.Subchapter(subchapter[0], subchapter[1]))
 		if err != nil {
@@ -123,16 +123,16 @@ func run() error {
 	parts = append(parts, individualParts...)
 
 	if len(parts) < 1 {
-		log.Fatal("[MAIN] Some number of parts must be specified")
+		log.Fatal("[main] Some number of parts must be specified")
 	}
 
-	log.Debug("[MAIN] Extracting versions...")
+	log.Debug("[main] Extracting versions...")
 	versions, err := ecfr.ExtractVersions(ctx, title)
 	if err != nil {
 		return err
 	}
 
-	log.Info("[MAIN] Fetching and processing parts...")
+	log.Info("[main] Fetching and processing parts...")
 	ch := make(chan *eregs.Part)
 	var wg sync.WaitGroup
 	for i := 0; i < threads; i++ {
@@ -153,20 +153,20 @@ func run() error {
 		}
 	}
 
-	log.Debug("[MAIN] Waiting until all parts are finished processing.")
+	log.Debug("[main] Waiting until all parts are finished processing.")
 	close(ch)
 	wg.Wait()
-	log.Info("[MAIN] All parts finished processing!")
+	log.Info("[main] All parts finished processing!")
 
 	return nil
 }
 
 func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, ctx context.Context, date time.Time) {
 	for reg := range ch {
-		log.Debug("[Worker ", thread, "] Processing part ", reg.Name)
+		log.Debug("[worker ", thread, "] Processing part ", reg.Name)
 		err := handlePart(thread, ctx, date, reg)
 		if err != nil {
-			log.Error("[Worker ", thread, "] Error processing part ", reg.Name, ": ", err)
+			log.Error("[worker ", thread, "] Error processing part ", reg.Name, ": ", err)
 		}
 		time.Sleep(1 * time.Second)
 	}
@@ -175,36 +175,36 @@ func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, 
 }
 
 func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part) error {
-	log.Trace("[MAIN] Fetching structure for part ", reg.Name)
+	log.Debug("[worker ", thread, "] Fetching structure for part ", reg.Name)
 	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
 		return err
 	}
 
-	log.Trace("[MAIN] Decoding structure for part ", reg.Name)
+	log.Trace("[worker ", thread, "] Decoding structure for part ", reg.Name)
 	sd := json.NewDecoder(sbody)
 	if err := sd.Decode(reg.Structure); err != nil {
 		return err
 	}
 
-	log.Trace("[MAIN] Fetching full document for part ", reg.Name)
+	log.Debug("[worker ", thread, "] Fetching full document for part ", reg.Name)
 	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
 		return err
 	}
 
-	log.Trace("[MAIN] Decoding full structure for part ", reg.Name)
+	log.Trace("[worker ", thread, "] Decoding full structure for part ", reg.Name)
 	d := xml.NewDecoder(body)
 	if err := d.Decode(reg.Document); err != nil {
 		return err
 	}
 
-	log.Trace("[MAIN] Running post process on structure for part ", reg.Name)
+	log.Debug("[worker ", thread, "] Running post process on structure for part ", reg.Name)
 	if err := reg.Document.PostProcess(); err != nil {
 		return err
 	}
 
-	log.Trace("[MAIN] Posting part ", reg.Name, " to eRegs")
+	log.Debug("[worker ", thread, "] Posting part ", reg.Name, " to eRegs")
 	resp, err := eregs.PostPart(ctx, reg)
 	if err != nil {
 		if resp != nil {
@@ -218,6 +218,6 @@ func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part
 		return err
 	}
 
-	log.Debug("[MAIN] Successfully processed part ", reg.Name)
+	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name)
 	return nil
 }

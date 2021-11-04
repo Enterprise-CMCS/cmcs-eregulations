@@ -17,7 +17,7 @@ var LogParseErrors bool
 
 func log_parse_error(err string) {
 	if LogParseErrors {
-		log.Warn("[PARSER] ", err)
+		log.Warn("[parser] ", err)
 	}
 }
 

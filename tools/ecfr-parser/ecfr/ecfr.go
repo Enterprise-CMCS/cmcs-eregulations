@@ -50,7 +50,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 
 	u := ecfrSite.ResolveReference(path)
 
-	log.Trace("[ECFR] Attempting fetch from ", u.String())
+	log.Trace("[ecfr] Attempting fetch from ", u.String())
 	start := time.Now()
 
 	c, cancel := context.WithTimeout(ctx, timeout)
@@ -61,15 +61,15 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
 	}
 
-	log.Trace("[ECFR] Connecting to ", u.String())
+	log.Trace("[ecfr] Connecting to ", u.String())
 	req_start := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("from `client.Do`: %+v, took %+v", err, time.Since(req_start))
 	}
-	log.Trace("[ECFR] client.Do took ", time.Since(req_start))
+	log.Trace("[ecfr] client.Do took ", time.Since(req_start))
 	if resp.StatusCode != 200 {
-		log.Trace("[ECFR] Received status code ", resp.StatusCode, " from ", u.String())
+		log.Trace("[ecfr] Received status code ", resp.StatusCode, " from ", u.String())
 		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
 			time.Sleep(2 * time.Second)
 			return fetch(ctx, path, opts)
@@ -83,7 +83,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	}
 	body := bytes.NewBuffer(b)
 
-	log.Trace("[ECFR] Received ", len(b), " bytes in ", time.Since(start), " from ", u.String())
+	log.Trace("[ecfr] Received ", len(b), " bytes in ", time.Since(start), " from ", u.String())
 	return body, nil
 }
 
