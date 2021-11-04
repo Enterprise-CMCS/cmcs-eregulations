@@ -4,6 +4,11 @@ import (
 	"regexp"
 )
 
+type Part struct {
+	Sections []Section `json:"section"`
+	Subparts []Subpart `json:"subpart"`
+}
+
 type Section struct {
 	Title   string `json:"title"`
 	Part    string `json:"part"`
@@ -11,26 +16,35 @@ type Section struct {
 }
 
 type Subpart struct {
-	Title   string `json:"title"`
-	Part    string `json:"part"`
-	Subpart string `json:"subpart"`
+	Title    string    `json:"title"`
+	Part     string    `json:"part"`
+	Subpart  string    `json:"subpart"`
+	Sections []Section `json:"section"`
 }
 
-func ExtractStructure(s Structure) {
+func ExtractStructure(s Structure) (Part, error) {
 	title := ExtractTitle(s)
-	part := s.Children[0].Children[0].Children
-	partNumber := part[0].Identifier[0]
-	for _, child := range part[0].Children {
-		if child.Type == "section" {
-			ExtractSection(title, child)
-		} else if child.Type == "subpart" {
-			ExtractSubpart(title, partNumber, child)
+	structurePart := s.Children[0].Children[0].Children
+	partNumber := structurePart[0].Identifier[0]
+	sections := []Section{}
+	subparts := []Subpart{}
 
-			for _, section := range child.Children {
-				ExtractSection(title, section)
-			}
+	for _, child := range structurePart[0].Children {
+		if child.Type == "section" {
+			sec := ExtractSection(title, child)
+			sections = append(sections, sec)
+		} else if child.Type == "subpart" {
+			subp := ExtractSubpart(title, partNumber, child)
+			subparts = append(subparts, subp)
 		}
 	}
+
+	p := Part{
+		Sections: sections,
+		Subparts: subparts,
+	}
+
+	return p, nil
 }
 
 func ExtractTitle(s Structure) string {
@@ -45,10 +59,18 @@ func ExtractTitle(s Structure) string {
 }
 
 func ExtractSubpart(title string, partNumber string, s *Structure) Subpart {
+	sections := []Section{}
+
+	for _, section := range s.Children {
+		sec := ExtractSection(title, section)
+		sections = append(sections, sec)
+	}
+
 	subpart := Subpart{
-		Title:   title,
-		Part:    partNumber,
-		Subpart: s.Identifier[0],
+		Title:    title,
+		Part:     partNumber,
+		Subpart:  s.Identifier[0],
+		Sections: sections,
 	}
 
 	return subpart
