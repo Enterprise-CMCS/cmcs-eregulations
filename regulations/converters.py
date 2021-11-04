@@ -11,7 +11,7 @@ class NumericConverter(PathConverter):
 
 
 class SubpartConverter(PathConverter):
-    regex = r'[A-Za-z]'
+    regex = r'[A-Za-z]-[A-Za-z]|[A-Za-z]'
 
 
 class VersionConverter(PathConverter):
