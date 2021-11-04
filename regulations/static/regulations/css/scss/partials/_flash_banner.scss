@@ -8,10 +8,11 @@
 .flash-banner {
     background: $teritary_background_color;
     text-align: center;
-    font-size: $font-size-sm;
-    padding: 1px;
+    font-size: $font-size-xs;
+    padding: 2px;
     position: relative;
     z-index: 100;
+    line-height: 1;
 
     a {
         text-decoration: none;
