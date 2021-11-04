@@ -14879,7 +14879,7 @@ select:focus-visible {
   background: #eefafe;
   text-align: center;
   font-size: 14px;
-  padding: 8px 16px;
+  padding: 1px;
   position: relative;
   z-index: 100;
 }
@@ -15854,10 +15854,11 @@ button.collapsible-title {
   color: #046791;
   cursor: pointer;
   margin-top: 16px;
-  display: block;
+  display: flex;
   border-radius: 3px;
   text-align: left;
   width: 100%;
+  justify-content: space-between;
 }
 button.collapsible-title.subcategory {
   font-size: 16px;
