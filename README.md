@@ -39,6 +39,9 @@ Proceed to <http://localhost:8000> in your browser to see the results.
 
 Proceed to <http://localhost:8000/admin> to access the admin portion and login with the credentials you created in the previous step
 
+`make local.seed` will load data from the fixtures folder setting up a usable amount of data for local use.  
+This data is not maintained and should not be relied on for any purpose other than development.
+
 `make local.stop` will cause the running docker processes to stop without losing data.
 
 `make local.clean` will remove the local environment completely, useful when you want to start fresh.
@@ -63,3 +66,8 @@ Running `make test` after `make local` will run the cypress suite of end to end 
 ## Working with assets ##
 
 `make watch`: scss and js files can be watched an automatically compiled
+
+## Exporting data from Production ##
+
+Every type of model has an "Export to JSON" button that will export the data to a JSON format that can be easily imported
+by saving the file to the fixtures folder and importing it with the built in `loaddata` command from Django.
