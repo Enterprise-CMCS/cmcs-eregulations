@@ -14011,7 +14011,7 @@ select:focus-visible {
   background-repeat: no-repeat;
   background-position: bottom 0px right 25px;
 }
-@media (max-width: 1023px) {
+@media (max-width: 1080px) {
   .site-homepage .hero-banner .hero-content {
     padding-top: 30px;
     padding-bottom: 30px;
@@ -14067,7 +14067,7 @@ select:focus-visible {
   margin: 0;
   font-size: 14px;
 }
-@media (max-width: 1023px) {
+@media (max-width: 1080px) {
   .site-homepage .hero-banner p.hero-text {
     margin-top: 20px;
   }
@@ -17963,7 +17963,7 @@ select:focus-visible {
   margin-bottom: 15px;
   font-weight: 700;
 }
-@media (max-width: 1023px) {
+@media (max-width: 1080px) {
   .hero-content .jump-to .jump-to-label {
     font-size: 20px;
   }

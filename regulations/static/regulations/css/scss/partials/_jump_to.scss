@@ -27,7 +27,7 @@
             margin-bottom: 15px;
             font-weight: 700;
 
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max($hero-tablet-max / 1px) {
                 font-size: $font_size_hero_h1_tablet;
             }
 

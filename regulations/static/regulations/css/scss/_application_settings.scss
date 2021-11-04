@@ -133,6 +133,8 @@ $tablet-max: $width-lg - 1; // 1023px
 $mobile-max: $width-md - 1; // 767px
 $iphoneSE-max: $width-xs - 1; // 374px
 
+$hero-tablet-max: 1080px;
+
 // Uses CMS Design System + a larger screen size
 
 $width-xxs: 320px;

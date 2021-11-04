@@ -49,7 +49,7 @@
             background-repeat: no-repeat;
             background-position: bottom 0px right 25px;
 
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max($hero-tablet-max / 1px) {
                 padding-top: 30px;
                 padding-bottom: 30px;
                 justify-content: flex-start;
@@ -113,7 +113,7 @@
             margin: 0;
             font-size: $font-size-sm;
 
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max($hero-tablet-max / 1px) {
                 margin-top: 20px;
             }
         }
