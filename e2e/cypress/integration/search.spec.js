@@ -57,12 +57,12 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit("/search/?q=State", { timeout: 60000 });
         cy.findByRole("link", {
-            name: "State in Beta eCFR",
+            name: "State in eCFR",
             exact: false,
         }).should(
             "have.attr",
             "href",
-            "https://ecfr.federalregister.gov/search?search%5Bdate%5D=current&search%5Bhierarchy%5D%5Btitle%5D=42&search%5Bquery%5D=State&view=standard"
+            "https://www.ecfr.gov/search?search%5Bdate%5D=current&search%5Bhierarchy%5D%5Btitle%5D=42&search%5Bquery%5D=State&view=standard"
         );
     });
 
