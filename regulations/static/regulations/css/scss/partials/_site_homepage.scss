@@ -45,7 +45,7 @@
             padding-bottom: 50px;
             flex: 1;
 
-            background-image: url("../images/hero-graphic-updated.svg");
+            background-image: url("../images/hero-graphic-updated2.svg");
             background-repeat: no-repeat;
             background-position: bottom 0px right 25px;
 
@@ -63,7 +63,7 @@
             }
 
             @include custom-max($mobile-max / 1px) {
-                background-image: url("../images/hero-graphic-updated-mobile.svg");
+                background-image: url("../images/hero-graphic-updated-mobile2.svg");
                 background-size: auto 45%;
                 background-position: bottom 0px right 50%;
 
@@ -75,7 +75,7 @@
             @include custom-max($iphoneSE-max / 1px) {
                 padding: 25px 20px;
 
-                background-image: url("../images/hero-graphic-updated-mobile.svg");
+                background-image: url("../images/hero-graphic-updated-mobile2.svg");
                 background-size: auto;
                 background-position: bottom 0px right 50%;
 
