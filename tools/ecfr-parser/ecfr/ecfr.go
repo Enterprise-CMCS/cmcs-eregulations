@@ -63,7 +63,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
 	}
 
-	req.Header.Set("User-Agent", "E-regs for " + os.Getenv("name"))
+	req.Header.Set("User-Agent", "E-regs for " + os.Getenv("NAME"))
     log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
 
 	log.Trace("[ECFR] Connecting to ", u.String())
