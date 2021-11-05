@@ -19,21 +19,38 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get("div.flash-banner").should("be.visible");
     });
 
-    //it("hides the flash banner when scrolling down", () => {
-        //cy.viewport("macbook-15");
-        //cy.visit("/");
-        //cy.scrollTo(0, 100);
+    it("hides the flash banner when scrolling down", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get("div.flash-banner").should("be.visible");
+        cy.scrollTo(0, 400);
+        cy.wait(500);
+        cy.get("div.flash-banner").then(($el) => {
+            const rect = $el[0].getBoundingClientRect();
+            expect(rect.bottom).to.be.lessThan(1);
+        });
+    });
 
-        //cy.get("div.flash-banner").then(($el) => {
-            //const rect = $el[0].getBoundingClientRect();
+    it("has the correct title and copy text", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".jump-to-label").should(
+            "have.text",
+            "Jump to Regulation Section"
+        );
+        cy.get(".hero-text").should(
+            "have.text",
+            "Explore this site as a supplement to existing policy tools. How this tool is updated."
+        );
+    });
 
-            //expect(rect.bottom).to.be.lessThan(1);
-        //});
-    //});
+    it("takes you to the about page when clicking how this tool is updated link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".hero-text a").click()
 
-    //it("has the correct title and copy text", () => {
-
-    //})
+        cy.url().should("eq", Cypress.config().baseUrl + "/about/#automated-updates");
+    });
 
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
