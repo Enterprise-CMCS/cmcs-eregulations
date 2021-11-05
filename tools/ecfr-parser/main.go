@@ -135,7 +135,7 @@ func run() error {
 	log.Info("[main] Fetching and processing parts...")
 	ch := make(chan *eregs.Part)
 	var wg sync.WaitGroup
-	for i := 0; i < threads; i++ {
+	for i := 1; i < threads + 1; i++ {
 		wg.Add(1)
 		go startHandlePartWorker(i, ch, &wg, ctx, today)
 	}
