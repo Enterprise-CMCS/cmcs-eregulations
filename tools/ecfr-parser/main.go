@@ -26,7 +26,7 @@ var (
 	subchapter      SubchapterArg
 	individualParts PartsArg
 	loglevel        string
-	threads         int
+	workers         int
 )
 
 type SubchapterArg []string
@@ -60,7 +60,7 @@ func init() {
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
 	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8080/v2/", "A url specifying where to send eregs parts")
-	flag.IntVar(&threads, "threads", 3, "Number of parts to process simultaneously.")
+	flag.IntVar(&workers, "workers", 3, "Number of parts to process simultaneously.")
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
 	flag.BoolVar(&parseXML.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
@@ -132,10 +132,10 @@ func run() error {
 		return err
 	}
 
-	log.Info("[main] Fetching and processing parts...")
+	log.Info("[main] Fetching and processing parts using ", workers, " workers...")
 	ch := make(chan *eregs.Part)
 	var wg sync.WaitGroup
-	for i := 1; i < threads + 1; i++ {
+	for i := 1; i < workers + 1; i++ {
 		wg.Add(1)
 		go startHandlePartWorker(i, ch, &wg, ctx, today)
 	}
