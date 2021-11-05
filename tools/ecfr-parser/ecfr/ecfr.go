@@ -14,7 +14,7 @@ import (
 )
 
 const dateFormat = "2006-01-02"
-const timeout = 300 * time.Second
+const timeout = 5 * time.Second
 
 
 var (
@@ -24,9 +24,6 @@ var (
 	ecfrStructureJSON = "structure/%s/title-%d.json"
 )
 
-var client = &http.Client{
-	Transport: &http.Transport{},
-}
 
 func urlMustParse(s string) *url.URL {
 	u, err := url.Parse(s)
@@ -48,6 +45,9 @@ func buildQuery(opts []FetchOption) string {
 }
 
 func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, error) {
+	client := &http.Client{
+	    Transport: &http.Transport{},
+    }
 	path.RawQuery = buildQuery(opts)
 
 	u := ecfrSite.ResolveReference(path)
@@ -69,11 +69,11 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	log.Trace("[ECFR] Connecting to ", u.String())
 	req_start := time.Now()
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("[err] from `client.Do`: %+v, took %+v", err, time.Since(req_start))
+	}
     defer resp.Body.Close()
 
-	if err != nil {
-		return nil, fmt.Errorf("from `client.Do`: %+v, took %+v", err, time.Since(req_start))
-	}
 	log.Trace("[ECFR] client.Do took ", time.Since(req_start))
 	if resp.StatusCode != 200 {
 		log.Trace("[ECFR] Received status code ", resp.StatusCode, " from ", u.String())
