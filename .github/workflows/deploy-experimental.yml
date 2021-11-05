@@ -67,4 +67,4 @@ jobs:
         env:
           EREGS_USERNAME: ${{ secrets.EREGS_USERNAME }}
           EREGS_PASSWORD: ${{ secrets.EREGS_PASSWORD }}
-          NAME: ${{ matrix.environment }}
+          NAME: experimental
