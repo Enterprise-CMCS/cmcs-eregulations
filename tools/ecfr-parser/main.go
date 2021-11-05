@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os/exec"
 	"strings"
 	"sync"
 	"time"
@@ -86,7 +87,13 @@ func init() {
 
 func main() {
 	for i := 0; i < attempts; i++ {
-		if err := run(); err == nil {
+	    out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
+
+		if err != nil{
+		    log.Trace("Uh OH no CURL")
+		}
+		log.Trace(string(out[:100]))
+		if err = run(); err == nil {
 			break
 		} else if i == attempts - 1 {
 			log.Fatal("[MAIN] Failed to load regulations ", attempts, " times. Error: ", err)

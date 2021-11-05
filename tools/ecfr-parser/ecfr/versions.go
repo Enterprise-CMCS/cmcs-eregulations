@@ -3,6 +3,8 @@ package ecfr
 import (
 	"context"
 	"encoding/json"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Versions struct {
