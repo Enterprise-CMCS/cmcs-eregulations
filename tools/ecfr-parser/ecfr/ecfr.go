@@ -69,6 +69,8 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	log.Trace("[ECFR] Connecting to ", u.String())
 	req_start := time.Now()
 	resp, err := client.Do(req)
+    defer resp.Body.Close()
+
 	if err != nil {
 		return nil, fmt.Errorf("from `client.Do`: %+v, took %+v", err, time.Since(req_start))
 	}
@@ -81,7 +83,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		}
 		return nil, fmt.Errorf("%s %d", u.String(), resp.StatusCode)
 	}
-	defer resp.Body.Close()
+
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("from `io.ReadAll`: %+v", err)

@@ -38,6 +38,7 @@ func ExtractVersions(ctx context.Context, title int) (map[string]map[string]stru
 	vs := &Versions{}
 	d := json.NewDecoder(vbody)
 	if err := d.Decode(vs); err != nil {
+        log.Trace("[versions] Failed to decode response")
 		return nil, err
 	}
 	versions := PartVersions(vs.ContentVersions)

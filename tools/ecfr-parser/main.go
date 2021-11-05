@@ -127,6 +127,7 @@ func run() error {
 	log.Debug("[MAIN] Extracting versions...")
 	versions, err := ecfr.ExtractVersions(ctx, title)
 	if err != nil {
+	    log.Trace("[main] extract Version failed")
 		return err
 	}
 
