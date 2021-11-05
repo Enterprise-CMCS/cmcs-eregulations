@@ -14007,7 +14007,7 @@ select:focus-visible {
   padding-top: 50px;
   padding-bottom: 50px;
   flex: 1;
-  background-image: url("../images/hero-graphic-updated2.svg");
+  background-image: url("../images/hero-graphic-updated.svg");
   background-repeat: no-repeat;
   background-position: bottom 0px right 25px;
 }
@@ -14025,7 +14025,7 @@ select:focus-visible {
 }
 @media (max-width: 767px) {
   .site-homepage .hero-banner .hero-content {
-    background-image: url("../images/hero-graphic-updated-mobile2.svg");
+    background-image: url("../images/hero-graphic-updated-mobile.svg");
     background-size: auto 45%;
     background-position: bottom 0px right 50%;
   }
@@ -14036,7 +14036,7 @@ select:focus-visible {
 @media (max-width: 374px) {
   .site-homepage .hero-banner .hero-content {
     padding: 25px 20px;
-    background-image: url("../images/hero-graphic-updated-mobile2.svg");
+    background-image: url("../images/hero-graphic-updated-mobile.svg");
     background-size: auto;
     background-position: bottom 0px right 50%;
   }
