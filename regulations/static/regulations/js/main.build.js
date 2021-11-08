@@ -247,7 +247,6 @@
         type: Number,
         default: 1
       },
-      showMore: { type: Function },
     },
     data() {
       return {
@@ -280,7 +279,7 @@
         staticClass: "show-more-button",
         on: {
           click: function($event) {
-            _vm.showMore(), _vm.toggleButton();
+            return _vm.toggleButton()
           }
         }
       },
@@ -323,52 +322,61 @@
     );
 
   //
-  var script$3$1 = {
-      name: 'related-rule-list',
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-      components: {
-          RelatedRule: __vue_component__$5$1,
-          ShowMoreButton: __vue_component__$4$1
+  var script$3$1 = {
+      name: "collapse-button",
+
+      created: function () {
+          this.visible = this.state === "expanded";
+          this.$root.$on("collapse-toggle", this.toggle);
       },
 
       props: {
-          rules: Array,
-          limit: {
-            type: Number,
-            default: 5
+          name: {
+              type: String,
+              required: true,
           },
-          title: {
-            type: String,
-          }
-
-      },
-
-      computed: {
-          limitedRules() {
-              if (this.limitedList) {
-                  return this.rules.slice(0, this.limit);
-              }
-              return this.rules;
+          state: {
+              //expanded or collapsed
+              type: String,
+              required: true,
           },
-          rulesCount() {
-              return this.rules.length;
+          'keep-contents-on-toggle': {
+              type: Boolean,
+              required: false,
+              default: false,
           },
       },
 
-      data() {
-        return {
-            limitedList: true,
-        };
+      data: function () {
+          return {
+              name: this.name,
+              visible: true,
+          };
       },
 
       methods: {
-          showMore() {
-              this.limitedList = !this.limitedList;
+          click: function (event) {
+              this.$root.$emit("collapse-toggle", this.name);
           },
-      },
-
-      filters: {
-
+          toggle: function (target) {
+              if (this.name === target) {
+                  this.visible = !this.visible;
+              }
+          },
       },
   };
 
@@ -380,41 +388,34 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _vm.rules.length
-      ? _c(
-          "div",
-          { staticClass: "related-rule-list" },
-          [
-            _vm._l(_vm.limitedRules, function(rule, index) {
-              return _c("related-rule", {
-                key: index,
-                attrs: {
-                  title: rule.title,
-                  type: rule.type,
-                  citation: rule.citation,
-                  publication_date: rule.publication_date,
-                  document_number: rule.document_number,
-                  html_url: rule.html_url,
-                  action: rule.action
-                }
-              })
-            }),
-            _vm._v(" "),
-            _vm.rules.length > _vm.limit
-              ? _c("show-more-button", {
-                  attrs: { showMore: _vm.showMore, count: _vm.rules.length }
-                })
-              : _vm._e()
-          ],
-          2
-        )
-      : _c("div", { staticClass: "show-more-inactive" }, [
-          _vm._v(
-            "No " +
-              _vm._s(_vm.title) +
-              " found in the Federal Register from 1994 to present."
-          )
-        ])
+    return _c(
+      "button",
+      {
+        staticClass: "collapsible-title",
+        class: { visible: _vm.visible },
+        attrs: {
+          "data-test": _vm.name,
+          "aria-label": _vm.visible
+            ? "collapse " + _vm.name
+            : "expand " + _vm.name
+        },
+        on: { click: _vm.click }
+      },
+      [
+        _vm.visible && !_vm.keepContentsOnToggle
+          ? _vm._t("expanded", [_vm._v("Hide")])
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.visible && !_vm.keepContentsOnToggle
+          ? _vm._t("collapsed", [_vm._v("Show")])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.keepContentsOnToggle
+          ? _vm._t("contents", [_vm._v("Click here")])
+          : _vm._e()
+      ],
+      2
+    )
   };
   var __vue_staticRenderFns__$3$1 = [];
   __vue_render__$3$1._withStripped = true;
@@ -626,62 +627,54 @@
     );
 
   //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
 
   var script$1$2 = {
-      name: "collapse-button",
+      name: "related-rule-list",
 
-      created: function () {
-          this.visible = this.state === "expanded";
-          this.$root.$on("collapse-toggle", this.toggle);
+      components: {
+          RelatedRule: __vue_component__$5$1,
+          ShowMoreButton: __vue_component__$4$1,
+          CollapseButton: __vue_component__$3$1,
+          Collapsible: __vue_component__$2$2,
       },
 
       props: {
-          name: {
-              type: String,
-              required: true,
+          rules: Array,
+          limit: {
+              type: Number,
+              default: 5,
           },
-          state: {
-              //expanded or collapsed
+          title: {
               type: String,
-              required: true,
-          },
-          'keep-contents-on-toggle': {
-              type: Boolean,
-              required: false,
-              default: false,
           },
       },
 
-      data: function () {
+      computed: {
+          limitedRules() {
+              return this.rules.slice(0, this.limit);
+          },
+          additionalRules() {
+              return this.rules.slice(this.limit);
+          },
+          rulesCount() {
+              return this.rules.length;
+          },
+      },
+
+      data() {
           return {
-              name: this.name,
-              visible: true,
+              limitedList: true,
+              innerName: Math.random().toString(36).replace(/[^a-z]+/g, '')
           };
       },
 
       methods: {
-          click: function (event) {
-              this.$root.$emit("collapse-toggle", this.name);
-          },
-          toggle: function (target) {
-              if (this.name === target) {
-                  this.visible = !this.visible;
-              }
+          showMore() {
+              this.limitedList = !this.limitedList;
           },
       },
+
+      filters: {},
   };
 
   /* script */
@@ -692,34 +685,95 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c(
-      "button",
-      {
-        staticClass: "collapsible-title",
-        class: { visible: _vm.visible },
-        attrs: {
-          "data-test": _vm.name,
-          "aria-label": _vm.visible
-            ? "collapse " + _vm.name
-            : "expand " + _vm.name
-        },
-        on: { click: _vm.click }
-      },
-      [
-        _vm.visible && !_vm.keepContentsOnToggle
-          ? _vm._t("expanded", [_vm._v("Hide")])
-          : _vm._e(),
-        _vm._v(" "),
-        !_vm.visible && !_vm.keepContentsOnToggle
-          ? _vm._t("collapsed", [_vm._v("Show")])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.keepContentsOnToggle
-          ? _vm._t("contents", [_vm._v("Click here")])
-          : _vm._e()
-      ],
-      2
-    )
+    return _vm.rules.length
+      ? _c(
+          "div",
+          { staticClass: "related-rule-list" },
+          [
+            _vm._l(_vm.limitedRules, function(rule, index) {
+              return _c("related-rule", {
+                key: index,
+                attrs: {
+                  title: rule.title,
+                  type: rule.type,
+                  citation: rule.citation,
+                  publication_date: rule.publication_date,
+                  document_number: rule.document_number,
+                  html_url: rule.html_url,
+                  action: rule.action
+                }
+              })
+            }),
+            _vm._v(" "),
+            _c(
+              "collapsible",
+              {
+                staticClass: "category-content",
+                attrs: { name: _vm.innerName, state: "collapsed" }
+              },
+              _vm._l(_vm.additionalRules, function(rule, index) {
+                return _c("related-rule", {
+                  key: index,
+                  attrs: {
+                    title: rule.title,
+                    type: rule.type,
+                    citation: rule.citation,
+                    publication_date: rule.publication_date,
+                    document_number: rule.document_number,
+                    html_url: rule.html_url,
+                    action: rule.action
+                  }
+                })
+              }),
+              1
+            ),
+            _vm._v(" "),
+            _vm.rules.length > _vm.limit
+              ? _c("collapse-button", {
+                  staticClass: "category-title",
+                  class: { subcategory: _vm.subcategory },
+                  attrs: { name: _vm.innerName, state: "collapsed" },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "expanded",
+                        fn: function() {
+                          return [
+                            _c("show-more-button", {
+                              attrs: { count: _vm.rules.length }
+                            })
+                          ]
+                        },
+                        proxy: true
+                      },
+                      {
+                        key: "collapsed",
+                        fn: function() {
+                          return [
+                            _c("show-more-button", {
+                              attrs: { count: _vm.rules.length }
+                            })
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ],
+                    null,
+                    false,
+                    2038579073
+                  )
+                })
+              : _vm._e()
+          ],
+          2
+        )
+      : _c("div", { staticClass: "show-more-inactive" }, [
+          _vm._v(
+            "\n    No " +
+              _vm._s(_vm.title) +
+              " found in the Federal Register from 1994 to present.\n"
+          )
+        ])
   };
   var __vue_staticRenderFns__$1$2 = [];
   __vue_render__$1$2._withStripped = true;
@@ -758,8 +812,8 @@
   var script$a = {
       components: {
         Collapsible: __vue_component__$2$2,
-        RelatedRuleList: __vue_component__$3$1,
-        CollapseButton: __vue_component__$1$2,
+        RelatedRuleList: __vue_component__$1$2,
+        CollapseButton: __vue_component__$3$1,
       },
 
       props: {
@@ -1662,7 +1716,6 @@
         type: Number,
         default: 1
       },
-      showMore: { type: Function },
     },
     data() {
       return {
@@ -1695,7 +1748,7 @@
         staticClass: "show-more-button",
         on: {
           click: function($event) {
-            _vm.showMore(), _vm.toggleButton();
+            return _vm.toggleButton()
           }
         }
       },
@@ -1738,52 +1791,61 @@
     );
 
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   var script$4 = {
-      name: 'supplemental-content-list',
+      name: "collapse-button",
 
-      components: {
-          SupplementalContentObject: __vue_component__$6,
-          ShowMoreButton: __vue_component__$5,
+      created: function () {
+          this.visible = this.state === "expanded";
+          this.$root.$on("collapse-toggle", this.toggle);
       },
 
       props: {
-          supplemental_content: {
-              type: Array,
+          name: {
+              type: String,
               required: true,
           },
-          limit: {
-              type: Number,
+          state: {
+              //expanded or collapsed
+              type: String,
+              required: true,
+          },
+          'keep-contents-on-toggle': {
+              type: Boolean,
               required: false,
-              default: 5,
+              default: false,
           },
       },
 
-      data() {
+      data: function () {
           return {
-              limitedList: true,
-          }
-      },
-
-      computed: {
-          limitedContent() {
-              if(this.limitedList) {
-                  return this.supplemental_content.slice(0, this.limit);
-              }
-              return this.supplemental_content;
-          },
-          contentCount() {
-              return this.supplemental_content.length;
-          },
-          showMoreNeeded() {
-              return this.contentCount > this.limit;
-          },
+              name: this.name,
+              visible: true,
+          };
       },
 
       methods: {
-          showMore() {
-              this.limitedList = !this.limitedList;
-          }
+          click: function (event) {
+              this.$root.$emit("collapse-toggle", this.name);
+          },
+          toggle: function (target) {
+              if (this.name === target) {
+                  this.visible = !this.visible;
+              }
+          },
       },
   };
 
@@ -1796,25 +1858,29 @@
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
     return _c(
-      "div",
-      { staticClass: "supplemental-content-list" },
+      "button",
+      {
+        staticClass: "collapsible-title",
+        class: { visible: _vm.visible },
+        attrs: {
+          "data-test": _vm.name,
+          "aria-label": _vm.visible
+            ? "collapse " + _vm.name
+            : "expand " + _vm.name
+        },
+        on: { click: _vm.click }
+      },
       [
-        _vm._l(_vm.limitedContent, function(content, index) {
-          return _c("supplemental-content-object", {
-            key: index,
-            attrs: {
-              name: content.name,
-              description: content.description,
-              date: content.date,
-              url: content.url
-            }
-          })
-        }),
+        _vm.visible && !_vm.keepContentsOnToggle
+          ? _vm._t("expanded", [_vm._v("Hide")])
+          : _vm._e(),
         _vm._v(" "),
-        _vm.showMoreNeeded
-          ? _c("show-more-button", {
-              attrs: { showMore: _vm.showMore, count: _vm.contentCount }
-            })
+        !_vm.visible && !_vm.keepContentsOnToggle
+          ? _vm._t("collapsed", [_vm._v("Show")])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.keepContentsOnToggle
+          ? _vm._t("contents", [_vm._v("Click here")])
           : _vm._e()
       ],
       2
@@ -1863,136 +1929,8 @@
   //
   //
   //
-  //
-  //
-  //
 
   var script$3 = {
-      name: "collapse-button",
-
-      created: function () {
-          this.visible = this.state === "expanded";
-          this.$root.$on("collapse-toggle", this.toggle);
-      },
-
-      props: {
-          name: {
-              type: String,
-              required: true,
-          },
-          state: {
-              //expanded or collapsed
-              type: String,
-              required: true,
-          },
-          'keep-contents-on-toggle': {
-              type: Boolean,
-              required: false,
-              default: false,
-          },
-      },
-
-      data: function () {
-          return {
-              name: this.name,
-              visible: true,
-          };
-      },
-
-      methods: {
-          click: function (event) {
-              this.$root.$emit("collapse-toggle", this.name);
-          },
-          toggle: function (target) {
-              if (this.name === target) {
-                  this.visible = !this.visible;
-              }
-          },
-      },
-  };
-
-  /* script */
-  const __vue_script__$3 = script$3;
-
-  /* template */
-  var __vue_render__$3 = function() {
-    var _vm = this;
-    var _h = _vm.$createElement;
-    var _c = _vm._self._c || _h;
-    return _c(
-      "button",
-      {
-        staticClass: "collapsible-title",
-        class: { visible: _vm.visible },
-        attrs: {
-          "data-test": _vm.name,
-          "aria-label": _vm.visible
-            ? "collapse " + _vm.name
-            : "expand " + _vm.name
-        },
-        on: { click: _vm.click }
-      },
-      [
-        _vm.visible && !_vm.keepContentsOnToggle
-          ? _vm._t("expanded", [_vm._v("Hide")])
-          : _vm._e(),
-        _vm._v(" "),
-        !_vm.visible && !_vm.keepContentsOnToggle
-          ? _vm._t("collapsed", [_vm._v("Show")])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.keepContentsOnToggle
-          ? _vm._t("contents", [_vm._v("Click here")])
-          : _vm._e()
-      ],
-      2
-    )
-  };
-  var __vue_staticRenderFns__$3 = [];
-  __vue_render__$3._withStripped = true;
-
-    /* style */
-    const __vue_inject_styles__$3 = undefined;
-    /* scoped */
-    const __vue_scope_id__$3 = undefined;
-    /* module identifier */
-    const __vue_module_identifier__$3 = undefined;
-    /* functional template */
-    const __vue_is_functional_template__$3 = false;
-    /* style inject */
-    
-    /* style inject SSR */
-    
-    /* style inject shadow dom */
-    
-
-    
-    const __vue_component__$3 = /*#__PURE__*/normalizeComponent$2(
-      { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
-      __vue_inject_styles__$3,
-      __vue_script__$3,
-      __vue_scope_id__$3,
-      __vue_is_functional_template__$3,
-      __vue_module_identifier__$3,
-      false,
-      undefined,
-      undefined,
-      undefined
-    );
-
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-
-  var script$2$1 = {
       name: "collapsible",
 
       created: function () {
@@ -2106,10 +2044,10 @@
   };
 
   /* script */
-  const __vue_script__$2$1 = script$2$1;
+  const __vue_script__$3 = script$3;
 
   /* template */
-  var __vue_render__$2$1 = function() {
+  var __vue_render__$3 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -2122,6 +2060,168 @@
         attrs: { "data-test": _vm.name }
       },
       [_vm._t("default")],
+      2
+    )
+  };
+  var __vue_staticRenderFns__$3 = [];
+  __vue_render__$3._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$3 = undefined;
+    /* scoped */
+    const __vue_scope_id__$3 = undefined;
+    /* module identifier */
+    const __vue_module_identifier__$3 = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$3 = false;
+    /* style inject */
+    
+    /* style inject SSR */
+    
+    /* style inject shadow dom */
+    
+
+    
+    const __vue_component__$3 = /*#__PURE__*/normalizeComponent$2(
+      { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+      __vue_inject_styles__$3,
+      __vue_script__$3,
+      __vue_scope_id__$3,
+      __vue_is_functional_template__$3,
+      __vue_module_identifier__$3,
+      false,
+      undefined,
+      undefined,
+      undefined
+    );
+
+  //
+
+  var script$2$1 = {
+      name: "supplemental-content-list",
+
+      components: {
+          SupplementalContentObject: __vue_component__$6,
+          ShowMoreButton: __vue_component__$5,
+          CollapseButton: __vue_component__$4,
+          Collapsible: __vue_component__$3,
+      },
+
+      props: {
+          supplemental_content: {
+              type: Array,
+              required: true,
+          },
+          limit: {
+              type: Number,
+              required: false,
+              default: 5,
+          },
+      },
+
+      data() {
+          return {
+              innerName: Math.random().toString(36).replace(/[^a-z]+/g, '')
+          };
+      },
+
+      computed: {
+          limitedContent() {
+              return this.supplemental_content.slice(0, this.limit);
+          },
+          additionalContent() {
+              return this.supplemental_content.slice(this.limit);
+          },
+          contentCount() {
+              return this.supplemental_content.length;
+          },
+          showMoreNeeded() {
+              return this.contentCount > this.limit;
+          },
+      },
+  };
+
+  /* script */
+  const __vue_script__$2$1 = script$2$1;
+
+  /* template */
+  var __vue_render__$2$1 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { staticClass: "supplemental-content-list" },
+      [
+        _vm._l(_vm.limitedContent, function(content, index) {
+          return _c("supplemental-content-object", {
+            key: index,
+            attrs: {
+              name: content.name,
+              description: content.description,
+              date: content.date,
+              url: content.url
+            }
+          })
+        }),
+        _vm._v(" "),
+        _c(
+          "collapsible",
+          {
+            staticClass: "category-content",
+            attrs: { name: _vm.innerName, state: "collapsed" }
+          },
+          _vm._l(_vm.additionalContent, function(content, index) {
+            return _c("supplemental-content-object", {
+              key: index,
+              attrs: {
+                name: content.name,
+                description: content.description,
+                date: content.date,
+                url: content.url
+              }
+            })
+          }),
+          1
+        ),
+        _vm._v(" "),
+        _vm.showMoreNeeded
+          ? _c("collapse-button", {
+              staticClass: "category-title",
+              class: { subcategory: _vm.subcategory },
+              attrs: { name: _vm.innerName, state: "collapsed" },
+              scopedSlots: _vm._u(
+                [
+                  {
+                    key: "expanded",
+                    fn: function() {
+                      return [
+                        _c("show-more-button", {
+                          attrs: { count: _vm.contentCount }
+                        })
+                      ]
+                    },
+                    proxy: true
+                  },
+                  {
+                    key: "collapsed",
+                    fn: function() {
+                      return [
+                        _c("show-more-button", {
+                          attrs: { count: _vm.contentCount }
+                        })
+                      ]
+                    },
+                    proxy: true
+                  }
+                ],
+                null,
+                false,
+                696881377
+              )
+            })
+          : _vm._e()
+      ],
       2
     )
   };
@@ -2163,9 +2263,9 @@
       name: 'supplemental-content-category',
 
       components: {
-          SupplementalContentList: __vue_component__$4,
-          CollapseButton: __vue_component__$3,
-          Collapsible: __vue_component__$2$1,
+          SupplementalContentList: __vue_component__$2$1,
+          CollapseButton: __vue_component__$4,
+          Collapsible: __vue_component__$3,
       },
 
       props: {
@@ -2232,7 +2332,7 @@
                 fn: function() {
                   return [
                     _vm._v(_vm._s(_vm.name) + " "),
-                    _c("i", { staticClass: "fa fa-chevron-up" })
+                    _c("i", { staticClass: "fa fa-chevron-down" })
                   ]
                 },
                 proxy: true
