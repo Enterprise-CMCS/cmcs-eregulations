@@ -1,0 +1,237 @@
+[
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 1,
+  "fields": {
+    "name": "NPRMs (Connected to Final Rules)",
+    "description": null,
+    "order": 0,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 2,
+  "fields": {
+    "name": "Final Rules",
+    "description": null,
+    "order": 0,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 3,
+  "fields": {
+    "name": "Related Statutes",
+    "description": "Statutes that relate to the subject matter of the Subpart",
+    "order": 200,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 4,
+  "fields": {
+    "name": "Related Regulations",
+    "description": "Regulations outside the Subpart related to the subject matter",
+    "order": 300,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 5,
+  "fields": {
+    "name": "Subregulatory Guidance",
+    "description": "SMDLs, SHOs, CIBs, FAQs",
+    "order": 400,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 6,
+  "fields": {
+    "name": "State Health Official (SHO) Letter",
+    "description": "",
+    "order": 200,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 7,
+  "fields": {
+    "name": "State Medicaid Director Letter (SMDL)",
+    "description": "",
+    "order": 100,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 8,
+  "fields": {
+    "name": "State Medicaid Manual",
+    "description": "",
+    "order": 500,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 9,
+  "fields": {
+    "name": "CMCS Informational Bulletin (CIB)",
+    "description": "",
+    "order": 300,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 10,
+  "fields": {
+    "name": "Frequently Asked Questions (FAQs)",
+    "description": "",
+    "order": 400,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 11,
+  "fields": {
+    "name": "Implementation Resources",
+    "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
+    "order": 500,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 12,
+  "fields": {
+    "name": "SPA Resources",
+    "description": "",
+    "order": 100,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 13,
+  "fields": {
+    "name": "Technical Assistance for States",
+    "description": "",
+    "order": 200,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 14,
+  "fields": {
+    "name": "Templates",
+    "description": "",
+    "order": 300,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 15,
+  "fields": {
+    "name": "Toolkits",
+    "description": "",
+    "order": 500,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 16,
+  "fields": {
+    "name": "Waiver Resources",
+    "description": "",
+    "order": 600,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 17,
+  "fields": {
+    "name": "Terms",
+    "description": "key abbreviations and definitions",
+    "order": 600,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 18,
+  "fields": {
+    "name": "Requests for Information (RFIs)",
+    "description": "RFIs published in the Federal Register",
+    "order": 100,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 19,
+  "fields": {
+    "name": "Reports to Congress",
+    "description": "CMS policy analysis and research reports sent to Congress",
+    "order": 501,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 1,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 2,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 3,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 4,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 5,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 11,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 17,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 18,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 19,
+  "fields": {}
+}
+]
