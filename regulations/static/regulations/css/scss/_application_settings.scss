@@ -121,6 +121,9 @@ $font_size_xxs: 10px;
 $font_size_xs: 12px;
 $font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable is depreciated
 
+$font_size_hero_h1: 26px;
+$font_size_hero_h1_tablet: 20px;
+
 //--------------------------
 // Breakpoints
 //--------------------------
@@ -129,6 +132,8 @@ $font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable i
 $tablet-max: $width-lg - 1; // 1023px
 $mobile-max: $width-md - 1; // 767px
 $iphoneSE-max: $width-xs - 1; // 374px
+
+$hero-tablet-max: 1080px;
 
 // Uses CMS Design System + a larger screen size
 
