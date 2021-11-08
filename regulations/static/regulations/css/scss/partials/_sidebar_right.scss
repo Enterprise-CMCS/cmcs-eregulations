@@ -307,6 +307,10 @@ button.collapsible-title {
 
     &.visible {
         color: $dark-gray;
+
+         i.fa {
+            color: $primary_link_color;
+         }
     }
 
     .fa {

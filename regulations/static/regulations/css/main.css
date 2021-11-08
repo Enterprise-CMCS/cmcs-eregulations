@@ -15873,6 +15873,9 @@ button.collapsible-title.subcategory {
 button.collapsible-title.visible {
   color: #212121;
 }
+button.collapsible-title.visible i.fa {
+  color: #046791;
+}
 button.collapsible-title .fa {
   float: right;
 }
