@@ -15825,8 +15825,9 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
-.category-content .supplemental-content-category:not(:last-child) {
-  border-bottom: 1px solid #d6d7d9;
+.supplemental-content-container .supplemental-content-category .category-content {
+  margin-left: 10px;
+  margin-right: 20px;
 }
 
 .supplemental-content-category {
@@ -15848,6 +15849,10 @@ aside.right-sidebar .resource-info {
 }
 .supplemental-content-category .category-content {
   margin-top: 1em;
+}
+
+.category-content .supplemental-content-category:not(:last-child) {
+  border-bottom: 1px solid #d6d7d9;
 }
 
 button.collapsible-title {

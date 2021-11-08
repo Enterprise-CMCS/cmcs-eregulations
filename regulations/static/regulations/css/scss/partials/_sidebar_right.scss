@@ -253,10 +253,11 @@ aside.right-sidebar {
     }
 }
 
-.category-content {
-    .supplemental-content-category:not(:last-child) {
-        border-bottom: 1px solid $light-gray;
-    }
+.supplemental-content-container
+    .supplemental-content-category
+    .category-content {
+    margin-left: 10px;
+    margin-right: 20px;
 }
 
 .supplemental-content-category {
@@ -284,6 +285,14 @@ aside.right-sidebar {
     }
 }
 
+.category-content {
+    .supplemental-content-category {
+        &:not(:last-child) {
+            border-bottom: 1px solid $light-gray;
+        }
+    }
+}
+
 button.collapsible-title {
     font-size: $font-size-md;
     font-weight: bold;
@@ -308,9 +317,9 @@ button.collapsible-title {
     &.visible {
         color: $dark-gray;
 
-         i.fa {
+        i.fa {
             color: $primary_link_color;
-         }
+        }
     }
 
     .fa {
