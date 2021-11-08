@@ -99,3 +99,10 @@ test.local: ## run cypress tests locally without docker
 	cd e2e; \
 		npm install; \
 		npm run cypress:run;
+
+local.seed:
+	docker-compose exec regulations python manage.py loaddata supplemental_content.category.json
+	docker-compose exec regulations python manage.py loaddata supplemental_content.subcategory.json
+	docker-compose exec regulations python manage.py loaddata supplemental_content.section.json
+	docker-compose exec regulations python manage.py loaddata supplemental_content.supplementalcontent.json
+

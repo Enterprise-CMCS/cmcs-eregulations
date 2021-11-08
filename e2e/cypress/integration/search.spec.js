@@ -9,16 +9,10 @@ describe("Search flow", () => {
     it("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".search-header > input").should("be.visible").type("State");
-        cy.get(".search-header").submit();
+        cy.get(".search-header > form > input").should("be.visible").type("State");
+        cy.get(".search-header > form").submit();
 
         cy.url().should("include", "/search/?q=State");
-    });
-
-    it("is hidden on the homepage on mobile devices", () => {
-        cy.viewport("iphone-x");
-        cy.visit("/");
-        cy.get(".hero-search").should("not.be.visible");
     });
 
     it("shows when mobile search open icon is clicked", () => {
