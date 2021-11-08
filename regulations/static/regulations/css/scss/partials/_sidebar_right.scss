@@ -262,7 +262,6 @@ aside.right-sidebar {
 
 .supplemental-content-category {
     display: table;
-    margin-bottom: 1em;
     width: 100%;
 
     .category {
@@ -288,6 +287,7 @@ aside.right-sidebar {
 .category-content {
     .supplemental-content-category {
         &:not(:last-child) {
+            margin-bottom: 1em;
             border-bottom: 1px solid $light-gray;
         }
     }
@@ -335,6 +335,7 @@ button.collapsible-title {
     cursor: pointer;
     width: 100%;
     text-align: left;
+    margin-bottom: $spacer-2;
 
     i {
         float: right;

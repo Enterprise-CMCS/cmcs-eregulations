@@ -15832,7 +15832,6 @@ aside.right-sidebar .resource-info {
 
 .supplemental-content-category {
   display: table;
-  margin-bottom: 1em;
   width: 100%;
 }
 .supplemental-content-category .category {
@@ -15852,6 +15851,7 @@ aside.right-sidebar .resource-info {
 }
 
 .category-content .supplemental-content-category:not(:last-child) {
+  margin-bottom: 1em;
   border-bottom: 1px solid #d6d7d9;
 }
 
@@ -15893,6 +15893,7 @@ button.collapsible-title .fa {
   cursor: pointer;
   width: 100%;
   text-align: left;
+  margin-bottom: 16px;
 }
 .show-more-button i {
   float: right;
