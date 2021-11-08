@@ -70,6 +70,14 @@ func init() {
 		log.Fatal("[main] Title flag is required and must be greater than 0.")
 	}
 
+	if workers < 1 {
+		log.Fatal("[main] Number of worker threads must be at least 1.")
+	}
+
+	if attempts < 1 {
+		log.Fatal("[main] Number of loading attempts must be at least 1.")
+	}
+
 	level := log.WarnLevel
 	switch loglevel {
 	case "fatal":
@@ -82,6 +90,8 @@ func init() {
 		level = log.DebugLevel
 	case "trace":
 		level = log.TraceLevel
+	default:
+		log.Warn("[main] \"", loglevel, "\" is an invalid log level, defaulting to \"warn\".")
 	}
 	log.SetLevel(level)
 }
