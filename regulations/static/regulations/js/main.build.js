@@ -1799,7 +1799,7 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _vm.has_sub_categories
+    return !_vm.has_sub_categories
       ? _c(
           "div",
           { staticClass: "supplemental-content-list" },
@@ -2203,7 +2203,7 @@
               return this.description && !/^\s*$/.test(this.description);
           },
           has_sub_categories() {
-              return !this.sub_categories.length;
+              return !!this.sub_categories.length;
           },
       },
   };

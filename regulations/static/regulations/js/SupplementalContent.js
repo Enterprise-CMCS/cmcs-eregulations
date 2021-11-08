@@ -371,7 +371,7 @@ var __vue_render__$4 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _vm.has_sub_categories
+  return !_vm.has_sub_categories
     ? _c(
         "div",
         { staticClass: "supplemental-content-list" },
@@ -775,7 +775,7 @@ var script$1 = {
             return this.description && !/^\s*$/.test(this.description);
         },
         has_sub_categories() {
-            return !this.sub_categories.length;
+            return !!this.sub_categories.length;
         },
     },
 };
