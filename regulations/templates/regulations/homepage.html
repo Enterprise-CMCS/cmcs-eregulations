@@ -6,7 +6,11 @@
 
 {% block body_class %}site-homepage{% endblock %}
 
-{% block header %}{% endblock %}
+{% block header %}
+    <header id="header" class="sticky home-page">
+        {% include "regulations/partials/header.html" %}
+    </header>
+{% endblock %}
 
 {% block body %}
     <main class="homepage">
@@ -17,24 +21,9 @@
         </div> -->
 
         <div class="hero-banner">
-            <div class="site-container">
-
-                <div class="hero-search">
-                    {% include "regulations/partials/header/search-input.html" with class="search-header" %}
-                </div>
-
-                <div class="hero-text">
-                    <h1>Medicaid &amp; CHIP eRegulations</h1>
-                    <h4>Look up policy with context.</h4>
-                    <p>This is a pilot project in the Center for Medicaid and CHIP Services (CMCS). Learn more about <a href="/about">using this tool</a> and <a href="/about/#automated-updates">how this tool is updated</a>, or explore the site as a supplement to existing policy tools.</p>
-                    <a href="#homepage-toc" id="view-toc-button" role="button" class="ds-c-button main-button">
-                        View Table of Contents
-                    </a>
-                </div>
-
-                <div class="hero-image">
-                    <img src="{% static 'images/hero-graphic.svg' %}" alt="Flat illustration of two doctors and a man in a wheelchair holding his smartphone. In the background, there is a tall plant and a heart with a monitor line."/>
-                </div>
+            <div class="site-container hero-content">
+                {% include "regulations/partials/jump_to.html" with parts=regulations title=cfr_title_number.0 %}
+                <p class="hero-text">Explore this site as a supplement to existing policy tools. <a href="{% url 'about' %}#automated-updates">How this tool is updated.</a></p>
             </div>
         </div>
 

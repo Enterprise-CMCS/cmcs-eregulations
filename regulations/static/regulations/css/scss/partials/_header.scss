@@ -27,6 +27,52 @@ header {
         }
     }
 
+    &.home-page {
+        display: flex;
+        flex-direction: row;
+
+        .search-header input::placeholder {
+            color: $secondary_text_color;
+            font-weight: 600;
+        }
+
+        @include screen-lg {
+            height: 80px;
+            padding: 0 25px;
+
+            .search-header input {
+                height: 45px;
+            }
+        }
+
+        @include custom-max($tablet-max / 1px) {
+            height: 70px;
+            padding: 0 25px;
+
+            .search-header input {
+                height: 40px;
+
+                &::placeholder {
+                    font-size: $font_size_sm;
+                }
+            }
+        }
+
+        @include custom-max($mobile-max / 1px) {
+            align-items: center;
+            height: 60px;
+            padding: 0 7px 0 20px;
+
+            .search-header input {
+                height: 40px;
+
+                &::placeholder {
+                    font-size: $font_size_sm;
+                }
+            }
+        }
+    }
+
     a {
         text-decoration: none;
         color: $secondary_link_color;
@@ -49,7 +95,7 @@ header {
         &.header-mobile {
             height: 48px;
 
-            @include screen-lg {
+            @include screen-md {
                 display: none;
             }
 
@@ -83,7 +129,7 @@ header {
         }
 
         &.header-large {
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max($mobile-max / 1px) {
                 display: none;
             }
         }
@@ -110,16 +156,25 @@ header {
     }
 
     .site-title {
-        padding-right: $spacer-2;
-        margin-right: $spacer-2;
         font-size: $font_size_sm;
         font-weight: normal;
 
         @include screen-lg {
-            border-right: 1px solid $border_color;
             font-size: $font-size-2xl;
-            font-weight: bold;
+            font-weight: 700;
+            line-height: 36px;
             display: inline-block;
+        }
+
+        &.homepage-site-title {
+            @include screen-lg {
+                font-size: $font-size-xl;
+            }
+
+            @include custom-max($tablet-max / 1px) {
+                font-size: $font-size-md;
+                font-weight: 700;
+            }
         }
     }
 
@@ -131,6 +186,10 @@ header {
 
         @include screen-lg {
             font-size: $font-size-md;
+            line-height: 36px;
+            padding-left: $spacer-2;
+            margin-left: $spacer-2;
+            border-left: 1px solid $border_color;
         }
 
         a {
@@ -162,8 +221,8 @@ header {
     flex: 0 0 48px;
     height: 48px;
 
-    @include screen-lg {
-        flex: 0 0 250px;
+    @include screen-md {
+        flex: 0 0 230px;
         height: auto;
 
         svg {
@@ -173,6 +232,11 @@ header {
 
     .search-box {
         display: none;
+
+        @include screen-md {
+            width: 230px;
+            display: inline-block;
+        }
 
         @include screen-lg {
             width: 250px;
