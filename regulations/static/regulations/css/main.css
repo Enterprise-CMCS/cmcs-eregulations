@@ -14878,10 +14878,11 @@ select:focus-visible {
 .flash-banner {
   background: #eefafe;
   text-align: center;
-  font-size: 14px;
-  padding: 1px;
+  font-size: 12px;
+  padding: 2px;
   position: relative;
   z-index: 100;
+  line-height: 1;
 }
 .flash-banner a {
   text-decoration: none;
@@ -15824,6 +15825,10 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
+.category-content .supplemental-content-category:not(:last-child) {
+  border-bottom: 1px solid #d6d7d9;
+}
+
 .supplemental-content-category {
   display: table;
   margin-bottom: 1em;
@@ -15861,7 +15866,9 @@ button.collapsible-title {
   justify-content: space-between;
 }
 button.collapsible-title.subcategory {
-  font-size: 16px;
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 button.collapsible-title.visible {
   color: #212121;
