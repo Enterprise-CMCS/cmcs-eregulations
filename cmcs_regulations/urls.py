@@ -23,4 +23,5 @@ urlpatterns = [
     path("", include('regulations.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
     path('admin/', admin.site.urls),
+    path(r'report_builder/', include('report_builder.urls'))
 ]
