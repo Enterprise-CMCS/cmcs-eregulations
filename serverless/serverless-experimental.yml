@@ -201,7 +201,7 @@ resources:
     AuroraRDSInstance:
       Type: AWS::RDS::DBInstance
       Properties:
-        DBInstanceClass: db.r5.large
+        DBInstanceClass: db.t4g.medium
         Engine: aurora-postgresql
         EngineVersion: "10.18"
         PubliclyAccessible: false
