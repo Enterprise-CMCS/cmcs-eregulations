@@ -6,11 +6,12 @@ import (
 	"errors"
 	"strings"
 	"time"
+	"html"
 )
 
 type Structure struct {
 	Identifier       IdentifierString `json:"identifier"`
-	Label            string           `json:"label"`
+	Label            HTMLString        `json:"label"`
 	LabelLevel       string           `json:"label_level"`
 	LabelDescription string           `json:"label_description"`
 	Reserved         bool             `json:"reserved"`
@@ -23,6 +24,13 @@ type RangeString []string
 
 func (rs *RangeString) UnmarshalText(data []byte) error {
 	*rs = strings.Split(string(data), " – ")
+	return nil
+}
+
+type HTMLString string
+
+func (hs *HTMLString) UnmarshalText(data []byte) error {
+	*hs = HTMLString(html.UnescapeString(string(data)))
 	return nil
 }
 
