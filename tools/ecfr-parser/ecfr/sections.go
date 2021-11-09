@@ -1,10 +1,8 @@
 package ecfr
 
-import (
-	"regexp"
-)
-
 type Part struct {
+	Name     string    `json:"name"`
+	Title    string    `json:"title"`
 	Sections []Section `json:"section"`
 	Subparts []Subpart `json:"subpart"`
 }
@@ -19,11 +17,11 @@ type Subpart struct {
 	Title    string    `json:"title"`
 	Part     string    `json:"part"`
 	Subpart  string    `json:"subpart"`
-	Sections []Section `json:"section"`
+	Sections []Section `json:"sections"`
 }
 
 func ExtractStructure(s Structure) (Part, error) {
-	title := ExtractTitle(s)
+	title := s.Identifier[0]
 	structurePart := s.Children[0].Children[0].Children
 	partNumber := structurePart[0].Identifier[0]
 	sections := []Section{}
@@ -40,22 +38,13 @@ func ExtractStructure(s Structure) (Part, error) {
 	}
 
 	p := Part{
+		Name:     partNumber,
+		Title:    title,
 		Sections: sections,
 		Subparts: subparts,
 	}
 
 	return p, nil
-}
-
-func ExtractTitle(s Structure) string {
-	re := regexp.MustCompile("[0-9]+")
-	if s.Type == "title" {
-		title := re.FindString(s.Label)
-		return title
-	} else {
-		// probably needs to be an error
-		return ""
-	}
 }
 
 func ExtractSubpart(title string, partNumber string, s *Structure) Subpart {
