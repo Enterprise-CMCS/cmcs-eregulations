@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 import os
-import json
-import django
 from django.core.management import call_command
 
 
