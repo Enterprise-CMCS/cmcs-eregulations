@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os/exec"
 	"strings"
 	"sync"
 	"time"
@@ -98,7 +99,14 @@ func init() {
 
 func main() {
 	for i := 0; i < attempts; i++ {
-		if err := run(); err == nil {
+	    log.Trace("Curling the ECFR site")
+	    out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
+        log.Trace("Finished Curling the ECFR site")
+		if err != nil{
+		    log.Trace("Uh OH CURL failed", err)
+		}
+		log.Trace(string(out[:100]))
+		if err = run(); err == nil {
 			break
 		} else if i == attempts - 1 {
 			log.Fatal("[main] Failed to load regulations ", attempts, " times. Error: ", err)
@@ -139,6 +147,7 @@ func run() error {
 	log.Debug("[main] Extracting versions...")
 	versions, err := ecfr.ExtractVersions(ctx, title)
 	if err != nil {
+	    log.Trace("[main] extract Version failed")
 		return err
 	}
 

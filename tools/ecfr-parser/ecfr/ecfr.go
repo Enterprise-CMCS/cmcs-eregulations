@@ -7,13 +7,15 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 
 	log "github.com/sirupsen/logrus"
 )
 
 const dateFormat = "2006-01-02"
-const timeout = 300 * time.Second
+const timeout = 5 * time.Second
+
 
 var (
 	ecfrSite          = urlMustParse("https://ecfr.gov/api/versioner/v1/")
@@ -22,9 +24,6 @@ var (
 	ecfrStructureJSON = "structure/%s/title-%d.json"
 )
 
-var client = &http.Client{
-	Transport: &http.Transport{},
-}
 
 func urlMustParse(s string) *url.URL {
 	u, err := url.Parse(s)
@@ -46,6 +45,9 @@ func buildQuery(opts []FetchOption) string {
 }
 
 func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, error) {
+	client := &http.Client{
+	    Transport: &http.Transport{},
+    }
 	path.RawQuery = buildQuery(opts)
 
 	u := ecfrSite.ResolveReference(path)
@@ -61,13 +63,19 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
 	}
 
+	req.Header.Set("User-Agent", "E-regs for " + os.Getenv("NAME"))
+    log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
+
 	log.Trace("[ecfr] Connecting to ", u.String())
 	req_start := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("from `client.Do`: %+v, took %+v", err, time.Since(req_start))
+		return nil, fmt.Errorf("[err] from `client.Do`: %+v, took %+v", err, time.Since(req_start))
 	}
 	log.Trace("[ecfr] client.Do took ", time.Since(req_start))
+    defer resp.Body.Close()
+
+	log.Trace("[ECFR] client.Do took ", time.Since(req_start))
 	if resp.StatusCode != 200 {
 		log.Trace("[ecfr] Received status code ", resp.StatusCode, " from ", u.String())
 		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
@@ -76,7 +84,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		}
 		return nil, fmt.Errorf("%s %d", u.String(), resp.StatusCode)
 	}
-	defer resp.Body.Close()
+
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("from `io.ReadAll`: %+v", err)
