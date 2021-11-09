@@ -190,7 +190,7 @@ resources:
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
-        EngineVersion: "10.18"
+        EngineVersion: "10"
         DatabaseName: ${self:custom.settings.DB_NAME}
         BackupRetentionPeriod: 3
         DBClusterParameterGroupName:
@@ -203,7 +203,7 @@ resources:
       Properties:
         DBInstanceClass: db.t4g.medium
         Engine: aurora-postgresql
-        EngineVersion: "10.18"
+        EngineVersion: "10"
         PubliclyAccessible: false
         DBParameterGroupName:
           Ref: AuroraRDSInstanceParameter
