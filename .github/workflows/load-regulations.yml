@@ -21,7 +21,11 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
+      - uses: wei/curl@master
+        with:
+          args: https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C
       - run: make data.${{ matrix.environment }}
         env:
           EREGS_USERNAME: ${{ secrets.EREGS_USERNAME }}
           EREGS_PASSWORD: ${{ secrets.EREGS_PASSWORD }}
+          NAME: ${{ matrix.environment }}
