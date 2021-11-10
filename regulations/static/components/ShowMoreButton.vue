@@ -1,7 +1,7 @@
 <template>
-  <button @click="toggleButton()" class="show-more-button">
+  <div @click="toggleButton()" class="show-more-button">
     <b>{{ buttonText }}</b> ({{count}})
-  </button>
+  </div>
 </template>
 
 <script>

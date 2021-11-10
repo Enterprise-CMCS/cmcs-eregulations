@@ -6,8 +6,12 @@
         v-on:click="click"
         class="collapsible-title"
     >
-        <slot name="expanded" v-if="visible && !keepContentsOnToggle">Hide</slot>
-        <slot name="collapsed" v-if="!visible && !keepContentsOnToggle">Show</slot>
+        <slot name="expanded" v-if="visible && !keepContentsOnToggle"
+            >Hide</slot
+        >
+        <slot name="collapsed" v-if="!visible && !keepContentsOnToggle"
+            >Show</slot
+        >
         <slot name="contents" v-if="keepContentsOnToggle">Click here</slot>
     </button>
 </template>
@@ -31,10 +35,14 @@ export default {
             type: String,
             required: true,
         },
-        'keep-contents-on-toggle': {
+        "keep-contents-on-toggle": {
             type: Boolean,
             required: false,
             default: false,
+        },
+        btnClass: {
+            type: String,
+            required: false,
         },
     },
 

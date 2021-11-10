@@ -261,7 +261,7 @@ var __vue_render__$5 = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c(
-    "button",
+    "div",
     {
       staticClass: "show-more-button",
       on: {
@@ -322,6 +322,10 @@ __vue_render__$5._withStripped = true;
 //
 //
 //
+//
+//
+//
+//
 
 var script$4 = {
     name: "collapse-button",
@@ -341,10 +345,14 @@ var script$4 = {
             type: String,
             required: true,
         },
-        'keep-contents-on-toggle': {
+        "keep-contents-on-toggle": {
             type: Boolean,
             required: false,
             default: false,
+        },
+        btnClass: {
+            type: String,
+            required: false,
         },
     },
 

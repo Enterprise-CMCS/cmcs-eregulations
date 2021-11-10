@@ -15650,7 +15650,7 @@ aside.right-sidebar .resource-info {
 }
 
 .recent-change {
-  margin: 16px 0;
+  padding: 16px 0 0;
   font-size: 14px;
 }
 .recent-change a {

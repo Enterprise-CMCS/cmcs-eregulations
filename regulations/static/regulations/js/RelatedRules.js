@@ -271,7 +271,7 @@ var __vue_render__$4 = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c(
-    "button",
+    "div",
     {
       staticClass: "show-more-button",
       on: {
@@ -332,6 +332,10 @@ __vue_render__$4._withStripped = true;
 //
 //
 //
+//
+//
+//
+//
 
 var script$3 = {
     name: "collapse-button",
@@ -351,10 +355,14 @@ var script$3 = {
             type: String,
             required: true,
         },
-        'keep-contents-on-toggle': {
+        "keep-contents-on-toggle": {
             type: Boolean,
             required: false,
             default: false,
+        },
+        btnClass: {
+            type: String,
+            required: false,
         },
     },
 
@@ -729,7 +737,11 @@ var __vue_render__$1 = function() {
             ? _c("collapse-button", {
                 staticClass: "category-title",
                 class: { subcategory: _vm.subcategory },
-                attrs: { name: _vm.innerName, state: "collapsed" },
+                attrs: {
+                  name: _vm.innerName,
+                  state: "collapsed",
+                  btnClass: "inner-button"
+                },
                 scopedSlots: _vm._u(
                   [
                     {

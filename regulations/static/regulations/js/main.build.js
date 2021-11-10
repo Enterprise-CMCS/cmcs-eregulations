@@ -274,7 +274,7 @@
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
     return _c(
-      "button",
+      "div",
       {
         staticClass: "show-more-button",
         on: {
@@ -335,6 +335,10 @@
   //
   //
   //
+  //
+  //
+  //
+  //
 
   var script$3$1 = {
       name: "collapse-button",
@@ -354,10 +358,14 @@
               type: String,
               required: true,
           },
-          'keep-contents-on-toggle': {
+          "keep-contents-on-toggle": {
               type: Boolean,
               required: false,
               default: false,
+          },
+          btnClass: {
+              type: String,
+              required: false,
           },
       },
 
@@ -732,7 +740,11 @@
               ? _c("collapse-button", {
                   staticClass: "category-title",
                   class: { subcategory: _vm.subcategory },
-                  attrs: { name: _vm.innerName, state: "collapsed" },
+                  attrs: {
+                    name: _vm.innerName,
+                    state: "collapsed",
+                    btnClass: "inner-button"
+                  },
                   scopedSlots: _vm._u(
                     [
                       {
@@ -1291,6 +1303,10 @@
   //
   //
   //
+  //
+  //
+  //
+  //
 
   var script$8 = {
       name: "collapse-button",
@@ -1310,10 +1326,14 @@
               type: String,
               required: true,
           },
-          'keep-contents-on-toggle': {
+          "keep-contents-on-toggle": {
               type: Boolean,
               required: false,
               default: false,
+          },
+          btnClass: {
+              type: String,
+              required: false,
           },
       },
 
@@ -1743,7 +1763,7 @@
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
     return _c(
-      "button",
+      "div",
       {
         staticClass: "show-more-button",
         on: {
@@ -1804,6 +1824,10 @@
   //
   //
   //
+  //
+  //
+  //
+  //
 
   var script$4 = {
       name: "collapse-button",
@@ -1823,10 +1847,14 @@
               type: String,
               required: true,
           },
-          'keep-contents-on-toggle': {
+          "keep-contents-on-toggle": {
               type: Boolean,
               required: false,
               default: false,
+          },
+          btnClass: {
+              type: String,
+              required: false,
           },
       },
 

@@ -36,6 +36,7 @@
             :name="innerName"
             state="collapsed"
             class="category-title"
+            btnClass="inner-button"
         >
             <template v-slot:expanded>
                 <show-more-button :count="rules.length"></show-more-button>
