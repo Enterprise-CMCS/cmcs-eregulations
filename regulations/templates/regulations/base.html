@@ -22,7 +22,7 @@ CSS/Javascript etc., should inherit from this template.
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>
             {% block title %}
-                {{meta.cfr_title_number}} CFR Part {{reg_part}} | Medicaid &amp; CHIP eRegulations
+                {{title}} CFR {{reg_part}} {% if subpart %} Subpart {{subpart}} {% endif %} | Medicaid &amp; CHIP eRegulations
             {% endblock %}
         </title>
         {% include "regulations/partials/favicon.html" %}
