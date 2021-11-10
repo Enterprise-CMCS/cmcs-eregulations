@@ -1,5 +1,5 @@
 from rest_framework import generics
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Section, Subpart
 
 from .models import (
     AbstractSupplementalContent,
@@ -42,3 +42,25 @@ class SupplementalContentView(generics.ListAPIView):
                 )
             ).distinct()
         return query
+
+
+class SupplementalContentSectionsView(generics.CreateAPIView):
+    def create(self, request, *args, **kwargs):
+        for section in request.data["sections"]:
+            section, created = Section.objects.get_or_create(
+                        title=section["title"],
+                        part=section["part"],
+                        section_id=section["section"]
+                    )
+        for subpart in request.data["subparts"]:
+            subpart, created = Subpart.objects.get_or_create(
+                        title=subpart["title"],
+                        part=subpart["part"],
+                        subpart_id=subpart["subpart"]
+                    )
+            for section in subpart["sections"]:
+                section, created = Section.objects.get_or_create(
+                            title=section["title"],
+                            part=section["part"],
+                            section_id=section["section"]
+                        )
