@@ -238,28 +238,28 @@ __vue_render__$5._withStripped = true;
 //
 
 var script$4 = {
-  name: 'show-more-button',
-  props: {
-    count: {
-      type: Number,
-      default: 1
+    name: "show-more-button",
+    props: {
+        count: {
+            type: Number,
+            default: 1,
+        },
     },
-  },
-  data() {
-    return {
-      toggle: false,
-    }
-  },
-  computed: {
-    buttonText(){
-      return this.toggle ? '- Show Less' : '+ Show More';
-    }
-  },
-  methods: {
-    toggleButton() {
-      this.toggle = !this.toggle;
-    }
-  }
+    data() {
+        return {
+            toggle: false,
+        };
+    },
+    computed: {
+        buttonText() {
+            return this.toggle ? "- Show Less" : "+ Show More";
+        },
+    },
+    methods: {
+        toggleButton() {
+            this.toggle = !this.toggle;
+        },
+    },
 };
 
 /* script */

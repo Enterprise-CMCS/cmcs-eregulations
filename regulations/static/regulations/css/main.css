@@ -15706,7 +15706,7 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
-.supplemental-content-container .supplemental-content-category .category-content {
+.supplemental-content-container .supplemental-content-category .category-content:not(.show-more-content) {
   margin-left: 10px;
   margin-right: 20px;
 }

@@ -228,28 +228,28 @@ __vue_render__$6._withStripped = true;
 //
 
 var script$5 = {
-  name: 'show-more-button',
-  props: {
-    count: {
-      type: Number,
-      default: 1
+    name: "show-more-button",
+    props: {
+        count: {
+            type: Number,
+            default: 1,
+        },
     },
-  },
-  data() {
-    return {
-      toggle: false,
-    }
-  },
-  computed: {
-    buttonText(){
-      return this.toggle ? '- Show Less' : '+ Show More';
-    }
-  },
-  methods: {
-    toggleButton() {
-      this.toggle = !this.toggle;
-    }
-  }
+    data() {
+        return {
+            toggle: false,
+        };
+    },
+    computed: {
+        buttonText() {
+            return this.toggle ? "- Show Less" : "+ Show More";
+        },
+    },
+    methods: {
+        toggleButton() {
+            this.toggle = !this.toggle;
+        },
+    },
 };
 
 /* script */
@@ -699,7 +699,7 @@ var __vue_render__$2 = function() {
           _c(
             "collapsible",
             {
-              staticClass: "category-content",
+              staticClass: "category-content show-more-content",
               attrs: { name: _vm.innerName, state: "collapsed" }
             },
             _vm._l(_vm.additionalContent, function(content, index) {

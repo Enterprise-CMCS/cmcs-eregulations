@@ -9,7 +9,7 @@
             :url="content.url"
         >
         </supplemental-content-object>
-        <collapsible :name="innerName" state="collapsed" class="category-content">
+        <collapsible :name="innerName" state="collapsed" class="category-content show-more-content">
             <supplemental-content-object
                 v-for="(content, index) in additionalContent"
                 :key="index"
