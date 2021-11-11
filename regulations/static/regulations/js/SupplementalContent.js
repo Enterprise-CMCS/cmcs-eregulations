@@ -234,21 +234,10 @@ var script$5 = {
             type: Number,
             default: 1,
         },
-    },
-    data() {
-        return {
-            toggle: false,
-        };
-    },
-    computed: {
-        buttonText() {
-            return this.toggle ? "- Show Less" : "+ Show More";
-        },
-    },
-    methods: {
-        toggleButton() {
-            this.toggle = !this.toggle;
-        },
+        buttonText: {
+            type: String,
+            required: true
+        }
     },
 };
 
@@ -260,21 +249,10 @@ var __vue_render__$5 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      staticClass: "show-more-button",
-      on: {
-        click: function($event) {
-          return _vm.toggleButton()
-        }
-      }
-    },
-    [
-      _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
-      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
-    ]
-  )
+  return _c("div", { staticClass: "show-more-button" }, [
+    _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+    _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+  ])
 };
 var __vue_staticRenderFns__$5 = [];
 __vue_render__$5._withStripped = true;
@@ -651,7 +629,9 @@ var script$2 = {
 
     data() {
         return {
-            innerName: Math.random().toString(36).replace(/[^a-z]+/g, '')
+            innerName: Math.random()
+                .toString(36)
+                .replace(/[^a-z]+/g, ""),
         };
     },
 
@@ -718,7 +698,7 @@ var __vue_render__$2 = function() {
           _vm._v(" "),
           _vm.showMoreNeeded
             ? _c("collapse-button", {
-                staticClass: "category-title",
+                staticClass: "category-title show-more",
                 class: { subcategory: _vm.subcategory },
                 attrs: { name: _vm.innerName, state: "collapsed" },
                 scopedSlots: _vm._u(
@@ -728,7 +708,10 @@ var __vue_render__$2 = function() {
                       fn: function() {
                         return [
                           _c("show-more-button", {
-                            attrs: { count: _vm.contentCount }
+                            attrs: {
+                              buttonText: "- Show Less",
+                              count: _vm.contentCount
+                            }
                           })
                         ]
                       },
@@ -739,7 +722,10 @@ var __vue_render__$2 = function() {
                       fn: function() {
                         return [
                           _c("show-more-button", {
-                            attrs: { count: _vm.contentCount }
+                            attrs: {
+                              buttonText: "+ Show More",
+                              count: _vm.contentCount
+                            }
                           })
                         ]
                       },
@@ -748,7 +734,7 @@ var __vue_render__$2 = function() {
                   ],
                   null,
                   false,
-                  696881377
+                  1539528923
                 )
               })
             : _vm._e()

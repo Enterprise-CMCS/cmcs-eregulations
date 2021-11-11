@@ -247,21 +247,10 @@
               type: Number,
               default: 1,
           },
-      },
-      data() {
-          return {
-              toggle: false,
-          };
-      },
-      computed: {
-          buttonText() {
-              return this.toggle ? "- Show Less" : "+ Show More";
-          },
-      },
-      methods: {
-          toggleButton() {
-              this.toggle = !this.toggle;
-          },
+          buttonText: {
+              type: String,
+              required: true
+          }
       },
   };
 
@@ -273,21 +262,10 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c(
-      "div",
-      {
-        staticClass: "show-more-button",
-        on: {
-          click: function($event) {
-            return _vm.toggleButton()
-          }
-        }
-      },
-      [
-        _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
-        _vm._v(" (" + _vm._s(_vm.count) + ")\n")
-      ]
-    )
+    return _c("div", { staticClass: "show-more-button" }, [
+      _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+    ])
   };
   var __vue_staticRenderFns__$4$1 = [];
   __vue_render__$4$1._withStripped = true;
@@ -672,7 +650,9 @@
       data() {
           return {
               limitedList: true,
-              innerName: Math.random().toString(36).replace(/[^a-z]+/g, '')
+              innerName: Math.random()
+                  .toString(36)
+                  .replace(/[^a-z]+/g, ""),
           };
       },
 
@@ -752,7 +732,10 @@
                         fn: function() {
                           return [
                             _c("show-more-button", {
-                              attrs: { count: _vm.rules.length }
+                              attrs: {
+                                buttonText: "- Show Less",
+                                count: _vm.rules.length
+                              }
                             })
                           ]
                         },
@@ -763,7 +746,10 @@
                         fn: function() {
                           return [
                             _c("show-more-button", {
-                              attrs: { count: _vm.rules.length }
+                              attrs: {
+                                buttonText: "+ Show More",
+                                count: _vm.rules.length
+                              }
                             })
                           ]
                         },
@@ -772,7 +758,7 @@
                     ],
                     null,
                     false,
-                    2038579073
+                    66893211
                   )
                 })
               : _vm._e()
@@ -1736,21 +1722,10 @@
               type: Number,
               default: 1,
           },
-      },
-      data() {
-          return {
-              toggle: false,
-          };
-      },
-      computed: {
-          buttonText() {
-              return this.toggle ? "- Show Less" : "+ Show More";
-          },
-      },
-      methods: {
-          toggleButton() {
-              this.toggle = !this.toggle;
-          },
+          buttonText: {
+              type: String,
+              required: true
+          }
       },
   };
 
@@ -1762,21 +1737,10 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c(
-      "div",
-      {
-        staticClass: "show-more-button",
-        on: {
-          click: function($event) {
-            return _vm.toggleButton()
-          }
-        }
-      },
-      [
-        _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
-        _vm._v(" (" + _vm._s(_vm.count) + ")\n")
-      ]
-    )
+    return _c("div", { staticClass: "show-more-button" }, [
+      _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+      _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+    ])
   };
   var __vue_staticRenderFns__$5 = [];
   __vue_render__$5._withStripped = true;
@@ -2153,7 +2117,9 @@
 
       data() {
           return {
-              innerName: Math.random().toString(36).replace(/[^a-z]+/g, '')
+              innerName: Math.random()
+                  .toString(36)
+                  .replace(/[^a-z]+/g, ""),
           };
       },
 
@@ -2220,7 +2186,7 @@
             _vm._v(" "),
             _vm.showMoreNeeded
               ? _c("collapse-button", {
-                  staticClass: "category-title",
+                  staticClass: "category-title show-more",
                   class: { subcategory: _vm.subcategory },
                   attrs: { name: _vm.innerName, state: "collapsed" },
                   scopedSlots: _vm._u(
@@ -2230,7 +2196,10 @@
                         fn: function() {
                           return [
                             _c("show-more-button", {
-                              attrs: { count: _vm.contentCount }
+                              attrs: {
+                                buttonText: "- Show Less",
+                                count: _vm.contentCount
+                              }
                             })
                           ]
                         },
@@ -2241,7 +2210,10 @@
                         fn: function() {
                           return [
                             _c("show-more-button", {
-                              attrs: { count: _vm.contentCount }
+                              attrs: {
+                                buttonText: "+ Show More",
+                                count: _vm.contentCount
+                              }
                             })
                           ]
                         },
@@ -2250,7 +2222,7 @@
                     ],
                     null,
                     false,
-                    696881377
+                    1539528923
                   )
                 })
               : _vm._e()

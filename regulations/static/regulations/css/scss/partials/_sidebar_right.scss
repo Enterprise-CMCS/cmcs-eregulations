@@ -323,6 +323,11 @@ button.collapsible-title {
         }
     }
 
+    &.show-more {
+        margin-top: 0;
+        padding-top: $spacer-2;
+    }
+
     .fa {
         float: right;
     }

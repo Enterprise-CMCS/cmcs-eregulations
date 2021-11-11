@@ -15762,6 +15762,10 @@ button.collapsible-title.visible {
 button.collapsible-title.visible i.fa {
   color: #046791;
 }
+button.collapsible-title.show-more {
+  margin-top: 0;
+  padding-top: 16px;
+}
 button.collapsible-title .fa {
   float: right;
 }

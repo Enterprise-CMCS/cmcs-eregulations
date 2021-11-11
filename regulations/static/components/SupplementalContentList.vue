@@ -9,7 +9,11 @@
             :url="content.url"
         >
         </supplemental-content-object>
-        <collapsible :name="innerName" state="collapsed" class="category-content show-more-content">
+        <collapsible
+            :name="innerName"
+            state="collapsed"
+            class="category-content show-more-content"
+        >
             <supplemental-content-object
                 v-for="(content, index) in additionalContent"
                 :key="index"
@@ -25,13 +29,19 @@
             v-bind:class="{ subcategory: subcategory }"
             :name="innerName"
             state="collapsed"
-            class="category-title"
+            class="category-title show-more"
         >
             <template v-slot:expanded>
-                <show-more-button :count="contentCount"></show-more-button>
+                <show-more-button
+                    buttonText="- Show Less"
+                    :count="contentCount"
+                ></show-more-button>
             </template>
             <template v-slot:collapsed>
-                <show-more-button :count="contentCount"></show-more-button>
+                <show-more-button
+                    buttonText="+ Show More"
+                    :count="contentCount"
+                ></show-more-button>
             </template>
         </collapse-button>
     </div>
@@ -71,7 +81,9 @@ export default {
 
     data() {
         return {
-            innerName: Math.random().toString(36).replace(/[^a-z]+/g, '')
+            innerName: Math.random()
+                .toString(36)
+                .replace(/[^a-z]+/g, ""),
         };
     },
 

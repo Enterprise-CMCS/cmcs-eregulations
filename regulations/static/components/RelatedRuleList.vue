@@ -39,10 +39,16 @@
             btnClass="inner-button"
         >
             <template v-slot:expanded>
-                <show-more-button :count="rules.length"></show-more-button>
+                <show-more-button
+                    buttonText="- Show Less"
+                    :count="rules.length"
+                ></show-more-button>
             </template>
             <template v-slot:collapsed>
-                <show-more-button :count="rules.length"></show-more-button>
+                <show-more-button
+                    buttonText="+ Show More"
+                    :count="rules.length"
+                ></show-more-button>
             </template>
         </collapse-button>
     </div>
@@ -93,7 +99,9 @@ export default {
     data() {
         return {
             limitedList: true,
-            innerName: Math.random().toString(36).replace(/[^a-z]+/g, '')
+            innerName: Math.random()
+                .toString(36)
+                .replace(/[^a-z]+/g, ""),
         };
     },
 
