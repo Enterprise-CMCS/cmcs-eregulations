@@ -1,5 +1,5 @@
 <template>
-    <div class="supplemental-content-list">
+    <div class="supplemental-content-list" v-if="!has_sub_categories">
         <supplemental-content-object
             v-for="(content, index) in limitedContent"
             :key="index"
@@ -56,6 +56,10 @@ export default {
     props: {
         supplemental_content: {
             type: Array,
+            required: true,
+        },
+        has_sub_categories: {
+            type: Boolean,
             required: true,
         },
         limit: {

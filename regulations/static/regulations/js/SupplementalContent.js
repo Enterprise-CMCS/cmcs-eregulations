@@ -638,6 +638,10 @@ var script$2 = {
             type: Array,
             required: true,
         },
+        has_sub_categories: {
+            type: Boolean,
+            required: true,
+        },
         limit: {
             type: Number,
             required: false,
@@ -675,81 +679,83 @@ var __vue_render__$2 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "supplemental-content-list" },
-    [
-      _vm._l(_vm.limitedContent, function(content, index) {
-        return _c("supplemental-content-object", {
-          key: index,
-          attrs: {
-            name: content.name,
-            description: content.description,
-            date: content.date,
-            url: content.url
-          }
-        })
-      }),
-      _vm._v(" "),
-      _c(
-        "collapsible",
-        {
-          staticClass: "category-content",
-          attrs: { name: _vm.innerName, state: "collapsed" }
-        },
-        _vm._l(_vm.additionalContent, function(content, index) {
-          return _c("supplemental-content-object", {
-            key: index,
-            attrs: {
-              name: content.name,
-              description: content.description,
-              date: content.date,
-              url: content.url
-            }
-          })
-        }),
-        1
-      ),
-      _vm._v(" "),
-      _vm.showMoreNeeded
-        ? _c("collapse-button", {
-            staticClass: "category-title",
-            class: { subcategory: _vm.subcategory },
-            attrs: { name: _vm.innerName, state: "collapsed" },
-            scopedSlots: _vm._u(
-              [
-                {
-                  key: "expanded",
-                  fn: function() {
-                    return [
-                      _c("show-more-button", {
-                        attrs: { count: _vm.contentCount }
-                      })
-                    ]
-                  },
-                  proxy: true
-                },
-                {
-                  key: "collapsed",
-                  fn: function() {
-                    return [
-                      _c("show-more-button", {
-                        attrs: { count: _vm.contentCount }
-                      })
-                    ]
-                  },
-                  proxy: true
+  return !_vm.has_sub_categories
+    ? _c(
+        "div",
+        { staticClass: "supplemental-content-list" },
+        [
+          _vm._l(_vm.limitedContent, function(content, index) {
+            return _c("supplemental-content-object", {
+              key: index,
+              attrs: {
+                name: content.name,
+                description: content.description,
+                date: content.date,
+                url: content.url
+              }
+            })
+          }),
+          _vm._v(" "),
+          _c(
+            "collapsible",
+            {
+              staticClass: "category-content",
+              attrs: { name: _vm.innerName, state: "collapsed" }
+            },
+            _vm._l(_vm.additionalContent, function(content, index) {
+              return _c("supplemental-content-object", {
+                key: index,
+                attrs: {
+                  name: content.name,
+                  description: content.description,
+                  date: content.date,
+                  url: content.url
                 }
-              ],
-              null,
-              false,
-              696881377
-            )
-          })
-        : _vm._e()
-    ],
-    2
-  )
+              })
+            }),
+            1
+          ),
+          _vm._v(" "),
+          _vm.showMoreNeeded
+            ? _c("collapse-button", {
+                staticClass: "category-title",
+                class: { subcategory: _vm.subcategory },
+                attrs: { name: _vm.innerName, state: "collapsed" },
+                scopedSlots: _vm._u(
+                  [
+                    {
+                      key: "expanded",
+                      fn: function() {
+                        return [
+                          _c("show-more-button", {
+                            attrs: { count: _vm.contentCount }
+                          })
+                        ]
+                      },
+                      proxy: true
+                    },
+                    {
+                      key: "collapsed",
+                      fn: function() {
+                        return [
+                          _c("show-more-button", {
+                            attrs: { count: _vm.contentCount }
+                          })
+                        ]
+                      },
+                      proxy: true
+                    }
+                  ],
+                  null,
+                  false,
+                  696881377
+                )
+              })
+            : _vm._e()
+        ],
+        2
+      )
+    : _vm._e()
 };
 var __vue_staticRenderFns__$2 = [];
 __vue_render__$2._withStripped = true;
@@ -786,7 +792,7 @@ __vue_render__$2._withStripped = true;
 //
 
 var script$1 = {
-    name: 'supplemental-content-category',
+    name: "supplemental-content-category",
 
     components: {
         SupplementalContentList: __vue_component__$2,
@@ -819,8 +825,11 @@ var script$1 = {
     },
 
     computed: {
-        showDescription: function() {
-            return (this.description && !/^\s*$/.test(this.description));
+        showDescription: function () {
+            return this.description && !/^\s*$/.test(this.description);
+        },
+        has_sub_categories() {
+            return this.sub_categories.length;
         },
     },
 };
@@ -893,7 +902,10 @@ var __vue_render__$1 = function() {
             }),
             _vm._v(" "),
             _c("supplemental-content-list", {
-              attrs: { supplemental_content: _vm.supplemental_content }
+              attrs: {
+                supplemental_content: _vm.supplemental_content,
+                has_sub_categories: _vm.has_sub_categories
+              }
             })
           ],
           2
