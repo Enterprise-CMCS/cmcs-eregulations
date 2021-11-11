@@ -15706,9 +15706,13 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
+.supplemental-content-container .supplemental-content-category .category-content {
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
 .supplemental-content-category {
   display: table;
-  margin-bottom: 1em;
   width: 100%;
 }
 .supplemental-content-category .category {
@@ -15727,6 +15731,11 @@ aside.right-sidebar .resource-info {
   margin-top: 1em;
 }
 
+.category-content .supplemental-content-category:not(:last-child) {
+  margin-bottom: 1em;
+  border-bottom: 1px solid #d6d7d9;
+}
+
 button.collapsible-title {
   font-size: 16px;
   font-weight: bold;
@@ -15743,10 +15752,15 @@ button.collapsible-title {
   justify-content: space-between;
 }
 button.collapsible-title.subcategory {
-  font-size: 16px;
+  font-size: 14px;
+  margin-top: 0;
+  margin-bottom: 16px;
 }
 button.collapsible-title.visible {
   color: #212121;
+}
+button.collapsible-title.visible i.fa {
+  color: #046791;
 }
 button.collapsible-title .fa {
   float: right;
@@ -15760,6 +15774,7 @@ button.collapsible-title .fa {
   cursor: pointer;
   width: 100%;
   text-align: left;
+  margin-bottom: 16px;
 }
 .show-more-button i {
   float: right;
