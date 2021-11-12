@@ -39,8 +39,14 @@
 	}
 
 	.container {
-		margin: 0;
+        margin: 0 auto $spacer-5;
 	}
+
+    @include screen-xxl {
+        .container {
+            margin: 0 auto $spacer-6;
+        }
+    }
 
 	// Context for what parts we're searching
 
