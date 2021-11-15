@@ -1,4 +1,3 @@
-
 //-----------------------------
 // Search Page
 //-----------------------------
@@ -6,234 +5,238 @@
 @import "../application_settings";
 
 .search-page {
+    main {
+        width: calc(100% - 450px);
+    }
 
-	main {
-		width: calc(100% - 450px);
-	}
+    aside.left-sidebar[data-state="expanded"] + main {
+        width: calc(100% - 800px);
+    }
 
-	aside.left-sidebar[data-state="expanded"] + main {
-		width: calc(100% - 800px);
-	}
+    aside.left-sidebar {
+        p {
+            margin: 0;
+        }
 
-	aside.left-sidebar {
-		p {
-			margin: 0;
-		}
+        .search-sidebar-element {
+            padding: $spacer-1 0;
+            margin: 0 $spacer-2;
+        }
 
-		.search-sidebar-element {
-			padding: $spacer-1 0;
-			margin: 0 $spacer-2;
-		}
+        h2 {
+            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
+        }
 
-		h2 {
-			margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
-		}
+        h3 {
+            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
+        }
 
-		h3 {
-			margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
-		}
-		
-		h4 {
-			margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
-		}
-	}
+        h4 {
+            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
+        }
+    }
 
-	.container {
-		margin: 0;
-	}
+    .container {
+        margin: 0 auto $spacer-5;
+    }
 
-	// Context for what parts we're searching
+    @include screen-xxl {
+        .container {
+            margin: 0 auto $spacer-6;
+        }
+    }
 
-	.search-context {
-		margin: $spacer-4 0 $spacer-2;
+    // Context for what parts we're searching
 
-		@include screen-lg {
-			margin: $spacer-6 0 $spacer-2;
-		}
-	}
+    .search-context {
+        margin: $spacer-4 0 $spacer-2;
 
-	// i.e. "18 results, displayed by relevance"
+        @include screen-lg {
+            margin: $spacer-6 0 $spacer-2;
+        }
+    }
 
-	.search-displayed-by {
-		font-size: .8em;
-		color: $secondary_text_color;
-		margin: $spacer-3 0;
-	}
+    // i.e. "18 results, displayed by relevance"
 
-	// Search Options/Filters
+    .search-displayed-by {
+        font-size: 0.8em;
+        color: $secondary_text_color;
+        margin: $spacer-3 0;
+    }
 
-	.search-options {
-		margin: $spacer-2 0 $spacer-3;
+    // Search Options/Filters
 
-		a {
-			text-decoration: none;
-			margin-right: $spacer-2;
-			padding: 0 .9em .3em 0;
+    .search-options {
+        margin: $spacer-2 0 $spacer-3;
 
-			&.selected {
-				border-bottom: 2px solid $primary_link_color;
-			}
-		}
+        a {
+            text-decoration: none;
+            margin-right: $spacer-2;
+            padding: 0 0.9em 0.3em 0;
 
-		.fa-search {
-			margin-right: .3em;
-		}
+            &.selected {
+                border-bottom: 2px solid $primary_link_color;
+            }
+        }
 
-		.fa-angle-down {
-			margin-left: .3em;
-		}
+        .fa-search {
+            margin-right: 0.3em;
+        }
 
-		label {
-			color: $primary_link_color;
-			cursor: pointer;
+        .fa-angle-down {
+            margin-left: 0.3em;
+        }
 
-			&:hover {
-				color: $primary_link_hover;
-			}
-		}
-	}
+        label {
+            color: $primary_link_color;
+            cursor: pointer;
 
-	.hierarchy {
-		float: right;
-	}
+            &:hover {
+                color: $primary_link_hover;
+            }
+        }
+    }
 
-	// Results
+    .hierarchy {
+        float: right;
+    }
 
-	.result {
-		margin: $spacer-3 0;
+    // Results
 
-		.results-part {
-			font-size: $font-size-sm;
-		}
+    .result {
+        margin: $spacer-3 0;
 
-		.results-section {
-			font-size: $font-size-lg;
-			margin-bottom: $spacer-1;
+        .results-part {
+            font-size: $font-size-sm;
+        }
 
-			a {
-				text-decoration: none;
-			}
-		}
+        .results-section {
+            font-size: $font-size-lg;
+            margin-bottom: $spacer-1;
 
-		.results-preview {
-			font-size: $font-size-sm;
-		}
+            a {
+                text-decoration: none;
+            }
+        }
 
-		.search-highlight {
-			font-weight: bold;
-		}
-	}
+        .results-preview {
+            font-size: $font-size-sm;
+        }
 
-	// Right Sidebar 
+        .search-highlight {
+            font-weight: bold;
+        }
+    }
 
-	.right-sidebar {
+    // Right Sidebar
 
-		h3 {
-			font-size: $font-size-md;
-			font-weight: 600;
-			margin-bottom: $spacer-2;
-		}
+    .right-sidebar {
+        h3 {
+            font-size: $font-size-md;
+            font-weight: 600;
+            margin-bottom: $spacer-2;
+        }
 
-		h4 {
-			margin: 0 0 0 $spacer-2;
-			font-weight: 600;
+        h4 {
+            margin: 0 0 0 $spacer-2;
+            font-weight: 600;
 
-			a {
-				text-decoration: none;
-			}
-		}
+            a {
+                text-decoration: none;
+            }
+        }
 
-		p {
-			margin: 0 0 0 $spacer-2;
-			color: $secondary_text_color;
-			font-size: $font-size-sm;
-		}
-
-	}
+        p {
+            margin: 0 0 0 $spacer-2;
+            color: $secondary_text_color;
+            font-size: $font-size-sm;
+        }
+    }
 }
 
 // Search Text Box
 
 .search-header,
 .search-box {
-	width: 100%;
-	position: relative;
-	display: flex;
+    width: 100%;
+    position: relative;
+    display: flex;
 
-	input {
-		width: 100%;
-		border: 1px solid $border_color;
-		border-right: none;
-		padding: $spacer-1 $spacer-2;
-		border-radius: 3px 0 0 3px;
-		outline: none;
+    input {
+        width: 100%;
+        border: 1px solid $border_color;
+        border-right: none;
+        padding: $spacer-1 $spacer-2;
+        border-radius: 3px 0 0 3px;
+        outline: none;
 
-		&:focus {
-			color: $primary_link_hover;
-		}
+        &:focus {
+            color: $primary_link_hover;
+        }
 
-		&::placeholder {
-			color: $placeholder_color;
-		}
+        &::placeholder {
+            color: $placeholder_color;
+        }
 
-		&::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-			color: $placeholder_color;
-		}
+        &::-webkit-input-placeholder {
+            /* Chrome/Opera/Safari */
+            color: $placeholder_color;
+        }
 
-		&::-moz-placeholder { /* Firefox 19+ */
-			color: $placeholder_color;
-		}
+        &::-moz-placeholder {
+            /* Firefox 19+ */
+            color: $placeholder_color;
+        }
 
-		&:-ms-input-placeholder { /* IE 10+ */
-			color: $placeholder_color;
-		}
+        &:-ms-input-placeholder {
+            /* IE 10+ */
+            color: $placeholder_color;
+        }
+    }
 
-	}
+    .search-reset {
+        border: 1px solid $border_color;
+        border-right: none;
+        border-left: none;
+        background: none;
+        text-align: center;
+        color: #fff;
+        border-radius: 0;
+        cursor: pointer;
+        font-size: 1.5rem;
+        width: 68px;
+        height: 58px;
 
-	.search-reset {
-		border: 1px solid $border_color;
-		border-right: none;
-		border-left: none;
-		background: none;
-		text-align: center;
-		color: #fff;
-		border-radius: 0;
-		cursor: pointer;
-		font-size: 1.5rem;
-		width: 68px;
-		height: 58px;
+        &:hover {
+            .fa {
+                color: $primary_link_hover;
+            }
+        }
 
-		&:hover {
-			.fa {
-				color: $primary_link_hover;
-			}
-		}
+        .fa {
+            color: $secondary_text_color;
+        }
+    }
 
-		.fa {
-			color: $secondary_text_color;
-		}
-	}
+    .search-submit {
+        border: 1px solid $border_color;
+        background: none;
+        text-align: center;
+        color: #fff;
+        border-radius: 0 3px 3px 0;
+        cursor: pointer;
+        font-size: 1.5rem;
+        width: 68px;
+        height: 58px;
 
-	.search-submit {
-		border: 1px solid $border_color;
-		background: none;
-		text-align: center;
-		color: #fff;
-		border-radius: 0 3px 3px 0;
-		cursor: pointer;
-		font-size: 1.5rem;
-		width: 68px;
-		height: 58px;
+        &:hover {
+            .fa {
+                color: $primary_link_hover;
+            }
+        }
 
-		&:hover {
-			.fa {
-				color: $primary_link_hover;
-			}
-		}
-
-		.fa {
-			color: $primary_link_color;
-		}
-	}
-
+        .fa {
+            color: $primary_link_color;
+        }
+    }
 }

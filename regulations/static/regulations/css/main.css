@@ -14354,7 +14354,12 @@ select:focus-visible {
   margin: 8px 8px 8px 16px;
 }
 .search-page .container {
-  margin: 0;
+  margin: 0 auto 40px;
+}
+@media (min-width: 1440px) {
+  .search-page .container {
+    margin: 0 auto 48px;
+  }
 }
 .search-page .search-context {
   margin: 32px 0 16px;
