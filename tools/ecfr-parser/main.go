@@ -103,9 +103,18 @@ func main() {
 	    out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
         log.Trace("Finished Curling the ECFR site")
 		if err != nil{
-		    log.Trace("Uh OH CURL failed", err)
+		    log.Trace("cURL failed to fetch eCFR: ", err)
 		}
 		log.Trace(string(out[:100]))
+
+	    log.Trace("Curling Google")
+	    out, err := exec.Command("curl", "https://www.google.com").Output()
+        log.Trace("Finished Curling Google")
+		if err != nil{
+		    log.Trace("cURL failed to fetch Google: ", err)
+		}
+		log.Trace(string(out[:100]))
+		
 		if err = run(); err == nil {
 			break
 		} else if i == attempts - 1 {
