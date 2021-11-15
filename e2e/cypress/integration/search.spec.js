@@ -17,7 +17,7 @@ describe("Search flow", () => {
 
     it("shows when mobile search open icon is clicked", () => {
         cy.viewport("iphone-x");
-        cy.visit("/42/400/");
+        cy.visit("/42/430/");
         cy.get("button#mobile-search-open")
             .should("be.visible")
             .click({ force: true });
@@ -45,19 +45,6 @@ describe("Search flow", () => {
             name: "§ 431.958 Definitions and use of terms.",
         }).click({ force: true });
         cy.url().should("include", "/431/Subpart-Q/2020-06-30/#431-958");
-    });
-
-    it("links to a search in the eCFR", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/search/?q=State", { timeout: 60000 });
-        cy.findByRole("link", {
-            name: "State in eCFR",
-            exact: false,
-        }).should(
-            "have.attr",
-            "href",
-            "https://www.ecfr.gov/search?search%5Bdate%5D=current&search%5Bhierarchy%5D%5Btitle%5D=42&search%5Bquery%5D=State&view=standard"
-        );
     });
 
     it("checks a11y for search page", () => {
