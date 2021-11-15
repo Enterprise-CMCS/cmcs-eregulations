@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"container/list"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -160,14 +161,7 @@ func run() error {
 		return err
 	}
 
-	log.Info("[main] Fetching and processing parts using ", workers, " workers...")
-	ch := make(chan *eregs.Part)
-	var wg sync.WaitGroup
-	for i := 1; i < workers + 1; i++ {
-		wg.Add(1)
-		go startHandlePartWorker(i, ch, &wg, ctx, today)
-	}
-
+	queue := list.New()
 	for _, part := range parts {
 		for date := range versions[part] {
 			reg := &eregs.Part{
@@ -176,16 +170,52 @@ func run() error {
 				Date:      date,
 				Structure: &ecfr.Structure{},
 				Document:  &parseXML.Part{},
+				Processed: false,
 			}
-			ch <- reg
+
+			queue.PushBack(reg)
 		}
 	}
 
-	log.Debug("[main] Waiting until all parts are finished processing.")
-	close(ch)
-	wg.Wait()
-	log.Info("[main] All parts finished processing!")
+	for i := 0; i < attempts; i++ {
+		log.Info("[main] Fetching and processing ", queue.Len(), " parts using ", workers, " workers...")
+		ch := make(chan *eregs.Part)
+		var wg sync.WaitGroup
+		for worker := 1; worker < workers + 1; worker++ {
+			wg.Add(1)
+			go startHandlePartWorker(worker, ch, &wg, ctx, today)
+		}
 
+		for reg := queue.Front(); reg != nil; reg = reg.Next() {
+			ch <- reg.Value.(*eregs.Part)
+		}
+
+		log.Debug("[main] Waiting until all parts are finished processing")
+		close(ch)
+		wg.Wait()
+
+		log.Trace("[main] Removing successfully processed parts from the queue")
+		originalLength := queue.Len()
+		var next *list.Element
+		for reg := queue.Front(); reg != nil; reg = next {
+			next = reg.Next()
+			if reg.Value.(*eregs.Part).Processed {
+				queue.Remove(reg)
+			}
+		}
+		log.Trace("[main] Successfully processed ", originalLength - queue.Len(), "/", originalLength, " parts")
+
+		if queue.Len() == 0 {
+			break
+		} else if i == attempts - 1 {
+			log.Fatal("[main] Some parts still failed to process after ", attempts, " attempts.")
+		} else {
+			log.Warn("[main] Some parts failed to process. Retrying ", attempts - i - 1, " more times.")
+			time.Sleep(3 * time.Second)
+		}
+	}
+
+	log.Info("[main] All parts finished processing!")
 	return nil
 }
 
@@ -193,7 +223,9 @@ func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, 
 	for reg := range ch {
 		log.Debug("[worker ", thread, "] Processing part ", reg.Name, " version ", reg.Date)
 		err := handlePart(thread, ctx, date, reg)
-		if err != nil {
+		if err == nil {
+			reg.Processed = true
+		} else {
 			log.Error("[worker ", thread, "] Error processing part ", reg.Name, " version ", reg.Date, ": ", err)
 		}
 		time.Sleep(1 * time.Second)

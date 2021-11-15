@@ -32,6 +32,7 @@ type Part struct {
 	Date      string          `json:"date" xml:"-"`
 	Structure *ecfr.Structure `json:"structure" xml:"-"`
 	Document  *parseXML.Part  `json:"document"`
+	Processed bool
 }
 
 func PostPart(ctx context.Context, p *Part) (*http.Response, error) {
