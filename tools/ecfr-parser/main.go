@@ -102,15 +102,15 @@ func main() {
 	    log.Trace("Curling the ECFR site")
 	    out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
         log.Trace("Finished Curling the ECFR site")
-		if err != nil{
+		if err != nil {
 		    log.Trace("cURL failed to fetch eCFR: ", err)
 		}
 		log.Trace(string(out[:100]))
 
 	    log.Trace("Curling Google")
-	    out, err := exec.Command("curl", "https://www.google.com").Output()
+	    out, err = exec.Command("curl", "https://www.google.com").Output()
         log.Trace("Finished Curling Google")
-		if err != nil{
+		if err != nil {
 		    log.Trace("cURL failed to fetch Google: ", err)
 		}
 		log.Trace(string(out[:100]))
@@ -191,10 +191,10 @@ func run() error {
 
 func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, ctx context.Context, date time.Time) {
 	for reg := range ch {
-		log.Debug("[worker ", thread, "] Processing part ", reg.Name)
+		log.Debug("[worker ", thread, "] Processing part ", reg.Name, " version ", reg.Date)
 		err := handlePart(thread, ctx, date, reg)
 		if err != nil {
-			log.Error("[worker ", thread, "] Error processing part ", reg.Name, ": ", err)
+			log.Error("[worker ", thread, "] Error processing part ", reg.Name, " version ", reg.Date, ": ", err)
 		}
 		time.Sleep(1 * time.Second)
 	}
@@ -205,36 +205,36 @@ func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, 
 func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part) error {
 	start := time.Now()
 
-	log.Debug("[worker ", thread, "] Fetching structure for part ", reg.Name)
+	log.Debug("[worker ", thread, "] Fetching structure for part ", reg.Name, " version ", reg.Date)
 	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
 		return err
 	}
 
-	log.Trace("[worker ", thread, "] Decoding structure for part ", reg.Name)
+	log.Trace("[worker ", thread, "] Decoding structure for part ", reg.Name, " version ", reg.Date)
 	sd := json.NewDecoder(sbody)
 	if err := sd.Decode(reg.Structure); err != nil {
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Fetching full document for part ", reg.Name)
+	log.Debug("[worker ", thread, "] Fetching full document for part ", reg.Name, " version ", reg.Date)
 	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
 	if err != nil {
 		return err
 	}
 
-	log.Trace("[worker ", thread, "] Decoding full structure for part ", reg.Name)
+	log.Trace("[worker ", thread, "] Decoding full structure for part ", reg.Name, " version ", reg.Date)
 	d := xml.NewDecoder(body)
 	if err := d.Decode(reg.Document); err != nil {
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Running post process on structure for part ", reg.Name)
+	log.Debug("[worker ", thread, "] Running post process on structure for part ", reg.Name, " version ", reg.Date)
 	if err := reg.Document.PostProcess(); err != nil {
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Posting part ", reg.Name, " to eRegs")
+	log.Debug("[worker ", thread, "] Posting part ", reg.Name, " version ", reg.Date, " to eRegs")
 	resp, err := eregs.PostPart(ctx, reg)
 	if err != nil {
 		if resp != nil {
@@ -248,6 +248,6 @@ func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " in ", time.Since(start))
+	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
 	return nil
 }
