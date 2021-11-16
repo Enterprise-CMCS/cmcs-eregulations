@@ -501,7 +501,7 @@
 
       computed: {
           heightStyle: function () {
-              return { height: this.height }
+              return { height: this.height };
           },
       },
 
@@ -512,8 +512,7 @@
           toggleDisplay: function (e) {
               if (this.visible) {
                   this.$refs.target.style.height = "auto";
-              }
-              else {
+              } else {
                   this.$refs.target.classList.add("display-none");
               }
           },
@@ -573,7 +572,7 @@
       {
         ref: "target",
         class: { invisible: !_vm.visible },
-        style: [_vm.styles, _vm.sizeStyle],
+        style: [_vm.styles],
         attrs: { "data-test": _vm.name }
       },
       [_vm._t("default")],
@@ -645,6 +644,9 @@
           rulesCount() {
               return this.rules.length;
           },
+          showMoreNeeded() {
+              return this.rulesCount > this.limit;
+          }
       },
 
       data() {
@@ -693,30 +695,7 @@
               })
             }),
             _vm._v(" "),
-            _c(
-              "collapsible",
-              {
-                staticClass: "category-content",
-                attrs: { name: _vm.innerName, state: "collapsed" }
-              },
-              _vm._l(_vm.additionalRules, function(rule, index) {
-                return _c("related-rule", {
-                  key: index,
-                  attrs: {
-                    title: rule.title,
-                    type: rule.type,
-                    citation: rule.citation,
-                    publication_date: rule.publication_date,
-                    document_number: rule.document_number,
-                    html_url: rule.html_url,
-                    action: rule.action
-                  }
-                })
-              }),
-              1
-            ),
-            _vm._v(" "),
-            _vm.rules.length > _vm.limit
+            _vm.showMoreNeeded && _vm.rulesCount > 10
               ? _c("collapse-button", {
                   staticClass: "category-title",
                   class: { subcategory: _vm.subcategory },
@@ -761,7 +740,79 @@
                     66893211
                   )
                 })
-              : _vm._e()
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "collapsible",
+              {
+                staticClass: "category-content additional-rules",
+                attrs: { name: _vm.innerName, state: "collapsed" }
+              },
+              [
+                _vm._l(_vm.additionalRules, function(rule, index) {
+                  return _c("related-rule", {
+                    key: index,
+                    attrs: {
+                      title: rule.title,
+                      type: rule.type,
+                      citation: rule.citation,
+                      publication_date: rule.publication_date,
+                      document_number: rule.document_number,
+                      html_url: rule.html_url,
+                      action: rule.action
+                    }
+                  })
+                }),
+                _vm._v(" "),
+                _vm.showMoreNeeded && _vm.rulesCount > 0
+                  ? _c("collapse-button", {
+                      staticClass: "category-title",
+                      class: { subcategory: _vm.subcategory },
+                      attrs: {
+                        name: _vm.innerName,
+                        state: "collapsed",
+                        btnClass: "inner-button"
+                      },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "expanded",
+                            fn: function() {
+                              return [
+                                _c("show-more-button", {
+                                  attrs: {
+                                    buttonText: "- Show Less",
+                                    count: _vm.rules.length
+                                  }
+                                })
+                              ]
+                            },
+                            proxy: true
+                          },
+                          {
+                            key: "collapsed",
+                            fn: function() {
+                              return [
+                                _c("show-more-button", {
+                                  attrs: {
+                                    buttonText: "+ Show More",
+                                    count: _vm.rules.length
+                                  }
+                                })
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        false,
+                        66893211
+                      )
+                    })
+                  : _vm._e()
+              ],
+              2
+            )
           ],
           2
         )
@@ -1089,7 +1140,7 @@
 
       computed: {
           heightStyle: function () {
-              return { height: this.height }
+              return { height: this.height };
           },
       },
 
@@ -1100,8 +1151,7 @@
           toggleDisplay: function (e) {
               if (this.visible) {
                   this.$refs.target.style.height = "auto";
-              }
-              else {
+              } else {
                   this.$refs.target.classList.add("display-none");
               }
           },
@@ -1236,7 +1286,7 @@
       {
         ref: "target",
         class: { invisible: !_vm.visible },
-        style: [_vm.styles, _vm.sizeStyle],
+        style: [_vm.styles],
         attrs: { "data-test": _vm.name }
       },
       [_vm._t("default")],
@@ -1976,7 +2026,7 @@
 
       computed: {
           heightStyle: function () {
-              return { height: this.height }
+              return { height: this.height };
           },
       },
 
@@ -1987,8 +2037,7 @@
           toggleDisplay: function (e) {
               if (this.visible) {
                   this.$refs.target.style.height = "auto";
-              }
-              else {
+              } else {
                   this.$refs.target.classList.add("display-none");
               }
           },
@@ -2048,7 +2097,7 @@
       {
         ref: "target",
         class: { invisible: !_vm.visible },
-        style: [_vm.styles, _vm.sizeStyle],
+        style: [_vm.styles],
         attrs: { "data-test": _vm.name }
       },
       [_vm._t("default")],
@@ -2164,26 +2213,6 @@
               })
             }),
             _vm._v(" "),
-            _c(
-              "collapsible",
-              {
-                staticClass: "category-content show-more-content",
-                attrs: { name: _vm.innerName, state: "collapsed" }
-              },
-              _vm._l(_vm.additionalContent, function(content, index) {
-                return _c("supplemental-content-object", {
-                  key: index,
-                  attrs: {
-                    name: content.name,
-                    description: content.description,
-                    date: content.date,
-                    url: content.url
-                  }
-                })
-              }),
-              1
-            ),
-            _vm._v(" "),
             _vm.showMoreNeeded
               ? _c("collapse-button", {
                   staticClass: "category-title show-more",
@@ -2225,7 +2254,72 @@
                     1539528923
                   )
                 })
-              : _vm._e()
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "collapsible",
+              {
+                staticClass: "category-content show-more-content",
+                attrs: { name: _vm.innerName, state: "collapsed" }
+              },
+              [
+                _vm._l(_vm.additionalContent, function(content, index) {
+                  return _c("supplemental-content-object", {
+                    key: index,
+                    attrs: {
+                      name: content.name,
+                      description: content.description,
+                      date: content.date,
+                      url: content.url
+                    }
+                  })
+                }),
+                _vm._v(" "),
+                _vm.showMoreNeeded && _vm.contentCount > 10
+                  ? _c("collapse-button", {
+                      staticClass: "category-title show-more",
+                      class: { subcategory: _vm.subcategory },
+                      attrs: { name: _vm.innerName, state: "collapsed" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "expanded",
+                            fn: function() {
+                              return [
+                                _c("show-more-button", {
+                                  attrs: {
+                                    buttonText: "- Show Less",
+                                    count: _vm.contentCount
+                                  }
+                                })
+                              ]
+                            },
+                            proxy: true
+                          },
+                          {
+                            key: "collapsed",
+                            fn: function() {
+                              return [
+                                _c("show-more-button", {
+                                  attrs: {
+                                    buttonText: "+ Show More",
+                                    count: _vm.contentCount
+                                  }
+                                })
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        false,
+                        1539528923
+                      )
+                    })
+                  : _vm._e()
+              ],
+              2
+            )
           ],
           2
         )

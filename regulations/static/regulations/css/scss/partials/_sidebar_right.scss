@@ -286,6 +286,11 @@ aside.right-sidebar {
 }
 
 .category-content {
+
+    &.additional-rules .related-rule:first-child {
+        padding: 0;
+    }
+
     .supplemental-content-category {
         &:not(:last-child) {
             margin-bottom: 1em;

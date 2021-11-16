@@ -488,7 +488,7 @@ var script$3 = {
 
     computed: {
         heightStyle: function () {
-            return { height: this.height }
+            return { height: this.height };
         },
     },
 
@@ -499,8 +499,7 @@ var script$3 = {
         toggleDisplay: function (e) {
             if (this.visible) {
                 this.$refs.target.style.height = "auto";
-            }
-            else {
+            } else {
                 this.$refs.target.classList.add("display-none");
             }
         },
@@ -560,7 +559,7 @@ var __vue_render__$3 = function() {
     {
       ref: "target",
       class: { invisible: !_vm.visible },
-      style: [_vm.styles, _vm.sizeStyle],
+      style: [_vm.styles],
       attrs: { "data-test": _vm.name }
     },
     [_vm._t("default")],
@@ -676,26 +675,6 @@ var __vue_render__$2 = function() {
             })
           }),
           _vm._v(" "),
-          _c(
-            "collapsible",
-            {
-              staticClass: "category-content show-more-content",
-              attrs: { name: _vm.innerName, state: "collapsed" }
-            },
-            _vm._l(_vm.additionalContent, function(content, index) {
-              return _c("supplemental-content-object", {
-                key: index,
-                attrs: {
-                  name: content.name,
-                  description: content.description,
-                  date: content.date,
-                  url: content.url
-                }
-              })
-            }),
-            1
-          ),
-          _vm._v(" "),
           _vm.showMoreNeeded
             ? _c("collapse-button", {
                 staticClass: "category-title show-more",
@@ -737,7 +716,72 @@ var __vue_render__$2 = function() {
                   1539528923
                 )
               })
-            : _vm._e()
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "collapsible",
+            {
+              staticClass: "category-content show-more-content",
+              attrs: { name: _vm.innerName, state: "collapsed" }
+            },
+            [
+              _vm._l(_vm.additionalContent, function(content, index) {
+                return _c("supplemental-content-object", {
+                  key: index,
+                  attrs: {
+                    name: content.name,
+                    description: content.description,
+                    date: content.date,
+                    url: content.url
+                  }
+                })
+              }),
+              _vm._v(" "),
+              _vm.showMoreNeeded && _vm.contentCount > 10
+                ? _c("collapse-button", {
+                    staticClass: "category-title show-more",
+                    class: { subcategory: _vm.subcategory },
+                    attrs: { name: _vm.innerName, state: "collapsed" },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "expanded",
+                          fn: function() {
+                            return [
+                              _c("show-more-button", {
+                                attrs: {
+                                  buttonText: "- Show Less",
+                                  count: _vm.contentCount
+                                }
+                              })
+                            ]
+                          },
+                          proxy: true
+                        },
+                        {
+                          key: "collapsed",
+                          fn: function() {
+                            return [
+                              _c("show-more-button", {
+                                attrs: {
+                                  buttonText: "+ Show More",
+                                  count: _vm.contentCount
+                                }
+                              })
+                            ]
+                          },
+                          proxy: true
+                        }
+                      ],
+                      null,
+                      false,
+                      1539528923
+                    )
+                  })
+                : _vm._e()
+            ],
+            2
+          )
         ],
         2
       )

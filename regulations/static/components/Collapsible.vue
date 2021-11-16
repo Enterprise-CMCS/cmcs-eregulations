@@ -3,7 +3,7 @@
         ref="target"
         v-bind:data-test="name"
         v-bind:class="{ invisible: !visible }"
-        v-bind:style="[styles, sizeStyle]"
+        v-bind:style="[styles]"
     >
         <slot></slot>
     </div>
@@ -64,7 +64,7 @@ export default {
 
     computed: {
         heightStyle: function () {
-            return { height: this.height }
+            return { height: this.height };
         },
     },
 
@@ -75,8 +75,7 @@ export default {
         toggleDisplay: function (e) {
             if (this.visible) {
                 this.$refs.target.style.height = "auto";
-            }
-            else {
+            } else {
                 this.$refs.target.classList.add("display-none");
             }
         },

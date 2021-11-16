@@ -15736,6 +15736,9 @@ aside.right-sidebar .resource-info {
   margin-top: 1em;
 }
 
+.category-content.additional-rules .related-rule:first-child {
+  padding: 0;
+}
 .category-content .supplemental-content-category:not(:last-child) {
   margin-bottom: 1em;
   border-bottom: 1px solid #d6d7d9;

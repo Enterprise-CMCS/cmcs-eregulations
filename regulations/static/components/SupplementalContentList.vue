@@ -9,21 +9,6 @@
             :url="content.url"
         >
         </supplemental-content-object>
-        <collapsible
-            :name="innerName"
-            state="collapsed"
-            class="category-content show-more-content"
-        >
-            <supplemental-content-object
-                v-for="(content, index) in additionalContent"
-                :key="index"
-                :name="content.name"
-                :description="content.description"
-                :date="content.date"
-                :url="content.url"
-            >
-            </supplemental-content-object>
-        </collapsible>
         <collapse-button
             v-if="showMoreNeeded"
             v-bind:class="{ subcategory: subcategory }"
@@ -44,6 +29,41 @@
                 ></show-more-button>
             </template>
         </collapse-button>
+        <collapsible
+            :name="innerName"
+            state="collapsed"
+            class="category-content show-more-content"
+        >
+            <supplemental-content-object
+                v-for="(content, index) in additionalContent"
+                :key="index"
+                :name="content.name"
+                :description="content.description"
+                :date="content.date"
+                :url="content.url"
+            >
+            </supplemental-content-object>
+            <collapse-button
+                v-if="showMoreNeeded && contentCount > 10"
+                v-bind:class="{ subcategory: subcategory }"
+                :name="innerName"
+                state="collapsed"
+                class="category-title show-more"
+            >
+                <template v-slot:expanded>
+                    <show-more-button
+                        buttonText="- Show Less"
+                        :count="contentCount"
+                    ></show-more-button>
+                </template>
+                <template v-slot:collapsed>
+                    <show-more-button
+                        buttonText="+ Show More"
+                        :count="contentCount"
+                    ></show-more-button>
+                </template>
+            </collapse-button>
+        </collapsible>
     </div>
 </template>
 
