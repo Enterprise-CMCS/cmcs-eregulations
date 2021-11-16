@@ -14,7 +14,7 @@ import (
 )
 
 const dateFormat = "2006-01-02"
-const timeout = 60 * time.Second
+const timeout = 10 * time.Second
 
 
 var (
