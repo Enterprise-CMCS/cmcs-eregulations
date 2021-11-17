@@ -14857,6 +14857,10 @@ select:focus-visible {
   }
 }
 
+header {
+  display: flex;
+  flex-direction: row;
+}
 header.sticky {
   position: sticky;
   top: 0;
@@ -14874,45 +14878,41 @@ header.sticky + .content aside {
     top: 102px;
   }
 }
-header.home-page {
-  display: flex;
-  flex-direction: row;
-}
-header.home-page .search-header input::placeholder {
+header .search-header input::placeholder {
   color: #5b616b;
   font-weight: 600;
 }
 @media (min-width: 1024px) {
-  header.home-page {
+  header {
     height: 80px;
     padding: 0 25px;
   }
-  header.home-page .search-header input {
+  header .search-header input {
     height: 45px;
   }
 }
 @media (max-width: 1023px) {
-  header.home-page {
+  header {
     height: 70px;
     padding: 0 25px;
   }
-  header.home-page .search-header input {
+  header .search-header input {
     height: 40px;
   }
-  header.home-page .search-header input::placeholder {
+  header .search-header input::placeholder {
     font-size: 14px;
   }
 }
 @media (max-width: 767px) {
-  header.home-page {
+  header {
     align-items: center;
     height: 60px;
     padding: 0 7px 0 20px;
   }
-  header.home-page .search-header input {
+  header .search-header input {
     height: 40px;
   }
-  header.home-page .search-header input::placeholder {
+  header .search-header input::placeholder {
     font-size: 14px;
   }
 }
@@ -14991,15 +14991,10 @@ header .site-title {
 }
 @media (min-width: 1024px) {
   header .site-title {
-    font-size: 24px;
+    font-size: 21px;
     font-weight: 700;
     line-height: 36px;
     display: inline-block;
-  }
-}
-@media (min-width: 1024px) {
-  header .site-title.homepage-site-title {
-    font-size: 21px;
   }
 }
 @media (max-width: 1023px) {
