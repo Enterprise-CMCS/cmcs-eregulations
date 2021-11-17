@@ -20,6 +20,10 @@ header {
             aside {
                 top: $header_height_mobile;
 
+                @include screen-md {
+                    top: $header_height_tablet;
+                }
+
                 @include screen-lg {
                     top: $header_height;
                 }
@@ -255,12 +259,6 @@ header {
 
 .search-page {
     header {
-        height: calc(#{$header_height_mobile} - #{$spacer-4});
-
-        @include screen-lg {
-            height: auto;
-        }
-
         &.sticky + .content aside {
             @include screen-lg {
                 top: calc(#{$header_height} - 5px);

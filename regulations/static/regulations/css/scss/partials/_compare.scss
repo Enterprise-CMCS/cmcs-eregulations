@@ -12,6 +12,10 @@
 
     top: $header_height_mobile;
 
+    @include screen-md {
+        top: $header_height_tablet;
+    }
+
     @include screen-lg {
         top: $header_height;
     }
@@ -49,7 +53,6 @@
         position: absolute;
         right: $spacer-4;
         cursor: pointer;
-        height: auto;
         border: none;
         background: none;
         height: 36px;

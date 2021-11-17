@@ -13554,20 +13554,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -13805,20 +13805,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -13956,20 +13956,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14314,20 +14314,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14588,20 +14588,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14614,11 +14614,16 @@ select:focus-visible {
   color: #fff;
   position: sticky;
   z-index: 2;
-  top: 81px;
+  top: 61px;
+}
+@media (min-width: 768px) {
+  .view-and-compare {
+    top: 71px;
+  }
 }
 @media (min-width: 1024px) {
   .view-and-compare {
-    top: 102px;
+    top: 80px;
   }
 }
 .view-and-compare[data-state=hide] {
@@ -14649,7 +14654,6 @@ select:focus-visible {
   position: absolute;
   right: 32px;
   cursor: pointer;
-  height: auto;
   border: none;
   background: none;
   height: 36px;
@@ -14734,20 +14738,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14840,20 +14844,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14871,11 +14875,16 @@ header.sticky {
   -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 header.sticky + .content aside {
-  top: 81px;
+  top: 61px;
+}
+@media (min-width: 768px) {
+  header.sticky + .content aside {
+    top: 71px;
+  }
 }
 @media (min-width: 1024px) {
   header.sticky + .content aside {
-    top: 102px;
+    top: 80px;
   }
 }
 header .search-header input::placeholder {
@@ -15080,17 +15089,9 @@ header .search-borderless input {
   border: 1px solid #d6d7d9;
 }
 
-.search-page header {
-  height: calc(81px - 32px);
-}
-@media (min-width: 1024px) {
-  .search-page header {
-    height: auto;
-  }
-}
 @media (min-width: 1024px) {
   .search-page header.sticky + .content aside {
-    top: calc(102px - 5px);
+    top: calc(80px - 5px);
   }
 }
 .search-page header .reg-title:after {
@@ -15172,26 +15173,26 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
 aside.left-sidebar {
   color: #fff;
-  height: calc(100vh - 102px);
+  height: calc(100vh - 80px);
   overflow-y: scroll;
   position: sticky;
   top: 0;
@@ -15455,20 +15456,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -15476,13 +15477,13 @@ aside.right-sidebar {
   padding-top: 40px;
   max-width: 400px;
   position: sticky;
-  height: calc(100vh - 81px - 40px);
+  height: calc(100vh - 61px - 40px);
   overflow-y: scroll;
   overflow-x: auto;
 }
 @media (min-width: 1024px) {
   aside.right-sidebar {
-    height: calc(100vh - 102px - 40px);
+    height: calc(100vh - 80px - 40px);
   }
 }
 aside.right-sidebar h2 {
@@ -15855,20 +15856,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -16783,20 +16784,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -16915,20 +16916,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17119,20 +17120,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17278,20 +17279,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17404,20 +17405,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17522,20 +17523,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17664,20 +17665,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17943,20 +17944,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
