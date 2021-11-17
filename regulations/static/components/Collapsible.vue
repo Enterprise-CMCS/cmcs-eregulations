@@ -62,12 +62,6 @@ export default {
         };
     },
 
-    computed: {
-        heightStyle: function () {
-            return { height: this.height };
-        },
-    },
-
     methods: {
         resize: function (e) {
             this.computeHeight();

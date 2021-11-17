@@ -40,10 +40,6 @@ export default {
             required: false,
             default: false,
         },
-        btnClass: {
-            type: String,
-            required: false,
-        },
     },
 
     data: function () {

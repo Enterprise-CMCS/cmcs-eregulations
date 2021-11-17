@@ -338,10 +338,6 @@ var script$3 = {
             required: false,
             default: false,
         },
-        btnClass: {
-            type: String,
-            required: false,
-        },
     },
 
     data: function () {
@@ -494,12 +490,6 @@ var script$2 = {
                 transition: this.transition,
             },
         };
-    },
-
-    computed: {
-        heightStyle: function () {
-            return { height: this.height };
-        },
     },
 
     methods: {
@@ -696,11 +686,7 @@ var __vue_render__$1 = function() {
             ? _c("collapse-button", {
                 staticClass: "category-title",
                 class: { subcategory: _vm.subcategory },
-                attrs: {
-                  name: _vm.innerName,
-                  state: "collapsed",
-                  btnClass: "inner-button"
-                },
+                attrs: { name: _vm.innerName, state: "collapsed" },
                 scopedSlots: _vm._u(
                   [
                     {
@@ -765,11 +751,7 @@ var __vue_render__$1 = function() {
                 ? _c("collapse-button", {
                     staticClass: "category-title",
                     class: { subcategory: _vm.subcategory },
-                    attrs: {
-                      name: _vm.innerName,
-                      state: "collapsed",
-                      btnClass: "inner-button"
-                    },
+                    attrs: { name: _vm.innerName, state: "collapsed" },
                     scopedSlots: _vm._u(
                       [
                         {

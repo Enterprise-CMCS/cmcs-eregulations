@@ -341,10 +341,6 @@
               required: false,
               default: false,
           },
-          btnClass: {
-              type: String,
-              required: false,
-          },
       },
 
       data: function () {
@@ -497,12 +493,6 @@
                   transition: this.transition,
               },
           };
-      },
-
-      computed: {
-          heightStyle: function () {
-              return { height: this.height };
-          },
       },
 
       methods: {
@@ -699,11 +689,7 @@
               ? _c("collapse-button", {
                   staticClass: "category-title",
                   class: { subcategory: _vm.subcategory },
-                  attrs: {
-                    name: _vm.innerName,
-                    state: "collapsed",
-                    btnClass: "inner-button"
-                  },
+                  attrs: { name: _vm.innerName, state: "collapsed" },
                   scopedSlots: _vm._u(
                     [
                       {
@@ -768,11 +754,7 @@
                   ? _c("collapse-button", {
                       staticClass: "category-title",
                       class: { subcategory: _vm.subcategory },
-                      attrs: {
-                        name: _vm.innerName,
-                        state: "collapsed",
-                        btnClass: "inner-button"
-                      },
+                      attrs: { name: _vm.innerName, state: "collapsed" },
                       scopedSlots: _vm._u(
                         [
                           {
@@ -1138,12 +1120,6 @@
           };
       },
 
-      computed: {
-          heightStyle: function () {
-              return { height: this.height };
-          },
-      },
-
       methods: {
           resize: function (e) {
               this.computeHeight();
@@ -1366,10 +1342,6 @@
               type: Boolean,
               required: false,
               default: false,
-          },
-          btnClass: {
-              type: String,
-              required: false,
           },
       },
 
@@ -1866,10 +1838,6 @@
               required: false,
               default: false,
           },
-          btnClass: {
-              type: String,
-              required: false,
-          },
       },
 
       data: function () {
@@ -2022,12 +1990,6 @@
                   transition: this.transition,
               },
           };
-      },
-
-      computed: {
-          heightStyle: function () {
-              return { height: this.height };
-          },
       },
 
       methods: {

@@ -328,10 +328,6 @@ var script$4 = {
             required: false,
             default: false,
         },
-        btnClass: {
-            type: String,
-            required: false,
-        },
     },
 
     data: function () {
@@ -484,12 +480,6 @@ var script$3 = {
                 transition: this.transition,
             },
         };
-    },
-
-    computed: {
-        heightStyle: function () {
-            return { height: this.height };
-        },
     },
 
     methods: {
