@@ -6,7 +6,6 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
-	"io"
 	"os/exec"
 	"strings"
 	"sync"
@@ -267,16 +266,7 @@ func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part
 	}
 
 	log.Debug("[worker ", thread, "] Posting part ", reg.Name, " version ", reg.Date, " to eRegs")
-	resp, err := eregs.PostPart(ctx, reg)
-	if err != nil {
-		if resp != nil {
-			defer resp.Body.Close()
-			response, e := io.ReadAll(resp.Body)
-			if e != nil {
-				log.Error(e)
-			}
-			return fmt.Errorf("%s | %s", err.Error(), string(response))
-		}
+	if err := eregs.PostPart(ctx, reg); err != nil {
 		return err
 	}
 
