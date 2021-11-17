@@ -1,9 +1,8 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import exception_handler
 from django.db.models import Prefetch, Q
-from django.http import JsonResponse
 from django.core import serializers
-
-import json
 
 from .models import (
     AbstractSupplementalContent,
@@ -55,25 +54,36 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
         sections = []
         subparts = []
         for section in request.data["sections"]:
-            new_section, created = Section.objects.get_or_create(
-                        title=section["title"],
-                        part=section["part"],
-                        section_id=section["section"]
-                    )
-            sections.append(new_section)
-        for subpart in request.data["subparts"]:
-            new_subpart, created = Subpart.objects.get_or_create(
-                        title=subpart["title"],
-                        part=subpart["part"],
-                        subpart_id=subpart["subpart"]
-                    )
-            subparts.append(new_subpart)
-            for section in subpart["sections"]:
+            try:
                 new_section, created = Section.objects.get_or_create(
                             title=section["title"],
                             part=section["part"],
                             section_id=section["section"]
                         )
                 sections.append(new_section)
-        serialized_response = serializers.serialize('json', [new_section, new_subpart, ])
-        return JsonResponse(serialized_response, safe=False)
+            except Exception:
+                return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        for subpart in request.data["subparts"]:
+            try:
+                new_subpart, created = Subpart.objects.get_or_create(
+                            title=subpart["title"],
+                            part=subpart["part"],
+                            subpart_id=subpart["subpart"]
+                        )
+                subparts.append(new_subpart)
+            except Exception:
+                return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            for section in subpart["sections"]:
+                try:
+                    new_section, created = Section.objects.get_or_create(
+                                title=section["title"],
+                                part=section["part"],
+                                section_id=section["section"]
+                            )
+                    sections.append(new_section)
+                except Exception:
+                    return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        res = serializers.serialize('json', [new_section, ])
+        return Response({'error': False, 'content': res})
