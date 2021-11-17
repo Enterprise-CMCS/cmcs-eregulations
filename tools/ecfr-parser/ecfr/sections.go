@@ -3,8 +3,8 @@ package ecfr
 type Part struct {
 	Name     string    `json:"name"`
 	Title    string    `json:"title"`
-	Sections []Section `json:"section"`
-	Subparts []Subpart `json:"subpart"`
+	Sections []Section `json:"sections"`
+	Subparts []Subpart `json:"subparts"`
 }
 
 type Section struct {
@@ -51,8 +51,10 @@ func ExtractSubpart(title string, partNumber string, s *Structure) Subpart {
 	sections := []Section{}
 
 	for _, section := range s.Children {
-		sec := ExtractSection(title, section)
-		sections = append(sections, sec)
+		if section.Type == "section" {
+			sec := ExtractSection(title, section)
+			sections = append(sections, sec)
+		}
 	}
 
 	subpart := Subpart{

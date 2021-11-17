@@ -12,12 +12,7 @@ import (
 
 var SuppContentURL string
 
-type SuppContentPart struct {
-	Sections *ecfr.Section `json:"section"`
-	Subparts *ecfr.Subpart `json:"subpart"`
-}
-
-func PostSupplementalPart(ctx context.Context, p *SuppContentPart) (*http.Response, error) {
+func PostSupplementalPart(ctx context.Context, p ecfr.Part) (*http.Response, error) {
 	buff := bytes.NewBuffer([]byte{})
 	enc := json.NewEncoder(buff)
 	enc.SetEscapeHTML(false)
@@ -31,7 +26,6 @@ func PostSupplementalPart(ctx context.Context, p *SuppContentPart) (*http.Respon
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.SetBasicAuth(username, password)
 	resp, err := client.Do(req)
 	if err != nil {
 		return resp, err

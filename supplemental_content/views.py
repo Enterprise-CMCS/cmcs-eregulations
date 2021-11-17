@@ -1,9 +1,15 @@
 from rest_framework import generics
-from django.db.models import Prefetch, Q, Section, Subpart
+from django.db.models import Prefetch, Q
+from django.http import JsonResponse
+from django.core import serializers
+
+import json
 
 from .models import (
     AbstractSupplementalContent,
     AbstractLocation,
+    Section,
+    Subpart,
 )
 
 from .serializers import AbstractSupplementalContentSerializer
@@ -46,21 +52,28 @@ class SupplementalContentView(generics.ListAPIView):
 
 class SupplementalContentSectionsView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
+        sections = []
+        subparts = []
         for section in request.data["sections"]:
-            section, created = Section.objects.get_or_create(
+            new_section, created = Section.objects.get_or_create(
                         title=section["title"],
                         part=section["part"],
                         section_id=section["section"]
                     )
+            sections.append(new_section)
         for subpart in request.data["subparts"]:
-            subpart, created = Subpart.objects.get_or_create(
+            new_subpart, created = Subpart.objects.get_or_create(
                         title=subpart["title"],
                         part=subpart["part"],
                         subpart_id=subpart["subpart"]
                     )
+            subparts.append(new_subpart)
             for section in subpart["sections"]:
-                section, created = Section.objects.get_or_create(
+                new_section, created = Section.objects.get_or_create(
                             title=section["title"],
                             part=section["part"],
                             section_id=section["section"]
                         )
+                sections.append(new_section)
+        serialized_response = serializers.serialize('json', [new_section, new_subpart, ])
+        return JsonResponse(serialized_response, safe=False)

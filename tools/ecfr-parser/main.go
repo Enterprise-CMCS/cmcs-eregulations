@@ -57,6 +57,7 @@ func init() {
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
 	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8080/v2/", "A url specifying where to send eregs parts")
+	flag.StringVar(&eregs.SuppContentURL, "eregs-supplemental-url", "http://localhost:8000/v2/supplemental_content", "A url specifying where to send eregs parts")
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.Parse()
 
@@ -71,10 +72,10 @@ func main() {
 	for i := 0; i < attempts; i++ {
 		if err := run(); err == nil {
 			break
-		} else if i == attempts - 1 {
+		} else if i == attempts-1 {
 			log.Fatal("Failed to load regulations ", attempts, " times. Error: ", err)
 		} else {
-			log.Println("[ERROR] Failed to load regulations. Retrying", attempts - i - 1, "more times. Error: ", err)
+			log.Println("[ERROR] Failed to load regulations. Retrying", attempts-i-1, "more times. Error: ", err)
 		}
 	}
 }
@@ -168,6 +169,24 @@ func handlePart(ctx context.Context, date time.Time, reg *eregs.Part) error {
 			response, e := io.ReadAll(resp.Body)
 			if e != nil {
 				log.Println("[ERROR]", e)
+			}
+			return fmt.Errorf("%s | %s", err.Error(), string(response))
+		}
+		return err
+	}
+
+	supplementalPart, err := ecfr.ExtractStructure(*reg.Structure)
+	if err != nil {
+		return err
+	}
+
+	suppResp, err := eregs.PostSupplementalPart(ctx, supplementalPart)
+	if err != nil {
+		if suppResp != nil {
+			defer suppResp.Body.Close()
+			response, e := io.ReadAll(suppResp.Body)
+			if e != nil {
+				log.Println("[ERROR], e")
 			}
 			return fmt.Errorf("%s | %s", err.Error(), string(response))
 		}
