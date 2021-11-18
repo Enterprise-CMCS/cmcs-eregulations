@@ -915,7 +915,15 @@ var script = {
         },
         sections: {
             type: Array,
-            required: true,
+            required: false,
+        },
+        subparts: {
+            type: Array,
+            required: false,
+        },
+        subject_groups: {
+            type: Array,
+            required: false,
         },
     },
 
@@ -930,9 +938,21 @@ var script = {
     },
 
     methods: {
+        join_locations() {
+            const locations = ["sections", "subparts", "subjectgroups"];
+            const arrays = [this.sections, this.subparts, this.subject_groups];
+            let output = "";
+            for (let i = 0; i < locations.length; i++) {
+                if (arrays[i].length > 0) {
+                    const queryString = "&" + locations[i] + "=";
+                    output += queryString + arrays[i].join(queryString);
+                }    
+            }
+            return output;
+        },
         async fetch_content(title, part, sections) {
-            const joinedSections = sections.join("&sections=");
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?&sections=${joinedSections}`);
+            const joinedLocations = this.join_locations();
+            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${joinedLocations}`);
             const content = await response.json();
             return content;
         },
