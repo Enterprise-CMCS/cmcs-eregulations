@@ -6,7 +6,7 @@
 <section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section">
     <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
         {% section_formatter cfr_title node.label as formatted_citation %}
-        {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="icon" formatted_citation=formatted_citation%}
+        <copy-btn btn_type="icon" title="{{nobe.label | join:'.'}}" hash="{{title | join:'-'}}" formatted_citation="{{formatted_citation}}"></copy-btn>
         {{node.title}}
     </h2>
 
