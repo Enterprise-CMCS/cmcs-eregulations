@@ -937,8 +937,8 @@ var script = {
         this.categories = await this.fetch_content(this.title, this.part, this.sections);
     },
 
-    methods: {
-        join_locations() {
+    computed: {
+        joined_locations: function() {
             const locations = ["sections", "subparts", "subjectgroups"];
             const arrays = [this.sections, this.subparts, this.subject_groups];
             let output = "";
@@ -950,9 +950,11 @@ var script = {
             }
             return output;
         },
+    },
+
+    methods: {
         async fetch_content(title, part, sections) {
-            const joinedLocations = this.join_locations();
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${joinedLocations}`);
+            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`);
             const content = await response.json();
             return content;
         },
