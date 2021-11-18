@@ -253,9 +253,16 @@ aside.right-sidebar {
     }
 }
 
+.supplemental-content-container
+    .supplemental-content-category
+    .category-content {
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
 .supplemental-content-category {
     display: table;
-    margin-bottom: 1em;
+    width: 100%;
 
     .category {
         display: table-cell;
@@ -277,6 +284,15 @@ aside.right-sidebar {
     }
 }
 
+.category-content {
+    .supplemental-content-category {
+        &:not(:last-child) {
+            margin-bottom: 1em;
+            border-bottom: 1px solid $light-gray;
+        }
+    }
+}
+
 button.collapsible-title {
     font-size: $font-size-md;
     font-weight: bold;
@@ -286,19 +302,30 @@ button.collapsible-title {
     color: $primary_link_color;
     cursor: pointer;
     margin-top: $spacer-2;
-    display: block;
+    display: flex;
     border-radius: $border-radius;
     text-align: left;
+    width: 100%;
+    justify-content: space-between;
 
     &.subcategory {
-        font-size: $font-size-md;
+        font-size: $font-size-sm;
+        margin-top: 0;
+        margin-bottom: $spacer-2;
     }
 
     &.visible {
         color: $dark-gray;
+
+        i.fa {
+            color: $primary_link_color;
+        }
+    }
+
+    .fa {
+        float: right;
     }
 }
-
 
 .show-more-button {
     color: $primary-link-color;
@@ -308,14 +335,15 @@ button.collapsible-title {
     cursor: pointer;
     width: 100%;
     text-align: left;
+    margin-bottom: $spacer-2;
 
-    i{
-        float:right
+    i {
+        float: right;
     }
 }
 
 .show-more-inactive {
     color: $secondary_text_color;
     font-size: $font-size-sm;
-    margin-top:$spacer-2
+    margin-top: $spacer-2;
 }

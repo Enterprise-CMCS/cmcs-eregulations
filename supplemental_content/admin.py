@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
+from django.db.models import Q
 
 # Register your models here.
 
@@ -10,6 +11,7 @@ from .models import (
     Category,
     SubCategory,
     SubSubCategory,
+    AbstractLocation,
     Section,
     SubjectGroup,
     Subpart,
@@ -24,6 +26,7 @@ from .filters import (
 )
 
 from .mixins import ExportCsvMixin
+from . import actions
 
 
 class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
@@ -36,6 +39,7 @@ class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
         urls = super().get_urls()
         my_urls = [
             path('export_all_csv/', self.export_all_as_csv),
+            path('export_all_json/', self.export_all_as_json),
         ]
         return my_urls + urls
 
@@ -46,6 +50,11 @@ class SectionAdmin(BaseAdmin):
     list_display = ("title", "part", "section_id", "parent")
     search_fields = ["title", "part", "section_id"]
     ordering = ("title", "part", "section_id", "parent")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "parent":
+            kwargs["queryset"] = AbstractLocation.objects.filter(Q(subpart__isnull=False) | Q(subjectgroup__isnull=False))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Subpart)
@@ -89,10 +98,11 @@ class SubSubCategoryAdmin(CategoryAdmin):
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(BaseAdmin):
     admin_priority = 0
-    list_display = ("date", "name", "description", "category", "created_at", "updated_at")
+    list_display = ("date", "name", "description", "category", "updated_at", "approved")
     search_fields = ["date", "name", "description"]
     ordering = ("-date", "name", "category", "-created_at", "-updated_at")
     filter_horizontal = ("locations",)
+    actions = [actions.mark_approved, actions.mark_not_approved]
     list_filter = [
         "approved",
         TitleFilter,

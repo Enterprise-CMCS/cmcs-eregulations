@@ -312,7 +312,7 @@ __vue_render__$5._withStripped = true;
 //
 
 var script$4 = {
-    name: 'supplemental-content-list',
+    name: "supplemental-content-list",
 
     components: {
         SupplementalContentObject: __vue_component__$6,
@@ -322,6 +322,10 @@ var script$4 = {
     props: {
         supplemental_content: {
             type: Array,
+            required: true,
+        },
+        has_sub_categories: {
+            type: Boolean,
             required: true,
         },
         limit: {
@@ -334,12 +338,12 @@ var script$4 = {
     data() {
         return {
             limitedList: true,
-        }
+        };
     },
 
     computed: {
         limitedContent() {
-            if(this.limitedList) {
+            if (this.limitedList) {
                 return this.supplemental_content.slice(0, this.limit);
             }
             return this.supplemental_content;
@@ -355,7 +359,7 @@ var script$4 = {
     methods: {
         showMore() {
             this.limitedList = !this.limitedList;
-        }
+        },
     },
 };
 
@@ -367,30 +371,32 @@ var __vue_render__$4 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "supplemental-content-list" },
-    [
-      _vm._l(_vm.limitedContent, function(content, index) {
-        return _c("supplemental-content-object", {
-          key: index,
-          attrs: {
-            name: content.name,
-            description: content.description,
-            date: content.date,
-            url: content.url
-          }
-        })
-      }),
-      _vm._v(" "),
-      _vm.showMoreNeeded
-        ? _c("show-more-button", {
-            attrs: { showMore: _vm.showMore, count: _vm.contentCount }
-          })
-        : _vm._e()
-    ],
-    2
-  )
+  return !_vm.has_sub_categories
+    ? _c(
+        "div",
+        { staticClass: "supplemental-content-list" },
+        [
+          _vm._l(_vm.limitedContent, function(content, index) {
+            return _c("supplemental-content-object", {
+              key: index,
+              attrs: {
+                name: content.name,
+                description: content.description,
+                date: content.date,
+                url: content.url
+              }
+            })
+          }),
+          _vm._v(" "),
+          _vm.showMoreNeeded
+            ? _c("show-more-button", {
+                attrs: { showMore: _vm.showMore, count: _vm.contentCount }
+              })
+            : _vm._e()
+        ],
+        2
+      )
+    : _vm._e()
 };
 var __vue_staticRenderFns__$4 = [];
 __vue_render__$4._withStripped = true;
@@ -732,7 +738,7 @@ __vue_render__$2._withStripped = true;
 //
 
 var script$1 = {
-    name: 'supplemental-content-category',
+    name: "supplemental-content-category",
 
     components: {
         SupplementalContentList: __vue_component__$4,
@@ -765,8 +771,11 @@ var script$1 = {
     },
 
     computed: {
-        showDescription: function() {
-            return (this.description && !/^\s*$/.test(this.description));
+        showDescription: function () {
+            return this.description && !/^\s*$/.test(this.description);
+        },
+        has_sub_categories() {
+            return this.sub_categories.length;
         },
     },
 };
@@ -782,34 +791,6 @@ var __vue_render__$1 = function() {
   return _c("div", { staticClass: "supplemental-content-category" }, [
     _c(
       "div",
-      { staticClass: "category-toggle-container" },
-      [
-        _c("collapse-button", {
-          staticClass: "category-toggle",
-          attrs: { name: _vm.name, state: "collapsed" },
-          scopedSlots: _vm._u([
-            {
-              key: "expanded",
-              fn: function() {
-                return [_c("i", { staticClass: "fa fa-chevron-up" })]
-              },
-              proxy: true
-            },
-            {
-              key: "collapsed",
-              fn: function() {
-                return [_c("i", { staticClass: "fa fa-chevron-down" })]
-              },
-              proxy: true
-            }
-          ])
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
       { staticClass: "category" },
       [
         _c("collapse-button", {
@@ -820,14 +801,20 @@ var __vue_render__$1 = function() {
             {
               key: "expanded",
               fn: function() {
-                return [_vm._v(_vm._s(_vm.name))]
+                return [
+                  _vm._v(_vm._s(_vm.name) + " "),
+                  _c("i", { staticClass: "fa fa-chevron-up" })
+                ]
               },
               proxy: true
             },
             {
               key: "collapsed",
               fn: function() {
-                return [_vm._v(_vm._s(_vm.name))]
+                return [
+                  _vm._v(_vm._s(_vm.name) + " "),
+                  _c("i", { staticClass: "fa fa-chevron-down" })
+                ]
               },
               proxy: true
             }
@@ -861,7 +848,10 @@ var __vue_render__$1 = function() {
             }),
             _vm._v(" "),
             _c("supplemental-content-list", {
-              attrs: { supplemental_content: _vm.supplemental_content }
+              attrs: {
+                supplemental_content: _vm.supplemental_content,
+                has_sub_categories: _vm.has_sub_categories
+              }
             })
           ],
           2
