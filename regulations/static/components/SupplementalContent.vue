@@ -51,7 +51,7 @@ export default {
     },
 
     async created() {
-        this.categories = await this.fetch_content(this.title, this.part, this.sections);
+        this.categories = await this.fetch_content(this.title, this.part);
     },
 
     computed: {
@@ -70,7 +70,7 @@ export default {
     },
 
     methods: {
-        async fetch_content(title, part, sections) {
+        async fetch_content(title, part) {
             const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`);
             const content = await response.json();
             return content;
