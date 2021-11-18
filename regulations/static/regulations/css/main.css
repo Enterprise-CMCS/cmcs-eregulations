@@ -15021,7 +15021,7 @@ header .reg-title {
 @media (min-width: 1024px) {
   header .reg-title {
     font-size: 16px;
-    line-height: 36px;
+    line-height: 24px;
     padding-left: 16px;
     margin-left: 16px;
     border-left: 1px solid #d6d7d9;
