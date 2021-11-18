@@ -51,8 +51,6 @@ class SupplementalContentView(generics.ListAPIView):
 
 class SupplementalContentSectionsView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
-        sections = []
-        subparts = []
         for section in request.data["sections"]:
             try:
                 new_section, created = Section.objects.get_or_create(
@@ -60,7 +58,6 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
                             part=section["part"],
                             section_id=section["section"]
                         )
-                sections.append(new_section)
             except Exception:
                 return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -71,7 +68,6 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
                             part=subpart["part"],
                             subpart_id=subpart["subpart"]
                         )
-                subparts.append(new_subpart)
             except Exception:
                 return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -82,8 +78,6 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
                                 part=section["part"],
                                 section_id=section["section"]
                             )
-                    sections.append(new_section)
                 except Exception:
                     return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        res = serializers.serialize('json', [new_section, ])
-        return Response({'error': False, 'content': res})
+        return Response({'error': False, 'content': request.data})
