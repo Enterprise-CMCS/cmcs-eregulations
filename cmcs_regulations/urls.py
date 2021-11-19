@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, TemplateView
 
 urlpatterns = [
     path("", include('regcore.urls')),
     path("", include('regulations.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
     path('admin/', admin.site.urls),
-    path('robots.txt', RedirectView.as_view(url=settings.STATIC_URL + 'robots.txt')),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 ]
