@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'x_robots_tag_middleware.middleware.XRobotsTagMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -160,3 +161,5 @@ HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
 HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 
 GA_ID = os.environ.get("GA_ID")
+
+X_ROBOTS_TAG = ['noindex', 'nofollow']
