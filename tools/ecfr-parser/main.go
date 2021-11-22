@@ -7,7 +7,6 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
-	"io"
 	"os/exec"
 	"strings"
 	"sync"
@@ -279,18 +278,10 @@ func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part
 	}
 
 	log.Debug("[worker ", thread, "] Posting supplemental content structure ", reg.Name, " version ", reg.Date, " to eRegs")
-	suppResp, err := eregs.PostSupplementalPart(ctx, supplementalPart)
-	if err != nil {
-		if suppResp != nil {
-			defer suppResp.Body.Close()
-			response, e := io.ReadAll(suppResp.Body)
-			if e != nil {
-				log.Println("[ERROR], e")
-			}
-			return fmt.Errorf("%s | %s", err.Error(), string(response))
-		}
+	if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
 		return err
 	}
+
 	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
 	return nil
 }
