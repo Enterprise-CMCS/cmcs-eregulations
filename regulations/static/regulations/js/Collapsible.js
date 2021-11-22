@@ -62,12 +62,6 @@ var script = {
         };
     },
 
-    computed: {
-        heightStyle: function () {
-            return { height: this.height }
-        },
-    },
-
     methods: {
         resize: function (e) {
             this.computeHeight();
@@ -75,8 +69,7 @@ var script = {
         toggleDisplay: function (e) {
             if (this.visible) {
                 this.$refs.target.style.height = "auto";
-            }
-            else {
+            } else {
                 this.$refs.target.classList.add("display-none");
             }
         },
@@ -211,7 +204,7 @@ var __vue_render__ = function() {
     {
       ref: "target",
       class: { invisible: !_vm.visible },
-      style: [_vm.styles, _vm.sizeStyle],
+      style: [_vm.styles],
       attrs: { "data-test": _vm.name }
     },
     [_vm._t("default")],
