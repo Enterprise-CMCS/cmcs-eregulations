@@ -4,7 +4,7 @@
 <p tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section depth-{{node|pdepth}}">
     {% if node.label and node.label|length > 0 %}
         {% paragraph_formatter cfr_title node.label as formatted_citation %}
-        <copy-btn btn_type="icon" title="{{nobe.label | join:'.'}}" hash="{{title | join:'-'}}" formatted_citation="{{formatted_citation}}"></copy-btn>
+        <copy-btn btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}"></copy-btn>
     {% endif %}
     {{node.text | safe}}
 </p>
