@@ -21,6 +21,8 @@ class ReaderView(CitationContextMixin, TemplateView):
     sectional_links = True
 
     def get_context_data(self, **kwargs):
+        start = datetime.now().timestamp()
+
         context = super().get_context_data(**kwargs)
 
         reg_version = context["version"]
@@ -47,6 +49,10 @@ class ReaderView(CitationContextMixin, TemplateView):
             'parts':        parts,
             'versions':     versions,
         }
+
+        end = datetime.now().timestamp()
+
+        print(f'<<<<<<<<<< GET DATA START {start} - {end} END >>>>>>>>>>>>>>>')
 
         return {**context, **c, **version_info}
 
