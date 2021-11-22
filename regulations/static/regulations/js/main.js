@@ -27,7 +27,8 @@ function isElementInViewport(el) {
 
 // scroll to anchor to accommodate FF's bad behavior
 function onPageShow() {
-    // some magic number constants
+    // some magic number constants to scroll to top
+    // with room for sticky header and some breathing room for content
     // investigate pulling in SCSS variables instead
     const HEADER_HEIGHT = 102;
     const HEADER_HEIGHT_MOBILE = 81;
