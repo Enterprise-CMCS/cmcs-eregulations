@@ -12,6 +12,10 @@
 //
 //
 //
+//
+//
+//
+//
 
 var script = {
     name: "collapse-button",
@@ -31,7 +35,7 @@ var script = {
             type: String,
             required: true,
         },
-        'keep-contents-on-toggle': {
+        "keep-contents-on-toggle": {
             type: Boolean,
             required: false,
             default: false,

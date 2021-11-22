@@ -15651,7 +15651,7 @@ aside.right-sidebar .resource-info {
 }
 
 .recent-change {
-  margin: 16px 0;
+  padding: 16px 0 0;
   font-size: 14px;
 }
 .recent-change a {
@@ -15707,7 +15707,7 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
-.supplemental-content-container .supplemental-content-category .category-content {
+.supplemental-content-container .supplemental-content-category .category-content:not(.show-more-content) {
   margin-left: 10px;
   margin-right: 20px;
 }
@@ -15732,6 +15732,9 @@ aside.right-sidebar .resource-info {
   margin-top: 1em;
 }
 
+.category-content.additional-rules .related-rule:first-child {
+  padding: 0;
+}
 .category-content .supplemental-content-category:not(:last-child) {
   margin-bottom: 1em;
   border-bottom: 1px solid #d6d7d9;
@@ -15762,6 +15765,10 @@ button.collapsible-title.visible {
 }
 button.collapsible-title.visible i.fa {
   color: #046791;
+}
+button.collapsible-title.show-more {
+  margin-top: 0;
+  padding-top: 16px;
 }
 button.collapsible-title .fa {
   float: right;
