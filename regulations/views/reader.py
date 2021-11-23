@@ -37,6 +37,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         toc = query.toc
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
+        node_list = self.get_supp_content_params(context, tree)
 
         c = {
             'tree':         tree,
@@ -46,9 +47,14 @@ class ReaderView(CitationContextMixin, TemplateView):
             'toc':          toc,
             'parts':        parts,
             'versions':     versions,
+            'node_list':    node_list,
+            'view_type':    self.get_view_type(),
         }
 
         return {**context, **c, **version_info}
+
+    def get_view_type(self):
+        raise NotImplementedError()
 
     def get_versions(self, title, part):
         versions = Part.objects.versions(title, part)
@@ -59,14 +65,26 @@ class ReaderView(CitationContextMixin, TemplateView):
     def get_content(self, context, document, toc):
         raise NotImplementedError()
 
-    def get_sections(self, tree):
-        sections = []
+    def get_supp_content_params(self, context, tree):
+        return {
+            "sections": self.get_sections(context, tree),
+            "subparts": self.get_subparts(context, tree),
+        }
+
+    def get_nodes_by_type(self, tree, type, label_index):
+        nodes = []
         for node in tree:
-            if node.get('node_type') == "SECTION":
-                sections.append(node['label'][1])
-            elif node.get('children') is not None and len(node['children']) > 0:
-                sections = sections + self.get_sections(node['children'])
-        return sections
+            if node.get("node_type") == type:
+                nodes.append(node["label"][label_index])
+            elif node.get("children") is not None and len(node["children"]) > 0:
+                nodes = nodes + self.find_nodes_by_type(node["children"], type, label_index)
+        return nodes
+
+    def get_sections(self, context, tree):
+        return self.get_nodes_by_type(tree, "SECTION", 1)
+
+    def get_subparts(self, context, tree):
+        return self.get_nodes_by_type(tree, "SUBPART", 0)
 
     def get_version_info(self, version, title, part):
         versions = self.get_versions(title, part)
@@ -83,19 +101,20 @@ class ReaderView(CitationContextMixin, TemplateView):
 
 class PartReaderView(ReaderView):
 
+    def get_view_type(self):
+        return "part"
+
     def get_content(self, context, document, structure):
         return document
 
 
 class SubpartReaderView(ReaderView):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        sections = self.get_sections([context['tree']])
-        c = {
-            "sections": sections,
-        }
-        return {**context, **c}
+    def get_view_type(self):
+        return "subpart"
+
+    def get_subparts(self, context, tree):
+        return [context["subpart"]]
 
     def get_content(self, context, document, toc):
         # using tree['structure'] find subpart requested then extract that data
