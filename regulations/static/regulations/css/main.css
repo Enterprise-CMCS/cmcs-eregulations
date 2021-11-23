@@ -13554,20 +13554,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -13805,20 +13805,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -13956,20 +13956,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14314,20 +14314,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14588,20 +14588,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14614,11 +14614,16 @@ select:focus-visible {
   color: #fff;
   position: sticky;
   z-index: 2;
-  top: 81px;
+  top: 61px;
+}
+@media (min-width: 768px) {
+  .view-and-compare {
+    top: 71px;
+  }
 }
 @media (min-width: 1024px) {
   .view-and-compare {
-    top: 102px;
+    top: 80px;
   }
 }
 .view-and-compare[data-state=hide] {
@@ -14649,7 +14654,6 @@ select:focus-visible {
   position: absolute;
   right: 32px;
   cursor: pointer;
-  height: auto;
   border: none;
   background: none;
   height: 36px;
@@ -14734,20 +14738,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -14840,23 +14844,27 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
+header {
+  display: flex;
+  flex-direction: row;
+}
 header.sticky {
   position: sticky;
   top: 0;
@@ -14867,52 +14875,53 @@ header.sticky {
   -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 header.sticky + .content aside {
-  top: 81px;
+  top: 61px;
+}
+@media (min-width: 768px) {
+  header.sticky + .content aside {
+    top: 71px;
+  }
 }
 @media (min-width: 1024px) {
   header.sticky + .content aside {
-    top: 102px;
+    top: 80px;
   }
 }
-header.home-page {
-  display: flex;
-  flex-direction: row;
-}
-header.home-page .search-header input::placeholder {
+header .search-header input::placeholder {
   color: #5b616b;
   font-weight: 600;
 }
 @media (min-width: 1024px) {
-  header.home-page {
+  header {
     height: 80px;
     padding: 0 25px;
   }
-  header.home-page .search-header input {
+  header .search-header input {
     height: 45px;
   }
 }
 @media (max-width: 1023px) {
-  header.home-page {
+  header {
     height: 70px;
     padding: 0 25px;
   }
-  header.home-page .search-header input {
+  header .search-header input {
     height: 40px;
   }
-  header.home-page .search-header input::placeholder {
+  header .search-header input::placeholder {
     font-size: 14px;
   }
 }
 @media (max-width: 767px) {
-  header.home-page {
+  header {
     align-items: center;
     height: 60px;
     padding: 0 7px 0 20px;
   }
-  header.home-page .search-header input {
+  header .search-header input {
     height: 40px;
   }
-  header.home-page .search-header input::placeholder {
+  header .search-header input::placeholder {
     font-size: 14px;
   }
 }
@@ -14991,15 +15000,10 @@ header .site-title {
 }
 @media (min-width: 1024px) {
   header .site-title {
-    font-size: 24px;
+    font-size: 21px;
     font-weight: 700;
     line-height: 36px;
     display: inline-block;
-  }
-}
-@media (min-width: 1024px) {
-  header .site-title.homepage-site-title {
-    font-size: 21px;
   }
 }
 @media (max-width: 1023px) {
@@ -15017,7 +15021,7 @@ header .reg-title {
 @media (min-width: 1024px) {
   header .reg-title {
     font-size: 16px;
-    line-height: 36px;
+    line-height: 24px;
     padding-left: 16px;
     margin-left: 16px;
     border-left: 1px solid #d6d7d9;
@@ -15085,17 +15089,9 @@ header .search-borderless input {
   border: 1px solid #d6d7d9;
 }
 
-.search-page header {
-  height: calc(81px - 32px);
-}
-@media (min-width: 1024px) {
-  .search-page header {
-    height: auto;
-  }
-}
 @media (min-width: 1024px) {
   .search-page header.sticky + .content aside {
-    top: calc(102px - 5px);
+    top: calc(80px - 5px);
   }
 }
 .search-page header .reg-title:after {
@@ -15177,26 +15173,26 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
 aside.left-sidebar {
   color: #fff;
-  height: calc(100vh - 102px);
+  height: calc(100vh - 80px);
   overflow-y: scroll;
   position: sticky;
   top: 0;
@@ -15460,20 +15456,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -15481,13 +15477,13 @@ aside.right-sidebar {
   padding-top: 40px;
   max-width: 400px;
   position: sticky;
-  height: calc(100vh - 81px - 40px);
+  height: calc(100vh - 61px - 40px);
   overflow-y: scroll;
   overflow-x: auto;
 }
 @media (min-width: 1024px) {
   aside.right-sidebar {
-    height: calc(100vh - 102px - 40px);
+    height: calc(100vh - 80px - 40px);
   }
 }
 aside.right-sidebar h2 {
@@ -15655,7 +15651,7 @@ aside.right-sidebar .resource-info {
 }
 
 .recent-change {
-  margin: 16px 0;
+  padding: 16px 0 0;
   font-size: 14px;
 }
 .recent-change a {
@@ -15711,7 +15707,7 @@ aside.right-sidebar .resource-info {
   background-size: 0.8em;
 }
 
-.supplemental-content-container .supplemental-content-category .category-content {
+.supplemental-content-container .supplemental-content-category .category-content:not(.show-more-content) {
   margin-left: 10px;
   margin-right: 20px;
 }
@@ -15736,6 +15732,9 @@ aside.right-sidebar .resource-info {
   margin-top: 1em;
 }
 
+.category-content.additional-rules .related-rule:first-child {
+  padding: 0;
+}
 .category-content .supplemental-content-category:not(:last-child) {
   margin-bottom: 1em;
   border-bottom: 1px solid #d6d7d9;
@@ -15766,6 +15765,10 @@ button.collapsible-title.visible {
 }
 button.collapsible-title.visible i.fa {
   color: #046791;
+}
+button.collapsible-title.show-more {
+  margin-top: 0;
+  padding-top: 16px;
 }
 button.collapsible-title .fa {
   float: right;
@@ -15860,20 +15863,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -16788,20 +16791,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -16920,20 +16923,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17124,20 +17127,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17283,20 +17286,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17409,20 +17412,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17527,20 +17530,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17669,20 +17672,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
@@ -17948,20 +17951,20 @@ select:focus-visible {
 }
 
 .content :target {
-  scroll-margin-top: 86px;
+  scroll-margin-top: 66px;
 }
 @media (min-width: 1024px) {
   .content :target {
-    scroll-margin-top: 107px;
+    scroll-margin-top: 85px;
   }
 }
 
 .content.go-to-version :target {
-  scroll-margin-top: 172px;
+  scroll-margin-top: 152px;
 }
 @media (min-width: 1024px) {
   .content.go-to-version :target {
-    scroll-margin-top: 193px;
+    scroll-margin-top: 171px;
   }
 }
 
