@@ -40,11 +40,6 @@ export default {
             required: false,
             default: [],
         },
-        subject_groups: {
-            type: Array,
-            required: false,
-            default: [],
-        },
     },
 
     data() {
@@ -59,8 +54,8 @@ export default {
 
     computed: {
         joined_locations: function() {
-            const locations = ["sections", "subparts", "subjectgroups"];
-            const arrays = [this.sections, this.subparts, this.subject_groups];
+            const locations = ["sections", "subparts"];
+            const arrays = [this.sections, this.subparts];
             let output = "";
             for (let i = 0; i < locations.length; i++) {
                 if (arrays[i].length > 0) {
