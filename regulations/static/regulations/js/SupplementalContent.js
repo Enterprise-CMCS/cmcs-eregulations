@@ -916,14 +916,17 @@ var script = {
         sections: {
             type: Array,
             required: false,
+            default: [],
         },
         subparts: {
             type: Array,
             required: false,
+            default: [],
         },
         subject_groups: {
             type: Array,
             required: false,
+            default: [],
         },
     },
 

@@ -37,7 +37,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         toc = query.toc
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
-        node_list = self.get_supp_content_params(context, tree)
+        node_list = self.get_supp_content_params(context, [tree])
 
         c = {
             'tree':         tree,
@@ -77,7 +77,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             if node.get("node_type") == type:
                 nodes.append(node["label"][label_index])
             elif node.get("children") is not None and len(node["children"]) > 0:
-                nodes = nodes + self.find_nodes_by_type(node["children"], type, label_index)
+                nodes = nodes + self.get_nodes_by_type(node["children"], type, label_index)
         return nodes
 
     def get_sections(self, context, tree):
