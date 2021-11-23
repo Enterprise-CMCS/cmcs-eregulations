@@ -179,6 +179,7 @@ aside.right-sidebar {
 .related-rule-list {
     padding-left: $spacer-2;
 }
+
 .rules-with-preamble {
     max-height: 1000em;
 
@@ -190,7 +191,7 @@ aside.right-sidebar {
 }
 
 .recent-change {
-    margin: $spacer-2 0;
+    padding: $spacer-2 0 0;
     font-size: $font-size-sm;
 
     a {
@@ -255,7 +256,7 @@ aside.right-sidebar {
 
 .supplemental-content-container
     .supplemental-content-category
-    .category-content {
+    .category-content:not(.show-more-content) {
     margin-left: 10px;
     margin-right: 20px;
 }
@@ -285,6 +286,11 @@ aside.right-sidebar {
 }
 
 .category-content {
+
+    &.additional-rules .related-rule:first-child {
+        padding: 0;
+    }
+
     .supplemental-content-category {
         &:not(:last-child) {
             margin-bottom: 1em;
@@ -320,6 +326,11 @@ button.collapsible-title {
         i.fa {
             color: $primary_link_color;
         }
+    }
+
+    &.show-more {
+        margin-top: 0;
+        padding-top: $spacer-2;
     }
 
     .fa {

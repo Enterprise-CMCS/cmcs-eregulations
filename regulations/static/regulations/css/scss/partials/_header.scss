@@ -20,6 +20,10 @@ header {
             aside {
                 top: $header_height_mobile;
 
+                @include screen-md {
+                    top: $header_height_tablet;
+                }
+
                 @include screen-lg {
                     top: $header_height;
                 }
@@ -27,48 +31,46 @@ header {
         }
     }
 
-    &.home-page {
-        display: flex;
-        flex-direction: row;
+    display: flex;
+    flex-direction: row;
 
-        .search-header input::placeholder {
-            color: $secondary_text_color;
-            font-weight: 600;
+    .search-header input::placeholder {
+        color: $secondary_text_color;
+        font-weight: 600;
+    }
+
+    @include screen-lg {
+        height: 80px;
+        padding: 0 25px;
+
+        .search-header input {
+            height: 45px;
         }
+    }
 
-        @include screen-lg {
-            height: 80px;
-            padding: 0 25px;
+    @include custom-max($tablet-max / 1px) {
+        height: 70px;
+        padding: 0 25px;
 
-            .search-header input {
-                height: 45px;
+        .search-header input {
+            height: 40px;
+
+            &::placeholder {
+                font-size: $font_size_sm;
             }
         }
+    }
 
-        @include custom-max($tablet-max / 1px) {
-            height: 70px;
-            padding: 0 25px;
+    @include custom-max($mobile-max / 1px) {
+        align-items: center;
+        height: 60px;
+        padding: 0 7px 0 20px;
 
-            .search-header input {
-                height: 40px;
+        .search-header input {
+            height: 40px;
 
-                &::placeholder {
-                    font-size: $font_size_sm;
-                }
-            }
-        }
-
-        @include custom-max($mobile-max / 1px) {
-            align-items: center;
-            height: 60px;
-            padding: 0 7px 0 20px;
-
-            .search-header input {
-                height: 40px;
-
-                &::placeholder {
-                    font-size: $font_size_sm;
-                }
+            &::placeholder {
+                font-size: $font_size_sm;
             }
         }
     }
@@ -160,17 +162,13 @@ header {
         font-weight: normal;
 
         @include screen-lg {
-            font-size: $font-size-2xl;
+            font-size: $font-size-xl;
             font-weight: 700;
             line-height: 36px;
             display: inline-block;
         }
 
         &.homepage-site-title {
-            @include screen-lg {
-                font-size: $font-size-xl;
-            }
-
             @include custom-max($tablet-max / 1px) {
                 font-size: $font-size-md;
                 font-weight: 700;
@@ -186,7 +184,7 @@ header {
 
         @include screen-lg {
             font-size: $font-size-md;
-            line-height: 36px;
+            line-height: 24px;
             padding-left: $spacer-2;
             margin-left: $spacer-2;
             border-left: 1px solid $border_color;
@@ -261,12 +259,6 @@ header {
 
 .search-page {
     header {
-        height: calc(#{$header_height_mobile} - #{$spacer-4});
-
-        @include screen-lg {
-            height: auto;
-        }
-
         &.sticky + .content aside {
             @include screen-lg {
                 top: calc(#{$header_height} - 5px);
