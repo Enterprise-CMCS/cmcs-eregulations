@@ -45,6 +45,6 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 		return fmt.Errorf("Received error code %d while posting", resp.StatusCode)
 	}
 
-	log.Trace("[eregs] Posted ", length, "bytes for part ", p.Name)
+	log.Trace("[eregs] Posted ", length, " bytes for part ", p.Name, " in ", time.Since(start))
 	return nil
 }

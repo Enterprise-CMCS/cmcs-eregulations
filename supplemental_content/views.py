@@ -72,6 +72,7 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
             for section in subpart["sections"]:
                 try:
                     new_section, created = Section.objects.get_or_create(
+                                parent=new_subpart,
                                 title=section["title"],
                                 part=section["part"],
                                 section_id=section["section"]
