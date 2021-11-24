@@ -94,11 +94,11 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
 
             for section in subpart["sections"]:
                 try:
-                    new_section, created = Section.objects.get_or_create(
+                    new_section, created = Section.objects.update_or_create(
                                 title=section["title"],
                                 part=section["part"],
                                 section_id=section["section"],
-                                parent=new_subpart
+                                defaults={'parent': new_subpart}
                             )
                 except Exception:
                     return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
