@@ -6,4 +6,5 @@ django>=3.1,<4
 requests
 djangorestframework
 psycopg2-binary
+django-report-builder
 django-x-robots-tag-middleware
