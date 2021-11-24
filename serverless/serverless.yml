@@ -48,6 +48,8 @@ functions:
       - http: ANY /
       - http: ANY {proxy+}
   reg_core_migrate:
+    environment:
+      STATIC_URL: ${self:custom.settings.static_url}
     handler: migrate.handler
     timeout: 300
   create_su:
