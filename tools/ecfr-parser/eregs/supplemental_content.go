@@ -22,7 +22,7 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 	enc := json.NewEncoder(buff)
 	enc.SetEscapeHTML(false)
 
-	log.Trace("[eregs] Encoding supplemental part ", p.Name, "to JSON")
+	log.Trace("[eregs] Encoding supplemental part ", p.Name, " to JSON")
 	if err := enc.Encode(p); err != nil {
 		return err
 	}
@@ -34,6 +34,7 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
+	req.SetBasicAuth(username, password)
 	log.Trace("[eregs] Posting supplemental part ", p.Name)
 	resp, err := client.Do(req)
 	if err != nil {
@@ -45,6 +46,6 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 		return fmt.Errorf("Received error code %d while posting", resp.StatusCode)
 	}
 
-	log.Trace("[eregs] Posted ", length, " bytes for part ", p.Name, " in ", time.Since(start))
+	log.Trace("[eregs] Posted ", length, " bytes for supplemental part ", p.Name, " in ", time.Since(start))
 	return nil
 }
