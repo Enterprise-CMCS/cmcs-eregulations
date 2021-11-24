@@ -21,8 +21,8 @@
         api_url="{% url 'regcore' %}"
         title="{{ title }}"
         part="{{ reg_part }}"
-        {% if node_list.sections %} :sections="{{ node_list.sections }}" {% endif %}
-        {% if node_list.subparts %} :subparts="{{ node_list.subparts }}" {% endif %}
+        :sections="{{ node_list.sections }}"
+        :subparts="{{ node_list.subparts }}"
     ></supplemental-content>
     {% endif %}
 

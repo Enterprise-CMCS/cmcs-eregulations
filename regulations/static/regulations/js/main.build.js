@@ -2520,16 +2520,20 @@
       },
 
       computed: {
+          params_array: function() {
+              return [
+                  ["sections", this.sections],
+                  ["subparts", this.subparts],
+              ]
+          },
           joined_locations: function() {
-              const locations = ["sections", "subparts"];
-              const arrays = [this.sections, this.subparts];
               let output = "";
-              for (let i = 0; i < locations.length; i++) {
-                  if (arrays[i].length > 0) {
-                      const queryString = "&" + locations[i] + "=";
-                      output += queryString + arrays[i].join(queryString);
+              this.params_array.forEach(function(param) {
+                  if (param[1].length > 0) {
+                      const queryString = "&" + param[0] + "=";
+                      output += queryString + param[1].join(queryString);
                   }    
-              }
+              });
               return output;
           },
       },
