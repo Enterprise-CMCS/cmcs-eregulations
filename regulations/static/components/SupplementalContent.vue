@@ -1,16 +1,7 @@
 <template>
     <div class="supplemental-content-container">
-        <div
-            v-if="isFetching"
-            class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
-        >
-            <span
-                class="ds-c-spinner ds-c-spinner--filled ds-c-spinner--inverse"
-                role="status"
-                ><span class="ds-u-visibility--screen-reader"
-                    >Loading</span
-                ></span
-            >
+        <div v-if="isFetching">
+            <simple-spinner></simple-spinner>
         </div>
         <div v-if="!isFetching">
             <supplemental-content-category
@@ -27,11 +18,13 @@
 </template>
 
 <script>
+import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
 export default {
     components: {
         SupplementalContentCategory,
+        SimpleSpinner,
     },
 
     props: {

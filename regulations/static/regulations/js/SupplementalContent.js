@@ -8,51 +8,26 @@
 //
 //
 //
+//
+//
 
+var script$7 = {
+    name: "simple-spinner",
 
-var script$6 = {
-  name: 'supplemental-content-object',
-
-  props: {
-    name: {
-      type: String,
-      required: true,
+    props: {
+        size: {
+            type: String,
+            default: "medium",
+        },
+        filled: {
+            type: Boolean,
+            default: false,
+        },
+        inverse: {
+            type: Boolean,
+            default: false,
+        },
     },
-    description: {
-        type: String,
-        required: false,
-    },
-    date: {
-        type: String,
-        required: false,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-  },
-  
-  filters: {
-    formatDate: function(value) {
-      const date = new Date(value);
-      let options = { year: 'numeric', timeZone: 'UTC' };
-      const raw_date = value.split('-');
-      if(raw_date.length > 1) {
-        options.month = 'long';
-      }
-      if(raw_date.length > 2) {
-        options.day = 'numeric';
-      }
-      const format = new Intl.DateTimeFormat("en-US", options);
-      return format.format(date);
-    }
-  },
-
-  methods: {
-    isBlank: function(str) {
-      return (!str || /^\s*$/.test(str));
-    },
-  },
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -129,6 +104,133 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
     }
     return script;
 }
+
+/* script */
+const __vue_script__$7 = script$7;
+
+/* template */
+var __vue_render__$7 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  _vm._self._c || _h;
+  return _vm._m(0)
+};
+var __vue_staticRenderFns__$7 = [
+  function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      {
+        staticClass:
+          "ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
+      },
+      [
+        _c(
+          "span",
+          {
+            staticClass:
+              "ds-c-spinner ds-c-spinner--filled ds-c-spinner--inverse",
+            attrs: { role: "status" }
+          },
+          [
+            _c("span", { staticClass: "ds-u-visibility--screen-reader" }, [
+              _vm._v("Loading")
+            ])
+          ]
+        )
+      ]
+    )
+  }
+];
+__vue_render__$7._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$7 = undefined;
+  /* scoped */
+  const __vue_scope_id__$7 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$7 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$7 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$7 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
+    __vue_inject_styles__$7,
+    __vue_script__$7,
+    __vue_scope_id__$7,
+    __vue_is_functional_template__$7,
+    __vue_module_identifier__$7,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var script$6 = {
+  name: 'supplemental-content-object',
+
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+        type: String,
+        required: false,
+    },
+    date: {
+        type: String,
+        required: false,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+  
+  filters: {
+    formatDate: function(value) {
+      const date = new Date(value);
+      let options = { year: 'numeric', timeZone: 'UTC' };
+      const raw_date = value.split('-');
+      if(raw_date.length > 1) {
+        options.month = 'long';
+      }
+      if(raw_date.length > 2) {
+        options.day = 'numeric';
+      }
+      const format = new Intl.DateTimeFormat("en-US", options);
+      return format.format(date);
+    }
+  },
+
+  methods: {
+    isBlank: function(str) {
+      return (!str || /^\s*$/.test(str));
+    },
+  },
+};
 
 /* script */
 const __vue_script__$6 = script$6;
@@ -972,6 +1074,7 @@ __vue_render__$1._withStripped = true;
 var script = {
     components: {
         SupplementalContentCategory: __vue_component__$1,
+        SimpleSpinner: __vue_component__$7,
     },
 
     props: {
@@ -1026,16 +1129,7 @@ var __vue_render__ = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c("div", { staticClass: "supplemental-content-container" }, [
-    _vm.isFetching
-      ? _c(
-          "div",
-          {
-            staticClass:
-              "ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
-          },
-          [_vm._m(0)]
-        )
-      : _vm._e(),
+    _vm.isFetching ? _c("div", [_c("simple-spinner")], 1) : _vm._e(),
     _vm._v(" "),
     !_vm.isFetching
       ? _c(
@@ -1056,25 +1150,7 @@ var __vue_render__ = function() {
       : _vm._e()
   ])
 };
-var __vue_staticRenderFns__ = [
-  function() {
-    var _vm = this;
-    var _h = _vm.$createElement;
-    var _c = _vm._self._c || _h;
-    return _c(
-      "span",
-      {
-        staticClass: "ds-c-spinner ds-c-spinner--filled ds-c-spinner--inverse",
-        attrs: { role: "status" }
-      },
-      [
-        _c("span", { staticClass: "ds-u-visibility--screen-reader" }, [
-          _vm._v("Loading")
-        ])
-      ]
-    )
-  }
-];
+var __vue_staticRenderFns__ = [];
 __vue_render__._withStripped = true;
 
   /* style */
