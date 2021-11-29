@@ -1,0 +1,21 @@
+version: '3'
+services:
+    parser:
+        image: golang:1.16
+        container_name: parser
+        network_mode: host
+        depends_on:
+        - regulations
+        environment:
+        - TITLE=${TITLE:-}
+        - SUBCHAPTER=${SUBCHAPTER}
+        - PARTS=${PARTS}
+        - EREGS_URL=${EREGS_URL}
+        - WORKERS=${WORKERS}
+        - ATTEMPTS=${ATTEMPTS}
+        - LOGLEVEL=${LOGLEVEL}
+        - LOG_PARSE_ERRORS=${LOG_PARSE_ERRORS}
+        working_dir: /app
+        command: go run . -use-environment-variables
+        volumes:
+        - ./tools/ecfr-parser:/app
