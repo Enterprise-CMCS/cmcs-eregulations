@@ -1520,6 +1520,7 @@
   //
   //
   //
+  //
 
   var script$7 = {
       name: "simple-spinner",
@@ -1531,11 +1532,17 @@
           },
           filled: {
               type: Boolean,
-              default: false,
+              default: true,
           },
-          inverse: {
-              type: Boolean,
-              default: false,
+      },
+
+      computed: {
+          spinnerClasses() {
+              return {
+                  "ds-c-spinner--filled": this.filled,
+                  "ds-c-spinner--small": this.size === "small",
+                  "ds-c-spinner--big": this.size === "large",
+              };
           },
       },
   };
@@ -1622,38 +1629,31 @@
   var __vue_render__$7 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
-    _vm._self._c || _h;
-    return _vm._m(0)
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      {
+        staticClass:
+          "ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
+      },
+      [
+        _c(
+          "span",
+          {
+            staticClass: "ds-c-spinner",
+            class: _vm.spinnerClasses,
+            attrs: { role: "status" }
+          },
+          [
+            _c("span", { staticClass: "ds-u-visibility--screen-reader" }, [
+              _vm._v("Loading")
+            ])
+          ]
+        )
+      ]
+    )
   };
-  var __vue_staticRenderFns__$7 = [
-    function() {
-      var _vm = this;
-      var _h = _vm.$createElement;
-      var _c = _vm._self._c || _h;
-      return _c(
-        "div",
-        {
-          staticClass:
-            "ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
-        },
-        [
-          _c(
-            "span",
-            {
-              staticClass:
-                "ds-c-spinner ds-c-spinner--filled ds-c-spinner--inverse",
-              attrs: { role: "status" }
-            },
-            [
-              _c("span", { staticClass: "ds-u-visibility--screen-reader" }, [
-                _vm._v("Loading")
-              ])
-            ]
-          )
-        ]
-      )
-    }
-  ];
+  var __vue_staticRenderFns__$7 = [];
   __vue_render__$7._withStripped = true;
 
     /* style */
@@ -2638,13 +2638,13 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "supplemental-content-container" }, [
-      _vm.isFetching ? _c("div", [_c("simple-spinner")], 1) : _vm._e(),
-      _vm._v(" "),
-      !_vm.isFetching
-        ? _c(
-            "div",
-            _vm._l(_vm.categories, function(category, index) {
+    return _c(
+      "div",
+      { staticClass: "supplemental-content-container" },
+      [
+        _vm.isFetching
+          ? [_c("simple-spinner")]
+          : _vm._l(_vm.categories, function(category, index) {
               return _c("supplemental-content-category", {
                 key: index,
                 attrs: {
@@ -2654,11 +2654,10 @@
                   sub_categories: category.sub_categories
                 }
               })
-            }),
-            1
-          )
-        : _vm._e()
-    ])
+            })
+      ],
+      2
+    )
   };
   var __vue_staticRenderFns__$8 = [];
   __vue_render__$8._withStripped = true;

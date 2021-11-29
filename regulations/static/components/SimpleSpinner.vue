@@ -3,7 +3,8 @@
         class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
     >
         <span
-            class="ds-c-spinner ds-c-spinner--filled ds-c-spinner--inverse"
+            class="ds-c-spinner"
+            :class="spinnerClasses"
             role="status"
             ><span class="ds-u-visibility--screen-reader">Loading</span></span
         >
@@ -21,11 +22,17 @@ export default {
         },
         filled: {
             type: Boolean,
-            default: false,
+            default: true,
         },
-        inverse: {
-            type: Boolean,
-            default: false,
+    },
+
+    computed: {
+        spinnerClasses() {
+            return {
+                "ds-c-spinner--filled": this.filled,
+                "ds-c-spinner--small": this.size === "small",
+                "ds-c-spinner--big": this.size === "large",
+            };
         },
     },
 };

@@ -1,9 +1,9 @@
 <template>
     <div class="supplemental-content-container">
-        <div v-if="isFetching">
+        <template v-if="isFetching">
             <simple-spinner></simple-spinner>
-        </div>
-        <div v-if="!isFetching">
+        </template>
+        <template v-else>
             <supplemental-content-category
                 v-for="(category, index) in categories"
                 :key="index"
@@ -13,7 +13,7 @@
                 :sub_categories="category.sub_categories"
             >
             </supplemental-content-category>
-        </div>
+        </template>
     </div>
 </template>
 
