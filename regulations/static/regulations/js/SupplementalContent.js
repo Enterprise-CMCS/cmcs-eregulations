@@ -11,6 +11,8 @@
 //
 //
 //
+//
+//
 
 var script$7 = {
     name: "simple-spinner",
@@ -22,7 +24,7 @@ var script$7 = {
         },
         filled: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
 
@@ -32,6 +34,12 @@ var script$7 = {
                 "ds-c-spinner--filled": this.filled,
                 "ds-c-spinner--small": this.size === "small",
                 "ds-c-spinner--big": this.size === "large",
+            };
+        },
+
+        spinnerStyles() {
+            return {
+                margin: this.size === "small" ? "4px" : "8px",
             };
         },
     },
@@ -132,6 +140,7 @@ var __vue_render__$7 = function() {
         {
           staticClass: "ds-c-spinner",
           class: _vm.spinnerClasses,
+          style: _vm.spinnerStyles,
           attrs: { role: "status" }
         },
         [
@@ -1098,8 +1107,8 @@ var script = {
 
     data() {
         return {
-            isFetching: true,
             categories: [],
+            isFetching: true,
         };
     },
 

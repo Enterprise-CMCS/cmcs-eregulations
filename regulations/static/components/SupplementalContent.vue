@@ -48,8 +48,8 @@ export default {
 
     data() {
         return {
-            isFetching: true,
             categories: [],
+            isFetching: true,
         };
     },
 

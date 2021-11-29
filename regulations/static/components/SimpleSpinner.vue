@@ -5,9 +5,11 @@
         <span
             class="ds-c-spinner"
             :class="spinnerClasses"
+            :style="spinnerStyles"
             role="status"
-            ><span class="ds-u-visibility--screen-reader">Loading</span></span
         >
+            <span class="ds-u-visibility--screen-reader">Loading</span>
+        </span>
     </div>
 </template>
 
@@ -22,7 +24,7 @@ export default {
         },
         filled: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
 
@@ -32,6 +34,12 @@ export default {
                 "ds-c-spinner--filled": this.filled,
                 "ds-c-spinner--small": this.size === "small",
                 "ds-c-spinner--big": this.size === "large",
+            };
+        },
+
+        spinnerStyles() {
+            return {
+                margin: this.size === "small" ? "4px" : "8px",
             };
         },
     },
