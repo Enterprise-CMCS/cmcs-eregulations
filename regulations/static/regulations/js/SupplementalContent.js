@@ -989,7 +989,13 @@ var script = {
         },
         sections: {
             type: Array,
-            required: true,
+            required: false,
+            default: [],
+        },
+        subparts: {
+            type: Array,
+            required: false,
+            default: [],
         },
     },
 
@@ -1000,13 +1006,31 @@ var script = {
     },
 
     async created() {
-        this.categories = await this.fetch_content(this.title, this.part, this.sections);
+        this.categories = await this.fetch_content(this.title, this.part);
+    },
+
+    computed: {
+        params_array: function() {
+            return [
+                ["sections", this.sections],
+                ["subparts", this.subparts],
+            ]
+        },
+        joined_locations: function() {
+            let output = "";
+            this.params_array.forEach(function(param) {
+                if (param[1].length > 0) {
+                    const queryString = "&" + param[0] + "=";
+                    output += queryString + param[1].join(queryString);
+                }    
+            });
+            return output;
+        },
     },
 
     methods: {
-        async fetch_content(title, part, sections) {
-            const joinedSections = sections.join("&sections=");
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?&sections=${joinedSections}`);
+        async fetch_content(title, part) {
+            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`);
             const content = await response.json();
             return content;
         },
