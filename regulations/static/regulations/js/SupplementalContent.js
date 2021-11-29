@@ -995,22 +995,26 @@ var script = {
 
     data() {
         return {
+            isFetching: true,
             categories: [],
-        }
+        };
     },
 
-    async created() {
-        this.categories = await this.fetch_content(this.title, this.part, this.sections);
+    created() {
+        this.fetch_content(this.title, this.part, this.sections);
     },
 
     methods: {
         async fetch_content(title, part, sections) {
             const joinedSections = sections.join("&sections=");
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?&sections=${joinedSections}`);
+            const response = await fetch(
+                `${this.api_url}title/${title}/part/${part}/supplemental_content?&sections=${joinedSections}`
+            );
             const content = await response.json();
-            return content;
+            this.categories = content;
+            this.isFetching = false;
         },
-    }
+    },
 };
 
 /* script */
@@ -1021,24 +1025,56 @@ var __vue_render__ = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "supplemental-content-container" },
-    _vm._l(_vm.categories, function(category, index) {
-      return _c("supplemental-content-category", {
-        key: index,
-        attrs: {
-          name: category.name,
-          description: category.description,
-          supplemental_content: category.supplemental_content,
-          sub_categories: category.sub_categories
-        }
-      })
-    }),
-    1
-  )
+  return _c("div", { staticClass: "supplemental-content-container" }, [
+    _vm.isFetching
+      ? _c(
+          "div",
+          {
+            staticClass:
+              "ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
+          },
+          [_vm._m(0)]
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    !_vm.isFetching
+      ? _c(
+          "div",
+          _vm._l(_vm.categories, function(category, index) {
+            return _c("supplemental-content-category", {
+              key: index,
+              attrs: {
+                name: category.name,
+                description: category.description,
+                supplemental_content: category.supplemental_content,
+                sub_categories: category.sub_categories
+              }
+            })
+          }),
+          1
+        )
+      : _vm._e()
+  ])
 };
-var __vue_staticRenderFns__ = [];
+var __vue_staticRenderFns__ = [
+  function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "span",
+      {
+        staticClass: "ds-c-spinner ds-c-spinner--filled ds-c-spinner--inverse",
+        attrs: { role: "status" }
+      },
+      [
+        _c("span", { staticClass: "ds-u-visibility--screen-reader" }, [
+          _vm._v("Loading")
+        ])
+      ]
+    )
+  }
+];
 __vue_render__._withStripped = true;
 
   /* style */
