@@ -17,6 +17,7 @@ provider:
     DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user~true}
     DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password~true}
     ALLOWED_HOST: '.amazonaws.com'
+    STATIC_URL: ${self:custom.settings.static_url}
   vpc:
     securityGroupIds:
       - !Ref ServerlessSecurityGroup
