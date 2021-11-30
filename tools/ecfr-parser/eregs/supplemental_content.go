@@ -43,7 +43,7 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("Received error code %d while posting", resp.StatusCode)
+		return fmt.Errorf("received error code %d while posting supplemental part ", resp.StatusCode)
 	}
 
 	log.Trace("[eregs] Posted ", length, " bytes for supplemental part ", p.Name, " in ", time.Since(start))

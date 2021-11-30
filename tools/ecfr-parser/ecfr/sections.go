@@ -28,7 +28,7 @@ func ExtractStructure(s Structure) (Part, error) {
 	subparts := []Subpart{}
 
 	for _, child := range structurePart[0].Children {
-		if child.Type == "section" {
+		if child.Type == "section" && !child.Reserved {
 			sec := ExtractSection(title, child)
 			sections = append(sections, sec)
 		} else if child.Type == "subpart" {
@@ -51,7 +51,7 @@ func ExtractSubpart(title string, partNumber string, s *Structure) Subpart {
 	sections := []Section{}
 
 	for _, section := range s.Children {
-		if section.Type == "section" {
+		if section.Type == "section" && !section.Reserved {
 			sec := ExtractSection(title, section)
 			sections = append(sections, sec)
 		}

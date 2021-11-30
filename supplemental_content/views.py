@@ -73,33 +73,24 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         for section in request.data["sections"]:
-            try:
-                new_section, created = Section.objects.get_or_create(
-                            title=section["title"],
-                            part=section["part"],
-                            section_id=section["section"]
-                        )
-            except Exception:
-                return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            new_orphan_section, created = Section.objects.get_or_create(
+                        title=section["title"],
+                        part=section["part"],
+                        section_id=section["section"]
+                    )
 
         for subpart in request.data["subparts"]:
-            try:
-                new_subpart, created = Subpart.objects.get_or_create(
-                            title=subpart["title"],
-                            part=subpart["part"],
-                            subpart_id=subpart["subpart"]
-                        )
-            except Exception:
-                return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            new_subpart, created = Subpart.objects.get_or_create(
+                        title=subpart["title"],
+                        part=subpart["part"],
+                        subpart_id=subpart["subpart"]
+                    )
 
             for section in subpart["sections"]:
-                try:
-                    new_section, created = Section.objects.update_or_create(
-                                title=section["title"],
-                                part=section["part"],
-                                section_id=section["section"],
-                                defaults={'parent': new_subpart}
-                            )
-                except Exception:
-                    return Response({'error': True, 'content': 'Exception!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                new_section, created = Section.objects.update_or_create(
+                            title=section["title"],
+                            part=section["part"],
+                            section_id=section["section"],
+                            defaults={'parent': new_subpart}
+                        )
         return Response({'error': False, 'content': request.data})
