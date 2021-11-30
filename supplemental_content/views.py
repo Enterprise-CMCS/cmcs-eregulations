@@ -1,4 +1,4 @@
-from rest_framework import generics, status
+from rest_framework import generics
 from django.conf import settings
 
 from rest_framework.response import Response
