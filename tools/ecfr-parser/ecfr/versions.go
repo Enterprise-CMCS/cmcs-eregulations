@@ -27,6 +27,10 @@ func PartVersions(versions []Version) map[string]map[string]struct{} {
 		if result[version.Part] == nil {
 			result[version.Part] = map[string]struct{}{}
 		}
+		// 2016 is unreliable, bump it up to 2017
+		if (version.Date[0:4] == "2016"){
+		    version.Date = "2017-01-01"
+		}
 		result[version.Part][version.Date] = struct{}{}
 	}
 	return result
