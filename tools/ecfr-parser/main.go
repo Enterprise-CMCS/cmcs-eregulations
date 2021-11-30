@@ -75,7 +75,7 @@ func init() {
 			var envName = strings.Replace(strings.ToUpper(flag.Name), "-", "_", -1)
 			var value = os.Getenv(envName)
 			if value != "" {
-				flag.Value.Set(os.Getenv(envName))
+				flag.Value.Set(value)
 			}
 		})
 	}
