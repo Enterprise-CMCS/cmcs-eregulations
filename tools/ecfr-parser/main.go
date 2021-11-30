@@ -67,7 +67,7 @@ func init() {
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
 	flag.BoolVar(&parseXML.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
-	flag.BoolVar(&useEnvironment, "use-environment-variables", false, "Retrieve parameters from command line. Same as command-line arguments but upper-case.")
+	flag.BoolVar(&useEnvironment, "use-environment-variables", false, "Retrieve arguments from environment variables. Same as command-line arguments but upper-case, e.g. 'EREGS_URL' instead of 'eregs-url'.")
 	flag.Parse()
 
 	if useEnvironment {
