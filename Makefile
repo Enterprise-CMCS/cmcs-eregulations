@@ -65,7 +65,7 @@ date.dev: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 
 data.experimental: ## Load a Part of Title 42. e.g. make data.experimental URL=[experimental lambda URL] into dev-experimental
 data.experimental: CORE_URL = $(URL)/v2/
-data.experimental: SUPPLEMENTAL_URL = $(URL)supplemental_content
+data.experimental: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 
 data.local: ## Load a Part of Title 42. e.g. make data.local.435 will load Part 435
 data.local: CORE_URL = http://localhost:8000/v2/
