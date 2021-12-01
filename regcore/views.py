@@ -41,6 +41,7 @@ class ExistingPartSerializer(serializers.BaseSerializer):
             'partName': instance.get("partName").split(",")
         }
 
+
 class PartsView(generics.ListCreateAPIView):
     serializer_class = ListPartSerializer
     authentication_classes = [SettingsAuthentication]
@@ -113,6 +114,7 @@ class EffectivePartView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.get_queryset().filter(name=self.kwargs.get(self.lookup_field)).latest("date")
+
 
 class ExistingPartsView(generics.ListAPIView):
 
