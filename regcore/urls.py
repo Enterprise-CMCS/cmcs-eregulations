@@ -5,6 +5,7 @@ from regcore.views import (
     EffectivePartsView,
     EffectivePartTocView,
     PartsView,
+    ExistingPartsView
 )
 
 
@@ -18,5 +19,6 @@ urlpatterns = [
         path("<date>/title/<title>", EffectivePartsView.as_view()),
         path("<date>/title/<title>/part/<name>", EffectivePartView.as_view()),
         path("<date>/title/<title>/part/<name>/toc", EffectivePartTocView.as_view()),
+        path("title/<title>/existing", ExistingPartsView.as_view())
     ]))
 ]
