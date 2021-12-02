@@ -1035,14 +1035,19 @@
           async fetch_rules(title, part) {
               let url = `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`;
               let results = [];
-              while (url) {
-                  const response = await fetch(url);
-                  const rules = await response.json();
-                  results = results.concat(rules.results);
-                  url = rules.next_page_url;
+              try {
+                  while (url) {
+                      const response = await fetch(url);
+                      const rules = await response.json();
+                      results = results.concat(rules.results ?? []);
+                      url = rules.next_page_url;
+                  }
+                  this.rules = results;
+              } catch (error) {
+                  console.error(error);
+              } finally {
+                  this.isFetching = false;
               }
-              this.rules = results;
-              this.isFetching = false;
           },
           showCategory(category) {
               category === this.activeCategory
@@ -2759,19 +2764,19 @@
       },
 
       computed: {
-          params_array: function() {
+          params_array: function () {
               return [
                   ["sections", this.sections],
                   ["subparts", this.subparts],
-              ]
+              ];
           },
-          joined_locations: function() {
+          joined_locations: function () {
               let output = "";
-              this.params_array.forEach(function(param) {
+              this.params_array.forEach(function (param) {
                   if (param[1].length > 0) {
                       const queryString = "&" + param[0] + "=";
                       output += queryString + param[1].join(queryString);
-                  }    
+                  }
               });
               return output;
           },
@@ -2779,10 +2784,17 @@
 
       methods: {
           async fetch_content(title, part) {
-              const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`);
-              const content = await response.json();
-              this.categories = content;
-              this.isFetching = false;
+              try {
+                  const response = await fetch(
+                      `${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`
+                  );
+                  const content = await response.json();
+                  this.categories = content;
+              } catch (error) {
+                  console.log(error);
+              } finally {
+                  this.isFetching = false;
+              }
           },
       },
   };

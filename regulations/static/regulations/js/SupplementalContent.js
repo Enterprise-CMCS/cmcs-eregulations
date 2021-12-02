@@ -1123,19 +1123,19 @@ var script = {
     },
 
     computed: {
-        params_array: function() {
+        params_array: function () {
             return [
                 ["sections", this.sections],
                 ["subparts", this.subparts],
-            ]
+            ];
         },
-        joined_locations: function() {
+        joined_locations: function () {
             let output = "";
-            this.params_array.forEach(function(param) {
+            this.params_array.forEach(function (param) {
                 if (param[1].length > 0) {
                     const queryString = "&" + param[0] + "=";
                     output += queryString + param[1].join(queryString);
-                }    
+                }
             });
             return output;
         },
@@ -1143,10 +1143,17 @@ var script = {
 
     methods: {
         async fetch_content(title, part) {
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`);
-            const content = await response.json();
-            this.categories = content;
-            this.isFetching = false;
+            try {
+                const response = await fetch(
+                    `${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`
+                );
+                const content = await response.json();
+                this.categories = content;
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.isFetching = false;
+            }
         },
     },
 };
