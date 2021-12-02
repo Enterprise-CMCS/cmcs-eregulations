@@ -74,7 +74,7 @@ data.%:
 	ATTEMPTS=3 \
 	LOGLEVEL=trace \
 	LOG_PARSE_ERRORS=false \
-	docker-compose -f docker-compose.parser.yml up parser
+	docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
 
 tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 	cd tools/guidance_pipeline; go build -o build/ .
