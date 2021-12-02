@@ -4,8 +4,6 @@ services:
         image: golang:1.16
         container_name: parser
         network_mode: host
-        depends_on:
-        - regulations
         environment:
         - EREGS_USERNAME=${EREGS_USERNAME:-}
         - EREGS_PASSWORD=${EREGS_PASSWORD:-}
