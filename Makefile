@@ -74,7 +74,7 @@ data.local: export EREGS_USERNAME=RpSS01rhbx
 data.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%: tools/ecfr-parser/build/ecfr-parser
-	./tools/ecfr-parser/build/ecfr-parser -loglevel trace -log-parse-errors=false -attempts 3 -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL) -eregs-supplemental-url $(SUPPLEMENTAL_URL)
+	./tools/ecfr-parser/build/ecfr-parser -loglevel trace -log-parse-errors=false -attempts 3 -workers 1 -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL) -eregs-supplemental-url $(SUPPLEMENTAL_URL)
 
 tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 	cd tools/guidance_pipeline; go build -o build/ .
