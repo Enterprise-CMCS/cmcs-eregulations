@@ -114,7 +114,7 @@ export default {
           while(url){
             const response = await fetch(url);
             const rules = await response.json();
-            results = results.concat(rules.results)
+            results = results.concat(rules.results ?? []);
             url = rules.next_page_url
           }
           return results
