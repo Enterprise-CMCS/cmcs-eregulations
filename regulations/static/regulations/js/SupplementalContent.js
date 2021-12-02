@@ -1150,7 +1150,7 @@ var script = {
                 const content = await response.json();
                 this.categories = content;
             } catch (error) {
-                console.log(error);
+                console.error(error);
             } finally {
                 this.isFetching = false;
             }
