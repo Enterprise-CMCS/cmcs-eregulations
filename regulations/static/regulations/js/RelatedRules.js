@@ -16,68 +16,47 @@
 //
 //
 //
-//
-//
 
-var script$5 = {
-    name: "related-rule",
+var script$6 = {
+    name: "collapse-button",
+
+    created: function () {
+        this.visible = this.state === "expanded";
+        this.$root.$on("collapse-toggle", this.toggle);
+    },
 
     props: {
-        title: {
+        name: {
             type: String,
             required: true,
         },
-        type: {
+        state: {
+            //expanded or collapsed
             type: String,
             required: true,
         },
-        citation: {
-            type: String,
-            required: true,
-        },
-        publication_date: String,
-        document_number: {
-            type: String,
-            required: true,
-        },
-        html_url: {
-            type: String,
-            required: true,
-        },
-        action: {
-            type: String,
-            required: true,
+        "keep-contents-on-toggle": {
+            type: Boolean,
+            required: false,
+            default: false,
         },
     },
 
-    computed: {
-        expandedType: function () {
-            if (this.type === "Rule") {
-                return "Final";
-            } else if(this.type === "Proposed Rule" && this.action === "Proposed rule."){
-              return "NPRM"
-            } else if(this.type === "Proposed Rule" && this.action === "Request for information."){
-              return "RFI"
+    data: function () {
+        return {
+            name: this.name,
+            visible: true,
+        };
+    },
+
+    methods: {
+        click: function (event) {
+            this.$root.$emit("collapse-toggle", this.name);
+        },
+        toggle: function (target) {
+            if (this.name === target) {
+                this.visible = !this.visible;
             }
-            return "Unknown";
-        },
-        getClassList: function(){
-          return this.expandedType === "Final" ? "recent-flag indicator" : "recent-flag indicator secondary-indicator"
-        }
-    },
-
-    methods: {},
-    filters: {
-        formatDate: function (value) {
-            const date = new Date(value);
-            const options = {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                timeZone: "UTC",
-            };
-            const format = new Intl.DateTimeFormat("en-US", options);
-            return format.format(date);
         },
     },
 };
@@ -158,212 +137,10 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
 }
 
 /* script */
-const __vue_script__$5 = script$5;
+const __vue_script__$6 = script$6;
 
 /* template */
-var __vue_render__$5 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "related-rule recent-change" }, [
-    _c(
-      "a",
-      {
-        staticClass: "related-rule-title",
-        attrs: {
-          href: _vm.html_url,
-          target: "_blank",
-          rel: "noopener noreferrer"
-        }
-      },
-      [
-        _c("span", { staticClass: "link-heading" }, [
-          _c("span", { class: _vm.getClassList }, [
-            _vm._v(_vm._s(_vm.expandedType))
-          ]),
-          _vm._v(" "),
-          _vm.publication_date
-            ? _c("span", { staticClass: "recent-date" }, [
-                _vm._v(_vm._s(_vm._f("formatDate")(_vm.publication_date)))
-              ])
-            : _vm._e(),
-          _vm._v("\n            | "),
-          _c("span", { staticClass: "recent-fr" }, [
-            _vm._v(_vm._s(_vm.citation))
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "recent-title" }, [_vm._v(_vm._s(_vm.title))])
-      ]
-    )
-  ])
-};
-var __vue_staticRenderFns__$5 = [];
-__vue_render__$5._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$5 = undefined;
-  /* scoped */
-  const __vue_scope_id__$5 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$5 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$5 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$5 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
-    __vue_inject_styles__$5,
-    __vue_script__$5,
-    __vue_scope_id__$5,
-    __vue_is_functional_template__$5,
-    __vue_module_identifier__$5,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-//
-
-var script$4 = {
-    name: "show-more-button",
-    props: {
-        count: {
-            type: Number,
-            default: 1,
-        },
-        buttonText: {
-            type: String,
-            required: true
-        }
-    },
-};
-
-/* script */
-const __vue_script__$4 = script$4;
-
-/* template */
-var __vue_render__$4 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "show-more-button" }, [
-    _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
-    _vm._v(" (" + _vm._s(_vm.count) + ")\n")
-  ])
-};
-var __vue_staticRenderFns__$4 = [];
-__vue_render__$4._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$4 = undefined;
-  /* scoped */
-  const __vue_scope_id__$4 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$4 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$4 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$4 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
-    __vue_inject_styles__$4,
-    __vue_script__$4,
-    __vue_scope_id__$4,
-    __vue_is_functional_template__$4,
-    __vue_module_identifier__$4,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var script$3 = {
-    name: "collapse-button",
-
-    created: function () {
-        this.visible = this.state === "expanded";
-        this.$root.$on("collapse-toggle", this.toggle);
-    },
-
-    props: {
-        name: {
-            type: String,
-            required: true,
-        },
-        state: {
-            //expanded or collapsed
-            type: String,
-            required: true,
-        },
-        "keep-contents-on-toggle": {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-    },
-
-    data: function () {
-        return {
-            name: this.name,
-            visible: true,
-        };
-    },
-
-    methods: {
-        click: function (event) {
-            this.$root.$emit("collapse-toggle", this.name);
-        },
-        toggle: function (target) {
-            if (this.name === target) {
-                this.visible = !this.visible;
-            }
-        },
-    },
-};
-
-/* script */
-const __vue_script__$3 = script$3;
-
-/* template */
-var __vue_render__$3 = function() {
+var __vue_render__$6 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -396,17 +173,17 @@ var __vue_render__$3 = function() {
     2
   )
 };
-var __vue_staticRenderFns__$3 = [];
-__vue_render__$3._withStripped = true;
+var __vue_staticRenderFns__$6 = [];
+__vue_render__$6._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$3 = undefined;
+  const __vue_inject_styles__$6 = undefined;
   /* scoped */
-  const __vue_scope_id__$3 = undefined;
+  const __vue_scope_id__$6 = undefined;
   /* module identifier */
-  const __vue_module_identifier__$3 = undefined;
+  const __vue_module_identifier__$6 = undefined;
   /* functional template */
-  const __vue_is_functional_template__$3 = false;
+  const __vue_is_functional_template__$6 = false;
   /* style inject */
   
   /* style inject SSR */
@@ -415,13 +192,13 @@ __vue_render__$3._withStripped = true;
   
 
   
-  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
-    __vue_inject_styles__$3,
-    __vue_script__$3,
-    __vue_scope_id__$3,
-    __vue_is_functional_template__$3,
-    __vue_module_identifier__$3,
+  const __vue_component__$6 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
+    __vue_inject_styles__$6,
+    __vue_script__$6,
+    __vue_scope_id__$6,
+    __vue_is_functional_template__$6,
+    __vue_module_identifier__$6,
     false,
     undefined,
     undefined,
@@ -440,7 +217,7 @@ __vue_render__$3._withStripped = true;
 //
 //
 
-var script$2 = {
+var script$5 = {
     name: "collapsible",
 
     created: function () {
@@ -547,10 +324,10 @@ var script$2 = {
 };
 
 /* script */
-const __vue_script__$2 = script$2;
+const __vue_script__$5 = script$5;
 
 /* template */
-var __vue_render__$2 = function() {
+var __vue_render__$5 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -565,6 +342,340 @@ var __vue_render__$2 = function() {
     [_vm._t("default")],
     2
   )
+};
+var __vue_staticRenderFns__$5 = [];
+__vue_render__$5._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$5 = undefined;
+  /* scoped */
+  const __vue_scope_id__$5 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$5 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$5 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$5 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
+    __vue_inject_styles__$5,
+    __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var script$4 = {
+    name: "simple-spinner",
+
+    props: {
+        size: {
+            type: String,
+            default: "medium",
+        },
+        filled: {
+            type: Boolean,
+            default: false,
+        },
+    },
+
+    computed: {
+        spinnerClasses() {
+            return {
+                "ds-c-spinner--filled": this.filled,
+                "ds-c-spinner--small": this.size === "small",
+                "ds-c-spinner--big": this.size === "large",
+            };
+        },
+
+        spinnerStyles() {
+            return {
+                margin: this.size === "small" ? "4px" : "8px",
+            };
+        },
+    },
+};
+
+/* script */
+const __vue_script__$4 = script$4;
+
+/* template */
+var __vue_render__$4 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      staticClass:
+        "ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
+    },
+    [
+      _c(
+        "span",
+        {
+          staticClass: "ds-c-spinner",
+          class: _vm.spinnerClasses,
+          style: _vm.spinnerStyles,
+          attrs: { role: "status" }
+        },
+        [
+          _c("span", { staticClass: "ds-u-visibility--screen-reader" }, [
+            _vm._v("Loading")
+          ])
+        ]
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$4 = [];
+__vue_render__$4._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$4 = undefined;
+  /* scoped */
+  const __vue_scope_id__$4 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$4 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$4 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$4 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
+    __vue_inject_styles__$4,
+    __vue_script__$4,
+    __vue_scope_id__$4,
+    __vue_is_functional_template__$4,
+    __vue_module_identifier__$4,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var script$3 = {
+    name: "related-rule",
+
+    props: {
+        title: {
+            type: String,
+            required: true,
+        },
+        type: {
+            type: String,
+            required: true,
+        },
+        citation: {
+            type: String,
+            required: true,
+        },
+        publication_date: String,
+        document_number: {
+            type: String,
+            required: true,
+        },
+        html_url: {
+            type: String,
+            required: true,
+        },
+        action: {
+            type: String,
+            required: true,
+        },
+    },
+
+    computed: {
+        expandedType: function () {
+            if (this.type === "Rule") {
+                return "Final";
+            } else if(this.type === "Proposed Rule" && this.action === "Proposed rule."){
+              return "NPRM"
+            } else if(this.type === "Proposed Rule" && this.action === "Request for information."){
+              return "RFI"
+            }
+            return "Unknown";
+        },
+        getClassList: function(){
+          return this.expandedType === "Final" ? "recent-flag indicator" : "recent-flag indicator secondary-indicator"
+        }
+    },
+
+    methods: {},
+    filters: {
+        formatDate: function (value) {
+            const date = new Date(value);
+            const options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                timeZone: "UTC",
+            };
+            const format = new Intl.DateTimeFormat("en-US", options);
+            return format.format(date);
+        },
+    },
+};
+
+/* script */
+const __vue_script__$3 = script$3;
+
+/* template */
+var __vue_render__$3 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "related-rule recent-change" }, [
+    _c(
+      "a",
+      {
+        staticClass: "related-rule-title",
+        attrs: {
+          href: _vm.html_url,
+          target: "_blank",
+          rel: "noopener noreferrer"
+        }
+      },
+      [
+        _c("span", { staticClass: "link-heading" }, [
+          _c("span", { class: _vm.getClassList }, [
+            _vm._v(_vm._s(_vm.expandedType))
+          ]),
+          _vm._v(" "),
+          _vm.publication_date
+            ? _c("span", { staticClass: "recent-date" }, [
+                _vm._v(_vm._s(_vm._f("formatDate")(_vm.publication_date)))
+              ])
+            : _vm._e(),
+          _vm._v("\n            | "),
+          _c("span", { staticClass: "recent-fr" }, [
+            _vm._v(_vm._s(_vm.citation))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "recent-title" }, [_vm._v(_vm._s(_vm.title))])
+      ]
+    )
+  ])
+};
+var __vue_staticRenderFns__$3 = [];
+__vue_render__$3._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$3 = undefined;
+  /* scoped */
+  const __vue_scope_id__$3 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$3 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+
+var script$2 = {
+    name: "show-more-button",
+    props: {
+        count: {
+            type: Number,
+            default: 1,
+        },
+        buttonText: {
+            type: String,
+            required: true
+        }
+    },
+};
+
+/* script */
+const __vue_script__$2 = script$2;
+
+/* template */
+var __vue_render__$2 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "show-more-button" }, [
+    _c("b", [_vm._v(_vm._s(_vm.buttonText))]),
+    _vm._v(" (" + _vm._s(_vm.count) + ")\n")
+  ])
 };
 var __vue_staticRenderFns__$2 = [];
 __vue_render__$2._withStripped = true;
@@ -604,10 +715,10 @@ var script$1 = {
     name: "related-rule-list",
 
     components: {
-        RelatedRule: __vue_component__$5,
-        ShowMoreButton: __vue_component__$4,
-        CollapseButton: __vue_component__$3,
-        Collapsible: __vue_component__$2,
+        RelatedRule: __vue_component__$3,
+        ShowMoreButton: __vue_component__$2,
+        CollapseButton: __vue_component__$6,
+        Collapsible: __vue_component__$5,
     },
 
     props: {
@@ -839,9 +950,10 @@ __vue_render__$1._withStripped = true;
 
 var script = {
     components: {
-      Collapsible: __vue_component__$2,
-      RelatedRuleList: __vue_component__$1,
-      CollapseButton: __vue_component__$3,
+        CollapseButton: __vue_component__$6,
+        Collapsible: __vue_component__$5,
+        RelatedRuleList: __vue_component__$1,
+        SimpleSpinner: __vue_component__$4,
     },
 
     props: {
@@ -858,86 +970,95 @@ var script = {
             default: 5,
         },
         activeCategory: {
-          type: String,
-          default: ''
+            type: String,
+            default: "",
         },
         categoryList: {
-          type: Array,
-          default: ['FINAL', 'PROPOSED', 'RFI']
+            type: Array,
+            default: ["FINAL", "PROPOSED", "RFI"],
         },
         categories: {
-          type: Object,
-          default: {
-            FINAL: {
-              getRules: (rules) => {
-                return rules.filter(rule => {
-                      return rule.type === 'Rule'
-                    }
-                )
-              },
-              title: "Final Rules"
+            type: Object,
+            default: {
+                FINAL: {
+                    getRules: (rules) => {
+                        return rules.filter((rule) => {
+                            return rule.type === "Rule";
+                        });
+                    },
+                    title: "Final Rules",
+                },
+                PROPOSED: {
+                    getRules: (rules) => {
+                        return rules.filter((rule) => {
+                            return (
+                                rule.type === "Proposed Rule" &&
+                                rule.action === "Proposed rule."
+                            );
+                        });
+                    },
+                    title: "Notices of Proposed Rulemaking",
+                },
+                RFI: {
+                    getRules: (rules) => {
+                        return rules.filter((rule) => {
+                            return (
+                                rule.type === "Proposed Rule" &&
+                                rule.action === "Request for information."
+                            );
+                        });
+                    },
+                    title: "Requests for Information",
+                },
             },
-            PROPOSED: {
-              getRules: (rules) => {
-                return rules.filter(rule => {
-                      return rule.type === 'Proposed Rule' && rule.action === "Proposed rule."
-                    }
-                )
-              },
-              title: "Notices of Proposed Rulemaking"
-            },
-            RFI: {
-              getRules: (rules) => {
-                return rules.filter(rule => {
-                      return rule.type === 'Proposed Rule' && rule.action === "Request for information."
-                    }
-                )
-              },
-              title: "Requests for Information"
-            }
-          }
         },
-
     },
 
     data() {
         return {
-            rules: [],
+            isFetching: true,
             limitedList: true,
+            rules: [],
         };
     },
 
-    computed: {
+    computed: {},
 
-    },
-
-    async created() {
-        this.rules = await this.fetch_rules(this.title, this.part);
+    created() {
+        this.fetch_rules(this.title, this.part);
     },
 
     methods: {
         async fetch_rules(title, part) {
-          let url = `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`;
-          let results = [];
-          while(url){
-            const response = await fetch(url);
-            const rules = await response.json();
-            results = results.concat(rules.results ?? []);
-            url = rules.next_page_url;
-          }
-          return results
-
+            let url = `https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=${title}&conditions[cfr][part]=${part}`;
+            let results = [];
+            try {
+                while (url) {
+                    const response = await fetch(url);
+                    const rules = await response.json();
+                    results = results.concat(rules.results ?? []);
+                    url = rules.next_page_url;
+                }
+                this.rules = results;
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isFetching = false;
+            }
         },
         showCategory(category) {
-          category === this.activeCategory ? this.activeCategory = '': this.activeCategory = category;
+            category === this.activeCategory
+                ? (this.activeCategory = "")
+                : (this.activeCategory = category);
         },
-        buttonClass(category){
-          return this.categories[category].getRules(this.rules).length > 0 ? "show-more-button": "show-more-button show-more-inactive"
+        buttonClass(category) {
+            return this.categories[category].getRules(this.rules).length > 0
+                ? "show-more-button"
+                : "show-more-button show-more-inactive";
         },
-        getRules(category){
-          return this.categories[category].getRules(this.rules)
-        }
-
+        getRules(category) {
+            return this.categories[category].getRules(this.rules);
+        },
     },
 };
 
@@ -951,8 +1072,8 @@ var __vue_render__ = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    _vm._l(_vm.categoryList, function(category) {
-      return _c("div", [
+    _vm._l(_vm.categoryList, function(category, index) {
+      return _c("div", { key: index }, [
         _c(
           "div",
           { staticClass: "category" },
@@ -967,7 +1088,10 @@ var __vue_render__ = function() {
                     key: "expanded",
                     fn: function() {
                       return [
-                        _vm._v(_vm._s(_vm.categories[category].title) + " "),
+                        _vm._v(
+                          _vm._s(_vm.categories[category].title) +
+                            "\n                    "
+                        ),
                         _c("i", {
                           staticClass: "fa fa-chevron-up category-toggle"
                         })
@@ -979,7 +1103,10 @@ var __vue_render__ = function() {
                     key: "collapsed",
                     fn: function() {
                       return [
-                        _vm._v(_vm._s(_vm.categories[category].title) + " "),
+                        _vm._v(
+                          _vm._s(_vm.categories[category].title) +
+                            "\n                    "
+                        ),
                         _c("i", {
                           staticClass: "fa fa-chevron-down category-toggle"
                         })
@@ -1003,15 +1130,19 @@ var __vue_render__ = function() {
                 }
               },
               [
-                _c("related-rule-list", {
-                  attrs: {
-                    rules: _vm.getRules(category),
-                    limit: _vm.limit,
-                    title: _vm.categories[category].title
-                  }
-                })
+                _vm.isFetching
+                  ? [_c("simple-spinner", { attrs: { size: "small" } })]
+                  : [
+                      _c("related-rule-list", {
+                        attrs: {
+                          rules: _vm.getRules(category),
+                          limit: _vm.limit,
+                          title: _vm.categories[category].title
+                        }
+                      })
+                    ]
               ],
-              1
+              2
             )
           ],
           1
