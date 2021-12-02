@@ -50,10 +50,19 @@ func ExtractStructure(s Structure) (Part, error) {
 func ExtractSubpart(title string, partNumber string, s *Structure) Subpart {
 	sections := []Section{}
 
-	for _, section := range s.Children {
-		if section.Type == "section" && !section.Reserved {
-			sec := ExtractSection(title, section)
-			sections = append(sections, sec)
+	for _, child := range s.Children {
+		if !child.Reserved {
+			if child.Type == "section" {
+				sec := ExtractSection(title, child)
+				sections = append(sections, sec)
+			} else if child.Type == "subject_group" {
+				for _, subChild := range child.Children {
+					if subChild.Type == "section" && !subChild.Reserved {
+						subSec := ExtractSection(title, subChild)
+						sections = append(sections, subSec)
+					}
+				}
+			}
 		}
 	}
 
