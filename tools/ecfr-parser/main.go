@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"os/exec"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -28,6 +29,7 @@ var (
 	individualParts PartsArg
 	loglevel        string
 	workers         int
+	useEnvironment  bool
 )
 
 type SubchapterArg []string
@@ -60,12 +62,23 @@ func init() {
 	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
-	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8080/v2/", "A url specifying where to send eregs parts")
+	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8000/v2/", "A url specifying where to send eregs parts")
 	flag.IntVar(&workers, "workers", 3, "Number of parts to process simultaneously.")
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
 	flag.BoolVar(&parseXML.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
+	flag.BoolVar(&useEnvironment, "use-environment-variables", false, "Retrieve arguments from environment variables. Same as command-line arguments but upper-case, e.g. 'EREGS_URL' instead of 'eregs-url'.")
 	flag.Parse()
+
+	if useEnvironment {
+		flag.VisitAll(func(flag *flag.Flag) {
+			var envName = strings.Replace(strings.ToUpper(flag.Name), "-", "_", -1)
+			var value = os.Getenv(envName)
+			if value != "" {
+				flag.Value.Set(value)
+			}
+		})
+	}
 
 	if title < 0 {
 		log.Fatal("[main] Title flag is required and must be greater than 0.")
@@ -81,6 +94,8 @@ func init() {
 
 	level := log.WarnLevel
 	switch loglevel {
+	case "warn":
+		level = log.WarnLevel
 	case "fatal":
 		level = log.FatalLevel
 	case "error":
