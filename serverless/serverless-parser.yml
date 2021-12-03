@@ -1,0 +1,30 @@
+service: ecfr-parser
+
+provider:
+  name: aws
+  runtime: go1.16
+  region: us-east-1
+  environment:
+    HTTP_AUTH_USER: ${ssm:/eregulations/http/user~true}
+    HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password~true}
+    TITLE: ${ssm:/eregulations/parser/title~true}
+    SUBCHAPTER: ${ssm:/eregulations/parser/subchapter~true}
+    PARTS: ${ssm:/eregulations/parser/parts~true}
+    EREGS_URL: ${self:custom.settings.eregs_url}
+    WORKERS: ${ssm:/eregulations/parser/workers~true}
+    ATTEMPTS: ${ssm:/eregulations/parser/attempts~true}
+    LOGLEVEL: ${ssm:/eregulations/parser/logleve~true}
+    LOG_PARSE_ERRORS: ${ssm:/eregulations/parser/log_parse_errors~true}
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  settings:
+    eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.StaticURL}/v2/
+
+functions:
+  ecfr_parser:
+    handler: ../tools/ecfr-parser/main.go
+    timeout: 1000
+
+plugins:
+  - serverless-go-plugin
