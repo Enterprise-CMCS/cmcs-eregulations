@@ -1,8 +1,0 @@
-{% load render_nested %}
-<div class="subchapter">
-    <h2>{{ label }}</h2>
-
-    {% for child in children %}
-        {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title %}
-    {% endfor %}
-</div>

@@ -1,9 +1,0 @@
-<li class="toc-subgroup toggle-toc-menu-subgroups">
-    <h3 class="toc-subgroup-name" >{{item.label|safe|upper}}</h3>
-</li>
-
-    <li>
-        {% if item.children %}
-            {% include "regulations/partials/sidebar_left/subpart/subgrp_toc.html" with type="toc-subgroup-list" %}
-        {% endif %}
-    </li>
