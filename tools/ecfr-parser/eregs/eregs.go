@@ -84,8 +84,6 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
     log.Trace("[eregs] Beginning checking of existing parts at ", checkUrl)
 	start := time.Now()
 
-    //buff := bytes.NewBuffer([]byte{})
-
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkUrl, nil)
 	if err != nil {
 	    log.Trace(err)
@@ -99,9 +97,7 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 		return nil, err
 	}
 	defer resp.Body.Close()
-
     if resp.StatusCode >= 400 {
-
 		log.Trace(fmt.Errorf("Received error code %d while checking", resp.StatusCode))
 		return nil, err
 	}
@@ -122,7 +118,6 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 
     // reduce the results to the desired format
     result := make(map[string][]string)
-
     for _, ep := range vs{
         result[ep.Date] = ep.PartName
     }

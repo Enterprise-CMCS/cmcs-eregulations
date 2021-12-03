@@ -38,7 +38,7 @@ class ExistingPartSerializer(serializers.BaseSerializer):
     def to_representation(self, instance):
         return {
             'date': instance.get("date"),
-            'partName': instance.get("partName").split(",")
+            'partName': instance.get("partName").split(","),
         }
 
 

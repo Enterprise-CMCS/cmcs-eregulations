@@ -133,15 +133,12 @@ func run() error {
 	defer func() {
 		log.Debug("[main] Run time:", time.Since(start))
 	}()
-
 	today := time.Now()
 
     log.Info("[main] Fetching Existing Versions list...")
-
     existingVersions, err := eregs.GetExistingParts(ctx, title)
 
 	log.Info("[main] Fetching parts list...")
-
 	var parts []string
 	if subchapter != nil {
 		log.Debug("[main] Fetching subchapter ", subchapter, " parts list...")
