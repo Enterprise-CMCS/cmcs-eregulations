@@ -62,8 +62,13 @@ Typical workflow for using ESLint and Prettier in your text editor:
 #### VSCode
 
 [ESLint plugin for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-Make sure you install v2.2.x.  If there are issues installing this version, you may need to install a pre-release version from VSIX, as outlined in the comment:
+
+Make sure you install ESLint v2.2.x.
+
+**Note:** If there are issues installing the above version, you may need to install a pre-release version from VSIX, as outlined in the comment:
+
 [https://github.com/microsoft/vscode-eslint/issues/972#issuecomment-903573031](Why 2.2.0 needs to be installed)
+
 [https://github.com/microsoft/vscode-eslint/releases/tag/release%2F2.2.20-Insider](VSCode ESLint releases)
 
 [Prettier plugin for VSCode](https://prettier.io/docs/en/editors.html#visual-studio-code)
@@ -72,21 +77,20 @@ Make sure you install v2.2.x.  If there are issues installing this version, you 
 
 [coc-eslint](https://github.com/neoclide/coc-eslint)
 
-However, for the same reason a pre-release build must be used for VSCode above, a custom coc eslint plugin must also be installed for now: [coc-eslint8])https://github.com/neoclide/coc-eslint/pull/118#issuecomment-973640987)
+**Note**: For the same reason that a pre-release build must be used for VSCode above, a custom coc eslint plugin must also be installed for now: [coc-eslint8](https://github.com/neoclide/coc-eslint/pull/118#issuecomment-973640987)
 
 [coc-prettier](https://prettier.io/docs/en/vim.html#coc-prettierhttpsgithubcomneoclidecoc-prettier)
 
-#### VIM via ALE
+#### VIM via ALE - Untested
 
-**Untested**
 [https://miikanissi.com/blog/configure-eslint-prettier-ale-vim.html](Configuring ESLint and Prettier for Vim with ALE)
 
 [Prettier plugin for use with ALE](https://prettier.io/docs/en/vim.html#alehttpsgithubcomdense-analysisale)
 
-#### JetBrains IDEs
+#### JetBrains IDEs - Untested
 
-**Untested**
 [Webstorm](https://www.jetbrains.com/help/webstorm/eslint.html)
+
 [Pycharm](https://www.jetbrains.com/help/pycharm/eslint.html)
 
 ### Using from the command line
