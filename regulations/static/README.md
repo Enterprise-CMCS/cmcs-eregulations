@@ -1,8 +1,8 @@
 # ERegs static files
 
-# Adding linting and code formatting to static files
+## Adding linting and code formatting to static files
 
-## Why linting and code formatting?
+### Why linting and code formatting?
 
 Linting helps find errors earlier.
 
@@ -16,9 +16,9 @@ Linting and code formatting can be added to projects in many ways:
 * Format-on-commit functionality that validates and formats code automatically when committed to source control using a git hook
 * Format-on-push functionality built into a CI/CD pipeline that validates and formats code automatically when pushing to source control
 
-** This story will focus on text editor integration and CLI command execution.** 
+**This story will focus on text editor integration and CLI command execution.** 
 
-## Why ESLint?
+### Why ESLint?
 
 ESLint helps find and fix problems in JavaScript code.  It exposes bugs and style errors, as well as offering opinions about syntax.
 
@@ -30,7 +30,7 @@ Additionally, we've added the official ESLint plugin for Vue.js: [eslint-plugin-
 
 And finally we've added Prettier, an opinionated code formatter.  This is another very popular library - [41.3k stars on github](https://github.com/prettier/prettier).  It complements ESLint, the Airbnb style guide, and the Vue.js plugin.
 
-## Getting Started
+### Getting Started
 
 [ESLint official Getting Started page](https://eslint.org/docs/user-guide/getting-started)
 
@@ -42,7 +42,7 @@ ESLint has been added to the package.json in `/regulations/static/`, including v
 
 `.prettierignore` has been created because it was recommended by the Prettier docs.  It includes an incomplete list of file types and directories to ignore when running Prettier from the command line.
 
-## Integrating with Text Editors (recommended)
+### Integrating with Text Editors (recommended)
 
 The best way to start using ESLint is to integrate it into your text editor so you get immediate feedback while writing code.  You can manually fix these alerts yourself, or use CodeActions to automatically fix all fixable problems.
 
@@ -59,7 +59,7 @@ Typical workflow for using ESLint and Prettier in your text editor:
 
 [Prettier official Editor Integration page](https://prettier.io/docs/en/editors.html)
 
-### VSCode
+#### VSCode
 
 [ESLint plugin for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 Make sure you install v2.2.x.  If there are issues installing this version, you may need to install a pre-release version from VSIX, as outlined in the comment:
@@ -68,7 +68,7 @@ Make sure you install v2.2.x.  If there are issues installing this version, you 
 
 [Prettier plugin for VSCode](https://prettier.io/docs/en/editors.html#visual-studio-code)
 
-### Neovim via nvim.coc
+#### Neovim via nvim.coc
 
 [coc-eslint](https://github.com/neoclide/coc-eslint)
 
@@ -76,20 +76,20 @@ However, for the same reason a pre-release build must be used for VSCode above, 
 
 [coc-prettier](https://prettier.io/docs/en/vim.html#coc-prettierhttpsgithubcomneoclidecoc-prettier)
 
-### VIM via ALE
+#### VIM via ALE
 
 **Untested**
 [https://miikanissi.com/blog/configure-eslint-prettier-ale-vim.html](Configuring ESLint and Prettier for Vim with ALE)
 
 [Prettier plugin for use with ALE](https://prettier.io/docs/en/vim.html#alehttpsgithubcomdense-analysisale)
 
-### JetBrains IDEs
+#### JetBrains IDEs
 
 **Untested**
 [Webstorm](https://www.jetbrains.com/help/webstorm/eslint.html)
 [Pycharm](https://www.jetbrains.com/help/pycharm/eslint.html)
 
-## Using from the command line
+### Using from the command line
 
 [Official ESLint Command Line Interface page](https://eslint.org/docs/user-guide/command-line-interface)
 
