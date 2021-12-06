@@ -15,7 +15,7 @@ import (
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -71,7 +71,7 @@ func init() {
 	flag.IntVar(&workers, "workers", 3, "Number of parts to process simultaneously.")
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
-	flag.BoolVar(&parseXML.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
+	flag.BoolVar(&parsexml.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
 	flag.BoolVar(&useEnvironment, "use-environment-variables", false, "Retrieve arguments from environment variables. Same as command-line arguments but upper-case, e.g. 'EREGS_URL' instead of 'eregs-url'.")
 	flag.Parse()
 
@@ -162,7 +162,7 @@ func run() error {
 	if subchapter != nil {
 		log.Debug("[main] Fetching subchapter ", subchapter, " parts list...")
 		var err error
-		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, ecfr.Subchapter(subchapter[0], subchapter[1]))
+		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
 			return err
 		}
@@ -188,7 +188,7 @@ func run() error {
 				Name:      part,
 				Date:      date,
 				Structure: &ecfr.Structure{},
-				Document:  &parseXML.Part{},
+				Document:  &parsexml.Part{},
 				Processed: false,
 			}
 

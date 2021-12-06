@@ -139,22 +139,16 @@ func (p *PartOption) Values() url.Values {
 	return v
 }
 
-
-type subchapterOption struct {
-	chapter    string
-	subchapter string
+// SubchapterOption is  a struct defining the Chapter and SubChapter
+type SubchapterOption struct {
+	Chapter    string
+	Subchapter string
 }
 
-func (p *subchapterOption) Values() url.Values {
+// Values returns a url.Values for the Chapter and SubChapter
+func (p *SubchapterOption) Values() url.Values {
 	v := url.Values{}
-	v.Set("chapter", p.chapter)
-	v.Set("subchapter", p.subchapter)
+	v.Set("chapter", p.Chapter)
+	v.Set("subchapter", p.Subchapter)
 	return v
-}
-
-func Subchapter(chapter string, subchapter string) *subchapterOption {
-	return &subchapterOption{
-		chapter:    chapter,
-		subchapter: subchapter,
-	}
 }

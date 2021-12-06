@@ -68,7 +68,7 @@ func SubchapterParts(s *Structure) ([]*Structure, error) {
 }
 
 // ExtractSubchapterParts extracts the subchapter parts from ECFR and returns then as an array of strings
-func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub *subchapterOption) ([]string, error) {
+func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub *SubchapterOption) ([]string, error) {
 	sbody, err := FetchStructure(ctx, date.Format("2006-01-02"), title, sub)
 	if err != nil {
 		return nil, err
