@@ -67,9 +67,9 @@ Make sure you install ESLint v2.2.x.
 
 **Note:** If there are issues installing the above version, you may need to install a pre-release version from VSIX, as outlined in the comment:
 
-[https://github.com/microsoft/vscode-eslint/issues/972#issuecomment-903573031](Why 2.2.0 needs to be installed)
+[Why 2.2.0 needs to be installed](https://github.com/microsoft/vscode-eslint/issues/972#issuecomment-903573031)
 
-[https://github.com/microsoft/vscode-eslint/releases/tag/release%2F2.2.20-Insider](VSCode ESLint releases)
+[VSCode ESLint releases](https://github.com/microsoft/vscode-eslint/releases/tag/release%2F2.2.20-Insider)
 
 [Prettier plugin for VSCode](https://prettier.io/docs/en/editors.html#visual-studio-code)
 
@@ -83,7 +83,7 @@ Make sure you install ESLint v2.2.x.
 
 #### VIM via ALE - Untested
 
-[https://miikanissi.com/blog/configure-eslint-prettier-ale-vim.html](Configuring ESLint and Prettier for Vim with ALE)
+[Configuring ESLint and Prettier for Vim with ALE](https://miikanissi.com/blog/configure-eslint-prettier-ale-vim.html)
 
 [Prettier plugin for use with ALE](https://prettier.io/docs/en/vim.html#alehttpsgithubcomdense-analysisale)
 
