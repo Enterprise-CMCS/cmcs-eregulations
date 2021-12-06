@@ -127,21 +127,18 @@ type FetchOption interface {
 	Values() url.Values
 }
 
-type partOption struct {
-	part string
+// PartOption is a struct that represents a string referring to the regulation Part
+type PartOption struct {
+	Part string
 }
 
-func (p *partOption) Values() url.Values {
+// Values inserts the Partoption.Part into a urlValues struct
+func (p *PartOption) Values() url.Values {
 	v := url.Values{}
-	v.Set("part", p.part)
+	v.Set("part", p.Part)
 	return v
 }
 
-func PartOption(part string) *partOption {
-	return &partOption{
-		part: part,
-	}
-}
 
 type subchapterOption struct {
 	chapter    string
