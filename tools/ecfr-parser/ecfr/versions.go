@@ -56,7 +56,7 @@ func ExtractVersions(ctx context.Context, title int) (map[string]map[string]stru
 }
 
 // ExtractPartVersions fetches and extracts the necessary information about a specific title and part
-func ExtractPartVersions(ctx context.Context, title int, po *partOption) (map[string]struct{}, error) {
+func ExtractPartVersions(ctx context.Context, title int, po *PartOption) (map[string]struct{}, error) {
 	vbody, err := FetchVersions(ctx, title, po)
 	if err != nil {
 		return nil, err
@@ -67,5 +67,5 @@ func ExtractPartVersions(ctx context.Context, title int, po *partOption) (map[st
 		return nil, err
 	}
 	versions := PartVersions(vs.ContentVersions)
-	return versions[po.part], nil
+	return versions[po.Part], nil
 }

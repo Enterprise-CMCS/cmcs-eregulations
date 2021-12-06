@@ -242,7 +242,8 @@ func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part
 	start := time.Now()
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", reg.Name, " version ", reg.Date)
-	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, ecfr.PartOption(reg.Name))
+	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, &ecfr.PartOption{reg.Name})
+
 	if err != nil {
 		return err
 	}
@@ -254,7 +255,7 @@ func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part
 	}
 
 	log.Debug("[worker ", thread, "] Fetching full document for part ", reg.Name, " version ", reg.Date)
-	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
+	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, &ecfr.PartOption{reg.Name})
 	if err != nil {
 		return err
 	}
