@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -33,7 +33,7 @@ type Part struct {
 	Name      string          `json:"name" xml:"-"`
 	Date      string          `json:"date" xml:"-"`
 	Structure *ecfr.Structure `json:"structure" xml:"-"`
-	Document  *parseXML.Part  `json:"document"`
+	Document  *parsexml.Part  `json:"document"`
 	Processed bool
 }
 
