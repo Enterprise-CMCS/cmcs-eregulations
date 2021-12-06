@@ -7,10 +7,12 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Versions is a list of Version structs and is whatis returned by ECFR
 type Versions struct {
 	ContentVersions []Version `json:"content_versions"`
 }
 
+// Version is the struct representing a regulation version from ECFR
 type Version struct {
 	Date       string
 	Identifier string
@@ -21,6 +23,7 @@ type Version struct {
 	Type       string
 }
 
+// PartVersions breaks an Array of Versions into a map of the correct format.
 func PartVersions(versions []Version) map[string]map[string]struct{} {
 	result := map[string]map[string]struct{}{}
 	for _, version := range versions {
@@ -36,6 +39,7 @@ func PartVersions(versions []Version) map[string]map[string]struct{} {
 	return result
 }
 
+// ExtractVersions fetches and extracts the necessary information about a specific title
 func ExtractVersions(ctx context.Context, title int) (map[string]map[string]struct{}, error) {
 	vbody, err := FetchVersions(ctx, title)
 	if err != nil {
@@ -51,6 +55,7 @@ func ExtractVersions(ctx context.Context, title int) (map[string]map[string]stru
 	return versions, nil
 }
 
+// ExtractPartVersions fetches and extracts the necessary information about a specific title and part
 func ExtractPartVersions(ctx context.Context, title int, po *partOption) (map[string]struct{}, error) {
 	vbody, err := FetchVersions(ctx, title, po)
 	if err != nil {

@@ -37,7 +37,7 @@ func buildQuery(opts []FetchOption) string {
 	q := url.Values{}
 	for _, opt := range opts {
 		v := opt.Values()
-		for key, _ := range v {
+		for key := range v {
 			q.Set(key, v.Get(key))
 		}
 	}
@@ -67,15 +67,15 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
     log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
 
 	log.Trace("[ecfr] Connecting to ", u.String())
-	req_start := time.Now()
+	reqStart := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("[err] from `client.Do`: %+v, took %+v", err, time.Since(req_start))
+		return nil, fmt.Errorf("[err] from `client.Do`: %+v, took %+v", err, time.Since(reqStart))
 	}
-	log.Trace("[ecfr] client.Do took ", time.Since(req_start))
+	log.Trace("[ecfr] client.Do took ", time.Since(reqStart))
     defer resp.Body.Close()
 
-	log.Trace("[ECFR] client.Do took ", time.Since(req_start))
+	log.Trace("[ECFR] client.Do took ", time.Since(reqStart))
 	if resp.StatusCode != 200 {
 		log.Trace("[ecfr] Received status code ", resp.StatusCode, " from ", u.String())
 		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
@@ -95,6 +95,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	return body, nil
 }
 
+// FetchFull fecthes the full regulation from ECFR
 func FetchFull(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date, title))
 	if err != nil {
@@ -103,6 +104,7 @@ func FetchFull(ctx context.Context, date string, title int, opts ...FetchOption)
 	return fetch(ctx, path, opts)
 }
 
+// FetchStructure fetches the structure for a given title and options
 func FetchStructure(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrStructureJSON, date, title))
 	if err != nil {
@@ -111,6 +113,7 @@ func FetchStructure(ctx context.Context, date string, title int, opts ...FetchOp
 	return fetch(ctx, path, opts)
 }
 
+// FetchVersions fetches the available versions for a given title
 func FetchVersions(ctx context.Context, title int, opts ...FetchOption) (io.Reader, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrVersionsXML, title))
 	if err != nil {
@@ -119,6 +122,7 @@ func FetchVersions(ctx context.Context, title int, opts ...FetchOption) (io.Read
 	return fetch(ctx, path, opts)
 }
 
+// FetchOption defines optional values for the fetch process
 type FetchOption interface {
 	Values() url.Values
 }

@@ -15,6 +15,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// BaseURL is the URL of the eRegs service that will accept the post requests
 var BaseURL string
 
 var client = &http.Client{
@@ -26,6 +27,7 @@ var (
 	password = os.Getenv("EREGS_PASSWORD")
 )
 
+// Part is the struct used to send a part to the eRegs server
 type Part struct {
 	Title     int             `json:"title,string" xml:"-"`
 	Name      string          `json:"name" xml:"-"`
@@ -35,6 +37,7 @@ type Part struct {
 	Processed bool
 }
 
+// PostPart is the function that sends a part to the eRegs server
 func PostPart(ctx context.Context, p *Part) error {
 	log.Trace("[eregs] Beginning post of part ", p.Name, " version ", p.Date, " to ", BaseURL)
 	start := time.Now()
