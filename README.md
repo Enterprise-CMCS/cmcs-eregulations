@@ -71,3 +71,6 @@ Running `make test` after `make local` will run the cypress suite of end to end 
 
 Every type of model has an "Export to JSON" button that will export the data to a JSON format that can be easily imported
 by saving the file to the fixtures folder and importing it with the built in `loaddata` command from Django.
+
+
+KNOLL
