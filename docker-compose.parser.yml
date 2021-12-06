@@ -15,6 +15,7 @@ services:
         - ATTEMPTS=${ATTEMPTS:-}
         - LOGLEVEL=${LOGLEVEL:-}
         - LOG_PARSE_ERRORS=${LOG_PARSE_ERRORS:-}
+        - EREGS_SUPPLEMENTAL_URL=${EREGS_SUPPLEMENTAL_URL:-}
         working_dir: /app
         command: go run . -use-environment-variables
         volumes:
