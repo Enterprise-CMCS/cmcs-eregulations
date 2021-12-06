@@ -73,8 +73,17 @@ data.local: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 data.local: export EREGS_USERNAME=RpSS01rhbx
 data.local: export EREGS_PASSWORD=UkOAsfkItN
 
-data.%: tools/ecfr-parser/build/ecfr-parser
-	./tools/ecfr-parser/build/ecfr-parser -loglevel trace -log-parse-errors=false -attempts 3 -workers 1 -title 42 -subchapter IV-C -parts 400,457,460 -eregs-url $(CORE_URL) -eregs-supplemental-url $(SUPPLEMENTAL_URL)
+data.%:
+	TITLE=42 \
+	SUBCHAPTER=IV-C \
+	PARTS=400,457,460 \
+	EREGS_URL=$(CORE_URL) \
+	WORKERS=3 \
+	ATTEMPTS=3 \
+	LOGLEVEL=trace \
+	LOG_PARSE_ERRORS=false \
+	EREGS_SUPPLEMENTAL_URL=$(SUPPLEMENTAL_URL)
+	docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
 
 tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 	cd tools/guidance_pipeline; go build -o build/ .
@@ -92,8 +101,7 @@ local.start: ## Start the local environment if stopped using `make local.stop`
 	docker-compose start
 
 local.clean: ## Remove the local environment entirely.
-	docker-compose down
-	docker volume rm cmcs-eregulations_eregs-data
+	docker-compose down --remove-orphans --volumes
 
 local.createadmin: ## Create a local admin account.
 	docker-compose exec regulations python manage.py createsuperuser

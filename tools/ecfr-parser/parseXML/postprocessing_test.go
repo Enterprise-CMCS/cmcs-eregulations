@@ -1,4 +1,4 @@
-package parseXML
+package parsexml
 
 import (
 	"reflect"

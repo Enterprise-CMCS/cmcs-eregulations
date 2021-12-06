@@ -8,51 +8,41 @@
 //
 //
 //
+//
+//
+//
+//
+//
 
+var script$7 = {
+    name: "simple-spinner",
 
-var script$6 = {
-  name: 'supplemental-content-object',
+    props: {
+        size: {
+            type: String,
+            default: "medium",
+        },
+        filled: {
+            type: Boolean,
+            default: false,
+        },
+    },
 
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    description: {
-        type: String,
-        required: false,
-    },
-    date: {
-        type: String,
-        required: false,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-  },
-  
-  filters: {
-    formatDate: function(value) {
-      const date = new Date(value);
-      let options = { year: 'numeric', timeZone: 'UTC' };
-      const raw_date = value.split('-');
-      if(raw_date.length > 1) {
-        options.month = 'long';
-      }
-      if(raw_date.length > 2) {
-        options.day = 'numeric';
-      }
-      const format = new Intl.DateTimeFormat("en-US", options);
-      return format.format(date);
-    }
-  },
+    computed: {
+        spinnerClasses() {
+            return {
+                "ds-c-spinner--filled": this.filled,
+                "ds-c-spinner--small": this.size === "small",
+                "ds-c-spinner--big": this.size === "large",
+            };
+        },
 
-  methods: {
-    isBlank: function(str) {
-      return (!str || /^\s*$/.test(str));
+        spinnerStyles() {
+            return {
+                margin: this.size === "small" ? "4px" : "8px",
+            };
+        },
     },
-  },
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -129,6 +119,127 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
     }
     return script;
 }
+
+/* script */
+const __vue_script__$7 = script$7;
+
+/* template */
+var __vue_render__$7 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      staticClass:
+        "ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
+    },
+    [
+      _c(
+        "span",
+        {
+          staticClass: "ds-c-spinner",
+          class: _vm.spinnerClasses,
+          style: _vm.spinnerStyles,
+          attrs: { role: "status" }
+        },
+        [
+          _c("span", { staticClass: "ds-u-visibility--screen-reader" }, [
+            _vm._v("Loading")
+          ])
+        ]
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$7 = [];
+__vue_render__$7._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$7 = undefined;
+  /* scoped */
+  const __vue_scope_id__$7 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$7 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$7 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$7 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
+    __vue_inject_styles__$7,
+    __vue_script__$7,
+    __vue_scope_id__$7,
+    __vue_is_functional_template__$7,
+    __vue_module_identifier__$7,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var script$6 = {
+  name: 'supplemental-content-object',
+
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+        type: String,
+        required: false,
+    },
+    date: {
+        type: String,
+        required: false,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+  
+  filters: {
+    formatDate: function(value) {
+      const date = new Date(value);
+      let options = { year: 'numeric', timeZone: 'UTC' };
+      const raw_date = value.split('-');
+      if(raw_date.length > 1) {
+        options.month = 'long';
+      }
+      if(raw_date.length > 2) {
+        options.day = 'numeric';
+      }
+      const format = new Intl.DateTimeFormat("en-US", options);
+      return format.format(date);
+    }
+  },
+
+  methods: {
+    isBlank: function(str) {
+      return (!str || /^\s*$/.test(str));
+    },
+  },
+};
 
 /* script */
 const __vue_script__$6 = script$6;
@@ -972,6 +1083,7 @@ __vue_render__$1._withStripped = true;
 var script = {
     components: {
         SupplementalContentCategory: __vue_component__$1,
+        SimpleSpinner: __vue_component__$7,
     },
 
     props: {
@@ -1002,27 +1114,28 @@ var script = {
     data() {
         return {
             categories: [],
-        }
+            isFetching: true,
+        };
     },
 
-    async created() {
-        this.categories = await this.fetch_content(this.title, this.part);
+    created() {
+        this.fetch_content(this.title, this.part);
     },
 
     computed: {
-        params_array: function() {
+        params_array: function () {
             return [
                 ["sections", this.sections],
                 ["subparts", this.subparts],
-            ]
+            ];
         },
-        joined_locations: function() {
+        joined_locations: function () {
             let output = "";
-            this.params_array.forEach(function(param) {
+            this.params_array.forEach(function (param) {
                 if (param[1].length > 0) {
                     const queryString = "&" + param[0] + "=";
                     output += queryString + param[1].join(queryString);
-                }    
+                }
             });
             return output;
         },
@@ -1030,11 +1143,19 @@ var script = {
 
     methods: {
         async fetch_content(title, part) {
-            const response = await fetch(`${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`);
-            const content = await response.json();
-            return content;
+            try {
+                const response = await fetch(
+                    `${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`
+                );
+                const content = await response.json();
+                this.categories = content;
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isFetching = false;
+            }
         },
-    }
+    },
 };
 
 /* script */
@@ -1048,18 +1169,22 @@ var __vue_render__ = function() {
   return _c(
     "div",
     { staticClass: "supplemental-content-container" },
-    _vm._l(_vm.categories, function(category, index) {
-      return _c("supplemental-content-category", {
-        key: index,
-        attrs: {
-          name: category.name,
-          description: category.description,
-          supplemental_content: category.supplemental_content,
-          sub_categories: category.sub_categories
-        }
-      })
-    }),
-    1
+    [
+      _vm.isFetching
+        ? [_c("simple-spinner")]
+        : _vm._l(_vm.categories, function(category, index) {
+            return _c("supplemental-content-category", {
+              key: index,
+              attrs: {
+                name: category.name,
+                description: category.description,
+                supplemental_content: category.supplemental_content,
+                sub_categories: category.sub_categories
+              }
+            })
+          })
+    ],
+    2
   )
 };
 var __vue_staticRenderFns__ = [];
