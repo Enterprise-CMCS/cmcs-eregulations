@@ -1,4 +1,4 @@
-package parseXML
+package parsexml
 
 import (
 	"fmt"
@@ -77,16 +77,16 @@ var alpha = regexp.MustCompile(`([a-z])`)
 var num = regexp.MustCompile(`(\d+)`)
 var roman = regexp.MustCompile(`(x|ix|iv|v|vi{1,3}|i{1,3})`)
 var upper = regexp.MustCompile(`([A-Z])`)
-var italic_num = regexp.MustCompile(`(<I>\d+<\/I>)`)
-var italic_roman = regexp.MustCompile(`<I>(ix|iv|v|vi{1,3}|i{1,3})<\/I>`)
+var italicNum = regexp.MustCompile(`(<I>\d+<\/I>)`)
+var italicRoman = regexp.MustCompile(`<I>(ix|iv|v|vi{1,3}|i{1,3})<\/I>`)
 
 var paragraphHeirarchy = []*regexp.Regexp{
 	alpha,
 	num,
 	roman,
 	upper,
-	italic_num,
-	italic_roman,
+	italicNum,
+	italicRoman,
 }
 
 func matchLabelType(l string) int {

@@ -15,11 +15,12 @@ import (
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parseXML"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
 	log "github.com/sirupsen/logrus"
 )
 
+// TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
 
 var (
@@ -29,15 +30,16 @@ var (
 	individualParts PartsArg
 	loglevel        string
 	workers         int
-	useEnvironment  bool
 )
 
+// SubchapterArg is an array of type string
 type SubchapterArg []string
 
 func (sc *SubchapterArg) String() string {
 	return strings.Join(*sc, "-")
 }
 
+// Set is to validate and set the subchapter
 func (sc *SubchapterArg) Set(s string) error {
 	*sc = strings.Split(s, "-")
 	if len(*sc) != 2 {
@@ -46,12 +48,14 @@ func (sc *SubchapterArg) Set(s string) error {
 	return nil
 }
 
+// PartsArg is an array of type string
 type PartsArg []string
 
 func (pa *PartsArg) String() string {
 	return strings.Join(*pa, ",")
 }
 
+// Set is to validate and set the PartsArg
 func (pa *PartsArg) Set(s string) error {
 	*pa = strings.Split(s, ",")
 
@@ -163,7 +167,7 @@ func run() error {
 	if subchapter != nil {
 		log.Debug("[main] Fetching subchapter ", subchapter, " parts list...")
 		var err error
-		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, ecfr.Subchapter(subchapter[0], subchapter[1]))
+		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
 			return err
 		}
@@ -189,7 +193,7 @@ func run() error {
 				Name:      part,
 				Date:      date,
 				Structure: &ecfr.Structure{},
-				Document:  &parseXML.Part{},
+				Document:  &parsexml.Part{},
 				Processed: false,
 			}
 
@@ -203,7 +207,7 @@ func run() error {
 		var wg sync.WaitGroup
 		for worker := 1; worker < workers + 1; worker++ {
 			wg.Add(1)
-			go startHandlePartWorker(worker, ch, &wg, ctx, today)
+			go startHandlePartWorker(ctx, worker, ch, &wg, today)
 		}
 
 		for reg := queue.Front(); reg != nil; reg = reg.Next() {
@@ -239,10 +243,10 @@ func run() error {
 	return nil
 }
 
-func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, ctx context.Context, date time.Time) {
+func startHandlePartWorker(ctx context.Context, thread int, ch chan *eregs.Part, wg *sync.WaitGroup, date time.Time) {
 	for reg := range ch {
 		log.Debug("[worker ", thread, "] Processing part ", reg.Name, " version ", reg.Date)
-		err := handlePart(thread, ctx, date, reg)
+		err := handlePart(ctx, thread, date, reg)
 		if err == nil {
 			reg.Processed = true
 		} else {
@@ -254,11 +258,12 @@ func startHandlePartWorker(thread int, ch chan *eregs.Part, wg *sync.WaitGroup, 
 	wg.Done()
 }
 
-func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part) error {
+func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part) error {
 	start := time.Now()
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", reg.Name, " version ", reg.Date)
-	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, ecfr.PartOption(reg.Name))
+	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, &ecfr.PartOption{reg.Name})
+
 	if err != nil {
 		return err
 	}
@@ -270,7 +275,7 @@ func handlePart(thread int, ctx context.Context, date time.Time, reg *eregs.Part
 	}
 
 	log.Debug("[worker ", thread, "] Fetching full document for part ", reg.Name, " version ", reg.Date)
-	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, ecfr.PartOption(reg.Name))
+	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, &ecfr.PartOption{reg.Name})
 	if err != nil {
 		return err
 	}
