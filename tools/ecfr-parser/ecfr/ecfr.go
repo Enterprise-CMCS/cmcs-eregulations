@@ -16,14 +16,12 @@ import (
 const dateFormat = "2006-01-02"
 const timeout = 10 * time.Second
 
-
 var (
 	ecfrSite          = urlMustParse("https://ecfr.gov/api/versioner/v1/")
 	ecfrFullXML       = "full/%s/title-%d.xml"
 	ecfrVersionsXML   = "versions/title-%d"
 	ecfrStructureJSON = "structure/%s/title-%d.json"
 )
-
 
 func urlMustParse(s string) *url.URL {
 	u, err := url.Parse(s)
@@ -46,8 +44,8 @@ func buildQuery(opts []FetchOption) string {
 
 func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, error) {
 	client := &http.Client{
-	    Transport: &http.Transport{},
-    }
+		Transport: &http.Transport{},
+	}
 	path.RawQuery = buildQuery(opts)
 
 	u := ecfrSite.ResolveReference(path)
@@ -63,8 +61,8 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
 	}
 
-	req.Header.Set("User-Agent", "E-regs for " + os.Getenv("NAME"))
-    log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
+	req.Header.Set("User-Agent", "E-regs for "+os.Getenv("NAME"))
+	log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
 
 	log.Trace("[ecfr] Connecting to ", u.String())
 	req_start := time.Now()
@@ -73,7 +71,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 		return nil, fmt.Errorf("[err] from `client.Do`: %+v, took %+v", err, time.Since(req_start))
 	}
 	log.Trace("[ecfr] client.Do took ", time.Since(req_start))
-    defer resp.Body.Close()
+	defer resp.Body.Close()
 
 	log.Trace("[ECFR] client.Do took ", time.Since(req_start))
 	if resp.StatusCode != 200 {

@@ -399,8 +399,8 @@ type Image struct {
 }
 
 type FootNote struct {
-	Type     string `json:"node_type"`
-	Content	 string `xml:",innerxml" json:"content"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 type Division struct {
