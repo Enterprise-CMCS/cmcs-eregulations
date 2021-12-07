@@ -26,7 +26,7 @@ var client = &http.Client{
 var (
 	username = os.Getenv("EREGS_USERNAME")
 	password = os.Getenv("EREGS_PASSWORD")
-	partURL = "%stitle/%d/existing"
+	partURL  = "%stitle/%d/existing"
 )
 
 // Part is the struct used to send a part to the eRegs server
@@ -82,25 +82,25 @@ func PostPart(ctx context.Context, p *Part) error {
 	return nil
 }
 
-func GetExistingParts(ctx context.Context, title int) (map[string][]string, error){
-    checkUrl := fmt.Sprintf(partURL, BaseURL, title)
-    log.Trace("[eregs] Beginning checking of existing parts at ", checkUrl)
+func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
+	checkUrl := fmt.Sprintf(partURL, BaseURL, title)
+	log.Trace("[eregs] Beginning checking of existing parts at ", checkUrl)
 	start := time.Now()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkUrl, nil)
 	if err != nil {
-	    log.Trace(err)
+		log.Trace(err)
 		return nil, err
 	}
 
 	log.Trace("[eregs] Checking title ", title)
 	resp, err := client.Do(req)
 	if err != nil {
-	    log.Trace(err)
+		log.Trace(err)
 		return nil, err
 	}
 	defer resp.Body.Close()
-    if resp.StatusCode >= 400 {
+	if resp.StatusCode >= 400 {
 		log.Trace(fmt.Errorf("Received error code %d while checking", resp.StatusCode))
 		return nil, err
 	}
@@ -119,12 +119,12 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 		return nil, err
 	}
 
-    // reduce the results to the desired format
-    result := make(map[string][]string)
-    for _, ep := range vs{
-        result[ep.Date] = ep.PartName
-    }
+	// reduce the results to the desired format
+	result := make(map[string][]string)
+	for _, ep := range vs {
+		result[ep.Date] = ep.PartName
+	}
 
-	log.Trace("[eregs] Checked existing parts for Title ", title , " in ", time.Since(start))
+	log.Trace("[eregs] Checked existing parts for Title ", title, " in ", time.Since(start))
 	return result, nil
 }
