@@ -59,6 +59,13 @@ func (pa *PartsArg) Set(s string) error {
 }
 
 func init() {
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "eCFR Parser for eRegs\n\n")
+		flag.PrintDefaults()
+		fmt.Fprintf(flag.CommandLine.Output(), "\nSet USE_ENVIRONMENT_VARS=true to configure with environment variables.\n" +
+			"Variables are the same as command line arguments but upper-case with underscores, e.g. 'EREGS_URL' instead of 'eregs-url'.\n")
+	}
+
 	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
@@ -67,10 +74,9 @@ func init() {
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
 	flag.BoolVar(&parseXML.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
-	flag.BoolVar(&useEnvironment, "use-environment-variables", false, "Retrieve arguments from environment variables. Same as command-line arguments but upper-case, e.g. 'EREGS_URL' instead of 'eregs-url'.")
 	flag.Parse()
 
-	if useEnvironment {
+	if os.Getenv("USE_ENVIRONMENT_VARS") == "true" {
 		flag.VisitAll(func(flag *flag.Flag) {
 			var envName = strings.Replace(strings.ToUpper(flag.Name), "-", "_", -1)
 			var value = os.Getenv(envName)
