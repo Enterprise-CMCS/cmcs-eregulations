@@ -436,8 +436,8 @@ type Image struct {
 
 // FootNote is a footnote to the regulation
 type FootNote struct {
-	Type     string `json:"node_type"`
-	Content	 string `xml:",innerxml" json:"content"`
+	Type    string `json:"node_type"`
+	Content string `xml:",innerxml" json:"content"`
 }
 
 // Division is a div in the html
