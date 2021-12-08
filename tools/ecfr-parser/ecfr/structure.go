@@ -4,15 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"html"
 	"strings"
 	"time"
-	"html"
 )
 
 // Structure is the struct that represents the structure of a regulation part at ECFR
 type Structure struct {
 	Identifier       IdentifierString `json:"identifier"`
-	Label            HTMLString        `json:"label"`
+	Label            HTMLString       `json:"label"`
 	LabelLevel       string           `json:"label_level"`
 	LabelDescription string           `json:"label_description"`
 	Reserved         bool             `json:"reserved"`
