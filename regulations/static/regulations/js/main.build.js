@@ -3803,15 +3803,15 @@
           return;
       }
 
-      viewButton.addEventListener("click", () => {
-          if (this.getAttribute("data-state") === "show") {
+      viewButton.addEventListener("click", (event) => {
+          if (event.currentTarget.getAttribute("data-state") === "show") {
               // focus on select
               document.querySelector("#view-options").focus();
 
-              this.setAttribute("data-set-state", "close");
+              event.currentTarget.setAttribute("data-set-state", "close");
           }
 
-          if (this.getAttribute("data-state") === "close") {
+          if (event.currentTarget.getAttribute("data-state") === "close") {
               const closeLink = document.querySelector("#close-link");
               closeLink.click();
           }
