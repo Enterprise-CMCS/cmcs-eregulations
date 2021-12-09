@@ -14761,7 +14761,6 @@ select:focus-visible {
   font-size: 12px;
   padding: 2px;
   position: relative;
-  z-index: 100;
   line-height: 1;
 }
 .flash-banner a {

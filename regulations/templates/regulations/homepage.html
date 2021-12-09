@@ -6,6 +6,10 @@
 
 {% block body_class %}site-homepage{% endblock %}
 
+{% block pre_header %}
+    <a class="ds-c-skip-nav" href="#main">Skip to main content</a>
+{% endblock %}
+
 {% block header %}
     <header id="header" class="sticky">
         {% include "regulations/partials/header.html" %}
@@ -27,7 +31,7 @@
             </div>
         </div>
 
-        <div class="site-container homepage-main-content">
+        <div class="site-container homepage-main-content" id="main">
             <div class="ds-l-row">
 
                 <div class="homepage-toc ds-l-col--8" id="homepage-toc">
