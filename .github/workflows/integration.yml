@@ -1,4 +1,4 @@
-name: Integration
+name: Python-Lint
 
 on: [push, pull_request]
 
@@ -18,14 +18,3 @@ jobs:
       - name: Run lint
         run: |
           make lint
-  golanglint:
-    name: goLint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
-          version: latest
-          working-directory: ../tools/ecfr-parser
