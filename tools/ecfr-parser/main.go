@@ -77,7 +77,7 @@ func init() {
 	flag.IntVar(&workers, "workers", 3, "Number of parts to process simultaneously.")
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
-	flag.BoolVar(&parseXML.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
+	flag.BoolVar(&parsexml.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
 	flag.Parse()
 
 	if os.Getenv("USE_ENVIRONMENT_VARS") == "true" {
