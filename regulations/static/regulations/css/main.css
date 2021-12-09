@@ -14137,6 +14137,20 @@ select:focus-visible {
   }
 }
 
+:target {
+  scroll-margin-top: 61px;
+}
+@media (min-width: 768px) {
+  :target {
+    scroll-margin-top: 71px;
+  }
+}
+@media (min-width: 1024px) {
+  :target {
+    scroll-margin-top: 80px;
+  }
+}
+
 @media (max-width: 1024px) {
   .homepage-main-content .ds-l-row {
     display: block;
