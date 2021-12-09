@@ -1,16 +1,18 @@
-import RelatedRules from "./RelatedRules.js";
-import Collapsible from "./Collapsible.js";
-import CollapseButton from "./CollapseButton.js";
-import SupplementalContent from "./SupplementalContent.js";
-import CopyBtn from "./CopyBtn.js";
-import TableComponent from "./TableComponent.js";
-import Vue from "../../node_modules/vue/dist/vue.esm.browser.min.js";
-import { goToVersion } from "./go-to-version.js";
+import Vue from "vue/dist/vue.esm.browser.min";
+
+import RelatedRules from "./RelatedRules";
+import Collapsible from "./Collapsible";
+import CollapseButton from "./CollapseButton";
+import SupplementalContent from "./SupplementalContent";
+import CopyBtn from "./CopyBtn";
+import TableComponent from "./TableComponent";
+
+import { goToVersion } from "./go-to-version";
 
 Vue.config.devtools = true;
 
 function isElementInViewport(el) {
-    var rect = el.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
 
     return (
         rect.top >= 0 &&
@@ -61,10 +63,10 @@ function onPageShow() {
 }
 
 function deactivateAllTOCLinks() {
-    const active_els = document.querySelectorAll(".menu-section.active");
-    for (let active_el of active_els) {
-        active_el.classList.remove("active");
-    }
+    const activeEls = document.querySelectorAll(".menu-section.active");
+    activeEls.forEach((el) => {
+        el.classList.remove("active");
+    });
 }
 
 function getCurrentSectionFromHash() {
@@ -95,32 +97,33 @@ const setResponsiveState = (el) => {
         window.innerWidth < 1024
     ) {
         el.setAttribute("data-state", "collapsed");
-        return;
     }
 };
 
 function makeStateful(el) {
-    const state_change_target = el.getAttribute("data-state-name");
-    const state_change_buttons = document.querySelectorAll(
-        `[data-set-state][data-state-name='${state_change_target}']`
+    const stateChangeTarget = el.getAttribute("data-state-name");
+    const stateChangeButtons = document.querySelectorAll(
+        `[data-set-state][data-state-name='${stateChangeTarget}']`
     );
 
     setResponsiveState(el);
 
-    for (const state_change_button of state_change_buttons) {
-        state_change_button.addEventListener("click", function () {
-            const state = this.getAttribute("data-set-state");
+    stateChangeButtons.forEach((btn) => {
+        btn.addEventListener("click", (event) => {
+            const state = event.currentTarget.getAttribute("data-set-state");
             el.setAttribute("data-state", state);
         });
-    }
+    });
 }
 
 function viewButtonClose() {
     const viewButton = document.querySelector("#view-button");
+
     if (!viewButton) {
         return;
     }
-    viewButton.addEventListener("click", function () {
+
+    viewButton.addEventListener("click", () => {
         if (this.getAttribute("data-state") === "show") {
             // focus on select
             document.querySelector("#view-options").focus();
@@ -143,14 +146,14 @@ function main() {
             CollapseButton,
             SupplementalContent,
             CopyBtn,
-            TableComponent
+            TableComponent,
         },
     }).$mount("#vue-app");
 
-    const stateful_elements = document.querySelectorAll("[data-state]");
-    for (const el of stateful_elements) {
+    const statefulElements = document.querySelectorAll("[data-state]");
+    statefulElements.forEach((el) => {
         makeStateful(el);
-    }
+    });
 
     viewButtonClose();
     goToVersion();
@@ -158,9 +161,9 @@ function main() {
     window.addEventListener("hashchange", activateTOCLink);
     activateTOCLink();
 
-    let reset_button = document.getElementById("search-reset");
-    if (reset_button) {
-        reset_button.addEventListener("click", (event) => {
+    const resetButton = document.getElementById("search-reset");
+    if (resetButton) {
+        resetButton.addEventListener("click", (event) => {
             document.getElementById("search-field").value = "";
             event.preventDefault();
         });
