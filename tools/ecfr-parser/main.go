@@ -154,11 +154,12 @@ func run() error {
 	defer func() {
 		log.Debug("[main] Run time:", time.Since(start))
 	}()
-
 	today := time.Now()
 
-	log.Info("[main] Fetching parts list...")
+	log.Info("[main] Fetching Existing Versions list...")
+	existingVersions, err := eregs.GetExistingParts(ctx, title)
 
+	log.Info("[main] Fetching parts list...")
 	var parts []string
 	if subchapter != nil {
 		log.Debug("[main] Fetching subchapter ", subchapter, " parts list...")
@@ -182,8 +183,15 @@ func run() error {
 	}
 
 	queue := list.New()
+	skippedParts := 0
 	for _, part := range parts {
 		for date := range versions[part] {
+			// If we have this part already, skip it
+			if contains(existingVersions[date], part) {
+				log.Trace("Skipping part ", part, " for ", date)
+				skippedParts++
+				continue
+			}
 			reg := &eregs.Part{
 				Title:     title,
 				Name:      part,
@@ -196,7 +204,7 @@ func run() error {
 			queue.PushBack(reg)
 		}
 	}
-
+	log.Info("[main] Skipped ", skippedParts, " parts because they were already imported")
 	for i := 0; i < attempts; i++ {
 		log.Info("[main] Fetching and processing ", queue.Len(), " parts using ", workers, " workers...")
 		ch := make(chan *eregs.Part)
@@ -307,4 +315,14 @@ func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part
 
 	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
 	return nil
+}
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
 }

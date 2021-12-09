@@ -1,5 +1,6 @@
 from rest_framework import generics, serializers
 from django.conf import settings
+from django.contrib.postgres.aggregates import StringAgg
 
 from regcore.models import Part
 
@@ -29,6 +30,15 @@ class ListPartSerializer(serializers.ModelSerializer):
         fields = "__all__"
         extra_kwargs = {
             'document': {'write_only': True}
+        }
+
+
+class ExistingPartSerializer(serializers.BaseSerializer):
+
+    def to_representation(self, instance):
+        return {
+            'date': instance.get("date"),
+            'partName': instance.get("partName").split(","),
         }
 
 
@@ -104,6 +114,17 @@ class EffectivePartView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.get_queryset().filter(name=self.kwargs.get(self.lookup_field)).latest("date")
+
+
+class ExistingPartsView(generics.ListAPIView):
+
+    serializer_class = ExistingPartSerializer
+
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        return Part.objects.filter(title=title).values('date').annotate(
+            partName=StringAgg('name', delimiter=','),
+        )
 
 
 class ListEffectivePartTocSerializer(serializers.ModelSerializer):
