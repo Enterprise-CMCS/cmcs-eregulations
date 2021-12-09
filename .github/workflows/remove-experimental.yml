@@ -18,13 +18,12 @@ jobs:
           echo "Branch Name: ${lower_case#refs/heads/}"
           echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
       - name: get branch name from PR
-        if: github.event.pull_request.closed == true
+        if: github.event.name != 'workflow_dispatch'
         run: |
           echo "Branch Name: ${{ github.event.pull_request.ref }}"
           echo "branch_name=${{ github.event.pull_request.ref }}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
-          ref: $branch_name
           submodules: true
       - uses: actions/setup-node@v1
         with:

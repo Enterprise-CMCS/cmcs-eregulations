@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"context"
 	"encoding/json"
 	"encoding/xml"
@@ -11,7 +12,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"container/list"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -124,28 +124,28 @@ func init() {
 
 func main() {
 	for i := 0; i < attempts; i++ {
-	    log.Trace("Curling the ECFR site")
-	    out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
-        log.Trace("Finished Curling the ECFR site")
+		log.Trace("Curling the ECFR site")
+		out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
+		log.Trace("Finished Curling the ECFR site")
 		if err != nil {
-		    log.Trace("cURL failed to fetch eCFR: ", err)
+			log.Trace("cURL failed to fetch eCFR: ", err)
 		}
 		log.Trace(string(out[:100]))
 
-	    log.Trace("Curling Google")
-	    out, err = exec.Command("curl", "https://www.google.com").Output()
-        log.Trace("Finished Curling Google")
+		log.Trace("Curling Google")
+		out, err = exec.Command("curl", "https://www.google.com").Output()
+		log.Trace("Finished Curling Google")
 		if err != nil {
-		    log.Trace("cURL failed to fetch Google: ", err)
+			log.Trace("cURL failed to fetch Google: ", err)
 		}
 		log.Trace(string(out[:100]))
-		
+
 		if err = run(); err == nil {
 			break
-		} else if i == attempts - 1 {
+		} else if i == attempts-1 {
 			log.Fatal("[main] Failed to load regulations ", attempts, " times. Error: ", err)
 		} else {
-			log.Error("[main] Failed to load regulations. Retrying ", attempts - i - 1, " more times. Error: ", err)
+			log.Error("[main] Failed to load regulations. Retrying ", attempts-i-1, " more times. Error: ", err)
 		}
 	}
 }
@@ -158,11 +158,12 @@ func run() error {
 	defer func() {
 		log.Debug("[main] Run time:", time.Since(start))
 	}()
-
 	today := time.Now()
 
-	log.Info("[main] Fetching parts list...")
+	log.Info("[main] Fetching Existing Versions list...")
+	existingVersions, err := eregs.GetExistingParts(ctx, title)
 
+	log.Info("[main] Fetching parts list...")
 	var parts []string
 	if subchapter != nil {
 		log.Debug("[main] Fetching subchapter ", subchapter, " parts list...")
@@ -181,13 +182,20 @@ func run() error {
 	log.Debug("[main] Extracting versions...")
 	versions, err := ecfr.ExtractVersions(ctx, title)
 	if err != nil {
-	    log.Trace("[main] extract Version failed")
+		log.Trace("[main] extract Version failed")
 		return err
 	}
 
 	queue := list.New()
+	skippedParts := 0
 	for _, part := range parts {
 		for date := range versions[part] {
+			// If we have this part already, skip it
+			if contains(existingVersions[date], part) {
+				log.Trace("Skipping part ", part, " for ", date)
+				skippedParts++
+				continue
+			}
 			reg := &eregs.Part{
 				Title:     title,
 				Name:      part,
@@ -200,12 +208,12 @@ func run() error {
 			queue.PushBack(reg)
 		}
 	}
-
+	log.Info("[main] Skipped ", skippedParts, " parts because they were already imported")
 	for i := 0; i < attempts; i++ {
 		log.Info("[main] Fetching and processing ", queue.Len(), " parts using ", workers, " workers...")
 		ch := make(chan *eregs.Part)
 		var wg sync.WaitGroup
-		for worker := 1; worker < workers + 1; worker++ {
+		for worker := 1; worker < workers+1; worker++ {
 			wg.Add(1)
 			go startHandlePartWorker(ctx, worker, ch, &wg, today)
 		}
@@ -227,14 +235,14 @@ func run() error {
 				queue.Remove(reg)
 			}
 		}
-		log.Trace("[main] Successfully processed ", originalLength - queue.Len(), "/", originalLength, " parts")
+		log.Trace("[main] Successfully processed ", originalLength-queue.Len(), "/", originalLength, " parts")
 
 		if queue.Len() == 0 {
 			break
-		} else if i == attempts - 1 {
+		} else if i == attempts-1 {
 			log.Fatal("[main] Some parts still failed to process after ", attempts, " attempts.")
 		} else {
-			log.Warn("[main] Some parts failed to process. Retrying ", attempts - i - 1, " more times.")
+			log.Warn("[main] Some parts failed to process. Retrying ", attempts-i-1, " more times.")
 			time.Sleep(3 * time.Second)
 		}
 	}
@@ -298,4 +306,14 @@ func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part
 
 	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
 	return nil
+}
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
 }
