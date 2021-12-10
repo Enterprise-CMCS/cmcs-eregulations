@@ -23,6 +23,7 @@ jobs:
           python-version: 3.6
       - name: Install dependencies
         run: |
+          echo "Your PR is ${PR}"
           python -m pip install --upgrade pip
           pip install flake8
       - name: Run lint
