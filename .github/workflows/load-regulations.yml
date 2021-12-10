@@ -2,8 +2,6 @@ name: LoadRegulations
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'
 
 jobs:
   load:
@@ -19,14 +17,17 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: false
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-node@v1
         with:
-          go-version: '^1.16' # The Go version to download (if necessary) and use.
-      - uses: wei/curl@master
-        with:
-          args: https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C
-      - run: make data.${{ matrix.environment }}
+          node-version: '15.11.0'
+      - name: Run eCFR parser
+        id: run-ecfr-parser
         env:
-          EREGS_USERNAME: ${{ secrets.EREGS_USERNAME }}
-          EREGS_PASSWORD: ${{ secrets.EREGS_PASSWORD }}
-          NAME: ${{ matrix.environment }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          pushd serverless
+          npm install serverless -g
+          npm install
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --config ./serverless-parser.yml --function ecfr_parser --stage ${{ matrix.environment }}
+          popd
