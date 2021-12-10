@@ -31,6 +31,8 @@ functions:
   ecfr_parser:
     handler: .
     timeout: 900
+    events:
+      - schedule: cron(0 0 * * ? *)
 
 resources:
 
