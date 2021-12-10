@@ -1,22 +1,26 @@
 name: Deploy Experimental
 
-on:
-  workflow_dispatch:
+on: [push, pull_request]
 
 jobs:
   deploy:
     environment:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
+      PR: ${{ steps.findPr.outputs.pr }}
     runs-on: ubuntu-latest
     steps:
-      - name: get branch name
-        run: |
-          lower_case=${GITHUB_REF,,}
-          echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           submodules: true
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+      # This will echo "Your PR is 7", or be skipped if there is no current PR.
+      - run: echo "Your PR is ${PR}"
+        if: success() && steps.findPr.outputs.number
       # should build first and save the artifact
       - uses: actions/setup-node@v1
         with:
@@ -40,7 +44,7 @@ jobs:
           pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install
-          serverless deploy --stage dev-$branch_name
+          serverless deploy --stage dev-${PR}
           popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
@@ -51,10 +55,10 @@ jobs:
           pushd serverless
           npm install serverless -g
           npm install
-          serverless deploy --config ./serverless-experimental.yml --stage dev-$branch_name | tee output.log
-          serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev-$branch_name
-          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev-$branch_name
-          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-$branch_name
+          serverless deploy --config ./serverless-experimental.yml --stage dev-${PR} | tee output.log
+          serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev-${PR}
+          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev-${PR}
+          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
       - uses: actions/setup-go@v2
