@@ -6,6 +6,7 @@ provider:
   region: us-east-1
   role: LambdaFunctionRole
   environment:
+    PARSER_ON_LAMBDA: true
     USE_ENVIRONMENT_VARS: true
     EREGS_USERNAME: ${ssm:/eregulations/http/user~true}
     EREGS_PASSWORD: ${ssm:/eregulations/http/password~true}
@@ -17,6 +18,7 @@ provider:
     ATTEMPTS: ${ssm:/eregulations/parser/attempts}
     LOGLEVEL: ${ssm:/eregulations/parser/loglevel}
     LOG_PARSE_ERRORS: ${ssm:/eregulations/parser/log_parse_errors}
+    SKIP_EXISTING_VERSIONS: ${ssm:/eregulations/parser/skip_existing_versions}
 
 custom:
   stage: ${opt:stage, self:provider.stage}
