@@ -9,19 +9,23 @@ jobs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           submodules: true
-      - uses: jwalton/gh-find-current-pr@v1
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
       # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - run: echo "Your PR is ${PR}"
+      - name: Echo PR#
+        run: echo "Your PR is ${PR}"
         if: success() && steps.findPr.outputs.number
       # should build first and save the artifact
-      - uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v1
         with:
           node-version: '15.11.0'
       - name: build static assets
@@ -30,12 +34,15 @@ jobs:
           cp -r regulations/static/regulations serverless/static-assets/static
           rm -r regulations/static/node_modules
       - uses: actions/setup-node@v1
+        needs: findPr
         with:
           node-version: '12.x'
       - uses: actions/setup-python@v2
+        needs: findPr
         with:
           python-version: '3.8'
       - name: deploy static assets
+        if: success() && steps.findPr.outputs.number
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -48,6 +55,7 @@ jobs:
           popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
+        needs: findPr
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
