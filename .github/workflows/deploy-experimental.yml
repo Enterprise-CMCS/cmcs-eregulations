@@ -1,8 +1,8 @@
-name: Deploy Experimental
+name: "Deploy Experimental"
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize, reopened]
 
 
 jobs:
