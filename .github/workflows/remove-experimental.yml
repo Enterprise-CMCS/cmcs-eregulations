@@ -19,6 +19,8 @@ jobs:
           state: "closed"
       # This will echo "Your PR is 7", or be skipped if there is no current PR.
       - name: Echo PR#
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
         run: echo "Your PR is ${PR}"
         if: success() && steps.findPr.outputs.number
       - uses: actions/checkout@v2
@@ -34,6 +36,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd serverless
           npm install serverless -g
@@ -44,6 +47,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd serverless/static-assets/serverless
           npm install serverless -g
