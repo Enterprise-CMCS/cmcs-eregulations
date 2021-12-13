@@ -1,6 +1,9 @@
 name: Deploy Experimental
 
-on: [push, pull_request]
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
 
 jobs:
   deploy:
@@ -67,7 +70,7 @@ jobs:
           serverless deploy --config ./serverless-experimental.yml --stage dev-${PR} | tee output.log
           serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev-${PR}
           serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev-${PR}
-          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR
+          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
       - name: Setup Go
