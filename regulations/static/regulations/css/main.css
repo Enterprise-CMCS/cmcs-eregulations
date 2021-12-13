@@ -13976,6 +13976,9 @@ select:focus-visible {
 .site-homepage {
   overflow-x: hidden;
 }
+.site-homepage a.ds-c-skip-nav {
+  transition: none;
+}
 @media (max-width: 1350px) {
   .site-homepage .site-container {
     padding-top: 16px;
