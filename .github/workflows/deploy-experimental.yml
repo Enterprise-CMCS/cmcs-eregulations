@@ -34,11 +34,11 @@ jobs:
           cp -r regulations/static/regulations serverless/static-assets/static
           rm -r regulations/static/node_modules
       - uses: actions/setup-node@v1
-        needs: findPr
+        if: success() && steps.findPr.outputs.number
         with:
           node-version: '12.x'
       - uses: actions/setup-python@v2
-        needs: findPr
+        if: success() && steps.findPr.outputs.number
         with:
           python-version: '3.8'
       - name: deploy static assets
@@ -55,7 +55,7 @@ jobs:
           popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
-        needs: findPr
+        if: success() && steps.findPr.outputs.number
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -70,13 +70,13 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
-      - uses: actions/setup-go@v2
+      - name: Setup Go
+        if: success() && steps.findPr.outputs.number
+        uses: actions/setup-go@v2
         with:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
-      - uses: wei/curl@master
-        with:
-          args: https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C
       - name: load regulations
+        if: success() && steps.findPr.outputs.number
         run: make data.experimental URL=${{ steps.deploy-regulations-site-server.outputs.url }}
         env:
           EREGS_USERNAME: ${{ secrets.EREGS_USERNAME }}
