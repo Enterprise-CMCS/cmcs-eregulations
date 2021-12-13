@@ -16,7 +16,7 @@ jobs:
         id: findPr
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
-          state: "closed"
+          state: all
       # This will echo "Your PR is 7", or be skipped if there is no current PR.
       - name: Echo PR#
         env:
