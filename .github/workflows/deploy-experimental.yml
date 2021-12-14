@@ -87,3 +87,13 @@ jobs:
           EREGS_USERNAME: ${{ secrets.EREGS_USERNAME }}
           EREGS_PASSWORD: ${{ secrets.EREGS_PASSWORD }}
           NAME: experimental
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
+        if: success() && steps.findPr.outputs.number && steps.deploy-regulations-site-server.outputs.url
+        with:
+          issue-number: ${PR}
+          body: |
+            This PR has [been deployed to: ${{ steps.deploy-regulations-site-server.outputs.url }}](${{ steps.deploy-regulations-site-server.outputs.url }})
