@@ -1,6 +1,8 @@
-import json, traceback
+import json
+import traceback
 
 from django.http.response import HttpResponse
+
 
 class JsonErrors:
     def __init__(self, get_response):
@@ -8,7 +10,7 @@ class JsonErrors:
 
     def __call__(self, request):
         return self.get_response(request)
-    
+
     def process_exception(self, request, exception):
         if "json_errors" in request.GET:
             error = {
