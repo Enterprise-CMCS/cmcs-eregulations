@@ -15,6 +15,7 @@ class JsonErrors:
         if "json_errors" in request.GET:
             error = {
                 "status": "error",
+                "type": str(type(exception)),
                 "exception": str(exception),
                 "traceback": traceback.extract_tb(exception.__traceback__).format(),
             }

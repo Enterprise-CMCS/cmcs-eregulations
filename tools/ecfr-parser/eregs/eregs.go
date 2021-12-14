@@ -26,7 +26,7 @@ var client = &http.Client{
 var (
 	username = os.Getenv("EREGS_USERNAME")
 	password = os.Getenv("EREGS_PASSWORD")
-	partURL  = "%stitle/%d/existing"
+	partURL  = "%stitle/%d/existing?json_errors"
 )
 
 // Part is the struct used to send a part to the eRegs server
