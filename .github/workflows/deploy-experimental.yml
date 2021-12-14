@@ -30,8 +30,23 @@ jobs:
           curl -s \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"body":"See this pull request in action: ${PR}"}' \
+            -d '{"body":"See this pull request in action: ${{PR}}"}' \
             -X POST "https://api.github.com/repos/CMSgov/cmcs-eregulations/issues/${PR}/comments"
+      - name: Create comment
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: 285
+          body: |
+            This is a multi-line test comment
+            ${PR}
+            - With GitHub **Markdown** :sparkles:
+            - Created by [create-or-update-comment][1]
+
+            [1]: https://github.com/peter-evans/create-or-update-comment
+          reactions: '+1'
+
       # should build first and save the artifact
       - name: Setup Node
         uses: actions/setup-node@v1
@@ -112,5 +127,5 @@ jobs:
           curl -s \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"body":"See this pull request in action: "${{steps.deploy-regulations-site-server.outputs.url}}"}' \
+            -d '{"body":"See this pull request in action: ${{steps.deploy-regulations-site-server.outputs.url}}"}' \
             -X POST "https://api.github.com/repos/CMSgov/cmcs-eregulations/issues/${PR}/comments"
