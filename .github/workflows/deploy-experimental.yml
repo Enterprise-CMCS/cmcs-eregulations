@@ -101,11 +101,12 @@ jobs:
         env:
           CYPRESS_DEPLOYING: true
       - name: Create or Update Comment
-        uses: peter-evans/create-or-update-comment@v1.4.5
         env:
           PR: ${{ steps.findPr.outputs.pr }}
         if: success() && steps.findPr.outputs.number && steps.deploy-regulations-site-server.outputs.url
-        with:
-          issue-number: ${PR}
-          body: |
-            This PR has [been deployed to: ${{ steps.deploy-regulations-site-server.outputs.url }}](${{ steps.deploy-regulations-site-server.outputs.url }})
+        run: |
+          curl -s \
+          -H "Authorization: token $GH_BOT_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d '{"body":"See this pull request in action: '"${{steps.deploy-regulations-site-server.outputs.url}} "}"'"}' \
+          -X POST "https://api.github.com/repos/CMSgov/cmcs-eregulations/issues/${PR}/comments"
