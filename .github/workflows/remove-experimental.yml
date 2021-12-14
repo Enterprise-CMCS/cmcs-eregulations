@@ -51,3 +51,13 @@ jobs:
           npm install
           serverless remove --stage dev-$branch_name
           popd
+      - name: remove eCFR parser
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          pushd serverless
+          npm install serverless -g
+          npm install
+          serverless remove --config ./serverless-parser.yml --stage dev-$branch_name
+          popd
