@@ -28,7 +28,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
           curl -s \
-            -H "Authorization: token $GH_BOT_TOKEN" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{"body":"See this pull request in action: "${PR}"}' \
             -X POST "https://api.github.com/repos/CMSgov/cmcs-eregulations/issues/${PR}/comments"
@@ -110,7 +110,7 @@ jobs:
         if: success() && steps.findPr.outputs.number && steps.deploy-regulations-site-server.outputs.url
         run: |
           curl -s \
-            -H "Authorization: token $GH_BOT_TOKEN" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{"body":"See this pull request in action: "${{steps.deploy-regulations-site-server.outputs.url}}"}' \
             -X POST "https://api.github.com/repos/CMSgov/cmcs-eregulations/issues/${PR}/comments"
