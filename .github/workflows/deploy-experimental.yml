@@ -30,7 +30,7 @@ jobs:
           curl -s \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"body":"See this pull request in action: "${PR}"}' \
+            -d '{"body":"See this pull request in action: ${PR}"}' \
             -X POST "https://api.github.com/repos/CMSgov/cmcs-eregulations/issues/${PR}/comments"
       # should build first and save the artifact
       - name: Setup Node
