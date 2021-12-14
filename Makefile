@@ -83,6 +83,7 @@ data.%:
 	LOGLEVEL=trace \
 	LOG_PARSE_ERRORS=false \
 	EREGS_SUPPLEMENTAL_URL=$(SUPPLEMENTAL_URL) \
+	SKIP_EXISTING_VERSIONS=true \
 	docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
 
 tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go

@@ -17,6 +17,8 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
+	"github.com/aws/aws-lambda-go/lambda"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -30,7 +32,7 @@ var (
 	individualParts PartsArg
 	loglevel        string
 	workers         int
-	useEnvironment  bool
+	skipVersions    bool
 )
 
 // SubchapterArg is an array of type string
@@ -64,6 +66,14 @@ func (pa *PartsArg) Set(s string) error {
 }
 
 func init() {
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "eCFR Parser for eRegs\n\n")
+		flag.PrintDefaults()
+		fmt.Fprintf(flag.CommandLine.Output(), "\nSet USE_ENVIRONMENT_VARS=true to configure with environment variables.\n" +
+			"Variables are the same as command line arguments but upper-case with underscores, e.g. 'EREGS_URL' instead of 'eregs-url'.\n\n" +
+			"Be sure to also set PARSER_ON_LAMBDA=true if running in AWS Lambda.\n")
+	}
+
 	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
@@ -73,10 +83,10 @@ func init() {
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
 	flag.BoolVar(&parsexml.LogParseErrors, "log-parse-errors", true, "Output errors encountered while parsing.")
-	flag.BoolVar(&useEnvironment, "use-environment-variables", false, "Retrieve arguments from environment variables. Same as command-line arguments but upper-case, e.g. 'EREGS_URL' instead of 'eregs-url'.")
+	flag.BoolVar(&skipVersions, "skip-existing-versions", true, "Skip versions of parts that already exist in eRegs.")
 	flag.Parse()
 
-	if useEnvironment {
+	if os.Getenv("USE_ENVIRONMENT_VARS") == "true" {
 		flag.VisitAll(func(flag *flag.Flag) {
 			var envName = strings.Replace(strings.ToUpper(flag.Name), "-", "_", -1)
 			var value = os.Getenv(envName)
@@ -118,7 +128,21 @@ func init() {
 	log.SetLevel(level)
 }
 
+func lambdaHandler(ctx context.Context) (string, error) {
+	err := start()
+	return "Operation complete.", err
+}
+
 func main() {
+	log.Trace("[main] eCFR parser starting")
+	if os.Getenv("PARSER_ON_LAMBDA") == "true" {
+		lambda.Start(lambdaHandler)
+	} else if err := start(); err != nil {
+		log.Fatal("[main] Parser failed: ", err)
+	}
+}
+
+func start() error {
 	for i := 0; i < attempts; i++ {
 		log.Trace("Curling the ECFR site")
 		out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
@@ -136,17 +160,20 @@ func main() {
 		}
 		log.Trace(string(out[:100]))
 
-		if err = run(); err == nil {
+		if err = attemptParsing(); err == nil {
 			break
 		} else if i == attempts-1 {
-			log.Fatal("[main] Failed to load regulations ", attempts, " times. Error: ", err)
+			log.Error("[main] Failed to load regulations ", attempts, " times.")
+			return err
 		} else {
 			log.Error("[main] Failed to load regulations. Retrying ", attempts-i-1, " more times. Error: ", err)
 		}
 	}
+
+	return nil
 }
 
-func run() error {
+func attemptParsing() error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
@@ -187,7 +214,7 @@ func run() error {
 	for _, part := range parts {
 		for date := range versions[part] {
 			// If we have this part already, skip it
-			if contains(existingVersions[date], part) {
+			if skipVersions && contains(existingVersions[date], part) {
 				log.Trace("Skipping part ", part, " for ", date)
 				skippedParts++
 				continue
@@ -204,7 +231,11 @@ func run() error {
 			queue.PushBack(reg)
 		}
 	}
-	log.Info("[main] Skipped ", skippedParts, " parts because they were already imported")
+
+	if skippedParts > 0 {
+		log.Info("[main] Skipped ", skippedParts, " parts because they were already imported")
+	}
+
 	for i := 0; i < attempts; i++ {
 		log.Info("[main] Fetching and processing ", queue.Len(), " parts using ", workers, " workers...")
 		ch := make(chan *eregs.Part)
@@ -231,7 +262,7 @@ func run() error {
 				queue.Remove(reg)
 			}
 		}
-		log.Trace("[main] Successfully processed ", originalLength-queue.Len(), "/", originalLength, " parts")
+		log.Info("[main] Successfully processed ", originalLength-queue.Len(), "/", originalLength, " parts")
 
 		if queue.Len() == 0 {
 			break

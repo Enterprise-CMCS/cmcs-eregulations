@@ -23,6 +23,10 @@ var (
 	ecfrStructureJSON = "structure/%s/title-%d.json"
 )
 
+var client = &http.Client{
+	Transport: &http.Transport{},
+}
+
 func urlMustParse(s string) *url.URL {
 	u, err := url.Parse(s)
 	if err != nil {
@@ -43,9 +47,6 @@ func buildQuery(opts []FetchOption) string {
 }
 
 func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, error) {
-	client := &http.Client{
-		Transport: &http.Transport{},
-	}
 	path.RawQuery = buildQuery(opts)
 
 	u := ecfrSite.ResolveReference(path)
