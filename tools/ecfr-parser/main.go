@@ -7,8 +7,8 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
-	"os/exec"
 	"os"
+	"os/exec"
 	"strings"
 	"sync"
 	"time"
@@ -257,6 +257,17 @@ func startHandlePartWorker(ctx context.Context, thread int, ch chan *eregs.Part,
 			log.Error("[worker ", thread, "] Error processing part ", reg.Name, " version ", reg.Date, ": ", err)
 		}
 		time.Sleep(1 * time.Second)
+
+		if len(eregs.SuppContentURL) > 0 {
+			log.Debug("[worker ", thread, "] Processing supplemental part ", reg.Name, " version ", reg.Date)
+			err := handleSupplementalPart(ctx, thread, reg)
+			if err == nil {
+				reg.Processed = true
+			} else {
+				log.Error("[worker ", thread, "] Error processing supplemental part ", reg.Name, " version ", reg.Date, ": ", err)
+			}
+			time.Sleep(1 * time.Second)
+		}
 	}
 
 	wg.Done()
@@ -300,20 +311,22 @@ func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part
 		return err
 	}
 
-	if len(eregs.SuppContentURL) > 0 {
-		log.Debug("[worker ", thread, "] Extracting supplemental content structure ", reg.Name, " version ", reg.Date)
-		supplementalPart, err := ecfr.ExtractStructure(*reg.Structure)
-		if err != nil {
-			return err
-		}
+	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
+	return nil
+}
 
-		log.Debug("[worker ", thread, "] Posting supplemental content structure ", reg.Name, " version ", reg.Date, " to eRegs")
-		if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
-			return err
-		}
+func handleSupplementalPart(ctx context.Context, thread int, reg *eregs.Part) error {
+	log.Debug("[worker ", thread, "] Extracting supplemental content structure ", reg.Name, " version ", reg.Date)
+	supplementalPart, err := ecfr.ExtractStructure(*reg.Structure)
+	if err != nil {
+		return err
 	}
 
-	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
+	log.Debug("[worker ", thread, "] Posting supplemental content structure ", reg.Name, " version ", reg.Date, " to eRegs")
+	if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
+		return err
+	}
+
 	return nil
 }
 
