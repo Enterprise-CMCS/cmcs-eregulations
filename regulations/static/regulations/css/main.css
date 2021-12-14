@@ -13541,6 +13541,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -13792,6 +13795,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -13943,6 +13949,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -13975,9 +13984,6 @@ select:focus-visible {
 
 .site-homepage {
   overflow-x: hidden;
-}
-.site-homepage a.ds-c-skip-nav {
-  transition: none;
 }
 @media (max-width: 1350px) {
   .site-homepage .site-container {
@@ -14318,6 +14324,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -14592,6 +14601,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -14742,6 +14754,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -14846,6 +14861,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -15176,6 +15194,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -15458,6 +15479,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -15865,6 +15889,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -16794,6 +16821,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -16925,6 +16955,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -17130,6 +17163,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -17289,6 +17325,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -17415,6 +17454,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -17532,6 +17574,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -17674,6 +17719,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -17953,6 +18001,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {

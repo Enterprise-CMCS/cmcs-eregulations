@@ -7,10 +7,6 @@
 .site-homepage {
     overflow-x: hidden;
 
-    a.ds-c-skip-nav {
-        transition: none;
-    }
-
     .site-container {
         @include custom-max(1350) {
             padding-top: $spacer-2;

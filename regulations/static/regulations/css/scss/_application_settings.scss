@@ -319,6 +319,10 @@ a {
         cursor: pointer;
         @include transition;
     }
+
+    &.ds-c-skip-nav {
+        transition: none;
+    }
 }
 
 html {
