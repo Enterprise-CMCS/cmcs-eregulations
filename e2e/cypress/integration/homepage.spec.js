@@ -41,7 +41,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.wait(500); // animation
         cy.focused().click(); // click instead of typing space/enter b/c of cypress limitations
         cy.wait(500); // scrolling
-        cy.get("#main").then(($el) => {
+        cy.get("#main-content").then(($el) => {
             const rect = $el[0].getBoundingClientRect();
             expect(rect.top).to.be.oneOf([60, 70, 80]); // header heights based on breakpoints
         });
