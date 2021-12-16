@@ -35,6 +35,7 @@ jobs:
         run: |
           make regulations
           cp -r regulations/static/regulations serverless/static-assets/static
+          cp -r regulations/static/report_builder serverless/static-assets/static/report_builder
           rm -r regulations/static/node_modules
       # setup node
       - uses: actions/setup-node@v1
