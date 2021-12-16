@@ -153,7 +153,7 @@ func makeMapOfRegs(header string, records [][]string) map[string][]Guidance {
 			for _, section := range sections {
 				guidance := Guidance{
 					Title:    record[0],
-					Url:      link,
+					URL:      link,
 					Sections: sections,
 				}
 				sectionString := section.Part + "-" + section.Section
@@ -168,6 +168,9 @@ func writeRegsToFile(header string, regs map[string][]Guidance) error {
 	for key, reg := range regs {
 		filename := formatFilename(*outputDirectory, key)
 		f, err := ioutil.ReadFile(filename)
+		if err != nil {
+			return err
+		}
 		dataJSON, err := toJSON(f, header, reg)
 		if err != nil {
 			return err
