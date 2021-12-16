@@ -11,7 +11,8 @@
   "devDependencies": {
     "@testing-library/cypress": "^7.0.5",
     "axe-core": "^4.3.0",
-    "cypress": "^6.9.1"
+    "cypress": "^6.9.1",
+    "cypress-plugin-tab": "^1.0.5"
   },
   "dependencies": {
     "cypress-axe": "^0.12.2"

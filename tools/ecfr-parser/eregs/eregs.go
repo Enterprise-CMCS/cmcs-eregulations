@@ -82,12 +82,13 @@ func PostPart(ctx context.Context, p *Part) error {
 	return nil
 }
 
+// GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
-	checkUrl := fmt.Sprintf(partURL, BaseURL, title)
-	log.Trace("[eregs] Beginning checking of existing parts at ", checkUrl)
+	checkURL := fmt.Sprintf(partURL, BaseURL, title)
+	log.Trace("[eregs] Beginning checking of existing parts at ", checkURL)
 	start := time.Now()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkUrl, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkURL, nil)
 	if err != nil {
 		log.Trace(err)
 		return nil, err

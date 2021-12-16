@@ -1,4 +1,4 @@
-name: Integration
+name: Python-Lint
 
 on: [push, pull_request]
 
