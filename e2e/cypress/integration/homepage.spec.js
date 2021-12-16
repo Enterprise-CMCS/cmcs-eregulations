@@ -38,10 +38,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("body").tab();
-        cy.wait(500); // animation
         cy.focused().click();
         cy.wait(500); // scrolling
-        cy.get("#main-content").then(($el) => {
+        cy.get("#main-content").should(($el) => { // pass function to should so it waits until passes or times out
             const rect = $el[0].getBoundingClientRect();
             expect(rect.top).to.be.oneOf([60, 70, 80]); // header heights based on breakpoints
         });
