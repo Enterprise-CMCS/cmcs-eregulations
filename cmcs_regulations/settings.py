@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'x_robots_tag_middleware.middleware.XRobotsTagMiddleware',
+    'regulations.middleware.json_errors.JsonErrors',
 ]
 
 REST_FRAMEWORK = {
