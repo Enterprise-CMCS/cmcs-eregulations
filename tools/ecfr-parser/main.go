@@ -96,14 +96,14 @@ func init() {
 		})
 	}
 
-	baseUrl, err := url.Parse(eregs.BaseURL)
+	baseURL, err := url.Parse(eregs.BaseURL)
 	if err != nil {
 		log.Fatal("[main] eregs-url value \"", eregs.BaseURL, "\" is not a valid URL.")
 	}
-	q := baseUrl.Query()
+	q := baseURL.Query()
 	q.Add("json_errors", "true")
-	baseUrl.RawQuery = q.Encode()
-	eregs.BaseURL = baseUrl.String()
+	baseURL.RawQuery = q.Encode()
+	eregs.BaseURL = baseURL.String()
 
 	if title < 0 {
 		log.Fatal("[main] Title flag is required and must be greater than 0.")

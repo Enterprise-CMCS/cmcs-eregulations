@@ -39,7 +39,8 @@ type Part struct {
 	Processed bool
 }
 
-type EregsError struct {
+// Error message returned by eRegs as JSON (if ?json_errors appended)
+type Error struct {
 	Status    string   `json:"status"`
 	Type      string   `json:"type"`
 	Exception string   `json:"exception"`
@@ -82,7 +83,7 @@ func PostPart(ctx context.Context, p *Part) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		eregsError := &EregsError{}
+		eregsError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(eregsError)
 		if err != nil {
 			fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
