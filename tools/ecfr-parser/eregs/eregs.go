@@ -39,6 +39,13 @@ type Part struct {
 	Processed bool
 }
 
+type EregsError struct {
+	Status    string   `json:"status"`
+	Type      string   `json:"type"`
+	Exception string   `json:"exception"`
+	Traceback []string `json:"traceback"`
+}
+
 // ExistingPart is a regulation that has been loaded already
 type ExistingPart struct {
 	Date     string   `json:"date"`
@@ -75,7 +82,12 @@ func PostPart(ctx context.Context, p *Part) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("Received error code %d while posting", resp.StatusCode)
+		eregsError := &EregsError{}
+		err = json.NewDecoder(resp.Body).Decode(eregsError)
+		if err != nil {
+			fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
+		}
+		return fmt.Errorf("Received error code %d while posting: %s", resp.StatusCode, eregsError.Exception)
 	}
 
 	log.Trace("[eregs] Posted ", length, " bytes for part ", p.Name, " version ", p.Date, " in ", time.Since(start))
