@@ -9,7 +9,7 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@testing-library/cypress": "^7.0.5",
+    "@testing-library/cypress": "^8.0.2",
     "axe-core": "^4.3.0",
     "cypress": "^9.1.1",
     "cypress-plugin-tab": "^1.0.5"
