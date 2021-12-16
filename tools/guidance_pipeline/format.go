@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Section is a struct representing a regulation section
 type Section struct {
 	Title   string `json:"title"`
 	Part    string `json:"part"`

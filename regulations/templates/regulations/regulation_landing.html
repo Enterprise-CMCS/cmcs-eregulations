@@ -1,6 +1,10 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 
+{% block pre_header %}
+    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+{% endblock %}
+
 {% block body %}
     <div class="content">
         <div class="flexbox">
@@ -9,7 +13,7 @@
                 {% include "regulations/partials/sidebar_left/subpart.html" %}
             </aside>
 
-            <main class="reg-part-homepage match-middle">
+            <main class="reg-part-homepage match-middle" id="main-content">
                 <div class="reg-part-toc">
                     {% include content %}
                 </div>

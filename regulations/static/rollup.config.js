@@ -1,8 +1,18 @@
 import vue from "rollup-plugin-vue";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import alias from "@rollup/plugin-alias";
 import commonjs from "@rollup/plugin-commonjs";
 
-const plugins = [nodeResolve(), commonjs(), vue({ needMap: false })];
+const plugins = [
+    nodeResolve(),
+    commonjs(),
+    vue({ needMap: false }),
+    alias({
+        entries: [
+            { find: "vue", replacement: "../../node_modules/vue" },
+        ],
+    }),
+];
 
 export default [
     {
@@ -31,10 +41,10 @@ export default [
         plugins,
     },
     {
-        input: 'components/SupplementalContent.vue',
+        input: "components/SupplementalContent.vue",
         output: {
-            format: 'esm',
-            file: 'regulations/js/SupplementalContent.js'
+            format: "esm",
+            file: "regulations/js/SupplementalContent.js",
         },
         plugins,
     },
@@ -60,5 +70,6 @@ export default [
             file: "regulations/js/main.build.js",
             format: "iife",
         },
+        plugins,
     },
 ];

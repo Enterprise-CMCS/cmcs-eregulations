@@ -57,9 +57,9 @@
                 background-size: 55%;
                 background-position: bottom 50% right 25px;
 
-                 > * {
-                     width: 40%;
-                 }
+                > * {
+                    width: 40%;
+                }
             }
 
             @include custom-max($mobile-max / 1px) {
@@ -67,9 +67,9 @@
                 background-size: auto 45%;
                 background-position: bottom 0px right 50%;
 
-                 > * {
-                     width: 100%;
-                 }
+                > * {
+                    width: 100%;
+                }
             }
 
             @include custom-max($iphoneSE-max / 1px) {
@@ -79,9 +79,9 @@
                 background-size: auto;
                 background-position: bottom 0px right 50%;
 
-                 > * {
-                     width: 100%;
-                 }
+                > * {
+                    width: 100%;
+                }
             }
 
             a {
@@ -96,7 +96,7 @@
                 }
             }
 
-            a[role=button] {
+            a[role="button"] {
                 color: $main_button_color;
                 text-shadow: none;
                 margin-top: $spacer-1;
@@ -192,6 +192,18 @@
 }
 
 // Table of Contents
+
+:target {
+    scroll-margin-top: $header_height_mobile;
+
+    @include screen-md {
+        scroll-margin-top: $header_height_tablet;
+    }
+
+    @include screen-lg {
+        scroll-margin-top: $header_height;
+    }
+}
 
 .homepage-main-content {
     .ds-l-row {
