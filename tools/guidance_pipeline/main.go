@@ -11,9 +11,10 @@ import (
 	"path/filepath"
 )
 
+// Guidance represents a piece of guidance
 type Guidance struct {
 	Title    string    `json:"title"`
-	Url      string    `json:"url"`
+	URL      string    `json:"url"`
 	Sections []Section `json:"sections"`
 }
 

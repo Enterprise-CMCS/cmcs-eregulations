@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 )
 
+// Regulation is a title and array of supplemental content
 type Regulation struct {
 	Title                string     `json:"title"`
 	SupplementalContent []Guidance `json:"supplemental_content"`
