@@ -114,7 +114,7 @@ jobs:
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
-            - :sparkles: See this Pull Request [in action][1] :sparkles:
+            :sparkles: See this Pull Request [in action][1] :sparkles:
             
             [1]: ${{ steps.deploy-regulations-site-server.outputs.url }}
           reactions: '+1'
