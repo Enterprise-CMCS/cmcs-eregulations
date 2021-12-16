@@ -39,7 +39,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get("body").tab();
         cy.wait(500); // animation
-        cy.get("a.ds-c-skip-nav").click();
+        cy.focused().click();
         cy.wait(500); // scrolling
         cy.get("#main-content").then(($el) => {
             const rect = $el[0].getBoundingClientRect();
