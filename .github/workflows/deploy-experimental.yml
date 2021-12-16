@@ -54,7 +54,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
-          cd regulations && python manage.py collectstatic --noinput
           pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install

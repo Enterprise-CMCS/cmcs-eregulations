@@ -38,7 +38,7 @@ jobs:
           pushd serverless
           npm install serverless -g
           npm install
-          serverless remove --config ./serverless-experimental.yml --stage dev-${PR}
+          serverless remove --stage dev-${PR}
           popd
       # Remove the static assets
       - name: remove static assets
