@@ -13541,6 +13541,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -13792,6 +13795,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -13942,6 +13948,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -14137,6 +14146,20 @@ select:focus-visible {
   }
 }
 
+:target {
+  scroll-margin-top: 61px;
+}
+@media (min-width: 768px) {
+  :target {
+    scroll-margin-top: 71px;
+  }
+}
+@media (min-width: 1024px) {
+  :target {
+    scroll-margin-top: 80px;
+  }
+}
+
 @media (max-width: 1024px) {
   .homepage-main-content .ds-l-row {
     display: block;
@@ -14300,6 +14323,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -14575,6 +14601,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -14725,6 +14754,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -14761,7 +14793,6 @@ select:focus-visible {
   font-size: 12px;
   padding: 2px;
   position: relative;
-  z-index: 100;
   line-height: 1;
 }
 .flash-banner a {
@@ -14830,6 +14861,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -15160,6 +15194,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -15442,6 +15479,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -15849,6 +15889,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -16778,6 +16821,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -16909,6 +16955,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -17114,6 +17163,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -17273,6 +17325,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -17399,6 +17454,9 @@ a:focus, a:hover {
   cursor: pointer;
   transition: all 0.1s ease-in;
 }
+a.ds-c-skip-nav {
+  transition: none;
+}
 
 html {
   scroll-behavior: smooth;
@@ -17516,6 +17574,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -17658,6 +17719,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {
@@ -17937,6 +18001,9 @@ a:focus, a:hover {
   color: #17415f;
   cursor: pointer;
   transition: all 0.1s ease-in;
+}
+a.ds-c-skip-nav {
+  transition: none;
 }
 
 html {

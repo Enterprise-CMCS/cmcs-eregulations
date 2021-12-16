@@ -2,6 +2,10 @@
 {% load static %}
 {% load render_nested %}
 
+{% block pre_header %}
+    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+{% endblock %}
+
 {% block body %}
     <div class="content">
         {% include "regulations/partials/view-and-compare.html" %}
@@ -10,7 +14,7 @@
                 {% include "regulations/partials/sidebar_left/subpart.html" %}
             </aside>
 
-            <main class="reg-text match-middle">
+            <main class="reg-text match-middle" id="main-content">
                 {% if isLatestVersion %}
                     <p class="latest-version{{ subpart|yesno:" subpart," }}">
                         <b>Latest Version</b> as of {{ formattedLatestVersion }}
