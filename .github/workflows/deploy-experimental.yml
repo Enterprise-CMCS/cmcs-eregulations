@@ -44,7 +44,7 @@ jobs:
       - name: build static assets
         env:
           STATIC_URL: http://localhost:8888/regulations/
-          STATIC_ROOT: /app/src/regulations/static
+          STATIC_ROOT: serverless/static-assets/static
         run: |
           make regulations
           python manage.py collectstatic --noinput
