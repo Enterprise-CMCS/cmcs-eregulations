@@ -1,3 +1,5 @@
+const mainContentId = "#main-content";
+
 describe("Homepage", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
@@ -13,7 +15,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.checkAccessibility();
     });
 
-    it("has a hidden Skip to main content button", () => {
+    it("has a hidden Skip to main content link", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".ds-c-skip-nav").then(($el) => {
@@ -22,7 +24,18 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("focuses the Skip to main content button after tab is pressed", () => {
+    it("should have a div id on the page that matches the href of the skip to main content link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".ds-c-skip-nav").should(
+            "have.attr",
+            "href",
+            mainContentId
+        );
+        cy.get(mainContentId).should("exist");
+    });
+
+    it("focuses and displays the Skip to main content link after tab is pressed one time", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("body").tab();
@@ -31,19 +44,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.focused().then(($el) => {
             const rect = $el[0].getBoundingClientRect();
             expect(rect.top).to.equal(0);
-        });
-    });
-
-    it("jumps to main content when clicking Skip to main content button", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get("body").tab();
-        cy.wait(500); // animation
-        cy.focused().click(); // click instead of typing space/enter b/c of cypress limitations
-        cy.wait(500); // scrolling
-        cy.get("#main-content").then(($el) => {
-            const rect = $el[0].getBoundingClientRect();
-            expect(rect.top).to.be.oneOf([60, 70, 80]); // header heights based on breakpoints
         });
     });
 
