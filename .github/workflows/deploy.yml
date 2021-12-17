@@ -45,10 +45,6 @@ jobs:
           npm install
           serverless deploy --stage ${{ matrix.environment }}
           popd
-      - uses: actions/setup-go@v2
-        with:
-          go-version: '^1.16' # The Go version to download (if necessary) and use.
-      - run: make supplemental_content
       - name: deploy regulations site server
         id: deploy-regulations-site-server
         env:
@@ -63,6 +59,9 @@ jobs:
           serverless invoke --function create_su --stage ${{ matrix.environment }}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16' # The Go version to download (if necessary) and use.
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
         env:

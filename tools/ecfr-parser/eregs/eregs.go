@@ -26,7 +26,7 @@ var client = &http.Client{
 var (
 	username = os.Getenv("EREGS_USERNAME")
 	password = os.Getenv("EREGS_PASSWORD")
-	partURL  = "%stitle/%d/existing"
+	partURL  = "%stitle/%d/existing?json_errors"
 )
 
 // Part is the struct used to send a part to the eRegs server
@@ -37,6 +37,14 @@ type Part struct {
 	Structure *ecfr.Structure `json:"structure" xml:"-"`
 	Document  *parsexml.Part  `json:"document"`
 	Processed bool
+}
+
+// Error message returned by eRegs as JSON (if ?json_errors appended)
+type Error struct {
+	Status    string   `json:"status"`
+	Type      string   `json:"type"`
+	Exception string   `json:"exception"`
+	Traceback []string `json:"traceback"`
 }
 
 // ExistingPart is a regulation that has been loaded already
@@ -75,7 +83,12 @@ func PostPart(ctx context.Context, p *Part) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("Received error code %d while posting", resp.StatusCode)
+		eregsError := &Error{}
+		err = json.NewDecoder(resp.Body).Decode(eregsError)
+		if err != nil {
+			fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
+		}
+		return fmt.Errorf("Received error code %d while posting: %s", resp.StatusCode, eregsError.Exception)
 	}
 
 	log.Trace("[eregs] Posted ", length, " bytes for part ", p.Name, " version ", p.Date, " in ", time.Since(start))

@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"net/url"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -94,6 +95,15 @@ func init() {
 			}
 		})
 	}
+
+	baseURL, err := url.Parse(eregs.BaseURL)
+	if err != nil {
+		log.Fatal("[main] eregs-url value \"", eregs.BaseURL, "\" is not a valid URL.")
+	}
+	q := baseURL.Query()
+	q.Add("json_errors", "true")
+	baseURL.RawQuery = q.Encode()
+	eregs.BaseURL = baseURL.String()
 
 	if title < 0 {
 		log.Fatal("[main] Title flag is required and must be greater than 0.")
