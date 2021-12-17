@@ -42,6 +42,8 @@ jobs:
           pip install -r ./serverless/requirements.txt
       # build the static assets for the website
       - name: build static assets
+        env:
+          STATIC_URL: http://localhost:8888/regulations/
         run: |
           make regulations
           python manage.py collectstatic --noinput
