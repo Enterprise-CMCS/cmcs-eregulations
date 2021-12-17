@@ -47,11 +47,8 @@ jobs:
           STATIC_ROOT: serverless/static-assets/static
         run: |
           make regulations
-          python manage.py collectstatic --noinput
-          cp -r regulations/static/regulations serverless/static-assets/static
-          cp -r regulations/static/report_builder serverless/static-assets/static/report_builder
           rm -r regulations/static/node_modules
-
+          python manage.py collectstatic --noinput
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
