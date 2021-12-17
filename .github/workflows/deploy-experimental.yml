@@ -35,10 +35,16 @@ jobs:
         if: success() && steps.findPr.outputs.number
         with:
           python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./serverless/requirements.txt
       # build the static assets for the website
       - name: build static assets
         run: |
           make regulations
+          python manage.py collectstatic --noinput
           cp -r regulations/static/regulations serverless/static-assets/static
           cp -r regulations/static/report_builder serverless/static-assets/static/report_builder
           rm -r regulations/static/node_modules
