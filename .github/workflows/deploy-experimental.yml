@@ -30,6 +30,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '15.11.0'
+      # setup python
+      - uses: actions/setup-python@v2
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: '3.8'
       # build the static assets for the website
       - name: build static assets
         run: |
@@ -37,16 +42,7 @@ jobs:
           cp -r regulations/static/regulations serverless/static-assets/static
           cp -r regulations/static/report_builder serverless/static-assets/static/report_builder
           rm -r regulations/static/node_modules
-      # setup node
-      - uses: actions/setup-node@v1
-        if: success() && steps.findPr.outputs.number
-        with:
-          node-version: '12.x'
-      # setup python
-      - uses: actions/setup-python@v2
-        if: success() && steps.findPr.outputs.number
-        with:
-          python-version: '3.8'
+
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
