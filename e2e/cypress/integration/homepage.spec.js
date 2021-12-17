@@ -34,18 +34,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("jumps to main content when clicking Skip to main content button", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get("body").tab();
-        cy.focused().click();
-        cy.wait(500); // scrolling
-        cy.get("#main-content").should(($el) => { // pass function to should so it waits until passes or times out
-            const rect = $el[0].getBoundingClientRect();
-            expect(rect.top).to.be.oneOf([60, 70, 80]); // header heights based on breakpoints
-        });
-    });
-
     it("has a flash banner at the top indicating draft content", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
