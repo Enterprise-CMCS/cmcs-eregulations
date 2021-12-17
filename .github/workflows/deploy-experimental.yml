@@ -44,13 +44,13 @@ jobs:
       - name: build static assets
         env:
           STATIC_URL: http://localhost:8888/regulations/
-          STATIC_ROOT: regulations/static/regulations
+          STATIC_ROOT: regulations/static
         run: |
           make regulations
+          rm -r regulations/static/node_modules
           python manage.py collectstatic --noinput
           cp -r regulations/static/regulations serverless/static-assets/static
           cp -r regulations/static/report_builder/ serverless/static-assets/static/report_builder/
-          rm -r regulations/static/node_modules
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
