@@ -14,6 +14,7 @@ provider:
     SUBCHAPTER: ${ssm:/eregulations/parser/subchapter}
     PARTS: ${ssm:/eregulations/parser/parts}
     EREGS_URL: ${self:custom.settings.eregs_url}
+    EREGS_SUPPLEMENTAL_URL: ${self:custom.settings.eregs_url}supplemental_content
     WORKERS: ${ssm:/eregulations/parser/workers}
     ATTEMPTS: ${ssm:/eregulations/parser/attempts}
     LOGLEVEL: ${ssm:/eregulations/parser/loglevel}

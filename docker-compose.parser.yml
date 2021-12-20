@@ -16,6 +16,7 @@ services:
         - ATTEMPTS=${ATTEMPTS:-}
         - LOGLEVEL=${LOGLEVEL:-}
         - LOG_PARSE_ERRORS=${LOG_PARSE_ERRORS:-}
+        - EREGS_SUPPLEMENTAL_URL=${EREGS_SUPPLEMENTAL_URL:-}
         - SKIP_EXISTING_VERSIONS=${SKIP_EXISTING_VERSIONS:-}
         working_dir: /app
         command: go run .
