@@ -7,8 +7,8 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
-	"os/exec"
 	"os"
+	"os/exec"
 	"strings"
 	"sync"
 	"time"
@@ -78,7 +78,8 @@ func init() {
 	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
-	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8000/v2/", "A url specifying where to send eregs parts")
+	flag.StringVar(&eregs.BaseURL, "eregs-url", "http://localhost:8080/v2/", "A url specifying where to send eregs parts")
+	flag.StringVar(&eregs.SuppContentURL, "eregs-supplemental-url", "", "A url specifying where to send eregs parts")
 	flag.IntVar(&workers, "workers", 3, "Number of parts to process simultaneously.")
 	flag.IntVar(&attempts, "attempts", 1, "The number of times to attempt regulation loading")
 	flag.StringVar(&loglevel, "loglevel", "warn", "Logging severity level. One of: fatal, error, warn, info, debug, trace.")
@@ -297,6 +298,17 @@ func startHandlePartWorker(ctx context.Context, thread int, ch chan *eregs.Part,
 			log.Error("[worker ", thread, "] Error processing part ", reg.Name, " version ", reg.Date, ": ", err)
 		}
 		time.Sleep(1 * time.Second)
+
+		if len(eregs.SuppContentURL) > 0 {
+			log.Debug("[worker ", thread, "] Processing supplemental part ", reg.Name, " version ", reg.Date)
+			err := handleSupplementalPart(ctx, thread, reg)
+			if err == nil {
+				reg.Processed = true
+			} else {
+				log.Error("[worker ", thread, "] Error processing supplemental part ", reg.Name, " version ", reg.Date, ": ", err)
+			}
+			time.Sleep(1 * time.Second)
+		}
 	}
 
 	wg.Done()
@@ -341,6 +353,21 @@ func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part
 	}
 
 	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
+	return nil
+}
+
+func handleSupplementalPart(ctx context.Context, thread int, reg *eregs.Part) error {
+	log.Debug("[worker ", thread, "] Extracting supplemental content structure ", reg.Name, " version ", reg.Date)
+	supplementalPart, err := ecfr.ExtractStructure(*reg.Structure)
+	if err != nil {
+		return err
+	}
+
+	log.Debug("[worker ", thread, "] Posting supplemental content structure ", reg.Name, " version ", reg.Date, " to eRegs")
+	if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
+		return err
+	}
+
 	return nil
 }
 
