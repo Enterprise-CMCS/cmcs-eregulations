@@ -1,3 +1,5 @@
+const mainContentId = "#main-content";
+
 describe("Homepage", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
@@ -11,6 +13,38 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.injectAxe();
         cy.contains("Medicaid & CHIP eRegulations");
         cy.checkAccessibility();
+    });
+
+    it("has a hidden Skip to main content link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".ds-c-skip-nav").then(($el) => {
+            const rect = $el[0].getBoundingClientRect();
+            expect(rect.bottom).to.equal(-56); // hidden off-screen
+        });
+    });
+
+    it("should have a div id on the page that matches the href of the skip to main content link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".ds-c-skip-nav").should(
+            "have.attr",
+            "href",
+            mainContentId
+        );
+        cy.get(mainContentId).should("exist");
+    });
+
+    it("focuses and displays the Skip to main content link after tab is pressed one time", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get("body").tab();
+        cy.wait(500); // animation
+        cy.focused().should("have.attr", "class", "ds-c-skip-nav");
+        cy.focused().then(($el) => {
+            const rect = $el[0].getBoundingClientRect();
+            expect(rect.top).to.equal(0);
+        });
     });
 
     it("has a flash banner at the top indicating draft content", () => {
@@ -47,9 +81,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("takes you to the about page when clicking how this tool is updated link", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".hero-text a").click()
+        cy.get(".hero-text a").click();
 
-        cy.url().should("eq", Cypress.config().baseUrl + "/about/#automated-updates");
+        cy.url().should(
+            "eq",
+            Cypress.config().baseUrl + "/about/#automated-updates"
+        );
     });
 
     it("jumps to a regulation Part using the jump-to select", () => {

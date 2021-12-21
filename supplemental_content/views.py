@@ -1,12 +1,35 @@
 from rest_framework import generics
+from django.conf import settings
+
+from rest_framework.response import Response
+
 from django.db.models import Prefetch, Q
+
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework import authentication
+from rest_framework import exceptions
 
 from .models import (
     AbstractSupplementalContent,
     AbstractLocation,
+    Section,
+    Subpart,
 )
 
 from .serializers import AbstractSupplementalContentSerializer
+
+
+class SettingsUser:
+    is_authenticated = False
+
+
+class SettingsAuthentication(authentication.BasicAuthentication):
+    def authenticate_credentials(self, userid, password, request=None):
+        if userid == settings.HTTP_AUTH_USER and password == settings.HTTP_AUTH_PASSWORD:
+            user = SettingsUser()
+            user.is_authenticated = True
+            return (user, None)
+        raise exceptions.AuthenticationFailed('No such user')
 
 
 class SupplementalContentView(generics.ListAPIView):
@@ -42,3 +65,32 @@ class SupplementalContentView(generics.ListAPIView):
                 )
             ).distinct()
         return query
+
+
+class SupplementalContentSectionsView(generics.CreateAPIView):
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def create(self, request, *args, **kwargs):
+        for section in request.data["sections"]:
+            new_orphan_section, created = Section.objects.get_or_create(
+                        title=section["title"],
+                        part=section["part"],
+                        section_id=section["section"]
+                    )
+
+        for subpart in request.data["subparts"]:
+            new_subpart, created = Subpart.objects.get_or_create(
+                        title=subpart["title"],
+                        part=subpart["part"],
+                        subpart_id=subpart["subpart"]
+                    )
+
+            for section in subpart["sections"]:
+                new_section, created = Section.objects.update_or_create(
+                            title=section["title"],
+                            part=section["part"],
+                            section_id=section["section"],
+                            defaults={'parent': new_subpart}
+                        )
+        return Response({'error': False, 'content': request.data})
