@@ -13,8 +13,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// SuppContentURL is the URL of the eRegs service that will accept the post request
 var SuppContentURL string
 
+// PostSupplementalPart is the function that sends a supplemental part to eRegs server
 func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 	log.Trace("[eregs] Beginning post of supplemental part ", p.Name, " to ", SuppContentURL)
 	start := time.Now()
