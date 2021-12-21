@@ -1,5 +1,6 @@
 package ecfr
 
+// Part is the struct that represents a part of a regulation that is ready to be posted to supplemental content
 type Part struct {
 	Name     string    `json:"name"`
 	Title    string    `json:"title"`
@@ -7,12 +8,14 @@ type Part struct {
 	Subparts []Subpart `json:"subparts"`
 }
 
+// Section is the struct representing a section of a part
 type Section struct {
 	Title   string `json:"title"`
 	Part    string `json:"part"`
 	Section string `json:"section"`
 }
 
+// Subpart is the struct representing a subpart of a part
 type Subpart struct {
 	Title    string    `json:"title"`
 	Part     string    `json:"part"`
@@ -20,6 +23,7 @@ type Subpart struct {
 	Sections []Section `json:"sections"`
 }
 
+// ExtractStructure is a function to extract the sections and subparts from an eCFR structure
 func ExtractStructure(s Structure) (Part, error) {
 	title := s.Identifier[0]
 	structurePart := s.Children[0].Children[0].Children
@@ -29,10 +33,10 @@ func ExtractStructure(s Structure) (Part, error) {
 
 	for _, child := range structurePart[0].Children {
 		if child.Type == "section" && !child.Reserved {
-			sec := ExtractSection(title, child)
+			sec := extractSection(title, child)
 			sections = append(sections, sec)
 		} else if child.Type == "subpart" {
-			subp := ExtractSubpart(title, partNumber, child)
+			subp := extractSubpart(title, partNumber, child)
 			subparts = append(subparts, subp)
 		}
 	}
@@ -47,18 +51,18 @@ func ExtractStructure(s Structure) (Part, error) {
 	return p, nil
 }
 
-func ExtractSubpart(title string, partNumber string, s *Structure) Subpart {
+func extractSubpart(title string, partNumber string, s *Structure) Subpart {
 	sections := []Section{}
 
 	for _, child := range s.Children {
 		if !child.Reserved {
 			if child.Type == "section" {
-				sec := ExtractSection(title, child)
+				sec := extractSection(title, child)
 				sections = append(sections, sec)
 			} else if child.Type == "subject_group" {
 				for _, subChild := range child.Children {
 					if subChild.Type == "section" && !subChild.Reserved {
-						subSec := ExtractSection(title, subChild)
+						subSec := extractSection(title, subChild)
 						sections = append(sections, subSec)
 					}
 				}
@@ -76,7 +80,7 @@ func ExtractSubpart(title string, partNumber string, s *Structure) Subpart {
 	return subpart
 }
 
-func ExtractSection(title string, s *Structure) Section {
+func extractSection(title string, s *Structure) Section {
 	section := Section{
 		Title:   title,
 		Part:    s.Identifier[0],
