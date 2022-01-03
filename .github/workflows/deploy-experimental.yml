@@ -1,7 +1,9 @@
-name: Deploy Experimental
+name: "Deploy Experimental"
 
 on:
-  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
 
 jobs:
   deploy:
@@ -10,65 +12,112 @@ jobs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     steps:
-      - name: get branch name
-        run: |
-          lower_case=${GITHUB_REF,,}
-          echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
-      - uses: actions/checkout@v2
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           submodules: true
+      # Find the PR number.  This is not always trivial which is why this uses an existign action
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+
       # should build first and save the artifact
-      - uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v1
         with:
           node-version: '15.11.0'
-      - name: build static assets
-        run: |
-          make regulations
-          cp -r regulations/static/regulations serverless/static-assets/static
-          rm -r regulations/static/node_modules
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
+      # setup python
       - uses: actions/setup-python@v2
+        if: success() && steps.findPr.outputs.number
         with:
           python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./serverless/requirements.txt
+      # build the static assets for the website
+      - name: build static assets
+        env:
+          STATIC_URL: http://localhost:8888/regulations/
+          STATIC_ROOT: regulations/static
+        run: |
+          make regulations
+          rm -r regulations/static/node_modules
+          python manage.py collectstatic --noinput
+          cp -r regulations/static/regulations serverless/static-assets/static
+          cp -r regulations/static/admin serverless/static-assets/static/admin
+          cp -r regulations/static/report_builder/ serverless/static-assets/static/report_builder/
+      # deploy static assets to AWS
       - name: deploy static assets
+        if: success() && steps.findPr.outputs.number
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install
-          serverless deploy --stage dev-$branch_name
+          serverless deploy --stage dev-${PR}
           popd
+      # Deploy the regulation site to AWS
       - name: deploy regulations site server
         id: deploy-regulations-site-server
+        if: success() && steps.findPr.outputs.number
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd serverless
           npm install serverless -g
           npm install
-          serverless deploy --config ./serverless-experimental.yml --stage dev-$branch_name | tee output.log
-          serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev-$branch_name
-          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev-$branch_name
-          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-$branch_name
+          serverless deploy --config ./serverless-experimental.yml --stage dev-${PR} | tee output.log
+          serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev-${PR}
+          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev-${PR}
+          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
-      - uses: actions/setup-go@v2
+      # Setup GO
+      - name: Setup Go
+        if: success() && steps.findPr.outputs.number
+        uses: actions/setup-go@v2
         with:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
+      # deploy the ECFR parser
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd serverless
           npm install serverless -g
           npm install
-          serverless deploy --config ./serverless-parser.yml --stage dev-$branch_name
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --config ./serverless-parser.yml --function ecfr_parser --stage dev-$branch_name
+          serverless deploy --config ./serverless-parser.yml --stage dev-${PR}
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --config ./serverless-parser.yml --function ecfr_parser --stage dev-${PR}
           popd
+      # Notify github that this is deployed and ready to look at
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          body: |
+            :sparkles: See this Pull Request [in action][1] :sparkles:
+
+            [1]: ${{ steps.deploy-regulations-site-server.outputs.url }}
+          reactions: '+1'
+      # Run the cypress tests
+      - name: end-to-end tests
+        uses: cypress-io/github-action@v2
+        with:
+          working-directory: e2e
+          config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
+        env:
+          CYPRESS_DEPLOYING: true
