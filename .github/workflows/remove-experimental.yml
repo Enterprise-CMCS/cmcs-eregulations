@@ -1,4 +1,4 @@
-name: Remove Experimental
+name: "Remove Experimental"
 
 on:
   workflow_dispatch:
@@ -11,53 +11,44 @@ jobs:
       name: "dev"
     runs-on: ubuntu-latest
     steps:
-      - name: get branch name manually
-        if: github.event.name == 'workflow_dispatch'
-        run: |
-          lower_case=${GITHUB_REF,,}
-          echo "Branch Name: ${lower_case#refs/heads/}"
-          echo "branch_name=${lower_case#refs/heads/}" >> $GITHUB_ENV
-      - name: get branch name from PR
-        if: github.event.name != 'workflow_dispatch'
-        run: |
-          echo "Branch Name: ${{ github.event.pull_request.ref }}"
-          echo "branch_name=${{ github.event.pull_request.ref }}" >> $GITHUB_ENV
+      # gettign PR is trivial here because the only tirgger is closing a PR
+      - name: Echo PR#
+        env:
+          PR: ${{ github.event.number }}
+        run: echo "Your PR is ${PR}"
+      # Checkout the code
       - uses: actions/checkout@v2
         with:
           submodules: true
+      # Setup Node
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+      # Setup Python
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
+      # remove the regulations site
       - name: remove experimental regulations site server
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ github.event.number }}
         run: |
           pushd serverless
           npm install serverless -g
           npm install
-          serverless remove --config ./serverless-experimental.yml --stage dev-$branch_name
+          serverless remove --stage dev-${PR}
           popd
+      # Remove the static assets
       - name: remove static assets
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ github.event.number }}
         run: |
           pushd serverless/static-assets/serverless
           npm install serverless -g
           npm install
-          serverless remove --stage dev-$branch_name
-          popd
-      - name: remove eCFR parser
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          pushd serverless
-          npm install serverless -g
-          npm install
-          serverless remove --config ./serverless-parser.yml --stage dev-$branch_name
+          serverless remove --stage dev-${PR}
           popd
