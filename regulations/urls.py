@@ -4,6 +4,7 @@ from regulations.views.reader import SubpartReaderView, SectionReaderView, PartR
 from regulations.views.goto import GoToRedirectView
 from regulations.views.search import SearchView
 from regulations.views.regulation_landing import RegulationLandingView
+from regulations.views.resource_landing import ResourceLandingView
 from regulations.views.homepage import HomepageView
 from regulations.views.about import AboutView
 from regulations import converters
@@ -17,6 +18,7 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),
+    path('<numeric:title>/<numeric:part>/resources', ResourceLandingView.as_view(), name="resource_view"),
     path('<numeric:title>/<numeric:part>/<numeric:section>/', SectionReaderView.as_view(), name='reader_view'),
     path('<numeric:title>/<numeric:part>/<numeric:section>/<version:version>/', SectionReaderView.as_view(), name='reader_view'),
     path('<numeric:title>/<numeric:part>/Subpart-<subpart:subpart>/<version:version>/',

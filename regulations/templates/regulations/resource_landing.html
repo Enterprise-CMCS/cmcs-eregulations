@@ -1,0 +1,34 @@
+{% extends "regulations/base.html" %}
+{% load static %}
+
+{% block pre_header %}
+    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="flexbox">
+
+            <aside tabindex="-1" class="left-sidebar match-sides" data-state="expanded" data-state-name="left-sidebar">
+                {% include "regulations/partials/sidebar_left/subpart.html" %}
+            </aside>
+
+            <main class="reg-part-homepage match-middle" id="main-content">
+                <div class="reg-part-toc">
+                    <h1>Resources</h1>
+                    <p>Resources are curated and stuff</p>
+                    <input type="search" name="q" placeholder="Search Regulations">
+                </div>
+    	    </main>
+                <supplemental-content
+                    api_url="{% url 'regcore' %}"
+                    title="{{ title }}"
+                    part="{{ reg_part }}"
+                ></supplemental-content>
+        </div>
+    </div>
+{% endblock %}
+
+{% block post_footer %}
+    <script src="{% static '/js/main.build.js' %}"></script>
+{% endblock %}

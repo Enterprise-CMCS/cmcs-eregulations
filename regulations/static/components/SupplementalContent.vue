@@ -1,5 +1,5 @@
 <template>
-    <div class="supplemental-content-container">
+    <div class="supplemental-content-container KNOLL">
         <template v-if="isFetching">
             <simple-spinner></simple-spinner>
         </template>

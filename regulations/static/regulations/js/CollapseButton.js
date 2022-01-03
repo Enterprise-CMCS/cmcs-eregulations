@@ -159,15 +159,21 @@ var __vue_render__ = function() {
     },
     [
       _vm.visible && !_vm.keepContentsOnToggle
-        ? _vm._t("expanded", [_vm._v("Hide")])
+        ? _vm._t("expanded", function() {
+            return [_vm._v("Hide")]
+          })
         : _vm._e(),
       _vm._v(" "),
       !_vm.visible && !_vm.keepContentsOnToggle
-        ? _vm._t("collapsed", [_vm._v("Show")])
+        ? _vm._t("collapsed", function() {
+            return [_vm._v("Show")]
+          })
         : _vm._e(),
       _vm._v(" "),
       _vm.keepContentsOnToggle
-        ? _vm._t("contents", [_vm._v("Click here")])
+        ? _vm._t("contents", function() {
+            return [_vm._v("Click here")]
+          })
         : _vm._e()
     ],
     2
