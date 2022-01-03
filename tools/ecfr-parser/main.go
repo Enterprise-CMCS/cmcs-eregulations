@@ -8,7 +8,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 	"sync"
 	"time"
@@ -154,23 +153,7 @@ func main() {
 
 func start() error {
 	for i := 0; i < attempts; i++ {
-		log.Trace("Curling the ECFR site")
-		out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
-		log.Trace("Finished Curling the ECFR site")
-		if err != nil {
-			log.Trace("cURL failed to fetch eCFR: ", err)
-		}
-		log.Trace(string(out[:100]))
-
-		log.Trace("Curling Google")
-		out, err = exec.Command("curl", "https://www.google.com").Output()
-		log.Trace("Finished Curling Google")
-		if err != nil {
-			log.Trace("cURL failed to fetch Google: ", err)
-		}
-		log.Trace(string(out[:100]))
-
-		if err = attemptParsing(); err == nil {
+		if err := attemptParsing(); err == nil {
 			break
 		} else if i == attempts-1 {
 			log.Error("[main] Failed to load regulations ", attempts, " times.")
