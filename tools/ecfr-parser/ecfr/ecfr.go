@@ -48,7 +48,6 @@ func buildQuery(opts []FetchOption) string {
 
 func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, error) {
 	path.RawQuery = buildQuery(opts)
-
 	u := ecfrSite.ResolveReference(path)
 
 	log.Trace("[ecfr] Attempting fetch from ", u.String())
@@ -63,30 +62,22 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	}
 
 	req.Header.Set("User-Agent", "E-regs for "+os.Getenv("NAME"))
-	log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
+	log.Trace("[ecfr] User agent is: ", req.Header.Get("User-Agent"))
 
 	log.Trace("[ecfr] Connecting to ", u.String())
-	reqStart := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("[err] from `client.Do`: %+v, took %+v", err, time.Since(reqStart))
+		return nil, fmt.Errorf("Client failed to connect: %+v", err)
 	}
-	log.Trace("[ecfr] client.Do took ", time.Since(reqStart))
     defer resp.Body.Close()
 
-	log.Trace("[ECFR] client.Do took ", time.Since(reqStart))
 	if resp.StatusCode != 200 {
-		log.Trace("[ecfr] Received status code ", resp.StatusCode, " from ", u.String())
-		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
-			time.Sleep(2 * time.Second)
-			return fetch(ctx, path, opts)
-		}
-		return nil, fmt.Errorf("%s %d", u.String(), resp.StatusCode)
+		return nil, fmt.Errorf("Received status code %d from %s", resp.StatusCode, u.String())
 	}
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("from `io.ReadAll`: %+v", err)
+		return nil, fmt.Errorf("Failed to read response body: %+v", err)
 	}
 	body := bytes.NewBuffer(b)
 
@@ -94,7 +85,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 	return body, nil
 }
 
-// FetchFull fecthes the full regulation from ECFR
+// FetchFull fetches the full regulation from eCFR
 func FetchFull(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
 	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date, title))
 	if err != nil {
@@ -138,7 +129,7 @@ func (p *PartOption) Values() url.Values {
 	return v
 }
 
-// SubchapterOption is  a struct defining the Chapter and SubChapter
+// SubchapterOption is a struct defining the Chapter and Subchapter
 type SubchapterOption struct {
 	Chapter    string
 	Subchapter string
