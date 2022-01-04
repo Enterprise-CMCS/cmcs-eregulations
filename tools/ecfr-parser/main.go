@@ -160,7 +160,7 @@ func main() {
 
 func start() error {
 	for i := 0; i < attempts; i++ {
-		if err, retry := attemptParsing(); err == nil {
+		if retry, err := attemptParsing(); err == nil {
 			break
 		} else if !retry {
 			log.Error("[main] Failed to load regulations. Will not retry.")
@@ -177,7 +177,7 @@ func start() error {
 	return nil
 }
 
-func attemptParsing() (error, bool) {
+func attemptParsing() (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
@@ -197,7 +197,7 @@ func attemptParsing() (error, bool) {
 		var err error
 		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
-			return err, true
+			return true, err
 		}
 	}
 	parts = append(parts, individualParts...)
@@ -209,7 +209,7 @@ func attemptParsing() (error, bool) {
 	log.Debug("[main] Extracting versions...")
 	versions, err := ecfr.ExtractVersions(ctx, title)
 	if err != nil {
-		return err, true
+		return true, err
 	}
 
 	// Create initial queue of versions to process
@@ -277,7 +277,7 @@ func attemptParsing() (error, bool) {
 		if queue.Len() == 0 {
 			break
 		} else if i >= attempts-1 {
-			return fmt.Errorf("Some parts still failed to process after %d attempts.", attempts), false
+			return false, fmt.Errorf("Some parts still failed to process after %d attempts", attempts)
 		} else {
 			log.Warn("[main] Some parts failed to process. Retrying ", attempts-i-1, " more times.")
 			time.Sleep(3 * time.Second)
@@ -285,7 +285,7 @@ func attemptParsing() (error, bool) {
 	}
 
 	log.Info("[main] All parts finished processing!")
-	return nil, false
+	return false, nil
 }
 
 func startHandlePartWorker(ctx context.Context, thread int, ch chan *eregs.Part, wg *sync.WaitGroup, date time.Time) {
