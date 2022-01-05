@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
@@ -30,7 +31,7 @@ var client = &http.Client{
 var (
 	username = os.Getenv("EREGS_USERNAME")
 	password = os.Getenv("EREGS_PASSWORD")
-	partURL  = "%stitle/%d/existing?json_errors"
+	partURL  = "/title/%d/existing"
 )
 
 // Part is the struct used to send a part to the eRegs server
@@ -57,7 +58,11 @@ type ExistingPart struct {
 	PartName []string `json:"partName"`
 }
 
-func post(ctx context.Context, path *url.URL, data interface{}) error {
+func post(ctx context.Context, eregsPath *url.URL, data interface{}) error {
+	q := eregsPath.Query()
+	q.Add("json_errors", "true")
+	eregsPath.RawQuery = q.Encode()
+
 	start := time.Now()
 	buff := bytes.NewBuffer([]byte{})
 	enc := json.NewEncoder(buff)
@@ -70,14 +75,14 @@ func post(ctx context.Context, path *url.URL, data interface{}) error {
 
 	length := buff.Len()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, path.String(), buff)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, eregsPath.String(), buff)
 	if err != nil {
 		return err
 	}
 
 	req.Header.Set("Content-Type", "application/json")
 	req.SetBasicAuth(username, password)
-	log.Trace("[eregs] Posting to ", path.String())
+	log.Trace("[eregs] Posting to ", eregsPath.String())
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
@@ -88,40 +93,48 @@ func post(ctx context.Context, path *url.URL, data interface{}) error {
 		eregsError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(eregsError)
 		if err != nil {
-			return fmt.Errorf("Received error code %d while posting to %s, unable to extract error message: %+v", resp.StatusCode, path.String(), err)
+			return fmt.Errorf("Received error code %d while posting to %s, unable to extract error message: %+v", resp.StatusCode, eregsPath.String(), err)
 		}
-		return fmt.Errorf("Received error code %d while posting to %s: %s", resp.StatusCode, path.String(), eregsError.Exception)
+		return fmt.Errorf("Received error code %d while posting to %s: %s", resp.StatusCode, eregsPath.String(), eregsError.Exception)
 	}
 
-	log.Trace("[eregs] Posted ", length, " bytes to ", path.String(), " in ", time.Since(start))
+	log.Trace("[eregs] Posted ", length, " bytes to ", eregsPath.String(), " in ", time.Since(start))
 	return nil
 }
 
 // PostPart is the function that sends a part to the eRegs server
 func PostPart(ctx context.Context, p *Part) error {
-	path, err := url.Parse(BaseURL)
+	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
 		return err
 	}
-	return post(ctx, path, p)
+	return post(ctx, eregsPath, p)
 }
 
 // PostSupplementalPart is the function that sends a supplemental part to eRegs server
 func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
-	path, err := url.Parse(SuppContentURL)
+	eregsPath, err := url.Parse(SuppContentURL)
 	if err != nil {
 		return err
 	}
-	return post(ctx, path, p)
+	return post(ctx, eregsPath, p)
 }
 
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
-	checkURL := fmt.Sprintf(partURL, BaseURL, title)
-	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL)
+	checkURL, err := url.Parse(BaseURL)
+	if err != nil {
+		return nil, err
+	}
+	q := checkURL.Query()
+	q.Add("json_errors", "true")
+	checkURL.RawQuery = q.Encode()
+	checkURL.Path = path.Join(checkURL.Path, fmt.Sprintf(partURL, title))
+
+	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL.String())
 	start := time.Now()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
