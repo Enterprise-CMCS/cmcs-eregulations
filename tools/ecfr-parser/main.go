@@ -109,6 +109,18 @@ func init() {
 	baseURL.RawQuery = q.Encode()
 	eregs.BaseURL = baseURL.String()
 
+	// Parse eRegs supplemental content URL and append ?json_errors
+	if len(eregs.SuppContentURL) > 0 {
+		suppContentURL, err := url.Parse(eregs.SuppContentURL)
+		if err != nil {
+			log.Fatal("[main] eregs-supplemental-url value \"", eregs.SuppContentURL, "\" is not a valid URL.")
+		}
+		q := suppContentURL.Query()
+		q.Add("json_errors", "true")
+		suppContentURL.RawQuery = q.Encode()
+		eregs.SuppContentURL = suppContentURL.String()
+	}
+
 	// Parse all other flags
 
 	if title < 0 {

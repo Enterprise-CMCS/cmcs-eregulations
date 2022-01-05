@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
@@ -18,6 +19,9 @@ import (
 
 // BaseURL is the URL of the eRegs service that will accept the post requests
 var BaseURL string
+
+// SuppContentURL is the URL of the eRegs service that will accept the post request
+var SuppContentURL string
 
 var client = &http.Client{
 	Transport: &http.Transport{},
@@ -53,28 +57,27 @@ type ExistingPart struct {
 	PartName []string `json:"partName"`
 }
 
-// PostPart is the function that sends a part to the eRegs server
-func PostPart(ctx context.Context, p *Part) error {
+func post(ctx context.Context, path *url.URL, data interface{}) error {
 	start := time.Now()
-
 	buff := bytes.NewBuffer([]byte{})
 	enc := json.NewEncoder(buff)
 	enc.SetEscapeHTML(false)
 
-	log.Trace("[eregs] Encoding part ", p.Name, " version ", p.Date, " to JSON")
-	if err := enc.Encode(p); err != nil {
+	log.Trace("[eregs] Encoding data to JSON")
+	if err := enc.Encode(data); err != nil {
 		return err
 	}
 
 	length := buff.Len()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, BaseURL, buff)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, path.String(), buff)
 	if err != nil {
 		return err
 	}
+
 	req.Header.Set("Content-Type", "application/json")
 	req.SetBasicAuth(username, password)
-	log.Trace("[eregs] Posting part ", p.Name, " version ", p.Date, " to ", BaseURL)
+	log.Trace("[eregs] Posting to ", path.String())
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
@@ -85,13 +88,31 @@ func PostPart(ctx context.Context, p *Part) error {
 		eregsError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(eregsError)
 		if err != nil {
-			return fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
+			return fmt.Errorf("Received error code %d while posting to %s, unable to extract error message: %+v", resp.StatusCode, path.String(), err)
 		}
-		return fmt.Errorf("Received error code %d while posting: %s", resp.StatusCode, eregsError.Exception)
+		return fmt.Errorf("Received error code %d while posting to %s: %s", resp.StatusCode, path.String(), eregsError.Exception)
 	}
 
-	log.Trace("[eregs] Posted ", length, " bytes for part ", p.Name, " version ", p.Date, " in ", time.Since(start))
+	log.Trace("[eregs] Posted ", length, " bytes to ", path.String(), " in ", time.Since(start))
 	return nil
+}
+
+// PostPart is the function that sends a part to the eRegs server
+func PostPart(ctx context.Context, p *Part) error {
+	path, err := url.Parse(BaseURL)
+	if err != nil {
+		return err
+	}
+	return post(ctx, path, p)
+}
+
+// PostSupplementalPart is the function that sends a supplemental part to eRegs server
+func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
+	path, err := url.Parse(SuppContentURL)
+	if err != nil {
+		return err
+	}
+	return post(ctx, path, p)
 }
 
 // GetExistingParts gets existing parts already imported
@@ -115,9 +136,9 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 		eregsError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(eregsError)
 		if err != nil {
-			return nil, fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
+			return nil, fmt.Errorf("Received error code %d while checking, unable to extract error message: %+v", resp.StatusCode, err)
 		}
-		return nil, fmt.Errorf("Received error code %d while posting: %s", resp.StatusCode, eregsError.Exception)
+		return nil, fmt.Errorf("Received error code %d while checking: %s", resp.StatusCode, eregsError.Exception)
 	}
 
 	// Read the body

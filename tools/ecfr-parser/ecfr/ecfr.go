@@ -58,7 +58,7 @@ func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, e
 
 	req, err := http.NewRequestWithContext(c, http.MethodGet, u.String(), nil)
 	if err != nil {
-		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
+		return nil, fmt.Errorf("Failed to create new request: %+v", err)
 	}
 
 	req.Header.Set("User-Agent", "E-regs for "+os.Getenv("NAME"))
