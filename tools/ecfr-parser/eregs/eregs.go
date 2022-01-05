@@ -55,7 +55,6 @@ type ExistingPart struct {
 
 // PostPart is the function that sends a part to the eRegs server
 func PostPart(ctx context.Context, p *Part) error {
-	log.Trace("[eregs] Beginning post of part ", p.Name, " version ", p.Date, " to ", BaseURL)
 	start := time.Now()
 
 	buff := bytes.NewBuffer([]byte{})
@@ -75,7 +74,7 @@ func PostPart(ctx context.Context, p *Part) error {
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.SetBasicAuth(username, password)
-	log.Trace("[eregs] Posting part ", p.Name)
+	log.Trace("[eregs] Posting part ", p.Name, " version ", p.Date, " to ", BaseURL)
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
@@ -86,7 +85,7 @@ func PostPart(ctx context.Context, p *Part) error {
 		eregsError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(eregsError)
 		if err != nil {
-			fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
+			return fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
 		}
 		return fmt.Errorf("Received error code %d while posting: %s", resp.StatusCode, eregsError.Exception)
 	}
@@ -98,31 +97,33 @@ func PostPart(ctx context.Context, p *Part) error {
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
 	checkURL := fmt.Sprintf(partURL, BaseURL, title)
-	log.Trace("[eregs] Beginning checking of existing parts at ", checkURL)
+	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL)
 	start := time.Now()
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkURL, nil)
 	if err != nil {
-		log.Trace(err)
 		return nil, err
 	}
 
-	log.Trace("[eregs] Checking title ", title)
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Trace(err)
 		return nil, err
 	}
 	defer resp.Body.Close()
+
 	if resp.StatusCode >= 400 {
-		log.Trace(fmt.Errorf("Received error code %d while checking", resp.StatusCode))
-		return nil, err
+		eregsError := &Error{}
+		err = json.NewDecoder(resp.Body).Decode(eregsError)
+		if err != nil {
+			return nil, fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
+		}
+		return nil, fmt.Errorf("Received error code %d while posting: %s", resp.StatusCode, eregsError.Exception)
 	}
 
 	// Read the body
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("from `io.ReadAll`: %+v", err)
+		return nil, fmt.Errorf("Unable to read response body while checking existing versions: %+v", err)
 	}
 
 	// Cast the body to an array of existing parts
@@ -130,7 +131,7 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 	var vs []ExistingPart
 	d := json.NewDecoder(body)
 	if err := d.Decode(&vs); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Unable to decode response body while checking existing versions: %+v", err)
 	}
 
 	// reduce the results to the desired format
