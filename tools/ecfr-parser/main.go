@@ -8,11 +8,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 	"sync"
 	"time"
-	"net/url"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -26,6 +24,7 @@ import (
 // TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
 
+// Local arguments set via command-line or environment variable
 var (
 	attempts        int
 	title           int
@@ -67,6 +66,7 @@ func (pa *PartsArg) Set(s string) error {
 }
 
 func init() {
+	// Parse command-line flags
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "eCFR Parser for eRegs\n\n")
 		flag.PrintDefaults()
@@ -74,7 +74,6 @@ func init() {
 			"Variables are the same as command line arguments but upper-case with underscores, e.g. 'EREGS_URL' instead of 'eregs-url'.\n\n" +
 			"Be sure to also set PARSER_ON_LAMBDA=true if running in AWS Lambda.\n")
 	}
-
 	flag.IntVar(&title, "title", -1, "The number of the regulation title to be loaded")
 	flag.Var(&subchapter, "subchapter", "A chapter and subchapter separated by a dash, e.g. IV-C")
 	flag.Var(&individualParts, "parts", "A comma-separated list of parts to load, e.g. 457,460")
@@ -87,6 +86,8 @@ func init() {
 	flag.BoolVar(&skipVersions, "skip-existing-versions", true, "Skip versions of parts that already exist in eRegs.")
 	flag.Parse()
 
+	// Retrieve params from environment vars if USE_ENVIRONMENT_VARS is true.
+	// Params are named using uppercase with underscores, e.g. 'log-parse-errors' becomes 'LOG_PARSE_ERRORS'.
 	if os.Getenv("USE_ENVIRONMENT_VARS") == "true" {
 		flag.VisitAll(func(flag *flag.Flag) {
 			var envName = strings.Replace(strings.ToUpper(flag.Name), "-", "_", -1)
@@ -96,15 +97,6 @@ func init() {
 			}
 		})
 	}
-
-	baseURL, err := url.Parse(eregs.BaseURL)
-	if err != nil {
-		log.Fatal("[main] eregs-url value \"", eregs.BaseURL, "\" is not a valid URL.")
-	}
-	q := baseURL.Query()
-	q.Add("json_errors", "true")
-	baseURL.RawQuery = q.Encode()
-	eregs.BaseURL = baseURL.String()
 
 	if title < 0 {
 		log.Fatal("[main] Title flag is required and must be greater than 0.")
@@ -138,13 +130,14 @@ func init() {
 	log.SetLevel(level)
 }
 
+// Only runs if parser is in a Lambda
 func lambdaHandler(ctx context.Context) (string, error) {
 	err := start()
 	return "Operation complete.", err
 }
 
 func main() {
-	log.Trace("[main] eCFR parser starting")
+	log.Info("[main] eCFR parser starting")
 	if os.Getenv("PARSER_ON_LAMBDA") == "true" {
 		lambda.Start(lambdaHandler)
 	} else if err := start(); err != nil {
@@ -154,36 +147,24 @@ func main() {
 
 func start() error {
 	for i := 0; i < attempts; i++ {
-		log.Trace("Curling the ECFR site")
-		out, err := exec.Command("curl", "https://www.ecfr.gov/api/versioner/v1/structure/2021-11-05/title-42.json?chapter=IV&subchapter=C").Output()
-		log.Trace("Finished Curling the ECFR site")
-		if err != nil {
-			log.Trace("cURL failed to fetch eCFR: ", err)
-		}
-		log.Trace(string(out[:100]))
-
-		log.Trace("Curling Google")
-		out, err = exec.Command("curl", "https://www.google.com").Output()
-		log.Trace("Finished Curling Google")
-		if err != nil {
-			log.Trace("cURL failed to fetch Google: ", err)
-		}
-		log.Trace(string(out[:100]))
-
-		if err = attemptParsing(); err == nil {
+		if retry, err := attemptParsing(); err == nil {
 			break
-		} else if i == attempts-1 {
+		} else if !retry {
+			log.Error("[main] Failed to load regulations. Will not retry.")
+			return err
+		} else if i >= attempts-1 {
 			log.Error("[main] Failed to load regulations ", attempts, " times.")
 			return err
 		} else {
 			log.Error("[main] Failed to load regulations. Retrying ", attempts-i-1, " more times. Error: ", err)
+			time.Sleep(3 * time.Second)
 		}
 	}
 
 	return nil
 }
 
-func attemptParsing() error {
+func attemptParsing() (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
@@ -193,7 +174,7 @@ func attemptParsing() error {
 	}()
 	today := time.Now()
 
-	log.Info("[main] Fetching Existing Versions list...")
+	log.Info("[main] Fetching list of existing versions...")
 	existingVersions, err := eregs.GetExistingParts(ctx, title)
 
 	log.Info("[main] Fetching parts list...")
@@ -203,7 +184,7 @@ func attemptParsing() error {
 		var err error
 		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
-			return err
+			return true, err
 		}
 	}
 	parts = append(parts, individualParts...)
@@ -215,20 +196,21 @@ func attemptParsing() error {
 	log.Debug("[main] Extracting versions...")
 	versions, err := ecfr.ExtractVersions(ctx, title)
 	if err != nil {
-		log.Trace("[main] extract Version failed")
-		return err
+		return true, err
 	}
 
+	// Create initial queue of versions to process
 	queue := list.New()
-	skippedParts := 0
+	skippedVersions := 0
 	for _, part := range parts {
 		for date := range versions[part] {
 			// If we have this part already, skip it
 			if skipVersions && contains(existingVersions[date], part) {
-				log.Trace("Skipping part ", part, " for ", date)
-				skippedParts++
+				log.Trace("[main] Skipping part ", part, " version ", date)
+				skippedVersions++
 				continue
 			}
+
 			reg := &eregs.Part{
 				Title:     title,
 				Name:      part,
@@ -242,12 +224,17 @@ func attemptParsing() error {
 		}
 	}
 
-	if skippedParts > 0 {
-		log.Info("[main] Skipped ", skippedParts, " parts because they were already imported")
+	if skippedVersions > 0 {
+		log.Info("[main] Skipped ", skippedVersions, " versions because they were parsed previously")
 	}
 
+	// Begin processing loop
+	// Spawns `workers` threads that parse versions in the queue
+	// If parsing fails, version kept in queue for next run (if any remain)
+
 	for i := 0; i < attempts; i++ {
-		log.Info("[main] Fetching and processing ", queue.Len(), " parts using ", workers, " workers...")
+		log.Info("[main] Fetching and processing ", queue.Len(), " versions using ", workers, " workers...")
+
 		ch := make(chan *eregs.Part)
 		var wg sync.WaitGroup
 		for worker := 1; worker < workers+1; worker++ {
@@ -255,29 +242,29 @@ func attemptParsing() error {
 			go startHandlePartWorker(ctx, worker, ch, &wg, today)
 		}
 
-		for reg := queue.Front(); reg != nil; reg = reg.Next() {
-			ch <- reg.Value.(*eregs.Part)
+		for version := queue.Front(); version != nil; version = version.Next() {
+			ch <- version.Value.(*eregs.Part)
 		}
 
-		log.Debug("[main] Waiting until all parts are finished processing")
+		log.Debug("[main] Waiting until all versions are finished processing")
 		close(ch)
 		wg.Wait()
 
-		log.Trace("[main] Removing successfully processed parts from the queue")
+		log.Trace("[main] Removing successfully processed versions from the queue")
 		originalLength := queue.Len()
 		var next *list.Element
-		for reg := queue.Front(); reg != nil; reg = next {
-			next = reg.Next()
-			if reg.Value.(*eregs.Part).Processed {
-				queue.Remove(reg)
+		for version := queue.Front(); version != nil; version = next {
+			next = version.Next()
+			if version.Value.(*eregs.Part).Processed {
+				queue.Remove(version)
 			}
 		}
-		log.Info("[main] Successfully processed ", originalLength-queue.Len(), "/", originalLength, " parts")
+		log.Info("[main] Successfully processed ", originalLength-queue.Len(), "/", originalLength, " versions")
 
 		if queue.Len() == 0 {
 			break
-		} else if i == attempts-1 {
-			log.Fatal("[main] Some parts still failed to process after ", attempts, " attempts.")
+		} else if i >= attempts-1 {
+			return false, fmt.Errorf("Some parts still failed to process after %d attempts", attempts)
 		} else {
 			log.Warn("[main] Some parts failed to process. Retrying ", attempts-i-1, " more times.")
 			time.Sleep(3 * time.Second)
@@ -285,7 +272,7 @@ func attemptParsing() error {
 	}
 
 	log.Info("[main] All parts finished processing!")
-	return nil
+	return false, nil
 }
 
 func startHandlePartWorker(ctx context.Context, thread int, ch chan *eregs.Part, wg *sync.WaitGroup, date time.Time) {
@@ -298,17 +285,6 @@ func startHandlePartWorker(ctx context.Context, thread int, ch chan *eregs.Part,
 			log.Error("[worker ", thread, "] Error processing part ", reg.Name, " version ", reg.Date, ": ", err)
 		}
 		time.Sleep(1 * time.Second)
-
-		if len(eregs.SuppContentURL) > 0 {
-			log.Debug("[worker ", thread, "] Processing supplemental part ", reg.Name, " version ", reg.Date)
-			err := handleSupplementalPart(ctx, thread, reg)
-			if err == nil {
-				reg.Processed = true
-			} else {
-				log.Error("[worker ", thread, "] Error processing supplemental part ", reg.Name, " version ", reg.Date, ": ", err)
-			}
-			time.Sleep(1 * time.Second)
-		}
 	}
 
 	wg.Done()
@@ -352,22 +328,20 @@ func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part
 		return err
 	}
 
+	if len(eregs.SuppContentURL) > 0 {
+		log.Debug("[worker ", thread, "] Extracting supplemental content structure for part ", reg.Name, " version ", reg.Date)
+		supplementalPart, err := ecfr.ExtractStructure(*reg.Structure)
+		if err != nil {
+			return err
+		}
+
+		log.Debug("[worker ", thread, "] Posting supplemental content structure for part ", reg.Name, " version ", reg.Date, " to eRegs")
+		if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
+			return err
+		}
+	}
+
 	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
-	return nil
-}
-
-func handleSupplementalPart(ctx context.Context, thread int, reg *eregs.Part) error {
-	log.Debug("[worker ", thread, "] Extracting supplemental content structure ", reg.Name, " version ", reg.Date)
-	supplementalPart, err := ecfr.ExtractStructure(*reg.Structure)
-	if err != nil {
-		return err
-	}
-
-	log.Debug("[worker ", thread, "] Posting supplemental content structure ", reg.Name, " version ", reg.Date, " to eRegs")
-	if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
-		return err
-	}
-
 	return nil
 }
 

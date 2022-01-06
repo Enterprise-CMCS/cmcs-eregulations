@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// Structure is the struct that represents the structure of a regulation part at ECFR
+// Structure is the struct that represents the structure of a regulation part at eCFR
 type Structure struct {
 	Identifier       IdentifierString `json:"identifier"`
 	Label            HTMLString       `json:"label"`
@@ -33,7 +33,7 @@ func (rs *RangeString) UnmarshalText(data []byte) error {
 // HTMLString is just a string used for JSON unmarshalling
 type HTMLString string
 
-// UnmarshalText escapes the response from ECFR correctly to prevent &amp from showing
+// UnmarshalText escapes the response from eCFR correctly to prevent "&amp" from showing
 func (hs *HTMLString) UnmarshalText(data []byte) error {
 	*hs = HTMLString(html.UnescapeString(string(data)))
 	return nil
@@ -67,7 +67,7 @@ func SubchapterParts(s *Structure) ([]*Structure, error) {
 	return s.Children[0].Children[0].Children, nil
 }
 
-// ExtractSubchapterParts extracts the subchapter parts from ECFR and returns then as an array of strings
+// ExtractSubchapterParts extracts the subchapter parts from eCFR and returns then as an array of strings
 func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub *SubchapterOption) ([]string, error) {
 	sbody, err := FetchStructure(ctx, date.Format("2006-01-02"), title, sub)
 	if err != nil {
