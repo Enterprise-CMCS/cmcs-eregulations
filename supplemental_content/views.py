@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, serializers
 from django.conf import settings
 
 from rest_framework.response import Response
@@ -94,3 +94,16 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
                             defaults={'parent': new_subpart}
                         )
         return Response({'error': False, 'content': request.data})
+
+class PartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields = [ 'title', 'part']
+
+class PartsListView(generics.ListAPIView):
+    serializer_class = PartSerializer
+
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        query = Section.objects.filter(title=title).order_by('part').distinct('part')
+        return query

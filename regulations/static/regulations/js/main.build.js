@@ -71,7 +71,7 @@
       },
   };
 
-  function normalizeComponent$5(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$6(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -208,7 +208,7 @@
     
 
     
-    const __vue_component__$6$1 = /*#__PURE__*/normalizeComponent$5(
+    const __vue_component__$6$1 = /*#__PURE__*/normalizeComponent$6(
       { render: __vue_render__$6$1, staticRenderFns: __vue_staticRenderFns__$6$1 },
       __vue_inject_styles__$6$1,
       __vue_script__$6$1,
@@ -378,7 +378,7 @@
     
 
     
-    const __vue_component__$5$1 = /*#__PURE__*/normalizeComponent$5(
+    const __vue_component__$5$1 = /*#__PURE__*/normalizeComponent$6(
       { render: __vue_render__$5$1, staticRenderFns: __vue_staticRenderFns__$5$1 },
       __vue_inject_styles__$5$1,
       __vue_script__$5$1,
@@ -489,7 +489,7 @@
     
 
     
-    const __vue_component__$4$1 = /*#__PURE__*/normalizeComponent$5(
+    const __vue_component__$4$1 = /*#__PURE__*/normalizeComponent$6(
       { render: __vue_render__$4$1, staticRenderFns: __vue_staticRenderFns__$4$1 },
       __vue_inject_styles__$4$1,
       __vue_script__$4$1,
@@ -646,7 +646,7 @@
     
 
     
-    const __vue_component__$3$1 = /*#__PURE__*/normalizeComponent$5(
+    const __vue_component__$3$1 = /*#__PURE__*/normalizeComponent$6(
       { render: __vue_render__$3$1, staticRenderFns: __vue_staticRenderFns__$3$1 },
       __vue_inject_styles__$3$1,
       __vue_script__$3$1,
@@ -712,7 +712,7 @@
     
 
     
-    const __vue_component__$2$2 = /*#__PURE__*/normalizeComponent$5(
+    const __vue_component__$2$2 = /*#__PURE__*/normalizeComponent$6(
       { render: __vue_render__$2$2, staticRenderFns: __vue_staticRenderFns__$2$2 },
       __vue_inject_styles__$2$2,
       __vue_script__$2$2,
@@ -727,7 +727,7 @@
 
   //
 
-  var script$1$2 = {
+  var script$1$3 = {
       name: "related-rule-list",
 
       components: {
@@ -782,10 +782,10 @@
   };
 
   /* script */
-  const __vue_script__$1$2 = script$1$2;
+  const __vue_script__$1$3 = script$1$3;
 
   /* template */
-  var __vue_render__$1$2 = function() {
+  var __vue_render__$1$3 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -930,17 +930,17 @@
           )
         ])
   };
-  var __vue_staticRenderFns__$1$2 = [];
-  __vue_render__$1$2._withStripped = true;
+  var __vue_staticRenderFns__$1$3 = [];
+  __vue_render__$1$3._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$1$2 = undefined;
+    const __vue_inject_styles__$1$3 = undefined;
     /* scoped */
-    const __vue_scope_id__$1$2 = undefined;
+    const __vue_scope_id__$1$3 = undefined;
     /* module identifier */
-    const __vue_module_identifier__$1$2 = undefined;
+    const __vue_module_identifier__$1$3 = undefined;
     /* functional template */
-    const __vue_is_functional_template__$1$2 = false;
+    const __vue_is_functional_template__$1$3 = false;
     /* style inject */
     
     /* style inject SSR */
@@ -949,13 +949,13 @@
     
 
     
-    const __vue_component__$1$2 = /*#__PURE__*/normalizeComponent$5(
-      { render: __vue_render__$1$2, staticRenderFns: __vue_staticRenderFns__$1$2 },
-      __vue_inject_styles__$1$2,
-      __vue_script__$1$2,
-      __vue_scope_id__$1$2,
-      __vue_is_functional_template__$1$2,
-      __vue_module_identifier__$1$2,
+    const __vue_component__$1$3 = /*#__PURE__*/normalizeComponent$6(
+      { render: __vue_render__$1$3, staticRenderFns: __vue_staticRenderFns__$1$3 },
+      __vue_inject_styles__$1$3,
+      __vue_script__$1$3,
+      __vue_scope_id__$1$3,
+      __vue_is_functional_template__$1$3,
+      __vue_module_identifier__$1$3,
       false,
       undefined,
       undefined,
@@ -968,7 +968,7 @@
       components: {
           CollapseButton: __vue_component__$6$1,
           Collapsible: __vue_component__$5$1,
-          RelatedRuleList: __vue_component__$1$2,
+          RelatedRuleList: __vue_component__$1$3,
           SimpleSpinner: __vue_component__$4$1,
       },
 
@@ -1187,7 +1187,7 @@
     
 
     
-    const __vue_component__$b = /*#__PURE__*/normalizeComponent$5(
+    const __vue_component__$b = /*#__PURE__*/normalizeComponent$6(
       { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
       __vue_inject_styles__$b,
       __vue_script__$b,
@@ -1318,7 +1318,7 @@
       },
   };
 
-  function normalizeComponent$4(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$5(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -1432,7 +1432,7 @@
     
 
     
-    const __vue_component__$a = /*#__PURE__*/normalizeComponent$4(
+    const __vue_component__$a = /*#__PURE__*/normalizeComponent$5(
       { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
       __vue_inject_styles__$a,
       __vue_script__$a,
@@ -1508,7 +1508,7 @@
       },
   };
 
-  function normalizeComponent$3(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$4(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -1645,7 +1645,7 @@
     
 
     
-    const __vue_component__$9 = /*#__PURE__*/normalizeComponent$3(
+    const __vue_component__$9 = /*#__PURE__*/normalizeComponent$4(
       { render: __vue_render__$9, staticRenderFns: __vue_staticRenderFns__$9 },
       __vue_inject_styles__$9,
       __vue_script__$9,
@@ -1705,7 +1705,7 @@
       },
   };
 
-  function normalizeComponent$2(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$3(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -1831,7 +1831,7 @@
     
 
     
-    const __vue_component__$7 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$7 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
       __vue_inject_styles__$7,
       __vue_script__$7,
@@ -1978,7 +1978,7 @@
     
 
     
-    const __vue_component__$6 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$6 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
       __vue_inject_styles__$6,
       __vue_script__$6,
@@ -2044,7 +2044,7 @@
     
 
     
-    const __vue_component__$5 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$5 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
       __vue_inject_styles__$5,
       __vue_script__$5,
@@ -2182,7 +2182,7 @@
     
 
     
-    const __vue_component__$4 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$4 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
       __vue_inject_styles__$4,
       __vue_script__$4,
@@ -2352,7 +2352,7 @@
     
 
     
-    const __vue_component__$3 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$3 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
       __vue_inject_styles__$3,
       __vue_script__$3,
@@ -2573,7 +2573,7 @@
     
 
     
-    const __vue_component__$2$1 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$2$1 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$2$1, staticRenderFns: __vue_staticRenderFns__$2$1 },
       __vue_inject_styles__$2$1,
       __vue_script__$2$1,
@@ -2588,7 +2588,7 @@
 
   //
 
-  var script$1$1 = {
+  var script$1$2 = {
       name: "supplemental-content-category",
 
       components: {
@@ -2632,10 +2632,10 @@
   };
 
   /* script */
-  const __vue_script__$1$1 = script$1$1;
+  const __vue_script__$1$2 = script$1$2;
 
   /* template */
-  var __vue_render__$1$1 = function() {
+  var __vue_render__$1$2 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -2712,17 +2712,17 @@
       )
     ])
   };
-  var __vue_staticRenderFns__$1$1 = [];
-  __vue_render__$1$1._withStripped = true;
+  var __vue_staticRenderFns__$1$2 = [];
+  __vue_render__$1$2._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$1$1 = undefined;
+    const __vue_inject_styles__$1$2 = undefined;
     /* scoped */
-    const __vue_scope_id__$1$1 = undefined;
+    const __vue_scope_id__$1$2 = undefined;
     /* module identifier */
-    const __vue_module_identifier__$1$1 = undefined;
+    const __vue_module_identifier__$1$2 = undefined;
     /* functional template */
-    const __vue_is_functional_template__$1$1 = false;
+    const __vue_is_functional_template__$1$2 = false;
     /* style inject */
     
     /* style inject SSR */
@@ -2731,13 +2731,13 @@
     
 
     
-    const __vue_component__$1$1 = /*#__PURE__*/normalizeComponent$2(
-      { render: __vue_render__$1$1, staticRenderFns: __vue_staticRenderFns__$1$1 },
-      __vue_inject_styles__$1$1,
-      __vue_script__$1$1,
-      __vue_scope_id__$1$1,
-      __vue_is_functional_template__$1$1,
-      __vue_module_identifier__$1$1,
+    const __vue_component__$1$2 = /*#__PURE__*/normalizeComponent$3(
+      { render: __vue_render__$1$2, staticRenderFns: __vue_staticRenderFns__$1$2 },
+      __vue_inject_styles__$1$2,
+      __vue_script__$1$2,
+      __vue_scope_id__$1$2,
+      __vue_is_functional_template__$1$2,
+      __vue_module_identifier__$1$2,
       false,
       undefined,
       undefined,
@@ -2748,7 +2748,7 @@
 
   var script$8 = {
       components: {
-          SupplementalContentCategory: __vue_component__$1$1,
+          SupplementalContentCategory: __vue_component__$1$2,
           SimpleSpinner: __vue_component__$7,
       },
 
@@ -2872,7 +2872,7 @@
     
 
     
-    const __vue_component__$8 = /*#__PURE__*/normalizeComponent$2(
+    const __vue_component__$8 = /*#__PURE__*/normalizeComponent$3(
       { render: __vue_render__$8, staticRenderFns: __vue_staticRenderFns__$8 },
       __vue_inject_styles__$8,
       __vue_script__$8,
@@ -2924,7 +2924,7 @@
   //
   //
 
-  var script$1 = {
+  var script$1$1 = {
       name: "action-button",
 
       props: {
@@ -2976,7 +2976,7 @@
       filters: {},
   };
 
-  function normalizeComponent$1(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  function normalizeComponent$2(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
       if (typeof shadowMode !== 'boolean') {
           createInjectorSSR = createInjector;
           createInjector = shadowMode;
@@ -3052,10 +3052,10 @@
   }
 
   /* script */
-  const __vue_script__$1 = script$1;
+  const __vue_script__$1$1 = script$1$1;
 
   /* template */
-  var __vue_render__$1 = function() {
+  var __vue_render__$1$1 = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -3111,17 +3111,17 @@
       ]
     )
   };
-  var __vue_staticRenderFns__$1 = [];
-  __vue_render__$1._withStripped = true;
+  var __vue_staticRenderFns__$1$1 = [];
+  __vue_render__$1$1._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$1 = undefined;
+    const __vue_inject_styles__$1$1 = undefined;
     /* scoped */
-    const __vue_scope_id__$1 = undefined;
+    const __vue_scope_id__$1$1 = undefined;
     /* module identifier */
-    const __vue_module_identifier__$1 = undefined;
+    const __vue_module_identifier__$1$1 = undefined;
     /* functional template */
-    const __vue_is_functional_template__$1 = false;
+    const __vue_is_functional_template__$1$1 = false;
     /* style inject */
     
     /* style inject SSR */
@@ -3130,13 +3130,13 @@
     
 
     
-    const __vue_component__$1 = /*#__PURE__*/normalizeComponent$1(
-      { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
-      __vue_inject_styles__$1,
-      __vue_script__$1,
-      __vue_scope_id__$1,
-      __vue_is_functional_template__$1,
-      __vue_module_identifier__$1,
+    const __vue_component__$1$1 = /*#__PURE__*/normalizeComponent$2(
+      { render: __vue_render__$1$1, staticRenderFns: __vue_staticRenderFns__$1$1 },
+      __vue_inject_styles__$1$1,
+      __vue_script__$1$1,
+      __vue_scope_id__$1$1,
+      __vue_is_functional_template__$1$1,
+      __vue_module_identifier__$1$1,
       false,
       undefined,
       undefined,
@@ -3167,7 +3167,7 @@
       name: "copy-btn",
 
       components: {
-          ActionBtn: __vue_component__$1,
+          ActionBtn: __vue_component__$1$1,
       },
 
       props: {
@@ -3485,7 +3485,7 @@
     
 
     
-    const __vue_component__$2 = /*#__PURE__*/normalizeComponent$1(
+    const __vue_component__$2 = /*#__PURE__*/normalizeComponent$2(
       { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
       __vue_inject_styles__$2,
       __vue_script__$2,
@@ -3504,7 +3504,7 @@
   //
   //
 
-  var script = {
+  var script$1 = {
       name: "table-component",
 
       props: {
@@ -3521,6 +3521,168 @@
           }
 
       },
+  };
+
+  function normalizeComponent$1(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+      if (typeof shadowMode !== 'boolean') {
+          createInjectorSSR = createInjector;
+          createInjector = shadowMode;
+          shadowMode = false;
+      }
+      // Vue.extend constructor export interop.
+      const options = typeof script === 'function' ? script.options : script;
+      // render functions
+      if (template && template.render) {
+          options.render = template.render;
+          options.staticRenderFns = template.staticRenderFns;
+          options._compiled = true;
+          // functional template
+          if (isFunctionalTemplate) {
+              options.functional = true;
+          }
+      }
+      // scopedId
+      if (scopeId) {
+          options._scopeId = scopeId;
+      }
+      let hook;
+      if (moduleIdentifier) {
+          // server build
+          hook = function (context) {
+              // 2.3 injection
+              context =
+                  context || // cached call
+                      (this.$vnode && this.$vnode.ssrContext) || // stateful
+                      (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
+              // 2.2 with runInNewContext: true
+              if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+                  context = __VUE_SSR_CONTEXT__;
+              }
+              // inject component styles
+              if (style) {
+                  style.call(this, createInjectorSSR(context));
+              }
+              // register component module identifier for async chunk inference
+              if (context && context._registeredComponents) {
+                  context._registeredComponents.add(moduleIdentifier);
+              }
+          };
+          // used by ssr in case component is cached and beforeCreate
+          // never gets called
+          options._ssrRegister = hook;
+      }
+      else if (style) {
+          hook = shadowMode
+              ? function (context) {
+                  style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
+              }
+              : function (context) {
+                  style.call(this, createInjector(context));
+              };
+      }
+      if (hook) {
+          if (options.functional) {
+              // register for functional component in vue file
+              const originalRender = options.render;
+              options.render = function renderWithStyleInjection(h, context) {
+                  hook.call(context);
+                  return originalRender(h, context);
+              };
+          }
+          else {
+              // inject component registration as beforeCreate hook
+              const existing = options.beforeCreate;
+              options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+          }
+      }
+      return script;
+  }
+
+  /* script */
+  const __vue_script__$1 = script$1;
+
+  /* template */
+  var __vue_render__$1 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("section", {
+      staticClass: "table-section",
+      domProps: { innerHTML: _vm._s(_vm.table) }
+    })
+  };
+  var __vue_staticRenderFns__$1 = [];
+  __vue_render__$1._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$1 = undefined;
+    /* scoped */
+    const __vue_scope_id__$1 = undefined;
+    /* module identifier */
+    const __vue_module_identifier__$1 = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$1 = false;
+    /* style inject */
+    
+    /* style inject SSR */
+    
+    /* style inject shadow dom */
+    
+
+    
+    const __vue_component__$1 = /*#__PURE__*/normalizeComponent$1(
+      { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
+      __vue_inject_styles__$1,
+      __vue_script__$1,
+      __vue_scope_id__$1,
+      __vue_is_functional_template__$1,
+      __vue_module_identifier__$1,
+      false,
+      undefined,
+      undefined,
+      undefined
+    );
+
+  //
+  var script = {
+    props: {
+      api_url: {
+          type: String,
+          required: true,
+      },
+      title: {
+          type: String,
+          required: true,
+      },
+    },
+    data: function(){
+      return {
+        part: '',
+        partOptions: [{part:"Loading"}],
+        subPart: '',
+        section:'',
+        category:'',
+      }
+    },
+    created: function(){
+      this.getParts(this.title);
+    },
+    methods:{
+      async getParts(title){
+        console.log(title);
+        try {
+          const response = await fetch(
+              `${this.api_url}title/${title}/parts`
+          );
+          const content = await response.json();
+          console.log(content);
+          this.partOptions = content;
+        } catch (error) {
+            console.error(error);
+        }
+      },
+
+    }
   };
 
   function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -3606,10 +3768,186 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("section", {
-      staticClass: "table-section",
-      domProps: { innerHTML: _vm._s(_vm.table) }
-    })
+    return _c("div", [
+      _c("div", [
+        _c("h2", [_vm._v("Filter Resources")]),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "part" } }, [_vm._v("Part")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.part,
+                expression: "part"
+              }
+            ],
+            attrs: { id: "part" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value;
+                    return val
+                  });
+                _vm.part = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0];
+              }
+            }
+          },
+          _vm._l(_vm.partOptions, function(partOption) {
+            return _c("option", [_vm._v(_vm._s(partOption.part))])
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "subPart" } }, [_vm._v("SubPart")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.subPart,
+                expression: "subPart"
+              }
+            ],
+            attrs: { id: "subPart" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value;
+                    return val
+                  });
+                _vm.subPart = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0];
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [_vm._v("Select SubPart")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "A" } }, [_vm._v("A")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "B" } }, [_vm._v("B")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "C" } }, [_vm._v("C")])
+          ]
+        ),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "section" } }, [_vm._v("Section")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.section,
+                expression: "section"
+              }
+            ],
+            attrs: { id: "section" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value;
+                    return val
+                  });
+                _vm.section = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0];
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [_vm._v("Select Section")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "A" } }, [_vm._v("A")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "B" } }, [_vm._v("B")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "C" } }, [_vm._v("C")])
+          ]
+        ),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "resourceCategory" } }, [
+          _vm._v("Resource Category")
+        ]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.category,
+                expression: "category"
+              }
+            ],
+            attrs: { id: "resourceCategory" },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value;
+                    return val
+                  });
+                _vm.category = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0];
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [
+              _vm._v("Select Resource Category")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "A" } }, [_vm._v("A")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "B" } }, [_vm._v("B")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "C" } }, [_vm._v("C")])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c("ul", [
+          _c("li", [_vm._v("Selected Part: " + _vm._s(_vm.part))]),
+          _vm._v(" "),
+          _c("li", [_vm._v("Selected SubPart: " + _vm._s(_vm.subPart))]),
+          _vm._v(" "),
+          _c("li", [_vm._v("Selected Section?: " + _vm._s(_vm.section))]),
+          _vm._v(" "),
+          _c("li", [_vm._v("Selected Category?: " + _vm._s(_vm.category))])
+        ])
+      ])
+    ])
   };
   var __vue_staticRenderFns__ = [];
   __vue_render__._withStripped = true;
@@ -3844,7 +4182,8 @@
               CollapseButton: __vue_component__$9,
               SupplementalContent: __vue_component__$8,
               CopyBtn: __vue_component__$2,
-              TableComponent: __vue_component__,
+              TableComponent: __vue_component__$1,
+              ResourceContent: __vue_component__,
           },
       }).$mount("#vue-app");
 

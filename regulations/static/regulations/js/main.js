@@ -6,6 +6,7 @@ import CollapseButton from "./CollapseButton";
 import SupplementalContent from "./SupplementalContent";
 import CopyBtn from "./CopyBtn";
 import TableComponent from "./TableComponent";
+import ResourceContent from "./ResourceContent";
 
 import { goToVersion } from "./go-to-version";
 
@@ -147,6 +148,7 @@ function main() {
             SupplementalContent,
             CopyBtn,
             TableComponent,
+            ResourceContent,
         },
     }).$mount("#vue-app");
 

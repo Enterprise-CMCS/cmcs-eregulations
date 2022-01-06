@@ -65,6 +65,14 @@ export default [
         plugins,
     },
     {
+        input: "components/ResourceContent.vue",
+        output: {
+            format: "esm",
+            file: "regulations/js/ResourceContent.js",
+        },
+        plugins,
+    },
+    {
         input: "regulations/js/main.js",
         output: {
             file: "regulations/js/main.build.js",

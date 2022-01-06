@@ -21,6 +21,7 @@ from django.views.generic.base import RedirectView, TemplateView
 urlpatterns = [
     path("", include('regcore.urls')),
     path("", include('regulations.urls')),
+    path("api/", include('supplemental_content.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
     path('admin/', admin.site.urls),
     path('report_builder/', include('report_builder.urls')),

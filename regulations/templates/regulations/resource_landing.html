@@ -19,12 +19,11 @@
                     <p>Resources are curated and stuff</p>
                     <input type="search" name="q" placeholder="Search Regulations">
                 </div>
+                 <resource-content
+                 title="{{title}}"
+                 api_url="{% url 'regcore' %}"
+                 ></resource-content>
     	    </main>
-                <supplemental-content
-                    api_url="{% url 'regcore' %}"
-                    title="{{ title }}"
-                    part="{{ reg_part }}"
-                ></supplemental-content>
         </div>
     </div>
 {% endblock %}
