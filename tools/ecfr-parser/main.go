@@ -310,7 +310,7 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 		}
 	}
 
-	log.Trace("[worker ", thread, "] Worker successfully processed ", processedVersions, "/", processingAttempts, " versions of ", processedParts, " parts.")
+	log.Debug("[worker ", thread, "] Worker successfully processed ", processedVersions, "/", processingAttempts, " versions of ", processedParts, " parts.")
 	wg.Done()
 }
 
