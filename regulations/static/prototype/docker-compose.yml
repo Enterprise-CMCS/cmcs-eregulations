@@ -1,0 +1,14 @@
+version: '4.5.15'
+
+services:
+
+  prototype:
+    container_name: prototype
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '8081:8080'
