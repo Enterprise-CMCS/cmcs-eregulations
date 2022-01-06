@@ -199,10 +199,13 @@ func attemptParsing() (bool, error) {
 		return true, err
 	}
 
-	// Create initial queue of versions to process
-	queue := list.New()
+	// Create initial list of versions to process
+	partList := list.New()
 	skippedVersions := 0
+	originalLength := 0
 	for _, part := range parts {
+		versionList := list.New()
+
 		for date := range versions[part] {
 			// If we have this part already, skip it
 			if skipVersions && contains(existingVersions[date], part) {
@@ -211,7 +214,7 @@ func attemptParsing() (bool, error) {
 				continue
 			}
 
-			reg := &eregs.Part{
+			version := &eregs.Part{
 				Title:     title,
 				Name:      part,
 				Date:      date,
@@ -220,8 +223,11 @@ func attemptParsing() (bool, error) {
 				Processed: false,
 			}
 
-			queue.PushBack(reg)
+			versionList.PushBack(version)
+			originalLength++
 		}
+
+		partList.PushBack(versionList)
 	}
 
 	if skippedVersions > 0 {
@@ -233,17 +239,17 @@ func attemptParsing() (bool, error) {
 	// If parsing fails, version kept in queue for next run (if any remain)
 
 	for i := 0; i < attempts; i++ {
-		log.Info("[main] Fetching and processing ", queue.Len(), " versions using ", workers, " workers...")
+		log.Info("[main] Fetching and processing ", originalLength, " versions using ", workers, " workers...")
 
-		ch := make(chan *eregs.Part)
+		ch := make(chan *list.List)
 		var wg sync.WaitGroup
 		for worker := 1; worker < workers+1; worker++ {
 			wg.Add(1)
-			go startHandlePartWorker(ctx, worker, ch, &wg, today)
+			go startHandlePartVersionWorker(ctx, worker, ch, &wg, today)
 		}
 
-		for version := queue.Front(); version != nil; version = version.Next() {
-			ch <- version.Value.(*eregs.Part)
+		for versionList := partList.Front(); versionList != nil; versionList = versionList.Next() {
+			ch <- versionList.Value.(*list.List)
 		}
 
 		log.Debug("[main] Waiting until all versions are finished processing")
@@ -251,17 +257,24 @@ func attemptParsing() (bool, error) {
 		wg.Wait()
 
 		log.Trace("[main] Removing successfully processed versions from the queue")
-		originalLength := queue.Len()
-		var next *list.Element
-		for version := queue.Front(); version != nil; version = next {
-			next = version.Next()
-			if version.Value.(*eregs.Part).Processed {
-				queue.Remove(version)
+		currentLength := 0
+		for versionListElement := partList.Front(); versionListElement != nil; versionListElement = versionListElement.Next() {
+			versionList := versionListElement.Value.(*list.List)
+			var next *list.Element
+			for version := versionList.Front(); version != nil; version = next {
+				next = version.Next()
+				if version.Value.(*eregs.Part).Processed {
+					versionList.Remove(version)
+				} else {
+					currentLength++
+				}
 			}
 		}
-		log.Info("[main] Successfully processed ", originalLength-queue.Len(), "/", originalLength, " versions")
 
-		if queue.Len() == 0 {
+		log.Info("[main] Successfully processed ", originalLength-currentLength, "/", originalLength, " versions")
+		originalLength = currentLength
+
+		if currentLength == 0 {
 			break
 		} else if i >= attempts-1 {
 			return false, fmt.Errorf("Some parts still failed to process after %d attempts", attempts)
@@ -275,73 +288,76 @@ func attemptParsing() (bool, error) {
 	return false, nil
 }
 
-func startHandlePartWorker(ctx context.Context, thread int, ch chan *eregs.Part, wg *sync.WaitGroup, date time.Time) {
-	for reg := range ch {
-		log.Debug("[worker ", thread, "] Processing part ", reg.Name, " version ", reg.Date)
-		err := handlePart(ctx, thread, date, reg)
-		if err == nil {
-			reg.Processed = true
-		} else {
-			log.Error("[worker ", thread, "] Error processing part ", reg.Name, " version ", reg.Date, ": ", err)
+func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup, date time.Time) {
+	for versionList := range ch {
+		for versionElement := versionList.Front(); versionElement != nil; versionElement = versionElement.Next() {
+			version := versionElement.Value.(*eregs.Part)
+			log.Debug("[worker ", thread, "] Processing part ", version.Name, " version ", version.Date)
+			err := handlePartVersion(ctx, thread, date, version)
+			if err == nil {
+				version.Processed = true
+			} else {
+				log.Error("[worker ", thread, "] Error processing part ", version.Name, " version ", version.Date, ": ", err)
+			}
+			time.Sleep(1 * time.Second)
 		}
-		time.Sleep(1 * time.Second)
 	}
 
 	wg.Done()
 }
 
-func handlePart(ctx context.Context, thread int, date time.Time, reg *eregs.Part) error {
+func handlePartVersion(ctx context.Context, thread int, date time.Time, version *eregs.Part) error {
 	start := time.Now()
 
-	log.Debug("[worker ", thread, "] Fetching structure for part ", reg.Name, " version ", reg.Date)
-	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), reg.Title, &ecfr.PartOption{reg.Name})
+	log.Debug("[worker ", thread, "] Fetching structure for part ", version.Name, " version ", version.Date)
+	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), version.Title, &ecfr.PartOption{version.Name})
 
 	if err != nil {
 		return err
 	}
 
-	log.Trace("[worker ", thread, "] Decoding structure for part ", reg.Name, " version ", reg.Date)
+	log.Trace("[worker ", thread, "] Decoding structure for part ", version.Name, " version ", version.Date)
 	sd := json.NewDecoder(sbody)
-	if err := sd.Decode(reg.Structure); err != nil {
+	if err := sd.Decode(version.Structure); err != nil {
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Fetching full document for part ", reg.Name, " version ", reg.Date)
-	body, err := ecfr.FetchFull(ctx, reg.Date, reg.Title, &ecfr.PartOption{reg.Name})
+	log.Debug("[worker ", thread, "] Fetching full document for part ", version.Name, " version ", version.Date)
+	body, err := ecfr.FetchFull(ctx, version.Date, version.Title, &ecfr.PartOption{version.Name})
 	if err != nil {
 		return err
 	}
 
-	log.Trace("[worker ", thread, "] Decoding full structure for part ", reg.Name, " version ", reg.Date)
+	log.Trace("[worker ", thread, "] Decoding full structure for part ", version.Name, " version ", version.Date)
 	d := xml.NewDecoder(body)
-	if err := d.Decode(reg.Document); err != nil {
+	if err := d.Decode(version.Document); err != nil {
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Running post process on structure for part ", reg.Name, " version ", reg.Date)
-	if err := reg.Document.PostProcess(); err != nil {
+	log.Debug("[worker ", thread, "] Running post process on structure for part ", version.Name, " version ", version.Date)
+	if err := version.Document.PostProcess(); err != nil {
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Posting part ", reg.Name, " version ", reg.Date, " to eRegs")
-	if err := eregs.PostPart(ctx, reg); err != nil {
+	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
+	if err := eregs.PostPart(ctx, version); err != nil {
 		return err
 	}
 
 	if len(eregs.SuppContentURL) > 0 {
-		log.Debug("[worker ", thread, "] Extracting supplemental content structure for part ", reg.Name, " version ", reg.Date)
-		supplementalPart, err := ecfr.ExtractStructure(*reg.Structure)
+		log.Debug("[worker ", thread, "] Extracting supplemental content structure for part ", version.Name, " version ", version.Date)
+		supplementalPart, err := ecfr.ExtractStructure(*version.Structure)
 		if err != nil {
 			return err
 		}
 
-		log.Debug("[worker ", thread, "] Posting supplemental content structure for part ", reg.Name, " version ", reg.Date, " to eRegs")
+		log.Debug("[worker ", thread, "] Posting supplemental content structure for part ", version.Name, " version ", version.Date, " to eRegs")
 		if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
 			return err
 		}
 	}
 
-	log.Debug("[worker ", thread, "] Successfully processed part ", reg.Name, " version ", reg.Date, " in ", time.Since(start))
+	log.Debug("[worker ", thread, "] Successfully processed part ", version.Name, " version ", version.Date, " in ", time.Since(start))
 	return nil
 }
 
