@@ -289,13 +289,20 @@ func attemptParsing() (bool, error) {
 }
 
 func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup, date time.Time) {
+	processingAttempts := 0
+	processedParts := 0
+	processedVersions := 0
+
 	for versionList := range ch {
+		processedParts++
 		for versionElement := versionList.Front(); versionElement != nil; versionElement = versionElement.Next() {
+			processingAttempts++
 			version := versionElement.Value.(*eregs.Part)
 			log.Debug("[worker ", thread, "] Processing part ", version.Name, " version ", version.Date)
 			err := handlePartVersion(ctx, thread, date, version)
 			if err == nil {
 				version.Processed = true
+				processedVersions++
 			} else {
 				log.Error("[worker ", thread, "] Error processing part ", version.Name, " version ", version.Date, ": ", err)
 			}
@@ -303,6 +310,7 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 		}
 	}
 
+	log.Trace("[worker ", thread, "] Worker successfully processed ", processedVersions, "/", processingAttempts, " versions of ", processedParts, " parts.")
 	wg.Done()
 }
 
