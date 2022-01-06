@@ -7,3 +7,4 @@ e2e/cypress/videos
 regulations/static/regulations/js/*
 !regulations/static/regulations/js/main.js
 !regulations/static/regulations/js/go-to-version.js
+regulations/static/regulations/css/main.css*
