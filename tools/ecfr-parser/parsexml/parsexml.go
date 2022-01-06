@@ -13,7 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// LogParseErrors indicates if there were any parsing errors
+// LogParseErrors determines whether to output parsing errors as logs
 var LogParseErrors bool
 
 func logParseError(err string) {
