@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'regcore.search',
     'supplemental_content',
     'report_builder',
+    'solo',
 ]
 
 MIDDLEWARE = [
