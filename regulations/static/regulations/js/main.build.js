@@ -3644,6 +3644,72 @@
     );
 
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
   var script = {
     props: {
       api_url: {
@@ -3660,19 +3726,25 @@
         part: '',
         partOptions: [{part:"Loading"}],
         subPart: '',
+        subPartOptions:  [{subpart_id:"Loading"}],
         section:'',
+        sectionOptions:  [{section_id:"Loading"}],
         category:'',
+        categoryOptions: [{category:"Loading"}],
+        supplementalContent:[],
+        history:[]
       }
     },
     created: function(){
       this.getParts(this.title);
+      this.getCategories();
     },
     methods:{
       async getParts(title){
         console.log(title);
         try {
           const response = await fetch(
-              `${this.api_url}title/${title}/parts`
+              `${this.api_url}api/title/${title}/parts`
           );
           const content = await response.json();
           console.log(content);
@@ -3681,7 +3753,63 @@
             console.error(error);
         }
       },
-
+      async getSubParts(){
+        await this.getSections();
+        try {
+         const response = await fetch(
+              `${this.api_url}api/title/${this.title}/part/${this.part}/subParts`
+          );
+          const content = await response.json();
+          console.log(content);
+          this.subPartOptions = content;
+        } catch (error) {
+            console.error(error);
+        }
+      },
+      async getSections(){
+        try {
+          const url = this.subPart ?
+                `${this.api_url}api/title/${this.title}/part/${this.part}/subPart/${this.subPart}/sections`
+              :
+                `${this.api_url}api/title/${this.title}/part/${this.part}/sections`;
+          const response = await fetch(url);
+          const content = await response.json();
+          this.sectionOptions = content;
+        } catch (error) {
+            console.error(error);
+        }
+      },
+      async getCategories(){
+        try {
+          const response = await fetch(
+              `${this.api_url}api/categories/`
+          );
+          const content = await response.json();
+          console.log(content);
+          this.categoryOptions = content;
+        } catch (error) {
+            console.error(error);
+        }
+      },
+      async getSupplementalContent(){
+        try {
+          var url = `${this.api_url}api/supplementalContent?section=${this.section}`;
+          if (this.category) {
+            url = `${url}&category=${this.category}`;
+          }
+          const response = await fetch(url);
+          const content = await response.json();
+          console.log(content);
+          this.supplementalContent = content;
+        } catch (error) {
+            console.error(error);
+        }
+      },
+      async setSection(id, name){
+        this.history.push({name, id});
+        this.section = id;
+        await this.getSupplementalContent();
+      },
     }
   };
 
@@ -3787,108 +3915,140 @@
             ],
             attrs: { id: "part" },
             on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value;
-                    return val
-                  });
-                _vm.part = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0];
-              }
-            }
-          },
-          _vm._l(_vm.partOptions, function(partOption) {
-            return _c("option", [_vm._v(_vm._s(partOption.part))])
-          }),
-          0
-        ),
-        _vm._v(" "),
-        _c("label", { attrs: { for: "subPart" } }, [_vm._v("SubPart")]),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.subPart,
-                expression: "subPart"
-              }
-            ],
-            attrs: { id: "subPart" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value;
-                    return val
-                  });
-                _vm.subPart = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0];
-              }
+              change: [
+                function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value;
+                      return val
+                    });
+                  _vm.part = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0];
+                },
+                _vm.getSubParts
+              ]
             }
           },
           [
-            _c("option", { attrs: { value: "" } }, [_vm._v("Select SubPart")]),
+            _c("option", { attrs: { disabled: "", value: "" } }, [
+              _vm._v("Select Part")
+            ]),
             _vm._v(" "),
-            _c("option", { attrs: { value: "A" } }, [_vm._v("A")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "B" } }, [_vm._v("B")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "C" } }, [_vm._v("C")])
-          ]
+            _vm._l(_vm.partOptions, function(partOption) {
+              return _c("option", { domProps: { value: partOption.part } }, [
+                _vm._v(_vm._s(partOption.part))
+              ])
+            })
+          ],
+          2
         ),
         _vm._v(" "),
-        _c("label", { attrs: { for: "section" } }, [_vm._v("Section")]),
+        _vm.part
+          ? _c("label", { attrs: { for: "subPart" } }, [_vm._v("SubPart")])
+          : _vm._e(),
         _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
+        _vm.part
+          ? _c(
+              "select",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.section,
-                expression: "section"
-              }
-            ],
-            attrs: { id: "section" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value;
-                    return val
-                  });
-                _vm.section = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0];
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { value: "" } }, [_vm._v("Select Section")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "A" } }, [_vm._v("A")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "B" } }, [_vm._v("B")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "C" } }, [_vm._v("C")])
-          ]
-        ),
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.subPart,
+                    expression: "subPart"
+                  }
+                ],
+                attrs: { id: "subPart" },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value;
+                          return val
+                        });
+                      _vm.subPart = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0];
+                    },
+                    _vm.getSections
+                  ]
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Select Subpart")
+                ]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "ORPHAN" } }, [
+                  _vm._v("No Subpart")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.subPartOptions, function(subPartOption) {
+                  return _c("option", { domProps: { value: subPartOption.id } }, [
+                    _vm._v("Subpart " + _vm._s(subPartOption.subpart_id))
+                  ])
+                })
+              ],
+              2
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.part
+          ? _c("label", { attrs: { for: "section" } }, [_vm._v("Section")])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.part
+          ? _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.section,
+                    expression: "section"
+                  }
+                ],
+                attrs: { id: "section" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value;
+                        return val
+                      });
+                    _vm.section = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0];
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "" } }, [
+                  _vm._v("Select Section")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.sectionOptions, function(sectionOption) {
+                  return _c("option", { domProps: { value: sectionOption.id } }, [
+                    _vm._v("Section " + _vm._s(sectionOption.section_id))
+                  ])
+                })
+              ],
+              2
+            )
+          : _vm._e(),
         _vm._v(" "),
         _c("label", { attrs: { for: "resourceCategory" } }, [
           _vm._v("Resource Category")
@@ -3923,30 +4083,132 @@
             }
           },
           [
-            _c("option", { attrs: { value: "" } }, [
-              _vm._v("Select Resource Category")
+            _c("option", { attrs: { disabled: "", value: "" } }, [
+              _vm._v("Select Category")
             ]),
             _vm._v(" "),
-            _c("option", { attrs: { value: "A" } }, [_vm._v("A")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "B" } }, [_vm._v("B")]),
-            _vm._v(" "),
-            _c("option", { attrs: { value: "C" } }, [_vm._v("C")])
-          ]
-        )
+            _vm._l(_vm.categoryOptions, function(categoryOption) {
+              return _c("option", { domProps: { value: categoryOption.id } }, [
+                _vm._v(_vm._s(categoryOption.name))
+              ])
+            })
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _vm.section
+          ? _c(
+              "button",
+              {
+                on: {
+                  click: function($event) {
+                    _vm.setSection(
+                      _vm.section,
+                      _vm.title +
+                        " " +
+                        _vm.part +
+                        "." +
+                        _vm.sectionOptions.find(function(ss) {
+                          return ss.id == _vm.section
+                        }).section_id
+                    );
+                  }
+                }
+              },
+              [_vm._v("\n      Fetch Supplemental Content\n    ")]
+            )
+          : _vm._e()
       ]),
       _vm._v(" "),
-      _c("div", [
-        _c("ul", [
-          _c("li", [_vm._v("Selected Part: " + _vm._s(_vm.part))]),
+      _c(
+        "div",
+        [
+          _c("ul", [
+            _c("li", [_vm._v("Selected Part: " + _vm._s(_vm.part))]),
+            _vm._v(" "),
+            _c("li", [_vm._v("Selected SubPart: " + _vm._s(_vm.subPart))]),
+            _vm._v(" "),
+            _c("li", [_vm._v("Selected Section: " + _vm._s(_vm.section))]),
+            _vm._v(" "),
+            _c("li", [_vm._v("Selected Category: " + _vm._s(_vm.category))]),
+            _vm._v(" "),
+            _c("li", [
+              _vm._v(
+                "Supplemental Content Count: " +
+                  _vm._s(_vm.supplementalContent.length)
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "li",
+              [
+                _vm._v("History: "),
+                _vm._l(_vm.history, function(h) {
+                  return _c(
+                    "button",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.setSection(h.id)
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(h.name))]
+                  )
+                })
+              ],
+              2
+            )
+          ]),
           _vm._v(" "),
-          _c("li", [_vm._v("Selected SubPart: " + _vm._s(_vm.subPart))]),
-          _vm._v(" "),
-          _c("li", [_vm._v("Selected Section?: " + _vm._s(_vm.section))]),
-          _vm._v(" "),
-          _c("li", [_vm._v("Selected Category?: " + _vm._s(_vm.category))])
-        ])
-      ])
+          _vm._l(_vm.supplementalContent, function(content) {
+            return _c(
+              "div",
+              [
+                _c("span", { staticStyle: { "background-color": "darkgrey" } }, [
+                  _vm._v(_vm._s(content.category))
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("a", { attrs: { href: content.url, target: "_blank" } }, [
+                  _vm._v(_vm._s(content.description || content.name))
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v("\n        SECTIONS:\n        "),
+                _vm._l(content.locations, function(location) {
+                  return _c(
+                    "span",
+                    { staticStyle: { "font-size": "12px", color: "#046791" } },
+                    [
+                      _c(
+                        "button",
+                        {
+                          on: {
+                            click: function($event) {
+                              return _vm.setSection(location.id, location.name)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n            " +
+                              _vm._s(location.name) +
+                              "\n          "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                })
+              ],
+              2
+            )
+          })
+        ],
+        2
+      )
     ])
   };
   var __vue_staticRenderFns__ = [];

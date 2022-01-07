@@ -14,6 +14,8 @@ from .models import (
     AbstractLocation,
     Section,
     Subpart,
+    Category,
+    AbstractCategory, SupplementalContent
 )
 
 from .serializers import AbstractSupplementalContentSerializer
@@ -98,12 +100,92 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
 class PartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
-        fields = [ 'title', 'part']
+        fields = ['title', 'part']
+
 
 class PartsListView(generics.ListAPIView):
     serializer_class = PartSerializer
 
     def get_queryset(self):
         title = self.kwargs.get("title")
-        query = Section.objects.filter(title=title).order_by('part').distinct('part')
-        return query
+        return Section.objects.filter(title=title).order_by('part').distinct('part')
+
+
+class SubPartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subpart
+        fields = ['id', 'subpart_id']
+
+
+class SubPartsListView(generics.ListAPIView):
+    serializer_class = SubPartSerializer
+
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        part = self.kwargs.get("part")
+        return Subpart.objects.filter(title=title, part=part)
+
+
+class SectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields = ['id', 'section_id', ]
+
+
+class SectionsListView(generics.ListAPIView):
+    serializer_class = SectionSerializer
+
+    def get_queryset(self):
+        subPart = self.kwargs.get("subPart")
+        title = self.kwargs.get("title")
+        part = self.kwargs.get("part")
+        if subPart:
+            return Section.objects.filter(parent__id=subPart) if subPart != "ORPHAN" else Section.objects.filter(title=title, part=part, parent__id=None)
+        else:
+            return Section.objects.filter(title=title, part=part)
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']
+
+
+class CategoryListView(generics.ListAPIView):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return AbstractCategory.objects.all().order_by('name')
+
+
+class LocationField(serializers.RelatedField):
+    def to_representation(self, value):
+        return {'name': '%s' % value.__str__(), 'id': value.id}
+
+
+class CategoryField(serializers.RelatedField):
+    def to_representation(self, value):
+        return '%s' % value.__str__()
+
+
+class SupplementalContentSerializer(serializers.ModelSerializer):
+    locations = LocationField(read_only=True, many=True)
+    category = CategoryField(read_only=True)
+    class Meta:
+        model = SupplementalContent
+        fields = ['id', 'description', 'name', 'url', 'category', 'locations']
+
+
+class SupplementalContentListView(generics.ListAPIView):
+    serializer_class = SupplementalContentSerializer
+
+    def get_queryset(self):
+        section = self.request.GET.get("section")
+        category = self.request.GET.get("category")
+        section = Section.objects.get(id=section)
+        query = section.supplemental_content.values_list('id', flat=True)
+        if category:
+            query = query.filter(category_id=category)
+        else:
+            query = query.all()
+
+        return SupplementalContent.objects.filter(id__in=query)
