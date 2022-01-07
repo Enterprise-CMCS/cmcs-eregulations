@@ -66,6 +66,11 @@ func (pa *PartsArg) Set(s string) error {
 }
 
 func init() {
+	eregs.BaseURL = os.Getenv("EREGS_API_URL")
+	if eregs.BaseURL == "" {
+		eregs.BaseURL = "http://localhost:8080/v2/"
+	}
+
 	// Parse command-line flags
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "eCFR Parser for eRegs\n\n")
@@ -146,6 +151,13 @@ func main() {
 }
 
 func start() error {
+	log.Info("[main] Loading configuration...")
+	config, err := eregs.RetrieveConfig()
+	if err != nil {
+		log.Fatal("error retrieving config: ", err)
+	}
+	log.Fatal(config)
+
 	for i := 0; i < attempts; i++ {
 		if retry, err := attemptParsing(); err == nil {
 			break

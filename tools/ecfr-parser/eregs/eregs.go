@@ -120,21 +120,9 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 	return post(ctx, eregsPath, p)
 }
 
-// GetExistingParts gets existing parts already imported
-func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
-	checkURL, err := url.Parse(BaseURL)
-	if err != nil {
-		return nil, err
-	}
-	q := checkURL.Query()
-	q.Add("json_errors", "true")
-	checkURL.RawQuery = q.Encode()
-	checkURL.Path = path.Join(checkURL.Path, fmt.Sprintf(partURL, title))
+func fetch(ctx context.Context, url *url.URL) (io.Reader, error) {
 
-	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL.String())
-	start := time.Now()
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkURL.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -159,9 +147,30 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 	if err != nil {
 		return nil, fmt.Errorf("Unable to read response body while checking existing versions: %+v", err)
 	}
+	body := bytes.NewBuffer(b)
+
+	return body, nil
+}
+
+// GetExistingParts gets existing parts already imported
+func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
+	checkURL, err := url.Parse(BaseURL)
+	if err != nil {
+		return nil, err
+	}
+	q := checkURL.Query()
+	q.Add("json_errors", "true")
+	checkURL.RawQuery = q.Encode()
+	checkURL.Path = path.Join(checkURL.Path, fmt.Sprintf(partURL, title))
+
+	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL.String())
+
+	body, err := fetch(ctx, checkURL)
+	if err != nil {
+		return nil, err
+	}
 
 	// Cast the body to an array of existing parts
-	body := bytes.NewBuffer(b)
 	var vs []ExistingPart
 	d := json.NewDecoder(body)
 	if err := d.Decode(&vs); err != nil {
@@ -174,6 +183,5 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 		result[ep.Date] = ep.PartName
 	}
 
-	log.Trace("[eregs] Checked existing parts for Title ", title, " in ", time.Since(start))
 	return result, nil
 }
