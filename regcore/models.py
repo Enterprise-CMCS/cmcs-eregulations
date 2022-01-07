@@ -82,8 +82,8 @@ class TitleConfiguration(models.Model):
     title = models.IntegerField(unique=True, help_text="The title of the regulations to parse, e.g. 42.")
     subchapters = models.TextField(
         blank=True,
-        help_text="A comma-separated list of subchapters to parse. All parts within the listed subchapters will be included."\
-                    "E.g., \"IV-C, IV-D, IV-F\" or simply \"IV-C\".",
+        help_text="A comma-separated list of subchapters to parse. All parts within the listed subchapters will be included."
+                  "E.g., \"IV-C, IV-D, IV-F\" or simply \"IV-C\".",
         validators=[RegexValidator(
             regex="^([A-Za-z]+-[A-Za-z]+)(,\\s*([A-Za-z]+-[A-Za-z]+))*$",
             message="Please enter a comma-separated list of subchapters, e.g. \"IV-C, IV-D, IV-F\" or \"IV-C\".",
@@ -91,8 +91,8 @@ class TitleConfiguration(models.Model):
     )
     parts = models.TextField(
         blank=True,
-        help_text="A comma-separated list of individual parts to parse if you do not wish to include the entire subchapter."\
-                    "E.g., \"400, 457, 460\" or simply \"400\".",
+        help_text="A comma-separated list of individual parts to parse if you do not wish to include the entire subchapter."
+                  "E.g., \"400, 457, 460\" or simply \"400\".",
         validators=[RegexValidator(
             regex="^(\\d+)(,\\s*\\d+)*$",
             message="Please enter a comma-separated list of part numbers, e.g. \"400, 457, 460\" or \"400\".",
