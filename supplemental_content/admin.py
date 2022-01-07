@@ -31,7 +31,7 @@ from . import actions
 
 class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
     change_list_template = "admin/export_all_csv.html"
-    list_per_page = 500
+    list_per_page = 200
     admin_priority = 20
     actions = ["export_as_csv"]
 
