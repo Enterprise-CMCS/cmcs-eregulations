@@ -18,6 +18,7 @@ class TitleConfigurationInline(admin.TabularInline):
     model = TitleConfiguration
     extra = 1
 
+
 @admin.register(ParserConfiguration)
 class ParserConfigurationAdmin(SingletonModelAdmin):
     inlines = (TitleConfigurationInline,)

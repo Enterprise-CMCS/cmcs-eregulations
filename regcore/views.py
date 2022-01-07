@@ -145,9 +145,18 @@ class TitleConfigurationSerializer(serializers.ModelSerializer):
 
 class ParserConfigurationSerializer(serializers.ModelSerializer):
     titles = TitleConfigurationSerializer(many=True)
+
     class Meta:
         model = ParserConfiguration
-        fields = ("workers", "attempts", "loglevel", "upload_supplemental_locations", "log_parse_errors", "skip_versions", "titles")
+        fields = (
+            "workers",
+            "attempts",
+            "loglevel",
+            "upload_supplemental_locations",
+            "log_parse_errors",
+            "skip_versions",
+            "titles",
+        )
 
 
 class ParserConfigurationView(generics.RetrieveAPIView):
