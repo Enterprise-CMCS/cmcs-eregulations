@@ -95,9 +95,13 @@ func start() error {
 		queue.PushBack(title)
 	}
 
+	start := time.Now()
+
+	var failed bool
 	for i := 0; i < config.Attempts; i++ {
 		originalLength := queue.Len()
 		processed := 0
+		failed = false
 		log.Info("[main] Begin parsing ", originalLength, " titles.")
 
 		var next *list.Element
@@ -107,29 +111,39 @@ func start() error {
 
 			log.Info("[main] Parsing title ", title.Title, "...")
 			if retry, err := parseTitle(title); err == nil {
-
 				queue.Remove(titleElement)
 				processed++
 			} else if !retry {
 				log.Error("[main] Failed to parse title ", title.Title, ". Will not retry. Error: ", err)
 				queue.Remove(titleElement)
+				failed = true
 			} else if i >= config.Attempts-1 {
 				log.Error("[main] Failed to parse title ", title.Title, " ", config.Attempts, " times. Error: ", err)
 				queue.Remove(titleElement)
+				failed = true
 			} else {
 				log.Error("[main] Failed to parse title ", title.Title, ". Error: ", err)
+				failed = true
 			}
 		}
 
 		log.Info("[main] Successfully parsed ", processed, "/", originalLength, " titles.")
 
-		if queue.Len() > 0 {
+		if queue.Len() < 1 {
+			break
+		}
+
+		if failed && i < config.Attempts {
 			log.Error("[main] Some titles failed to parse. Will retry ", config.Attempts-i-1, " more times.")
-		} else {
+		} else if !failed {
 			break
 		}
 	}
 
+	if failed {
+		return fmt.Errorf("Some titles failed to process after %d attempts.", config.Attempts)
+	}
+	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(start))
 	return nil
 }
 
@@ -138,18 +152,15 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	defer cancel()
 
 	start := time.Now()
-	defer func() {
-		log.Debug("[main] Run time:", time.Since(start))
-	}()
 	today := time.Now()
 
-	log.Info("[main] Fetching list of existing versions...")
+	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, err := eregs.GetExistingParts(ctx, title.Title)
 
-	log.Info("[main] Fetching parts list...")
+	log.Info("[main] Fetching parts list for title ", title.Title, "...")
 	var parts []string
 	for _, subchapter := range title.Subchapters {
-		log.Debug("[main] Fetching subchapter ", subchapter, " parts list...")
+		log.Debug("[main] Fetching title ", title.Title, " subchapter ", subchapter, " parts list...")
 		var err error
 		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
@@ -179,7 +190,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		for date := range versions[part] {
 			// If we have this part already, skip it
 			if config.SkipVersions && contains(existingVersions[date], part) {
-				log.Trace("[main] Skipping part ", part, " version ", date)
+				log.Trace("[main] Skipping title ", title.Title, " part ", part, " version ", date)
 				skippedVersions++
 				continue
 			}
@@ -254,7 +265,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		}
 	}
 
-	log.Info("[main] All parts finished processing!")
+	log.Info("[main] All parts of title ", title.Title, " finished processing in ", time.Since(start), "!")
 	return false, nil
 }
 
