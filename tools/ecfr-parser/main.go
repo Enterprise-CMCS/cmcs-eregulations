@@ -141,7 +141,7 @@ func start() error {
 	}
 
 	if failed {
-		return fmt.Errorf("Some titles failed to process after %d attempts.", config.Attempts)
+		return fmt.Errorf("Some titles failed to process after %d attempts", config.Attempts)
 	}
 	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(start))
 	return nil
