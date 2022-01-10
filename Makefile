@@ -29,6 +29,17 @@ storybook: regulations/static/node_modules
 	cd regulations/static; \
 		npm run storybook
 
+.PHONY: prototype
+prototype: ## Run prototype for regulations
+prototype: regulations/static/prototype/node_modules
+	cd regulations/static/prototype; \
+		npm run start-container
+
+prototype.clean: ## Stop prototype for regulations
+prototype.clean: regulations/static/prototype/node_modules
+	cd regulations/static/prototype; \
+		npm run stop-container
+
 .PHONY: lint
 lint:
 	flake8;
