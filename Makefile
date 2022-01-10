@@ -34,7 +34,7 @@ lint:
 	flake8;
 
 local: ## Start a local environment with parts 400 and 433 loaded.
-local: local.docker data.local
+local: regulations local.docker data.local
 	@echo Local environment started. Visit http://localhost:8000
 
 local.docker: ## Start a local environment
