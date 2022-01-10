@@ -152,11 +152,11 @@ func main() {
 
 func start() error {
 	log.Info("[main] Loading configuration...")
-	config, err := eregs.RetrieveConfig()
-	if err != nil {
-		log.Fatal("error retrieving config: ", err)
-	}
-	log.Fatal(config)
+	//config, err := eregs.RetrieveConfig()
+	//if err != nil {
+	//	log.Fatal("error retrieving config: ", err)
+	//}
+	//log.Fatal(config)
 
 	for i := 0; i < attempts; i++ {
 		if retry, err := attemptParsing(); err == nil {

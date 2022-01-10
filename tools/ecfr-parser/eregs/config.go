@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"encoding/json"
 
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -57,15 +59,12 @@ func RetrieveConfig() (*ParserConfig, error) {
 		return nil, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL environment variable.", BaseURL)
 	}
 	configURL.Path = path.Join(configURL.Path, "/parser_config")
-	q := configURL.Query()
-	q.Add("json_errors", "true")
-	configURL.RawQuery = q.Encode()
 
 	log.Debug("[config] Retrieving parser configuration from ", configURL.String())
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
 	defer cancel()
-	body, err := fetch(ctx, configURL)
+	body, err := network.Fetch(ctx, configURL, true)
 	if err != nil {
 		return nil, err
 	}
