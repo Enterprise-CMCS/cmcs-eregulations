@@ -31,9 +31,13 @@ func (sc *SubchapterArg) Set(s string) error {
 	return nil
 }
 
+// SubchapterList is an array of SubchapterArgs
 type SubchapterList []SubchapterArg
+
+// PartList is an array of strings representing parts
 type PartList []string
 
+// UnmarshalText extracts subchapters (e.g. IV-C) from a provided comma-separated list
 func (sl *SubchapterList) UnmarshalText(data []byte) error {
 	subchapters := strings.Split(string(data), ",")
 	*sl = make([]SubchapterArg, 0, len(subchapters))
@@ -45,6 +49,7 @@ func (sl *SubchapterList) UnmarshalText(data []byte) error {
 	return nil
 }
 
+// UnmarshalText extracts valid parts (must be numeric) and stores as strings
 func (pl *PartList) UnmarshalText(data []byte) error {
 	tmp := strings.Split(string(data), ",")
 	*pl = make([]string, 0, len(tmp))
@@ -60,26 +65,29 @@ func (pl *PartList) UnmarshalText(data []byte) error {
 	return nil
 }
 
+// TitleConfig represents parser configuration for a specific title, i.e. what parts to parse
 type TitleConfig struct {
-	Title int `json:"title"`
+	Title 		int 		   `json:"title"`
 	Subchapters SubchapterList `json:"subchapters"`
-	Parts PartList `json:"parts"`
+	Parts 		PartList 	   `json:"parts"`
 }
 
+// ParserConfig represents configuration for the parser as a whole
 type ParserConfig struct {
-	Workers int `json:"workers"`
-	Attempts int `json:"attempts"`
-	LogLevel string `json:"loglevel"`
-	UploadSupplemental bool `json:"upload_supplemental_locations"`
-	LogParseErrors bool `json:"log_parse_errors"`
-	SkipVersions bool `json:"skip_versions"`
-	Titles []*TitleConfig `json:"titles"`
+	Workers 		   int 			  `json:"workers"`
+	Attempts 		   int 		      `json:"attempts"`
+	LogLevel 		   string 		  `json:"loglevel"`
+	UploadSupplemental bool 		  `json:"upload_supplemental_locations"`
+	LogParseErrors 	   bool 		  `json:"log_parse_errors"`
+	SkipVersions 	   bool 		  `json:"skip_versions"`
+	Titles 			   []*TitleConfig `json:"titles"`
 }
 
+// RetrieveConfig fetches parser config from eRegs at /v2/parser_config
 func RetrieveConfig() (*ParserConfig, error) {
 	configURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL environment variable.", BaseURL)
+		return nil, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL environment variable", BaseURL)
 	}
 	configURL.Path = path.Join(configURL.Path, "/parser_config")
 
