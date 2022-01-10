@@ -15,24 +15,47 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type SubchapterList []string
-type PartList []int
+// SubchapterArg is an array of type string
+type SubchapterArg []string
+
+func (sc *SubchapterArg) String() string {
+	return strings.Join(*sc, "-")
+}
+
+// Set is to validate and set the subchapter
+func (sc *SubchapterArg) Set(s string) error {
+	*sc = strings.Split(s, "-")
+	if len(*sc) != 2 {
+		return fmt.Errorf("Subchapter is expected to be of the form <Roman Numeral>-<Letter>")
+	}
+	return nil
+}
+
+type SubchapterList []SubchapterArg
+type PartList []string
 
 func (sl *SubchapterList) UnmarshalText(data []byte) error {
-	*sl = strings.Split(string(data), ",")
+	subchapters := strings.Split(string(data), ",")
+	*sl = make([]SubchapterArg, 0, len(subchapters))
+	for _, subchapter := range subchapters {
+		var sc SubchapterArg
+		sc.Set(subchapter)
+		*sl = append(*sl, sc)
+	}
 	return nil
 }
 
 func (pl *PartList) UnmarshalText(data []byte) error {
 	tmp := strings.Split(string(data), ",")
-	*pl = make([]int, 0, len(tmp))
+	*pl = make([]string, 0, len(tmp))
 	for _, raw := range tmp {
-		v, err := strconv.Atoi(raw)
+		trimmed := strings.TrimSpace(raw)
+		_, err := strconv.Atoi(trimmed)
 		if err != nil {
-			log.Error("[config] ", raw, " is not a valid part, skipping.")
+			log.Error("[config] ", trimmed, " is not a valid part, skipping.")
 			continue
 		}
-		*pl = append(*pl, v)
+		*pl = append(*pl, trimmed)
 	}
 	return nil
 }
