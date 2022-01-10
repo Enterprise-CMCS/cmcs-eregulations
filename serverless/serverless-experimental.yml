@@ -25,7 +25,7 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
 
 package:
-  individually: true
+  individually: false
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -212,5 +212,4 @@ resources:
           Ref: RDSResource
 
 plugins:
-  - serverless-python-requirements
   - serverless-wsgi
