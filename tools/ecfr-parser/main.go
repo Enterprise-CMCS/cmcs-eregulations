@@ -97,6 +97,7 @@ func start() error {
 
 	for i := 0; i < config.Attempts; i++ {
 		originalLength := queue.Len()
+		processed := 0
 		log.Info("[main] Begin parsing ", originalLength, " titles.")
 
 		var next *list.Element
@@ -106,23 +107,24 @@ func start() error {
 
 			log.Info("[main] Parsing title ", title.Title, "...")
 			if retry, err := parseTitle(title); err == nil {
+
 				queue.Remove(titleElement)
+				processed++
 			} else if !retry {
-				log.Error("[main] Failed to load title ", title.Title, ". Will not retry. Error: ", err)
+				log.Error("[main] Failed to parse title ", title.Title, ". Will not retry. Error: ", err)
 				queue.Remove(titleElement)
 			} else if i >= config.Attempts-1 {
-				log.Error("[main] Failed to load title ", title.Title, " ", config.Attempts, " times. Error: ", err)
+				log.Error("[main] Failed to parse title ", title.Title, " ", config.Attempts, " times. Error: ", err)
 				queue.Remove(titleElement)
 			} else {
-				log.Error("[main] Failed to load title ", title.Title, ". Error: ", err)
+				log.Error("[main] Failed to parse title ", title.Title, ". Error: ", err)
 			}
 		}
 
-		newLength := queue.Len()
-		log.Info("[main] Successfully parsed ", originalLength-newLength, "/", originalLength, " titles.")
+		log.Info("[main] Successfully parsed ", processed, "/", originalLength, " titles.")
 
-		if newLength > 0 {
-			log.Error("[main] Some titles failed to process. Will retry ", config.Attempts-i-1, " more times.")
+		if queue.Len() > 0 {
+			log.Error("[main] Some titles failed to parse. Will retry ", config.Attempts-i-1, " more times.")
 		} else {
 			break
 		}
@@ -155,6 +157,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		}
 	}
 	parts = append(parts, title.Parts...)
+	log.Info(parts)
 
 	if len(parts) < 1 {
 		return false, fmt.Errorf("Some number of parts must be specified")
