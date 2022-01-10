@@ -212,4 +212,5 @@ resources:
           Ref: RDSResource
 
 plugins:
+  - serverless-python-requirements
   - serverless-wsgi
