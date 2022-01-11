@@ -32,6 +32,7 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
                 'log_parse_errors',
                 'skip_versions',
             ),
-            'description': "<b>Please note:</b> Changes to the parser configuration will not take effect until the next scheduled parser run!",
+            'description': "<b>Please note:</b> Changes to the parser configuration "
+                           "will not take effect until the next scheduled parser run!",
         }),
     )
