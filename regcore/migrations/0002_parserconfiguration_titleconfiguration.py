@@ -46,8 +46,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.IntegerField(help_text='The title of the regulations to parse, e.g. 42.', unique=True)),
-                ('subchapters', models.TextField(blank=True, help_text='A comma-separated list of subchapters to parse. All parts within the listed subchapters will be included.E.g., "IV-C, IV-D, IV-F" or simply "IV-C".', validators=[django.core.validators.RegexValidator(message='Please enter a comma-separated list of subchapters, e.g. "IV-C, IV-D, IV-F" or "IV-C".', regex='^([A-Za-z]+-[A-Za-z]+)(,\\s*([A-Za-z]+-[A-Za-z]+))*$')])),
-                ('parts', models.TextField(blank=True, help_text='A comma-separated list of individual parts to parse if you do not wish to include the entire subchapter.E.g., "400, 457, 460" or simply "400".', validators=[django.core.validators.RegexValidator(message='Please enter a comma-separated list of part numbers, e.g. "400, 457, 460" or "400".', regex='^(\\d+)(,\\s*\\d+)*$')])),
+                ('subchapters', models.TextField(blank=True, help_text='A comma-separated list of subchapters to parse. All parts within the listed subchapters will be included. E.g., "IV-C, IV-D, IV-F" or simply "IV-C".', validators=[django.core.validators.RegexValidator(message='Please enter a comma-separated list of subchapters, e.g. "IV-C, IV-D, IV-F" or "IV-C".', regex='^([A-Za-z]+-[A-Za-z]+)(,\\s*([A-Za-z]+-[A-Za-z]+))*$')])),
+                ('parts', models.TextField(blank=True, help_text='A comma-separated list of individual parts to parse if you do not wish to include the entire subchapter. E.g., "400, 457, 460" or simply "400".', validators=[django.core.validators.RegexValidator(message='Please enter a comma-separated list of part numbers, e.g. "400, 457, 460" or "400".', regex='^(\\d+)(,\\s*\\d+)*$')])),
                 ('parser_config', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='titles', to='regcore.parserconfiguration')),
             ],
             options={
