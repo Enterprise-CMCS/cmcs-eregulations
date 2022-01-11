@@ -49,13 +49,13 @@ functions:
       - http: ANY /
       - http: ANY {proxy+}
   reg_core_migrate:
-    handler: migrate.handler
+    handler: reg_apps/migrate.handler
     timeout: 300
   create_su:
-    handler: createsu.handler
+    handler: reg_apps/createsu.handler
     timeout: 300
   populate_content:
-    handler: populate_content.handler
+    handler: reg_apps/populate_content.handler
     timeout: 300
 
 resources:
