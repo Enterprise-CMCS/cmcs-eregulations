@@ -31,15 +31,17 @@ func init() {
 	}
 }
 
-func parseConfig() error {
+func parseConfig() {
 	parsexml.LogParseErrors = config.LogParseErrors
 
 	if config.Workers < 1 {
-		return fmt.Errorf("Number of worker threads must be at least 1, %d given", config.Workers)
+		log.Warn("[main] ", config.Workers, " is an invalid number of workers, defaulting to 1.")
+		config.Workers = 1
 	}
 
 	if config.Attempts < 1 {
-		return fmt.Errorf("Number of loading attempts must be at least 1, %d given", config.Attempts)
+		log.Warn("[main] ", config.Attempts, " is an invalid number of attempts, defaulting to 1.")
+		config.Attempts = 1
 	}
 
 	level := log.WarnLevel
@@ -60,8 +62,6 @@ func parseConfig() error {
 		log.Warn("[main] \"", config.LogLevel, "\" is an invalid log level, defaulting to \"warn\".")
 	}
 	log.SetLevel(level)
-
-	return nil
 }
 
 // Only runs if parser is in a Lambda
@@ -86,9 +86,7 @@ func start() error {
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
-	if err := parseConfig(); err != nil {
-		return fmt.Errorf("Error parsing configuration: %+v", err)
-	}
+	parseConfig()
 
 	queue := list.New()
 	for _, title := range config.Titles {
@@ -168,7 +166,6 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		}
 	}
 	parts = append(parts, title.Parts...)
-	log.Info(parts)
 
 	if len(parts) < 1 {
 		return false, fmt.Errorf("Some number of parts must be specified")
