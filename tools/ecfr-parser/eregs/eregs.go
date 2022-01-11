@@ -19,9 +19,6 @@ import (
 // BaseURL is the URL of the eRegs service that will accept the post requests
 var BaseURL string
 
-// SuppContentURL is the URL of the eRegs service that will accept the post request
-var SuppContentURL string
-
 var client = &http.Client{
 	Transport: &http.Transport{},
 }
@@ -60,10 +57,11 @@ func PostPart(ctx context.Context, p *Part) error {
 
 // PostSupplementalPart is the function that sends a supplemental part to eRegs server
 func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
-	eregsPath, err := url.Parse(SuppContentURL)
+	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
 		return err
 	}
+	eregsPath.Path = path.Join(eregsPath.Path, "/supplemental_content")
 	return network.PostJSON(ctx, eregsPath, p, true, postAuth)
 }
 
@@ -73,9 +71,6 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 	if err != nil {
 		return nil, err
 	}
-	q := checkURL.Query()
-	q.Add("json_errors", "true")
-	checkURL.RawQuery = q.Encode()
 	checkURL.Path = path.Join(checkURL.Path, fmt.Sprintf(partURL, title))
 
 	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL.String())

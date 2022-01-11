@@ -333,7 +333,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 		return err
 	}
 
-	if len(eregs.SuppContentURL) > 0 {
+	if config.UploadSupplemental {
 		log.Debug("[worker ", thread, "] Extracting supplemental content structure for part ", version.Name, " version ", version.Date)
 		supplementalPart, err := ecfr.ExtractStructure(*version.Structure)
 		if err != nil {
