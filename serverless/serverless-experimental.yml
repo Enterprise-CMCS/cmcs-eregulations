@@ -30,7 +30,7 @@ package:
 custom:
   stage: ${opt:stage, self:provider.stage}
   wsgi:
-    app: handler.application
+    app: reg_apps/handler.application
     packRequirements: false
   settings:
     static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
