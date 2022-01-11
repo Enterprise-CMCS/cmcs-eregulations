@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator, RegexValidator
 
 from solo.models import SingletonModel
 
@@ -46,29 +46,37 @@ class ParserConfiguration(SingletonModel):
 
     workers = models.IntegerField(
         default=3,
-        help_text="The number of worker threads used to parse regulations."
+        help_text="The number of worker threads used to parse regulations.",
+        validators=[MinValueValidator(
+            limit_value=1,
+            message="Number of workers must be at least 1!",
+        )],
     )
     attempts = models.IntegerField(
         default=3,
-        help_text="Number of times to retry parsing if it fails to complete."
+        help_text="Number of times to retry parsing if it fails to complete.",
+        validators=[MinValueValidator(
+            limit_value=1,
+            message="Number of attempts must be at least 1!"
+        )],
     )
     loglevel = models.CharField(
         max_length=5,
         choices=LOGLEVEL_CHOICES,
         default="info",
-        help_text="Specifies the level of detail contained in the parser's logs."
+        help_text="Specifies the level of detail contained in the parser's logs.",
     )
     upload_supplemental_locations = models.BooleanField(
         default=True,
-        help_text="Should the parser process and upload section and subpart names for use in supplemental content management?"
+        help_text="Should the parser process and upload section and subpart names for use in supplemental content management?",
     )
     log_parse_errors = models.BooleanField(
         default=False,
-        help_text="Should the parser log errors encountered while processing the raw XML data from eCFR?"
+        help_text="Should the parser log errors encountered while processing the raw XML data from eCFR?",
     )
     skip_versions = models.BooleanField(
         default=True,
-        help_text="Should the parser skip processing versions of parts that have been previously processed?"
+        help_text="Should the parser skip processing versions of parts that have been previously processed?",
     )
 
     def __str__(self):

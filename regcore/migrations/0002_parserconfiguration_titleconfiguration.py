@@ -30,8 +30,8 @@ class Migration(migrations.Migration):
             name='ParserConfiguration',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('workers', models.IntegerField(default=3, help_text='The number of worker threads used to parse regulations.')),
-                ('attempts', models.IntegerField(default=3, help_text='Number of times to retry parsing if it fails to complete.')),
+                ('workers', models.IntegerField(default=3, help_text='The number of worker threads used to parse regulations.', validators=[django.core.validators.MinValueValidator(limit_value=1, message='Number of workers must be at least 1!')])),
+                ('attempts', models.IntegerField(default=3, help_text='Number of times to retry parsing if it fails to complete.', validators=[django.core.validators.MinValueValidator(limit_value=1, message='Number of attempts must be at least 1!')])),
                 ('loglevel', models.CharField(choices=[('warn', 'Warning'), ('error', 'Error'), ('fatal', 'Fatal'), ('info', 'Info'), ('debug', 'Debug'), ('trace', 'Trace')], default='info', help_text="Specifies the level of detail contained in the parser's logs.", max_length=5)),
                 ('upload_supplemental_locations', models.BooleanField(default=True, help_text='Should the parser process and upload section and subpart names for use in supplemental content management?')),
                 ('log_parse_errors', models.BooleanField(default=False, help_text='Should the parser log errors encountered while processing the raw XML data from eCFR?')),
