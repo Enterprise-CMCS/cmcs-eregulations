@@ -22,3 +22,16 @@ class TitleConfigurationInline(admin.TabularInline):
 @admin.register(ParserConfiguration)
 class ParserConfigurationAdmin(SingletonModelAdmin):
     inlines = (TitleConfigurationInline,)
+    fieldsets = (
+        (None, {
+            'fields': (
+                'workers',
+                'attempts',
+                'loglevel',
+                'upload_supplemental_locations',
+                'log_parse_errors',
+                'skip_versions',
+            ),
+            'description': "<b>Please note:</b> Changes to the parser configuration will not take effect until the next scheduled parser run!",
+        }),
+    )
