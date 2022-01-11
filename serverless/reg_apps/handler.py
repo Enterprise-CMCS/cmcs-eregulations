@@ -9,6 +9,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "reg_apps.cmcs_regulations.settings")
 
 application = get_wsgi_application()
