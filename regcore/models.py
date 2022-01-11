@@ -36,9 +36,9 @@ class Part(models.Model):
 
 class ParserConfiguration(SingletonModel):
     LOGLEVEL_CHOICES = [
-        ("warn", "Warning"),
-        ("error", "Error"),
         ("fatal", "Fatal"),
+        ("error", "Error"),
+        ("warn", "Warning"),
         ("info", "Info"),
         ("debug", "Debug"),
         ("trace", "Trace"),
@@ -63,7 +63,7 @@ class ParserConfiguration(SingletonModel):
     loglevel = models.CharField(
         max_length=5,
         choices=LOGLEVEL_CHOICES,
-        default="info",
+        default="warn",
         help_text="Specifies the level of detail contained in the parser's logs.",
     )
     upload_supplemental_locations = models.BooleanField(
