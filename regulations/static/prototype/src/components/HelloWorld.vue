@@ -1,15 +1,16 @@
 <template>
-  <v-container>
-    <p>{{ msg }}</p>
-  </v-container>
+    <v-container>
+        <p>{{ msg }}</p>
+    </v-container>
 </template>
 
 <script>
-  export default {
-    name: 'HelloWorld',
+export default {
+    name: "HelloWorld",
 
     props: {
-        msg: String
-    }
-  }
+        msg: String,
+        default: "Hello World!",
+    },
+};
 </script>
