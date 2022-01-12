@@ -53,38 +53,23 @@ tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**
 
 data.prod: ## Load a Part of Title 42. e.g. make data.prod.435 will load Part 435 into prod
 data.prod: CORE_URL = https://3iok6sq3ui.execute-api.us-east-1.amazonaws.com/prod/v2/
-date.prod: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 
 data.val: ## Load a Part of Title 42. e.g. make data.val.435 will load Part 435 into val
 data.val: CORE_URL = https://qavc1ytrff.execute-api.us-east-1.amazonaws.com/val/v2/
-date.val: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 
 data.dev: ## Load a Part of Title 42. e.g. make dev.data.435 will load Part 435 into dev
 data.dev: CORE_URL = https://hittwbzqah.execute-api.us-east-1.amazonaws.com/dev/v2/
-date.dev: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 
 data.experimental: ## Load a Part of Title 42. e.g. make data.experimental URL=[experimental lambda URL] into dev-experimental
 data.experimental: CORE_URL = $(URL)/v2/
-data.experimental: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 
 data.local: ## Load a Part of Title 42. e.g. make data.local.435 will load Part 435
 data.local: CORE_URL = http://localhost:8000/v2/
-data.local: SUPPLEMENTAL_URL = $(CORE_URL)supplemental_content
 data.local: export EREGS_USERNAME=RpSS01rhbx
 data.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%:
-	TITLE=42 \
-	SUBCHAPTER=IV-C \
-	PARTS=400,457,460 \
-	EREGS_URL=$(CORE_URL) \
-	WORKERS=3 \
-	ATTEMPTS=3 \
-	LOGLEVEL=trace \
-	LOG_PARSE_ERRORS=false \
-	EREGS_SUPPLEMENTAL_URL=$(SUPPLEMENTAL_URL) \
-	SKIP_EXISTING_VERSIONS=true \
-	docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
+	EREGS_API_URL=$(CORE_URL) docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
 
 tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
 	cd tools/guidance_pipeline; go build -o build/ .
