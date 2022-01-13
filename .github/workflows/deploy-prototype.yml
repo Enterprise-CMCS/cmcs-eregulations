@@ -1,0 +1,63 @@
+name: "Deploy Prototype"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+
+jobs:
+  deploy:
+    environment:
+      name: "dev"
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      # Find the PR number.  This is not always trivial which is why this uses an existign action
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+
+      # should build first and save the artifact
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '15.11.0'
+      # build the static assets for the website
+      - name: build static assets
+        env:
+          STATIC_ROOT: regulations/static/prototype
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
+        run: |
+          npm ci
+          npm install serverless -g
+          npm run build
+          serverless deploy --stage dev-${PR}
+          echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 9-)"
+      # Notify github that this is deployed and ready to look at
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          body: |
+            :sparkles: See this Prototype Site [in action][1] :sparkles:
+
+            [1]: ${{ steps.build-static-assets.outputs.url }}
+          reactions: '+1'
+      # Run the cypress tests
+      #- name: end-to-end tests
+        #uses: cypress-io/github-action@v2
+        #with:
+          #working-directory: e2e
+          #config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
+        #env:
+          #CYPRESS_DEPLOYING: true
