@@ -26,7 +26,11 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
 
 package:
-  individually: true
+  individually: false
+  exclude:
+    - static-assets/**
+    - node_modules/**
+    - regulations/static/**
 
 custom:
   stage: ${opt:stage, self:provider.stage}
