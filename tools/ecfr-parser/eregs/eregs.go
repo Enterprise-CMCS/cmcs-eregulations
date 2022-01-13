@@ -1,17 +1,17 @@
 package eregs
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
+	"net/url"
 	"os"
-	"time"
+	"path"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -23,11 +23,12 @@ var client = &http.Client{
 	Transport: &http.Transport{},
 }
 
-var (
-	username = os.Getenv("EREGS_USERNAME")
-	password = os.Getenv("EREGS_PASSWORD")
-	partURL  = "%stitle/%d/existing?json_errors"
-)
+var partURL  = "/title/%d/existing"
+
+var postAuth = &network.PostAuth{
+	Username: os.Getenv("EREGS_USERNAME"),
+	Password: os.Getenv("EREGS_PASSWORD"),
+}
 
 // Part is the struct used to send a part to the eRegs server
 type Part struct {
@@ -39,14 +40,6 @@ type Part struct {
 	Processed bool
 }
 
-// Error message returned by eRegs as JSON (if ?json_errors appended)
-type Error struct {
-	Status    string   `json:"status"`
-	Type      string   `json:"type"`
-	Exception string   `json:"exception"`
-	Traceback []string `json:"traceback"`
-}
-
 // ExistingPart is a regulation that has been loaded already
 type ExistingPart struct {
 	Date     string   `json:"date"`
@@ -55,82 +48,43 @@ type ExistingPart struct {
 
 // PostPart is the function that sends a part to the eRegs server
 func PostPart(ctx context.Context, p *Part) error {
-	log.Trace("[eregs] Beginning post of part ", p.Name, " version ", p.Date, " to ", BaseURL)
-	start := time.Now()
-
-	buff := bytes.NewBuffer([]byte{})
-	enc := json.NewEncoder(buff)
-	enc.SetEscapeHTML(false)
-
-	log.Trace("[eregs] Encoding part ", p.Name, " version ", p.Date, " to JSON")
-	if err := enc.Encode(p); err != nil {
-		return err
-	}
-
-	length := buff.Len()
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, BaseURL, buff)
+	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
 		return err
 	}
-	req.Header.Set("Content-Type", "application/json")
-	req.SetBasicAuth(username, password)
-	log.Trace("[eregs] Posting part ", p.Name)
-	resp, err := client.Do(req)
+	return network.PostJSON(ctx, eregsPath, p, true, postAuth)
+}
+
+// PostSupplementalPart is the function that sends a supplemental part to eRegs server
+func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
+	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= 400 {
-		eregsError := &Error{}
-		err = json.NewDecoder(resp.Body).Decode(eregsError)
-		if err != nil {
-			fmt.Errorf("Received error code %d while posting, unable to extract error message: %+v", err)
-		}
-		return fmt.Errorf("Received error code %d while posting: %s", resp.StatusCode, eregsError.Exception)
-	}
-
-	log.Trace("[eregs] Posted ", length, " bytes for part ", p.Name, " version ", p.Date, " in ", time.Since(start))
-	return nil
+	eregsPath.Path = path.Join(eregsPath.Path, "/supplemental_content")
+	return network.PostJSON(ctx, eregsPath, p, true, postAuth)
 }
 
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
-	checkURL := fmt.Sprintf(partURL, BaseURL, title)
-	log.Trace("[eregs] Beginning checking of existing parts at ", checkURL)
-	start := time.Now()
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checkURL, nil)
+	checkURL, err := url.Parse(BaseURL)
 	if err != nil {
-		log.Trace(err)
 		return nil, err
 	}
+	checkURL.Path = path.Join(checkURL.Path, fmt.Sprintf(partURL, title))
 
-	log.Trace("[eregs] Checking title ", title)
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Trace(err)
-		return nil, err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode >= 400 {
-		log.Trace(fmt.Errorf("Received error code %d while checking", resp.StatusCode))
-		return nil, err
-	}
+	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL.String())
 
-	// Read the body
-	b, err := io.ReadAll(resp.Body)
+	body, err := network.Fetch(ctx, checkURL, true)
 	if err != nil {
-		return nil, fmt.Errorf("from `io.ReadAll`: %+v", err)
+		return nil, err
 	}
 
 	// Cast the body to an array of existing parts
-	body := bytes.NewBuffer(b)
 	var vs []ExistingPart
 	d := json.NewDecoder(body)
 	if err := d.Decode(&vs); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Unable to decode response body while checking existing versions: %+v", err)
 	}
 
 	// reduce the results to the desired format
@@ -139,6 +93,5 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 		result[ep.Date] = ep.PartName
 	}
 
-	log.Trace("[eregs] Checked existing parts for Title ", title, " in ", time.Since(start))
 	return result, nil
 }

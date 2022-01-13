@@ -7,19 +7,9 @@ provider:
   role: LambdaFunctionRole
   environment:
     PARSER_ON_LAMBDA: true
-    USE_ENVIRONMENT_VARS: true
     EREGS_USERNAME: ${ssm:/eregulations/http/user~true}
     EREGS_PASSWORD: ${ssm:/eregulations/http/password~true}
-    TITLE: ${ssm:/eregulations/parser/title}
-    SUBCHAPTER: ${ssm:/eregulations/parser/subchapter}
-    PARTS: ${ssm:/eregulations/parser/parts}
-    EREGS_URL: ${self:custom.settings.eregs_url}
-    EREGS_SUPPLEMENTAL_URL: ${self:custom.settings.eregs_url}supplemental_content
-    WORKERS: ${ssm:/eregulations/parser/workers}
-    ATTEMPTS: ${ssm:/eregulations/parser/attempts}
-    LOGLEVEL: ${ssm:/eregulations/parser/loglevel}
-    LOG_PARSE_ERRORS: ${ssm:/eregulations/parser/log_parse_errors}
-    SKIP_EXISTING_VERSIONS: ${ssm:/eregulations/parser/skip_existing_versions}
+    EREGS_API_URL: ${self:custom.settings.eregs_url}
 
 custom:
   stage: ${opt:stage, self:provider.stage}

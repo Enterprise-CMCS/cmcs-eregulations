@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'regcore.search',
     'supplemental_content',
     'report_builder',
+    'solo',
 ]
 
 MIDDLEWARE = [
@@ -141,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Eastern'
 
 USE_I18N = True
 

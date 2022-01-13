@@ -11,7 +11,9 @@ services:
     volumes:
       - eregs-data:/var/lib/postgresql/data
   regulations:
-    build: .
+    build:
+      context: .
+      network: host
     volumes:
       - .:/app/src
     environment:

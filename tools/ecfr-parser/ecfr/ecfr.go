@@ -1,129 +1,50 @@
 package ecfr
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"io"
-	"net/http"
 	"net/url"
-	"os"
-	"time"
-
-	log "github.com/sirupsen/logrus"
+	"path"
+	
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 )
 
-const dateFormat = "2006-01-02"
-const timeout = 10 * time.Second
-
 var (
-	ecfrSite          = urlMustParse("https://ecfr.gov/api/versioner/v1/")
+	ecfrSite          = "https://ecfr.gov/api/versioner/v1/"
 	ecfrFullXML       = "full/%s/title-%d.xml"
 	ecfrVersionsXML   = "versions/title-%d"
 	ecfrStructureJSON = "structure/%s/title-%d.json"
 )
 
-var client = &http.Client{
-	Transport: &http.Transport{},
-}
-
-func urlMustParse(s string) *url.URL {
-	u, err := url.Parse(s)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return u
-}
-
-func buildQuery(opts []FetchOption) string {
-	q := url.Values{}
-	for _, opt := range opts {
-		v := opt.Values()
-		for key := range v {
-			q.Set(key, v.Get(key))
-		}
-	}
-	return q.Encode()
-}
-
-func fetch(ctx context.Context, path *url.URL, opts []FetchOption) (io.Reader, error) {
-	path.RawQuery = buildQuery(opts)
-
-	u := ecfrSite.ResolveReference(path)
-
-	log.Trace("[ecfr] Attempting fetch from ", u.String())
-	start := time.Now()
-
-	c, cancel := context.WithTimeout(ctx, timeout)
-	defer cancel()
-
-	req, err := http.NewRequestWithContext(c, http.MethodGet, u.String(), nil)
-	if err != nil {
-		return nil, fmt.Errorf("from `http.NewRequestWithContext`: %+v", err)
-	}
-
-	req.Header.Set("User-Agent", "E-regs for "+os.Getenv("NAME"))
-	log.Trace("User Agent is: ", req.Header.Get("User-Agent"))
-
-	log.Trace("[ecfr] Connecting to ", u.String())
-	reqStart := time.Now()
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("[err] from `client.Do`: %+v, took %+v", err, time.Since(reqStart))
-	}
-	log.Trace("[ecfr] client.Do took ", time.Since(reqStart))
-    defer resp.Body.Close()
-
-	log.Trace("[ECFR] client.Do took ", time.Since(reqStart))
-	if resp.StatusCode != 200 {
-		log.Trace("[ecfr] Received status code ", resp.StatusCode, " from ", u.String())
-		if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode == http.StatusBadGateway {
-			time.Sleep(2 * time.Second)
-			return fetch(ctx, path, opts)
-		}
-		return nil, fmt.Errorf("%s %d", u.String(), resp.StatusCode)
-	}
-
-	b, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("from `io.ReadAll`: %+v", err)
-	}
-	body := bytes.NewBuffer(b)
-
-	log.Trace("[ecfr] Received ", len(b), " bytes in ", time.Since(start), " from ", u.String())
-	return body, nil
-}
-
-// FetchFull fecthes the full regulation from ECFR
-func FetchFull(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrFullXML, date, title))
+// FetchFull fetches the full regulation from eCFR
+func FetchFull(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, error) {
+	ecfrURL, err := url.Parse(ecfrSite)
 	if err != nil {
 		return nil, err
 	}
-	return fetch(ctx, path, opts)
+	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrFullXML, date, title))
+	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
 }
 
 // FetchStructure fetches the structure for a given title and options
-func FetchStructure(ctx context.Context, date string, title int, opts ...FetchOption) (io.Reader, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrStructureJSON, date, title))
+func FetchStructure(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, error) {
+	ecfrURL, err := url.Parse(ecfrSite)
 	if err != nil {
 		return nil, err
 	}
-	return fetch(ctx, path, opts)
+	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrStructureJSON, date, title))
+	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
 }
 
 // FetchVersions fetches the available versions for a given title
-func FetchVersions(ctx context.Context, title int, opts ...FetchOption) (io.Reader, error) {
-	path, err := url.Parse(fmt.Sprintf(ecfrVersionsXML, title))
+func FetchVersions(ctx context.Context, title int, opts ...network.FetchOption) (io.Reader, error) {
+	ecfrURL, err := url.Parse(ecfrSite)
 	if err != nil {
 		return nil, err
 	}
-	return fetch(ctx, path, opts)
-}
-
-// FetchOption defines optional values for the fetch process
-type FetchOption interface {
-	Values() url.Values
+	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrVersionsXML, title))
+	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
 }
 
 // PartOption is a struct that represents a string referring to the regulation Part
@@ -138,7 +59,7 @@ func (p *PartOption) Values() url.Values {
 	return v
 }
 
-// SubchapterOption is  a struct defining the Chapter and SubChapter
+// SubchapterOption is a struct defining the Chapter and Subchapter
 type SubchapterOption struct {
 	Chapter    string
 	Subchapter string

@@ -3,16 +3,14 @@ package ecfr
 import (
 	"context"
 	"encoding/json"
-
-	log "github.com/sirupsen/logrus"
 )
 
-// Versions is a list of Version structs and is whatis returned by ECFR
+// Versions is a list of Version structs and is what is returned by eCFR
 type Versions struct {
 	ContentVersions []Version `json:"content_versions"`
 }
 
-// Version is the struct representing a regulation version from ECFR
+// Version is the struct representing a regulation version from eCFR
 type Version struct {
 	Date       string
 	Identifier string
@@ -48,7 +46,6 @@ func ExtractVersions(ctx context.Context, title int) (map[string]map[string]stru
 	vs := &Versions{}
 	d := json.NewDecoder(vbody)
 	if err := d.Decode(vs); err != nil {
-		log.Trace("[versions] Failed to decode response")
 		return nil, err
 	}
 	versions := PartVersions(vs.ContentVersions)
