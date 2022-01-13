@@ -31,12 +31,12 @@ storybook: regulations/static/node_modules
 
 .PHONY: prototype
 prototype: ## Run prototype for regulations
-prototype: regulations/static/prototype/node_modules
+prototype: regulations/static/prototype
 	cd regulations/static/prototype; \
 		npm run start-container
 
 prototype.clean: ## Stop prototype for regulations
-prototype.clean: regulations/static/prototype/node_modules
+prototype.clean: regulations/static/prototype
 	cd regulations/static/prototype; \
 		npm run stop-container
 
