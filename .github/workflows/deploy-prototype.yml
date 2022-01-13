@@ -38,11 +38,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
+          pushd regulations/static/prototype
           npm ci
           npm install serverless -g
           npm run build
           serverless deploy --stage dev-${PR}
           echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 9-)"
+          popd
       # Notify github that this is deployed and ready to look at
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v1
