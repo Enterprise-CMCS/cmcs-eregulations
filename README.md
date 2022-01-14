@@ -71,3 +71,13 @@ Running `make test` after `make local` will run the cypress suite of end to end 
 
 Every type of model has an "Export to JSON" button that will export the data to a JSON format that can be easily imported
 by saving the file to the fixtures folder and importing it with the built in `loaddata` command from Django.
+
+## Running eRegs Prototype ##
+
+To better support Rapid Prototyping, a VueJS Single Page Application (SPA) has been created using the [Vue CLI](https://cli.vuejs.org/).
+
+1. `make prototype` to spin up Docker container
+2. visit `localhost:8081` to view prototype
+3. edit files in `/regulations/static/prototype` to make changes
+4. changes should be reflected in running prototype via hot reloading
+5. `make prototype:clean` to tear down Docker container
