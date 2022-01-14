@@ -1,0 +1,38 @@
+name: "Remove Prototype"
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  remove:
+    environment:
+      name: "dev"
+    runs-on: ubuntu-latest
+    steps:
+      # gettign PR is trivial here because the only tirgger is closing a PR
+      - name: Echo PR#
+        env:
+          PR: ${{ github.event.number }}
+        run: echo "Your PR is ${PR}"
+      # Checkout the code
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      # Setup Node
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      # remove the prototype site
+      - name: remove experimental regulations site server
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ github.event.number }}
+        run: |
+          pushd regulations/static/prototype
+          npm install serverless -g
+          npm install
+          serverless remove --stage dev-${PR}
+          popd
