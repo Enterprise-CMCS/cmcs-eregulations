@@ -11,4 +11,4 @@ services:
         working_dir: /app
         command: go run .
         volumes:
-        - ./tools/ecfr-parser:/app
+        - ./parser/ecfr-parser:/app

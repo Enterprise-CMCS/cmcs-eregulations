@@ -15,15 +15,14 @@ services:
       context: .
       network: host
     volumes:
-      - .:/app/src
+      - ./backend:/app/src
     environment:
       ALLOWED_HOST: regulations
       HTTP_AUTH_USER: RpSS01rhbx
       HTTP_AUTH_PASSWORD: UkOAsfkItN
       PYTHONPATH: /var/lib/eregs
       EREGS_API_BASE: http://regulations:8000/
-      PYTHONPATH: /var/lib/eregs
-      STATIC_URL: http://localhost:8888/regulations/
+      STATIC_URL: http://localhost:8888/
       STATIC_ROOT: /app/src/regulations/static
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
       DEBUG: "True"
@@ -37,7 +36,7 @@ services:
     ports:
       - 8888:80
     volumes:
-      - ./config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
-      - ./regulations/static:/usr/share/nginx/html
+      - ./backend/nginx/config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
+      - ./backend/regulations/static:/usr/share/nginx/html
 volumes:
   eregs-data:

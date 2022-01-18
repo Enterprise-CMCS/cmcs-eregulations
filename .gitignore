@@ -4,7 +4,6 @@ node_modules
 __pycache__/
 e2e/cypress/videos
 .env
-regulations/static/regulations/js/*
-!regulations/static/regulations/js/main.js
-!regulations/static/regulations/js/go-to-version.js
-regulations/static/regulations/css/main.css*
+regulations/static/regulations/static/*
+!regulations/static/regulations/static/fonts/*
+!regulations/static/regulations/static/images/*
