@@ -3,19 +3,22 @@ help: ## Show this help.
 	@egrep '^[a-zA-Z_\.%-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 regulations: ## Build regulations assets
-regulations: regulations/static/regulations/css/main.css regulations/static/regulations/js/main.build.js
+regulations: ui/regulations/node_modules backend/regulations/static/css/main.css backend/regulations/static/js/main.build.js backend/regulations/static/admin
 
-regulations/static/node_modules: regulations/static/package.json
-	cd regulations/static; \
+ui/regulations/node_modules: ui/regulations/package.json
+	cd ui/regulations; \
 		npm install;
 
-regulations/static/regulations/css/main.css: regulations/static/node_modules regulations/static/regulations/css/**/*.scss
-	cd regulations/static; \
+backend/regulations/static/css/main.css: ui/regulations/css/**/*.scss
+	cd ui/regulations; \
 		npm run css;
 
-regulations/static/regulations/js/main.build.js: regulations/static/regulations/js/main.js regulations/static/components/*.vue
-	cd regulations/static; \
+backend/regulations/static/js/main.build.js: ui/regulations/js/main.js ui/regulations/components/*.vue
+	cd ui/regulations; \
 		npm run js;
+
+backend/regulations/static/admin:
+	docker-compose exec regulations python manage.py collectstatic --noinput
 
 .PHONY: watch
 watch: ## Watch regulations static assets and rebuild when they're changed
@@ -25,14 +28,14 @@ watch: ui/regulations/node_modules
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations
-storybook: regulations/static/node_modules
-	cd regulations/static; \
+storybook: ui/regulations/.storybook
+	cd ui/regulations; \
 		npm run storybook
 
 .PHONY: prototype
 prototype: ## Run prototype for regulations
-prototype: regulations/static/prototype
-	cd regulations/static/prototype; \
+prototype: ui/prototype
+	cd ui/prototype; \
 		npm run start-container
 
 prototype.clean: ## Stop prototype for regulations
@@ -109,7 +112,7 @@ local.collectstatic: ## Create a local admin account.
 test: ## run the cypress e2e suite
 	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
 test.local: ## run cypress tests locally without docker
-	cd e2e; \
+	cd ui/e2e; \
 		npm install; \
 		npm run cypress:run;
 
