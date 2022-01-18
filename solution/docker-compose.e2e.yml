@@ -11,4 +11,4 @@ services:
         working_dir: /app
         command: npx cypress run
         volumes:
-        - ./e2e:/app
+        - ./ui/e2e:/app

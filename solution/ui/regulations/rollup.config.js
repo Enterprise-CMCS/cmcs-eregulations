@@ -17,57 +17,57 @@ const plugins = [
 export default [
     {
         // ...
-        input: "components/RelatedRules.vue",
+        input: "js/src/components/RelatedRules.vue",
         output: {
             format: "esm",
-            file: "js/RelatedRules.js",
+            file: "dist/RelatedRules.js",
         },
         plugins,
     },
     {
-        input: "components/CollapseButton.vue",
+        input: "js/src/components/CollapseButton.vue",
         output: {
             format: "esm",
-            file: "js/CollapseButton.js",
+            file: "dist/CollapseButton.js",
         },
         plugins,
     },
     {
-        input: "components/Collapsible.vue",
+        input: "js/src/components/Collapsible.vue",
         output: {
             format: "esm",
-            file: "js/Collapsible.js",
+            file: "dist/Collapsible.js",
         },
         plugins,
     },
     {
-        input: "components/SupplementalContent.vue",
+        input: "js/src/components/SupplementalContent.vue",
         output: {
             format: "esm",
-            file: "js/SupplementalContent.js",
+            file: "dist/SupplementalContent.js",
         },
         plugins,
     },
     {
-        input: "components/tooltips/CopyBtn.vue",
+        input: "js/src/components/tooltips/CopyBtn.vue",
         output: {
             format: "esm",
-            file: "js/CopyBtn.js",
+            file: "dist/CopyBtn.js",
         },
         plugins,
     },
     {
-        input: "components/TableComponent.vue",
+        input: "js/src/components/TableComponent.vue",
         output: {
             format: "esm",
-            file: "js/TableComponent.js",
+            file: "dist/TableComponent.js",
         },
         plugins,
     },
     {
         input: "js/main.js",
         output: {
-            file: "../backend/regulations/static/js/main.build.js",
+            file: "../static-assets/js/main.build.js",
             format: "iife",
         },
         plugins,

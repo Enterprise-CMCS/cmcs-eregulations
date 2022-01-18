@@ -3,21 +3,21 @@ help: ## Show this help.
 	@egrep '^[a-zA-Z_\.%-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 regulations: ## Build regulations assets
-regulations: ui/regulations/node_modules backend/regulations/static/css/main.css backend/regulations/static/js/main.build.js backend/regulations/static/admin
+regulations: ui/regulations/node_modules static-assets/css/main.css static-assets/js/main.build.js static-assets/admin
 
 ui/regulations/node_modules: ui/regulations/package.json
 	cd ui/regulations; \
 		npm install;
 
-backend/regulations/static/css/main.css: ui/regulations/css/**/*.scss
+static-assets/css/main.css: ui/regulations/css/**/*.scss
 	cd ui/regulations; \
 		npm run css;
 
-backend/regulations/static/js/main.build.js: ui/regulations/js/main.js ui/regulations/components/*.vue
+static-assets/js/main.build.js: ui/regulations/js/main.js ui/regulations/js/src/components/*.vue
 	cd ui/regulations; \
 		npm run js;
 
-backend/regulations/static/admin:
+static-assets/admin:
 	docker-compose exec regulations python manage.py collectstatic --noinput
 
 .PHONY: watch
@@ -84,15 +84,6 @@ data.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%:
 	EREGS_API_URL=$(CORE_URL) docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
-
-tools/guidance_pipeline/build/guidance_pipeline: tools/guidance_pipeline/*.go
-	cd tools/guidance_pipeline; go build -o build/ .
-
-serverless/guidance/*.json: tools/guidance_pipeline/build/guidance_pipeline
-	./tools/guidance_pipeline/build/guidance_pipeline -f tools/guidance_pipeline/guidances.txt -o serverless/guidance
-
-supplemental_content: ## Load old supplemental content into a folder
-supplemental_content: serverless/guidance/*.json
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker-compose stop

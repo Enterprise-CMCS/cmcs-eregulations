@@ -1,11 +1,11 @@
 import Vue from "vue/dist/vue.esm.browser.min";
 
-import RelatedRules from "./RelatedRules";
-import Collapsible from "./Collapsible";
-import CollapseButton from "./CollapseButton";
-import SupplementalContent from "./SupplementalContent";
-import CopyBtn from "./CopyBtn";
-import TableComponent from "./TableComponent";
+import RelatedRules from "../dist/RelatedRules";
+import Collapsible from "../dist/Collapsible";
+import CollapseButton from "../dist/CollapseButton";
+import SupplementalContent from "../dist/SupplementalContent";
+import CopyBtn from "../dist/CopyBtn";
+import TableComponent from "../dist/TableComponent";
 
 import { goToVersion } from "./go-to-version";
 
