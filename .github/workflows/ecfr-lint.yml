@@ -25,7 +25,7 @@ jobs:
     # Install all the dependencies
     - name: Install dependencies
       run: |
-        cd tools/ecfr-parser
+        cd solution/ecfr-parser
         go version
         go get -u golang.org/x/lint/golint
 

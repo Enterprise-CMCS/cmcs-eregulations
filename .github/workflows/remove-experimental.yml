@@ -35,7 +35,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ github.event.number }}
         run: |
-          pushd serverless
+          pushd solution/backend
           npm install serverless -g
           npm install
           serverless remove --stage dev-${PR}
@@ -47,7 +47,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ github.event.number }}
         run: |
-          pushd serverless/static-assets/serverless
+          pushd solution/static-assets
           npm install serverless -g
           npm install
           serverless remove --stage dev-${PR}

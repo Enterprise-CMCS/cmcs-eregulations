@@ -16,7 +16,7 @@ custom:
   settings:
     eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v2/
   go:
-    baseDir: ../tools/ecfr-parser
+    baseDir: ./ecfr-parser
 
 functions:
   ecfr_parser:

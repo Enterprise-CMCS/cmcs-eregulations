@@ -1,10 +1,13 @@
 service: cmcs-eregs-site
+#variablesResolutionMode: 20210326
 
 provider:
   name: aws
   runtime: python3.8
   region: us-east-1
-  role: LambdaFunctionRole
+  iam:
+    role: LambdaFunctionRole
+  lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}
@@ -25,11 +28,13 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
 
 package:
+  patterns:
+    - '!node_modules/**'
+    - '!nginx/**'
+    - '!package.json'
+    - '!package-lock.json'
+    - '!serverless*'
   individually: false
-  exclude:
-    - static-assets/**
-    - node_modules/**
-    - regulations/static/**
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -48,10 +53,10 @@ functions:
       STATIC_URL: ${self:custom.settings.static_url}
       WORKING_DIR: /var/task
     handler: wsgi_handler.handler
-    timeout: 300
+    timeout: 30
     events:
       - http: ANY /
-      - http: ANY {proxy+}
+      - http: ANY /{proxy+}
   reg_core_migrate:
     handler: migrate.handler
     timeout: 300

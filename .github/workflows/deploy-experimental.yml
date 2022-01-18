@@ -39,19 +39,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r ./serverless/requirements.txt
+          pip install -r ./solution/backend/requirements.txt
       # build the static assets for the website
       - name: build static assets
         env:
-          STATIC_URL: http://localhost:8888/regulations/
-          STATIC_ROOT: regulations/static
+          STATIC_URL: http://localhost:8888/
+          STATIC_ROOT: solution/satic-assets/regulation
         run: |
+          pushd solution
           make regulations
-          rm -r regulations/static/node_modules
-          python manage.py collectstatic --noinput
-          cp -r regulations/static/regulations serverless/static-assets/static
-          cp -r regulations/static/admin serverless/static-assets/static/admin
-          cp -r regulations/static/report_builder/ serverless/static-assets/static/report_builder/
+          popd
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
@@ -60,7 +57,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
-          pushd serverless/static-assets/serverless
+          pushd solution/static-assets
           npm install serverless -g
           npm install
           serverless deploy --stage dev-${PR}
@@ -74,7 +71,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
-          pushd serverless
+          pushd solution
           npm install serverless -g
           npm install
           serverless deploy --config ./serverless-experimental.yml --stage dev-${PR} | tee output.log

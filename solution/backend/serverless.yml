@@ -28,9 +28,10 @@ provider:
 package:
   individually: false
   exclude:
-    - static-assets/**
     - node_modules/**
-    - regulations/static/**
+    - nginx/**
+    - package.json
+    - package-lock.json
 
 custom:
   stage: ${opt:stage, self:provider.stage}

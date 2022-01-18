@@ -9,7 +9,7 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   s3Sync:
     - bucketName: eregs-${self:custom.stage}-site-assets
-      localDir: ../regulations
+      localDir: ./regulations
   cloudfrontInvalidate:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId, false}
       items:
