@@ -28,13 +28,15 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
 
 package:
-  patterns:
-    - '!node_modules/**'
-    - '!nginx/**'
-    - '!package.json'
-    - '!package-lock.json'
-    - '!serverless*'
+  #patterns:
+  #  - '!node_modules/**'
+  #  - '!nginx/**'
+  #  - '!package.json'
+  #  - '!package-lock.json'
   individually: false
+  exclude:
+    - node_modules/**
+    - nginx/**
 
 custom:
   stage: ${opt:stage, self:provider.stage}
