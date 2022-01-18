@@ -25,12 +25,12 @@ jobs:
     # Install all the dependencies
     - name: Install dependencies
       run: |
-        cd solution/ecfr-parser
+        cd solution/parser/ecfr-parser
         go version
         go get -u golang.org/x/lint/golint
 
     # Run lint on the code
     - name: Run lint
       run: |
-        cd solution/parser
+        cd solution/parser/ecfr-parser
         golint -set_exit_status ./...
