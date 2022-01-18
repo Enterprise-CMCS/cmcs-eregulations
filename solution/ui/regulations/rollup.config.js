@@ -67,7 +67,7 @@ export default [
     {
         input: "js/main.js",
         output: {
-            file: "../static-assets/js/main.build.js",
+            file: "../../static-assets/regulations/js/main.build.js",
             format: "iife",
         },
         plugins,

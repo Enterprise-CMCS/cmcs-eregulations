@@ -24,7 +24,7 @@ services:
       PYTHONPATH: /var/lib/eregs
       EREGS_API_BASE: http://regulations:8000/
       STATIC_URL: http://localhost:8888/
-      STATIC_ROOT: /app/static-assets
+      STATIC_ROOT: /app/static-assets/regulations
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
       DEBUG: "True"
       SUPPLEMENTAL_CONTENT_PATH: /app/src/serverless/guidance
@@ -38,6 +38,6 @@ services:
       - 8888:80
     volumes:
       - ./backend/nginx/config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
-      - ./static-assets:/usr/share/nginx/html
+      - ./static-assets/regulations:/usr/share/nginx/html
 volumes:
   eregs-data:
