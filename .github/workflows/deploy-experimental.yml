@@ -74,7 +74,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
-          pushd solution
+          pushd solution/backend
           npm install serverless -g
           npm install
           serverless deploy --config ./serverless-experimental.yml --stage dev-${PR} | tee output.log
@@ -97,7 +97,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
-          pushd serverless
+          pushd solution/parser
           npm install serverless -g
           npm install
           serverless deploy --config ./serverless-parser.yml --stage dev-${PR}
@@ -117,7 +117,7 @@ jobs:
       - name: end-to-end tests
         uses: cypress-io/github-action@v2
         with:
-          working-directory: e2e
+          working-directory: solution/ui/e2e
           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
         env:
           CYPRESS_DEPLOYING: true
