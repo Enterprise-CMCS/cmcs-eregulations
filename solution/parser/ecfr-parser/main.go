@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
+	"github.com/cmsgov/cmcs-eregulations/solution/parser/ecfr-parser/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/solution/parser/ecfr-parser/eregs"
+	"github.com/cmsgov/cmcs-eregulations/solution/parser/ecfr-parser/parsexml"
 
 	"github.com/aws/aws-lambda-go/lambda"
 

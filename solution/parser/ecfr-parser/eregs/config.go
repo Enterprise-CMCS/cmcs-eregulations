@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"encoding/json"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+	"github.com/cmsgov/cmcs-eregulations/solution/parser/ecfr-parser/network"
 
 	log "github.com/sirupsen/logrus"
 )
