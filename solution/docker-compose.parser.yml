@@ -1,0 +1,14 @@
+version: '3'
+services:
+    parser:
+        image: golang:1.16
+        container_name: parser
+        network_mode: host
+        environment:
+        - EREGS_USERNAME=${EREGS_USERNAME:-}
+        - EREGS_PASSWORD=${EREGS_PASSWORD:-}
+        - EREGS_API_URL=${EREGS_API_URL:-}
+        working_dir: /app
+        command: go run .
+        volumes:
+        - ./tools/ecfr-parser:/app
