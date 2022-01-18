@@ -32,4 +32,5 @@ jobs:
     # Run lint on the code
     - name: Run lint
       run: |
+        cd solution/parser
         golint -set_exit_status ./...

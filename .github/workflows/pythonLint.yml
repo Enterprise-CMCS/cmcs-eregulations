@@ -19,4 +19,5 @@ jobs:
           pip install flake8
       - name: Run lint
         run: |
+          pushd solution
           make lint

@@ -3,7 +3,7 @@ help: ## Show this help.
 	@egrep '^[a-zA-Z_\.%-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 regulations: ## Build regulations assets
-regulations: ui/regulations/node_modules static-assets/regulations/css/main.css static-assets/regulations/js/main.build.js static-assets/regulations/admin
+regulations: ui/regulations/node_modules static-assets/regulations/css/main.css static-assets/regulations/js/main.build.js
 
 ui/regulations/node_modules: ui/regulations/package.json
 	cd ui/regulations; \
@@ -16,9 +16,6 @@ static-assets/regulations/css/main.css: ui/regulations/css/**/*.scss
 static-assets/regulations/js/main.build.js: ui/regulations/js/main.js ui/regulations/js/src/components/*.vue
 	cd ui/regulations; \
 		npm run js;
-
-static-assets/regulations/admin:
-	docker-compose exec regulations python manage.py collectstatic --noinput
 
 .PHONY: watch
 watch: ## Watch regulations static assets and rebuild when they're changed

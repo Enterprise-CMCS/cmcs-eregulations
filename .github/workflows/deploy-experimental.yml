@@ -48,6 +48,9 @@ jobs:
         run: |
           pushd solution
           make regulations
+          cd backend
+          python manage.py collect-static --noinput
+          cd ..
           popd
       # deploy static assets to AWS
       - name: deploy static assets
