@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"path"
 	
-	"github.com/cmsgov/cmcs-eregulations/solution/parser/ecfr-parser/network"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 )
 
 var (
