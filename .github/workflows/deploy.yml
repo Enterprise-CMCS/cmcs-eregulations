@@ -23,18 +23,20 @@ jobs:
       # should build first and save the artifact
       - uses: actions/setup-node@v1
         with:
-          node-version: '15.11.0'
-      - name: build static assets
-        run: |
-          make regulations
-          cp -r regulations/static/regulations serverless/static-assets/static
-          rm -r regulations/static/node_modules
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
+          node-version: '14.x'
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
+      - name: build static assets
+        env:
+          STATIC_ROOT: ../static-assets/regulations
+        run: |
+          pushd solution
+          make regulations
+          cd backend
+          python manage.py collectstatic --noinput
+          cd ..
+          popd
       - name: deploy static assets
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -68,16 +70,16 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          pushd serverless
+          pushd solution/parser
           npm install serverless -g
           npm install
-          serverless deploy --config ./serverless-parser.yml --stage ${{ matrix.environment }}
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --config ./serverless-parser.yml --function ecfr_parser --stage ${{ matrix.environment }}
+          serverless deploy --stage dev-${PR}
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev-${PR}
           popd
       - name: end-to-end tests
         uses: cypress-io/github-action@v2
         with:
-          working-directory: e2e
+          working-directory: solution/ui/e2e
           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
         env:
           CYPRESS_DEPLOYING: true
