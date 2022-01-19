@@ -1,14 +1,17 @@
 service: cmcs-eregs-parser
+variablesResolutionMode: 20210326
 
 provider:
   name: aws
   runtime: go1.x
   region: us-east-1
-  role: LambdaFunctionRole
+  iam:
+    role: LambdaFunctionRole
+  lambdaHashingVersion: '20201221'
   environment:
     PARSER_ON_LAMBDA: true
-    EREGS_USERNAME: ${ssm:/eregulations/http/user~true}
-    EREGS_PASSWORD: ${ssm:/eregulations/http/password~true}
+    EREGS_USERNAME: ${ssm:/eregulations/http/user}
+    EREGS_PASSWORD: ${ssm:/eregulations/http/password}
     EREGS_API_URL: ${self:custom.settings.eregs_url}
 
 custom:
@@ -16,7 +19,7 @@ custom:
   settings:
     eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v2/
   go:
-    baseDir: ./ecfr-parser
+    baseDir: ecfr-parser/
 
 functions:
   ecfr_parser:
@@ -32,7 +35,7 @@ resources:
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
-        Path: ${ssm:/account_vars/iam/path~true}
+        Path: ${ssm:/account_vars/iam/path}
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -48,7 +51,7 @@ resources:
             - - 'arn:aws:iam::'
               - Ref: AWS::AccountId
               - ':policy'
-              - ${ssm:/account_vars/iam/permissions_boundary_policy~true}
+              - ${ssm:/account_vars/iam/permissions_boundary_policy}
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
@@ -82,7 +85,7 @@ resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
-        VpcId: ${ssm:/account_vars/vpc/id~true}
+        VpcId: ${ssm:/account_vars/vpc/id}
         Tags:
           - Key: "Name"
             Value: "ServerlessSecurityGroup"
