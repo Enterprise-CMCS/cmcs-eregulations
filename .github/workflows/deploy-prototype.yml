@@ -29,17 +29,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '15.11.0'
+          node-version: '14.x'
       # build the static assets for the website
       - name: build static assets and deploy
         id: build-static-assets-and-deploy
         env:
-          STATIC_ROOT: regulations/static/prototype
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
-          pushd regulations/static/prototype
+          pushd solution/ui/prototype
           npm ci
           npm install serverless -g
           npm run build

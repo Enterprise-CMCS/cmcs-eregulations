@@ -23,7 +23,7 @@ jobs:
       # Setup Node
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
       # remove the prototype site
       - name: remove experimental regulations site server
         env:
@@ -31,7 +31,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ github.event.number }}
         run: |
-          pushd regulations/static/prototype
+          pushd solution/ui/prototype
           npm install serverless -g
           npm install
           serverless remove --stage dev-${PR}

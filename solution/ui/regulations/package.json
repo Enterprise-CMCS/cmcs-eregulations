@@ -1,0 +1,52 @@
+{
+  "name": "regulations",
+  "description": "",
+  "scripts": {
+    "css": "npx sass -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
+    "watch-css": "npx sass --watch -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "watch-js": "npx rollup -c --watch --sourcemap",
+    "js": "npx rollup -c --sourcemap"
+  },
+  "license": "CC",
+  "private": true,
+  "engines": {
+    "node": "15"
+  },
+  "dependencies": {
+    "@cmsgov/design-system": "^2.5.0",
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "lodash": "^4.17.21",
+    "react": "16.x",
+    "react-dom": "16.x",
+    "rollup": "^2.48.0",
+    "rollup-plugin-vue": "^5.1.9",
+    "sass": "^1.32.8",
+    "vue": "^2.6.12",
+    "vue-clickaway": "^2.2.2",
+    "vue-loader": "^15.9.7",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.16",
+    "@rollup/plugin-alias": "^3.1.8",
+    "@rollup/plugin-commonjs": "^21.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/builder-webpack5": "^6.4.9",
+    "@storybook/manager-webpack5": "^6.4.9",
+    "@storybook/vue": "^6.4.9",
+    "@vue/component-compiler": "^4.2.4",
+    "babel-loader": "^8.2.2",
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-vue": "^8.1.1",
+    "prettier": "2.2.1",
+    "webpack": "^5.65.0"
+  }
+}

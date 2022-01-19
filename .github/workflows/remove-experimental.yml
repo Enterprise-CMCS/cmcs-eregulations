@@ -23,7 +23,7 @@ jobs:
       # Setup Node
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
       # Setup Python
       - uses: actions/setup-python@v2
         with:
@@ -35,7 +35,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ github.event.number }}
         run: |
-          pushd serverless
+          pushd solution/backend
           npm install serverless -g
           npm install
           serverless remove --stage dev-${PR}
@@ -47,7 +47,19 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ github.event.number }}
         run: |
-          pushd serverless/static-assets/serverless
+          pushd solution/static-assets
+          npm install serverless -g
+          npm install
+          serverless remove --stage dev-${PR}
+          popd
+      # Remove the parser lambda
+      - name: remove parser
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ github.event.number }}
+        run: |
+          pushd solution/parser
           npm install serverless -g
           npm install
           serverless remove --stage dev-${PR}
