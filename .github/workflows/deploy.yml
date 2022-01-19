@@ -28,6 +28,8 @@ jobs:
         with:
           python-version: '3.8'
       - name: build static assets
+        env:
+          STATIC_ROOT: ../static-assets/regulations
         run: |
           pushd solution
           make regulations
