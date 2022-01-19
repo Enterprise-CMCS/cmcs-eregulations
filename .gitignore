@@ -8,3 +8,4 @@ solution/backend/regulations/static/*
 solution/static-assets/regulations/*
 !solution/static-assets/regulations/fonts/*
 !solution/static-assets/regulations/images/*
+solution/ui/regulations/dist
