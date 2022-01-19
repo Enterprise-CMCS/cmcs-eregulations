@@ -44,7 +44,7 @@ jobs:
       - name: build static assets
         env:
           STATIC_URL: http://localhost:8888/
-          STATIC_ROOT: solution/satic-assets/regulation
+          STATIC_ROOT: solution/static-assets/regulation
         run: |
           pushd solution
           make regulations
