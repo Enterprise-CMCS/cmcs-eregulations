@@ -1,37 +1,38 @@
 service: cmcs-eregs-site
+variablesResolutionMode: 20210326
 
 provider:
   name: aws
   runtime: python3.8
   region: us-east-1
-  role: LambdaFunctionRole
+  iam:
+    role: LambdaFunctionRole
+  lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}
-    DB_PASSWORD: ${ssm:/eregulations/db/password~true}
+    DB_PASSWORD: ${ssm:/eregulations/db/password}
     DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
     DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
     GA_ID: ${ssm:/eregulations/http/google_analytics}
-    HTTP_AUTH_USER: ${ssm:/eregulations/http/user~true}
-    HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password~true}
-    DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user~true}
-    DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password~true}
+    HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
+    HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
+    DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user}
+    DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password}
     ALLOWED_HOST: '.amazonaws.com'
     STATIC_URL: ${self:custom.settings.static_url}
   vpc:
     securityGroupIds:
       - !Ref ServerlessSecurityGroup
     subnetIds:
-      - ${ssm:/account_vars/vpc/subnets/private/a/id~true}
-      - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
+      - ${ssm:/account_vars/vpc/subnets/private/a/id}
+      - ${ssm:/account_vars/vpc/subnets/private/b/id}
 
 package:
   individually: false
   exclude:
     - node_modules/**
     - nginx/**
-    - package.json
-    - package-lock.json
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -73,7 +74,7 @@ resources:
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
-        Path: ${ssm:/account_vars/iam/path~true}
+        Path: ${ssm:/account_vars/iam/path}
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -89,7 +90,7 @@ resources:
             - - 'arn:aws:iam::'
               - Ref: AWS::AccountId
               - ':policy'
-              - ${ssm:/account_vars/iam/permissions_boundary_policy~true}
+              - ${ssm:/account_vars/iam/permissions_boundary_policy}
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
@@ -123,7 +124,7 @@ resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
-        VpcId: ${ssm:/account_vars/vpc/id~true}
+        VpcId: ${ssm:/account_vars/vpc/id}
         Tags:
           - Key: "Name"
             Value: "ServerlessSecurityGroup"
@@ -132,7 +133,7 @@ resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Database
-        VpcId: ${ssm:/account_vars/vpc/id~true}
+        VpcId: ${ssm:/account_vars/vpc/id}
         Tags:
           - Key: "Name"
             Value: "DBSecurityGroup"
@@ -151,8 +152,8 @@ resources:
       Properties:
         DBSubnetGroupDescription: "RDS Subnet Group"
         SubnetIds:
-          - ${ssm:/account_vars/vpc/subnets/private/a/id~true}
-          - ${ssm:/account_vars/vpc/subnets/private/b/id~true}
+          - ${ssm:/account_vars/vpc/subnets/private/a/id}
+          - ${ssm:/account_vars/vpc/subnets/private/b/id}
         Tags:
           - Key: "Name"
             Value: "DBSubnetGroup"
@@ -195,7 +196,7 @@ resources:
       Type: AWS::RDS::DBCluster
       Properties:
         MasterUsername: ${self:custom.settings.USERNAME}
-        MasterUserPassword: ${ssm:/eregulations/db/password~true}
+        MasterUserPassword: ${ssm:/eregulations/db/password}
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql

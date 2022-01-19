@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '15.11.0'
+          node-version: '14.x'
       # build the static assets for the website
       - name: build static assets and deploy
         id: build-static-assets-and-deploy

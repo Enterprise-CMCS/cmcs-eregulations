@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '15.11.0'
+          node-version: '14.x'
       # setup python
       - uses: actions/setup-python@v2
         if: success() && steps.findPr.outputs.number
@@ -100,10 +100,6 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          cd ecfr-parser
-          ls -la
-          cd ..
-          go version
           serverless deploy --stage dev-${PR}
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev-${PR}
           popd

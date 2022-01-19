@@ -23,7 +23,7 @@ jobs:
       # Setup Node
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
       # remove the prototype site
       - name: remove experimental regulations site server
         env:
