@@ -28,6 +28,18 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
+      # Remove the parser lambda
+      - name: remove parser
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ github.event.number }}
+        run: |
+          pushd solution/parser
+          npm install serverless -g
+          npm install
+          serverless remove --stage dev-${PR}
+          popd
       # remove the regulations site
       - name: remove experimental regulations site server
         env:
@@ -48,18 +60,6 @@ jobs:
           PR: ${{ github.event.number }}
         run: |
           pushd solution/static-assets
-          npm install serverless -g
-          npm install
-          serverless remove --stage dev-${PR}
-          popd
-      # Remove the parser lambda
-      - name: remove parser
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          PR: ${{ github.event.number }}
-        run: |
-          pushd solution/parser
           npm install serverless -g
           npm install
           serverless remove --stage dev-${PR}
