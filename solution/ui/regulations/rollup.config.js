@@ -64,6 +64,7 @@ export default [
         },
         plugins,
     },
+    // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",
         output: {
