@@ -221,13 +221,13 @@ func (s *Section) PostProcess() error {
 			var err error
 			c.Citation, err = generateParagraphCitation(c, prev)
 			if err != nil && err != ErrNoParents {
-				logParseError(fmt.Sprintf("Error generating paragraph citation", err, prev, c))
+				logParseError(fmt.Sprintf("Error generating paragraph citation for %+v -> %+v: %+v", prev, c, err))
 			} else {
 				prev = c
 			}
 			c.Marker, err = c.marker()
 			if err != nil {
-				logParseError(fmt.Sprintf("Error generating paragraph marker", err, prev, c))
+				logParseError(fmt.Sprintf("Error generating paragraph marker for %+v -> %+v: %+v", prev, c, err))
 			}
 		}
 	}
