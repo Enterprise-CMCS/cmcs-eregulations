@@ -11,6 +11,9 @@
     "stop-container": "docker-compose down"
   },
   "dependencies": {
+    "@cmsgov/design-system": "^2.13.0",
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
     "core-js": "^3.6.5",
     "lodash": "^4.17.21",
     "vue": "^2.6.11",
@@ -25,6 +28,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
+    "css-loader": "^3.5.3",
     "eslint": "^6.7.2",
     "eslint-plugin-jest": "^25.3.4",
     "eslint-plugin-vue": "^6.2.2",
