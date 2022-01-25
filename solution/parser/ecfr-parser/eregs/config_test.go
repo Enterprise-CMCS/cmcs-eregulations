@@ -271,7 +271,7 @@ func TestRetrieveConfig(t *testing.T) {
 			Name: "test-bad-fetch",
 			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte("oops"))
+				w.Write([]byte(`{ "exception": "Expected failure" }`))
 			})),
 			Output: nil,
 			Error: true,

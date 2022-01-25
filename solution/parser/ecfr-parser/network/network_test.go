@@ -25,9 +25,9 @@ func TestFetch(t *testing.T) {
 			Name: "fetch-succeed-test",
 			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`This is an arbitrary array of bytes`))
+				w.Write([]byte("This is an arbitrary array of bytes"))
 			})),
-			ExpectedResponse: []byte(`This is an arbitrary array of bytes`),
+			ExpectedResponse: []byte("This is an arbitrary array of bytes"),
 			ErrorExpected: false,
 			JSONErrors: false,
 		},
@@ -35,7 +35,7 @@ func TestFetch(t *testing.T) {
 			Name: "fetch-fail-test",
 			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`This request failed`))
+				w.Write([]byte(`{ "exception": "This request failed, as expected" }`))
 			})),
 			ExpectedResponse: nil,
 			ErrorExpected: true,
@@ -47,12 +47,12 @@ func TestFetch(t *testing.T) {
 				w.WriteHeader(http.StatusOK)
 				keys, ok := r.URL.Query()["json_errors"]
 				if !ok || len(keys[0]) < 1 {
-					w.Write([]byte(`json_errors parameter NOT found!`))
+					w.Write([]byte("json_errors parameter NOT found!"))
 				} else {
-					w.Write([]byte(`json_errors parameter found!`))
+					w.Write([]byte("json_errors parameter found!"))
 				}
 			})),
-			ExpectedResponse: []byte(`json_errors parameter found!`),
+			ExpectedResponse: []byte("json_errors parameter found!"),
 			ErrorExpected: false,
 			JSONErrors: true,
 		},
@@ -61,7 +61,7 @@ func TestFetch(t *testing.T) {
 			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				time.Sleep((1 * time.Second) + (500 * time.Millisecond))
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`This request will cause a context timeout`))
+				w.Write([]byte("This request will cause a context timeout"))
 			})),
 			ExpectedResponse: nil,
 			ErrorExpected: true,
@@ -124,13 +124,13 @@ func TestPostJSON(t *testing.T) {
 				err := d.Decode(&postData)
 				if err != nil {
 					w.WriteHeader(http.StatusInternalServerError)
-					w.Write([]byte(`Failed to decode JSON`))
+					w.Write([]byte(`{ "exception": "Failed to decode JSON" }`))
 				} else if postData.Name != "test" || postData.ID != 5 || !postData.Valid {
 					w.WriteHeader(http.StatusInternalServerError)
-					w.Write([]byte(`Decoded JSON is not valid`))
+					w.Write([]byte(`{ "exception": "Decoded JSON is not valid" }`))
 				} else {
 					w.WriteHeader(http.StatusOK)
-					w.Write([]byte(`OK`))
+					w.Write([]byte("OK"))
 				}
 			})),
 			PostData: &PostData{
@@ -146,7 +146,7 @@ func TestPostJSON(t *testing.T) {
 			Name: "post-fail-test",
 			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`Expected failure`))
+				w.Write([]byte(`{ "exception": "Expected failure" }`))
 			})),
 			PostData: &PostData{},
 			ErrorExpected: true,
@@ -159,10 +159,10 @@ func TestPostJSON(t *testing.T) {
 				keys, ok := r.URL.Query()["json_errors"]
 				if !ok || len(keys[0]) < 1 {
 					w.WriteHeader(http.StatusInternalServerError)
-					w.Write([]byte(`json_errors parameter NOT found!`))
+					w.Write([]byte(`{ "exception": "json_errors parameter NOT found!" }`))
 				} else {
 					w.WriteHeader(http.StatusOK)
-					w.Write([]byte(`json_errors parameter found!`))
+					w.Write([]byte("OK"))
 				}
 			})),
 			PostData: &PostData{},
@@ -175,7 +175,7 @@ func TestPostJSON(t *testing.T) {
 			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				time.Sleep((1 * time.Second) + (500 * time.Millisecond))
 				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`This request will cause a context timeout`))
+				w.Write([]byte("This request will cause a context timeout"))
 			})),
 			PostData: &PostData{},
 			ErrorExpected: true,
@@ -189,17 +189,17 @@ func TestPostJSON(t *testing.T) {
 				if ok {
 					if user != "testusername" {
 						w.WriteHeader(http.StatusUnauthorized)
-						w.Write([]byte(`Bad username!`))
+						w.Write([]byte(`{ "exception": "Bad username!" }`))
 					} else if pass != "testpassword" {
 						w.WriteHeader(http.StatusUnauthorized)
-						w.Write([]byte(`Bad password!`))
+						w.Write([]byte(`{ "exception": "Bad password!" }`))
 					} else {
 						w.WriteHeader(http.StatusOK)
-						w.Write([]byte(`OK`))
+						w.Write([]byte("OK"))
 					}
 				} else {
 					w.WriteHeader(http.StatusInternalServerError)
-					w.Write([]byte(`Failed to retrieve auth parameters!`))
+					w.Write([]byte(`{ "exception": "Failed to retrieve auth parameters!" }`))
 				}
 			})),
 			PostData: &PostData{},
