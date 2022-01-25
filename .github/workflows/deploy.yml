@@ -35,6 +35,8 @@ jobs:
       - name: build static assets
         env:
           STATIC_ROOT: ../static-assets/regulations
+          # This isn't at all accurate, but it doesn't matter; Django just needs it to run collectstatic
+          STATIC_URL: http://localhost:8888/
         run: |
           pushd solution
           make regulations
