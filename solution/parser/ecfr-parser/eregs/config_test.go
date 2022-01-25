@@ -173,11 +173,6 @@ func TestPartListUnmarshalText(t *testing.T) {
 	}
 }
 
-//good config, good results
-//bad config, error fails to decode
-//fetch fails due to bad response, error
-//bad url
-
 func TestRetrieveConfig(t *testing.T) {
 	testTable := []struct {
 		Name string
