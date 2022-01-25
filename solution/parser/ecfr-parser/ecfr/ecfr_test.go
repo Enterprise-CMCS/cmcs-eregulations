@@ -145,15 +145,46 @@ func TestPartOptionValues(t *testing.T) {
 func TestSubchapterOptionValues(t *testing.T) {
 	testTable := []struct {
 		Name string
+		Input SubchapterOption
+		Output url.Values
 	}{
 		{
-			Name: "",
+			Name: "test-valid-subchapteroption",
+			Input: SubchapterOption{
+				Chapter: "IV",
+				Subchapter: "C",
+			},
+			Output: url.Values{
+				"chapter": []string{"IV"},
+				"subchapter": []string{"C"},				
+			},
+		},
+		{
+			Name: "test-empty-subchapteroption",
+			Input: SubchapterOption{},
+			Output: url.Values{
+				"chapter": []string{""},
+				"subchapter": []string{""},
+			},
+		},
+		{
+			Name: "test-single-value-subchapteroption",
+			Input: SubchapterOption{
+				Chapter: "ABC",
+			},
+			Output: url.Values{
+				"chapter": []string{"ABC"},
+				"subchapter": []string{""},
+			},
 		},
 	}
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-
+			output := tc.Input.Values()
+			if !reflect.DeepEqual(output, tc.Output) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Output, output)
+			}
 		})
 	}
 }
