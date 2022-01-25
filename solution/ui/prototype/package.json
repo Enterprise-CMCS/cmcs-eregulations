@@ -8,7 +8,7 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "start-container": "docker compose up -d",
-    "stop-container": "docker-compose down"
+    "stop-container": "docker-compose down --remove-orphans --volumes"
   },
   "dependencies": {
     "@cmsgov/design-system": "^2.13.0",
