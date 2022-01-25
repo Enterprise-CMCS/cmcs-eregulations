@@ -9,8 +9,9 @@ import (
 
 func TestSubchapterArgString(t *testing.T) {
 	arg := SubchapterArg{"one", "two"}
-	if arg.String() != "one-two" {
-		t.Errorf("expected (%s), got (%s)", "one-two", arg.String())
+	expected := "one-two"
+	if arg.String() != expected {
+		t.Errorf("expected (%s), got (%s)", expected, arg.String())
 	}
 }
 
