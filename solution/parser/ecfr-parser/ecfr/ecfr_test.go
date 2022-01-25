@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"time"
+	"reflect"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 )
@@ -112,15 +113,31 @@ func TestFetchFunctions(t *testing.T) {
 func TestPartOptionValues(t *testing.T) {
 	testTable := []struct {
 		Name string
+		Input PartOption
+		Output url.Values
 	}{
 		{
-			Name: "",
+			Name: "test-valid-partoption",
+			Input: PartOption{"100"},
+			Output: url.Values{
+				"part": []string{"100"},
+			},
+		},
+		{
+			Name: "test-empty-partoption",
+			Input: PartOption{},
+			Output: url.Values{
+				"part": []string{""},
+			},
 		},
 	}
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-
+			output := tc.Input.Values()
+			if !reflect.DeepEqual(output, tc.Output) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Output, output)
+			}
 		})
 	}
 }
