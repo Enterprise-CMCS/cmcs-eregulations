@@ -3,6 +3,10 @@ package ecfr
 import (
 	"testing"
 	"reflect"
+	"net/http/httptest"
+	"net/http"
+	"context"
+	"time"
 )
 
 func TestRangeStringUnmarshal(t *testing.T) {
@@ -164,5 +168,159 @@ func TestSubchapterParts(t *testing.T) {
 }
 
 func TestExtractSubchapterParts(t *testing.T) {
-	
+	testTable := []struct {
+		Name string
+		Server *httptest.Server
+		Expected []string
+		Error bool
+	}{
+		{
+			Name: "test-valid-response",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{
+					"identifier": "42",
+					"label": "Title 42 - Public Health",
+					"label_level": "Title 42",
+					"label_description": "Public Health",
+					"reserved": false,
+					"type": "title",
+					"children": [
+						{
+							"identifier": "IV",
+							"label": " Chapter IV - Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"label_level": " Chapter IV",
+							"label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"reserved": false,
+							"type": "chapter",
+							"children": [
+								{
+									"identifier": "C",
+									"label": "Subchapter C - Medical Assistance Programs",
+									"label_level": "Subchapter C",
+									"label_description": "Medical Assistance Programs",
+									"reserved": false,
+									"type": "subchapter",
+									"children": [
+										{
+											"identifier": "430",
+											"label": "Part 430 - Grants to States for Medical Assistance Programs",
+											"label_level": "Part 430",
+											"label_description": "Grants to States for Medical Assistance Programs",
+											"reserved": false,
+											"type": "part",
+											"volumes": [
+												"4"
+											],
+											"children": [],
+											"descendant_range": "430.0 – 430.104"
+										},
+										{
+											"identifier": "431",
+											"label": "Part 431 - State Organization and General Administration",
+											"label_level": "Part 431",
+											"label_description": "State Organization and General Administration",
+											"reserved": false,
+											"type": "part",
+											"volumes": [
+												"4"
+											],
+											"children": [],
+											"descendant_range": "431.1 – 431.1010"
+										},
+										{
+											"identifier": "432",
+											"label": "Part 432 - State Personnel Administration",
+											"label_level": "Part 432",
+											"label_description": "State Personnel Administration",
+											"reserved": false,
+											"type": "part",
+											"volumes": [
+												"4"
+											],
+											"children": [],
+											"descendant_range": "432.1 – 432.55"
+										}
+									],
+									"descendant_range": "430 – 456"
+								}
+							],
+							"descendant_range": "400 – 699"
+						}
+					]
+				}`))
+			})),
+			Expected: []string{"430", "431", "432"},
+			Error: false,
+		},
+		{
+			Name: "test-server-error",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "All is well" }`))
+			})),
+			Expected: []string{},
+			Error: true,
+		},
+		{
+			Name: "test-bad-json",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{ "what" "this json won't decode properly"`))
+			})),
+			Expected: []string{},
+			Error: true,
+		},
+		{
+			Name: "test-bad-depth",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{
+					"identifier": "42",
+					"label": "Title 42 - Public Health",
+					"label_level": "Title 42",
+					"label_description": "Public Health",
+					"reserved": false,
+					"type": "title",
+					"children": [
+						{
+							"identifier": "IV",
+							"label": " Chapter IV - Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"label_level": " Chapter IV",
+							"label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"reserved": false,
+							"type": "chapter",
+							"children": [],
+							"descendant_range": "400 – 699"
+						}
+					]
+				}`))
+			})),
+			Expected: []string{},
+			Error: true,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			defer tc.Server.Close()
+			ecfrSite = tc.Server.URL
+			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			defer cancel()
+			subchapter := SubchapterOption{
+				Chapter: "IV",
+				Subchapter: "C",
+			}
+
+			out, err := ExtractSubchapterParts(ctx, time.Now(), 42, &subchapter)
+
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received (%+v)", out)
+			} else if err == nil && !reflect.DeepEqual(out, tc.Expected) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			}
+		})
+	}
 }
