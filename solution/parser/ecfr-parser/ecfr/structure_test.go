@@ -85,7 +85,82 @@ func TestIdentifierStringUnmarshal(t *testing.T) {
 }
 
 func TestSubchapterParts(t *testing.T) {
-	
+	testTable := []struct {
+		Name string
+		Input Structure
+		Expected []*Structure
+		Error bool
+	}{
+		{
+			Name: "test-one-level",
+			Input: Structure{
+				Children: []*Structure{},
+			},
+			Expected: []*Structure{},
+			Error: true,
+		},
+		{
+			Name: "test-two-levels",
+			Input: Structure{
+				Children: []*Structure{
+					&Structure{
+						Children: []*Structure{},
+					},
+				},
+			},
+			Expected: []*Structure{},
+			Error: true,
+		},
+		{
+			Name: "test-three-levels",
+			Input: Structure{
+				Children: []*Structure{
+					&Structure{
+						Children: []*Structure{
+							&Structure{
+								Children: []*Structure{
+									&Structure{
+										LabelDescription: "test 1",
+									},
+									&Structure{
+										LabelDescription: "test 2",
+									},
+									&Structure{
+										LabelDescription: "test 3",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			Expected: []*Structure{
+				&Structure{
+					LabelDescription: "test 1",
+				},
+				&Structure{
+					LabelDescription: "test 2",
+				},
+				&Structure{
+					LabelDescription: "test 3",
+				},
+			},
+			Error: false,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			out, err := SubchapterParts(&tc.Input)
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received (%+v)", out)
+			} else if err == nil && !reflect.DeepEqual(out, tc.Expected) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			}
+		})
+	}
 }
 
 func TestExtractSubchapterParts(t *testing.T) {
