@@ -1,10 +1,21 @@
 <template>
     <div id="app">
+        <FlashBanner />
         <router-view />
     </div>
 </template>
 
-<script></script>
+<script>
+import FlashBanner from "@/components/FlashBanner.vue";
+
+export default {
+    name: "App",
+    components: {
+        FlashBanner
+    }
+};
+
+</script>
 
 <style lang="scss">
 $font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
@@ -13,4 +24,13 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
+
+h1, h2, h3, h4, h5, h6, p, ul {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+ul {
+    padding-inline-start: 40px;
+}
 </style>
