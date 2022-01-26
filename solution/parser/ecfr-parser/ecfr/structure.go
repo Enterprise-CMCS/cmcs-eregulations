@@ -7,7 +7,6 @@ import (
 	"html"
 	"strings"
 	"time"
-	"fmt"
 )
 
 // Structure is the struct that represents the structure of a regulation part at eCFR
@@ -28,9 +27,6 @@ type RangeString []string
 // UnmarshalText splits the string into parts or throws an error if the string is malformed
 func (rs *RangeString) UnmarshalText(data []byte) error {
 	*rs = strings.Split(string(data), " – ")
-	if len(*rs) < 2 || strings.TrimSpace((*rs)[0]) == "" || strings.TrimSpace((*rs)[1]) == "" {
-		return fmt.Errorf("Failed to unmarshal %s into a valid RangeString", data)
-	}
 	return nil
 }
 

@@ -6,53 +6,82 @@ import (
 )
 
 func TestRangeStringUnmarshal(t *testing.T) {
+	input := []byte("432.1 – 432.200")
+	expected := RangeString{"432.1", "432.200"}
+	var rs RangeString
+	rs.UnmarshalText(input)
+	if !reflect.DeepEqual(rs, expected) {
+		t.Errorf("expected (%s), received (%s)", expected, rs)
+	}
+}
+
+func TestHTMLStringUnmarshal(t *testing.T) {
+	input := []byte("&quot;Hello world&quot; &lt;&amp; &#39;")
+	expected := HTMLString("\"Hello world\" <& '")
+	var hs HTMLString
+	hs.UnmarshalText(input)
+	if hs != expected {
+		t.Errorf("expected (%s), received (%s)", expected, hs)
+	}
+}
+
+func TestIdentifierStringUnmarshal(t *testing.T) {
 	testTable := []struct {
 		Name string
 		Input []byte
-		Expected RangeString
-		Error bool
+		Expected IdentifierString
 	}{
 		{
-			Name: "test-valid-rangestring",
-			Input: []byte("432.1 – 432.200"),
-			Expected: RangeString{"432.1", "432.200"},
-			Error: false,
+			Name: "test-title-identifier",
+			Input: []byte("42"),
+			Expected: IdentifierString{"42"},
 		},
 		{
-			Name: "test-invalid-rangestring",
-			Input: []byte("432.1 – "),
-			Expected: RangeString{"432.1"},
-			Error: true,
+			Name: "test-chapter-identifier",
+			Input: []byte("IV"),
+			Expected: IdentifierString{"IV"},
 		},
 		{
-			Name: "test-single-element-rangestring",
-			Input: []byte("431.1"),
-			Expected: RangeString{"431.1"},
-			Error: true,
+			Name: "test-subchapter-identifier",
+			Input: []byte("C"),
+			Expected: IdentifierString{"C"},
+		},
+		{
+			Name: "test-part-identifier",
+			Input: []byte("430"),
+			Expected: IdentifierString{"430"},
+		},
+		{
+			Name: "test-subpart-identifier",
+			Input: []byte("A"),
+			Expected: IdentifierString{"A"},
+		},
+		{
+			Name: "test-subjectgroup-identifier",
+			Input: []byte("ECFR370de681c5a0a70"),
+			Expected: IdentifierString{"ECFR370de681c5a0a70"},
+		},
+		{
+			Name: "test-section-identifier",
+			Input: []byte("430.1"),
+			Expected: IdentifierString{"430", "1"},
+		},
+		{
+			Name: "test-paragraph-identifier",
+			Input: []byte("430.1 a 1"),
+			Expected: IdentifierString{"430", "1", "a", "1"},
 		},
 	}
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-			var rs RangeString
-			err := rs.UnmarshalText(tc.Input)
-			if err == nil && tc.Error {
-				t.Errorf("expected error, received (%+v)", rs)
-			} else if err != nil && !tc.Error {
-				t.Errorf("expected no error, received (%+v)", err)
-			} else if err == nil && !reflect.DeepEqual(rs, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, rs)
+			var is IdentifierString
+			is.UnmarshalText(tc.Input)
+			if !reflect.DeepEqual(is, tc.Expected) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Expected, is)
 			}
 		})
 	}
-}
-
-func TestHTMLStringUnmarshal(t *testing.T) {
-	
-}
-
-func TestIdentifierStringUnmarshal(t *testing.T) {
-	
 }
 
 func TestSubchapterParts(t *testing.T) {
