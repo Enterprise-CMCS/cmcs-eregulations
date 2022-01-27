@@ -94,8 +94,11 @@ local.clean: ## Remove the local environment entirely.
 local.createadmin: ## Create a local admin account.
 	docker-compose exec regulations python manage.py createsuperuser
 
-local.collectstatic: ## Create a local admin account.
+local.collectstatic: ## Create static assets.
 	docker-compose exec regulations python manage.py collectstatic --noinput
+
+local.opensearch: ## Run a local opensearch environment
+	docker-compose -f docker-compose.opensearch.yml up -d
 
 test: ## run the cypress e2e suite
 	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
