@@ -172,5 +172,3 @@ OPENSEARCH_DSL = {
         'hosts': 'opensearch-node1'
     },
 }
-
-TESTING = True

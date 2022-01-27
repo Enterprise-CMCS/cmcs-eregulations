@@ -18,9 +18,7 @@ class Command(BaseCommand):
             for child in node['children']:
                 if child.get('children'):
                     self.process_node(child, name, title)
-                    #del child['children']
                 self.process_child(child, name, title)
-
         self.process_child(node, name, title)
 
     def process_child(self, child, name, title):
