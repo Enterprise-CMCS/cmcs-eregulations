@@ -12,24 +12,36 @@ class Command(BaseCommand):
     count = 0
     url = f'http://{openSearchURL}:9200/_bulk'
 
-    def process_children(self, children):
+    def process_node(self, node, name, title):
 
-        for child in children:
+        if node.get('children'):
+            for child in node['children']:
+                if child.get('children'):
+                    self.process_node(child, name, title)
+                    #del child['children']
+                self.process_child(child, name, title)
+
+        self.process_child(node, name, title)
+
+    def process_child(self, child, name, title):
+        if child.get('label'):
+            if child.get('title'):
+                child['text'] = child['title']
+                del child['title']
             if child.get('children'):
-                self.process_children(child['children'])
-            else:
-                # print(child)
-                if child.get('label'):
-                    index = f'{{"index": {{"_index": "parts", "_id": "{".".join(child["label"])}"}}}}'
-                    self.data.append(index)
-                    self.data.append(json.dumps(child))
-
+                del child['children']
+            if len(child["label"]) == 1 and child['node_type'] != "PART":
+                child["label"].insert(0, name)
+            index = f'{{"index": {{"_index": "parts", "_id": "{title}.{".".join(child["label"])}"}}}}'
+            self.data.append(index)
+            self.data.append(json.dumps(child))
 
     def handle(self, *args, **options):
         # get all of the parts in date order, oldest to newest
         parts = Part.objects.all().order_by('date')
         for part in parts:
-            self.process_children(part.document['children'])
+            print(type(part.document))
+            self.process_node(part.document, part.name, part.title)
         print(len(self.data))
         count = 0
         chunk = 1000
