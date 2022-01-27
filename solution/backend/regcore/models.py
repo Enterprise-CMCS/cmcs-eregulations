@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.core.validators import MinValueValidator, RegexValidator
 
@@ -33,6 +34,13 @@ class Part(models.Model):
     def toc(self):
         return self.structure['children'][0]['children'][0]['children'][0]
 
+    @property
+    def document_text(self):
+        return self.document
+
+    @property
+    def structure_text(self):
+        return json.dumps(self.structure)
 
 class ParserConfiguration(SingletonModel):
     LOGLEVEL_CHOICES = [

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'supplemental_content',
     'report_builder',
     'solo',
+    'django_opensearch_dsl',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,11 @@ HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 GA_ID = os.environ.get("GA_ID")
 
 X_ROBOTS_TAG = ['noindex', 'nofollow']
+
+OPENSEARCH_DSL = {
+    'default': {
+        'hosts': 'opensearch-node1'
+    },
+}
+
+TESTING = True
