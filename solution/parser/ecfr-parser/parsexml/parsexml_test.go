@@ -141,9 +141,75 @@ func TestParsePart(t *testing.T) {
 	}
 }
 
-//TO IMPLEMENT
 func TestPartPostProcess(t *testing.T) {
-	
+	input := Part{
+		XMLName: xml.Name{
+			Space: "",
+			Local: "DIV5",
+		},
+		Citation: SectionCitation{"some", "part"},
+		Type: "PART",
+		Header: "Some header",
+		Children: PartChildren{
+			&Subpart{
+				Header: "Some subpart",
+				Citation: SectionCitation{"A"},
+				Type: "SUBPART",
+				Children: SubpartChildren{
+					&Section{
+						Type: "SECTION",
+						Citation: SectionCitation{"433", "11"},
+						Header: "§ 433.11 Enhanced FMAP rate for children.",
+						Children: SectionChildren{
+							&Paragraph{
+								Type: "Paragraph",
+								Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	expected := Part{
+		XMLName: xml.Name{
+			Space: "",
+			Local: "DIV5",
+		},
+		Citation: SectionCitation{"some", "part"},
+		Type: "PART",
+		Header: "Some header",
+		Children: PartChildren{
+			&Subpart{
+				Header: "Some subpart",
+				Citation: SectionCitation{"A"},
+				Type: "SUBPART",
+				Children: SubpartChildren{
+					&Section{
+						Type: "SECTION",
+						Citation: SectionCitation{"433", "11"},
+						Header: "§ 433.11 Enhanced FMAP rate for children.",
+						Children: SectionChildren{
+							&Paragraph{
+								Type: "Paragraph",
+								Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+								Citation: []string{"433", "11", "a"},
+								Marker: []string{"a"},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	err := input.PostProcess()
+	if err != nil {
+		t.Errorf("PostProcess failed, this should not happen")
+	} else if !reflect.DeepEqual(input, expected) {
+		t.Errorf("expected (%+v), received (%+v)", expected, input)
+	}
 }
 
 func TestPartChildrenUnmarshalXML(t *testing.T) {
@@ -272,9 +338,53 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 	}
 }
 
-//TO IMPLEMENT
 func TestSubpartPostProcess(t *testing.T) {
-	
+	input := Subpart{
+		Header: "Some subpart",
+		Citation: SectionCitation{"A"},
+		Type: "SUBPART",
+		Children: SubpartChildren{
+			&Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"433", "11"},
+				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+					},
+				},
+			},
+		},
+	}
+
+	expected := Subpart{
+		Header: "Some subpart",
+		Citation: SectionCitation{"A"},
+		Type: "SUBPART",
+		Children: SubpartChildren{
+			&Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"433", "11"},
+				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+						Citation: []string{"433", "11", "a"},
+						Marker: []string{"a"},
+					},
+				},
+			},
+		},
+	}
+
+	err := input.PostProcess()
+	if err != nil {
+		t.Errorf("PostProcess failed, this should not happen")
+	} else if !reflect.DeepEqual(input, expected) {
+		t.Errorf("expected (%+v), received (%+v)", expected, input)
+	}	
 }
 
 func TestSubpartChildrenUnmarshalXML(t *testing.T) {
@@ -444,9 +554,57 @@ func TestXMLStringMarshalText(t *testing.T) {
 	}
 }
 
-//TO IMPLEMENT
 func TestSubjectGroupPostProcess(t *testing.T) {
-	
+	input := SubjectGroup{
+		Type: "SUBJGRP",
+		Header: XMLString{
+			Content: "Some subject group",
+		},
+		Citation: SectionCitation{"some", "subject", "group"},
+		Children: SubjectGroupChildren{
+			&Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"433", "11"},
+				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+					},
+				},
+			},		
+		},
+	}
+
+	expected := SubjectGroup{
+		Type: "SUBJGRP",
+		Header: XMLString{
+			Content: "Some subject group",
+		},
+		Citation: SectionCitation{"some", "subject", "group"},
+		Children: SubjectGroupChildren{
+			&Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"433", "11"},
+				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+						Citation: []string{"433", "11", "a"},
+						Marker: []string{"a"},
+					},
+				},
+			},		
+		},
+	}
+
+	err := input.PostProcess()
+	if err != nil {
+		t.Errorf("PostProcess failed, this should not happen")
+	} else if !reflect.DeepEqual(input, expected) {
+		t.Errorf("expected (%+v), received (%+v)", expected, input)
+	}
 }
 
 func TestSubjectGroupChildrenUnmarshalXML(t *testing.T) {
