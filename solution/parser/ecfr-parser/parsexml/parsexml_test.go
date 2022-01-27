@@ -522,126 +522,169 @@ func TestSubjectGroupChildrenUnmarshalXML(t *testing.T) {
 }
 
 func TestSectionPostProcess(t *testing.T) {
-	input := Section{
-		Type: "SECTION",
-		Citation: SectionCitation{"433", "11"},
-		Header: "§ 433.11 Enhanced FMAP rate for children.",
-		Children: SectionChildren{
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+	testTable := []struct {
+		Name string
+		Input Section
+		Expected Section
+		Error bool
+	}{
+		{
+			Name: "test-full-valid-section",
+			Input: Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"433", "11"},
+				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(1) Services provided to optional targeted low-income children described in § 435...",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(2) Services provided to children born before October 1, 1983, with or without...",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(i) They had been born on or after that date; and ",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(ii) They would not qualify for medical assistance under the State plan in effect...",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(b) Enhanced FMAP is not available if - ",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(1) A State adopts income and resource standards and methodologies for purposes of...",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(2) No funds are available in the State's title XXI allotment, as determined under...",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(3) The State fails to maintain a valid method of identifying services provided on...",
+					},
+					&Citation{
+						Type: "Citation",
+						Content: "[66 FR 2666, Jan. 11, 2001] ",
+					},
+				},
 			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(1) Services provided to optional targeted low-income children described in § 435...",
+			Expected: Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"433", "11"},
+				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+						Citation: []string{"433", "11", "a"},
+						Marker: []string{"a"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(1) Services provided to optional targeted low-income children described in § 435...",
+						Citation: []string{"433", "11", "a", "1"},
+						Marker: []string{"1"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(2) Services provided to children born before October 1, 1983, with or without...",
+						Citation: []string{"433", "11", "a", "2"},
+						Marker: []string{"2"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(i) They had been born on or after that date; and ",
+						Citation: []string{"433", "11", "a", "2", "i"},
+						Marker: []string{"i"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(ii) They would not qualify for medical assistance under the State plan in effect...",
+						Citation: []string{"433", "11", "a", "2", "ii"},
+						Marker: []string{"ii"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(b) Enhanced FMAP is not available if - ",
+						Citation: []string{"433", "11", "b"},
+						Marker: []string{"b"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(1) A State adopts income and resource standards and methodologies for purposes of...",
+						Citation: []string{"433", "11", "b", "1"},
+						Marker: []string{"1"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(2) No funds are available in the State's title XXI allotment, as determined under...",
+						Citation: []string{"433", "11", "b", "2"},
+						Marker: []string{"2"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(3) The State fails to maintain a valid method of identifying services provided on...",
+						Citation: []string{"433", "11", "b", "3"},
+						Marker: []string{"3"},
+					},
+					&Citation{
+						Type: "Citation",
+						Content: "[66 FR 2666, Jan. 11, 2001] ",
+					},
+				},
 			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(2) Services provided to children born before October 1, 1983, with or without...",
+			Error: false,
+		},
+		{
+			Name: "test-md5-hash-citation",
+			Input: Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"432", "1"},
+				Header: "§ 432.1 Basis and purpose.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "This part prescribes regulations to implement section 1902(a)(4) of the Act, which relates to a merit system of State personnel administration and training and use of subprofessional staff and volunteers in State Medicaid programs, and section 1903(a), rates of FFP for Medicaid staffing and training costs. It also prescribes regulations, based on the general administrative authority in section 1902(a)(4), for State training programs for all staff. ",
+					},
+				},
 			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(i) They had been born on or after that date; and ",
+			Expected: Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"432", "1"},
+				Header: "§ 432.1 Basis and purpose.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "This part prescribes regulations to implement section 1902(a)(4) of the Act, which relates to a merit system of State personnel administration and training and use of subprofessional staff and volunteers in State Medicaid programs, and section 1903(a), rates of FFP for Medicaid staffing and training costs. It also prescribes regulations, based on the general administrative authority in section 1902(a)(4), for State training programs for all staff. ",
+						Citation: []string{"432", "1", "a9b4ca164fc8bf23d8d44767a9940bf2"},
+						Marker: nil,
+					},
+				},
 			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(ii) They would not qualify for medical assistance under the State plan in effect...",
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(b) Enhanced FMAP is not available if - ",
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(1) A State adopts income and resource standards and methodologies for purposes of...",
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(2) No funds are available in the State's title XXI allotment, as determined under...",
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(3) The State fails to maintain a valid method of identifying services provided on...",
-			},
-			&Citation{
-				Type: "Citation",
-				Content: "[66 FR 2666, Jan. 11, 2001] ",
-			},
+			Error: false,
 		},
 	}
 
-	expected := Section{
-		Type: "SECTION",
-		Citation: SectionCitation{"433", "11"},
-		Header: "§ 433.11 Enhanced FMAP rate for children.",
-		Children: SectionChildren{
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
-				Citation: []string{"433", "11", "a"},
-				Marker: []string{"a"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(1) Services provided to optional targeted low-income children described in § 435...",
-				Citation: []string{"433", "11", "a", "1"},
-				Marker: []string{"1"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(2) Services provided to children born before October 1, 1983, with or without...",
-				Citation: []string{"433", "11", "a", "2"},
-				Marker: []string{"2"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(i) They had been born on or after that date; and ",
-				Citation: []string{"433", "11", "a", "2", "i"},
-				Marker: []string{"i"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(ii) They would not qualify for medical assistance under the State plan in effect...",
-				Citation: []string{"433", "11", "a", "2", "ii"},
-				Marker: []string{"ii"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(b) Enhanced FMAP is not available if - ",
-				Citation: []string{"433", "11", "b"},
-				Marker: []string{"b"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(1) A State adopts income and resource standards and methodologies for purposes of...",
-				Citation: []string{"433", "11", "b", "1"},
-				Marker: []string{"1"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(2) No funds are available in the State's title XXI allotment, as determined under...",
-				Citation: []string{"433", "11", "b", "2"},
-				Marker: []string{"2"},
-			},
-			&Paragraph{
-				Type: "Paragraph",
-				Content: "(3) The State fails to maintain a valid method of identifying services provided on...",
-				Citation: []string{"433", "11", "b", "3"},
-				Marker: []string{"3"},
-			},
-			&Citation{
-				Type: "Citation",
-				Content: "[66 FR 2666, Jan. 11, 2001] ",
-			},
-		},
-	}
-
-	err := input.PostProcess()
-	if err != nil {
-		t.Errorf("received error (%+v)", err)
-	}
-	if !reflect.DeepEqual(input, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, input)
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			err := tc.Input.PostProcess()
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received (%+v)", tc.Input)
+			} else if err == nil && !reflect.DeepEqual(tc.Input, tc.Expected) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Expected, tc.Input)
+			}
+		})
 	}
 }
 
