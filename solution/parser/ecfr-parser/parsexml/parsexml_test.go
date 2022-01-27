@@ -9,7 +9,137 @@ import (
 
 //TO IMPLEMENT
 func TestParsePart(t *testing.T) {
+	testTable := []struct {
+		Name string
+		Input []byte
+		Expected Part
+		Error bool
+	}{
+		{
+			Name: "test-valid-part",
+			Input: []byte(`
+				<DIV5 N="433" TYPE="PART">
+					<HEAD>PART 399 - EMPLOYEE SAFETY AND HEALTH STANDARDS</HEAD>
+					<AUTH>
+						<HED>Authority:</HED>
+						<PSPACE>49 U.S.C. 31502; and 49 CFR 1.87. </PSPACE>
+					</AUTH>
+					<SOURCE>
+						<HED>Source:</HED>
+						<PSPACE>44 FR 43732, July 26, 1979, unless otherwise noted. </PSPACE>
+					</SOURCE>
+					<DIV6 N="L" TYPE="SUBPART">
+						<HEAD>Subpart L - Step, Handhold, and Deck Requirements...</HEAD>
+						<DIV7 N="ECFRb511534bf191cab" TYPE="SUBJGRP">
+							<HEAD>Assignment of Rights to Benefits</HEAD>
+							<DIV8 N="433.145" TYPE="SECTION" VOLUME="4">
+								<HEAD>§ 433.145 Assignment of rights to benefits - State plan requirements.</HEAD>
+								<P>(a) A State plan must provide that, as a condition of eligibility, each legally...</P>
+								<P>(1) Assign to the Medicaid agency his or her rights, or the rights of any other...</P>
+							</DIV8>
+						</DIV7>
+					</DIV6>
+					<DIV8 N="433.146" TYPE="SECTION" VOLUME="4">
+						<HEAD>§ 433.146 Rights assigned; assignment method.</HEAD>
+						<P>(a) Except as specified in paragraph (b) of this section, the agency must require...</P>
+					</DIV8>
+				</DIV5>
+			`),
+			Expected: Part{
+				XMLName: xml.Name{
+					Space: "",
+					Local: "DIV5",
+				},
+				Citation: SectionCitation{"433"},
+				Type: "PART",
+				Header: "PART 399 - EMPLOYEE SAFETY AND HEALTH STANDARDS",
+				Authority: Authority{
+					Header: "Authority:",
+					Content: "49 U.S.C. 31502; and 49 CFR 1.87. ",
+				},
+				Source: Source{
+					Header: "Source:",
+					Content: "44 FR 43732, July 26, 1979, unless otherwise noted. ",
+				},
+				Children: PartChildren{
+					&Subpart{
+						Type: "SUBPART",
+						Citation: SectionCitation{"L"},
+						Header: "Subpart L - Step, Handhold, and Deck Requirements...",
+						Children: SubpartChildren{
+							&SubjectGroup{
+								Type: "SUBJGRP",
+								Header: XMLString{
+									Content: "Assignment of Rights to Benefits",
+								},
+								Citation: SectionCitation{"ECFRb511534bf191cab"},
+								Children: SubjectGroupChildren{
+									&Section{
+										Type: "SECTION",
+										Citation: SectionCitation{"433", "145"},
+										Header: "§ 433.145 Assignment of rights to benefits - State plan requirements.",
+										Children: SectionChildren{
+											&Paragraph{
+												Type: "Paragraph",
+												Content: "(a) A State plan must provide that, as a condition of eligibility, each legally...",
+											},
+											&Paragraph{
+												Type: "Paragraph",
+												Content: "(1) Assign to the Medicaid agency his or her rights, or the rights of any other...",
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+					&Section{
+						Type: "SECTION",
+						Citation: SectionCitation{"433", "146"},
+						Header: "§ 433.146 Rights assigned; assignment method.",
+						Children: SectionChildren{
+							&Paragraph{
+								Type: "Paragraph",
+								Content: "(a) Except as specified in paragraph (b) of this section, the agency must require...",
+							},
+						},
+					},
+				},
+			},
+			Error: false,
+		},
+		{
+			Name: "test-invalid-part",
+			Input: []byte(`
+				<DIV8 N="433.146" TYPE="SECTION" VOLUME="4">
+					<HEAD>§ 433.146 Rights assigned; assignment method.</HEAD>
+					<P>(a) Except as specified in paragraph (b) of this section, the agency must require...</P>
+				</DIV8>
+			`),
+			Expected: Part{},
+			Error: true,
+		},
+		{
+			Name: "test-bad-xml",
+			Input: []byte("<PThis is bad XML"),
+			Expected: Part{},
+			Error: true,
+		},
+	}
 
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			reader := bytes.NewReader(tc.Input)
+			out, err := ParsePart(reader)
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received (%+v)", out)
+			} else if err == nil && !reflect.DeepEqual(out, &tc.Expected) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			}
+		})
+	}
 }
 
 //TO IMPLEMENT
@@ -17,7 +147,6 @@ func TestPartPostProcess(t *testing.T) {
 	
 }
 
-//TO IMPLEMENT
 func TestPartChildrenUnmarshalXML(t *testing.T) {
 	testTable := []struct {
 		Name string
