@@ -1122,7 +1122,48 @@ func TestAppendixCitationUnmarshalText(t *testing.T) {
 	}
 }
 
-//TO IMPLEMENT
 func TestParagraphLevel(t *testing.T) {
-	
+	testTable := []struct {
+		Name string
+		Input Paragraph
+		Expected int
+	}{
+		{
+			Name: "test-level-0",
+			Input: Paragraph{
+				Citation: []string{"a"},
+			},
+			Expected: 0,
+		},
+		{
+			Name: "test-level-1",
+			Input: Paragraph{
+				Citation: []string{"a", "1"},
+			},
+			Expected: 1,
+		},
+		{
+			Name: "test-nil-marker",
+			Input: Paragraph{
+				Content: "",
+			},
+			Expected: -1,
+		},
+		{
+			Name: "test-match-label",
+			Input: Paragraph{
+				Content: "(a) (b) (xi)",
+			},
+			Expected: 2,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			out := tc.Input.Level()
+			if out != tc.Expected {
+				t.Errorf("expected (%d), received (%d)", tc.Expected, out)
+			}
+		})
+	}
 }
