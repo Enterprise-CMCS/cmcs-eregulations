@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        <FlashBanner />
         <Header />
         <div class="site-container">
             <main class="about">
@@ -234,12 +235,14 @@
 </template>
 
 <script>
+import FlashBanner from "@/components/FlashBanner.vue";
 import Header from "@/components/Header.vue"
 
 export default {
     name: "About",
 
     components: {
+        FlashBanner,
         Header
     }
 

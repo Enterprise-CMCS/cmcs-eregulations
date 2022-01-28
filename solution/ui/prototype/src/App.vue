@@ -1,18 +1,12 @@
 <template>
-    <div id="app">
-        <FlashBanner />
-        <router-view />
-    </div>
+    <router-view />
 </template>
 
 <script>
-import FlashBanner from "@/components/FlashBanner.vue";
 
 export default {
     name: "App",
-    components: {
-        FlashBanner
-    }
+    components: {}
 };
 
 </script>
@@ -24,6 +18,10 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
+
+input {
+    background-color: white;
+}
 
 h1, h2, h3, h4, h5, h6, p, ul {
     margin-block-start: 1em;
