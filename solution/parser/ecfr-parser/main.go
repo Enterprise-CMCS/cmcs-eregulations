@@ -22,12 +22,15 @@ import (
 // TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
 
+var DefaultBaseURL = "http://localhost:8000/v2/"
+
 var config = &eregs.ParserConfig{}
+
 
 func init() {
 	eregs.BaseURL = os.Getenv("EREGS_API_URL")
 	if eregs.BaseURL == "" {
-		eregs.BaseURL = "http://localhost:8000/v2/"
+		eregs.BaseURL = DefaultBaseURL
 	}
 }
 
