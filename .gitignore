@@ -3,6 +3,7 @@ node_modules
 .serverless
 __pycache__/
 e2e/cypress/videos
+solution/ui/e2e/cypress/videos
 .env
 solution/backend/regulations/static/*
 solution/static-assets/regulations/*
