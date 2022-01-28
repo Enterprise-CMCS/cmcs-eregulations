@@ -52,7 +52,7 @@ func TestFetchFunctions(t *testing.T) {
 		w.Write([]byte("OK"))
 	}))
 	defer server.Close()
-	ecfrSite = server.URL
+	EcfrSite = server.URL
 	
 	testTable := []struct {
 		Name string

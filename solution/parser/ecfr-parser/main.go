@@ -24,8 +24,13 @@ const TIMELIMIT = 5000 * time.Second
 
 var DefaultBaseURL = "http://localhost:8000/v2/"
 
-var config = &eregs.ParserConfig{}
+var (
+	ParseTitleFunc = parseTitle
+	StartHandlePartVersionWorkerFunc = startHandlePartVersionWorker
+	HandlePartVersionFunc = handlePartVersion
+)
 
+var config = &eregs.ParserConfig{}
 
 func init() {
 	eregs.BaseURL = os.Getenv("EREGS_API_URL")
@@ -114,7 +119,7 @@ func start() error {
 			title := titleElement.Value.(*eregs.TitleConfig)
 
 			log.Info("[main] Parsing title ", title.Title, "...")
-			if retry, err := parseTitle(title); err == nil {
+			if retry, err := ParseTitleFunc(title); err == nil {
 				queue.Remove(titleElement)
 				processed++
 			} else if !retry {
@@ -229,7 +234,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		var wg sync.WaitGroup
 		for worker := 1; worker < config.Workers+1; worker++ {
 			wg.Add(1)
-			go startHandlePartVersionWorker(ctx, worker, ch, &wg, today)
+			go StartHandlePartVersionWorkerFunc(ctx, worker, ch, &wg, today)
 		}
 
 		for versionList := partList.Front(); versionList != nil; versionList = versionList.Next() {
@@ -283,7 +288,7 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 			processingAttempts++
 			version := versionElement.Value.(*eregs.Part)
 			log.Debug("[worker ", thread, "] Processing part ", version.Name, " version ", version.Date)
-			err := handlePartVersion(ctx, thread, date, version)
+			err := HandlePartVersionFunc(ctx, thread, date, version)
 			if err == nil {
 				version.Processed = true
 				processedVersions++
