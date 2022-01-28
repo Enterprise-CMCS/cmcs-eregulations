@@ -34,6 +34,26 @@ func init() {
 	}
 }
 
+func getLogLevel(l string) log.Level {
+	switch l {
+	case "warn":
+		return log.WarnLevel
+	case "fatal":
+		return log.FatalLevel
+	case "error":
+		return log.ErrorLevel
+	case "info":
+		return log.InfoLevel
+	case "debug":
+		return log.DebugLevel
+	case "trace":
+		return log.TraceLevel
+	default:
+		log.Warn("[main] \"", config.LogLevel, "\" is an invalid log level, defaulting to \"warn\".")
+		return log.WarnLevel
+	}
+}
+
 func parseConfig() {
 	parsexml.LogParseErrors = config.LogParseErrors
 
@@ -47,24 +67,7 @@ func parseConfig() {
 		config.Attempts = 1
 	}
 
-	level := log.WarnLevel
-	switch config.LogLevel {
-	case "warn":
-		level = log.WarnLevel
-	case "fatal":
-		level = log.FatalLevel
-	case "error":
-		level = log.ErrorLevel
-	case "info":
-		level = log.InfoLevel
-	case "debug":
-		level = log.DebugLevel
-	case "trace":
-		level = log.TraceLevel
-	default:
-		log.Warn("[main] \"", config.LogLevel, "\" is an invalid log level, defaulting to \"warn\".")
-	}
-	log.SetLevel(level)
+	log.SetLevel(getLogLevel(config.LogLevel))
 }
 
 // Only runs if parser is in a Lambda
