@@ -870,6 +870,43 @@ func TestSectionPostProcess(t *testing.T) {
 				},
 			},
 		},
+		{
+			Name: "test-paragraph-bad-order",
+			Input: Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"432", "1"},
+				Header: "§ 432.1 Basis and purpose.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(b) <I>Negative case reviews.</I> Except as provided in paragraph (c) of this...",
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(iv) Individuals whose eligibility was determined under a State's option under...",
+					},
+				},
+			},
+			Expected: Section{
+				Type: "SECTION",
+				Citation: SectionCitation{"432", "1"},
+				Header: "§ 432.1 Basis and purpose.",
+				Children: SectionChildren{
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(b) <I>Negative case reviews.</I> Except as provided in paragraph (c) of this...",
+						Citation: []string{"432", "1", "b"},
+						Marker: []string{"b"},
+					},
+					&Paragraph{
+						Type: "Paragraph",
+						Content: "(iv) Individuals whose eligibility was determined under a State's option under...",
+						Citation: []string{"432", "1", "76f6ff614229c6d44034872f9922375d"},
+						Marker: []string{"iv"},
+					},
+				},
+			},
+		},
 	}
 
 	for _, tc := range testTable {
