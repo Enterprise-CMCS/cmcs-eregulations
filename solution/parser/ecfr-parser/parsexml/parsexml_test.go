@@ -7,6 +7,26 @@ import (
 	"bytes"
 )
 
+func TestLogParseError(t *testing.T) {
+	called := false
+	LogWarning = func(args ...interface{}) {
+		called = true
+	}
+
+	LogParseErrors = true
+	logParseError("Test message")
+	if !called {
+		t.Error("logParseError did not successfully log the message")
+	}
+
+	called = false
+	LogParseErrors = false
+	logParseError("Test message")
+	if called {
+		t.Error("logParseError logged the message but should not have")
+	}
+}
+
 func TestParsePart(t *testing.T) {
 	testTable := []struct {
 		Name string
@@ -121,6 +141,35 @@ func TestParsePart(t *testing.T) {
 		{
 			Name: "test-bad-xml",
 			Input: []byte("<PThis is bad XML"),
+			Expected: Part{},
+			Error: true,
+		},
+		{
+			Name: "test-deep-bad-xml",
+			Input: []byte(`
+				<DIV5 N="433" TYPE="PART">
+					<HEAD>PART 399 - EMPLOYEE SAFETY AND HEALTH STANDARDS</HEAD>
+					<AUTH>
+						<HED>Authority:</HED>
+						<PSPACE>49 U.S.C. 31502; and 49 CFR 1.87. </PSPACE>
+					</AUTH>
+					<SOURCE>
+						<HED>Source:</HED>
+						<PSPACE>44 FR 43732, July 26, 1979, unless otherwise noted. </PSPACE>
+					</SOURCE>
+					<DIV6 N="L" TYPE="SUBPART">
+						<HEAD>Subpart L - Step, Handhold, and Deck Requirements...</HEAD>
+						<DIV7 N="ECFRb511534bf191cab" TYPE="SUBJGRP">
+							<HEAD>Assignment of Rights to Benefits</HEAD>
+							<DIV8 N="433.145" TYPE="SECTION" VOLUME="4">
+								<HEAD>§ 433.145 Assignment of rights to benefits - State plan requirements.</HEAD>
+								<P>(a) A State plan must provide that, as a condition of eligibility, each legally...</P
+								<P>(1) Assign to the Medicaid agency his or her rights, or the rights of any other...</P>
+							</DIV8>
+						</DIV7>
+					</DIV6>
+				</DIV5>
+			`),
 			Expected: Part{},
 			Error: true,
 		},

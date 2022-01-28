@@ -15,10 +15,11 @@ import (
 
 // LogParseErrors determines whether to output parsing errors as logs
 var LogParseErrors bool
+var LogWarning = log.Warn
 
 func logParseError(err string) {
 	if LogParseErrors {
-		log.Warn("[parser] ", err)
+		LogWarning("[parser] ", err)
 	}
 }
 
