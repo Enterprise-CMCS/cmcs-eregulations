@@ -3,16 +3,16 @@
         <div v-for="(category, index) in categoryList" :key="index">
             <div class="category">
                 <collapse-button
-                    v-bind:class="{ category: category }"
+                    :class="{ category: category }"
                     :name="category"
                     state="collapsed"
                     class="related-rules-title"
                 >
-                    <template v-slot:expanded
+                    <template #expanded
                         >{{ categories[category].title }}
                         <i class="fa fa-chevron-up category-toggle"></i
                     ></template>
-                    <template v-slot:collapsed
+                    <template #collapsed
                         >{{ categories[category].title }}
                         <i class="fa fa-chevron-down category-toggle"></i
                     ></template>
@@ -20,7 +20,9 @@
                 <collapsible
                     :name="category"
                     :state="
-                        activeCategory === category ? 'expanded' : 'collapsed'
+                        currentActiveCategory === category
+                            ? 'expanded'
+                            : 'collapsed'
                     "
                 >
                     <template v-if="isFetching">
@@ -72,41 +74,38 @@ export default {
         },
         categoryList: {
             type: Array,
-            default: ["FINAL", "PROPOSED", "RFI"],
+            default() {
+                return ["FINAL", "PROPOSED", "RFI"];
+            },
         },
         categories: {
             type: Object,
-            default: {
-                FINAL: {
-                    getRules: (rules) => {
-                        return rules.filter((rule) => {
-                            return rule.type === "Rule";
-                        });
+            default() {
+                return {
+                    FINAL: {
+                        getRules: (rules) =>
+                            rules.filter((rule) => rule.type === "Rule"),
+                        title: "Final Rules",
                     },
-                    title: "Final Rules",
-                },
-                PROPOSED: {
-                    getRules: (rules) => {
-                        return rules.filter((rule) => {
-                            return (
-                                rule.type === "Proposed Rule" &&
-                                rule.action === "Proposed rule."
-                            );
-                        });
+                    PROPOSED: {
+                        getRules: (rules) =>
+                            rules.filter(
+                                (rule) =>
+                                    rule.type === "Proposed Rule" &&
+                                    rule.action === "Proposed rule."
+                            ),
+                        title: "Notices of Proposed Rulemaking",
                     },
-                    title: "Notices of Proposed Rulemaking",
-                },
-                RFI: {
-                    getRules: (rules) => {
-                        return rules.filter((rule) => {
-                            return (
-                                rule.type === "Proposed Rule" &&
-                                rule.action === "Request for information."
-                            );
-                        });
+                    RFI: {
+                        getRules: (rules) =>
+                            rules.filter(
+                                (rule) =>
+                                    rule.type === "Proposed Rule" &&
+                                    rule.action === "Request for information."
+                            ),
+                        title: "Requests for Information",
                     },
-                    title: "Requests for Information",
-                },
+                };
             },
         },
     },
@@ -119,7 +118,11 @@ export default {
         };
     },
 
-    computed: {},
+    computed: {
+        currentActiveCategory() {
+            return this.activeCategory;
+        },
+    },
 
     created() {
         this.fetch_rules(this.title, this.part);
@@ -131,22 +134,24 @@ export default {
             let results = [];
             try {
                 while (url) {
+                    /* eslint-disable no-await-in-loop */
                     const response = await fetch(url);
                     const rules = await response.json();
                     results = results.concat(rules.results ?? []);
                     url = rules.next_page_url;
+                    /* eslint-enable no-await-in-loop */
                 }
                 this.rules = results;
             } catch (error) {
+                // eslint-disable-next-line no-console
                 console.error(error);
             } finally {
                 this.isFetching = false;
             }
         },
         showCategory(category) {
-            category === this.activeCategory
-                ? (this.activeCategory = "")
-                : (this.activeCategory = category);
+            this.currentActiveCategory =
+                category === this.currentActiveCategory ? "" : category;
         },
         buttonClass(category) {
             return this.categories[category].getRules(this.rules).length > 0
