@@ -217,10 +217,7 @@ func (s *Section) PostProcess() {
 			} else {
 				prev = c
 			}
-			c.Marker, err = c.marker()
-			if err != nil {
-				logParseError(fmt.Sprintf("Error generating paragraph marker for %+v -> %+v: %+v", prev, c, err))
-			}
+			c.Marker = c.marker()
 		}
 	}
 	for _, child := range s.Children {
@@ -455,7 +452,7 @@ type Paragraph struct {
 	Marker   []string `json:"marker"`
 }
 
-func (p *Paragraph) marker() ([]string, error) {
+func (p *Paragraph) marker() []string {
 	return extractMarker(p.Content)
 }
 
@@ -464,11 +461,7 @@ func (p *Paragraph) Level() int {
 	if p.Citation != nil {
 		return len(p.Citation) - 1
 	}
-	m, err := p.marker()
-	if err != nil {
-		logParseError(err.Error())
-		return -1
-	}
+	m := p.marker()
 	if m == nil {
 		return -1
 	}

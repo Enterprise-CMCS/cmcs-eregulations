@@ -321,9 +321,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	}
 
 	log.Debug("[worker ", thread, "] Running post process on structure for part ", version.Name, " version ", version.Date)
-	if err := version.Document.PostProcess(); err != nil {
-		return err
-	}
+	version.Document.PostProcess()
 
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
 	if err := eregs.PostPart(ctx, version); err != nil {
