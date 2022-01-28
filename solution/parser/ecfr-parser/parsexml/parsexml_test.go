@@ -204,10 +204,8 @@ func TestPartPostProcess(t *testing.T) {
 		},
 	}
 
-	err := input.PostProcess()
-	if err != nil {
-		t.Errorf("PostProcess failed, this should not happen")
-	} else if !reflect.DeepEqual(input, expected) {
+	input.PostProcess()
+	if !reflect.DeepEqual(input, expected) {
 		t.Errorf("expected (%+v), received (%+v)", expected, input)
 	}
 }
@@ -379,10 +377,8 @@ func TestSubpartPostProcess(t *testing.T) {
 		},
 	}
 
-	err := input.PostProcess()
-	if err != nil {
-		t.Errorf("PostProcess failed, this should not happen")
-	} else if !reflect.DeepEqual(input, expected) {
+	input.PostProcess()
+	if !reflect.DeepEqual(input, expected) {
 		t.Errorf("expected (%+v), received (%+v)", expected, input)
 	}	
 }
@@ -599,10 +595,8 @@ func TestSubjectGroupPostProcess(t *testing.T) {
 		},
 	}
 
-	err := input.PostProcess()
-	if err != nil {
-		t.Errorf("PostProcess failed, this should not happen")
-	} else if !reflect.DeepEqual(input, expected) {
+	input.PostProcess()
+	if !reflect.DeepEqual(input, expected) {
 		t.Errorf("expected (%+v), received (%+v)", expected, input)
 	}
 }
@@ -684,7 +678,6 @@ func TestSectionPostProcess(t *testing.T) {
 		Name string
 		Input Section
 		Expected Section
-		Error bool
 	}{
 		{
 			Name: "test-full-valid-section",
@@ -800,7 +793,6 @@ func TestSectionPostProcess(t *testing.T) {
 					},
 				},
 			},
-			Error: false,
 		},
 		{
 			Name: "test-md5-hash-citation",
@@ -828,18 +820,13 @@ func TestSectionPostProcess(t *testing.T) {
 					},
 				},
 			},
-			Error: false,
 		},
 	}
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-			err := tc.Input.PostProcess()
-			if err != nil && !tc.Error {
-				t.Errorf("expected no error, received (%+v)", err)
-			} else if err == nil && tc.Error {
-				t.Errorf("expected error, received (%+v)", tc.Input)
-			} else if err == nil && !reflect.DeepEqual(tc.Input, tc.Expected) {
+			tc.Input.PostProcess()
+			if !reflect.DeepEqual(tc.Input, tc.Expected) {
 				t.Errorf("expected (%+v), received (%+v)", tc.Expected, tc.Input)
 			}
 		})

@@ -24,7 +24,7 @@ func logParseError(err string) {
 
 // PostProcessor interface
 type PostProcessor interface {
-	PostProcess() error
+	PostProcess()
 }
 
 // ParsePart decodes an io.Reader into a regulation Part
@@ -52,16 +52,13 @@ type Part struct {
 }
 
 // PostProcess is the steps for post processing a Part
-func (p *Part) PostProcess() (err error) {
+func (p *Part) PostProcess() {
 	for _, child := range p.Children {
 		c, ok := child.(PostProcessor)
 		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
+			c.PostProcess()
 		}
 	}
-	return nil
 }
 
 // PartChildren is an array of interface
@@ -99,16 +96,13 @@ type Subpart struct {
 }
 
 // PostProcess defines how to postProcess a subPart
-func (sp *Subpart) PostProcess() error {
+func (sp *Subpart) PostProcess() {
 	for _, child := range sp.Children {
 		c, ok := child.(PostProcessor)
 		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
+			c.PostProcess()
 		}
 	}
-	return nil
 }
 
 // SubpartChildren is an array of interface
@@ -167,16 +161,13 @@ func (xs XMLString) MarshalText() ([]byte, error) {
 }
 
 // PostProcess is the processing of an XMLString after it is unmarshalled
-func (sg *SubjectGroup) PostProcess() error {
+func (sg *SubjectGroup) PostProcess() {
 	for _, child := range sg.Children {
 		c, ok := child.(PostProcessor)
 		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
+			c.PostProcess()
 		}
 	}
-	return nil
 }
 
 // SubjectGroupChildren is an array of interface
@@ -213,7 +204,7 @@ type Section struct {
 }
 
 // PostProcess cleans up the section after it is imported
-func (s *Section) PostProcess() error {
+func (s *Section) PostProcess() {
 	var prev *Paragraph
 	for _, child := range s.Children {
 		c, ok := child.(*Paragraph)
@@ -248,12 +239,9 @@ func (s *Section) PostProcess() error {
 	for _, child := range s.Children {
 		c, ok := child.(PostProcessor)
 		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
+			c.PostProcess()
 		}
 	}
-	return nil
 }
 
 // SectionChildren is an array of interface
