@@ -7,6 +7,9 @@ import (
 	"context"
 	"time"
 	"strings"
+	"encoding/xml"
+	"encoding/json"
+	"fmt"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
@@ -161,28 +164,9 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 	
 }
 
-//NOT IMPLEMENTED
-/*
-	strategy: implement ecfr and eregs mock servers
-		1. one valid part version 
-		2. one invalid part version
-		ecfr endpoints:
-			- fetch structure
-			- fetch full
-		eregs endpoints:
-			- post part
-			- post supplemental part
-	inputs:
-		- context
-		- thread num (doesn't matter, 1 as default)
-		- date (set static, NOT time.now)
-		- version structure
-	outputs:
-		error
-		post version struct should match expected output
-*/
 func TestHandlePartVersion(t *testing.T) {
-	log.SetLevel(log.TraceLevel)
+	config.UploadSupplemental = true
+	
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -254,7 +238,26 @@ func TestHandlePartVersion(t *testing.T) {
 					]
 				}`))
 			} else if path[3] == "title-43.json" {
-
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{
+					"identifier": "42",
+					"label": "Title 42 - Public Health",
+					"label_level": "Title 42",
+					"label_description": "Public Health",
+					"reserved": false,
+					"type": "title",
+					"children": [
+						{
+							"identifier": "IV",
+							"label": " Chapter IV - Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"label_level": " Chapter IV",
+							"label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"reserved": false,
+							"type": "chapter",
+							"children": []
+						}
+					]
+				}`))
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(`{ "exception": "Unrecognized title '` + path[3] + `'" }`))
@@ -280,8 +283,6 @@ func TestHandlePartVersion(t *testing.T) {
 						</DIV8>
 					</DIV5>
 				`))
-			} else if path[3] == "title-43.xml" {
-	
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(`{ "exception": "Unrecognized title '` + path[3] + `'" }`))
@@ -295,7 +296,40 @@ func TestHandlePartVersion(t *testing.T) {
 	ecfr.EcfrSite = ecfrServer.URL
 
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Expected POST method, got ` + r.Method + `" }`))
+			return
+		}
 
+		path := strings.Split(r.URL.Path, "/")
+		if len(path) < 2 {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Invalid POST path '` + r.URL.Path + `'" }`))
+		} else if path[1] == "" {
+			//posting a part
+			d := json.NewDecoder(r.Body)
+			var part struct{}
+			if err := d.Decode(&part); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				errString := fmt.Sprintf("%+v", err)
+				w.Write([]byte(`{ "exception": "POST part - failed to parse JSON: '` + errString + `'" }`))
+				return
+			}
+		} else if path[1] == "supplemental_content" {
+			//posting supplemental content
+			d := json.NewDecoder(r.Body)
+			var part struct{}
+			if err := d.Decode(&part); err != nil {
+				//failed to decode part
+				errString := fmt.Sprintf("%+v", err)
+				w.Write([]byte(`{ "exception": "POST supplemental parts - failed to parse JSON: '` + errString + `'" }`))
+				return
+			}
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("OK"))
 	}))
 	defer eregsServer.Close()
 	eregs.BaseURL = eregsServer.URL
@@ -307,7 +341,7 @@ func TestHandlePartVersion(t *testing.T) {
 		Error bool
 	}{
 		{
-			Name: "test-",
+			Name: "test-valid",
 			Input: eregs.Part{
 				Title: 42,
 				Name: "433",
@@ -374,10 +408,64 @@ func TestHandlePartVersion(t *testing.T) {
 					DescendantRange: nil,
 				},
 				Document: &parsexml.Part{
-
+					XMLName: xml.Name{
+						Space: "",
+						Local: "DIV5",
+					},
+					Structure: nil,
+					Citation: parsexml.SectionCitation{"433"},
+					Type: "PART",
+					Header: "PART 433 - STATE FISCAL ADMINISTRATION ",
+					Authority: parsexml.Authority{
+						Header: "Authority:",
+						Content: "42 U.S.C. 1302. ",
+					},
+					Source: parsexml.Source{
+						Header: "Source:",
+						Content: "43 FR 45201, Sept. 29, 1978, unless otherwise noted. ",
+					},
+					Children: parsexml.PartChildren{
+						&parsexml.Section{
+							Type: "SECTION",
+							Citation: parsexml.SectionCitation{"433", "1"},
+							Header: "§ 433.1 Purpose.",
+							Children: parsexml.SectionChildren{
+								&parsexml.Paragraph{
+									Type: "Paragraph",
+									Content: "This part specifies the rates of FFP for services and administration, and prescribes requirements, prohibitions, and FFP conditions relating to State fiscal activities. ",
+									Citation: parsexml.SectionCitation{"433", "1", "d78835ad878d59bddbcde2a31249107c"},
+									Marker: nil,
+								},
+							},
+						},
+					},
 				},
 			},
 			Error: false,
+		},
+		{
+			Name: "test-bad-fetch-structure",
+			Input: eregs.Part{
+				Title: 43,
+				Name: "433",
+				Date: "2022-01-01",
+				Structure: &ecfr.Structure{},
+				Document: &parsexml.Part{},
+			},
+			Expected: eregs.Part{},
+			Error: true,
+		},
+		{
+			Name: "test-unrecognized-path",
+			Input: eregs.Part{
+				Title: 44,
+				Name: "433",
+				Date: "2022-01-01",
+				Structure: &ecfr.Structure{},
+				Document: &parsexml.Part{},
+			},
+			Expected: eregs.Part{},
+			Error: true,
 		},
 	}
 
@@ -387,7 +475,7 @@ func TestHandlePartVersion(t *testing.T) {
 			defer cancel()
 			date := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
 			err := handlePartVersion(ctx, 1, date, &tc.Input)
-			diff := deep.Equal(tc.Input.Structure, tc.Expected.Structure)
+			diff := deep.Equal(tc.Input.Document, tc.Expected.Document)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
