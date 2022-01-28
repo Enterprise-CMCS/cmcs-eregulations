@@ -160,7 +160,39 @@ func TestHandlePartVersion(t *testing.T) {
 	
 }
 
-//NOT IMPLEMENTED
 func TestContains(t *testing.T) {
-	
+	testTable := []struct {
+		Name string
+		Array []string
+		String string
+		Expected bool
+	}{
+		{
+			Name: "test-in-array",
+			Array: []string{"aaa", "bbb", "ccc"},
+			String: "bbb",
+			Expected: true,
+		},
+		{
+			Name: "test-last-element",
+			Array: []string{"aaa", "bbb", "ccc"},
+			String: "ccc",
+			Expected: true,
+		},
+		{
+			Name: "test-not-in-array",
+			Array: []string{"aaa", "bbb", "ccc"},
+			String: "ddd",
+			Expected: false,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			out := contains(tc.Array, tc.String)
+			if out != tc.Expected {
+				t.Errorf("expected (%t), received (%t)", tc.Expected, out)
+			}
+		})
+	}
 }
