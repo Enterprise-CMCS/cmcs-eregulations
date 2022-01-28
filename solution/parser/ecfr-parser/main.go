@@ -54,20 +54,20 @@ func getLogLevel(l string) log.Level {
 	}
 }
 
-func parseConfig() {
-	parsexml.LogParseErrors = config.LogParseErrors
+func parseConfig(c *eregs.ParserConfig) {
+	parsexml.LogParseErrors = c.LogParseErrors
 
-	if config.Workers < 1 {
-		log.Warn("[main] ", config.Workers, " is an invalid number of workers, defaulting to 1.")
-		config.Workers = 1
+	if c.Workers < 1 {
+		log.Warn("[main] ", c.Workers, " is an invalid number of workers, defaulting to 1.")
+		c.Workers = 1
 	}
 
-	if config.Attempts < 1 {
-		log.Warn("[main] ", config.Attempts, " is an invalid number of attempts, defaulting to 1.")
-		config.Attempts = 1
+	if c.Attempts < 1 {
+		log.Warn("[main] ", c.Attempts, " is an invalid number of attempts, defaulting to 1.")
+		c.Attempts = 1
 	}
 
-	log.SetLevel(getLogLevel(config.LogLevel))
+	log.SetLevel(getLogLevel(c.LogLevel))
 }
 
 // Only runs if parser is in a Lambda
@@ -92,7 +92,7 @@ func start() error {
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
-	parseConfig()
+	parseConfig(config)
 
 	queue := list.New()
 	for _, title := range config.Titles {

@@ -2,8 +2,10 @@ package main
 
 import (
 	"testing"
+	"reflect"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -67,9 +69,63 @@ func TestGetLogLevel(t *testing.T) {
 	}
 }
 
-//NOT IMPLEMENTED
 func TestParseConfig(t *testing.T) {
-	
+	testTable := []struct {
+		Name string
+		Input eregs.ParserConfig
+		Expected eregs.ParserConfig
+	}{
+		{
+			Name: "test-valid-config",
+			Input: eregs.ParserConfig{
+				Workers: 3,
+				Attempts: 4,
+				LogLevel: "info",
+				UploadSupplemental: true,
+				LogParseErrors: false,
+				SkipVersions: true,
+			},
+			Expected: eregs.ParserConfig{
+				Workers: 3,
+				Attempts: 4,
+				LogLevel: "info",
+				UploadSupplemental: true,
+				LogParseErrors: false,
+				SkipVersions: true,
+			},
+		},
+		{
+			Name: "test-bad-config",
+			Input: eregs.ParserConfig{
+				Workers: -1,
+				Attempts: -2,
+				LogLevel: "warn",
+				UploadSupplemental: true,
+				LogParseErrors: false,
+				SkipVersions: true,
+			},
+			Expected: eregs.ParserConfig{
+				Workers: 1,
+				Attempts: 1,
+				LogLevel: "warn",
+				UploadSupplemental: true,
+				LogParseErrors: false,
+				SkipVersions: true,
+			},
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func (t *testing.T) {
+			parseConfig(&tc.Input)
+			if !reflect.DeepEqual(tc.Input, tc.Expected) {
+				t.Errorf("expected (%+v), received (%+v)", tc.Expected, tc.Input)
+			}
+			if parsexml.LogParseErrors != tc.Input.LogParseErrors {
+				t.Errorf("parsexml.LogParseErrors: expected (%t), received (%t)", tc.Expected.LogParseErrors, parsexml.LogParseErrors)
+			}
+		})
+	}
 }
 
 //NOT IMPLEMENTED
