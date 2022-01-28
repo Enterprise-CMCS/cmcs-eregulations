@@ -2,9 +2,10 @@ package eregs
 
 import (
 	"testing"
-	"reflect"
 	"net/http/httptest"
 	"net/http"
+
+	"github.com/go-test/deep"
 )
 
 func TestSubchapterArgString(t *testing.T) {
@@ -113,12 +114,13 @@ func TestSubchapterListUnmarshalText(t *testing.T) {
 			var sl SubchapterList
 			err := sl.UnmarshalText(tc.Input)
 
+			diff := deep.Equal(&sl, tc.Output)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", sl)
-			} else if err == nil && !reflect.DeepEqual(&sl, tc.Output) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Output, sl)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -167,8 +169,8 @@ func TestPartListUnmarshalText(t *testing.T) {
 			var pl PartList
 			pl.UnmarshalText(tc.Input)
 			
-			if !reflect.DeepEqual(&pl, tc.Output) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Output, pl)
+			if diff := deep.Equal(&pl, tc.Output); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -284,12 +286,13 @@ func TestRetrieveConfig(t *testing.T) {
 			BaseURL = tc.Server.URL
 			config, err := RetrieveConfig()
 
+			diff := deep.Equal(config, tc.Output)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", config)
-			} else if err == nil && !reflect.DeepEqual(config, tc.Output) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Output, config)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}

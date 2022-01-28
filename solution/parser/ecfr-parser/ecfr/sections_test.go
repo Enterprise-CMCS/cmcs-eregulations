@@ -2,7 +2,8 @@ package ecfr
 
 import (
 	"testing"
-	"reflect"
+	
+	"github.com/go-test/deep"
 )
 
 func TestExtractStructure(t *testing.T) {
@@ -165,8 +166,8 @@ func TestExtractStructure(t *testing.T) {
 	}
 
 	output, _ := ExtractStructure(input)
-	if !reflect.DeepEqual(output, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, output)
+	if diff := deep.Equal(output, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }
 
@@ -360,8 +361,8 @@ func TestExtractSubpart(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			output := extractSubpart("42", "432", &tc.Input)
-			if !reflect.DeepEqual(output, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, output)
+			if diff := deep.Equal(output, tc.Expected); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -386,7 +387,7 @@ func TestExtractSection(t *testing.T) {
 	}
 
 	output := extractSection("42", &input)
-	if !reflect.DeepEqual(output, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, output)
+	if diff := deep.Equal(output, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }

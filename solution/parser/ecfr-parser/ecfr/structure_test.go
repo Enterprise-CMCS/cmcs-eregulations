@@ -2,11 +2,12 @@ package ecfr
 
 import (
 	"testing"
-	"reflect"
 	"net/http/httptest"
 	"net/http"
 	"context"
 	"time"
+
+	"github.com/go-test/deep"
 )
 
 func TestRangeStringUnmarshal(t *testing.T) {
@@ -14,8 +15,8 @@ func TestRangeStringUnmarshal(t *testing.T) {
 	expected := RangeString{"432.1", "432.200"}
 	var rs RangeString
 	rs.UnmarshalText(input)
-	if !reflect.DeepEqual(rs, expected) {
-		t.Errorf("expected (%s), received (%s)", expected, rs)
+	if diff := deep.Equal(rs, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }
 
@@ -81,8 +82,8 @@ func TestIdentifierStringUnmarshal(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			var is IdentifierString
 			is.UnmarshalText(tc.Input)
-			if !reflect.DeepEqual(is, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, is)
+			if diff := deep.Equal(is, tc.Expected); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -156,12 +157,13 @@ func TestSubchapterParts(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			out, err := SubchapterParts(&tc.Input)
+			diff := deep.Equal(out, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", out)
-			} else if err == nil && !reflect.DeepEqual(out, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -304,7 +306,7 @@ func TestExtractSubchapterParts(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			defer tc.Server.Close()
-			ecfrSite = tc.Server.URL
+			EcfrSite = tc.Server.URL
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 			subchapter := SubchapterOption{
@@ -314,12 +316,13 @@ func TestExtractSubchapterParts(t *testing.T) {
 
 			out, err := ExtractSubchapterParts(ctx, time.Now(), 42, &subchapter)
 
+			diff := deep.Equal(out, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", out)
-			} else if err == nil && !reflect.DeepEqual(out, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}

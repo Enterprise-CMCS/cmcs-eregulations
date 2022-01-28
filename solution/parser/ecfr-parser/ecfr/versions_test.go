@@ -2,11 +2,12 @@ package ecfr
 
 import (
 	"testing"
-	"reflect"
 	"net/http/httptest"
 	"net/http"
 	"context"
 	"time"
+
+	"github.com/go-test/deep"
 )
 
 func TestPartVersions(t *testing.T) {
@@ -52,8 +53,8 @@ func TestPartVersions(t *testing.T) {
 
 	output := PartVersions(input)
 
-	if !reflect.DeepEqual(output, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, output)
+	if diff := deep.Equal(output, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }
 
@@ -169,18 +170,19 @@ func TestExtractVersions(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			defer tc.Server.Close()
-			ecfrSite = tc.Server.URL
+			EcfrSite = tc.Server.URL
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
 			out, err := ExtractVersions(ctx, 42)
 
+			diff := deep.Equal(out, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", out)
-			} else if err == nil && !reflect.DeepEqual(out, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -291,7 +293,7 @@ func TestExtractPartVersions(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			defer tc.Server.Close()
-			ecfrSite = tc.Server.URL
+			EcfrSite = tc.Server.URL
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
@@ -301,12 +303,13 @@ func TestExtractPartVersions(t *testing.T) {
 
 			out, err := ExtractPartVersions(ctx, 42, &part)
 
+			diff := deep.Equal(out, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", out)
-			} else if err == nil && !reflect.DeepEqual(out, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}

@@ -1,8 +1,9 @@
 package parsexml
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/go-test/deep"
 )
 
 func TestGenerateParagraphCitation(t *testing.T) {
@@ -195,12 +196,13 @@ func TestGenerateParagraphCitation(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			out, err := generateParagraphCitation(tc.Paragraph, tc.Previous)
+			diff := deep.Equal(out, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", out)
-			} else if err == nil && !reflect.DeepEqual(out, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -328,8 +330,8 @@ func TestExtractMarker(t *testing.T) {
 	}
 	for _, test := range tests {
 		result := extractMarker(test.Input)
-		if !reflect.DeepEqual(result, test.Expected) {
-			t.Errorf("unexpected result, got %+v, expected %+v", result, test.Expected)
+		if diff := deep.Equal(result, test.Expected); diff != nil {
+			t.Errorf("output not as expected: %+v", diff)
 		}
 	}
 }

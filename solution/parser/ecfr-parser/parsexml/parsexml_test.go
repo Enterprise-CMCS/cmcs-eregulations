@@ -2,9 +2,10 @@ package parsexml
 
 import (
 	"testing"
-	"reflect"
 	"encoding/xml"
 	"bytes"
+
+	"github.com/go-test/deep"
 )
 
 func TestLogParseError(t *testing.T) {
@@ -179,12 +180,13 @@ func TestParsePart(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			reader := bytes.NewReader(tc.Input)
 			out, err := ParsePart(reader)
+			diff := deep.Equal(out, &tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", out)
-			} else if err == nil && !reflect.DeepEqual(out, &tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -254,8 +256,8 @@ func TestPartPostProcess(t *testing.T) {
 	}
 
 	input.PostProcess()
-	if !reflect.DeepEqual(input, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, input)
+	if diff := deep.Equal(input, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }
 
@@ -374,12 +376,13 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 			d := xml.NewDecoder(reader)
 			var pc PartChildren
 			err := d.Decode(&pc)
+			diff := deep.Equal(pc, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", pc)
-			} else if err == nil && !reflect.DeepEqual(pc, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, pc)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -427,8 +430,8 @@ func TestSubpartPostProcess(t *testing.T) {
 	}
 
 	input.PostProcess()
-	if !reflect.DeepEqual(input, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, input)
+	if diff := deep.Equal(input, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}	
 }
 
@@ -577,12 +580,13 @@ func TestSubpartChildrenUnmarshalXML(t *testing.T) {
 			d := xml.NewDecoder(reader)
 			var sc SubpartChildren
 			err := d.Decode(&sc)
+			diff := deep.Equal(sc, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", sc)
-			} else if err == nil && !reflect.DeepEqual(sc, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, sc)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -594,8 +598,8 @@ func TestXMLStringMarshalText(t *testing.T) {
 	}
 	expected := []byte("This is some XML bytes")
 	output, _ := input.MarshalText()
-	if !reflect.DeepEqual(expected, output) {
-		t.Errorf("expected (%s), received (%s)", expected, output)
+	if diff := deep.Equal(output, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }
 
@@ -645,8 +649,8 @@ func TestSubjectGroupPostProcess(t *testing.T) {
 	}
 
 	input.PostProcess()
-	if !reflect.DeepEqual(input, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, input)
+	if diff := deep.Equal(input, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }
 
@@ -711,12 +715,13 @@ func TestSubjectGroupChildrenUnmarshalXML(t *testing.T) {
 			d := xml.NewDecoder(reader)
 			var sjc SubjectGroupChildren
 			err := d.Decode(&sjc)
+			diff := deep.Equal(sjc, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", sjc)
-			} else if err == nil && !reflect.DeepEqual(sjc, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, sjc)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -912,8 +917,8 @@ func TestSectionPostProcess(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			tc.Input.PostProcess()
-			if !reflect.DeepEqual(tc.Input, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, tc.Input)
+			if diff := deep.Equal(tc.Input, tc.Expected); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -1075,12 +1080,13 @@ func TestSectionChildrenUnmarshalXML(t *testing.T) {
 			d := xml.NewDecoder(reader)
 			var sc SectionChildren
 			err := d.Decode(&sc)
+			diff := deep.Equal(sc, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", sc)
-			} else if err == nil && !reflect.DeepEqual(sc, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, sc)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -1118,8 +1124,8 @@ func TestSectionCitationUnmarshalText(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			var output SectionCitation
 			output.UnmarshalText(tc.Input)
-			if !reflect.DeepEqual(output, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, output)
+			if diff := deep.Equal(output, tc.Expected); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}	
@@ -1174,12 +1180,13 @@ func TestAppendixChildrenUnmarshalXML(t *testing.T) {
 			d := xml.NewDecoder(reader)
 			var ac AppendixChildren
 			err := d.Decode(&ac)
+			diff := deep.Equal(ac, tc.Expected)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%+v)", ac)
-			} else if err == nil && !reflect.DeepEqual(ac, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, ac)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -1190,8 +1197,8 @@ func TestAppendixCitationUnmarshalText(t *testing.T) {
 	expected := AppendixCitation{"Appendix", "A", "to", "Subchapter", "B", "of", "Chapter", "III"}
 	var output AppendixCitation
 	output.UnmarshalText(input)
-	if !reflect.DeepEqual(output, expected) {
-		t.Errorf("expected (%+v), received (%+v)", expected, output)
+	if diff := deep.Equal(output, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }
 

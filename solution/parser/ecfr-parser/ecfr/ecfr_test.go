@@ -8,9 +8,9 @@ import (
 	"context"
 	"fmt"
 	"time"
-	"reflect"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+	"github.com/go-test/deep"
 )
 
 type TestOption struct {
@@ -135,8 +135,8 @@ func TestPartOptionValues(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			output := tc.Input.Values()
-			if !reflect.DeepEqual(output, tc.Output) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Output, output)
+			if diff := deep.Equal(output, tc.Output); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -182,8 +182,8 @@ func TestSubchapterOptionValues(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			output := tc.Input.Values()
-			if !reflect.DeepEqual(output, tc.Output) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Output, output)
+			if diff := deep.Equal(output, tc.Output); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}

@@ -2,7 +2,6 @@ package eregs
 
 import (
 	"testing"
-	"reflect"
 	"net/http/httptest"
 	"net/http"
 	"context"
@@ -10,6 +9,8 @@ import (
 	"fmt"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
+
+	"github.com/go-test/deep"
 )
 
 func TestPostPart(t *testing.T) {
@@ -131,7 +132,7 @@ func TestGetExistingParts(t *testing.T) {
 		"2021-08-13": []string{"455"},
 	}
 
-	if !reflect.DeepEqual(results, expected) {
-		t.Errorf("expected (%+v), got (%+v)", expected, results)
+	if diff := deep.Equal(results, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
 	}
 }

@@ -7,10 +7,11 @@ import (
 	"net/url"
 	"context"
 	"time"
-	"reflect"
 	"io"
 	"encoding/json"
 	"sort"
+
+	"github.com/go-test/deep"
 )
 
 func TestFetch(t *testing.T) {
@@ -91,8 +92,8 @@ func TestFetch(t *testing.T) {
 				if err != nil {
 					t.Errorf("unable to extract bytes from response: %+v", err)
 				}
-				if !reflect.DeepEqual(response, tc.ExpectedResponse) {
-					t.Errorf("expected (%s), got (%s)", tc.ExpectedResponse, response)
+				if diff := deep.Equal(response, tc.ExpectedResponse); diff != nil {
+					t.Errorf("output not as expected: %+v", diff)
 				}
 			} else if tc.ExpectedResponse != nil {
 				t.Errorf("expected (%s), got nil", tc.ExpectedResponse)
@@ -276,8 +277,8 @@ func TestBuildQuery(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			output := buildQuery(tc.Input)
-			if !reflect.DeepEqual(output, tc.Output) {
-				t.Errorf("expect (%s), got (%s)", tc.Output, output)
+			if diff := deep.Equal(output, tc.Output); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
@@ -352,8 +353,8 @@ func TestFetchWithOptions(t *testing.T) {
 				t.Errorf("unable to extract bytes from response: %+v", err)
 			}
 
-			if !reflect.DeepEqual(response, tc.Result) {
-				t.Errorf("expected (%s), received (%s)", tc.Result, response)
+			if diff := deep.Equal(response, tc.Result); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}

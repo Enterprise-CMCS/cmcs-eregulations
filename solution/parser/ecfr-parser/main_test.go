@@ -2,7 +2,6 @@ package main
 
 import (
 	"testing"
-	"reflect"
 	"net/http/httptest"
 	"net/http"
 	"context"
@@ -125,8 +124,8 @@ func TestParseConfig(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func (t *testing.T) {
 			parseConfig(&tc.Input)
-			if !reflect.DeepEqual(tc.Input, tc.Expected) {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, tc.Input)
+			if diff := deep.Equal(tc.Input, tc.Expected); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 			if parsexml.LogParseErrors != tc.Input.LogParseErrors {
 				t.Errorf("parsexml.LogParseErrors: expected (%t), received (%t)", tc.Expected.LogParseErrors, parsexml.LogParseErrors)
