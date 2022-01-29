@@ -153,7 +153,83 @@ func TestMainFunction(t *testing.T) {
 
 //NOT IMPLEMENTED
 func TestStart(t *testing.T) {
-	
+	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Expected GET request" }`))
+			return
+		}
+
+		if r.URL.Path != "/parser_config" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Invalid path '` + r.URL.Path + `'" }`))
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{
+			"workers": 3,
+			"attempts": 3,
+			"loglevel": "trace",
+			"upload_supplemental_locations": true,
+			"log_parse_errors": false,
+			"skip_versions": false,
+			"titles": [
+				{
+					"title": 42,
+					"subchapters": "IV-C",
+					"parts": "400, 457, 460"
+				},
+				{
+					"title": 43,
+					"subchapters": "AB-C",
+					"parts": "1, 2, 3"
+				}
+			]
+		}`))
+	}))
+	defer eregsServer.Close()
+	eregs.BaseURL = eregsServer.URL
+
+	testTable := []struct {
+		Name string
+		ParseTitleFunc func (*eregs.TitleConfig) (bool, error)
+		Error bool
+	}{
+		{
+			Name: "test-valid",
+			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
+				return false, nil
+			},
+			Error: false,
+		},
+		{
+			Name: "test-retry-fail",
+			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
+				return true, fmt.Errorf("something bad happened")
+			},
+			Error: true,
+		},
+		{
+			Name: "test-total-failure",
+			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
+				return false, fmt.Errorf("something REALLY bad happened")
+			},
+			Error: true,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func (t *testing.T) {
+			ParseTitleFunc = tc.ParseTitleFunc
+			err := start()
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received none")
+			}
+		})
+	}
 }
 
 func TestParseTitle(t *testing.T) {
