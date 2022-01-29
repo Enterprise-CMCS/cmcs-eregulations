@@ -166,6 +166,9 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, err := eregs.GetExistingParts(ctx, title.Title)
+	if err != nil {
+		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
+	}
 
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
 	var parts []string

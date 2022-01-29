@@ -156,9 +156,292 @@ func TestStart(t *testing.T) {
 	
 }
 
-//NOT IMPLEMENTED
 func TestParseTitle(t *testing.T) {
-	
+	config.SkipVersions = true
+	config.Attempts = 3
+	config.Workers = 3
+
+	SleepFunc = func(t time.Duration) {
+		return
+	}
+
+	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Expected GET request, received ` + r.Method + `" }`))
+			return
+		}
+
+		path := strings.Split(r.URL.Path, "/")
+		if len(path) < 3 {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Invalid path length '` + r.URL.Path + `'" }`))
+			return
+		}
+
+		if path[1] == "structure" {
+			//fetch structure
+			chapter, ok := r.URL.Query()["chapter"]
+			if !ok || len(chapter[0]) < 1 {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "chapter missing`))
+				return
+			}
+			subchapter, ok := r.URL.Query()["subchapter"]
+			if !ok || len(chapter[0]) < 1 {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "subchapter missing`))
+				return
+			}
+
+			if string(chapter[0]) == "IV" && string(subchapter[0]) == "C" {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{
+					"identifier": "42",
+					"label": "Title 42 - Public Health",
+					"label_level": "Title 42",
+					"label_description": "Public Health",
+					"reserved": false,
+					"type": "title",
+					"children": [
+						{
+							"identifier": "IV",
+							"label": " Chapter IV - Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"label_level": " Chapter IV",
+							"label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+							"reserved": false,
+							"type": "chapter",
+							"children": [
+						  		{
+									"identifier": "C",
+									"label": "Subchapter C - Medical Assistance Programs",
+									"label_level": "Subchapter C",
+									"label_description": "Medical Assistance Programs",
+									"reserved": false,
+									"type": "subchapter",
+									"children": [
+										{
+											"identifier": "433",
+											"label": "Part 433 - State Fiscal Administration",
+											"label_level": "Part 433",
+											"label_description": "State Fiscal Administration",
+											"reserved": false,
+											"type": "part",
+											"volumes": [
+												"4"
+											],
+											"children": [
+												{
+													"identifier": "433.1",
+													"label": "§ 433.1 Purpose.",
+													"label_level": "§ 433.1",
+													"label_description": "Purpose.",
+													"reserved": false,
+													"type": "section",
+													"volumes": [
+														"4"
+													],
+													"received_on": "2017-01-03T00:00:00-0500"
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}`))
+				return
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "No such chapter subchapter combo" }`))
+				return
+			}
+		} else if path[1] == "versions" {
+			if path[2] == "title-42" {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`{
+					"content_versions": [
+						{
+							"date": "2018-01-01",
+							"identifier": "433.1",
+							"name": "§ 433.1 Purpose.",
+							"part": "433",
+							"removed": false,
+							"title": "42",
+							"type": "section"
+						},
+						{
+							"date": "2019-01-01",
+							"identifier": "433.1",
+							"name": "§ 433.1 Purpose.",
+							"part": "433",
+							"removed": false,
+							"title": "42",
+							"type": "section"
+						},
+						{
+							"date": "2020-01-01",
+							"identifier": "433.1",
+							"name": "§ 433.1 Purpose.",
+							"part": "433",
+							"removed": false,
+							"title": "42",
+							"type": "section"
+						}
+					]
+				}`))
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "No such title to get versions for" }`))
+			}
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Invalid path '` + r.URL.Path + `'" }`))
+		}
+	}))
+	defer ecfrServer.Close()
+	ecfr.EcfrSite = ecfrServer.URL
+
+	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Expected GET request, received ` + r.Method + `" }`))
+			return
+		}
+
+		path := strings.Split(r.URL.Path, "/")
+		if len(path) < 4 {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Invalid path length '` + r.URL.Path + `'" }`))
+			return
+		}
+
+		if path[2] == "42" {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`[
+				{
+					"date": "2019-01-01",
+					"partName": [
+						"433"
+					]
+				}
+			]`))
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Unrecognized title" }`))
+			return
+		}
+	}))
+	defer eregsServer.Close()
+	eregs.BaseURL = eregsServer.URL	
+
+	var WorkerFunc func (*eregs.Part)
+
+	StartHandlePartVersionWorkerFunc = func(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup, date time.Time) {
+		for versionList := range ch {
+			for versionElement := versionList.Front(); versionElement != nil; versionElement = versionElement.Next() {
+				version := versionElement.Value.(*eregs.Part)
+				WorkerFunc(version)
+			}
+		}
+		wg.Done()
+	}
+
+	testTable := []struct {
+		Name string
+		WorkerFunc func (*eregs.Part)
+		Input eregs.TitleConfig
+		Retry bool
+		Error bool
+	}{
+		{
+			Name: "test-valid",
+			WorkerFunc: func(version *eregs.Part) {
+				version.Processed = true
+			},
+			Input: eregs.TitleConfig{
+				Title: 42,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"IV", "C"},
+				},
+				Parts: eregs.PartList{"1", "2", "3"},
+			},
+			Retry: false,
+			Error: false,
+		},
+		{
+			Name: "test-process-fail",
+			WorkerFunc: func(version *eregs.Part) {
+				version.Processed = false
+			},
+			Input: eregs.TitleConfig{
+				Title: 42,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"IV", "C"},
+				},
+				Parts: eregs.PartList{"1", "2", "3"},
+			},
+			Retry: false,
+			Error: true,
+		},
+		{
+			Name: "test-no-parts",
+			WorkerFunc: func(version *eregs.Part) {
+				version.Processed = false
+			},
+			Input: eregs.TitleConfig{
+				Title: 42,
+				Subchapters: eregs.SubchapterList{},
+				Parts: eregs.PartList{},
+			},
+			Retry: false,
+			Error: true,
+		},
+		{
+			Name: "test-no-parts",
+			WorkerFunc: func(version *eregs.Part) {
+				version.Processed = true
+			},
+			Input: eregs.TitleConfig{
+				Title: 42,
+				Subchapters: eregs.SubchapterList{},
+				Parts: eregs.PartList{},
+			},
+			Retry: false,
+			Error: true,
+		},
+		{
+			Name: "test-bad-part",
+			WorkerFunc: func(version *eregs.Part) {
+				version.Processed = true
+			},
+			Input: eregs.TitleConfig{
+				Title: 43,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"IV", "C"},
+				},
+				Parts: eregs.PartList{"1", "2", "3"},
+			},
+			Retry: false,
+			Error: true,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			WorkerFunc = tc.WorkerFunc
+			retry, err := parseTitle(&tc.Input)
+			if err != nil && !tc.Error {
+				t.Errorf("received unexpected error (%+v)", err)
+				if retry != tc.Retry {
+					t.Errorf("retry should be (%t), is (%t)", tc.Retry, retry)
+				}
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received none")
+			}
+		})
+	}
 }
 
 func TestStartHandlePartVersionWorker(t *testing.T) {
