@@ -28,6 +28,7 @@ var (
 	ParseTitleFunc = parseTitle
 	StartHandlePartVersionWorkerFunc = startHandlePartVersionWorker
 	HandlePartVersionFunc = handlePartVersion
+	SleepFunc = time.Sleep
 )
 
 var config = &eregs.ParserConfig{}
@@ -269,7 +270,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 			return false, fmt.Errorf("Some parts still failed to process after %d attempts", config.Attempts)
 		} else {
 			log.Warn("[main] Some parts failed to process. Retrying ", config.Attempts-i-1, " more times.")
-			time.Sleep(3 * time.Second)
+			SleepFunc(3 * time.Second)
 		}
 	}
 
@@ -295,7 +296,7 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 			} else {
 				log.Error("[worker ", thread, "] Error processing part ", version.Name, " version ", version.Date, ": ", err)
 			}
-			time.Sleep(1 * time.Second)
+			SleepFunc(1 * time.Second)
 		}
 	}
 

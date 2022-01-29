@@ -10,6 +10,8 @@ import (
 	"encoding/xml"
 	"encoding/json"
 	"fmt"
+	"container/list"
+	"sync"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
@@ -159,14 +161,101 @@ func TestParseTitle(t *testing.T) {
 	
 }
 
-//NOT IMPLEMENTED
 func TestStartHandlePartVersionWorker(t *testing.T) {
-	
+	SleepFunc = func(t time.Duration) {
+		return
+	}
+
+	input := [][]eregs.Part{
+		[]eregs.Part{
+			eregs.Part{
+				Title: 42,
+				Name: "433",
+				Date: "2022-01-01",
+			},
+			eregs.Part{
+				Title: 42,
+				Name: "433",
+				Date: "2022-02-01",
+			},
+		},
+		[]eregs.Part{
+			eregs.Part{
+				Title: 42,
+				Name: "450",
+				Date: "2022-03-01",
+			},
+			eregs.Part{
+				Title: 42,
+				Name: "433",
+				Date: "2022-04-01",
+			},
+		},
+	}
+
+	testTable := []struct {
+		Name string
+		ShouldProcess bool
+		HandlePartVersionFunc func(context.Context, int, time.Time, *eregs.Part) error
+	}{
+		{
+			Name: "test-valid-run",
+			ShouldProcess: true,
+			HandlePartVersionFunc: func(ctx context.Context, thread int, date time.Time, part *eregs.Part) error {
+				return nil
+			},
+		},
+		{
+			Name: "test-fail-run",
+			ShouldProcess: false,
+			HandlePartVersionFunc: func(ctx context.Context, thread int, date time.Time, part *eregs.Part) error {
+				return fmt.Errorf("Oops something bad happened")
+			},
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			HandlePartVersionFunc = tc.HandlePartVersionFunc
+
+			parts := list.New()
+			for _, part := range input {
+				versions := list.New()
+				for _, version := range part {
+					versions.PushBack(&version)
+				}
+				parts.PushBack(versions)
+			}
+
+			ch := make(chan *list.List)
+			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			defer cancel()
+			date := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
+
+			var wg sync.WaitGroup
+			wg.Add(1)
+			go startHandlePartVersionWorker(ctx, 1, ch, &wg, date)
+			for versionList := parts.Front(); versionList != nil; versionList = versionList.Next() {
+				ch <- versionList.Value.(*list.List)
+			}
+			close(ch)
+			wg.Wait()
+
+			for part := parts.Front(); part != nil; part = part.Next() {
+				for versionElement := part.Value.(*list.List).Front(); versionElement != nil; versionElement = versionElement.Next() {
+					version := versionElement.Value.(*eregs.Part)
+					if version.Processed != tc.ShouldProcess {
+						t.Errorf("version.Processed: expected (%t), received (%t)", tc.ShouldProcess, version.Processed)
+					}
+				}
+			}
+		})
+	}
 }
 
 func TestHandlePartVersion(t *testing.T) {
 	config.UploadSupplemental = true
-	
+
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusInternalServerError)
