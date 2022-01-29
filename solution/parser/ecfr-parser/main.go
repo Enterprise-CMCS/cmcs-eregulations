@@ -22,8 +22,10 @@ import (
 // TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
 
+// DefaultBaseURL is the default eRegs API URL to use if none is specified
 var DefaultBaseURL = "http://localhost:8000/v2/"
 
+// Functions for easy testing via patching
 var (
 	ParseTitleFunc = parseTitle
 	StartHandlePartVersionWorkerFunc = startHandlePartVersionWorker

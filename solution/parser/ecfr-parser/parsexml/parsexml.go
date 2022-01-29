@@ -15,6 +15,8 @@ import (
 
 // LogParseErrors determines whether to output parsing errors as logs
 var LogParseErrors bool
+
+// LogWarning is a function pointer for easy testing via patching
 var LogWarning = log.Warn
 
 func logParseError(err string) {

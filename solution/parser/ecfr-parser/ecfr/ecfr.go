@@ -10,8 +10,10 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 )
 
+// EcfrSite is the base URL for accessing the eCFR API
+var EcfrSite = "https://ecfr.gov/api/versioner/v1/"
+
 var (
-	EcfrSite          = "https://ecfr.gov/api/versioner/v1/"
 	ecfrFullXML       = "full/%s/title-%d.xml"
 	ecfrVersionsXML   = "versions/title-%d"
 	ecfrStructureJSON = "structure/%s/title-%d.json"

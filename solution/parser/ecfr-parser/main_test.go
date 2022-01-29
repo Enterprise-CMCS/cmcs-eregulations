@@ -328,11 +328,10 @@ func TestParseTitle(t *testing.T) {
 					]
 				}`))
 				return
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "No such chapter subchapter combo" }`))
-				return
 			}
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "No such chapter subchapter combo" }`))
+			return
 		} else if path[1] == "versions" {
 			if path[2] == "title-42" {
 				w.WriteHeader(http.StatusOK)
