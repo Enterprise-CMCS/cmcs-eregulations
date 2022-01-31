@@ -19,6 +19,10 @@ $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
 
+*, ::before, ::after {
+    box-sizing: unset;
+}
+
 input {
     background-color: white;
 }

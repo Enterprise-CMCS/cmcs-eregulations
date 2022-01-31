@@ -15,7 +15,11 @@
                             class="homepage-toc ds-l-col--8"
                         >
                             <div class="toc-container">
-                                <h1>Title Placeholder</h1>
+                                <h1>Title 42 - Public Health</h1>
+
+                                <h4>
+                                    Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services
+                                </h4>
 
                                 <p class="toc-external-ref">
                                     For subsequent subchapters (F-I), see
@@ -35,6 +39,7 @@
                     </div>
                 </div>
             </main>
+            <Footer />
         </div>
     </body>
 </template>
@@ -42,6 +47,7 @@
 <script>
 // @ is an alias to /src
 import FlashBanner from "@/components/FlashBanner.vue";
+import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import Hero from "@/components/homepage/Hero.vue";
 import RecentChanges from "@/components/RecentChanges.vue";
@@ -51,6 +57,7 @@ export default {
 
     components: {
         FlashBanner,
+        Footer,
         Header,
         Hero,
         RecentChanges

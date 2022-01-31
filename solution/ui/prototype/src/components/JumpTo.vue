@@ -1,10 +1,25 @@
 <template>
     <div class="jump-to">
-        <div class="jump-to-label">Jump to Regulation Section</div>
+        <div class="jump-to-label">
+            Jump to Regulation Section
+        </div>
 
-        <form method="GET" action="">
-            <input name="-version" type="hidden" required value="" />
-            <input name="title" type="hidden" required value="42" />
+        <form
+            method="GET"
+            action=""
+        >
+            <input
+                name="-version"
+                type="hidden"
+                required
+                value=""
+            />
+            <input
+                name="title"
+                type="hidden"
+                required
+                value="42"
+            />
 
             <div class="jump-to-input">
                 §
@@ -25,7 +40,11 @@
                 />
             </div>
 
-            <input class="submit" type="submit" value="Go" />
+            <input
+                class="submit"
+                type="submit"
+                value="Go"
+            />
         </form>
     </div>
 </template>
@@ -34,12 +53,16 @@
 export default {};
 </script>
 
-<style>
-    .jump-to .dot {
-        margin: 0 5px;
-    }
+<style scoped>
+* {
+    box-sizing: border-box;
+}
 
-    input.submit {
-        color: black;
-    }
+.jump-to .dot {
+    margin: 0 5px;
+}
+
+input.submit {
+    color: black;
+}
 </style>
