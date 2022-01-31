@@ -99,6 +99,8 @@ class SubSubCategoryAdmin(CategoryAdmin):
 class SupplementalContentAdmin(BaseAdmin):
     admin_priority = 0
     list_display = ("date", "name", "description", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "category", "updated_at")
+    empty_value_display = 'NONE'
     search_fields = ["date", "name", "description"]
     ordering = ("-updated_at", "-date", "name", "category", "-created_at")
     filter_horizontal = ("locations",)
