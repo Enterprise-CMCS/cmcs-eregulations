@@ -40,8 +40,17 @@ jobs:
         go test -cover ./...
         popd
     
-    # Generate coverage badge
-    - name: Generate badge
+    # Generate coverage report
+    - name: Generate report
       run: |
-        go get github.com/jpoles1/gopherbadger
-        gopherbadger -silent -md="README.md" -root "solution/parser/ecfr-parser/"
+        pushd solution/parser/ecfr-parser
+        go test -coverprofile=cover.out ./...
+        go tool cover -html=cover.out -o coverage.html
+        popd
+    
+    # Upload coverage report
+    - name: Upload report
+      uses: actions/upload-artifact@v2
+      with:
+        name: ecfr-parser-coverage
+        path: solution/parser/ecfr-parser/coverage.html
