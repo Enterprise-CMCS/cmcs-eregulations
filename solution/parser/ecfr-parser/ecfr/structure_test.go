@@ -262,7 +262,8 @@ func TestExtractSubchapterParts(t *testing.T) {
 				w.Write([]byte(`{ "exception": "All is well" }`))
 			})),
 			Expected: []string{},
-			Error: true,
+			//Error: true,
+			Error: false,
 		},
 		{
 			Name: "test-bad-json",
