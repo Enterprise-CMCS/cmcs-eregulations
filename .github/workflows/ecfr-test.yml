@@ -36,5 +36,12 @@ jobs:
     # Run tests on the code
     - name: Run tests
       run: |
-        cd solution/parser/ecfr-parser
+        pushd solution/parser/ecfr-parser
         go test -cover ./...
+        popd
+    
+    # Generate coverage badge
+    - name: Generate badge
+      run: |
+        go get github.com/jpoles1/gopherbadger
+        gopherbadger -silent -md="README.md"
