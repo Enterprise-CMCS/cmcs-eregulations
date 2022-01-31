@@ -10,8 +10,10 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 )
 
+// EcfrSite is the base URL for accessing the eCFR API
+var EcfrSite = "https://ecfr.gov/api/versioner/v1/"
+
 var (
-	ecfrSite          = "https://ecfr.gov/api/versioner/v1/"
 	ecfrFullXML       = "full/%s/title-%d.xml"
 	ecfrVersionsXML   = "versions/title-%d"
 	ecfrStructureJSON = "structure/%s/title-%d.json"
@@ -19,7 +21,7 @@ var (
 
 // FetchFull fetches the full regulation from eCFR
 func FetchFull(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, error) {
-	ecfrURL, err := url.Parse(ecfrSite)
+	ecfrURL, err := url.Parse(EcfrSite)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +31,7 @@ func FetchFull(ctx context.Context, date string, title int, opts ...network.Fetc
 
 // FetchStructure fetches the structure for a given title and options
 func FetchStructure(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, error) {
-	ecfrURL, err := url.Parse(ecfrSite)
+	ecfrURL, err := url.Parse(EcfrSite)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +41,7 @@ func FetchStructure(ctx context.Context, date string, title int, opts ...network
 
 // FetchVersions fetches the available versions for a given title
 func FetchVersions(ctx context.Context, title int, opts ...network.FetchOption) (io.Reader, error) {
-	ecfrURL, err := url.Parse(ecfrSite)
+	ecfrURL, err := url.Parse(EcfrSite)
 	if err != nil {
 		return nil, err
 	}

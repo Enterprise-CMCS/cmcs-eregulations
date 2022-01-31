@@ -73,9 +73,6 @@ func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub 
 	if err != nil {
 		return nil, err
 	}
-	if err != nil {
-		return nil, err
-	}
 	s := &Structure{}
 	sd := json.NewDecoder(sbody)
 	if err := sd.Decode(s); err != nil {
