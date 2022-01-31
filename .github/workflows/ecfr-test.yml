@@ -44,4 +44,4 @@ jobs:
     - name: Generate badge
       run: |
         go get github.com/jpoles1/gopherbadger
-        gopherbadger -silent -md="README.md"
+        gopherbadger -silent -md="README.md" -root "solution/parser/ecfr-parser/"
