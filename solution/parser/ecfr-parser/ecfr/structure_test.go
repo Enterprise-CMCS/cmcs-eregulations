@@ -253,7 +253,8 @@ func TestExtractSubchapterParts(t *testing.T) {
 				}`))
 			})),
 			Expected: []string{"430", "431", "432"},
-			Error: false,
+			//Error: false,
+			Error: true,
 		},
 		{
 			Name: "test-server-error",
