@@ -40,8 +40,6 @@ func init() {
 	if eregs.BaseURL == "" {
 		eregs.BaseURL = DefaultBaseURL
 	}
-
-	this is a test
 }
 
 func getLogLevel(l string) log.Level {
