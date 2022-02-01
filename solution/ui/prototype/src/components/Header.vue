@@ -67,7 +67,6 @@ export default {
 
     methods: {
         toggleState(payload) {
-            console.log("from the child:", payload);
             this.action = payload.action;
             this.state = payload.state;
         },

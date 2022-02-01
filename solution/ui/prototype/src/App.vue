@@ -25,6 +25,7 @@ $eregs-image-path: "~legacy-static/images";
 
 input {
     background-color: white;
+    box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6, p, ul {
