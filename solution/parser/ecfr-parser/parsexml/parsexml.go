@@ -16,15 +16,18 @@ import (
 // LogParseErrors determines whether to output parsing errors as logs
 var LogParseErrors bool
 
+// LogWarning is a function pointer for easy testing via patching
+var LogWarning = log.Warn
+
 func logParseError(err string) {
 	if LogParseErrors {
-		log.Warn("[parser] ", err)
+		LogWarning("[parser] ", err)
 	}
 }
 
 // PostProcessor interface
 type PostProcessor interface {
-	PostProcess() error
+	PostProcess()
 }
 
 // ParsePart decodes an io.Reader into a regulation Part
@@ -52,16 +55,13 @@ type Part struct {
 }
 
 // PostProcess is the steps for post processing a Part
-func (p *Part) PostProcess() (err error) {
+func (p *Part) PostProcess() {
 	for _, child := range p.Children {
 		c, ok := child.(PostProcessor)
 		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
+			c.PostProcess()
 		}
 	}
-	return nil
 }
 
 // PartChildren is an array of interface
@@ -99,16 +99,13 @@ type Subpart struct {
 }
 
 // PostProcess defines how to postProcess a subPart
-func (sp *Subpart) PostProcess() error {
+func (sp *Subpart) PostProcess() {
 	for _, child := range sp.Children {
 		c, ok := child.(PostProcessor)
 		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
+			c.PostProcess()
 		}
 	}
-	return nil
 }
 
 // SubpartChildren is an array of interface
@@ -167,16 +164,13 @@ func (xs XMLString) MarshalText() ([]byte, error) {
 }
 
 // PostProcess is the processing of an XMLString after it is unmarshalled
-func (sg *SubjectGroup) PostProcess() error {
+func (sg *SubjectGroup) PostProcess() {
 	for _, child := range sg.Children {
 		c, ok := child.(PostProcessor)
 		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
+			c.PostProcess()
 		}
 	}
-	return nil
 }
 
 // SubjectGroupChildren is an array of interface
@@ -213,7 +207,7 @@ type Section struct {
 }
 
 // PostProcess cleans up the section after it is imported
-func (s *Section) PostProcess() error {
+func (s *Section) PostProcess() {
 	var prev *Paragraph
 	for _, child := range s.Children {
 		c, ok := child.(*Paragraph)
@@ -221,14 +215,11 @@ func (s *Section) PostProcess() error {
 			var err error
 			c.Citation, err = generateParagraphCitation(c, prev)
 			if err != nil && err != ErrNoParents {
-				logParseError(fmt.Sprintf("Error generating paragraph citation", err, prev, c))
+				logParseError(fmt.Sprintf("Error generating paragraph citation for %+v -> %+v: %+v", prev, c, err))
 			} else {
 				prev = c
 			}
-			c.Marker, err = c.marker()
-			if err != nil {
-				logParseError(fmt.Sprintf("Error generating paragraph marker", err, prev, c))
-			}
+			c.Marker = c.marker()
 		}
 	}
 	for _, child := range s.Children {
@@ -244,16 +235,6 @@ func (s *Section) PostProcess() error {
 			}
 		}
 	}
-
-	for _, child := range s.Children {
-		c, ok := child.(PostProcessor)
-		if ok {
-			if err := c.PostProcess(); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
 }
 
 // SectionChildren is an array of interface
@@ -473,7 +454,7 @@ type Paragraph struct {
 	Marker   []string `json:"marker"`
 }
 
-func (p *Paragraph) marker() ([]string, error) {
+func (p *Paragraph) marker() []string {
 	return extractMarker(p.Content)
 }
 
@@ -482,11 +463,7 @@ func (p *Paragraph) Level() int {
 	if p.Citation != nil {
 		return len(p.Citation) - 1
 	}
-	m, err := p.marker()
-	if err != nil {
-		logParseError(err.Error())
-		return -1
-	}
+	m := p.marker()
 	if m == nil {
 		return -1
 	}
