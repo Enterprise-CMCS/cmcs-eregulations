@@ -1,4 +1,4 @@
-name: Go-Test
+name: eCFR Parser Checks
 
 on:
   pull_request:
@@ -6,14 +6,11 @@ on:
     paths:
       - 'solution/parser/ecfr-parser/**'
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # The "test" workflow
-  gotest:
+  ecfr-parser-checks:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
@@ -23,7 +20,7 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: '^1.16' # The Go version to download (if necessary) and use.
-
+  
     # set up build cache
     - name: Set up build cache
       uses: actions/cache@v2
@@ -34,6 +31,22 @@ jobs:
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
+
+    # Install golint if not in cache
+    - name: Install golint
+      run: |
+        if ! command golint &> /dev/null
+        then
+          go get -u golang.org/x/lint/golint
+        else
+          echo Golint found in cache
+        fi
+
+    # Run lint on the code
+    - name: Run lint
+      run: |
+        cd solution/parser/ecfr-parser
+        golint -set_exit_status ./...
     
     # Run tests and create coverage report
     - name: Run tests and create report
@@ -42,7 +55,7 @@ jobs:
         go test -coverprofile=cover.out ./...
         go tool cover -html=cover.out -o coverage.html
         popd
-    
+
     # Upload coverage report
     - name: Upload report
       uses: actions/upload-artifact@v2
