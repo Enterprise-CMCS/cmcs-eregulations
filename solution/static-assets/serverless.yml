@@ -14,6 +14,12 @@ custom:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId, false}
       items:
         - "/*"
+layers:
+  python-app-dependencies:
+    path: requirements
+    compatibleRuntimes:
+      - python3.8
+    description: "Dependencies for python functions"
 
 plugins:
   - serverless-s3-sync
