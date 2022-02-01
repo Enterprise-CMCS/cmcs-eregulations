@@ -39,7 +39,6 @@ func init() {
 	eregs.BaseURL = os.Getenv("EREGS_API_URL")
 	if eregs.BaseURL == "" {
 		eregs.BaseURL = DefaultBaseURL
-		SleepFunc(1 * time.Second)
 	}
 }
 
