@@ -32,16 +32,9 @@ jobs:
         key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
         restore-keys: |
           ${{ runner.os }}-go-
-
-    # Run tests on the code
-    - name: Run tests
-      run: |
-        pushd solution/parser/ecfr-parser
-        go test -cover ./...
-        popd
     
-    # Generate coverage report
-    - name: Generate report
+    # Run tests and create coverage report
+    - name: Run tests and create report
       run: |
         pushd solution/parser/ecfr-parser
         go test -coverprofile=cover.out ./...
