@@ -33,21 +33,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-    # Install golint if not in cache
-    - name: Install golint
-      run: |
-        if ! command golint &> /dev/null
-        then
-          go get golang.org/x/lint/golint
-        else
-          echo Golint found in cache
-        fi
-
     # Run lint on the code
     - name: Run lint
       run: |
-        cd solution/parser/ecfr-parser
+        go get golang.org/x/lint/golint
+        pushd solution/parser/ecfr-parser
         golint -set_exit_status ./...
+        popd
     
     # Run tests and create coverage report
     - name: Run tests and create report
