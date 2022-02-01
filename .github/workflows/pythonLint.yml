@@ -3,6 +3,8 @@ name: Python-Lint
 on:
   pull_request:
     types: [ opened, synchronize, reopened ]
+    paths:
+      - '**.py'
 
 jobs:
   lint:
