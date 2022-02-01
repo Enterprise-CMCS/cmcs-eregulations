@@ -231,11 +231,13 @@
                 </section>
             </main>
         </div>
+        <Footer />
     </div>
 </template>
 
 <script>
 import FlashBanner from "@/components/FlashBanner.vue";
+import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue"
 
 export default {
@@ -243,6 +245,7 @@ export default {
 
     components: {
         FlashBanner,
+        Footer,
         Header
     }
 
