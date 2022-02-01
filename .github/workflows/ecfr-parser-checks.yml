@@ -37,7 +37,7 @@ jobs:
       run: |
         if ! command golint &> /dev/null
         then
-          go get -u golang.org/x/lint/golint
+          go get golang.org/x/lint/golint
         else
           echo Golint found in cache
         fi
