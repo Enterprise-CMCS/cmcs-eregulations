@@ -3,6 +3,11 @@ name: Python-Lint
 on:
   pull_request:
     types: [ opened, synchronize, reopened ]
+    paths:
+      - '**.py'
+  push:
+    branches:
+      - main
 
 jobs:
   lint:

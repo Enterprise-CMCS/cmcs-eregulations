@@ -1,4 +1,4 @@
-import DropdownHeader from '../components/DropdownHeader.vue';
+import DropdownHeader from '../js/src/components/DropdownHeader.vue';
 
 export default {
   title: 'Dropdown/Dropdown Header',

@@ -1,4 +1,4 @@
-import RelatedRules from '../components/RelatedRules.vue';
+import RelatedRules from '../js/src/components/RelatedRules.vue';
 
 export default {
   title: 'SupplementalContent/Related Rules',
