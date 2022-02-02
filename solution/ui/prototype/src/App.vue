@@ -1,36 +1,39 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">
-        Home
-      </router-link> |
-      <router-link to="/about">
-        About
-      </router-link>
-    </div>
     <router-view />
-  </div>
 </template>
 
+<script>
+
+export default {
+    name: "App",
+    components: {}
+};
+
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
+
+*, ::before, ::after {
+    box-sizing: unset;
 }
 
-#nav {
-  padding: 30px;
+input {
+    background-color: white;
+    box-sizing: border-box;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+h1, h2, h3, h4, h5, h6, p, ul {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+ul {
+    padding-inline-start: 40px;
 }
 </style>

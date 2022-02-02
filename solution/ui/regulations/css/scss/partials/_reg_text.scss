@@ -335,7 +335,7 @@ article {
 
         &.previous {
             &:before {
-                background-image: url("/images/previous.svg");
+                background-image: url("#{$eregs-image-path}/previous.svg");
             }
         }
 
@@ -343,7 +343,7 @@ article {
             text-align: right;
 
             &:before {
-                background-image: url("/images/next.svg");
+                background-image: url("#{$eregs-image-path}/next.svg");
             }
         }
     }
