@@ -5,6 +5,9 @@ on:
     types: [ opened, synchronize, reopened ]
     paths:
       - 'solution/parser/ecfr-parser/**'
+  push:
+    branches:
+      - main
 
 jobs:
   ecfr-parser-checks:

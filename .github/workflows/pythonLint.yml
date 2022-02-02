@@ -5,6 +5,9 @@ on:
     types: [ opened, synchronize, reopened ]
     paths:
       - '**.py'
+  push:
+    branches:
+      - main
 
 jobs:
   lint:
