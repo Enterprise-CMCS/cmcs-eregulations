@@ -1,8 +1,8 @@
-import Dropdown from '../components/Dropdown.vue';
-import DropdownContent from '../components/DropdownContent.vue';
-import DropdownHeader from '../components/DropdownHeader.vue';
-import DropdownItem from '../components/DropdownItem.vue';
-import PartButton from '../components/PartButton.vue';
+import Dropdown from '../js/src/components/Dropdown.vue';
+import DropdownContent from '../js/src/components/DropdownContent.vue';
+import DropdownHeader from '../js/src/components/DropdownHeader.vue';
+import DropdownItem from '../js/src/components/DropdownItem.vue';
+import PartButton from '../js/src/components/PartButton.vue';
 
 export default {
   title: 'Dropdown/Dropdown',

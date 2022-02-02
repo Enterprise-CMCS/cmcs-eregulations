@@ -1,4 +1,4 @@
-import DropdownItem from '../components/DropdownItem.vue';
+import DropdownItem from '../js/src/components/DropdownItem.vue';
 
 export default {
   title: 'Dropdown/Dropdown Item',

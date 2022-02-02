@@ -1,4 +1,4 @@
-import SupplementalContentCategory from '../components/SupplementalContentCategory.vue';
+import SupplementalContentCategory from '../js/src/components/SupplementalContentCategory.vue';
 
 export default {
   title: 'SupplementalContent/SupplementalContentCategory',
