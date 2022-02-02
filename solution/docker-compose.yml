@@ -41,3 +41,5 @@ services:
       - ./static-assets/regulations:/usr/share/nginx/html
 volumes:
   eregs-data:
+
+
