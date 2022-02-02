@@ -1,5 +1,7 @@
 # About
 
+[![Actions Status](https://github.com/CMSgov/cmcs-eregulations/workflows/eCFR%20Parser%20Checks/badge.svg)](https://github.com/CMSgov/cmcs-eregulations/actions)
+
 This is a project for the Center for Medicaid and CHIP Services (CMCS) to meet needs of CMCS and State staff researching regulations and related guidance, building on the [eRegulations](https://eregs.github.io/) open source project.
 
 We have public documentation about our product, design, and research processes in [this repository wiki](https://github.com/CMSgov/cmcs-eregulations/wiki).
