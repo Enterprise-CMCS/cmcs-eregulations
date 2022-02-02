@@ -1,6 +1,6 @@
-import DropdownContent from '../components/DropdownContent.vue';
-import DropdownHeader from '../components/DropdownHeader.vue';
-import DropdownItem from '../components/DropdownItem.vue'
+import DropdownContent from '../js/src/components/DropdownContent.vue';
+import DropdownHeader from '../js/src/components/DropdownHeader.vue';
+import DropdownItem from '../js/src/components/DropdownItem.vue'
 
 export default {
   title: 'Dropdown/Dropdown Content',
