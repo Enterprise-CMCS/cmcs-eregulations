@@ -57,7 +57,7 @@ functions:
     handler: wsgi_handler.handler
     timeout: 30
     layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonDashappDashdependenciesLambdaLayerQualifiedArn}
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
     events:
       - http: ANY /
       - http: ANY /{proxy+}
@@ -65,17 +65,17 @@ functions:
     handler: migrate.handler
     timeout: 300
     layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonDashappDashdependenciesLambdaLayerQualifiedArn}
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   create_su:
     handler: createsu.handler
     timeout: 300
     layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonDashappDashdependenciesLambdaLayerQualifiedArn}
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   populate_content:
     handler: populate_content.handler
     timeout: 300
     layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonDashappDashdependenciesLambdaLayerQualifiedArn}
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
 
 resources:
 
