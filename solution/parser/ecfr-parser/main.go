@@ -22,46 +22,60 @@ import (
 // TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
 
+// DefaultBaseURL is the default eRegs API URL to use if none is specified
+var DefaultBaseURL = "http://localhost:8000/v2/"
+
+// Functions for easy testing via patching
+var (
+	ParseTitleFunc = parseTitle
+	StartHandlePartVersionWorkerFunc = startHandlePartVersionWorker
+	HandlePartVersionFunc = handlePartVersion
+	SleepFunc = time.Sleep
+)
+
 var config = &eregs.ParserConfig{}
 
 func init() {
 	eregs.BaseURL = os.Getenv("EREGS_API_URL")
 	if eregs.BaseURL == "" {
-		eregs.BaseURL = "http://localhost:8000/v2/"
+		eregs.BaseURL = DefaultBaseURL
 	}
 }
 
-func parseConfig() {
-	parsexml.LogParseErrors = config.LogParseErrors
-
-	if config.Workers < 1 {
-		log.Warn("[main] ", config.Workers, " is an invalid number of workers, defaulting to 1.")
-		config.Workers = 1
-	}
-
-	if config.Attempts < 1 {
-		log.Warn("[main] ", config.Attempts, " is an invalid number of attempts, defaulting to 1.")
-		config.Attempts = 1
-	}
-
-	level := log.WarnLevel
-	switch config.LogLevel {
+func getLogLevel(l string) log.Level {
+	switch l {
 	case "warn":
-		level = log.WarnLevel
+		return log.WarnLevel
 	case "fatal":
-		level = log.FatalLevel
+		return log.FatalLevel
 	case "error":
-		level = log.ErrorLevel
+		return log.ErrorLevel
 	case "info":
-		level = log.InfoLevel
+		return log.InfoLevel
 	case "debug":
-		level = log.DebugLevel
+		return log.DebugLevel
 	case "trace":
-		level = log.TraceLevel
+		return log.TraceLevel
 	default:
 		log.Warn("[main] \"", config.LogLevel, "\" is an invalid log level, defaulting to \"warn\".")
+		return log.WarnLevel
 	}
-	log.SetLevel(level)
+}
+
+func parseConfig(c *eregs.ParserConfig) {
+	parsexml.LogParseErrors = c.LogParseErrors
+
+	if c.Workers < 1 {
+		log.Warn("[main] ", c.Workers, " is an invalid number of workers, defaulting to 1.")
+		c.Workers = 1
+	}
+
+	if c.Attempts < 1 {
+		log.Warn("[main] ", c.Attempts, " is an invalid number of attempts, defaulting to 1.")
+		c.Attempts = 1
+	}
+
+	log.SetLevel(getLogLevel(c.LogLevel))
 }
 
 // Only runs if parser is in a Lambda
@@ -86,7 +100,7 @@ func start() error {
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
-	parseConfig()
+	parseConfig(config)
 
 	queue := list.New()
 	for _, title := range config.Titles {
@@ -108,7 +122,7 @@ func start() error {
 			title := titleElement.Value.(*eregs.TitleConfig)
 
 			log.Info("[main] Parsing title ", title.Title, "...")
-			if retry, err := parseTitle(title); err == nil {
+			if retry, err := ParseTitleFunc(title); err == nil {
 				queue.Remove(titleElement)
 				processed++
 			} else if !retry {
@@ -154,6 +168,9 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, err := eregs.GetExistingParts(ctx, title.Title)
+	if err != nil {
+		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
+	}
 
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
 	var parts []string
@@ -223,7 +240,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		var wg sync.WaitGroup
 		for worker := 1; worker < config.Workers+1; worker++ {
 			wg.Add(1)
-			go startHandlePartVersionWorker(ctx, worker, ch, &wg, today)
+			go StartHandlePartVersionWorkerFunc(ctx, worker, ch, &wg, today)
 		}
 
 		for versionList := partList.Front(); versionList != nil; versionList = versionList.Next() {
@@ -258,7 +275,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 			return false, fmt.Errorf("Some parts still failed to process after %d attempts", config.Attempts)
 		} else {
 			log.Warn("[main] Some parts failed to process. Retrying ", config.Attempts-i-1, " more times.")
-			time.Sleep(3 * time.Second)
+			SleepFunc(3 * time.Second)
 		}
 	}
 
@@ -277,14 +294,14 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 			processingAttempts++
 			version := versionElement.Value.(*eregs.Part)
 			log.Debug("[worker ", thread, "] Processing part ", version.Name, " version ", version.Date)
-			err := handlePartVersion(ctx, thread, date, version)
+			err := HandlePartVersionFunc(ctx, thread, date, version)
 			if err == nil {
 				version.Processed = true
 				processedVersions++
 			} else {
 				log.Error("[worker ", thread, "] Error processing part ", version.Name, " version ", version.Date, ": ", err)
 			}
-			time.Sleep(1 * time.Second)
+			SleepFunc(1 * time.Second)
 		}
 	}
 
@@ -321,9 +338,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	}
 
 	log.Debug("[worker ", thread, "] Running post process on structure for part ", version.Name, " version ", version.Date)
-	if err := version.Document.PostProcess(); err != nil {
-		return err
-	}
+	version.Document.PostProcess()
 
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
 	if err := eregs.PostPart(ctx, version); err != nil {

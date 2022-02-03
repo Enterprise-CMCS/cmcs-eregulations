@@ -1,4 +1,4 @@
-import RelatedRuleList from '../components/RelatedRuleList.vue';
+import RelatedRuleList from '../js/src/components/RelatedRuleList.vue';
 
 export default {
   title: 'SupplementalContent/Related Rule List',

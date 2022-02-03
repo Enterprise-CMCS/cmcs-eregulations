@@ -23,10 +23,10 @@
         </div>
         <div
             v-if="clicked"
+            v-clickaway="handleCloseClick"
             class="copy-tooltip clicked"
             :class="tooltipClasses"
             :style="tooltipStyles"
-            v-clickaway="handleCloseClick"
         >
             <button
                 class="close-btn text-btn"
@@ -47,19 +47,19 @@
                     />
                 </svg>
             </button>
-            <p class="citation-title">{{ this.formatted_citation }}</p>
+            <p class="citation-title">{{ formatted_citation }}</p>
             <div class="action-btns">
                 <ActionBtn
-                    @action-btn-click="handleActionClick"
-                    :selectedAction="selectedAction"
+                    :selected-action="selectedAction"
                     :status="copyStatus"
-                    actionType="link"
+                    action-type="link"
+                    @action-btn-click="handleActionClick"
                 ></ActionBtn>
                 <ActionBtn
-                    @action-btn-click="handleActionClick"
-                    :selectedAction="selectedAction"
+                    :selected-action="selectedAction"
                     :status="copyStatus"
-                    actionType="citation"
+                    action-type="citation"
+                    @action-btn-click="handleActionClick"
                 ></ActionBtn>
             </div>
         </div>
@@ -88,10 +88,43 @@ const appendPxSuffix = (int) => `${int}px`;
 const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
 export default {
-    name: "copy-btn",
+    name: "CopyBtn",
 
     components: {
         ActionBtn,
+    },
+
+    // https://www.vuesnippets.com/posts/click-away/
+    // https://dev.to/jamus/clicking-outside-the-box-making-your-vue-app-aware-of-events-outside-its-world-53nh
+    directives: {
+        clickaway: {
+            bind(el, { value }) {
+                if (typeof value !== "function") {
+                    console.warn(`Expect a function, got ${value}`);
+                    return;
+                }
+
+                const clickawayHandler = (e) => {
+                    const elementsOfInterest = Array.from(
+                        el.parentElement.children
+                    );
+                    const clickedInside = elementsOfInterest.filter((el) =>
+                        el.contains(e.target)
+                    );
+                    return clickedInside.length || value();
+                };
+
+                el.__clickawayEventHandler__ = clickawayHandler;
+
+                document.addEventListener("click", clickawayHandler);
+            },
+            unbind(el) {
+                document.removeEventListener(
+                    "click",
+                    el.__clickawayEventHandler__
+                );
+            },
+        },
     },
 
     props: {
@@ -153,7 +186,7 @@ export default {
     },
 
     watch: {
-        copyStatus: async function (newStatus, oldStatus) {
+        async copyStatus (newStatus, oldStatus) {
             if (
                 newStatus === "pending" &&
                 (oldStatus === "idle" || oldStatus === "success")
@@ -167,39 +200,6 @@ export default {
                     this.copyStatus = "idle";
                 }
             }
-        },
-    },
-
-    // https://www.vuesnippets.com/posts/click-away/
-    // https://dev.to/jamus/clicking-outside-the-box-making-your-vue-app-aware-of-events-outside-its-world-53nh
-    directives: {
-        clickaway: {
-            bind(el, { value }) {
-                if (typeof value !== "function") {
-                    console.warn(`Expect a function, got ${value}`);
-                    return;
-                }
-
-                const clickawayHandler = (e) => {
-                    const elementsOfInterest = Array.from(
-                        el.parentElement.children
-                    );
-                    const clickedInside = elementsOfInterest.filter((el) =>
-                        el.contains(e.target)
-                    );
-                    return clickedInside.length || value();
-                };
-
-                el.__clickawayEventHandler__ = clickawayHandler;
-
-                document.addEventListener("click", clickawayHandler);
-            },
-            unbind(el) {
-                document.removeEventListener(
-                    "click",
-                    el.__clickawayEventHandler__
-                );
-            },
         },
     },
 

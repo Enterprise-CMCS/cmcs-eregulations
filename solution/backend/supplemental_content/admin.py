@@ -102,7 +102,7 @@ class SupplementalContentAdmin(BaseAdmin):
     list_display_links = ("date", "name", "description", "category", "updated_at")
     empty_value_display = 'NONE'
     search_fields = ["date", "name", "description"]
-    ordering = ("-date", "name", "category", "-created_at", "-updated_at")
+    ordering = ("-updated_at", "-date", "name", "category", "-created_at")
     filter_horizontal = ("locations",)
     actions = [actions.mark_approved, actions.mark_not_approved]
     list_filter = [

@@ -25,7 +25,7 @@ func (sc *SubchapterArg) String() string {
 // Set is to validate and set the subchapter
 func (sc *SubchapterArg) Set(s string) error {
 	*sc = strings.Split(s, "-")
-	if len(*sc) != 2 {
+	if len(*sc) != 2 || strings.TrimSpace((*sc)[0]) == "" || strings.TrimSpace((*sc)[1]) == ""{
 		return fmt.Errorf("Subchapter is expected to be of the form <Roman Numeral>-<Letter>")
 	}
 	return nil
@@ -43,7 +43,10 @@ func (sl *SubchapterList) UnmarshalText(data []byte) error {
 	*sl = make([]SubchapterArg, 0, len(subchapters))
 	for _, subchapter := range subchapters {
 		var sc SubchapterArg
-		sc.Set(subchapter)
+		err := sc.Set(strings.TrimSpace(subchapter))
+		if err != nil {
+			return err
+		}
 		*sl = append(*sl, sc)
 	}
 	return nil

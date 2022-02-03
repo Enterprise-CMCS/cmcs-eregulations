@@ -9,10 +9,7 @@ var re = regexp.MustCompile(`^\(([^\)]+)\)(?:(?: ?<I>[^<]+<\/I>(?: ?-)?)? ?\(([^
 
 func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) {
 	citation := []string{}
-	pLabel, err := p.marker()
-	if err != nil {
-		return citation, err
-	}
+	pLabel := p.marker()
 
 	if len(pLabel) == 0 {
 		return citation, nil
@@ -68,7 +65,6 @@ func generateParagraphCitation(p *Paragraph, prev *Paragraph) ([]string, error) 
 	}
 
 	citation = append(citation, prev.Citation[:l]...)
-
 	return append(citation, pLabel...), nil
 }
 
@@ -99,13 +95,10 @@ func matchLabelType(l string) int {
 	return m
 }
 
-func extractMarker(l string) ([]string, error) {
+func extractMarker(l string) []string {
 	pLabel := re.FindStringSubmatch(l)
 	if len(pLabel) == 0 {
-		return nil, nil
-	}
-	if len(pLabel) < 2 {
-		return nil, fmt.Errorf("wrong number of labels")
+		return nil
 	}
 	if len(pLabel) == 3 && pLabel[2] == "" {
 		pLabel = pLabel[:2]
@@ -119,5 +112,5 @@ func extractMarker(l string) ([]string, error) {
 		}
 	}
 	pLabel = pLabel[1:]
-	return pLabel, nil
+	return pLabel
 }

@@ -36,8 +36,8 @@ prototype: ui/prototype
 		npm run start-container
 
 prototype.clean: ## Stop prototype for regulations
-prototype.clean: regulations/static/prototype
-	cd regulations/static/prototype; \
+prototype.clean: ui/prototype
+	cd ui/prototype; \
 		npm run stop-container
 
 .PHONY: lint
