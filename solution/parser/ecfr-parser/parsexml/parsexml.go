@@ -415,6 +415,28 @@ type Image struct {
 	Source string `xml:"src,attr" json:"src"`
 }
 
+// PostProcess checks an image source, if it's /graphics/X.Y change to new source
+func (img *Image) PostProcess() {
+	if strings.HasPrefix(img.Source, "/graphics/") {
+		splitPath := strings.Split(img.Source, "/")
+		if len(splitPath) < 3 {
+			return //Invalid path length, not our responsibility here
+		}
+		splitName := strings.Split(splitPath[2], ".")
+		if len(splitName) < 2 {
+			return //Invalid filename: have "X", need "X.Y", so leave unchanged
+		}
+		var nameSlice []string
+		if len(splitName) > 2 && strings.ToLower(splitName[len(splitName) - 2]) == "eps" {
+			nameSlice = splitName[0:len(splitName)-2] //Remove file extension and "eps" (e.g. "X.eps.gif")
+		} else {
+			nameSlice = splitName[0:len(splitName)-1] //Only remove file extension (e.g. "X.gif")
+		}
+		imgName := strings.ToUpper(strings.Join(nameSlice, "."))
+		img.Source = fmt.Sprintf("https://images.federalregister.gov/%s/large.png", imgName)
+	}
+}
+
 // FootNote is a footnote to the regulation
 type FootNote struct {
 	Type    string `json:"node_type"`
