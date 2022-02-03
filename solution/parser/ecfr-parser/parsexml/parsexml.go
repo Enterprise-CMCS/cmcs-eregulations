@@ -418,11 +418,7 @@ type Image struct {
 // PostProcess checks an image source, if it's /graphics/X.Y change to new source
 func (img *Image) PostProcess() {
 	if strings.HasPrefix(img.Source, "/graphics/") {
-		splitPath := strings.Split(img.Source, "/")
-		if len(splitPath) < 3 {
-			return //Invalid path length, not our responsibility here
-		}
-		splitName := strings.Split(splitPath[2], ".")
+		splitName := strings.Split(strings.Split(img.Source, "/")[2], ".")
 		if len(splitName) < 2 {
 			return //Invalid filename: have "X", need "X.Y", so leave unchanged
 		}
