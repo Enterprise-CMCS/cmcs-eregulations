@@ -1,11 +1,17 @@
-/* eslint-disable */
-import _ from "lodash";
-import { formatDate, parseError, delay } from "./utils";
+import _filter from "lodash/filter";
+import _get from "lodash/get";
+import _isBoolean from "lodash/isBoolean";
+import _isFunction from "lodash/isFunction";
+import _isNil from "lodash/isNil";
+import _isObject from "lodash/isObject";
+import _keys from "lodash/keys";
+import _map from "lodash/map";
+import { niceDate, parseError, delay } from "./utils";
+import mockExisting from "../mock-data/existing";
 
 const apiPath = "https://regulations-pilot.cms.gov/v2";
 //const apiPath = "http://localhost:8000/v2";
 
-/* eslint-disable import/no-mutable-exports */
 let config = {
     apiPath,
     fetchMode: "no-cors",
@@ -64,18 +70,18 @@ function fetchJson(url, options = {}, retryCount = 0) {
         // For example {key1: value1, key2: value2}
 
         // Get keys from the params object such as [key1, key2] etc
-        const paramKeys = _.keys(merged.params);
+        const paramKeys = _keys(merged.params);
 
         // Filter out params with undefined or null values
-        const paramKeysToPass = _.filter(
+        const paramKeysToPass = _filter(
             paramKeys,
-            (key) => !_.isNil(_.get(merged.params, key))
+            (key) => !_isNil(_get(merged.params, key))
         );
-        const query = _.map(
+        const query = _map(
             paramKeysToPass,
             (key) =>
                 `${encodeURIComponent(key)}=${encodeURIComponent(
-                    _.get(merged.params, key)
+                    _get(merged.params, key)
                 )}`
         ).join("&");
         url = query ? `${url}?${query}` : url;
@@ -106,13 +112,13 @@ function fetchJson(url, options = {}, retryCount = 0) {
             return response;
         })
         .then((response) => {
-            if (_.isFunction(response.text)) return response.text();
+            if (_isFunction(response.text)) return response.text();
             return response;
         })
         .then((text) => {
             let json;
             try {
-                if (_.isObject(text)) {
+                if (_isObject(text)) {
                     json = text;
                 } else {
                     json = JSON.parse(text);
@@ -151,7 +157,7 @@ function fetchJson(url, options = {}, retryCount = 0) {
             return json;
         })
         .then((json) => {
-            if (_.isBoolean(isOk) && !isOk) {
+            if (_isBoolean(isOk) && !isOk) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
                 return json;
@@ -187,6 +193,7 @@ function httpApiPost(urlPath, { data = {}, params } = {}) {
     });
 }
 
+// eslint-disable-next-line no-unused-vars
 function httpApiPut(urlPath, { data, params } = {}) {
     return fetchJson(`${config.apiPath}/${urlPath}`, {
         method: "PUT",
@@ -218,10 +225,19 @@ const statusCheck = () => {
     return httpApiGet("Authentication/Test");
 };
 
-const getLastUpdatedDate = async () => {
-    console.log("fetching...");
-    const result = await httpApiGet("title/42/existing");
-    return result;
+const getLastUpdatedDate = async (title = "42") => {
+    const reducer = (accumulator, currentValue) => {
+        return currentValue.date > accumulator.date
+            ? currentValue
+            : accumulator;
+    };
+    const result = await httpApiMock("get", `title/${title}/existing`, {
+        data: {},
+        params: {},
+        response: mockExisting[title],
+    });
+
+    return niceDate(_get(result.reduce(reducer), "date"));
 };
 
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)

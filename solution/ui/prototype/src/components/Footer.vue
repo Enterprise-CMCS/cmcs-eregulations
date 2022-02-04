@@ -8,14 +8,7 @@
                 >
                     <img
                         :src="require('legacy-static/images/medicaid.png')"
-                        fetch("http:
-                        localhost:8000
-                        v2
-                        title
-                        42
-                        existing",
-                        {mode:
-                        "no-cors"})
+                        alt="Medicaid.gov logo with subtitle Keeping America Healthy"
                     />
                 </a>
                 <h5>Centers for Medicare &amp; Medicaid Services</h5>
@@ -121,29 +114,16 @@ export default {
         };
     },
 
-    created() {
-        /*this.lastUpdated = getLastUpdatedDate();*/
-        this.fetch_content();
+    async created() {
+        try {
+            const lastUpdated = await getLastUpdatedDate();
+            this.lastUpdated = lastUpdated;
+        } catch (error) {
+            console.error(error);
+        } finally {
+            this.fetchingLastUpdated = false;
+        }
     },
-
-    methods: {
-        async fetch_content() {
-            console.log("fetching content...");
-            try {
-                const response = await fetch(
-                    /*`https://regulations-pilot.cms.gov/v2/title/42/existing`*/
-                    `http://localhost:8000/v2/title/42/existing`
-                );
-                const content = await response.json();
-                console.log("content", content);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                console.log("finally");
-            }
-        },
-    },
-    
 };
 </script>
 
