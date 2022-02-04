@@ -235,6 +235,12 @@ func (s *Section) PostProcess() {
 			}
 		}
 	}
+	for _, child := range s.Children {
+		c, ok := child.(PostProcessor)
+		if ok {
+			c.PostProcess()
+		}
+	}
 }
 
 // SectionChildren is an array of interface
