@@ -1,5 +1,24 @@
 /* eslint-disable */
-import _ from "lodash";
+import _delay from "lodash/delay";
+import _endsWith from "lodash/endsWith";
+import _filter from "lodash/filter";
+import _forEach from "lodash/forEach";
+import _get from "lodash/get";
+import _indexOf from "lodash/indexOf";
+import _isArray from "lodash/isArray";
+import _isBoolean from "lodash/isBoolean";
+import _isEmpty from "lodash/isEmpty";
+import _isFunction from "lodash/isFunction";
+import _isNil from "lodash/isNil";
+import _isNumber from "lodash/isNumber";
+import _isObject from "lodash/isObject";
+import _isString from "lodash/isString";
+import _keys from "lodash/keys";
+import _map from "lodash/map";
+import _random from "lodash/random";
+import _set from "lodash/set";
+import _transform from "lodash/transform";
+
 import numeral from "numeral";
 
 /**
@@ -22,8 +41,8 @@ function parseError(err) {
     const message = errMessage;
     try {
         const code = Object.keys(err.errors)[0];
-        const status = _.get(err, "status");
-        const requestId = _.get(err, "requestId");
+        const status = _get(err, "status");
+        const requestId = _get(err, "requestId");
         const error = new Error(message);
         error.code = code;
         error.requestId = requestId;
@@ -49,21 +68,32 @@ function swallowError(promise, fn = () => ({})) {
 // a promise friendly delay function
 function delay(seconds) {
     return new Promise((resolve) => {
-        _.delay(resolve, seconds * 1000);
+        _delay(resolve, seconds * 1000);
     });
 }
 
 function niceNumber(value) {
-    if (_.isNil(value)) return "N/A";
-    if (_.isString(value) && _.isEmpty(value)) return "N/A";
+    if (_isNil(value)) return "N/A";
+    if (_isString(value) && _isEmpty(value)) return "N/A";
     return numeral(value).format("0,0");
 }
 
 function nicePrice(value) {
-    if (_.isNil(value)) return "N/A";
-    if (_.isString(value) && _.isEmpty(value)) return "N/A";
+    if (_isNil(value)) return "N/A";
+    if (_isString(value) && _isEmpty(value)) return "N/A";
     return numeral(value).format("0,0.00");
 }
+
+// YYYY-MM-DD to MMM DD, YYYY
+const niceDate = (kebabDate) => {
+    if (_isNil(kebabDate)) return "N/A";
+    if (_isString(kebabDate) && _isEmpty(kebabDate)) return "N/A";
+    const date = new Date(`${kebabDate}T12:00:00.000-05:00`);
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month} ${day}, ${year}`;
+};
 
 function getQueryParam(location, key) {
     const queryParams = new URL(location).searchParams;
@@ -74,7 +104,7 @@ function addQueryParams(location, params) {
     const url = new URL(location);
     const queryParams = url.searchParams;
 
-    const keys = _.keys(params);
+    const keys = _keys(params);
     keys.forEach((key) => {
         queryParams.append(key, params[key]);
     });
@@ -135,7 +165,7 @@ function removeFragmentParams(location, keyNamesToRemove) {
             const currentKey = keyValueArr[0];
             const value = keyValueArr[1];
             // Do not include the currentKey if it is the one specified in the array of keyNamesToRemove
-            if (value && _.indexOf(keyNamesToRemove, currentKey) < 0) {
+            if (value && _indexOf(keyNamesToRemove, currentKey) < 0) {
                 hashStr = `${currentKey}${currentKey}=${value}`;
             }
         });
@@ -159,7 +189,7 @@ function removeNulls(obj = {}) {
 
 // remove the "end" string from "str" if it exists
 function chopRight(str = "", end = "") {
-    if (!_.endsWith(str, end)) return str;
+    if (!_endsWith(str, end)) return str;
     return str.substring(0, str.length - end.length);
 }
 
@@ -172,7 +202,7 @@ const isFloat = (n) => {
 function childrenArrayToMap(arr) {
     const result = {};
     arr.forEach((item) => {
-        const key = _.keys(item)[0];
+        const key = _keys(item)[0];
         result[key] = item[key];
     });
     return result;
@@ -182,7 +212,7 @@ const idGeneratorCount = 0;
 
 function generateId(prefix = "") {
     idGeneratorCount += 1;
-    return `${prefix}_${idGeneratorCount}_${Date.now()}_${_.random(0, 1000)}`;
+    return `${prefix}_${idGeneratorCount}_${Date.now()}_${_random(0, 1000)}`;
 }
 
 // Given a Map and an array of items (each item MUST have an "id" prop), consolidate
@@ -215,7 +245,7 @@ function consolidateToMap(map, itemsArray, mergeExistingFn) {
         }
     });
 
-    _.forEach(unprocessedKeys, (_value, key) => {
+    _forEach(unprocessedKeys, (_value, key) => {
         map.delete(key);
     });
 }
@@ -245,8 +275,8 @@ function consolidateToMap(map, itemsArray, mergeExistingFn) {
 function flattenObject(obj, filterFn = () => true, keyPrefix = "", accum = {}) {
     function toFlattenedKey(key, idx) {
         let flattenedKey;
-        if (_.isNil(idx)) {
-            if (_.isNumber(key)) {
+        if (_isNil(idx)) {
+            if (_isNumber(key)) {
                 flattenedKey = keyPrefix ? `${keyPrefix}[${key}]` : `[${key}]`;
             } else {
                 flattenedKey = keyPrefix ? `${keyPrefix}.${key}` : key;
@@ -259,15 +289,15 @@ function flattenObject(obj, filterFn = () => true, keyPrefix = "", accum = {}) {
         return flattenedKey;
     }
 
-    return _.transform(
+    return _transform(
         obj,
         (result, value, key) => {
             if (filterFn(result, value, key)) {
-                if (_.isArray(value)) {
+                if (_isArray(value)) {
                     const idx = 0;
-                    _.forEach(value, (element) => {
+                    _forEach(value, (element) => {
                         const flattenedKey = toFlattenedKey(key, idx);
-                        if (_.isObject(element)) {
+                        if (_isObject(element)) {
                             flattenObject(
                                 element,
                                 filterFn,
@@ -281,7 +311,7 @@ function flattenObject(obj, filterFn = () => true, keyPrefix = "", accum = {}) {
                     });
                 } else {
                     const flattenedKey = toFlattenedKey(key);
-                    if (_.isObject(value)) {
+                    if (_isObject(value)) {
                         flattenObject(value, filterFn, flattenedKey, result);
                     } else {
                         result[flattenedKey] = value;
@@ -318,11 +348,11 @@ function flattenObject(obj, filterFn = () => true, keyPrefix = "", accum = {}) {
  * @returns {*}
  */
 function unFlattenObject(keyValuePairs, filterFn = () => true) {
-    return _.transform(
+    return _transform(
         keyValuePairs,
         (result, value, key) => {
             if (filterFn(result, value, key)) {
-                _.set(result, key, value);
+                _set(result, key, value);
             }
             return result;
         },
@@ -341,15 +371,6 @@ function formatAmount(amount) {
         .toString()
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
-
-// YYYY-MM-DD to MMM DD, YYYY
-const niceDate = (kebabDate) => {
-    const date = new Date(`${kebabDate}T12:00:00.000-05:00`);
-    const month = date.toLocaleString("default", { month: "short" });
-    const day = date.getDate();
-    const year = date.getFullYear();
-    return `${month} ${day}, ${year}`;
-};
 
 // convert current date to YYYY-MM-DD
 const formatDateParam = () => {

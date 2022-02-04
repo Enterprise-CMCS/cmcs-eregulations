@@ -86,12 +86,11 @@
                     </a>
                     on
                     <template v-if="lastUpdated">
-                        {{ lastUpdated }}
+                        {{ lastUpdated }}.
                     </template>
                     <template v-else>
                         <InlineLoader />
                     </template>
-                    .
                 </h4>
 
                 <div class="about-footer">
@@ -111,13 +110,13 @@
 
 <script>
 import { getLastUpdatedDate } from "../utilities/api";
-import InlineLoader from "./InlineLoader.vue"
+import InlineLoader from "./InlineLoader.vue";
 
 export default {
     name: "Footer",
 
     components: {
-        InlineLoader
+        InlineLoader,
     },
 
     data() {

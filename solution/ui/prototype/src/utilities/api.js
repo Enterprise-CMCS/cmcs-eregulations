@@ -9,12 +9,12 @@ import _map from "lodash/map";
 import { niceDate, parseError, delay } from "./utils";
 import mockExisting from "../mock-data/existing";
 
-const apiPath = "https://regulations-pilot.cms.gov/v2";
-//const apiPath = "http://localhost:8000/v2";
+//const apiPath = "https://f2qpfij2v0.execute-api.us-east-1.amazonaws.com/dev-331/v2";
+const apiPath = "http://localhost:8000/v2";
 
 let config = {
     apiPath,
-    fetchMode: "no-cors",
+    fetchMode: "cors",
     maxRetryCount: 2,
 };
 
@@ -231,11 +231,8 @@ const getLastUpdatedDate = async (title = "42") => {
             ? currentValue
             : accumulator;
     };
-    const result = await httpApiMock("get", `title/${title}/existing`, {
-        data: {},
-        params: {},
-        response: mockExisting[title],
-    });
+
+    const result = await httpApiGet(`title/${title}/existing`);
 
     return niceDate(_get(result.reduce(reducer), "date"));
 };
