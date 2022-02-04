@@ -1,10 +1,7 @@
 name: Remove
 
 on:
-  pull_request:
-    types: [ opened, synchronize, reopened ]
-    paths:
-      - 'solution/parser/ecfr-parser/**'
+  workflow_dispatch:
 
 jobs:
   remove:
