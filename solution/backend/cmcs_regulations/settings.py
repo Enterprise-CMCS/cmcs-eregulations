@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     'report_builder',
     'solo',
     'django_opensearch_dsl',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -172,3 +174,12 @@ OPENSEARCH_DSL = {
         'hosts': 'opensearch-node1'
     },
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8081",
+    "http://0.0.0.0:8081"
+]
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"https://\w+\.execute-api.us-east-1\.amazonaws\.com$"
+]
