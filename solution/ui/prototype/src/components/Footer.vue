@@ -84,13 +84,20 @@
                     >
                         eCFR
                     </a>
-                    on {{ lastUpdated }}.
+                    on
+                    <template v-if="lastUpdated">
+                        {{ lastUpdated }}
+                    </template>
+                    <template v-else>
+                        <InlineLoader />
+                    </template>
+                    .
                 </h4>
 
                 <div class="about-footer">
-                    <a href="{% url 'about' %}">
+                    <router-link :to="{ name: 'about' }">
                         About Medicaid &amp; CHIP eRegulations
-                    </a>
+                    </router-link>
                 </div>
 
                 <p>
@@ -104,9 +111,14 @@
 
 <script>
 import { getLastUpdatedDate } from "../utilities/api";
+import InlineLoader from "./InlineLoader.vue"
 
 export default {
     name: "Footer",
+
+    components: {
+        InlineLoader
+    },
 
     data() {
         return {
@@ -116,12 +128,9 @@ export default {
 
     async created() {
         try {
-            const lastUpdated = await getLastUpdatedDate();
-            this.lastUpdated = lastUpdated;
+            this.lastUpdated = await getLastUpdatedDate();
         } catch (error) {
             console.error(error);
-        } finally {
-            this.fetchingLastUpdated = false;
         }
     },
 };
