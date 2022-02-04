@@ -2,10 +2,20 @@
     <footer>
         <div class="flexbox">
             <div class="footer-left match-sides">
-                <a href="https://www.medicaid.gov/" target="_blank">
+                <a
+                    href="https://www.medicaid.gov/"
+                    target="_blank"
+                >
                     <img
                         :src="require('legacy-static/images/medicaid.png')"
-                        alt="Medicaid.gov logo with subtitle Keeping America Healthy"
+                        fetch("http:
+                        localhost:8000
+                        v2
+                        title
+                        42
+                        existing",
+                        {mode:
+                        "no-cors"})
                     />
                 </a>
                 <h5>Centers for Medicare &amp; Medicaid Services</h5>
@@ -81,7 +91,7 @@
                     >
                         eCFR
                     </a>
-                    on {% last_updated %}.
+                    on {{ lastUpdated }}.
                 </h4>
 
                 <div class="about-footer">
@@ -100,12 +110,53 @@
 </template>
 
 <script>
-export default {};
+import { getLastUpdatedDate } from "../utilities/api";
+
+export default {
+    name: "Footer",
+
+    data() {
+        return {
+            lastUpdated: "",
+        };
+    },
+
+    created() {
+        /*this.lastUpdated = getLastUpdatedDate();*/
+        this.fetch_content();
+    },
+
+    methods: {
+        async fetch_content() {
+            console.log("fetching content...");
+            try {
+                const response = await fetch(
+                    /*`https://regulations-pilot.cms.gov/v2/title/42/existing`*/
+                    `http://localhost:8000/v2/title/42/existing`
+                );
+                const content = await response.json();
+                console.log("content", content);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                console.log("finally");
+            }
+        },
+    },
+    
+};
 </script>
 
 <style lang="scss">
 footer {
-    h1, h2, h3, h4, h5, h6, p, ul {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    ul {
         margin-block-start: 0;
         margin-block-end: 0;
     }
