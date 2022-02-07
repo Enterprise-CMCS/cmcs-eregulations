@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from regcore.models import Part
+from supplemental_content.models import Category
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
@@ -40,6 +41,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
+        categories = list(Category.objects.all().order_by('order').values())
 
         c = {
             'tree':         tree,
@@ -51,6 +53,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'versions':     versions,
             'node_list':    node_list,
             'view_type':    self.get_view_type(),
+            'categories':   categories,
         }
 
         end = datetime.now().timestamp()

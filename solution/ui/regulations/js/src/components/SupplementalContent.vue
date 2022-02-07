@@ -1,9 +1,5 @@
 <template>
     <div class="supplemental-content-container">
-        <template v-if="isFetching">
-            <simple-spinner></simple-spinner>
-        </template>
-        <template v-else>
             <supplemental-content-category
                 v-for="(category, index) in categories"
                 :key="index"
@@ -12,8 +8,9 @@
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
             >
+
             </supplemental-content-category>
-        </template>
+
     </div>
 </template>
 
@@ -97,5 +94,8 @@ export default {
             }
         },
     },
+    mounted() {
+    this.categories = JSON.parse(document.getElementById('categories').textContent)
+  },
 };
 </script>

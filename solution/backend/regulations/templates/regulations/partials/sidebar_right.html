@@ -1,5 +1,7 @@
 {% load string_formatters %}
 
+{{ categories|json_script:"categories" }}
+
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
     <h2>Part {{ reg_part}} Federal Register Documents</h2>
@@ -9,7 +11,6 @@
     {% comment %}<hr />{% endcomment %}
 
     <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2" ruletype="RULE"></related-rules>
-
     {% if node_list %}
     <h2 id="subpart-resources-heading">
         {% if view_type == "part" %} Part {{ reg_part }} {% endif %}
@@ -23,6 +24,7 @@
         part="{{ reg_part }}"
         :sections="{{ node_list.sections }}"
         :subparts="{{ node_list.subparts }}"
+
     ></supplemental-content>
     {% endif %}
 

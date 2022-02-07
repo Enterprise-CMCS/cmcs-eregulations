@@ -2,8 +2,9 @@
     <div class="supplemental-content-category">
         <div class="category">
             <collapse-button v-bind:class="{ subcategory: subcategory }" :name="name" state="collapsed" class="category-title">
-                <template v-slot:expanded>{{ name }} <i class="fa fa-chevron-up"></i></template>
-                <template v-slot:collapsed>{{ name }} <i class="fa fa-chevron-down"></i></template>
+
+              <template v-slot:expanded>{{ name }} <i class="fa fa-chevron-up"></i></template>
+              <template v-slot:collapsed>{{ name }} <i class="fa fa-chevron-down"></i></template>
             </collapse-button>
             <span v-if="showDescription" class="category-description">{{
                 description
@@ -26,8 +27,11 @@
                 <supplemental-content-list
                     :supplemental_content="supplemental_content"
                     :has_sub_categories="has_sub_categories"
+                    v-if="supplemental_content"
                 />
+                <div v-else>None</div>
             </collapsible>
+
         </div>
     </div>
 </template>
