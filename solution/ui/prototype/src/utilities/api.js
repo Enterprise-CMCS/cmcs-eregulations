@@ -7,7 +7,6 @@ import _isObject from "lodash/isObject";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
 import { niceDate, parseError, delay } from "./utils";
-import mockExisting from "../mock-data/existing";
 
 //const apiPath = "https://f2qpfij2v0.execute-api.us-east-1.amazonaws.com/dev-331/v2";
 const apiPath = "http://localhost:8000/v2";
