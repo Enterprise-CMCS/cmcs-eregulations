@@ -56,18 +56,26 @@ functions:
       WORKING_DIR: /var/task
     handler: wsgi_handler.handler
     timeout: 30
+    layers:
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
     events:
       - http: ANY /
       - http: ANY /{proxy+}
   reg_core_migrate:
     handler: migrate.handler
     timeout: 300
+    layers:
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   create_su:
     handler: createsu.handler
     timeout: 300
+    layers:
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   populate_content:
     handler: populate_content.handler
     timeout: 300
+    layers:
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
 
 resources:
 
@@ -223,5 +231,4 @@ resources:
           Ref: RDSResource
 
 plugins:
-  - serverless-python-requirements
   - serverless-wsgi
