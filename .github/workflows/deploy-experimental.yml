@@ -113,6 +113,33 @@ jobs:
 
             [1]: ${{ steps.deploy-regulations-site-server.outputs.url }}
           reactions: '+1'
+
+      # build the static assets for the website
+      - name: build static assets and deploy prototype
+        id: build-static-assets-and-deploy-prototype
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
+          VUE_APP_API_URL: ${{ steps.deploy-regulations-site-server.outputs.url }}
+        run: |
+          pushd solution/ui/prototype
+          npm ci
+          npm install serverless -g
+          npm run build
+          serverless deploy --stage dev-${PR}
+          echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 12-)"
+          popd
+      # Notify github that this is deployed and ready to look at
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          body: |
+            :sparkles: See this Prototype Site [in action][1] :sparkles:
+
+            [1]: ${{ steps.build-static-assets-and-deploy-prototype.outputs.url }}
+          reactions: '+1'
       # Run the cypress tests
       - name: end-to-end tests
         uses: cypress-io/github-action@v2
