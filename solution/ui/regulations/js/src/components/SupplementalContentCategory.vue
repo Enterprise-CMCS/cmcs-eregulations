@@ -7,7 +7,7 @@
               <template v-slot:collapsed>{{ name }} <i v-if="has_children" class="fa fa-chevron-down"></i></template>
             </collapse-button>
             <span v-if="showDescription" class="category-description">{{ description }}</span>
-            <span v-else-if="!has_children">None</span>
+
             <collapsible
                 :name="name"
                 state="collapsed"
@@ -21,6 +21,7 @@
                     :description="category.description"
                     :supplemental_content="category.supplemental_content"
                     :sub_categories="category.sub_categories"
+                    :isFetching="isFetching"
                 >
                 </supplemental-content-category>
                 <supplemental-content-list
@@ -38,6 +39,7 @@
 import SupplementalContentList from "./SupplementalContentList.vue";
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
+import SimpleSpinner from "./SimpleSpinner.vue";
 
 export default {
     name: "supplemental-content-category",
@@ -46,6 +48,7 @@ export default {
         SupplementalContentList,
         CollapseButton,
         Collapsible,
+        SimpleSpinner
     },
 
     props: {
@@ -53,6 +56,11 @@ export default {
             type: Boolean,
             required: false,
             default: false,
+        },
+        isFetching: {
+            type: Boolean,
+            required: false,
+            default: true,
         },
         name: {
             type: String,
@@ -74,7 +82,7 @@ export default {
 
     computed: {
         showDescription () {
-            return this.description && !/^\s*$/.test(this.description) && (this.sub_categories?.length || this.supplemental_content?.length);
+            return this.description && !/^\s*$/.test(this.description) ;
         },
         has_sub_categories() {
             return this.sub_categories.length;

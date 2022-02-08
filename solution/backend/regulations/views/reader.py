@@ -41,8 +41,8 @@ class ReaderView(CitationContextMixin, TemplateView):
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
-        categories = list(Category.objects.all().order_by('order').values())
-        sub_categories = list(SubCategory.objects.all().order_by('order').values())
+        categories = list(Category.objects.filter(show_if_empty=True).order_by('order').values())
+        sub_categories = list(SubCategory.objects.filter(show_if_empty=True).order_by('order').values())
 
         c = {
             'tree':         tree,

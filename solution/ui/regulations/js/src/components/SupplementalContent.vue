@@ -7,9 +7,10 @@
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
+                :isFetching="isFetching"
             >
-
             </supplemental-content-category>
+            <simple-spinner v-if="isFetching"></simple-spinner>
 
     </div>
 </template>
@@ -85,13 +86,9 @@ export default {
                 const response = await fetch(
                     `${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`
                 );
+                await new Promise(r => setTimeout(r, 5000));
                 const content = await response.json();
-                const updatedContent = this.categories.map(category =>{
-                  const newContent = content.find(c => c.name === category.name)
-                  return newContent || category
-                })
-
-                this.categories = updatedContent;
+                this.categories = content;
             } catch (error) {
                 console.error(error);
             } finally {
