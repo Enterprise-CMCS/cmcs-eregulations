@@ -319,6 +319,9 @@ button.collapsible-title {
         margin-top: 0;
         margin-bottom: $spacer-2;
     }
+    &.childless {
+        color: $mid_gray;
+    }
 
     &.visible {
         color: $dark-gray;

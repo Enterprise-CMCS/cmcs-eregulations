@@ -1,14 +1,13 @@
 <template>
     <div class="supplemental-content-category">
         <div class="category">
-            <collapse-button v-bind:class="{ subcategory: subcategory }" :name="name" state="collapsed" class="category-title">
+            <collapse-button v-bind:class="{ subcategory: subcategory, childless: !has_children }" :name="name" state="collapsed" class="category-title">
 
-              <template v-slot:expanded>{{ name }} <i class="fa fa-chevron-up"></i></template>
-              <template v-slot:collapsed>{{ name }} <i class="fa fa-chevron-down"></i></template>
+              <template v-slot:expanded>{{ name }} <i v-if="has_children" class="fa fa-chevron-up"></i></template>
+              <template v-slot:collapsed>{{ name }} <i v-if="has_children" class="fa fa-chevron-down"></i></template>
             </collapse-button>
-            <span v-if="showDescription" class="category-description">{{
-                description
-            }}</span>
+            <span v-if="showDescription" class="category-description">{{ description }}</span>
+            <span v-else-if="!has_children">None</span>
             <collapsible
                 :name="name"
                 state="collapsed"
@@ -29,7 +28,6 @@
                     :has_sub_categories="has_sub_categories"
                     v-if="supplemental_content"
                 />
-                <div v-else>None</div>
             </collapsible>
 
         </div>
@@ -75,12 +73,15 @@ export default {
     },
 
     computed: {
-        showDescription: function () {
-            return this.description && !/^\s*$/.test(this.description);
+        showDescription () {
+            return this.description && !/^\s*$/.test(this.description) && (this.sub_categories?.length || this.supplemental_content?.length);
         },
         has_sub_categories() {
             return this.sub_categories.length;
         },
+        has_children () {
+          return this.sub_categories?.length || this.supplemental_content?.length
+        }
     },
 };
 </script>
