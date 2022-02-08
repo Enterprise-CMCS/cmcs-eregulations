@@ -57,7 +57,7 @@ export default {
     },
 
     created() {
-        this.fetch_content(this.title, this.part);
+       this.fetch_content(this.title, this.part);
     },
 
     computed: {
@@ -85,8 +85,14 @@ export default {
                 const response = await fetch(
                     `${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`
                 );
+                await new Promise(r => setTimeout(r, 5000));
                 const content = await response.json();
-                this.categories = content;
+                const updatedContent = this.categories.map(category =>{
+                  const newContent = content.find(c => c.name === category.name)
+                  return newContent || category
+                })
+
+                this.categories = updatedContent;
             } catch (error) {
                 console.error(error);
             } finally {
@@ -95,7 +101,13 @@ export default {
         },
     },
     mounted() {
-    this.categories = JSON.parse(document.getElementById('categories').textContent)
+      const rawCategories = JSON.parse(document.getElementById('categories').textContent)
+      const rawSubCategories = JSON.parse(document.getElementById('sub_categories').textContent)
+      this.categories = rawCategories.map(c => {
+        const category = JSON.parse(JSON.stringify(c))
+        category.sub_categories = rawSubCategories.filter(subcategory => subcategory.parent_id === category.id)
+        return category
+      })
   },
 };
 </script>
