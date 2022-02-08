@@ -6,7 +6,10 @@
 
 export default {
     name: "App",
-    components: {}
+    components: {},
+    created: function(){
+      console.log("API URL: " + process.env.VUE_APP_API_URL)
+    }
 };
 
 </script>
