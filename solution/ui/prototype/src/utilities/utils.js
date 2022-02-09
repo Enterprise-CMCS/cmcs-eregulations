@@ -373,8 +373,7 @@ function formatAmount(amount) {
 }
 
 // convert current date to YYYY-MM-DD
-const formatDateParam = () => {
-    const date = new Date();
+const getKebabDate = (date = new Date()) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
@@ -406,5 +405,5 @@ export {
     isAmountFormatCorrect,
     formatAmount,
     niceDate,
-    formatDateParam,
+    getKebabDate,
 };

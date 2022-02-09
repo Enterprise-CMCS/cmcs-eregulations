@@ -1,12 +1,16 @@
 import _filter from "lodash/filter";
 import _get from "lodash/get";
+import _isArray from "lodash/isArray";
 import _isBoolean from "lodash/isBoolean";
 import _isFunction from "lodash/isFunction";
 import _isNil from "lodash/isNil";
 import _isObject from "lodash/isObject";
+import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
-import { niceDate, parseError, delay } from "./utils";
+import _set from "lodash/set";
+import _setWith from "lodash/setWith";
+import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
 //const apiPath = "https://f2qpfij2v0.execute-api.us-east-1.amazonaws.com/dev-331/v2";
 const apiPath = "http://localhost:8000/v2";
@@ -236,6 +240,103 @@ const getLastUpdatedDate = async (title = "42") => {
     return niceDate(_get(result.reduce(reducer), "date"));
 };
 
+const getHomepageStructure = async () => {
+    const reducer = (accumulator, currentValue) => {
+        const title = currentValue.title;
+        const chapter = _get(
+            currentValue,
+            "structure.children[0].identifier[0]"
+        );
+        const subchapter = _get(
+            currentValue,
+            "structure.children[0].children[0].identifier[0]"
+        );
+        const part = _get(
+            currentValue,
+            "structure.children[0].children[0].children[0].identifier[0]"
+        );
+        const partLabel = _get(
+            currentValue,
+            "structure.children[0].children[0].children[0].label"
+        );
+
+        if (
+            _isUndefined(title) ||
+            _isUndefined(chapter) ||
+            _isUndefined(subchapter) ||
+            _isUndefined(part)
+        ) {
+            return accumulator;
+        }
+
+        const contentToSet = {
+            title,
+            chapter,
+            subchapter,
+            part,
+            label: partLabel,
+            type: "part"
+        };
+
+        _setWith(
+            accumulator,
+            `${title}.chapters.${chapter}.subchapters.${subchapter}.parts.${part}`,
+            contentToSet,
+            Object
+        );
+
+        // if no title label, set it
+        if (_isUndefined(accumulator[title].label)) {
+            _set(
+                accumulator,
+                `${title}.label`,
+                _get(currentValue, "structure.label")
+            );
+            _set(
+                accumulator,
+                `${title}.type`,
+                _get(currentValue, "structure.type")
+            );
+        }
+
+        // if no chapter label, set it
+        if (_isUndefined(accumulator[title].chapters[chapter].label)) {
+            _set(
+                accumulator,
+                `${title}.chapters.${chapter}.label`,
+                _get(currentValue, "structure.children[0].label")
+            );
+            _set(
+                accumulator,
+                `${title}.chapters.${chapter}.type`,
+                _get(currentValue, "structure.children[0].type")
+            );
+        }
+
+        // if no subchapter label, set it
+        if (_isUndefined(accumulator[title].chapters[chapter].subchapters[subchapter].label)) {
+            _set(
+                accumulator,
+                `${title}.chapters.${chapter}.subchapters.${subchapter}.label`,
+                _get(currentValue, "structure.children[0].children[0].label")
+            );
+            _set(
+                accumulator,
+                `${title}.chapters.${chapter}.subchapters.${subchapter}.type`,
+                _get(currentValue, "structure.children[0].children[0].type")
+            );
+        }
+
+        return accumulator;
+    };
+
+    const result = await httpApiGet(`${getKebabDate()}`);
+
+    const transformedResult = result.reduce(reducer, {});
+
+    return transformedResult;
+};
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
@@ -247,5 +348,6 @@ export {
     login,
     statusCheck,
     getLastUpdatedDate,
+    getHomepageStructure,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
