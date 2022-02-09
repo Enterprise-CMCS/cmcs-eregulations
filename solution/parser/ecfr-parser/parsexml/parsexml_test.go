@@ -1247,3 +1247,50 @@ func TestParagraphLevel(t *testing.T) {
 		})
 	}
 }
+
+func TestImagePostProcess(t *testing.T) {
+	testTable := []struct {
+		Name string
+		Input string
+		Expected string
+	}{
+		{
+			Name: "test-good-image",
+			Input: "https://images.federalregister.gov/ABCDEF/large.png",
+			Expected: "https://images.federalregister.gov/ABCDEF/large.png",
+		},
+		{
+			Name: "test-rewrite",
+			Input: "/graphics/er27jn96.010.gif",
+			Expected: "https://images.federalregister.gov/ER27JN96.010/large.png",
+		},
+		{
+			Name: "test-eps-rewrite",
+			Input: "/graphics/716-106a.eps.gif",
+			Expected: "https://images.federalregister.gov/716-106A/large.png",
+		},
+		{
+			Name: "test-bad-path-1",
+			Input: "/graphics/",
+			Expected: "/graphics/",
+		},
+		{
+			Name: "test-bad-path-2",
+			Input: "/graphics",
+			Expected: "/graphics",
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			img := Image{
+				Type: "Image",
+				Source: tc.Input,
+			}
+			img.PostProcess()
+			if img.Source != tc.Expected {
+				t.Errorf("expected image source=(%s), received (%s)", tc.Expected, img.Source)
+			}
+		})
+	}
+}
