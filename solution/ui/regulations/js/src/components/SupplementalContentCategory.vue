@@ -1,12 +1,16 @@
 <template>
     <div class="supplemental-content-category">
         <div class="category">
-            <collapse-button v-bind:class="{ subcategory: subcategory, childless: !has_children }" :name="name" state="collapsed" class="category-title">
-
+            <collapse-button v-if="has_children" v-bind:class="{ subcategory: subcategory }" :name="name" state="collapsed" class="category-title">
               <template v-slot:expanded>{{ name }} <i v-if="has_children" class="fa fa-chevron-up"></i></template>
               <template v-slot:collapsed>{{ name }} <i v-if="has_children" class="fa fa-chevron-down"></i></template>
             </collapse-button>
-            <span v-if="showDescription" class="category-description">{{ description }}</span>
+            <div v-else class="category-title childless collapsible-title">
+              {{name}}
+            </div>
+            <span v-if="isFetching"></span>
+            <span v-else-if="!has_children" class="childless">None</span>
+            <span v-else-if="showDescription" class="category-description">{{ description }}</span>
 
             <collapsible
                 :name="name"
@@ -82,7 +86,7 @@ export default {
 
     computed: {
         showDescription () {
-            return this.description && !/^\s*$/.test(this.description) ;
+            return this.description && !/^\s*$/.test(this.description);
         },
         has_sub_categories() {
             return this.sub_categories.length;

@@ -298,15 +298,16 @@ aside.right-sidebar {
         }
     }
 }
-
-button.collapsible-title {
+button.collapsible-title{
+    cursor: pointer;
+}
+.collapsible-title {
     font-size: $font-size-md;
     font-weight: bold;
     padding-left: 0;
     background: none;
     border: none;
     color: $primary_link_color;
-    cursor: pointer;
     margin-top: $spacer-2;
     display: flex;
     border-radius: $border-radius;
@@ -318,9 +319,6 @@ button.collapsible-title {
         font-size: $font-size-sm;
         margin-top: 0;
         margin-bottom: $spacer-2;
-    }
-    &.childless {
-        color: $mid_gray;
     }
 
     &.visible {
@@ -339,6 +337,10 @@ button.collapsible-title {
     .fa {
         float: right;
     }
+}
+
+.childless {
+    color: $mid_gray_3;
 }
 
 .show-more-button {
