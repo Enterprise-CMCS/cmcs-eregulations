@@ -110,7 +110,7 @@
 
 <script>
 import { getLastUpdatedDate } from "../utilities/api";
-import InlineLoader from "./InlineLoader.vue";
+import InlineLoader from "@/components//InlineLoader.vue";
 
 export default {
     name: "Footer",

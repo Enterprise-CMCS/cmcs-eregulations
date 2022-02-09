@@ -15,7 +15,7 @@
 
 <script>
 export default {
-    name: "simple-spinner",
+    name: "SimpleSpinner",
 
     props: {
         size: {
