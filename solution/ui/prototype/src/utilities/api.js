@@ -259,6 +259,10 @@ const getHomepageStructure = async () => {
             currentValue,
             "structure.children[0].children[0].children[0].label"
         );
+        const partDescription = _get(
+            currentValue,
+            "structure.children[0].children[0].children[0].label_description"
+        );
 
         if (
             _isUndefined(title) ||
@@ -275,6 +279,7 @@ const getHomepageStructure = async () => {
             subchapter,
             part,
             label: partLabel,
+            description: partDescription,
             type: "part"
         };
 

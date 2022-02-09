@@ -11,14 +11,14 @@
                 >
                     <div class="ds-l-row">
                         <div id="homepage-toc" class="homepage-toc ds-l-col--8">
-                            <div class="toc-container">
-                                <template v-if="structure">
-                                    {{ structure }}
-                                </template>
-                                <template v-else>
+                            <template v-if="structure">
+                                <TOC :structure="structure" />
+                            </template>
+                            <template v-else>
+                                <div class="toc-container">
                                     <SimpleSpinner />
-                                </template>
-                            </div>
+                                </div>
+                            </template>
                         </div>
 
                         <aside class="homepage-updates ds-l-col--4">
@@ -40,6 +40,7 @@ import Header from "@/components/Header.vue";
 import Hero from "@/components/homepage/Hero.vue";
 import RecentChanges from "@/components/RecentChanges.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import TOC from "@/components/homepage/Toc.vue";
 
 import { getHomepageStructure } from "../utilities/api";
 
@@ -51,6 +52,7 @@ export default {
         Hero,
         RecentChanges,
         SimpleSpinner,
+        TOC,
     },
 
     name: "Home",
