@@ -7,6 +7,9 @@ from django.db import models
 
 class AbstractModel:
     def _get_string_repr(self):
+        if hasattr(self, 'display_name'):
+            if self.display_name:
+                return self.display_name
         for subclass in self.__class__.__subclasses__():
             attr = getattr(self, subclass.__name__.lower(), None)
             if attr:
@@ -66,6 +69,7 @@ class SubSubCategory(AbstractCategory):
 class AbstractLocation(models.Model, AbstractModel):
     title = models.IntegerField()
     part = models.IntegerField()
+    display_name = models.CharField(max_length=128, null=True)
 
     def __str__(self):
         return self._get_string_repr()
@@ -73,6 +77,9 @@ class AbstractLocation(models.Model, AbstractModel):
     class Meta:
         ordering = ["title", "part", "section__section_id", "subpart__subpart_id", "subjectgroup__subject_group_id"]
 
+    def save(self, *args, **kwargs):
+        self.display_name = self._get_string_repr()
+        super(AbstractLocation, self).save(*args, **kwargs)
 
 class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
