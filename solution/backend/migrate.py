@@ -24,7 +24,7 @@ def handler(event, context):
             call_command("migrate", app)
         except CommandError:
             pass
-    ### This only needs to run once and then can be deleted
+    # This only needs to run once and then can be deleted
     from supplemental_content.models import AbstractLocation
     locations = AbstractLocation.objects.all()
     for location in locations:

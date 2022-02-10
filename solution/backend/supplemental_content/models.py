@@ -81,6 +81,7 @@ class AbstractLocation(models.Model, AbstractModel):
         self.display_name = self._get_string_repr()
         super(AbstractLocation, self).save(*args, **kwargs)
 
+
 class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
 
