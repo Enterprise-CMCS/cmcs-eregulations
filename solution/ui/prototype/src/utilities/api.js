@@ -10,6 +10,8 @@ import _keys from "lodash/keys";
 import _map from "lodash/map";
 import _set from "lodash/set";
 import _setWith from "lodash/setWith";
+import _sortedUniq from "lodash/sortedUniq";
+
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
 //const apiPath = "https://f2qpfij2v0.execute-api.us-east-1.amazonaws.com/dev-331/v2";
@@ -240,6 +242,12 @@ const getLastUpdatedDate = async (title = "42") => {
     return niceDate(_get(result.reduce(reducer), "date"));
 };
 
+const getPartNames = async (title = "42") => {
+    const result = await httpApiGet(`title/${title}/existing`);
+
+    return _sortedUniq(result.flatMap((part) => part.partName).sort());
+};
+
 const getHomepageStructure = async () => {
     const reducer = (accumulator, currentValue) => {
         const title = currentValue.title;
@@ -280,7 +288,7 @@ const getHomepageStructure = async () => {
             part,
             label: partLabel,
             description: partDescription,
-            type: "part"
+            type: "part",
         };
 
         _setWith(
@@ -319,7 +327,12 @@ const getHomepageStructure = async () => {
         }
 
         // if no subchapter label, set it
-        if (_isUndefined(accumulator[title].chapters[chapter].subchapters[subchapter].label)) {
+        if (
+            _isUndefined(
+                accumulator[title].chapters[chapter].subchapters[subchapter]
+                    .label
+            )
+        ) {
             _set(
                 accumulator,
                 `${title}.chapters.${chapter}.subchapters.${subchapter}.label`,
@@ -354,5 +367,6 @@ export {
     statusCheck,
     getLastUpdatedDate,
     getHomepageStructure,
+    getPartNames,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

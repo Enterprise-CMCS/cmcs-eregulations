@@ -42,7 +42,7 @@ import RecentChanges from "@/components/RecentChanges.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 import TOC from "@/components/homepage/Toc.vue";
 
-import { getHomepageStructure } from "../utilities/api";
+import { getHomepageStructure } from "@/utilities/api";
 
 export default {
     components: {

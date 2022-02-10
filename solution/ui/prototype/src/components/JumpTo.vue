@@ -1,25 +1,10 @@
 <template>
     <div class="jump-to">
-        <div class="jump-to-label">
-            Jump to Regulation Section
-        </div>
+        <div class="jump-to-label">Jump to Regulation Section</div>
 
-        <form
-            method="GET"
-            action=""
-        >
-            <input
-                name="-version"
-                type="hidden"
-                required
-                value=""
-            />
-            <input
-                name="title"
-                type="hidden"
-                required
-                value="42"
-            />
+        <form @submit.prevent="formSubmit">
+            <input name="-version" type="hidden" required value="" />
+            <input name="title" type="hidden" required value="42" />
 
             <div class="jump-to-input">
                 §
@@ -27,7 +12,18 @@
                     name="part"
                     class="ds-c-field"
                     aria-label="Regulation part number"
-                ></select>
+                    v-model="selectedPart"
+                >
+                    <template v-if="partNames">
+                        <option
+                            v-for="partName in partNames"
+                            :value="partName"
+                            :key="partName"
+                        >
+                            {{ partName }}
+                        </option>
+                    </template>
+                </select>
                 <span class="dot">.</span>
                 <input
                     class="number-box ds-c-field"
@@ -40,17 +36,38 @@
                 />
             </div>
 
-            <input
-                class="submit"
-                type="submit"
-                value="Go"
-            />
+            <input class="submit" type="submit" value="Go" />
         </form>
     </div>
 </template>
 
 <script>
-export default {};
+import { getPartNames } from "@/utilities/api";
+
+export default {
+    name: "JumpTo",
+
+    data() {
+        return {
+            partNames: null,
+            selectedPart: "400"
+        };
+    },
+
+    async created() {
+        try {
+            this.partNames = await getPartNames();
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    methods: {
+        formSubmit() {
+            this.$router.push({ name: "part", params: { title: "42", part: this.selectedPart } });
+        }
+    }
+};
 </script>
 
 <style scoped>
