@@ -86,7 +86,6 @@ export default {
                 const response = await fetch(
                     `${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`
                 );
-                await new Promise(r => setTimeout(r, 5000));
                 const content = await response.json();
                 this.categories = content;
             } catch (error) {

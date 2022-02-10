@@ -9,7 +9,7 @@
               {{name}}
             </div>
             <span v-if="isFetching"></span>
-            <span v-else-if="!has_children" class="childless">None</span>
+            <span v-else-if="!has_children" class="childless category-description">None</span>
             <span v-else-if="showDescription" class="category-description">{{ description }}</span>
 
             <collapsible

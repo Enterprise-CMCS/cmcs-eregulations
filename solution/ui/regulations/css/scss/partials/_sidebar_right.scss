@@ -29,6 +29,10 @@ aside.right-sidebar {
         }
     }
 
+    #subpart-resources-heading{
+        margin-bottom:0px;
+    }
+
     #view-button {
         font-size: $base-font-size;
         color: $primary_link_color;
@@ -264,6 +268,7 @@ aside.right-sidebar {
 .supplemental-content-category {
     display: table;
     width: 100%;
+    color: $primary_text_color;
 
     .category {
         display: table-cell;
@@ -272,7 +277,6 @@ aside.right-sidebar {
     .category-description {
         font-size: $font-size-sm;
         font-weight: normal;
-        color: $primary_text_color;
         padding-right: $spacer-4;
     }
 
