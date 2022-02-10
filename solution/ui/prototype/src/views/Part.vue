@@ -1,9 +1,26 @@
 <template>
-    <h1>{{ title }} {{ part }}</h1>
+    <body class="ds-base">
+        <div id="app">
+            <FlashBanner />
+            <Header />
+            <h1>{{ title }} {{ part }}</h1>
+            <Footer />
+        </div>
+    </body>
 </template>
 
 <script>
+import FlashBanner from "@/components/FlashBanner.vue";
+import Footer from "@/components/Footer.vue";
+import Header from "@/components/Header.vue";
+
 export default {
+    components: {
+        FlashBanner,
+        Footer,
+        Header
+    },
+
     name: "Part",
 
     data() {
@@ -18,7 +35,6 @@ export default {
             () => this.$route.params,
             (toParams, previousParams) => {
                 // react to route changes...
-                this.loadPart();
             }
         )
     }
