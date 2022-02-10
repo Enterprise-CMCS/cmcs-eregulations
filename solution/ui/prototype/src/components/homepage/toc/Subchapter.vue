@@ -3,7 +3,12 @@
         <h2>{{ label }}</h2>
         <template v-for="part in partsArr">
             <div class="part-names" :key="part[0]">
-                <router-link :to="{ name: 'about' }">
+                <router-link
+                    :to="{
+                        name: 'part',
+                        params: { title: part[1].title, part: part[1].part },
+                    }"
+                >
                     <span class="part-number">Part {{ part[0] }} </span>
                     <span>–</span>
                     <span class="part-title"> {{ part[1].description }}</span>
@@ -20,25 +25,20 @@ export default {
     props: {
         label: {
             type: String,
-            required: true
+            required: true,
         },
         parts: {
             type: Object,
-            required: false
-        }
+            required: false,
+        },
     },
 
     computed: {
         partsArr() {
-            console.log(this.parts);
             return Object.entries(this.parts);
-        }
-    }
-
-}
+        },
+    },
+};
 </script>
 
-<style>
-
-</style>
-
+<style></style>

@@ -42,10 +42,6 @@ export default {
             return Object.entries(this.structure);
         },
     },
-
-    mounted() {
-        console.log(Object.entries(this.structure));
-    },
 };
 </script>
 
