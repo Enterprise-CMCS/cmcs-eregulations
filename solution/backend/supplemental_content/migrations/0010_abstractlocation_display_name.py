@@ -3,6 +3,13 @@
 from django.db import migrations, models
 
 
+def resave_locations(apps, schema_editor):
+    AbstractLocation = apps.get_model("supplemental_content", "AbstractLocation")
+    locations = AbstractLocation.objects.all()
+    for location in locations:
+        location.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -15,4 +22,5 @@ class Migration(migrations.Migration):
             name='display_name',
             field=models.CharField(max_length=128, null=True),
         ),
+        migrations.RunPython(resave_locations),
     ]
