@@ -348,7 +348,7 @@ const getHomepageStructure = async () => {
         return accumulator;
     };
 
-    const result = await httpApiGet(`${getKebabDate()}`);
+    const result = await httpApiGet("all_parts");
 
     const transformedResult = result.reduce(reducer, {});
 
