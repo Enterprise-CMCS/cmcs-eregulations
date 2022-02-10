@@ -174,6 +174,7 @@ OPENSEARCH_DSL = {
         'hosts': 'opensearch-node1'
     },
 }
+
 if DEBUG:
     import os  # only if you haven't already imported this
     import socket  # only if you haven't already imported this
