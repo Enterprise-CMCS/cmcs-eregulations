@@ -14,10 +14,29 @@ custom:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId, false}
       items:
         - "/*"
+  pythonRequirements:
+    layer:
+      name: python-django
+      description: "Layer which contains django requirements"
+      compatibleRuntimes:
+        - python3.8
+
+
+package:
+  #patterns:
+  #  - '!node_modules/**'
+  #  - '!nginx/**'
+  #  - '!package.json'
+  #  - '!package-lock.json'
+  individually: false
+  exclude:
+    - node_modules/**
+    - nginx/**
 
 plugins:
   - serverless-s3-sync
   - serverless-cloudfront-invalidate
+  - serverless-python-requirements
 
 resources:
   Resources:
