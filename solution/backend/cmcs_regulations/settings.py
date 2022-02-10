@@ -183,7 +183,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"https://\w+\.execute-api.us-east-1\.amazonaws\.com$"
+    r"https://\w+\.execute-api.us-east-1\.amazonaws\.com$",
     r"https://\w+\.cloudfront\.net"
 ]
 
