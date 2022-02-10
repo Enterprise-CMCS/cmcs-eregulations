@@ -14,8 +14,7 @@ import _sortedUniq from "lodash/sortedUniq";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-//const apiPath = "https://f2qpfij2v0.execute-api.us-east-1.amazonaws.com/dev-331/v2";
-const apiPath = "http://localhost:8000/v2";
+const apiPath = `${process.env.VUE_APP_API_URL}/v2`;
 
 let config = {
     apiPath,
