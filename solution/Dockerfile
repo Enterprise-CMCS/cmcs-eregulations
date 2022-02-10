@@ -1,6 +1,6 @@
 FROM python:3-alpine
 
-COPY ["static-assets/requirements/requirements.txt", "/app/src/"]
+COPY ["static-assets/requirements.txt", "/app/src/"]
 WORKDIR /app/src/
 
 RUN apk --update add ca-certificates build-base postgresql-dev \
