@@ -3,7 +3,7 @@
         <div id="app">
             <FlashBanner />
             <Header />
-            <h1>{{ title }} {{ part }}</h1>
+            <PartNav :title="title" :part="part" :partLabel="partLabel" />
             <Footer />
         </div>
     </body>
@@ -13,12 +13,16 @@
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
+import PartNav from "@/components/part/PartNav.vue";
+
+import { getPart } from "@/utilities/api";
 
 export default {
     components: {
         FlashBanner,
         Footer,
-        Header
+        Header,
+        PartNav
     },
 
     name: "Part",
@@ -27,16 +31,25 @@ export default {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
+            structure: null,
+            partLabel: null,
         }
     },
 
-    created() {
+    async created() {
         this.$watch(
             () => this.$route.params,
             (toParams, previousParams) => {
                 // react to route changes...
             }
         )
+
+        try {
+            this.structure = await getPart(this.title, this.part);
+            this.partLabel = this.structure.toc.label_description;
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 </script>

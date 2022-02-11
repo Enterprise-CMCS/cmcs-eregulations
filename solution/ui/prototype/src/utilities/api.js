@@ -354,6 +354,14 @@ const getHomepageStructure = async () => {
     return transformedResult;
 };
 
+const getPart = async (title, part) => {
+    const result = await httpApiGet(`${getKebabDate()}/title/${title}/part/${part}`);
+
+    console.log("result", result);
+
+    return result;
+};
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
@@ -367,5 +375,6 @@ export {
     getLastUpdatedDate,
     getHomepageStructure,
     getPartNames,
+    getPart,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
