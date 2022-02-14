@@ -219,16 +219,6 @@ function httpApiDelete(urlPath, { data, params } = {}) {
 
 // ---------- api calls ---------------
 
-const login = (username, password) => {
-    return httpApiPost("Authentication/login", {
-        data: { username, password },
-    });
-};
-
-const statusCheck = () => {
-    return httpApiGet("Authentication/Test");
-};
-
 const getLastUpdatedDate = async (title = "42") => {
     const reducer = (accumulator, currentValue) => {
         return currentValue.date > accumulator.date
@@ -362,8 +352,6 @@ export {
     getDecodedIdToken,
     forgetIdToken,
     config,
-    login,
-    statusCheck,
     getLastUpdatedDate,
     getHomepageStructure,
     getPartNames,
