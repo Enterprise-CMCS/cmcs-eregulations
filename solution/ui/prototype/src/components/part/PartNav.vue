@@ -8,7 +8,8 @@
 
 <script>
 export default {
-    name: 'PartNav',
+    name: "PartNav",
+
     props: {
         title: {
             type: String,

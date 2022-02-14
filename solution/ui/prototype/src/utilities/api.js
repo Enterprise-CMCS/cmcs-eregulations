@@ -218,7 +218,6 @@ function httpApiDelete(urlPath, { data, params } = {}) {
 }
 
 // ---------- api calls ---------------
-
 const getLastUpdatedDate = async (title = "42") => {
     const reducer = (accumulator, currentValue) => {
         return currentValue.date > accumulator.date
