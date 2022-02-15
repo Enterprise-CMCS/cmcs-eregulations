@@ -14,7 +14,6 @@
         </related-rule>
         <collapse-button
             v-if="showMoreNeeded && rulesCount > 10"
-            v-bind:class="{ subcategory: subcategory }"
             :name="innerName"
             state="collapsed"
             class="category-title"
@@ -51,7 +50,6 @@
             </related-rule>
             <collapse-button
                 v-if="showMoreNeeded && rulesCount > 0"
-                v-bind:class="{ subcategory: subcategory }"
                 :name="innerName"
                 state="collapsed"
                 class="category-title"

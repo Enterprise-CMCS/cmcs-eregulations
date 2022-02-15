@@ -2,7 +2,10 @@
     <footer>
         <div class="flexbox">
             <div class="footer-left match-sides">
-                <a href="https://www.medicaid.gov/" target="_blank">
+                <a
+                    href="https://www.medicaid.gov/"
+                    target="_blank"
+                >
                     <img
                         :src="require('legacy-static/images/medicaid.png')"
                         alt="Medicaid.gov logo with subtitle Keeping America Healthy"
@@ -81,13 +84,19 @@
                     >
                         eCFR
                     </a>
-                    on {% last_updated %}.
+                    on
+                    <template v-if="lastUpdated">
+                        {{ lastUpdated }}.
+                    </template>
+                    <template v-else>
+                        <InlineLoader />
+                    </template>
                 </h4>
 
                 <div class="about-footer">
-                    <a href="{% url 'about' %}">
+                    <router-link :to="{ name: 'about' }">
                         About Medicaid &amp; CHIP eRegulations
-                    </a>
+                    </router-link>
                 </div>
 
                 <p>
@@ -100,12 +109,42 @@
 </template>
 
 <script>
-export default {};
+import { getLastUpdatedDate } from "../utilities/api";
+import InlineLoader from "@/components//InlineLoader.vue";
+
+export default {
+    name: "Footer",
+
+    components: {
+        InlineLoader,
+    },
+
+    data() {
+        return {
+            lastUpdated: "",
+        };
+    },
+
+    async created() {
+        try {
+            this.lastUpdated = await getLastUpdatedDate();
+        } catch (error) {
+            console.error(error);
+        }
+    },
+};
 </script>
 
 <style lang="scss">
 footer {
-    h1, h2, h3, h4, h5, h6, p, ul {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    ul {
         margin-block-start: 0;
         margin-block-end: 0;
     }

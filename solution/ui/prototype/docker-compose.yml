@@ -4,6 +4,7 @@ services:
     container_name: prototype
     environment:
       CONTAINER: "true"
+      VUE_APP_API_URL: http://localhost:8000
     build:
       context: .
       dockerfile: Dockerfile
