@@ -8,7 +8,7 @@
             <div class="title-container">
                 <SiteTitle />
                 <JumpTo/>
-            </div>
+            </div>        
             <div class= "links-container">
                 <a class = "header-links-container" href="">Resources</a>
                 <a class= "header-links-container" href="">About</a>
@@ -50,7 +50,8 @@ import RegTitle from "@/components/header/RegTitle.vue";
 import SearchInput from "@/components/header/SearchInput.vue";
 import SiteTitle from "@/components/header/SiteTitle.vue";
 import ToggleButton from "@/components/header/ToggleButton.vue";
-import JumpTo from "./JumpToNew.vue"
+import JumpTo from "@/components/header/JumpToHeader.vue"
+
 export default {
     name: "Header",
 
