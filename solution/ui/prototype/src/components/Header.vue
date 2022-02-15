@@ -7,10 +7,13 @@
         <div class="flexbox header-large">
             <div class="title-container">
                 <SiteTitle />
-                <RegTitle />
+                <JumpTo/>
             </div>
-
-            <div class="search-header">
+            <div class= "links-container">
+                <a class = "header-links-container" href="">Resources</a>
+                <a class= "header-links-container" href="">About</a>
+            </div>
+            <div class="header-search-container">
                 <SearchInput type="search-box" />
             </div>
         </div>
@@ -47,7 +50,7 @@ import RegTitle from "@/components/header/RegTitle.vue";
 import SearchInput from "@/components/header/SearchInput.vue";
 import SiteTitle from "@/components/header/SiteTitle.vue";
 import ToggleButton from "@/components/header/ToggleButton.vue";
-
+import JumpTo from "./JumpToNew.vue"
 export default {
     name: "Header",
 
@@ -56,6 +59,7 @@ export default {
         SearchInput,
         SiteTitle,
         ToggleButton,
+        JumpTo
     },
 
     data() {
