@@ -16,6 +16,7 @@
     "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
     "core-js": "^3.6.5",
     "lodash": "^4.17.21",
+    "numeral": "^2.0.6",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0"

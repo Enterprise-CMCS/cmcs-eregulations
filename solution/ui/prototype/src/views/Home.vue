@@ -10,27 +10,15 @@
                     class="site-container homepage-main-content"
                 >
                     <div class="ds-l-row">
-                        <div
-                            id="homepage-toc"
-                            class="homepage-toc ds-l-col--8"
-                        >
-                            <div class="toc-container">
-                                <h1>Title 42 - Public Health</h1>
-
-                                <h4>
-                                    Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services
-                                </h4>
-
-                                <p class="toc-external-ref">
-                                    For subsequent subchapters (F-I), see
-                                    <a
-                                        href="https://www.ecfr.gov/current/title-42/chapter-IV"
-                                        target="_blank"
-                                        class="external"
-                                        aria-label="link to Federal Register Title 42 Chapter 4"
-                                    >Title 42 Chapter IV in eCFR</a>
-                                </p>
-                            </div>
+                        <div id="homepage-toc" class="homepage-toc ds-l-col--8">
+                            <template v-if="structure">
+                                <TOC :structure="structure" />
+                            </template>
+                            <template v-else>
+                                <div class="toc-container">
+                                    <SimpleSpinner />
+                                </div>
+                            </template>
                         </div>
 
                         <aside class="homepage-updates ds-l-col--4">
@@ -51,16 +39,36 @@ import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import Hero from "@/components/homepage/Hero.vue";
 import RecentChanges from "@/components/RecentChanges.vue";
+import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import TOC from "@/components/homepage/Toc.vue";
+
+import { getHomepageStructure } from "@/utilities/api";
 
 export default {
-    name: "Home",
-
     components: {
         FlashBanner,
         Footer,
         Header,
         Hero,
-        RecentChanges
+        RecentChanges,
+        SimpleSpinner,
+        TOC,
+    },
+
+    name: "Home",
+
+    data() {
+        return {
+            structure: null,
+        };
+    },
+
+    async created() {
+        try {
+            this.structure = await getHomepageStructure();
+        } catch (error) {
+            console.error(error);
+        }
     },
 };
 </script>
