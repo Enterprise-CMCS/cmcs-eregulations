@@ -1,9 +1,5 @@
 <template>
     <div class="supplemental-content-container">
-        <template v-if="isFetching">
-            <simple-spinner></simple-spinner>
-        </template>
-        <template v-else>
             <supplemental-content-category
                 v-for="(category, index) in categories"
                 :key="index"
@@ -11,9 +7,11 @@
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
+                :isFetching="isFetching"
             >
             </supplemental-content-category>
-        </template>
+            <simple-spinner v-if="isFetching"></simple-spinner>
+
     </div>
 </template>
 
@@ -60,7 +58,7 @@ export default {
     },
 
     created() {
-        this.fetch_content(this.title, this.part);
+       this.fetch_content(this.title, this.part);
     },
 
     computed: {
@@ -97,5 +95,14 @@ export default {
             }
         },
     },
+    mounted() {
+      const rawCategories = JSON.parse(document.getElementById('categories').textContent)
+      const rawSubCategories = JSON.parse(document.getElementById('sub_categories').textContent)
+      this.categories = rawCategories.map(c => {
+        const category = JSON.parse(JSON.stringify(c))
+        category.sub_categories = rawSubCategories.filter(subcategory => subcategory.parent_id === category.id)
+        return category
+      })
+  },
 };
 </script>
