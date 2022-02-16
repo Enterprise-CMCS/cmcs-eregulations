@@ -50,8 +50,15 @@ export default {
 .jump-to .dot {
     margin: 0 5px;
 }
-
-input.submit {
-    color: black;
+.jump-to select{
+     border: 1px solid #D6D7D9;
+}
+.jump-to input.submit {
+    border: solid 1px #D6D7D9;
+    color: #A3A3A3;
+    background-color: white;
+}
+.jump-to .number-box{
+    border: #D6D7D9 1px solid
 }
 </style>
