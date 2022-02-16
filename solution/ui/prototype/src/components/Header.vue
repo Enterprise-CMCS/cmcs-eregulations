@@ -76,4 +76,22 @@ export default {
 </script>
 
 <style>
+header {
+    box-sizing: border-box;
+    border: 1px solid #d6d7d9;
+}
+.links-container {
+    padding-right: 10px;
+}
+
+.header-links-container {
+    padding-right: 20px;
+    color: #212121;
+}
+.site-title {
+    padding: 10px;
+}
+.header-search-container {
+    border-left: 1px #ddf5fd;
+}
 </style>
