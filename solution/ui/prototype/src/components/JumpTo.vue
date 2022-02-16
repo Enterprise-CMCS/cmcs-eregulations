@@ -53,6 +53,9 @@ export default {
 .jump-to select{
      border: 1px solid #D6D7D9;
 }
+.jump-to-input{
+    padding:10px;
+}
 .jump-to input.submit {
     border: solid 1px #D6D7D9;
     color: #A3A3A3;

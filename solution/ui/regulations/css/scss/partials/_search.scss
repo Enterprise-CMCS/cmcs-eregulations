@@ -165,13 +165,11 @@
     border-left: #D6D7D9 1px solid;
     input {
         width: 100%;
-        border: none;
-        flex:auto;
-        padding: 30px $spacer-2;
+        border: 1px solid $border_color;
+        border-right: none;
+        padding: $spacer-1 $spacer-2;
         border-radius: 3px 0 0 3px;
         outline: none;
-        background-image: url(https://cdn2.hubspot.net/hubfs/4004166/bioticresearch_website_assets/images/search_icon.png);
-        background-position: right;
 
         &:focus {
             color: $primary_link_hover;
@@ -241,10 +239,5 @@
         .fa {
             color: $primary_link_color;
         }
-    }
-    
-    .search-chevron p{
-        background-color:#DDF5FD;
-        font-size: 16px;
     }
 }
