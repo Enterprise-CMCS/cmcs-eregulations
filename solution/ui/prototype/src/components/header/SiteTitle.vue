@@ -30,4 +30,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.site-title.homepage-site-title{
+    padding:20px 10px;
+    border-right:1px #D6D7D9 solid;
+}
+</style>

@@ -1,17 +1,14 @@
 <template>
-    <header
-        id="header"
-        class="sticky"
-    >
+    <header id="header" class="sticky">
         <!-- desktop -->
         <div class="flexbox header-large">
             <div class="title-container">
                 <SiteTitle />
-                <JumpTo/>
-            </div>        
-            <div class= "links-container">
-                <a class = "header-links-container" href="">Resources</a>
-                <a class= "header-links-container" href="">About</a>
+                <JumpTo />
+            </div>
+            <div class="links-container">
+                <a class="header-links-container" href="">Resources</a>
+                <a class="header-links-container" href="">About</a>
             </div>
             <div class="header-search-container">
                 <SearchInput type="search-box" />
@@ -44,13 +41,12 @@
         </div>
     </header>
 </template>
-
 <script>
 import RegTitle from "@/components/header/RegTitle.vue";
 import SearchInput from "@/components/header/SearchInput.vue";
 import SiteTitle from "@/components/header/SiteTitle.vue";
 import ToggleButton from "@/components/header/ToggleButton.vue";
-import JumpTo from "@/components/header/JumpToHeader.vue"
+import JumpTo from "./JumpTo.vue";
 
 export default {
     name: "Header",
@@ -60,7 +56,7 @@ export default {
         SearchInput,
         SiteTitle,
         ToggleButton,
-        JumpTo
+        JumpTo,
     },
 
     data() {
@@ -79,4 +75,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

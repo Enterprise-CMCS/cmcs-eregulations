@@ -1,33 +1,24 @@
 <template>
     <div class="jump-to">
-        <div class="jump-to-label">
-            Jump to Regulation Section
+        <div v-if="header !== ''" class="jump-to-label">
+            {{ header }}
         </div>
 
-        <form
-            method="GET"
-            action=""
-        >
-            <input
-                name="-version"
-                type="hidden"
-                required
-                value=""
-            />
-            <input
-                name="title"
-                type="hidden"
-                required
-                value="42"
-            />
-
+        <form method="GET" action="">
+            <input name="-version" type="hidden" required value="" />
             <div class="jump-to-input">
+                <select v-if="defaultTitle !== ''" name="title" class="ds-c-field" required>
+                    <option value="" disabled selected>Title</option>
+                </select>
                 §
                 <select
                     name="part"
                     class="ds-c-field"
                     aria-label="Regulation part number"
-                ></select>
+                    required
+                >
+                    <option value="" disabled selected>Part</option>
+                </select>
                 <span class="dot">.</span>
                 <input
                     class="number-box ds-c-field"
@@ -40,17 +31,15 @@
                 />
             </div>
 
-            <input
-                class="submit"
-                type="submit"
-                value="Go"
-            />
+            <input class="submit" type="submit" value="Go" />
         </form>
     </div>
 </template>
 
 <script>
-export default {};
+export default {
+    props: ["header", "defaultTitle"],
+};
 </script>
 
 <style scoped>
