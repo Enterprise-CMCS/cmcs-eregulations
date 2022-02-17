@@ -7,7 +7,7 @@ import django.db.models.deletion
 
 
 def create_parents(apps, schema_editor):
-    AbstractModel = apps.get_model("supplemental_content", "AbstractLocation")
+    AbstractModel = apps.get_model("supplemental_content", "AbstractModel")
     AbstractCategory = apps.get_model("supplemental_content", "AbstractCategory")
     AbstractLocation = apps.get_model("supplemental_content", "AbstractLocation")
     AbstractSupplementalContent = apps.get_model("supplemental_content", "AbstractSupplementalContent")
@@ -16,6 +16,15 @@ def create_parents(apps, schema_editor):
         parent = AbstractModel.objects.create()
         child.abstractmodel_ptr = parent.pk
         child.save()
+
+
+def resave_all(apps, schema_editor):
+    try:
+        from supplemental_content.models import AbstractModel
+        for model in AbstractModel.objects.all():
+            model.save()
+    except: # Primarily ImportError but safer to catch everything
+        pass # Skip in case model is changed, renamed, or deleted in the future
 
 
 class Migration(migrations.Migration):
@@ -36,35 +45,48 @@ class Migration(migrations.Migration):
             model_name='abstractlocation',
             name='display_name',
         ),
-        migrations.RemoveField(
-            model_name='abstractcategory',
-            name='id',
-        ),
         migrations.AddField(
             model_name='abstractcategory',
             name='abstractmodel_ptr',
-            field=models.OneToOneField(auto_created=True, default=0, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractmodel'),
-            preserve_default=False,
-        ),
-        migrations.RemoveField(
-            model_name='abstractlocation',
-            name='id',
+            field=models.IntegerField(null=True),
         ),
         migrations.AddField(
             model_name='abstractlocation',
             name='abstractmodel_ptr',
-            field=models.OneToOneField(auto_created=True, default=0, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractmodel'),
-            preserve_default=False,
-        ),
-        migrations.RemoveField(
-            model_name='abstractsupplementalcontent',
-            name='id',
+            field=models.IntegerField(null=True),
         ),
         migrations.AddField(
             model_name='abstractsupplementalcontent',
             name='abstractmodel_ptr',
-            field=models.OneToOneField(auto_created=True, default=0, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractmodel'),
-            preserve_default=False,
+            field=models.IntegerField(null=True),
         ),
         migrations.RunPython(create_parents),
+        migrations.RemoveField(
+            model_name='abstractcategory',
+            name='id',
+        ),
+        migrations.AlterField(
+            model_name='abstractcategory',
+            name='abstractmodel_ptr',
+            field=models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractmodel'),
+        ),
+        migrations.RemoveField(
+            model_name='abstractlocation',
+            name='id',
+        ),
+        migrations.AlterField(
+            model_name='abstractlocation',
+            name='abstractmodel_ptr',
+            field=models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractmodel'),
+        ),
+        migrations.RemoveField(
+            model_name='abstractsupplementalcontent',
+            name='id',
+        ),
+        migrations.AlterField(
+            model_name='abstractsupplementalcontent',
+            name='abstractmodel_ptr',
+            field=models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractmodel'),
+        ),
+        migrations.RunPython(resave_all),
     ]

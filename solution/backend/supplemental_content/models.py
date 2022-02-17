@@ -76,7 +76,7 @@ class SubSubCategory(AbstractCategory):
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
 
 
-class AbstractLocation(models.Model):
+class AbstractLocation(AbstractModel):
     title = models.IntegerField()
     part = models.IntegerField()
 
@@ -125,7 +125,7 @@ class Section(AbstractLocation):
 # All supplemental content types must inherit from AbstractSupplementalContent.
 
 
-class AbstractSupplementalContent(models.Model):
+class AbstractSupplementalContent(AbstractModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=True)
