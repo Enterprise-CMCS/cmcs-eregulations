@@ -9,8 +9,9 @@
             <input name="-version" type="hidden" required value="" />
 
             <div class="jump-to-input">
-                <select v-if="defaultTitle !== ''" name="title" class="ds-c-field" required>
+                <select v-if="defaultTitle !== ''" name="title" class="ds-c-field" required v-model="selectedTitle">
                     <option value="" disabled selected>Title</option>
+                    <option value="42">42</option>
                 </select>
                 §
                 <select
@@ -69,7 +70,8 @@ props: {
     data() {
         return {
             partNames: null,
-            selectedPart: ""
+            selectedPart: "",
+            selectedTitle: ""
         };
     },
 
@@ -84,7 +86,7 @@ props: {
 
     methods: {
         formSubmit() {
-            this.$router.push({ name: "part", params: { title: "42", part: this.selectedPart } });
+            this.$router.push({ name: "part", params: { title: this.selectedTitle, part: this.selectedPart } });
         }
     }
 };
