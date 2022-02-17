@@ -188,14 +188,6 @@
             console.error(error);
         }
     },
-    mounted() {
-      setTimeout(function() {
-            this.collapsed = !this.collapsed
-            const dialog = document.getElementsByClassName("v-dialog--active v-dialog--fullscreen")
-            dialog[0].classList.add("halfScreen")
-      }, (1 * 1000));
-
-    },
     methods:{
       collapse: function (){
         this.collapsed = !this.collapsed
