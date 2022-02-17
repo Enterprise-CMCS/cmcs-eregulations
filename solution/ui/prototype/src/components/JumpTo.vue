@@ -58,7 +58,6 @@ export default {
     name: "JumpTo",
 props: {
   header: {
-    default: "header",
     type: String,
     required: false
   },
