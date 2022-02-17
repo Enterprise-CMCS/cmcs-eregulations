@@ -98,11 +98,13 @@ props: {
 .jump-to .dot {
     margin: 0 5px;
 }
-.jump-to select{
-     border: 1px solid #D6D7D9;
+.jump-to .jump-to-input select{
+     border:#D6D7D9 1px solid;
+
 }
 .jump-to-input{
     padding:10px;
+   
 }
 .jump-to input.submit {
     border: solid 1px #D6D7D9;

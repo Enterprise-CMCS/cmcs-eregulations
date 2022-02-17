@@ -1,8 +1,5 @@
 <template>
-    <div 
-        class="site-title" 
-        :class="titleClasses"
-    >
+    <div class="site-title" :class="titleClasses">
         <router-link :to="{ name: 'home' }">
             Medicaid &amp; CHIP eRegulations
         </router-link>
@@ -31,8 +28,8 @@ export default {
 </script>
 
 <style>
-.site-title.homepage-site-title{
-    padding:20px 10px;
-    border-right:1px #D6D7D9 solid;
+.site-title.homepage-site-title {
+    padding: 20px 10px;
+    border-right: 1px #d6d7d9 solid;
 }
 </style>

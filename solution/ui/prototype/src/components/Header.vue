@@ -75,7 +75,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 header {
     box-sizing: border-box;
     border: 1px solid #d6d7d9;
@@ -85,13 +85,12 @@ header {
 }
 
 .header-links-container {
-    padding-right: 20px;
     color: #212121;
-}
-.site-title {
-    padding: 10px;
+    padding-right: 20px;
 }
 .header-search-container {
-    border-left: 1px #ddf5fd;
+    border-left: 1px #d6d7d9 solid;
+    padding: 10px 18px;
+    
 }
 </style>

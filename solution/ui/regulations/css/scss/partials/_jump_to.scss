@@ -19,7 +19,7 @@
 }
 
 .hero-content {
-    .jump-to {        
+    .jump-to {
         .jump-to-label {
             font-family: $primary_site_font;
             font-size: $font_size_hero_h1;
@@ -64,6 +64,7 @@
         select {
             display: inline-block;
             width: 70px;
+            border: none;
         }
     }
 
