@@ -1,29 +1,42 @@
 <template>
     <div class="nav-container">
         <div class="content">
-            <h1>{{ title }} CFR Part {{ part }} - {{ partLabel }}</h1>
+            <h1>
+                <span> {{ title }} CFR Part {{ part }} - </span>
+                <span v-if="partLabel">{{ partLabel }}</span>
+                <span v-else>
+                    <InlineLoader />
+                </span>
+            </h1>
+            <slot></slot>
         </div>
     </div>
 </template>
 
 <script>
+import InlineLoader from "@/components/InlineLoader.vue";
+
 export default {
+    components: {
+        InlineLoader,
+    },
+
     name: "PartNav",
 
     props: {
         title: {
             type: String,
-            required: true
+            required: true,
         },
         part: {
             type: String,
-            required: true
+            required: true,
         },
         partLabel: {
             type: String,
-        }
+        },
     },
-}
+};
 </script>
 
 <style lang="scss">
@@ -48,8 +61,5 @@ $eregs-image-path: "~legacy-static/images";
             margin-bottom: 40px;
         }
     }
-
 }
-
 </style>
-
