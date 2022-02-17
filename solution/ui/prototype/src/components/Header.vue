@@ -91,6 +91,5 @@ header {
 .header-search-container {
     border-left: 1px #d6d7d9 solid;
     padding: 10px 18px;
-    
 }
 </style>

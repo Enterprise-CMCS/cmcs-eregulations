@@ -1,6 +1,5 @@
 <template>
     <div class="jump-to">
-
         <div v-if="header !== ''" class="jump-to-label">
             {{ header }}
         </div>
@@ -9,7 +8,13 @@
             <input name="-version" type="hidden" required value="" />
 
             <div class="jump-to-input">
-                <select v-if="defaultTitle !== ''" name="title" class="ds-c-field" required v-model="selectedTitle">
+                <select
+                    v-if="defaultTitle !== ''"
+                    name="title"
+                    class="ds-c-field"
+                    required
+                    v-model="selectedTitle"
+                >
                     <option value="" disabled selected>Title</option>
                     <option value="42">42</option>
                 </select>
@@ -31,7 +36,6 @@
                             {{ partName }}
                         </option>
                     </template>
-
                 </select>
                 <span class="dot">.</span>
                 <input
@@ -51,34 +55,32 @@
 </template>
 
 <script>
-
 import { getPartNames } from "@/utilities/api";
 
 export default {
     name: "JumpTo",
-props: {
-  header: {
-    type: String,
-    required: false
-  },
-  defaultTitle:{
-      type: Number,
-      required:false
-  }
-},
+    props: {
+        header: {
+            type: String,
+            required: false,
+        },
+        defaultTitle: {
+            type: Number,
+            required: false,
+        },
+    },
 
     data() {
         return {
             partNames: null,
             selectedPart: "",
-            selectedTitle: ""
+            selectedTitle: "",
         };
     },
 
     async created() {
         try {
             this.partNames = await getPartNames();
-            
         } catch (error) {
             console.error(error);
         }
@@ -86,9 +88,12 @@ props: {
 
     methods: {
         formSubmit() {
-            this.$router.push({ name: "part", params: { title: this.selectedTitle, part: this.selectedPart } });
-        }
-    }
+            this.$router.push({
+                name: "part",
+                params: { title: this.selectedTitle, part: this.selectedPart },
+            });
+        },
+    },
 };
 </script>
 
@@ -100,20 +105,22 @@ props: {
 .jump-to .dot {
     margin: 0 5px;
 }
-.jump-to .jump-to-input select{
-     border:#D6D7D9 1px solid;
 
+.jump-to .jump-to-input select {
+    
+    border: #d6d7d9 1px solid;
 }
-.jump-to-input{
-    padding:10px;
-   
+.jump-to-input {
+    padding: 10px;
 }
+
 .jump-to input.submit {
-    border: solid 1px #D6D7D9;
-    color: #A3A3A3;
+    border: solid 1px #d6d7d9;
+    color: #a3a3a3;
     background-color: white;
 }
-.jump-to .number-box{
-    border: #D6D7D9 1px solid
+
+.jump-to .number-box {
+    border: #d6d7d9 1px solid;
 }
 </style>
