@@ -25,12 +25,14 @@
                     @click="dialog = false"
                 >
                     <v-icon>mdi-close</v-icon>
+                    <br/>
+                    Close
                 </v-btn>
             </div>
             <div class="wrapper centered-container">
                 <div class="one">
                     <v-text-field
-                        outlined
+                        solo
                         placeholder="Search Resources"
                         append-icon="mdi-magnify"
                     />
@@ -40,15 +42,29 @@
                 </div>
                 <div style="grid-column: 4 / 6;">
                     <v-select
-                        outlined
-                        :items="availableCategories"
                         v-model="selectedCategory"
+                        solo
+                        :items="availableCategories"
                         multiple
                     />
                 </div>
             </div>
             <v-divider />
 
+            <v-btn-toggle
+                v-model="cardView"
+                style="float:right"
+            >
+                <v-btn>
+                    <v-icon>mdi-format-list-bulleted</v-icon>
+                    List
+                </v-btn>
+      
+                <v-btn>
+                    <v-icon>mdi-view-grid</v-icon>
+                    Grid
+                </v-btn>
+            </v-btn-toggle>
             <div
                 v-for="category in availableContent"
                 :key="category.name"
@@ -57,8 +73,18 @@
                 <div class="supplemental-content-category-title">
                     {{ category.name }}
                 </div>
-                <div class="flex-row-container">
+                <div
+                    v-if="cardView"
+                    class="flex-row-container"
+                >
                     <SupplementalContentCard
+                        v-for="c in category.supplemental_content"
+                        :key="c.url"
+                        :supplemental-content="c"
+                    />
+                </div>
+                <div v-else>
+                    <supplemental-content-list
                         v-for="c in category.supplemental_content"
                         :key="c.url"
                         :supplemental-content="c"
@@ -71,8 +97,18 @@
                     <div class="supplemental-content-subcategory-title">
                         {{ subcategory.name }}
                     </div>
-                    <div class="flex-row-container">
+                    <div
+                        v-if="cardView"
+                        class="flex-row-container"
+                    >
                         <SupplementalContentCard
+                            v-for="c in subcategory.supplemental_content"
+                            :key="c.url"
+                            :supplemental-content="c"
+                        />
+                    </div>
+                    <div v-else>
+                        <supplemental-content-list
                             v-for="c in subcategory.supplemental_content"
                             :key="c.url"
                             :supplemental-content="c"
@@ -82,16 +118,17 @@
                 <v-divider />
             </div>
         </v-card>
-    </v-dialog>
+  </v-dialog>
 </template>
 
 <script>
   import {getSupplementalContent} from "../utilities/api";
   import SupplementalContentCard from "./SupplementalContentCard";
+  import SupplementalContentList from "./SupplementalContentList";
 
   export default {
     name: "SectionResources",
-    components: {SupplementalContentCard},
+    components: {SupplementalContentList, SupplementalContentCard},
     props:{
       title: String,
       part: String,
@@ -104,15 +141,9 @@
         sound: true,
         widgets: false,
         selectedCategory: [],
-        content:[]
+        content:[],
+        cardView: 1
       }
-    },
-    async created() {
-        try {
-            this.content = await getSupplementalContent(this.title, this.part, [this.section], null );
-        } catch (error) {
-            console.error(error);
-        }
     },
     computed:{
       availableCategories: function(){
@@ -126,12 +157,20 @@
           return this.content
         }
       }
+    },
+    async created() {
+        try {
+            this.content = await getSupplementalContent(this.title, this.part, [this.section], null );
+        } catch (error) {
+            console.error(error);
+        }
     }
   }
 
 </script>
 
 <style>
+
 .supplemental-content-category-title{
   font-size:22px;
   font-weight:bold;
