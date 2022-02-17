@@ -2,7 +2,7 @@
     <v-dialog
         v-model="dialog"
         fullscreen
-        hide-overlay
+        persistent
         transition="dialog-bottom-transition"
     >
         <template v-slot:activator="{ on, attrs }">
@@ -15,19 +15,41 @@
                 View Section Resources
             </v-btn>
         </template>
-        <v-card style="background-color: #f3f3f3">
-            <div class="centered-container" style="margin-bottom: 25px">
+        <v-card
+            style="background-color: #f3f3f3"
+
+        >
+            <div
+                class="centered-container"
+                style="margin-bottom: 25px"
+            >
                 <b style="font-size:30px">§{{ part }}.{{ section }} Resources </b>
                 <a style="font-size:14px; margin-left:15px"> Show All Resources</a>
-                <v-btn
-                    icon
-                    class="close-button"
-                    @click="dialog = false"
+                <v-btn-toggle
+                    style="float:right"
                 >
-                    <v-icon>mdi-close</v-icon>
-                    <br/>
-                    Close
-                </v-btn>
+                    <v-btn
+                        @click="collapse"
+                        v-if="collapsed"
+                    >
+                        <v-icon>mdi-chevron-up</v-icon>
+                        Expand
+                    </v-btn>
+                    <v-btn
+                        @click="collapse"
+                        v-else
+                    >
+                        <v-icon>mdi-chevron-down</v-icon>
+                        Collapse
+                    </v-btn>
+                  
+                    <v-btn
+                        @click="dialog = false"
+                    >
+                        <v-icon>mdi-close</v-icon>
+                        Close
+                    </v-btn>
+                </v-btn-toggle>
             </div>
             <div class="wrapper centered-container">
                 <div class="one">
@@ -118,7 +140,7 @@
                 <v-divider />
             </div>
         </v-card>
-  </v-dialog>
+    </v-dialog>
 </template>
 
 <script>
@@ -142,7 +164,8 @@
         widgets: false,
         selectedCategory: [],
         content:[],
-        cardView: 1
+        cardView: 1,
+        collapsed: false,
       }
     },
     computed:{
@@ -164,13 +187,36 @@
         } catch (error) {
             console.error(error);
         }
+    },
+    mounted() {
+      setTimeout(function() {
+            this.collapsed = !this.collapsed
+            const dialog = document.getElementsByClassName("v-dialog--active v-dialog--fullscreen")
+            dialog[0].classList.add("halfScreen")
+      }, (1 * 1000));
+
+    },
+    methods:{
+      collapse: function (){
+        this.collapsed = !this.collapsed
+        const dialog = document.getElementsByClassName("v-dialog--active v-dialog--fullscreen")
+        if (this.collapsed) {
+          dialog[0].classList.add("halfScreen")
+        } else{
+          dialog[0].classList.remove("halfScreen")
+        }
+      }
     }
   }
 
 </script>
 
 <style>
+.halfScreen{
+  height:100% !important;
+  top:50vh !important;
 
+}
 .supplemental-content-category-title{
   font-size:22px;
   font-weight:bold;
@@ -195,9 +241,6 @@
     flex: 1 1 30%; /*grow | shrink | basis */
     margin: 10px;
     max-width:30%;
-}
-.close-button{
-  float:right;
 }
 
 .wrapper {
