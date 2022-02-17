@@ -7,7 +7,6 @@
 
         <form @submit.prevent="formSubmit">
             <input name="-version" type="hidden" required value="" />
-            <input name="title" type="hidden" required value="42" />
 
             <div class="jump-to-input">
                 <select v-if="defaultTitle !== ''" name="title" class="ds-c-field" required>
@@ -22,7 +21,7 @@
                     required
                 >
                     <template v-if="partNames">
-                        <option value="" disabled selected>Part</option>
+                        <option value="" disable selected>Part</option>
                         <option
                             v-for="partName in partNames"
                             :value="partName"
@@ -70,13 +69,14 @@ props: {
     data() {
         return {
             partNames: null,
-            selectedPart: "400"
+            selectedPart: ""
         };
     },
 
     async created() {
         try {
             this.partNames = await getPartNames();
+            
         } catch (error) {
             console.error(error);
         }
