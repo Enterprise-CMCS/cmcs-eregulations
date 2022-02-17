@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import generics, serializers
 from django.conf import settings
 from django.contrib.postgres.aggregates import StringAgg
@@ -40,6 +42,13 @@ class ExistingPartSerializer(serializers.BaseSerializer):
             'date': instance.get("date"),
             'partName': instance.get("partName").split(","),
         }
+
+
+class PartListView(generics.ListAPIView):
+    serializer_class = ListPartSerializer
+
+    def get_queryset(self):
+        return Part.objects.filter(date__lte=date.today()).distinct("title", "name").order_by("title", "name")
 
 
 class PartsView(generics.ListCreateAPIView):

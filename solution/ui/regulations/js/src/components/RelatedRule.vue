@@ -46,7 +46,6 @@ export default {
         },
         action: {
             type: String,
-            required: true,
         },
     },
 
@@ -54,16 +53,24 @@ export default {
         expandedType: function () {
             if (this.type === "Rule") {
                 return "Final";
-            } else if(this.type === "Proposed Rule" && this.action === "Proposed rule."){
-              return "NPRM"
-            } else if(this.type === "Proposed Rule" && this.action === "Request for information."){
-              return "RFI"
+            } else if (
+                this.type === "Proposed Rule" &&
+                this.action === "Proposed rule."
+            ) {
+                return "NPRM";
+            } else if (
+                this.type === "Proposed Rule" &&
+                this.action === "Request for information."
+            ) {
+                return "RFI";
             }
             return "Unknown";
         },
-        getClassList: function(){
-          return this.expandedType === "Final" ? "recent-flag indicator" : "recent-flag indicator secondary-indicator"
-        }
+        getClassList: function () {
+            return this.expandedType === "Final"
+                ? "recent-flag indicator"
+                : "recent-flag indicator secondary-indicator";
+        },
     },
 
     methods: {},

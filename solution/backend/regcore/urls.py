@@ -7,6 +7,7 @@ from regcore.views import (
     PartsView,
     ExistingPartsView,
     ParserConfigurationView,
+    PartListView,
 )
 
 
@@ -16,6 +17,7 @@ urlpatterns = [
         path("", include('supplemental_content.urls')),
         path("", PartsView.as_view(), name="regcore"),
         path("parser_config", ParserConfigurationView.as_view()),
+        path("all_parts", PartListView.as_view()),
         path("title/<title>/part/<name>", PartsView.as_view()),
         path("<date>", EffectiveTitlesView.as_view()),
         path("<date>/title/<title>", EffectivePartsView.as_view()),

@@ -1,8 +1,8 @@
 <template>
     <button
         v-bind:class="{ visible: visible }"
-        v-bind:data-test="name"
-        v-bind:aria-label="visible ? `collapse ${name}` : `expand ${name}`"
+        v-bind:data-test="dataName"
+        v-bind:aria-label="visible ? `collapse ${dataName}` : `expand ${dataName}`"
         v-on:click="click"
         class="collapsible-title"
     >
@@ -44,17 +44,17 @@ export default {
 
     data: function () {
         return {
-            name: this.name,
+            dataName: this.name,
             visible: true,
         };
     },
 
     methods: {
         click: function (event) {
-            this.$root.$emit("collapse-toggle", this.name);
+            this.$root.$emit("collapse-toggle", this.dataName);
         },
         toggle: function (target) {
-            if (this.name === target) {
+            if (this.dataName === target) {
                 this.visible = !this.visible;
             }
         },

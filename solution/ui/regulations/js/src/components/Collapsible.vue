@@ -1,7 +1,7 @@
 <template>
     <div
         ref="target"
-        v-bind:data-test="name"
+        v-bind:data-test="dataName"
         v-bind:class="{ invisible: !visible }"
         v-bind:style="[styles]"
     >
@@ -52,7 +52,7 @@ export default {
 
     data: function () {
         return {
-            name: this.name,
+            dataName: this.name,
             height: "auto",
             visible: false,
             styles: {
@@ -74,7 +74,7 @@ export default {
             }
         },
         toggle: function (target) {
-            if (this.name === target) {
+            if (this.dataName === target) {
                 this.$refs.target.classList.remove("display-none");
                 requestAnimationFrame(() => {
                     this.computeHeight();

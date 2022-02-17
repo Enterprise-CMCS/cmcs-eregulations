@@ -29,6 +29,10 @@ aside.right-sidebar {
         }
     }
 
+    #subpart-resources-heading{
+        margin-bottom:0px;
+    }
+
     #view-button {
         font-size: $base-font-size;
         color: $primary_link_color;
@@ -264,6 +268,7 @@ aside.right-sidebar {
 .supplemental-content-category {
     display: table;
     width: 100%;
+    color: $primary_text_color;
 
     .category {
         display: table-cell;
@@ -272,7 +277,6 @@ aside.right-sidebar {
     .category-description {
         font-size: $font-size-sm;
         font-weight: normal;
-        color: $primary_text_color;
         padding-right: $spacer-4;
     }
 
@@ -298,15 +302,16 @@ aside.right-sidebar {
         }
     }
 }
-
-button.collapsible-title {
+button.collapsible-title{
+    cursor: pointer;
+}
+.collapsible-title {
     font-size: $font-size-md;
     font-weight: bold;
     padding-left: 0;
     background: none;
     border: none;
     color: $primary_link_color;
-    cursor: pointer;
     margin-top: $spacer-2;
     display: flex;
     border-radius: $border-radius;
@@ -336,6 +341,10 @@ button.collapsible-title {
     .fa {
         float: right;
     }
+}
+
+.childless {
+    color: $mid_gray_3;
 }
 
 .show-more-button {

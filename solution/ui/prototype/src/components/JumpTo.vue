@@ -1,11 +1,14 @@
 <template>
     <div class="jump-to">
+
         <div v-if="header !== ''" class="jump-to-label">
             {{ header }}
         </div>
 
-        <form method="GET" action="">
+        <form @submit.prevent="formSubmit">
             <input name="-version" type="hidden" required value="" />
+            <input name="title" type="hidden" required value="42" />
+
             <div class="jump-to-input">
                 <select v-if="defaultTitle !== ''" name="title" class="ds-c-field" required>
                     <option value="" disabled selected>Title</option>
@@ -15,9 +18,20 @@
                     name="part"
                     class="ds-c-field"
                     aria-label="Regulation part number"
+                    v-model="selectedPart"
                     required
                 >
-                    <option value="" disabled selected>Part</option>
+                    <template v-if="partNames">
+                        <option value="" disabled selected>Part</option>
+                        <option
+                            v-for="partName in partNames"
+                            :value="partName"
+                            :key="partName"
+                        >
+                            {{ partName }}
+                        </option>
+                    </template>
+
                 </select>
                 <span class="dot">.</span>
                 <input
@@ -37,8 +51,43 @@
 </template>
 
 <script>
+
+import { getPartNames } from "@/utilities/api";
+
 export default {
-    props: ["header", "defaultTitle"],
+    name: "JumpTo",
+props: {
+  header: {
+    default: "header",
+    type: String,
+    required: false
+  },
+  defaultTitle:{
+      type: Number,
+      required:false
+  }
+},
+
+    data() {
+        return {
+            partNames: null,
+            selectedPart: "400"
+        };
+    },
+
+    async created() {
+        try {
+            this.partNames = await getPartNames();
+        } catch (error) {
+            console.error(error);
+        }
+    },
+
+    methods: {
+        formSubmit() {
+            this.$router.push({ name: "part", params: { title: "42", part: this.selectedPart } });
+        }
+    }
 };
 </script>
 
