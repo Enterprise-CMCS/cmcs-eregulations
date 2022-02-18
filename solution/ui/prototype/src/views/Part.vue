@@ -11,14 +11,12 @@
                 </v-tabs>
             </PartNav>
             <v-tabs-items v-model="tab">
-                <template v-for="(item, index) in tabsContent">
-                    <v-tab-item v-if="item" :key="index">
-                        {{ item }}
-                    </v-tab-item>
-                    <v-tab-item v-else :key="index">
-                        <SimpleSpinner />
-                    </v-tab-item>
-                </template>
+                <v-tab-item v-for="(item, index) in tabsShape" :key="index">
+                    <component
+                        :is="item.component"
+                        :structure="tabsContent[index]"
+                    ></component>
+                </v-tab-item>
             </v-tabs-items>
             <Footer />
         </div>
@@ -29,7 +27,9 @@
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
+import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
+import PartToc from "@/components/part/PartToc.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 import { getPart } from "@/utilities/api";
@@ -39,7 +39,9 @@ export default {
         FlashBanner,
         Footer,
         Header,
+        PartContent,
         PartNav,
+        PartToc,
         SimpleSpinner,
     },
 
@@ -50,30 +52,30 @@ export default {
             title: this.$route.params.title,
             part: this.$route.params.part,
             structure: null,
-            partLabel: "",
-            tab: 0,
+            sections: [],
+            tab: 1, // index 1, "Part"
             tabsShape: [
                 {
                     label: "Table of Contents",
                     value: "tocContent",
                     type: "button",
+                    component: "PartToc",
                 },
                 {
                     label: "Part",
                     value: "partContent",
                     type: "button",
+                    component: "PartContent",
                 },
                 {
                     label: "Subpart",
                     value: "subpart",
                     type: "dropdown",
-                    options: [],
                 },
                 {
                     label: "Section",
                     value: "section",
                     type: "dropdown",
-                    options: [],
                 },
             ],
         };
@@ -81,10 +83,13 @@ export default {
 
     computed: {
         tocContent() {
-            return this.structure?.toc ?? null;
+            return this.structure?.[0];
+        },
+        partLabel() {
+            return this.structure?.[0].label_description ?? "N/A";
         },
         partContent() {
-            return "Part";
+            return this.structure?.[1];
         },
         tabsContent() {
             return [this.tocContent, this.partContent, null, null];
@@ -101,7 +106,6 @@ export default {
 
         try {
             this.structure = await getPart(this.title, this.part);
-            this.partLabel = this.structure?.toc?.label_description ?? "N/A";
         } catch (error) {
             console.error(error);
         }
@@ -110,7 +114,6 @@ export default {
     updated() {
         this.$nextTick(function () {
             console.log(this.tab);
-            console.log(this.tabsContent);
         });
     },
 };

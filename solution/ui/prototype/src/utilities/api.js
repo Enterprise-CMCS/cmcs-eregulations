@@ -344,11 +344,16 @@ const getHomepageStructure = async () => {
 };
 
 const getPart = async (title, part) => {
-    const result = await httpApiGet(`${getKebabDate()}/title/${title}/part/${part}`);
+    const result = await httpApiGet(
+        `${getKebabDate()}/title/${title}/part/${part}`
+    );
 
-    console.log("result", result);
+    // mixing lodash get and optional chaining.  Both provide safeguards and do the same this
+    const toc = result?.toc;
 
-    return result;
+    const orphansAndSubparts = _get(result, "document.children");
+
+    return [toc, orphansAndSubparts];
 };
 
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
