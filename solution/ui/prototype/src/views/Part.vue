@@ -4,7 +4,6 @@
             <FlashBanner />
             <Header />
             <h1>{{ title }} {{ part }}</h1>
-            <h2>Selected Section: {{this.selectedSection}}</h2>
             <div
               v-for="section in sections"
               v-bind:key="section"
