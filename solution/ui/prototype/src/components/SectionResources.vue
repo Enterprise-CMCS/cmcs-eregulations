@@ -1,23 +1,7 @@
 <template>
-    <v-dialog
-        v-model="dialog"
-        fullscreen
-        persistent
-        transition="dialog-bottom-transition"
-    >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                color="primary"
-                dark
-                v-bind="attrs"
-                v-on="on"
-            >
-                View Section Resources
-            </v-btn>
-        </template>
-        <v-card
-            style="background-color: #f3f3f3"
-
+        <div
+            class="footer-panel"
+            :class="{fullHeight:!collapsed, halfHeight:collapsed}"
         >
             <div
                 class="centered-container"
@@ -44,7 +28,7 @@
                     </v-btn>
                   
                     <v-btn
-                        @click="dialog = false"
+                        @click="$emit('close')"
                     >
                         <v-icon>mdi-close</v-icon>
                         Close
@@ -139,8 +123,8 @@
                 </div>
                 <v-divider />
             </div>
-        </v-card>
-    </v-dialog>
+        </div>
+
 </template>
 
 <script>
@@ -156,6 +140,16 @@
       part: String,
       section: String,
     },
+    watch: {
+      // whenever section changes, this function will run
+      async section(newSection) {
+        try {
+            this.content = await getSupplementalContent(this.title, this.part, [newSection], null );
+        } catch (error) {
+            console.error(error);
+        }
+      }
+    },
     data () {
       return {
         dialog: false,
@@ -165,7 +159,7 @@
         selectedCategory: [],
         content:[],
         cardView: 1,
-        collapsed: false,
+        collapsed: true,
       }
     },
     computed:{
@@ -191,12 +185,6 @@
     methods:{
       collapse: function (){
         this.collapsed = !this.collapsed
-        const dialog = document.getElementsByClassName("v-dialog--active v-dialog--fullscreen")
-        if (this.collapsed) {
-          dialog[0].classList.add("halfScreen")
-        } else{
-          dialog[0].classList.remove("halfScreen")
-        }
       }
     }
   }
@@ -204,15 +192,29 @@
 </script>
 
 <style>
-.halfScreen{
-  height:100% !important;
-  top:50vh !important;
 
+.footer-panel{
+  background-color: #f3f3f3;
+  position:fixed;
+  bottom:0;
+  width:100%;
+  z-index:202;
+  overflow: scroll;
 }
+
+.fullHeight{
+  height:100vh;
+}
+
+.halfHeight{
+  height:50vh;
+}
+
 .supplemental-content-category-title{
   font-size:22px;
   font-weight:bold;
 }
+
 .supplemental-content-subcategory-title{
   font-size:18px;
 
@@ -229,6 +231,7 @@
     justify-content: left;
     margin-bottom: 40px;
 }
+
 .flex-row-container > .flex-row-item {
     flex: 1 1 30%; /*grow | shrink | basis */
     margin: 10px;
