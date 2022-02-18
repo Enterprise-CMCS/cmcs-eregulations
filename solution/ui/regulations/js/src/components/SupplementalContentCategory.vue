@@ -1,33 +1,40 @@
 <template>
     <div class="supplemental-content-category">
         <div class="category">
-            <collapse-button v-bind:class="{ subcategory: subcategory }" :name="name" state="collapsed" class="category-title">
-                <template v-slot:expanded>{{ name }} <i class="fa fa-chevron-up"></i></template>
-                <template v-slot:collapsed>{{ name }} <i class="fa fa-chevron-down"></i></template>
+            <collapse-button v-if="has_children" v-bind:class="{ subcategory: subcategory }" :name="name" state="collapsed" class="category-title">
+              <template v-slot:expanded>{{ name }} <i v-if="has_children" class="fa fa-chevron-up"></i></template>
+              <template v-slot:collapsed>{{ name }} <i v-if="has_children" class="fa fa-chevron-down"></i></template>
             </collapse-button>
-            <span v-if="showDescription" class="category-description">{{
-                description
-            }}</span>
+            <div v-else class="category-title childless collapsible-title">
+              {{name}}
+            </div>
+            <span v-if="isFetching"></span>
+            <span v-else-if="!has_children" class="childless category-description">None</span>
+            <span v-else-if="showDescription" class="category-description">{{ description }}</span>
+
             <collapsible
                 :name="name"
                 state="collapsed"
                 class="category-content"
             >
                 <supplemental-content-category
-                    v-for="(category, index) in sub_categories"
-                    :key="index"
+                    v-for="category in sub_categories"
+                    :key="category.name"
                     :subcategory="true"
                     :name="category.name"
                     :description="category.description"
                     :supplemental_content="category.supplemental_content"
                     :sub_categories="category.sub_categories"
+                    :isFetching="isFetching"
                 >
                 </supplemental-content-category>
                 <supplemental-content-list
                     :supplemental_content="supplemental_content"
                     :has_sub_categories="has_sub_categories"
+                    v-if="supplemental_content"
                 />
             </collapsible>
+
         </div>
     </div>
 </template>
@@ -36,6 +43,7 @@
 import SupplementalContentList from "./SupplementalContentList.vue";
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
+import SimpleSpinner from "./SimpleSpinner.vue";
 
 export default {
     name: "supplemental-content-category",
@@ -44,6 +52,7 @@ export default {
         SupplementalContentList,
         CollapseButton,
         Collapsible,
+        SimpleSpinner
     },
 
     props: {
@@ -51,6 +60,11 @@ export default {
             type: Boolean,
             required: false,
             default: false,
+        },
+        isFetching: {
+            type: Boolean,
+            required: false,
+            default: true,
         },
         name: {
             type: String,
@@ -71,12 +85,15 @@ export default {
     },
 
     computed: {
-        showDescription: function () {
+        showDescription () {
             return this.description && !/^\s*$/.test(this.description);
         },
         has_sub_categories() {
             return this.sub_categories.length;
         },
+        has_children () {
+          return this.sub_categories?.length || this.supplemental_content?.length
+        }
     },
 };
 </script>

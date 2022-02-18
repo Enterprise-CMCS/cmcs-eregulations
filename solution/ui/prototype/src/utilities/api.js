@@ -405,8 +405,6 @@ export {
     getDecodedIdToken,
     forgetIdToken,
     config,
-    login,
-    statusCheck,
     getLastUpdatedDate,
     getHomepageStructure,
     getPartNames,
