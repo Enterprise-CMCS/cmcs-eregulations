@@ -10,10 +10,6 @@ custom:
   s3Sync:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
-  cloudfrontInvalidate:
-    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
-      items:
-        - "/*"
   pythonRequirements:
     layer:
       name: python-django
@@ -35,7 +31,6 @@ package:
 
 plugins:
   - serverless-s3-sync
-  - serverless-cloudfront-invalidate
   - serverless-python-requirements
 
 resources:

@@ -1,8 +1,8 @@
 <template>
     <div class="supplemental-content-container">
             <supplemental-content-category
-                v-for="(category, index) in categories"
-                :key="index"
+                v-for="category in categories"
+                :key="category.name"
                 :name="category.name"
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
