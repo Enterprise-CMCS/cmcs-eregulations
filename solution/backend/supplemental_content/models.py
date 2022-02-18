@@ -9,25 +9,22 @@ class AbstractModel(models.Model):
     display_name = models.CharField(max_length=128, null=True)
 
     def save(self, *args, **kwargs):
-        self.display_name = self._get_string_repr()
+        name = self._get_string_repr()
+        if len(name) > 128:
+            name = name[0:125] + "..."
+        self.display_name = name
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self._get_string_repr()
+        return self.display_name if self.display_name else self._get_string_repr()
 
     def _get_string_repr(self):
-        if hasattr(self, 'display_name'):
-            if self.display_name:
-                return self.display_name
         for subclass in self.__class__.__subclasses__():
             attr = getattr(self, subclass.__name__.lower(), None)
             if attr:
-                for subsubclass in attr.__class__.__subclasses__():
-                    subattr = getattr(self, subclass.__name__.lower(), None)
-                    if subattr:
-                        return str(subattr)
-                return str(attr)
-        return super().__str__()
+                string = attr._get_string_repr()
+                return str(attr) if string == "" else string
+        return ""
 
 
 # Category types
