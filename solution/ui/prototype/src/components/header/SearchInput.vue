@@ -1,10 +1,21 @@
 <template>
     <form :class="formClasses" action="">
-        <button class="search-chevron">
-            <p class="fa fa-chevron-down"></p>
-        </button>
-        <input type="search" name="q" placeholder="Search" />
-        <div class="glass"><svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-labelledby="title"><path d="M14.9012 8.09846C14.9012 4.59913 11.9002 1.79966 8.3819 1.79966C4.76009 1.79966 1.86265 4.59913 1.86265 8.09846C1.86265 11.4978 4.76009 14.3973 8.3819 14.3973C11.9002 14.3973 14.9012 11.4978 14.9012 8.09846ZM15.2116 12.6976L21.2135 18.3965C22.0413 19.2963 20.7995 20.5961 19.8682 19.6963L13.9698 13.9973C12.5211 15.3971 10.555 16.1969 8.3819 16.1969C3.72529 16.1969 0 12.4976 0 8.09846C0 3.59932 3.72529 0 8.3819 0C12.935 0 16.7638 3.59932 16.7638 8.09846C16.7638 9.79814 16.1429 11.3978 15.2116 12.6976Z" fill="#046791"></path></svg></div>
+            <v-text-field
+              v-model="message"
+                flat
+                solo
+              clearable
+              class="removethis"
+              label="Search"
+              type="text"
+              append-icon="mdi-magnify"
+              prepend-icon="mdi-chevron-down"
+              hide-details
+            >
+
+
+
+            </v-text-field>
     </form>
 </template>
 
@@ -28,27 +39,18 @@ export default {
         },
     },
 };
+
 </script>
 
-<style scoped>
-.search-box{
-    vertical-align: center;
-}
-.search-box input {
+<style>
+
+
+.search-box .search-header input {
     border: none;
     flex: auto;
     background-position: right;
 }
 
-.search-chevron p {
-    background-color: #ddf5fd;
-    font-size: 16px;
-    padding: 6px 4px;
-    border-radius: 5px;
-}
-.glass{
-    display: flex;
-    align-items: center;
-}
+
 </style>
 
