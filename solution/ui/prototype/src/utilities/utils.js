@@ -381,6 +381,24 @@ const getKebabDate = (date = new Date()) => {
     return `${year}-${month}-${day}`;
 };
 
+// lifted straight from django pdepth templatetag
+const getParagraphDepth = (value) => {
+    const sectionDepth = 2;
+
+    const labelLength = value?.label?.length;
+    const markerLength = value?.marker?.length;
+
+    const depth = labelLength - sectionDepth;
+
+    if (markerLength > 1) {
+        depth = depth - (markerLength - 1);
+    }
+
+    if (depth < 1) return 1;
+
+    return depth;
+}
+
 export {
     mapToArray,
     parseError,
@@ -406,4 +424,5 @@ export {
     formatAmount,
     niceDate,
     getKebabDate,
+    getParagraphDepth,
 };

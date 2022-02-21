@@ -2,13 +2,16 @@
     <p
         tabindex="-1"
         :id="kebabTitle"
-        class="reg-section depth-1"
+        class="reg-section"
+        :class="depthClass"
     >
         {{ node.text }}
     </p>
 </template>
 
 <script>
+import { getParagraphDepth } from "@/utilities/utils.js";
+
 export default {
     name: "Paragraph",
 
@@ -21,7 +24,17 @@ export default {
         },
     },
 
+    mounted() {
+        this.$nextTick(() => {
+            console.log(this.node)
+        });
+    },
+
     computed: {
+        depthClass() {
+            const depth = getParagraphDepth(this.node);
+            return `depth-${depth}`;
+        },
         kebabTitle() {
             return `${this.node.label.join("-")}-title`;
         },
