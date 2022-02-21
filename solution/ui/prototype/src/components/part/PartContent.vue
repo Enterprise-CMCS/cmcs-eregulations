@@ -1,6 +1,6 @@
 <template>
     <div class="content-container">
-        <div class="content">
+        <div class="content reg-text">
             <template v-for="item in structure">
                 <Node 
                     :node="item"

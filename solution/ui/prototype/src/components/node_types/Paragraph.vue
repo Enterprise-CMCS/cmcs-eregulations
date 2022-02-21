@@ -4,9 +4,8 @@
         :id="kebabTitle"
         class="reg-section"
         :class="depthClass"
-    >
-        {{ node.text }}
-    </p>
+        v-html="node.text"
+    ></p>
 </template>
 
 <script>
@@ -26,7 +25,7 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-            console.log(this.node)
+            /*console.log(this.node)*/
         });
     },
 

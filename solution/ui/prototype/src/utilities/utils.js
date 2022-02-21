@@ -388,7 +388,7 @@ const getParagraphDepth = (value) => {
     const labelLength = value?.label?.length;
     const markerLength = value?.marker?.length;
 
-    const depth = labelLength - sectionDepth;
+    let depth = labelLength - sectionDepth;
 
     if (markerLength > 1) {
         depth = depth - (markerLength - 1);
