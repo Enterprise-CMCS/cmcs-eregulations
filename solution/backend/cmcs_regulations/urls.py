@@ -18,8 +18,9 @@ from django.urls import path, include
 from django.conf import settings
 from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.sitemaps.views import sitemap
+from regulations.sitemap import PartSitemap
 
-sitemaps = {}
+sitemaps = {"Parts": PartSitemap}
 urlpatterns = [
     path("", include('regcore.urls')),
     path("", include('regulations.urls')),
