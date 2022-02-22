@@ -1,21 +1,17 @@
 <template>
     <form :class="formClasses" action="">
-            <v-text-field
-              v-model="message"
-                flat
-                solo
-              clearable
-              class="removethis"
-              label="Search"
-              type="text"
-              append-icon="mdi-magnify"
-              prepend-icon="mdi-chevron-down"
-              hide-details
-            >
-
-
-
-            </v-text-field>
+        <v-text-field
+            flat
+            solo
+            clearable
+            class="removethis"
+            label="Search"
+            type="text"
+            append-icon="mdi-magnify"
+            prepend-icon="mdi-chevron-down"
+            hide-details
+        >
+        </v-text-field>
     </form>
 </template>
 
@@ -39,18 +35,11 @@ export default {
         },
     },
 };
-
 </script>
 
-<style>
-
-
-.search-box .search-header input {
-    border: none;
-    flex: auto;
-    background-position: right;
+<style scoped>
+.v-input >>>input{
+    border:none;
 }
-
-
 </style>
 
