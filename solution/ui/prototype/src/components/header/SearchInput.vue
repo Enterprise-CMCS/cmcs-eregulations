@@ -10,6 +10,8 @@
             append-icon="mdi-magnify"
             prepend-icon="mdi-chevron-down"
             hide-details
+            @click:prepend="toggle"
+            @click:append="search"
         >
         </v-text-field>
     </form>
@@ -25,7 +27,14 @@ export default {
             default: "",
         },
     },
-
+    methods: {
+        toggle() {
+            console.log("toggle")
+        },
+        search() {
+            console.log("search")
+        },
+    },
     computed: {
         formClasses() {
             return {
@@ -37,9 +46,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.v-input >>>input{
-    border:none;
-}
-</style>
 
