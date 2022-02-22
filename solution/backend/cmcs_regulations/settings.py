@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'solo',
     'django_opensearch_dsl',
     'corsheaders',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
