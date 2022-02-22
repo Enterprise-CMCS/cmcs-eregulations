@@ -88,8 +88,9 @@ header {
     color: #212121;
     padding-right: 20px;
 }
+
 .header-search-container {
     border-left: 1px #d6d7d9 solid;
-    padding: 10px 18px;
+    padding: 10px 0 10px 18px;
 }
 </style>

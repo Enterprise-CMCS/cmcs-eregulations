@@ -29,10 +29,10 @@ export default {
     },
     methods: {
         toggle() {
-            console.log("toggle")
+            console.log("toggle");
         },
         search() {
-            console.log("search")
+            console.log("search");
         },
     },
     computed: {
@@ -46,4 +46,24 @@ export default {
 };
 </script>
 
+<style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
 
+@import "legacy/css/scss/main.scss";
+
+.v-input__icon.v-input__icon--prepend button {
+    background-color: $lighter_blue;
+    border-radius: 3px;
+}
+
+.v-input__icon.v-input__icon--append button {
+    color: $mid_blue;
+}
+
+.v-text-field.v-text-field--enclosed .v-input__slot {
+    max-width: 160px;
+}
+</style>
