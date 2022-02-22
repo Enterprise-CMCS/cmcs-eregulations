@@ -4,8 +4,12 @@
             <FlashBanner />
             <Header />
             <PartNav :title="title" :part="part" :partLabel="partLabel">
-                <v-tabs v-model="tab">
-                    <v-tab v-for="item in tabsShape" :key="item.label">
+                <v-tabs slider-size="5" class="nav-tabs" v-model="tab">
+                    <v-tab
+                        v-for="item in tabsShape"
+                        :key="item.label"
+                        :disabled="item.disabled"
+                    >
                         {{ item.label }}
                     </v-tab>
                 </v-tabs>
@@ -34,6 +38,9 @@ import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 import { getPart } from "@/utilities/api";
 
+// See github issue about tab highlight being misaligned & possible fixes
+// https://github.com/vuetifyjs/vuetify/issues/4733
+
 export default {
     components: {
         FlashBanner,
@@ -60,22 +67,26 @@ export default {
                     value: "tocContent",
                     type: "button",
                     component: "PartToc",
+                    disabled: false,
                 },
                 {
                     label: "Part",
                     value: "partContent",
                     type: "button",
                     component: "PartContent",
+                    disabled: false,
                 },
                 {
                     label: "Subpart",
                     value: "subpart",
                     type: "dropdown",
+                    disabled: true,
                 },
                 {
                     label: "Section",
                     value: "section",
                     type: "dropdown",
+                    disabled: true,
                 },
             ],
         };

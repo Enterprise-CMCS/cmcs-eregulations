@@ -50,7 +50,7 @@ $eregs-image-path: "~legacy-static/images";
 .nav-container {
     overflow: auto;
     width: 100%;
-    background: #eefafe;
+    background: $lightest_blue;
 
     .content {
         max-width: $text-max-width;
@@ -59,6 +59,25 @@ $eregs-image-path: "~legacy-static/images";
         h1 {
             margin-top: 55px;
             margin-bottom: 40px;
+        }
+
+        .nav-tabs.v-tabs .v-tabs-bar {
+            background-color: transparent;
+
+            .v-tab {
+                text-transform: none;
+                font-weight: 500;
+                padding: 0;
+                margin-right: 35px;
+                min-width: unset;
+                letter-spacing: 0.02em;
+                font-size: 18px;
+
+                &.v-tab--active {
+                    letter-spacing: 0.01em;
+                    font-weight: 600;
+                }
+            }
         }
     }
 }
