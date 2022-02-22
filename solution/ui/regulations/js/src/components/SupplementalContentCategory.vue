@@ -18,8 +18,8 @@
                 class="category-content"
             >
                 <supplemental-content-category
-                    v-for="(category, index) in sub_categories"
-                    :key="index"
+                    v-for="category in sub_categories"
+                    :key="category.name"
                     :subcategory="true"
                     :name="category.name"
                     :description="category.description"
