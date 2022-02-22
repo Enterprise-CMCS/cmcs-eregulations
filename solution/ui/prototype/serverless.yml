@@ -67,6 +67,11 @@ resources:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
+          CustomErrorResponse:
+            ErrorCachingMinTTL: 5
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
           Comment: CloudFront Distro for the static website hosted in S3
           Aliases:
             - Ref: AWS::NoValue
