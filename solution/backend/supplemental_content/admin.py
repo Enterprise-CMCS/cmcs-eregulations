@@ -34,7 +34,6 @@ class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_per_page = 200
     admin_priority = 20
     actions = ["export_as_csv"]
-    exclude = ["display_name"]
 
     def get_urls(self):
         urls = super().get_urls()

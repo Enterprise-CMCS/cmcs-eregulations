@@ -4,6 +4,7 @@ import django.core.validators
 from django.db import migrations, models
 from django.db.migrations.operations.fields import RemoveField
 import django.db.models.deletion
+from supplemental_content.models import AbstractModel
 
 
 def make_category(id, title, description, order):
@@ -141,7 +142,7 @@ class Migration(migrations.Migration):
                 ('show_if_empty', models.BooleanField(default=False)),
                 ('old_id', models.IntegerField()),
             ],
-            bases=(models.Model,),
+            bases=(models.Model, AbstractModel),
         ),
         migrations.CreateModel(
             name='AbstractLocation',
@@ -150,7 +151,7 @@ class Migration(migrations.Migration):
                 ('title', models.IntegerField()),
                 ('part', models.IntegerField()),
             ],
-            bases=(models.Model,),
+            bases=(models.Model, AbstractModel),
         ),
         migrations.CreateModel(
             name='AbstractSupplementalContent',
@@ -162,7 +163,7 @@ class Migration(migrations.Migration):
                 ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supplemental_content', to='supplemental_content.abstractcategory')),
                 ('locations', models.ManyToManyField(blank=True, null=True, related_name='supplemental_content', to='supplemental_content.AbstractLocation')),
             ],
-            bases=(models.Model,),
+            bases=(models.Model, AbstractModel),
         ),
         migrations.CreateModel(
             name='Category',

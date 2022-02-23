@@ -5,44 +5,34 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 
-class AbstractModel(models.Model):
-    display_name = models.CharField(max_length=128, blank=True)
-
-    def save(self, *args, **kwargs):
-        name = self._get_string_repr()
-        if len(name) > 128:
-            name = name[0:125] + "..."
-        self.display_name = name
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self._get_string_repr() if self.display_name == "" else self.display_name
-
-    def _string(self):
-        return ""
-
+class AbstractModel:
     def _get_string_repr(self):
-        string = ""
+        if hasattr(self, 'display_name'):
+            if self.display_name:
+                return self.display_name
         for subclass in self.__class__.__subclasses__():
             attr = getattr(self, subclass.__name__.lower(), None)
             if attr:
-                string = attr._get_string_repr()
-        return self._string() if string == "" else string
+                return str(attr)
+        return super().__str__()
 
 
 # Category types
 # Current choice is one model per level due to constraint of exactly 3 levels.
 
 
-class AbstractCategory(AbstractModel):
+class AbstractCategory(models.Model, AbstractModel):
     name = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self._get_string_repr()
+
 
 class Category(AbstractCategory):
-    def _string(self):
+    def __str__(self):
         return f"{self.name} (Category)"
 
     class Meta:
@@ -53,7 +43,7 @@ class Category(AbstractCategory):
 class SubCategory(AbstractCategory):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
 
-    def _string(self):
+    def __str__(self):
         return f"{self.name} (Sub-category)"
 
     class Meta:
@@ -64,7 +54,7 @@ class SubCategory(AbstractCategory):
 class SubSubCategory(AbstractCategory):
     parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
 
-    def _string(self):
+    def __str__(self):
         return f"{self.name} (Sub-sub-category)"
 
     class Meta:
@@ -76,18 +66,26 @@ class SubSubCategory(AbstractCategory):
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
 
 
-class AbstractLocation(AbstractModel):
+class AbstractLocation(models.Model, AbstractModel):
     title = models.IntegerField()
     part = models.IntegerField()
+    display_name = models.CharField(max_length=128, null=True)
+
+    def __str__(self):
+        return self._get_string_repr()
 
     class Meta:
         ordering = ["title", "part", "section__section_id", "subpart__subpart_id", "subjectgroup__subject_group_id"]
+
+    def save(self, *args, **kwargs):
+        self.display_name = self._get_string_repr()
+        super(AbstractLocation, self).save(*args, **kwargs)
 
 
 class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
 
-    def _string(self):
+    def __str__(self):
         return f'{self.title} {self.part} Subpart {self.subpart_id}'
 
     class Meta:
@@ -99,7 +97,7 @@ class Subpart(AbstractLocation):
 class SubjectGroup(AbstractLocation):
     subject_group_id = models.CharField(max_length=512)
 
-    def _string(self):
+    def __str__(self):
         return f'{self.title} {self.part} - {self.subject_group_id}'
 
     class Meta:
@@ -112,7 +110,7 @@ class Section(AbstractLocation):
     section_id = models.IntegerField()
     parent = models.ForeignKey(AbstractLocation, null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
 
-    def _string(self):
+    def __str__(self):
         return f'{self.title} {self.part}.{self.section_id}'
 
     class Meta:
@@ -125,7 +123,7 @@ class Section(AbstractLocation):
 # All supplemental content types must inherit from AbstractSupplementalContent.
 
 
-class AbstractSupplementalContent(AbstractModel):
+class AbstractSupplementalContent(models.Model, AbstractModel):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=True)
@@ -133,6 +131,9 @@ class AbstractSupplementalContent(AbstractModel):
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content"
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="supplemental_content")
+
+    def __str__(self):
+        return self._get_string_repr()
 
 
 class SupplementalContent(AbstractSupplementalContent):
@@ -163,7 +164,7 @@ class SupplementalContent(AbstractSupplementalContent):
                 except ValueError:
                     raise ValidationError(f'{day} is not a valid day for the month of {month}!')
 
-    def _string(self):
+    def __str__(self):
         return f'{self.date} {self.name} {self.truncated_description}...'
 
     @property
