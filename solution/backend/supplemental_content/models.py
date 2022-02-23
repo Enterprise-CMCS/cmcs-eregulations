@@ -26,9 +26,14 @@ class AbstractCategory(models.Model, AbstractModel):
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
+    display_name = models.CharField(max_length=128, null=True)
 
     def __str__(self):
         return self._get_string_repr()
+
+    def save(self, *args, **kwargs):
+        self.display_name = self._get_string_repr()
+        super(AbstractCategory, self).save(*args, **kwargs)
 
 
 class Category(AbstractCategory):
@@ -131,9 +136,14 @@ class AbstractSupplementalContent(models.Model, AbstractModel):
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content"
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="supplemental_content")
+    display_name = models.CharField(max_length=128, null=True)
 
     def __str__(self):
         return self._get_string_repr()
+
+    def save(self, *args, **kwargs):
+        self.display_name = self._get_string_repr()
+        super(AbstractLocation, self).save(*args, **kwargs)
 
 
 class SupplementalContent(AbstractSupplementalContent):
