@@ -4,7 +4,12 @@
             <FlashBanner />
             <Header />
             <PartNav :title="title" :part="part" :partLabel="partLabel">
-                <v-tabs slider-size="5" class="nav-tabs" v-model="tab">
+                <v-tabs
+                    slider-size="5"
+                    class="nav-tabs"
+                    v-model="tab"
+                    ref="tabs"
+                >
                     <v-tab
                         v-for="item in tabsShape"
                         :key="item.label"
@@ -14,14 +19,21 @@
                     </v-tab>
                 </v-tabs>
             </PartNav>
-            <v-tabs-items v-model="tab">
-                <v-tab-item v-for="(item, index) in tabsShape" :key="index">
-                    <component
-                        :is="item.component"
-                        :structure="tabsContent[index]"
-                    ></component>
-                </v-tab-item>
-            </v-tabs-items>
+            <div class="content-container">
+                <template v-if="structure">
+                    <v-tabs-items v-model="tab">
+                        <v-tab-item v-for="(item, index) in tabsShape" :key="index">
+                            <component
+                                :is="item.component"
+                                :structure="tabsContent[index]"
+                            ></component>
+                        </v-tab-item>
+                    </v-tabs-items>
+                </template>
+                <div v-else>
+                    <SimpleSpinner />
+                </div>
+            </div>
             <Footer />
         </div>
     </body>
@@ -37,9 +49,6 @@ import PartToc from "@/components/part/PartToc.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 import { getPart } from "@/utilities/api";
-
-// See github issue about tab highlight being misaligned & possible fixes
-// https://github.com/vuetifyjs/vuetify/issues/4733
 
 export default {
     components: {
@@ -125,7 +134,10 @@ export default {
 
     updated() {
         this.$nextTick(function () {
-            console.log(this.tab);
+            console.log("updated", this.tab);
+            // call onResize to fix tab highlight misalignment bug
+            // https://github.com/vuetifyjs/vuetify/issues/4733
+            this.$refs.tabs && this.$refs.tabs.onResize();
         });
     },
 };
