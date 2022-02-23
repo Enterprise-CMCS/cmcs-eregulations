@@ -20,6 +20,7 @@ export default {
         Extract: () => import("@/components/node_types/Extract.vue"),
         FlushParagraph: () =>
             import("@/components/node_types/FlushParagraph.vue"),
+        Citation: () => import("@/components/node_types/Citation.vue"),
     },
 
     props: {
