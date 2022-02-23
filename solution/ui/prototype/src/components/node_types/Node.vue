@@ -21,6 +21,7 @@ export default {
         FlushParagraph: () =>
             import("@/components/node_types/FlushParagraph.vue"),
         Citation: () => import("@/components/node_types/Citation.vue"),
+        FootNote: () => import("@/components/node_types/FootNote.vue"),
     },
 
     props: {
