@@ -1,15 +1,11 @@
 <template>
-    <div>
-        {{ node.node_type }}
-        <p v-if="node.node_type === 'Heading'">{{ node }}</p>
-        <img v-if="node.node_type === 'Image'" :src="node.src" class="reg-image" />
-        <component
-            v-else
-            :is="node.node_type"
-            :node="node"
-            :key="node.title"
-        ></component>
-    </div>
+    <img v-if="node.node_type === 'Image'" :src="node.src" class="reg-image" />
+    <component
+        v-else
+        :is="node.node_type"
+        :node="node"
+        :key="node.title"
+    ></component>
 </template>
 
 <script>
