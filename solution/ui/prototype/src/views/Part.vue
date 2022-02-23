@@ -20,19 +20,14 @@
                 </v-tabs>
             </PartNav>
             <div class="content-container">
-                <template v-if="structure">
-                    <v-tabs-items v-model="tab">
-                        <v-tab-item v-for="(item, index) in tabsShape" :key="index">
-                            <component
-                                :is="item.component"
-                                :structure="tabsContent[index]"
-                            ></component>
-                        </v-tab-item>
-                    </v-tabs-items>
-                </template>
-                <div v-else>
-                    <SimpleSpinner />
-                </div>
+                <v-tabs-items v-model="tab">
+                    <v-tab-item v-for="(item, index) in tabsShape" :key="index">
+                        <component
+                            :is="item.component"
+                            :structure="tabsContent[index]"
+                        ></component>
+                    </v-tab-item>
+                </v-tabs-items>
             </div>
             <Footer />
         </div>
@@ -46,7 +41,6 @@ import Header from "@/components/Header.vue";
 import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
-import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 import { getPart } from "@/utilities/api";
 
@@ -58,7 +52,6 @@ export default {
         PartContent,
         PartNav,
         PartToc,
-        SimpleSpinner,
     },
 
     name: "Part",

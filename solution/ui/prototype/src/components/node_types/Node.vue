@@ -22,6 +22,7 @@ export default {
             import("@/components/node_types/FlushParagraph.vue"),
         Citation: () => import("@/components/node_types/Citation.vue"),
         FootNote: () => import("@/components/node_types/FootNote.vue"),
+        SUBJGRP: () => import("@/components/node_types/SubjectGroup.vue"),
     },
 
     props: {

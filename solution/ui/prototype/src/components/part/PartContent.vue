@@ -1,29 +1,31 @@
 <template>
     <div class="content-container">
-        <div class="content reg-text">
+        <div v-if="structure" class="content reg-text">
             <template v-for="item in structure">
-                <Node 
-                    :node="item"
-                    :key="item.title"
-                />
+                <Node :node="item" :key="item.title" />
             </template>
+        </div>
+        <div v-else>
+            <SimpleSpinner />
         </div>
     </div>
 </template>
 
 <script>
 import Node from "@/components/node_types/Node.vue";
+import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 export default {
     name: "PartContent",
 
     components: {
-        Node
+        Node,
+        SimpleSpinner,
     },
 
     props: {
         structure: {
-            type: Object,
+            type: Array,
             required: false,
         },
     },
@@ -46,7 +48,8 @@ $eregs-image-path: "~legacy-static/images";
         max-width: $text-max-width;
         margin: 0 auto;
 
-        article, article section {
+        article,
+        article section {
             padding: 0;
         }
 

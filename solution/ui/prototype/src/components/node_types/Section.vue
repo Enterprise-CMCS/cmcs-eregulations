@@ -1,11 +1,11 @@
 <template>
     <section
-        :aria-labelledby="nodeLabel"
+        :aria-labelledby="kebabTitle"
         tabindex="-1"
         :id="kebabTitle"
         class="reg-section"
     >
-        <h2 class="section-title" :id="nodeLabel">
+        <h2 class="section-title" :id="kebabTitle">
             {{ node.title }}
         </h2>
 
@@ -39,7 +39,6 @@ export default {
 
     computed: {
         kebabTitle() {
-            console.log(this.node);
             return `${this.node.label.join("-")}-title`;
         },
     },
