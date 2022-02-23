@@ -4,6 +4,28 @@
             <FlashBanner />
             <Header />
             <h1>{{ title }} {{ part }}</h1>
+            <div
+              v-for="section in sections"
+              v-bind:key="section"
+            >
+              <p>I'm baby brunch banjo whatever, keffiyeh mustache locavore migas kitsch shaman sustainable kinfolk hashtag activated charcoal polaroid.  Bespoke next level crucifix waistcoat readymade.  Gochujang bushwick microdosing cred franzen umami.  Tote bag pinterest man bun +1 master cleanse ugh neutra sustainable tofu ramps copper mug put a bird on it fingerstache chia.</p>
+              <v-btn
+                  color="primary"
+                  outlined
+                  v-on:click="selectedSection = section"
+              >
+                  View Section Resources
+              </v-btn>
+            </div>
+
+            <SectionResources
+                v-bind:title="title"
+                v-bind:part="part"
+                v-bind:section="selectedSection"
+                v-if="selectedSection"
+                v-on:close="selectedSection = null"
+            />
+
             <Footer />
         </div>
     </body>
@@ -13,9 +35,11 @@
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
+import SectionResources from "@/components/SectionResources.vue"
 
 export default {
     components: {
+      SectionResources,
         FlashBanner,
         Footer,
         Header
@@ -27,6 +51,8 @@ export default {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
+            sections: [...Array(10).keys()], // This can go when we get real sections
+            selectedSection: null,
         }
     },
 
