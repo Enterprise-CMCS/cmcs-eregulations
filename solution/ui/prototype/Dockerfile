@@ -9,6 +9,7 @@ ENV PATH /app/solution/ui/prototype/node_modules/.bin:$PATH
 
 # install and cache app dependencies
 COPY package.json /app/solution/ui/prototype/package.json
+COPY package-lock.json /app/solution/ui/prototype/package-lock.json
 RUN npm install
 RUN npm install @vue/cli@4.5.15 -g
 
