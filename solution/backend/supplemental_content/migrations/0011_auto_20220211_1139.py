@@ -5,14 +5,16 @@ from django.db import migrations
 
 # Re-save locations to properly generate display_name field
 # This didn't work in the previous migration because the "get_model" func reconstructs models from migrations, and custom save hooks are not included in that.
+# NOTE: function body removed because AbstractLocation.objects.all() now generates an error that cannot be recovered from with try-except.
 def resave_locations(apps, schema_editor):
-    try:
-        from supplemental_content.models import AbstractLocation
-        locations = AbstractLocation.objects.all()
-        for location in locations:
-            location.save()
-    except: # Primarily ImportError but safer to catch everything
-        pass # Skip in case model is changed, renamed, or deleted in the future
+    #try:
+    #    from supplemental_content.models import AbstractLocation
+    #    locations = AbstractLocation.objects.all()
+    #    for location in locations:
+    #        location.save()
+    #except: # Primarily ImportError but safer to catch everything
+    #    pass # Skip in case model is changed, renamed, or deleted in the future
+    pass
 
 
 class Migration(migrations.Migration):
