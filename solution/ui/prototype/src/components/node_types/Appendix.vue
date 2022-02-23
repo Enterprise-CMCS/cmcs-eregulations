@@ -1,34 +1,48 @@
 <template>
     <section
-        aria-labelledby="{{ node.label }}-title"
+        :aria-labelledby="kebabTitle"
         tabindex="-1"
-        id="{{ node.label }}"
+        :id="kebabLabel"
         class="appendix-section"
     >
-        <h2 class="section-title" id="{{ node.label }}-title">
-            {% appendix_formatter cfr_title node.label as formatted_citation %}
-            {% include "regulations/partials/copy-btn.html" with
-            title=node.label btn_type="icon"
-            formatted_citation=formatted_citation %}
+        <h2 class="section-title" :id="kebabLabel">
             {{ node.title }}
         </h2>
 
-        <div class="paragraphs">
-            {{ node.text }}
-        </div>
+        <template v-for="(child, index) in node.children">
+            <Node 
+                :node="child"
+                :key="index"
+            />
+        </template>
     </section>
 </template>
 
 <script>
+import Node from "@/components/node_types/Node.vue"
+
 export default {
     name: "Appendix",
+
+    components: {
+        Node
+    },
 
     props: {
         node: {
             type: Object,
             required: true
         }
-    }
+    },
+
+    computed: {
+        kebabLabel() {
+            return `${this.node.label.join("-")}`;
+        },
+        kebabTitle() {
+            return `${this.node.label.join("-")}-title`;
+        },
+    },
 };
 </script>
 

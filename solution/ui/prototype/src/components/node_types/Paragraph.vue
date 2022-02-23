@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getParagraphDepth } from "@/utilities/utils.js";
+import { getKebabTitle, getParagraphDepth } from "@/utilities/utils.js";
 
 export default {
     name: "Paragraph",
@@ -35,7 +35,7 @@ export default {
             return `depth-${depth}`;
         },
         kebabTitle() {
-            return `${this.node.label.join("-")}-title`;
+            return getKebabTitle(this.node.label);
         },
     },
 };

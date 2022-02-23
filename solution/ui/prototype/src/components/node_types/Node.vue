@@ -23,6 +23,9 @@ export default {
         Citation: () => import("@/components/node_types/Citation.vue"),
         FootNote: () => import("@/components/node_types/FootNote.vue"),
         SUBJGRP: () => import("@/components/node_types/SubjectGroup.vue"),
+        SectionAuthority: () => import("@/components/node_types/SectionAuthority.vue"),
+        EffectiveDateNote: () => import("@/components/node_types/EffectiveDateNote.vue"),
+        APPENDIX: () => import("@/components/node_types/Appendix.vue"),
     },
 
     props: {
