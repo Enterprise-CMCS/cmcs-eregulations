@@ -22,6 +22,7 @@
 
 <script>
 import Node from "@/components/node_types/Node.vue"
+import { getKebabTitle } from "@/utilities/utils.js";
 
 export default {
     name: "Section",
@@ -39,7 +40,7 @@ export default {
 
     computed: {
         kebabTitle() {
-            return `${this.node.label.join("-")}-title`;
+            return getKebabTitle(this.node.label);
         },
     },
 };

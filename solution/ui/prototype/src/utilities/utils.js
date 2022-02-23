@@ -381,10 +381,13 @@ const getKebabDate = (date = new Date()) => {
     return `${year}-${month}-${day}`;
 };
 
+const getKebabLabel = (label) => {
+    if (!label) return "na-label";
+    return `${label.join("-")}`;
+}
+
 const getKebabTitle = (label) => {
-    console.log("label", label);
-    if (!label) return "na-title";
-    return `${label.join("-")}-title`;
+    return `${getKebabLabel(label)}-title`;
 }
 
 // lifted straight from django pdepth templatetag
@@ -430,6 +433,7 @@ export {
     formatAmount,
     niceDate,
     getKebabDate,
+    getKebabLabel,
     getKebabTitle,
     getParagraphDepth,
 };

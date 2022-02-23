@@ -16,6 +16,7 @@
 
 <script>
 import Node from "@/components/node_types/Node.vue"
+import { getKebabLabel } from "@/utilities/utils.js";
 
 export default {
     name: "SubjectGroup",
@@ -33,7 +34,7 @@ export default {
 
     computed: {
         kebabLabel() {
-            return `${this.node.label.join("-")}`;
+            return getKebabLabel(this.node.label);
         },
     },
 }

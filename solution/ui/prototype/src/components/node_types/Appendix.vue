@@ -10,37 +10,35 @@
         </h2>
 
         <template v-for="(child, index) in node.children">
-            <Node 
-                :node="child"
-                :key="index"
-            />
+            <Node :node="child" :key="index" />
         </template>
     </section>
 </template>
 
 <script>
-import Node from "@/components/node_types/Node.vue"
+import Node from "@/components/node_types/Node.vue";
+import { getKebabLabel, getKebabTitle } from "@/utilities/utils.js";
 
 export default {
     name: "Appendix",
 
     components: {
-        Node
+        Node,
     },
 
     props: {
         node: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
 
     computed: {
         kebabLabel() {
-            return `${this.node.label.join("-")}`;
+            return getKebabLabel(this.node.label);
         },
         kebabTitle() {
-            return `${this.node.label.join("-")}-title`;
+            return getKebabTitle(this.node.label);
         },
     },
 };

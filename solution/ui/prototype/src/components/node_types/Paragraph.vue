@@ -1,7 +1,7 @@
 <template>
     <p
         tabindex="-1"
-        :id="kebabTitle"
+        :id="kebabLabel"
         class="reg-section"
         :class="depthClass"
         v-html="node.text"
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getKebabTitle, getParagraphDepth } from "@/utilities/utils.js";
+import { getKebabLabel, getParagraphDepth } from "@/utilities/utils.js";
 
 export default {
     name: "Paragraph",
@@ -34,8 +34,8 @@ export default {
             const depth = getParagraphDepth(this.node);
             return `depth-${depth}`;
         },
-        kebabTitle() {
-            return getKebabTitle(this.node.label);
+        kebabLabel() {
+            return getKebabLabel(this.node.label);
         },
     },
 };
