@@ -143,7 +143,7 @@ class AbstractSupplementalContent(models.Model, AbstractModel):
 
     def save(self, *args, **kwargs):
         self.display_name = self._get_string_repr()
-        super(AbstractLocation, self).save(*args, **kwargs)
+        super(AbstractSupplementalContent, self).save(*args, **kwargs)
 
 
 class SupplementalContent(AbstractSupplementalContent):
