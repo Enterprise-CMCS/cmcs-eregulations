@@ -34,16 +34,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RemoveField(
+            model_name='abstractlocation',
+            name='display_name',
+        ),
         migrations.CreateModel(
             name='AbstractModel',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('display_name', models.CharField(max_length=128, blank=True)),
             ],
-        ),
-        migrations.RemoveField(
-            model_name='abstractlocation',
-            name='display_name',
         ),
         migrations.AddField(
             model_name='abstractcategory',
