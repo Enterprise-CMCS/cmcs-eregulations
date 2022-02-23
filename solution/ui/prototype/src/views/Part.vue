@@ -102,7 +102,6 @@ export default {
             return this.structure?.[0].label_description ?? "N/A";
         },
         partContent() {
-            console.log(this.structure?.[1]);
             return this.structure?.[1];
         },
         tabsContent() {

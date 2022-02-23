@@ -6,10 +6,6 @@
 export default {
     name: "Extract",
 
-    components: {
-        Node,
-    },
-
     props: {
         node: {
             type: Object,

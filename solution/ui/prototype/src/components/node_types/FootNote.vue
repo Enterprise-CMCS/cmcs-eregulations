@@ -8,10 +8,6 @@
 export default {
     name: "FootNote",
 
-    components: {
-        Node,
-    },
-
     props: {
         node: {
             type: Object,

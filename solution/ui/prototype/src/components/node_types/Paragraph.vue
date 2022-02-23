@@ -14,8 +14,6 @@ import { getKebabLabel, getParagraphDepth } from "@/utilities/utils.js";
 export default {
     name: "Paragraph",
 
-    components: {},
-
     props: {
         node: {
             type: Object,
