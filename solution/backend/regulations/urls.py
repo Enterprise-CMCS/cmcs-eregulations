@@ -25,4 +25,5 @@ urlpatterns = [
     path('<numeric:title>/<numeric:part>/<version:version>/', PartReaderView.as_view(), name='reader_view'),
     path('goto/', GoToRedirectView.as_view(), name='goto'),
     path('search/', SearchView.as_view(), name='search'),
+    path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
 ]
