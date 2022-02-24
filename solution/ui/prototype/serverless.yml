@@ -68,8 +68,7 @@ resources:
       Properties:
         DistributionConfig:
           CustomErrorResponses:
-            - CustomErrorResponse:
-                ErrorCachingMinTTL: 5
+              - ErrorCachingMinTTL: 5
                 ErrorCode: 403
                 ResponseCode: 200
                 ResponsePagePath: /index.html
