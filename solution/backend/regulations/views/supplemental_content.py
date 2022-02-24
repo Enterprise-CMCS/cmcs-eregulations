@@ -9,4 +9,16 @@ class SupplementalContentView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return context
+        content_id = self.kwargs.get("id")
+        content = SupplementalContent.objects.filter(id=content_id, approved=True)
+        if len(content) < 1:
+            raise Http404
+        content = content[0]
+        c = {
+            "title": content.name,
+            "description": content.description,
+            "pub_time": content.date,
+            "mod_time": content.updated_at.isoformat(),
+            "redirect_link": content.url,
+        }
+        return {**context, **c}

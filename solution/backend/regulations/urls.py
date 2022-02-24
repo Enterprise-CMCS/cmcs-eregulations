@@ -6,6 +6,7 @@ from regulations.views.search import SearchView
 from regulations.views.regulation_landing import RegulationLandingView
 from regulations.views.homepage import HomepageView
 from regulations.views.about import AboutView
+from regulations.views.supplemental_content import SupplementalContentView
 from regulations import converters
 
 register_converter(converters.NumericConverter, 'numeric')
