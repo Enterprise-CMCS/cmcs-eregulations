@@ -8,7 +8,7 @@ from django.db import models
 class AbstractModel:
     def _get_string_repr(self):
         if hasattr(self, 'display_name'):
-            if self.display_name:
+            if self.display_name != "":
                 return self.display_name
         for subclass in self.__class__.__subclasses__():
             attr = getattr(self, subclass.__name__.lower(), None)
@@ -26,7 +26,7 @@ class AbstractCategory(models.Model, AbstractModel):
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
-    display_name = models.CharField(max_length=128, null=True)
+    display_name = models.CharField(max_length=128, blank=True)
 
     def __str__(self):
         return self._get_string_repr()
@@ -74,7 +74,7 @@ class SubSubCategory(AbstractCategory):
 class AbstractLocation(models.Model, AbstractModel):
     title = models.IntegerField()
     part = models.IntegerField()
-    display_name = models.CharField(max_length=128, null=True)
+    display_name = models.CharField(max_length=128, blank=True)
 
     def __str__(self):
         return self._get_string_repr()
@@ -136,7 +136,7 @@ class AbstractSupplementalContent(models.Model, AbstractModel):
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="supplemental_content"
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="supplemental_content")
-    display_name = models.CharField(max_length=128, null=True)
+    display_name = models.CharField(max_length=128, blank=True)
 
     def __str__(self):
         return self._get_string_repr()
