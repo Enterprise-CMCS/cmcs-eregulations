@@ -4,7 +4,6 @@
             flat
             solo
             clearable
-            class="removethis"
             label="Search"
             type="text"
             append-icon="mdi-magnify"
