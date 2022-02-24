@@ -67,7 +67,7 @@ resources:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
-          CustomErrorResponse:
+          CustomErrorResponses:
             ErrorCachingMinTTL: 5
             ErrorCode: 403
             ResponseCode: 200
