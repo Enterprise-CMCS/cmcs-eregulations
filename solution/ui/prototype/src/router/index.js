@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import Part from "@/views/Part.vue";
+import CacheExplorer from "@/views/CacheExplorer";
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,11 @@ const routes = [
         path: "/:title/:part",
         name: "part",
         component: Part,
+    },
+    {
+        path: "/cache",
+        name: "Cache-Explorer",
+        component: CacheExplorer,
     }
 ];
 

@@ -65,6 +65,7 @@ $eregs-image-path: "~legacy-static/images";
             background-color: transparent;
 
             .v-tab {
+                color: $mid_gray;
                 text-transform: none;
                 font-weight: 500;
                 padding: 0;
@@ -74,9 +75,14 @@ $eregs-image-path: "~legacy-static/images";
                 font-size: 18px;
 
                 &.v-tab--active {
+                    color: $teal_blue;
                     letter-spacing: 0.01em;
                     font-weight: 600;
                 }
+            }
+
+            .v-tabs-slider {
+                background-color: $teal_blue;
             }
         }
     }

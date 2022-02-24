@@ -20,6 +20,24 @@
                 </v-tabs>
             </PartNav>
             <div class="content-container">
+                <div v-for="section in sections" v-bind:key="section">
+                    <p>
+                        I'm baby brunch banjo whatever, keffiyeh mustache
+                        locavore migas kitsch shaman sustainable kinfolk hashtag
+                        activated charcoal polaroid. Bespoke next level crucifix
+                        waistcoat readymade. Gochujang bushwick microdosing cred
+                        franzen umami. Tote bag pinterest man bun +1 master
+                        cleanse ugh neutra sustainable tofu ramps copper mug put
+                        a bird on it fingerstache chia.
+                    </p>
+                    <v-btn
+                        color="primary"
+                        outlined
+                        v-on:click="selectedSection = section"
+                    >
+                        View Section Resources
+                    </v-btn>
+                </div>
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(item, index) in tabsShape" :key="index">
                         <component
@@ -29,6 +47,13 @@
                     </v-tab-item>
                 </v-tabs-items>
             </div>
+            <SectionResources
+                v-bind:title="title"
+                v-bind:part="part"
+                v-bind:section="selectedSection"
+                v-if="selectedSection"
+                v-on:close="selectedSection = null"
+            />
             <Footer />
         </div>
     </body>
@@ -41,11 +66,13 @@ import Header from "@/components/Header.vue";
 import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
+import SectionResources from "@/components/SectionResources.vue";
 
 import { getPart } from "@/utilities/api";
 
 export default {
     components: {
+        SectionResources,
         FlashBanner,
         Footer,
         Header,
@@ -91,6 +118,8 @@ export default {
                     disabled: true,
                 },
             ],
+            sections: [...Array(10).keys()], // This can go when we get real sections
+            selectedSection: null,
         };
     },
 
