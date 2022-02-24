@@ -85,22 +85,16 @@ header {
     border: 1px solid #d6d7d9;
 }
 .links-container {
-    padding-right: 20px;
-}
-
-.header-links-container {
-    color: #212121;
-    padding-right: 20px;
+    padding-right: 10px;
 }
 
 .header-search-container {
     border-left: 1px #d6d7d9 solid;
     padding: 10px 0 10px 18px;
 }
-.v-text-field.v-text-field--enclosed .v-input__slot {
-    max-width: 160px;
-}
+
 .header-link {
-    padding-right: 10px;
+    color: #212121;
+    padding-right: 20px;
 }
 </style>
