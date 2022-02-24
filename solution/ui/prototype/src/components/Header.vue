@@ -7,8 +7,12 @@
                 <JumpTo />
             </div>
             <div class="links-container">
-                <a class="header-links-container" href="">Resources</a>
-                <a class="header-links-container" href="">About</a>
+                <router-link :to="{ name: 'search' }" class="header-link">
+                    Resources
+                </router-link>
+                <router-link :to="{ name: 'about' }" class="header-link">
+                    About
+                </router-link>
             </div>
             <div class="header-search-container">
                 <SearchInput type="search-box" />
@@ -81,7 +85,7 @@ header {
     border: 1px solid #d6d7d9;
 }
 .links-container {
-    padding-right: 10px;
+    padding-right: 20px;
 }
 
 .header-links-container {
@@ -92,5 +96,11 @@ header {
 .header-search-container {
     border-left: 1px #d6d7d9 solid;
     padding: 10px 0 10px 18px;
+}
+.v-text-field.v-text-field--enclosed .v-input__slot {
+    max-width: 160px;
+}
+.header-link {
+    padding-right: 10px;
 }
 </style>
