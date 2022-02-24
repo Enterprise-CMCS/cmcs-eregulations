@@ -3,6 +3,7 @@ from django.http import Http404
 
 from supplemental_content.models import SupplementalContent
 
+
 class SupplementalContentView(TemplateView):
 
     template_name = "regulations/supplemental_content.html"
