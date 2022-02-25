@@ -1,7 +1,6 @@
 <template>
     <div class="hero-banner">
         <div class="site-container hero-content">
-            <JumpTo />
             <p class="hero-text">
                 Explore this site as a supplement to existing policy tools.
                 <router-link :to="{ name: 'about', hash: '#automated-updates' }">
@@ -13,13 +12,11 @@
 </template>
 
 <script>
-import JumpTo from "@/components/JumpTo.vue";
 
 export default {
     name: 'Hero',
 
     components: {
-        JumpTo
     }
 };
 </script>

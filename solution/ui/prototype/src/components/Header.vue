@@ -1,16 +1,20 @@
 <template>
-    <header
-        id="header"
-        class="sticky"
-    >
+    <header id="header" class="sticky">
         <!-- desktop -->
         <div class="flexbox header-large">
             <div class="title-container">
                 <SiteTitle />
-                <RegTitle />
+                <JumpTo />
             </div>
-
-            <div class="search-header">
+            <div class="links-container">
+                <router-link :to="{ name: 'search' }" class="header-link">
+                    Resources
+                </router-link>
+                <router-link :to="{ name: 'about' }" class="header-link">
+                    About
+                </router-link>
+            </div>
+            <div class="header-search-container">
                 <SearchInput type="search-box" />
             </div>
         </div>
@@ -41,12 +45,12 @@
         </div>
     </header>
 </template>
-
 <script>
 import RegTitle from "@/components/header/RegTitle.vue";
 import SearchInput from "@/components/header/SearchInput.vue";
 import SiteTitle from "@/components/header/SiteTitle.vue";
 import ToggleButton from "@/components/header/ToggleButton.vue";
+import JumpTo from "./JumpTo.vue";
 
 export default {
     name: "Header",
@@ -56,6 +60,7 @@ export default {
         SearchInput,
         SiteTitle,
         ToggleButton,
+        JumpTo,
     },
 
     data() {
@@ -74,4 +79,22 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+header {
+    box-sizing: border-box;
+    border: 1px solid #d6d7d9;
+}
+.links-container {
+    padding-right: 10px;
+}
+
+.header-search-container {
+    border-left: 1px #d6d7d9 solid;
+    padding: 10px 0 10px 18px;
+}
+
+.header-link {
+    color: #212121;
+    padding-right: 20px;
+}
+</style>

@@ -19,7 +19,7 @@ import _random from "lodash/random";
 import _set from "lodash/set";
 import _transform from "lodash/transform";
 
-import numeral from "numeral";
+//import numeral from "numeral";
 
 /**
  * Converts the given Map object to an array of values from the map
@@ -72,17 +72,17 @@ function delay(seconds) {
     });
 }
 
-function niceNumber(value) {
-    if (_isNil(value)) return "N/A";
-    if (_isString(value) && _isEmpty(value)) return "N/A";
-    return numeral(value).format("0,0");
-}
+// function niceNumber(value) {
+//     if (_isNil(value)) return "N/A";
+//     if (_isString(value) && _isEmpty(value)) return "N/A";
+//     return numeral(value).format("0,0");
+// }
 
-function nicePrice(value) {
-    if (_isNil(value)) return "N/A";
-    if (_isString(value) && _isEmpty(value)) return "N/A";
-    return numeral(value).format("0,0.00");
-}
+// function nicePrice(value) {
+//     if (_isNil(value)) return "N/A";
+//     if (_isString(value) && _isEmpty(value)) return "N/A";
+//     return numeral(value).format("0,0.00");
+// }
 
 // YYYY-MM-DD to MMM DD, YYYY
 const niceDate = (kebabDate) => {
@@ -386,13 +386,13 @@ export {
     parseError,
     swallowError,
     delay,
-    niceNumber,
+    //niceNumber,
     getQueryParam,
     removeQueryParams,
     addQueryParams,
     getFragmentParam,
     removeFragmentParams,
-    nicePrice,
+    //nicePrice,
     isFloat,
     removeNulls,
     chopRight,
