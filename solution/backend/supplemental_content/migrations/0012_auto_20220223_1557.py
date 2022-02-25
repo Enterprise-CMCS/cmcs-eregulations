@@ -5,6 +5,14 @@ from itertools import chain
 from django.db import migrations, models
 
 
+def set_not_null(apps, schema_editor):
+    AbstractLocation = apps.get_model("supplemental_content", "AbstractLocation")
+    for i in AbstractLocation.objects.all():
+        if i.display_name is None:
+            i.display_name = ""
+            i.save()
+
+
 def resave_models(apps, schema_editor):
     try:
         from supplemental_content.models import AbstractCategory, AbstractSupplementalContent
@@ -24,12 +32,18 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='abstractcategory',
             name='display_name',
-            field=models.CharField(max_length=128, null=True),
+            field=models.CharField(max_length=128, blank=True),
         ),
         migrations.AddField(
             model_name='abstractsupplementalcontent',
             name='display_name',
-            field=models.CharField(max_length=128, null=True),
+            field=models.CharField(max_length=128, blank=True),
+        ),
+        migrations.RunPython(set_not_null),
+        migrations.AlterField(
+            model_name='abstractlocation',
+            name='display_name',
+            field=models.CharField(max_length=128, blank=True),
         ),
         migrations.RunPython(resave_models),
     ]
