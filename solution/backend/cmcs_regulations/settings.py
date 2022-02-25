@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'solo',
     'django_opensearch_dsl',
     'corsheaders',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,13 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     )
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+
+    # Put your context processors here
+
+    'django.core.context_processors.request',
+)
 
 ROOT_URLCONF = 'cmcs_regulations.urls'
 

@@ -26,7 +26,7 @@ class ReaderView(CitationContextMixin, TemplateView):
 
         context = super().get_context_data(**kwargs)
 
-        reg_version = context["version"]
+        reg_version = context.get("version", datetime.strftime(datetime.now(), "%Y-%m-%d"))
         reg_part = context["part"]
         reg_title = context["title"]
 
