@@ -7,9 +7,8 @@ from django.db import models
 
 class AbstractModel:
     def _get_string_repr(self):
-        if hasattr(self, 'display_name'):
-            if self.display_name != "":
-                return self.display_name
+        if hasattr(self, 'display_name') and self.display_name and self.display_name != "":
+            return self.display_name
         for subclass in self.__class__.__subclasses__():
             attr = getattr(self, subclass.__name__.lower(), None)
             if attr:
