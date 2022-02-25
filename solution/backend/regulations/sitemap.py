@@ -64,9 +64,9 @@ class SupplementalContentSitemap(Sitemap):
 
     def items(self):
         return SupplementalContent.objects.filter(approved=True)
-    
+
     def lastmod(self, item):
         return item.updated_at
-    
+
     def location(self, item):
-        return reverse("supplemental_content", kwargs={ "id": item.id })
+        return reverse("supplemental_content", kwargs={"id": item.id})
