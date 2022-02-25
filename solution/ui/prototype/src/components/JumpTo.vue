@@ -1,20 +1,33 @@
 <template>
     <div class="jump-to">
-        <div class="jump-to-label">Jump to Regulation Section</div>
+        <div v-if="header !== ''" class="jump-to-label">
+            {{ header }}
+        </div>
 
         <form @submit.prevent="formSubmit">
             <input name="-version" type="hidden" required value="" />
-            <input name="title" type="hidden" required value="42" />
 
             <div class="jump-to-input">
+                <select
+                    v-if="defaultTitle !== ''"
+                    name="title"
+                    class="ds-c-field"
+                    required
+                    v-model="selectedTitle"
+                >
+                    <option value="" disabled selected>Title</option>
+                    <option value="42">42</option>
+                </select>
                 §
                 <select
                     name="part"
                     class="ds-c-field"
                     aria-label="Regulation part number"
                     v-model="selectedPart"
+                    required
                 >
                     <template v-if="partNames">
+                        <option value="" disable selected>Part</option>
                         <option
                             v-for="partName in partNames"
                             :value="partName"
@@ -46,11 +59,22 @@ import { getPartNames } from "@/utilities/api";
 
 export default {
     name: "JumpTo",
+    props: {
+        header: {
+            type: String,
+            required: false,
+        },
+        defaultTitle: {
+            type: Number,
+            required: false,
+        },
+    },
 
     data() {
         return {
             partNames: null,
-            selectedPart: "400"
+            selectedPart: "",
+            selectedTitle: "",
         };
     },
 
@@ -64,9 +88,12 @@ export default {
 
     methods: {
         formSubmit() {
-            this.$router.push({ name: "part", params: { title: "42", part: this.selectedPart } });
-        }
-    }
+            this.$router.push({
+                name: "part",
+                params: { title: this.selectedTitle, part: this.selectedPart },
+            });
+        },
+    },
 };
 </script>
 
@@ -79,7 +106,21 @@ export default {
     margin: 0 5px;
 }
 
-input.submit {
-    color: black;
+.jump-to .jump-to-input select {
+    
+    border: #d6d7d9 1px solid;
+}
+.jump-to-input {
+    padding: 10px;
+}
+
+.jump-to input.submit {
+    border: solid 1px #d6d7d9;
+    color: #a3a3a3;
+    background-color: white;
+}
+
+.jump-to .number-box {
+    border: #d6d7d9 1px solid;
 }
 </style>
