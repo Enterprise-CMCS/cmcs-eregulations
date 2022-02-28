@@ -41,7 +41,8 @@ class SupplementalContentView(generics.ListAPIView):
                                                 type=arrayStrings),
                                OpenApiParameter(name='subparts', description='What subparts would you like to filter by.',
                                                 required=False, type=arrayStrings),
-                               OpenApiParameter(name='subjectgroups', description='Subject groups to filter by.', required=False, type=arrayStrings)])
+                               OpenApiParameter(name='subjectgroups', description='Subject groups to filter by.', 
+                                required=False, type=arrayStrings)])
     @extend_schema(description='Get a list of supplmental content')
     def get(self, *args, **kwargs):
         title = kwargs.get("title")
