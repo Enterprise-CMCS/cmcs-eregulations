@@ -5,6 +5,7 @@
         :is="node.node_type"
         :node="node"
         :key="node.title"
+        :resourceParamsEmitter="resourceParamsEmitter"
     ></component>
 </template>
 
@@ -36,6 +37,10 @@ export default {
         node: {
             type: Object,
             required: true,
+        },
+        resourceParamsEmitter: {
+            type: Function,
+            required: false,
         },
     },
 

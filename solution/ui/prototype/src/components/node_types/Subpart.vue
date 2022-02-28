@@ -3,11 +3,7 @@
         <h1 tabindex="-1" :id="kebabTitle">
             {{ node.title }}
         </h1>
-        <v-btn
-            color="primary"
-            outlined
-            @click="handleBtnClick"
-        >
+        <v-btn color="primary" outlined @click="handleBtnClick">
             View Subpart Resources
         </v-btn>
         <template v-for="child in node.children">
@@ -32,6 +28,10 @@ export default {
             type: Object,
             required: true,
         },
+        resourceParamsEmitter: {
+            type: Function,
+            required: false,
+        },
     },
 
     computed: {
@@ -44,10 +44,7 @@ export default {
     methods: {
         handleBtnClick() {
             console.log("emit here");
-            this.$emit("view-resources", {
-                scope: "subpart",
-                identifier: this.node.label[0]
-            });
+            this.resourceParamsEmitter("subpart", this.node.label[0]);
         },
     },
 };

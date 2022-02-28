@@ -1,15 +1,15 @@
 <template>
     <div class="content-container">
         <div v-if="structure" class="content reg-text">
-            <v-btn
-                color="primary"
-                outlined
-                @click="handleBtnClick"
-            >
+            <v-btn color="primary" outlined @click="handleBtnClick">
                 View Part Resources
             </v-btn>
             <template v-for="item in structure">
-                <Node :node="item" :key="item.title" />
+                <Node
+                    :node="item"
+                    :key="item.title"
+                    :resourceParamsEmitter="emitResourcesParams"
+                />
             </template>
         </div>
         <div v-else>
@@ -42,11 +42,14 @@ export default {
     },
 
     methods: {
-        handleBtnClick() {
+        emitResourcesParams(scope, identifier) {
             this.$emit("view-resources", {
-                scope: "part",
-                identifier: this.part
+                scope,
+                identifier,
             });
+        },
+        handleBtnClick() {
+            this.emitResourcesParams("part", this.part);
         },
     },
 };
