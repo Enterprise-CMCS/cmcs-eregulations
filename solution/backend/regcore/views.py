@@ -44,7 +44,7 @@ class ExistingPartSerializer(serializers.Serializer):
 
 class PartListView(generics.ListAPIView):
     serializer_class = ListPartSerializer
-    
+
     def get_queryset(self):
         return Part.objects.filter(date__lte=date.today()).distinct("title", "name").order_by("title", "name")
 
