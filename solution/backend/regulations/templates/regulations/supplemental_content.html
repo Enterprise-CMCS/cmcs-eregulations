@@ -1,0 +1,17 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <meta name="description" content="{{ description }}" />
+        <meta property="og:title" content="{{ title }}" />
+        <meta property="og:description" content="{{ description }}" />
+        <meta property="article:published_time" content="{{ pub_time }}" />
+        <meta property="article:modified_time" content="{{ mod_time }}" />
+    </head>
+    <body>
+        <script type="text/javascript">
+            window.location = '{{ redirect_link }}';
+        </script>
+    </body>
+</html>

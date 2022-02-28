@@ -6,6 +6,7 @@ from regulations.views.search import SearchView
 from regulations.views.regulation_landing import RegulationLandingView
 from regulations.views.homepage import HomepageView
 from regulations.views.about import AboutView
+from regulations.views.supplemental_content import SupplementalContentView
 from regulations import converters
 
 register_converter(converters.NumericConverter, 'numeric')
@@ -28,4 +29,5 @@ urlpatterns = [
     path('<numeric:title>/<numeric:part>/<version:version>/', PartReaderView.as_view(), name='reader_view'),
     path('goto/', GoToRedirectView.as_view(), name='goto'),
     path('search/', SearchView.as_view(), name='search'),
+    path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
 ]
