@@ -11,6 +11,7 @@ import _map from "lodash/map";
 import _set from "lodash/set";
 import _setWith from "lodash/setWith";
 import _sortedUniq from "lodash/sortedUniq";
+import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
@@ -21,6 +22,12 @@ let config = {
     fetchMode: "cors",
     maxRetryCount: 2,
 };
+
+localforage.config({
+    name        : 'eregs',
+    version     : 1.0,
+    storeName   : 'eregs_django', // Should be alphanumeric, with underscores.
+})
 
 let token;
 let decodedIdToken;
@@ -92,7 +99,17 @@ function fetchJson(url, options = {}, retryCount = 0) {
     }
 
     return Promise.resolve()
-        .then(() => fetch(url, merged))
+        .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
+        .then(value => {
+            if (value && Date.now() < value.expiration_date) {
+                console.log('CACHE HIT')
+                return value
+            }
+            else{
+                console.log("CACHE MISS")
+                return fetch(url, merged)
+            }
+        })
         .catch((err) => {
             // this will capture network/timeout errors, because fetch does not consider http Status 5xx or 4xx as errors
             if (retryCount < config.maxRetryCount) {
@@ -164,6 +181,8 @@ function fetchJson(url, options = {}, retryCount = 0) {
             if (_isBoolean(isOk) && !isOk) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
+                json.expiration_date = Date.now() + 8 * 60 * 60 * 1000 // 24 hours * 60 minutes * 60 seconds * 1000
+                localforage.setItem(url.replace(apiPath, merged.method), json)
                 return json;
             }
         });
@@ -216,8 +235,36 @@ function httpApiDelete(urlPath, { data, params } = {}) {
         body: JSON.stringify(data),
     });
 }
+// ---------- cache helpers -----------
+
+const getCacheKeys = async () => {
+    return localforage.keys()
+}
+
+const removeCacheItem = async (key) => {
+    return localforage.removeItem(key)
+}
+
+const getCacheItem = async (key) => {
+    return localforage.getItem(key)
+}
+
+const setCacheItem = async (key, data) => {
+    data.expiration_date = Date.now() + 8 * 60 * 60 * 1000 // 24 hours * 60 minutes * 60 seconds * 1000
+    return localforage.setItem(key, data)
+}
 
 // ---------- api calls ---------------
+
+const login = (username, password) => {
+    return httpApiPost("Authentication/login", {
+        data: { username, password },
+    });
+};
+
+const statusCheck = () => {
+    return httpApiGet("Authentication/Test");
+};
 
 const getLastUpdatedDate = async (title = "42") => {
     const reducer = (accumulator, currentValue) => {
@@ -344,6 +391,12 @@ const getHomepageStructure = async () => {
     return transformedResult;
 };
 
+const getSupplementalContent = async (title = "42", part, sections, subpart) => {
+    const result = await httpApiGet(`title/${title}/part/${part}/supplemental_content?&sections=${sections.join("&sections=")}${subpart ? `&subparts=${subpart}`:""}`);
+    return result
+};
+
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
@@ -355,5 +408,10 @@ export {
     getLastUpdatedDate,
     getHomepageStructure,
     getPartNames,
+    getCacheKeys,
+    removeCacheItem,
+    getCacheItem,
+    setCacheItem,
+    getSupplementalContent
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
