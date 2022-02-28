@@ -5,8 +5,11 @@
 
 <section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="appendix-section">
     <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
-        {% appendix_formatter cfr_title node.label as formatted_citation %}
-        {% include "regulations/partials/copy-btn.html" with title=node.label btn_type="icon" formatted_citation=formatted_citation %}
+
+        {% if node.label and node.label|length > 0 %}
+            {% appendix_formatter cfr_title node.label as formatted_citation %}
+            <copy-btn btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}"></copy-btn>
+        {% endif %}
         {{node.title}}
     </h2>
 

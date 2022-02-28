@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'solo',
     'django_opensearch_dsl',
     'corsheaders',
-    'drf_spectacular'
+    'drf_spectacular',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +73,13 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+
+    # Put your context processors here
+
+    'django.core.context_processors.request',
+)
 
 ROOT_URLCONF = 'cmcs_regulations.urls'
 
