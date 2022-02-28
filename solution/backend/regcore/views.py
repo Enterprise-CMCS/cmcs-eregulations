@@ -12,7 +12,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
 from rest_framework import exceptions
 
-
 class SettingsUser:
     is_authenticated = False
 
@@ -35,8 +34,7 @@ class ListPartSerializer(serializers.ModelSerializer):
         }
 
 
-class ExistingPartSerializer(serializers.BaseSerializer):
-
+class ExistingPartSerializer(serializers.Serializer):   
     def to_representation(self, instance):
         return {
             'date': instance.get("date"),
@@ -46,7 +44,7 @@ class ExistingPartSerializer(serializers.BaseSerializer):
 
 class PartListView(generics.ListAPIView):
     serializer_class = ListPartSerializer
-
+    
     def get_queryset(self):
         return Part.objects.filter(date__lte=date.today()).distinct("title", "name").order_by("title", "name")
 

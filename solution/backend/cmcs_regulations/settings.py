@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'solo',
     'django_opensearch_dsl',
     'corsheaders',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -68,7 +69,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 ROOT_URLCONF = 'cmcs_regulations.urls'
@@ -186,6 +188,11 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     r"https://\w+\.execute-api.us-east-1\.amazonaws\.com$",
     r"https://\w+\.cloudfront\.net"
 ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'CMCS API',
+    'DESCRIPTION': 'CMCS Project API'
+}
 
 if DEBUG:
     import os  # only if you haven't already imported this

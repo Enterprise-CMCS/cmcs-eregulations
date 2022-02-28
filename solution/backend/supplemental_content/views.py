@@ -8,6 +8,8 @@ from django.db.models import Prefetch, Q
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
 from rest_framework import exceptions
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 
 from .models import (
     AbstractSupplementalContent,
@@ -34,10 +36,18 @@ class SettingsAuthentication(authentication.BasicAuthentication):
 
 class SupplementalContentView(generics.ListAPIView):
     serializer_class = AbstractSupplementalContentSerializer
+    arrayStrings ={'type': 'array','items': {'type': 'string'}}
+    
+    @extend_schema(parameters=[OpenApiParameter(name='sections', description='Sections you want to search.', required=True, 
+    type=arrayStrings),
+    OpenApiParameter(name='subparts', description='What subparts would you like to filter by.', required=False, type=arrayStrings),
+    OpenApiParameter(name='subjectgroups', description='Subject groups to filter by.', required=False, type=arrayStrings)])
 
-    def get_queryset(self):
-        title = self.kwargs.get("title")
-        part = self.kwargs.get("part")
+    @extend_schema(description='Get a list of supplmental content')
+
+    def get(self, *args, **kwargs):
+        title = kwargs.get("title")
+        part = kwargs.get("part")
         section_list = self.request.GET.getlist("sections")
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
@@ -64,7 +74,9 @@ class SupplementalContentView(generics.ListAPIView):
                     )
                 )
             ).distinct()
-        return query
+        serializer =AbstractSupplementalContentSerializer(query, many=True)
+       
+        return Response(serializer.data)
 
 
 class SupplementalContentSectionsView(generics.CreateAPIView):
