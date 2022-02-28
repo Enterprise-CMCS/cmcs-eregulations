@@ -3,24 +3,28 @@
         <h1 tabindex="-1" :id="kebabTitle">
             {{ node.title }}
         </h1>
+        <v-btn
+            color="primary"
+            outlined
+            @click="handleBtnClick"
+        >
+            View Subpart Resources
+        </v-btn>
         <template v-for="child in node.children">
-            <Node 
-                :node="child"
-                :key="child.title"
-            />
+            <Node :node="child" :key="child.title" />
         </template>
     </article>
 </template>
 
 <script>
-import Node from "@/components/node_types/Node.vue"
+import Node from "@/components/node_types/Node.vue";
 import { getKebabTitle } from "@/utilities/utils.js";
 
 export default {
     name: "Subpart",
 
     components: {
-        Node
+        Node,
     },
 
     props: {
@@ -32,7 +36,18 @@ export default {
 
     computed: {
         kebabTitle() {
+            console.log("subpart node", this.node);
             return getKebabTitle(this.node.label);
+        },
+    },
+
+    methods: {
+        handleBtnClick() {
+            console.log("emit here");
+            this.$emit("view-resources", {
+                scope: "subpart",
+                identifier: this.node.label[0]
+            });
         },
     },
 };

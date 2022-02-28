@@ -1,6 +1,13 @@
 <template>
     <div class="content-container">
         <div v-if="structure" class="content reg-text">
+            <v-btn
+                color="primary"
+                outlined
+                @click="handleBtnClick"
+            >
+                View Part Resources
+            </v-btn>
             <template v-for="item in structure">
                 <Node :node="item" :key="item.title" />
             </template>
@@ -24,9 +31,22 @@ export default {
     },
 
     props: {
+        part: {
+            type: String,
+            required: true,
+        },
         structure: {
             type: Array,
             required: false,
+        },
+    },
+
+    methods: {
+        handleBtnClick() {
+            this.$emit("view-resources", {
+                scope: "part",
+                identifier: this.part
+            });
         },
     },
 };

@@ -4,7 +4,7 @@
         :class="{ fullHeight: !collapsed, halfHeight: collapsed }"
     >
         <div class="centered-container" style="margin-bottom: 25px">
-            <b style="font-size: 30px">§{{ part }}.{{ section }} Resources </b>
+            <b style="font-size: 30px">§{{ part }} Resources </b>
             <a style="font-size: 14px; margin-left: 15px">
                 Show All Resources</a
             >
@@ -117,16 +117,18 @@ export default {
     props: {
         title: String,
         part: String,
-        section: String,
+        selectedIdentifier: String,
+        selectedScope: String,
     },
     watch: {
-        // whenever section changes, this function will run
-        async section(newSection) {
+        // whenever selected params changes, this function will run
+        async selectedIdentifier(newSelectedIdentifier) {
             try {
                 this.content = await getSupplementalContent(
                     this.title,
                     this.part,
-                    [newSection],
+                    this.selectedScope,
+                    newSelectedIdentifier,
                     null
                 );
             } catch (error) {
@@ -166,7 +168,8 @@ export default {
             this.content = await getSupplementalContent(
                 this.title,
                 this.part,
-                [this.section],
+                this.selectedScope,
+                this.selectedIdentifier,
                 null
             );
         } catch (error) {

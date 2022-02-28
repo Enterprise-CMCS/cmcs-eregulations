@@ -49,7 +49,7 @@ export default {
 
     mounted() {
         this.$nextTick(() => {
-            console.log(this.node.node_type);
+            /*console.log(this.node.node_type);*/
         });
     },
 };
