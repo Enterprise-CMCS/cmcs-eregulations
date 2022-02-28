@@ -8,8 +8,7 @@ from django.db.models import Prefetch, Q
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
 from rest_framework import exceptions
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
-from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from .models import (
     AbstractSupplementalContent,
@@ -36,15 +35,14 @@ class SettingsAuthentication(authentication.BasicAuthentication):
 
 class SupplementalContentView(generics.ListAPIView):
     serializer_class = AbstractSupplementalContentSerializer
-    arrayStrings ={'type': 'array','items': {'type': 'string'}}
-    
-    @extend_schema(parameters=[OpenApiParameter(name='sections', description='Sections you want to search.', required=True, 
-    type=arrayStrings),
-    OpenApiParameter(name='subparts', description='What subparts would you like to filter by.', required=False, type=arrayStrings),
-    OpenApiParameter(name='subjectgroups', description='Subject groups to filter by.', required=False, type=arrayStrings)])
+    arrayStrings = {'type': 'array', 'items': {'type': 'string'}}
 
+    @extend_schema(parameters=[OpenApiParameter(name='sections', description='Sections you want to search.', required=True,
+                                                type=arrayStrings),
+                               OpenApiParameter(name='subparts', description='What subparts would you like to filter by.',
+                                                required=False, type=arrayStrings),
+                               OpenApiParameter(name='subjectgroups', description='Subject groups to filter by.', required=False, type=arrayStrings)])
     @extend_schema(description='Get a list of supplmental content')
-
     def get(self, *args, **kwargs):
         title = kwargs.get("title")
         part = kwargs.get("part")
@@ -74,8 +72,8 @@ class SupplementalContentView(generics.ListAPIView):
                     )
                 )
             ).distinct()
-        serializer =AbstractSupplementalContentSerializer(query, many=True)
-       
+        serializer = AbstractSupplementalContentSerializer(query, many=True)
+
         return Response(serializer.data)
 
 
@@ -86,23 +84,23 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         for section in request.data["sections"]:
             new_orphan_section, created = Section.objects.get_or_create(
-                        title=section["title"],
-                        part=section["part"],
-                        section_id=section["section"]
-                    )
+                title=section["title"],
+                part=section["part"],
+                section_id=section["section"]
+            )
 
         for subpart in request.data["subparts"]:
             new_subpart, created = Subpart.objects.get_or_create(
-                        title=subpart["title"],
-                        part=subpart["part"],
-                        subpart_id=subpart["subpart"]
-                    )
+                title=subpart["title"],
+                part=subpart["part"],
+                subpart_id=subpart["subpart"]
+            )
 
             for section in subpart["sections"]:
                 new_section, created = Section.objects.update_or_create(
-                            title=section["title"],
-                            part=section["part"],
-                            section_id=section["section"],
-                            defaults={'parent': new_subpart}
-                        )
+                    title=section["title"],
+                    part=section["part"],
+                    section_id=section["section"],
+                    defaults={'parent': new_subpart}
+                )
         return Response({'error': False, 'content': request.data})

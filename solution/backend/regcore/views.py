@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
 from rest_framework import exceptions
 
+
 class SettingsUser:
     is_authenticated = False
 
@@ -34,7 +35,7 @@ class ListPartSerializer(serializers.ModelSerializer):
         }
 
 
-class ExistingPartSerializer(serializers.Serializer):   
+class ExistingPartSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return {
             'date': instance.get("date"),
