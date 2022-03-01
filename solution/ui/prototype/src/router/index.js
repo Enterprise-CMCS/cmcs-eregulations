@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import Part from "@/views/Part.vue";
 import CacheExplorer from "@/views/CacheExplorer";
+import PDPart from "@/views/PDPart";
 
 Vue.use(VueRouter);
 
@@ -20,6 +21,11 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
             import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    },
+    {
+        path: "/PD/:title/:part",
+        name: "PDpart",
+        component: PDPart,
     },
     {
         path: "/:title/:part",
