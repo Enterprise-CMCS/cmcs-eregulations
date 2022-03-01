@@ -52,11 +52,14 @@ export default {
 
     methods: {
         handleBtnClick() {
-            console.log(this.node)
             this.resourceParamsEmitter("section", this.node.label[1]);
         },
     },
 };
 </script>
 
-<style></style>
+<style>
+    .btn-container {
+        margin: 20px 0px 50px;
+    }
+</style>
