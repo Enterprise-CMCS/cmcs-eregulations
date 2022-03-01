@@ -20,90 +20,96 @@
                 </v-btn>
             </v-btn-toggle>
         </div>
-        <div class="centered-container" style="margin-bottom: 25px">
-            <b style="font-size: 30px">§{{ titleLabel }} Resources </b>
-            <a style="font-size: 14px; margin-left: 15px">
-                Show All Resources</a
-            >
-        </div>
-        <div class="wrapper centered-container">
-            <div class="one">
-                <v-text-field
-                    solo
-                    placeholder="Search Resources"
-                    append-icon="mdi-magnify"
-                />
+        <div class="footer-panel-content-container">
+            <div class="title-container" style="margin-bottom: 25px">
+                <span class="subsection">§</span>
+                <span class="title"> {{ titleLabel }} Resources </span>
+                <a style="font-size: 14px; margin-left: 30px">
+                    Show All Resources</a
+                >
             </div>
-            <div style="grid-column: 3; text-align: right">
-                <label>Filter By:</label>
+            <div class="wrapper">
+                <div class="one">
+                    <v-text-field
+                        solo
+                        placeholder="Search Resources"
+                        append-icon="mdi-magnify"
+                    />
+                </div>
+                <div style="grid-column: 3; text-align: right">
+                    <label class="filter-label">Filter by</label>
+                </div>
+                <div style="grid-column: 4 / 6">
+                    <v-select
+                        v-model="selectedCategory"
+                        solo
+                        :items="availableCategories"
+                        multiple
+                    />
+                </div>
             </div>
-            <div style="grid-column: 4 / 6">
-                <v-select
-                    v-model="selectedCategory"
-                    solo
-                    :items="availableCategories"
-                    multiple
-                />
-            </div>
-        </div>
-        <v-divider />
 
-        <v-btn-toggle v-model="cardView" style="float: right">
-            <v-btn>
-                <v-icon>mdi-format-list-bulleted</v-icon>
-                List
-            </v-btn>
+            <v-divider class="hr-divider" />
 
-            <v-btn>
-                <v-icon>mdi-view-grid</v-icon>
-                Grid
-            </v-btn>
-        </v-btn-toggle>
-        <div
-            v-for="category in availableContent"
-            :key="category.name"
-            class="centered-container"
-        >
-            <div class="supplemental-content-category-title">
-                {{ category.name }}
-            </div>
-            <div v-if="cardView" class="flex-row-container">
-                <SupplementalContentCard
-                    v-for="c in category.supplemental_content"
-                    :key="c.url"
-                    :supplemental-content="c"
-                />
-            </div>
-            <div v-else>
-                <supplemental-content-list
-                    v-for="c in category.supplemental_content"
-                    :key="c.url"
-                    :supplemental-content="c"
-                />
+            <div class="card-toggle-btns-group">
+                <v-btn-toggle v-model="cardView" style="float: right">
+                    <v-btn class="toggle-btn">
+                        <v-icon>mdi-format-list-bulleted</v-icon>
+                        List
+                    </v-btn>
+
+                    <v-btn class="toggle-btn">
+                        <v-icon>mdi-view-grid</v-icon>
+                        Grid
+                    </v-btn>
+                </v-btn-toggle>
             </div>
             <div
-                v-for="subcategory in category.sub_categories"
-                :key="subcategory.name"
+                v-for="category in availableContent"
+                :key="category.name"
+                :class="{ 'list-view': !cardView }"
             >
-                <div class="supplemental-content-subcategory-title">
-                    {{ subcategory.name }}
+                <div class="supplemental-content-category-title">
+                    {{ category.name }}
                 </div>
                 <div v-if="cardView" class="flex-row-container">
                     <SupplementalContentCard
-                        v-for="c in subcategory.supplemental_content"
+                        v-for="c in category.supplemental_content"
                         :key="c.url"
                         :supplemental-content="c"
                     />
                 </div>
                 <div v-else>
                     <supplemental-content-list
-                        v-for="c in subcategory.supplemental_content"
+                        v-for="c in category.supplemental_content"
                         :key="c.url"
                         :supplemental-content="c"
                     />
                 </div>
+                <div
+                    v-for="subcategory in category.sub_categories"
+                    :key="subcategory.name"
+                >
+                    <div class="supplemental-content-subcategory-title">
+                        {{ subcategory.name }}
+                    </div>
+                    <div v-if="cardView" class="flex-row-container">
+                        <SupplementalContentCard
+                            v-for="c in subcategory.supplemental_content"
+                            :key="c.url"
+                            :supplemental-content="c"
+                        />
+                    </div>
+                    <div v-else>
+                        <supplemental-content-list
+                            v-for="c in subcategory.supplemental_content"
+                            :key="c.url"
+                            :supplemental-content="c"
+                        />
+                    </div>
+                </div>
+                <v-divider class="hr-divider"/>
             </div>
-            <v-divider />
         </div>
     </div>
 </template>
@@ -208,6 +214,10 @@ $eregs-image-path: "~legacy-static/images";
     width: 100%;
     z-index: 202;
     overflow: scroll;
+
+    box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.75);
 }
 
 .fullHeight {
@@ -248,6 +258,64 @@ $eregs-image-path: "~legacy-static/images";
             }
         }
     }
+
+    .v-btn-toggle > .v-btn.toggle-btn.v-btn--active::before {
+        opacity: 0;
+    }
+}
+
+.card-toggle-btns-group {
+    margin: 15px 0;
+
+    .v-item-group.v-btn-toggle {
+        background: $lighter_gray !important;
+        border: none;
+
+        button.v-btn.toggle-btn {
+            border: none;
+            background: $lighter_gray;
+            height: 36px;
+            border-radius: 2px;
+
+            span.v-btn__content {
+                font-size: 13px;
+                display: flex;
+                flex-direction: row;
+                letter-spacing: initial;
+                color: $mid_gray;
+                text-transform: capitalize;
+
+                i.v-icon {
+                    color: $mid_gray;
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+}
+
+.footer-panel-content-container {
+    padding: 30px 120px;
+
+    .title-container {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        width: 90%;
+        margin: auto;
+
+        .subsection {
+            font-size: 26px;
+            margin: -5px 5px 0 0;
+        }
+        .title {
+            font-size: 30px;
+        }
+    }
+}
+
+.hr-divider.v-divider {
+    margin: 10px 0;
 }
 
 .supplemental-content-category-title {
@@ -256,11 +324,16 @@ $eregs-image-path: "~legacy-static/images";
 }
 
 .supplemental-content-subcategory-title {
-    font-size: 18px;
+    font-size: 22px;
+    margin: 20px 0;
 }
 .centered-container {
     width: 90%;
     margin: auto;
+}
+
+.list-view {
+    margin: 0 100px;
 }
 
 .flex-row-container {
@@ -274,14 +347,28 @@ $eregs-image-path: "~legacy-static/images";
 .flex-row-container > .flex-row-item {
     flex: 1 1 30%; /*grow | shrink | basis */
     margin: 10px;
-    max-width: 30%;
+    max-width: 33%;
+
+    &:first-child {
+        margin-left: 0;
+    }
+
+    &:last-child {
+        margin-right: 0;
+    }
 }
 
 .wrapper {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     gap: 10px;
+    align-items: baseline;
 }
+
+.filter-label {
+    font-weight: 700;
+}
+
 .one {
     grid-column: 1 / 3;
     grid-row: 1;
