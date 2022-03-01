@@ -4,7 +4,7 @@
         :class="{ fullHeight: !collapsed, halfHeight: collapsed }"
     >
         <div class="centered-container" style="margin-bottom: 25px">
-            <b style="font-size: 30px">§{{ part }} Resources </b>
+            <b style="font-size: 30px">§{{ titleLabel }} Resources </b>
             <a style="font-size: 14px; margin-left: 15px">
                 Show All Resources</a
             >
@@ -161,6 +161,13 @@ export default {
             } else {
                 return this.content;
             }
+        },
+        titleLabel() {
+            return this.selectedScope === "subpart"
+                ? `${this.part} Subpart ${this.selectedIdentifier}`
+                : this.selectedScope === "part"
+                ? `${this.part}`
+                : `${this.part}.${this.selectedIdentifier}`;
         },
     },
     async created() {
