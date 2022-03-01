@@ -348,14 +348,6 @@ $eregs-image-path: "~legacy-static/images";
     flex: 1 1 30%; /*grow | shrink | basis */
     margin: 10px;
     max-width: 33%;
-
-    &:first-child {
-        margin-left: 0;
-    }
-
-    &:last-child {
-        margin-right: 0;
-    }
 }
 
 .wrapper {
