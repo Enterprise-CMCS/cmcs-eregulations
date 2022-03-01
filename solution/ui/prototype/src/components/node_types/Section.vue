@@ -11,24 +11,26 @@
 
         <div class="paragraphs">
             <template v-for="child in node.children">
-                <Node 
-                    :node="child"
-                    :key="child.title"
-                />
+                <Node :node="child" :key="child.title" />
             </template>
+        </div>
+        <div class="btn-container">
+            <ResourcesBtn :clickHandler="handleBtnClick" label="Section" />
         </div>
     </section>
 </template>
 
 <script>
-import Node from "@/components/node_types/Node.vue"
+import Node from "@/components/node_types/Node.vue";
+import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import { getKebabTitle } from "@/utilities/utils.js";
 
 export default {
     name: "Section",
 
     components: {
-        Node
+        Node,
+        ResourcesBtn,
     },
 
     props: {
@@ -36,11 +38,22 @@ export default {
             type: Object,
             required: true,
         },
+        resourceParamsEmitter: {
+            type: Function,
+            required: false,
+        },
     },
 
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);
+        },
+    },
+
+    methods: {
+        handleBtnClick() {
+            console.log(this.node)
+            this.resourceParamsEmitter("section", this.node.label[1]);
         },
     },
 };

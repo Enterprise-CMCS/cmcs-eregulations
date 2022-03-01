@@ -7,7 +7,11 @@
             <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" />
         </div>
         <template v-for="child in node.children">
-            <Node :node="child" :key="child.title" />
+            <Node
+                :node="child"
+                :key="child.title"
+                :resourceParamsEmitter="resourceParamsEmitter"
+            />
         </template>
     </article>
 </template>
@@ -22,7 +26,7 @@ export default {
 
     components: {
         Node,
-        ResourcesBtn
+        ResourcesBtn,
     },
 
     props: {
@@ -61,6 +65,5 @@ $eregs-image-path: "~legacy-static/images";
 @import "legacy/css/scss/main.scss";
 
 .btn-container {
-
 }
 </style>
