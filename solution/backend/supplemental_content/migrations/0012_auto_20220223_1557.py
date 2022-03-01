@@ -13,15 +13,6 @@ def set_not_null(apps, schema_editor):
             i.save()
 
 
-def resave_models(apps, schema_editor):
-    try:
-        from supplemental_content.models import AbstractLocation, AbstractCategory, AbstractSupplementalContent
-        for model in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractSupplementalContent.objects.all()):
-            model.save()
-    except: # Primarily ImportError but safer to catch everything
-        pass # Skip in case model is changed, renamed, or deleted in the future
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -45,5 +36,4 @@ class Migration(migrations.Migration):
             name='display_name',
             field=models.CharField(max_length=128, blank=True),
         ),
-        migrations.RunPython(resave_models),
     ]
