@@ -3,9 +3,9 @@
         <h1 tabindex="-1" :id="kebabTitle">
             {{ node.title }}
         </h1>
-        <v-btn color="primary" outlined @click="handleBtnClick">
-            View Subpart Resources
-        </v-btn>
+        <div class="btn-container">
+            <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" />
+        </div>
         <template v-for="child in node.children">
             <Node :node="child" :key="child.title" />
         </template>
@@ -14,6 +14,7 @@
 
 <script>
 import Node from "@/components/node_types/Node.vue";
+import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import { getKebabTitle } from "@/utilities/utils.js";
 
 export default {
@@ -21,6 +22,7 @@ export default {
 
     components: {
         Node,
+        ResourcesBtn
     },
 
     props: {
@@ -50,4 +52,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
+
+.btn-container {
+
+}
+</style>
