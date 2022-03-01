@@ -100,7 +100,7 @@ function fetchJson(url, options = {}, retryCount = 0) {
 
     return (
         Promise.resolve()
-            //.then(() => localforage.getItem(url.replace(apiPath, merged.method)))
+            .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
             .then((value) => {
                 if (value && Date.now() < value.expiration_date) {
                     console.log("CACHE HIT");
