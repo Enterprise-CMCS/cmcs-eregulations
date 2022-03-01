@@ -3,26 +3,28 @@
         class="footer-panel"
         :class="{ fullHeight: !collapsed, halfHeight: collapsed }"
     >
+        <div class="toggle-btns-group">
+            <v-btn-toggle>
+                <v-btn @click="collapse" v-if="collapsed" class="toggle-btn">
+                    <v-icon x-large>mdi-chevron-up</v-icon>
+                    Expand
+                </v-btn>
+                <v-btn @click="collapse" v-else class="toggle-btn">
+                    <v-icon x-large>mdi-chevron-down</v-icon>
+                    Collapse
+                </v-btn>
+
+                <v-btn @click="$emit('close')" class="toggle-btn">
+                    <v-icon x-large>mdi-close</v-icon>
+                    Close
+                </v-btn>
+            </v-btn-toggle>
+        </div>
         <div class="centered-container" style="margin-bottom: 25px">
             <b style="font-size: 30px">§{{ titleLabel }} Resources </b>
             <a style="font-size: 14px; margin-left: 15px">
                 Show All Resources</a
             >
-            <v-btn-toggle style="float: right">
-                <v-btn @click="collapse" v-if="collapsed">
-                    <v-icon>mdi-chevron-up</v-icon>
-                    Expand
-                </v-btn>
-                <v-btn @click="collapse" v-else>
-                    <v-icon>mdi-chevron-down</v-icon>
-                    Collapse
-                </v-btn>
-
-                <v-btn @click="$emit('close')">
-                    <v-icon>mdi-close</v-icon>
-                    Close
-                </v-btn>
-            </v-btn-toggle>
         </div>
         <div class="wrapper centered-container">
             <div class="one">
@@ -191,9 +193,16 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
+
 .footer-panel {
-    background-color: #f3f3f3;
+    background-color: $lighter_gray;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -207,6 +216,38 @@ export default {
 
 .halfHeight {
     height: 50vh;
+}
+
+.toggle-btns-group {
+    position: absolute;
+    right: 0;
+    margin: 15px 0;
+
+    .v-item-group.v-btn-toggle {
+        background: $lighter_gray !important;
+        border: none;
+
+        button.v-btn.toggle-btn {
+            border: none;
+            background: $lighter_gray;
+            padding: 10px 20px;
+
+            &:first-child {
+                border-right: 1px solid black;
+            }
+
+            span.v-btn__content {
+                display: flex;
+                flex-direction: column;
+                letter-spacing: initial;
+                color: $mid_gray;
+
+                i.v-icon {
+                    color: $mid_gray;
+                }
+            }
+        }
+    }
 }
 
 .supplemental-content-category-title {
