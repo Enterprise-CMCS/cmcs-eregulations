@@ -347,7 +347,7 @@ $eregs-image-path: "~legacy-static/images";
 .flex-row-container > .flex-row-item {
     flex: 1 1 30%; /*grow | shrink | basis */
     margin: 10px;
-    max-width: 33%;
+    max-width: 30%;
 }
 
 .wrapper {
