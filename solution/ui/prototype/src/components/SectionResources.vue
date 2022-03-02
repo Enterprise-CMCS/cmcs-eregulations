@@ -1,41 +1,34 @@
 <template>
-        <div
-            class="footer-panel"
-            :class="{fullHeight:!collapsed, halfHeight:collapsed}"
-        >
-            <div
-                class="centered-container"
-                style="margin-bottom: 25px"
-            >
-                <b style="font-size:30px">§{{ part }}.{{ section }} Resources </b>
-                <a style="font-size:14px; margin-left:15px"> Show All Resources</a>
-                <v-btn-toggle
-                    style="float:right"
+    <div
+        class="footer-panel"
+        :class="{ fullHeight: !collapsed, halfHeight: collapsed }"
+    >
+        <div class="toggle-btns-group">
+            <v-btn-toggle>
+                <v-btn @click="collapse" v-if="collapsed" class="toggle-btn">
+                    <v-icon x-large>mdi-chevron-up</v-icon>
+                    Expand
+                </v-btn>
+                <v-btn @click="collapse" v-else class="toggle-btn">
+                    <v-icon x-large>mdi-chevron-down</v-icon>
+                    Collapse
+                </v-btn>
+
+                <v-btn @click="$emit('close')" class="toggle-btn">
+                    <v-icon x-large>mdi-close</v-icon>
+                    Close
+                </v-btn>
+            </v-btn-toggle>
+        </div>
+        <div class="footer-panel-content-container">
+            <div class="title-container" style="margin-bottom: 25px">
+                <span class="subsection">§</span>
+                <span class="title"> {{ titleLabel }} Resources </span>
+                <a style="font-size: 14px; margin-left: 30px">
+                    Show All Resources</a
                 >
-                    <v-btn
-                        @click="collapse"
-                        v-if="collapsed"
-                    >
-                        <v-icon>mdi-chevron-up</v-icon>
-                        Expand
-                    </v-btn>
-                    <v-btn
-                        @click="collapse"
-                        v-else
-                    >
-                        <v-icon>mdi-chevron-down</v-icon>
-                        Collapse
-                    </v-btn>
-                  
-                    <v-btn
-                        @click="$emit('close')"
-                    >
-                        <v-icon>mdi-close</v-icon>
-                        Close
-                    </v-btn>
-                </v-btn-toggle>
             </div>
-            <div class="wrapper centered-container">
+            <div class="wrapper">
                 <div class="one">
                     <v-text-field
                         solo
@@ -43,10 +36,10 @@
                         append-icon="mdi-magnify"
                     />
                 </div>
-                <div style="grid-column: 3; text-align:right">
-                    <label>Filter By:</label>
+                <div style="grid-column: 3; text-align: right">
+                    <label class="filter-label">Filter by</label>
                 </div>
-                <div style="grid-column: 4 / 6;">
+                <div style="grid-column: 4 / 6">
                     <v-select
                         v-model="selectedCategory"
                         solo
@@ -55,173 +48,315 @@
                     />
                 </div>
             </div>
-            <v-divider />
 
-            <v-btn-toggle
-                v-model="cardView"
-                style="float:right"
-            >
-                <v-btn>
-                    <v-icon>mdi-format-list-bulleted</v-icon>
-                    List
-                </v-btn>
-      
-                <v-btn>
-                    <v-icon>mdi-view-grid</v-icon>
-                    Grid
-                </v-btn>
-            </v-btn-toggle>
-            <div
-                v-for="category in availableContent"
-                :key="category.name"
-                class="centered-container"
-            >
-                <div class="supplemental-content-category-title">
-                    {{ category.name }}
-                </div>
+            <v-divider class="hr-divider" />
+
+            <div class="card-toggle-btns-group">
+                <v-btn-toggle v-model="cardView" style="float: right">
+                    <v-btn class="toggle-btn">
+                        <v-icon>mdi-format-list-bulleted</v-icon>
+                        List
+                    </v-btn>
+
+                    <v-btn class="toggle-btn">
+                        <v-icon>mdi-view-grid</v-icon>
+                        Grid
+                    </v-btn>
+                </v-btn-toggle>
+            </div>
+            <template v-if="isLoading">
+                <SimpleSpinner />
+            </template>
+            <template v-else>
                 <div
-                    v-if="cardView"
-                    class="flex-row-container"
+                    v-for="category in availableContent"
+                    :key="category.name"
+                    :class="{ 'list-view': !cardView }"
                 >
-                    <SupplementalContentCard
-                        v-for="c in category.supplemental_content"
-                        :key="c.url"
-                        :supplemental-content="c"
-                    />
-                </div>
-                <div v-else>
-                    <supplemental-content-list
-                        v-for="c in category.supplemental_content"
-                        :key="c.url"
-                        :supplemental-content="c"
-                    />
-                </div>
-                <div
-                    v-for="subcategory in category.sub_categories"
-                    :key="subcategory.name"
-                >
-                    <div class="supplemental-content-subcategory-title">
-                        {{ subcategory.name }}
+                    <div class="supplemental-content-category-title">
+                        {{ category.name }}
                     </div>
-                    <div
-                        v-if="cardView"
-                        class="flex-row-container"
-                    >
+                    <div v-if="cardView" class="flex-row-container">
                         <SupplementalContentCard
-                            v-for="c in subcategory.supplemental_content"
+                            v-for="c in category.supplemental_content"
                             :key="c.url"
                             :supplemental-content="c"
                         />
                     </div>
                     <div v-else>
                         <supplemental-content-list
-                            v-for="c in subcategory.supplemental_content"
+                            v-for="c in category.supplemental_content"
                             :key="c.url"
                             :supplemental-content="c"
                         />
                     </div>
+                    <div
+                        v-for="subcategory in category.sub_categories"
+                        :key="subcategory.name"
+                    >
+                        <div class="supplemental-content-subcategory-title">
+                            {{ subcategory.name }}
+                        </div>
+                        <div v-if="cardView" class="flex-row-container">
+                            <SupplementalContentCard
+                                v-for="c in subcategory.supplemental_content"
+                                :key="c.url"
+                                :supplemental-content="c"
+                            />
+                        </div>
+                        <div v-else>
+                            <supplemental-content-list
+                                v-for="c in subcategory.supplemental_content"
+                                :key="c.url"
+                                :supplemental-content="c"
+                            />
+                        </div>
+                    </div>
+                    <v-divider class="hr-divider" />
                 </div>
-                <v-divider />
-            </div>
+            </template>
         </div>
-
+    </div>
 </template>
 
 <script>
-  import {getSupplementalContent} from "../utilities/api";
-  import SupplementalContentCard from "./SupplementalContentCard";
-  import SupplementalContentList from "./SupplementalContentList";
+import { getSupplementalContent } from "@/utilities/api";
+import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import SupplementalContentCard from "@/components/SupplementalContentCard";
+import SupplementalContentList from "@/components/SupplementalContentList";
 
-  export default {
+export default {
     name: "SectionResources",
-    components: {SupplementalContentList, SupplementalContentCard},
-    props:{
-      title: String,
-      part: String,
-      section: String,
+
+    components: {
+        SimpleSpinner,
+        SupplementalContentList,
+        SupplementalContentCard,
     },
+
+    props: {
+        title: String,
+        part: String,
+        selectedIdentifier: String,
+        selectedScope: String,
+    },
+
+    data() {
+        return {
+            dialog: false,
+            notifications: false,
+            sound: true,
+            widgets: false,
+            selectedCategory: [],
+            content: [],
+            cardView: 1,
+            collapsed: true,
+            isLoading: true,
+        };
+    },
+
     watch: {
-      // whenever section changes, this function will run
-      async section(newSection) {
-        try {
-            this.content = await getSupplementalContent(this.title, this.part, [newSection], null );
-        } catch (error) {
-            console.error(error);
-        }
-      }
+        // whenever selected params changes, this function will run
+        async selectedIdentifier(newSelectedIdentifier) {
+            this.isLoading = true;
+            try {
+                this.content = await getSupplementalContent(
+                    this.title,
+                    this.part,
+                    this.selectedScope,
+                    newSelectedIdentifier,
+                    null
+                );
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
     },
-    data () {
-      return {
-        dialog: false,
-        notifications: false,
-        sound: true,
-        widgets: false,
-        selectedCategory: [],
-        content:[],
-        cardView: 1,
-        collapsed: true,
-      }
+
+    computed: {
+        availableCategories: function () {
+            return this.content.map((category) => category.name);
+        },
+        availableContent: function () {
+            if (this.selectedCategory.length > 0) {
+                return this.content.filter(
+                    (category) =>
+                        this.selectedCategory.indexOf(category.name) >= 0
+                );
+            } else {
+                return this.content;
+            }
+        },
+        titleLabel() {
+            return this.selectedScope === "subpart"
+                ? `${this.part} Subpart ${this.selectedIdentifier}`
+                : this.selectedScope === "part"
+                ? `${this.part}`
+                : `${this.part}.${this.selectedIdentifier}`;
+        },
     },
-    computed:{
-      availableCategories: function(){
-        return this.content.map(category => category.name)
-      },
-      availableContent: function (){
-        if (this.selectedCategory.length > 0){
-          return this.content.filter(category => this.selectedCategory.indexOf(category.name) >= 0)
-        }
-        else{
-          return this.content
-        }
-      }
-    },
+
     async created() {
         try {
-            this.content = await getSupplementalContent(this.title, this.part, [this.section], null );
+            this.content = await getSupplementalContent(
+                this.title,
+                this.part,
+                this.selectedScope,
+                this.selectedIdentifier,
+                null
+            );
         } catch (error) {
             console.error(error);
+        } finally {
+            this.isLoading = false;
         }
     },
-    methods:{
-      collapse: function (){
-        this.collapsed = !this.collapsed
-      }
-    }
-  }
 
+    methods: {
+        collapse: function () {
+            this.collapsed = !this.collapsed;
+        },
+    },
+};
 </script>
 
-<style>
+<style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
 
-.footer-panel{
-  background-color: #f3f3f3;
-  position:fixed;
-  bottom:0;
-  width:100%;
-  z-index:202;
-  overflow: scroll;
+@import "legacy/css/scss/main.scss";
+
+.footer-panel {
+    background-color: $lighter_gray;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 202;
+    overflow: scroll;
+
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
-.fullHeight{
-  height:100vh;
+.fullHeight {
+    height: 100vh;
 }
 
-.halfHeight{
-  height:50vh;
+.halfHeight {
+    height: 50vh;
 }
 
-.supplemental-content-category-title{
-  font-size:22px;
-  font-weight:bold;
+.toggle-btns-group {
+    position: absolute;
+    right: 0;
+    margin: 15px 0;
+
+    .v-item-group.v-btn-toggle {
+        background: $lighter_gray !important;
+        border: none;
+
+        button.v-btn.toggle-btn {
+            border: none;
+            background: $lighter_gray;
+            padding: 10px 20px;
+
+            &:first-child {
+                border-right: 1px solid black;
+            }
+
+            span.v-btn__content {
+                display: flex;
+                flex-direction: column;
+                letter-spacing: initial;
+                color: $mid_gray;
+
+                i.v-icon {
+                    color: $mid_gray;
+                }
+            }
+        }
+    }
+
+    .v-btn-toggle > .v-btn.toggle-btn.v-btn--active::before {
+        opacity: 0;
+    }
 }
 
-.supplemental-content-subcategory-title{
-  font-size:18px;
+.card-toggle-btns-group {
+    margin: 15px 0;
 
+    .v-item-group.v-btn-toggle {
+        background: $lighter_gray !important;
+        border: none;
+
+        button.v-btn.toggle-btn {
+            border: none;
+            background: $lighter_gray;
+            height: 36px;
+            border-radius: 2px;
+
+            span.v-btn__content {
+                font-size: 13px;
+                display: flex;
+                flex-direction: row;
+                letter-spacing: initial;
+                color: $mid_gray;
+                text-transform: capitalize;
+
+                i.v-icon {
+                    color: $mid_gray;
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
 }
-.centered-container{
-  width:90%;
-  margin:auto;
+
+.footer-panel-content-container {
+    padding: 30px 120px;
+
+    .title-container {
+        display: flex;
+        align-items: center;
+        font-weight: 700;
+        width: 90%;
+
+        .subsection {
+            font-size: 26px;
+            margin: -5px 5px 0 0;
+        }
+        .title {
+            font-size: 30px;
+        }
+    }
+}
+
+.hr-divider.v-divider {
+    margin: 10px 0;
+}
+
+.supplemental-content-category-title {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.supplemental-content-subcategory-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 20px 0;
+}
+.centered-container {
+    width: 90%;
+    margin: auto;
+}
+
+.list-view {
+    margin: 0 100px;
 }
 
 .flex-row-container {
@@ -235,16 +370,22 @@
 .flex-row-container > .flex-row-item {
     flex: 1 1 30%; /*grow | shrink | basis */
     margin: 10px;
-    max-width:30%;
+    max-width: 30%;
 }
 
 .wrapper {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+    align-items: baseline;
 }
+
+.filter-label {
+    font-weight: 700;
+}
+
 .one {
-  grid-column: 1 / 3;
-  grid-row: 1;
+    grid-column: 1 / 3;
+    grid-row: 1;
 }
 </style>
