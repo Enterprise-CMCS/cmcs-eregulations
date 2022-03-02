@@ -238,9 +238,9 @@ $eregs-image-path: "~legacy-static/images";
     z-index: 202;
     overflow: scroll;
 
-    box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.75);
-    -webkit-box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 .fullHeight {
