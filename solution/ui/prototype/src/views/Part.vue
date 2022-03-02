@@ -81,7 +81,7 @@ export default {
                     value: "tocContent",
                     type: "button",
                     component: "PartToc",
-                    disabled: false,
+                    disabled: true,
                 },
                 {
                     label: "Part",
