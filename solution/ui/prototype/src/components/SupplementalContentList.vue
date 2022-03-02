@@ -41,8 +41,10 @@ $eregs-image-path: "~legacy-static/images";
 
 .supplemental-content__title {
     font-size: 15px;
+    line-height: 20px;
     font-weight: bold;
     color: #046791;
+    word-break: normal;
 }
 .supplemental-content__text {
     font-size: 15px;

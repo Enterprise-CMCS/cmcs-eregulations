@@ -302,7 +302,6 @@ $eregs-image-path: "~legacy-static/images";
         align-items: center;
         font-weight: 700;
         width: 90%;
-        margin: auto;
 
         .subsection {
             font-size: 26px;
