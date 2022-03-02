@@ -1,9 +1,6 @@
 <template>
     <div class="content-container">
         <div v-if="structure" class="content reg-text">
-            <div class="btn-container">
-                <ResourcesBtn :clickHandler="handleBtnClick" label="Part" />
-            </div>
             <template v-for="item in structure">
                 <Node
                     :node="item"
@@ -49,9 +46,6 @@ export default {
                 scope,
                 identifier,
             });
-        },
-        handleBtnClick() {
-            this.emitResourcesParams("part", this.part);
         },
     },
 };
