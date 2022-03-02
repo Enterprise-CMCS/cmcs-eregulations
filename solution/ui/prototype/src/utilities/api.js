@@ -405,7 +405,6 @@ const getSupplementalContent = async (
     scope,
     identifier 
 ) => {
-    console.log("Identifier", identifier);
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?&${scope}s=${identifier}`
     );

@@ -42,14 +42,12 @@ export default {
 
     computed: {
         kebabTitle() {
-            console.log("subpart node", this.node);
             return getKebabTitle(this.node.label);
         },
     },
 
     methods: {
         handleBtnClick() {
-            console.log("emit here");
             this.resourceParamsEmitter("subpart", this.node.label[0]);
         },
     },

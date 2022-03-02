@@ -64,86 +64,83 @@
                     </v-btn>
                 </v-btn-toggle>
             </div>
-            <div
-                v-for="category in availableContent"
-                :key="category.name"
-                :class="{ 'list-view': !cardView }"
-            >
-                <div class="supplemental-content-category-title">
-                    {{ category.name }}
-                </div>
-                <div v-if="cardView" class="flex-row-container">
-                    <SupplementalContentCard
-                        v-for="c in category.supplemental_content"
-                        :key="c.url"
-                        :supplemental-content="c"
-                    />
-                </div>
-                <div v-else>
-                    <supplemental-content-list
-                        v-for="c in category.supplemental_content"
-                        :key="c.url"
-                        :supplemental-content="c"
-                    />
-                </div>
+            <template v-if="isLoading">
+                <SimpleSpinner />
+            </template>
+            <template v-else>
                 <div
-                    v-for="subcategory in category.sub_categories"
-                    :key="subcategory.name"
+                    v-for="category in availableContent"
+                    :key="category.name"
+                    :class="{ 'list-view': !cardView }"
                 >
-                    <div class="supplemental-content-subcategory-title">
-                        {{ subcategory.name }}
+                    <div class="supplemental-content-category-title">
+                        {{ category.name }}
                     </div>
                     <div v-if="cardView" class="flex-row-container">
                         <SupplementalContentCard
-                            v-for="c in subcategory.supplemental_content"
+                            v-for="c in category.supplemental_content"
                             :key="c.url"
                             :supplemental-content="c"
                         />
                     </div>
                     <div v-else>
                         <supplemental-content-list
-                            v-for="c in subcategory.supplemental_content"
+                            v-for="c in category.supplemental_content"
                             :key="c.url"
                             :supplemental-content="c"
                         />
                     </div>
+                    <div
+                        v-for="subcategory in category.sub_categories"
+                        :key="subcategory.name"
+                    >
+                        <div class="supplemental-content-subcategory-title">
+                            {{ subcategory.name }}
+                        </div>
+                        <div v-if="cardView" class="flex-row-container">
+                            <SupplementalContentCard
+                                v-for="c in subcategory.supplemental_content"
+                                :key="c.url"
+                                :supplemental-content="c"
+                            />
+                        </div>
+                        <div v-else>
+                            <supplemental-content-list
+                                v-for="c in subcategory.supplemental_content"
+                                :key="c.url"
+                                :supplemental-content="c"
+                            />
+                        </div>
+                    </div>
+                    <v-divider class="hr-divider" />
                 </div>
-                <v-divider class="hr-divider"/>
-            </div>
+            </template>
         </div>
     </div>
 </template>
 
 <script>
-import { getSupplementalContent } from "../utilities/api";
-import SupplementalContentCard from "./SupplementalContentCard";
-import SupplementalContentList from "./SupplementalContentList";
+import { getSupplementalContent } from "@/utilities/api";
+import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import SupplementalContentCard from "@/components/SupplementalContentCard";
+import SupplementalContentList from "@/components/SupplementalContentList";
 
 export default {
     name: "SectionResources",
-    components: { SupplementalContentList, SupplementalContentCard },
+
+    components: {
+        SimpleSpinner,
+        SupplementalContentList,
+        SupplementalContentCard,
+    },
+
     props: {
         title: String,
         part: String,
         selectedIdentifier: String,
         selectedScope: String,
     },
-    watch: {
-        // whenever selected params changes, this function will run
-        async selectedIdentifier(newSelectedIdentifier) {
-            try {
-                this.content = await getSupplementalContent(
-                    this.title,
-                    this.part,
-                    this.selectedScope,
-                    newSelectedIdentifier,
-                    null
-                );
-            } catch (error) {
-                console.error(error);
-            }
-        },
-    },
+
     data() {
         return {
             dialog: false,
@@ -154,8 +151,30 @@ export default {
             content: [],
             cardView: 1,
             collapsed: true,
+            isLoading: true,
         };
     },
+
+    watch: {
+        // whenever selected params changes, this function will run
+        async selectedIdentifier(newSelectedIdentifier) {
+            this.isLoading = true;
+            try {
+                this.content = await getSupplementalContent(
+                    this.title,
+                    this.part,
+                    this.selectedScope,
+                    newSelectedIdentifier,
+                    null
+                );
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+    },
+
     computed: {
         availableCategories: function () {
             return this.content.map((category) => category.name);
@@ -178,6 +197,7 @@ export default {
                 : `${this.part}.${this.selectedIdentifier}`;
         },
     },
+
     async created() {
         try {
             this.content = await getSupplementalContent(
@@ -189,8 +209,11 @@ export default {
             );
         } catch (error) {
             console.error(error);
+        } finally {
+            this.isLoading = false;
         }
     },
+
     methods: {
         collapse: function () {
             this.collapsed = !this.collapsed;
