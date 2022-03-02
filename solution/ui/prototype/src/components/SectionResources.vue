@@ -346,7 +346,8 @@ $eregs-image-path: "~legacy-static/images";
 }
 
 .supplemental-content-subcategory-title {
-    font-size: 22px;
+    font-size: 18px;
+    font-weight: 600;
     margin: 20px 0;
 }
 .centered-container {

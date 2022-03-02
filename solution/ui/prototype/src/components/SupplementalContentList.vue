@@ -1,5 +1,5 @@
 <template>
-    <div style="margin: 15px 0px" class="list-item">
+    <div style="margin: 0px 0px 25px 0px" class="list-item">
         <a :href="supplementalContent.url" target="_blank">
             <div class="supplemental-content__title">
                 {{ formattedDate }}{{ supplementalContent.name ? ` | ${supplementalContent.name}` : "" }}
