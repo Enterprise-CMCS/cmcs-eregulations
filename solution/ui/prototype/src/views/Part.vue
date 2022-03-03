@@ -128,19 +128,28 @@ export default {
             () => this.$route.params,
             (toParams, previousParams) => {
                 // react to route changes...
+                if (toParams.part !== previousParams.part) {
+                    this.structure = null;
+                    this.clearResourcesParams();
+                    this.title = toParams.title;
+                    this.part = toParams.part;
+                }
             }
         );
 
-        try {
-            this.structure = await getPart(this.title, this.part);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            console.log(this.structure);
-        }
+        await this.getPartStructure();
     },
 
     methods: {
+        async getPartStructure() {
+            try {
+                this.structure = await getPart(this.title, this.part);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                console.log(this.structure);
+            }
+        },
         setResourcesParams(payload) {
             console.log("payload", payload);
             this.selectedIdentifier = payload.identifier;
@@ -150,6 +159,12 @@ export default {
             console.log("clear resource params");
             this.selectedIdentifier = null;
             this.selectedScope = null;
+        },
+    },
+
+    watch: {
+        async part(newPart) {
+            await this.getPartStructure();
         },
     },
 
