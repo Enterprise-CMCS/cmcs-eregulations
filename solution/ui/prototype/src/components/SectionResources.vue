@@ -23,7 +23,7 @@
         <div class="footer-panel-content-container">
             <div class="title-container" style="margin-bottom: 25px">
                 <span class="subsection">§</span>
-                <span class="title"> {{ titleLabel }} Resources </span>
+                <span class="resource-title"> {{ titleLabel }} Resources </span>
                 <a style="font-size: 14px; margin-left: 30px">
                     Show All Resources</a
                 >
@@ -330,7 +330,7 @@ $eregs-image-path: "~legacy-static/images";
             font-size: 26px;
             margin: -5px 5px 0 0;
         }
-        .title {
+        .resource-title {
             font-size: 30px;
         }
     }

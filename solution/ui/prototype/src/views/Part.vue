@@ -3,7 +3,12 @@
         <div id="app">
             <FlashBanner />
             <Header />
-            <PartNav :title="title" :part="part" :partLabel="partLabel">
+            <PartNav
+                :title="title"
+                :part="part"
+                :partLabel="partLabel"
+                :resourcesDisplay="resourcesDisplay"
+            >
                 <v-tabs
                     slider-size="5"
                     class="nav-tabs"
@@ -25,14 +30,18 @@
                         <component
                             :is="item.component"
                             :structure="tabsContent[index]"
+                            :title="title"
                             :part="part"
+                            :resourcesDisplay="resourcesDisplay"
+                            :selectedIdentifier="selectedIdentifier"
+                            :selectedScope="selectedScope"
                             @view-resources="setResourcesParams"
                         ></component>
                     </v-tab-item>
                 </v-tabs-items>
             </div>
             <SectionResources
-                v-if="selectedIdentifier"
+                v-if="resourcesDisplay === 'drawer' && selectedIdentifier"
                 :title="title"
                 :part="part"
                 :selectedIdentifier="selectedIdentifier"
@@ -40,6 +49,16 @@
                 @close="clearResourcesParams"
             />
             <Footer />
+            <v-btn
+                :color="resourcesBtnColor"
+                dark
+                rounded
+                class="floating-action-btn"
+                @click="changeResourcesDisplay"
+                elevation="5"
+            >
+                {{ resourcesBtnLabel }}
+            </v-btn>
         </div>
     </body>
 </template>
@@ -105,6 +124,7 @@ export default {
             ],
             selectedIdentifier: null,
             selectedScope: null,
+            resourcesDisplay: "drawer",
         };
     },
 
@@ -120,6 +140,14 @@ export default {
         },
         tabsContent() {
             return [this.tocContent, this.partContent, null, null];
+        },
+        resourcesBtnLabel() {
+            return `View Resources in ${
+                this.resourcesDisplay === "drawer" ? "sidebar" : "drawer"
+            }`;
+        },
+        resourcesBtnColor() {
+            return this.resourcesDisplay === "drawer" ? "green" : "blue";
         },
     },
 
@@ -160,6 +188,10 @@ export default {
             this.selectedIdentifier = null;
             this.selectedScope = null;
         },
+        changeResourcesDisplay() {
+            this.resourcesDisplay =
+                this.resourcesDisplay === "drawer" ? "sidebar" : "drawer";
+        },
     },
 
     watch: {
@@ -179,4 +211,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.floating-action-btn {
+    position: sticky;
+    bottom: 30px;
+    left: 75vw;
+    z-index: 203;
+}
+</style>

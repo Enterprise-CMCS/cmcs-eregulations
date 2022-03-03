@@ -1,16 +1,23 @@
 <template>
     <div class="content-container">
-        <div v-if="structure" class="content reg-text">
-            <template v-for="item in structure">
-                <Node
-                    :node="item"
-                    :key="item.title"
-                    :resourceParamsEmitter="emitResourcesParams"
-                />
-            </template>
+        <div v-if="structure" class="content reg-text" :class="resourcesClass">
+            <Node
+                v-for="item in structure"
+                :node="item"
+                :key="item.title"
+                :resourceParamsEmitter="emitResourcesParams"
+            />
         </div>
         <div v-else>
             <SimpleSpinner />
+        </div>
+        <div class="sidebar" v-if="resourcesDisplay === 'sidebar'">
+            <SectionResourcesSidebar
+                :title="title"
+                :part="part"
+                :selectedIdentifier="selectedIdentifier"
+                :selectedScope="selectedScope"
+            />
         </div>
     </div>
 </template>
@@ -18,6 +25,7 @@
 <script>
 import Node from "@/components/node_types/Node.vue";
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
+import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 export default {
@@ -26,10 +34,15 @@ export default {
     components: {
         Node,
         ResourcesBtn,
+        SectionResourcesSidebar,
         SimpleSpinner,
     },
 
     props: {
+        title: {
+            type: String,
+            required: true,
+        },
         part: {
             type: String,
             required: true,
@@ -37,6 +50,24 @@ export default {
         structure: {
             type: Array,
             required: false,
+        },
+        resourcesDisplay: {
+            type: String,
+            required: true,
+        },
+        selectedIdentifier: {
+            type: String,
+            required: false,
+        },
+        selectedScope: {
+            type: String,
+            required: false,
+        },
+    },
+
+    computed: {
+        resourcesClass() {
+            return `content-with-${this.resourcesDisplay}`;
         },
     },
 
@@ -62,10 +93,19 @@ $eregs-image-path: "~legacy-static/images";
 .content-container {
     overflow: auto;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .content-with-drawer {
+        margin: 0 auto;
+    }
+
+    .content-with-sidebar {
+        margin-left: 50px;
+    }
 
     .content {
         max-width: $text-max-width;
-        margin: 0 auto;
 
         .btn-container {
             margin: 60px 0 40px;
@@ -80,6 +120,10 @@ $eregs-image-path: "~legacy-static/images";
             margin-top: 55px;
             margin-bottom: 40px;
         }
+    }
+
+    .sidebar {
+        width: 500px;
     }
 }
 </style>
