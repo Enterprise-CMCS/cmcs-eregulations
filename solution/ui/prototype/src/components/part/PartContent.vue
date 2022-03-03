@@ -1,6 +1,10 @@
 <template>
     <div class="content-container">
-        <div v-if="structure" class="content reg-text" :class="resourcesClass">
+        <div
+            v-if="structure"
+            class="content reg-text"
+            :class="resourcesClass"
+        >
             <Node
                 v-for="item in structure"
                 :node="item"
@@ -11,21 +15,12 @@
         <div v-else>
             <SimpleSpinner />
         </div>
-        <div class="sidebar" v-if="resourcesDisplay === 'sidebar'">
-            <SectionResourcesSidebar
-                :title="title"
-                :part="part"
-                :selectedIdentifier="selectedIdentifier"
-                :selectedScope="selectedScope"
-            />
-        </div>
     </div>
 </template>
 
 <script>
 import Node from "@/components/node_types/Node.vue";
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
-import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 export default {
@@ -34,7 +29,6 @@ export default {
     components: {
         Node,
         ResourcesBtn,
-        SectionResourcesSidebar,
         SimpleSpinner,
     },
 
@@ -54,14 +48,6 @@ export default {
         resourcesDisplay: {
             type: String,
             required: true,
-        },
-        selectedIdentifier: {
-            type: String,
-            required: false,
-        },
-        selectedScope: {
-            type: String,
-            required: false,
         },
     },
 
@@ -120,13 +106,6 @@ $eregs-image-path: "~legacy-static/images";
             margin-top: 55px;
             margin-bottom: 40px;
         }
-    }
-
-    .sidebar {
-        flex: 0 0 400px;
-        margin: 40px 0;
-        padding: 0 35px;
-        border-left: 1px solid $light_gray;
     }
 }
 </style>

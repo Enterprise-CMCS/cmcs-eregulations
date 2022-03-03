@@ -39,6 +39,14 @@
                         ></component>
                     </v-tab-item>
                 </v-tabs-items>
+                <div class="sidebar" v-if="resourcesDisplay === 'sidebar'">
+                    <SectionResourcesSidebar
+                        :title="title"
+                        :part="part"
+                        :selectedIdentifier="selectedIdentifier"
+                        :selectedScope="selectedScope"
+                    />
+                </div>
             </div>
             <SectionResources
                 v-if="resourcesDisplay === 'drawer' && selectedIdentifier"
@@ -71,12 +79,14 @@ import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
 import SectionResources from "@/components/SectionResources.vue";
+import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 
 import { getPart } from "@/utilities/api";
 
 export default {
     components: {
         SectionResources,
+        SectionResourcesSidebar,
         FlashBanner,
         Footer,
         Header,
@@ -211,11 +221,44 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
+
+$sidebar-top-margin: 40px;
+
+#app {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: $header-height + $sidebar-top-margin;
+    height: calc(100vh - #{$header-height} - #{$sidebar-top-margin});
+    flex: 0 0 400px;
+    margin: $sidebar-top-margin 0;
+    padding: 0 35px;
+    border-left: 1px solid $light_gray;
+}
+
 .floating-action-btn {
     position: sticky;
     bottom: 30px;
     left: 75vw;
     z-index: 203;
+    width: -moz-fit-content;
+    width: fit-content;
 }
 </style>
