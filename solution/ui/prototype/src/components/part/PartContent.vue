@@ -123,7 +123,10 @@ $eregs-image-path: "~legacy-static/images";
     }
 
     .sidebar {
-        width: 500px;
+        flex: 0 0 400px;
+        margin: 40px 0;
+        padding: 0 35px;
+        border-left: 1px solid $light_gray;
     }
 }
 </style>
