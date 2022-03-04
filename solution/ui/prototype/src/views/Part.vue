@@ -39,7 +39,7 @@
                         ></component>
                     </v-tab-item>
                 </v-tabs-items>
-                <div class="sidebar" v-if="resourcesDisplay === 'sidebar'">
+                <div class="sidebar" v-show="resourcesDisplay === 'sidebar'">
                     <SectionResourcesSidebar
                         :title="title"
                         :part="part"
