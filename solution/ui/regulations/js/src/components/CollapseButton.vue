@@ -1,29 +1,26 @@
 <template>
     <button
-        v-bind:class="{ visible: visible }"
-        v-bind:data-test="dataName"
-        v-bind:aria-label="visible ? `collapse ${dataName}` : `expand ${dataName}`"
-        v-on:click="click"
+        :class="{ visible: visible }"
+        :data-test="dataName"
+        :aria-label="visible ? `collapse ${dataName}` : `expand ${dataName}`"
         class="collapsible-title"
+        @click="click"
     >
-        <slot name="expanded" v-if="visible && !keepContentsOnToggle"
+        <slot v-if="visible && !keepContentsOnToggle" name="expanded"
             >Hide</slot
         >
-        <slot name="collapsed" v-if="!visible && !keepContentsOnToggle"
+        <slot v-if="!visible && !keepContentsOnToggle" name="collapsed"
             >Show</slot
         >
-        <slot name="contents" v-if="keepContentsOnToggle">Click here</slot>
+        <slot v-if="keepContentsOnToggle" name="contents">Click here</slot>
     </button>
 </template>
 
 <script>
 export default {
-    name: "collapse-button",
+    name: "CollapseButton",
 
-    created: function () {
-        this.visible = this.state === "expanded";
-        this.$root.$on("collapse-toggle", this.toggle);
-    },
+    inject: ["getStateOverride"],
 
     props: {
         name: {
@@ -31,7 +28,7 @@ export default {
             required: true,
         },
         state: {
-            //expanded or collapsed
+            // expanded or collapsed
             type: String,
             required: true,
         },
@@ -42,18 +39,51 @@ export default {
         },
     },
 
-    data: function () {
+    data() {
         return {
+            reactiveState: this.state,
             dataName: this.name,
             visible: true,
         };
     },
 
+    computed: {
+        stateOverrideValue() {
+            if (!this.getStateOverride) return null;
+            return this.getStateOverride();
+        },
+    },
+
+    watch: {
+        // https://stackoverflow.com/questions/60416153/making-vue-js-provide-inject-reactive
+        stateOverrideValue(newStateOverrideValue) {
+            if (
+                this.reactiveState === "collapsed" &&
+                newStateOverrideValue === true
+            ) {
+                this.reactiveState = "expanded";
+                this.click();
+            }
+            if (
+                this.reactiveState === "expanded" &&
+                newStateOverrideValue === false
+            ) {
+                this.reactiveState = "collapsed";
+                this.click();
+            }
+        },
+    },
+
+    created() {
+        this.visible = this.reactiveState === "expanded";
+        this.$root.$on("collapse-toggle", this.toggle);
+    },
+
     methods: {
-        click: function (event) {
+        click(event) {
             this.$root.$emit("collapse-toggle", this.dataName);
         },
-        toggle: function (target) {
+        toggle(target) {
             if (this.dataName === target) {
                 this.visible = !this.visible;
             }

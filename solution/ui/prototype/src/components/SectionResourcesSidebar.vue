@@ -2,10 +2,13 @@
     <div class="sidebar-container">
         <div class="title-container">
             <span v-if="selectedIdentifier" class="subsection">§</span>
-            <h3 class="sidebar-title">
-                {{ sidebarTitle }} Resources
-            </h3>
-            <v-btn text class="expand-all-btn" @click="expandAll" v-if="selectedIdentifier">
+            <h3 class="sidebar-title">{{ sidebarTitle }} Resources</h3>
+            <v-btn
+                text
+                class="expand-all-btn"
+                @click="expandAll"
+                v-if="selectedIdentifier"
+            >
                 {{ expandBtnLabel }} All
             </v-btn>
         </div>
@@ -72,9 +75,12 @@ export default {
         },
     },
 
+    provide() {
+        return { getStateOverride: () => this.expanded };
+    },
+
     methods: {
         expandAll() {
-            console.log("clicked");
             this.expanded = !this.expanded;
         },
     },
