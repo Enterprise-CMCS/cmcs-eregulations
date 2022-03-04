@@ -78,7 +78,7 @@ export default {
     provide() {
         // https://v2.vuejs.org/v2/api/?redirect=true#provide-inject
         // https://stackoverflow.com/questions/60416153/making-vue-js-provide-inject-reactive
-        return { getStateOverride: () => this.expanded };
+        return { getStateOverride: () => this.expanded ?  "expanded" : "collapsed" };
     },
 
     methods: {

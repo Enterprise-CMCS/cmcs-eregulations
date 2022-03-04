@@ -41,7 +41,6 @@ export default {
 
     data() {
         return {
-            reactiveState: this.state,
             dataName: this.name,
             visible: true,
         };
@@ -57,25 +56,16 @@ export default {
     watch: {
         // https://stackoverflow.com/questions/60416153/making-vue-js-provide-inject-reactive
         stateOverrideValue(newStateOverrideValue) {
-            if (
-                this.reactiveState === "collapsed" &&
-                newStateOverrideValue === true
-            ) {
-                this.reactiveState = "expanded";
+            if (this.visible && newStateOverrideValue === "collapsed") {
                 this.click();
-            }
-            if (
-                this.reactiveState === "expanded" &&
-                newStateOverrideValue === false
-            ) {
-                this.reactiveState = "collapsed";
+            } else if (!this.visible && newStateOverrideValue === "expanded") {
                 this.click();
             }
         },
     },
 
     created() {
-        this.visible = this.reactiveState === "expanded";
+        this.visible = this.state === "expanded";
         this.$root.$on("collapse-toggle", this.toggle);
     },
 
