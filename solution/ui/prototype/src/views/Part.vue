@@ -212,7 +212,6 @@ export default {
 
     updated() {
         this.$nextTick(function () {
-            console.log("updated", this.tab);
             // call onResize to fix tab highlight misalignment bug
             // https://github.com/vuetifyjs/vuetify/issues/4733
             this.$refs.tabs && this.$refs.tabs.onResize();
@@ -249,7 +248,7 @@ $sidebar-top-margin: 40px;
     height: calc(100vh - #{$header-height} - #{$sidebar-top-margin});
     flex: 0 0 400px;
     margin: $sidebar-top-margin 0;
-    padding: 0 35px;
+    padding: 0 25px;
     border-left: 1px solid $light_gray;
 }
 
