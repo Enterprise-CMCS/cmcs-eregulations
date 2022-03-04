@@ -11,10 +11,10 @@
 
         <div class="paragraphs">
             <template v-for="child in node.children">
-                <Node :node="child" :key="child.title" />
+                <Node :node="child" :key="child.title" :showResourceButtons="showResourceButtons" />
             </template>
         </div>
-        <div class="btn-container">
+        <div v-if="showResourceButtons" class="btn-container">
             <ResourcesBtn :clickHandler="handleBtnClick" label="Section" />
         </div>
     </section>
@@ -42,6 +42,11 @@ export default {
             type: Function,
             required: false,
         },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+        }
     },
 
     computed: {

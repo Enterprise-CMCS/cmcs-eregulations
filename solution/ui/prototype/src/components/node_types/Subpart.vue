@@ -3,7 +3,7 @@
         <h1 tabindex="-1" :id="kebabTitle">
             {{ node.title }}
         </h1>
-        <div class="btn-container">
+        <div v-if="showResourceButtons" class="btn-container">
             <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" />
         </div>
         <template v-for="child in node.children">
@@ -11,6 +11,7 @@
                 :node="child"
                 :key="child.title"
                 :resourceParamsEmitter="resourceParamsEmitter"
+                :showResourceButtons="showResourceButtons"
             />
         </template>
     </article>
@@ -38,6 +39,11 @@ export default {
             type: Function,
             required: false,
         },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+        }
     },
 
     computed: {

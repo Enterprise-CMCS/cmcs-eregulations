@@ -1,7 +1,7 @@
 <template>
     <div class="content-container">
         <div v-if="structure" class="content reg-text">
-            <div class="btn-container">
+            <div v-if="showResourceButtons" class="btn-container">
                 <ResourcesBtn :clickHandler="handleBtnClick" label="Part" />
             </div>
             <template v-for="item in structure">
@@ -9,6 +9,7 @@
                     :node="item"
                     :key="item.title"
                     :resourceParamsEmitter="emitResourcesParams"
+                    :showResourceButtons="showResourceButtons"
                 />
             </template>
         </div>
@@ -41,6 +42,11 @@ export default {
             type: Array,
             required: false,
         },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+        }
     },
 
     methods: {

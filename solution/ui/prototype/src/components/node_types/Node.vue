@@ -6,6 +6,7 @@
         :node="node"
         :key="node.title"
         :resourceParamsEmitter="resourceParamsEmitter"
+        :showResourceButtons="showResourceButtons"
     ></component>
 </template>
 
@@ -42,6 +43,12 @@ export default {
             type: Function,
             required: false,
         },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+
+        }
     },
 
     computed: {

@@ -2,10 +2,19 @@
     <div style="width:100%; margin:20px">
         <div>
             <h2 style="display: inline">
-                Title {{ title }} > Part {{ part }}
+                <Breadcrumbs
+                    :title="title"
+                    :part="part"
+                    :subPart="subPart"
+                    :section="section"
+                />
             </h2>
             <span style="float:right">
-                <a>Previous</a>/<a>Next</a>
+                <router-link v-if="navigation.previous" >Previous</router-link>
+                <span v-else>Previous</span>
+                /
+                <a v-if="navigation.next" :href="nextURL">Next</a>
+                <span v-else>Next</span>
             </span>
         </div>
 
@@ -20,19 +29,42 @@
             </v-expansion-panel>
         </v-expansion-panels>
 
-
-
+        <PartContent
+            v-if="structure.length"
+            :structure="structure"
+            :part="part"
+            :showResourceButtons="false"
+            @view-resources="setResourcesParams"
+        />
+        <div v-else>Regulation not found</div>
     </div>
 </template>
 
 <script>
+import PartContent from "@/components/part/PartContent.vue";
+import Breadcrumbs from "@/components/PDPart/Breadcrumbs.vue";
+
 export default {
   name: "LeftColumn",
+  components: {
+        PartContent,
+        Breadcrumbs
+    },
   props:{
-    title: {type:Number},
-    part: {type: Number},
+    title: {type:String},
+    part: {type: String},
+    subPart: {type: String},
+    section: {type: String},
+    structure: {type: Object},
+    navigation: {type: Object},
     
-  }
+  },
+  methods: {
+    setResourcesParams(payload) {
+        console.log(payload)
+    },
+  },
+
 }
 </script>
 

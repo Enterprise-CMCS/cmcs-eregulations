@@ -379,12 +379,27 @@ const getHomepageStructure = async () => {
         return accumulator;
     };
 
-    const result = await httpApiGet("all_parts");
+    const result = await getAllParts()
 
     const transformedResult = result.reduce(reducer, {});
 
     return transformedResult;
 };
+
+const getAllParts = async () =>{
+    return  await httpApiGet("all_parts");
+}
+
+const getSubPartsForPart = async (part) =>{
+    const all_parts = await getAllParts()
+    const parts = all_parts.map(d => d.name)
+    console.log(parts)
+    const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
+    const subParts = potentialSubParts.filter(p=>p.type==="subpart")
+    return subParts.map(s => s.identifier[0])
+
+}
+
 
 const getPart = async (title, part) => {
     const result = await httpApiGet(
@@ -422,6 +437,8 @@ export {
     getLastUpdatedDate,
     getHomepageStructure,
     getPartNames,
+    getAllParts,
+    getSubPartsForPart,
     getPart,
     getCacheKeys,
     removeCacheItem,

@@ -23,6 +23,16 @@ const routes = [
             import(/* webpackChunkName: "about" */ "../views/About.vue"),
     },
     {
+        path: "/PD/:title/:part/:subPart/:section",
+        name: "PDpart-section",
+        component: PDPart,
+    },
+        {
+        path: "/PD/:title/:part/:subPart",
+        name: "PDpart-subPart",
+        component: PDPart,
+    },
+        {
         path: "/PD/:title/:part",
         name: "PDpart",
         component: PDPart,
