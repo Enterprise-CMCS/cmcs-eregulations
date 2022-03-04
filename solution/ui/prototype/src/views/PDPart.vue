@@ -5,13 +5,13 @@
             <Header />
             <splitpanes>
                 <pane min-size="30">
-                    <left-column :title="title" :part="part"/>
+                    <left-column :title="title" :part="part" />
                 </pane>
                 <pane min-size="30">
-                    <right-column :title="title" :part="part"/>
+                    <right-column :title="title" :part="part" />
                 </pane>
             </splitpanes>
-            <Footer/>
+            <Footer />
         </div>
     </body>
 </template>
@@ -20,16 +20,15 @@
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
-import { Splitpanes, Pane } from 'splitpanes'
-import 'splitpanes/dist/splitpanes.css'
+import { Splitpanes, Pane } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
 import LeftColumn from "@/components/PDPart/LeftColumn";
 import RightColumn from "../components/PDPart/RightColumn";
 
 export default {
-
     name: "Part",
     components: {
-      RightColumn,
+        RightColumn,
         LeftColumn,
         FlashBanner,
         Footer,
@@ -44,7 +43,7 @@ export default {
             part: this.$route.params.part,
             sections: [...Array(10).keys()], // This can go when we get real sections
             selectedSection: null,
-        }
+        };
     },
 
     created() {
@@ -53,24 +52,21 @@ export default {
             (toParams, previousParams) => {
                 // react to route changes...
             }
-        )
-    }
-}
+        );
+    },
+};
 </script>
 
 <style>
-
 .splitpanes__pane {
-  justify-content: left;
-  align-items: flex-start;
-  display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    display: flex;
 }
 
 .splitpanes--vertical > .splitpanes__splitter {
-  min-width: 6px;
-  background: #A3E8FF;
+    min-width: 6px;
+    background: #a3e8ff;
 }
-
-
 </style>
 

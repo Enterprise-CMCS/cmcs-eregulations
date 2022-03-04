@@ -4,19 +4,33 @@
             <v-tab v-for="tab in tabs" :key="tab">{{ tab }}</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
-            <v-tab-item v-for="d in data" :key="d"
-                ><v-card
-                    ><v-card-text>{{ d }}</v-card-text></v-card
-                ></v-tab-item
-            >
+            <v-tab-item v-for="d in data" :key="d">
+                <template v-if="tabs[tab] === 'Section'">
+                    <v-container fluid
+                        ><v-row dense v-for="i in d"
+                            ><SectionCards class="section-cards" v-bind:name="'Section Name'" v-bind:description="'Section Description'" /> </v-row
+                    ></v-container>
+                </template>
+                <template v-else-if="tabs[tab] === 'Part'"
+                    ><PartSummary v-bind:title="title" v-bind:part="part"
+                /></template>
+                <template v-else-if="tabs[tab]=== 'Subpart'">
+                    <SubpartResources /></template>
+            </v-tab-item>
         </v-tabs-items>
     </div>
 </template>
 <script>
 import TabFilters from "./TabFilters.vue";
+import SectionCards from "./SectionCards.vue";
+import PartSummary from "./PartSummary.vue";
+import SubpartResources from "./Subpart.vue";
 export default {
     components: {
         TabFilters,
+        SectionCards,
+        PartSummary,
+        SubpartResources
     },
     name: "RightColumn",
     props: {
@@ -27,8 +41,17 @@ export default {
         return {
             tab: null,
             tabs: ["Part", "Subpart", "Section"],
-            data: ["Part Data", "Subpart Data", "Section Data"],
+            data: [
+                ["Part Data", "Part Data2"],
+                ["Subpart Data"],
+                ["Section Data", "Section Data", "Section Data"],
+            ],
         };
     },
 };
 </script>
+<style scoped>
+.section-cards {
+    margin-bottom: 10px;
+}
+</style>

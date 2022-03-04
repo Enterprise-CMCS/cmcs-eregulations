@@ -9,7 +9,7 @@
         <div>
             <v-text-field clearable outlined class="exdample"> </v-text-field>
         </div>
-<TabFilters/>
+<TabFilters v-bind:title="title" v-bind:part="part"/>
     </div>
 </template>
 
