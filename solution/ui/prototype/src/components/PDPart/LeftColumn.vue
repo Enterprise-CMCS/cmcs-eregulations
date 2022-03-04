@@ -10,10 +10,23 @@
                 />
             </h2>
             <span style="float:right">
-                <router-link v-if="navigation.previous" >Previous</router-link>
+                <router-link
+                    v-if="navigation.previous"
+                    :to="{
+                        name: navigation.name,
+                        params: navigation.previous,
+                    }"
+
+                >Previous</router-link>
                 <span v-else>Previous</span>
                 /
-                <a v-if="navigation.next" :href="nextURL">Next</a>
+                <router-link
+                    v-if="navigation.next"
+                    :to="{
+                        name: navigation.name,
+                        params: navigation.next,
+                    }"
+                >Next</router-link>
                 <span v-else>Next</span>
             </span>
         </div>

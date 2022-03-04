@@ -25,7 +25,7 @@ import { Splitpanes, Pane } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 import LeftColumn from "@/components/PDPart/LeftColumn";
 import RightColumn from "../components/PDPart/RightColumn";
-import { getPart, getSubPartsForPart } from "@/utilities/api";
+import { getPart, getSubPartsForPart, getPartsList, getSectionsForSubPart } from "@/utilities/api";
 export default {
 
     name: "Part",
@@ -38,7 +38,43 @@ export default {
         Splitpanes,
         Pane,
     },
+    watch:{
+      '$route.params': {
+        async handler(toParams, previousParams) {
+            // react to route changes...
+            if (toParams.part !== previousParams.part){
+                this.title = toParams.title;
+                this.part = toParams.part;
+            }
+            if(toParams.subPart != previousParams.subPart){
+              this.subPart = toParams.subPart;
 
+            }
+
+          if(toParams.section != previousParams.section){
+              this.section = toParams.section ? String(toParams.section): undefined;
+          }
+
+        }
+
+      },
+      part:{
+        async handler(){
+          try {
+            console.log("getting structure")
+            this.structure = await getPart(this.title, this.part);
+            this.subPartList = await getSubPartsForPart(this.part);
+            this.partsList = await getPartsList()
+            this.sections = await getSectionsForSubPart(this.part, this.subPart.split("-")[1])
+            console.log(this.sections)
+          } catch (error) {
+              console.error(error);
+          }
+
+        },
+        immediate: true,
+      }
+    },
     data() {
         return {
             title: this.$route.params.title,
@@ -48,6 +84,7 @@ export default {
             selectedSection: null,
             structure: null,
             subPartList: [],
+            partsList: [],
             sections: [],
         }
     },
@@ -73,8 +110,25 @@ export default {
       },
       navigation() {
         const results = {name:"PDpart", previous: null, next: null}
-        if (this.subPart){
-          results.name = "PDPart-subPart"
+        if (this.section){
+          results.name = "PDpart-section"
+          const currentIndex = this.sections.indexOf(this.section)
+          console.log(currentIndex)
+          results.previous = currentIndex > 0
+              ?
+              {title:this.title, part:this.part, subPart:this.subPart, section: + this.sections[currentIndex - 1]}
+              :
+              null;
+          results.next = currentIndex < this.sections.length - 1
+              ?
+              {title:this.title, part:this.part, subPart:this.subPart, section: + this.sections[currentIndex + 1]}
+              :
+              null
+          console.log(typeof this.section)
+          console.log(results)
+        }
+        else if (this.subPart){
+          results.name = "PDpart-subPart"
           const currentIndex = this.subPartList.indexOf(this.subPart.split("-")[1])
           results.previous = currentIndex > 0
               ?
@@ -88,47 +142,23 @@ export default {
               null
 
         }
-        if (this.section){
-          results.name = "PDPart-section"
-        }
+        else {
+          results.name = "PDpart"
+          const currentIndex = this.partsList.indexOf(this.part)
+          results.previous = currentIndex > 0
+              ?
+              {title:this.title, part:this.partsList[currentIndex - 1]}
+              :
+              null;
+          results.next = currentIndex < this.partsList.length - 1
+              ?
+              {title:this.title, part: this.partsList[currentIndex + 1]}
+              :
+              null
 
-        if (this.subPart) {
-          const currentIndex = this.subPartList.indexOf(this.subPart.split("-")[1])
-
-          results.previous = currentIndex > 0 ? "subPart-" + this.subPartList[currentIndex - 1] : null;
-          results.next = currentIndex < this.subPartList.length - 1 ? "subPart-" + this.subPartList[currentIndex + 1] : null
         }
         return results
       },
-    },
-    async created() {
-        this.$watch(
-            () => this.$route.params,
-            (toParams, previousParams) => {
-                // react to route changes...
-                if (toParams.part !== previousParams.part ||
-                    toParams.subPart != previousParams.subPart ||
-                    toParams.section != previousParams.section
-
-                ) {
-                    console.log("navigating")
-                    this.title = toParams.title;
-                    this.part = toParams.part;
-                    this.subPart = toParams.subPart;
-                    this.section = toParams.section;
-                }
-            }
-        );
-
-        try {
-            this.structure = await getPart(this.title, this.part);
-            this.subPartList = await getSubPartsForPart(this.part)
-
-        } catch (error) {
-            console.error(error);
-        } finally {
-            console.log(this.structure);
-        }
     },
 }
 </script>
