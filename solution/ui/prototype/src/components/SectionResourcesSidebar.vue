@@ -17,6 +17,19 @@
             expert on our team. Select a subpart or section on the left to view
             associated resources.
         </p>
+        <v-text-field
+            v-if="selectedIdentifier"
+            outlined
+            flat
+            solo
+            clearable
+            label="Search"
+            type="text"
+            class="search-field"
+            append-icon="mdi-magnify"
+            hide-details
+        >
+        </v-text-field>
         <SupplementalContent
             :api_url="apiPath"
             :title="title"
@@ -121,8 +134,13 @@ $eregs-image-path: "~legacy-static/images";
             letter-spacing: normal;
             text-decoration: underline;
             text-transform: capitalize;
+            margin-right: -16px;
         }
     }
+}
+
+.search-field {
+    width: 430px;
 }
 
 .empty-state-text {

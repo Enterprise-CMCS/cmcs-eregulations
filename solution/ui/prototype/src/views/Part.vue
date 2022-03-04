@@ -24,7 +24,7 @@
                     </v-tab>
                 </v-tabs>
             </PartNav>
-            <div class="content-container">
+            <div class="content-container" :class="contentContainerResourcesClass">
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(item, index) in tabsShape" :key="index">
                         <component
@@ -159,6 +159,9 @@ export default {
         resourcesBtnColor() {
             return this.resourcesDisplay === "drawer" ? "green" : "blue";
         },
+        contentContainerResourcesClass() {
+            return `content-container-${this.resourcesDisplay}`;
+        }
     },
 
     async created() {
@@ -238,7 +241,14 @@ $sidebar-top-margin: 40px;
 .content-container {
     display: flex;
     flex-direction: row;
+}
+
+.content-container-drawer {
     justify-content: center;
+}
+
+.content-container-sidebar {
+    justify-content: flex-start;
 }
 
 .sidebar {
@@ -246,7 +256,7 @@ $sidebar-top-margin: 40px;
     position: sticky;
     top: $header-height + $sidebar-top-margin;
     height: calc(100vh - #{$header-height} - #{$sidebar-top-margin});
-    flex: 0 0 400px;
+    flex: 0 0 450px;
     margin: $sidebar-top-margin 0;
     padding: 0 25px;
     border-left: 1px solid $light_gray;
