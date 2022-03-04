@@ -77,10 +77,12 @@ export default {
 
     watch: {
         sections() {
+            this.categories = [];
             this.isFetching = true;
             this.fetch_content(this.title, this.part);
         },
         subparts() {
+            this.categories = [];
             this.isFetching = true;
             this.fetch_content(this.title, this.part);
         },
