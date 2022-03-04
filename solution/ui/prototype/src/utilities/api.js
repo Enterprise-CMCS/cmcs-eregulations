@@ -24,10 +24,10 @@ let config = {
 };
 
 localforage.config({
-    name        : 'eregs',
-    version     : 1.0,
-    storeName   : 'eregs_django', // Should be alphanumeric, with underscores.
-})
+    name: "eregs",
+    version: 1.0,
+    storeName: "eregs_django", // Should be alphanumeric, with underscores.
+});
 
 let token;
 let decodedIdToken;
@@ -98,94 +98,100 @@ function fetchJson(url, options = {}, retryCount = 0) {
         url = query ? `${url}?${query}` : url;
     }
 
-    return Promise.resolve()
-        .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
-        .then(value => {
-            if (value && Date.now() < value.expiration_date) {
-                console.log('CACHE HIT')
-                return value
-            }
-            else{
-                console.log("CACHE MISS")
-                return fetch(url, merged)
-            }
-        })
-        .catch((err) => {
-            // this will capture network/timeout errors, because fetch does not consider http Status 5xx or 4xx as errors
-            if (retryCount < config.maxRetryCount) {
-                let backoff = retryCount * retryCount;
-                if (backoff < 1) backoff = 1;
-
-                return Promise.resolve()
-                    .then(() =>
-                        console.log(
-                            `Retrying count = ${retryCount}, Backoff = ${backoff}`
-                        )
-                    )
-                    .then(() => delay(backoff))
-                    .then(() => fetchJson(url, options, retryCount + 1));
-            }
-            throw parseError(err);
-        })
-        .then((response) => {
-            isOk = response.ok;
-            httpStatus = response.status;
-            return response;
-        })
-        .then((response) => {
-            if (_isFunction(response.text)) return response.text();
-            return response;
-        })
-        .then((text) => {
-            let json;
-            try {
-                if (_isObject(text)) {
-                    json = text;
+    return (
+        Promise.resolve()
+            .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
+            .then((value) => {
+                if (value && Date.now() < value.expiration_date) {
+                    console.log("CACHE HIT");
+                    return value;
                 } else {
-                    json = JSON.parse(text);
+                    console.log("CACHE MISS");
+                    return fetch(url, merged);
                 }
-            } catch (err) {
-                if (httpStatus >= 400) {
-                    if (
-                        httpStatus >= 501 &&
-                        retryCount < config.maxRetryCount
-                    ) {
-                        let backoff = retryCount * retryCount;
-                        if (backoff < 1) backoff = 1;
+            })
+            .catch((err) => {
+                // this will capture network/timeout errors, because fetch does not consider http Status 5xx or 4xx as errors
+                if (retryCount < config.maxRetryCount) {
+                    let backoff = retryCount * retryCount;
+                    if (backoff < 1) backoff = 1;
 
-                        return Promise.resolve()
-                            .then(() =>
-                                console.log(
-                                    `Retrying count = ${retryCount}, Backoff = ${backoff}`
-                                )
+                    return Promise.resolve()
+                        .then(() =>
+                            console.log(
+                                `Retrying count = ${retryCount}, Backoff = ${backoff}`
                             )
-                            .then(() => delay(backoff))
-                            .then(() =>
-                                fetchJson(url, options, retryCount + 1)
-                            );
-                    }
-                    throw parseError({
-                        message: text,
-                        status: httpStatus,
-                    });
-                } else {
-                    throw parseError(
-                        new Error("The server did not return a json response.")
-                    );
+                        )
+                        .then(() => delay(backoff))
+                        .then(() => fetchJson(url, options, retryCount + 1));
                 }
-            }
+                throw parseError(err);
+            })
+            .then((response) => {
+                isOk = response.ok;
+                httpStatus = response.status;
+                return response;
+            })
+            .then((response) => {
+                if (_isFunction(response.text)) return response.text();
+                return response;
+            })
+            .then((text) => {
+                let json;
+                try {
+                    if (_isObject(text)) {
+                        json = text;
+                    } else {
+                        json = JSON.parse(text);
+                    }
+                } catch (err) {
+                    if (httpStatus >= 400) {
+                        if (
+                            httpStatus >= 501 &&
+                            retryCount < config.maxRetryCount
+                        ) {
+                            let backoff = retryCount * retryCount;
+                            if (backoff < 1) backoff = 1;
 
-            return json;
-        })
-        .then((json) => {
-            if (_isBoolean(isOk) && !isOk) {
-                throw parseError({ ...json, status: httpStatus });
-            } else {
-                json.expiration_date = Date.now() + 8 * 60 * 60 * 1000 // 24 hours * 60 minutes * 60 seconds * 1000
-                localforage.setItem(url.replace(apiPath, merged.method), json)
+                            return Promise.resolve()
+                                .then(() =>
+                                    console.log(
+                                        `Retrying count = ${retryCount}, Backoff = ${backoff}`
+                                    )
+                                )
+                                .then(() => delay(backoff))
+                                .then(() =>
+                                    fetchJson(url, options, retryCount + 1)
+                                );
+                        }
+                        throw parseError({
+                            message: text,
+                            status: httpStatus,
+                        });
+                    } else {
+                        throw parseError(
+                            new Error(
+                                "The server did not return a json response."
+                            )
+                        );
+                    }
+                }
+
                 return json;
-            }
-        });
+            })
+            .then((json) => {
+                if (_isBoolean(isOk) && !isOk) {
+                    throw parseError({ ...json, status: httpStatus });
+                } else {
+                    json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
+                    localforage.setItem(
+                        url.replace(apiPath, merged.method),
+                        json
+                    );
+                    return json;
+                }
+            })
+    );
 }
 
 // ---------- helper functions ---------------
@@ -238,34 +244,23 @@ function httpApiDelete(urlPath, { data, params } = {}) {
 // ---------- cache helpers -----------
 
 const getCacheKeys = async () => {
-    return localforage.keys()
-}
+    return localforage.keys();
+};
 
 const removeCacheItem = async (key) => {
-    return localforage.removeItem(key)
-}
+    return localforage.removeItem(key);
+};
 
 const getCacheItem = async (key) => {
-    return localforage.getItem(key)
-}
+    return localforage.getItem(key);
+};
 
 const setCacheItem = async (key, data) => {
-    data.expiration_date = Date.now() + 8 * 60 * 60 * 1000 // 24 hours * 60 minutes * 60 seconds * 1000
-    return localforage.setItem(key, data)
-}
+    data.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
+    return localforage.setItem(key, data);
+};
 
 // ---------- api calls ---------------
-
-const login = (username, password) => {
-    return httpApiPost("Authentication/login", {
-        data: { username, password },
-    });
-};
-
-const statusCheck = () => {
-    return httpApiGet("Authentication/Test");
-};
-
 const getLastUpdatedDate = async (title = "42") => {
     const reducer = (accumulator, currentValue) => {
         return currentValue.date > accumulator.date
@@ -384,18 +379,52 @@ const getHomepageStructure = async () => {
         return accumulator;
     };
 
-    const result = await httpApiGet("all_parts");
+    const result = await getAllParts()
 
     const transformedResult = result.reduce(reducer, {});
 
     return transformedResult;
 };
 
-const getSupplementalContent = async (title = "42", part, sections, subpart) => {
-    const result = await httpApiGet(`title/${title}/part/${part}/supplemental_content?&sections=${sections.join("&sections=")}${subpart ? `&subparts=${subpart}`:""}`);
-    return result
+const getAllParts = async () =>{
+    return  await httpApiGet("all_parts");
+}
+
+const getSubPartsForPart = async (part) =>{
+    const all_parts = await getAllParts()
+    const parts = all_parts.map(d => d.name)
+    console.log(parts)
+    const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
+    const subParts = potentialSubParts.filter(p=>p.type==="subpart")
+    return subParts.map(s => s.identifier[0])
+
+}
+
+
+const getPart = async (title, part) => {
+    const result = await httpApiGet(
+        `${getKebabDate()}/title/${title}/part/${part}`
+    );
+
+    // mixing lodash get and optional chaining.  Both provide safeguards and do the same this
+    const toc = result?.toc;
+
+    const orphansAndSubparts = _get(result, "document.children");
+
+    return [toc, orphansAndSubparts];
 };
 
+const getSupplementalContent = async (
+    title = "42",
+    part,
+    scope,
+    identifier 
+) => {
+    const result = await httpApiGet(
+        `title/${title}/part/${part}/supplemental_content?&${scope}s=${identifier}`
+    );
+    return result;
+};
 
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
@@ -408,10 +437,13 @@ export {
     getLastUpdatedDate,
     getHomepageStructure,
     getPartNames,
+    getAllParts,
+    getSubPartsForPart,
+    getPart,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,
     setCacheItem,
-    getSupplementalContent
+    getSupplementalContent,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

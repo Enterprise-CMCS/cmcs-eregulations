@@ -18,6 +18,7 @@ import _map from "lodash/map";
 import _random from "lodash/random";
 import _set from "lodash/set";
 import _transform from "lodash/transform";
+import {getAllParts} from "./api";
 
 //import numeral from "numeral";
 
@@ -381,6 +382,34 @@ const getKebabDate = (date = new Date()) => {
     return `${year}-${month}-${day}`;
 };
 
+const getKebabLabel = (label) => {
+    if (!label) return "na-label";
+    return `${label.join("-")}`;
+}
+
+const getKebabTitle = (label) => {
+    return `${getKebabLabel(label)}-title`;
+}
+
+// lifted straight from django pdepth templatetag
+const getParagraphDepth = (value) => {
+    const sectionDepth = 2;
+
+    const labelLength = value?.label?.length;
+    const markerLength = value?.marker?.length;
+
+    let depth = labelLength - sectionDepth;
+
+    if (markerLength > 1) {
+        depth = depth - (markerLength - 1);
+    }
+
+    if (depth < 1) return 1;
+
+    return depth;
+}
+
+
 export {
     mapToArray,
     parseError,
@@ -406,4 +435,7 @@ export {
     formatAmount,
     niceDate,
     getKebabDate,
+    getKebabLabel,
+    getKebabTitle,
+    getParagraphDepth,
 };
