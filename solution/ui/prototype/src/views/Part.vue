@@ -250,6 +250,7 @@ $sidebar-top-margin: 40px;
     margin: $sidebar-top-margin 0;
     padding: 0 25px;
     border-left: 1px solid $light_gray;
+    overflow: scroll;
 }
 
 .floating-action-btn {

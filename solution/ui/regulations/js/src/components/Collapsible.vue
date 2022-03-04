@@ -75,7 +75,7 @@ export default {
         },
         toggle: function (target) {
             if (this.dataName === target) {
-                this.$refs.target.classList.remove("display-none");
+                if (this.$refs.target) this.$refs.target.classList.remove("display-none");
                 requestAnimationFrame(() => {
                     this.computeHeight();
                     requestAnimationFrame(() => {
