@@ -5,7 +5,7 @@ from solo.models import SingletonModel
 
 
 class Title(models.Model):
-    name = models.CharField(max_length=8)
+    name = models.CharField(max_length=8, unique=True)
     last_updated = models.DateTimeField(auto_now=True)
     toc = models.JSONField()
 
@@ -34,18 +34,18 @@ class Part(models.Model):
     title = models.CharField(max_length=8)
     date = models.DateField()
     last_updated = models.DateTimeField(auto_now=True)
-    
+
     document = models.JSONField()
     structure = models.JSONField()
     depth = models.IntegerField(default=3)
 
-    title_object = models.ForeignKey(Title, on_delete="models.CASCADE", related_name="parts")
+    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")
 
     objects = PartManager()
 
     class Meta:
         unique_together = ['name', 'title', 'date']
-        ordering = ("title", "name", "-version")
+        ordering = ("title", "name", "-date")
 
     @property
     def toc(self):
