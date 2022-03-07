@@ -75,7 +75,9 @@ export default {
         },
         toggle: function (target) {
             if (this.dataName === target) {
-                if (this.$refs.target) this.$refs.target.classList.remove("display-none");
+                if (this.$refs.target) {
+                    this.$refs.target.classList.remove("display-none");
+                }
                 requestAnimationFrame(() => {
                     this.computeHeight();
                     requestAnimationFrame(() => {
@@ -85,7 +87,10 @@ export default {
             }
         },
         getStyle: function () {
-            return window.getComputedStyle(this.$refs.target);
+            if (this.$refs.target) {
+                return window.getComputedStyle(this.$refs.target);
+            }
+            return "auto";
         },
         setProps: function (visibility, display, position, height) {
             this.$refs.target.style.visibility = visibility;
@@ -98,14 +103,18 @@ export default {
                 return "auto";
             }
 
-            this.$refs.target.classList.remove("invisible");
-
-            this.setProps("hidden", "block", "absolute", "auto");
+            if (this.$refs.target) {
+                this.$refs.target.classList.remove("invisible");
+                this.setProps("hidden", "block", "absolute", "auto");
+            }
 
             const height = this.getStyle().height;
 
-            this.setProps(null, null, null, height);
-            if (!this.visible) {
+            if (this.$refs.target) {
+                this.setProps(null, null, null, height);
+            }
+
+            if (!this.visible && this.$refs.target) {
                 this.$refs.target.classList.add("invisible");
             }
             return height;
