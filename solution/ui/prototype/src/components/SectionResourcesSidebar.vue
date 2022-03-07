@@ -109,6 +109,12 @@ export default {
             console.log("search will happen here");
         },
     },
+
+    watch: {
+        selectedIdentifier(newSelectedIdentifier) {
+            this.expanded = false;
+        },
+    },
 };
 </script>
 
