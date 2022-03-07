@@ -17,19 +17,23 @@
             expert on our team. Select a subpart or section on the left to view
             associated resources.
         </p>
-        <v-text-field
-            v-if="selectedIdentifier"
-            outlined
-            flat
-            solo
-            clearable
-            label="Search"
-            type="text"
-            class="search-field"
-            append-icon="mdi-magnify"
-            hide-details
-        >
-        </v-text-field>
+        <form class="search-resources-form" @submit.prevent="search">
+            <v-text-field
+                v-if="selectedIdentifier"
+                outlined
+                flat
+                solo
+                clearable
+                label="Search Resources"
+                type="text"
+                class="search-field"
+                append-icon="mdi-magnify"
+                hide-details
+                dense
+                @click:append="search"
+            >
+            </v-text-field>
+        </form>
         <SupplementalContent
             :api_url="apiPath"
             :title="title"
@@ -91,12 +95,18 @@ export default {
     provide() {
         // https://v2.vuejs.org/v2/api/?redirect=true#provide-inject
         // https://stackoverflow.com/questions/60416153/making-vue-js-provide-inject-reactive
-        return { getStateOverride: () => this.expanded ?  "expanded" : "collapsed" };
+        return {
+            getStateOverride: () => (this.expanded ? "expanded" : "collapsed"),
+        };
     },
 
     methods: {
         expandAll() {
             this.expanded = !this.expanded;
+        },
+
+        search() {
+            console.log("search will happen here");
         },
     },
 };
@@ -139,8 +149,16 @@ $eregs-image-path: "~legacy-static/images";
     }
 }
 
-.search-field {
-    width: 430px;
+.search-resources-form {
+    .search-field {
+        width: 430px;
+        height: 40px;
+        margin-bottom: 15px;
+
+        .v-input__icon.v-input__icon--append button {
+            color: $mid_blue;
+        }
+    }
 }
 
 .empty-state-text {
