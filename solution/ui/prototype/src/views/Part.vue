@@ -248,7 +248,7 @@ $sidebar-top-margin: 40px;
 }
 
 .content-container-sidebar {
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 .sidebar {
