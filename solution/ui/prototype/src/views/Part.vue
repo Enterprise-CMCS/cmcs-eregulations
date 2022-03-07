@@ -57,16 +57,6 @@
                 @close="clearResourcesParams"
             />
             <Footer />
-            <v-btn
-                :color="resourcesBtnColor"
-                dark
-                rounded
-                class="floating-action-btn"
-                @click="changeResourcesDisplay"
-                elevation="5"
-            >
-                {{ resourcesBtnLabel }}
-            </v-btn>
         </div>
     </body>
 </template>
@@ -101,6 +91,7 @@ export default {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
+            resourcesDisplay: this.$route.params.resourcesDisplay || "drawer",
             structure: null,
             sections: [],
             tab: 1, // index 1, "Part"
@@ -134,7 +125,6 @@ export default {
             ],
             selectedIdentifier: null,
             selectedScope: null,
-            resourcesDisplay: "drawer",
         };
     },
 
@@ -151,14 +141,6 @@ export default {
         tabsContent() {
             return [this.tocContent, this.partContent, null, null];
         },
-        resourcesBtnLabel() {
-            return `View Resources in ${
-                this.resourcesDisplay === "drawer" ? "sidebar" : "drawer"
-            }`;
-        },
-        resourcesBtnColor() {
-            return this.resourcesDisplay === "drawer" ? "green" : "blue";
-        },
         contentContainerResourcesClass() {
             return `content-container-${this.resourcesDisplay}`;
         }
@@ -174,6 +156,7 @@ export default {
                     this.clearResourcesParams();
                     this.title = toParams.title;
                     this.part = toParams.part;
+                    this.resourcesDisplay = toParams.resourcesDisplay || "drawer";
                 }
             }
         );
@@ -263,12 +246,4 @@ $sidebar-top-margin: 40px;
     overflow: scroll;
 }
 
-.floating-action-btn {
-    position: sticky;
-    bottom: 30px;
-    left: 75vw;
-    z-index: 203;
-    width: -moz-fit-content;
-    width: fit-content;
-}
 </style>
