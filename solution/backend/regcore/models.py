@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator, RegexValidator
 from solo.models import SingletonModel
 
 
-class TitleV3(models.Model):
+class Title(models.Model):
     name = models.CharField(max_length=8)
     last_updated = models.DateTimeField(auto_now=True)
     toc = models.JSONField()
@@ -13,39 +13,6 @@ class TitleV3(models.Model):
         ordering = ("name",)
 
 
-class PartQuerySetV3(models.QuerySet):
-    def latest(self, title, part):
-        query = self.filter(title__name=title, name=part).order_by("-version")
-        return query[0] if len(query) > 0 else None
-
-
-class PartManagerV3(models.Manager.from_queryset(PartQuerySetV3)):
-    pass
-
-
-class PartV3(models.Model):
-    name = models.CharField(max_length=8)
-    title = models.ForeignKey(TitleV3, on_delete="models.CASCADE", related_name="parts")
-    version = models.DateField()
-    last_updated = models.DateTimeField(auto_now=True)
-    depth = models.IntegerField()
-    document = models.JSONField()
-    structure = models.JSONField()
-
-    objects = PartManagerV3()
-
-    @property
-    def toc(self):
-        structure = self.structure
-        for _ in range(self.depth):
-            structure = structure['children'][0]
-        return structure
-
-    class Meta:
-        ordering = ("title__name", "name", "-version")
-
-
-### DEPRECATED
 class PartQuerySet(models.QuerySet):
     def effective(self, date):
         return self.filter(date__lte=date).order_by("name", "-date").distinct("name")
@@ -53,29 +20,39 @@ class PartQuerySet(models.QuerySet):
     def versions(self, title, part):
         return self.filter(name=part, title=title).order_by('-date').values("date")
 
+    def latest(self, title, part):
+        query = self.filter(titleobject__name=title, name=part).order_by("-version")
+        return query[0] if len(query) > 0 else None
 
-### DEPRECATED
+
 class PartManager(models.Manager.from_queryset(PartQuerySet)):
     pass
 
 
-### DEPRECATED
 class Part(models.Model):
     name = models.CharField(max_length=8)
     title = models.CharField(max_length=8)
     date = models.DateField()
     last_updated = models.DateTimeField(auto_now=True)
+    
     document = models.JSONField()
     structure = models.JSONField()
+    depth = models.IntegerField(default=3)
+
+    title_object = models.ForeignKey(Title, on_delete="models.CASCADE", related_name="parts")
 
     objects = PartManager()
 
     class Meta:
         unique_together = ['name', 'title', 'date']
+        ordering = ("title", "name", "-version")
 
     @property
     def toc(self):
-        return self.structure['children'][0]['children'][0]['children'][0]
+        structure = self.structure
+        for _ in range(self.depth):
+            structure = structure['children'][0]
+        return structure
 
 
 class ParserConfiguration(SingletonModel):
