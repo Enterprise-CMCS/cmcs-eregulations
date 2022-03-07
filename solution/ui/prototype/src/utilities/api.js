@@ -439,6 +439,13 @@ const getSupplementalContent = async (
     return result;
 };
 
+const getSupplementalContentCountForPart = async (part) =>{
+        const result = await httpApiGet(
+        `supplemental_content_count_by_part?part=${part}`
+    );
+    return result;
+}
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
@@ -459,6 +466,7 @@ export {
     setCacheItem,
     getSupplementalContent,
     getPartsList,
-    getSectionsForSubPart
+    getSectionsForSubPart,
+    getSupplementalContentCountForPart
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

@@ -47,6 +47,7 @@
             :structure="structure"
             :part="part"
             :showResourceButtons="false"
+            :supplementalContentCount="supplementalContentCount"
             @view-resources="setResourcesParams"
         />
         <div v-else>Regulation not found</div>
@@ -68,9 +69,10 @@ export default {
     part: {type: String},
     subPart: {type: String},
     section: {type: String},
-    structure: {type: Object},
+    structure: {type: Array},
     navigation: {type: Object},
-    
+    supplementalContentCount: {type:Object},
+
   },
   methods: {
     setResourcesParams(payload) {

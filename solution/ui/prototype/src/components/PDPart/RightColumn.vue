@@ -7,7 +7,7 @@
             </span>
         </div>
         <div>
-            <v-text-field clearable outlined class="exdample"> </v-text-field>
+            <v-text-field clearable outlined class="example"> </v-text-field>
         </div>
 <TabFilters/>
     </div>
@@ -21,8 +21,8 @@ export default {
     },
     name: "RightColumn",
     props: {
-        title: { type: Number },
-        part: { type: Number },
+        title: { type: String },
+        part: { type: String },
     },
     data(){
         return{

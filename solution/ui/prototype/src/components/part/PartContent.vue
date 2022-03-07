@@ -10,6 +10,7 @@
                     :key="item.title"
                     :resourceParamsEmitter="emitResourcesParams"
                     :showResourceButtons="showResourceButtons"
+                    :supplementalContentCount="supplementalContentCount"
                 />
             </template>
         </div>
@@ -46,6 +47,11 @@ export default {
             type: Boolean,
             required: false,
             default: true
+        },
+        supplementalContentCount:{
+          type: Object,
+          required:false,
+          default:() =>{}
         }
     },
 

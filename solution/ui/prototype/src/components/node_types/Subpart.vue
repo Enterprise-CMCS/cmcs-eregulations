@@ -1,8 +1,11 @@
 <template>
     <article>
         <h1 tabindex="-1" :id="kebabTitle">
-            {{ node.title }}
+           <span v-if="numSupplementalContent" class="supplemental-content-count">{{numSupplementalContent}}</span>
+          {{ node.title }}
         </h1>
+
+
         <div v-if="showResourceButtons" class="btn-container">
             <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" />
         </div>
@@ -12,6 +15,7 @@
                 :key="child.title"
                 :resourceParamsEmitter="resourceParamsEmitter"
                 :showResourceButtons="showResourceButtons"
+                :supplementalContentCount="supplementalContentCount"
             />
         </template>
     </article>
@@ -20,7 +24,7 @@
 <script>
 import Node from "@/components/node_types/Node.vue";
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
-import { getKebabTitle } from "@/utilities/utils.js";
+import { getKebabTitle, getDisplayName } from "@/utilities/utils.js";
 
 export default {
     name: "Subpart",
@@ -43,13 +47,25 @@ export default {
             type: Boolean,
             required: false,
             default: true
-        }
+        },
+        supplementalContentCount: {
+            type:Object,
+            required: false
+        },
+
     },
 
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);
         },
+        numSupplementalContent(){
+            const total = this.node.children.reduce((count, node) => {
+              return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
+            }, 0)
+            console.log(total)
+            return total
+        }
     },
 
     methods: {

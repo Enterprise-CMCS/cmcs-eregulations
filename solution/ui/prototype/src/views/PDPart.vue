@@ -5,7 +5,15 @@
             <Header />
             <splitpanes>
                 <pane min-size="30">
-                    <left-column :title="title" :part="part" :subPart="subPart" :section="section" :structure="partContent" :navigation="navigation"/>
+                    <left-column
+                        :title="title"
+                        :part="part"
+                        :subPart="subPart"
+                        :section="section"
+                        :structure="partContent"
+                        :navigation="navigation"
+                        :supplementalContentCount="supplementalContentCount"
+                    />
 
                 </pane>
                 <pane min-size="30">
@@ -25,7 +33,13 @@ import { Splitpanes, Pane } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 import LeftColumn from "@/components/PDPart/LeftColumn";
 import RightColumn from "../components/PDPart/RightColumn";
-import { getPart, getSubPartsForPart, getPartsList, getSectionsForSubPart } from "@/utilities/api";
+import {
+  getPart,
+  getSubPartsForPart,
+  getPartsList,
+  getSectionsForSubPart,
+  getSupplementalContentCountForPart
+} from "@/utilities/api";
 export default {
 
     name: "Part",
@@ -65,7 +79,10 @@ export default {
             this.structure = await getPart(this.title, this.part);
             this.subPartList = await getSubPartsForPart(this.part);
             this.partsList = await getPartsList()
-            this.sections = await getSectionsForSubPart(this.part, this.subPart.split("-")[1])
+            if(this.subPart) {
+              this.sections = await getSectionsForSubPart(this.part, this.subPart.split("-")[1])
+            }
+            this.supplementalContentCount = await getSupplementalContentCountForPart(this.part)
             console.log(this.sections)
           } catch (error) {
               console.error(error);
@@ -86,6 +103,7 @@ export default {
             subPartList: [],
             partsList: [],
             sections: [],
+            supplementalContentCount: {},
         }
     },
     computed: {

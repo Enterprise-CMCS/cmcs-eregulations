@@ -391,6 +391,11 @@ const getKebabTitle = (label) => {
     return `${getKebabLabel(label)}-title`;
 }
 
+const getDisplayName = (label, title= 42) =>{
+        if (!label) return "na-label";
+    return `${title} ${label.join(".")}`;
+}
+
 // lifted straight from django pdepth templatetag
 const getParagraphDepth = (value) => {
     const sectionDepth = 2;
@@ -438,4 +443,5 @@ export {
     getKebabLabel,
     getKebabTitle,
     getParagraphDepth,
+    getDisplayName
 };
