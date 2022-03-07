@@ -41,16 +41,25 @@
             :sections="sections"
             :subparts="subparts"
         ></SupplementalContent>
+        <div class="btn-container" v-if="selectedIdentifier">
+            <ResourcesBtn
+                :clickHandler="routeToResourcesPage"
+                label="All"
+                type="solid"
+            />
+        </div>
     </div>
 </template>
 
 <script>
+import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import SupplementalContent from "legacy/js/src/components/SupplementalContent.vue";
 
 export default {
     name: "SectionResourcesSidebar",
 
     components: {
+        ResourcesBtn,
         SupplementalContent,
     },
 
@@ -107,6 +116,12 @@ export default {
 
         search() {
             console.log("search will happen here");
+        },
+
+        routeToResourcesPage() {
+            console.log(
+                "This will go to the resources page implemented in EREGCSC-1211"
+            );
         },
     },
 

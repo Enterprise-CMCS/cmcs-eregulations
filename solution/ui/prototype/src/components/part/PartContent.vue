@@ -20,7 +20,6 @@
 
 <script>
 import Node from "@/components/node_types/Node.vue";
-import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 export default {
@@ -28,7 +27,6 @@ export default {
 
     components: {
         Node,
-        ResourcesBtn,
         SimpleSpinner,
     },
 
@@ -92,10 +90,6 @@ $eregs-image-path: "~legacy-static/images";
 
     .content {
         max-width: $text-max-width;
-
-        .btn-container {
-            margin: 60px 0 40px;
-        }
 
         article,
         article section {
