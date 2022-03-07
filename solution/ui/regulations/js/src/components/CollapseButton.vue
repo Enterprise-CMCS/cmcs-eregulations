@@ -20,7 +20,9 @@
 export default {
     name: "CollapseButton",
 
-    inject: ["getStateOverride"],
+    inject: {
+        getStateOverride: { default: null, },
+    },
 
     props: {
         name: {
