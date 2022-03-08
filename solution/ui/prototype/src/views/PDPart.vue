@@ -13,6 +13,7 @@
                         :structure="partContent"
                         :navigation="navigation"
                         :supplementalContentCount="supplementalContentCount"
+                        @view-resources="setResourcesParams"
                     />
 
                 </pane>
@@ -178,6 +179,11 @@ export default {
         return results
       },
     },
+    methods:{
+        setResourcesParams(payload) {
+            console.log("payload", payload);
+        },
+    }
 }
 </script>
 

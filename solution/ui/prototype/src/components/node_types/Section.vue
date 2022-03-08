@@ -6,7 +6,7 @@
         class="reg-section"
     >
         <h2 class="section-title" :id="kebabTitle">
-            <span v-if="numSupplementalContent" class="supplemental-content-count">{{numSupplementalContent}}</span> {{ node.title }}
+            <button v-on:click="handleBtnClick" v-if="numSupplementalContent" class="supplemental-content-count">{{numSupplementalContent}}</button> {{ node.title }}
         </h2>
 
         <div class="paragraphs">

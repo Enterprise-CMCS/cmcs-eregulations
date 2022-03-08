@@ -1,21 +1,36 @@
 <template>
     <article>
-        <h1 tabindex="-1" :id="kebabTitle">
-           <span v-if="numSupplementalContent" class="supplemental-content-count">{{numSupplementalContent}}</span>
-          {{ node.title }}
+        <h1
+            :id="kebabTitle"
+            tabindex="-1"
+        >
+            <button
+                v-if="numSupplementalContent"
+                v-on:click="handleBtnClick"
+                class="supplemental-content-count"
+            >
+                {{ numSupplementalContent }}
+            </button>
+            {{ node.title }}
         </h1>
 
 
-        <div v-if="showResourceButtons" class="btn-container">
-            <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" />
+        <div
+            v-if="showResourceButtons"
+            class="btn-container"
+        >
+            <ResourcesBtn
+                :click-handler="handleBtnClick"
+                label="Subpart"
+            />
         </div>
         <template v-for="child in node.children">
             <Node
-                :node="child"
                 :key="child.title"
-                :resourceParamsEmitter="resourceParamsEmitter"
-                :showResourceButtons="showResourceButtons"
-                :supplementalContentCount="supplementalContentCount"
+                :node="child"
+                :resource-params-emitter="resourceParamsEmitter"
+                :show-resource-buttons="showResourceButtons"
+                :supplemental-content-count="supplementalContentCount"
             />
         </template>
     </article>
