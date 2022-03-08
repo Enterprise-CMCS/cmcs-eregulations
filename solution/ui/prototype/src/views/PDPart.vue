@@ -33,7 +33,7 @@ import Header from "@/components/Header.vue";
 import { Splitpanes, Pane } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 import LeftColumn from "@/components/PDPart/LeftColumn";
-import RightColumn from "../components/PDPart/RightColumn";
+import RightColumn from "@/components/PDPart/RightColumn";
 import {
   getPart,
   getSubPartsForPart,
@@ -76,7 +76,6 @@ export default {
       part:{
         async handler(){
           try {
-            console.log("getting structure")
             this.structure = await getPart(this.title, this.part);
             this.subPartList = await getSubPartsForPart(this.part);
             this.partsList = await getPartsList()
@@ -84,7 +83,6 @@ export default {
               this.sections = await getSectionsForSubPart(this.part, this.subPart.split("-")[1])
             }
             this.supplementalContentCount = await getSupplementalContentCountForPart(this.part)
-            console.log(this.sections)
           } catch (error) {
               console.error(error);
           }
@@ -115,7 +113,7 @@ export default {
         return this.structure?.[0].label_description ?? "N/A";
       },
       partContent() {
-        var results = this.structure?.[1];
+        let results = this.structure?.[1];
         if (results && this.subPart) {
           results = results.filter(subPart => {
             return subPart.label[0] === this.subPart.split("-")[1]
@@ -132,7 +130,6 @@ export default {
         if (this.section){
           results.name = "PDpart-section"
           const currentIndex = this.sections.indexOf(this.section)
-          console.log(currentIndex)
           results.previous = currentIndex > 0
               ?
               {title:this.title, part:this.part, subPart:this.subPart, section: + this.sections[currentIndex - 1]}
@@ -143,8 +140,6 @@ export default {
               {title:this.title, part:this.part, subPart:this.subPart, section: + this.sections[currentIndex + 1]}
               :
               null
-          console.log(typeof this.section)
-          console.log(results)
         }
         else if (this.subPart){
           results.name = "PDpart-subPart"
@@ -181,6 +176,7 @@ export default {
     },
     methods:{
         setResourcesParams(payload) {
+            // Implement response to user choosing a section or subpart here
             console.log("payload", payload);
         },
     }
