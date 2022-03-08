@@ -184,10 +184,6 @@ export default {
             this.selectedIdentifier = null;
             this.selectedScope = null;
         },
-        changeResourcesDisplay() {
-            this.resourcesDisplay =
-                this.resourcesDisplay === "drawer" ? "sidebar" : "drawer";
-        },
     },
 
     watch: {
