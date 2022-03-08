@@ -1,17 +1,16 @@
 <template>
     <div class="supplemental-content-container">
-            <supplemental-content-category
-                v-for="category in categories"
-                :key="category.name"
-                :name="category.name"
-                :description="category.description"
-                :supplemental_content="category.supplemental_content"
-                :sub_categories="category.sub_categories"
-                :isFetching="isFetching"
-            >
-            </supplemental-content-category>
-            <simple-spinner v-if="isFetching"></simple-spinner>
-
+        <supplemental-content-category
+            v-for="category in categories"
+            :key="category.name"
+            :name="category.name"
+            :description="category.description"
+            :supplemental_content="category.supplemental_content"
+            :sub_categories="category.sub_categories"
+            :isFetching="isFetching"
+        >
+        </supplemental-content-category>
+        <simple-spinner v-if="isFetching"></simple-spinner>
     </div>
 </template>
 
@@ -57,10 +56,6 @@ export default {
         };
     },
 
-    created() {
-       this.fetch_content(this.title, this.part);
-    },
-
     computed: {
         params_array: function () {
             return [
@@ -80,6 +75,42 @@ export default {
         },
     },
 
+    watch: {
+        sections() {
+            this.categories = [];
+            this.isFetching = true;
+            this.fetch_content(this.title, this.part);
+        },
+        subparts() {
+            this.categories = [];
+            this.isFetching = true;
+            this.fetch_content(this.title, this.part);
+        },
+    },
+
+    created() {
+        this.fetch_content(this.title, this.part);
+    },
+
+    mounted() {
+        if (!document.getElementById("categories")) return;
+
+        const rawCategories = JSON.parse(
+            document.getElementById("categories").textContent
+        );
+        const rawSubCategories = JSON.parse(
+            document.getElementById("sub_categories").textContent
+        );
+
+        this.categories = rawCategories.map((c) => {
+            const category = JSON.parse(JSON.stringify(c));
+            category.sub_categories = rawSubCategories.filter(
+                (subcategory) => subcategory.parent_id === category.id
+            );
+            return category;
+        });
+    },
+
     methods: {
         async fetch_content(title, part) {
             try {
@@ -95,14 +126,5 @@ export default {
             }
         },
     },
-    mounted() {
-      const rawCategories = JSON.parse(document.getElementById('categories').textContent)
-      const rawSubCategories = JSON.parse(document.getElementById('sub_categories').textContent)
-      this.categories = rawCategories.map(c => {
-        const category = JSON.parse(JSON.stringify(c))
-        category.sub_categories = rawSubCategories.filter(subcategory => subcategory.parent_id === category.id)
-        return category
-      })
-  },
 };
 </script>

@@ -89,7 +89,7 @@ export default {
             required: true,
         },
         has_sub_categories: {
-            type: Boolean,
+            type: Number,
             required: true,
         },
         limit: {
