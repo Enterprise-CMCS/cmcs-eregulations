@@ -130,6 +130,7 @@ class EffectivePartView(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         return HttpResponse(status=204)
 
+
 class ExistingPartsView(generics.ListAPIView):
 
     serializer_class = ExistingPartSerializer
