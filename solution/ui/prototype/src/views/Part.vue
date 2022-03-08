@@ -3,7 +3,12 @@
         <div id="app">
             <FlashBanner />
             <Header />
-            <PartNav :title="title" :part="part" :partLabel="partLabel">
+            <PartNav
+                :title="title"
+                :part="part"
+                :partLabel="partLabel"
+                :resourcesDisplay="resourcesDisplay"
+            >
                 <v-tabs
                     slider-size="5"
                     class="nav-tabs"
@@ -19,20 +24,32 @@
                     </v-tab>
                 </v-tabs>
             </PartNav>
-            <div class="content-container">
+            <div class="content-container" :class="contentContainerResourcesClass">
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(item, index) in tabsShape" :key="index">
                         <component
                             :is="item.component"
                             :structure="tabsContent[index]"
+                            :title="title"
                             :part="part"
+                            :resourcesDisplay="resourcesDisplay"
+                            :selectedIdentifier="selectedIdentifier"
+                            :selectedScope="selectedScope"
                             @view-resources="setResourcesParams"
                         ></component>
                     </v-tab-item>
                 </v-tabs-items>
+                <div class="sidebar" v-show="resourcesDisplay === 'sidebar'">
+                    <SectionResourcesSidebar
+                        :title="title"
+                        :part="part"
+                        :selectedIdentifier="selectedIdentifier"
+                        :selectedScope="selectedScope"
+                    />
+                </div>
             </div>
             <SectionResources
-                v-if="selectedIdentifier"
+                v-if="resourcesDisplay === 'drawer' && selectedIdentifier"
                 :title="title"
                 :part="part"
                 :selectedIdentifier="selectedIdentifier"
@@ -52,12 +69,14 @@ import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
 import SectionResources from "@/components/SectionResources.vue";
+import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 
 import { getPart } from "@/utilities/api";
 
 export default {
     components: {
         SectionResources,
+        SectionResourcesSidebar,
         FlashBanner,
         Footer,
         Header,
@@ -72,6 +91,7 @@ export default {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
+            resourcesDisplay: this.$route.params.resourcesDisplay || "drawer",
             structure: null,
             sections: [],
             tab: 1, // index 1, "Part"
@@ -121,6 +141,9 @@ export default {
         tabsContent() {
             return [this.tocContent, this.partContent, null, null];
         },
+        contentContainerResourcesClass() {
+            return `content-container-${this.resourcesDisplay}`;
+        }
     },
 
     async created() {
@@ -128,19 +151,29 @@ export default {
             () => this.$route.params,
             (toParams, previousParams) => {
                 // react to route changes...
+                if (toParams.part !== previousParams.part) {
+                    this.structure = null;
+                    this.clearResourcesParams();
+                    this.title = toParams.title;
+                    this.part = toParams.part;
+                    this.resourcesDisplay = toParams.resourcesDisplay || "drawer";
+                }
             }
         );
 
-        try {
-            this.structure = await getPart(this.title, this.part);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            console.log(this.structure);
-        }
+        await this.getPartStructure();
     },
 
     methods: {
+        async getPartStructure() {
+            try {
+                this.structure = await getPart(this.title, this.part);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                console.log(this.structure);
+            }
+        },
         setResourcesParams(payload) {
             console.log("payload", payload);
             this.selectedIdentifier = payload.identifier;
@@ -153,9 +186,14 @@ export default {
         },
     },
 
+    watch: {
+        async part(newPart) {
+            await this.getPartStructure();
+        },
+    },
+
     updated() {
         this.$nextTick(function () {
-            console.log("updated", this.tab);
             // call onResize to fix tab highlight misalignment bug
             // https://github.com/vuetifyjs/vuetify/issues/4733
             this.$refs.tabs && this.$refs.tabs.onResize();
@@ -164,4 +202,44 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
+
+$sidebar-top-margin: 40px;
+
+#app {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.content-container-drawer {
+    justify-content: center;
+}
+
+.content-container-sidebar {
+    justify-content: space-between;
+}
+
+.sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: $header-height + $sidebar-top-margin;
+    height: calc(100vh - #{$header-height} - #{$sidebar-top-margin});
+    flex: 0 0 450px;
+    margin: $sidebar-top-margin 0;
+    padding: 0 25px;
+    border-left: 1px solid $light_gray;
+    overflow: scroll;
+}
+
+</style>

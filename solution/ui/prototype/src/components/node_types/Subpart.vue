@@ -4,7 +4,11 @@
             {{ node.title }}
         </h1>
         <div class="btn-container">
-            <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" />
+            <ResourcesBtn
+                :clickHandler="handleBtnClick"
+                label="Subpart"
+                size="small"
+            />
         </div>
         <template v-for="child in node.children">
             <Node
@@ -54,5 +58,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
