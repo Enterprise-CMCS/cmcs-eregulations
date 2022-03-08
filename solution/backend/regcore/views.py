@@ -3,6 +3,7 @@ from datetime import date
 from rest_framework import generics, serializers
 from django.conf import settings
 from django.contrib.postgres.aggregates import StringAgg
+from django.http import HttpResponse
 
 from regcore.models import Part, ParserConfiguration, TitleConfiguration
 
@@ -123,6 +124,11 @@ class EffectivePartView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         return self.get_queryset().filter(name=self.kwargs.get(self.lookup_field)).latest("date")
 
+    def delete(self, request, *args, **kwargs):
+        return HttpResponse(status=204)
+
+    def patch(self, request, *args, **kwargs):
+        return HttpResponse(status=204)
 
 class ExistingPartsView(generics.ListAPIView):
 
