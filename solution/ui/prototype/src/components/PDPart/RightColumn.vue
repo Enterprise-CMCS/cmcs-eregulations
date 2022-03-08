@@ -38,7 +38,5 @@ export default {
     width: 100% !important;
     max-width: 100% !important;
 }
-.v-slide-group__content{
-    border-bottom:1px black solid;
-}
+
 </style>
