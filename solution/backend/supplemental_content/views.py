@@ -97,6 +97,7 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
                         )
         return Response({'error': False, 'content': request.data})
 
+
 class SupplementalContentByPartView(APIView):
     def get(self, request, format=None):
         part = request.GET.get('part', '')
