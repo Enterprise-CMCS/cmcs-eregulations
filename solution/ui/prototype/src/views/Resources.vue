@@ -1,5 +1,8 @@
 <template>
-    <h1>RESOURCES</h1>
+    <div>
+        <h1>RESOURCES</h1>
+        {{ queryParams }}
+    </div>
 </template>
 
 <script>
@@ -12,14 +15,14 @@ export default {
         propName: {
             type: String,
             required: false,
-            default: "default value"
+            default: "default value",
         },
     },
 
     data() {
         return {
-            dataProp: "value",
-        }
+            queryParams: this.$route.query,
+        };
     },
 
     computed: {
@@ -31,6 +34,21 @@ export default {
     methods: {
         methodName() {
             console.log("method has been invoked");
+        },
+    },
+
+    watch: {
+        "$route.params": {
+            async handler(toParams, previousParams) {
+                // react to route changes...
+                console.log("toParams in watch", toParams);
+            },
+        },
+        "$route.query": {
+            async handler(toQueries, previousQueries) {
+                // react to route changes...
+                console.log("toQueries in watch", toQueries);
+            },
         },
     },
 
@@ -49,10 +67,7 @@ export default {
     beforeDestroy() {},
 
     destroyed() {},
-}
+};
 </script>
 
-<style>
-
-</style>
-
+<style></style>
