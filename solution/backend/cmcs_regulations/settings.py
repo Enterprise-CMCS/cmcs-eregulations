@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'regcore',
     'regcore.search',
     'supplemental_content',
-    'report_builder',
     'solo',
     'django_opensearch_dsl',
     'corsheaders',

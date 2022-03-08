@@ -109,7 +109,7 @@ class PartSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "title", "date", "last_updated", "document", "structure", "toc")
 
 
-class EffectivePartView(generics.RetrieveUpdateDestroyAPIView):
+class EffectivePartView(generics.RetrieveAPIView):
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -123,12 +123,6 @@ class EffectivePartView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.get_queryset().filter(name=self.kwargs.get(self.lookup_field)).latest("date")
-
-    def delete(self, request, *args, **kwargs):
-        return HttpResponse(status=204)
-
-    def patch(self, request, *args, **kwargs):
-        return HttpResponse(status=204)
 
 
 class ExistingPartsView(generics.ListAPIView):
