@@ -11,3 +11,8 @@ class ContentsSerializer(serializers.ModelSerializer):
 class VersionsSerializer(serializers.BaseSerializer):
     def to_representation(self, instance):
         return instance.date
+
+
+class PartContentsSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance):
+        return instance.toc
