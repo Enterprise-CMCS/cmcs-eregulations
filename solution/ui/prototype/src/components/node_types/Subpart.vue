@@ -22,8 +22,8 @@
                 :node="child"
                 :key="child.title"
                 :resource-params-emitter="resourceParamsEmitter"
-                :show-resource-buttons="showResourceButtons"
-                :supplemental-content-count="supplementalContentCount"
+                :showResourceButtons="showResourceButtons"
+                :supplementalContentCount="supplementalContentCount"
             />
         </template>
     </article>
@@ -58,7 +58,8 @@ export default {
         },
         supplementalContentCount: {
             type:Object,
-            required: false
+            required: false,
+            default: () => {}
         },
 
     },
@@ -68,10 +69,13 @@ export default {
             return getKebabTitle(this.node.label);
         },
         numSupplementalContent(){
+            if (!this.supplementalContentCount){
+              return 0
+            }
             const total = this.node.children.reduce((count, node) => {
               return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
             }, 0)
-            console.log(total)
+
             return total
         }
     },

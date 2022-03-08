@@ -45,7 +45,9 @@
         <PartContent
             v-if="structure.length"
             :structure="structure"
+            :title="title"
             :part="part"
+            resourcesDisplay="drawer"
             :showResourceButtons="false"
             :supplementalContentCount="supplementalContentCount"
             @view-resources="setResourcesParams"

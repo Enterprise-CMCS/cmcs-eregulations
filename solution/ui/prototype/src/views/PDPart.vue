@@ -45,7 +45,7 @@ export default {
 
     name: "Part",
     components: {
-      RightColumn,
+        RightColumn,
         LeftColumn,
         FlashBanner,
         Footer,
@@ -98,7 +98,7 @@ export default {
             subPart: this.$route.params.subPart,
             section: this.$route.params.section,
             selectedSection: null,
-            structure: null,
+            structure: [],
             subPartList: [],
             partsList: [],
             sections: [],
@@ -123,7 +123,7 @@ export default {
             results = results[0].children.filter(section => section.label[1] === this.section)
           }
         }
-        return results
+        return results || []
       },
       navigation() {
         const results = {name:"PDpart", previous: null, next: null}

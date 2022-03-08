@@ -52,7 +52,8 @@ export default {
         },
         supplementalContentCount: {
             type:Object,
-            required: false
+            required: false,
+            default: () => {}
         },
     },
 

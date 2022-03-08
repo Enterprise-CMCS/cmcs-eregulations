@@ -64,7 +64,7 @@ export default {
         },
         numSupplementalContent(){
 
-          return this.supplementalContentCount[getDisplayName(this.node.label)]
+          return this.supplementalContentCount ? this.supplementalContentCount[getDisplayName(this.node.label)] : 0
         }
     },
 
