@@ -3,7 +3,6 @@ from datetime import date
 from rest_framework import generics, serializers
 from django.conf import settings
 from django.contrib.postgres.aggregates import StringAgg
-from django.http import HttpResponse
 
 from regcore.models import Part, ParserConfiguration, TitleConfiguration
 
