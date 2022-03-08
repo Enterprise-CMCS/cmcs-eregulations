@@ -1,5 +1,5 @@
 <template>
-    <form :class="formClasses" action="">
+    <form class="search-input-form" :class="formClasses" action="">
         <v-text-field
             flat
             solo
@@ -53,16 +53,18 @@ $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
 
-.v-input__icon.v-input__icon--prepend button {
-    background-color: $lighter_blue;
-    border-radius: 3px;
-}
+.search-input-form {
+    .v-input__icon.v-input__icon--prepend button {
+        background-color: $lighter_blue;
+        border-radius: 3px;
+    }
 
-.v-input__icon.v-input__icon--append button {
-    color: $mid_blue;
-}
+    .v-input__icon.v-input__icon--append button {
+        color: $mid_blue;
+    }
 
-.v-text-field.v-text-field--enclosed .v-input__slot {
-    max-width: 160px;
+    .v-text-field.v-text-field--enclosed .v-input__slot {
+        max-width: 160px;
+    }
 }
 </style>

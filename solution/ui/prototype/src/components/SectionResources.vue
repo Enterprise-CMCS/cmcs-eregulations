@@ -23,7 +23,7 @@
         <div class="footer-panel-content-container">
             <div class="title-container" style="margin-bottom: 25px">
                 <span class="subsection">§</span>
-                <span class="title"> {{ titleLabel }} Resources </span>
+                <span class="resource-title"> {{ titleLabel }} Resources </span>
                 <a style="font-size: 14px; margin-left: 30px">
                     Show All Resources</a
                 >
@@ -70,7 +70,7 @@
             <template v-else>
                 <div
                     v-for="category in availableContent"
-                    :key="category.name"
+                    :key="category.created_at"
                     :class="{ 'list-view': !cardView }"
                 >
                     <div class="supplemental-content-category-title">
@@ -79,20 +79,20 @@
                     <div v-if="cardView" class="flex-row-container">
                         <SupplementalContentCard
                             v-for="c in category.supplemental_content"
-                            :key="c.url"
+                            :key="c.created_at"
                             :supplemental-content="c"
                         />
                     </div>
                     <div v-else>
                         <supplemental-content-list
                             v-for="c in category.supplemental_content"
-                            :key="c.url"
+                            :key="c.created_at"
                             :supplemental-content="c"
                         />
                     </div>
                     <div
                         v-for="subcategory in category.sub_categories"
-                        :key="subcategory.name"
+                        :key="subcategory.created_at"
                     >
                         <div class="supplemental-content-subcategory-title">
                             {{ subcategory.name }}
@@ -100,14 +100,14 @@
                         <div v-if="cardView" class="flex-row-container">
                             <SupplementalContentCard
                                 v-for="c in subcategory.supplemental_content"
-                                :key="c.url"
+                                :key="c.created_at"
                                 :supplemental-content="c"
                             />
                         </div>
                         <div v-else>
                             <supplemental-content-list
                                 v-for="c in subcategory.supplemental_content"
-                                :key="c.url"
+                                :key="c.created_at"
                                 :supplemental-content="c"
                             />
                         </div>
@@ -330,7 +330,7 @@ $eregs-image-path: "~legacy-static/images";
             font-size: 26px;
             margin: -5px 5px 0 0;
         }
-        .title {
+        .resource-title {
             font-size: 30px;
         }
     }

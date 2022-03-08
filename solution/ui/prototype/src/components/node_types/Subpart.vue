@@ -1,9 +1,6 @@
 <template>
     <article>
-        <h1
-            :id="kebabTitle"
-            tabindex="-1"
-        >
+        <h1 tabindex="-1" :id="kebabTitle">
             <button
                 v-if="numSupplementalContent"
                 v-on:click="handleBtnClick"
@@ -13,21 +10,17 @@
             </button>
             {{ node.title }}
         </h1>
-
-
-        <div
-            v-if="showResourceButtons"
-            class="btn-container"
-        >
+        <div v-if="showResourceButtons" class="btn-container">
             <ResourcesBtn
-                :click-handler="handleBtnClick"
+                :clickHandler="handleBtnClick"
                 label="Subpart"
+                size="small"
             />
         </div>
         <template v-for="child in node.children">
             <Node
-                :key="child.title"
                 :node="child"
+                :key="child.title"
                 :resource-params-emitter="resourceParamsEmitter"
                 :show-resource-buttons="showResourceButtons"
                 :supplemental-content-count="supplementalContentCount"
@@ -91,5 +84,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

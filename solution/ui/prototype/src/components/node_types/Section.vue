@@ -15,7 +15,11 @@
             </template>
         </div>
         <div v-if="showResourceButtons" class="btn-container">
-            <ResourcesBtn :clickHandler="handleBtnClick" label="Section" />
+            <ResourcesBtn
+                :clickHandler="handleBtnClick"
+                label="Section"
+                size="small"
+            />
         </div>
     </section>
 </template>
@@ -73,6 +77,9 @@ export default {
 </script>
 
 <style>
+.btn-container {
+    margin: 20px 0px 50px;
+}
     .btn-container {
         margin: 20px 0px 50px;
     }
