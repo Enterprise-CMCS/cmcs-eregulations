@@ -14,6 +14,7 @@ from regcore.views import (
 
 from regcore.v3views import (
     ContentsViewSet,
+    TitleViewSet,
     VersionsViewSet,
     PartContentsViewSet,
 )
@@ -39,7 +40,11 @@ urlpatterns = [
     path("v3/", include([
         path("toc", ContentsViewSet.as_view({
             "get": "list",
+        })),
+        path("title/<name>", TitleViewSet.as_view({
+            "get": "retrieve",
             "post": "create",
+            "put": "update",
         })),
         path("title/<title>/part/<part>/versions", VersionsViewSet.as_view({
             "get": "list",

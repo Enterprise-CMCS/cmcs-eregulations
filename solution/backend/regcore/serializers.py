@@ -7,6 +7,12 @@ class ContentsSerializer(serializers.BaseSerializer):
         return instance.toc
 
 
+class TitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Title
+        fields = "__all__"
+
+
 class VersionsSerializer(serializers.BaseSerializer):
     def to_representation(self, instance):
         return instance.date
