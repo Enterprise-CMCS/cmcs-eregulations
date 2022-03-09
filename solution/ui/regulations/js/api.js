@@ -10,7 +10,7 @@ import _keys from "lodash/keys";
 import _map from "lodash/map";
 import localforage from "localforage";
 
-import { delay, getKebabDate, niceDate, parseError } from "./utils";
+import { delay, parseError } from "./utils";
 
 let config = {
     fetchMode: "cors",
@@ -18,13 +18,12 @@ let config = {
 };
 
 localforage.config({
-    name: "eregs",
+    name: "eregs-pilot",
     version: 1.0,
     storeName: "eregs_django_pilot", // Should be alphanumeric, with underscores.
 });
 
 let token;
-let decodedIdToken;
 const authHeader = (tok) => ({
     Authorization: `Bearer ${tok}`,
     "Content-Type": "application/json",
