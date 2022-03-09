@@ -41,7 +41,7 @@ urlpatterns = [
         path("toc", ContentsViewSet.as_view({
             "get": "list",
         })),
-        path("title/<name>", TitleViewSet.as_view({
+        path("title/<title>", TitleViewSet.as_view({
             "get": "retrieve",
             "post": "create",
             "put": "update",
