@@ -9,10 +9,11 @@ from regcore.views import SettingsAuthentication
 from regcore.serializers import (
     ContentsSerializer,
     VersionsSerializer,
-    PartContentsSerializer,
 )
 
+
 class MultipleFieldLookupMixin(object):
+    # must define lookup_fields mapping with entries like { "field_name": "url_parameter", ... }
     def get_object(self):
         queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
@@ -44,7 +45,7 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
 
 class PartContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.all()
-    serializer_class = PartContentsSerializer
+    serializer_class = ContentsSerializer
     lookup_fields = {
         "title": "title",
         "name": "part",
