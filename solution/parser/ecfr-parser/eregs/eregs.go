@@ -65,6 +65,44 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 	return network.PostJSON(ctx, eregsPath, p, true, postAuth)
 }
 
+// GetTitle retrieves a title object from regcore in eRegs
+func GetTitle(ctx context.Context, title int) (Title, error) {
+	eregsPath, err := url.Parse(BaseURL)
+	if err != nil {
+		return err
+	}
+	// TODO: remove the following line on v3 move! BaseURL should point to v3.
+	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
+	
+	log.Trace("[eregs] Retrieving title ", title, " from eRegs")
+
+	body, err := network.Fetch(ctx, eregsPath, true)
+	if err != nil {
+		return nil, err
+	}
+
+	var t Title
+	d := json.NewDecoder(body)
+	if err := d.Decode(&t); err != nil {
+		return nil, fmt.Errorf("Unable to decode response body while retrieving title object")
+	}
+
+	return t, nil
+}
+
+// PostTitle sends a title object to regcore in eRegs for table of contents tracking
+func PostTitle(ctx context.Context, t *Title) error {
+	eregsPath, err := url.Parse(BaseURL)
+	if err != nil {
+		return nil
+	}
+	// TODO: remove the following line on v3 move! BaseURL should point to v3.
+	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
+	return network.PostJSON(ctx, eregsPath, t, true, postAuth)
+}
+
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
 	checkURL, err := url.Parse(BaseURL)
