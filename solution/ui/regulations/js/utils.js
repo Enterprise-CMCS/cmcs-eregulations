@@ -1,9 +1,6 @@
 /* eslint-disable */
 import _delay from "lodash/delay";
 import _get from "lodash/get";
-import _isEmpty from "lodash/isEmpty";
-import _isNil from "lodash/isNil";
-import _isString from "lodash/isString";
 
 // a promise friendly delay function
 function delay(seconds) {
