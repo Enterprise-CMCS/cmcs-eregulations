@@ -2,17 +2,12 @@
 
 import _filter from "lodash/filter";
 import _get from "lodash/get";
-import _isArray from "lodash/isArray";
 import _isBoolean from "lodash/isBoolean";
 import _isFunction from "lodash/isFunction";
 import _isNil from "lodash/isNil";
 import _isObject from "lodash/isObject";
-import _isUndefined from "lodash/isUndefined";
 import _keys from "lodash/keys";
 import _map from "lodash/map";
-import _set from "lodash/set";
-import _setWith from "lodash/setWith";
-import _sortedUniq from "lodash/sortedUniq";
 import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
