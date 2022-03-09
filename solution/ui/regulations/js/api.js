@@ -20,7 +20,7 @@ let config = {
 localforage.config({
     name: "eregs",
     version: 1.0,
-    storeName: "eregs_django", // Should be alphanumeric, with underscores.
+    storeName: "eregs_django_pilot", // Should be alphanumeric, with underscores.
 });
 
 let token;
