@@ -18,6 +18,7 @@
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",
+    "splitpanes": "^2.4.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0"

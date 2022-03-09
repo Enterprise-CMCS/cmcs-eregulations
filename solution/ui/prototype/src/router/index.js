@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue";
 import Part from "@/views/Part.vue";
 import Resources from "@/views/Resources.vue";
 import CacheExplorer from "@/views/CacheExplorer";
+import PDPart from "@/views/PDPart";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,21 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
             import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    },
+    {
+        path: "/PD/:title/:part/:subPart/:section",
+        name: "PDpart-section",
+        component: PDPart,
+    },
+        {
+        path: "/PD/:title/:part/:subPart",
+        name: "PDpart-subPart",
+        component: PDPart,
+    },
+        {
+        path: "/PD/:title/:part",
+        name: "PDpart",
+        component: PDPart,
     },
     {
         path: "/:title/:part/:resourcesDisplay?", // resourcesDisplay will be "drawer" or "sidebar"

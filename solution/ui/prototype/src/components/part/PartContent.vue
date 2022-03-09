@@ -10,6 +10,8 @@
                 :node="item"
                 :key="item.title"
                 :resourceParamsEmitter="emitResourcesParams"
+                :showResourceButtons="showResourceButtons"
+                :supplementalContentCount="supplementalContentCount"
             />
         </div>
         <div v-else>
@@ -47,6 +49,16 @@ export default {
             type: String,
             required: true,
         },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+        supplementalContentCount:{
+            type: Object,
+            required:false,
+            default:() =>{}
+        }
     },
 
     computed: {
