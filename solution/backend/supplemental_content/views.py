@@ -1,9 +1,11 @@
+from django.http import JsonResponse
 from rest_framework import generics
+from rest_framework.views import APIView
 from django.conf import settings
 
 from rest_framework.response import Response
 
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Count
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
@@ -105,3 +107,14 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
                     defaults={'parent': new_subpart}
                 )
         return Response({'error': False, 'content': request.data})
+
+
+class SupplementalContentByPartView(APIView):
+    def get(self, request, format=None):
+        part = request.GET.get('part', '')
+        results = AbstractLocation.objects.filter(part=part).annotate(num_locations=Count('supplemental_content')).filter(
+            num_locations__gt=0)
+        data = {}
+        for r in results:
+            data[r.display_name] = r.num_locations
+        return JsonResponse(data)
