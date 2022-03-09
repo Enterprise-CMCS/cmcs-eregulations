@@ -189,6 +189,10 @@ export default {
   justify-content: left;
   align-items: flex-start;
   display: flex;
+  position: -webkit-sticky;
+  position: sticky;
+  overflow: scroll;
+  height: calc(100vh - 124px);
 }
 
 .splitpanes--vertical > .splitpanes__splitter {

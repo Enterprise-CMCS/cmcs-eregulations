@@ -69,14 +69,14 @@ export default {
             return getKebabTitle(this.node.label);
         },
         numSupplementalContent(){
-            if (!this.supplementalContentCount){
-              return 0
-            }
-            const total = this.node.children.reduce((count, node) => {
+          let total = 0
+          if (this.supplementalContentCount && this.node.children ) {
+
+            total = this.node.children.reduce((count, node) => {
               return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
             }, 0)
-
-            return total
+          }
+          return total
         }
     },
 
