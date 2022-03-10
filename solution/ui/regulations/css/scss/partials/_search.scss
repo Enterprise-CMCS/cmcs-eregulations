@@ -169,6 +169,11 @@
         border-radius: 3px 0 0 3px;
         outline: none;
 
+        &#search-field {
+            border: 1px solid $border_color;
+            border-right: none;
+        }
+
         &:focus {
             color: $primary_link_hover;
         }
