@@ -386,20 +386,19 @@ const getHomepageStructure = async () => {
     return transformedResult;
 };
 
-const getAllParts = async () =>{
-    return  await httpApiGet("all_parts");
+const getAllParts = async () => {
+    return await httpApiGet("all_parts");
 }
 
-const getSubPartsForPart = async (part) =>{
+const getSubPartsForPart = async (part) => {
     const all_parts = await getAllParts()
     const parts = all_parts.map(d => d.name)
     console.log(parts)
     const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
-    const subParts = potentialSubParts.filter(p=>p.type==="subpart")
+    const subParts = potentialSubParts.filter(p => p.type === "subpart")
     return subParts.map(s => s.identifier[0])
 
 }
-
 
 const getPart = async (title, part) => {
     const result = await httpApiGet(
@@ -418,11 +417,33 @@ const getSupplementalContent = async (
     title = "42",
     part,
     scope,
-    identifier 
+    identifier
 ) => {
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?&${scope}s=${identifier}`
     );
+    return result;
+};
+
+const getSupplementalContentNew = async (
+    title,
+    part,
+    sections =[],
+    subparts= []
+) => {
+    let sString = '';
+    for (let s in sections) {
+        sString = sString + "&sections=" + sections[s]
+    }
+    console.log(sString)
+    for(let sp in subparts){
+        sString = sString + "&subparts=" + subparts[sp]
+    }
+
+    const result = await httpApiGet(
+        `title/${title}/part/${part}/supplemental_content?${sString}`
+    );
+    
     return result;
 };
 
@@ -445,5 +466,6 @@ export {
     getCacheItem,
     setCacheItem,
     getSupplementalContent,
+    getSupplementalContentNew,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

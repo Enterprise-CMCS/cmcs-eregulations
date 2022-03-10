@@ -9,7 +9,7 @@
 
                 </pane>
                 <pane min-size="30">
-                    <right-column :title="title" :part="part" />
+                    <right-column :title="title" :part="part" :subparts="partContent" />
                 </pane>
             </splitpanes>
             <Footer />
@@ -121,7 +121,7 @@ export default {
 
         try {
             this.structure = await getPart(this.title, this.part);
-            this.subPartList = await getSubPartsForPart(this.part)
+            this.subPartList = await getSubPartsForPart(this.part);
 
         } catch (error) {
             console.error(error);

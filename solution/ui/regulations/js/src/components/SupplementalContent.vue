@@ -4,7 +4,7 @@
                 v-for="category in categories"
                 :key="category.name"
                 :name="category.name"
-                :description="category.description"
+                :description="category.description" 
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
                 :isFetching="isFetching"

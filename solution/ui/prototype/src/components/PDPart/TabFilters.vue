@@ -4,18 +4,18 @@
             <v-tab v-for="tab in tabs" :key="tab">{{ tab }}</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
-            <v-tab-item v-for="d in data" :key="d">
+            <v-tab-item v-for="d in tabs" :key="d">
                 <template v-if="tabs[tab] === 'Section'">
                     <v-container fluid
                         ><v-row dense v-for="i in d"
-                            ><SectionCards class="section-cards" v-bind:name="'Section Name'" v-bind:description="'Section Description'" /> </v-row
+                            ><SectionCards class="section-cards" v-bind:title="title" v-bind:part="part" /> </v-row
                     ></v-container>
                 </template>
                 <template v-else-if="tabs[tab] === 'Part'"
                     ><PartSummary v-bind:title="title" v-bind:part="part"
                 /></template>
                 <template v-else-if="tabs[tab]=== 'Subpart'">
-                    <SubpartResources /></template>
+                    <SubpartResources v-bind:subparts="subparts" /></template>
             </v-tab-item>
         </v-tabs-items>
     </div>
@@ -35,19 +35,21 @@ export default {
     name: "RightColumn",
     props: {
         title: { type: Number },
-        part: { type: Number },
+        part: { type: Number },   
+        subparts: {type: Array, required:false}
+     
     },
     data() {
         return {
             tab: null,
             tabs: ["Part", "Subpart", "Section"],
-            data: [
-                ["Part Data", "Part Data2"],
-                ["Subpart Data"],
-                ["Section Data", "Section Data", "Section Data"],
-            ],
         };
     },
+    computed:{
+        subpartList: function (){
+            
+        }
+    }
 };
 </script>
 <style scoped>

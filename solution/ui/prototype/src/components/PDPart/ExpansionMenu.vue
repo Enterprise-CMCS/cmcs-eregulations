@@ -8,12 +8,12 @@
             <v-btn style="float: right" @click="hide" text>Hide All</v-btn></template>
         </div>
         <v-expansion-panels v-model="panel" multiple accordion>
-            <v-expansion-panel v-for="(item, i) in 3" :key="i">
+            <v-expansion-panel v-for="(item, i) in data" :key="i">
                 <v-expansion-panel-header>
-                    {{ subpiece }}
+                    {{ item.title }}
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                    {{ content }}
+
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
@@ -21,13 +21,20 @@
 </template>
 
 <script>
+import Node from "@/components/node_types/Node.vue";
+
 export default {
+        components: {
+        Node,
+    },
     name: "ExpansionMenu",
     props: {
         header: { type: String },
         subpiece: { type: Number },
         content: { type: String },
         expandAll: { type: Boolean },
+        data: {type: Array}
+        
     },
     data() {
         return {
