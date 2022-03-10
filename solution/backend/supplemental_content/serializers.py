@@ -37,16 +37,10 @@ class PolymorphicSerializer(serializers.Serializer):
 # Serializers for children of AbstractLocation
 
 
-class AbstractLocationSerializer(PolymorphicSerializer):
+class AbstractLocationSerializer(serializers.Serializer):
     title = serializers.IntegerField()
     part = serializers.IntegerField()
-
-    def get_serializer_map(self):
-        return {
-            Subpart: SubpartSerializer,
-            SubjectGroup: SubjectGroupSerializer,
-            Section: SectionSerializer,
-        }
+    display_name = serializers.CharField()
 
     class Meta:
         model = AbstractLocation
@@ -94,6 +88,17 @@ class AbstractCategorySerializer(PolymorphicSerializer):
         model = AbstractCategory
 
 
+class SimpleCategorySerializer(serializers.Serializer):
+    name = serializers.CharField()
+    description = serializers.CharField()
+    order = serializers.IntegerField()
+    show_if_empty = serializers.BooleanField()
+    id = serializers.IntegerField()
+    display_name = serializers.CharField()
+
+    class Meta:
+        model = AbstractCategory
+
 class CategorySerializer(serializers.Serializer):
     class Meta:
         model = Category
@@ -127,13 +132,12 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
     def _add_supplemental_content(self, flat_tree, supplemental_content):
         for content in supplemental_content:
             category = flat_tree[content["category"]["id"]]
+            del content["category"]
             category["supplemental_content"].append(content)
 
     def _get_categories(self, supplemental_content):
-        raw_categories = AbstractCategory.objects.filter(show_if_empty=True).distinct()
+        raw_categories = AbstractCategory.objects.all()
         categories = AbstractCategorySerializer(raw_categories, many=True).to_representation(raw_categories)
-        for content in supplemental_content:
-            categories.append(content["category"])
         return categories
 
     def _make_category_trees(self, categories):
@@ -171,6 +175,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
 
     def _sort(self, tree):
         tree = sorted(tree, key=lambda category: (category["order"], category["name"]))
+        result = []
         for category in tree:
             category["supplemental_content"] = sorted(
                 category["supplemental_content"],
@@ -180,14 +185,17 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
                 ),
             )
             category["sub_categories"] = self._sort(category["sub_categories"])
-        return tree
+            # Throw out empty categories
+            if len(category["supplemental_content"]) or len(category["sub_categories"]) or category["show_if_empty"]:
+                result.append(category)
+        return result
 
 
 class AbstractSupplementalContentSerializer(PolymorphicSerializer):
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
     approved = serializers.BooleanField()
-    category = AbstractCategorySerializer()
+    category = SimpleCategorySerializer()
     locations = AbstractLocationSerializer(many=True)
 
     def get_serializer_map(self):
