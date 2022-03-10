@@ -114,6 +114,7 @@ class SimpleCategorySerializer(serializers.Serializer):
     class Meta:
         model = AbstractCategory
 
+
 class CategorySerializer(serializers.Serializer):
     class Meta:
         model = Category
@@ -151,7 +152,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
             category["supplemental_content"].append(content)
 
     def _get_categories(self):
-        raw_categories = AbstractCategory.objects.all()
+        raw_categories = AbstractCategory.objects.all().select_subclasses()
         categories = AbstractCategorySerializer(raw_categories, many=True).to_representation(raw_categories)
         return categories
 
@@ -224,6 +225,11 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
 
 
 class SupplementalContentSerializer(serializers.Serializer):
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    approved = serializers.BooleanField()
+    category = SimpleCategorySerializer()
+    locations = SimpleLocationSerializer(many=True)
     url = serializers.URLField()
     description = serializers.CharField()
     name = serializers.CharField()
@@ -231,3 +237,4 @@ class SupplementalContentSerializer(serializers.Serializer):
 
     class Meta:
         model = SupplementalContent
+        list_serializer_class = ApplicableSupplementalContentSerializer

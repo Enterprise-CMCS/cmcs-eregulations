@@ -1,5 +1,5 @@
 import datetime
-
+from model_utils.managers import InheritanceManager
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -33,6 +33,8 @@ class AbstractCategory(models.Model, AbstractModel):
     def save(self, *args, **kwargs):
         self.display_name = self._get_string_repr()
         super(AbstractCategory, self).save(*args, **kwargs)
+
+    objects = InheritanceManager()
 
 
 class Category(AbstractCategory):
@@ -143,6 +145,8 @@ class AbstractSupplementalContent(models.Model, AbstractModel):
     def save(self, *args, **kwargs):
         self.display_name = self._get_string_repr()
         super(AbstractSupplementalContent, self).save(*args, **kwargs)
+
+    objects = InheritanceManager()
 
 
 class SupplementalContent(AbstractSupplementalContent):

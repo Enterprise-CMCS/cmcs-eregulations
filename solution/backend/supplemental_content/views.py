@@ -17,13 +17,14 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from .models import (
     AbstractSupplementalContent,
+    AbstractCategory,
     SupplementalContent,
     AbstractLocation,
     Section,
     Subpart,
 )
 
-from .serializers import AbstractSupplementalContentSerializer
+from .serializers import AbstractSupplementalContentSerializer, SupplementalContentSerializer
 
 
 class SettingsUser:
@@ -57,29 +58,32 @@ class SupplementalContentView(generics.ListAPIView):
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
 
-        query = AbstractSupplementalContent.objects \
-            .filter(
-                Q(locations__section__section_id__in=section_list) |
-                Q(locations__subpart__subpart_id__in=subpart_list) |
-                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part,
-            )\
-            .prefetch_related(
-                Prefetch(
-                    'locations',
-                    queryset=AbstractLocation.objects.filter(
-                        Q(section__section_id__in=section_list) |
-                        Q(subpart__subpart_id__in=subpart_list) |
-                        Q(subjectgroup__subject_group_id__in=subjgrp_list),
-                        title=title,
-                        part=part,
-                    )
+        query = AbstractSupplementalContent.objects.filter(
+            Q(locations__section__section_id__in=section_list) |
+            Q(locations__subpart__subpart_id__in=subpart_list) |
+            Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
+            approved=True,
+            category__isnull=False,
+            locations__title=title,
+            locations__part=part,
+        ).prefetch_related(
+            Prefetch(
+                'locations',
+                queryset=AbstractLocation.objects.filter(
+                    Q(section__section_id__in=section_list) |
+                    Q(subpart__subpart_id__in=subpart_list) |
+                    Q(subjectgroup__subject_group_id__in=subjgrp_list),
+                    title=title,
+                    part=part,
                 )
-            ).distinct()
-        serializer = AbstractSupplementalContentSerializer(query, many=True)
+            )
+        ).prefetch_related(
+            Prefetch(
+                'category',
+                queryset=AbstractCategory.objects.all().select_subclasses()
+            )
+        ).distinct().select_subclasses(SupplementalContent)
+        serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
 
@@ -122,40 +126,3 @@ class SupplementalContentByPartView(APIView):
         for r in results:
             data[r.display_name] = r.num_locations
         return JsonResponse(data)
-
-# This whole view will be deleted after the investigation is over.
-class InvestigationView(APIView):
-    def get(self, request, format=None):
-        title = 42
-        part = self.request.GET.get('part', 441)
-        section_list = self.request.GET.getlist("sections")
-        subpart_list = self.request.GET.getlist("subparts")
-        subjgrp_list = self.request.GET.getlist("subjectgroups")
-
-        query = AbstractSupplementalContent.objects \
-            .filter(
-            Q(locations__section__section_id__in=section_list) |
-            Q(locations__subpart__subpart_id__in=subpart_list) |
-            Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
-            approved=True,
-            category__isnull=False,
-            locations__title=title,
-            locations__part=part,
-        ) \
-            .prefetch_related(
-            Prefetch(
-                'locations',
-                queryset=AbstractLocation.objects.filter(
-                    Q(section__section_id__in=section_list) |
-                    Q(subpart__subpart_id__in=subpart_list) |
-                    Q(subjectgroup__subject_group_id__in=subjgrp_list),
-                    title=title,
-                    part=part,
-                )
-            )
-        ).distinct()
-
-        serializer = AbstractSupplementalContentSerializer(query, many=True)
-        data = json.dumps(serializer.data, sort_keys=True, indent=2)
-        response = HttpResponse(u'<html><body><pre>{}</pre></body></html>'.format(data))
-        return response
