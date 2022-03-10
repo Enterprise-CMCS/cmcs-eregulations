@@ -1,10 +1,7 @@
-import json
-from django.forms.models import model_to_dict
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from rest_framework import generics
 from rest_framework.views import APIView
 from django.conf import settings
-from django.core import serializers
 
 from rest_framework.response import Response
 
