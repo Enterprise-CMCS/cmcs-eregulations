@@ -37,7 +37,22 @@ class PolymorphicSerializer(serializers.Serializer):
 # Serializers for children of AbstractLocation
 
 
-class AbstractLocationSerializer(serializers.Serializer):
+class AbstractLocationSerializer(PolymorphicSerializer):
+    title = serializers.IntegerField()
+    part = serializers.IntegerField()
+
+    def get_serializer_map(self):
+        return {
+            Subpart: SubpartSerializer,
+            SubjectGroup: SubjectGroupSerializer,
+            Section: SectionSerializer,
+        }
+
+    class Meta:
+        model = AbstractLocation
+
+
+class SimpleLocationSerializer(serializers.Serializer):
     title = serializers.IntegerField()
     part = serializers.IntegerField()
     display_name = serializers.CharField()
@@ -124,7 +139,7 @@ class SubSubCategorySerializer(serializers.Serializer):
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
     def to_representation(self, instance):
         supplemental_content = super().to_representation(instance)
-        categories = self._get_categories(supplemental_content)
+        categories = self._get_categories()
         tree, flat_tree = self._make_category_trees(categories)
         self._add_supplemental_content(flat_tree, supplemental_content)
         return self._sort(self._to_array(tree))
@@ -135,7 +150,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
             del content["category"]
             category["supplemental_content"].append(content)
 
-    def _get_categories(self, supplemental_content):
+    def _get_categories(self):
         raw_categories = AbstractCategory.objects.all()
         categories = AbstractCategorySerializer(raw_categories, many=True).to_representation(raw_categories)
         return categories
@@ -185,7 +200,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
                 ),
             )
             category["sub_categories"] = self._sort(category["sub_categories"])
-            # Throw out empty categories
+            # only keep populated categories
             if len(category["supplemental_content"]) or len(category["sub_categories"]) or category["show_if_empty"]:
                 result.append(category)
         return result
@@ -196,7 +211,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
     updated_at = serializers.DateTimeField()
     approved = serializers.BooleanField()
     category = SimpleCategorySerializer()
-    locations = AbstractLocationSerializer(many=True)
+    locations = SimpleLocationSerializer(many=True)
 
     def get_serializer_map(self):
         return {
