@@ -37,6 +37,7 @@ type Part struct {
 	Date      string          `json:"date" xml:"-"`
 	Structure *ecfr.Structure `json:"structure" xml:"-"`
 	Document  *parsexml.Part  `json:"document"`
+	Depth	  int			  `json:"depth"`
 	Processed bool
 }
 
@@ -67,25 +68,29 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 
 // GetTitle retrieves a title object from regcore in eRegs
 func GetTitle(ctx context.Context, title int) (Title, error) {
+	emptyTitle := Title{
+		Name: fmt.Sprintf("%s", title),
+	}
+
 	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
-		return err
+		return emptyTitle, err
 	}
 	// TODO: remove the following line on v3 move! BaseURL should point to v3.
 	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
-	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
+	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", title))
 	
 	log.Trace("[eregs] Retrieving title ", title, " from eRegs")
 
 	body, err := network.Fetch(ctx, eregsPath, true)
 	if err != nil {
-		return nil, err
+		return emptyTitle, err
 	}
 
 	var t Title
 	d := json.NewDecoder(body)
 	if err := d.Decode(&t); err != nil {
-		return nil, fmt.Errorf("Unable to decode response body while retrieving title object")
+		return emptyTitle, fmt.Errorf("Unable to decode response body while retrieving title object")
 	}
 
 	return t, nil
