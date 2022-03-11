@@ -4,7 +4,7 @@
         <p>Subpart Description</p>
 
         <h3 style="display: inline">Subparts</h3>
-        <template v-if="panel.length">
+        <template v-if="this.panel.length <= 0">
             <v-btn style="float: right" @click="all" text
                 >Expand All</v-btn
             ></template
@@ -14,7 +14,7 @@
                 >Hide All</v-btn
             ></template
         >
-        <v-expansion-panels accordion>
+        <v-expansion-panels accordion multiple v-model="panel">
             <v-expansion-panel v-for="(subpart, i) in subParts" :key="i">
                 <v-expansion-panel-header
                     >Subpart {{ subpart }}</v-expansion-panel-header
@@ -26,22 +26,11 @@
                         v-bind:subpart="subpart" /></v-expansion-panel-content
             ></v-expansion-panel>
         </v-expansion-panels>
-
-        <supplemental-content-category
-            v-for="category in supList"
-            :key="category.name"
-            :name="category.name"
-            :description="category.description"
-            :supplemental_content="category.supplemental_content"
-            :sub_categories="category.sub_categories"
-            :isFetching="true"
-        >
-        </supplemental-content-category>
         <br />
     </div>
 </template>
 <script>
-import ExpansionMenu from "./ExpansionMenu.vue";
+
 import { getSupplementalContentNew, getSubPartsForPart } from "@/utilities/api";
 import SupplementalContentCategory from "../../../../regulations/js/src/components/SupplementalContentCategory.vue";
 import SubpartSupplement from "./SubpartSupplemental.vue";
@@ -52,7 +41,6 @@ export default {
         part: { type: String },
     },
     components: {
-        ExpansionMenu,
         getSupplementalContentNew,
         SupplementalContentCategory,
         SubpartSupplement,
@@ -66,7 +54,7 @@ export default {
 
     methods: {
         all() {
-            this.panel = [...Array(this.panel).keys()].map((k, i) => i);
+            this.panel = [...Array(this.subParts.length).keys()].map((k, i) => i);
         },
 
         hide() {
@@ -79,7 +67,7 @@ export default {
         } catch (error) {
             console.error(error);
         } finally {
-            console.log(this.supList);
+            console.log(this.subParts);
         }
     },
 };

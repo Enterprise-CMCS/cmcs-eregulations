@@ -11,7 +11,6 @@
             /></v-tab-item>
             <v-tab-item>
                 <SubpartResources
-                    v-bind:subparts="subparts"
                     v-bind:title="title"
                     v-bind:part="part"
                 />
@@ -52,6 +51,7 @@ export default {
     },
 };
 </script>
+
 <style scoped>
 .tab-bar {
     border-bottom: 1px solid #d6d7d9;
