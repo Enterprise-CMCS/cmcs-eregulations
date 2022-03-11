@@ -6,7 +6,7 @@
         class="reg-section"
     >
         <h2 class="section-title" :id="kebabTitle">
-            {{ node.title }}
+            <button v-on:click="handleBtnClick" v-if="numSupplementalContent" class="supplemental-content-count">{{numSupplementalContent}}</button> {{ node.title }}
         </h2>
 
         <div class="paragraphs">
@@ -23,7 +23,7 @@
 <script>
 import Node from "@/components/node_types/Node.vue";
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
-import { getKebabTitle } from "@/utilities/utils.js";
+import { getKebabTitle, getDisplayName } from "@/utilities/utils.js";
 
 export default {
     name: "Section",
@@ -53,6 +53,10 @@ export default {
         kebabTitle() {
             return getKebabTitle(this.node.label);
         },
+        numSupplementalContent(){
+
+          return this.supplementalContentCount ? this.supplementalContentCount[getDisplayName(this.node.label)] : 0
+        }
     },
 
     methods: {
@@ -64,7 +68,19 @@ export default {
 </script>
 
 <style>
+.btn-container {
+    margin: 20px 0px 50px;
+}
     .btn-container {
         margin: 20px 0px 50px;
+    }
+    .supplemental-content-count{
+      background-color: #EEFAFE;
+      color: #046791;
+      padding: 3px 7px;
+      border: #C0EAF8 solid 1px;
+      border-radius: 3px;
+      font-size: 12px;
+      line-height: 20px;
     }
 </style>

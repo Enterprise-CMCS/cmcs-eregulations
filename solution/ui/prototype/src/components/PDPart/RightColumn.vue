@@ -7,42 +7,36 @@
             </span>
         </div>
         <div>
-            <v-text-field clearable outlined class="sidebar-search"> </v-text-field>
+            <v-text-field clearable outlined class="example"> </v-text-field>
         </div>
-        <TabFilters
-            v-bind:title="title"
-            v-bind:part="part"
-            v-bind:subparts="subparts"
-        />
+<TabFilters/>
     </div>
 </template>
 
 <script>
-import TabFilters from "./TabFilters.vue";
+import TabFilters from "./TabFilters.vue"
 export default {
     components: {
-        TabFilters,
+        TabFilters
     },
     name: "RightColumn",
     props: {
-        title: { type: Number },
-        part: { type: Number },
-        subparts: { type: Array, required: false },
+        title: { type: String },
+        part: { type: String },
     },
-    data() {
-        return {
+    data(){
+        return{
             tabs: null,
-            text: "djfdhkf",
-        };
-    },
+            text: 'djfdhkf'
+        }
+    }
 };
 </script>
 
 <style>
-.sidebar-search.v-text-field.v-text-field--enclosed {
-    width: 95% !important;
+.v-text-field.v-text-field--enclosed .v-input__slot {
+    width: 100% !important;
+    max-width: 100% !important;
 }
-.v-slide-group__content {
-    border-bottom: 1px black solid;
-}
+
 </style>

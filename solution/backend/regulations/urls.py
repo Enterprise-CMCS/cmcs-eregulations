@@ -8,6 +8,7 @@ from regulations.views.homepage import HomepageView
 from regulations.views.about import AboutView
 from regulations.views.supplemental_content import SupplementalContentView
 from regulations import converters
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
@@ -29,5 +30,7 @@ urlpatterns = [
     path('<numeric:title>/<numeric:part>/<version:version>/', PartReaderView.as_view(), name='reader_view'),
     path('goto/', GoToRedirectView.as_view(), name='goto'),
     path('search/', SearchView.as_view(), name='search'),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
 ]

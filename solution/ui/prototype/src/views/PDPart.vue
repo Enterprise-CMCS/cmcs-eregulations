@@ -5,14 +5,23 @@
             <Header />
             <splitpanes>
                 <pane min-size="30">
-                    <left-column :title="title" :part="part" :subPart="subPart" :section="section" :structure="partContent" :navigation="navigation"/>
+                    <left-column
+                        :title="title"
+                        :part="part"
+                        :subPart="subPart"
+                        :section="section"
+                        :structure="partContent"
+                        :navigation="navigation"
+                        :supplementalContentCount="supplementalContentCount"
+                        @view-resources="setResourcesParams"
+                    />
 
                 </pane>
                 <pane min-size="30">
-                    <right-column :title="title" :part="part" :subparts="partContent" />
+                    <right-column :title="title" :part="part"/>
                 </pane>
             </splitpanes>
-            <Footer />
+            <Footer/>
         </div>
     </body>
 </template>
@@ -21,12 +30,19 @@
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
-import { Splitpanes, Pane } from "splitpanes";
-import "splitpanes/dist/splitpanes.css";
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
 import LeftColumn from "@/components/PDPart/LeftColumn";
-import RightColumn from "../components/PDPart/RightColumn";
-import { getPart, getSubPartsForPart } from "@/utilities/api";
+import RightColumn from "@/components/PDPart/RightColumn";
+import {
+  getPart,
+  getSubPartsForPart,
+  getPartsList,
+  getSectionsForSubPart,
+  getSupplementalContentCountForPart
+} from "@/utilities/api";
 export default {
+
     name: "Part",
     components: {
         RightColumn,
@@ -37,7 +53,44 @@ export default {
         Splitpanes,
         Pane,
     },
+    watch:{
+      '$route.params': {
+        async handler(toParams, previousParams) {
+            // react to route changes...
+            if (toParams.part !== previousParams.part){
+                this.title = toParams.title;
+                this.part = toParams.part;
+            }
+            if(toParams.subPart != previousParams.subPart){
+              this.subPart = toParams.subPart;
 
+            }
+
+          if(toParams.section != previousParams.section){
+              this.section = toParams.section ? String(toParams.section): undefined;
+          }
+
+        }
+
+      },
+      part:{
+        async handler(){
+          try {
+            this.structure = await getPart(this.title, this.part);
+            this.subPartList = await getSubPartsForPart(this.part);
+            this.partsList = await getPartsList()
+            if(this.subPart) {
+              this.sections = await getSectionsForSubPart(this.part, this.subPart.split("-")[1])
+            }
+            this.supplementalContentCount = await getSupplementalContentCountForPart(this.part)
+          } catch (error) {
+              console.error(error);
+          }
+
+        },
+        immediate: true,
+      }
+    },
     data() {
         return {
             title: this.$route.params.title,
@@ -45,9 +98,11 @@ export default {
             subPart: this.$route.params.subPart,
             section: this.$route.params.section,
             selectedSection: null,
-            structure: null,
+            structure: [],
             subPartList: [],
+            partsList: [],
             sections: [],
+            supplementalContentCount: {},
         }
     },
     computed: {
@@ -58,7 +113,7 @@ export default {
         return this.structure?.[0].label_description ?? "N/A";
       },
       partContent() {
-        var results = this.structure?.[1];
+        let results = this.structure?.[1];
         if (results && this.subPart) {
           results = results.filter(subPart => {
             return subPart.label[0] === this.subPart.split("-")[1]
@@ -68,12 +123,26 @@ export default {
             results = results[0].children.filter(section => section.label[1] === this.section)
           }
         }
-        return results
+        return results || []
       },
       navigation() {
         const results = {name:"PDpart", previous: null, next: null}
-        if (this.subPart){
-          results.name = "PDPart-subPart"
+        if (this.section){
+          results.name = "PDpart-section"
+          const currentIndex = this.sections.indexOf(this.section)
+          results.previous = currentIndex > 0
+              ?
+              {title:this.title, part:this.part, subPart:this.subPart, section: + this.sections[currentIndex - 1]}
+              :
+              null;
+          results.next = currentIndex < this.sections.length - 1
+              ?
+              {title:this.title, part:this.part, subPart:this.subPart, section: + this.sections[currentIndex + 1]}
+              :
+              null
+        }
+        else if (this.subPart){
+          results.name = "PDpart-subPart"
           const currentIndex = this.subPartList.indexOf(this.subPart.split("-")[1])
           results.previous = currentIndex > 0
               ?
@@ -87,61 +156,50 @@ export default {
               null
 
         }
-        if (this.section){
-          results.name = "PDPart-section"
-        }
+        else {
+          results.name = "PDpart"
+          const currentIndex = this.partsList.indexOf(this.part)
+          results.previous = currentIndex > 0
+              ?
+              {title:this.title, part:this.partsList[currentIndex - 1]}
+              :
+              null;
+          results.next = currentIndex < this.partsList.length - 1
+              ?
+              {title:this.title, part: this.partsList[currentIndex + 1]}
+              :
+              null
 
-        if (this.subPart) {
-          const currentIndex = this.subPartList.indexOf(this.subPart.split("-")[1])
-
-          results.previous = currentIndex > 0 ? "subPart-" + this.subPartList[currentIndex - 1] : null;
-          results.next = currentIndex < this.subPartList.length - 1 ? "subPart-" + this.subPartList[currentIndex + 1] : null
         }
         return results
       },
     },
-    async created() {
-        this.$watch(
-            () => this.$route.params,
-            (toParams, previousParams) => {
-                // react to route changes...
-                if (toParams.part !== previousParams.part ||
-                    toParams.subPart != previousParams.subPart ||
-                    toParams.section != previousParams.section
-
-                ) {
-                    console.log("navigating")
-                    this.title = toParams.title;
-                    this.part = toParams.part;
-                    this.subPart = toParams.subPart;
-                    this.section = toParams.section;
-                }
-            }
-        );
-
-        try {
-            this.structure = await getPart(this.title, this.part);
-            this.subPartList = await getSubPartsForPart(this.part);
-
-        } catch (error) {
-            console.error(error);
-        } finally {
-            console.log(this.structure);
-        }
-    },
+    methods:{
+        setResourcesParams(payload) {
+            // Implement response to user choosing a section or subpart here
+            console.log("payload", payload);
+        },
+    }
 }
 </script>
 
 <style>
+
 .splitpanes__pane {
-    justify-content: left;
-    align-items: flex-start;
-    display: flex;
+  justify-content: left;
+  align-items: flex-start;
+  display: flex;
+  position: -webkit-sticky;
+  position: sticky;
+  overflow: scroll;
+  height: calc(100vh - 124px);
 }
 
 .splitpanes--vertical > .splitpanes__splitter {
-    min-width: 6px;
-    background: #a3e8ff;
+  min-width: 6px;
+  background: #A3E8FF;
 }
+
+
 </style>
 

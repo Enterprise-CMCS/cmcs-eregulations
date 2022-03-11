@@ -38,7 +38,7 @@ const routes = [
         component: PDPart,
     },
     {
-        path: "/:title/:part",
+        path: "/:title/:part/:resourcesDisplay?", // resourcesDisplay will be "drawer" or "sidebar"
         name: "part",
         component: Part,
     },
@@ -46,14 +46,14 @@ const routes = [
         path: "/cache",
         name: "Cache-Explorer",
         component: CacheExplorer,
-    }
+    },
 ];
 
 const router = new VueRouter({
     mode: "history",
     base: process.env.BASE_URL,
     routes,
-    scrollBehavior: function(to) {
+    scrollBehavior: function (to) {
         if (to.hash) {
             return {
                 selector: to.hash,
@@ -61,7 +61,7 @@ const router = new VueRouter({
             };
         }
         return { x: 0, y: 0 };
-    }
+    },
 });
 
 export default router;

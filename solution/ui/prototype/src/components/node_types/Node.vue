@@ -7,6 +7,7 @@
         :key="node.title"
         :resourceParamsEmitter="resourceParamsEmitter"
         :showResourceButtons="showResourceButtons"
+        :supplementalContentCount="supplementalContentCount"
     ></component>
 </template>
 
@@ -48,7 +49,12 @@ export default {
             required: false,
             default: true
 
-        }
+        },
+        supplementalContentCount: {
+            type:Object,
+            required: false,
+            default: () => {}
+        },
     },
 
     computed: {

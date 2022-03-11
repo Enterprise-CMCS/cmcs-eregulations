@@ -386,19 +386,33 @@ const getHomepageStructure = async () => {
     return transformedResult;
 };
 
-const getAllParts = async () => {
-    return await httpApiGet("all_parts");
+const getAllParts = async () =>{
+    return  await httpApiGet("all_parts");
 }
+const getPartsList = async () =>{
+    const all_parts = await getAllParts()
+    return all_parts.map(d => d.name)
 
-const getSubPartsForPart = async (part) => {
+
+}
+const getSubPartsForPart = async (part) =>{
     const all_parts = await getAllParts()
     const parts = all_parts.map(d => d.name)
-    console.log(parts)
     const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
-    const subParts = potentialSubParts.filter(p => p.type === "subpart")
+    const subParts = potentialSubParts.filter(p=>p.type==="subpart")
     return subParts.map(s => s.identifier[0])
 
 }
+
+const getSectionsForSubPart = async (part, subPart) =>{
+    const all_parts = await getAllParts()
+    const parts = all_parts.map(d => d.name)
+    const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
+    const parent = potentialSubParts.find(p=>p.type==="subpart" && p.identifier[0] === subPart )
+    return parent.children.map(c => c.identifier[1])
+
+}
+
 
 const getPart = async (title, part) => {
     const result = await httpApiGet(
@@ -446,6 +460,12 @@ const getSupplementalContentNew = async (
     
     return result;
 };
+const getSupplementalContentCountForPart = async (part) =>{
+        const result = await httpApiGet(
+        `supplemental_content_count_by_part?part=${part}`
+    );
+    return result;
+}
 
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
@@ -467,5 +487,8 @@ export {
     setCacheItem,
     getSupplementalContent,
     getSupplementalContentNew,
+    getPartsList,
+    getSectionsForSubPart,
+    getSupplementalContentCountForPart
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

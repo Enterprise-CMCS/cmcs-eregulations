@@ -34,28 +34,6 @@
 },
 {
   "model": "supplemental_content.abstractcategory",
-  "pk": 4,
-  "fields": {
-    "name": "Related Regulations",
-    "description": "Regulations outside the Subpart related to the subject matter",
-    "order": 300,
-    "show_if_empty": false,
-    "display_name": "Related Regulations (Category)"
-  }
-},
-{
-  "model": "supplemental_content.abstractcategory",
-  "pk": 5,
-  "fields": {
-    "name": "Subregulatory Guidance",
-    "description": "SMDLs, SHOs, CIBs, FAQs",
-    "order": 400,
-    "show_if_empty": false,
-    "display_name": "Subregulatory Guidance (Category)"
-  }
-},
-{
-  "model": "supplemental_content.abstractcategory",
   "pk": 6,
   "fields": {
     "name": "State Health Official (SHO) Letter",
@@ -78,17 +56,6 @@
 },
 {
   "model": "supplemental_content.abstractcategory",
-  "pk": 8,
-  "fields": {
-    "name": "State Medicaid Manual",
-    "description": "",
-    "order": 500,
-    "show_if_empty": false,
-    "display_name": "State Medicaid Manual (Sub-category)"
-  }
-},
-{
-  "model": "supplemental_content.abstractcategory",
   "pk": 9,
   "fields": {
     "name": "CMCS Informational Bulletin (CIB)",
@@ -107,17 +74,6 @@
     "order": 400,
     "show_if_empty": false,
     "display_name": "Frequently Asked Questions (FAQs) (Sub-category)"
-  }
-},
-{
-  "model": "supplemental_content.abstractcategory",
-  "pk": 11,
-  "fields": {
-    "name": "Implementation Resources",
-    "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
-    "order": 500,
-    "show_if_empty": false,
-    "display_name": "Implementation Resources (Category)"
   }
 },
 {
@@ -177,17 +133,6 @@
 },
 {
   "model": "supplemental_content.abstractcategory",
-  "pk": 17,
-  "fields": {
-    "name": "Terms",
-    "description": "key abbreviations and definitions",
-    "order": 600,
-    "show_if_empty": false,
-    "display_name": "Terms (Category)"
-  }
-},
-{
-  "model": "supplemental_content.abstractcategory",
   "pk": 18,
   "fields": {
     "name": "Requests for Information (RFIs)",
@@ -199,13 +144,101 @@
 },
 {
   "model": "supplemental_content.abstractcategory",
+  "pk": 23,
+  "fields": {
+    "name": "Oversight Reports",
+    "description": "Reports from HHS Office of Inspector General and U.S. Government Accountability Office",
+    "order": 600,
+    "show_if_empty": true,
+    "display_name": "Oversight Reports (Category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 4,
+  "fields": {
+    "name": "Related Regulations",
+    "description": "Regulations outside the Subpart related to the subject matter",
+    "order": 300,
+    "show_if_empty": false,
+    "display_name": "Related Regulations (Category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 8,
+  "fields": {
+    "name": "State Medicaid Manual (SMM)",
+    "description": "",
+    "order": 500,
+    "show_if_empty": false,
+    "display_name": "State Medicaid Manual (SMM) (Sub-category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 5,
+  "fields": {
+    "name": "Subregulatory Guidance",
+    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+    "order": 400,
+    "show_if_empty": true,
+    "display_name": "Subregulatory Guidance (Category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 11,
+  "fields": {
+    "name": "Implementation Resources",
+    "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
+    "order": 500,
+    "show_if_empty": true,
+    "display_name": "Implementation Resources (Category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
   "pk": 19,
   "fields": {
     "name": "Reports to Congress",
     "description": "CMS policy analysis and research reports sent to Congress",
     "order": 501,
-    "show_if_empty": false,
+    "show_if_empty": true,
     "display_name": "Reports to Congress (Category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 17,
+  "fields": {
+    "name": "Terms",
+    "description": "key abbreviations and definitions",
+    "order": 700,
+    "show_if_empty": false,
+    "display_name": "Terms (Category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 24,
+  "fields": {
+    "name": "GAO Reports",
+    "description": "",
+    "order": 601,
+    "show_if_empty": false,
+    "display_name": "GAO Reports (Sub-category)"
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 25,
+  "fields": {
+    "name": "OIG Reports",
+    "description": "",
+    "order": 0,
+    "show_if_empty": false,
+    "display_name": "OIG Reports (Sub-category)"
   }
 },
 {
@@ -251,6 +284,11 @@
 {
   "model": "supplemental_content.category",
   "pk": 19,
+  "fields": {}
+},
+{
+  "model": "supplemental_content.category",
+  "pk": 23,
   "fields": {}
 }
 ]

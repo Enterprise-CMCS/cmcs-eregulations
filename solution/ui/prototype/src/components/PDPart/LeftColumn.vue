@@ -10,10 +10,23 @@
                 />
             </h2>
             <span style="float:right">
-                <router-link v-if="navigation.previous" >Previous</router-link>
+                <router-link
+                    v-if="navigation.previous"
+                    :to="{
+                        name: navigation.name,
+                        params: navigation.previous,
+                    }"
+
+                >Previous</router-link>
                 <span v-else>Previous</span>
                 /
-                <a v-if="navigation.next" :href="nextURL">Next</a>
+                <router-link
+                    v-if="navigation.next"
+                    :to="{
+                        name: navigation.name,
+                        params: navigation.next,
+                    }"
+                >Next</router-link>
                 <span v-else>Next</span>
             </span>
         </div>
@@ -32,8 +45,11 @@
         <PartContent
             v-if="structure.length"
             :structure="structure"
+            :title="title"
             :part="part"
+            resourcesDisplay="drawer"
             :showResourceButtons="false"
+            :supplementalContentCount="supplementalContentCount"
             @view-resources="setResourcesParams"
         />
         <div v-else>Regulation not found</div>
@@ -55,9 +71,10 @@ export default {
     part: {type: String},
     subPart: {type: String},
     section: {type: String},
-    structure: {type: Object},
+    structure: {type: Array},
     navigation: {type: Object},
-    
+    supplementalContentCount: {type:Object},
+
   },
   methods: {
     setResourcesParams(payload) {

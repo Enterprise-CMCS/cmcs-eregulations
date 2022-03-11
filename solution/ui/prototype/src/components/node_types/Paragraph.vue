@@ -21,12 +21,6 @@ export default {
         },
     },
 
-    mounted() {
-        this.$nextTick(() => {
-            /*console.log(this.node)*/
-        });
-    },
-
     computed: {
         depthClass() {
             const depth = getParagraphDepth(this.node);

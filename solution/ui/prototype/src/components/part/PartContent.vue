@@ -1,17 +1,18 @@
 <template>
     <div class="content-container">
-        <div v-if="structure" class="content reg-text">
-            <div v-if="showResourceButtons" class="btn-container">
-                <ResourcesBtn :clickHandler="handleBtnClick" label="Part" />
-            </div>
-            <template v-for="item in structure">
-                <Node
-                    :node="item"
-                    :key="item.title"
-                    :resourceParamsEmitter="emitResourcesParams"
-                    :showResourceButtons="showResourceButtons"
-                />
-            </template>
+        <div
+            v-if="structure"
+            class="content reg-text"
+            :class="resourcesClass"
+        >
+            <Node
+                v-for="item in structure"
+                :node="item"
+                :key="item.title"
+                :resourceParamsEmitter="emitResourcesParams"
+                :showResourceButtons="showResourceButtons"
+                :supplementalContentCount="supplementalContentCount"
+            />
         </div>
         <div v-else>
             <SimpleSpinner />
@@ -21,7 +22,6 @@
 
 <script>
 import Node from "@/components/node_types/Node.vue";
-import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 
 export default {
@@ -29,11 +29,14 @@ export default {
 
     components: {
         Node,
-        ResourcesBtn,
         SimpleSpinner,
     },
 
     props: {
+        title: {
+            type: String,
+            required: true,
+        },
         part: {
             type: String,
             required: true,
@@ -42,11 +45,26 @@ export default {
             type: Array,
             required: false,
         },
+        resourcesDisplay: {
+            type: String,
+            required: true,
+        },
         showResourceButtons: {
             type: Boolean,
             required: false,
             default: true
+        },
+        supplementalContentCount:{
+            type: Object,
+            required:false,
+            default:() =>{}
         }
+    },
+
+    computed: {
+        resourcesClass() {
+            return `content-with-${this.resourcesDisplay}`;
+        },
     },
 
     methods: {
@@ -55,9 +73,6 @@ export default {
                 scope,
                 identifier,
             });
-        },
-        handleBtnClick() {
-            this.emitResourcesParams("part", this.part);
         },
     },
 };
@@ -74,14 +89,19 @@ $eregs-image-path: "~legacy-static/images";
 .content-container {
     overflow: auto;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .content-with-drawer {
+        margin: 0 auto;
+    }
+
+    .content-with-sidebar {
+        margin-left: 50px;
+    }
 
     .content {
         max-width: $text-max-width;
-        margin: 0 auto;
-
-        .btn-container {
-            margin: 60px 0 40px;
-        }
 
         article,
         article section {

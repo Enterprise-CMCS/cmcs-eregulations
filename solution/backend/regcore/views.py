@@ -35,8 +35,7 @@ class ListPartSerializer(serializers.ModelSerializer):
         }
 
 
-class ExistingPartSerializer(serializers.BaseSerializer):
-
+class ExistingPartSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return {
             'date': instance.get("date"),
@@ -109,7 +108,7 @@ class PartSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "title", "date", "last_updated", "document", "structure", "toc")
 
 
-class EffectivePartView(generics.RetrieveUpdateDestroyAPIView):
+class EffectivePartView(generics.RetrieveAPIView):
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 

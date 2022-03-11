@@ -1,6 +1,6 @@
 <template>
     <div class="nav-container">
-        <div class="content">
+        <div class="content" :class="resourcesClass">
             <h1>
                 <span> {{ title }} CFR Part {{ part }} - </span>
                 <span v-if="partLabel">{{ partLabel }}</span>
@@ -35,6 +35,15 @@ export default {
         partLabel: {
             type: String,
         },
+        resourcesDisplay: {
+            type: String,
+        },
+    },
+
+    computed: {
+        resourcesClass() {
+            return `content-with-${this.resourcesDisplay}`;
+        },
     },
 };
 </script>
@@ -52,9 +61,16 @@ $eregs-image-path: "~legacy-static/images";
     width: 100%;
     background: $lightest_blue;
 
+    .content-with-drawer {
+        margin: 0 auto;
+    }
+
+    .content-with-sidebar {
+        margin-left: 50px;
+    }
+
     .content {
         max-width: $text-max-width;
-        margin: 0 auto;
 
         h1 {
             margin-top: 55px;
