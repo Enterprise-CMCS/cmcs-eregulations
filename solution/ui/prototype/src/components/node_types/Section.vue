@@ -11,11 +11,15 @@
 
         <div class="paragraphs">
             <template v-for="child in node.children">
-                <Node :node="child" :key="child.title" :showResourceButtons="showResourceButtons" />
+                <Node :node="child" :key="child.title" :showResourceButtons="showResourceButtons" :supplementalContentCount="supplementalContentCount"/>
             </template>
         </div>
         <div v-if="showResourceButtons" class="btn-container">
-            <ResourcesBtn :clickHandler="handleBtnClick" label="Section" />
+            <ResourcesBtn
+                :clickHandler="handleBtnClick"
+                label="Section"
+                size="small"
+            />
         </div>
     </section>
 </template>
@@ -46,7 +50,12 @@ export default {
             type: Boolean,
             required: false,
             default: true
-        }
+        },
+        supplementalContentCount: {
+            type:Object,
+            required: false,
+            default: () => {}
+        },
     },
 
     computed: {
