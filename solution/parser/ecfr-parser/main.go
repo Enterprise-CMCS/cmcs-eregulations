@@ -172,6 +172,13 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
 	}
 
+	// log.Info("[main] Fetching table of contents for title ", title.Title, "...")
+	// toc, err := eregs.GetTitle(ctx, title.Title)
+	// if err != nil {
+	// 	log.Warn("Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one")
+	// 	toc = &eregs.Title{}
+	// }
+
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
 	var parts []string
 	for _, subchapter := range title.Subchapters {
