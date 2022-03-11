@@ -53,21 +53,16 @@ export default {
         show: false,
         documentHeader: "Part {{ part }} Federal Register Documents",
         panel: [],
-        items: 3,
+
     }),
     props: {
-        title: { type: Number },
-        part: { type: Number },
+        title: { type: String },
+        part: { type: String },
     },
-    data() {
-        return {
-            panel: [],
-            items: 3,
-        };
-    },
+
     methods: {
         all() {
-            this.panel = [...Array(this.items).keys()].map((k, i) => i);
+            this.panel = [...Array(this.panel).keys()].map((k, i) => i);
         },
 
         hide() {

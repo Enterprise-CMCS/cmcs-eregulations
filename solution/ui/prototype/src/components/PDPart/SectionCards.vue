@@ -2,8 +2,8 @@
     <div>
         <div v-for="content in supList" :key="content.name">
             <div v-for="c in content.sub_categories" :key="c.name">
-                <div v-for="f in c.supplemental_content" :key="f.name">
-                    <v-card outlined elevation="5" width="100%" class="mx-auto"
+                <div v-for="f in c.supplemental_content" :key="f.name" class = "card">
+                    <v-card outlined elevation="1" width="100%" class="mx-auto"
                         ><v-card-subtitle color="#102e43">{{
                             f.category.name
                         }}</v-card-subtitle
@@ -51,15 +51,16 @@
 
 <script>
 import { getSupplementalContentNew } from "@/utilities/api";
+
 export default {
     name: "Section Cards",
     data: () => ({
         show: false,
+        supList: null
     }),
     props: {
         title: { type: String },
         part: { type: String },
-        supList: [],
     },
     async created() {
         try {
@@ -93,5 +94,8 @@ export default {
 }
 .v-card__text {
     width: 95%;
+}
+.card{
+    padding-bottom: 10px;
 }
 </style>

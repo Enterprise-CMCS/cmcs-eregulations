@@ -1,21 +1,25 @@
 <template v-slot:extension>
     <div>
-        <v-tabs v-model="tab">
-            <v-tab v-for="tab in tabs" :key="tab">{{ tab }}</v-tab>
-        </v-tabs>
+        <div class="tab-bar">
+            <v-tabs v-model="tab">
+                <v-tab v-for="tab in tabs" :key="tab">{{ tab }}</v-tab>
+            </v-tabs>
+        </div>
         <v-tabs-items v-model="tab">
-            <v-tab-item v-for="d in tabs" :key="d">
-                <template v-if="tabs[tab] === 'Section'">
-                    <v-container fluid
-                        ><v-row dense v-for="i in d"
-                            ><SectionCards class="section-cards" v-bind:title="title" v-bind:part="part" /> </v-row
-                    ></v-container>
-                </template>
-                <template v-else-if="tabs[tab] === 'Part'"
-                    ><PartSummary v-bind:title="title" v-bind:part="part"
-                /></template>
-                <template v-else-if="tabs[tab]=== 'Subpart'">
-                    <SubpartResources v-bind:subparts="subparts" /></template>
+            <v-tab-item
+                ><PartSummary v-bind:title="title" v-bind:part="part"
+            /></v-tab-item>
+            <v-tab-item>
+                <SubpartResources
+                    v-bind:subparts="subparts"
+                    v-bind:title="title"
+                    v-bind:part="part"
+                />
+            </v-tab-item>
+            <v-tab-item>
+                <v-container fluid
+                    ><SectionCards v-bind:title="title" v-bind:part="part"
+                /></v-container>
             </v-tab-item>
         </v-tabs-items>
     </div>
@@ -30,14 +34,12 @@ export default {
         TabFilters,
         SectionCards,
         PartSummary,
-        SubpartResources
+        SubpartResources,
     },
     name: "RightColumn",
     props: {
-        title: { type: Number },
-        part: { type: Number },   
-        subparts: {type: Array, required:false}
-     
+        title: { type: String },
+        part: { type: String },
     },
     data() {
         return {
@@ -45,15 +47,13 @@ export default {
             tabs: ["Part", "Subpart", "Section"],
         };
     },
-    computed:{
-        subpartList: function (){
-            
-        }
-    }
+    computed: {
+        subpartList: function () {},
+    },
 };
 </script>
 <style scoped>
-.section-cards {
-    margin-bottom: 10px;
+.tab-bar {
+    border-bottom: 1px solid #d6d7d9;
 }
 </style>

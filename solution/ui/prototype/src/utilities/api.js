@@ -453,7 +453,7 @@ const getSupplementalContentNew = async (
     for(let sp in subparts){
         sString = sString + "&subparts=" + subparts[sp]
     }
-
+    console.log(sString)
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );

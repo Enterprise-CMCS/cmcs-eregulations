@@ -7,16 +7,7 @@
             <template v-else>
             <v-btn style="float: right" @click="hide" text>Hide All</v-btn></template>
         </div>
-        <v-expansion-panels v-model="panel" multiple accordion>
-            <v-expansion-panel v-for="(item, i) in data" :key="i">
-                <v-expansion-panel-header>
-                    {{ item.title }}
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-        </v-expansion-panels>
+        
     </div>
 </template>
 
@@ -30,7 +21,7 @@ export default {
     name: "ExpansionMenu",
     props: {
         header: { type: String },
-        subpiece: { type: Number },
+        subpiece: { type: String },
         content: { type: String },
         expandAll: { type: Boolean },
         data: {type: Array}

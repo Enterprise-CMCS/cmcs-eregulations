@@ -9,7 +9,7 @@
         <div>
             <v-text-field clearable outlined class="example"> </v-text-field>
         </div>
-<TabFilters/>
+<TabFilters v-bind:title="title" v-bind:part="part"/>
     </div>
 </template>
 
@@ -35,8 +35,8 @@ export default {
 
 <style>
 .v-text-field.v-text-field--enclosed .v-input__slot {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 90% !important;
+    max-width: 90% !important;
 }
 
 </style>
