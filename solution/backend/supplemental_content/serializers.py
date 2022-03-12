@@ -52,6 +52,15 @@ class AbstractLocationSerializer(PolymorphicSerializer):
         model = AbstractLocation
 
 
+class SimpleLocationSerializer(serializers.Serializer):
+    title = serializers.IntegerField()
+    part = serializers.IntegerField()
+    display_name = serializers.CharField()
+
+    class Meta:
+        model = AbstractLocation
+
+
 class SubpartSerializer(serializers.Serializer):
     subpart_id = serializers.CharField()
 
@@ -94,6 +103,18 @@ class AbstractCategorySerializer(PolymorphicSerializer):
         model = AbstractCategory
 
 
+class SimpleCategorySerializer(serializers.Serializer):
+    name = serializers.CharField()
+    description = serializers.CharField()
+    order = serializers.IntegerField()
+    show_if_empty = serializers.BooleanField()
+    id = serializers.IntegerField()
+    display_name = serializers.CharField()
+
+    class Meta:
+        model = AbstractCategory
+
+
 class CategorySerializer(serializers.Serializer):
     class Meta:
         model = Category
@@ -119,7 +140,7 @@ class SubSubCategorySerializer(serializers.Serializer):
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
     def to_representation(self, instance):
         supplemental_content = super().to_representation(instance)
-        categories = self._get_categories(supplemental_content)
+        categories = self._get_categories()
         tree, flat_tree = self._make_category_trees(categories)
         self._add_supplemental_content(flat_tree, supplemental_content)
         return self._sort(self._to_array(tree))
@@ -127,13 +148,12 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
     def _add_supplemental_content(self, flat_tree, supplemental_content):
         for content in supplemental_content:
             category = flat_tree[content["category"]["id"]]
+            del content["category"]
             category["supplemental_content"].append(content)
 
-    def _get_categories(self, supplemental_content):
-        raw_categories = AbstractCategory.objects.filter(show_if_empty=True).distinct()
+    def _get_categories(self):
+        raw_categories = AbstractCategory.objects.all().select_subclasses()
         categories = AbstractCategorySerializer(raw_categories, many=True).to_representation(raw_categories)
-        for content in supplemental_content:
-            categories.append(content["category"])
         return categories
 
     def _make_category_trees(self, categories):
@@ -171,6 +191,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
 
     def _sort(self, tree):
         tree = sorted(tree, key=lambda category: (category["order"], category["name"]))
+        result = []
         for category in tree:
             category["supplemental_content"] = sorted(
                 category["supplemental_content"],
@@ -180,15 +201,18 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
                 ),
             )
             category["sub_categories"] = self._sort(category["sub_categories"])
-        return tree
+            # only keep populated categories
+            if len(category["supplemental_content"]) or len(category["sub_categories"]) or category["show_if_empty"]:
+                result.append(category)
+        return result
 
 
 class AbstractSupplementalContentSerializer(PolymorphicSerializer):
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
     approved = serializers.BooleanField()
-    category = AbstractCategorySerializer()
-    locations = AbstractLocationSerializer(many=True)
+    category = SimpleCategorySerializer()
+    locations = SimpleLocationSerializer(many=True)
 
     def get_serializer_map(self):
         return {
@@ -201,6 +225,11 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
 
 
 class SupplementalContentSerializer(serializers.Serializer):
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    approved = serializers.BooleanField()
+    category = SimpleCategorySerializer()
+    locations = SimpleLocationSerializer(many=True)
     url = serializers.URLField()
     description = serializers.CharField()
     name = serializers.CharField()
@@ -208,3 +237,4 @@ class SupplementalContentSerializer(serializers.Serializer):
 
     class Meta:
         model = SupplementalContent
+        list_serializer_class = ApplicableSupplementalContentSerializer
