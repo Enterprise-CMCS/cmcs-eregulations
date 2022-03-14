@@ -53,7 +53,7 @@
 import { getSupplementalContentNew } from "@/utilities/api";
 
 export default {
-    name: "Section Cards",
+    name: "SectionCards",
     data: () => ({
         show: false,
         supList: null
