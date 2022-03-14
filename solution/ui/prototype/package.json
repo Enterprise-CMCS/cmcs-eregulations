@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "start-container": "docker-compose up -d",
+    "start-container": "docker compose up -d",
     "stop-container": "docker-compose down --remove-orphans --volumes"
   },
   "dependencies": {
