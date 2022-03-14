@@ -1,7 +1,6 @@
 <template>
     <body class="ds-base">
         <div id="app">
-            <FlashBanner />
             <Header />
             <PartNav
                 :title="title"
