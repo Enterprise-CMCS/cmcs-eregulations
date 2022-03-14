@@ -18,6 +18,8 @@
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
+import { getSupplementalContentLegacy } from "../../api";
+
 export default {
     components: {
         SupplementalContentCategory,
@@ -114,11 +116,13 @@ export default {
     methods: {
         async fetch_content(title, part) {
             try {
-                const response = await fetch(
-                    `${this.api_url}title/${title}/part/${part}/supplemental_content?${this.joined_locations}`
+                const response = await getSupplementalContentLegacy(
+                    this.api_url,
+                    title,
+                    part,
+                    this.joined_locations
                 );
-                const content = await response.json();
-                this.categories = content;
+                this.categories = response;
             } catch (error) {
                 console.error(error);
             } finally {

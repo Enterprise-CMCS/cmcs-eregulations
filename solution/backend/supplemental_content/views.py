@@ -14,12 +14,14 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from .models import (
     AbstractSupplementalContent,
+    AbstractCategory,
+    SupplementalContent,
     AbstractLocation,
     Section,
     Subpart,
 )
 
-from .serializers import AbstractSupplementalContentSerializer
+from .serializers import AbstractSupplementalContentSerializer, SupplementalContentSerializer
 
 
 class SettingsUser:
@@ -45,7 +47,7 @@ class SupplementalContentView(generics.ListAPIView):
                                                 required=False, type=arrayStrings),
                                OpenApiParameter(name='subjectgroups', description='Subject groups to filter by.',
                                                 required=False, type=arrayStrings)])
-    @extend_schema(description='Get a list of supplmental content')
+    @extend_schema(description='Get a list of supplemental content')
     def get(self, *args, **kwargs):
         title = kwargs.get("title")
         part = kwargs.get("part")
@@ -53,29 +55,32 @@ class SupplementalContentView(generics.ListAPIView):
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
 
-        query = AbstractSupplementalContent.objects \
-            .filter(
-                Q(locations__section__section_id__in=section_list) |
-                Q(locations__subpart__subpart_id__in=subpart_list) |
-                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part,
-            )\
-            .prefetch_related(
-                Prefetch(
-                    'locations',
-                    queryset=AbstractLocation.objects.filter(
-                        Q(section__section_id__in=section_list) |
-                        Q(subpart__subpart_id__in=subpart_list) |
-                        Q(subjectgroup__subject_group_id__in=subjgrp_list),
-                        title=title,
-                        part=part,
-                    )
+        query = AbstractSupplementalContent.objects.filter(
+            Q(locations__section__section_id__in=section_list) |
+            Q(locations__subpart__subpart_id__in=subpart_list) |
+            Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
+            approved=True,
+            category__isnull=False,
+            locations__title=title,
+            locations__part=part,
+        ).prefetch_related(
+            Prefetch(
+                'locations',
+                queryset=AbstractLocation.objects.filter(
+                    Q(section__section_id__in=section_list) |
+                    Q(subpart__subpart_id__in=subpart_list) |
+                    Q(subjectgroup__subject_group_id__in=subjgrp_list),
+                    title=title,
+                    part=part,
                 )
-            ).distinct()
-        serializer = AbstractSupplementalContentSerializer(query, many=True)
+            )
+        ).prefetch_related(
+            Prefetch(
+                'category',
+                queryset=AbstractCategory.objects.all().select_subclasses()
+            )
+        ).distinct().select_subclasses(SupplementalContent)
+        serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
 

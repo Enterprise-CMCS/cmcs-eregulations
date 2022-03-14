@@ -197,8 +197,8 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 ]
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'CMCS API',
-    'DESCRIPTION': 'CMCS Project API'
+    'TITLE': 'CMCS eRegulations API',
+    'DESCRIPTION': 'Medicaid and CHIP regulation content and associated supplemental content (such as subregulatory guidance)'
 }
 
 if DEBUG:
