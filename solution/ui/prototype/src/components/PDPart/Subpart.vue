@@ -32,7 +32,7 @@
 <script>
 
 import { getSupplementalContentNew, getSubPartsForPart } from "@/utilities/api";
-import SupplementalContentCategory from "../../../../regulations/js/src/components/SupplementalContentCategory.vue";
+import SupplementalContentCategory from "legacy/js/src/components/SupplementalContentCategory.vue";
 import SubpartSupplement from "./SubpartSupplemental.vue";
 export default {
     name: "SubpartResources",

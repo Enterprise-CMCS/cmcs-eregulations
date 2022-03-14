@@ -72,7 +72,7 @@
     </div>
 </template>
 <script>
-import RelatedRules from "../../../../regulations/js/src/components/RelatedRules.vue";
+import RelatedRules from "legacy/js/src/components/RelatedRules.vue";
 export default {
     name: "PartSummary",
     components: {
