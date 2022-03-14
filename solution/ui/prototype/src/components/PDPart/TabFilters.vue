@@ -10,14 +10,14 @@
                 ><PartSummary v-bind:title="title" v-bind:part="part"
             /></v-tab-item>
             <v-tab-item>
-                <SubpartResources
-                    v-bind:title="title"
-                    v-bind:part="part"
-                />
+                <SubpartResources v-bind:title="title" v-bind:part="part" />
             </v-tab-item>
             <v-tab-item>
                 <v-container fluid
-                    ><SectionCards v-bind:title="title" v-bind:part="part"
+                    ><SectionCards
+                        v-bind:title="title"
+                        v-bind:part="part"
+                        v-bind:selectedSection="selectedSection"
                 /></v-container>
             </v-tab-item>
         </v-tabs-items>
@@ -39,6 +39,7 @@ export default {
     props: {
         title: { type: String },
         part: { type: String },
+        selectedSection: { type: String },
     },
     data() {
         return {

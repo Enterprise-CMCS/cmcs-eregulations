@@ -61,11 +61,11 @@ export default {
     props: {
         title: { type: String },
         part: { type: String },
+        selectedSection: {type: String}
     },
     async created() {
         try {
-            let sections = ["3"];
-
+            let sections = [this.selectedSection];
             this.supList = await getSupplementalContentNew(
                 this.title,
                 this.part,

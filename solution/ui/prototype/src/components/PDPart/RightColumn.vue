@@ -9,27 +9,31 @@
         <div>
             <v-text-field clearable outlined class="example"> </v-text-field>
         </div>
-<TabFilters v-bind:title="title" v-bind:part="part"/>
+        <TabFilters
+            v-bind:title="title"
+            v-bind:part="part"
+            v-bind:selectedSection="selectedSection"
+        />
     </div>
 </template>
 
 <script>
-import TabFilters from "./TabFilters.vue"
+import TabFilters from "./TabFilters.vue";
 export default {
     components: {
-        TabFilters
+        TabFilters,
     },
     name: "RightColumn",
     props: {
         title: { type: String },
         part: { type: String },
+        selectedSection: { type: String },
     },
-    data(){
-        return{
+    data() {
+        return {
             tabs: null,
-            text: 'djfdhkf'
-        }
-    }
+        };
+    },
 };
 </script>
 
@@ -38,5 +42,4 @@ export default {
     width: 90% !important;
     max-width: 90% !important;
 }
-
 </style>
