@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from django.conf import settings
 
@@ -21,7 +21,7 @@ from .models import (
     Subpart,
 )
 
-from .serializers import AbstractSupplementalContentSerializer, SupplementalContentSerializer
+from .serializers import AbstractCategorySerializer, AbstractSupplementalContentSerializer, SupplementalContentSerializer
 
 
 class SettingsUser:
@@ -36,6 +36,12 @@ class SettingsAuthentication(authentication.BasicAuthentication):
             return (user, None)
         raise exceptions.AuthenticationFailed('No such user')
 
+class CategoriesViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        queryset = AbstractCategory.objects.all()
+        serializer = AbstractCategorySerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class SupplementalContentView(generics.ListAPIView):
     serializer_class = AbstractSupplementalContentSerializer
