@@ -3,7 +3,22 @@
         <div id="app">
             <Header />
             <ResourcesNav :resourcesDisplay="resourcesDisplay">
-                <p>search input goes here</p>
+                <form class="search-resources-form" @submit.prevent="search">
+                    <v-text-field
+                        outlined
+                        flat
+                        solo
+                        clearable
+                        label="Search Resources"
+                        type="text"
+                        class="search-field"
+                        append-icon="mdi-magnify"
+                        hide-details
+                        dense
+                        @click:append="search"
+                    >
+                    </v-text-field>
+                </form>
             </ResourcesNav>
         </div>
     </body>
@@ -39,8 +54,8 @@ export default {
     },
 
     methods: {
-        methodName() {
-            console.log("method has been invoked");
+        search() {
+            console.log("search will happen here");
         },
     },
 
@@ -103,5 +118,17 @@ $sidebar-top-margin: 40px;
 
 .content-container-sidebar {
     justify-content: space-between;
+}
+
+.search-resources-form {
+    .search-field {
+        width: calc(100% - 25px);
+        height: 40px;
+        margin-bottom: 50px;
+
+        .v-input__icon.v-input__icon--append button {
+            color: $mid_blue;
+        }
+    }
 }
 </style>
