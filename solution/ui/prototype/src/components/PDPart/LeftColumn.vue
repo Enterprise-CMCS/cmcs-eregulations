@@ -1,5 +1,5 @@
 <template>
-    <div style="width:100%; margin:20px">
+    <div style="width: 100%; margin: 20px">
         <div>
             <h2 style="display: inline">
                 <Breadcrumbs
@@ -9,15 +9,15 @@
                     :section="section"
                 />
             </h2>
-            <span style="float:right">
+            <span style="float: right">
                 <router-link
                     v-if="navigation.previous"
                     :to="{
                         name: navigation.name,
                         params: navigation.previous,
                     }"
-
-                >Previous</router-link>
+                    >Previous</router-link
+                >
                 <span v-else>Previous</span>
                 /
                 <router-link
@@ -26,7 +26,8 @@
                         name: navigation.name,
                         params: navigation.next,
                     }"
-                >Next</router-link>
+                    >Next</router-link
+                >
                 <span v-else>Next</span>
             </span>
         </div>
@@ -61,30 +62,33 @@ import PartContent from "@/components/part/PartContent.vue";
 import Breadcrumbs from "@/components/PDPart/Breadcrumbs.vue";
 
 export default {
-  name: "LeftColumn",
-  components: {
+    name: "LeftColumn",
+    components: {
         PartContent,
-        Breadcrumbs
+        Breadcrumbs,
     },
-  props:{
-    title: {type:String},
-    part: {type: String},
-    subPart: {type: String},
-    section: {type: String},
-    structure: {type: Array},
-    navigation: {type: Object},
-    supplementalContentCount: {type:Object},
-
-  },
-  methods: {
-    setResourcesParams(payload) {
-        console.log(payload)
+    props: {
+        title: { type: String },
+        part: { type: String },
+        subPart: { type: String },
+        section: { type: String },
+        structure: { type: Array },
+        navigation: { type: Object },
+        supplementalContentCount: { type: Object },
     },
-  },
+    methods: {
+        setResourcesParams(payload) {
+            let scope = payload["scope"];
+            let identifier = payload["identifier"];
 
-}
+            this.$emit("view-resources", {
+                scope,
+                identifier,
+            });
+        },
+    },
+};
 </script>
 
 <style scoped>
-
 </style>
