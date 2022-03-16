@@ -5,7 +5,7 @@
                 <div v-for="f in c.supplemental_content" :key="f.name" class = "card">
                     <v-card outlined elevation="1" width="100%" class="mx-auto"
                         ><v-card-subtitle color="#102e43">{{
-                            f.category.name
+                            content.name
                         }}</v-card-subtitle
                         ><v-card-text
                             ><a v-bind:href="f.url">
