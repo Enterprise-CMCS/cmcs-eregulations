@@ -12,7 +12,7 @@
         <TabFilters
             v-bind:title="title"
             v-bind:part="part"
-            v-bind:selectedSection="selectedSection"
+            v-bind:supList="supList"
         />
     </div>
 </template>
@@ -27,7 +27,7 @@ export default {
     props: {
         title: { type: String },
         part: { type: String },
-        selectedSection: { type: String },
+        supList: { type: Array },
     },
     data() {
         return {

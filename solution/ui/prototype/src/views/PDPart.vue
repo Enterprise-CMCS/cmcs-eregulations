@@ -20,7 +20,7 @@
                     <right-column
                         :title="title"
                         :part="part"
-                        :selectedSection="selectedSection"
+                        :supList="supList"
                     />
                 </pane>
             </splitpanes>
@@ -101,12 +101,12 @@ export default {
             part: this.$route.params.part,
             subPart: this.$route.params.subPart,
             section: this.$route.params.section,
-            selectedSection: null,
+            supList: [],
             structure: [],
             subPartList: [],
             partsList: [],
             sections: [],
-            selectedSection: "0",
+
             supplementalContentCount: {},
         };
     },
@@ -203,7 +203,8 @@ export default {
     },
     methods: {
         setResourcesParams(payload) {
-            this.selectedSection = payload["identifier"];
+     
+            this.supList = payload["identifier"];
             // Implement response to user choosing a section or subpart here
         },
         changeSection: function (updatedSection) {

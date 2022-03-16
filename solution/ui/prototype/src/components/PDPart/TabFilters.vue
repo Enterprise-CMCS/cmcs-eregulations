@@ -17,7 +17,7 @@
                     ><SectionCards
                         v-bind:title="title"
                         v-bind:part="part"
-                        v-bind:selectedSection="selectedSection"
+                        v-bind:supList="supList"
                 /></v-container>
             </v-tab-item>
         </v-tabs-items>
@@ -39,7 +39,7 @@ export default {
     props: {
         title: { type: String },
         part: { type: String },
-        selectedSection: { type: String },
+        supList: { type: Array },
     },
     data() {
         return {

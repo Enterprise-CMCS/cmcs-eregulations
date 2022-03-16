@@ -61,21 +61,7 @@ export default {
     props: {
         title: { type: String },
         part: { type: String },
-        selectedSection: {type: String}
-    },
-    async created() {
-        try {
-            let sections = [this.selectedSection];
-            this.supList = await getSupplementalContentNew(
-                this.title,
-                this.part,
-                sections
-            );
-        } catch (error) {
-            console.error(error);
-        } finally {
-            console.log(this.structure);
-        }
+        supList: {type: Array},
     },
 };
 </script>

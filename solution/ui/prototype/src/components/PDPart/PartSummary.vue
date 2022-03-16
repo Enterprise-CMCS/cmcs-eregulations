@@ -91,6 +91,7 @@ export default {
     },
 
     methods: {
+        
         show_topics() {
             this.topicPanel = [...Array(this.topicPanel).keys()].map((k, i) => i);
         },
