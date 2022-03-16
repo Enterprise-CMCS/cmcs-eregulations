@@ -16,22 +16,26 @@
         >
         <v-expansion-panels accordion multiple v-model="panel">
             <v-expansion-panel v-for="(subpart, i) in subParts" :key="i">
-                <v-expansion-panel-header
-                    >Subpart {{ subpart }}</v-expansion-panel-header
-                >
+                <v-expansion-panel-header>{{
+                    subpart[0]
+                }}</v-expansion-panel-header>
                 <v-expansion-panel-content
                     ><SubpartSupplement
                         v-bind:title="title"
                         v-bind:part="part"
-                        v-bind:subpart="subpart" /></v-expansion-panel-content
+                        v-bind:subpart="
+                            subpart[1]
+                        " /></v-expansion-panel-content
             ></v-expansion-panel>
         </v-expansion-panels>
         <br />
     </div>
 </template>
 <script>
-
-import { getSupplementalContentNew, getSubPartsForPart } from "@/utilities/api";
+import {
+    getSupplementalContentNew,
+    getSubPartsForPartDesc,
+} from "@/utilities/api";
 import SupplementalContentCategory from "legacy/js/src/components/SupplementalContentCategory.vue";
 import SubpartSupplement from "./SubpartSupplemental.vue";
 export default {
@@ -50,11 +54,13 @@ export default {
             panel: [],
             subParts: null,
         };
-    },    
+    },
 
     methods: {
         all() {
-            this.panel = [...Array(this.subParts.length).keys()].map((k, i) => i);
+            this.panel = [...Array(this.subParts.length).keys()].map(
+                (k, i) => i
+            );
         },
 
         hide() {
@@ -63,7 +69,7 @@ export default {
     },
     async created() {
         try {
-            this.subParts = await getSubPartsForPart(this.part);
+            this.subParts = await getSubPartsForPartDesc(this.part);
         } catch (error) {
             console.error(error);
         } finally {
