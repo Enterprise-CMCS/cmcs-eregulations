@@ -5,20 +5,20 @@
 
         <div>
             <h3 style="display: inline">Featured Topics</h3>
-            <template v-if="!panel.length">
-                <v-btn style="float: right" @click="all" text
+            <template v-if="!topicPanel.length">
+                <v-btn style="float: right" @click="show_topics" text
                     >Expand All</v-btn
                 ></template
             >
             <template v-else>
-                <v-btn style="float: right" @click="hide" text
+                <v-btn style="float: right" @click="hide_topics" text
                     >Hide All</v-btn
                 ></template
             >
-                        <v-expansion-panels v-model="panel" multiple accordion>
+            <v-expansion-panels v-model="topicPanel" multiple accordion>
                 <v-expansion-panel>
                     <v-expansion-panel-content v-for="i in 3" :key="i">
-                        Featured topic  {{i}}</v-expansion-panel-content
+                        Featured topic {{ i }}</v-expansion-panel-content
                     >
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -26,18 +26,18 @@
         <h3 style="display: inline">
             Part {{ part }} Federal Register Documents
         </h3>
-        <template v-if="!panel.length">
-            <v-btn style="float: right" @click="all" text
+        <template v-if="!documentPanel.length">
+            <v-btn style="float: right" @click="show_documents" text
                 >Expand All</v-btn
             ></template
         >
         <template v-else>
-            <v-btn style="float: right" @click="hide" text
+            <v-btn style="float: right" @click="hide_documents" text
                 >Hide All</v-btn
             ></template
         >
-        
-        <v-expansion-panels v-model="panel" multiple accordion>
+
+        <v-expansion-panels v-model="documentPanel" multiple accordion>
             <v-expansion-panel>
                 <v-expansion-panel-content>
                     <RelatedRules v-bind:title="title" v-bind:part="part"
@@ -49,20 +49,20 @@
             <h3 style="display: inline">
                 Miscellaneous Resources not Tied to a Regulation
             </h3>
-            <template v-if="!panel.length">
-                <v-btn style="float: right" @click="all" text
+            <template v-if="!miscPanel.length">
+                <v-btn style="float: right" @click="show_misc" text
                     >Expand All</v-btn
                 ></template
             >
             <template v-else>
-                <v-btn style="float: right" @click="hide" text
+                <v-btn style="float: right" @click="hide_misc" text
                     >Hide All</v-btn
                 ></template
             >
-            <v-expansion-panels v-model="panel" multiple accordion>
+            <v-expansion-panels v-model="miscPanel" multiple accordion>
                 <v-expansion-panel>
                     <v-expansion-panel-content v-for="i in 3" :key="i">
-                        Misc {{i}}</v-expansion-panel-content
+                        Misc {{ i }}</v-expansion-panel-content
                     >
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -81,7 +81,9 @@ export default {
     data: () => ({
         show: false,
         documentHeader: "Part {{ part }} Federal Register Documents",
-        panel: [],
+        topicPanel: [],
+        documentPanel:[],
+        miscPanel:[],
     }),
     props: {
         title: { type: String },
@@ -89,12 +91,26 @@ export default {
     },
 
     methods: {
-        all() {
-            this.panel = [...Array(this.panel).keys()].map((k, i) => i);
+        show_topics() {
+            this.topicPanel = [...Array(this.topicPanel).keys()].map((k, i) => i);
         },
 
-        hide() {
-            this.panel = [];
+        hide_topics() {
+            this.topicPanel = [];
+        },
+        show_documents() {
+            this.documentPanel = [...Array(this.documentPanel).keys()].map((k, i) => i);
+        },
+
+        hide_documents() {
+            this.documentPanel = [];
+        },
+        show_misc() {
+            this.miscPanel = [...Array(this.miscPanel).keys()].map((k, i) => i);
+        },
+
+        hide_misc() {
+            this.miscPanel = [];
         },
     },
 };
