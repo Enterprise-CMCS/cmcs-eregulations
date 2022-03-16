@@ -9,34 +9,37 @@
         <div>
             <v-text-field clearable outlined class="example"> </v-text-field>
         </div>
-<TabFilters/>
+        <TabFilters
+            v-bind:title="title"
+            v-bind:part="part"
+            v-bind:supList="supList"
+        />
     </div>
 </template>
 
 <script>
-import TabFilters from "./TabFilters.vue"
+import TabFilters from "./TabFilters.vue";
 export default {
     components: {
-        TabFilters
+        TabFilters,
     },
     name: "RightColumn",
     props: {
         title: { type: String },
         part: { type: String },
+        supList: { type: Array },
     },
-    data(){
-        return{
+    data() {
+        return {
             tabs: null,
-            text: 'djfdhkf'
-        }
-    }
+        };
+    },
 };
 </script>
 
 <style>
 .v-text-field.v-text-field--enclosed .v-input__slot {
-    width: 100% !important;
-    max-width: 100% !important;
+    width: 90% !important;
+    max-width: 90% !important;
 }
-
 </style>
