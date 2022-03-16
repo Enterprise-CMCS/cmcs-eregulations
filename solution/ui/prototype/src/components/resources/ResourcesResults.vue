@@ -1,0 +1,58 @@
+<template>
+    <h5>Results go here</h5>
+</template>
+
+<script>
+export default {
+    name: "ResourcesResults",
+
+    components: {},
+
+    props: {
+        propName: {
+            type: String,
+            required: false,
+        },
+    },
+
+    beforeCreate() {},
+
+    created() {},
+
+    beforeMount() {},
+
+    mounted() {},
+
+    beforeUpdate() {},
+
+    updated() {},
+
+    beforeDestroy() {},
+
+    destroyed() {},
+
+    data() {
+        return {
+            dataProp: "value",
+        }
+    },
+
+    computed: {
+        computedProp() {
+            return this.dataProp.toUpperCase();
+        },
+    },
+
+    methods: {
+        methodName() {
+            console.log("method has been invoked");
+        },
+    },
+
+}
+</script>
+
+<style>
+
+</style>
+

@@ -20,6 +20,11 @@
                     </v-text-field>
                 </form>
             </ResourcesNav>
+            <div class="content-container">
+                <ResourcesFilters :resourcesDisplay="resourcesDisplay" />
+                <ResourcesSelections />
+                <ResourcesResults />
+            </div>
         </div>
     </body>
 </template>
@@ -28,6 +33,9 @@
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import ResourcesNav from "@/components/resources/ResourcesNav.vue";
+import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
+import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
+import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
 export default {
     name: "Resources",
@@ -36,6 +44,9 @@ export default {
         Footer,
         Header,
         ResourcesNav,
+        ResourcesFilters,
+        ResourcesSelections,
+        ResourcesResults,
     },
 
     props: {},
@@ -48,8 +59,8 @@ export default {
     },
 
     computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
+        contentContainerResourcesClass() {
+            return `content-container-${this.resourcesDisplay}`;
         },
     },
 
@@ -109,7 +120,7 @@ $sidebar-top-margin: 40px;
 
 .content-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .content-container-column {
