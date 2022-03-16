@@ -408,7 +408,7 @@ const getSubPartsForPartDesc = async (part) => {
     const parts = all_parts.map(d => d.name)
     const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
     const subParts = potentialSubParts.filter(p => p.type === "subpart")
-    return subParts.map(s => [s.label, s.identifier[0]])
+    return subParts.map(s =>{ return {label:s.label, identifier: s.identifier[0]}})
 
 }
 const getSectionsForSubPart = async (part, subPart) => {
@@ -494,7 +494,7 @@ export {
     getSupplementalContentNew,
     getPartsList,
     getSectionsForSubPart,
-    getSupplementalContentCountForPart
-    , getSubPartsForPartDesc
+    getSupplementalContentCountForPart,
+    getSubPartsForPartDesc
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

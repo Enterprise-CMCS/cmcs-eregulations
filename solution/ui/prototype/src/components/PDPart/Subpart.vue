@@ -17,14 +17,14 @@
         <v-expansion-panels accordion multiple v-model="panel">
             <v-expansion-panel v-for="(subpart, i) in subParts" :key="i">
                 <v-expansion-panel-header>{{
-                    subpart[0]
+                    subpart.label
                 }}</v-expansion-panel-header>
                 <v-expansion-panel-content
                     ><SubpartSupplement
                         v-bind:title="title"
                         v-bind:part="part"
                         v-bind:subpart="
-                            subpart[1]
+                            subpart.identifier
                         " /></v-expansion-panel-content
             ></v-expansion-panel>
         </v-expansion-panels>
