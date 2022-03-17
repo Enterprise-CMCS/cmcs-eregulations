@@ -6,6 +6,8 @@
         :node="node"
         :key="node.title"
         :resourceParamsEmitter="resourceParamsEmitter"
+        :showResourceButtons="showResourceButtons"
+        :supplementalContentCount="supplementalContentCount"
     ></component>
 </template>
 
@@ -41,6 +43,17 @@ export default {
         resourceParamsEmitter: {
             type: Function,
             required: false,
+        },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+
+        },
+        supplementalContentCount: {
+            type:Object,
+            required: false,
+            default: () => {}
         },
     },
 

@@ -18,6 +18,7 @@ import _map from "lodash/map";
 import _random from "lodash/random";
 import _set from "lodash/set";
 import _transform from "lodash/transform";
+import {getAllParts} from "./api";
 
 //import numeral from "numeral";
 
@@ -390,6 +391,11 @@ const getKebabTitle = (label) => {
     return `${getKebabLabel(label)}-title`;
 }
 
+const getDisplayName = (label, title= 42) =>{
+        if (!label) return "na-label";
+    return `${title} ${label.join(".")}`;
+}
+
 // lifted straight from django pdepth templatetag
 const getParagraphDepth = (value) => {
     const sectionDepth = 2;
@@ -407,6 +413,7 @@ const getParagraphDepth = (value) => {
 
     return depth;
 }
+
 
 export {
     mapToArray,
@@ -436,4 +443,5 @@ export {
     getKebabLabel,
     getKebabTitle,
     getParagraphDepth,
+    getDisplayName
 };

@@ -1,16 +1,29 @@
 <template>
     <article>
         <h1 tabindex="-1" :id="kebabTitle">
+            <button
+                v-if="numSupplementalContent"
+                v-on:click="handleBtnClick"
+                class="supplemental-content-count"
+            >
+                {{ numSupplementalContent }}
+            </button>
             {{ node.title }}
         </h1>
-        <div class="btn-container">
-            <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" />
+        <div v-if="showResourceButtons" class="btn-container">
+            <ResourcesBtn
+                :clickHandler="handleBtnClick"
+                label="Subpart"
+                size="small"
+            />
         </div>
         <template v-for="child in node.children">
             <Node
                 :node="child"
                 :key="child.title"
-                :resourceParamsEmitter="resourceParamsEmitter"
+                :resource-params-emitter="resourceParamsEmitter"
+                :showResourceButtons="showResourceButtons"
+                :supplementalContentCount="supplementalContentCount"
             />
         </template>
     </article>
@@ -19,7 +32,7 @@
 <script>
 import Node from "@/components/node_types/Node.vue";
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
-import { getKebabTitle } from "@/utilities/utils.js";
+import { getKebabTitle, getDisplayName } from "@/utilities/utils.js";
 
 export default {
     name: "Subpart",
@@ -38,12 +51,33 @@ export default {
             type: Function,
             required: false,
         },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+        supplementalContentCount: {
+            type:Object,
+            required: false,
+            default: () => {}
+        },
+
     },
 
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);
         },
+        numSupplementalContent(){
+          let total = 0
+          if (this.supplementalContentCount && this.node.children ) {
+
+            total = this.node.children.reduce((count, node) => {
+              return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
+            }, 0)
+          }
+          return total
+        }
     },
 
     methods: {
@@ -54,5 +88,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

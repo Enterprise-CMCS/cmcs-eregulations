@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import Part from "@/views/Part.vue";
 import CacheExplorer from "@/views/CacheExplorer";
+import PDPart from "@/views/PDPart";
 
 Vue.use(VueRouter);
 
@@ -22,7 +23,22 @@ const routes = [
             import(/* webpackChunkName: "about" */ "../views/About.vue"),
     },
     {
-        path: "/:title/:part",
+        path: "/PD/:title/:part/:subPart/:section",
+        name: "PDpart-section",
+        component: PDPart,
+    },
+        {
+        path: "/PD/:title/:part/:subPart",
+        name: "PDpart-subPart",
+        component: PDPart,
+    },
+        {
+        path: "/PD/:title/:part",
+        name: "PDpart",
+        component: PDPart,
+    },
+    {
+        path: "/:title/:part/:resourcesDisplay?", // resourcesDisplay will be "drawer" or "sidebar"
         name: "part",
         component: Part,
     },
@@ -30,14 +46,14 @@ const routes = [
         path: "/cache",
         name: "Cache-Explorer",
         component: CacheExplorer,
-    }
+    },
 ];
 
 const router = new VueRouter({
     mode: "history",
     base: process.env.BASE_URL,
     routes,
-    scrollBehavior: function(to) {
+    scrollBehavior: function (to) {
         if (to.hash) {
             return {
                 selector: to.hash,
@@ -45,7 +61,7 @@ const router = new VueRouter({
             };
         }
         return { x: 0, y: 0 };
-    }
+    },
 });
 
 export default router;
