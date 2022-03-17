@@ -20,8 +20,8 @@
                     </v-text-field>
                 </form>
             </ResourcesNav>
-            <div class="content-container">
-                <ResourcesFilters :resourcesDisplay="resourcesDisplay" />
+            <div class="resources-content-container">
+                <ResourcesFilters :resourcesDisplay="resourcesDisplay"/>
                 <ResourcesSelections />
                 <ResourcesResults />
             </div>
@@ -118,7 +118,7 @@ $sidebar-top-margin: 40px;
     flex-direction: column;
 }
 
-.content-container {
+.resources-content-container {
     display: flex;
     flex-direction: column;
 }
