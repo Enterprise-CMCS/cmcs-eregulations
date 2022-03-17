@@ -1,6 +1,6 @@
 <template>
     <body class="ds-base">
-        <div id="app">
+        <div id="app" class="resources-view">
             <Header />
             <ResourcesNav :resourcesDisplay="resourcesDisplay">
                 <form class="search-resources-form" @submit.prevent="search">
@@ -21,7 +21,7 @@
                 </form>
             </ResourcesNav>
             <div class="resources-content-container">
-                <ResourcesFilters :resourcesDisplay="resourcesDisplay"/>
+                <ResourcesFilters :resourcesDisplay="resourcesDisplay" />
                 <ResourcesSelections />
                 <ResourcesResults />
             </div>
@@ -113,32 +113,32 @@ $eregs-image-path: "~legacy-static/images";
 
 $sidebar-top-margin: 40px;
 
-#app {
+#app.resources-view {
     display: flex;
     flex-direction: column;
-}
 
-.resources-content-container {
-    display: flex;
-    flex-direction: column;
-}
+    .resources-content-container {
+        display: flex;
+        flex-direction: column;
+    }
 
-.content-container-column {
-    justify-content: center;
-}
+    .content-container-column {
+        justify-content: center;
+    }
 
-.content-container-sidebar {
-    justify-content: space-between;
-}
+    .content-container-sidebar {
+        justify-content: space-between;
+    }
 
-.search-resources-form {
-    .search-field {
-        width: calc(100% - 25px);
-        height: 40px;
-        margin-bottom: 50px;
+    .search-resources-form {
+        .search-field {
+            width: calc(100% - 25px);
+            height: 40px;
+            margin-bottom: 50px;
 
-        .v-input__icon.v-input__icon--append button {
-            color: $mid_blue;
+            .v-input__icon.v-input__icon--append button {
+                color: $mid_blue;
+            }
         }
     }
 }

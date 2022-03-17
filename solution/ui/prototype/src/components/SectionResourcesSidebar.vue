@@ -34,13 +34,15 @@
             >
             </v-text-field>
         </form>
-        <SupplementalContent
-            :api_url="apiPath"
-            :title="title"
-            :part="part"
-            :sections="sections"
-            :subparts="subparts"
-        ></SupplementalContent>
+        <template v-if="selectedIdentifier">
+            <SupplementalContent
+                :api_url="apiPath"
+                :title="title"
+                :part="part"
+                :sections="sections"
+                :subparts="subparts"
+            ></SupplementalContent>
+        </template>
         <div class="btn-container" v-if="selectedIdentifier">
             <ResourcesBtn
                 :clickHandler="routeToResourcesPage"
@@ -66,7 +68,7 @@ export default {
     props: {
         title: String,
         part: String,
-        selectedIdentifier: String,
+        selectedIdentifier: [String, Array],
         selectedScope: String,
     },
 

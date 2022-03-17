@@ -69,9 +69,11 @@ export default {
             default: () => {},
         },
     },
+
     data: () => ({
         supList: null,
     }),
+
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);
@@ -85,19 +87,7 @@ export default {
 
     methods: {
         async handleBtnClick() {
-            try {
-                this.supList = await getSupplementalContentNew(
-                    42,
-                    this.node.label[0],
-                    [this.node.label[1]]
-                );
-            } catch (error) {
-                console.error(error);
-            } finally {
-                console.log(this.structure);
-            }
-            
-            this.resourceParamsEmitter("supList", this.supList);
+            this.resourceParamsEmitter("section", this.node.label[1]);
         },
     },
 };
