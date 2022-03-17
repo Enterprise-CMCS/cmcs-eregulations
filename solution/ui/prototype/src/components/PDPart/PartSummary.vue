@@ -93,21 +93,21 @@ export default {
     methods: {
         
         show_topics() {
-            this.topicPanel = [...Array(this.topicPanel).keys()].map((k, i) => i);
+            this.topicPanel = [...Array(this.topicPanel).keys()];
         },
 
         hide_topics() {
             this.topicPanel = [];
         },
         show_documents() {
-            this.documentPanel = [...Array(this.documentPanel).keys()].map((k, i) => i);
+            this.documentPanel = [...Array(this.documentPanel).keys()];
         },
 
         hide_documents() {
             this.documentPanel = [];
         },
         show_misc() {
-            this.miscPanel = [...Array(this.miscPanel).keys()].map((k, i) => i);
+            this.miscPanel = [...Array(this.miscPanel).keys()];
         },
 
         hide_misc() {
