@@ -11,6 +11,7 @@ import (
 type Title struct {
 	Name string `json:"name"`
 	Contents *ecfr.Structure `json:"toc"`
+	Exists bool
 }
 
 // AddPart adds a part to a title if it's not already there, otherwise updates it

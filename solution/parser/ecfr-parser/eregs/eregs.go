@@ -53,7 +53,7 @@ func PostPart(ctx context.Context, p *Part) error {
 	if err != nil {
 		return err
 	}
-	return network.PostJSON(ctx, eregsPath, p, true, postAuth)
+	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HttpPost)
 }
 
 // PostSupplementalPart is the function that sends a supplemental part to eRegs server
@@ -63,13 +63,14 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 		return err
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, "/supplemental_content")
-	return network.PostJSON(ctx, eregsPath, p, true, postAuth)
+	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HttpPost)
 }
 
 // GetTitle retrieves a title object from regcore in eRegs
 func GetTitle(ctx context.Context, title int) (Title, error) {
 	emptyTitle := Title{
-		Name: fmt.Sprintf("%s", title),
+		Name: fmt.Sprintf("%d", title),
+		Exists: false,
 	}
 
 	eregsPath, err := url.Parse(BaseURL)
@@ -78,7 +79,7 @@ func GetTitle(ctx context.Context, title int) (Title, error) {
 	}
 	// TODO: remove the following line on v3 move! BaseURL should point to v3.
 	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
-	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", title))
+	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%d", title))
 	
 	log.Trace("[eregs] Retrieving title ", title, " from eRegs")
 
@@ -96,8 +97,8 @@ func GetTitle(ctx context.Context, title int) (Title, error) {
 	return t, nil
 }
 
-// PostTitle sends a title object to regcore in eRegs for table of contents tracking
-func PostTitle(ctx context.Context, t *Title) error {
+// SendTitle sends a title object to regcore in eRegs for table of contents tracking
+func SendTitle(ctx context.Context, t *Title) error {
 	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
 		return nil
@@ -105,7 +106,13 @@ func PostTitle(ctx context.Context, t *Title) error {
 	// TODO: remove the following line on v3 move! BaseURL should point to v3.
 	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
-	return network.PostJSON(ctx, eregsPath, t, true, postAuth)
+	var method string
+	if t.Exists {
+		method = network.HttpPut
+	} else {
+		method = network.HttpPut
+	}
+	return network.SendJSON(ctx, eregsPath, t, true, postAuth, method)
 }
 
 // GetExistingParts gets existing parts already imported
