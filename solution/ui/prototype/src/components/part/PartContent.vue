@@ -12,6 +12,8 @@
                 :resourceParamsEmitter="emitResourcesParams"
                 :showResourceButtons="showResourceButtons"
                 :supplementalContentCount="supplementalContentCount"
+                :title="title"
+                :part="part"
             />
         </div>
         <div v-else>
