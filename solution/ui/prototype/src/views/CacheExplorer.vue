@@ -1,13 +1,16 @@
 <template>
     <div id="app">
         CACHE EXPLORER
-        <ol>
+        <ul>
             <li v-for="key in cacheKeys" v-bind:key="key">
                 {{key}}
                 <v-btn class="button" @click="deleteCacheItem(key)">Delete</v-btn>
                 <v-btn class="button" @click="editData(key)">Edit</v-btn>
             </li>
-        </ol>
+            <li>
+                <v-btn class="button" @click="deleteAllCacheItems()">Delete All Cache Items</v-btn>
+            </li>
+        </ul>
         <v-divider></v-divider>
         <v-container fluid>
             <v-row>
@@ -52,6 +55,12 @@ export default {
             console.log("Clearing Key: ", key);
             await removeCacheItem(key)
             this.cacheKeys = await getCacheKeys();
+        },
+        deleteAllCacheItems: async function(){
+          this.cacheKeys.forEach(async (key) => {
+            await removeCacheItem(key)
+          })
+          this.cacheKeys = await getCacheKeys();
         },
         editData: async function (key) {
           this.path = formatKey(key)

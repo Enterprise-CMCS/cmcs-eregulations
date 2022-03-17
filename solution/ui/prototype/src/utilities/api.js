@@ -431,7 +431,7 @@ const getSupplementalContent = async (
     title = "42",
     part,
     scope,
-    identifier 
+    identifier
 ) => {
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?&${scope}s=${identifier}`
@@ -439,6 +439,25 @@ const getSupplementalContent = async (
     return result;
 };
 
+const getSupplementalContentNew = async (
+    title,
+    part,
+    sections =[],
+    subparts= []
+) => {
+    let sString = '';
+    for (let s in sections) {
+        sString = sString + "&sections=" + sections[s]
+    }
+    for(let sp in subparts){
+        sString = sString + "&subparts=" + subparts[sp]
+    }
+    const result = await httpApiGet(
+        `title/${title}/part/${part}/supplemental_content?${sString}`
+    );
+    
+    return result;
+};
 const getSupplementalContentCountForPart = async (part) =>{
         const result = await httpApiGet(
         `supplemental_content_count_by_part?part=${part}`
@@ -465,6 +484,7 @@ export {
     getCacheItem,
     setCacheItem,
     getSupplementalContent,
+    getSupplementalContentNew,
     getPartsList,
     getSectionsForSubPart,
     getSupplementalContentCountForPart

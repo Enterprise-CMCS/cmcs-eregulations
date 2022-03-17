@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: postgres:9.6
+    image: postgres:13.5
     environment:
       POSTGRES_USER: eregs
       POSTGRES_PASSWORD: sgere
