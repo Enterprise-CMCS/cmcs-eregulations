@@ -9,6 +9,7 @@ import (
 	"os"
 	"sync"
 	"time"
+	"sort"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -172,12 +173,12 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
 	}
 
-	// log.Info("[main] Fetching table of contents for title ", title.Title, "...")
-	// toc, err := eregs.GetTitle(ctx, title.Title)
-	// if err != nil {
-	// 	log.Warn("Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one")
-	// 	toc = &eregs.Title{}
-	// }
+	log.Info("[main] Fetching table of contents for title ", title.Title, "...")
+	toc, err := eregs.GetTitle(ctx, title.Title)
+	if err != nil {
+		// TODO: check error code. If it isn't 404, there might be a worse problem to solve!
+		log.Warn("Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one")
+	}
 
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
 	var parts []string
@@ -208,7 +209,14 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	for _, part := range parts {
 		versionList := list.New()
 
-		for date := range versions[part] {
+		// sort versions ascending
+		keys := make([]string, 0, len(versions[part]))
+		for k := range versions[part] {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		for _, date := range keys {
 			// If we have this part already, skip it
 			if config.SkipVersions && contains(existingVersions[date], part) {
 				log.Trace("[main] Skipping title ", title.Title, " part ", part, " version ", date)
@@ -217,16 +225,21 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 			}
 
 			version := &eregs.Part{
-				Title:     title.Title,
-				Name:      part,
-				Date:      date,
-				Structure: &ecfr.Structure{},
-				Document:  &parsexml.Part{},
-				Processed: false,
+				Title:     		title.Title,
+				Name:      		part,
+				Date:      		date,
+				Structure: 		&ecfr.Structure{},
+				Document:  		&parsexml.Part{},
+				Processed: 	    false,
+				UploadContents: false,
 			}
 
 			versionList.PushBack(version)
 			originalLength++
+		}
+
+		if versionList.Len() > 0 {
+			versionList.Back().Value.(*eregs.Part).UploadContents = true
 		}
 
 		partList.PushBack(versionList)
@@ -263,10 +276,15 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		for versionListElement := partList.Front(); versionListElement != nil; versionListElement = versionListElement.Next() {
 			versionList := versionListElement.Value.(*list.List)
 			var next *list.Element
-			for version := versionList.Front(); version != nil; version = next {
-				next = version.Next()
-				if version.Value.(*eregs.Part).Processed {
-					versionList.Remove(version)
+			for versionElement := versionList.Front(); versionElement != nil; versionElement = next {
+				next = versionElement.Next()
+				version := versionElement.Value.(*eregs.Part)
+				if version.Processed {
+					if version.UploadContents {
+						log.Debug("[main] Adding structure of part ", version.Name, " to Title ", title.Title, "'s table of contents")
+						toc.AddPart(version.Structure, version.Name)
+					}
+					versionList.Remove(versionElement)
 				} else {
 					currentLength++
 				}
@@ -286,6 +304,10 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		}
 	}
 
+	log.Info("[main] Uploading table of contents to eRegs...")
+	if err := eregs.SendTitle(ctx, &toc); err != nil {
+		log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
+	}
 	log.Info("[main] All parts of title ", title.Title, " finished processing in ", time.Since(start), "!")
 	return false, nil
 }

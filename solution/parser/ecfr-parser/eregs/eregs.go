@@ -32,13 +32,14 @@ var postAuth = &network.PostAuth{
 
 // Part is the struct used to send a part to the eRegs server
 type Part struct {
-	Title     int             `json:"title,string" xml:"-"`
-	Name      string          `json:"name" xml:"-"`
-	Date      string          `json:"date" xml:"-"`
-	Structure *ecfr.Structure `json:"structure" xml:"-"`
-	Document  *parsexml.Part  `json:"document"`
-	Depth	  int			  `json:"depth"`
-	Processed bool
+	Title     	   int             `json:"title,string" xml:"-"`
+	Name      	   string          `json:"name" xml:"-"`
+	Date      	   string          `json:"date" xml:"-"`
+	Structure 	   *ecfr.Structure `json:"structure" xml:"-"`
+	Document  	   *parsexml.Part  `json:"document"`
+	Depth	  	   int			  `json:"depth"`
+	Processed 	   bool
+	UploadContents bool
 }
 
 // ExistingPart is a regulation that has been loaded already
@@ -70,6 +71,7 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
 func GetTitle(ctx context.Context, title int) (Title, error) {
 	emptyTitle := Title{
 		Name: fmt.Sprintf("%d", title),
+		Contents: &ecfr.Structure{},
 		Exists: false,
 	}
 
@@ -93,6 +95,7 @@ func GetTitle(ctx context.Context, title int) (Title, error) {
 	if err := d.Decode(&t); err != nil {
 		return emptyTitle, fmt.Errorf("Unable to decode response body while retrieving title object")
 	}
+	t.Exists = true
 
 	return t, nil
 }
@@ -110,7 +113,7 @@ func SendTitle(ctx context.Context, t *Title) error {
 	if t.Exists {
 		method = network.HttpPut
 	} else {
-		method = network.HttpPut
+		method = network.HttpPost
 	}
 	return network.SendJSON(ctx, eregsPath, t, true, postAuth, method)
 }

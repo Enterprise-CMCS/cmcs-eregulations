@@ -139,19 +139,7 @@ func TestParseConfig(t *testing.T) {
 	}
 }
 
-//NOT IMPLEMENTED
-//SHOULD NOT TEST IF POSSIBLE
-func TestLambdaHandler(t *testing.T) {
-	
-}
 
-//NOT IMPLEMENTED
-//SHOULD NOT TEST IF POSSIBLE
-func TestMainFunction(t *testing.T) {
-	
-}
-
-//NOT IMPLEMENTED
 func TestStart(t *testing.T) {
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {

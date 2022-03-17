@@ -71,7 +71,7 @@ func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 	if auth != nil {
 		req.SetBasicAuth(auth.Username, auth.Password)
 	}
-	log.Trace("[network] ", method, "ing  data to ", postPath)
+	log.Trace("[network] ", method, "ing data to ", postPath)
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("%s failed to complete: %+v", method, err)
