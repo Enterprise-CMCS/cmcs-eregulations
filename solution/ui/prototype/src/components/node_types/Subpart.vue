@@ -2,7 +2,7 @@
     <article>
         <h1 tabindex="-1" :id="kebabTitle">
             <button
-                v-if="numSupplementalContent"
+                v-if="numSupplementalContent && !showResourceButtons"
                 v-on:click="handleBtnClick"
                 class="supplemental-content-count"
             >
@@ -10,7 +10,7 @@
             </button>
             {{ node.title }}
         </h1>
-        <div v-if="showResourceButtons" class="btn-container">
+        <div v-if="showResourceButtons  && numSupplementalContent" class="btn-container">
             <ResourcesBtn
                 :clickHandler="handleBtnClick"
                 label="Subpart"

@@ -35,6 +35,7 @@
                             :resourcesDisplay="resourcesDisplay"
                             :selectedIdentifier="selectedIdentifier"
                             :selectedScope="selectedScope"
+                            :supplementalContentCount="supplementalContentCount"
                             @view-resources="setResourcesParams"
                         ></component>
                     </v-tab-item>
@@ -71,7 +72,7 @@ import PartToc from "@/components/part/PartToc.vue";
 import SectionResources from "@/components/SectionResources.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 
-import { getPart } from "@/utilities/api";
+import { getPart, getSupplementalContentCountForPart } from "@/utilities/api";
 
 export default {
     components: {
@@ -125,6 +126,7 @@ export default {
             ],
             selectedIdentifier: null,
             selectedScope: null,
+            supplementalContentCount: {},
         };
     },
 
@@ -157,6 +159,7 @@ export default {
                     this.title = toParams.title;
                     this.part = toParams.part;
                     this.resourcesDisplay = toParams.resourcesDisplay || "drawer";
+
                 }
             }
         );
@@ -168,6 +171,7 @@ export default {
         async getPartStructure() {
             try {
                 this.structure = await getPart(this.title, this.part);
+                this.supplementalContentCount = await getSupplementalContentCountForPart(this.part);
             } catch (error) {
                 console.error(error);
             } finally {
