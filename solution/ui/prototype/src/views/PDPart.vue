@@ -43,6 +43,7 @@ import {
     getPartsList,
     getSectionsForSubPart,
     getSupplementalContentCountForPart,
+    getSupplementalContentNew
 } from "@/utilities/api";
 export default {
     name: "Part",
@@ -201,9 +202,18 @@ export default {
         },
     },
     methods: {
-        setResourcesParams(payload) {
-     
-            this.supList = payload["identifier"];
+        async setResourcesParams(payload) {
+            try {
+                this.supList = await getSupplementalContentNew(
+                    42,
+                    this.part,
+                    payload["identifier"]
+                );
+            } catch (error) {
+                console.error(error);
+            } finally {
+                console.log(this.supList);
+            }
             // Implement response to user choosing a section or subpart here
         },
         changeSection: function (updatedSection) {

@@ -8,6 +8,8 @@
         :resourceParamsEmitter="resourceParamsEmitter"
         :showResourceButtons="showResourceButtons"
         :supplementalContentCount="supplementalContentCount"
+        :title="title"
+        :part="part"
     ></component>
 </template>
 
@@ -36,6 +38,14 @@ export default {
     },
 
     props: {
+        title: {
+            type: String,
+            required: false,
+        },
+        part: {
+            type: String,
+            required: false,
+        },
         node: {
             type: Object,
             required: true,

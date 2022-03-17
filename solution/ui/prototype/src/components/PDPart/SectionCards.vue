@@ -50,13 +50,11 @@
 </template>
 
 <script>
-import { getSupplementalContentNew } from "@/utilities/api";
 
 export default {
     name: "SectionCards",
     data: () => ({
         show: false,
-        supList: null
     }),
     props: {
         title: { type: String },
