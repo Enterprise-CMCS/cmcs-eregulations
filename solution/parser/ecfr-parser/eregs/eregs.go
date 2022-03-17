@@ -93,7 +93,7 @@ func GetTitle(ctx context.Context, title int) (Title, error) {
 	var t Title
 	d := json.NewDecoder(body)
 	if err := d.Decode(&t); err != nil {
-		return emptyTitle, fmt.Errorf("Unable to decode response body while retrieving title object")
+		return emptyTitle, fmt.Errorf("Unable to decode response body while retrieving title object: %+v", err)
 	}
 	t.Exists = true
 

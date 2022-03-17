@@ -177,7 +177,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	toc, err := eregs.GetTitle(ctx, title.Title)
 	if err != nil {
 		// TODO: check error code. If it isn't 404, there might be a worse problem to solve!
-		log.Warn("Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one")
+		log.Warn("Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
 	}
 
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
