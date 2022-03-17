@@ -32,10 +32,7 @@
     </div>
 </template>
 <script>
-import {
-    getSupplementalContentNew,
-    getSubPartsForPartDesc,
-} from "@/utilities/api";
+import { getSupplementalContentNew, getSubPartsForPart } from "@/utilities/api";
 import SupplementalContentCategory from "legacy/js/src/components/SupplementalContentCategory.vue";
 import SubpartSupplement from "./SubpartSupplemental.vue";
 export default {
@@ -69,7 +66,7 @@ export default {
     },
     async created() {
         try {
-            this.subParts = await getSubPartsForPartDesc(this.part);
+            this.subParts = await getSubPartsForPart(this.part);
         } catch (error) {
             console.error(error);
         } finally {

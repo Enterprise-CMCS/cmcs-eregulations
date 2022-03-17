@@ -106,7 +106,6 @@ export default {
             subPartList: [],
             partsList: [],
             sections: [],
-
             supplementalContentCount: {},
         };
     },
@@ -157,8 +156,8 @@ export default {
                         : null;
             } else if (this.subPart) {
                 results.name = "PDpart-subPart";
-                const currentIndex = this.subPartList.indexOf(
-                    this.subPart.split("-")[1]
+                const currentIndex = this.subPartList.findIndex(
+                    sub => { return sub.identifier === this.subPart.split("-")[1]}
                 );
                 results.previous =
                     currentIndex > 0
@@ -167,7 +166,7 @@ export default {
                               part: this.part,
                               subPart:
                                   "subPart-" +
-                                  this.subPartList[currentIndex - 1],
+                                  this.subPartList[currentIndex - 1].identifier,
                           }
                         : null;
                 results.next =
@@ -177,7 +176,7 @@ export default {
                               part: this.part,
                               subPart:
                                   "subPart-" +
-                                  this.subPartList[currentIndex + 1],
+                                  this.subPartList[currentIndex + 1].identifier,
                           }
                         : null;
             } else {
