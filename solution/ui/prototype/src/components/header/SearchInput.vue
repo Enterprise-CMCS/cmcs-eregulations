@@ -4,6 +4,7 @@
             flat
             solo
             clearable
+            class="header-search"
             label="Search"
             type="text"
             append-icon="mdi-magnify"
@@ -45,7 +46,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
 $image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
@@ -62,9 +63,8 @@ $eregs-image-path: "~legacy-static/images";
     .v-input__icon.v-input__icon--append button {
         color: $mid_blue;
     }
-
-    .v-text-field.v-text-field--enclosed .v-input__slot {
-        max-width: 160px;
-    }
+}
+.header-search.v-text-field.v-text-field--enclosed {
+    max-width: 200px;
 }
 </style>
