@@ -87,17 +87,15 @@ export default {
           return total
         },
         numDirectContent(){
-          console.log(`${this.title} ${this.part} Subpart ${this.node.label[0]}`)
           return this.supplementalContentCount[`${this.title} ${this.part} Subpart ${this.node.label[0]}`]
         }
     },
 
     methods: {
         handleBtnClick() {
-            this.resourceParamsEmitter("subpart", this.node.label[0]);
+            this.resourceParamsEmitter("subpart", [this.node.label[0]]);
         },
         handleBlueBtnClick() {
-          console.log(this.node.children.map(child => child.label[1]))
           this.resourceParamsEmitter("sections", this.node.children.map(child => child.label[1]));
         }
     },

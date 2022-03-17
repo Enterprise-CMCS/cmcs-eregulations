@@ -213,7 +213,7 @@ export default {
             } catch (error) {
                 console.error(error);
             } finally {
-                console.log(this.suplist);
+                console.log(this.supList);
             }
             // Implement response to user choosing a section or subpart here
         },
