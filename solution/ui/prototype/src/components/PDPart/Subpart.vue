@@ -55,9 +55,7 @@ export default {
 
     methods: {
         all() {
-            this.panel = [...Array(this.subParts.length).keys()].map(
-                (k, i) => i
-            );
+            this.panel = [...Array(this.subParts.length).keys()];
         },
 
         hide() {
