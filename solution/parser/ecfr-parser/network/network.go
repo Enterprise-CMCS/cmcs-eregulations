@@ -34,8 +34,13 @@ type Error struct {
 	Traceback []string `json:"traceback"`
 }
 
-// PostJSON attempts to post arbitrary JSON data to a given URL
-func PostJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonErrors bool, auth *PostAuth) error {
+const (
+	HttpPost string = http.MethodPost
+	HttpPut string = http.MethodPut
+)
+
+// SendJSON attempts to send arbitrary JSON data to a given URL using a specified method
+func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonErrors bool, auth *PostAuth, method string) error {
 	if jsonErrors {
 		q := postURL.Query()
 		q.Add("json_errors", "true")
@@ -43,7 +48,7 @@ func PostJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 	}
 	postPath := postURL.String()
 
-	log.Trace("[network] Beginning post to ", postPath)
+	log.Trace("[network] Beginning ", method, " to ", postPath)
 	start := time.Now()
 	buff := bytes.NewBuffer([]byte{})
 	enc := json.NewEncoder(buff)
@@ -56,7 +61,7 @@ func PostJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 
 	length := buff.Len()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, postPath, buff)
+	req, err := http.NewRequestWithContext(ctx, method, postPath, buff)
 	if err != nil {
 		return fmt.Errorf("Failed to create HTTP request: %+v", err)
 	}
@@ -66,10 +71,10 @@ func PostJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 	if auth != nil {
 		req.SetBasicAuth(auth.Username, auth.Password)
 	}
-	log.Trace("[network] Posting to ", postPath)
+	log.Trace("[network] ", method, "ing  data to ", postPath)
 	resp, err := client.Do(req)
 	if err != nil {
-		return fmt.Errorf("Post failed to complete: %+v", err)
+		return fmt.Errorf("%s failed to complete: %+v", method, err)
 	}
 	defer resp.Body.Close()
 
@@ -77,12 +82,12 @@ func PostJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 		postError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(postError)
 		if err != nil {
-			return fmt.Errorf("Received error code %d while posting to %s, unable to extract error message: %+v", resp.StatusCode, postPath, err)
+			return fmt.Errorf("Received error code %d while %sing to %s, unable to extract error message: %+v", resp.StatusCode, method, postPath, err)
 		}
-		return fmt.Errorf("Received error code %d while posting to %s: %s", resp.StatusCode, postPath, postError.Exception)
+		return fmt.Errorf("Received error code %d while %sing to %s: %s", resp.StatusCode, method, postPath, postError.Exception)
 	}
 
-	log.Trace("[network] Posted ", length, " bytes to ", postPath, " in ", time.Since(start))
+	log.Trace("[network] ", method, "ed ", length, " bytes to ", postPath, " in ", time.Since(start))
 	return nil
 }
 

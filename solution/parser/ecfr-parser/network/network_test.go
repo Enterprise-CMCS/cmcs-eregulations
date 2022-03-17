@@ -108,7 +108,7 @@ type PostData struct {
 	Valid  bool   `json:"yes"`
 }
 
-func TestPostJSON(t *testing.T) {
+func TestSendJSON(t *testing.T) {
 	testTable := []struct {
 		Name string
 		Server *httptest.Server
@@ -116,6 +116,7 @@ func TestPostJSON(t *testing.T) {
 		ErrorExpected bool
 		JSONErrors bool
 		PostAuth *PostAuth
+		Method string
 	}{
 		{
 			Name: "post-succeed-test",
@@ -142,6 +143,7 @@ func TestPostJSON(t *testing.T) {
 			ErrorExpected: false,
 			JSONErrors: false,
 			PostAuth: nil,
+			Method: HttpPost,
 		},
 		{
 			Name: "post-fail-test",
@@ -153,6 +155,7 @@ func TestPostJSON(t *testing.T) {
 			ErrorExpected: true,
 			JSONErrors: false,
 			PostAuth: nil,
+			Method: HttpPost,
 		},
 		{
 			Name: "post-json-errors-test",
@@ -170,6 +173,7 @@ func TestPostJSON(t *testing.T) {
 			ErrorExpected: false,
 			JSONErrors: true,
 			PostAuth: nil,
+			Method: HttpPost,
 		},
 		{
 			Name: "post-timeout-test",
@@ -182,6 +186,7 @@ func TestPostJSON(t *testing.T) {
 			ErrorExpected: true,
 			JSONErrors: false,
 			PostAuth: nil,
+			Method: HttpPost,
 		},
 		{
 			Name: "post-auth-test",
@@ -210,6 +215,37 @@ func TestPostJSON(t *testing.T) {
 				Username: "testusername",
 				Password: "testpassword",
 			},
+			Method: HttpPost,
+		},
+		{
+			Name: "put-test",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				d := json.NewDecoder(r.Body)
+				var postData PostData
+				err := d.Decode(&postData)
+				if err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(`{ "exception": "Failed to decode JSON" }`))
+				} else if postData.Name != "test" || postData.ID != 5 || !postData.Valid {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(`{ "exception": "Decoded JSON is not valid" }`))
+				} else if r.Method != "PUT" {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(`{ "exception": "Expected PUT method, received ` + r.Method + `!" }`))
+				} else {
+					w.WriteHeader(http.StatusOK)
+					w.Write([]byte("OK"))
+				}
+			})),
+			PostData: &PostData{
+				Name: "test",
+				ID: 5,
+				Valid: true,
+			},
+			ErrorExpected: false,
+			JSONErrors: false,
+			PostAuth: nil,
+			Method: HttpPut,
 		},
 	}
 
@@ -223,7 +259,7 @@ func TestPostJSON(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			err = PostJSON(ctx, testURL, tc.PostData, tc.JSONErrors, tc.PostAuth)
+			err = SendJSON(ctx, testURL, tc.PostData, tc.JSONErrors, tc.PostAuth, tc.Method)
 
 			if err == nil && tc.ErrorExpected {
 				t.Errorf("expected error, got nil")
