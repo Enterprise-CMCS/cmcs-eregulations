@@ -50,6 +50,14 @@ export default {
     },
 
     props: {
+        title: {
+            type: String,
+            required: false,
+        },
+        part: {
+            type: String,
+            required: false,
+        },
         node: {
             type: Object,
             required: true,
@@ -85,19 +93,7 @@ export default {
 
     methods: {
         async handleBtnClick() {
-            try {
-                this.supList = await getSupplementalContentNew(
-                    42,
-                    this.node.label[0],
-                    [this.node.label[1]]
-                );
-            } catch (error) {
-                console.error(error);
-            } finally {
-                console.log(this.structure);
-            }
-            
-            this.resourceParamsEmitter("supList", this.supList);
+            this.resourceParamsEmitter("section", [this.node.label[1]]);
         },
     },
 };

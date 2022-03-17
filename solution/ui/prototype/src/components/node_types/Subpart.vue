@@ -3,14 +3,14 @@
         <h1 tabindex="-1" :id="kebabTitle">
             <button
                 v-if="numSupplementalContent && !showResourceButtons"
-                v-on:click="handleBtnClick"
+                v-on:click="handleBlueBtnClick"
                 class="supplemental-content-count"
             >
                 {{ numSupplementalContent }}
             </button>
             {{ node.title }}
         </h1>
-        <div v-if="showResourceButtons  && numSupplementalContent" class="btn-container">
+        <div v-if="showResourceButtons  && numDirectContent" class="btn-container">
             <ResourcesBtn
                 :clickHandler="handleBtnClick"
                 label="Subpart"
@@ -43,6 +43,14 @@ export default {
     },
 
     props: {
+        title: {
+            type: String,
+            required: false,
+        },
+        part: {
+            type: String,
+            required: false,
+        },
         node: {
             type: Object,
             required: true,
@@ -77,6 +85,10 @@ export default {
             }, 0)
           }
           return total
+        },
+        numDirectContent(){
+          console.log(`${this.title} ${this.part} Subpart ${this.node.label[0]}`)
+          return this.supplementalContentCount[`${this.title} ${this.part} Subpart ${this.node.label[0]}`]
         }
     },
 
@@ -84,6 +96,10 @@ export default {
         handleBtnClick() {
             this.resourceParamsEmitter("subpart", this.node.label[0]);
         },
+        handleBlueBtnClick() {
+          console.log(this.node.children.map(child => child.label[1]))
+          this.resourceParamsEmitter("sections", this.node.children.map(child => child.label[1]));
+        }
     },
 };
 </script>
