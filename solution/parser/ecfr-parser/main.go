@@ -97,7 +97,7 @@ func main() {
 func start() error {
 	log.Info("[main] Loading configuration...")
 	var err error
-	config, err = eregs.RetrieveConfig()
+	config, _, err = eregs.RetrieveConfig()
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
@@ -168,16 +168,18 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	today := time.Now()
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
-	existingVersions, err := eregs.GetExistingParts(ctx, title.Title)
+	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
 	if err != nil {
 		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
 	}
 
 	log.Info("[main] Fetching table of contents for title ", title.Title, "...")
-	toc, err := eregs.GetTitle(ctx, title.Title)
+	toc, code, err := eregs.GetTitle(ctx, title.Title)
 	if err != nil {
-		// TODO: check error code. If it isn't 404, there might be a worse problem to solve!
-		log.Warn("Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
+		if code != 404 {
+			return true, fmt.Errorf("Failed to retrieve existing table of contents for title %d. Error code is %d, so not using empty default. Error: %+v", title.Title, code, err)
+		}
+		log.Warn("[main] Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
 	}
 
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
@@ -305,7 +307,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	}
 
 	log.Info("[main] Uploading table of contents to eRegs...")
-	if err := eregs.SendTitle(ctx, &toc); err != nil {
+	if _, err := eregs.SendTitle(ctx, &toc); err != nil {
 		log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
 	}
 	log.Info("[main] All parts of title ", title.Title, " finished processing in ", time.Since(start), "!")
@@ -342,7 +344,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	start := time.Now()
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", version.Name, " version ", version.Date)
-	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), version.Title, &ecfr.PartOption{version.Name})
+	sbody, _, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), version.Title, &ecfr.PartOption{version.Name})
 
 	if err != nil {
 		return err
@@ -355,7 +357,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	}
 
 	log.Debug("[worker ", thread, "] Fetching full document for part ", version.Name, " version ", version.Date)
-	body, err := ecfr.FetchFull(ctx, version.Date, version.Title, &ecfr.PartOption{version.Name})
+	body, _, err := ecfr.FetchFull(ctx, version.Date, version.Title, &ecfr.PartOption{version.Name})
 	if err != nil {
 		return err
 	}
@@ -370,7 +372,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	version.Document.PostProcess()
 
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
-	if err := eregs.PostPart(ctx, version); err != nil {
+	if _, err := eregs.PostPart(ctx, version); err != nil {
 		return err
 	}
 
@@ -382,7 +384,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 		}
 
 		log.Debug("[worker ", thread, "] Posting supplemental content structure for part ", version.Name, " version ", version.Date, " to eRegs")
-		if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
+		if _, err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
 			return err
 		}
 	}

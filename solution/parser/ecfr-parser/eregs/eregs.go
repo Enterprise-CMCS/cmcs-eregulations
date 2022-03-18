@@ -49,26 +49,26 @@ type ExistingPart struct {
 }
 
 // PostPart is the function that sends a part to the eRegs server
-func PostPart(ctx context.Context, p *Part) error {
+func PostPart(ctx context.Context, p *Part) (int, error) {
 	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
-		return err
+		return -1, err
 	}
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HttpPost)
 }
 
 // PostSupplementalPart is the function that sends a supplemental part to eRegs server
-func PostSupplementalPart(ctx context.Context, p ecfr.Part) error {
+func PostSupplementalPart(ctx context.Context, p ecfr.Part) (int, error) {
 	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
-		return err
+		return -1, err
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, "/supplemental_content")
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HttpPost)
 }
 
 // GetTitle retrieves a title object from regcore in eRegs
-func GetTitle(ctx context.Context, title int) (Title, error) {
+func GetTitle(ctx context.Context, title int) (Title, int, error) {
 	emptyTitle := Title{
 		Name: fmt.Sprintf("%d", title),
 		Contents: &ecfr.Structure{},
@@ -77,7 +77,7 @@ func GetTitle(ctx context.Context, title int) (Title, error) {
 
 	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
-		return emptyTitle, err
+		return emptyTitle, -1, err
 	}
 	// TODO: remove the following line on v3 move! BaseURL should point to v3.
 	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
@@ -85,26 +85,26 @@ func GetTitle(ctx context.Context, title int) (Title, error) {
 	
 	log.Trace("[eregs] Retrieving title ", title, " from eRegs")
 
-	body, err := network.Fetch(ctx, eregsPath, true)
+	body, code, err := network.Fetch(ctx, eregsPath, true)
 	if err != nil {
-		return emptyTitle, err
+		return emptyTitle, code, err
 	}
 
 	var t Title
 	d := json.NewDecoder(body)
 	if err := d.Decode(&t); err != nil {
-		return emptyTitle, fmt.Errorf("Unable to decode response body while retrieving title object: %+v", err)
+		return emptyTitle, code, fmt.Errorf("Unable to decode response body while retrieving title object: %+v", err)
 	}
 	t.Exists = true
 
-	return t, nil
+	return t, code, nil
 }
 
 // SendTitle sends a title object to regcore in eRegs for table of contents tracking
-func SendTitle(ctx context.Context, t *Title) error {
+func SendTitle(ctx context.Context, t *Title) (int, error) {
 	eregsPath, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil
+		return -1, nil
 	}
 	// TODO: remove the following line on v3 move! BaseURL should point to v3.
 	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
@@ -119,25 +119,25 @@ func SendTitle(ctx context.Context, t *Title) error {
 }
 
 // GetExistingParts gets existing parts already imported
-func GetExistingParts(ctx context.Context, title int) (map[string][]string, error) {
+func GetExistingParts(ctx context.Context, title int) (map[string][]string, int, error) {
 	checkURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil, err
+		return nil, -1, err
 	}
 	checkURL.Path = path.Join(checkURL.Path, fmt.Sprintf(partURL, title))
 
 	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL.String())
 
-	body, err := network.Fetch(ctx, checkURL, true)
+	body, code, err := network.Fetch(ctx, checkURL, true)
 	if err != nil {
-		return nil, err
+		return nil, code, err
 	}
 
 	// Cast the body to an array of existing parts
 	var vs []ExistingPart
 	d := json.NewDecoder(body)
 	if err := d.Decode(&vs); err != nil {
-		return nil, fmt.Errorf("Unable to decode response body while checking existing versions: %+v", err)
+		return nil, code, fmt.Errorf("Unable to decode response body while checking existing versions: %+v", err)
 	}
 
 	// reduce the results to the desired format
@@ -146,5 +146,5 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, erro
 		result[ep.Date] = ep.PartName
 	}
 
-	return result, nil
+	return result, code, nil
 }

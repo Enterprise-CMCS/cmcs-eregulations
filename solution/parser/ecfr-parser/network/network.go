@@ -40,7 +40,7 @@ const (
 )
 
 // SendJSON attempts to send arbitrary JSON data to a given URL using a specified method
-func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonErrors bool, auth *PostAuth, method string) error {
+func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonErrors bool, auth *PostAuth, method string) (int, error) {
 	if jsonErrors {
 		q := postURL.Query()
 		q.Add("json_errors", "true")
@@ -56,14 +56,14 @@ func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 
 	log.Trace("[network] Encoding data as JSON")
 	if err := enc.Encode(data); err != nil {
-		return fmt.Errorf("Failed to encode data as JSON: %+v", err)
+		return -1, fmt.Errorf("Failed to encode data as JSON: %+v", err)
 	}
 
 	length := buff.Len()
 
 	req, err := http.NewRequestWithContext(ctx, method, postPath, buff)
 	if err != nil {
-		return fmt.Errorf("Failed to create HTTP request: %+v", err)
+		return -1, fmt.Errorf("Failed to create HTTP request: %+v", err)
 	}
 
 	req.Header.Set("User-Agent", "eRegs for "+os.Getenv("NAME"))
@@ -74,7 +74,7 @@ func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 	log.Trace("[network] ", method, "ing data to ", postPath)
 	resp, err := client.Do(req)
 	if err != nil {
-		return fmt.Errorf("%s failed to complete: %+v", method, err)
+		return -1, fmt.Errorf("%s failed to complete: %+v", method, err)
 	}
 	defer resp.Body.Close()
 
@@ -82,17 +82,17 @@ func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 		postError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(postError)
 		if err != nil {
-			return fmt.Errorf("Received error code %d while %sing to %s, unable to extract error message: %+v", resp.StatusCode, method, postPath, err)
+			return resp.StatusCode, fmt.Errorf("Received error code %d while %sing to %s, unable to extract error message: %+v", resp.StatusCode, method, postPath, err)
 		}
-		return fmt.Errorf("Received error code %d while %sing to %s: %s", resp.StatusCode, method, postPath, postError.Exception)
+		return resp.StatusCode, fmt.Errorf("Received error code %d while %sing to %s: %s", resp.StatusCode, method, postPath, postError.Exception)
 	}
 
 	log.Trace("[network] ", method, "ed ", length, " bytes to ", postPath, " in ", time.Since(start))
-	return nil
+	return resp.StatusCode, nil
 }
 
 // Fetch attempts to fetch arbitrary bytes from a given URL
-func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool) (io.Reader, error) {
+func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool) (io.Reader, int, error) {
 	if jsonErrors {
 		q := fetchURL.Query()
 		q.Add("json_errors", "true")
@@ -108,14 +108,14 @@ func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool) (io.Reader, 
 
 	req, err := http.NewRequestWithContext(c, http.MethodGet, fetchPath, nil)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to create HTTP request: %+v", err)
+		return nil, -1, fmt.Errorf("Failed to create HTTP request: %+v", err)
 	}
 
 	req.Header.Set("User-Agent", "eRegs for "+os.Getenv("NAME"))
 	log.Trace("[network] Fetching from ", fetchPath)
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("Fetch failed to complete: %+v", err)
+		return nil, -1, fmt.Errorf("Fetch failed to complete: %+v", err)
 	}
 	defer resp.Body.Close()
 
@@ -123,19 +123,19 @@ func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool) (io.Reader, 
 		fetchError := &Error{}
 		err = json.NewDecoder(resp.Body).Decode(fetchError)
 		if err != nil {
-			return nil, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message: %+v", resp.StatusCode, fetchPath, err)
+			return nil, resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message: %+v", resp.StatusCode, fetchPath, err)
 		}
-		return nil, fmt.Errorf("Received error code %d while fetching from %s: %s", resp.StatusCode, fetchPath, fetchError.Exception)
+		return nil, resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s: %s", resp.StatusCode, fetchPath, fetchError.Exception)
 	}
 
 	b, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to read response body: %+v", err)
+		return nil, resp.StatusCode, fmt.Errorf("Failed to read response body: %+v", err)
 	}
 	body := bytes.NewBuffer(b)
 
 	log.Trace("[network] Received ", len(b), " bytes from ", fetchPath, " in ", time.Since(start))
-	return body, nil
+	return body, resp.StatusCode, nil
 }
 
 // FetchOption defines optional values for the fetch process
@@ -155,7 +155,7 @@ func buildQuery(opts []FetchOption) string {
 }
 
 // FetchWithOptions attempts to fetch arbitrary bytes from a given URL with provided fetch options
-func FetchWithOptions(ctx context.Context, fetchURL *url.URL, jsonErrors bool, opts []FetchOption) (io.Reader, error) {
+func FetchWithOptions(ctx context.Context, fetchURL *url.URL, jsonErrors bool, opts []FetchOption) (io.Reader, int, error) {
 	fetchURL.RawQuery = buildQuery(opts)
 	return Fetch(ctx, fetchURL, jsonErrors)
 }

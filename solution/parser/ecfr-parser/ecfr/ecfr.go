@@ -20,30 +20,30 @@ var (
 )
 
 // FetchFull fetches the full regulation from eCFR
-func FetchFull(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, error) {
+func FetchFull(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, int, error) {
 	ecfrURL, err := url.Parse(EcfrSite)
 	if err != nil {
-		return nil, err
+		return nil, -1, err
 	}
 	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrFullXML, date, title))
 	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
 }
 
 // FetchStructure fetches the structure for a given title and options
-func FetchStructure(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, error) {
+func FetchStructure(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, int, error) {
 	ecfrURL, err := url.Parse(EcfrSite)
 	if err != nil {
-		return nil, err
+		return nil, -1, err
 	}
 	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrStructureJSON, date, title))
 	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
 }
 
 // FetchVersions fetches the available versions for a given title
-func FetchVersions(ctx context.Context, title int, opts ...network.FetchOption) (io.Reader, error) {
+func FetchVersions(ctx context.Context, title int, opts ...network.FetchOption) (io.Reader, int, error) {
 	ecfrURL, err := url.Parse(EcfrSite)
 	if err != nil {
-		return nil, err
+		return nil, -1, err
 	}
 	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrVersionsXML, title))
 	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
