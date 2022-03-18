@@ -23,7 +23,10 @@
                     </v-tab>
                 </v-tabs>
             </PartNav>
-            <div class="content-container" :class="contentContainerResourcesClass">
+            <div
+                class="content-container"
+                :class="contentContainerResourcesClass"
+            >
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(item, index) in tabsShape" :key="index">
                         <component
@@ -45,6 +48,7 @@
                         :part="part"
                         :selectedIdentifier="selectedIdentifier"
                         :selectedScope="selectedScope"
+                        :routeToResources="routeToResources"
                     />
                 </div>
             </div>
@@ -54,6 +58,7 @@
                 :part="part"
                 :selectedIdentifier="selectedIdentifier"
                 :selectedScope="selectedScope"
+                :routeToResources="routeToResources"
                 @close="clearResourcesParams"
             />
             <Footer />
@@ -144,7 +149,7 @@ export default {
         },
         contentContainerResourcesClass() {
             return `content-container-${this.resourcesDisplay}`;
-        }
+        },
     },
 
     async created() {
@@ -157,8 +162,8 @@ export default {
                     this.clearResourcesParams();
                     this.title = toParams.title;
                     this.part = toParams.part;
-                    this.resourcesDisplay = toParams.resourcesDisplay || "drawer";
-
+                    this.resourcesDisplay =
+                        toParams.resourcesDisplay || "drawer";
                 }
             }
         );
@@ -170,7 +175,8 @@ export default {
         async getPartStructure() {
             try {
                 this.structure = await getPart(this.title, this.part);
-                this.supplementalContentCount = await getSupplementalContentCountForPart(this.part);
+                this.supplementalContentCount =
+                    await getSupplementalContentCountForPart(this.part);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -186,6 +192,23 @@ export default {
             console.log("clear resource params");
             this.selectedIdentifier = null;
             this.selectedScope = null;
+        },
+        routeToResources() {
+            const identifiers = this.selectedIdentifier.reduce((acc, item) => {
+                acc[this.selectedScope]
+                    ? (acc[this.selectedScope] += `,${item}`)
+                    : (acc[this.selectedScope] = `${item}`);
+                return acc;
+            }, {});
+
+            this.$router.push({
+                name: "resources",
+                query: {
+                    title: this.title,
+                    part: this.part,
+                    ...identifiers,
+                },
+            });
         },
     },
 
@@ -244,5 +267,4 @@ $sidebar-top-margin: 40px;
     border-left: 1px solid $light_gray;
     overflow: scroll;
 }
-
 </style>

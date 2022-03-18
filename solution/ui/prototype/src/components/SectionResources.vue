@@ -24,9 +24,9 @@
             <div class="title-container" style="margin-bottom: 25px">
                 <span class="subsection">§</span>
                 <span class="resource-title"> {{ titleLabel }} Resources </span>
-                <a style="font-size: 14px; margin-left: 30px">
-                    Show All Resources</a
-                >
+                <v-btn text @click="routeToResources" class="show-all-btn">
+                    Show All Resources
+                </v-btn>
             </div>
             <div class="wrapper">
                 <div class="one">
@@ -139,6 +139,7 @@ export default {
         part: String,
         selectedIdentifier: Array,
         selectedScope: String,
+        routeToResources: Function,
     },
 
     data() {
@@ -332,6 +333,18 @@ $eregs-image-path: "~legacy-static/images";
         }
         .resource-title {
             font-size: 30px;
+        }
+
+        .show-all-btn {
+            color: $primary_link_color;
+            letter-spacing: normal;
+            text-decoration: underline;
+            text-transform: capitalize;
+            margin-left: 30px;
+
+            .v-btn__content {
+                font-size: 14px;
+            }
         }
     }
 }

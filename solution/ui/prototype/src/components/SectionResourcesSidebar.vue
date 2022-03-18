@@ -45,7 +45,7 @@
         </template>
         <div class="btn-container" v-if="selectedIdentifier">
             <ResourcesBtn
-                :clickHandler="routeToResourcesPage"
+                :clickHandler="routeToResources"
                 label="All"
                 type="solid"
             />
@@ -71,6 +71,7 @@ export default {
         part: String,
         selectedIdentifier: Array,
         selectedScope: String,
+        routeToResources: Function,
     },
 
     data() {
@@ -119,24 +120,6 @@ export default {
 
         search() {
             console.log("search will happen here");
-        },
-
-        routeToResourcesPage() {
-            const identifiers = this.selectedIdentifier.reduce((acc, item) => {
-                acc[this.selectedScope]
-                    ? acc[this.selectedScope] += `,${item}`
-                    : (acc[this.selectedScope] = `${item}`);
-                return acc;
-            }, {});
-
-            this.$router.push({
-                name: "resources",
-                query: {
-                    title: this.title,
-                    part: this.part,
-                    ...identifiers,
-                },
-            });
         },
     },
 
