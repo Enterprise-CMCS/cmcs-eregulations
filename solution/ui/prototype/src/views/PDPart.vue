@@ -205,7 +205,7 @@ export default {
         async setResourcesParams(payload) {
             try {
                 this.supList = await getSupplementalContentNew(
-                    42,
+                    this.title,
                     this.part,
                     payload["identifier"]
                 );
