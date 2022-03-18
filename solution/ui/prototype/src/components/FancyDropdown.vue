@@ -1,28 +1,31 @@
 <template>
-    <div class="filters-container">
-        <div class="content" :class="resourcesClass">
-            <h3>Filter Resources</h3>
-            <div class="filters">
-                <FancyDropdown label="Select Title" />
-            </div>
-        </div>
-    </div>
+    <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+            <v-btn class="ds-c-field select-btn" v-bind="attrs" v-on="on">
+                {{ label }}
+            </v-btn>
+        </template>
+        <v-list>
+            <v-list-item>
+                <v-list-item-title>Test</v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+                <v-list-item-title>Longer title that is longer than the button</v-list-item-title>
+            </v-list-item>
+        </v-list>
+    </v-menu>
 </template>
 
 <script>
-import FancyDropdown from "@/components/FancyDropdown.vue";
-
 export default {
-    name: "ResourcesFilters",
+    name: "FancyDropdown",
 
-    components: {
-        FancyDropdown
-    },
+    components: {},
 
     props: {
-        resourcesDisplay: {
+        label: {
             type: String,
-            required: false,
+            default: "Select",
         },
     },
 
@@ -49,8 +52,8 @@ export default {
     },
 
     computed: {
-        resourcesClass() {
-            return `content-with-${this.resourcesDisplay}`;
+        computedProp() {
+            return this.dataProp.toUpperCase();
         },
     },
 
@@ -70,20 +73,8 @@ $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
 
-.filters-container {
-    overflow: auto;
-    width: 100%;
-
-    .content-with-column {
-        margin: 0 auto;
-    }
-
-    .content-with-sidebar {
-        margin-left: 50px;
-    }
-
-    .content {
-        max-width: $text-max-width;
-    }
+.select-btn {
+    background-image: url(#{$eregs-image-path}/arrow-both.svg);
+    background-position: right center;
 }
 </style>
