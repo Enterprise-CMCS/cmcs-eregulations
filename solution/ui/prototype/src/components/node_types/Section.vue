@@ -8,7 +8,7 @@
         <h2 class="section-title" :id="kebabTitle">
             <button
                 v-on:click="handleBtnClick"
-                v-if="numSupplementalContent"
+                v-if="numSupplementalContent && !showResourceButtons"
                 class="supplemental-content-count"
             >
                 {{ numSupplementalContent }}
@@ -26,7 +26,7 @@
                 />
             </template>
         </div>
-        <div v-if="showResourceButtons" class="btn-container">
+        <div v-if="showResourceButtons && numSupplementalContent" class="btn-container">
             <ResourcesBtn
                 :clickHandler="handleBtnClick"
                 label="Section"
@@ -50,6 +50,14 @@ export default {
     },
 
     props: {
+        title: {
+            type: String,
+            required: false,
+        },
+        part: {
+            type: String,
+            required: false,
+        },
         node: {
             type: Object,
             required: true,
@@ -87,7 +95,7 @@ export default {
 
     methods: {
         async handleBtnClick() {
-            this.resourceParamsEmitter("section", this.node.label[1]);
+            this.resourceParamsEmitter("section", [this.node.label[1]]);
         },
     },
 };
