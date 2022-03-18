@@ -24,6 +24,7 @@
                 <ResourcesFilters :resourcesDisplay="resourcesDisplay" />
                 <ResourcesSelections />
                 <ResourcesResults />
+                queryParams: {{ queryParams }}
             </div>
         </div>
     </body>
@@ -79,6 +80,8 @@ export default {
         },
         "$route.query": {
             async handler(toQueries, previousQueries) {
+                console.log("watching queries");
+                console.log(toQueries);
                 // react to route changes...
                 console.log("toQueries in watch", toQueries);
             },

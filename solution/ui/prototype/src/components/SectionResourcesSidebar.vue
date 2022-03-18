@@ -121,9 +121,10 @@ export default {
         },
 
         routeToResourcesPage() {
-            console.log(
-                "This will go to the resources page implemented in EREGCSC-1211"
-            );
+            this.$router.push({
+                name: "resources",
+                query: { title: this.title, part: this.part },
+            });
         },
     },
 
