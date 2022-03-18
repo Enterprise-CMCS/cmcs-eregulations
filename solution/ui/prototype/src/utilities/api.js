@@ -389,6 +389,10 @@ const getHomepageStructure = async () => {
 const getAllParts = async () =>{
     return  await httpApiGet("all_parts");
 }
+const getCategories = async () => {
+    return  await httpApiGet("categories");
+}
+
 const getPartsList = async () =>{
     const all_parts = await getAllParts()
     return all_parts.map(d => d.name)
@@ -487,6 +491,7 @@ export {
     getSupplementalContentNew,
     getPartsList,
     getSectionsForSubPart,
-    getSupplementalContentCountForPart
+    getSupplementalContentCountForPart,
+    getCategories
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
