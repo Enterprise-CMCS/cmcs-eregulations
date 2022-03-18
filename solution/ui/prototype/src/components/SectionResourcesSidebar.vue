@@ -56,6 +56,7 @@
 <script>
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import SupplementalContent from "legacy/js/src/components/SupplementalContent.vue";
+import _isArray from "lodash/isArray";
 
 export default {
     name: "SectionResourcesSidebar",
@@ -121,9 +122,20 @@ export default {
         },
 
         routeToResourcesPage() {
+            const identifiers = this.selectedIdentifier.reduce((acc, item) => {
+                acc[this.selectedScope]
+                    ? acc[this.selectedScope] += `,${item}`
+                    : (acc[this.selectedScope] = `${item}`);
+                return acc;
+            }, {});
+
             this.$router.push({
                 name: "resources",
-                query: { title: this.title, part: this.part },
+                query: {
+                    title: this.title,
+                    part: this.part,
+                    ...identifiers,
+                },
             });
         },
     },
