@@ -84,7 +84,7 @@
                         />
                     </div>
                     <div v-else>
-                        <supplemental-content-list
+                        <SupplementalContentList
                             v-for="c in category.supplemental_content"
                             :key="c.created_at"
                             :supplemental-content="c"
@@ -105,7 +105,7 @@
                             />
                         </div>
                         <div v-else>
-                            <supplemental-content-list
+                            <SupplementalContentList
                                 v-for="c in subcategory.supplemental_content"
                                 :key="c.created_at"
                                 :supplemental-content="c"
