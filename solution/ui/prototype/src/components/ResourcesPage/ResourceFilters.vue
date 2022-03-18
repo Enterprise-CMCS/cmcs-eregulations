@@ -64,7 +64,7 @@ export default {
           label: 'c',
         } ],
     }),
-    components:{Treeselect},
+ 
     methods: {
         organizeCategories: function (categories) {
             console.log(categories);
@@ -86,6 +86,7 @@ export default {
                     this.categoryDict[cat.name] = { subcategories: [] };
                 }
             }
+            console.log(this.categoryDict)
             this.categories= [this.categoryDict]
             //console.log(this.categoryDict)
         },
