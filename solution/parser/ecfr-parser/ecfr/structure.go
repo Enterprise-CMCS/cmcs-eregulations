@@ -27,8 +27,13 @@ type RangeString []string
 // UnmarshalJSON splits the string into parts or populates an array or object (if it is one)
 func (rs *RangeString) UnmarshalJSON(data []byte) error {
 	s := string(data)
-	if len(s) > 0 && (strings.HasPrefix(s, "[") || strings.HasPrefix(s, "{")) {
-		json.Unmarshal(data, *rs)
+	if len(s) > 0 && strings.HasPrefix(s, "[") {
+		s = strings.Trim(strings.Trim(s, "["), "]")
+		pieces := strings.Split(s, ",")
+		for _, piece := range pieces {
+			a := strings.Trim(strings.TrimSpace(piece), "\"")
+			*rs = append(*rs, a)
+		}
 	} else {
 		s = strings.Trim(s, "\"")
 		*rs = strings.Split(s, " – ")
@@ -51,9 +56,14 @@ type IdentifierString []string
 // UnmarshalJSON splits a string into parts, or populates an array or object (if it is one)
 func (is *IdentifierString) UnmarshalJSON(data []byte) error {
 	s := string(data)
-	if len(s) > 0 && (strings.HasPrefix(s, "[") || strings.HasPrefix(s, "{")) {
-		json.Unmarshal(data, *is)
-	} else {
+	if len(s) > 0 && strings.HasPrefix(s, "[") { //is an array of strings (if it's an array of something else we have bigger problems)
+		s = strings.Trim(strings.Trim(s, "["), "]")
+		pieces := strings.Split(s, ",")
+		for _, piece := range pieces {
+			a := strings.Trim(strings.TrimSpace(piece), "\"")
+			*is = append(*is, a)
+		}
+	} else { //just a string
 		s = strings.Trim(s, "\"")
 		pieces := strings.Split(s, ".")
 		for _, piece := range pieces {
