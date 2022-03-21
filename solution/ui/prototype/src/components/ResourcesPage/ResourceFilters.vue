@@ -5,6 +5,7 @@
 
 
         <h3>Title</h3>
+        <treeselect v-model="value" :multiple="true" :options="this.catOptions" />
         <v-select
             multiple
             v-model="selectedTitles"
@@ -28,13 +29,19 @@
     </div>
 </template>
 <script>
-import { getSupplementalContentNew, getCategories } from "@/utilities/api";
+
+import { getSupplementalContentNew, getCategories, getAllParts } from "@/utilities/api";
+import { getCategoryTree } from "@/utilities/utils";
+import Treeselect from '@riophae/vue-treeselect'
+
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
     name: "ResourceFilters",
+    components: { Treeselect },
     data: () => ({
         titles: ["42"],
-        parts: ["foo", "bar", "fizz"],
+        parts: [],
         sections: ["sections"],
         resources: ["resources"],
         selectedResources: [],
@@ -43,59 +50,17 @@ export default {
         selectedTitles: [],
         supList: [],
         categories: [],
-        categoryDict: {},
-                value: null,
-        // define options
-        options: [ {
-          id: 'a',
-          label: 'a',
-          children: [ {
-            id: 'aa',
-            label: 'aa',
-          }, {
-            id: 'ab',
-            label: 'ab',
-          } ],
-        }, {
-          id: 'b',
-          label: 'b',
-        }, {
-          id: 'c',
-          label: 'c',
-        } ],
+        catOptions:[],
+        value: null,
+
     }),
  
-    methods: {
-        organizeCategories: function (categories) {
-            console.log(categories);
-
-            for (let category in categories) {
-                let cat = categories[category];
-                console.log(cat.object_type);
-                if (cat.object_type === "subcategory") {
-                    if (cat.parent.name in this.categoryDict) {
-                        this.categoryDict[cat.parent.name].subcategories.push(
-                            cat.name
-                        );
-                    } else {
-                        this.categoryDict[cat.parent.name] = {
-                            subcategories: [cat.name],
-                        };
-                    }
-                } else if (!(cat.name in this.categoryDict)) {
-                    this.categoryDict[cat.name] = { subcategories: [] };
-                }
-            }
-            console.log(this.categoryDict)
-            this.categories= [this.categoryDict]
-            //console.log(this.categoryDict)
-        },
-    },
     async created() {
         try {
             this.supList = await getSupplementalContentNew(42, 441, [], ["B"]);
+            this.parts = await getAllParts();
             this.categories = await getCategories();
-            this.categories = this.organizeCategories(this.categories);
+            this.catOptions = getCategoryTree(this.categories);
         } catch (error) {
             console.error(error);
         } finally {
