@@ -20,6 +20,7 @@ func TestFetch(t *testing.T) {
 		Server *httptest.Server
 		ExpectedResponse []byte
 		ErrorExpected bool
+		ExpectedCode int
 		JSONErrors bool
 	}{
 		{
@@ -30,6 +31,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: []byte("This is an arbitrary array of bytes"),
 			ErrorExpected: false,
+			ExpectedCode: 200,
 			JSONErrors: false,
 		},
 		{
@@ -40,6 +42,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: nil,
 			ErrorExpected: true,
+			ExpectedCode: 500,
 			JSONErrors: false,
 		},
 		{
@@ -55,6 +58,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: []byte("json_errors parameter found!"),
 			ErrorExpected: false,
+			ExpectedCode: 200,
 			JSONErrors: true,
 		},
 		{
@@ -66,6 +70,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: nil,
 			ErrorExpected: true,
+			ExpectedCode: -1,
 			JSONErrors: false,
 		},
 	}
@@ -80,13 +85,18 @@ func TestFetch(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			body, err := Fetch(ctx, testURL, tc.JSONErrors)
+			body, code, err := Fetch(ctx, testURL, tc.JSONErrors)
 
 			if err == nil && tc.ErrorExpected {
 				t.Errorf("expected error, got nil")
 			} else if err != nil && !tc.ErrorExpected {
 				t.Errorf("expected no error, got (%+v)", err)
 			}
+
+			if code != tc.ExpectedCode {
+				t.Errorf("expected code (%d), got (%d)", tc.ExpectedCode, code)
+			}
+
 			if body != nil {
 				response, err := io.ReadAll(body)
 				if err != nil {
@@ -114,6 +124,7 @@ func TestSendJSON(t *testing.T) {
 		Server *httptest.Server
 		PostData *PostData
 		ErrorExpected bool
+		ExpectedCode int
 		JSONErrors bool
 		PostAuth *PostAuth
 		Method string
@@ -141,6 +152,7 @@ func TestSendJSON(t *testing.T) {
 				Valid: true,
 			},
 			ErrorExpected: false,
+			ExpectedCode: 200,
 			JSONErrors: false,
 			PostAuth: nil,
 			Method: HttpPost,
@@ -153,6 +165,7 @@ func TestSendJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: true,
+			ExpectedCode: 500,
 			JSONErrors: false,
 			PostAuth: nil,
 			Method: HttpPost,
@@ -171,6 +184,7 @@ func TestSendJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: false,
+			ExpectedCode: 200,
 			JSONErrors: true,
 			PostAuth: nil,
 			Method: HttpPost,
@@ -184,6 +198,7 @@ func TestSendJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: true,
+			ExpectedCode: -1,
 			JSONErrors: false,
 			PostAuth: nil,
 			Method: HttpPost,
@@ -210,6 +225,7 @@ func TestSendJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: false,
+			ExpectedCode: 200,
 			JSONErrors: false,
 			PostAuth: &PostAuth{
 				Username: "testusername",
@@ -244,6 +260,7 @@ func TestSendJSON(t *testing.T) {
 			},
 			ErrorExpected: false,
 			JSONErrors: false,
+			ExpectedCode: 200,
 			PostAuth: nil,
 			Method: HttpPut,
 		},
@@ -259,12 +276,16 @@ func TestSendJSON(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			err = SendJSON(ctx, testURL, tc.PostData, tc.JSONErrors, tc.PostAuth, tc.Method)
+			code, err := SendJSON(ctx, testURL, tc.PostData, tc.JSONErrors, tc.PostAuth, tc.Method)
 
 			if err == nil && tc.ErrorExpected {
 				t.Errorf("expected error, got nil")
 			} else if err != nil && !tc.ErrorExpected {
 				t.Errorf("expected no error, got (%+v)", err)
+			}
+
+			if code != tc.ExpectedCode {
+				t.Errorf("expected code (%d), got (%d)", tc.ExpectedCode, code)
 			}
 		})
 	}
@@ -378,10 +399,14 @@ func TestFetchWithOptions(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			body, err := FetchWithOptions(ctx, testURL, false, tc.FetchOptions)
+			body, code, err := FetchWithOptions(ctx, testURL, false, tc.FetchOptions)
 
 			if err != nil {
 				t.Errorf("received error (%+v)", err)
+			}
+
+			if code != 200 {
+				t.Errorf("received code (%d)", code)
 			}
 
 			response, err := io.ReadAll(body)
