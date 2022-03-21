@@ -73,6 +73,7 @@ type TitleConfig struct {
 	Title       int            `json:"title"`
 	Subchapters SubchapterList `json:"subchapters"`
 	Parts       PartList       `json:"parts"`
+	Contents	Title
 }
 
 // ParserConfig represents configuration for the parser as a whole

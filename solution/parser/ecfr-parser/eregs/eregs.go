@@ -73,6 +73,7 @@ func GetTitle(ctx context.Context, title int) (Title, int, error) {
 		Name: fmt.Sprintf("%d", title),
 		Contents: &ecfr.Structure{},
 		Exists: false,
+		Modified: false,
 	}
 
 	eregsPath, err := url.Parse(BaseURL)
@@ -95,7 +96,9 @@ func GetTitle(ctx context.Context, title int) (Title, int, error) {
 	if err := d.Decode(&t); err != nil {
 		return emptyTitle, code, fmt.Errorf("Unable to decode response body while retrieving title object: %+v", err)
 	}
+	
 	t.Exists = true
+	t.Modified = false
 
 	return t, code, nil
 }

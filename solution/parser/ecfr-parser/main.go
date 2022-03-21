@@ -103,8 +103,21 @@ func start() error {
 	}
 	parseConfig(config)
 
+	ctx, cancel := context.WithTimeout(context.Background(), 120 * time.Second)
+	defer cancel()
+
 	queue := list.New()
 	for _, title := range config.Titles {
+		log.Debug("[main] Fetching table of contents for title ", title.Title, "...")
+		toc, code, err := eregs.GetTitle(ctx, title.Title)
+		if err != nil {
+			if code != 404 {
+				log.Error("[main] Failed to retrieve existing table of contents for title ", title.Title, ". Error code is ", code, ", so processing of this title will be skipped. Error: ", err)
+				continue
+			}
+			log.Warn("[main] Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
+		}
+		title.Contents = toc
 		queue.PushBack(title)
 	}
 
@@ -137,6 +150,15 @@ func start() error {
 			} else {
 				log.Error("[main] Failed to parse title ", title.Title, ". Error: ", err)
 				failed = true
+			}
+
+			if title.Contents.Modified {
+				log.Debug("[main] Uploading Title ", title.Title, "'s table of contents to eRegs...")
+				if _, err := eregs.SendTitle(ctx, &title.Contents); err != nil {
+					log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
+					queue.PushBack(titleElement)
+					failed = true
+				}
 			}
 		}
 
@@ -173,26 +195,21 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
 	}
 
-	log.Info("[main] Fetching table of contents for title ", title.Title, "...")
-	toc, code, err := eregs.GetTitle(ctx, title.Title)
-	if err != nil {
-		if code != 404 {
-			return true, fmt.Errorf("Failed to retrieve existing table of contents for title %d. Error code is %d, so not using empty default. Error: %+v", title.Title, code, err)
-		}
-		log.Warn("[main] Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
-	}
-
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
 	var parts []string
 	for _, subchapter := range title.Subchapters {
 		log.Debug("[main] Fetching title ", title.Title, " subchapter ", subchapter, " parts list...")
 		var err error
-		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+		var subchapterParts []string
+		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
 			return true, err
 		}
+		parts = append(parts, subchapterParts...)
 	}
 	parts = append(parts, title.Parts...)
+
+	log.Fatal(parts[0])
 
 	if len(parts) < 1 {
 		return false, fmt.Errorf("Some number of parts must be specified")
@@ -284,7 +301,8 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 				if version.Processed {
 					if version.UploadContents {
 						log.Debug("[main] Adding structure of part ", version.Name, " to Title ", title.Title, "'s table of contents")
-						toc.AddPart(version.Structure, version.Name)
+						title.Contents.AddPart(version.Structure, version.Name)
+						title.Contents.Modified = true
 					}
 					versionList.Remove(versionElement)
 				} else {
@@ -306,10 +324,6 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		}
 	}
 
-	log.Info("[main] Uploading table of contents to eRegs...")
-	if _, err := eregs.SendTitle(ctx, &toc); err != nil {
-		log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
-	}
 	log.Info("[main] All parts of title ", title.Title, " finished processing in ", time.Since(start), "!")
 	return false, nil
 }
