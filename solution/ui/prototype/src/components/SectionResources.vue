@@ -69,7 +69,7 @@
             </template>
             <template v-else>
                 <div
-                    v-for="category in availableContent"
+                    v-for="(category, idx) in availableContent"
                     :key="category.created_at"
                     :class="{ 'list-view': !cardView }"
                 >
@@ -112,7 +112,14 @@
                             />
                         </div>
                     </div>
-                    <v-divider class="hr-divider" />
+                    <v-divider v-if="availableContent.length - 1 != idx" class="hr-divider" />
+                    <div class="btn-container" v-else>
+                        <ResourcesBtn
+                            :clickHandler="routeToResources"
+                            label="All"
+                            type="solid"
+                        />
+                    </div>
                 </div>
             </template>
         </div>
@@ -121,6 +128,7 @@
 
 <script>
 import { getSupplementalContent } from "@/utilities/api";
+import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 import SupplementalContentCard from "@/components/SupplementalContentCard";
 import SupplementalContentList from "@/components/SupplementalContentList";
@@ -129,6 +137,7 @@ export default {
     name: "SectionResources",
 
     components: {
+        ResourcesBtn,
         SimpleSpinner,
         SupplementalContentList,
         SupplementalContentCard,
@@ -346,6 +355,11 @@ $eregs-image-path: "~legacy-static/images";
                 font-size: 14px;
             }
         }
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
     }
 }
 
