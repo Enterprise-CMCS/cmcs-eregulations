@@ -142,13 +142,15 @@ func TestParseConfig(t *testing.T) {
 
 func TestStart(t *testing.T) {
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "GET" {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Expected GET request" }`))
-			return
-		}
-
-		if r.URL.Path == "/parser_config" {
+		if (r.Method == "POST" || r.Method == "PUT") {
+			if r.URL.Path == "/title/42" || r.URL.Path == "/title/43" {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`OK!`))
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "Something happened!!" }`))
+			}
+		} else if r.URL.Path == "/parser_config" {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{
 				"workers": 3,
@@ -167,6 +169,11 @@ func TestStart(t *testing.T) {
 						"title": 43,
 						"subchapters": "AB-C",
 						"parts": "1, 2, 3"
+					},
+					{
+						"title": 44,
+						"subchapters": "XY-Z",
+						"parts": "4, 5, 6"
 					}
 				]
 			}`))
@@ -239,6 +246,12 @@ func TestStart(t *testing.T) {
 				  "label_description": "Public Health"
 				}
 			  }`))
+		} else if r.URL.Path == "/title/43" {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(`{ "exception": "404 not found!" }`))
+		} else if r.URL.Path == "/title/43" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Something happened!" }`))
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{ "exception": "Invalid path '` + r.URL.Path + `'" }`))
@@ -272,6 +285,14 @@ func TestStart(t *testing.T) {
 				return false, fmt.Errorf("something REALLY bad happened")
 			},
 			Error: true,
+		},
+		{
+			Name: "test-toc-modified",
+			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
+				title.Contents.Modified = true
+				return false, nil
+			},
+			Error: false,
 		},
 	}
 
