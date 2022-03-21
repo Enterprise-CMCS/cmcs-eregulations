@@ -155,7 +155,7 @@ func start() error {
 				log.Debug("[main] Uploading Title ", title.Title, "'s table of contents to eRegs...")
 				ctx, cancel := context.WithTimeout(context.Background(), 15 * time.Second)
 				defer cancel()
-				if _, err := eregs.SendTitle(ctx, &title.Contents); err != nil {
+				if _, err := eregs.SendTitle(ctx, title.Contents); err != nil {
 					log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
 					queue.PushBack(title)
 					failed = true

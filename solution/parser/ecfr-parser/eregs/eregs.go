@@ -68,8 +68,8 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) (int, error) {
 }
 
 // GetTitle retrieves a title object from regcore in eRegs
-func GetTitle(ctx context.Context, title int) (Title, int, error) {
-	emptyTitle := Title{
+func GetTitle(ctx context.Context, title int) (*Title, int, error) {
+	emptyTitle := &Title{
 		Name: fmt.Sprintf("%d", title),
 		Contents: &ecfr.Structure{},
 		Exists: false,
@@ -100,7 +100,7 @@ func GetTitle(ctx context.Context, title int) (Title, int, error) {
 	t.Exists = true
 	t.Modified = false
 
-	return t, code, nil
+	return &t, code, nil
 }
 
 // SendTitle sends a title object to regcore in eRegs for table of contents tracking
