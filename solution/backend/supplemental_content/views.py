@@ -117,7 +117,10 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
 class SupplementalContentByPartView(APIView):
     def get(self, request, format=None):
         part = request.GET.get('part', '')
-        results = AbstractLocation.objects.filter(part=part).annotate(num_locations=Count('supplemental_content')).filter(
+        results = AbstractLocation.objects.filter(part=part).annotate(
+            num_locations=Count(
+                'supplemental_content', filter=Q(supplemental_content__approved="t")
+            )).filter(
             num_locations__gt=0)
         data = {}
         for r in results:

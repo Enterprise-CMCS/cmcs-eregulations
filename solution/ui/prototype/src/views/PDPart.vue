@@ -21,6 +21,7 @@
                         :title="title"
                         :part="part"
                         :supList="supList"
+                        :suggestedTab="suggestedTab"
                     />
                 </pane>
             </splitpanes>
@@ -108,6 +109,7 @@ export default {
             partsList: [],
             sections: [],
             supplementalContentCount: {},
+            suggestedTab:"",
         };
     },
     computed: {
@@ -203,6 +205,11 @@ export default {
     },
     methods: {
         async setResourcesParams(payload) {
+            this.suggestedTab = payload["scope"]
+            // skip this for subparts
+            if (payload["scope"] === "subpart"){
+              return
+            }
             try {
                 this.supList = await getSupplementalContentNew(
                     42,
@@ -213,6 +220,7 @@ export default {
                 console.error(error);
             } finally {
                 console.log(this.supList);
+                this.suggestedTab = payload["scope"]
             }
             // Implement response to user choosing a section or subpart here
         },
