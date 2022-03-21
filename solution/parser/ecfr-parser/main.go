@@ -103,12 +103,11 @@ func start() error {
 	}
 	parseConfig(config)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 120 * time.Second)
-	defer cancel()
-
 	queue := list.New()
 	for _, title := range config.Titles {
 		log.Debug("[main] Fetching table of contents for title ", title.Title, "...")
+		ctx, cancel := context.WithTimeout(context.Background(), 15 * time.Second)
+		defer cancel()
 		toc, code, err := eregs.GetTitle(ctx, title.Title)
 		if err != nil {
 			if code != 404 {
@@ -154,9 +153,11 @@ func start() error {
 
 			if title.Contents.Modified {
 				log.Debug("[main] Uploading Title ", title.Title, "'s table of contents to eRegs...")
+				ctx, cancel := context.WithTimeout(context.Background(), 15 * time.Second)
+				defer cancel()
 				if _, err := eregs.SendTitle(ctx, &title.Contents); err != nil {
 					log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
-					queue.PushBack(titleElement)
+					queue.PushBack(title)
 					failed = true
 				}
 			}
@@ -208,8 +209,6 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		parts = append(parts, subchapterParts...)
 	}
 	parts = append(parts, title.Parts...)
-
-	log.Fatal(parts[0])
 
 	if len(parts) < 1 {
 		return false, fmt.Errorf("Some number of parts must be specified")

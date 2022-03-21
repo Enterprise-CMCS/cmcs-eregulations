@@ -30,6 +30,7 @@ func (rs *RangeString) UnmarshalJSON(data []byte) error {
 	if len(s) > 0 && (strings.HasPrefix(s, "[") || strings.HasPrefix(s, "{")) {
 		json.Unmarshal(data, *rs)
 	} else {
+		s = strings.Trim(s, "\"")
 		*rs = strings.Split(s, " – ")
 	}
 	return nil
@@ -53,6 +54,7 @@ func (is *IdentifierString) UnmarshalJSON(data []byte) error {
 	if len(s) > 0 && (strings.HasPrefix(s, "[") || strings.HasPrefix(s, "{")) {
 		json.Unmarshal(data, *is)
 	} else {
+		s = strings.Trim(s, "\"")
 		pieces := strings.Split(s, ".")
 		for _, piece := range pieces {
 			*is = append(*is, strings.Split(piece, " ")...)
