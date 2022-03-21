@@ -41,6 +41,7 @@ func copyStructure(src *ecfr.Structure) *ecfr.Structure {
 		Reserved: src.Reserved,
 		Type: src.Type,
 		DescendantRange: src.DescendantRange,
+		Children: []*ecfr.Structure{},
 	}
 }
 
@@ -64,7 +65,7 @@ func addPart(dest *ecfr.Structure, src *ecfr.Structure, part string) {
 	}
 
 	if index == -1 {
-		//first child of src does not exist, add t
+		//first child of src does not exist, add it
 		dest.Children = append(dest.Children, copyStructure(src.Children[0]))
 		if src.Children[0].Type != "part" || src.Children[0].Identifier[0] != part {
 			//not the part we're looking for, so recurse down a level
