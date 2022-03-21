@@ -14,7 +14,7 @@ func TestRangeStringUnmarshal(t *testing.T) {
 	input := []byte("432.1 – 432.200")
 	expected := RangeString{"432.1", "432.200"}
 	var rs RangeString
-	rs.UnmarshalText(input)
+	rs.UnmarshalJSON(input)
 	if diff := deep.Equal(rs, expected); diff != nil {
 		t.Errorf("output not as expected: %+v", diff)
 	}
@@ -81,7 +81,7 @@ func TestIdentifierStringUnmarshal(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			var is IdentifierString
-			is.UnmarshalText(tc.Input)
+			is.UnmarshalJSON(tc.Input)
 			if diff := deep.Equal(is, tc.Expected); diff != nil {
 				t.Errorf("output not as expected: %+v", diff)
 			}

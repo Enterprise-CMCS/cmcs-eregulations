@@ -57,39 +57,30 @@ func TestFetchFunctions(t *testing.T) {
 	testTable := []struct {
 		Name string
 		Path string
-		Function func(context.Context, ...network.FetchOption) error
+		Function func(context.Context, ...network.FetchOption) (int, error)
 	}{
 		{
 			Name: "test-fetch-full",
 			Path: "/" + fmt.Sprintf(ecfrFullXML, "2022-01-01", 42),
-			Function: func(ctx context.Context, opts ...network.FetchOption) error {
-				_, err := FetchFull(ctx, "2022-01-01", 42, opts...)
-				if err != nil {
-					return err
-				}
-				return nil
+			Function: func(ctx context.Context, opts ...network.FetchOption) (int, error) {
+				_, code, err := FetchFull(ctx, "2022-01-01", 42, opts...)
+				return code, err
 			},
 		},
 		{
 			Name: "test-fetch-structure",
 			Path: "/" + fmt.Sprintf(ecfrStructureJSON, "2022-01-01", 42),
-			Function: func(ctx context.Context, opts ...network.FetchOption) error {
-				_, err := FetchStructure(ctx, "2022-01-01", 42, opts...)
-				if err != nil {
-					return err
-				}
-				return nil
+			Function: func(ctx context.Context, opts ...network.FetchOption) (int, error) {
+				_, code, err := FetchStructure(ctx, "2022-01-01", 42, opts...)
+				return code, err
 			},
 		},
 		{
 			Name: "test-fetch-versions",
 			Path: "/" + fmt.Sprintf(ecfrVersionsXML, 42),
-			Function: func(ctx context.Context, opts ...network.FetchOption) error {
-				_, err := FetchVersions(ctx, 42, opts...)
-				if err != nil {
-					return err
-				}
-				return nil
+			Function: func(ctx context.Context, opts ...network.FetchOption) (int, error) {
+				_, code, err := FetchVersions(ctx, 42, opts...)
+				return code, err
 			},
 		},
 	}
@@ -102,9 +93,12 @@ func TestFetchFunctions(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 			path = tc.Path
-			err := tc.Function(ctx, &opt1, &opt2)
+			code, err := tc.Function(ctx, &opt1, &opt2)
 			if err != nil {
 				t.Errorf("received error (%+v)", err)
+			}
+			if code != 200 {
+				t.Errorf("received code (%d)", code)
 			}
 		})
 	}

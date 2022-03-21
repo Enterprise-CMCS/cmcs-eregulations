@@ -148,33 +148,101 @@ func TestStart(t *testing.T) {
 			return
 		}
 
-		if r.URL.Path != "/parser_config" {
+		if r.URL.Path == "/parser_config" {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{
+				"workers": 3,
+				"attempts": 3,
+				"loglevel": "trace",
+				"upload_supplemental_locations": true,
+				"log_parse_errors": false,
+				"skip_versions": false,
+				"titles": [
+					{
+						"title": 42,
+						"subchapters": "IV-C",
+						"parts": "400, 457, 460"
+					},
+					{
+						"title": 43,
+						"subchapters": "AB-C",
+						"parts": "1, 2, 3"
+					}
+				]
+			}`))
+		} else if r.URL.Path == "/title/42" {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{
+				"id": 1,
+				"name": "42",
+				"last_updated": "2022-03-21T17:09:10.628069",
+				"toc": {
+				  "type": "title",
+				  "label": "Title 42 - Public Health",
+				  "children": [
+					{
+					  "type": "chapter",
+					  "label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
+					  "children": [
+						{
+						  "type": "subchapter",
+						  "label": "Subchapter A - General Provisions",
+						  "children": [
+							{
+							  "type": "part",
+							  "label": "Part 400 - Introduction; Definitions",
+							  "children": null,
+							  "reserved": false,
+							  "identifier": [
+								"400"
+							  ],
+							  "label_level": "Part 400",
+							  "descendant_range": [
+								"400.200",
+								"400.203"
+							  ],
+							  "label_description": "Introduction; Definitions"
+							}
+						  ],
+						  "reserved": false,
+						  "identifier": [
+							"A"
+						  ],
+						  "label_level": "Subchapter A",
+						  "descendant_range": [
+							"400",
+							"404"
+						  ],
+						  "label_description": "General Provisions"
+						}
+					  ],
+					  "reserved": false,
+					  "identifier": [
+						"IV"
+					  ],
+					  "label_level": " Chapter IV",
+					  "descendant_range": [
+						"400",
+						"699"
+					  ],
+					  "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
+					}
+				  ],
+				  "reserved": false,
+				  "identifier": [
+					"42"
+				  ],
+				  "label_level": "Title 42",
+				  "descendant_range": [
+					"null"
+				  ],
+				  "label_description": "Public Health"
+				}
+			  }`))
+		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{ "exception": "Invalid path '` + r.URL.Path + `'" }`))
-			return
 		}
-
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{
-			"workers": 3,
-			"attempts": 3,
-			"loglevel": "trace",
-			"upload_supplemental_locations": true,
-			"log_parse_errors": false,
-			"skip_versions": false,
-			"titles": [
-				{
-					"title": 42,
-					"subchapters": "IV-C",
-					"parts": "400, 457, 460"
-				},
-				{
-					"title": 43,
-					"subchapters": "AB-C",
-					"parts": "1, 2, 3"
-				}
-			]
-		}`))
 	}))
 	defer eregsServer.Close()
 	eregs.BaseURL = eregsServer.URL
@@ -429,6 +497,9 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
+				Contents: &eregs.Title{
+					Contents: &ecfr.Structure{},
+				},
 			},
 			Retry: false,
 			Error: false,
@@ -444,6 +515,9 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
+				Contents: &eregs.Title{
+					Contents: &ecfr.Structure{},
+				},
 			},
 			Retry: false,
 			Error: true,
@@ -457,6 +531,9 @@ func TestParseTitle(t *testing.T) {
 				Title: 42,
 				Subchapters: eregs.SubchapterList{},
 				Parts: eregs.PartList{},
+				Contents: &eregs.Title{
+					Contents: &ecfr.Structure{},
+				},
 			},
 			Retry: false,
 			Error: true,
@@ -470,6 +547,9 @@ func TestParseTitle(t *testing.T) {
 				Title: 42,
 				Subchapters: eregs.SubchapterList{},
 				Parts: eregs.PartList{},
+				Contents: &eregs.Title{
+					Contents: &ecfr.Structure{},
+				},
 			},
 			Retry: false,
 			Error: true,
@@ -485,6 +565,9 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
+				Contents: &eregs.Title{
+					Contents: &ecfr.Structure{},
+				},
 			},
 			Retry: false,
 			Error: true,

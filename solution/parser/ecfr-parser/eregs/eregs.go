@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
@@ -80,8 +81,10 @@ func GetTitle(ctx context.Context, title int) (*Title, int, error) {
 	if err != nil {
 		return emptyTitle, -1, err
 	}
-	// TODO: remove the following line on v3 move! BaseURL should point to v3.
-	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	// TODO: remove the following 2 lines on v3 move! BaseURL should point to v3.
+	if strings.HasSuffix(eregsPath.Path, "v2/") {
+		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	}
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%d", title))
 	
 	log.Trace("[eregs] Retrieving title ", title, " from eRegs")
@@ -109,8 +112,10 @@ func SendTitle(ctx context.Context, t *Title) (int, error) {
 	if err != nil {
 		return -1, nil
 	}
-	// TODO: remove the following line on v3 move! BaseURL should point to v3.
-	eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	// TODO: remove the following 2 lines on v3 move! BaseURL should point to v3.
+	if strings.HasSuffix(eregsPath.Path, "v2/") {
+		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	}
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
 	var method string
 	if t.Exists {
