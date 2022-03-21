@@ -37,8 +37,14 @@ func TestPostPart(t *testing.T) {
 		Document: nil,
 	}
 
-	if err := PostPart(ctx, part); err != nil {
+	code, err := PostPart(ctx, part)
+
+	if err != nil {
 		t.Errorf("received error (%+v)", err)
+	}
+
+	if code != 200 {
+		t.Errorf("received code (%d)", code)
 	}
 }
 
@@ -70,8 +76,14 @@ func TestPostSupplementalPart(t *testing.T) {
 		},
 	}
 
-	if err := PostSupplementalPart(ctx, part); err != nil {
+	code, err := PostSupplementalPart(ctx, part)
+
+	if err != nil {
 		t.Errorf("received error (%+v)", err)
+	}
+
+	if code != 200 {
+		t.Errorf("received code (%d)", code)
 	}
 }
 
@@ -120,9 +132,14 @@ func TestGetExistingParts(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 	defer cancel()
 
-	results, err := GetExistingParts(ctx, 42)
+	results, code, err := GetExistingParts(ctx, 42)
+	
 	if err != nil {
 		t.Errorf("received error (%+v)", err)
+	}
+
+	if code != 200 {
+		t.Errorf("received code (%d)", code)
 	}
 
 	expected := map[string][]string{
