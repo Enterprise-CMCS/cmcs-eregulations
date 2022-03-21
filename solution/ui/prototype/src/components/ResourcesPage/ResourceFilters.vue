@@ -2,10 +2,10 @@
     <div class="resourcefilters">
         <h2>Filters</h2>
         <h3>Resource Type</h3>
-
+     <treeselect v-model="value" :multiple="true" :options="this.catOptions" />
 
         <h3>Title</h3>
-        <treeselect v-model="value" :multiple="true" :options="this.catOptions" />
+  
         <v-select
             multiple
             v-model="selectedTitles"
