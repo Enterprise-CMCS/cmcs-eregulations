@@ -8,6 +8,7 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 )
 
+// Title represents a title object from eRegs, specifically for table of contents processing
 type Title struct {
 	Name string `json:"name"`
 	Contents *ecfr.Structure `json:"toc"`
@@ -24,7 +25,7 @@ func identifierStringEqual(one *ecfr.IdentifierString, two *ecfr.IdentifierStrin
 	if len(*one) != len(*two) {
 		return false
 	}
-	for i, _ := range *one {
+	for i := range *one {
 		if (*one)[i] != (*two)[i] {
 			return false
 		}

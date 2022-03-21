@@ -55,7 +55,7 @@ func PostPart(ctx context.Context, p *Part) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HttpPost)
+	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
 }
 
 // PostSupplementalPart is the function that sends a supplemental part to eRegs server
@@ -65,7 +65,7 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) (int, error) {
 		return -1, err
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, "/supplemental_content")
-	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HttpPost)
+	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
 }
 
 // GetTitle retrieves a title object from regcore in eRegs
@@ -119,9 +119,9 @@ func SendTitle(ctx context.Context, t *Title) (int, error) {
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
 	var method string
 	if t.Exists {
-		method = network.HttpPut
+		method = network.HTTPPut
 	} else {
-		method = network.HttpPost
+		method = network.HTTPPost
 	}
 	return network.SendJSON(ctx, eregsPath, t, true, postAuth, method)
 }

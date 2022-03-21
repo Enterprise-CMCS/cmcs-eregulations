@@ -155,7 +155,7 @@ func TestSendJSON(t *testing.T) {
 			ExpectedCode: 200,
 			JSONErrors: false,
 			PostAuth: nil,
-			Method: HttpPost,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-fail-test",
@@ -168,7 +168,7 @@ func TestSendJSON(t *testing.T) {
 			ExpectedCode: 500,
 			JSONErrors: false,
 			PostAuth: nil,
-			Method: HttpPost,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-json-errors-test",
@@ -187,7 +187,7 @@ func TestSendJSON(t *testing.T) {
 			ExpectedCode: 200,
 			JSONErrors: true,
 			PostAuth: nil,
-			Method: HttpPost,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-timeout-test",
@@ -201,7 +201,7 @@ func TestSendJSON(t *testing.T) {
 			ExpectedCode: -1,
 			JSONErrors: false,
 			PostAuth: nil,
-			Method: HttpPost,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-auth-test",
@@ -231,7 +231,7 @@ func TestSendJSON(t *testing.T) {
 				Username: "testusername",
 				Password: "testpassword",
 			},
-			Method: HttpPost,
+			Method: HTTPPost,
 		},
 		{
 			Name: "put-test",
@@ -262,7 +262,7 @@ func TestSendJSON(t *testing.T) {
 			JSONErrors: false,
 			ExpectedCode: 200,
 			PostAuth: nil,
-			Method: HttpPut,
+			Method: HTTPPut,
 		},
 	}
 

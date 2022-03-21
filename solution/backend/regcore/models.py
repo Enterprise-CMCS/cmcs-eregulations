@@ -20,7 +20,7 @@ class PartQuerySet(models.QuerySet):
     def versions(self, title, part):
         return self.filter(name=part, title=title).order_by('-date').values("date")
 
-    def new_latest(self, title, part): ### TODO: rename to "latest"
+    def new_latest(self, title, part):  # TODO: rename to "latest"
         query = self.filter(titleobject__name=title, name=part).order_by("-version")
         return query[0] if len(query) > 0 else None
 
@@ -31,21 +31,22 @@ class PartManager(models.Manager.from_queryset(PartQuerySet)):
 
 class Part(models.Model):
     name = models.CharField(max_length=8)
-    title = models.CharField(max_length=8) ### TODO: delete
-    date = models.DateField() ### TODO: rename to version, more clarity
+    title = models.CharField(max_length=8)  # TODO: delete
+    date = models.DateField()  # TODO: rename to version, more clarity
     last_updated = models.DateTimeField(auto_now=True)
 
     document = models.JSONField()
     structure = models.JSONField()
-    depth = models.IntegerField(default=3) ### TODO: remove default, must be set by parser
+    depth = models.IntegerField(default=3)  # TODO: remove default, must be set by parser
 
-    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts") ### TODO: rename to title
+    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")  # TODO: rename to title
 
     objects = PartManager()
 
     class Meta:
         unique_together = ['name', 'title', 'date']
-        #ordering = ("title", "name", "-date") ### TODO: add once /v2/title/X/existing is removed, this line breaks it for some reason
+        # TODO: add once /v2/title/X/existing is removed, the following line breaks it for some reason
+        # ordering = ("title", "name", "-date")
 
     @property
     def toc(self):

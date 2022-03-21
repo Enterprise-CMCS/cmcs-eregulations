@@ -34,9 +34,10 @@ type Error struct {
 	Traceback []string `json:"traceback"`
 }
 
+// Represents HTTP POST and PUT methods
 const (
-	HttpPost string = http.MethodPost
-	HttpPut string = http.MethodPut
+	HTTPPost string = http.MethodPost
+	HTTPPut string = http.MethodPut
 )
 
 // SendJSON attempts to send arbitrary JSON data to a given URL using a specified method
