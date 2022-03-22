@@ -11,7 +11,11 @@
                         :key="name"
                         :disabled="value.disabled"
                     >
-                        <TitlePartList :filterEmitter="filterEmitter" />
+                        <component
+                            :is="value.listType"
+                            :key="value.buttonId"
+                            :filterEmitter="filterEmitter"
+                        ></component>
                     </FancyDropdown>
                 </template>
             </div>
@@ -20,8 +24,11 @@
 </template>
 
 <script>
-import FancyDropdown from "@/components/FancyDropdown.vue";
-import TitlePartList from "@/components/TitlePartList.vue";
+import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
+import TitlePartList from "@/components/custom_elements/TitlePartList.vue";
+import SubpartList from "@/components/custom_elements/SubpartList.vue";
+import SectionList from "@/components/custom_elements/SectionList.vue";
+import CategoryList from "@/components/custom_elements/CategoryList.vue";
 
 export default {
     name: "ResourcesFilters",
@@ -29,12 +36,19 @@ export default {
     components: {
         FancyDropdown,
         TitlePartList,
+        SubpartList,
+        SectionList,
+        CategoryList,
     },
 
     props: {
         resourcesDisplay: {
             type: String,
             required: false,
+        },
+        filters: {
+            type: Object,
+            required: true,
         },
     },
 
@@ -54,38 +68,7 @@ export default {
 
     destroyed() {},
 
-    data() {
-        return {
-            filters: {
-                title: {
-                    label: "Title",
-                    buttonTitle: "Select Title",
-                    buttonId: "select-title",
-                    disabled: false,
-                },
-                part: {
-                    label: "Part",
-                    buttonTitle: "Select Parts",
-                    buttonId: "select-parts",
-                },
-                subpart: {
-                    label: "Subpart",
-                    buttonTitle: "Select Subparts",
-                    buttonId: "select-subparts",
-                },
-                section: {
-                    label: "Section",
-                    buttonTitle: "Select Sections",
-                    buttonId: "select-sections",
-                },
-                resourceCategory: {
-                    label: "Resource Category",
-                    buttonTitle: "Select Categories",
-                    buttonId: "select-resource-categories",
-                },
-            },
-        };
-    },
+    /*data() {},*/
 
     computed: {
         resourcesClass() {

@@ -2,10 +2,10 @@
     <v-list dense>
         <v-list-item-group>
             <v-list-item @click="clickMethod" data-value="one">
-                Do I need anything else?
+                Section One
             </v-list-item>
             <v-list-item @click="clickMethod" data-value="two">
-                how about now
+                Section Two
             </v-list-item>
         </v-list-item-group>
     </v-list>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-    name: "TitlePartList",
+    name: "DefaultName",
 
     components: {},
 
@@ -40,24 +40,28 @@ export default {
 
     destroyed() {},
 
-    /*data() {
+    data() {
         return {
             dataProp: "value",
-        };
+        }
     },
 
     computed: {
         computedProp() {
             return this.dataProp.toUpperCase();
         },
-    },*/
+    },
 
     methods: {
         clickMethod(e) {
             this.filterEmitter(e.currentTarget.dataset.value)
         },
     },
-};
+
+}
 </script>
 
-<style></style>
+<style>
+
+</style>
+

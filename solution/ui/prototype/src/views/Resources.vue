@@ -23,6 +23,7 @@
             <div class="resources-content-container">
                 <ResourcesFilters
                     :resourcesDisplay="resourcesDisplay"
+                    :filters="filters"
                     @select-filter="updateFilters"
                 />
                 <ResourcesSelections />
@@ -59,6 +60,39 @@ export default {
         return {
             queryParams: this.$route.query,
             resourcesDisplay: this.$route.params.resourcesDisplay || "column",
+            filters: {
+                title: {
+                    label: "Title",
+                    buttonTitle: "Select Title",
+                    buttonId: "select-title",
+                    listType: "TitlePartList",
+                    disabled: false,
+                },
+                part: {
+                    label: "Part",
+                    buttonTitle: "Select Parts",
+                    buttonId: "select-parts",
+                    listType: "TitlePartList",
+                },
+                subpart: {
+                    label: "Subpart",
+                    buttonTitle: "Select Subparts",
+                    buttonId: "select-subparts",
+                    listType: "SubpartList",
+                },
+                section: {
+                    label: "Section",
+                    buttonTitle: "Select Sections",
+                    buttonId: "select-sections",
+                    listType: "SectionList",
+                },
+                resourceCategory: {
+                    label: "Resource Category",
+                    buttonTitle: "Select Categories",
+                    buttonId: "select-resource-categories",
+                    listType: "CategoryList",
+                },
+            },
         };
     },
 
@@ -74,7 +108,7 @@ export default {
         },
         updateFilters(payload) {
             console.log("payload", payload);
-        }
+        },
     },
 
     watch: {
