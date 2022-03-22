@@ -23,15 +23,6 @@ class Migration(migrations.Migration):
                 'ordering': ('name',),
             },
         ),
-        migrations.AlterModelOptions(
-            name='part',
-            options={'ordering': ('title', 'name', '-date')},
-        ),
-        migrations.AddField(
-            model_name='part',
-            name='depth',
-            field=models.IntegerField(default=3),
-        ),
         migrations.AddField(
             model_name='part',
             name='title_object',

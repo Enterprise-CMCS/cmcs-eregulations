@@ -37,7 +37,9 @@ class Part(models.Model):
 
     document = models.JSONField()
     structure = models.JSONField()
-    depth = models.IntegerField(default=3)  # TODO: remove default, must be set by parser
+
+    # TODO: add this in later v3 work
+    # depth = models.IntegerField()
 
     title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")  # TODO: rename to title
 
@@ -50,10 +52,15 @@ class Part(models.Model):
 
     @property
     def toc(self):
-        structure = self.structure
-        for _ in range(self.depth):
-            structure = structure['children'][0]
-        return structure
+        return self.structure['children'][0]['children'][0]['children'][0]
+
+    # TODO: add this along with depth field in later v3 work
+    #@property
+    #def toc(self):
+    #    structure = self.structure
+    #    for _ in range(self.depth):
+    #        structure = structure['children'][0]
+    #    return structure
 
 
 class ParserConfiguration(SingletonModel):
