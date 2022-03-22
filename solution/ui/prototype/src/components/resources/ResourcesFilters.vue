@@ -3,7 +3,16 @@
         <div class="content" :class="resourcesClass">
             <h3>Filter Resources</h3>
             <div class="filters">
-                <FancyDropdown label="Select Title" />
+                <template v-for="(value, name) in filters">
+                    <FancyDropdown
+                        :label="value.label"
+                        :buttonTitle="value.buttonTitle"
+                        :buttonId="value.buttonId"
+                        :key="name"
+                    >
+                        <TitlePartList :clickMethod="clickMethod" />
+                    </FancyDropdown>
+                </template>
             </div>
         </div>
     </div>
@@ -11,12 +20,14 @@
 
 <script>
 import FancyDropdown from "@/components/FancyDropdown.vue";
+import TitlePartList from "@/components/TitlePartList.vue";
 
 export default {
     name: "ResourcesFilters",
 
     components: {
-        FancyDropdown
+        FancyDropdown,
+        TitlePartList,
     },
 
     props: {
@@ -44,7 +55,33 @@ export default {
 
     data() {
         return {
-            dataProp: "value",
+            filters: {
+                title: {
+                    label: "Title",
+                    buttonTitle: "Select Title",
+                    buttonId: "select-title",
+                },
+                part: {
+                    label: "Part",
+                    buttonTitle: "Select Parts",
+                    buttonId: "select-parts",
+                },
+                subpart: {
+                    label: "Subpart",
+                    buttonTitle: "Select Subparts",
+                    buttonId: "select-subparts",
+                },
+                section: {
+                    label: "Section",
+                    buttonTitle: "Select Sections",
+                    buttonId: "select-sections",
+                },
+                resourceCategory: {
+                    label: "Resource Category",
+                    buttonTitle: "Select Categories",
+                    buttonId: "select-resource-categories",
+                },
+            },
         };
     },
 
@@ -55,8 +92,8 @@ export default {
     },
 
     methods: {
-        methodName() {
-            console.log("method has been invoked");
+        clickMethod() {
+            this.$emit("select-filter", { payload: "payload" });
         },
     },
 };
@@ -84,6 +121,11 @@ $eregs-image-path: "~legacy-static/images";
 
     .content {
         max-width: $text-max-width;
+
+        .filters {
+            display: flex;
+            justify-content: space-between;
+        }
     }
 }
 </style>

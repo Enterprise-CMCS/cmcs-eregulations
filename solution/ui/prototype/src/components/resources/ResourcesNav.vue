@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import InlineLoader from "@/components/InlineLoader.vue";
 
 export default {
     name: "ResourcesNav",

@@ -21,7 +21,10 @@
                 </form>
             </ResourcesNav>
             <div class="resources-content-container">
-                <ResourcesFilters :resourcesDisplay="resourcesDisplay" />
+                <ResourcesFilters
+                    :resourcesDisplay="resourcesDisplay"
+                    @select-filter="updateFilters"
+                />
                 <ResourcesSelections />
                 <ResourcesResults />
                 queryParams: {{ queryParams }}
@@ -69,6 +72,9 @@ export default {
         search() {
             console.log("search will happen here");
         },
+        updateFilters(payload) {
+            console.log("payload", payload);
+        }
     },
 
     watch: {
