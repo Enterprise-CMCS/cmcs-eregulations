@@ -55,12 +55,12 @@ class Part(models.Model):
         return self.structure['children'][0]['children'][0]['children'][0]
 
     # TODO: add this along with depth field in later v3 work
-    #@property
-    #def toc(self):
-    #    structure = self.structure
-    #    for _ in range(self.depth):
-    #        structure = structure['children'][0]
-    #    return structure
+    # @property
+    # def toc(self):
+    #     structure = self.structure
+    #     for _ in range(self.depth):
+    #         structure = structure['children'][0]
+    #     return structure
 
 
 class ParserConfiguration(SingletonModel):
