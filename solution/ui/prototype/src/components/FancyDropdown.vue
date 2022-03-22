@@ -9,6 +9,7 @@
                     v-bind="attrs"
                     v-on="on"
                     depressed
+                    :disabled="disabled"
                 >
                     {{ buttonTitle }}
                 </v-btn>
@@ -36,6 +37,10 @@ export default {
         buttonId: {
             type: String,
             default: "",
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
         },
     },
 

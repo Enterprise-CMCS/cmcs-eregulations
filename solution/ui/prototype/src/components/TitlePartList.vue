@@ -1,8 +1,11 @@
 <template>
     <v-list dense>
         <v-list-item-group>
-            <v-list-item @click="clickMethod">
+            <v-list-item @click="clickMethod" data-value="one">
                 Do I need anything else?
+            </v-list-item>
+            <v-list-item @click="clickMethod" data-value="two">
+                how about now
             </v-list-item>
         </v-list-item-group>
     </v-list>
@@ -15,7 +18,7 @@ export default {
     components: {},
 
     props: {
-        clickMethod: {
+        filterEmitter: {
             type: Function,
             required: true,
         },
@@ -50,8 +53,8 @@ export default {
     },*/
 
     methods: {
-        methodName() {
-            console.log("method has been invoked");
+        clickMethod(e) {
+            this.filterEmitter(e.currentTarget.dataset.value)
         },
     },
 };

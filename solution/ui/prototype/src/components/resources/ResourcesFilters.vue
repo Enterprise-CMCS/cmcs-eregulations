@@ -9,8 +9,9 @@
                         :buttonTitle="value.buttonTitle"
                         :buttonId="value.buttonId"
                         :key="name"
+                        :disabled="value.disabled"
                     >
-                        <TitlePartList :clickMethod="clickMethod" />
+                        <TitlePartList :filterEmitter="filterEmitter" />
                     </FancyDropdown>
                 </template>
             </div>
@@ -60,6 +61,7 @@ export default {
                     label: "Title",
                     buttonTitle: "Select Title",
                     buttonId: "select-title",
+                    disabled: false,
                 },
                 part: {
                     label: "Part",
@@ -92,8 +94,8 @@ export default {
     },
 
     methods: {
-        clickMethod() {
-            this.$emit("select-filter", { payload: "payload" });
+        filterEmitter(payload) {
+            this.$emit("select-filter", { payload });
         },
     },
 };
