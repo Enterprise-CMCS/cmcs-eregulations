@@ -22,9 +22,7 @@ class MultipleFieldLookupMixin(object):
         for field in self.lookup_fields:
             if self.kwargs.get(self.lookup_fields[field], None):
                 filter[field] = self.kwargs[self.lookup_fields[field]]
-        obj = get_object_or_404(queryset, **filter)
-        self.check_object_permissions(self.request, obj)
-        return obj
+        return get_object_or_404(queryset, **filter)
 
 
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
