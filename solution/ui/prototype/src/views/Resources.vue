@@ -26,9 +26,12 @@
                     :filters="filters"
                     @select-filter="updateFilters"
                 />
-                <ResourcesSelections />
+                <ResourcesSelections
+                    :filterParams="filterParams"
+                    @chip-filter="updateFilters"
+                />
                 <ResourcesResults />
-                queryParams: {{ queryParams }}
+                filterParams: {{ filterParams }}
             </div>
         </div>
     </body>
@@ -100,6 +103,15 @@ export default {
         contentContainerResourcesClass() {
             return `content-container-${this.resourcesDisplay}`;
         },
+        filterParams() {
+            return {
+                title: this.queryParams.title,
+                part: this.queryParams.part,
+                subpart: this.queryParams.subpart,
+                section: this.queryParams.section,
+                resourceCategory: this.queryParams.resourceCategory,
+            };
+        },
     },
 
     methods: {
@@ -107,7 +119,12 @@ export default {
             console.log("search will happen here");
         },
         updateFilters(payload) {
-            console.log("payload", payload);
+            const newQueryParams = { ...this.queryParams };
+            delete newQueryParams[payload.scope];
+            this.$router.push({
+                name: "resources",
+                query: newQueryParams,
+            });
         },
     },
 
@@ -120,10 +137,7 @@ export default {
         },
         "$route.query": {
             async handler(toQueries, previousQueries) {
-                console.log("watching queries");
-                console.log(toQueries);
-                // react to route changes...
-                console.log("toQueries in watch", toQueries);
+                this.queryParams = toQueries;
             },
         },
     },

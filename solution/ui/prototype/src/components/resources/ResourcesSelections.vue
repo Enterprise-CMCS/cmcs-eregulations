@@ -1,5 +1,16 @@
 <template>
-    <h4>Chips go here</h4>
+    <div class="selections-container">
+        <template v-for="(value, name, idx) in filterParams">
+            <v-chip
+                v-if="value"
+                :key="value + name + idx"
+                close
+                @click:close="handleClose(value, name)"
+            >
+                {{ value }} {{ name }}
+            </v-chip>
+        </template>
+    </div>
 </template>
 
 <script>
@@ -9,9 +20,8 @@ export default {
     components: {},
 
     props: {
-        propName: {
-            type: String,
-            required: false,
+        filterParams: {
+            type: Object,
         },
     },
 
@@ -34,7 +44,7 @@ export default {
     data() {
         return {
             dataProp: "value",
-        }
+        };
     },
 
     computed: {
@@ -44,15 +54,14 @@ export default {
     },
 
     methods: {
-        methodName() {
-            console.log("method has been invoked");
+        handleClose(value, name) {
+            this.$emit("chip-filter", {
+                scope: name,
+                selectedIdentifier: value,
+            });
         },
     },
-
-}
+};
 </script>
 
-<style>
-
-</style>
-
+<style></style>
