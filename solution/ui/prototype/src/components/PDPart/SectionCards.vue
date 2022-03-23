@@ -5,62 +5,18 @@
             :key="f.name"
             class="card"
         >
-            <v-card
-                outlined
-                elevation="1"
-                width="100%"
-                class="mx-auto"
-            >
-                <v-card-subtitle color="#102e43">
-                    {{
-                        f.category
-                    }}
-                </v-card-subtitle><v-card-text>
-                    <a :href="f.url">
-                        {{ f.description }}
-                    </a>
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn
-                        color="#5B616B"
-                        text
-                    >
-                        Relevant Regulations
-                    </v-btn>
-
-                    <v-spacer />
-
-                    <v-btn
-                        color="#5B616B"
-                        icon
-                        @click="toggleLocations(f)"
-                    >
-                        <v-icon>
-                            {{
-                                show === f.url ? "mdi-chevron-up" : "mdi-chevron-down"
-                            }}
-                        </v-icon>
-                    </v-btn>
-                </v-card-actions>
-
-                <v-expand-transition>
-                    <div v-show="show === f.url">
-                        <v-divider />
-                        <v-card-text>
-                            {{ f.locations }}
-                        </v-card-text>
-                    </div>
-                </v-expand-transition>
-            </v-card>
+            <SectionCard :f="f"/>
         </div>
     </div>
 </template>
 
 <script>
 
+import SectionCard from "./SectionCard";
 export default {
     name: "SectionCards",
-    props: {
+  components: {SectionCard},
+  props: {
         title: { type: String },
         part: { type: String },
         supList: {type: Array},

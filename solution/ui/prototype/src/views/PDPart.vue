@@ -10,6 +10,7 @@
                         :part="part"
                         :subPart="subPart"
                         :section="section"
+                        :partLabel="partLabel"
                         :structure="partContent"
                         :navigation="navigation"
                         :supplementalContentCount="supplementalContentCount"
@@ -117,7 +118,7 @@ export default {
             return this.structure?.[0];
         },
         partLabel() {
-            return this.structure?.[0].label_description ?? "N/A";
+            return this.structure?.[0] ? this.structure?.[0].label_description ?? "N/A" : null;
         },
         partContent() {
             let results = this.structure?.[1];

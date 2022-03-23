@@ -42,7 +42,7 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
-
+        <h1 style="margin-bottom:0px" v-if="!subPart && !section">Part {{this.part}} - {{ this.partLabel }}</h1>
         <PartContent
             v-if="structure.length"
             :structure="structure"
@@ -75,6 +75,7 @@ export default {
         structure: { type: Array },
         navigation: { type: Object },
         supplementalContentCount: { type: Object },
+        partLabel: {type: String},
     },
     methods: {
         setResourcesParams(payload) {
