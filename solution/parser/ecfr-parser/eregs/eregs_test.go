@@ -43,7 +43,7 @@ func TestPostPart(t *testing.T) {
 		t.Errorf("received error (%+v)", err)
 	}
 
-	if code != 200 {
+	if code != http.StatusOK {
 		t.Errorf("received code (%d)", code)
 	}
 }
@@ -82,7 +82,7 @@ func TestPostSupplementalPart(t *testing.T) {
 		t.Errorf("received error (%+v)", err)
 	}
 
-	if code != 200 {
+	if code != http.StatusOK {
 		t.Errorf("received code (%d)", code)
 	}
 }
@@ -138,7 +138,7 @@ func TestGetExistingParts(t *testing.T) {
 		t.Errorf("received error (%+v)", err)
 	}
 
-	if code != 200 {
+	if code != http.StatusOK {
 		t.Errorf("received code (%d)", code)
 	}
 
@@ -165,19 +165,19 @@ func TestGetTitle(t *testing.T) {
 			Name: "test-valid-title",
 			Title: 42,
 			Error: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 		},
 		{
 			Name: "test-404",
 			Title: 43,
 			Error: true,
-			ExpectedCode: 404,
+			ExpectedCode: http.StatusNotFound,
 		},
 		{
 			Name: "test-server-error",
 			Title: 44,
 			Error: true,
-			ExpectedCode: 500,
+			ExpectedCode: http.StatusInternalServerError,
 		},
 	}
 
@@ -246,7 +246,7 @@ func TestSendTitle(t *testing.T) {
 		t.Errorf("received error (%+v)", err)
 	}
 
-	if code != 200 {
+	if code != http.StatusOK {
 		t.Errorf("received code (%d)", code)
 	}
 }

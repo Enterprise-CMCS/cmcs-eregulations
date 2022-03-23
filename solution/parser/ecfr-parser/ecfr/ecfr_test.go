@@ -97,7 +97,7 @@ func TestFetchFunctions(t *testing.T) {
 			if err != nil {
 				t.Errorf("received error (%+v)", err)
 			}
-			if code != 200 {
+			if code != http.StatusOK {
 				t.Errorf("received code (%d)", code)
 			}
 		})

@@ -241,7 +241,7 @@ func TestRetrieveConfig(t *testing.T) {
 				},
 			},
 			Error: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 		},
 		{
 			Name: "test-bad-response",
@@ -270,7 +270,7 @@ func TestRetrieveConfig(t *testing.T) {
 			})),
 			Output: nil,
 			Error: true,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 		},
 		{
 			Name: "test-bad-fetch",
@@ -280,7 +280,7 @@ func TestRetrieveConfig(t *testing.T) {
 			})),
 			Output: nil,
 			Error: true,
-			ExpectedCode: 500,
+			ExpectedCode: http.StatusInternalServerError,
 		},
 	}
 

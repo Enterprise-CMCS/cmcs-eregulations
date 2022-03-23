@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 	"sort"
+	"net/http"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -110,7 +111,7 @@ func start() error {
 		defer cancel()
 		toc, code, err := eregs.GetTitle(ctx, title.Title)
 		if err != nil {
-			if code != 404 {
+			if code != http.StatusNotFound {
 				log.Error("[main] Failed to retrieve existing table of contents for title ", title.Title, ". Error code is ", code, ", so processing of this title will be skipped. Error: ", err)
 				continue
 			}

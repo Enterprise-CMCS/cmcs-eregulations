@@ -31,7 +31,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: []byte("This is an arbitrary array of bytes"),
 			ErrorExpected: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: false,
 		},
 		{
@@ -42,7 +42,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: nil,
 			ErrorExpected: true,
-			ExpectedCode: 500,
+			ExpectedCode: http.StatusInternalServerError,
 			JSONErrors: false,
 		},
 		{
@@ -58,7 +58,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: []byte("json_errors parameter found!"),
 			ErrorExpected: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: true,
 		},
 		{
@@ -152,7 +152,7 @@ func TestSendJSON(t *testing.T) {
 				Valid: true,
 			},
 			ErrorExpected: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: false,
 			PostAuth: nil,
 			Method: HTTPPost,
@@ -165,7 +165,7 @@ func TestSendJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: true,
-			ExpectedCode: 500,
+			ExpectedCode: http.StatusInternalServerError,
 			JSONErrors: false,
 			PostAuth: nil,
 			Method: HTTPPost,
@@ -184,7 +184,7 @@ func TestSendJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: true,
 			PostAuth: nil,
 			Method: HTTPPost,
@@ -225,7 +225,7 @@ func TestSendJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: false,
 			PostAuth: &PostAuth{
 				Username: "testusername",
@@ -260,7 +260,7 @@ func TestSendJSON(t *testing.T) {
 			},
 			ErrorExpected: false,
 			JSONErrors: false,
-			ExpectedCode: 200,
+			ExpectedCode: http.StatusOK,
 			PostAuth: nil,
 			Method: HTTPPut,
 		},
@@ -405,7 +405,7 @@ func TestFetchWithOptions(t *testing.T) {
 				t.Errorf("received error (%+v)", err)
 			}
 
-			if code != 200 {
+			if code != http.StatusOK {
 				t.Errorf("received code (%d)", code)
 			}
 
