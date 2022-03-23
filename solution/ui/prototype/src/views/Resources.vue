@@ -30,8 +30,7 @@
                     :filterParams="filterParams"
                     @chip-filter="updateFilters"
                 />
-                <ResourcesResults />
-                {{ this.supplementalContent }}
+                <ResourcesResults :content="supplementalContent"/>
             </div>
         </div>
     </body>
@@ -99,7 +98,7 @@ export default {
                     listType: "CategoryList",
                 },
             },
-            supplementalContent: {},
+            supplementalContent: [],
         };
     },
 
