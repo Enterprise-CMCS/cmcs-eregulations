@@ -31,6 +31,7 @@ export default {
         content: {
             type: Array,
             required: false,
+            default: [],
         },
     },
 

@@ -28,9 +28,9 @@
                 />
                 <ResourcesSelections
                     :filterParams="filterParams"
-                    @chip-filter="updateFilters"
+                    @chip-filter="removeChip"
                 />
-                <ResourcesResults :content="supplementalContent"/>
+                <ResourcesResults :content="supplementalContent" />
             </div>
         </div>
     </body>
@@ -45,7 +45,7 @@ import ResourcesSelections from "@/components/resources/ResourcesSelections.vue"
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
 import _isEmpty from "lodash/isEmpty";
-import { getSupplementalContentNew } from "@/utilities/api";
+import { getAllParts, getSupplementalContentNew } from "@/utilities/api";
 
 export default {
     name: "Resources",
@@ -71,31 +71,36 @@ export default {
                     buttonTitle: "Select Title",
                     buttonId: "select-title",
                     listType: "TitlePartList",
-                    disabled: false,
+                    listItems: [],
+                    disabled: true,
                 },
                 part: {
                     label: "Part",
                     buttonTitle: "Select Parts",
                     buttonId: "select-parts",
                     listType: "TitlePartList",
+                    listItems: [],
                 },
                 subpart: {
                     label: "Subpart",
                     buttonTitle: "Select Subparts",
                     buttonId: "select-subparts",
                     listType: "SubpartList",
+                    listItems: [],
                 },
                 section: {
                     label: "Section",
                     buttonTitle: "Select Sections",
                     buttonId: "select-sections",
                     listType: "SectionList",
+                    listItems: [],
                 },
                 resourceCategory: {
                     label: "Resource Category",
                     buttonTitle: "Select Categories",
                     buttonId: "select-resource-categories",
                     listType: "CategoryList",
+                    listItems: [],
                 },
             },
             supplementalContent: [],
@@ -108,7 +113,7 @@ export default {
         },
         filterParams() {
             return {
-                title: this.queryParams.title,
+                title: this.queryParams.title || 42,
                 part: this.queryParams.part,
                 subpart: this.queryParams.subpart,
                 section: this.queryParams.section,
@@ -121,7 +126,7 @@ export default {
         search() {
             console.log("search will happen here");
         },
-        updateFilters(payload) {
+        removeChip(payload) {
             const newQueryParams = { ...this.queryParams };
             delete newQueryParams[payload.scope];
             this.$router.push({
@@ -129,16 +134,28 @@ export default {
                 query: newQueryParams,
             });
         },
+        updateFilters(payload) {
+            const newQueryParams = { ...this.queryParams };
+            if (newQueryParams[payload.scope]) {
+                delete newQueryParams[payload.scope];
+            } else {
+                newQueryParams.title = "42"; // hard coding for now
+                newQueryParams[payload.scope] = payload.selectedIdentifier;
+            }
+            this.$router.push({
+                name: "resources",
+                query: newQueryParams,
+            });
+        },
         async getSupplementalContent(dataQueryParams) {
             const queryParamsObj = { ...dataQueryParams };
-            if (!_isEmpty(queryParamsObj)) {
+            if (queryParamsObj.part) {
                 if (queryParamsObj.section) {
                     queryParamsObj.sections = queryParamsObj.section.split(",");
                 }
                 if (queryParamsObj.subpart) {
                     queryParamsObj.subparts = queryParamsObj.subpart.split(",");
                 }
-                console.log(queryParamsObj);
                 try {
                     this.supplementalContent = await getSupplementalContentNew(
                         queryParamsObj.title,
@@ -148,10 +165,21 @@ export default {
                     );
                 } catch (error) {
                     console.error(error);
+                    this.supplementalContent = [];
                 }
             } else {
-                this.supplementalContent = {};
+                this.supplementalContent = [];
             }
+        },
+        async getFormattedPartsList() {
+            const partsList = await getAllParts();
+            return partsList.map((part) => {
+                return {
+                    name: part.name,
+                    label: part.structure.children[0].children[0].children[0]
+                        .label,
+                };
+            });
         },
     },
 
@@ -178,6 +206,7 @@ export default {
 
     async created() {
         this.getSupplementalContent(this.queryParams);
+        this.filters.part.listItems = await this.getFormattedPartsList();
     },
 
     beforeMount() {},

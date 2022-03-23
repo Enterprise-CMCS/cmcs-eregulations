@@ -15,6 +15,7 @@
                             :is="value.listType"
                             :key="value.buttonId"
                             :filterEmitter="filterEmitter"
+                            :listItems=value.listItems
                         ></component>
                     </FancyDropdown>
                 </template>
@@ -78,7 +79,7 @@ export default {
 
     methods: {
         filterEmitter(payload) {
-            this.$emit("select-filter", { payload });
+            this.$emit("select-filter", payload);
         },
     },
 };

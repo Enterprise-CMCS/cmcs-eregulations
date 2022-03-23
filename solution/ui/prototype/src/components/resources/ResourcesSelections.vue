@@ -2,7 +2,7 @@
     <div class="selections-container">
         <template v-for="(value, name, idx) in filterParams">
             <v-chip
-                v-if="value"
+                v-if="value && name !== 'title'"
                 :key="value + name + idx"
                 close
                 @click:close="handleClose(value, name)"
