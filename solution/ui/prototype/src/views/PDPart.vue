@@ -127,9 +127,24 @@ export default {
                 });
 
                 if (this.section) {
-                    results = results[0].children.filter(
-                        (section) => section.label[1] === this.section
+                    const sections = results[0].children.filter(section => {
+                          if (section.label[1] === this.section && section.node_type === "SECTION"){
+                            return true
+                          } else{
+                            return section.children.filter(subSection =>{
+                              return subSection.label[1] === this.section && subSection.node_type === "SECTION"
+                            }).length
+                          }
+                        }
                     );
+                    if (sections[0].node_type === "SECTION"){
+                      return [sections[0]]
+                    }
+                    else{
+                      return sections[0].children.filter(subSection =>{
+                          return subSection.label[1] === this.section && subSection.node_type === "SECTION"
+                      })
+                    }
                 }
             }
             return results || [];

@@ -421,7 +421,6 @@ const getSectionsForSubPart = async (part, subPart) => {
             })
         }
     })
-    console.log(sections)
     return sections
 
 }
