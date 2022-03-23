@@ -18,6 +18,7 @@
             <v-btn
                 color="#5B616B"
                 text
+                @click="showLocation = !showLocation"
             >
                 Relevant Regulations
             </v-btn>
@@ -31,7 +32,7 @@
             >
                 <v-icon>
                     {{
-                      showLocation ? "mdi-chevron-up" : "mdi-chevron-down"
+                        showLocation ? "mdi-chevron-up" : "mdi-chevron-down"
                     }}
                 </v-icon>
             </v-btn>
@@ -41,49 +42,53 @@
             <div v-show="showLocation">
                 <v-divider />
                 <v-card-text>
-                    This resource is linked to the following subparts:
-                    <ul>
-                        <li v-for="location in subpartLocations">
-                          Part
-                          <router-link
-                            :to="{
-                                name: 'PDpart-subPart',
-                                params: {
-                                  title: location.title,
-                                  part:location.part,
-                                  subPart: 'subPart-' + location.display_name[location.display_name.length -1]
-                                },
-                            }"
-                        >
-                            {{location.display_name.slice(3,)}}
-                          </router-link>
-                        </li>
-                    </ul>
-                    This resource is linked to the following sections:
-                    <ul>
-                        <li v-for="(locations, part) in sectionLocations">
-                            Within <a>Part {{ part }}</a>
-                            <ul>
-                                <li>
-                                    §§ <span v-for="location in locations">
+                    <div v-if="subpartLocations.length > 0">
+                        This resource is linked to the following subparts:
+                        <ul>
+                            <li v-for="location in subpartLocations">
+                                Part
+                                <router-link
+                                    :to="{
+                                        name: 'PDpart-subPart',
+                                        params: {
+                                            title: location.title,
+                                            part:location.part,
+                                            subPart: 'subPart-' + location.display_name[location.display_name.length -1]
+                                        },
+                                    }"
+                                >
+                                    {{ location.display_name.slice(3,) }}
+                                </router-link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="sectionLocations">
+                        This resource is linked to the following sections:
+                        <ul>
+                            <li v-for="(locations, part) in sectionLocations">
+                                Within <a>Part {{ part }}</a>
+                                <ul>
+                                    <li>
+                                        §§ <span v-for="location in locations">
                               
-                                        <router-link
-                                            :to="{
-                                                name: 'PDpart',
-                                                params: {
-                                                  title: location.title,
-                                                  part: location.part,
-                                                },
-                                            }"
-                                        >
-                                            {{ location.display_name.slice(3,) }}
-                                        </router-link>
+                                            <router-link
+                                                :to="{
+                                                    name: 'PDpart',
+                                                    params: {
+                                                        title: location.title,
+                                                        part: location.part,
+                                                    },
+                                                }"
+                                            >
+                                                {{ location.display_name.slice(3,) }}
+                                            </router-link>
                                     &nbsp;
-                                    </span>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </v-card-text>
             </div>
         </v-expand-transition>
