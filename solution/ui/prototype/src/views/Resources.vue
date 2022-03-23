@@ -31,7 +31,7 @@
                     @chip-filter="updateFilters"
                 />
                 <ResourcesResults />
-                filterParams: {{ filterParams }}
+                {{ this.supplementalContent }}
             </div>
         </div>
     </body>
@@ -44,6 +44,9 @@ import ResourcesNav from "@/components/resources/ResourcesNav.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+
+import _isEmpty from "lodash/isEmpty";
+import { getSupplementalContentNew } from "@/utilities/api";
 
 export default {
     name: "Resources",
@@ -96,6 +99,7 @@ export default {
                     listType: "CategoryList",
                 },
             },
+            supplementalContent: {},
         };
     },
 
@@ -126,6 +130,30 @@ export default {
                 query: newQueryParams,
             });
         },
+        async getSupplementalContent(dataQueryParams) {
+            const queryParamsObj = { ...dataQueryParams };
+            if (!_isEmpty(queryParamsObj)) {
+                if (queryParamsObj.section) {
+                    queryParamsObj.sections = queryParamsObj.section.split(",");
+                }
+                if (queryParamsObj.subpart) {
+                    queryParamsObj.subparts = queryParamsObj.subpart.split(",");
+                }
+                console.log(queryParamsObj);
+                try {
+                    this.supplementalContent = await getSupplementalContentNew(
+                        queryParamsObj.title,
+                        queryParamsObj.part,
+                        queryParamsObj.sections,
+                        queryParamsObj.subparts
+                    );
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                this.supplementalContent = {};
+            }
+        },
     },
 
     watch: {
@@ -140,11 +168,18 @@ export default {
                 this.queryParams = toQueries;
             },
         },
+        queryParams: {
+            async handler() {
+                this.getSupplementalContent(this.queryParams);
+            },
+        },
     },
 
     beforeCreate() {},
 
-    created() {},
+    async created() {
+        this.getSupplementalContent(this.queryParams);
+    },
 
     beforeMount() {},
 
