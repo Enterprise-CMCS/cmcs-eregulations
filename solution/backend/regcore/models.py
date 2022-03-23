@@ -20,10 +20,6 @@ class PartQuerySet(models.QuerySet):
     def versions(self, title, part):
         return self.filter(name=part, title=title).order_by('-date').values("date")
 
-    def new_latest(self, title, part):  # TODO: rename to "latest"
-        query = self.filter(titleobject__name=title, name=part).order_by("-version")
-        return query[0] if len(query) > 0 else None
-
 
 class PartManager(models.Manager.from_queryset(PartQuerySet)):
     pass
