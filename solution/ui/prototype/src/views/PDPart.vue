@@ -133,11 +133,12 @@ export default {
                             return true
                           } else{
                             return section.children.filter(subSection =>{
-                              return subSection.label[1] === this.section && subSection.node_type === "SECTION"
+                              return subSection.label && subSection.label[1] === this.section && subSection.node_type === "SECTION"
                             }).length
                           }
                         }
                     );
+                    console.log(sections)
                     if (sections[0].node_type === "SECTION"){
                       return [sections[0]]
                     }
