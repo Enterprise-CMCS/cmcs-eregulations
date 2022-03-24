@@ -144,6 +144,11 @@ export default {
             newQueryParams[payload.scope] = _isEmpty(newScopeVals)
                 ? undefined
                 : newScopeVals.join(",");
+            if (_isEmpty(newQueryParams.part)) {
+                newQueryParams.title = undefined;
+                newQueryParams.subpart = undefined;
+                newQueryParams.section = undefined;
+            }
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
@@ -155,7 +160,6 @@ export default {
                 const scopeVals = newQueryParams[payload.scope].split(",");
                 scopeVals.push(payload.selectedIdentifier);
                 const uniqScopeVals = _uniq(scopeVals);
-                console.log(uniqScopeVals);
                 newQueryParams[payload.scope] = uniqScopeVals.sort().join(",");
             } else {
                 newQueryParams.title = "42"; // hard coding for now
@@ -226,13 +230,15 @@ export default {
             },
         },
         queryParams: {
+            // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
                 // only get content if a part is selected
                 if (_isEmpty(newParams.part)) {
                     // don't make supp content request, but clear lists
                     this.filters.subpart.listItems = [];
-                    // clear sections
+                    this.filters.section.listItems = [];
                 } else if (_isEmpty(oldParams.part) && newParams.part) {
+                    // get supplemental content on fresh part selection
                     this.getSupplementalContent(this.queryParams);
                     this.getFormattedSubpartsList(this.queryParams.part);
                     this.getFormattedSectionsList(
@@ -244,7 +250,7 @@ export default {
                     const newParts = newParams.part.split(",");
                     if (newParts.length > oldParts.length) {
                         const newPart = _difference(newParts, oldParts)[0];
-                        /*this.getSupplementalContent(this.queryParams);*/
+                        this.getSupplementalContent(this.queryParams);
                         this.getFormattedSubpartsList(newPart);
                         this.getFormattedSectionsList(
                             this.queryParams.part,

@@ -34,9 +34,7 @@ export default {
 
     beforeCreate() {},
 
-    created() {
-        console.log("section list listItems", this.listItems);
-    },
+    created() {},
 
     beforeMount() {},
 
@@ -50,17 +48,17 @@ export default {
 
     destroyed() {},
 
-    data() {
-        return {
-            dataProp: "value",
-        }
-    },
+    /*data() {*/
+        /*return {*/
+            /*dataProp: "value",*/
+        /*}*/
+    /*},*/
 
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
+    /*computed: {*/
+        /*computedProp() {*/
+            /*return this.dataProp.toUpperCase();*/
+        /*},*/
+    /*},*/
 
     methods: {
         clickMethod(e) {
@@ -87,7 +85,7 @@ $eregs-image-path: "~legacy-static/images";
     min-height: unset;
     padding-top: 5px;
     padding-bottom: 5px;
-    font-size: 15px;
+    font-size: 14px;
 
     .section-number {
         color: $dark_gray;

@@ -12,7 +12,7 @@
                     <span class="subpart-letter"
                         >Subpart {{ item.identifier }}</span
                     >
-                    <span class="subpart-range">{{
+                    <span class="subpart-range"> {{
                         item.range | formatRange
                     }}</span>
                 </div>
