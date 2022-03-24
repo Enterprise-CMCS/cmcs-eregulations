@@ -402,26 +402,25 @@ const getPartsDetails = async () => {
     const all_parts = await getAllParts()
     return all_parts.map(part => { return { 'id': part.name, 'name': part.structure.children[0].children[0].children[0].label } })
 }
-const getSubPartsandSections = async() =>{
+const getSubPartsandSections = async () => {
     const all_parts = await getAllParts()
     let subparts = []
     let fullSelection = []
 
     all_parts.forEach(part =>
-        
-        part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({part:part.name, data:subpart})))
-    
-        for( const subpart in subparts){
-            //console.log(subparts[subpart])
-            fullSelection.push({label:subparts[subpart].data.label, id:subparts[subpart].data.identifier[0], part:subparts[subpart].part})
-           
-            let sections = subparts[subpart].data.children
-            
-            for (const section in sections){
-                fullSelection.push({label:sections[section].label, id:sections[section].identifier[0], part:subparts[subpart].part})
-            }
+
+        part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
+
+    for (const subpart in subparts) {
+        fullSelection.push({ label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, location: {part: subparts[subpart].part ,subpart: subparts[subpart].data.identifier[0]},type:'subpart'})
+
+        let sections = subparts[subpart].data.children
+
+        for (const section in sections) {
+            fullSelection.push({ label: sections[section].label, id:sections[section].label, location:{ part: subparts[subpart].part , section : sections[section].identifier[1]}, part: subparts[subpart].part, type:'section'})
         }
-        console.log(fullSelection)
+    }
+
 
     return fullSelection
     //potentialSubParts = all_parts[parts.indexOf('400')].structure.children[0].children[0].children[0].children

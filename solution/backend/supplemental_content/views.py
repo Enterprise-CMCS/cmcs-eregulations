@@ -2,7 +2,6 @@ from django.http import JsonResponse
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from django.conf import settings
-
 from rest_framework.response import Response
 
 from django.db.models import Prefetch, Q, Count
@@ -60,32 +59,52 @@ class SupplementalContentView(generics.ListAPIView):
         section_list = self.request.GET.getlist("sections")
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
-
-        query = AbstractSupplementalContent.objects.filter(
-            Q(locations__section__section_id__in=section_list) |
-            Q(locations__subpart__subpart_id__in=subpart_list) |
-            Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
-            approved=True,
-            category__isnull=False,
-            locations__title=title,
-            locations__part=part,
-        ).prefetch_related(
-            Prefetch(
-                'locations',
-                queryset=AbstractLocation.objects.filter(
-                    Q(section__section_id__in=section_list) |
-                    Q(subpart__subpart_id__in=subpart_list) |
-                    Q(subjectgroup__subject_group_id__in=subjgrp_list),
-                    title=title,
-                    part=part,
+        if len(section_list)==0 and len(subpart_list) ==0 and len(subjgrp_list)==0:
+            query = AbstractSupplementalContent.objects.filter(
+                approved=True,
+                category__isnull=False,
+                locations__title=title,
+                locations__part=part,
+            ).prefetch_related(
+                Prefetch(
+                    'locations',
+                    queryset=AbstractLocation.objects.filter(
+                        title=title,
+                        part=part,
+                    )
                 )
-            )
-        ).prefetch_related(
-            Prefetch(
-                'category',
-                queryset=AbstractCategory.objects.all().select_subclasses()
-            )
-        ).distinct().select_subclasses(SupplementalContent)
+            ).prefetch_related(
+                Prefetch(
+                    'category',
+                    queryset=AbstractCategory.objects.all().select_subclasses()
+                )
+            ).distinct().select_subclasses(SupplementalContent)
+        else:
+            query = AbstractSupplementalContent.objects.filter(
+                Q(locations__section__section_id__in=section_list) |
+                Q(locations__subpart__subpart_id__in=subpart_list) |
+                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
+                approved=True,
+                category__isnull=False,
+                locations__title=title,
+                locations__part=part,
+            ).prefetch_related(
+                Prefetch(
+                    'locations',
+                    queryset=AbstractLocation.objects.filter(
+                        Q(section__section_id__in=section_list) |
+                        Q(subpart__subpart_id__in=subpart_list) |
+                        Q(subjectgroup__subject_group_id__in=subjgrp_list),
+                        title=title,
+                        part=part,
+                    )
+                )
+            ).prefetch_related(
+                Prefetch(
+                    'category',
+                    queryset=AbstractCategory.objects.all().select_subclasses()
+                )
+            ).distinct().select_subclasses(SupplementalContent)
         serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
@@ -120,6 +139,7 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
         return Response({'error': False, 'content': request.data})
 
 
+
 class SupplementalContentByPartView(APIView):
     def get(self, request, format=None):
         part = request.GET.get('part', '')
@@ -129,3 +149,12 @@ class SupplementalContentByPartView(APIView):
         for r in results:
             data[r.display_name] = r.num_locations
         return JsonResponse(data)
+
+class SupplementalContentAll(generics.ListAPIView):
+ 
+
+     
+    queryset = SupplementalContent.objects.all()
+    serializer_class = SupplementalContentSerializer
+
+
