@@ -27,7 +27,8 @@
             item-value="id"
             item-text="name"
             outlined
-        ></v-autocomplete>
+        >
+        </v-autocomplete>
         <h3>Section</h3>
 
         <v-autocomplete

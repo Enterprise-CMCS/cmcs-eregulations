@@ -11,10 +11,8 @@
                     </div>
                 </pane>
                 <pane min-size="30">
-                    <SectionCards
-                        v-bind:title="title"
-                        v-bind:part="part"
-                        v-bind:supList="supList"
+                    <SectionPane
+                        v-bind:supList="singleSupList"
                     />
                 </pane>
             </splitpanes>
@@ -29,9 +27,10 @@ import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import { Splitpanes, Pane } from "splitpanes";
 import SectionCards from "../components/PDPart/SectionCards.vue";
-import {getSupplementalContentNew} from "../utilities/api"
+import { getSupplementalContentNew } from "../utilities/api";
 import "splitpanes/dist/splitpanes.css";
 import ResourceFilters from "../components/ResourcesPage/ResourceFilters.vue";
+import SectionPane from "../components/ResourcesPage/SectionSide.vue"
 export default {
     name: "ResourcePage",
     components: {
@@ -42,44 +41,48 @@ export default {
         Pane,
         ResourceFilters,
         SectionCards,
+        SectionPane
     },
     data: () => ({
         supList: [],
         title: "kdfjdk",
         part: "323",
         filters: [],
-        singleSupList:[]
+        singleSupList: [],
     }),
     methods: {
         setResourcesParams(payload) {
             console.log("hit");
             this.filters = payload;
-            for(let part in this.filters){
-                console.log(this.filters[part])
+            for (let part in this.filters) {
+                console.log(this.filters[part]);
             }
             this.getSupContent();
             // Implement response to user choosing a section or subpart here
         },
         async getSupContent() {
+            this.singleSupList = [];
             try {
-                this.supList=[]
+                this.supList = [];
                 for (let part in this.filters) {
-                    let query= this.filters[part]
-                    console.log(query)
+                    let query = this.filters[part];
+                    console.log(query);
                     this.supList.push(
                         await getSupplementalContentNew(
                             42,
-                            query['part'],
-                            query['sections'],
-                            query['subparts']
+                            query["part"],
+                            query["sections"],
+                            query["subparts"]
                         )
                     );
                 }
-                for(let sup of this.supList){
-                    this.singleSupList.push(sup)
+                for (let sup of this.supList) {
+                    for (let content of sup) {
+                        this.singleSupList.push(content);
+                    }
                 }
-                this.singleSupList = 
-                console.log(this.supList);
+
+                console.log(this.singleSupList);
             } catch (error) {
                 console.error(error);
             } finally {
