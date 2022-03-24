@@ -46,7 +46,6 @@ export default {
                     .forEach(c => content.push(c))
               })
             })
-        console.log(content)
         return content
       }
     },
