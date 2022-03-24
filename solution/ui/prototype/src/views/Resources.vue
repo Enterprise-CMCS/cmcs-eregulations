@@ -141,7 +141,9 @@ export default {
         updateFilters(payload) {
             const newQueryParams = { ...this.queryParams };
             if (newQueryParams[payload.scope]) {
-                delete newQueryParams[payload.scope];
+                const scopeVals = newQueryParams[payload.scope].split(",");
+                scopeVals.push(payload.selectedIdentifier);
+                newQueryParams[payload.scope] = scopeVals.join(",");
             } else {
                 newQueryParams.title = "42"; // hard coding for now
                 newQueryParams[payload.scope] = payload.selectedIdentifier;

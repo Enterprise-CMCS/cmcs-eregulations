@@ -1,14 +1,16 @@
 <template>
     <div class="selections-container">
-        <template v-for="(value, name, idx) in filterParams">
-            <v-chip
-                v-if="value && name !== 'title'"
-                :key="value + name + idx"
-                close
-                @click:close="handleClose(value, name)"
-            >
-                {{ value }} {{ name }}
-            </v-chip>
+        <template v-for="(array, name, idx) in splitParams">
+            <div v-if="array && name !== 'title'" :key="array[0] + name + idx" class="chip-group">
+                <v-chip
+                    v-for="value in array"
+                    :key="value + name + idx"
+                    close
+                    @click:close="handleClose(value, name)"
+                >
+                    {{ value }} {{ name }}
+                </v-chip>
+            </div>
         </template>
     </div>
 </template>
@@ -48,8 +50,15 @@ export default {
     },
 
     computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
+        splitParams() {
+            const splitParams = { ...this.filterParams };
+
+            for (const key in splitParams) {
+                if (splitParams[key]) {
+                    splitParams[key] = splitParams[key].split(",");
+                }
+            }
+            return splitParams;
         },
     },
 
@@ -64,4 +73,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.chip-group {
+    display: inline;
+}
+</style>

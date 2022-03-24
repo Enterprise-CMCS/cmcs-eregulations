@@ -64,7 +64,7 @@ export default {
     methods: {
         clickMethod(e) {
             this.filterEmitter({
-                scope: "category",
+                scope: "resourceCategory",
                 selectedIdentifier: e.currentTarget.dataset.value,
             });
         },
