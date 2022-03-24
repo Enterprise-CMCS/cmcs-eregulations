@@ -11,12 +11,31 @@ import (
 )
 
 func TestRangeStringUnmarshal(t *testing.T) {
-	input := []byte("432.1 – 432.200")
-	expected := RangeString{"432.1", "432.200"}
-	var rs RangeString
-	rs.UnmarshalText(input)
-	if diff := deep.Equal(rs, expected); diff != nil {
-		t.Errorf("output not as expected: %+v", diff)
+	testTable := []struct{
+		Name string
+		Input []byte
+		Expected RangeString
+	}{
+		{
+			Name: "test-range-string",
+			Input: []byte("432.1 – 432.200"),
+			Expected: RangeString{"432.1", "432.200"},
+		},
+		{
+			Name: "test-array-input",
+			Input: []byte("[\"432.1\", \"432.200\"]"),
+			Expected: RangeString{"432.1", "432.200"},
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			var rs RangeString
+			rs.UnmarshalJSON(tc.Input)
+			if diff := deep.Equal(rs, tc.Expected); diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
+			}
+		})
 	}
 }
 
@@ -76,12 +95,17 @@ func TestIdentifierStringUnmarshal(t *testing.T) {
 			Input: []byte("430.1 a 1"),
 			Expected: IdentifierString{"430", "1", "a", "1"},
 		},
+		{
+			Name: "test-array-input",
+			Input: []byte("[\"430\", \"12\"]"),
+			Expected: IdentifierString{"430", "12"},
+		},
 	}
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			var is IdentifierString
-			is.UnmarshalText(tc.Input)
+			is.UnmarshalJSON(tc.Input)
 			if diff := deep.Equal(is, tc.Expected); diff != nil {
 				t.Errorf("output not as expected: %+v", diff)
 			}

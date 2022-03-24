@@ -73,6 +73,7 @@ type TitleConfig struct {
 	Title       int            `json:"title"`
 	Subchapters SubchapterList `json:"subchapters"`
 	Parts       PartList       `json:"parts"`
+	Contents	*Title
 }
 
 // ParserConfig represents configuration for the parser as a whole
@@ -87,10 +88,10 @@ type ParserConfig struct {
 }
 
 // RetrieveConfig fetches parser config from eRegs at /v2/parser_config
-func RetrieveConfig() (*ParserConfig, error) {
+func RetrieveConfig() (*ParserConfig, int, error) {
 	configURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL environment variable", BaseURL)
+		return nil, -1, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL environment variable", BaseURL)
 	}
 	configURL.Path = path.Join(configURL.Path, "/parser_config")
 
@@ -98,16 +99,16 @@ func RetrieveConfig() (*ParserConfig, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
 	defer cancel()
-	body, err := network.Fetch(ctx, configURL, true)
+	body, code, err := network.Fetch(ctx, configURL, true)
 	if err != nil {
-		return nil, err
+		return nil, code, err
 	}
 
 	var config ParserConfig
 	d := json.NewDecoder(body)
 	if err := d.Decode(&config); err != nil {
-		return nil, fmt.Errorf("Unable to decode configuration from response body: %+v", err)
+		return nil, code, fmt.Errorf("Unable to decode configuration from response body: %+v", err)
 	}
 
-	return &config, nil
+	return &config, code, nil
 }
