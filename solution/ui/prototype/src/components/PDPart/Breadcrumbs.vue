@@ -1,5 +1,5 @@
 <template>
-    <span>
+    <span class="breadcrumbs">
         <router-link
             v-if="subPart"
             :to="{
@@ -43,4 +43,13 @@ export default {
 
 <style scoped>
 
+.breadcrumbs{
+    font-family: Open Sans;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 30px;
+    letter-spacing: 0em;
+    text-align: left;
+}
 </style>

@@ -9,6 +9,9 @@
             <Node 
                 :node="child"
                 :key="child.title"
+                :resource-params-emitter="resourceParamsEmitter"
+                :showResourceButtons="showResourceButtons"
+                :supplementalContentCount="supplementalContentCount"
             />
         </template>
     </div>
@@ -29,6 +32,20 @@ export default {
         node: {
             type: Object,
             required: true,
+        },
+              resourceParamsEmitter: {
+            type: Function,
+            required: false,
+        },
+        showResourceButtons: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+        supplementalContentCount: {
+            type:Object,
+            required: false,
+            default: () => {}
         },
     },
 

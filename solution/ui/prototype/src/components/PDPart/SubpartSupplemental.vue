@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-import { getSupplementalContentNew } from "@/utilities/api";
+import { getSupplementalContentNew, getSectionsForSubPart } from "@/utilities/api";
 import SupplementalContentCategory from "../../../../regulations/js/src/components/SupplementalContentCategory.vue";
 
 export default {
@@ -34,10 +34,11 @@ export default {
     },
     async created() {
         try {
+            const sections = await getSectionsForSubPart(this.part, this.subpart)
             this.supList = await getSupplementalContentNew(
                 this.title,
                 this.part,
-                [],
+                sections,
                 [this.subpart]
             );
         } catch (error) {

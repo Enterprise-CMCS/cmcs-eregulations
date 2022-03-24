@@ -9,7 +9,7 @@
                     :section="section"
                 />
             </h2>
-            <span style="float: right">
+            <span style="float: right" class="breadcrumbs">
                 <router-link
                     v-if="navigation.previous"
                     :to="{
@@ -42,7 +42,7 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
-
+        <h1 style="margin-bottom:0px" v-if="!subPart && !section">Part {{this.part}} - {{ this.partLabel }}</h1>
         <PartContent
             v-if="structure.length"
             :structure="structure"
@@ -75,6 +75,7 @@ export default {
         structure: { type: Array },
         navigation: { type: Object },
         supplementalContentCount: { type: Object },
+        partLabel: {type: String},
     },
     methods: {
         setResourcesParams(payload) {
@@ -91,4 +92,13 @@ export default {
 </script>
 
 <style scoped>
+  .breadcrumbs{
+      font-family: Open Sans;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 30px;
+      letter-spacing: 0em;
+      text-align: left;
+  }
 </style>
