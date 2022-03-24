@@ -452,6 +452,10 @@ const getParagraphDepth = (value) => {
     return depth;
 }
 
+function capitalizeFirstLetter(string) {
+    return string[0].toUpperCase() + string.slice(1);
+}
+
 
 export {
     mapToArray,
@@ -482,5 +486,6 @@ export {
     getKebabTitle,
     getParagraphDepth,
     getDisplayName,
-    getCategoryTree
+    getCategoryTree,
+    capitalizeFirstLetter
 };

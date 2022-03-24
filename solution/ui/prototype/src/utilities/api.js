@@ -474,7 +474,19 @@ const getSectionsForSubPart = async (part, subPart) => {
     const parts = all_parts.map(d => d.name)
     const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
     const parent = potentialSubParts.find(p => p.type === "subpart" && p.identifier[0] === subPart)
-    return parent.children.map(c => c.identifier[1])
+    const sections = []
+    parent.children.forEach(c => {
+        if (c.type === "section"){
+            sections.push(c.identifier[1])
+        }else if (c.children){
+            c.children.forEach( child => {
+                if (child.type === "section"){
+                    sections.push(child.identifier[1])
+                }
+            })
+        }
+    })
+    return sections
 
 }
 

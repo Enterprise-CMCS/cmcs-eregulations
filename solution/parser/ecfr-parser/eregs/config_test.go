@@ -182,6 +182,7 @@ func TestRetrieveConfig(t *testing.T) {
 		Server *httptest.Server
 		Output *ParserConfig
 		Error bool
+		ExpectedCode int
 	}{
 		{
 			Name: "test-good-config",
@@ -240,6 +241,7 @@ func TestRetrieveConfig(t *testing.T) {
 				},
 			},
 			Error: false,
+			ExpectedCode: http.StatusOK,
 		},
 		{
 			Name: "test-bad-response",
@@ -268,6 +270,7 @@ func TestRetrieveConfig(t *testing.T) {
 			})),
 			Output: nil,
 			Error: true,
+			ExpectedCode: http.StatusOK,
 		},
 		{
 			Name: "test-bad-fetch",
@@ -277,6 +280,7 @@ func TestRetrieveConfig(t *testing.T) {
 			})),
 			Output: nil,
 			Error: true,
+			ExpectedCode: http.StatusInternalServerError,
 		},
 	}
 
@@ -284,7 +288,7 @@ func TestRetrieveConfig(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			defer tc.Server.Close()
 			BaseURL = tc.Server.URL
-			config, err := RetrieveConfig()
+			config, code, err := RetrieveConfig()
 
 			diff := deep.Equal(config, tc.Output)
 			if err != nil && !tc.Error {
@@ -293,6 +297,10 @@ func TestRetrieveConfig(t *testing.T) {
 				t.Errorf("expected error, received (%+v)", config)
 			} else if err == nil && diff != nil {
 				t.Errorf("output not as expected: %+v", diff)
+			}
+
+			if code != tc.ExpectedCode {
+				t.Errorf("expected code (%d), got (%d)", tc.ExpectedCode, code)
 			}
 		})
 	}

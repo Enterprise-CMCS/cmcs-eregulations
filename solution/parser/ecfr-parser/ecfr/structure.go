@@ -24,9 +24,20 @@ type Structure struct {
 // RangeString is just an array of strings but required for the JSON unmarshalling
 type RangeString []string
 
-// UnmarshalText splits the string into parts or throws an error if the string is malformed
-func (rs *RangeString) UnmarshalText(data []byte) error {
-	*rs = strings.Split(string(data), " – ")
+// UnmarshalJSON splits the string into parts or populates an array or object (if it is one)
+func (rs *RangeString) UnmarshalJSON(data []byte) error {
+	s := string(data)
+	if len(s) > 0 && strings.HasPrefix(s, "[") {
+		s = strings.Trim(strings.Trim(s, "["), "]")
+		pieces := strings.Split(s, ",")
+		for _, piece := range pieces {
+			a := strings.Trim(strings.TrimSpace(piece), "\"")
+			*rs = append(*rs, a)
+		}
+	} else {
+		s = strings.Trim(s, "\"")
+		*rs = strings.Split(s, " – ")
+	}
 	return nil
 }
 
@@ -42,11 +53,22 @@ func (hs *HTMLString) UnmarshalText(data []byte) error {
 // IdentifierString is just an array of strings but required for the JSON unmarshalling
 type IdentifierString []string
 
-// UnmarshalText splits the string into parts or throws an error if the string is malformed
-func (is *IdentifierString) UnmarshalText(data []byte) error {
-	pieces := strings.Split(string(data), ".")
-	for _, piece := range pieces {
-		*is = append(*is, strings.Split(piece, " ")...)
+// UnmarshalJSON splits a string into parts, or populates an array or object (if it is one)
+func (is *IdentifierString) UnmarshalJSON(data []byte) error {
+	s := string(data)
+	if len(s) > 0 && strings.HasPrefix(s, "[") { //is an array of strings (if it's an array of something else we have bigger problems)
+		s = strings.Trim(strings.Trim(s, "["), "]")
+		pieces := strings.Split(s, ",")
+		for _, piece := range pieces {
+			a := strings.Trim(strings.TrimSpace(piece), "\"")
+			*is = append(*is, a)
+		}
+	} else { //just a string
+		s = strings.Trim(s, "\"")
+		pieces := strings.Split(s, ".")
+		for _, piece := range pieces {
+			*is = append(*is, strings.Split(piece, " ")...)
+		}
 	}
 	return nil
 }
@@ -69,7 +91,7 @@ func SubchapterParts(s *Structure) ([]*Structure, error) {
 
 // ExtractSubchapterParts extracts the subchapter parts from eCFR and returns then as an array of strings
 func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub *SubchapterOption) ([]string, error) {
-	sbody, err := FetchStructure(ctx, date.Format("2006-01-02"), title, sub)
+	sbody, _, err := FetchStructure(ctx, date.Format("2006-01-02"), title, sub)
 	if err != nil {
 		return nil, err
 	}

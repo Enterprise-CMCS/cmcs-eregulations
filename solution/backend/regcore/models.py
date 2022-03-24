@@ -4,6 +4,15 @@ from django.core.validators import MinValueValidator, RegexValidator
 from solo.models import SingletonModel
 
 
+class Title(models.Model):
+    name = models.CharField(max_length=8, unique=True)
+    last_updated = models.DateTimeField(auto_now=True)
+    toc = models.JSONField()
+
+    class Meta:
+        ordering = ("name",)
+
+
 class PartQuerySet(models.QuerySet):
     def effective(self, date):
         return self.filter(date__lte=date).order_by("name", "-date").distinct("name")
@@ -18,20 +27,36 @@ class PartManager(models.Manager.from_queryset(PartQuerySet)):
 
 class Part(models.Model):
     name = models.CharField(max_length=8)
-    title = models.CharField(max_length=8)
-    date = models.DateField()
+    title = models.CharField(max_length=8)  # TODO: delete
+    date = models.DateField()  # TODO: rename to version, more clarity
     last_updated = models.DateTimeField(auto_now=True)
+
     document = models.JSONField()
     structure = models.JSONField()
+
+    # TODO: add this in later v3 work
+    # depth = models.IntegerField()
+
+    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")  # TODO: rename to title
 
     objects = PartManager()
 
     class Meta:
         unique_together = ['name', 'title', 'date']
+        # TODO: add once /v2/title/X/existing is removed, the following line breaks it for some reason
+        # ordering = ("title", "name", "-date")
 
     @property
     def toc(self):
         return self.structure['children'][0]['children'][0]['children'][0]
+
+    # TODO: add this along with depth field in later v3 work
+    # @property
+    # def toc(self):
+    #     structure = self.structure
+    #     for _ in range(self.depth):
+    #         structure = structure['children'][0]
+    #     return structure
 
 
 class ParserConfiguration(SingletonModel):

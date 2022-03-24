@@ -10,6 +10,7 @@
                         :part="part"
                         :subPart="subPart"
                         :section="section"
+                        :partLabel="partLabel"
                         :structure="partContent"
                         :navigation="navigation"
                         :supplementalContentCount="supplementalContentCount"
@@ -21,6 +22,7 @@
                         :title="title"
                         :part="part"
                         :supList="supList"
+                        :suggestedTab="suggestedTab"
                     />
                 </pane>
             </splitpanes>
@@ -108,6 +110,7 @@ export default {
             partsList: [],
             sections: [],
             supplementalContentCount: {},
+            suggestedTab:"",
         };
     },
     computed: {
@@ -115,7 +118,7 @@ export default {
             return this.structure?.[0];
         },
         partLabel() {
-            return this.structure?.[0].label_description ?? "N/A";
+            return this.structure?.[0] ? this.structure?.[0].label_description ?? "N/A" : null;
         },
         partContent() {
             let results = this.structure?.[1];
@@ -125,9 +128,25 @@ export default {
                 });
 
                 if (this.section) {
-                    results = results[0].children.filter(
-                        (section) => section.label[1] === this.section
+                    const sections = results[0].children.filter(section => {
+                          if (section.label[1] === this.section && section.node_type === "SECTION"){
+                            return true
+                          } else{
+                            return section.children.filter(subSection =>{
+                              return subSection.label && subSection.label[1] === this.section && subSection.node_type === "SECTION"
+                            }).length
+                          }
+                        }
                     );
+                    console.log(sections)
+                    if (sections[0].node_type === "SECTION"){
+                      return [sections[0]]
+                    }
+                    else{
+                      return sections[0].children.filter(subSection =>{
+                          return subSection.label[1] === this.section && subSection.node_type === "SECTION"
+                      })
+                    }
                 }
             }
             return results || [];
@@ -203,6 +222,11 @@ export default {
     },
     methods: {
         async setResourcesParams(payload) {
+            this.suggestedTab = payload["scope"]
+            // skip this for subparts
+            if (payload["scope"] === "subpart"){
+              return
+            }
             try {
                 this.supList = await getSupplementalContentNew(
                     this.title,
@@ -213,6 +237,7 @@ export default {
                 console.error(error);
             } finally {
                 console.log(this.supList);
+                this.suggestedTab = payload["scope"]
             }
             // Implement response to user choosing a section or subpart here
         },
