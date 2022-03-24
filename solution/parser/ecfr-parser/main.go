@@ -9,6 +9,8 @@ import (
 	"os"
 	"sync"
 	"time"
+	"sort"
+	"net/http"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -96,7 +98,7 @@ func main() {
 func start() error {
 	log.Info("[main] Loading configuration...")
 	var err error
-	config, err = eregs.RetrieveConfig()
+	config, _, err = eregs.RetrieveConfig()
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
@@ -104,6 +106,18 @@ func start() error {
 
 	queue := list.New()
 	for _, title := range config.Titles {
+		log.Debug("[main] Fetching table of contents for title ", title.Title, "...")
+		ctx, cancel := context.WithTimeout(context.Background(), 15 * time.Second)
+		defer cancel()
+		toc, code, err := eregs.GetTitle(ctx, title.Title)
+		if err != nil {
+			if code != http.StatusNotFound {
+				log.Error("[main] Failed to retrieve existing table of contents for title ", title.Title, ". Error code is ", code, ", so processing of this title will be skipped. Error: ", err)
+				continue
+			}
+			log.Warn("[main] Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
+		}
+		title.Contents = toc
 		queue.PushBack(title)
 	}
 
@@ -137,6 +151,17 @@ func start() error {
 				log.Error("[main] Failed to parse title ", title.Title, ". Error: ", err)
 				failed = true
 			}
+
+			if title.Contents.Modified {
+				log.Debug("[main] Uploading Title ", title.Title, "'s table of contents to eRegs...")
+				ctx, cancel := context.WithTimeout(context.Background(), 15 * time.Second)
+				defer cancel()
+				if _, err := eregs.SendTitle(ctx, title.Contents); err != nil {
+					log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
+					queue.PushFront(title)
+					failed = true
+				}
+			}
 		}
 
 		log.Info("[main] Successfully parsed ", processed, "/", originalLength, " titles.")
@@ -167,7 +192,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	today := time.Now()
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
-	existingVersions, err := eregs.GetExistingParts(ctx, title.Title)
+	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
 	if err != nil {
 		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
 	}
@@ -177,10 +202,12 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	for _, subchapter := range title.Subchapters {
 		log.Debug("[main] Fetching title ", title.Title, " subchapter ", subchapter, " parts list...")
 		var err error
-		parts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+		var subchapterParts []string
+		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
 			return true, err
 		}
+		parts = append(parts, subchapterParts...)
 	}
 	parts = append(parts, title.Parts...)
 
@@ -201,7 +228,14 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	for _, part := range parts {
 		versionList := list.New()
 
-		for date := range versions[part] {
+		// sort versions ascending
+		keys := make([]string, 0, len(versions[part]))
+		for k := range versions[part] {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		for _, date := range keys {
 			// If we have this part already, skip it
 			if config.SkipVersions && contains(existingVersions[date], part) {
 				log.Trace("[main] Skipping title ", title.Title, " part ", part, " version ", date)
@@ -210,16 +244,21 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 			}
 
 			version := &eregs.Part{
-				Title:     title.Title,
-				Name:      part,
-				Date:      date,
-				Structure: &ecfr.Structure{},
-				Document:  &parsexml.Part{},
-				Processed: false,
+				Title:     		title.Title,
+				Name:      		part,
+				Date:      		date,
+				Structure: 		&ecfr.Structure{},
+				Document:  		&parsexml.Part{},
+				Processed: 	    false,
+				UploadContents: false,
 			}
 
 			versionList.PushBack(version)
 			originalLength++
+		}
+
+		if versionList.Len() > 0 {
+			versionList.Back().Value.(*eregs.Part).UploadContents = true
 		}
 
 		partList.PushBack(versionList)
@@ -256,10 +295,16 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		for versionListElement := partList.Front(); versionListElement != nil; versionListElement = versionListElement.Next() {
 			versionList := versionListElement.Value.(*list.List)
 			var next *list.Element
-			for version := versionList.Front(); version != nil; version = next {
-				next = version.Next()
-				if version.Value.(*eregs.Part).Processed {
-					versionList.Remove(version)
+			for versionElement := versionList.Front(); versionElement != nil; versionElement = next {
+				next = versionElement.Next()
+				version := versionElement.Value.(*eregs.Part)
+				if version.Processed {
+					if version.UploadContents {
+						log.Debug("[main] Adding structure of part ", version.Name, " to Title ", title.Title, "'s table of contents")
+						title.Contents.AddPart(version.Structure, version.Name)
+						title.Contents.Modified = true
+					}
+					versionList.Remove(versionElement)
 				} else {
 					currentLength++
 				}
@@ -313,7 +358,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	start := time.Now()
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", version.Name, " version ", version.Date)
-	sbody, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), version.Title, &ecfr.PartOption{version.Name})
+	sbody, _, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), version.Title, &ecfr.PartOption{version.Name})
 
 	if err != nil {
 		return err
@@ -326,7 +371,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	}
 
 	log.Debug("[worker ", thread, "] Fetching full document for part ", version.Name, " version ", version.Date)
-	body, err := ecfr.FetchFull(ctx, version.Date, version.Title, &ecfr.PartOption{version.Name})
+	body, _, err := ecfr.FetchFull(ctx, version.Date, version.Title, &ecfr.PartOption{version.Name})
 	if err != nil {
 		return err
 	}
@@ -341,7 +386,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	version.Document.PostProcess()
 
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
-	if err := eregs.PostPart(ctx, version); err != nil {
+	if _, err := eregs.PostPart(ctx, version); err != nil {
 		return err
 	}
 
@@ -353,7 +398,7 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 		}
 
 		log.Debug("[worker ", thread, "] Posting supplemental content structure for part ", version.Name, " version ", version.Date, " to eRegs")
-		if err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
+		if _, err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
 			return err
 		}
 	}

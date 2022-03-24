@@ -1,4 +1,6 @@
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+
 from regcore.views import (
     EffectivePartView,
     EffectiveTitlesView,
@@ -10,6 +12,16 @@ from regcore.views import (
     PartListView,
 )
 
+from regcore.v3views import (
+    ContentsViewSet,
+    TitleViewSet,
+    VersionsViewSet,
+    PartContentsViewSet,
+)
+
+
+router = DefaultRouter()
+router.register("toc", ContentsViewSet)
 
 urlpatterns = [
     path("v2/", include([
@@ -24,5 +36,21 @@ urlpatterns = [
         path("<date>/title/<title>/part/<name>", EffectivePartView.as_view()),
         path("<date>/title/<title>/part/<name>/toc", EffectivePartTocView.as_view()),
         path("title/<title>/existing", ExistingPartsView.as_view()),
-    ]))
+    ])),
+    path("v3/", include([
+        path("toc", ContentsViewSet.as_view({
+            "get": "list",
+        })),
+        path("title/<title>", TitleViewSet.as_view({
+            "get": "retrieve",
+            "post": "create",
+            "put": "update",
+        })),
+        path("title/<title>/part/<part>/versions", VersionsViewSet.as_view({
+            "get": "list",
+        })),
+        path("title/<title>/part/<part>/version/<version>/toc", PartContentsViewSet.as_view({
+            "get": "retrieve",
+        })),
+    ])),
 ]

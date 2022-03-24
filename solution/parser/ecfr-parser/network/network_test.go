@@ -20,6 +20,7 @@ func TestFetch(t *testing.T) {
 		Server *httptest.Server
 		ExpectedResponse []byte
 		ErrorExpected bool
+		ExpectedCode int
 		JSONErrors bool
 	}{
 		{
@@ -30,6 +31,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: []byte("This is an arbitrary array of bytes"),
 			ErrorExpected: false,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: false,
 		},
 		{
@@ -40,6 +42,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: nil,
 			ErrorExpected: true,
+			ExpectedCode: http.StatusInternalServerError,
 			JSONErrors: false,
 		},
 		{
@@ -55,6 +58,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: []byte("json_errors parameter found!"),
 			ErrorExpected: false,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: true,
 		},
 		{
@@ -66,6 +70,7 @@ func TestFetch(t *testing.T) {
 			})),
 			ExpectedResponse: nil,
 			ErrorExpected: true,
+			ExpectedCode: -1,
 			JSONErrors: false,
 		},
 	}
@@ -80,13 +85,18 @@ func TestFetch(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			body, err := Fetch(ctx, testURL, tc.JSONErrors)
+			body, code, err := Fetch(ctx, testURL, tc.JSONErrors)
 
 			if err == nil && tc.ErrorExpected {
 				t.Errorf("expected error, got nil")
 			} else if err != nil && !tc.ErrorExpected {
 				t.Errorf("expected no error, got (%+v)", err)
 			}
+
+			if code != tc.ExpectedCode {
+				t.Errorf("expected code (%d), got (%d)", tc.ExpectedCode, code)
+			}
+
 			if body != nil {
 				response, err := io.ReadAll(body)
 				if err != nil {
@@ -108,14 +118,16 @@ type PostData struct {
 	Valid  bool   `json:"yes"`
 }
 
-func TestPostJSON(t *testing.T) {
+func TestSendJSON(t *testing.T) {
 	testTable := []struct {
 		Name string
 		Server *httptest.Server
 		PostData *PostData
 		ErrorExpected bool
+		ExpectedCode int
 		JSONErrors bool
 		PostAuth *PostAuth
+		Method string
 	}{
 		{
 			Name: "post-succeed-test",
@@ -140,8 +152,10 @@ func TestPostJSON(t *testing.T) {
 				Valid: true,
 			},
 			ErrorExpected: false,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: false,
 			PostAuth: nil,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-fail-test",
@@ -151,8 +165,10 @@ func TestPostJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: true,
+			ExpectedCode: http.StatusInternalServerError,
 			JSONErrors: false,
 			PostAuth: nil,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-json-errors-test",
@@ -168,8 +184,10 @@ func TestPostJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: false,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: true,
 			PostAuth: nil,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-timeout-test",
@@ -180,8 +198,10 @@ func TestPostJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: true,
+			ExpectedCode: -1,
 			JSONErrors: false,
 			PostAuth: nil,
+			Method: HTTPPost,
 		},
 		{
 			Name: "post-auth-test",
@@ -205,11 +225,44 @@ func TestPostJSON(t *testing.T) {
 			})),
 			PostData: &PostData{},
 			ErrorExpected: false,
+			ExpectedCode: http.StatusOK,
 			JSONErrors: false,
 			PostAuth: &PostAuth{
 				Username: "testusername",
 				Password: "testpassword",
 			},
+			Method: HTTPPost,
+		},
+		{
+			Name: "put-test",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				d := json.NewDecoder(r.Body)
+				var postData PostData
+				err := d.Decode(&postData)
+				if err != nil {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(`{ "exception": "Failed to decode JSON" }`))
+				} else if postData.Name != "test" || postData.ID != 5 || !postData.Valid {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(`{ "exception": "Decoded JSON is not valid" }`))
+				} else if r.Method != "PUT" {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(`{ "exception": "Expected PUT method, received ` + r.Method + `!" }`))
+				} else {
+					w.WriteHeader(http.StatusOK)
+					w.Write([]byte("OK"))
+				}
+			})),
+			PostData: &PostData{
+				Name: "test",
+				ID: 5,
+				Valid: true,
+			},
+			ErrorExpected: false,
+			JSONErrors: false,
+			ExpectedCode: http.StatusOK,
+			PostAuth: nil,
+			Method: HTTPPut,
 		},
 	}
 
@@ -223,12 +276,16 @@ func TestPostJSON(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			err = PostJSON(ctx, testURL, tc.PostData, tc.JSONErrors, tc.PostAuth)
+			code, err := SendJSON(ctx, testURL, tc.PostData, tc.JSONErrors, tc.PostAuth, tc.Method)
 
 			if err == nil && tc.ErrorExpected {
 				t.Errorf("expected error, got nil")
 			} else if err != nil && !tc.ErrorExpected {
 				t.Errorf("expected no error, got (%+v)", err)
+			}
+
+			if code != tc.ExpectedCode {
+				t.Errorf("expected code (%d), got (%d)", tc.ExpectedCode, code)
 			}
 		})
 	}
@@ -342,10 +399,14 @@ func TestFetchWithOptions(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			body, err := FetchWithOptions(ctx, testURL, false, tc.FetchOptions)
+			body, code, err := FetchWithOptions(ctx, testURL, false, tc.FetchOptions)
 
 			if err != nil {
 				t.Errorf("received error (%+v)", err)
+			}
+
+			if code != http.StatusOK {
+				t.Errorf("received code (%d)", code)
 			}
 
 			response, err := io.ReadAll(body)

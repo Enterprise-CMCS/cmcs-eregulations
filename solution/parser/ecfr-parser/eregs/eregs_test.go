@@ -37,8 +37,14 @@ func TestPostPart(t *testing.T) {
 		Document: nil,
 	}
 
-	if err := PostPart(ctx, part); err != nil {
+	code, err := PostPart(ctx, part)
+
+	if err != nil {
 		t.Errorf("received error (%+v)", err)
+	}
+
+	if code != http.StatusOK {
+		t.Errorf("received code (%d)", code)
 	}
 }
 
@@ -70,8 +76,14 @@ func TestPostSupplementalPart(t *testing.T) {
 		},
 	}
 
-	if err := PostSupplementalPart(ctx, part); err != nil {
+	code, err := PostSupplementalPart(ctx, part)
+
+	if err != nil {
 		t.Errorf("received error (%+v)", err)
+	}
+
+	if code != http.StatusOK {
+		t.Errorf("received code (%d)", code)
 	}
 }
 
@@ -120,9 +132,14 @@ func TestGetExistingParts(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 	defer cancel()
 
-	results, err := GetExistingParts(ctx, 42)
+	results, code, err := GetExistingParts(ctx, 42)
+	
 	if err != nil {
 		t.Errorf("received error (%+v)", err)
+	}
+
+	if code != http.StatusOK {
+		t.Errorf("received code (%d)", code)
 	}
 
 	expected := map[string][]string{
@@ -134,5 +151,102 @@ func TestGetExistingParts(t *testing.T) {
 
 	if diff := deep.Equal(results, expected); diff != nil {
 		t.Errorf("output not as expected: %+v", diff)
+	}
+}
+
+func TestGetTitle(t *testing.T) {
+	testTable := []struct{
+		Name string
+		Title int
+		Error bool
+		ExpectedCode int
+	}{
+		{
+			Name: "test-valid-title",
+			Title: 42,
+			Error: false,
+			ExpectedCode: http.StatusOK,
+		},
+		{
+			Name: "test-404",
+			Title: 43,
+			Error: true,
+			ExpectedCode: http.StatusNotFound,
+		},
+		{
+			Name: "test-server-error",
+			Title: 44,
+			Error: true,
+			ExpectedCode: http.StatusInternalServerError,
+		},
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/title/42" {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`{ "id": 1, "name": "42", "last_updated": "ABC", "toc": {} }`))
+		} else if r.URL.Path == "/title/43" {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte("NOT FOUND"))
+		} else if r.URL.Path == "/title/44" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("BAD RESPONSE"))
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("BAD PATH"))
+		}
+	}))
+	defer server.Close()
+	BaseURL = server.URL
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			defer cancel()
+			_, code, err := GetTitle(ctx, tc.Title)
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received none")
+			}
+
+			if code != tc.ExpectedCode {
+				t.Errorf("expected code (%d), got (%d)", tc.ExpectedCode, code)
+			}
+		})
+	}
+}
+
+func TestSendTitle(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/title/42" {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("OK"))
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("BAD PATH"))
+		}
+	}))
+	defer server.Close()
+	BaseURL = server.URL
+
+	title := Title{
+		Name: "42",
+		Contents: &ecfr.Structure{},
+		Exists: false,
+		Modified: true,
+	}
+	
+	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+	defer cancel()
+
+	code, err := SendTitle(ctx, &title)
+
+	if err != nil {
+		t.Errorf("received error (%+v)", err)
+	}
+
+	if code != http.StatusOK {
+		t.Errorf("received code (%d)", code)
 	}
 }

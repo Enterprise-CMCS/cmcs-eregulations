@@ -25,7 +25,7 @@
                 <span class="subsection">§</span>
                 <span class="resource-title"> {{ titleLabel }} Resources </span>
                 <v-btn text @click="routeToResources" class="show-all-btn">
-                    Show All Resources
+                    View All Resources</a
                 </v-btn>
             </div>
             <div class="wrapper">
