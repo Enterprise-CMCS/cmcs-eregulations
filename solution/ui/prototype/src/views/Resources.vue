@@ -29,6 +29,7 @@
                 <ResourcesSelections
                     :filterParams="filterParams"
                     @chip-filter="removeChip"
+                    @clear-selections="clearSelections"
                 />
                 <ResourcesResults :content="supplementalContent" />
             </div>
@@ -134,6 +135,18 @@ export default {
     methods: {
         search() {
             console.log("search will happen here");
+        },
+        clearSelections() {
+            this.$router.push({
+                name: "resources",
+                query: {
+                    title: undefined,
+                    part: undefined,
+                    subpart: undefined,
+                    section: undefined,
+                    resourceCategory: undefined,
+                },
+            });
         },
         removeChip(payload) {
             const newQueryParams = { ...this.queryParams };
@@ -245,10 +258,27 @@ export default {
                         this.queryParams.part,
                         this.queryParams.subpart
                     );
+                } else if (_isEmpty(oldParams.subpart) && newParams.subpart) {
+                    // get supplemental content on fresh subpart selection
+                    this.getSupplementalContent(this.queryParams);
+                    this.getFormattedSectionsList(
+                        this.queryParams.part,
+                        this.queryParams.subpart
+                    );
+                } else if (_isEmpty(oldParams.section) && newParams.section) {
+                    // get supplemental content on fresh section selection
+                    this.getSupplementalContent(this.queryParams);
                 } else {
                     const oldParts = oldParams.part.split(",");
                     const newParts = newParams.part.split(",");
+
+                    const oldSubparts = oldParams.subpart.split(",");
+                    const newSubparts = newParams.subpart.split(",");
+
+                    const oldSections = oldParams.section.split(",");
+                    const newSections = newParams.section.split(",");
                     if (newParts.length > oldParts.length) {
+                        // get supplemental content for new part only
                         const newPart = _difference(newParts, oldParts)[0];
                         this.getSupplementalContent(this.queryParams);
                         this.getFormattedSubpartsList(newPart);

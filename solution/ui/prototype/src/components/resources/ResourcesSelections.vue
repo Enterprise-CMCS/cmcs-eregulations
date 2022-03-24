@@ -1,7 +1,11 @@
 <template>
     <div class="selections-container">
         <template v-for="(array, name, idx) in splitParams">
-            <div v-if="array && name !== 'title'" :key="array[0] + name + idx" class="chip-group">
+            <div
+                v-if="array && name !== 'title'"
+                :key="array[0] + name + idx"
+                class="chip-group"
+            >
                 <v-chip
                     v-for="value in array"
                     :key="value + name + idx"
@@ -12,10 +16,18 @@
                 </v-chip>
             </div>
         </template>
+        <v-chip
+            v-if="showClearAll"
+            class="clear-all-chip"
+            outlined
+            @click="handleCloseAll"
+            >Clear All</v-chip
+        >
     </div>
 </template>
 
 <script>
+import _isEmpty from "lodash/isEmpty";
 export default {
     name: "ResourcesSelections",
 
@@ -29,7 +41,9 @@ export default {
 
     beforeCreate() {},
 
-    created() {},
+    created() {
+        console.log("FilterParams", this.filterParams);
+    },
 
     beforeMount() {},
 
@@ -50,6 +64,13 @@ export default {
     },
 
     computed: {
+        showClearAll() {
+            const params = { ...this.filterParams };
+            delete params.title;
+            return !_isEmpty(
+                Object.values(params).filter((i) => i !== undefined)
+            );
+        },
         splitParams() {
             const splitParams = { ...this.filterParams };
 
@@ -69,12 +90,29 @@ export default {
                 selectedIdentifier: value,
             });
         },
+        handleCloseAll() {
+            this.$emit("clear-selections");
+        },
     },
 };
 </script>
 
-<style>
+<style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
 .chip-group {
     display: inline;
+}
+.v-chip.v-chip--outlined.clear-all-chip {
+    margin-left: 8px;
+    text-transform: uppercase;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    color: $mid_blue;
 }
 </style>
