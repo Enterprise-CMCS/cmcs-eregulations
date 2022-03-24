@@ -51,6 +51,7 @@ import _uniq from "lodash/uniq";
 import {
     getAllParts,
     getCategories,
+    getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentNew,
 } from "@/utilities/api";
@@ -202,6 +203,11 @@ export default {
         async getFormattedSubpartsList(part) {
             this.filters.subpart.listItems = await getSubPartsForPart(part);
         },
+        async getFormattedSectionsList(part, subpart) {
+            const x = await getSectionObjects(part, subpart);
+            console.log("Formatted section list", x);
+            this.filters.section.listItems = x;
+        },
         async getCategoryList() {
             this.filters.resourceCategory.listItems = await getCategories();
         },
@@ -229,7 +235,10 @@ export default {
                 } else if (_isEmpty(oldParams.part) && newParams.part) {
                     this.getSupplementalContent(this.queryParams);
                     this.getFormattedSubpartsList(this.queryParams.part);
-                    // get sections
+                    this.getFormattedSectionsList(
+                        this.queryParams.part,
+                        this.queryParams.subpart
+                    );
                 } else {
                     const oldParts = oldParams.part.split(",");
                     const newParts = newParams.part.split(",");
@@ -237,7 +246,10 @@ export default {
                         const newPart = _difference(newParts, oldParts)[0];
                         /*this.getSupplementalContent(this.queryParams);*/
                         this.getFormattedSubpartsList(newPart);
-                        // get sections
+                        this.getFormattedSectionsList(
+                            this.queryParams.part,
+                            this.queryParams.subpart
+                        );
                     }
                 }
             },
@@ -254,7 +266,10 @@ export default {
             this.getSupplementalContent(this.queryParams);
             console.log("HERE", this.queryParams);
             this.getFormattedSubpartsList(this.queryParams.part);
-            // get subpart list
+            this.getFormattedSectionsList(
+                this.queryParams.part,
+                this.queryParams.subpart
+            );
             // get section list
         }
     },
