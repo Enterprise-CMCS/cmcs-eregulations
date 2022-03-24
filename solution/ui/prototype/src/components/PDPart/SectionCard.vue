@@ -4,6 +4,7 @@
         elevation="1"
         width="100%"
         class="mx-auto"
+        :key="f.url"
     >
         <v-card-subtitle color="#102e43">
             {{
@@ -14,11 +15,12 @@
                 {{ f.description }}
             </a>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions
+          @click="showLocation = !showLocation"
+        >
             <v-btn
                 color="#5B616B"
                 text
-                @click="showLocation = !showLocation"
             >
                 Relevant Regulations
             </v-btn>
@@ -28,7 +30,6 @@
             <v-btn
                 color="#5B616B"
                 icon
-                @click="showLocation = !showLocation"
             >
                 <v-icon>
                     {{
