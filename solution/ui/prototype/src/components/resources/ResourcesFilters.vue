@@ -9,7 +9,7 @@
                         :buttonTitle="value.buttonTitle"
                         :buttonId="value.buttonId"
                         :key="name"
-                        :disabled="value.disabled"
+                        :disabled="value.disabled || value.listItems.length === 0"
                     >
                         <component
                             :is="value.listType"

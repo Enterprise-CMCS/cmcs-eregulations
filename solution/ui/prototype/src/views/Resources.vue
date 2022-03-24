@@ -44,10 +44,14 @@ import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
+import _difference from "lodash/difference";
 import _isEmpty from "lodash/isEmpty";
+import _uniq from "lodash/uniq";
+
 import {
     getAllParts,
     getCategories,
+    getSubPartsForPart,
     getSupplementalContentNew,
 } from "@/utilities/api";
 
@@ -117,7 +121,7 @@ export default {
         },
         filterParams() {
             return {
-                title: this.queryParams.title || 42,
+                title: this.queryParams.title || "42",
                 part: this.queryParams.part,
                 subpart: this.queryParams.subpart,
                 section: this.queryParams.section,
@@ -136,8 +140,9 @@ export default {
             const newScopeVals = scopeVals.filter(
                 (val) => val !== payload.selectedIdentifier
             );
-            newQueryParams[payload.scope] =
-                newScopeVals.length > 0 ? newScopeVals.join(",") : undefined;
+            newQueryParams[payload.scope] = _isEmpty(newScopeVals)
+                ? undefined
+                : newScopeVals.join(",");
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
@@ -148,7 +153,9 @@ export default {
             if (newQueryParams[payload.scope]) {
                 const scopeVals = newQueryParams[payload.scope].split(",");
                 scopeVals.push(payload.selectedIdentifier);
-                newQueryParams[payload.scope] = scopeVals.join(",");
+                const uniqScopeVals = _uniq(scopeVals);
+                console.log(uniqScopeVals);
+                newQueryParams[payload.scope] = uniqScopeVals.sort().join(",");
             } else {
                 newQueryParams.title = "42"; // hard coding for now
                 newQueryParams[payload.scope] = payload.selectedIdentifier;
@@ -184,7 +191,7 @@ export default {
         },
         async getFormattedPartsList() {
             const partsList = await getAllParts();
-            return partsList.map((part) => {
+            this.filters.part.listItems = partsList.map((part) => {
                 return {
                     name: part.name,
                     label: part.structure.children[0].children[0].children[0]
@@ -192,9 +199,11 @@ export default {
                 };
             });
         },
+        async getFormattedSubpartsList(part) {
+            this.filters.subpart.listItems = await getSubPartsForPart(part);
+        },
         async getCategoryList() {
-            const categoryList = await getCategories();
-            return categoryList;
+            this.filters.resourceCategory.listItems = await getCategories();
         },
     },
 
@@ -211,8 +220,26 @@ export default {
             },
         },
         queryParams: {
-            async handler() {
-                this.getSupplementalContent(this.queryParams);
+            async handler(newParams, oldParams) {
+                // only get content if a part is selected
+                if (_isEmpty(newParams.part)) {
+                    // don't make supp content request, but clear lists
+                    this.filters.subpart.listItems = [];
+                    // clear sections
+                } else if (_isEmpty(oldParams.part) && newParams.part) {
+                    this.getSupplementalContent(this.queryParams);
+                    this.getFormattedSubpartsList(this.queryParams.part);
+                    // get sections
+                } else {
+                    const oldParts = oldParams.part.split(",");
+                    const newParts = newParams.part.split(",");
+                    if (newParts.length > oldParts.length) {
+                        const newPart = _difference(newParts, oldParts)[0];
+                        /*this.getSupplementalContent(this.queryParams);*/
+                        this.getFormattedSubpartsList(newPart);
+                        // get sections
+                    }
+                }
             },
         },
     },
@@ -220,14 +247,16 @@ export default {
     beforeCreate() {},
 
     async created() {
-        this.getSupplementalContent(this.queryParams);
-        await Promise.all([
-            this.getFormattedPartsList(),
-            this.getCategoryList(),
-        ]).then((responses) => {
-            this.filters.part.listItems = responses[0];
-            this.filters.resourceCategory.listItems = responses[1];
-        });
+        this.getFormattedPartsList();
+        this.getCategoryList();
+
+        if (this.queryParams.part) {
+            this.getSupplementalContent(this.queryParams);
+            console.log("HERE", this.queryParams);
+            this.getFormattedSubpartsList(this.queryParams.part);
+            // get subpart list
+            // get section list
+        }
     },
 
     beforeMount() {},

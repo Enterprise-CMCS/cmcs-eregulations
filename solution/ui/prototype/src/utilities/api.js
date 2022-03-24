@@ -432,7 +432,7 @@ const getSubPartsForPart = async (part) => {
     const parts = all_parts.map(d => d.name)
     const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
     const subParts = potentialSubParts.filter(p => p.type === "subpart")
-    return subParts.map(s =>{ return {label:s.label, identifier: s.identifier[0]}})
+    return subParts.map(s =>{ return {label:s.label, identifier: s.identifier[0], range: s.descendant_range}})
 }
 
 /**
