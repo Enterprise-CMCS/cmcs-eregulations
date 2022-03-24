@@ -25,7 +25,7 @@
                 <span class="subsection">§</span>
                 <span class="resource-title"> {{ titleLabel }} Resources </span>
                 <a style="font-size: 14px; margin-left: 30px">
-                    Show All Resources</a
+                    View All Resources</a
                 >
             </div>
             <div class="wrapper">
