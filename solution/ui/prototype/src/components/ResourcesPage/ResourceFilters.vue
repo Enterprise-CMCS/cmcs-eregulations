@@ -1,10 +1,14 @@
 <template>
-    <div class="resourcefilters">
-        <h2>Filters</h2>
+    <div class="resourcefilters"><div class="filter-header">
+            <h2 style="display: inline">Filters</h2>
+            <span style="float: right">
+                <v-btn text v-on:click="clearFilters">Clear All</v-btn>
+            </span></div>
         <h3>Resource Type</h3>
         <treeselect
-            v-model="this.resourcesValues"
+            v-model="selectedResources"
             :multiple="true"
+            v-on:input="get_filter"
             :options="this.catOptions"
         />
 
@@ -67,7 +71,6 @@ export default {
         titles: ["42"],
         parts: [],
         sections: ["sections"],
-        resourcesValues: [],
         selectedResources: [],
         selectedParts: [],
         selectedSections: [],
@@ -79,6 +82,15 @@ export default {
     }),
 
     methods: {
+        clearFilters(){
+            this.selectedResources=[]
+            this.selectedParts=[]
+            this.selectedSections=[]
+            this.selectedTitles=[]
+            this.filters=[]
+            console.log('clearing')
+            this.resourceParamsEmitter(this.filters)
+        },
         filterSections(parts) {
             if (parts.length > 0) {
                 this.filteredSections = this.sections.filter((section) =>
@@ -108,7 +120,7 @@ export default {
                 }
             }
             console.log(this.filters)
-            this.resourceParamsEmitter(this.filters)
+            this.resourceParamsEmitter({parts:this.filters, resources:this.selectedResources})
         },
     },
     async created() {
@@ -129,5 +141,8 @@ export default {
 <style scoped>
 .resourcefilters {
     padding: 20px;
+}
+.filter-header{
+    padding-bottom:20px;
 }
 </style>

@@ -11,9 +11,7 @@
                     </div>
                 </pane>
                 <pane min-size="30">
-                    <SectionPane
-                        v-bind:supList="singleSupList"
-                    />
+                    <SectionPane v-bind:supList="sortedSupList" />
                 </pane>
             </splitpanes>
             <Footer />
@@ -26,11 +24,10 @@ import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import { Splitpanes, Pane } from "splitpanes";
-import SectionCards from "../components/PDPart/SectionCards.vue";
 import { getSupplementalContentNew } from "../utilities/api";
 import "splitpanes/dist/splitpanes.css";
 import ResourceFilters from "../components/ResourcesPage/ResourceFilters.vue";
-import SectionPane from "../components/ResourcesPage/SectionSide.vue"
+import SectionPane from "../components/ResourcesPage/SectionSide.vue";
 export default {
     name: "ResourcePage",
     components: {
@@ -40,33 +37,62 @@ export default {
         Splitpanes,
         Pane,
         ResourceFilters,
-        SectionCards,
-        SectionPane
+        SectionPane,
     },
     data: () => ({
         supList: [],
-        title: "kdfjdk",
-        part: "323",
         filters: [],
         singleSupList: [],
+        sortedSupList: [],
     }),
     methods: {
         setResourcesParams(payload) {
-            console.log("hit");
             this.filters = payload;
-            for (let part in this.filters) {
-                console.log(this.filters[part]);
-            }
+        
+            this.sortedSupList = [];
+
             this.getSupContent();
+
             // Implement response to user choosing a section or subpart here
+        },
+        sortContent() {
+            try {
+                let i = 0;
+                for (let content of this.singleSupList) {
+           
+                    console.log(this.filters.resources)
+                    if (this.filters.resources.includes(content.name)|| this.filters.resources.length==0) {
+                        if (content.supplemental_content.length > 0) {
+                            for (let supplement of content.supplemental_content) {
+                                supplement.category = content.name;
+                                this.sortedSupList.push(supplement);
+                            }
+                        }
+                        if (content.sub_categories.length > 0) {
+                            for (let subcat of content.sub_categories) {
+                                if (subcat.supplemental_content.length > 0) {
+                                    for (let supplement of subcat.supplemental_content) {
+                                        supplement.subcategory = subcat.name;
+                                        supplement.category = content.name;
+                                        this.sortedSupList.push(supplement);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log("error");
+            }
         },
         async getSupContent() {
             this.singleSupList = [];
+
             try {
                 this.supList = [];
-                for (let part in this.filters) {
-                    let query = this.filters[part];
-                    console.log(query);
+                for (let part in this.filters.parts) {
+                    let query = this.filters.parts[part];
+
                     this.supList.push(
                         await getSupplementalContentNew(
                             42,
@@ -81,13 +107,12 @@ export default {
                         this.singleSupList.push(content);
                     }
                 }
-
-                console.log(this.singleSupList);
             } catch (error) {
                 console.error(error);
             } finally {
                 console.log(this.structure);
             }
+            this.sortContent();
         },
     },
 };
