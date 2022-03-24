@@ -2,6 +2,19 @@
     <body class="ds-base">
         <div id="app">
             <Header />
+            <div class="searchpane">
+                <v-text-field
+                    flat
+                    solo
+                    clearable
+                    class="search-bar"
+                    label="Search"
+                    type="text"
+                    append-icon="mdi-magnify"
+                    hide-details
+                >
+                </v-text-field>
+            </div>
             <splitpanes>
                 <pane min-size="30">
                     <div style="width: 100%; margin: 20px">
@@ -48,7 +61,7 @@ export default {
     methods: {
         setResourcesParams(payload) {
             this.filters = payload;
-        
+
             this.sortedSupList = [];
 
             this.getSupContent();
@@ -59,9 +72,10 @@ export default {
             try {
                 let i = 0;
                 for (let content of this.singleSupList) {
-           
-                    console.log(this.filters.resources)
-                    if (this.filters.resources.includes(content.name)|| this.filters.resources.length==0) {
+                    if (
+                        this.filters.resources.includes(content.name) ||
+                        this.filters.resources.length == 0
+                    ) {
                         if (content.supplemental_content.length > 0) {
                             for (let supplement of content.supplemental_content) {
                                 supplement.category = content.name;
@@ -117,6 +131,24 @@ export default {
     },
 };
 </script>
-<style>
+<style scoped>
+.searchpane {
+    width: 100%;
+    height: 127px;
+    background-color: #f3f3f3;
+}
+
+.search-bar.v-text-field.v-text-field--enclosed {
+    max-width: 610px;
+
+    height: 20px;
+    box-sizing: border-box;
+    margin: auto auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
 </style>
 
