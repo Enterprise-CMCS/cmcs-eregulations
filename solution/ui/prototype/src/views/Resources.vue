@@ -136,7 +136,8 @@ export default {
             const newScopeVals = scopeVals.filter(
                 (val) => val !== payload.selectedIdentifier
             );
-            newQueryParams[payload.scope] = newScopeVals.join(",");
+            newQueryParams[payload.scope] =
+                newScopeVals.length > 0 ? newScopeVals.join(",") : undefined;
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
