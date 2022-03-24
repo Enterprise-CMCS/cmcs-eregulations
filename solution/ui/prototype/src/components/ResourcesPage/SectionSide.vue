@@ -7,14 +7,16 @@
             <div> <v-select v-model="sortBy" label="Sort By" :items='sortList'></v-select>
             </div></div>
             <div class="section-cards">
-            <div v-for="content in supList" :key="content.name">
-        <SupplementalCards v-bind:content="content" /></div></div>
+            <div class="section-cards" v-for="content in supList" :key="content.name">
+        <SectionCard v-bind:f="content" /></div></div>
 
     </div>
     
 </template>
 <script>
-import SupplementalCards from "./SupplementalCards.vue"
+
+import SectionCard from "../PDPart/SectionCard.vue"
+
 export default {
     name: "SectionPane",
     props: ["supList"],
@@ -23,7 +25,7 @@ export default {
         sortBy: 'Relevance'
     }),
     components: {
-        SupplementalCards,
+        SectionCard,
     },
 };
 </script>
@@ -33,7 +35,8 @@ export default {
     width:100%;
 }
 .section-cards{
-padding:30px;
+padding-bottom: 10px;
+padding-top:10px;
 }
 
 .flex-parent-element {
