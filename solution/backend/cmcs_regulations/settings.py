@@ -59,7 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'x_robots_tag_middleware.middleware.XRobotsTagMiddleware',
     'regulations.middleware.json_errors.JsonErrors',
 ]
 
@@ -178,7 +177,6 @@ HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 
 GA_ID = os.environ.get("GA_ID")
 
-X_ROBOTS_TAG = ['noindex', 'nofollow']
 
 OPENSEARCH_DSL = {
     'default': {

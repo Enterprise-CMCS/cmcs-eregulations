@@ -66,7 +66,7 @@ export default {
     props: {
         title: String,
         part: String,
-        selectedIdentifier: String,
+        selectedIdentifier: Array,
         selectedScope: String,
     },
 

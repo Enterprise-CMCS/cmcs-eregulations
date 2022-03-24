@@ -272,13 +272,24 @@ const getLastUpdatedDate = async (title = "42") => {
 
     return niceDate(_get(result.reduce(reducer), "date"));
 };
-
+/**
+ *
+ * Fetches a list of the part names for the desired title
+ * @param title {string} - The title requested defaults to 42
+ * @returns {Array} - A sorted list of the parts in this title
+ */
 const getPartNames = async (title = "42") => {
     const result = await httpApiGet(`title/${title}/existing`);
 
     return _sortedUniq(result.flatMap((part) => part.partName).sort());
 };
 
+/**
+ *
+ * Fetches the data and formats it for the home page
+ *
+ * @returns {Array[Object]} - a structured list used to populate the home page
+ */
 const getHomepageStructure = async () => {
     const reducer = (accumulator, currentValue) => {
         const title = currentValue.title;
@@ -385,14 +396,23 @@ const getHomepageStructure = async () => {
 
     return transformedResult;
 };
+getCategories
+/**
+ * Returns the result from the all_parts endpoint
+ *
+ * @returns {Array} - a list of objects that represent a part of title 42
+ */
 
 const getAllParts = async () => {
     return await httpApiGet("all_parts");
 }
-const getCategories = async () => {
-    return await httpApiGet("categories");
-}
 
+/**
+ *
+ * Fetches all_parts and returns a list of those parts by name
+ *
+ * @returns {Array[string]} - a list pf parts for title 42
+ */
 const getPartsList = async () => {
     const all_parts = await getAllParts()
     return all_parts.map(d => d.name)
@@ -426,16 +446,29 @@ const getSubPartsandSections = async () => {
     //potentialSubParts = all_parts[parts.indexOf('400')].structure.children[0].children[0].children[0].children
 
 }
+
+/**
+ *
+ * Fetches all_parts and returns a list of objects for the subparts in that part
+ * Each object has a label and an identifier
+ * @param {string} - the name of a part in title 42
+ * @returns {Object<{label:string, identifier:string}>}
+ */
 const getSubPartsForPart = async (part) => {
     const all_parts = await getAllParts()
     const parts = all_parts.map(d => d.name)
     const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
     const subParts = potentialSubParts.filter(p => p.type === "subpart")
-
-    return subParts.map(s => s.identifier[0])
-
+    return subParts.map(s =>{ return {label:s.label, identifier: s.identifier[0]}})
 }
 
+/**
+ *
+ * Fetches all_parts and returns a list of sections for the part and subpart specified
+ * @param part - a part in title 42
+ * @param subPart - a subpart in title 42 ("A", "B", etc)
+ * @returns {Array[string]} - a list of all sections in this subpart
+ */
 const getSectionsForSubPart = async (part, subPart) => {
     const all_parts = await getAllParts()
     const parts = all_parts.map(d => d.name)
@@ -445,6 +478,14 @@ const getSectionsForSubPart = async (part, subPart) => {
 
 }
 
+/**
+ *
+ * Fetches all_parts and returns a list of sections for the part and subpart specified
+ * @param part - a part in title 42
+ * @param subPart - a subpart in title 42 ("A", "B", etc)
+ * @returns {Array[Object>TOC>, Object<orphansAndSubparts>]} - a tuple with a Table of contents and a list of
+ * top level elements for the requested part
+ */
 
 const getPart = async (title, part) => {
     const result = await httpApiGet(
@@ -455,9 +496,17 @@ const getPart = async (title, part) => {
     const toc = result?.toc;
 
     const orphansAndSubparts = _get(result, "document.children");
-
     return [toc, orphansAndSubparts];
 };
+
+/**
+ *
+ * @param title {string} - The requested title, defaults to 42
+ * @param part {string} - The part pf the title
+ * @param scope {string} - a formatted string of the sections desired ( section=1&section=2&section=3...)
+ * @param identifier {string} - a formatted string of the subparts desired (subpart=A&subpart=B...)
+ * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
+ */
 
 const getSupplementalContent = async (
     title = "42",
@@ -471,6 +520,14 @@ const getSupplementalContent = async (
     return result;
 };
 
+/**
+ *
+ * @param title {string} - The requested title, defaults to 42
+ * @param part {string} - The part pf the title
+ * @param sections {Array[string]} - a list of the sections desired ([1,2,3...)
+ * @param subparts {Array[string]} - a list of the subparts desired (subpart=A&subpart=B...)
+ * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
+ */
 const getSupplementalContentNew = async (
     title,
     part,
@@ -490,6 +547,16 @@ const getSupplementalContentNew = async (
 
     return result;
 };
+
+const getCategories = async () => {
+    return await httpApiGet("categories");
+}
+/**
+ *
+ * @param part {string} - a regulation part
+ * @returns {Object<string:number>} - an object where the keys represent the display name for each part and
+ * the value is the count of how many pieces of supplemental content exist for that part.
+ */
 const getSupplementalContentCountForPart = async (part) => {
     const result = await httpApiGet(
         `supplemental_content_count_by_part?part=${part}`
