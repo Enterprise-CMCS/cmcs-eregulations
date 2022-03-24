@@ -45,7 +45,11 @@ import ResourcesSelections from "@/components/resources/ResourcesSelections.vue"
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
 import _isEmpty from "lodash/isEmpty";
-import { getAllParts, getSupplementalContentNew } from "@/utilities/api";
+import {
+    getAllParts,
+    getCategories,
+    getSupplementalContentNew,
+} from "@/utilities/api";
 
 export default {
     name: "Resources",
@@ -181,6 +185,10 @@ export default {
                 };
             });
         },
+        async getCategoryList() {
+            const categoryList = await getCategories();
+            return categoryList;
+        },
     },
 
     watch: {
@@ -206,7 +214,13 @@ export default {
 
     async created() {
         this.getSupplementalContent(this.queryParams);
-        this.filters.part.listItems = await this.getFormattedPartsList();
+        await Promise.all([
+            this.getFormattedPartsList(),
+            this.getCategoryList(),
+        ]).then((responses) => {
+            this.filters.part.listItems = responses[0];
+            this.filters.resourceCategory.listItems = responses[1];
+        });
     },
 
     beforeMount() {},

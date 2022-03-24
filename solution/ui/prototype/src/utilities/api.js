@@ -521,6 +521,10 @@ const getSupplementalContentNew = async (
     return result;
 };
 
+const getCategories = async () => {
+    return await httpApiGet("categories");
+}
+
 /**
  *
  * @param part {string} - a regulation part
@@ -557,5 +561,6 @@ export {
     getPartsList,
     getSectionsForSubPart,
     getSupplementalContentCountForPart,
+    getCategories,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
