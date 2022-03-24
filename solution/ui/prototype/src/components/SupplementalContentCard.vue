@@ -30,7 +30,7 @@ export default {
     },
     computed: {
         formattedDate: function () {
-            const date = new Date(this.supplementalContent.updated_at);
+            const date = new Date(this.supplementalContent.date);
             const options = { year: "numeric", month: "long", day: "numeric" };
             return new Intl.DateTimeFormat("en-US", options).format(date);
         },
