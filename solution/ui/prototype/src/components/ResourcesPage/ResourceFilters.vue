@@ -2,7 +2,8 @@
     <div class="resourcefilters"><div class="filter-header">
             <h2 style="display: inline">Filters</h2>
             <span style="float: right">
-                <v-btn text v-on:click="clearFilters">Clear All</v-btn>
+            
+                <v-btn text v-on:click="clearFilters">Close filters <v-icon>mdi-close</v-icon></v-btn>
             </span></div>
         <h3>Resource Type</h3>
         <treeselect
