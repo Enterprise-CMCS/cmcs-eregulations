@@ -132,7 +132,11 @@ export default {
         },
         removeChip(payload) {
             const newQueryParams = { ...this.queryParams };
-            delete newQueryParams[payload.scope];
+            const scopeVals = newQueryParams[payload.scope].split(",");
+            const newScopeVals = scopeVals.filter(
+                (val) => val !== payload.selectedIdentifier
+            );
+            newQueryParams[payload.scope] = newScopeVals.join(",");
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
