@@ -66,13 +66,7 @@ class SupplementalContentView(generics.ListAPIView):
         ).prefetch_related(
             Prefetch(
                 'locations',
-                queryset=AbstractLocation.objects.filter(
-                    Q(section__section_id__in=section_list) |
-                    Q(subpart__subpart_id__in=subpart_list) |
-                    Q(subjectgroup__subject_group_id__in=subjgrp_list),
-                    title=title,
-                    part=part,
-                )
+                queryset=AbstractLocation.objects.all()
             )
         ).prefetch_related(
             Prefetch(
@@ -117,7 +111,10 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
 class SupplementalContentByPartView(APIView):
     def get(self, request, format=None):
         part = request.GET.get('part', '')
-        results = AbstractLocation.objects.filter(part=part).annotate(num_locations=Count('supplemental_content')).filter(
+        results = AbstractLocation.objects.filter(part=part).annotate(
+            num_locations=Count(
+                'supplemental_content', filter=Q(supplemental_content__approved="t")
+            )).filter(
             num_locations__gt=0)
         data = {}
         for r in results:
