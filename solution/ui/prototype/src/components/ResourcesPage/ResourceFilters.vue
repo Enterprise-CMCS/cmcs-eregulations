@@ -1,10 +1,13 @@
 <template>
-    <div class="resourcefilters"><div class="filter-header">
+    <div class="resourcefilters">
+        <div class="filter-header">
             <h2 style="display: inline">Filters</h2>
             <span style="float: right">
-            
-                <v-btn text v-on:click="clearFilters">Close filters <v-icon>mdi-close</v-icon></v-btn>
-            </span></div>
+                <v-btn text v-on:click="clearFilters"
+                    >Close filters <v-icon>mdi-close</v-icon></v-btn
+                >
+            </span>
+        </div>
         <h3>Resource Type</h3>
         <treeselect
             v-model="selectedResources"
@@ -21,7 +24,16 @@
             :items="titles"
             chips
             outlined
-        ></v-autocomplete>
+        >
+            <template #selection="{ item }">
+                <v-chip
+                    close
+                    color="blue lighten-5"
+                    @click:close="remove(item)"
+                    >{{ item }}</v-chip
+                >
+            </template></v-autocomplete
+        >
         <h3>Part</h3>
         <v-autocomplete
             multiple
@@ -33,6 +45,14 @@
             item-text="name"
             outlined
         >
+            <template #selection="{ item }">
+                <v-chip
+                    close
+                    color="blue lighten-5"
+                    @click:close="remove(item)"
+                    >{{ item.name }}</v-chip
+                >
+            </template>
         </v-autocomplete>
         <h3>Section</h3>
 
@@ -45,7 +65,16 @@
             chips
             outlined
             v-on:change="get_filter"
-        ></v-autocomplete>
+        >
+            <template #selection="{ item }">
+                <v-chip
+                    close
+                    color="blue lighten-5"
+                    @click:close="remove(item)"
+                    >{{ item.label }}</v-chip
+                >
+            </template></v-autocomplete
+        >
     </div>
 </template>
 <script>
@@ -78,19 +107,19 @@ export default {
         selectedTitles: [],
         categories: [],
         catOptions: [],
-        filteredSections:[],
-        filters:{}
+        filteredSections: [],
+        filters: {},
     }),
 
     methods: {
-        clearFilters(){
-            this.selectedResources=[]
-            this.selectedParts=[]
-            this.selectedSections=[]
-            this.selectedTitles=[]
-            this.filters=[]
-            console.log('clearing')
-            this.resourceParamsEmitter(this.filters)
+        clearFilters() {
+            this.selectedResources = [];
+            this.selectedParts = [];
+            this.selectedSections = [];
+            this.selectedTitles = [];
+            this.filters = [];
+            console.log("clearing");
+            this.resourceParamsEmitter(this.filters);
         },
         filterSections(parts) {
             if (parts.length > 0) {
@@ -102,26 +131,32 @@ export default {
             }
             this.get_filter();
         },
-        get_filter(){
-            this.filters={}
-           
-            for(let part of this.selectedParts){
-                this.filters[part]={part:part, subparts:[], sections:[]}
+        get_filter() {
+            this.filters = {};
+
+            for (let part of this.selectedParts) {
+                this.filters[part] = { part: part, subparts: [], sections: [] };
             }
-            
-            for(let section of this.selectedSections){
-                if(!this.filters[section.part]){
-                    this.filters[section.part]={part:section.part, subparts:[], sections:[]}
+
+            for (let section of this.selectedSections) {
+                if (!this.filters[section.part]) {
+                    this.filters[section.part] = {
+                        part: section.part,
+                        subparts: [],
+                        sections: [],
+                    };
                 }
-                if(section.section){
-                    this.filters[section.part].sections.push(section.section)
-                }
-                else{
-                    this.filters[section.part].subparts.push(section.subpart)
+                if (section.section) {
+                    this.filters[section.part].sections.push(section.section);
+                } else {
+                    this.filters[section.part].subparts.push(section.subpart);
                 }
             }
-            console.log(this.filters)
-            this.resourceParamsEmitter({parts:this.filters, resources:this.selectedResources})
+            console.log(this.filters);
+            this.resourceParamsEmitter({
+                parts: this.filters,
+                resources: this.selectedResources,
+            });
         },
     },
     async created() {
@@ -143,7 +178,10 @@ export default {
 .resourcefilters {
     padding: 20px;
 }
-.filter-header{
-    padding-bottom:20px;
+.filter-header {
+    padding-bottom: 20px;
+}
+.v-chip .v-chip__content {
+    background-color: #c0eaf8;
 }
 </style>
