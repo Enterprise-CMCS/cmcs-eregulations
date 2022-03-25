@@ -407,9 +407,38 @@ const getAllParts = async () => {
  * @returns {Array[string]} - a list pf parts for title 42
  */
 const getPartsList = async () => {
-    const all_parts = await getAllParts();
-    return all_parts.map((d) => d.name);
-};
+    const all_parts = await getAllParts()
+    return all_parts.map(d => d.name)
+}
+
+const getPartsDetails = async () => {
+    const all_parts = await getAllParts()
+    return all_parts.map(part => { return { 'id': part.name, 'name': part.structure.children[0].children[0].children[0].label } })
+}
+const getSubPartsandSections = async () => {
+    const all_parts = await getAllParts()
+    let subparts = []
+    let fullSelection = []
+
+    all_parts.forEach(part =>
+
+        part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
+
+    for (const subpart in subparts) {
+        fullSelection.push({ label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, location: { part: subparts[subpart].part, subpart: subparts[subpart].data.identifier[0] }, type: 'subpart' })
+
+        let sections = subparts[subpart].data.children
+
+        for (const section in sections) {
+            fullSelection.push({ label: sections[section].label, id: sections[section].label, location: { part: subparts[subpart].part, section: sections[section].identifier[1] }, part: subparts[subpart].part, type: 'section' })
+        }
+    }
+
+
+    return fullSelection
+    //potentialSubParts = all_parts[parts.indexOf('400')].structure.children[0].children[0].children[0].children
+
+}
 
 /**
  *
@@ -450,11 +479,11 @@ const getSectionsForSubPart = async (part, subPart) => {
     const parent = potentialSubParts.find(p => p.type === "subpart" && p.identifier[0] === subPart)
     const sections = []
     parent.children.forEach(c => {
-        if (c.type === "section"){
+        if (c.type === "section") {
             sections.push(c.identifier[1])
-        }else if (c.children){
-            c.children.forEach( child => {
-                if (child.type === "section"){
+        } else if (c.children) {
+            c.children.forEach(child => {
+                if (child.type === "section") {
                     sections.push(child.identifier[1])
                 }
             })
@@ -534,6 +563,11 @@ const getPart = async (title, part) => {
  * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
  */
 
+const getAllSupplementalContentByPieces = async (start, max_results = 100) => {
+    const result = await (httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
+    return result;
+}
+
 const getSupplementalContent = async (
     title = "42",
     part,
@@ -558,7 +592,9 @@ const getSupplementalContentNew = async (
     title,
     part,
     sections = [],
-    subparts = []
+    subparts = [],
+    start = 0,
+    max_results = 10000
 ) => {
     let sString = "";
     for (let s in sections) {
@@ -567,6 +603,7 @@ const getSupplementalContentNew = async (
     for (let sp in subparts) {
         sString = sString + "&subparts=" + subparts[sp];
     }
+    sString = sString + "&start=" + start + "&max_results=" + max_results
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );
@@ -616,5 +653,8 @@ export {
     getSectionObjects,
     getSupplementalContentCountForPart,
     getCategories,
+    getPartsDetails,
+    getSubPartsandSections,
+    getAllSupplementalContentByPieces
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
