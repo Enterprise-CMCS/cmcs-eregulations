@@ -46,6 +46,12 @@
             </v-expansion-panel>
         </v-expansion-panels>
         <br />
+        <router-link :to="{
+            name:'PDResources',
+            query: { part, title, subPart, section }
+        }">
+            <v-btn color="#046791" class="white--text">View All Resources</v-btn>
+        </router-link>
     </div>
 </template>
 <script>
@@ -68,6 +74,8 @@ export default {
         title: { type: String },
         part: { type: String },
         suggestedSubPart: {type: String},
+        subPart: { type: String },
+        section: { type: String },
 
     },
     data() {

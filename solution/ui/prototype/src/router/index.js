@@ -56,7 +56,7 @@ const routes = [
     },
     {
         path: "/PDResources",
-        name: "resources",
+        name: "PDResources",
         component: ResourcePage
     }
 ];

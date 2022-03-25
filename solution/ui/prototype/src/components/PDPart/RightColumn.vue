@@ -55,6 +55,8 @@
         <TabFilters
             :title="title"
             :part="part"
+            :subPart="subPart"
+            :section="section"
             :sup-list="supList"
             :suggestedTab="suggestedTab"
             :suggestedSubPart="suggestedSubPart"
@@ -75,6 +77,8 @@ export default {
         supList: { type: Array },
         suggestedTab: { type: String},
         suggestedSubPart: { type: String},
+        subPart: { type: String },
+        section: { type: String },
     },
     data() {
         return {

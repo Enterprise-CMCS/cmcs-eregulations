@@ -7,16 +7,15 @@
         </div>
         <v-tabs-items v-model="tab">
             <v-tab-item>
-                <PartSummary v-bind:title="title" v-bind:part="part"/>
+                <PartSummary :title="title" :part="part" :subPart="subPart" :section="section"/>
             </v-tab-item>
             <v-tab-item>
-                <SubpartResources v-bind:title="title" v-bind:part="part" :suggestedSubPart="suggestedSubPart" />
+                <SubpartResources :title="title" :part="part" :subPart="subPart" :section="section" :suggestedSubPart="suggestedSubPart" />
             </v-tab-item>
             <v-tab-item>
                 <v-container fluid>
                     <SectionCards
-                        v-bind:title="title"
-                        v-bind:part="part"
+                        :title="title" :part="part" :subPart="subPart" :section="section"
                         v-bind:supList="supList"
                     />
                 </v-container>
@@ -44,6 +43,8 @@ export default {
         supList: { type: Array },
         suggestedTab: {type: String },
         suggestedSubPart: { type: String},
+        subPart: { type: String },
+        section: { type: String },
     },
     data() {
         return {

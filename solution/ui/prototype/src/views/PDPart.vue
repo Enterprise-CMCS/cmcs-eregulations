@@ -21,6 +21,8 @@
                     <right-column
                         :title="title"
                         :part="part"
+                        :subPart="subPart"
+                        :section="section"
                         :supList="supList"
                         :suggestedTab="suggestedTab"
                         :suggestedSubPart="suggestedSubPart"

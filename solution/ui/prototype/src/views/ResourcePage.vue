@@ -20,6 +20,8 @@
                     <div style="width: 100%; margin: 20px">
                         <ResourceFilters
                             :resourceParamsEmitter="setResourcesParams"
+                            :selectedParts="selectedParts"
+                            :selectedSections="selectedSections"
                         />
                     </div>
                 </pane>
@@ -61,14 +63,29 @@ export default {
     }),
     async created() {
         try {
-            this.supList = await getAllSupplementalContentByPieces(0,100);
-            for (let sup of this.supList) {
 
-              
-                this.singleSupList.push(sup);
+            const urlParams = new URLSearchParams(window.location.search);
+            this.selectedParts = [urlParams.get('part')]
+            this.selectedSections = [urlParams.get('subpart'), urlParams.get('section')]
+
+            this.filters["parts"] = {
+              [urlParams.get('part')] : {
+                part: urlParams.get('part'),
+                subparts: [urlParams.get('subPart').split('-')[1]],
+                sections: [urlParams.get('section')]
+              }
             }
-            
-            this.sortContent()
+
+            if (this.filters.parts){
+              await this.getSupContent();
+            }else {
+              this.supList = await getAllSupplementalContentByPieces(0, 100);
+              for (let sup of this.supList) {
+                this.singleSupList.push(sup);
+              }
+
+              this.sortContent()
+            }
         } catch (error) {
             console.error(error);
         } finally {

@@ -68,7 +68,12 @@
             </v-expansion-panels>
         </div>
         <br />
-        <v-btn color="#046791" class="white--text">View All Resources</v-btn>
+        <router-link :to="{
+            name:'PDResources',
+            query: { part, title, subPart, section }
+        }">
+            <v-btn color="#046791" class="white--text">View All Resources</v-btn>
+        </router-link>
     </div>
 </template>
 <script>
@@ -88,6 +93,8 @@ export default {
     props: {
         title: { type: String },
         part: { type: String },
+        subPart: { type: String },
+        section: { type: String },
     },
 
     methods: {
