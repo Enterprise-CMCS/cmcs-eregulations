@@ -1,8 +1,7 @@
 from django.http import JsonResponse
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from django.conf import settings
-
 from rest_framework.response import Response
 
 from django.db.models import Prefetch, Q, Count
@@ -21,7 +20,7 @@ from .models import (
     Subpart,
 )
 
-from .serializers import AbstractSupplementalContentSerializer, SupplementalContentSerializer
+from .serializers import AbstractCategorySerializer, AbstractSupplementalContentSerializer, SupplementalContentSerializer
 
 
 class SettingsUser:
@@ -35,6 +34,14 @@ class SettingsAuthentication(authentication.BasicAuthentication):
             user.is_authenticated = True
             return (user, None)
         raise exceptions.AuthenticationFailed('No such user')
+
+
+class CategoriesViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        queryset = AbstractCategory.objects.all()
+        serializer = AbstractCategorySerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class SupplementalContentView(generics.ListAPIView):
@@ -54,26 +61,59 @@ class SupplementalContentView(generics.ListAPIView):
         section_list = self.request.GET.getlist("sections")
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
-
+        start = int(self.request.GET.get("start", 0))
+        maxResults = int(self.request.GET.get("max_results", 1000))
         query = AbstractSupplementalContent.objects.filter(
-            Q(locations__section__section_id__in=section_list) |
-            Q(locations__subpart__subpart_id__in=subpart_list) |
-            Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
             approved=True,
             category__isnull=False,
             locations__title=title,
             locations__part=part,
-        ).prefetch_related(
-            Prefetch(
-                'locations',
-                queryset=AbstractLocation.objects.all()
+        )
+        if len(section_list) > 0 or len(subpart_list) > 0 and len(subjgrp_list) > 0:
+            query = query.filter(
+                Q(locations__section__section_id__in=section_list) |
+                Q(locations__subpart__subpart_id__in=subpart_list) |
+                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list)
             )
-        ).prefetch_related(
-            Prefetch(
-                'category',
-                queryset=AbstractCategory.objects.all().select_subclasses()
-            )
-        ).distinct().select_subclasses(SupplementalContent)
+
+        query = query.prefetch_related(
+                    Prefetch(
+                        'locations',
+                        queryset=AbstractLocation.objects.all()
+                    )
+                ).prefetch_related(
+                    Prefetch(
+                        'category',
+                        queryset=AbstractCategory.objects.all().select_subclasses()
+                    )
+                ).distinct().select_subclasses(SupplementalContent).order_by(
+                    "-supplementalcontent__date"
+                )[start:start+maxResults]
+        serializer = SupplementalContentSerializer(query, many=True)
+
+        return Response(serializer.data)
+
+
+class AllSupplementalContentView(APIView):
+    def get(self, *args, **kwargs):
+        start = int(self.request.GET.get("start", 0))
+        maxResults = int(self.request.GET.get("max_results", 1000))
+        query = AbstractSupplementalContent.objects.filter(
+                approved=True,
+                category__isnull=False
+            ).prefetch_related(
+                Prefetch(
+                    'category',
+                    queryset=AbstractCategory.objects.all().select_subclasses()
+                )
+            ).prefetch_related(
+                Prefetch(
+                    'locations',
+                    queryset=AbstractLocation.objects.all()
+                )
+            ).distinct().select_subclasses(SupplementalContent).order_by(
+                "-supplementalcontent__date"
+            )[start:start+maxResults]
         serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
