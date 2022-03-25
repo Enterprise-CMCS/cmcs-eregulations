@@ -71,7 +71,13 @@ export default {
           async handler(suggestedTab) {
               this.tab = this.tabs.indexOf(capitalizeFirstLetter(suggestedTab)) || 5
           }
-      }
+      },
+      // suggested subpart changed, switch to the tab section
+      suggestedSubPart:{
+          async handler() {
+              this.tab = 1
+          }
+      },
     }
 };
 </script>
