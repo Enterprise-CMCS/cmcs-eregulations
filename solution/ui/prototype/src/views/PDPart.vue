@@ -252,7 +252,6 @@ export default {
             // skip this for subparts
             if (payload["scope"] === "subpart"){
               this.suggestedSubPart = payload["identifier"]["subPart"]
-              console.log(this.suggestedSubPart)
               return
             }
             try {
