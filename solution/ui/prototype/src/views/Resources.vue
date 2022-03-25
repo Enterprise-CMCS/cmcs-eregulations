@@ -20,13 +20,18 @@
                     </v-text-field>
                 </form>
             </ResourcesNav>
-            {{ resourcesDisplay }}
             <div
                 class="resources-content-container"
                 :class="contentContainerResourcesClass"
             >
                 <div :class="filtersResourcesClass">
                     <ResourcesFilters
+                        v-if="resourcesDisplay === 'column'"
+                        :resourcesDisplay="resourcesDisplay"
+                        :filters="filters"
+                        @select-filter="updateFilters"
+                    />
+                    <ResourcesSidebarFilters v-else
                         :resourcesDisplay="resourcesDisplay"
                         :filters="filters"
                         @select-filter="updateFilters"
@@ -53,6 +58,7 @@ import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import ResourcesNav from "@/components/resources/ResourcesNav.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
+import ResourcesSidebarFilters from "@/components/resources/ResourcesSidebarFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
@@ -76,6 +82,7 @@ export default {
         Header,
         ResourcesNav,
         ResourcesFilters,
+        ResourcesSidebarFilters,
         ResourcesSelections,
         ResourcesResults,
     },
@@ -350,6 +357,7 @@ export default {
     beforeCreate() {},
 
     async created() {
+        console.log("route", this.$route);
         this.getFormattedPartsList();
         this.getCategoryList();
 
@@ -415,6 +423,7 @@ $sidebar-top-margin: 40px;
 
     .results-sidebar {
         flex: 1;
+        padding: 40px 80px 0;
     }
 
     .search-resources-form {
