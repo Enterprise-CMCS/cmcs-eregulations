@@ -59,6 +59,8 @@ class SupplementalContentView(generics.ListAPIView):
         section_list = self.request.GET.getlist("sections")
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
+        start = int(self.request.GET.get("start", 0))
+        maxResults = int(self.request.GET.get("max_results", 1))
         if len(section_list)==0 and len(subpart_list) ==0 and len(subjgrp_list)==0:
             query = AbstractSupplementalContent.objects.filter(
                 approved=True,
@@ -78,7 +80,9 @@ class SupplementalContentView(generics.ListAPIView):
                     'category',
                     queryset=AbstractCategory.objects.all().select_subclasses()
                 )
-            ).distinct().select_subclasses(SupplementalContent)
+            ).distinct().select_subclasses(SupplementalContent).order_by(
+                "-supplementalcontent__date"
+                    )[start:start+maxResults]
         else:
             query = AbstractSupplementalContent.objects.filter(
                 Q(locations__section__section_id__in=section_list) |
@@ -104,7 +108,9 @@ class SupplementalContentView(generics.ListAPIView):
                     'category',
                     queryset=AbstractCategory.objects.all().select_subclasses()
                 )
-            ).distinct().select_subclasses(SupplementalContent)
+            ).distinct().select_subclasses(SupplementalContent).order_by(
+    "-supplementalcontent__date"
+)
         serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)

@@ -396,7 +396,7 @@ const getHomepageStructure = async () => {
 
     return transformedResult;
 };
-getCategories
+
 /**
  * Returns the result from the all_parts endpoint
  *
@@ -544,7 +544,9 @@ const getSupplementalContentNew = async (
     title,
     part,
     sections = [],
-    subparts = []
+    subparts = [],
+    start=0,
+    max_results=4
 ) => {
     let sString = '';
     for (let s in sections) {
@@ -553,6 +555,7 @@ const getSupplementalContentNew = async (
     for (let sp in subparts) {
         sString = sString + "&subparts=" + subparts[sp]
     }
+    sString= sString+"&start"+start+"&max_results"+max_results
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );
