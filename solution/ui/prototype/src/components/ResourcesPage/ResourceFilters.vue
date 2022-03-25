@@ -12,6 +12,7 @@
         <treeselect
             v-model="selectedResources"
             :multiple="true"
+            value-consists-of="ALL_WITH_INDETERMINATE"
             v-on:input="get_filter"
             :options="this.catOptions"
         />

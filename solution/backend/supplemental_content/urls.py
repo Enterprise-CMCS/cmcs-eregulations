@@ -4,7 +4,8 @@ from .views import (
         SupplementalContentView,
         SupplementalContentSectionsView,
         SupplementalContentByPartView,
-        CategoriesViewSet
+        CategoriesViewSet,
+        AllSupplementalContentView
 )
 category_list = CategoriesViewSet.as_view({'get': 'list'})
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
         path("supplemental_content", SupplementalContentSectionsView.as_view()),
         path("supplemental_content_count_by_part", SupplementalContentByPartView.as_view()),
         path("categories", category_list),
+        path("all_sup", AllSupplementalContentView.as_view()),
 ]

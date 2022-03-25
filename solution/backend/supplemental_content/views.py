@@ -115,7 +115,25 @@ class SupplementalContentView(generics.ListAPIView):
 
         return Response(serializer.data)
 
+class AllSupplementalContentView(APIView):
+    def get(self, *args, **kwargs):
+        start = int(self.request.GET.get("start", 0))
+        maxResults = int(self.request.GET.get("max_results", 100))
+        query = AbstractSupplementalContent.objects.filter(
+                approved=True,
+                category__isnull=False
 
+            ).prefetch_related(
+                Prefetch(
+                    'category',
+                    queryset=AbstractCategory.objects.all().select_subclasses()
+                )
+            ).distinct().select_subclasses(SupplementalContent).order_by(
+                "-supplementalcontent__date"
+                    )[start:start+maxResults]
+        serializer = SupplementalContentSerializer(query, many=True)
+
+        return Response(serializer.data)
 class SupplementalContentSectionsView(generics.CreateAPIView):
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]

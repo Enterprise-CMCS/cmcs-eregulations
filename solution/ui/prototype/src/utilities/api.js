@@ -520,6 +520,12 @@ const getPart = async (title, part) => {
  * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
  */
 
+const getAllSupplementalContentByPieces = async(start, max_results=100)=>{
+    console.log('hi')
+    const result = await(httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
+    return result;
+}
+
 const getSupplementalContent = async (
     title = "42",
     part,
@@ -546,7 +552,7 @@ const getSupplementalContentNew = async (
     sections = [],
     subparts = [],
     start=0,
-    max_results=4
+    max_results=10000
 ) => {
     let sString = '';
     for (let s in sections) {
@@ -555,7 +561,7 @@ const getSupplementalContentNew = async (
     for (let sp in subparts) {
         sString = sString + "&subparts=" + subparts[sp]
     }
-    sString= sString+"&start"+start+"&max_results"+max_results
+    sString= sString+"&start="+start+"&max_results="+max_results
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );
@@ -604,6 +610,7 @@ export {
     getSupplementalContentCountForPart,
     getCategories,
     getPartsDetails,
-    getSubPartsandSections
+    getSubPartsandSections,
+    getAllSupplementalContentByPieces
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

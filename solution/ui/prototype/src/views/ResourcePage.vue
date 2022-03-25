@@ -37,7 +37,7 @@ import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import { Splitpanes, Pane } from "splitpanes";
-import { getSupplementalContentNew } from "../utilities/api";
+import { getSupplementalContentNew, getAllSupplementalContentByPieces } from "../utilities/api";
 import "splitpanes/dist/splitpanes.css";
 import ResourceFilters from "../components/ResourcesPage/ResourceFilters.vue";
 import SectionPane from "../components/ResourcesPage/SectionSide.vue";
@@ -54,16 +54,34 @@ export default {
     },
     data: () => ({
         supList: [],
-        filters: [],
+        filters: {resources:[]},
         singleSupList: [],
         sortedSupList: [],
+
     }),
+    async created() {
+        try {
+            this.supList = await getAllSupplementalContentByPieces(0,100);
+            console.log(this.supList)
+            for (let sup of this.supList) {
+
+              
+                this.singleSupList.push(sup);
+            }
+            
+            this.sortContent()
+        } catch (error) {
+            console.error(error);
+        } finally {
+            console.log(this.subParts);
+        }
+    },
     methods: {
         setResourcesParams(payload) {
             this.filters = payload;
 
             this.sortedSupList = [];
-
+            this.supList =[]
             this.getSupContent();
 
             // Implement response to user choosing a section or subpart here
@@ -74,7 +92,7 @@ export default {
                 for (let content of this.singleSupList) {
                     if (
                         this.filters.resources.includes(content.name) ||
-                        this.filters.resources.length == 0
+                        this.filters.resources.length == 0 
                     ) {
                         if (content.supplemental_content.length > 0) {
                             for (let supplement of content.supplemental_content) {
@@ -87,13 +105,17 @@ export default {
                                 if (subcat.supplemental_content.length > 0) {
                                     for (let supplement of subcat.supplemental_content) {
                                         supplement.subcategory = subcat.name;
-                                        supplement.category = content.name;
+                                        supplement.category = subcat.name;
                                         this.sortedSupList.push(supplement);
                                     }
                                 }
                             }
                         }
                     }
+
+              
+                    console.log('hhi')
+                this.sortedSupList.filter(content => content.name)
                 }
             } catch (error) {
                 console.log("error");
