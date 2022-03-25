@@ -35,12 +35,14 @@ class SettingsAuthentication(authentication.BasicAuthentication):
             return (user, None)
         raise exceptions.AuthenticationFailed('No such user')
 
+
 class CategoriesViewSet(viewsets.ViewSet):
 
     def list(self, request):
         queryset = AbstractCategory.objects.all()
         serializer = AbstractCategorySerializer(queryset, many=True)
         return Response(serializer.data)
+
 
 class SupplementalContentView(generics.ListAPIView):
     serializer_class = AbstractSupplementalContentSerializer
@@ -61,7 +63,7 @@ class SupplementalContentView(generics.ListAPIView):
         subjgrp_list = self.request.GET.getlist("subjectgroups")
         start = int(self.request.GET.get("start", 0))
         maxResults = int(self.request.GET.get("max_results", 1000))
-        if len(section_list)==0 and len(subpart_list) ==0 and len(subjgrp_list)==0:
+        if len(section_list) == 0 and len(subpart_list) == 0 and len(subjgrp_list) == 0:
             query = AbstractSupplementalContent.objects.filter(
                 approved=True,
                 category__isnull=False,
@@ -106,11 +108,12 @@ class SupplementalContentView(generics.ListAPIView):
                     queryset=AbstractCategory.objects.all().select_subclasses()
                 )
             ).distinct().select_subclasses(SupplementalContent).order_by(
-    "-supplementalcontent__date"
-)
+                "-supplementalcontent__date"
+            )
         serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
+
 
 class AllSupplementalContentView(APIView):
     def get(self, *args, **kwargs):
@@ -135,6 +138,7 @@ class AllSupplementalContentView(APIView):
         serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
+
 
 class SupplementalContentSectionsView(generics.CreateAPIView):
     authentication_classes = [SettingsAuthentication]
@@ -165,7 +169,6 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
         return Response({'error': False, 'content': request.data})
 
 
-
 class SupplementalContentByPartView(APIView):
     def get(self, request, format=None):
         part = request.GET.get('part', '')
@@ -178,12 +181,3 @@ class SupplementalContentByPartView(APIView):
         for r in results:
             data[r.display_name] = r.num_locations
         return JsonResponse(data)
-
-class SupplementalContentAll(generics.ListAPIView):
- 
-
-     
-    queryset = SupplementalContent.objects.all()
-    serializer_class = SupplementalContentSerializer
-
-

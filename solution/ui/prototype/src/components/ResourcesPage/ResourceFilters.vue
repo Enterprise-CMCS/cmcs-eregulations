@@ -27,12 +27,7 @@
             outlined
         >
             <template #selection="{ item }">
-                <v-chip
-                    close
-                    color="blue lighten-5"
-                    @click:close="remove(item)"
-                    >{{ item }}</v-chip
-                >
+                <v-chip color="blue lighten-5">{{ item }}</v-chip>
             </template></v-autocomplete
         >
         <h3>Part</h3>
@@ -47,12 +42,7 @@
             outlined
         >
             <template #selection="{ item }">
-                <v-chip
-                    close
-                    color="blue lighten-5"
-                    @click:close="remove(item)"
-                    >{{ item.name }}</v-chip
-                >
+                <v-chip color="blue lighten-5">{{ item.name }}</v-chip>
             </template>
         </v-autocomplete>
         <h3>Section</h3>
@@ -68,12 +58,7 @@
             v-on:change="get_filter"
         >
             <template #selection="{ item }">
-                <v-chip
-                    close
-                    color="blue lighten-5"
-                    @click:close="remove(item)"
-                    >{{ item.label }}</v-chip
-                >
+                <v-chip color="blue lighten-5">{{ item.label }}</v-chip>
             </template></v-autocomplete
         >
     </div>
@@ -152,7 +137,7 @@ export default {
                     this.filters[section.part].subparts.push(section.subpart);
                 }
             }
-            
+
             this.resourceParamsEmitter({
                 parts: this.filters,
                 resources: this.selectedResources,
