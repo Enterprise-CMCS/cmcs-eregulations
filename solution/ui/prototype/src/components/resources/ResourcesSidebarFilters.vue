@@ -38,7 +38,9 @@
                                             </v-list-item-action>
                                             <v-list-item-content>
                                                 <v-list-item-subtitle>
-                                                    {{ item | itemFilter(value) }}
+                                                    {{
+                                                        item | itemFilter(value)
+                                                    }}
                                                 </v-list-item-subtitle>
                                             </v-list-item-content>
                                         </template>
@@ -57,8 +59,6 @@
 export default {
     name: "ResourcesSidebarFilters",
 
-    components: {},
-
     props: {
         resourcesDisplay: {
             type: String,
@@ -70,41 +70,6 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
-    created() {
-        console.log("filters", this.filters);
-    },
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
     filters: {
         itemFilter(item, value) {
             if (value.label === "Part") return item.label;
