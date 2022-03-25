@@ -18,7 +18,10 @@
                         {{ item.sub_category }}
                     </div>
                 </div>
-                <div class="result-content-wrapper" :key="item.name + item.created_at">
+                <div
+                    class="result-content-wrapper"
+                    :key="item.name + item.created_at"
+                >
                     <SupplementalContentObject
                         :key="item.created_at"
                         :name="item.name"
@@ -26,6 +29,14 @@
                         :date="item.date"
                         :url="item.url"
                     />
+                </div>
+                <div class="related-sections" :key="item.url + item.created_at">
+                    <span class="related-sections-title">
+                        Related Sections:
+                    </span>
+                    §§ 433.51 | 435.219 | 441.510 | 441.515 | 441.520 | 441.525
+                    | 441.530 | 441.540 | 441.545 | 441.555 | 441.560 | 441.565
+                    | 441.570 | 441.575 | 441.580 | 441.585
                 </div>
             </template>
         </div>
@@ -167,7 +178,26 @@ $eregs-image-path: "~legacy-static/images";
         }
 
         .result-content-wrapper {
+            margin-bottom: 20px;
+
+            .supplemental-content a.supplemental-content-link {
+                .supplemental-content-date,
+                .supplemental-content-title,
+                .supplemental-content-description {
+                    font-size: 18px;
+                }
+            }
+        }
+
+        .related-sections {
             margin-bottom: 40px;
+            font-size: 12px;
+            color: $mid_gray;
+
+            .related-sections-title {
+                font-weight: 600;
+                color: $dark_gray;
+            }
         }
     }
 }
