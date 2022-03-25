@@ -236,10 +236,29 @@ export default {
             this.filters.subpart.listItems = await getSubPartsForPart(part);
         },
         async getFormattedSectionsList(part, subpart) {
-            this.filters.section.listItems = await getSectionObjects(part, subpart);
+            this.filters.section.listItems = await getSectionObjects(
+                part,
+                subpart
+            );
         },
         async getCategoryList() {
-            this.filters.resourceCategory.listItems = await getCategories();
+            const rawCats = await getCategories();
+            const reducedCats = rawCats
+                .filter((item) => item.object_type === "category")
+                .sort((a, b) =>
+                    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+                )
+                .reduce((acc, item) => {
+                    acc[item.name] = item;
+                    acc[item.name].subcategories = [];
+                    return acc;
+                }, {});
+            rawCats.forEach((item) => {
+                if (item.object_type === "subcategory") {
+                    reducedCats[item.parent.name].subcategories.push(item);
+                }
+            });
+            this.filters.resourceCategory.listItems = Object.values(reducedCats);
         },
     },
 
