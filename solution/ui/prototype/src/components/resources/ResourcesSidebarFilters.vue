@@ -14,10 +14,7 @@
                         </v-expansion-panel-header>
                         <v-expansion-panel-content class="panel-content">
                             <v-list flat three-line>
-                                <v-list-item-group
-                                    multiple
-                                    active-class=""
-                                >
+                                <v-list-item-group multiple active-class="">
                                     <v-list-item
                                         v-for="item in value.listItems"
                                         :key="item.name"
@@ -28,10 +25,9 @@
                                                     :input-value="active"
                                                 ></v-checkbox>
                                             </v-list-item-action>
-
                                             <v-list-item-content>
                                                 <v-list-item-subtitle>
-                                                    {{ item.label }}
+                                                    {{ item | itemFilter(value) }}
                                                 </v-list-item-subtitle>
                                             </v-list-item-content>
                                         </template>
@@ -96,54 +92,61 @@ export default {
             console.log("method has been invoked");
         },
     },
+    filters: {
+        itemFilter(item, value) {
+            if (value.label === "Part") return item.label;
+            return item.name ?? `${item.label} ${item.description}`;
+        },
+    },
 };
 </script>
 
-<style>
-.sidebar-header {
-    font-size: 15px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
+<style lang="scss">
 .sidebar-filters-container {
     overflow: auto;
     width: 100%;
     padding-bottom: 30px;
     margin: 40px 50px 0;
-}
 
-.panel-container {
-    border-bottom: 1px solid #ddd;
-}
-.panel-header {
-    font-size: 13px;
-    font-weight: bold;
-    color: black;
-}
+    .sidebar-header {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-.v-expansion-panel-content .v-expansion-panel-content__wrap {
-    max-height: 250px;
-    overflow: scroll;
-    padding-left: 0px;
-    padding-right: 0px;
-}
+    .panel-container {
+        border-bottom: 1px solid #ddd;
+    }
 
-.v-list-item-group .v-list-item {
-    padding: 0;
-}
+    .panel-header {
+        font-size: 15px;
+        font-weight: bold;
+        color: black;
+    }
 
-.v-list-item-group .v-list-item.v-list-item--link {
-    min-height: 25px;
-}
+    .v-expansion-panel-content .v-expansion-panel-content__wrap {
+        max-height: 250px;
+        overflow: scroll;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
 
-.v-list-item-group .v-list-item .v-list-item__action {
-    margin-top: 15px;
-    margin-right: 5px;
-    margin-bottom: 0;
-}
+    .v-list-item-group .v-list-item {
+        padding: 0;
+    }
 
-.v-list-item-group .v-list-item .v-list-item__content {
-    height: 30px;
+    .v-list-item-group .v-list-item.v-list-item--link {
+        min-height: 25px;
+    }
+
+    .v-list-item-group .v-list-item .v-list-item__action {
+        margin-top: 15px;
+        margin-right: 5px;
+        margin-bottom: 0;
+    }
+
+    .v-list-item-group .v-list-item .v-list-item__content {
+        height: 30px;
+    }
 }
 </style>
