@@ -24,9 +24,9 @@
             <div class="title-container" style="margin-bottom: 25px">
                 <span class="subsection">§</span>
                 <span class="resource-title"> {{ titleLabel }} Resources </span>
-                <a style="font-size: 14px; margin-left: 30px">
-                    View All Resources</a
-                >
+                <v-btn text @click="routeToResources" class="show-all-btn">
+                    View All Resources
+                </v-btn>
             </div>
             <div class="wrapper">
                 <div class="one">
@@ -69,7 +69,7 @@
             </template>
             <template v-else>
                 <div
-                    v-for="category in availableContent"
+                    v-for="(category, idx) in availableContent"
                     :key="category.created_at"
                     :class="{ 'list-view': !cardView }"
                 >
@@ -84,7 +84,7 @@
                         />
                     </div>
                     <div v-else>
-                        <supplemental-content-list
+                        <SupplementalContentList
                             v-for="c in category.supplemental_content"
                             :key="c.created_at"
                             :supplemental-content="c"
@@ -105,14 +105,21 @@
                             />
                         </div>
                         <div v-else>
-                            <supplemental-content-list
+                            <SupplementalContentList
                                 v-for="c in subcategory.supplemental_content"
                                 :key="c.created_at"
                                 :supplemental-content="c"
                             />
                         </div>
                     </div>
-                    <v-divider class="hr-divider" />
+                    <v-divider v-if="availableContent.length - 1 != idx" class="hr-divider" />
+                    <div class="btn-container" v-else>
+                        <ResourcesBtn
+                            :clickHandler="routeToResources"
+                            label="All"
+                            type="solid"
+                        />
+                    </div>
                 </div>
             </template>
         </div>
@@ -121,6 +128,7 @@
 
 <script>
 import { getSupplementalContent } from "@/utilities/api";
+import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
 import SupplementalContentCard from "@/components/SupplementalContentCard";
 import SupplementalContentList from "@/components/SupplementalContentList";
@@ -129,6 +137,7 @@ export default {
     name: "SectionResources",
 
     components: {
+        ResourcesBtn,
         SimpleSpinner,
         SupplementalContentList,
         SupplementalContentCard,
@@ -139,6 +148,7 @@ export default {
         part: String,
         selectedIdentifier: Array,
         selectedScope: String,
+        routeToResources: Function,
     },
 
     data() {
@@ -333,6 +343,23 @@ $eregs-image-path: "~legacy-static/images";
         .resource-title {
             font-size: 30px;
         }
+
+        .show-all-btn {
+            color: $primary_link_color;
+            letter-spacing: normal;
+            text-decoration: underline;
+            text-transform: capitalize;
+            margin-left: 30px;
+
+            .v-btn__content {
+                font-size: 14px;
+            }
+        }
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
     }
 }
 

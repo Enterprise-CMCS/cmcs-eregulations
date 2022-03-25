@@ -1,5 +1,4 @@
 services:
-
   prototype:
     container_name: prototype
     environment:
