@@ -219,9 +219,18 @@ export default {
 
                 try {
                     const resultArray = await Promise.all(partPromises);
+                    //flatten array
+                    let finalArray = [];
+                    for (const category of resultArray.flat()) {
+                        finalArray = finalArray.concat(category);
+                        for (const subcategory of category.sub_categories) {
+                            subcategory.parent_category = category.name;
+                            finalArray = finalArray.concat(subcategory);
+                        }
+                    }
                     this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(resultArray.flat())
-                        : resultArray.flat();
+                        ? this.filterCategories(finalArray)
+                        : finalArray;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
