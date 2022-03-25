@@ -259,9 +259,9 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                // only get content if a part is selected
                 if (_isEmpty(newParams.part)) {
-                    // don't make supp content request, but clear lists
+                    // only get content if a part is selected
+                    // don't make supp content request here, but clear lists
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
                     this.supplementalContent = [];
@@ -284,22 +284,15 @@ export default {
                             this.queryParams.part,
                             this.queryParams.subpart
                         );
-                    } else if (
-                        _isEmpty(oldParams.section) &&
-                        newParams.section
-                    ) {
-                        // get supplemental content on fresh section selection
-                        this.getSupplementalContent(this.queryParams);
                     } else {
                         const oldParts = oldParams.part.split(",");
                         const newParts = newParams.part.split(",");
 
                         if (newParts.length > oldParts.length) {
-                            // get supplemental content for new part only
                             const newPart = _difference(newParts, oldParts)[0];
                             this.getFormattedSubpartsList(newPart);
                             this.getFormattedSectionsList(
-                                this.queryParams.part,
+                                newPart,
                                 this.queryParams.subpart
                             );
                         }
