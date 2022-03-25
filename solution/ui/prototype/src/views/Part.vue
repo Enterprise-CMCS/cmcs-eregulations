@@ -201,8 +201,13 @@ export default {
                 return acc;
             }, {});
 
+            const routeName =
+                this.resourcesDisplay === "sidebar"
+                    ? "resources-sidebar"
+                    : "resources";
+
             this.$router.push({
-                name: "resources",
+                name: routeName,
                 query: {
                     title: this.title,
                     part: this.part,

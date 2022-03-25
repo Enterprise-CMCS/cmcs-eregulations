@@ -20,21 +20,29 @@
                     </v-text-field>
                 </form>
             </ResourcesNav>
-            <div class="resources-content-container">
-                <ResourcesFilters
-                    :resourcesDisplay="resourcesDisplay"
-                    :filters="filters"
-                    @select-filter="updateFilters"
-                />
-                <ResourcesSelections
-                    :filterParams="filterParams"
-                    @chip-filter="removeChip"
-                    @clear-selections="clearSelections"
-                />
-                <ResourcesResults
-                    :isLoading="isLoading"
-                    :content="supplementalContent"
-                />
+            {{ resourcesDisplay }}
+            <div
+                class="resources-content-container"
+                :class="contentContainerResourcesClass"
+            >
+                <div :class="filtersResourcesClass">
+                    <ResourcesFilters
+                        :resourcesDisplay="resourcesDisplay"
+                        :filters="filters"
+                        @select-filter="updateFilters"
+                    />
+                </div>
+                <div :class="resultsResourcesClass">
+                    <ResourcesSelections
+                        :filterParams="filterParams"
+                        @chip-filter="removeChip"
+                        @clear-selections="clearSelections"
+                    />
+                    <ResourcesResults
+                        :isLoading="isLoading"
+                        :content="supplementalContent"
+                    />
+                </div>
             </div>
         </div>
     </body>
@@ -78,7 +86,8 @@ export default {
         return {
             isLoading: false,
             queryParams: this.$route.query,
-            resourcesDisplay: this.$route.params.resourcesDisplay || "column",
+            resourcesDisplay:
+                this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
                 title: {
                     label: "Title",
@@ -123,7 +132,13 @@ export default {
 
     computed: {
         contentContainerResourcesClass() {
-            return `content-container-${this.resourcesDisplay}`;
+            return `resources-content-container-${this.resourcesDisplay}`;
+        },
+        filtersResourcesClass() {
+            return `filters-${this.resourcesDisplay}`;
+        },
+        resultsResourcesClass() {
+            return `results-${this.resourcesDisplay}`;
         },
         filterParams() {
             return {
@@ -381,12 +396,25 @@ $sidebar-top-margin: 40px;
         flex-direction: column;
     }
 
-    .content-container-column {
-        justify-content: center;
+    .resources-content-container-column {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
     }
 
-    .content-container-sidebar {
-        justify-content: space-between;
+    .resources-content-container-sidebar {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .filters-sidebar {
+        display: flex;
+        flex: 0 0 430px;
+        max-width: 430px;
+    }
+
+    .results-sidebar {
+        flex: 1;
     }
 
     .search-resources-form {

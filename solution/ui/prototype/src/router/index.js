@@ -49,6 +49,11 @@ const routes = [
         component: Resources,
     },
     {
+        path: "/resources-sidebar",
+        name: "resources-sidebar",
+        component: Resources,
+    },
+    {
         path: "/cache",
         name: "Cache-Explorer",
         component: CacheExplorer,
