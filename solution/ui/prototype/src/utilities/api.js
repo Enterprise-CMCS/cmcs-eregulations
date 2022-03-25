@@ -521,7 +521,6 @@ const getPart = async (title, part) => {
  */
 
 const getAllSupplementalContentByPieces = async(start, max_results=100)=>{
-    console.log('hi')
     const result = await(httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
     return result;
 }

@@ -119,7 +119,6 @@ export default {
             this.selectedSections = [];
             this.selectedTitles = [];
             this.filters = [];
-            console.log("clearing");
             this.resourceParamsEmitter(this.filters);
         },
         filterSections(parts) {
@@ -153,7 +152,7 @@ export default {
                     this.filters[section.part].subparts.push(section.subpart);
                 }
             }
-            console.log(this.filters);
+            
             this.resourceParamsEmitter({
                 parts: this.filters,
                 resources: this.selectedResources,
