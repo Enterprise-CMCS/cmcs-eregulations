@@ -13,17 +13,28 @@
                             {{ value.label }}
                         </v-expansion-panel-header>
                         <v-expansion-panel-content class="panel-content">
-                            <v-list flat three-line>
+                            <v-list v-if="name === 'title'" flat three-line>
+                                <v-list-item-group multiple active-class="">
+                                    <v-list-item>
+                                        <v-list-item-content>
+                                            <v-list-item-subtitle>
+                                                <v-radio
+                                                    label="42 CFR - Public Health"
+                                                ></v-radio>
+                                            </v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                </v-list-item-group>
+                            </v-list>
+                            <v-list v-else flat three-line>
                                 <v-list-item-group multiple active-class="">
                                     <v-list-item
                                         v-for="item in value.listItems"
                                         :key="item.name"
                                     >
-                                        <template v-slot:default="{ active }">
+                                        <template>
                                             <v-list-item-action>
-                                                <v-checkbox
-                                                    :input-value="active"
-                                                ></v-checkbox>
+                                                <v-checkbox></v-checkbox>
                                             </v-list-item-action>
                                             <v-list-item-content>
                                                 <v-list-item-subtitle>
@@ -61,7 +72,9 @@ export default {
 
     beforeCreate() {},
 
-    created() {},
+    created() {
+        console.log("filters", this.filters);
+    },
 
     beforeMount() {},
 
