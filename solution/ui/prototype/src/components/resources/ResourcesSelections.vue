@@ -1,28 +1,32 @@
 <template>
     <div class="selections-container">
-        <template v-for="(array, name, idx) in splitParams">
-            <div
-                v-if="array && name !== 'title'"
-                :key="array[0] + name + idx"
-                class="chip-group"
-            >
-                <v-chip
-                    v-for="value in array"
-                    :key="value + name + idx"
-                    close
-                    @click:close="handleClose(value, name)"
+        <div class="selections-content">
+            <template v-for="(array, name, idx) in splitParams">
+                <div
+                    v-if="array && name !== 'title'"
+                    :key="array[0] + name + idx"
+                    class="chip-group"
                 >
-                    {{ value }} {{ name }}
-                </v-chip>
-            </div>
-        </template>
-        <v-chip
-            v-if="showClearAll"
-            class="clear-all-chip"
-            outlined
-            @click="handleCloseAll"
-            >Clear All</v-chip
-        >
+                    <v-chip
+                        v-for="value in array"
+                        :key="value + name + idx"
+                        close
+                        close-icon="mdi-close"
+                        text-color="#046791"
+                        @click:close="handleClose(value, name)"
+                    >
+                        {{ value | formatChipLabel(name) }}
+                    </v-chip>
+                </div>
+            </template>
+            <v-chip
+                v-if="showClearAll"
+                class="clear-all-chip"
+                outlined
+                @click="handleCloseAll"
+                >Clear All</v-chip
+            >
+        </div>
     </div>
 </template>
 
@@ -94,6 +98,27 @@ export default {
             this.$emit("clear-selections");
         },
     },
+
+    filters: {
+        formatChipLabel(value, name) {
+            switch (name) {
+                case "part":
+                    return `Part ${value}`;
+                    break;
+                case "subpart":
+                    return `Subpart ${value}`;
+                    break;
+                case "section":
+                    return `§ ${value}`;
+                    break;
+                case "resourceCategory":
+                    return `${value}`;
+                    break;
+                default:
+                    return `${name} ${value}`;
+            }
+        }
+    },
 };
 </script>
 
@@ -104,15 +129,39 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
-.chip-group {
-    display: inline;
-}
-.v-chip.v-chip--outlined.clear-all-chip {
-    margin-left: 8px;
-    text-transform: uppercase;
-    border: none;
-    font-size: 12px;
-    font-weight: bold;
-    color: $mid_blue;
+
+.selections-container {
+    overflow: auto;
+    width: 100%;
+    margin-bottom: 30px;
+
+    .selections-content {
+        max-width: $text-max-width;
+        margin: 0 auto;
+
+        .chip-group {
+            display: inline;
+        }
+
+        .v-chip {
+            color: $mid_blue;
+            font-size: 15px;
+            font-weight: 600;
+            background: $lightest_blue;
+            border: 1px solid #c0eaf8;
+            margin-right: 10px;
+
+            &.v-chip--outlined.clear-all-chip {
+                text-transform: uppercase;
+                border: none;
+                font-size: 12px;
+                font-weight: bold;
+            }
+
+            .v-chip__content button.v-chip__close {
+                color: $mid_blue;
+            }
+        }
+    }
 }
 </style>

@@ -96,6 +96,7 @@ $eregs-image-path: "~legacy-static/images";
 .filters-container {
     overflow: auto;
     width: 100%;
+    padding-bottom: 30px;
 
     .content-with-column {
         margin: 0 auto;
