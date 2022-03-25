@@ -2,42 +2,47 @@
     <div class="results-container">
         <div class="results-content">
             <hr class="top-rule" />
-            <div class="results-count">{{ sortedContent.length }} Results</div>
-            <template v-for="(item, idx) in sortedContent">
-                <div :key="item.created_at + idx">
-                    <div class="category-labels">
-                        <div
-                            v-if="item.category"
-                            class="result-label category-label"
-                        >
-                            {{ item.category }}
+            <div class="results-count">
+                <span v-if="isLoading">Loading...</span>
+                <span v-else>{{ sortedContent.length }} Results</span>
+            </div>
+            <div v-if="!isLoading">
+                <template v-for="(item, idx) in sortedContent">
+                    <div :key="item.created_at + idx">
+                        <div class="category-labels">
+                            <div
+                                v-if="item.category"
+                                class="result-label category-label"
+                            >
+                                {{ item.category }}
+                            </div>
+                            <div
+                                v-if="item.sub_category"
+                                class="result-label subcategory-label"
+                            >
+                                {{ item.sub_category }}
+                            </div>
                         </div>
-                        <div
-                            v-if="item.sub_category"
-                            class="result-label subcategory-label"
-                        >
-                            {{ item.sub_category }}
+                        <div class="result-content-wrapper">
+                            <SupplementalContentObject
+                                :name="item.name"
+                                :description="item.description"
+                                :date="item.date"
+                                :url="item.url"
+                            />
+                        </div>
+                        <div class="related-sections">
+                            <span class="related-sections-title">
+                                Related Sections:
+                            </span>
+                            §§ 433.51 | 435.219 | 441.510 | 441.515 | 441.520 |
+                            441.525 | 441.530 | 441.540 | 441.545 | 441.555 |
+                            441.560 | 441.565 | 441.570 | 441.575 | 441.580 |
+                            441.585
                         </div>
                     </div>
-                    <div class="result-content-wrapper">
-                        <SupplementalContentObject
-                            :name="item.name"
-                            :description="item.description"
-                            :date="item.date"
-                            :url="item.url"
-                        />
-                    </div>
-                    <div class="related-sections">
-                        <span class="related-sections-title">
-                            Related Sections:
-                        </span>
-                        §§ 433.51 | 435.219 | 441.510 | 441.515 | 441.520 |
-                        441.525 | 441.530 | 441.540 | 441.545 | 441.555 |
-                        441.560 | 441.565 | 441.570 | 441.575 | 441.580 |
-                        441.585
-                    </div>
-                </div>
-            </template>
+                </template>
+            </div>
         </div>
     </div>
 </template>
@@ -57,6 +62,11 @@ export default {
             type: Array,
             required: false,
             default: [],
+        },
+        isLoading: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
     },
 

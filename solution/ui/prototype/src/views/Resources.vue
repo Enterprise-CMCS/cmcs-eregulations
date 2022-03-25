@@ -31,7 +31,10 @@
                     @chip-filter="removeChip"
                     @clear-selections="clearSelections"
                 />
-                <ResourcesResults :content="supplementalContent" />
+                <ResourcesResults
+                    :isLoading="isLoading"
+                    :content="supplementalContent"
+                />
             </div>
         </div>
     </body>
@@ -73,6 +76,7 @@ export default {
 
     data() {
         return {
+            isLoading: false,
             queryParams: this.$route.query,
             resourcesDisplay: this.$route.params.resourcesDisplay || "column",
             filters: {
@@ -184,6 +188,7 @@ export default {
             });
         },
         async getSupplementalContent(dataQueryParams) {
+            this.isLoading = true;
             const queryParamsObj = { ...dataQueryParams };
             if (queryParamsObj.part) {
                 queryParamsObj.part = queryParamsObj.part.split(",");
@@ -209,9 +214,12 @@ export default {
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
+                } finally {
+                    this.isLoading = false;
                 }
             } else {
                 this.supplementalContent = [];
+                this.isLoading = false;
             }
         },
         async getFormattedPartsList() {
