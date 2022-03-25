@@ -219,7 +219,6 @@ export default {
 
                 try {
                     const resultArray = await Promise.all(partPromises);
-                    console.log(resultArray);
                     //flatten array
                     let finalArray = [];
                     for (const category of resultArray.flat()) {
@@ -228,7 +227,6 @@ export default {
                             finalArray = finalArray.concat(subcategory);
                         }
                     }
-                    console.log(finalArray);
                     this.supplementalContent = this.queryParams.resourceCategory
                         ? this.filterCategories(finalArray)
                         : finalArray;

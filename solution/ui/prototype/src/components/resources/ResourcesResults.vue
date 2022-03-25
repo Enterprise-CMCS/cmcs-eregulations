@@ -49,6 +49,7 @@
 
 <script>
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
+import _uniqBy from "lodash/uniq";
 
 export default {
     name: "ResourcesResults",
@@ -94,7 +95,7 @@ export default {
 
     computed: {
         sortedContent() {
-            return this.content
+            let x = this.content
                 .filter((category) => {
                     return (
                         category.supplemental_content?.length ||
@@ -122,6 +123,11 @@ export default {
 
                     return returnArr;
                 });
+            //remove duplicates
+            x = _uniqBy(x, (item) => {
+                return item.name;
+            });
+            return x;
         },
     },
 
