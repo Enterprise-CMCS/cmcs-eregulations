@@ -49,6 +49,8 @@
 
 <script>
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
+import _uniqBy from "lodash/uniq";
+import _has from "lodash/has";
 
 export default {
     name: "ResourcesResults",
@@ -94,7 +96,7 @@ export default {
 
     computed: {
         sortedContent() {
-            return this.content
+            let x = this.content
                 .filter((category) => {
                     return (
                         category.supplemental_content?.length ||
@@ -115,13 +117,23 @@ export default {
                         });
                     } else {
                         category.supplemental_content.forEach((item) => {
-                            item.category = category.name;
+                            if (_has(category, "parent_category")) {
+                                item.category = category.parent_category;
+                                item.sub_category = category.name;
+                            } else {
+                                item.category = category.name;
+                            }                            
                             returnArr.push(item);
                         });
                     }
 
                     return returnArr;
                 });
+            //remove duplicates
+            x = _uniqBy(x, (item) => {
+                return item.name;
+            });
+            return x;
         },
     },
 
