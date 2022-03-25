@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import Part from "@/views/Part.vue";
+import Resources from "@/views/Resources.vue";
 import CacheExplorer from "@/views/CacheExplorer";
 import PDPart from "@/views/PDPart";
 import ResourcePage from "@/views/ResourcePage"
@@ -42,6 +43,11 @@ const routes = [
         path: "/:title/:part/:resourcesDisplay?", // resourcesDisplay will be "drawer" or "sidebar"
         name: "part",
         component: Part,
+    },
+    {
+        path: "/resources",
+        name: "resources",
+        component: Resources,
     },
     {
         path: "/cache",

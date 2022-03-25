@@ -77,9 +77,11 @@ export default {
             default: () => {},
         },
     },
+
     data: () => ({
         supList: null,
     }),
+
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);

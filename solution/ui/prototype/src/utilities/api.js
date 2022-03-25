@@ -98,100 +98,93 @@ function fetchJson(url, options = {}, retryCount = 0) {
         url = query ? `${url}?${query}` : url;
     }
 
-    return (
-        Promise.resolve()
-            .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
-            .then((value) => {
-                if (value && Date.now() < value.expiration_date) {
-                    console.log("CACHE HIT");
-                    return value;
-                } else {
-                    console.log("CACHE MISS");
-                    return fetch(url, merged);
-                }
-            })
-            .catch((err) => {
-                // this will capture network/timeout errors, because fetch does not consider http Status 5xx or 4xx as errors
-                if (retryCount < config.maxRetryCount) {
-                    let backoff = retryCount * retryCount;
-                    if (backoff < 1) backoff = 1;
+    return Promise.resolve()
+        .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
+        .then((value) => {
+            if (value && Date.now() < value.expiration_date) {
+                console.log("CACHE HIT");
+                return value;
+            } else {
+                console.log("CACHE MISS");
+                return fetch(url, merged);
+            }
+        })
+        .catch((err) => {
+            // this will capture network/timeout errors, because fetch does not consider http Status 5xx or 4xx as errors
+            if (retryCount < config.maxRetryCount) {
+                let backoff = retryCount * retryCount;
+                if (backoff < 1) backoff = 1;
 
-                    return Promise.resolve()
-                        .then(() =>
-                            console.log(
-                                `Retrying count = ${retryCount}, Backoff = ${backoff}`
-                            )
+                return Promise.resolve()
+                    .then(() =>
+                        console.log(
+                            `Retrying count = ${retryCount}, Backoff = ${backoff}`
                         )
-                        .then(() => delay(backoff))
-                        .then(() => fetchJson(url, options, retryCount + 1));
-                }
-                throw parseError(err);
-            })
-            .then((response) => {
-                isOk = response.ok;
-                httpStatus = response.status;
-                return response;
-            })
-            .then((response) => {
-                if (_isFunction(response.text)) return response.text();
-                return response;
-            })
-            .then((text) => {
-                let json;
-                try {
-                    if (_isObject(text)) {
-                        json = text;
-                    } else {
-                        json = JSON.parse(text);
-                    }
-                } catch (err) {
-                    if (httpStatus >= 400) {
-                        if (
-                            httpStatus >= 501 &&
-                            retryCount < config.maxRetryCount
-                        ) {
-                            let backoff = retryCount * retryCount;
-                            if (backoff < 1) backoff = 1;
-
-                            return Promise.resolve()
-                                .then(() =>
-                                    console.log(
-                                        `Retrying count = ${retryCount}, Backoff = ${backoff}`
-                                    )
-                                )
-                                .then(() => delay(backoff))
-                                .then(() =>
-                                    fetchJson(url, options, retryCount + 1)
-                                );
-                        }
-                        throw parseError({
-                            message: text,
-                            status: httpStatus,
-                        });
-                    } else {
-                        throw parseError(
-                            new Error(
-                                "The server did not return a json response."
-                            )
-                        );
-                    }
-                }
-
-                return json;
-            })
-            .then((json) => {
-                if (_isBoolean(isOk) && !isOk) {
-                    throw parseError({ ...json, status: httpStatus });
+                    )
+                    .then(() => delay(backoff))
+                    .then(() => fetchJson(url, options, retryCount + 1));
+            }
+            throw parseError(err);
+        })
+        .then((response) => {
+            isOk = response.ok;
+            httpStatus = response.status;
+            return response;
+        })
+        .then((response) => {
+            if (_isFunction(response.text)) return response.text();
+            return response;
+        })
+        .then((text) => {
+            let json;
+            try {
+                if (_isObject(text)) {
+                    json = text;
                 } else {
-                    json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-                    localforage.setItem(
-                        url.replace(apiPath, merged.method),
-                        json
-                    );
-                    return json;
+                    json = JSON.parse(text);
                 }
-            })
-    );
+            } catch (err) {
+                if (httpStatus >= 400) {
+                    if (
+                        httpStatus >= 501 &&
+                        retryCount < config.maxRetryCount
+                    ) {
+                        let backoff = retryCount * retryCount;
+                        if (backoff < 1) backoff = 1;
+
+                        return Promise.resolve()
+                            .then(() =>
+                                console.log(
+                                    `Retrying count = ${retryCount}, Backoff = ${backoff}`
+                                )
+                            )
+                            .then(() => delay(backoff))
+                            .then(() =>
+                                fetchJson(url, options, retryCount + 1)
+                            );
+                    }
+                    throw parseError({
+                        message: text,
+                        status: httpStatus,
+                    });
+                } else {
+                    throw parseError(
+                        new Error("The server did not return a json response.")
+                    );
+                }
+            }
+
+            return json;
+        })
+        .then((json) => {
+            if (_isBoolean(isOk) && !isOk) {
+                throw parseError({ ...json, status: httpStatus });
+            } else {
+                json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
+                localforage.setItem(url.replace(apiPath, merged.method), json);
+                return json;
+            }
+        });
 }
 
 // ---------- helper functions ---------------
@@ -390,7 +383,7 @@ const getHomepageStructure = async () => {
         return accumulator;
     };
 
-    const result = await getAllParts()
+    const result = await getAllParts();
 
     const transformedResult = result.reduce(reducer, {});
 
@@ -405,7 +398,7 @@ const getHomepageStructure = async () => {
 
 const getAllParts = async () => {
     return await httpApiGet("all_parts");
-}
+};
 
 /**
  *
@@ -432,12 +425,12 @@ const getSubPartsandSections = async () => {
         part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
 
     for (const subpart in subparts) {
-        fullSelection.push({ label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, location: {part: subparts[subpart].part ,subpart: subparts[subpart].data.identifier[0]},type:'subpart'})
+        fullSelection.push({ label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, location: { part: subparts[subpart].part, subpart: subparts[subpart].data.identifier[0] }, type: 'subpart' })
 
         let sections = subparts[subpart].data.children
 
         for (const section in sections) {
-            fullSelection.push({ label: sections[section].label, id:sections[section].label, location:{ part: subparts[subpart].part , section : sections[section].identifier[1]}, part: subparts[subpart].part, type:'section'})
+            fullSelection.push({ label: sections[section].label, id: sections[section].label, location: { part: subparts[subpart].part, section: sections[section].identifier[1] }, part: subparts[subpart].part, type: 'section' })
         }
     }
 
@@ -455,12 +448,22 @@ const getSubPartsandSections = async () => {
  * @returns {Object<{label:string, identifier:string}>}
  */
 const getSubPartsForPart = async (part) => {
-    const all_parts = await getAllParts()
-    const parts = all_parts.map(d => d.name)
-    const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
-    const subParts = potentialSubParts.filter(p => p.type === "subpart")
-    return subParts.map(s =>{ return {label:s.label, identifier: s.identifier[0]}})
-}
+    // if part is string of multiple parts, use final part
+    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
+    const all_parts = await getAllParts();
+    const parts = all_parts.map((d) => d.name);
+    const potentialSubParts =
+        all_parts[parts.indexOf(part)].structure.children[0].children[0]
+            .children[0].children;
+    const subParts = potentialSubParts.filter((p) => p.type === "subpart");
+    return subParts.map((s) => {
+        return {
+            label: s.label,
+            identifier: s.identifier[0],
+            range: s.descendant_range,
+        };
+    });
+};
 
 /**
  *
@@ -476,19 +479,59 @@ const getSectionsForSubPart = async (part, subPart) => {
     const parent = potentialSubParts.find(p => p.type === "subpart" && p.identifier[0] === subPart)
     const sections = []
     parent.children.forEach(c => {
-        if (c.type === "section"){
+        if (c.type === "section") {
             sections.push(c.identifier[1])
-        }else if (c.children){
-            c.children.forEach( child => {
-                if (child.type === "section"){
+        } else if (c.children) {
+            c.children.forEach(child => {
+                if (child.type === "section") {
                     sections.push(child.identifier[1])
                 }
             })
         }
     })
     return sections
+};
 
-}
+/**
+ *
+ * Fetches all_parts and returns formatted section objects for the part (and subpart if specified)
+ * @param {string} part - a part in title 42
+ * @param {?string} subPart - a subpart in title 42 ("A", "B", etc) - undefined returns all sections for part
+ * @returns {Array[Object]} - an array of formatted objects for the section or subpart
+ */
+const getSectionObjects = async (part, subPart) => {
+    // if part is string of multiple parts, use final part
+    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
+    const all_parts = await getAllParts();
+    const parts = all_parts.map((d) => d.name);
+    const potentialSubParts =
+        all_parts[parts.indexOf(part)].structure.children[0].children[0]
+            .children[0].children;
+    if (subPart) {
+        const parent = potentialSubParts.find(
+            (p) => p.type === "subpart" && p.identifier[0] === subPart
+        );
+        return parent.children.map((c) => {
+            return {
+                identifier: c.identifier[1],
+                label: c.label_level,
+                description: c.label_description,
+            };
+        });
+    } else {
+        return potentialSubParts
+            .filter((p) => p.type === "subpart")
+            .flatMap((p) =>
+                p.children.map((c) => {
+                    return {
+                        identifier: c.identifier[1],
+                        label: c.label_level,
+                        description: c.label_description,
+                    };
+                })
+            );
+    }
+};
 
 /**
  *
@@ -520,8 +563,8 @@ const getPart = async (title, part) => {
  * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
  */
 
-const getAllSupplementalContentByPieces = async(start, max_results=100)=>{
-    const result = await(httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
+const getAllSupplementalContentByPieces = async (start, max_results = 100) => {
+    const result = await (httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
     return result;
 }
 
@@ -550,17 +593,17 @@ const getSupplementalContentNew = async (
     part,
     sections = [],
     subparts = [],
-    start=0,
-    max_results=10000
+    start = 0,
+    max_results = 10000
 ) => {
-    let sString = '';
+    let sString = "";
     for (let s in sections) {
-        sString = sString + "&sections=" + sections[s]
+        sString = sString + "&sections=" + sections[s];
     }
     for (let sp in subparts) {
-        sString = sString + "&subparts=" + subparts[sp]
+        sString = sString + "&subparts=" + subparts[sp];
     }
-    sString= sString+"&start="+start+"&max_results="+max_results
+    sString = sString + "&start=" + start + "&max_results=" + max_results
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );
@@ -570,7 +613,8 @@ const getSupplementalContentNew = async (
 
 const getCategories = async () => {
     return await httpApiGet("categories");
-}
+};
+
 /**
  *
  * @param part {string} - a regulation part
@@ -582,7 +626,7 @@ const getSupplementalContentCountForPart = async (part) => {
         `supplemental_content_count_by_part?part=${part}`
     );
     return result;
-}
+};
 
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
@@ -606,6 +650,7 @@ export {
     getSupplementalContentNew,
     getPartsList,
     getSectionsForSubPart,
+    getSectionObjects,
     getSupplementalContentCountForPart,
     getCategories,
     getPartsDetails,

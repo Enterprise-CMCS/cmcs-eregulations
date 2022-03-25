@@ -49,7 +49,7 @@
                 />
             </div>
 
-            <input class="submit" type="submit" value="Go" />
+            <input class="submit" v-bind:class="{active: isActive}" type="submit" value="Go" />
         </form>
     </div>
 </template>
@@ -85,12 +85,23 @@ export default {
             console.error(error);
         }
     },
-
+    computed: {
+      isActive(){
+        return this.selectedTitle && this.selectedPart
+      }
+    },
     methods: {
         formSubmit() {
+            const resourcesDisplay = window.location.pathname.indexOf('sidebar') >= 0 ? "sidebar" : "drawer"
+            const name = window.location.pathname.indexOf('PD') >= 0 ? "PDpart" : "part"
+
             this.$router.push({
-                name: "part",
-                params: { title: this.selectedTitle, part: this.selectedPart },
+                name,
+                params: {
+                  title: this.selectedTitle,
+                  part: this.selectedPart,
+                  resourcesDisplay
+                },
             });
         },
     },
@@ -118,6 +129,12 @@ export default {
     border: solid 1px #d6d7d9;
     color: #a3a3a3;
     background-color: white;
+}
+
+.jump-to input.submit.active {
+    border: solid 1px #046791;
+    color: #FFFFFF;
+    background-color: #046791;
 }
 
 .jump-to .number-box {
