@@ -205,7 +205,6 @@ export default {
 
                 try {
                     const resultArray = await Promise.all(partPromises);
-                    console.log(resultArray);
                     this.supplementalContent = resultArray.flat();
                 } catch (error) {
                     console.error(error);
@@ -258,37 +257,44 @@ export default {
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
                     this.supplementalContent = [];
-                } else if (_isEmpty(oldParams.part) && newParams.part) {
-                    // get supplemental content on fresh part selection
-                    this.getSupplementalContent(this.queryParams);
-                    this.getFormattedSubpartsList(this.queryParams.part);
-                    this.getFormattedSectionsList(
-                        this.queryParams.part,
-                        this.queryParams.subpart
-                    );
-                } else if (_isEmpty(oldParams.subpart) && newParams.subpart) {
-                    // get supplemental content on fresh subpart selection
-                    this.getSupplementalContent(this.queryParams);
-                    this.getFormattedSectionsList(
-                        this.queryParams.part,
-                        this.queryParams.subpart
-                    );
-                } else if (_isEmpty(oldParams.section) && newParams.section) {
-                    // get supplemental content on fresh section selection
-                    this.getSupplementalContent(this.queryParams);
                 } else {
-                    const oldParts = oldParams.part.split(",");
-                    const newParts = newParams.part.split(",");
+                    // always get content otherwise
+                    this.getSupplementalContent(this.queryParams);
 
-                    if (newParts.length > oldParts.length) {
-                        // get supplemental content for new part only
-                        const newPart = _difference(newParts, oldParts)[0];
-                        this.getSupplementalContent(this.queryParams);
-                        this.getFormattedSubpartsList(newPart);
+                    // logic for populating select dropdowns
+                    if (_isEmpty(oldParams.part) && newParams.part) {
+                        this.getFormattedSubpartsList(this.queryParams.part);
                         this.getFormattedSectionsList(
                             this.queryParams.part,
                             this.queryParams.subpart
                         );
+                    } else if (
+                        _isEmpty(oldParams.subpart) &&
+                        newParams.subpart
+                    ) {
+                        this.getFormattedSectionsList(
+                            this.queryParams.part,
+                            this.queryParams.subpart
+                        );
+                    } else if (
+                        _isEmpty(oldParams.section) &&
+                        newParams.section
+                    ) {
+                        // get supplemental content on fresh section selection
+                        this.getSupplementalContent(this.queryParams);
+                    } else {
+                        const oldParts = oldParams.part.split(",");
+                        const newParts = newParams.part.split(",");
+
+                        if (newParts.length > oldParts.length) {
+                            // get supplemental content for new part only
+                            const newPart = _difference(newParts, oldParts)[0];
+                            this.getFormattedSubpartsList(newPart);
+                            this.getFormattedSectionsList(
+                                this.queryParams.part,
+                                this.queryParams.subpart
+                            );
+                        }
                     }
                 }
             },
