@@ -69,7 +69,7 @@ export default {
     watch: {
       suggestedTab:{
           async handler(suggestedTab) {
-            this.tab = this.tabs.indexOf(capitalizeFirstLetter(suggestedTab)) || 5
+              this.tab = this.tabs.indexOf(capitalizeFirstLetter(suggestedTab)) || 5
           }
       }
     }
