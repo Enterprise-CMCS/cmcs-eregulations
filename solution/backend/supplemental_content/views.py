@@ -60,7 +60,7 @@ class SupplementalContentView(generics.ListAPIView):
         subpart_list = self.request.GET.getlist("subparts")
         subjgrp_list = self.request.GET.getlist("subjectgroups")
         start = int(self.request.GET.get("start", 0))
-        maxResults = int(self.request.GET.get("max_results", 1))
+        maxResults = int(self.request.GET.get("max_results", 1000))
         if len(section_list)==0 and len(subpart_list) ==0 and len(subjgrp_list)==0:
             query = AbstractSupplementalContent.objects.filter(
                 approved=True,
@@ -70,10 +70,7 @@ class SupplementalContentView(generics.ListAPIView):
             ).prefetch_related(
                 Prefetch(
                     'locations',
-                    queryset=AbstractLocation.objects.filter(
-                        title=title,
-                        part=part,
-                    )
+                    queryset=AbstractLocation.objects.all()
                 )
             ).prefetch_related(
                 Prefetch(
@@ -82,7 +79,7 @@ class SupplementalContentView(generics.ListAPIView):
                 )
             ).distinct().select_subclasses(SupplementalContent).order_by(
                 "-supplementalcontent__date"
-                    )[start:start+maxResults]
+            )[start:start+maxResults]
         else:
             query = AbstractSupplementalContent.objects.filter(
                 Q(locations__section__section_id__in=section_list) |
@@ -118,22 +115,27 @@ class SupplementalContentView(generics.ListAPIView):
 class AllSupplementalContentView(APIView):
     def get(self, *args, **kwargs):
         start = int(self.request.GET.get("start", 0))
-        maxResults = int(self.request.GET.get("max_results", 100))
+        maxResults = int(self.request.GET.get("max_results", 1000))
         query = AbstractSupplementalContent.objects.filter(
                 approved=True,
                 category__isnull=False
-
             ).prefetch_related(
                 Prefetch(
                     'category',
                     queryset=AbstractCategory.objects.all().select_subclasses()
                 )
+            ).prefetch_related(
+                Prefetch(
+                    'locations',
+                    queryset=AbstractLocation.objects.all()
+                )
             ).distinct().select_subclasses(SupplementalContent).order_by(
                 "-supplementalcontent__date"
-                    )[start:start+maxResults]
+            )[start:start+maxResults]
         serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
+
 class SupplementalContentSectionsView(generics.CreateAPIView):
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]

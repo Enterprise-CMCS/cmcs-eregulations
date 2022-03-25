@@ -62,7 +62,6 @@ export default {
     async created() {
         try {
             this.supList = await getAllSupplementalContentByPieces(0,100);
-            console.log(this.supList)
             for (let sup of this.supList) {
 
               
@@ -88,7 +87,6 @@ export default {
         },
         sortContent() {
             try {
-                let i = 0;
                 for (let content of this.singleSupList) {
                     if (
                         this.filters.resources.includes(content.name) ||
@@ -112,9 +110,6 @@ export default {
                             }
                         }
                     }
-
-              
-                    console.log('hhi')
                 this.sortedSupList.filter(content => content.name)
                 }
             } catch (error) {
