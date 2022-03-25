@@ -187,6 +187,15 @@ export default {
                 query: newQueryParams,
             });
         },
+        filterCategories(resultArray) {
+            const filteredArray = resultArray.filter((item) => {
+                if (this.queryParams.resourceCategory.includes(item.name)) {
+                    return true;
+                }
+            });
+
+            return filteredArray;
+        },
         async getSupplementalContent(dataQueryParams) {
             this.isLoading = true;
             const queryParamsObj = { ...dataQueryParams };
@@ -210,7 +219,9 @@ export default {
 
                 try {
                     const resultArray = await Promise.all(partPromises);
-                    this.supplementalContent = resultArray.flat();
+                    this.supplementalContent = this.queryParams.resourceCategory
+                        ? this.filterCategories(resultArray.flat())
+                        : resultArray.flat();
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -258,7 +269,8 @@ export default {
                     reducedCats[item.parent.name].subcategories.push(item);
                 }
             });
-            this.filters.resourceCategory.listItems = Object.values(reducedCats);
+            this.filters.resourceCategory.listItems =
+                Object.values(reducedCats);
         },
     },
 
