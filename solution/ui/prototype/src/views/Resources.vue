@@ -250,6 +250,7 @@ export default {
                     // don't make supp content request, but clear lists
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
+                    this.supplementalContent = [];
                 } else if (_isEmpty(oldParams.part) && newParams.part) {
                     // get supplemental content on fresh part selection
                     this.getSupplementalContent(this.queryParams);

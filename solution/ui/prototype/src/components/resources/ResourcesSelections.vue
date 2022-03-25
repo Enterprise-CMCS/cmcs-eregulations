@@ -1,5 +1,5 @@
 <template>
-    <div class="selections-container">
+    <div v-if="filterParams.part" class="selections-container">
         <div class="selections-content">
             <template v-for="(array, name, idx) in splitParams">
                 <div
