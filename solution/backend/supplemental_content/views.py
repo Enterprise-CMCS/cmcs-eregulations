@@ -63,53 +63,32 @@ class SupplementalContentView(generics.ListAPIView):
         subjgrp_list = self.request.GET.getlist("subjectgroups")
         start = int(self.request.GET.get("start", 0))
         maxResults = int(self.request.GET.get("max_results", 1000))
-        if len(section_list) == 0 and len(subpart_list) == 0 and len(subjgrp_list) == 0:
-            query = AbstractSupplementalContent.objects.filter(
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part,
-            ).prefetch_related(
-                Prefetch(
-                    'locations',
-                    queryset=AbstractLocation.objects.all()
-                )
-            ).prefetch_related(
-                Prefetch(
-                    'category',
-                    queryset=AbstractCategory.objects.all().select_subclasses()
-                )
-            ).distinct().select_subclasses(SupplementalContent).order_by(
-                "-supplementalcontent__date"
-            )[start:start+maxResults]
-        else:
-            query = AbstractSupplementalContent.objects.filter(
+        query = AbstractSupplementalContent.objects.filter(
+            approved=True,
+            category__isnull=False,
+            locations__title=title,
+            locations__part=part,
+        )
+        if len(section_list) > 0 or len(subpart_list) > 0 and len(subjgrp_list) > 0:
+            query = query.filter(
                 Q(locations__section__section_id__in=section_list) |
                 Q(locations__subpart__subpart_id__in=subpart_list) |
-                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part,
-            ).prefetch_related(
-                Prefetch(
-                    'locations',
-                    queryset=AbstractLocation.objects.filter(
-                        Q(section__section_id__in=section_list) |
-                        Q(subpart__subpart_id__in=subpart_list) |
-                        Q(subjectgroup__subject_group_id__in=subjgrp_list),
-                        title=title,
-                        part=part,
-                    )
-                )
-            ).prefetch_related(
-                Prefetch(
-                    'category',
-                    queryset=AbstractCategory.objects.all().select_subclasses()
-                )
-            ).distinct().select_subclasses(SupplementalContent).order_by(
-                "-supplementalcontent__date"
+                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list)
             )
+
+        query = query.prefetch_related(
+                    Prefetch(
+                        'locations',
+                        queryset=AbstractLocation.objects.all()
+                    )
+                ).prefetch_related(
+                    Prefetch(
+                        'category',
+                        queryset=AbstractCategory.objects.all().select_subclasses()
+                    )
+                ).distinct().select_subclasses(SupplementalContent).order_by(
+                    "-supplementalcontent__date"
+                )[start:start+maxResults]
         serializer = SupplementalContentSerializer(query, many=True)
 
         return Response(serializer.data)
