@@ -180,6 +180,9 @@ export default {
         },
         setResourcesParams(payload) {
             console.log("payload", payload);
+            if (payload.scope === "rendered"){
+              return
+            }
             this.selectedIdentifier = payload.identifier;
             this.selectedScope = payload.scope;
         },
