@@ -49,7 +49,7 @@ const routes = [
         component: CacheExplorer,
     },
     {
-        path: "/:resources",
+        path: "/PDResources",
         name: "resources",
         component: ResourcePage
     }
