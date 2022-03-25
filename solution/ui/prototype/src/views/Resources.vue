@@ -236,8 +236,7 @@ export default {
             this.filters.subpart.listItems = await getSubPartsForPart(part);
         },
         async getFormattedSectionsList(part, subpart) {
-            const x = await getSectionObjects(part, subpart);
-            this.filters.section.listItems = x;
+            this.filters.section.listItems = await getSectionObjects(part, subpart);
         },
         async getCategoryList() {
             this.filters.resourceCategory.listItems = await getCategories();
@@ -315,7 +314,6 @@ export default {
                 this.queryParams.part,
                 this.queryParams.subpart
             );
-            // get section list
         }
     },
 

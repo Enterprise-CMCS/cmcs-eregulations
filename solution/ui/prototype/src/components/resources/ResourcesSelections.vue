@@ -45,9 +45,7 @@ export default {
 
     beforeCreate() {},
 
-    created() {
-        console.log("FilterParams", this.filterParams);
-    },
+    created() {},
 
     beforeMount() {},
 
