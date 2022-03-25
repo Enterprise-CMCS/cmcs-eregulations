@@ -34,16 +34,18 @@
             >
             </v-text-field>
         </form>
-        <SupplementalContent
-            :api_url="apiPath"
-            :title="title"
-            :part="part"
-            :sections="sections"
-            :subparts="subparts"
-        ></SupplementalContent>
+        <template v-if="selectedIdentifier">
+            <SupplementalContent
+                :api_url="apiPath"
+                :title="title"
+                :part="part"
+                :sections="sections"
+                :subparts="subparts"
+            ></SupplementalContent>
+        </template>
         <div class="btn-container" v-if="selectedIdentifier">
             <ResourcesBtn
-                :clickHandler="routeToResourcesPage"
+                :clickHandler="routeToResources"
                 label="All"
                 type="solid"
             />
@@ -54,6 +56,7 @@
 <script>
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
 import SupplementalContent from "legacy/js/src/components/SupplementalContent.vue";
+import _isArray from "lodash/isArray";
 
 export default {
     name: "SectionResourcesSidebar",
@@ -68,6 +71,7 @@ export default {
         part: String,
         selectedIdentifier: Array,
         selectedScope: String,
+        routeToResources: Function,
     },
 
     data() {
@@ -116,12 +120,6 @@ export default {
 
         search() {
             console.log("search will happen here");
-        },
-
-        routeToResourcesPage() {
-            console.log(
-                "This will go to the resources page implemented in EREGCSC-1211"
-            );
         },
     },
 
