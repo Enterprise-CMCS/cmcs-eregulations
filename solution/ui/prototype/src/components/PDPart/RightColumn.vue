@@ -1,5 +1,6 @@
 <template>
     <div style="width: 100%; margin: 20px">
+
         <div>
             <h2 style="display: inline">
                 Part {{ part }} resources
@@ -56,6 +57,7 @@
             :part="part"
             :sup-list="supList"
             :suggestedTab="suggestedTab"
+            :suggestedSubPart="suggestedSubPart"
         />
     </div>
 </template>
@@ -72,6 +74,7 @@ export default {
         part: { type: String },
         supList: { type: Array },
         suggestedTab: { type: String},
+        suggestedSubPart: { type: String},
     },
     data() {
         return {

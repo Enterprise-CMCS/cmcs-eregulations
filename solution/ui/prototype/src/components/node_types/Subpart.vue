@@ -96,7 +96,13 @@ export default {
             this.resourceParamsEmitter("subpart", [this.node.label[0]]);
         },
         handleBlueBtnClick() {
-          this.resourceParamsEmitter("subpart", this.node.children.map(child => child.label[1]));
+          this.resourceParamsEmitter(
+              "subpart",
+              {
+                subPart: this.node.label[0],
+                sections: this.node.children.filter(c => c.label).map(child => child.label[1])
+              }
+          );
         }
     },
 };

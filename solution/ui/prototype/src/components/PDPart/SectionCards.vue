@@ -2,7 +2,6 @@
     <div>
         <div
             v-for="f in supplemental_content"
-            :key="f.name"
             class="card"
         >
             <SectionCard :f="f"/>

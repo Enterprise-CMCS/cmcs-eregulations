@@ -10,7 +10,7 @@
                 <PartSummary v-bind:title="title" v-bind:part="part"/>
             </v-tab-item>
             <v-tab-item>
-                <SubpartResources v-bind:title="title" v-bind:part="part" />
+                <SubpartResources v-bind:title="title" v-bind:part="part" :suggestedSubPart="suggestedSubPart" />
             </v-tab-item>
             <v-tab-item>
                 <v-container fluid>
@@ -43,6 +43,7 @@ export default {
         part: { type: String },
         supList: { type: Array },
         suggestedTab: {type: String },
+        suggestedSubPart: { type: String},
     },
     data() {
         return {
