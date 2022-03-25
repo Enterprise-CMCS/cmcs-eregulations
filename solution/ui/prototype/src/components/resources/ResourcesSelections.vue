@@ -148,6 +148,7 @@ $eregs-image-path: "~legacy-static/images";
             background: $lightest_blue;
             border: 1px solid #c0eaf8;
             margin-right: 10px;
+            margin-bottom: 10px;
 
             &.v-chip--outlined.clear-all-chip {
                 text-transform: uppercase;
