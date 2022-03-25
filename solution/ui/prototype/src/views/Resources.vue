@@ -186,19 +186,27 @@ export default {
         async getSupplementalContent(dataQueryParams) {
             const queryParamsObj = { ...dataQueryParams };
             if (queryParamsObj.part) {
+                queryParamsObj.part = queryParamsObj.part.split(",");
                 if (queryParamsObj.section) {
                     queryParamsObj.sections = queryParamsObj.section.split(",");
                 }
                 if (queryParamsObj.subpart) {
                     queryParamsObj.subparts = queryParamsObj.subpart.split(",");
                 }
-                try {
-                    this.supplementalContent = await getSupplementalContentNew(
+                // map over parts and return promises to put in Promise.all
+                const partPromises = queryParamsObj.part.map((part) => {
+                    return getSupplementalContentNew(
                         queryParamsObj.title,
-                        queryParamsObj.part,
+                        part,
                         queryParamsObj.sections,
                         queryParamsObj.subparts
                     );
+                });
+
+                try {
+                    const resultArray = await Promise.all(partPromises);
+                    console.log(resultArray);
+                    this.supplementalContent = resultArray.flat();
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -222,7 +230,6 @@ export default {
         },
         async getFormattedSectionsList(part, subpart) {
             const x = await getSectionObjects(part, subpart);
-            console.log("Formatted section list", x);
             this.filters.section.listItems = x;
         },
         async getCategoryList() {
@@ -273,11 +280,6 @@ export default {
                     const oldParts = oldParams.part.split(",");
                     const newParts = newParams.part.split(",");
 
-                    const oldSubparts = oldParams.subpart.split(",");
-                    const newSubparts = newParams.subpart.split(",");
-
-                    const oldSections = oldParams.section.split(",");
-                    const newSections = newParams.section.split(",");
                     if (newParts.length > oldParts.length) {
                         // get supplemental content for new part only
                         const newPart = _difference(newParts, oldParts)[0];
@@ -301,7 +303,6 @@ export default {
 
         if (this.queryParams.part) {
             this.getSupplementalContent(this.queryParams);
-            console.log("HERE", this.queryParams);
             this.getFormattedSubpartsList(this.queryParams.part);
             this.getFormattedSectionsList(
                 this.queryParams.part,

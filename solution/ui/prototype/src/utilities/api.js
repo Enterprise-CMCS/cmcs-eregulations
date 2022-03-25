@@ -419,6 +419,8 @@ const getPartsList = async () => {
  * @returns {Object<{label:string, identifier:string}>}
  */
 const getSubPartsForPart = async (part) => {
+    // if part is string of multiple parts, use final part
+    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
     const all_parts = await getAllParts();
     const parts = all_parts.map((d) => d.name);
     const potentialSubParts =
@@ -469,6 +471,8 @@ const getSectionsForSubPart = async (part, subPart) => {
  * @returns {Array[Object]} - an array of formatted objects for the section or subpart
  */
 const getSectionObjects = async (part, subPart) => {
+    // if part is string of multiple parts, use final part
+    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
     const all_parts = await getAllParts();
     const parts = all_parts.map((d) => d.name);
     const potentialSubParts =

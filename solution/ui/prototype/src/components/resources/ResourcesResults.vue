@@ -4,39 +4,38 @@
             <hr class="top-rule" />
             <div class="results-count">{{ sortedContent.length }} Results</div>
             <template v-for="(item, idx) in sortedContent">
-                <div class="category-labels" :key="item.category + idx">
-                    <div
-                        v-if="item.category"
-                        class="result-label category-label"
-                    >
-                        {{ item.category }}
+                <div :key="item.created_at + idx">
+                    <div class="category-labels">
+                        <div
+                            v-if="item.category"
+                            class="result-label category-label"
+                        >
+                            {{ item.category }}
+                        </div>
+                        <div
+                            v-if="item.sub_category"
+                            class="result-label subcategory-label"
+                        >
+                            {{ item.sub_category }}
+                        </div>
                     </div>
-                    <div
-                        v-if="item.sub_category"
-                        class="result-label subcategory-label"
-                    >
-                        {{ item.sub_category }}
+                    <div class="result-content-wrapper">
+                        <SupplementalContentObject
+                            :name="item.name"
+                            :description="item.description"
+                            :date="item.date"
+                            :url="item.url"
+                        />
                     </div>
-                </div>
-                <div
-                    class="result-content-wrapper"
-                    :key="item.name + item.created_at"
-                >
-                    <SupplementalContentObject
-                        :key="item.created_at"
-                        :name="item.name"
-                        :description="item.description"
-                        :date="item.date"
-                        :url="item.url"
-                    />
-                </div>
-                <div class="related-sections" :key="item.url + item.created_at">
-                    <span class="related-sections-title">
-                        Related Sections:
-                    </span>
-                    §§ 433.51 | 435.219 | 441.510 | 441.515 | 441.520 | 441.525
-                    | 441.530 | 441.540 | 441.545 | 441.555 | 441.560 | 441.565
-                    | 441.570 | 441.575 | 441.580 | 441.585
+                    <div class="related-sections">
+                        <span class="related-sections-title">
+                            Related Sections:
+                        </span>
+                        §§ 433.51 | 435.219 | 441.510 | 441.515 | 441.520 |
+                        441.525 | 441.530 | 441.540 | 441.545 | 441.555 |
+                        441.560 | 441.565 | 441.570 | 441.575 | 441.580 |
+                        441.585
+                    </div>
                 </div>
             </template>
         </div>
