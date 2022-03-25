@@ -224,6 +224,7 @@ export default {
                     for (const category of resultArray.flat()) {
                         finalArray = finalArray.concat(category);
                         for (const subcategory of category.sub_categories) {
+                            subcategory.parent_category = category.name;
                             finalArray = finalArray.concat(subcategory);
                         }
                     }
