@@ -72,7 +72,7 @@ export default {
 
     filters: {
         itemFilter(item, value) {
-            if (value.label === "Part") return item.label;
+            if (value.label === "Part" || value.label === "Subpart") return item.label;
             return item.name ?? `${item.label} ${item.description}`;
         },
     },
