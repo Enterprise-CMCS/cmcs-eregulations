@@ -5,6 +5,7 @@ import Part from "@/views/Part.vue";
 import Resources from "@/views/Resources.vue";
 import CacheExplorer from "@/views/CacheExplorer";
 import PDPart from "@/views/PDPart";
+import ResourcePage from "@/views/ResourcePage"
 
 Vue.use(VueRouter);
 
@@ -53,6 +54,11 @@ const routes = [
         name: "Cache-Explorer",
         component: CacheExplorer,
     },
+    {
+        path: "/PDResources",
+        name: "resources",
+        component: ResourcePage
+    }
 ];
 
 const router = new VueRouter({
