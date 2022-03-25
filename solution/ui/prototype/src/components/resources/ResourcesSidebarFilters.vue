@@ -13,7 +13,31 @@
                             {{ value.label }}
                         </v-expansion-panel-header>
                         <v-expansion-panel-content class="panel-content">
-                            {{ value.listItems }}
+                            <v-list flat three-line>
+                                <v-list-item-group
+                                    multiple
+                                    active-class=""
+                                >
+                                    <v-list-item
+                                        v-for="item in value.listItems"
+                                        :key="item.name"
+                                    >
+                                        <template v-slot:default="{ active }">
+                                            <v-list-item-action>
+                                                <v-checkbox
+                                                    :input-value="active"
+                                                ></v-checkbox>
+                                            </v-list-item-action>
+
+                                            <v-list-item-content>
+                                                <v-list-item-subtitle>
+                                                    {{ item.label }}
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </template>
+                                    </v-list-item>
+                                </v-list-item-group>
+                            </v-list>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
@@ -90,7 +114,7 @@ export default {
 }
 
 .panel-container {
-    border-bottom: 1px solid #DDD;
+    border-bottom: 1px solid #ddd;
 }
 .panel-header {
     font-size: 13px;
@@ -101,5 +125,25 @@ export default {
 .v-expansion-panel-content .v-expansion-panel-content__wrap {
     max-height: 250px;
     overflow: scroll;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.v-list-item-group .v-list-item {
+    padding: 0;
+}
+
+.v-list-item-group .v-list-item.v-list-item--link {
+    min-height: 25px;
+}
+
+.v-list-item-group .v-list-item .v-list-item__action {
+    margin-top: 15px;
+    margin-right: 5px;
+    margin-bottom: 0;
+}
+
+.v-list-item-group .v-list-item .v-list-item__content {
+    height: 30px;
 }
 </style>
