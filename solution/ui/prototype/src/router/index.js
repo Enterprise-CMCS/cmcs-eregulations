@@ -2,8 +2,10 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import Part from "@/views/Part.vue";
+import Resources from "@/views/Resources.vue";
 import CacheExplorer from "@/views/CacheExplorer";
 import PDPart from "@/views/PDPart";
+import ResourcePage from "@/views/ResourcePage"
 
 Vue.use(VueRouter);
 
@@ -43,10 +45,20 @@ const routes = [
         component: Part,
     },
     {
+        path: "/resources",
+        name: "resources",
+        component: Resources,
+    },
+    {
         path: "/cache",
         name: "Cache-Explorer",
         component: CacheExplorer,
     },
+    {
+        path: "/PDResources",
+        name: "resources",
+        component: ResourcePage
+    }
 ];
 
 const router = new VueRouter({
