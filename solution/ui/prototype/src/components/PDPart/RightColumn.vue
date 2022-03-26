@@ -1,6 +1,5 @@
 <template>
     <div style="width: 100%; margin: 20px">
-
         <div>
             <h2 style="display: inline">
                 Part {{ part }} resources
@@ -23,17 +22,17 @@
                 >
                     <v-col
                         cols="8"
-
                     >
                         <label
                             class="label"
                             style="display: inline"
                         >Resource Type</label>
-                        <v-select
-                            :items="[1,2,3,4,5]"
-                            multiple
-                            outlined
-                            chips
+                        <treeselect
+                            v-model="selectedResources"
+                            :multiple="true"
+                            value-consists-of="ALL_WITH_INDETERMINATE"
+                            :options="this.catOptions"
+
                         />
                     </v-col>
                     <v-col
@@ -46,7 +45,7 @@
                         <v-select
                             :items="['Relevance', 'Most Recent', 'Regulation hierarchy', 'Resource type']"
                             outlined
-                            chips
+                            dense
                         />
                     </v-col>
                 </v-row>
@@ -55,21 +54,27 @@
         <TabFilters
             :title="title"
             :part="part"
-            :subPart="subPart"
+            :sub-part="subPart"
             :section="section"
             :sup-list="supList"
-            :suggestedTab="suggestedTab"
-            :suggestedSubPart="suggestedSubPart"
+            :suggested-tab="suggestedTab"
+            :suggested-sub-part="suggestedSubPart"
         />
     </div>
 </template>
 
 <script>
 import TabFilters from "./TabFilters.vue";
+import { getCategories } from "@/utilities/api";
+import { getCategoryTree } from "@/utilities/utils";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+
 export default {
     name: "RightColumn",
     components: {
         TabFilters,
+        Treeselect,
     },
     props: {
         title: { type: String },
@@ -83,7 +88,11 @@ export default {
     data() {
         return {
             tabs: null,
-            showFilter:false
+            showFilter:false,
+            selectedResources: [],
+            categories: [],
+            catOptions: [],
+
         };
     },
     watch: {
@@ -92,6 +101,10 @@ export default {
             this.tabs = 2
           }
       }
+    },
+    async created(){
+      this.categories = await getCategories();
+      this.catOptions = getCategoryTree(this.categories);
     }
 };
 </script>
