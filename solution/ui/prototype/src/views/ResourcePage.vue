@@ -12,16 +12,15 @@
                     type="text"
                     append-icon="mdi-magnify"
                     hide-details
-                >
-                </v-text-field>
+                />
             </div>
             <splitpanes>
                 <pane min-size="30">
                     <div style="width: 100%; margin: 20px">
                         <ResourceFilters
                             :resourceParamsEmitter="setResourcesParams"
-                            :selectedParts="selectedParts"
-                            :selectedSections="selectedSections"
+                            :preSelectedParts="preSelectedParts"
+                            :preSelectedSections="preSelectedSections"
                         />
                     </div>
                 </pane>
@@ -46,7 +45,6 @@ import SectionPane from "../components/ResourcesPage/SectionSide.vue";
 export default {
     name: "ResourcePage",
     components: {
-        FlashBanner,
         Header,
         Footer,
         Splitpanes,
@@ -59,23 +57,33 @@ export default {
         filters: {resources:[]},
         singleSupList: [],
         sortedSupList: [],
+        preSelectedSections:[],
+        preSelectedParts: []
+
 
     }),
     async created() {
         try {
 
             const urlParams = new URLSearchParams(window.location.search);
-            this.selectedParts = [urlParams.get('part')]
-            this.selectedSections = [urlParams.get('subpart'), urlParams.get('section')]
-
-            this.filters["parts"] = {
-              [urlParams.get('part')] : {
-                part: urlParams.get('part'),
-                subparts: [urlParams.get('subPart').split('-')[1]],
-                sections: [urlParams.get('section')]
-              }
+            const part = urlParams.get('part')
+            if (part){
+                  this.filters["parts"] = {
+                      [part]: {part}
+                  }
+                this.preSelectedParts.push(part)
+                const subpart = urlParams.get('subPart') ? urlParams.get('subPart').split('-')[1] : null
+                const section = urlParams.get('section')
+                if(subpart) {
+                  this.preSelectedSections.push({part, subpart})
+                  this.filters["parts"][part]["subparts"] = [subpart]
+                }
+                if(subpart) {
+                  this.preSelectedSections.push({part, section})
+                  this.filters["parts"][part]["sections"] = [section]
+                }
             }
-
+            console.log(this.filters)
             if (this.filters.parts){
               await this.getSupContent();
             }else {
@@ -88,8 +96,6 @@ export default {
             }
         } catch (error) {
             console.error(error);
-        } finally {
-            console.log(this.subParts);
         }
     },
     methods: {
@@ -135,7 +141,7 @@ export default {
         },
         async getSupContent() {
             this.singleSupList = [];
-
+            console.log(this.filters)
             try {
                 this.supList = [];
                 for (let part in this.filters.parts) {
@@ -157,8 +163,6 @@ export default {
                 }
             } catch (error) {
                 console.error(error);
-            } finally {
-                console.log(this.structure);
             }
             this.sortContent();
         },
