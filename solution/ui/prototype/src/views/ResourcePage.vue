@@ -78,7 +78,7 @@ export default {
                   this.preSelectedSections.push({part, subpart})
                   this.filters["parts"][part]["subparts"] = [subpart]
                 }
-                if(subpart) {
+                if(section) {
                   this.preSelectedSections.push({part, section})
                   this.filters["parts"][part]["sections"] = [section]
                 }
