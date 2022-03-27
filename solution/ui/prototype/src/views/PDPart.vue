@@ -21,8 +21,11 @@
                     <right-column
                         :title="title"
                         :part="part"
+                        :subPart="subPart"
+                        :section="section"
                         :supList="supList"
                         :suggestedTab="suggestedTab"
+                        :suggestedSubPart="suggestedSubPart"
                     />
                 </pane>
             </splitpanes>
@@ -91,12 +94,32 @@ export default {
                     }
                     this.supplementalContentCount =
                         await getSupplementalContentCountForPart(this.part);
+
+                    this.supList = await getSupplementalContentNew(
+                        this.title,
+                        this.part,
+                        this.section ? [this.section] : this.renderedSections,
+                        this.subPart ? [this.subPart] : this.subPartList.map(sp => sp.identifier),
+                    )
+
                 } catch (error) {
                     console.error(error);
                 }
             },
             immediate: true,
         },
+    },
+    async mounted(){
+      try {
+        this.supList = await getSupplementalContentNew(
+            this.title,
+            this.part,
+            this.section ? [this.section] : this.renderedSections,
+            this.subPart ? [this.subPart] : this.subPartList.map(sp => sp.identifier),
+        )
+      } catch (error) {
+          console.error(error);
+      }
     },
     data() {
         return {
@@ -111,6 +134,8 @@ export default {
             sections: [],
             supplementalContentCount: {},
             suggestedTab:"",
+            suggestedSubPart:"",
+            renderedSections: []
         };
     },
     computed: {
@@ -138,7 +163,6 @@ export default {
                           }
                         }
                     );
-                    console.log(sections)
                     if (sections[0].node_type === "SECTION"){
                       return [sections[0]]
                     }
@@ -222,9 +246,14 @@ export default {
     },
     methods: {
         async setResourcesParams(payload) {
+            if (payload["scope"] === "rendered"){
+              this.renderedSections.push(payload["identifier"])
+              return
+            }
             this.suggestedTab = payload["scope"]
             // skip this for subparts
             if (payload["scope"] === "subpart"){
+              this.suggestedSubPart = payload["identifier"]["subPart"]
               return
             }
             try {

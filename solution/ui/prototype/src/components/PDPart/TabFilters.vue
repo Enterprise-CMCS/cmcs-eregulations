@@ -7,16 +7,15 @@
         </div>
         <v-tabs-items v-model="tab">
             <v-tab-item>
-                <PartSummary v-bind:title="title" v-bind:part="part"/>
+                <PartSummary :title="title" :part="part" :subPart="subPart" :section="section"/>
             </v-tab-item>
             <v-tab-item>
-                <SubpartResources v-bind:title="title" v-bind:part="part" />
+                <SubpartResources :title="title" :part="part" :subPart="subPart" :section="section" :suggestedSubPart="suggestedSubPart" />
             </v-tab-item>
             <v-tab-item>
                 <v-container fluid>
                     <SectionCards
-                        v-bind:title="title"
-                        v-bind:part="part"
+                        :title="title" :part="part" :subPart="subPart" :section="section"
                         v-bind:supList="supList"
                     />
                 </v-container>
@@ -43,6 +42,9 @@ export default {
         part: { type: String },
         supList: { type: Array },
         suggestedTab: {type: String },
+        suggestedSubPart: { type: String},
+        subPart: { type: String },
+        section: { type: String },
     },
     data() {
         return {
@@ -68,9 +70,15 @@ export default {
     watch: {
       suggestedTab:{
           async handler(suggestedTab) {
-            this.tab = this.tabs.indexOf(capitalizeFirstLetter(suggestedTab)) || 5
+              this.tab = this.tabs.indexOf(capitalizeFirstLetter(suggestedTab)) || 5
           }
-      }
+      },
+      // suggested subpart changed, switch to the tab section
+      suggestedSubPart:{
+          async handler() {
+              this.tab = 1
+          }
+      },
     }
 };
 </script>

@@ -12,14 +12,15 @@
                     type="text"
                     append-icon="mdi-magnify"
                     hide-details
-                >
-                </v-text-field>
+                />
             </div>
             <splitpanes>
                 <pane min-size="30">
                     <div style="width: 100%; margin: 20px">
                         <ResourceFilters
                             :resourceParamsEmitter="setResourcesParams"
+                            :preSelectedParts="preSelectedParts"
+                            :preSelectedSections="preSelectedSections"
                         />
                     </div>
                 </pane>
@@ -44,7 +45,6 @@ import SectionPane from "../components/ResourcesPage/SectionSide.vue";
 export default {
     name: "ResourcePage",
     components: {
-        FlashBanner,
         Header,
         Footer,
         Splitpanes,
@@ -57,22 +57,45 @@ export default {
         filters: {resources:[]},
         singleSupList: [],
         sortedSupList: [],
+        preSelectedSections:[],
+        preSelectedParts: []
+
 
     }),
     async created() {
         try {
-            this.supList = await getAllSupplementalContentByPieces(0,100);
-            for (let sup of this.supList) {
 
-              
-                this.singleSupList.push(sup);
+            const urlParams = new URLSearchParams(window.location.search);
+            const part = urlParams.get('part')
+            if (part){
+                  this.filters["parts"] = {
+                      [part]: {part}
+                  }
+                this.preSelectedParts.push(part)
+                const subpart = urlParams.get('subPart') ? urlParams.get('subPart').split('-')[1] : null
+                const section = urlParams.get('section')
+                if(subpart) {
+                  this.preSelectedSections.push({part, subpart})
+                  this.filters["parts"][part]["subparts"] = [subpart]
+                }
+                if(section) {
+                  this.preSelectedSections.push({part, section})
+                  this.filters["parts"][part]["sections"] = [section]
+                }
             }
-            
-            this.sortContent()
+            console.log(this.filters)
+            if (this.filters.parts){
+              await this.getSupContent();
+            }else {
+              this.supList = await getAllSupplementalContentByPieces(0, 100);
+              for (let sup of this.supList) {
+                this.singleSupList.push(sup);
+              }
+
+              this.sortContent()
+            }
         } catch (error) {
             console.error(error);
-        } finally {
-            console.log(this.subParts);
         }
     },
     methods: {
@@ -118,7 +141,7 @@ export default {
         },
         async getSupContent() {
             this.singleSupList = [];
-
+            console.log(this.filters)
             try {
                 this.supList = [];
                 for (let part in this.filters.parts) {
@@ -140,8 +163,6 @@ export default {
                 }
             } catch (error) {
                 console.error(error);
-            } finally {
-                console.log(this.structure);
             }
             this.sortContent();
         },

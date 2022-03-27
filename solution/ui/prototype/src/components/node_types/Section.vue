@@ -98,6 +98,9 @@ export default {
             this.resourceParamsEmitter("section", [this.node.label[1]]);
         },
     },
+    created(){
+        this.resourceParamsEmitter("rendered", this.node.label[1]);
+    }
 };
 </script>
 

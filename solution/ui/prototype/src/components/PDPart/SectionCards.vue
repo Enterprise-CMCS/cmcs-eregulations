@@ -2,11 +2,16 @@
     <div>
         <div
             v-for="f in supplemental_content"
-            :key="f.name"
             class="card"
         >
             <SectionCard :f="f"/>
         </div>
+        <router-link :to="{
+            name:'PDResources',
+            query: { part, title, subPart, section }
+        }">
+            <v-btn color="#046791" class="white--text">View All Resources</v-btn>
+        </router-link>
     </div>
 </template>
 
@@ -20,6 +25,8 @@ export default {
         title: { type: String },
         part: { type: String },
         supList: {type: Array},
+        subPart: { type: String },
+        section: { type: String },
     },
     data: () => ({
         show: false,

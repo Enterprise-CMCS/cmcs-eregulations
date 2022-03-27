@@ -3,8 +3,9 @@
         <div class="filter-header">
             <h2 style="display: inline">Filters</h2>
             <span style="float: right">
-                <v-btn text v-on:click="clearFilters"
-                    >Close filters <v-icon>mdi-close</v-icon></v-btn
+                <v-btn text v-on:click="clearFilters">
+                    Close filters <v-icon>mdi-close</v-icon>
+                </v-btn
                 >
             </span>
         </div>
@@ -82,6 +83,8 @@ export default {
             type: Function,
             required: false,
         },
+        preSelectedParts: {type: Array},
+        preSelectedSections: {type: Array},
     },
     data: () => ({
         titles: ["42"],
@@ -146,14 +149,19 @@ export default {
     },
     async created() {
         try {
+            this.selectedParts = this.preSelectedParts
+            this.selectedSections = this.preSelectedSections
             this.parts = await getPartsDetails();
             this.categories = await getCategories();
             this.catOptions = getCategoryTree(this.categories);
             this.sections = await getSubPartsandSections();
-            this.filteredSections = this.sections;
+            if (this.selectedParts){
+                this.filterSections(this.selectedParts)
+            }else {
+                this.filteredSections = this.sections;
+            }
         } catch (error) {
             console.error(error);
-        } finally {
         }
     },
 };
