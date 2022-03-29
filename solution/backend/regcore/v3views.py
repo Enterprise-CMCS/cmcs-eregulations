@@ -54,8 +54,6 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class PartContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
-    # TODO: modify so ".../version/latest/..." returns the latest version
-    # best accomplished after ordering can be set on Parts
     queryset = Part.objects.all()
     serializer_class = ContentsSerializer
     lookup_fields = {
