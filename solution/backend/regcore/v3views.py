@@ -20,8 +20,7 @@ class MultipleFieldLookupMixin(object):
         queryset = self.filter_queryset(queryset)
         filter = {}
         latest_field = None
-        for field in self.lookup_fields:
-            param = self.lookup_fields[field]
+        for field, param in self.lookup_fields.items():
             value = self.kwargs.get(param, None)
             if param == "version" and value == "latest":
                 latest_field = field
