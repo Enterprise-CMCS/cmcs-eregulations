@@ -33,9 +33,7 @@ class Part(models.Model):
 
     document = models.JSONField()
     structure = models.JSONField()
-
-    # TODO: add this in later v3 work
-    # depth = models.IntegerField()
+    depth = models.IntegerField()
 
     title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")  # TODO: rename to title
 
@@ -46,17 +44,14 @@ class Part(models.Model):
         # TODO: add once /v2/title/X/existing is removed, the following line breaks it for some reason
         # ordering = ("title", "name", "-date")
 
+    def get_part_level(data):
+        for _ in range(self.depth):
+            data = data['children'][0]
+        return data
+
     @property
     def toc(self):
-        return self.structure['children'][0]['children'][0]['children'][0]
-
-    # TODO: add this along with depth field in later v3 work
-    # @property
-    # def toc(self):
-    #     structure = self.structure
-    #     for _ in range(self.depth):
-    #         structure = structure['children'][0]
-    #     return structure
+        return self.get_part_level(self.structure)
 
 
 class ParserConfiguration(SingletonModel):
