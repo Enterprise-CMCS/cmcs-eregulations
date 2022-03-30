@@ -44,7 +44,7 @@ class Part(models.Model):
         # TODO: add once /v2/title/X/existing is removed, the following line breaks it for some reason
         # ordering = ("title", "name", "-date")
 
-    def get_part_level(data):
+    def get_part_level(self, data):
         for _ in range(self.depth):
             data = data['children'][0]
         return data
