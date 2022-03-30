@@ -26,7 +26,7 @@ class MultipleFieldLookupMixin(object):
             if param == "version" and value == "latest":
                 latest_field = field
             elif value:
-                filter[field] = self.kwargs[self.lookup_fields[field]]
+                filter[field] = value
         return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)
 
 
