@@ -387,7 +387,6 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 
 	log.Trace("[worker ", thread, "] Determining depth of part ", version.Name, " version ", version.Date)
 	version.Depth = ecfr.DeterminePartDepth(version.Structure, version.Name)
-	log.Trace("[worker ", thread, "] Part depth is ", version.Depth)
 	if version.Depth == -1 {
 		return fmt.Errorf("Unable to determine depth of part in structure")
 	}
