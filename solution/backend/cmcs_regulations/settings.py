@@ -60,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'regulations.middleware.json_errors.JsonErrors',
+    'regcore.middleware.html_api.HtmlApi',
 ]
 
 REST_FRAMEWORK = {
