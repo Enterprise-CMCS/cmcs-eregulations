@@ -1,0 +1,9 @@
+@media print {
+    footer,
+    aside.left-sidebar,
+    aside.right-sidebar,
+    .flash-banner,
+    .search-header {
+        display: none;
+    }
+}
