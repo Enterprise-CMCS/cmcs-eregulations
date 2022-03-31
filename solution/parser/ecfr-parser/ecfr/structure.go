@@ -115,12 +115,11 @@ func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub 
 func DeterminePartDepth(s *Structure, part string) int {
 	if s.Type == "part" && len(s.Identifier) > 0 && s.Identifier[0] == part {
 		return 0
-	} else if len(s.Children) > 0 {
-		for _, child := range s.Children {
-			depth := DeterminePartDepth(child, part)
-			if depth != -1 {
-				return depth+1
-			}
+	}
+	for _, child := range s.Children {
+		depth := DeterminePartDepth(child, part)
+		if depth != -1 {
+			return depth+1
 		}
 	}
 	return -1
