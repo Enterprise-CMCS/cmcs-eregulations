@@ -13,8 +13,7 @@ class HtmlApi:
 
     def process_view(self, request, view_func, view_args, view_kwargs):
         if "html_api" in request.GET:
-            response = view_func(request, view_args, view_kwargs)
+            response = view_func(request, *view_args, **view_kwargs)
             data = json.dumps(response.data, indent=4)
             return render(request, "response.html", context={'data': data})
-        else:
-            return None
+        return None
