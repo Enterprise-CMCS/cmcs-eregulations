@@ -1,3 +1,11 @@
+/*
+    Most values below were calculated by multiplying value by 0.56,
+    which is the ratio of 1440px (the width of the figma comp)
+    to 8.5in/816px (the width of the printed page)
+*/
+
+$ratio: 0.56;
+
 @media print {
     @page {
         size: letter; /* 8.5 x 11 in */
@@ -8,7 +16,8 @@
     aside.left-sidebar,
     aside.right-sidebar,
     .flash-banner,
-    .search-header {
+    .search-header,
+    .copy-btn-container {
         display: none;
     }
 
@@ -75,5 +84,49 @@
     .content main.reg-text.match-middle {
         margin-left: 0;
         padding: 0 40px;
+
+        section,
+        h1,
+        h2 {
+            padding-left: 0px;
+            &:focus {
+                background: transparent;
+            }
+        }
+
+        h1 {
+            font-size: $base-font-size * 1.5 * $ratio;
+            margin-bottom: 17px;
+        }
+
+        h2 {
+            font-size: $font-size-2xl * $ratio;
+        }
+
+        .latest-version {
+            padding-left: 0px;
+            margin: 22px auto 20px;
+
+            &.subpart {
+                font-size: 10px;
+            }
+        }
+
+        article .paragraphs {
+            font-size: $font-size-md * $ratio;
+            line-height: 1.3;
+
+            p {
+                margin-block-start: 0;
+                margin-block-end: 0;
+                margin-top: 8px;
+
+                @for $i from 1 through 10 {
+                    &.depth-#{$i} + .depth-#{$i} {
+                        margin-top: 3px;
+                    }
+                }
+            }
+        }
     }
 }
