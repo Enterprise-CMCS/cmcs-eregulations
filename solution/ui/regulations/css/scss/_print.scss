@@ -1,9 +1,79 @@
 @media print {
+    @page {
+        size: letter; /* 8.5 x 11 in */
+        margin: 0.6in 0;
+    }
+
     footer,
     aside.left-sidebar,
     aside.right-sidebar,
     .flash-banner,
     .search-header {
         display: none;
+    }
+
+    header {
+        height: 48px;
+        padding: 0 40px;
+        border-top: 1px solid $secondary_color;
+        border-bottom: 1px solid $secondary_color;
+
+        &.sticky {
+            position: unset;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+        }
+
+        .flexbox {
+            &.header-mobile {
+                display: none;
+            }
+
+            &.header-large {
+                @include screen-xs {
+                    display: flex;
+                }
+            }
+        }
+
+        .title-container {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 18px;
+            display: inline-block;
+        }
+
+        .reg-title {
+            display: block;
+            flex: 2;
+            padding-right: $spacer-2;
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: $spacer-2;
+            margin-left: $spacer-2;
+            border-left: 1px solid $border_color;
+
+            a {
+                max-width: $text-max-width;
+                display: inline-block;
+            }
+        }
+
+        .header-part-name {
+            display: inline;
+        }
+    }
+
+    .content main.reg-text.match-middle {
+        margin-left: 0;
+        padding: 0 40px;
     }
 }
