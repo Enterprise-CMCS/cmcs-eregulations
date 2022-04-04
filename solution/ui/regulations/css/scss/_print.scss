@@ -5,6 +5,7 @@
 */
 
 $ratio: 0.56;
+$left-right-padding: 40px;
 
 @media print {
     @page {
@@ -12,7 +13,7 @@ $ratio: 0.56;
         margin: 0.6in 0;
     }
 
-    footer,
+    footer .site-footer,
     aside.left-sidebar,
     aside.right-sidebar,
     .flash-banner,
@@ -23,7 +24,7 @@ $ratio: 0.56;
 
     header {
         height: 48px;
-        padding: 0 40px;
+        padding: 0 $left-right-padding;
         border-top: 1px solid $secondary_color;
         border-bottom: 1px solid $secondary_color;
 
@@ -83,7 +84,7 @@ $ratio: 0.56;
 
     .content main.reg-text.match-middle {
         margin-left: 0;
-        padding: 0 40px;
+        padding: 0 $left-right-padding;
 
         section,
         h1,
@@ -126,6 +127,21 @@ $ratio: 0.56;
                         margin-top: 3px;
                     }
                 }
+            }
+        }
+    }
+
+    footer {
+        background: transparent;
+        padding: 11px 0;
+        margin: 0 $left-right-padding;
+
+        .print-footer {
+            display: block;
+            font-size: $font-size-md * $ratio;
+
+            a:link.external::after {
+                display: none;
             }
         }
     }
