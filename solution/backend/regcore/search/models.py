@@ -18,18 +18,18 @@ class SearchIndexQuerySet(models.QuerySet):
     def search(self, query):
         return self\
             .annotate(rank=SearchRank(
-                SearchVector('label', weight='A')
-                + SearchVector(models.functions.Concat('label__0', models.Value('.'), 'label__1'), weight='A')
-                + SearchVector('parent__title', weight='A')
-                + SearchVector('part__document__title', weight='B')
-                + SearchVector('content', weight='B'),
-                SearchQuery(query))
+                SearchVector('label', weight='A', config='english')
+                + SearchVector(models.functions.Concat('label__0', models.Value('.'), 'label__1'), weight='A', config='english')
+                + SearchVector('parent__title', weight='A', config='english')
+                + SearchVector('part__document__title', weight='B', config='english')
+                + SearchVector('content', weight='B', config='english'),
+                SearchQuery(query, search_type='phrase', config='english'))
             )\
             .filter(rank__gte=0.2)\
             .annotate(
                 headline=SearchHeadline(
                     "content",
-                    SearchQuery(query),
+                    SearchQuery(query, search_type='phrase', config='english'),
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
                 ),
