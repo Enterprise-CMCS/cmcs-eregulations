@@ -39,7 +39,7 @@ jobs:
     # Run lint on the code
     - name: Run lint
       run: |
-        go get golang.org/x/lint/golint
+        go install golang.org/x/lint/golint
         pushd solution/parser/ecfr-parser
         golint -set_exit_status ./...
         popd
