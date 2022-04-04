@@ -19,10 +19,14 @@ class MultipleFieldLookupMixin(object):
         queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
         filter = {}
-        for field in self.lookup_fields:
-            if self.kwargs.get(self.lookup_fields[field], None):
-                filter[field] = self.kwargs[self.lookup_fields[field]]
-        return get_object_or_404(queryset, **filter)
+        latest_field = None
+        for field, param in self.lookup_fields.items():
+            value = self.kwargs.get(param, None)
+            if param == "version" and value == "latest":
+                latest_field = field
+            elif value:
+                filter[field] = value
+        return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)
 
 
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
@@ -49,8 +53,6 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class PartContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
-    # TODO: modify so ".../version/latest/..." returns the latest version
-    # best accomplished after ordering can be set on Parts
     queryset = Part.objects.all()
     serializer_class = ContentsSerializer
     lookup_fields = {
