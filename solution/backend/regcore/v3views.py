@@ -10,6 +10,7 @@ from regcore.serializers import (
     ContentsSerializer,
     TitlesSerializer,
     TitleSerializer,
+    PartsSerialier,
     VersionsSerializer,
 )
 
@@ -47,6 +48,14 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class PartsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PartsSerialier
+
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        return Part.objects.filter(title=title).order_by("name", "-date").distinct("name")
 
 
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):

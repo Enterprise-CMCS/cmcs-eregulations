@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from regcore.models import Title
+from regcore.models import Title, Part
 
 
 class ContentsSerializer(serializers.BaseSerializer):
@@ -18,6 +18,12 @@ class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
         fields = "__all__"
+
+
+class PartsSerialier(serializers.ModelSerializer):
+    class Meta:
+        model = Part
+        fields = ("id", "name", "date", "last_updated", "depth", "title_object")
 
 
 class VersionsSerializer(serializers.BaseSerializer):
