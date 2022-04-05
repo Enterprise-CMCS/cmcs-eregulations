@@ -38,6 +38,7 @@ class SearchIndexQuerySet(models.QuerySet):
                     SearchQuery(query, search_type=search_type, config='english'),
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
+                    config='english'
                 ),
             )\
             .order_by('-rank')\
