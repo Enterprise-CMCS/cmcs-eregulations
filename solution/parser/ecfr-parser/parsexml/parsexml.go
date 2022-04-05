@@ -101,11 +101,6 @@ type Subpart struct {
 // PostProcess defines how to postProcess a subPart
 func (sp *Subpart) PostProcess() {
 	for _, child := range sp.Children {
-		s, ok := child.(Section)
-		if ok {
-			s.Subpart = sp.Citation[0]
-		}
-
 		c, ok := child.(PostProcessor)
 		if ok {
 			c.PostProcess()
@@ -209,7 +204,6 @@ type Section struct {
 	Citation SectionCitation `xml:"N,attr" json:"label"`
 	Header   string          `xml:"HEAD" json:"title"`
 	Children SectionChildren `xml:",any" json:"children"`
-	Subpart  string          `json:"subpart"`
 }
 
 // PostProcess cleans up the section after it is imported
