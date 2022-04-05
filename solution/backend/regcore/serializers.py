@@ -35,7 +35,7 @@ class VersionsSerializer(serializers.BaseSerializer):
 # You must specify a node_type
 class NodeTypeSerializer(serializers.BaseSerializer):
     remove_fields = []
-    
+
     def find_nodes(self, structure):
         nodes = []
         for child in structure["children"]:
