@@ -391,6 +391,9 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 		return fmt.Errorf("Unable to determine depth of part in structure")
 	}
 
+	log.Trace("[worker ", thread, "] Computing section parents for part ", version.Name, " version ", version.Date)
+	ecfr.DetermineParents(version.Structure)
+
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
 	if _, err := eregs.PostPart(ctx, version); err != nil {
 		return err

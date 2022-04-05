@@ -19,6 +19,8 @@ type Structure struct {
 	Type             string           `json:"type"`
 	Children         []*Structure     `json:"children"`
 	DescendantRange  RangeString      `json:"descendant_range"`
+	ParentType       string           `json:"parent_type"`
+	Parent           IdentifierString `json:"parent"`
 }
 
 // RangeString is just an array of strings but required for the JSON unmarshalling
@@ -123,4 +125,18 @@ func DeterminePartDepth(s *Structure, part string) int {
 		}
 	}
 	return -1
+}
+
+// DetermineParents computes the parent of each node in the structure
+func DetermineParents(s *Structure) {
+	determineParents(s, &IdentifierString{}, "")
+}
+
+func determineParents(s *Structure, is *IdentifierString, pt string) {
+	s.Parent = make([]string, len(*is))
+	copy(s.Parent, *is)
+	s.ParentType = pt
+	for _, child := range s.Children {
+		determineParents(child, &s.Identifier, s.Type)
+	}
 }
