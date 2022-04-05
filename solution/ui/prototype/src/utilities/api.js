@@ -611,6 +611,15 @@ const getSupplementalContentNew = async (
     return result;
 };
 
+const getSupIDByLocations = async() =>{
+    const result = await httpApiGet('locations');
+    return result;
+}
+
+const getSupByPart= async(title, part) => {
+    const result = await httpApiGet(`sup_by_id/title/${title}/part/${part}`)
+    return result;
+}
 const getCategories = async () => {
     return await httpApiGet("categories");
 };
@@ -655,6 +664,8 @@ export {
     getCategories,
     getPartsDetails,
     getSubPartsandSections,
-    getAllSupplementalContentByPieces
+    getAllSupplementalContentByPieces,
+    getSupIDByLocations,
+    getSupByPart
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
