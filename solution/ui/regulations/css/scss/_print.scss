@@ -13,6 +13,10 @@ $left-right-padding: 40px;
         margin: 0.6in 0;
     }
 
+    *:focus {
+        background: transparent !important;
+    }
+
     footer .site-footer,
     aside.left-sidebar,
     aside.right-sidebar,
@@ -129,13 +133,10 @@ $left-right-padding: 40px;
             margin-left: 0;
             padding: 0 $left-right-padding;
 
-            section,
             h1,
-            h2 {
+            h2,
+            article > section:not(.appendix-section) {
                 padding-left: 0px;
-                &:focus {
-                    background: transparent;
-                }
             }
 
             h1 {
@@ -176,6 +177,20 @@ $left-right-padding: 40px;
                             }
                         }
                     }
+                }
+
+                .effective-date-note {
+                    font-size: 13px * $ratio;
+                    line-height: 18px * $ratio;
+                }
+
+                .footnote-section {
+                    font-size: $font_size_sm * $ratio;
+                    line-height: 1.5;
+                }
+
+                .reg-image {
+                    max-width: 50%;
                 }
             }
         }
