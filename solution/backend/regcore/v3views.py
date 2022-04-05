@@ -8,6 +8,7 @@ from regcore.views import SettingsAuthentication
 
 from regcore.serializers import (
     ContentsSerializer,
+    TitlesSerializer,
     TitleSerializer,
     VersionsSerializer,
 )
@@ -32,6 +33,11 @@ class MultipleFieldLookupMixin(object):
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all()
     serializer_class = ContentsSerializer
+
+
+class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitlesSerializer
 
 
 class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):

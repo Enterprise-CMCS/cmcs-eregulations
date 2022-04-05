@@ -8,6 +8,12 @@ class ContentsSerializer(serializers.BaseSerializer):
         return instance.toc
 
 
+class TitlesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Title
+        fields = ("id", "name", "last_updated")
+
+
 class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
