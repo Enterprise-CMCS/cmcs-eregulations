@@ -38,7 +38,7 @@ import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import { Splitpanes, Pane } from "splitpanes";
-import { getSupplementalContentNew, getAllSupplementalContentByPieces } from "../utilities/api";
+import { getSupplementalContentNew, getAllSupplementalContentByPieces, getSupIDByLocations, getSupByPart } from "../utilities/api";
 import "splitpanes/dist/splitpanes.css";
 import ResourceFilters from "../components/ResourcesPage/ResourceFilters.vue";
 import SectionPane from "../components/ResourcesPage/SectionSide.vue";
@@ -58,8 +58,9 @@ export default {
         singleSupList: [],
         sortedSupList: [],
         preSelectedSections:[],
-        preSelectedParts: []
-
+        preSelectedParts: [],
+        supbyId:[],
+        supTest:[]
 
     }),
     async created() {
@@ -67,6 +68,9 @@ export default {
 
             const urlParams = new URLSearchParams(window.location.search);
             const part = urlParams.get('part')
+
+            this.supbyId=await getSupIDByLocations()
+            
             if (part){
                   this.filters["parts"] = {
                       [part]: {part}
@@ -142,11 +146,12 @@ export default {
         async getSupContent() {
             this.singleSupList = [];
             console.log(this.filters)
+            
             try {
                 this.supList = [];
                 for (let part in this.filters.parts) {
                     let query = this.filters.parts[part];
-
+                    this.supTest.push(await getSupByPart(42, query["part"]))
                     this.supList.push(
                         await getSupplementalContentNew(
                             42,
