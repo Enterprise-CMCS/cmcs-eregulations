@@ -69,31 +69,24 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
         return Part.objects.filter(title=title, name=part).order_by("-date")
 
 
-class PartContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+# Inherit from this class to retrieve attributes from a specific version of a part
+# You must specify a serializer_class
+class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.all()
+    lookup_fields = {
+        "title": "title",
+        "name": "part",
+        "date": "version",
+    }
+
+
+class PartContentsViewSet(PartPropertiesViewSet):
     serializer_class = ContentsSerializer
-    lookup_fields = {
-        "title": "title",
-        "name": "part",
-        "date": "version",
-    }
 
 
-class PartSectionsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Part.objects.all()
+class PartSectionsViewSet(PartPropertiesViewSet):
     serializer_class = PartSectionsSerializer
-    lookup_fields = {
-        "title": "title",
-        "name": "part",
-        "date": "version",
-    }
 
 
-class PartSubpartsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Part.objects.all()
+class PartSubpartsViewSet(PartPropertiesViewSet):
     serializer_class = PartSubpartsSerializer
-    lookup_fields = {
-        "title": "title",
-        "name": "part",
-        "date": "version",
-    }

@@ -31,6 +31,8 @@ class VersionsSerializer(serializers.BaseSerializer):
         return instance.date
 
 
+# Inherit from this class to return a flat list of specific types of nodes within the part
+# You must specify a node_type
 class NodeTypeSerializer(serializers.BaseSerializer):
     def find_nodes(self, structure):
         nodes = []
