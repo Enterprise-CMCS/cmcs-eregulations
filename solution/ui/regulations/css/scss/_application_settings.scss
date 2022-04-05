@@ -119,6 +119,13 @@ $copy_button_success: $green;
 // Fonts
 //--------------------------
 
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: url('#{$additional-font-path}/OpenSans-BoldItalic.ttf') format('truetype');
+}
+
 $primary_site_font: $font-sans; // Open Sans
 $secondary_site_font: "Merriweather", Georgia, serif;
 $font_size_xxs: 10px;
