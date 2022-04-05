@@ -96,8 +96,6 @@ func main() {
 }
 
 func start() error {
-	log.Info("This is a test to make the linter run on GHA")
-	
 	log.Info("[main] Loading configuration...")
 	var err error
 	config, _, err = eregs.RetrieveConfig()
