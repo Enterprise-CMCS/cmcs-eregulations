@@ -192,6 +192,22 @@ $left-right-padding: 40px;
                 .reg-image {
                     max-width: 50%;
                 }
+
+                .table-section {
+                    .gpotbl_div {
+                        table {
+                            th,
+                            td {
+                                font-size: $font-size-sm * $ratio;
+                            }
+
+                            th {
+                                print-color-adjust: exact;
+                                -webkit-print-color-adjust: exact;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
