@@ -12,6 +12,8 @@ from regcore.serializers import (
     TitleSerializer,
     PartsSerialier,
     VersionsSerializer,
+    PartSectionsSerializer,
+    PartSubpartsSerializer,
 )
 
 
@@ -70,6 +72,26 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
 class PartContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.all()
     serializer_class = ContentsSerializer
+    lookup_fields = {
+        "title": "title",
+        "name": "part",
+        "date": "version",
+    }
+
+
+class PartSectionsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = Part.objects.all()
+    serializer_class = PartSectionsSerializer
+    lookup_fields = {
+        "title": "title",
+        "name": "part",
+        "date": "version",
+    }
+
+
+class PartSubpartsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = Part.objects.all()
+    serializer_class = PartSubpartsSerializer
     lookup_fields = {
         "title": "title",
         "name": "part",

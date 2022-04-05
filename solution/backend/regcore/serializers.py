@@ -29,3 +29,31 @@ class PartsSerialier(serializers.ModelSerializer):
 class VersionsSerializer(serializers.BaseSerializer):
     def to_representation(self, instance):
         return instance.date
+
+
+class NodeTypeSerializer(serializers.BaseSerializer):
+    def find_nodes(self, structure):
+        nodes = []
+        for child in structure["children"]:
+            if child["type"] == self.node_type:
+                nodes.append(child)
+            if child["children"]:
+                nodes = nodes + self.find_nodes(child)
+        return nodes
+    
+    def to_representation(self, instance):
+        part = instance.structure
+        for _ in range(instance.depth):
+            part = part["children"][0]
+        nodes = self.find_nodes(part)
+        for node in nodes:
+            node["children"] = None
+        return nodes
+
+
+class PartSectionsSerializer(NodeTypeSerializer):
+    node_type = "section"
+
+
+class PartSubpartsSerializer(NodeTypeSerializer):
+    node_type = "subpart"
