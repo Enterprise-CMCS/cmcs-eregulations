@@ -34,6 +34,8 @@ class VersionsSerializer(serializers.BaseSerializer):
 # Inherit from this class to return a flat list of specific types of nodes within the part
 # You must specify a node_type
 class NodeTypeSerializer(serializers.BaseSerializer):
+    remove_fields = []
+    
     def find_nodes(self, structure):
         nodes = []
         for child in structure["children"]:
@@ -49,12 +51,14 @@ class NodeTypeSerializer(serializers.BaseSerializer):
             part = part["children"][0]
         nodes = self.find_nodes(part)
         for node in nodes:
-            node["children"] = None
+            for field in self.remove_fields + ["children", "type"]:
+                del node[field]
         return nodes
 
 
 class PartSectionsSerializer(NodeTypeSerializer):
     node_type = "section"
+    remove_fields = ["descendant_range"]
 
 
 class PartSubpartsSerializer(NodeTypeSerializer):
