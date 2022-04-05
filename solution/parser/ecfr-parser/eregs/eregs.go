@@ -38,7 +38,7 @@ type Part struct {
 	Date      	   string          `json:"date" xml:"-"`
 	Structure 	   *ecfr.Structure `json:"structure" xml:"-"`
 	Document  	   *parsexml.Part  `json:"document"`
-	Depth	  	   int			  `json:"depth"`
+	Depth	  	   int			   `json:"depth"`
 	Processed 	   bool
 	UploadContents bool
 }

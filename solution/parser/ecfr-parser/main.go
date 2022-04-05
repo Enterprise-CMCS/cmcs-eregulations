@@ -385,6 +385,12 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 	log.Debug("[worker ", thread, "] Running post process on structure for part ", version.Name, " version ", version.Date)
 	version.Document.PostProcess()
 
+	log.Trace("[worker ", thread, "] Determining depth of part ", version.Name, " version ", version.Date)
+	version.Depth = ecfr.DeterminePartDepth(version.Structure, version.Name)
+	if version.Depth == -1 {
+		return fmt.Errorf("Unable to determine depth of part in structure")
+	}
+
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
 	if _, err := eregs.PostPart(ctx, version); err != nil {
 		return err
