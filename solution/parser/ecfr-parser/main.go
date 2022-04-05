@@ -117,6 +117,9 @@ func start() error {
 			}
 			log.Warn("[main] Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
 		}
+		if !config.SkipVersions {
+			toc.Contents = &ecfr.Structure{}
+		}
 		title.Contents = toc
 		queue.PushBack(title)
 	}
