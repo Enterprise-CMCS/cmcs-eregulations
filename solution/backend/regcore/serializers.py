@@ -40,7 +40,7 @@ class NodeTypeSerializer(serializers.BaseSerializer):
             if child["children"]:
                 nodes = nodes + self.find_nodes(child)
         return nodes
-    
+
     def to_representation(self, instance):
         part = instance.structure
         for _ in range(instance.depth):
