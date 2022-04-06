@@ -53,6 +53,12 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
+class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = ContentsSerializer
+    lookup_fields = {"name": "title"}
+
+
 class PartsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PartsSerialier
 
