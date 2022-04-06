@@ -35,7 +35,9 @@ class Part(models.Model):
     structure = models.JSONField()
     depth = models.IntegerField()
 
-    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")  # TODO: rename to title
+    # TODO: rename to title
+    # also, part upload endpoint needs to connect this to title object
+    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")
 
     objects = PartManager()
 

@@ -8,8 +8,12 @@ from regcore.views import SettingsAuthentication
 
 from regcore.serializers import (
     ContentsSerializer,
+    TitlesSerializer,
     TitleSerializer,
+    PartsSerialier,
     VersionsSerializer,
+    PartSectionsSerializer,
+    PartSubpartsSerializer,
 )
 
 
@@ -34,6 +38,11 @@ class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentsSerializer
 
 
+class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitlesSerializer
+
+
 class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
@@ -41,6 +50,14 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class PartsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PartsSerialier
+
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        return Part.objects.filter(title=title).order_by("name", "-date").distinct("name")
 
 
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
@@ -52,11 +69,24 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
         return Part.objects.filter(title=title, name=part).order_by("-date")
 
 
-class PartContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+# Inherit from this class to retrieve attributes from a specific version of a part
+# You must specify a serializer_class
+class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.all()
-    serializer_class = ContentsSerializer
     lookup_fields = {
         "title": "title",
         "name": "part",
         "date": "version",
     }
+
+
+class PartContentsViewSet(PartPropertiesViewSet):
+    serializer_class = ContentsSerializer
+
+
+class PartSectionsViewSet(PartPropertiesViewSet):
+    serializer_class = PartSectionsSerializer
+
+
+class PartSubpartsViewSet(PartPropertiesViewSet):
+    serializer_class = PartSubpartsSerializer

@@ -351,3 +351,231 @@ func TestExtractSubchapterParts(t *testing.T) {
 		})
 	}
 }
+
+func TestDeterminePartDepth(t *testing.T) {
+	testTable := []struct{
+		Name string
+		Structure Structure
+		Part string
+		Depth int
+	}{
+		{
+			Name: "test-level-zero",
+			Structure: Structure{
+				Identifier: IdentifierString{"433"},
+				Children: []*Structure{},
+				Type: "part",
+			},
+			Part: "433",
+			Depth: 0,
+		},
+		{
+			Name: "test-level-3",
+			Structure: Structure{
+				Identifier: IdentifierString{"42"},
+				Type: "title",
+				Children: []*Structure{
+					&Structure{
+						Identifier: IdentifierString{"IV"},
+						Type: "chapter",
+						Children: []*Structure{
+							&Structure{
+								Identifier: IdentifierString{"C"},
+								Type: "subchapter",
+								Children: []*Structure{
+									&Structure{
+										Identifier: IdentifierString{"433"},
+										Type: "part",
+										Children: []*Structure{},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			Part: "433",
+			Depth: 3,
+		},
+		{
+			Name: "test-multiple-children",
+			Structure: Structure{
+				Identifier: IdentifierString{"42"},
+				Type: "title",
+				Children: []*Structure{
+					&Structure{
+						Identifier: IdentifierString{"440"},
+						Type: "part",
+						Children: []*Structure{},
+					},
+					&Structure{
+						Identifier: IdentifierString{"IV"},
+						Type: "chapter",
+						Children: []*Structure{
+							&Structure{
+								Identifier: IdentifierString{"C"},
+								Type: "subchapter",
+								Children: []*Structure{
+									&Structure{
+										Identifier: IdentifierString{"200"},
+										Type: "part",
+										Children: []*Structure{},
+									},
+									&Structure{
+										Identifier: IdentifierString{"300"},
+										Type: "part",
+										Children: []*Structure{},
+									},									
+									&Structure{
+										Identifier: IdentifierString{"433"},
+										Type: "part",
+										Children: []*Structure{},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			Part: "433",
+			Depth: 3,
+		},
+		{
+			Name: "test-not-found",
+			Structure: Structure{
+				Identifier: IdentifierString{"42"},
+				Type: "title",
+				Children: []*Structure{
+					&Structure{
+						Identifier: IdentifierString{"IV"},
+						Type: "chapter",
+						Children: []*Structure{
+							&Structure{
+								Identifier: IdentifierString{"C"},
+								Type: "subchapter",
+								Children: []*Structure{
+									&Structure{
+										Identifier: IdentifierString{"200"},
+										Type: "part",
+										Children: []*Structure{},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			Part: "443",
+			Depth: -1,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			depth := DeterminePartDepth(&tc.Structure, tc.Part)
+			if depth != tc.Depth {
+				t.Errorf("expected (%d), received (%d)", tc.Depth, depth)
+			}
+		})
+	}
+}
+
+func TestDetermineParents(t *testing.T) {
+	structure := Structure{
+		Identifier: IdentifierString{"42"},
+		Type: "title",
+		Children: []*Structure{
+			&Structure{
+				Identifier: IdentifierString{"440"},
+				Type: "part",
+				Children: []*Structure{},
+			},
+			&Structure{
+				Identifier: IdentifierString{"IV"},
+				Type: "chapter",
+				Children: []*Structure{
+					&Structure{
+						Identifier: IdentifierString{"C"},
+						Type: "subchapter",
+						Children: []*Structure{
+							&Structure{
+								Identifier: IdentifierString{"200"},
+								Type: "part",
+								Children: []*Structure{},
+							},
+							&Structure{
+								Identifier: IdentifierString{"300"},
+								Type: "part",
+								Children: []*Structure{},
+							},									
+							&Structure{
+								Identifier: IdentifierString{"433"},
+								Type: "part",
+								Children: []*Structure{},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	expected := Structure{
+		Identifier: IdentifierString{"42"},
+		Type: "title",
+		Parent: IdentifierString{},
+		ParentType: "",
+		Children: []*Structure{
+			&Structure{
+				Identifier: IdentifierString{"440"},
+				Type: "part",
+				Parent: IdentifierString{"42"},
+				ParentType: "title",
+				Children: []*Structure{},
+			},
+			&Structure{
+				Identifier: IdentifierString{"IV"},
+				Type: "chapter",
+				Parent: IdentifierString{"42"},
+				ParentType: "title",
+				Children: []*Structure{
+					&Structure{
+						Identifier: IdentifierString{"C"},
+						Type: "subchapter",
+						Parent: IdentifierString{"IV"},
+						ParentType: "chapter",
+						Children: []*Structure{
+							&Structure{
+								Identifier: IdentifierString{"200"},
+								Type: "part",
+								Parent: IdentifierString{"C"},
+								ParentType: "subchapter",
+								Children: []*Structure{},
+							},
+							&Structure{
+								Identifier: IdentifierString{"300"},
+								Type: "part",
+								Parent: IdentifierString{"C"},
+								ParentType: "subchapter",
+								Children: []*Structure{},
+							},									
+							&Structure{
+								Identifier: IdentifierString{"433"},
+								Type: "part",
+								Parent: IdentifierString{"C"},
+								ParentType: "subchapter",
+								Children: []*Structure{},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	DetermineParents(&structure)
+
+	if diff := deep.Equal(structure, expected); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
+	}
+}
