@@ -43,6 +43,8 @@ func copyStructure(src *ecfr.Structure) *ecfr.Structure {
 		Type: src.Type,
 		DescendantRange: src.DescendantRange,
 		Children: []*ecfr.Structure{},
+		Parent: src.Parent,
+		ParentType: src.ParentType,
 	}
 }
 
