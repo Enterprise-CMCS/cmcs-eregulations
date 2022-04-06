@@ -16,22 +16,29 @@ class SearchIndexQuerySet(models.QuerySet):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
     def search(self, query):
+        search_type = "plain"
+        cover_density = False
+        if query.startswith('"') and query.endswith('"'):
+            search_type = "phrase"
+            cover_density = True
+
         return self\
             .annotate(rank=SearchRank(
-                SearchVector('label', weight='A')
-                + SearchVector(models.functions.Concat('label__0', models.Value('.'), 'label__1'), weight='A')
-                + SearchVector('parent__title', weight='A')
-                + SearchVector('part__document__title', weight='B')
-                + SearchVector('content', weight='B'),
-                SearchQuery(query))
+                SearchVector('label', weight='A', config='english')
+                + SearchVector(models.functions.Concat('label__0', models.Value('.'), 'label__1'), weight='A', config='english')
+                + SearchVector('parent__title', weight='A', config='english')
+                + SearchVector('part__document__title', weight='B', config='english')
+                + SearchVector('content', weight='B', config='english'),
+                SearchQuery(query, search_type=search_type, config='english'), cover_density=cover_density)
             )\
             .filter(rank__gte=0.2)\
             .annotate(
                 headline=SearchHeadline(
                     "content",
-                    SearchQuery(query),
+                    SearchQuery(query, search_type=search_type, config='english'),
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
+                    config='english'
                 ),
             )\
             .order_by('-rank')\
