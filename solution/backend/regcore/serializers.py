@@ -60,3 +60,12 @@ class PartSectionsSerializer(NodeTypeSerializer):
 
 class PartSubpartsSerializer(NodeTypeSerializer):
     node_type = "subpart"
+
+
+class SubpartContentsSerializer(serializers.BaseSerializer):
+    def to_representation(self, instance):
+        toc = instance.toc
+        for node in toc["children"]:
+            if node["type"] == "subpart" and node["identifier"][0] == self.context["subpart"]:
+                return node["children"]
+        return []

@@ -14,6 +14,7 @@ from regcore.serializers import (
     VersionsSerializer,
     PartSectionsSerializer,
     PartSubpartsSerializer,
+    SubpartContentsSerializer,
 )
 
 
@@ -90,3 +91,12 @@ class PartSectionsViewSet(PartPropertiesViewSet):
 
 class PartSubpartsViewSet(PartPropertiesViewSet):
     serializer_class = PartSubpartsSerializer
+
+
+class SubpartContentsViewSet(PartPropertiesViewSet):
+    serializer_class = SubpartContentsSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["subpart"] = self.kwargs.get("subpart")
+        return context
