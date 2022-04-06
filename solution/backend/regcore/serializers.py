@@ -46,10 +46,7 @@ class NodeTypeSerializer(serializers.BaseSerializer):
         return nodes
 
     def to_representation(self, instance):
-        part = instance.structure
-        for _ in range(instance.depth):
-            part = part["children"][0]
-        nodes = self.find_nodes(part)
+        nodes = self.find_nodes(instance.get_part_level(instance.structure))
         for node in nodes:
             for field in self.remove_fields + ["children", "type"]:
                 del node[field]
