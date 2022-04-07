@@ -117,6 +117,9 @@ func start() error {
 			}
 			log.Warn("[main] Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
 		}
+		if !config.SkipVersions {
+			toc.Contents = &ecfr.Structure{}
+		}
 		title.Contents = toc
 		queue.PushBack(title)
 	}
@@ -384,6 +387,15 @@ func handlePartVersion(ctx context.Context, thread int, date time.Time, version 
 
 	log.Debug("[worker ", thread, "] Running post process on structure for part ", version.Name, " version ", version.Date)
 	version.Document.PostProcess()
+
+	log.Trace("[worker ", thread, "] Determining depth of part ", version.Name, " version ", version.Date)
+	version.Depth = ecfr.DeterminePartDepth(version.Structure, version.Name)
+	if version.Depth == -1 {
+		return fmt.Errorf("Unable to determine depth of part in structure")
+	}
+
+	log.Trace("[worker ", thread, "] Computing section parents for part ", version.Name, " version ", version.Date)
+	ecfr.DetermineParents(version.Structure)
 
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
 	if _, err := eregs.PostPart(ctx, version); err != nil {

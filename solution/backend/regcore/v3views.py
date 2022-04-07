@@ -8,8 +8,12 @@ from regcore.views import SettingsAuthentication
 
 from regcore.serializers import (
     ContentsSerializer,
+    TitlesSerializer,
     TitleSerializer,
+    PartsSerialier,
     VersionsSerializer,
+    PartSectionsSerializer,
+    PartSubpartsSerializer,
 )
 
 
@@ -19,15 +23,24 @@ class MultipleFieldLookupMixin(object):
         queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
         filter = {}
-        for field in self.lookup_fields:
-            if self.kwargs.get(self.lookup_fields[field], None):
-                filter[field] = self.kwargs[self.lookup_fields[field]]
-        return get_object_or_404(queryset, **filter)
+        latest_field = None
+        for field, param in self.lookup_fields.items():
+            value = self.kwargs.get(param, None)
+            if param == "version" and value == "latest":
+                latest_field = field
+            elif value:
+                filter[field] = value
+        return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)
 
 
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all()
     serializer_class = ContentsSerializer
+
+
+class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = TitlesSerializer
 
 
 class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
@@ -39,6 +52,14 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
+class PartsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = PartsSerialier
+
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        return Part.objects.filter(title=title).order_by("name", "-date").distinct("name")
+
+
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VersionsSerializer
 
@@ -48,13 +69,24 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
         return Part.objects.filter(title=title, name=part).order_by("-date")
 
 
-class PartContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
-    # TODO: modify so ".../version/latest/..." returns the latest version
-    # best accomplished after ordering can be set on Parts
+# Inherit from this class to retrieve attributes from a specific version of a part
+# You must specify a serializer_class
+class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.all()
-    serializer_class = ContentsSerializer
     lookup_fields = {
         "title": "title",
         "name": "part",
         "date": "version",
     }
+
+
+class PartContentsViewSet(PartPropertiesViewSet):
+    serializer_class = ContentsSerializer
+
+
+class PartSectionsViewSet(PartPropertiesViewSet):
+    serializer_class = PartSectionsSerializer
+
+
+class PartSubpartsViewSet(PartPropertiesViewSet):
+    serializer_class = PartSubpartsSerializer

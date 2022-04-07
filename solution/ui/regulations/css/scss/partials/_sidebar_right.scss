@@ -6,6 +6,7 @@
 
 aside.right-sidebar {
     padding-top: $spacer-5;
+    padding-bottom: $spacer-5;
     max-width: 400px;
     position: sticky;
     height: calc(100vh - #{$header_height_mobile} - #{$spacer-5});

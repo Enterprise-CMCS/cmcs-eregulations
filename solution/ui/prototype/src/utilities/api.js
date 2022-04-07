@@ -424,13 +424,30 @@ const getSubPartsandSections = async () => {
 
         part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
 
-    for (const subpart in subparts) {
-        fullSelection.push({ label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, label: "Part " + subparts[subpart].part + " " + subparts[subpart].data.label, location: { part: subparts[subpart].part, subpart: subparts[subpart].data.identifier[0] }, type: 'subpart' })
+    for (const subpart of subparts) {
+        if (subpart.data.type === 'section') {
+            fullSelection.push({ label: subpart.data.label, id: subpart.data.label, location: {part: subpart.part, section: subpart.data.identifier[1] }, type: 'section' })
+        }
+        else {
+            fullSelection.push({ label: "Part " + subpart.part + " " + subpart.data.label, label: "Part " + subpart.part + " " + subpart.data.label, location: { part: subpart.part, subpart: subpart.data.identifier[0] }, type: 'subpart' })
 
-        let sections = subparts[subpart].data.children
+            let sections = subpart.data.children
 
-        for (const section in sections) {
-            fullSelection.push({ label: sections[section].label, id: sections[section].label, location: { part: subparts[subpart].part, section: sections[section].identifier[1] }, part: subparts[subpart].part, type: 'section' })
+            for (const section of sections) {
+               
+                if (section.type != "subject_group") {
+                  
+                    fullSelection.push({ label: section.label, id: section.label, location: { part: subpart.part, section: section.identifier[1] }, part: subpart.part, type: 'section' })
+                    
+                }
+                else {
+                    
+                    for (const s of section.children) {
+                      
+                        fullSelection.push({ label: s.label, id: s.label, location: { part: subpart.part, section: s.identifier[1] }, part: subpart.part, type: 'section' })
+                    }
+                }
+            }
         }
     }
 
