@@ -27,7 +27,7 @@
                         </button>
                     </form>
                     {% if synonym %}
-                        <div style="margin: 24px 0 16px 0; font-size:14px">
+                        <div class="search-suggestion">
                             Try searching for:
                             {% for syn in synonym.synonyms.all %}
                                 <a href="{% url 'search' %}?q=%22{{ syn }}%22">{{ syn }}</a>{% if not forloop.last %},{% endif %}
