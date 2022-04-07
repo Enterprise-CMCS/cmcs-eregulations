@@ -479,11 +479,11 @@ const getSectionsForSubPart = async (part, subPart) => {
     const parent = potentialSubParts.find(p => p.type === "subpart" && p.identifier[0] === subPart)
     const sections = []
     parent.children.forEach(c => {
-        if (c.type === "section" && !c.reserved){
+        if (c.type === "section" && !c.reserved) {
             sections.push(c.identifier[1])
-        }else if (c.children){
-            c.children.forEach( child => {
-                if (child.type === "section" && !c.reserved){
+        } else if (c.children) {
+            c.children.forEach(child => {
+                if (child.type === "section" && !c.reserved) {
                     sections.push(child.identifier[1])
                 }
             })
@@ -621,27 +621,16 @@ const getSupByPart = async (title, part, subparts, sections) => {
     const allIndex = sections.concat(subparts)
 
     const supplemental = await httpApiGet(`sup_by_id/title/${title}/part/${part}`)
-    console.log(supplemental)
 
-    let supList = []
-    let supItems = []
-
-    if (allIndex.length === 0) {
-        let allSupInPart = locations[title][part]
-        supList = Object.keys(allSupInPart).reduce((acc, x) => {
-            return acc.concat(allSupInPart[x])
-        },[])
-    }
-    else {
-        supList=allIndex.reduce((acc, sec)=>{
-            return acc.concat(locations[title][part][sec])      
+    const supList = allIndex.length === 0
+        ? Object.keys(locations[title][part]).reduce((acc, x) => {
+            return acc.concat(locations[title][part][x])
         }, [])
-    }
-
+        : allIndex.reduce((acc, sec) => {
+            return acc.concat(locations[title][part][sec])
+        }, [])
 
     const contents = [...new Set(supList)].map(supId => {
-        console.log(supId)
-        console.log(supplemental[supId])
         const item = JSON.parse(JSON.stringify(supplemental[supId]))
         item['category'] = item['category'].display_name
         return item
