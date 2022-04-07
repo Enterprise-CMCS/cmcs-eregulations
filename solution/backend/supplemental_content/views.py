@@ -167,11 +167,13 @@ class SupplementalContentByPartView(APIView):
 
 
 class SupByLocationViewSet(viewsets.ModelViewSet):
-    queryset = AbstractLocation.objects.prefetch_related('supplemental_content')
-    serializer_class= SuppByLocationSerializer
 
     def list(self, request, *args, **kwargs):
-        queryset = AbstractLocation.objects.prefetch_related('supplemental_content')
+        queryset = AbstractLocation.objects.prefetch_related(
+                    Prefetch(
+                        'supplemental_content',
+                        queryset=AbstractSupplementalContent.objects.filter(approved=True).select_subclasses(SupplementalContent)
+                    ))
         serializer = SuppByLocationSerializer(queryset, many=True)
         response_dict={}
         for item in serializer.data:
@@ -179,7 +181,7 @@ class SupByLocationViewSet(viewsets.ModelViewSet):
             partKey=item.pop("part")
             is_subpart = False
             if 'Subpart' in item['display_name']:
-                identifier = item['display_name']
+                identifier = item['display_name'][-1]
                 is_subpart = True
             else:
                 identifier = item['display_name'].split()[1].split('.') 

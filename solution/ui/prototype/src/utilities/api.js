@@ -628,28 +628,20 @@ const getSupByPart = async (title, part, subparts, sections) => {
 
     if (allIndex.length === 0) {
         let allSupInPart = locations[title][part]
-        for (let x in allSupInPart) {
-            if (allSupInPart[x].length > 0) {
-                for (let item of allSupInPart[x]) {
-                    if (supList.indexOf(item) === -1) {
-                        supList.push(item)
-                    }
-                }
-            }
-        }
+        supList = Object.keys(allSupInPart).reduce((acc, x) => {
+            return acc.concat(allSupInPart[x])
+        },[])
     }
     else {
-        for (let sec of allIndex) {
-            supItems = locations[title][part][sec]
-            for (let item of supItems) {
-                if (supList.indexOf(item) === -1) {
-                    supList.push(item)
-                }
-            }
-        }
+        supList=allIndex.reduce((acc, sec)=>{
+            return acc.concat(locations[title][part][sec])      
+        }, [])
     }
 
-    const contents = supList.map(supId => {
+
+    const contents = [...new Set(supList)].map(supId => {
+        console.log(supId)
+        console.log(supplemental[supId])
         const item = JSON.parse(JSON.stringify(supplemental[supId]))
         item['category'] = item['category'].display_name
         return item
