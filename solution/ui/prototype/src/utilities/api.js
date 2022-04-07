@@ -611,14 +611,51 @@ const getSupplementalContentNew = async (
     return result;
 };
 
-const getSupIDByLocations = async() =>{
+const getSupIDByLocations = async () => {
     const result = await httpApiGet('locations');
     return result;
 }
 
-const getSupByPart= async(title, part) => {
-    const result = await httpApiGet(`sup_by_id/title/${title}/part/${part}`)
-    return result;
+const getSupByPart = async (title, part, subparts, sections) => {
+    const locations = await httpApiGet('locations');
+    const allIndex = sections.concat(subparts)
+
+    const supplemental = await httpApiGet(`sup_by_id/title/${title}/part/${part}`)
+    console.log(supplemental)
+
+    let supList = []
+    let supItems = []
+
+    if (allIndex.length === 0) {
+        let allSupInPart = locations[title][part]
+        for (let x in allSupInPart) {
+            if (allSupInPart[x].length > 0) {
+                for (let item of allSupInPart[x]) {
+                    if (supList.indexOf(item) === -1) {
+                        supList.push(item)
+                    }
+                }
+            }
+        }
+    }
+    else {
+        for (let sec of allIndex) {
+            supItems = locations[title][part][sec]
+            for (let item of supItems) {
+                if (supList.indexOf(item) === -1) {
+                    supList.push(item)
+                }
+            }
+        }
+    }
+
+    const contents = supList.map(supId => {
+        const item = JSON.parse(JSON.stringify(supplemental[supId]))
+        item['category'] = item['category'].display_name
+        return item
+    })
+
+    return contents;
 }
 const getCategories = async () => {
     return await httpApiGet("categories");

@@ -171,26 +171,33 @@ class SupByLocationViewSet(viewsets.ModelViewSet):
     serializer_class= SuppByLocationSerializer
 
     def list(self, request, *args, **kwargs):
-        response = super(SupByLocationViewSet, self).list(request, *args, **kwargs)
+        queryset = AbstractLocation.objects.prefetch_related('supplemental_content')
+        serializer = SuppByLocationSerializer(queryset, many=True)
         response_dict={}
-        for item in response.data:
+        for item in serializer.data:
             titleKey= item.pop("title")
             partKey=item.pop("part")
+            is_subpart = False
             if 'Subpart' in item['display_name']:
-                identifier = item['display_name'][-1]
+                identifier = item['display_name']
+                is_subpart = True
             else:
-                identifier = item['display_name'].split()[1].split('.')
+                identifier = item['display_name'].split()[1].split('.') 
 
             newsup=[]
             for content in item['supplemental_content']:
                 newsup.append(content['id'])
 
-            if len(identifier) > 1:
-                location = {identifier[1] :newsup}
+            if len(identifier) > 1 or is_subpart:
+                if is_subpart:
+                    location = {identifier: newsup}
+                else:
+                    identifier = identifier[1]
+                    location = {identifier :newsup}  
                 partDict = {partKey: location}
                 if titleKey in response_dict:
                     if partKey in response_dict[titleKey]:
-                        response_dict[titleKey][partKey][identifier[1]]=newsup
+                        response_dict[titleKey][partKey][identifier]=newsup
                     else:
                         response_dict[titleKey][partKey]=location
                 else:
@@ -208,9 +215,7 @@ class SupByIdViewSet(viewsets.ViewSet):
             category__isnull=False,
             locations__part=part,
             locations__title=title
-        )
-
-        queryset = queryset.prefetch_related(
+        ).prefetch_related(
                     Prefetch(
                         'locations',
                         queryset=AbstractLocation.objects.all()
