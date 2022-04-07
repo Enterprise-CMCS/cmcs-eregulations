@@ -23,6 +23,7 @@ from regcore.v3views import (
     PartSectionsViewSet,
     PartSubpartsViewSet,
     SubpartContentsViewSet,
+    SupplementalContentSearchViewSet
 )
 
 
@@ -75,6 +76,9 @@ urlpatterns = [
         })),
         path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", SubpartContentsViewSet.as_view({
             "get": "retrieve",
+        })),
+        path("supplemental_content/search", SupplementalContentSearchViewSet.as_view({
+            "get": "list",
         })),
     ])),
 ]
