@@ -62,6 +62,15 @@ class SearchIndex(models.Model):
         unique_together = ['label', 'part']
 
 
+class Synonym(models.Model):
+    isActive = models.BooleanField(default=True)
+    baseWord = models.CharField(max_length=128)
+    synonyms = models.ManyToManyField("self", blank=True)
+
+    def __str__(self):
+        return self.baseWord if self.isActive else f'{self.baseWord} (inactive)'
+
+
 def create_search(part, piece, memo, parent=None, ):
     if piece.get("node_type", None) == "SECTION":
         si = SearchIndex(

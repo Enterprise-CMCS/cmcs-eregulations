@@ -26,7 +26,14 @@
                             <i class="fa fa-search"></i>
                         </button>
                     </form>
-
+                    {% if synonym %}
+                        <div class="search-context">
+                            Try searching for:
+                            {% for syn in synonym.synonyms.all %}
+                                <a href="{% url 'search' %}?q=%22{{ syn }}%22">{{ syn }}</a>{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="search-displayed-by">{{ results | length }} results, displayed by relevance</div>
 
                     <div class="search-results">
