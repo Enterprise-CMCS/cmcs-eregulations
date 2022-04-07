@@ -1,0 +1,581 @@
+[
+{
+  "model": "search.synonym",
+  "pk": 3,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Medicaid Management Information",
+    "synonyms": [
+      2,
+      4
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 2,
+  "fields": {
+    "isActive": true,
+    "baseWord": "MMIS",
+    "synonyms": [
+      3,
+      4
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 5,
+  "fields": {
+    "isActive": true,
+    "baseWord": "MCPIRS",
+    "synonyms": []
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 7,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Advanced Planning Document",
+    "synonyms": [
+      6
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 6,
+  "fields": {
+    "isActive": true,
+    "baseWord": "APD",
+    "synonyms": [
+      7
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 8,
+  "fields": {
+    "isActive": true,
+    "baseWord": "T-MSIS",
+    "synonyms": [
+      9
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 4,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Mechanized claims processing and information retrieval system",
+    "synonyms": [
+      3,
+      2
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 9,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Transformed Medicaid Statistical Information System",
+    "synonyms": [
+      8
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 10,
+  "fields": {
+    "isActive": true,
+    "baseWord": "PASRR",
+    "synonyms": [
+      11
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 11,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Preadmission Screening and Resident Review",
+    "synonyms": [
+      10
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 12,
+  "fields": {
+    "isActive": true,
+    "baseWord": "ICF/ID",
+    "synonyms": [
+      13
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 13,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Intermediate Care Facilities for individuals with Intellectual disability",
+    "synonyms": [
+      12
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 14,
+  "fields": {
+    "isActive": true,
+    "baseWord": "PE",
+    "synonyms": [
+      17
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 15,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Presumptive Eligibility",
+    "synonyms": [
+      17
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 16,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Presumptive eligibility determined by hospitals",
+    "synonyms": [
+      17
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 17,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Hospital PE",
+    "synonyms": [
+      14,
+      15,
+      16
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 22,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Personal Needs Allowance",
+    "synonyms": [
+      1,
+      21,
+      20,
+      19
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 1,
+  "fields": {
+    "isActive": true,
+    "baseWord": "PETI",
+    "synonyms": [
+      22,
+      21,
+      20,
+      19
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 21,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Application of patient income to the cost of care",
+    "synonyms": [
+      22,
+      1,
+      20,
+      19
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 20,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Post-Eligibility Financial Requirements",
+    "synonyms": [
+      22,
+      1,
+      21,
+      19
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 19,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Post Eligibility Treatment of Income",
+    "synonyms": [
+      22,
+      1,
+      21,
+      20
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 23,
+  "fields": {
+    "isActive": true,
+    "baseWord": "TMA",
+    "synonyms": [
+      24
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 24,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Transitional Medical Assistance",
+    "synonyms": [
+      23
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 25,
+  "fields": {
+    "isActive": true,
+    "baseWord": "SUD",
+    "synonyms": [
+      26
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 26,
+  "fields": {
+    "isActive": true,
+    "baseWord": "substance use disorder",
+    "synonyms": [
+      25
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 27,
+  "fields": {
+    "isActive": true,
+    "baseWord": "ABP",
+    "synonyms": [
+      28
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 28,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Alternative Benefit Plan",
+    "synonyms": [
+      27
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 29,
+  "fields": {
+    "isActive": true,
+    "baseWord": "NEMT",
+    "synonyms": [
+      30
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 30,
+  "fields": {
+    "isActive": true,
+    "baseWord": "non-emergency medical transportation",
+    "synonyms": [
+      29
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 31,
+  "fields": {
+    "isActive": true,
+    "baseWord": "MLR",
+    "synonyms": [
+      32
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 32,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Medicaid Loss Ratio",
+    "synonyms": [
+      31
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 33,
+  "fields": {
+    "isActive": true,
+    "baseWord": "MDR",
+    "synonyms": [
+      34
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 34,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Medicaid Drug Rebate",
+    "synonyms": [
+      33
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 35,
+  "fields": {
+    "isActive": true,
+    "baseWord": "HCBS",
+    "synonyms": [
+      36
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 36,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Home and Community-Based Services",
+    "synonyms": [
+      35
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 37,
+  "fields": {
+    "isActive": true,
+    "baseWord": "ELE",
+    "synonyms": [
+      38
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 38,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Express Lane Eligibility",
+    "synonyms": [
+      37
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 39,
+  "fields": {
+    "isActive": true,
+    "baseWord": "EPSDT",
+    "synonyms": [
+      40
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 40,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Early and Periodic Screening Diagnosis and Treatment",
+    "synonyms": [
+      39
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 41,
+  "fields": {
+    "isActive": true,
+    "baseWord": "MFCU",
+    "synonyms": [
+      42
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 42,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Medicaid Fraud Control Unit",
+    "synonyms": [
+      41
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 43,
+  "fields": {
+    "isActive": true,
+    "baseWord": "MCE",
+    "synonyms": [
+      44
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 44,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Medicaid Managed Care Entity",
+    "synonyms": [
+      43
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 45,
+  "fields": {
+    "isActive": true,
+    "baseWord": "PIHP",
+    "synonyms": [
+      46
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 46,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Prepaid Inpatient Health Plans",
+    "synonyms": [
+      45
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 47,
+  "fields": {
+    "isActive": true,
+    "baseWord": "PAHP",
+    "synonyms": [
+      48
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 48,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Prepaid Ambulatory Health Plans",
+    "synonyms": [
+      47
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 49,
+  "fields": {
+    "isActive": true,
+    "baseWord": "EQRO",
+    "synonyms": [
+      50
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 50,
+  "fields": {
+    "isActive": true,
+    "baseWord": "External Quality Review Organization",
+    "synonyms": [
+      49
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 51,
+  "fields": {
+    "isActive": true,
+    "baseWord": "AMP",
+    "synonyms": [
+      52
+    ]
+  }
+},
+{
+  "model": "search.synonym",
+  "pk": 52,
+  "fields": {
+    "isActive": true,
+    "baseWord": "Average Manufacturer Price",
+    "synonyms": [
+      51
+    ]
+  }
+}
+]
