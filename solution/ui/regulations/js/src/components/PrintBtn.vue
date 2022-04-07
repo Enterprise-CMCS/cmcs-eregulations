@@ -70,7 +70,6 @@ export default {
 
     methods: {
         handleClick() {
-            console.log("method has been invoked");
             window.print();
         },
     },
