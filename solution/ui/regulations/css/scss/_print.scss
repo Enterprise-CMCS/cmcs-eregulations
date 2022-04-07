@@ -17,7 +17,12 @@ $left-right-padding: 40px;
         background: transparent !important;
     }
 
+    a:link.external::after {
+        display: none;
+    }
+
     footer .site-footer,
+    footer.toc-footer,
     aside.left-sidebar,
     aside.right-sidebar,
     .flash-banner,
@@ -129,6 +134,41 @@ $left-right-padding: 40px;
             }
         }
 
+        main.reg-part-homepage.match-middle .reg-part-toc {
+            .last-updated {
+                font-size: 11px;
+                margin-bottom: 22px;
+            }
+
+            .part-meta {
+                font-size: 9px;
+            }
+
+            h2 {
+                font-size: 16px;
+                margin-top: 22px;
+            }
+
+            h3 {
+                font-size: 12px;
+            }
+
+            ul.table-of-contents {
+                .menu-section {
+                    font-size: 12px;
+                }
+
+                li a.reserved-subpart {
+                    color: $mid_gray;
+                }
+
+                li ul li {
+                    margin-bottom: 4px;
+                }
+            }
+        }
+
+        main.reg-part-homepage.match-middle,
         main.reg-text.match-middle {
             margin-left: 0;
             padding: 0 $left-right-padding;
@@ -140,7 +180,7 @@ $left-right-padding: 40px;
             }
 
             h1 {
-                font-size: $base-font-size * 1.5 * $ratio;
+                font-size: 16px;
                 margin-bottom: 17px;
             }
 
@@ -220,10 +260,6 @@ $left-right-padding: 40px;
         .print-footer {
             display: block;
             font-size: $font-size-md * $ratio;
-
-            a:link.external::after {
-                display: none;
-            }
         }
     }
 }

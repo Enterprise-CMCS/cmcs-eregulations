@@ -1,6 +1,6 @@
 {% load render_nested %}
 <li>
-    <a href="{% url 'reader_view' title part identifier.0 version %}" class="subpart-info">
+    <a href="{% url 'reader_view' title part identifier.0 version %}" class="{% if 'Reserved' in label_description %}reserved-subpart {% endif %}subpart-info">
         <h3 class="subpart-letter">{{label_level|safe}} <span class="subpart-name">- {{label_description|safe}}</span></h3>
     </a>
     <ul>
