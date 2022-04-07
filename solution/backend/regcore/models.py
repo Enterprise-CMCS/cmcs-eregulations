@@ -46,14 +46,12 @@ class Part(models.Model):
         # TODO: add once /v2/title/X/existing is removed, the following line breaks it for some reason
         # ordering = ("title", "name", "-date")
 
-    def get_part_level(self, data):
-        for _ in range(self.depth):
-            data = data['children'][0]
-        return data
-
     @property
     def toc(self):
-        return self.get_part_level(self.structure)
+        structure = self.structure
+        for _ in range(self.depth):
+            structure = structure["children"][0]
+        return structure
 
 
 class ParserConfiguration(SingletonModel):
