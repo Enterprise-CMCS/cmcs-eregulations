@@ -65,8 +65,6 @@ export default {
         preSelectedSections: [],
         preSelectedParts: [],
         supbyId: [],
-        supTest: [],
-        supTestFlat: [],
     }),
     async created() {
         try {
@@ -153,12 +151,8 @@ export default {
 
             try {
                 this.supList = [];
-                this.supTest = [];
-                this.supTestFlat = [];
                 for (let part in this.filters.parts) {
                     let query = this.filters.parts[part];
-
-                    //this.supTest.push(await getSupByPart(42, query["part"], query['subparts'],query['sections']))
                     this.supList.push(
                         await getSupByPart(
                             42,
@@ -168,12 +162,17 @@ export default {
                         )
                     );
                 }
-                for (let sup of this.supList) {
-                    for (let content of sup) {
-                        if (content) {
-                            this.sortedSupList.push(content);
+
+                this.sortedSupList = this.supList.reduce((acc, content) => {
+                    return acc.concat(content);
+                }, []);
+                
+                if (this.filters.resources.length >0) {
+                    this.sortedSupList = this.sortedSupList.filter(
+                        content => {
+                            return this.filters.resources.includes(content.category);
                         }
-                    }
+                    );
                 }
             } catch (error) {
                 console.error(error);

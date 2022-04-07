@@ -632,7 +632,7 @@ const getSupByPart = async (title, part, subparts, sections) => {
 
     const contents = [...new Set(supList)].map(supId => {
         const item = JSON.parse(JSON.stringify(supplemental[supId]))
-        item['category'] = item['category'].display_name
+        item['category'] = item['category'].name
         return item
     })
 
