@@ -44,4 +44,3 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
 class SectionAdmin(BaseAdmin):
     admin_priority = 20
     ordering = ('baseWord',)
-
