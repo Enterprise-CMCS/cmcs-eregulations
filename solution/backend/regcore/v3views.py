@@ -14,6 +14,7 @@ from regcore.serializers import (
     VersionsSerializer,
     PartSectionsSerializer,
     PartSubpartsSerializer,
+    SubpartContentsSerializer,
 )
 
 
@@ -50,6 +51,12 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+    queryset = Title.objects.all()
+    serializer_class = ContentsSerializer
+    lookup_fields = {"name": "title"}
 
 
 class PartsViewSet(viewsets.ReadOnlyModelViewSet):
@@ -90,3 +97,12 @@ class PartSectionsViewSet(PartPropertiesViewSet):
 
 class PartSubpartsViewSet(PartPropertiesViewSet):
     serializer_class = PartSubpartsSerializer
+
+
+class SubpartContentsViewSet(PartPropertiesViewSet):
+    serializer_class = SubpartContentsSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["subpart"] = self.kwargs.get("subpart")
+        return context
