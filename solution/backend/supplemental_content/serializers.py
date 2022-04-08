@@ -40,7 +40,7 @@ class PolymorphicSerializer(serializers.Serializer):
 class AbstractLocationSerializer(PolymorphicSerializer):
     title = serializers.IntegerField()
     part = serializers.IntegerField()
-    
+
     def get_serializer_map(self):
         return {
             Subpart: SubpartSerializer,
@@ -224,11 +224,13 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
         model = AbstractSupplementalContent
         list_serializer_class = ApplicableSupplementalContentSerializer
 
+
 class SupIDSerializer(serializers.Serializer):
     id = serializers.CharField()
 
     class Meta:
         model = AbstractSupplementalContent
+
 
 class SupplementalContentSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField()
@@ -245,6 +247,7 @@ class SupplementalContentSerializer(serializers.Serializer):
         model = SupplementalContent
         list_serializer_class = ApplicableSupplementalContentSerializer
 
+
 class IndividualSupSerializer(PolymorphicSerializer):
     id = serializers.CharField()
 
@@ -254,15 +257,19 @@ class IndividualSupSerializer(PolymorphicSerializer):
         return {
             SupplementalContent: SupplementalContentSerializer,
         }
+
     class Meta:
         model = AbstractSupplementalContent
 
+
 class SuppByLocationSerializer(serializers.ModelSerializer):
-    supplemental_content= SupIDSerializer(many=True)
+    supplemental_content = SupIDSerializer(many=True)
+
     def get_serializer_map(self):
         return {
             SupplementalContent: SupIDSerializer,
         }
+
     class Meta:
         model = AbstractLocation
-        fields="__all__"
+        fields = "__all__"

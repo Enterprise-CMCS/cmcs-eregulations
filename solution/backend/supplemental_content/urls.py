@@ -9,8 +9,8 @@ from .views import (
         SupByLocationViewSet,
         SupByIdViewSet
 )
-sup_list = SupByIdViewSet.as_view({'get':'list'})
-location_sup_list = SupByLocationViewSet.as_view({'get':'list'})
+sup_list = SupByIdViewSet.as_view({'get': 'list'})
+location_sup_list = SupByLocationViewSet.as_view({'get': 'list'})
 
 category_list = CategoriesViewSet.as_view({'get': 'list'})
 urlpatterns = [
@@ -18,7 +18,7 @@ urlpatterns = [
         path("supplemental_content", SupplementalContentSectionsView.as_view()),
         path("supplemental_content_count_by_part", SupplementalContentByPartView.as_view()),
         path("categories", category_list),
-        path("locations", location_sup_list,name='location_sup_list'),
+        path("locations", location_sup_list, name='location_sup_list'),
         path("sup_by_id/title/<title>/part/<part>", sup_list, name="sup-by-id-list"),
         path("all_sup", AllSupplementalContentView.as_view()),
 ]

@@ -1,5 +1,3 @@
-from http import server
-from urllib import response
 from django.http import JsonResponse
 
 from rest_framework import generics, viewsets
@@ -23,7 +21,13 @@ from .models import (
     Subpart,
 )
 
-from .serializers import AbstractCategorySerializer, SuppByLocationSerializer,AbstractSupplementalContentSerializer, SupplementalContentSerializer,IndividualSupSerializer,SuppByLocationSerializer
+from .serializers import (
+    AbstractCategorySerializer,
+    AbstractSupplementalContentSerializer,
+    SupplementalContentSerializer,
+    IndividualSupSerializer,
+    SuppByLocationSerializer
+)
 
 
 class SettingsUser:
@@ -165,7 +169,6 @@ class SupplementalContentByPartView(APIView):
         return JsonResponse(data)
 
 
-
 class SupByLocationViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
@@ -175,18 +178,18 @@ class SupByLocationViewSet(viewsets.ModelViewSet):
                         queryset=AbstractSupplementalContent.objects.filter(approved=True).select_subclasses(SupplementalContent)
                     ))
         serializer = SuppByLocationSerializer(queryset, many=True)
-        response_dict={}
+        response_dict = {}
         for item in serializer.data:
-            titleKey= item.pop("title")
-            partKey=item.pop("part")
+            titleKey = item.pop("title")
+            partKey = item.pop("part")
             is_subpart = False
             if 'Subpart' in item['display_name']:
                 identifier = item['display_name'][-1]
                 is_subpart = True
             else:
-                identifier = item['display_name'].split()[1].split('.') 
+                identifier = item['display_name'].split()[1].split('.')
 
-            newsup=[]
+            newsup = []
             for content in item['supplemental_content']:
                 newsup.append(content['id'])
 
@@ -195,17 +198,18 @@ class SupByLocationViewSet(viewsets.ModelViewSet):
                     location = {identifier: newsup}
                 else:
                     identifier = identifier[1]
-                    location = {identifier :newsup}  
+                    location = {identifier: newsup}
                 partDict = {partKey: location}
                 if titleKey in response_dict:
                     if partKey in response_dict[titleKey]:
-                        response_dict[titleKey][partKey][identifier]=newsup
+                        response_dict[titleKey][partKey][identifier] = newsup
                     else:
-                        response_dict[titleKey][partKey]=location
+                        response_dict[titleKey][partKey] = location
                 else:
-                    response_dict={titleKey: partDict}
+                    response_dict = {titleKey: partDict}
 
         return Response(response_dict)
+
 
 class SupByIdViewSet(viewsets.ViewSet):
 
@@ -231,10 +235,10 @@ class SupByIdViewSet(viewsets.ViewSet):
                     "-supplementalcontent__date"
                 )
         serializer = IndividualSupSerializer(queryset, many=True)
-        response_dict ={}
+        response_dict = {}
 
         for item in serializer.data:
-            idKey= item.pop('id')    
-            response_dict[idKey]= item
-            
+            idKey = item.pop('id')
+            response_dict[idKey] = item
+
         return Response(response_dict)
