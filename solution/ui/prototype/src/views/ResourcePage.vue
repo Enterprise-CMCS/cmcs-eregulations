@@ -163,17 +163,15 @@ export default {
                     );
                 }
 
-                this.sortedSupList = this.supList.reduce((acc, content) => {
-                    return acc.concat(content);
-                }, []);
-                
-                if (this.filters.resources.length >0) {
-                    this.sortedSupList = this.sortedSupList.filter(
-                        content => {
-                            return this.filters.resources.includes(content.category);
-                        }
-                    );
-                }
+                this.sortedSupList = this.supList
+                    .reduce((acc, content) => {
+                        return acc.concat(content);
+                    }, [])
+                    .filter((content) => {
+                        return this.filters.resources.length > 0
+                            ? this.filters.resources.includes(content.category)
+                            : true;
+                    });
             } catch (error) {
                 console.error(error);
             }
