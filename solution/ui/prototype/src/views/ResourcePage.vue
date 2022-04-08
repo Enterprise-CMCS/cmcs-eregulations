@@ -65,6 +65,7 @@ export default {
         preSelectedSections: [],
         preSelectedParts: [],
         supbyId: [],
+        firstLoad: true,
     }),
     async created() {
         try {
@@ -143,7 +144,7 @@ export default {
 
         async getSupContent() {
             this.supList = [];
-            if (Object.keys(this.filters.parts).length > 0) {
+            if (!this.firstLoad && this.filters) {
                 try {
                     this.supList = await Object.keys(this.filters.parts).reduce(
                         async (acc, part) => {
@@ -176,6 +177,10 @@ export default {
                 } catch (error) {
                     console.error(error);
                 }
+            } else if (this.firstLoad) {
+                this.firstLoad = false;
+            } else {
+                this.sortedSupList = [];
             }
         },
     },
