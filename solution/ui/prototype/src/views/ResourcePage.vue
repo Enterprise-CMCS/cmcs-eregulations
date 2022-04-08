@@ -168,9 +168,7 @@ export default {
                         return acc.concat(content);
                     }, [])
                     .filter((content) => {
-                        return this.filters.resources.length > 0
-                            ? this.filters.resources.includes(content.category)
-                            : true;
+                        return this.filters.resources.length === 0 || this.filters.resources.includes(content.category)
                     });
             } catch (error) {
                 console.error(error);
