@@ -98,7 +98,6 @@ export default {
                 for (let sup of this.supList) {
                     this.singleSupList.push(sup);
                 }
-
                 this.sortContent();
             }
         } catch (error) {
@@ -108,11 +107,7 @@ export default {
     methods: {
         setResourcesParams(payload) {
             this.filters = payload;
-
-            this.sortedSupList = [];
-            this.supList = [];
             this.getSupContent();
-
             // Implement response to user choosing a section or subpart here
         },
         sortContent() {
@@ -140,38 +135,47 @@ export default {
                             }
                         }
                     }
-                    this.sortedSupList.filter((content) => content.name);
                 }
             } catch (error) {
                 console.log("error");
             }
         },
+
         async getSupContent() {
-            this.singleSupList = [];
-
-            try {
-                this.supList = [];
-                for (let part in this.filters.parts) {
-                    let query = this.filters.parts[part];
-                    this.supList.push(
-                        await getSupByPart(
-                            42,
-                            query["part"],
-                            query["sections"],
-                            query["subparts"]
-                        )
+            this.supList = [];
+            if (Object.keys(this.filters.parts).length > 0) {
+                try {
+                    this.supList = await Object.keys(this.filters.parts).reduce(
+                        async (acc, part) => {
+                            let fullList = await acc;
+                            let query = this.filters.parts[part];
+                            const supContent = await getSupByPart(
+                                42,
+                                query["part"],
+                                query["sections"],
+                                query["subparts"]
+                            );
+                            fullList.push(supContent);
+                            return fullList;
+                        },
+                        Promise.resolve([])
                     );
-                }
 
-                this.sortedSupList = this.supList
-                    .reduce((acc, content) => {
-                        return acc.concat(content);
-                    }, [])
-                    .filter((content) => {
-                        return this.filters.resources.length === 0 || this.filters.resources.includes(content.category)
-                    });
-            } catch (error) {
-                console.error(error);
+                    this.sortedSupList = this.supList
+                        .reduce((acc, content) => {
+                            return acc.concat(content);
+                        }, [])
+                        .filter((content) => {
+                            return (
+                                this.filters.resources.length === 0 ||
+                                this.filters.resources.includes(
+                                    content.category
+                                )
+                            );
+                        });
+                } catch (error) {
+                    console.error(error);
+                }
             }
         },
     },
