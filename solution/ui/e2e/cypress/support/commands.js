@@ -23,26 +23,40 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-import '@testing-library/cypress/add-commands';
+import "@testing-library/cypress/add-commands";
 
 // Print cypress-axe violations to the terminal
 function printA11yViolations(violations) {
-  cy.task(
-    'table',
-    violations.map(({ id, impact, description, nodes }) => ({
-      impact,
-      description: `${description} (${id})`,
-      nodes: nodes.length,
-    })),
-  );
+    cy.task(
+        "table",
+        violations.map(({ id, impact, description, nodes }) => ({
+            impact,
+            description: `${description} (${id})`,
+            nodes: nodes.length,
+        }))
+    );
 }
 
 Cypress.Commands.add(
-  'checkAccessibility',
-  {
-    prevSubject: 'optional',
-  },
-  (subject, { skipFailures = false } = {}) => {
-    cy.checkA11y(subject, { includedImpacts: ['critical', 'serious']}, printA11yViolations, skipFailures);
-  },
+    "checkAccessibility",
+    {
+        prevSubject: "optional",
+    },
+    (subject, { skipFailures = false } = {}) => {
+        cy.checkA11y(
+            subject,
+            { includedImpacts: ["critical", "serious"] },
+            printA11yViolations,
+            skipFailures
+        );
+    }
 );
+
+Cypress.Commands.add("setCssMedia", (media) => {
+    Cypress.automation("remote:debugger:protocol", {
+        command: "Emulation.setEmulatedMedia",
+        params: {
+            media,
+        },
+    });
+});
