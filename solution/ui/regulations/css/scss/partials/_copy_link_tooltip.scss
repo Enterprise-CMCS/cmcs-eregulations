@@ -60,7 +60,8 @@
     position: relative;
 }
 
-.copy-btn {
+.copy-btn,
+.print-btn {
     color: $mid_blue;
     cursor: pointer;
     line-height: 1.2;
@@ -193,10 +194,11 @@
 }
 
 aside.right-sidebar {
-    .copy-btn-container {
+    .copy-btn-container,
+    .print-btn-container {
         position: relative;
 
-        .copy-btn-labeled {
+        .copy-btn-labeled, .print-btn-labeled {
             display: flex;
             align-items: center;
             height: 30px;
@@ -206,7 +208,7 @@ aside.right-sidebar {
             }
 
             & span {
-                padding: 0 5px;
+                padding: 0 10px;
                 text-transform: uppercase;
                 font-weight: 700;
                 font-size: $font-size-xxs;

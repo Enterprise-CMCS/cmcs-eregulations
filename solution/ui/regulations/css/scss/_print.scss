@@ -1,0 +1,266 @@
+/*
+    Most values below were calculated by multiplying value by 0.56,
+    which is the ratio of 1440px (the width of the figma comp)
+    to 8.5in/816px (the width of the printed page)
+*/
+
+$ratio: 0.56;
+$left-right-padding: 40px;
+
+@media print {
+    @page {
+        size: letter; /* 8.5 x 11 in */
+        margin: 0.6in 0;
+    }
+
+    *:focus {
+        background: transparent !important;
+    }
+
+    a:link.external::after {
+        display: none;
+    }
+
+    footer .site-footer,
+    footer.toc-footer,
+    aside.left-sidebar,
+    aside.right-sidebar,
+    .flash-banner,
+    .search-header,
+    .copy-btn-container {
+        display: none;
+    }
+
+    header {
+        height: 48px;
+        padding: 0 $left-right-padding;
+        border-top: 1px solid $secondary_color;
+        border-bottom: 1px solid $secondary_color;
+
+        &.sticky {
+            position: unset;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+        }
+
+        .flexbox {
+            &.header-mobile {
+                display: none;
+            }
+
+            &.header-large {
+                @include screen-xs {
+                    display: flex;
+                }
+            }
+        }
+
+        .title-container {
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 18px;
+            display: inline-block;
+        }
+
+        .reg-title {
+            display: block;
+            flex: 2;
+            padding-right: $spacer-2;
+            font-size: 12px;
+            line-height: 16px;
+            padding-left: $spacer-2;
+            margin-left: $spacer-2;
+            border-left: 1px solid $border_color;
+
+            a {
+                max-width: $text-max-width;
+                display: inline-block;
+            }
+        }
+
+        .header-part-name {
+            display: inline;
+        }
+    }
+
+    .content {
+        #view-and-compare {
+            position: unset;
+            height: unset;
+            display: block;
+            background: transparent;
+            color: $mid_blue;
+            font-size: $font-size-md * $ratio;
+            font-weight: bold;
+            padding: 0 $left-right-padding;
+
+            &[data-state="hide"] {
+                display: none;
+            }
+
+            .view-container {
+                display: none;
+            }
+
+            .print-view-container {
+                margin: 22px 0;
+                display: block;
+
+                svg {
+                    display: inline-block;
+                    vertical-align: middle;
+                    height: 22px;
+                    width: 18px;
+                    margin-top: -5px;
+                    padding-right: 8px;
+
+                    rect,
+                    line {
+                        stroke: $mid_blue;
+                    }
+
+                    path {
+                        fill: $mid_blue;
+                    }
+                }
+            }
+        }
+
+        main.reg-part-homepage.match-middle .reg-part-toc {
+            .last-updated {
+                font-size: 11px;
+                margin-bottom: 22px;
+            }
+
+            h2 {
+                font-size: 16px;
+                margin-top: 22px;
+            }
+
+            h3 {
+                font-size: 12px;
+            }
+
+            ul.table-of-contents {
+                .menu-section {
+                    font-size: 12px;
+                }
+
+                li a.reserved-subpart {
+                    color: $mid_gray;
+                }
+
+                li ul li {
+                    margin-bottom: 4px;
+                }
+            }
+        }
+
+        .reg-part-homepage section.part-meta,
+        .reg-text section.part-meta {
+            font-size: 9px;
+        }
+
+        main.reg-part-homepage.match-middle,
+        main.reg-text.match-middle {
+            margin-left: 0;
+            padding: 0 $left-right-padding;
+
+            h1,
+            h2,
+            article > section:not(.appendix-section) {
+                padding-left: 0px;
+            }
+
+            h1 {
+                font-size: 16px;
+                margin-bottom: 17px;
+            }
+
+            h2 {
+                font-size: $font-size-2xl * $ratio;
+            }
+
+            .latest-version {
+                padding-left: 0px;
+                margin: 22px auto 20px;
+
+                &.subpart {
+                    font-size: 10px;
+                }
+            }
+
+            article {
+                margin-top: 0px;
+
+                .paragraphs {
+                    font-size: 18px * $ratio;
+                    line-height: 1.4;
+
+                    p {
+                        margin-block-start: 0;
+                        margin-block-end: 0;
+                        margin-top: 8px;
+                        margin-bottom: 8px;
+
+                        @for $i from 1 through 10 {
+                            &.depth-#{$i} + .depth-#{$i} {
+                                margin-top: 3px;
+                                margin-bottom: 3px;
+                            }
+                        }
+                    }
+                }
+
+                .effective-date-note {
+                    font-size: 13px * $ratio;
+                    line-height: 18px * $ratio;
+                }
+
+                .footnote-section {
+                    font-size: $font_size_sm * $ratio;
+                    line-height: 1.5;
+                }
+
+                .reg-image {
+                    max-width: 50%;
+                }
+
+                .table-section {
+                    .gpotbl_div {
+                        table {
+                            th,
+                            td {
+                                font-size: $font-size-sm * $ratio;
+                            }
+
+                            th {
+                                print-color-adjust: exact;
+                                -webkit-print-color-adjust: exact;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    footer {
+        background: transparent;
+        padding: 11px 0;
+        margin: 0 $left-right-padding;
+
+        .print-footer {
+            display: block;
+            font-size: $font-size-md * $ratio;
+        }
+    }
+}

@@ -132,6 +132,10 @@ footer {
         }
     }
 
+    .print-footer {
+        display: none;
+    }
+
     // divide to strip unit (px)
     // https://css-tricks.com/snippets/sass/strip-unit-function/
     @include custom-max($tablet-max / 1px) {
