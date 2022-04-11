@@ -12,6 +12,7 @@
 @import '@cmsgov/design-system/dist/scss/index';
 
 $fa-font-path: "../fonts/webfonts" !default;
+$additional-font-path: "../fonts" !default;
 @import '@fortawesome/fontawesome-free/scss/fontawesome';
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
 @import "@fortawesome/fontawesome-free/scss/brands.scss";
@@ -38,3 +39,4 @@ $eregs-image-path: "../images" !default;
 @import "partials/browser_not_supported";
 @import "partials/copy_link_tooltip";
 @import "partials/jump_to";
+@import 'print';
