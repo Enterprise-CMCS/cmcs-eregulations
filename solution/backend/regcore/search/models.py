@@ -70,6 +70,10 @@ class Synonym(models.Model):
     def __str__(self):
         return self.baseWord if self.isActive else f'{self.baseWord} (inactive)'
 
+    @property
+    def filtered_synonyms(self):
+        return self.synonyms.filter(isActive=True).order_by("baseWord")
+
 
 def create_search(part, piece, memo, parent=None, ):
     if piece.get("node_type", None) == "SECTION":
