@@ -21,7 +21,7 @@ class SearchView(TemplateView):
         if not parts:
             raise Http404
         structure = get_structure(parts)
-        synonym = Synonym.objects.filter(baseWord__iexact=query.strip('\"')).first()
+        synonym = Synonym.objects.filter(isActive=True, baseWord__iexact=query.strip('\"')).first()
         c = {
             'parts': parts,
             'toc': structure,
