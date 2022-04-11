@@ -10,7 +10,7 @@
             </div></div>
             <div class="section-cards">
             <div class="section-cards" v-for="content in supList" :key="content.name">
-        <SectionCard v-bind:f="content" /></div></div>
+        <SectionCard v-bind:f="content" v-bind:usingSearch="usingSearch" /></div></div>
 
     </div>
     
