@@ -645,6 +645,18 @@ const getSupplementalContentCountForPart = async (part) => {
     return result;
 };
 
+/**
+ *
+ * @param query {string} - a query string to search supplemental content
+ * @returns {Object<string:number>} - a list containing unstructured supplemental content search results
+ */
+const getSupplementalContentSearchResults = async (query) => {
+    const result = await httpApiGet(
+        `supplemental_content/search?q=${query}`
+    );
+    return result;
+};
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
@@ -672,6 +684,7 @@ export {
     getCategories,
     getPartsDetails,
     getSubPartsandSections,
-    getAllSupplementalContentByPieces
+    getAllSupplementalContentByPieces,
+    getSupplementalContentSearchResults
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

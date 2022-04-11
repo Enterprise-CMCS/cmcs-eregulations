@@ -4,6 +4,9 @@
             <Header />
             <div class="searchpane">
                 <v-text-field
+                    v-on:click:append="search"
+                    v-on:keydown="search"
+                    @change="searchQuery = $event"
                     flat
                     solo
                     clearable
@@ -12,6 +15,7 @@
                     type="text"
                     append-icon="mdi-magnify"
                     hide-details
+                    ref="search"
                 />
             </div>
             <splitpanes>
@@ -38,7 +42,7 @@ import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import { Splitpanes, Pane } from "splitpanes";
-import { getSupplementalContentNew, getAllSupplementalContentByPieces } from "../utilities/api";
+import { getSupplementalContentNew, getAllSupplementalContentByPieces, getSupplementalContentSearchResults } from "../utilities/api";
 import "splitpanes/dist/splitpanes.css";
 import ResourceFilters from "../components/ResourcesPage/ResourceFilters.vue";
 import SectionPane from "../components/ResourcesPage/SectionSide.vue";
@@ -58,13 +62,12 @@ export default {
         singleSupList: [],
         sortedSupList: [],
         preSelectedSections:[],
-        preSelectedParts: []
-
-
+        preSelectedParts: [],
+        searchQuery: "",
+        usingSearch: false,
     }),
     async created() {
         try {
-
             const urlParams = new URLSearchParams(window.location.search);
             const part = urlParams.get('part')
             if (part){
@@ -99,6 +102,24 @@ export default {
         }
     },
     methods: {
+        async search(event) {
+            if ((event.type === "keydown" && event.key === "Enter") || event.type === "click") {
+                this.supList = [];
+                this.singleSupList = [];
+                this.sortedSupList = [];
+                this.supList.push(await getSupplementalContentSearchResults(this.searchQuery));
+                for (let sup of this.supList) {
+                    for (let content of sup) {
+                        let clone = JSON.parse(JSON.stringify(content));
+                        clone.category = clone.category.name;
+                        this.singleSupList.push(clone);
+                        this.sortedSupList.push(clone);
+                    }
+                }
+                this.sortedSupList.filter(content => content.name)
+                this.usingSearch = true;
+            }
+        },
         setResourcesParams(payload) {
             this.filters = payload;
 
