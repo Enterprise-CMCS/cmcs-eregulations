@@ -140,10 +140,6 @@ $left-right-padding: 40px;
                 margin-bottom: 22px;
             }
 
-            .part-meta {
-                font-size: 9px;
-            }
-
             h2 {
                 font-size: 16px;
                 margin-top: 22px;
@@ -166,6 +162,11 @@ $left-right-padding: 40px;
                     margin-bottom: 4px;
                 }
             }
+        }
+
+        .reg-part-homepage section.part-meta,
+        .reg-text section.part-meta {
+            font-size: 9px;
         }
 
         main.reg-part-homepage.match-middle,
