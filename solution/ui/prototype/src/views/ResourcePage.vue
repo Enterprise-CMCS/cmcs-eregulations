@@ -29,7 +29,7 @@
                     </div>
                 </pane>
                 <pane min-size="30">
-                    <SectionPane v-bind:supList="sortedSupList" />
+                    <SectionPane v-bind:supList="sortedSupList" v-bind:usingSearch="usingSearch" v-bind:searchQuery="searchQuery"/>
                 </pane>
             </splitpanes>
             <Footer />
@@ -161,6 +161,7 @@ export default {
             }
         },
         async getSupContent() {
+            this.usingSearch = false;
             this.singleSupList = [];
             console.log(this.filters)
             try {

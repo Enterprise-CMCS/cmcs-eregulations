@@ -2,7 +2,9 @@
     <div class="section-display">
     <div class="flex-parent-element">
     <div class="flex-child-element">
-            <h2>{{supList.length}} Results</h2></div>
+            <h2 v-bind:class="{ 'search-header': usingSearch }">{{supList.length}} Results</h2>
+            <p class="search-subtitle" v-if="usingSearch">For "{{searchQuery}}".</p>
+            </div>
          
             <div> <v-select v-model="sortBy" label="Sort By" :items='sortList'></v-select>
             </div></div>
@@ -19,7 +21,7 @@ import SectionCard from "../PDPart/SectionCard.vue"
 
 export default {
     name: "SectionPane",
-    props: ["supList"],
+    props: ["supList", "usingSearch", "searchQuery"],
     data: () =>({
         sortList:['Relevance', 'Most recent', 'Regulation hieracry', 'Resource type'],
         sortBy: 'Relevance'
@@ -53,5 +55,13 @@ padding-top:10px;
 }
 .flex-child-element:first-child {
   margin-left: 20px;
+}
+.search-header {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.search-subtitle {
+  margin-top: 0;
+  padding-top: 0;
 }
 </style>
