@@ -44,3 +44,8 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
 class SectionAdmin(BaseAdmin):
     admin_priority = 20
     ordering = ('baseWord',)
+
+    class Media:
+        css = {
+            "all": ("css/admin/synonym.css",)
+        }

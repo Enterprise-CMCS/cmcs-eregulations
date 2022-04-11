@@ -28,7 +28,7 @@
                     </form>
                     {% if synonym.filtered_synonyms.count %}
                         <div class="search-suggestion">
-                            Try searching for:
+                            Similar terms:
                             {% for syn in synonym.filtered_synonyms %}
                                 <a href="{% url 'search' %}?q=%22{{ syn }}%22">{{ syn }}</a>{% if not forloop.last %},{% endif %}
                             {% endfor %}
