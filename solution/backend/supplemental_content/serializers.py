@@ -259,11 +259,11 @@ class FlatSupplementalContentSerializer(serializers.Serializer):
     def get_nameHeadline(self, obj):
         try:
             return obj.nameHeadline
-        except:
+        except Exception:
             return None
 
     def get_descriptionHeadline(self, obj):
         try:
             return obj.descriptionHeadline
-        except:
+        except Exception:
             return None

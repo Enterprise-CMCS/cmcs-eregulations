@@ -5,7 +5,6 @@ from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVe
 
 from regcore.models import Part
 from .models import SearchIndex
-from django.contrib.postgres.search import SearchQuery, SearchRank, SearchHeadline
 
 from supplemental_content.models import AbstractSupplementalContent
 from supplemental_content.serializers import FlatSupplementalContentSerializer
