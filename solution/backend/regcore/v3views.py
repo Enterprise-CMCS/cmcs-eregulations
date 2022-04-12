@@ -10,13 +10,12 @@ from regcore.models import Title, Part
 from regcore.views import SettingsAuthentication
 
 from regcore.serializers import (
+    FlatContentsSerializer,
     ContentsSerializer,
     TitlesSerializer,
     TitleSerializer,
     PartsSerializer,
     VersionsSerializer,
-    PartSectionsSerializer,
-    PartSubpartsSerializer,
 )
 
 
@@ -98,21 +97,38 @@ class PartContentsViewSet(PartPropertiesViewSet):
         return Response(serializer.data)
 
 
-class PartSectionsViewSet(PartPropertiesViewSet):
-    serializer_class = PartSectionsSerializer
+# Inherit from this class to retrieve a flat list of specific types of nodes within a part's structure
+# You must specify a node_type
+class PartStructureNodesViewSet(PartPropertiesViewSet):
+    serializer_class = FlatContentsSerializer
+
+    def find_nodes(self, structure):
+        nodes = []
+        for child in structure["children"]:
+            if child["type"] == self.node_type:
+                nodes.append(child)
+            if child["children"]:
+                nodes = nodes + self.find_nodes(child)
+        return nodes
+
+    def retrieve(self, request, *args, **kwargs):
+        nodes = self.find_nodes(self.get_object().toc)
+        return Response(self.serializer_class(nodes, many=True).data)
 
 
-class PartSubpartsViewSet(PartPropertiesViewSet):
-    serializer_class = PartSubpartsSerializer
+class PartSectionsViewSet(PartStructureNodesViewSet):
+    node_type = "section"
+
+
+class PartSubpartsViewSet(PartStructureNodesViewSet):
+    node_type = "subpart"
 
 
 class SubpartContentsViewSet(PartPropertiesViewSet):
     serializer_class = ContentsSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        part = self.get_object()
-        toc = part.toc
-        for node in toc["children"]:
+        for node in self.get_object().toc["children"]:
             if node["type"] == "subpart" and len(node["identifier"]) and node["identifier"][0] == self.kwargs.get("subpart"):
                 return Response(self.serializer_class(node["children"], many=True).data)
         raise Http404()
