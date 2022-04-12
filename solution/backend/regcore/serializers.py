@@ -22,22 +22,26 @@ class ContentsSerializer(FlatContentsSerializer):
         return fields
 
 
-class TitlesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Title
-        fields = ("id", "name", "last_updated")
+class TitlesSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    last_updated = serializers.CharField()
 
 
-class TitleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Title
-        fields = "__all__"
+class TitleSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    last_updated = serializers.CharField()
+    toc = ContentsSerializer()
 
 
-class PartsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Part
-        fields = ("id", "name", "date", "last_updated", "depth", "title_object")
+class PartsSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    date = serializers.CharField()
+    last_updated = serializers.CharField()
+    depth = serializers.IntegerField()
+    title_object = serializers.IntegerField()
 
 
 class VersionsSerializer(serializers.Serializer):
