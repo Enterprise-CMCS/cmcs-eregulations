@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from regcore.models import Title, Part
-
 
 class FlatContentsSerializer(serializers.Serializer):
     type = serializers.CharField()
