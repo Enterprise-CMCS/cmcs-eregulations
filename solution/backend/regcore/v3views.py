@@ -68,7 +68,7 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
         return Part.objects.filter(title=title).order_by("name", "-date").distinct("name")
 
 
-@extend_schema(responses=serializers.ListField(child=serializers.CharField()))
+@extend_schema(responses={(200, "application/json"): {"type": "string"}})
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VersionsSerializer
 
