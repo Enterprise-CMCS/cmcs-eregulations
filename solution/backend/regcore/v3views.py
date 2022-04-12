@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema, inline_serializer
@@ -69,13 +69,14 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
         return Part.objects.filter(title=title).order_by("name", "-date").distinct("name")
 
 
+@extend_schema(responses=serializers.ListField(child=serializers.CharField()))
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VersionsSerializer
 
     def get_queryset(self):
         title = self.kwargs.get("title")
         part = self.kwargs.get("part")
-        return Part.objects.filter(title=title, name=part).order_by("-date")
+        return Part.objects.filter(title=title, name=part).order_by("-date").values_list("date", flat=True)
 
 
 # Inherit from this class to retrieve attributes from a specific version of a part
@@ -91,6 +92,10 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
 
 class PartContentsViewSet(PartPropertiesViewSet):
     serializer_class = ContentsSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.serializer_class(self.get_object().toc)
+        return Response(serializer.data)
 
 
 class PartSectionsViewSet(PartPropertiesViewSet):
