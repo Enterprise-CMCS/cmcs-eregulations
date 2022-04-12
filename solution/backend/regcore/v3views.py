@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from drf_spectacular.utils import extend_schema, inline_serializer
 
 from regcore.models import Title, Part
 from regcore.views import SettingsAuthentication
@@ -10,7 +12,7 @@ from regcore.serializers import (
     ContentsSerializer,
     TitlesSerializer,
     TitleSerializer,
-    PartsSerialier,
+    PartsSerializer,
     VersionsSerializer,
     PartSectionsSerializer,
     PartSubpartsSerializer,
@@ -54,13 +56,13 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
 
 class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().values_list("toc", flat=True)
     serializer_class = ContentsSerializer
     lookup_fields = {"name": "title"}
 
 
 class PartsViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = PartsSerialier
+    serializer_class = PartsSerializer
 
     def get_queryset(self):
         title = self.kwargs.get("title")
