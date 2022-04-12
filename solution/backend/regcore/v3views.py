@@ -35,7 +35,7 @@ class MultipleFieldLookupMixin(object):
 
 
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Title.objects.all()
+    queryset = Title.objects.all().values_list("toc", flat=True)
     serializer_class = ContentsSerializer
 
 
