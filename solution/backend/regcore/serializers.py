@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 
 from regcore.models import Title, Part
 
@@ -32,15 +33,16 @@ class TitleSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class PartsSerialier(serializers.ModelSerializer):
+class PartsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Part
         fields = ("id", "name", "date", "last_updated", "depth", "title_object")
 
 
-class VersionsSerializer(serializers.BaseSerializer):
-    def to_representation(self, instance):
-        return instance.date
+class VersionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Part
+        fields = ("id", "name", "date", "last_updated")
 
 
 # Inherit from this class to return a flat list of specific types of nodes within the part
