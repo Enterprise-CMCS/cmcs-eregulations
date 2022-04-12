@@ -3,7 +3,7 @@ from rest_framework import serializers
 from regcore.models import Title, Part
 
 
-class ContentsSerializer(serializers.Serializer):
+class FlatContentsSerializer(serializers.Serializer):
     type = serializers.CharField()
     label = serializers.CharField()
     parent = serializers.ListField(child=serializers.CharField())
@@ -14,6 +14,8 @@ class ContentsSerializer(serializers.Serializer):
     descendant_range = serializers.ListField(child=serializers.CharField())
     label_description = serializers.CharField()
 
+
+class ContentsSerializer(FlatContentsSerializer):
     def get_fields(self):
         fields = super(ContentsSerializer, self).get_fields()
         fields['children'] = serializers.ListField(child=ContentsSerializer())
@@ -41,34 +43,3 @@ class PartsSerializer(serializers.ModelSerializer):
 class VersionsSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return instance
-
-
-# Inherit from this class to return a flat list of specific types of nodes within the part
-# You must specify a node_type
-class NodeTypeSerializer(serializers.BaseSerializer):
-    remove_fields = []
-
-    def find_nodes(self, structure):
-        nodes = []
-        for child in structure["children"]:
-            if child["type"] == self.node_type:
-                nodes.append(child)
-            if child["children"]:
-                nodes = nodes + self.find_nodes(child)
-        return nodes
-
-    def to_representation(self, instance):
-        nodes = self.find_nodes(instance.toc)
-        for node in nodes:
-            for field in self.remove_fields + ["children", "type"]:
-                del node[field]
-        return nodes
-
-
-class PartSectionsSerializer(NodeTypeSerializer):
-    node_type = "section"
-    remove_fields = ["descendant_range"]
-
-
-class PartSubpartsSerializer(NodeTypeSerializer):
-    node_type = "subpart"

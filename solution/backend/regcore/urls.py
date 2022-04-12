@@ -67,12 +67,12 @@ urlpatterns = [
         path("title/<title>/part/<part>/version/<version>/toc", PartContentsViewSet.as_view({
             "get": "retrieve",
         })),
-        # path("title/<title>/part/<part>/version/<version>/sections", PartSectionsViewSet.as_view({
-        #     "get": "retrieve",
-        # })),
-        # path("title/<title>/part/<part>/version/<version>/subparts", PartSubpartsViewSet.as_view({
-        #     "get": "retrieve",
-        # })),
+        path("title/<title>/part/<part>/version/<version>/sections", PartSectionsViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/part/<part>/version/<version>/subparts", PartSubpartsViewSet.as_view({
+            "get": "retrieve",
+        })),
         path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", SubpartContentsViewSet.as_view({
             "get": "retrieve",
         })),
