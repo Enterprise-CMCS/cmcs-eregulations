@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 from rest_framework import viewsets, serializers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from drf_spectacular.utils import extend_schema, inline_serializer
+from drf_spectacular.utils import extend_schema
 
 from regcore.models import Title, Part
 from regcore.views import SettingsAuthentication
@@ -16,7 +17,6 @@ from regcore.serializers import (
     VersionsSerializer,
     PartSectionsSerializer,
     PartSubpartsSerializer,
-    SubpartContentsSerializer,
 )
 
 
@@ -107,9 +107,12 @@ class PartSubpartsViewSet(PartPropertiesViewSet):
 
 
 class SubpartContentsViewSet(PartPropertiesViewSet):
-    serializer_class = SubpartContentsSerializer
+    serializer_class = ContentsSerializer
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context["subpart"] = self.kwargs.get("subpart")
-        return context
+    def retrieve(self, request, *args, **kwargs):
+        part = self.get_object()
+        toc = part.toc
+        for node in toc["children"]:
+            if node["type"] == "subpart" and len(node["identifier"]) and node["identifier"][0] == self.kwargs.get("subpart"):
+                return Response(self.serializer_class(node["children"], many=True).data)
+        raise Http404()
