@@ -39,10 +39,9 @@ class PartsSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "date", "last_updated", "depth", "title_object")
 
 
-class VersionsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Part
-        fields = ("id", "name", "date", "last_updated")
+class VersionsSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return instance
 
 
 # Inherit from this class to return a flat list of specific types of nodes within the part
