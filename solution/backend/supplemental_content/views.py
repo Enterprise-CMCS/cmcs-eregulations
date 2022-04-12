@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from django.conf import settings
@@ -20,7 +21,13 @@ from .models import (
     Subpart,
 )
 
-from .serializers import AbstractCategorySerializer, AbstractSupplementalContentSerializer, SupplementalContentSerializer
+from .serializers import (
+    AbstractCategorySerializer,
+    AbstractSupplementalContentSerializer,
+    SupplementalContentSerializer,
+    IndividualSupSerializer,
+    SuppByLocationSerializer
+)
 
 
 class SettingsUser:
@@ -166,3 +173,78 @@ class SupplementalContentByPartView(APIView):
         for r in results:
             data[r.display_name] = r.num_locations
         return JsonResponse(data)
+
+
+class SupByLocationViewSet(viewsets.ModelViewSet):
+
+    def list(self, request, *args, **kwargs):
+        queryset = AbstractLocation.objects.prefetch_related(
+                    Prefetch(
+                        'supplemental_content',
+                        queryset=AbstractSupplementalContent.objects.filter(approved=True).select_subclasses(SupplementalContent)
+                    ))
+        serializer = SuppByLocationSerializer(queryset, many=True)
+        response_dict = {}
+        for item in serializer.data:
+            titleKey = item.pop("title")
+            partKey = item.pop("part")
+            is_subpart = False
+            if 'Subpart' in item['display_name']:
+                identifier = item['display_name'][-1]
+                is_subpart = True
+            else:
+                identifier = item['display_name'].split()[1].split('.')
+
+            newsup = []
+            for content in item['supplemental_content']:
+                newsup.append(content['id'])
+
+            if len(identifier) > 1 or is_subpart:
+                if is_subpart:
+                    location = {identifier: newsup}
+                else:
+                    identifier = identifier[1]
+                    location = {identifier: newsup}
+                partDict = {partKey: location}
+                if titleKey in response_dict:
+                    if partKey in response_dict[titleKey]:
+                        response_dict[titleKey][partKey][identifier] = newsup
+                    else:
+                        response_dict[titleKey][partKey] = location
+                else:
+                    response_dict = {titleKey: partDict}
+
+        return Response(response_dict)
+
+
+class SupByIdViewSet(viewsets.ViewSet):
+
+    def list(self, request, *args, **kwargs):
+        title = kwargs.get("title")
+        part = kwargs.get("part")
+        queryset = AbstractSupplementalContent.objects.filter(
+            approved=True,
+            category__isnull=False,
+            locations__part=part,
+            locations__title=title
+        ).prefetch_related(
+                    Prefetch(
+                        'locations',
+                        queryset=AbstractLocation.objects.all()
+                    )
+                ).prefetch_related(
+                    Prefetch(
+                        'category',
+                        queryset=AbstractCategory.objects.all().select_subclasses()
+                    )
+                ).distinct().select_subclasses(SupplementalContent).order_by(
+                    "-supplementalcontent__date"
+                )
+        serializer = IndividualSupSerializer(queryset, many=True)
+        response_dict = {}
+
+        for item in serializer.data:
+            idKey = item.pop('id')
+            response_dict[idKey] = item
+
+        return Response(response_dict)
