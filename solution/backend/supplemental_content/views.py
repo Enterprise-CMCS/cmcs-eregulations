@@ -9,7 +9,11 @@ from django.db.models import Prefetch, Q, Count
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
 from rest_framework import exceptions
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    OpenApiTypes,
+)
 
 from .models import (
     AbstractSupplementalContent,
@@ -99,7 +103,12 @@ class SupplementalContentView(generics.ListAPIView):
 
         return Response(serializer.data)
 
-
+@extend_schema(
+        parameters=[
+          OpenApiParameter("start", int, OpenApiParameter.QUERY),
+          OpenApiParameter("max_results", int, OpenApiParameter.QUERY)
+        ],
+    )
 class AllSupplementalContentView(APIView):
     def get(self, *args, **kwargs):
         start = int(self.request.GET.get("start", 0))
@@ -155,6 +164,12 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
 
 
 class SupplementalContentByPartView(APIView):
+    @extend_schema(
+        parameters=[
+            OpenApiParameter("part", str, OpenApiParameter.QUERY), ],
+        responses={
+            (200, 'application/json'): OpenApiTypes.OBJECT}
+    )
     def get(self, request, format=None):
         part = request.GET.get('part', '')
         results = AbstractLocation.objects.filter(part=part).annotate(
