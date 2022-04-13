@@ -103,6 +103,7 @@ class SupplementalContentView(generics.ListAPIView):
 
         return Response(serializer.data)
 
+
 @extend_schema(
         parameters=[
           OpenApiParameter("start", int, OpenApiParameter.QUERY),
