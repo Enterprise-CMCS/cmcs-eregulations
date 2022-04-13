@@ -287,6 +287,7 @@ class IndividualSupSerializer(PolymorphicSerializer):
         except Exception:
             return None
 
+
 class SuppByLocationSerializer(serializers.ModelSerializer):
     supplemental_content = SupIDSerializer(many=True)
 
