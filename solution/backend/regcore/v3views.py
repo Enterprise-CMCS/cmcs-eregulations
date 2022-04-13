@@ -4,7 +4,7 @@ from django.http import Http404
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from regcore.models import Title, Part
 from regcore.views import SettingsAuthentication
@@ -17,6 +17,10 @@ from regcore.serializers import (
     PartsSerializer,
     VersionsSerializer,
 )
+
+
+def OpenApiPathParameter(name, description):
+    return OpenApiParameter(name=name, description=description, required=True, type=str, location=OpenApiParameter.PATH)
 
 
 class MultipleFieldLookupMixin(object):
@@ -35,16 +39,23 @@ class MultipleFieldLookupMixin(object):
         return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)
 
 
+@extend_schema(description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "
+                           "Each object in the array is a TOC for a specific Title.")
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all().values_list("toc", flat=True)
     serializer_class = ContentsSerializer
 
 
+@extend_schema(description="Retrieve a simple list of all Titles in the system.")
 class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitlesSerializer
 
 
+@extend_schema(
+    description="Retrieve, create, or update a specific Title object.",
+    parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.")],
+)
 class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
@@ -54,12 +65,20 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
+@extend_schema(
+    description="Retrieve the table of contents for a specific Title, with detail down to the Part level.",
+    parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.")],
+)
 class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all().values_list("toc", flat=True)
     serializer_class = ContentsSerializer
     lookup_fields = {"name": "title"}
 
 
+@extend_schema(
+    description="Retrieve a list of the latest version of each Part contained within a specific Title, in numerical order.",
+    parameters=[OpenApiPathParameter("title", "Title to retrieve Parts from, e.g. 42.")],
+)
 class PartsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PartsSerializer
 
@@ -68,7 +87,14 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
         return Part.objects.filter(title=title).order_by("name", "-date").distinct("name")
 
 
-@extend_schema(responses={(200, "application/json"): {"type": "string"}})
+@extend_schema(
+    description="Retrieve a list of versions of a specific Part within a specific Title. Response is a simple list of strings.",
+    parameters=[
+        OpenApiPathParameter("title", "Title where Part is contained, e.g. 42."),
+        OpenApiPathParameter("part", "Part of interest, e.g. 433."),
+    ],
+    responses={(200, "application/json"): {"type": "string"}},
+)
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = VersionsSerializer
 
@@ -80,6 +106,14 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
 
 # Inherit from this class to retrieve attributes from a specific version of a part
 # You must specify a serializer_class
+@extend_schema(
+    parameters=[
+        OpenApiPathParameter("title", "Title where Part is contained, e.g. 42."),
+        OpenApiPathParameter("part", "Part of interest, e.g. 433."),
+        OpenApiPathParameter("version", "Version of the Part. Must be in YYYY-MM-DD format (e.g. 2021-01-31), "
+                             "or \"latest\" to retrieve the most recent version."),
+    ],
+)
 class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.all()
     lookup_fields = {
@@ -89,6 +123,8 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
     }
 
 
+@extend_schema(description="Retrieve the table of contents for a specific version of a specific Part of a specific Title, "
+                           "with detail down to the Section level.")
 class PartContentsViewSet(PartPropertiesViewSet):
     serializer_class = ContentsSerializer
 
@@ -116,14 +152,21 @@ class PartStructureNodesViewSet(PartPropertiesViewSet):
         return Response(self.serializer_class(nodes, many=True).data)
 
 
+@extend_schema(description="Retrieve a list of Sections contained within a version of a Part.")
 class PartSectionsViewSet(PartStructureNodesViewSet):
     node_type = "section"
 
 
+@extend_schema(description="Retrieve a list of Subparts contained within a version of a Part.")
 class PartSubpartsViewSet(PartStructureNodesViewSet):
     node_type = "subpart"
 
 
+@extend_schema(
+    description="Retrieve a table of contents for a specific Subpart contained within a Part, "
+                "with detail down to the Section level.",
+    parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.")],
+)
 class SubpartContentsViewSet(PartPropertiesViewSet):
     serializer_class = ContentsSerializer
 
