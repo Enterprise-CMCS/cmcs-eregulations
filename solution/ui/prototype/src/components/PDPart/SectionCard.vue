@@ -11,10 +11,7 @@
                 f.category
             }}
         </v-card-subtitle><v-card-text :class="$style['search-highlight']">
-            <a :href="f.url" v-if="!usingSearch">
-                {{ f.description }}
-            </a>
-            <a :href="f.url" v-if="usingSearch" v-html="f.descriptionHeadline" />
+            <a :href="f.url" v-html="f.descriptionHeadline || f.description" />
         </v-card-text>
         <v-card-actions
           @click="showLocation = !showLocation"

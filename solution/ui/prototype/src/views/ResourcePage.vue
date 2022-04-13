@@ -5,8 +5,8 @@
             <div class="searchpane">
                 <v-text-field
                     v-on:click:append="search"
-                    v-on:keydown="search"
-                    @change="searchQuery = $event"
+                    v-on:keydown.enter="search"
+                    v-model="searchQuery"
                     flat
                     solo
                     clearable
@@ -103,22 +103,20 @@ export default {
     },
     methods: {
         async search(event) {
-            if ((event.type === "keydown" && event.key === "Enter") || event.type === "click") {
-                this.supList = [];
-                this.singleSupList = [];
-                this.sortedSupList = [];
-                this.supList.push(await getSupplementalContentSearchResults(this.searchQuery));
-                for (let sup of this.supList) {
-                    for (let content of sup) {
-                        let clone = JSON.parse(JSON.stringify(content));
-                        clone.category = clone.category.name;
-                        this.singleSupList.push(clone);
-                        this.sortedSupList.push(clone);
-                    }
+            this.supList = [];
+            this.singleSupList = [];
+            this.sortedSupList = [];
+            this.supList.push(await getSupplementalContentSearchResults(this.searchQuery));
+            for (let sup of this.supList) {
+                for (let content of sup) {
+                    let clone = JSON.parse(JSON.stringify(content));
+                    clone.category = clone.category.name; //rewrites cache if `content` used instead of `clone`
+                    this.singleSupList.push(clone);
+                    this.sortedSupList.push(clone);
                 }
-                this.sortedSupList.filter(content => content.name)
-                this.usingSearch = true;
             }
+            this.sortedSupList.filter(content => content.name)
+            this.usingSearch = true;
         },
         setResourcesParams(payload) {
             this.filters = payload;
