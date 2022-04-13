@@ -213,6 +213,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
     approved = serializers.BooleanField()
     category = SimpleCategorySerializer()
     locations = SimpleLocationSerializer(many=True)
+    id = serializers.CharField()
 
     def get_serializer_map(self):
         return {
@@ -222,6 +223,13 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
     class Meta:
         model = AbstractSupplementalContent
         list_serializer_class = ApplicableSupplementalContentSerializer
+
+
+class SupIDSerializer(serializers.Serializer):
+    id = serializers.CharField()
+
+    class Meta:
+        model = AbstractSupplementalContent
 
 
 class SupplementalContentSerializer(serializers.Serializer):
@@ -253,6 +261,17 @@ class FlatSupplementalContentSerializer(serializers.Serializer):
     nameHeadline = serializers.SerializerMethodField()
     descriptionHeadline = serializers.SerializerMethodField()
 
+
+class IndividualSupSerializer(PolymorphicSerializer):
+    id = serializers.CharField()
+
+    locations = SimpleLocationSerializer(many=True)
+
+    def get_serializer_map(self):
+        return {
+            SupplementalContent: SupplementalContentSerializer,
+        }
+
     class Meta:
         model = AbstractSupplementalContent
 
@@ -267,3 +286,15 @@ class FlatSupplementalContentSerializer(serializers.Serializer):
             return obj.descriptionHeadline
         except Exception:
             return None
+
+class SuppByLocationSerializer(serializers.ModelSerializer):
+    supplemental_content = SupIDSerializer(many=True)
+
+    def get_serializer_map(self):
+        return {
+            SupplementalContent: SupIDSerializer,
+        }
+
+    class Meta:
+        model = AbstractLocation
+        fields = "__all__"

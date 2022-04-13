@@ -31,6 +31,10 @@
         text-align: center;
     }
 
+    .print-view-container {
+        display: none;
+    }
+
     .view-title {
         font-weight: bold;
         border-right: 1px solid $border_color;

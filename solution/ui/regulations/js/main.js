@@ -5,6 +5,7 @@ import Collapsible from "../dist/Collapsible";
 import CollapseButton from "../dist/CollapseButton";
 import SupplementalContent from "../dist/SupplementalContent";
 import CopyBtn from "../dist/CopyBtn";
+import PrintBtn from "../dist/PrintBtn";
 import TableComponent from "../dist/TableComponent";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
@@ -148,6 +149,7 @@ function main() {
             SupplementalContent,
             CopyBtn,
             TableComponent,
+            PrintBtn,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");

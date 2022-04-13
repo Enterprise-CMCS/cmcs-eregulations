@@ -42,7 +42,13 @@ import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import { Splitpanes, Pane } from "splitpanes";
-import { getSupplementalContentNew, getAllSupplementalContentByPieces, getSupplementalContentSearchResults } from "../utilities/api";
+import {
+    getSupplementalContentNew,
+    getAllSupplementalContentByPieces,
+    getSupIDByLocations,
+    getSupByPart,
+    getSupplementalContentSearchResults,
+} from "../utilities/api";
 import "splitpanes/dist/splitpanes.css";
 import ResourceFilters from "../components/ResourcesPage/ResourceFilters.vue";
 import SectionPane from "../components/ResourcesPage/SectionSide.vue";
@@ -58,11 +64,13 @@ export default {
     },
     data: () => ({
         supList: [],
-        filters: {resources:[]},
+        filters: { resources: [] },
         singleSupList: [],
         sortedSupList: [],
-        preSelectedSections:[],
+        preSelectedSections: [],
         preSelectedParts: [],
+        supbyId: [],
+        firstLoad: true,
         searchText: "",
         searchQuery: "",
         usingSearch: false,
@@ -70,33 +78,36 @@ export default {
     async created() {
         try {
             const urlParams = new URLSearchParams(window.location.search);
-            const part = urlParams.get('part')
-            if (part){
-                  this.filters["parts"] = {
-                      [part]: {part}
-                  }
-                this.preSelectedParts.push(part)
-                const subpart = urlParams.get('subPart') ? urlParams.get('subPart').split('-')[1] : null
-                const section = urlParams.get('section')
-                if(subpart) {
-                  this.preSelectedSections.push({part, subpart})
-                  this.filters["parts"][part]["subparts"] = [subpart]
+            const part = urlParams.get("part");
+
+            this.supbyId = await getSupIDByLocations();
+
+            if (part) {
+                this.filters["parts"] = {
+                    [part]: { part },
+                };
+                this.preSelectedParts.push(part);
+                const subpart = urlParams.get("subPart")
+                    ? urlParams.get("subPart").split("-")[1]
+                    : null;
+                const section = urlParams.get("section");
+                if (subpart) {
+                    this.preSelectedSections.push({ part, subpart });
+                    this.filters["parts"][part]["subparts"] = [subpart];
                 }
-                if(section) {
-                  this.preSelectedSections.push({part, section})
-                  this.filters["parts"][part]["sections"] = [section]
+                if (section) {
+                    this.preSelectedSections.push({ part, section });
+                    this.filters["parts"][part]["sections"] = [section];
                 }
             }
-            console.log(this.filters)
-            if (this.filters.parts){
-              await this.getSupContent();
-            }else {
-              this.supList = await getAllSupplementalContentByPieces(0, 100);
-              for (let sup of this.supList) {
-                this.singleSupList.push(sup);
-              }
-
-              this.sortContent()
+            if (this.filters.parts) {
+                await this.getSupContent();
+            } else {
+                this.supList = await getAllSupplementalContentByPieces(0, 100);
+                for (let sup of this.supList) {
+                    this.singleSupList.push(sup);
+                }
+                this.sortContent();
             }
         } catch (error) {
             console.error(error);
@@ -122,11 +133,7 @@ export default {
         },
         setResourcesParams(payload) {
             this.filters = payload;
-
-            this.sortedSupList = [];
-            this.supList =[]
             this.getSupContent();
-
             // Implement response to user choosing a section or subpart here
         },
         sortContent() {
@@ -134,7 +141,7 @@ export default {
                 for (let content of this.singleSupList) {
                     if (
                         this.filters.resources.includes(content.name) ||
-                        this.filters.resources.length == 0 
+                        this.filters.resources.length == 0
                     ) {
                         if (content.supplemental_content.length > 0) {
                             for (let supplement of content.supplemental_content) {
@@ -154,39 +161,53 @@ export default {
                             }
                         }
                     }
-                this.sortedSupList.filter(content => content.name)
                 }
             } catch (error) {
                 console.log("error");
             }
         },
+
         async getSupContent() {
             this.usingSearch = false;
-            this.singleSupList = [];
-            console.log(this.filters)
-            try {
-                this.supList = [];
-                for (let part in this.filters.parts) {
-                    let query = this.filters.parts[part];
-
-                    this.supList.push(
-                        await getSupplementalContentNew(
-                            42,
-                            query["part"],
-                            query["sections"],
-                            query["subparts"]
-                        )
+            this.supList = [];
+            if (!this.firstLoad && this.filters) {
+                try {
+                    this.supList = await Object.keys(this.filters.parts).reduce(
+                        async (acc, part) => {
+                            let fullList = await acc;
+                            let query = this.filters.parts[part];
+                            const supContent = await getSupByPart(
+                                42,
+                                query["part"],
+                                query["sections"],
+                                query["subparts"]
+                            );
+                            fullList.push(supContent);
+                            return fullList;
+                        },
+                        Promise.resolve([])
                     );
+
+                    this.sortedSupList = this.supList
+                        .reduce((acc, content) => {
+                            return acc.concat(content);
+                        }, [])
+                        .filter((content) => {
+                            return (
+                                this.filters.resources.length === 0 ||
+                                this.filters.resources.includes(
+                                    content.category
+                                )
+                            );
+                        });
+                } catch (error) {
+                    console.error(error);
                 }
-                for (let sup of this.supList) {
-                    for (let content of sup) {
-                        this.singleSupList.push(content);
-                    }
-                }
-            } catch (error) {
-                console.error(error);
+            } else if (this.firstLoad) {
+                this.firstLoad = false;
+            } else {
+                this.sortedSupList = [];
             }
-            this.sortContent();
         },
     },
 };
