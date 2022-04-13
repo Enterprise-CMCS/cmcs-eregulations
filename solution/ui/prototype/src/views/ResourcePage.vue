@@ -6,7 +6,7 @@
                 <v-text-field
                     v-on:click:append="search"
                     v-on:keydown.enter="search"
-                    v-model="searchQuery"
+                    v-model="searchText"
                     flat
                     solo
                     clearable
@@ -63,6 +63,7 @@ export default {
         sortedSupList: [],
         preSelectedSections:[],
         preSelectedParts: [],
+        searchText: "",
         searchQuery: "",
         usingSearch: false,
     }),
@@ -103,6 +104,7 @@ export default {
     },
     methods: {
         async search(event) {
+            this.searchQuery = this.searchText;
             this.supList = [];
             this.singleSupList = [];
             this.sortedSupList = [];
