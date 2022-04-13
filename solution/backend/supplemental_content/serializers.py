@@ -261,17 +261,6 @@ class FlatSupplementalContentSerializer(serializers.Serializer):
     nameHeadline = serializers.SerializerMethodField()
     descriptionHeadline = serializers.SerializerMethodField()
 
-
-class IndividualSupSerializer(PolymorphicSerializer):
-    id = serializers.CharField()
-
-    locations = SimpleLocationSerializer(many=True)
-
-    def get_serializer_map(self):
-        return {
-            SupplementalContent: SupplementalContentSerializer,
-        }
-
     class Meta:
         model = AbstractSupplementalContent
 
@@ -286,6 +275,20 @@ class IndividualSupSerializer(PolymorphicSerializer):
             return obj.descriptionHeadline
         except Exception:
             return None
+
+
+class IndividualSupSerializer(PolymorphicSerializer):
+    id = serializers.CharField()
+
+    locations = SimpleLocationSerializer(many=True)
+
+    def get_serializer_map(self):
+        return {
+            SupplementalContent: SupplementalContentSerializer,
+        }
+
+    class Meta:
+        model = AbstractSupplementalContent
 
 
 class SuppByLocationSerializer(serializers.ModelSerializer):
