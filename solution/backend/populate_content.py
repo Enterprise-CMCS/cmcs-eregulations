@@ -13,3 +13,4 @@ def handler(event, context):
     call_command('loaddata', 'supplemental_content.subpart.json')
     call_command('loaddata', 'supplemental_content.section.json')
     call_command('loaddata', 'supplemental_content.supplementalcontent.json')
+    call_command('loaddata', 'synonyms.json')
