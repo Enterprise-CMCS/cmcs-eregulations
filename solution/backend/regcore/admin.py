@@ -4,7 +4,9 @@ from django.forms import TextInput
 
 from solo.admin import SingletonModelAdmin
 
+from supplemental_content.admin import BaseAdmin
 from .models import ParserConfiguration, TitleConfiguration
+from .search.models import Synonym
 
 
 class TitleConfigurationInline(admin.TabularInline):
@@ -36,3 +38,14 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
                            "will not take effect until the next scheduled parser run!",
         }),
     )
+
+
+@admin.register(Synonym)
+class SectionAdmin(BaseAdmin):
+    admin_priority = 20
+    ordering = ('baseWord',)
+
+    class Media:
+        css = {
+            "all": ("css/admin/synonym.css",)
+        }
