@@ -19,8 +19,8 @@ from regcore.serializers import (
 )
 
 
-def OpenApiPathParameter(name, description):
-    return OpenApiParameter(name=name, description=description, required=True, type=str, location=OpenApiParameter.PATH)
+def OpenApiPathParameter(name, description, type):
+    return OpenApiParameter(name=name, description=description, required=True, type=type, location=OpenApiParameter.PATH)
 
 
 class MultipleFieldLookupMixin(object):
@@ -54,7 +54,7 @@ class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
 
 @extend_schema(
     description="Retrieve, create, or update a specific Title object.",
-    parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.")],
+    parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.", int)],
 )
 class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     queryset = Title.objects.all()
@@ -67,7 +67,7 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
 @extend_schema(
     description="Retrieve the table of contents for a specific Title, with detail down to the Part level.",
-    parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.")],
+    parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.", int)],
 )
 class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all().values_list("toc", flat=True)
@@ -77,7 +77,7 @@ class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewS
 
 @extend_schema(
     description="Retrieve a list of the latest version of each Part contained within a specific Title, in numerical order.",
-    parameters=[OpenApiPathParameter("title", "Title to retrieve Parts from, e.g. 42.")],
+    parameters=[OpenApiPathParameter("title", "Title to retrieve Parts from, e.g. 42.", int)],
 )
 class PartsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PartsSerializer
@@ -90,8 +90,8 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
 @extend_schema(
     description="Retrieve a list of versions of a specific Part within a specific Title. Response is a simple list of strings.",
     parameters=[
-        OpenApiPathParameter("title", "Title where Part is contained, e.g. 42."),
-        OpenApiPathParameter("part", "Part of interest, e.g. 433."),
+        OpenApiPathParameter("title", "Title where Part is contained, e.g. 42.", int),
+        OpenApiPathParameter("part", "Part of interest, e.g. 433.", int),
     ],
     responses={(200, "application/json"): {"type": "string"}},
 )
@@ -108,10 +108,10 @@ class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
 # You must specify a serializer_class
 @extend_schema(
     parameters=[
-        OpenApiPathParameter("title", "Title where Part is contained, e.g. 42."),
-        OpenApiPathParameter("part", "Part of interest, e.g. 433."),
+        OpenApiPathParameter("title", "Title where Part is contained, e.g. 42.", int),
+        OpenApiPathParameter("part", "Part of interest, e.g. 433.", int),
         OpenApiPathParameter("version", "Version of the Part. Must be in YYYY-MM-DD format (e.g. 2021-01-31), "
-                             "or \"latest\" to retrieve the most recent version."),
+                             "or \"latest\" to retrieve the most recent version.", str),
     ],
 )
 class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
@@ -165,7 +165,7 @@ class PartSubpartsViewSet(PartStructureNodesViewSet):
 @extend_schema(
     description="Retrieve a table of contents for a specific Subpart contained within a Part, "
                 "with detail down to the Section level.",
-    parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.")],
+    parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.", str)],
 )
 class SubpartContentsViewSet(PartPropertiesViewSet):
     serializer_class = ContentsSerializer
