@@ -40,6 +40,11 @@ class SearchIndexQuerySet(models.QuerySet):
                     stop_sel='</span>',
                     config='english'
                 ),
+                parentHeadline=SearchHeadline(
+                    "parent__title",
+                    SearchQuery(query, search_type=search_type, config='english'),
+                    config='english',
+                ),
             )\
             .order_by('-rank')\
             .prefetch_related('part')
