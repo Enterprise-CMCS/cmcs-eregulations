@@ -4,6 +4,9 @@
             <Header />
             <div class="searchpane">
                 <v-text-field
+                    v-on:click:append="search"
+                    v-on:keydown.enter="search"
+                    v-model="searchText"
                     flat
                     solo
                     clearable
@@ -12,6 +15,7 @@
                     type="text"
                     append-icon="mdi-magnify"
                     hide-details
+                    ref="search"
                 />
             </div>
             <splitpanes>
@@ -25,7 +29,7 @@
                     </div>
                 </pane>
                 <pane min-size="30">
-                    <SectionPane v-bind:supList="sortedSupList" />
+                    <SectionPane v-bind:supList="sortedSupList" v-bind:usingSearch="usingSearch" v-bind:searchQuery="searchQuery"/>
                 </pane>
             </splitpanes>
             <Footer />
@@ -43,6 +47,7 @@ import {
     getAllSupplementalContentByPieces,
     getSupIDByLocations,
     getSupByPart,
+    getSupplementalContentSearchResults,
 } from "../utilities/api";
 import "splitpanes/dist/splitpanes.css";
 import ResourceFilters from "../components/ResourcesPage/ResourceFilters.vue";
@@ -66,6 +71,9 @@ export default {
         preSelectedParts: [],
         supbyId: [],
         firstLoad: true,
+        searchText: "",
+        searchQuery: "",
+        usingSearch: false,
     }),
     async created() {
         try {
@@ -106,6 +114,23 @@ export default {
         }
     },
     methods: {
+        async search(event) {
+            this.searchQuery = this.searchText;
+            this.supList = [];
+            this.singleSupList = [];
+            this.sortedSupList = [];
+            this.supList.push(await getSupplementalContentSearchResults(this.searchQuery));
+            for (let sup of this.supList) {
+                for (let content of sup) {
+                    let clone = JSON.parse(JSON.stringify(content));
+                    clone.category = clone.category.name; //rewrites cache if `content` used instead of `clone`
+                    this.singleSupList.push(clone);
+                    this.sortedSupList.push(clone);
+                }
+            }
+            this.sortedSupList.filter(content => content.name)
+            this.usingSearch = true;
+        },
         setResourcesParams(payload) {
             this.filters = payload;
             this.getSupContent();
@@ -143,6 +168,7 @@ export default {
         },
 
         async getSupContent() {
+            this.usingSearch = false;
             this.supList = [];
             if (!this.firstLoad && this.filters) {
                 try {

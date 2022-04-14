@@ -248,6 +248,35 @@ class SupplementalContentSerializer(serializers.Serializer):
         list_serializer_class = ApplicableSupplementalContentSerializer
 
 
+class FlatSupplementalContentSerializer(serializers.Serializer):
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
+    approved = serializers.BooleanField()
+    category = SimpleCategorySerializer()
+    locations = SimpleLocationSerializer(many=True)
+    url = serializers.URLField()
+    description = serializers.CharField()
+    name = serializers.CharField()
+    date = serializers.CharField()
+    nameHeadline = serializers.SerializerMethodField()
+    descriptionHeadline = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AbstractSupplementalContent
+
+    def get_nameHeadline(self, obj):
+        try:
+            return obj.nameHeadline
+        except Exception:
+            return None
+
+    def get_descriptionHeadline(self, obj):
+        try:
+            return obj.descriptionHeadline
+        except Exception:
+            return None
+
+
 class IndividualSupSerializer(PolymorphicSerializer):
     id = serializers.CharField()
 

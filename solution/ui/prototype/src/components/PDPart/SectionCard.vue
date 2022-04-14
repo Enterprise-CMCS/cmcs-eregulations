@@ -10,10 +10,8 @@
             {{
                 f.category
             }}
-        </v-card-subtitle><v-card-text>
-            <a :href="f.url">
-                {{ f.description }}
-            </a>
+        </v-card-subtitle><v-card-text :class="$style['search-highlight']">
+            <a :href="f.url" v-html="f.descriptionHeadline || f.description" />
         </v-card-text>
         <v-card-actions
           @click="showLocation = !showLocation"
@@ -100,7 +98,8 @@
 export default {
   name: "SectionCard",
   props: {
-    f: {type: Object}
+    f: {type: Object},
+    usingSearch: {type: Boolean},
   },
   data: () => ({
     showLocation: false,
@@ -132,6 +131,9 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style module>
+.search-highlight span {
+    font-style: italic;
+    font-weight: bold;
+}
 </style>
