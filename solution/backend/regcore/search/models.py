@@ -43,7 +43,10 @@ class SearchIndexQuerySet(models.QuerySet):
                 parentHeadline=SearchHeadline(
                     "parent__title",
                     SearchQuery(query, search_type=search_type, config='english'),
+                    start_sel="<span class='search-highlight'>",
+                    stop_sel="</span>",
                     config='english',
+                    highlight_all=True
                 ),
             )\
             .order_by('-rank')\
