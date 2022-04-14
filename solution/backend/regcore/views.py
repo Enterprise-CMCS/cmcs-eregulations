@@ -4,7 +4,7 @@ from rest_framework import generics, serializers
 from django.conf import settings
 from django.contrib.postgres.aggregates import StringAgg
 
-from regcore.models import Part, ParserConfiguration, TitleConfiguration
+from regcore.models import Part, ParserConfiguration
 
 from rest_framework.response import Response
 
@@ -145,10 +145,10 @@ class EffectivePartTocView(EffectivePartView):
     serializer_class = ListEffectivePartTocSerializer
 
 
-class TitleConfigurationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TitleConfiguration
-        fields = ("title", "subchapters", "parts")
+class TitleConfigurationSerializer(serializers.Serializer):
+    title = serializers.IntegerField()
+    subchapters = serializers.CharField()
+    parts = serializers.CharField()
 
 
 class ParserConfigurationSerializer(serializers.ModelSerializer):

@@ -11,7 +11,9 @@ ui/regulations/node_modules: ui/regulations/package.json
 
 static-assets/regulations/css/main.css: ui/regulations/css/**/*.scss
 	cd ui/regulations; \
-		npm run css;
+		npm run css;\
+		mkdir ../../static-assets/regulations/css/admin/;\
+		cp css/admin/*.css ../../static-assets/regulations/css/admin/;\
 
 static-assets/regulations/js/main.build.js: ui/regulations/js/main.js ui/regulations/js/src/components/*.vue
 	cd ui/regulations; \
@@ -113,4 +115,5 @@ local.seed:
 	docker-compose exec regulations python manage.py loaddata supplemental_content.subpart.json
 	docker-compose exec regulations python manage.py loaddata supplemental_content.section.json
 	docker-compose exec regulations python manage.py loaddata supplemental_content.supplementalcontent.json
+	docker-compose exec regulations python manage.py loaddata synonyms.json
 

@@ -2,6 +2,7 @@ from datetime import date
 from rest_framework import generics, serializers, viewsets
 from django.db import models
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from regcore.models import Part
 from .models import SearchIndex
@@ -21,6 +22,10 @@ class SearchViewSerializer(serializers.ModelSerializer):
         fields = ("type", "content", "headline", "label", "parent", "regulation_title", "title", "date")
 
 
+@extend_schema(
+        parameters=[
+          OpenApiParameter("q", str, OpenApiParameter.QUERY), ],
+    )
 class SearchView(generics.ListAPIView):
     serializer_class = SearchViewSerializer
 
