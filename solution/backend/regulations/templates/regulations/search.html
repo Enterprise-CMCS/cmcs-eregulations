@@ -1,5 +1,6 @@
 {% extends "regulations/base.html" %}
 {% load static %}
+{% load string_formatters %}
 
 {% block title %}Search for {{ q }} | Medicaid & CHIP eRegulations{% endblock %}
 
@@ -42,7 +43,11 @@
                             <div class="result">
                                 <!--{{ result.rank }}-->
                                 <div class="results-part">{{ result.part.document.title | title}}</div>
-                                <div class="results-section"><a href="{% url 'reader_view' result.part.title result.label.0 result.label.1 result.part.date %}#{{ result.label | join:'-' }}">{{ result.parentHeadline | safe }}</a></div>
+                                <div class="results-section">
+                                    <a href="{% url 'reader_view' result.part.title result.label.0 result.label.1 result.part.date %}#{{ result.label | join:'-' }}">
+                                        {{ result.parentHeadline | stripSurroundingQuotes | safe }}
+                                    </a>
+                                </div>
                                 <div class="results-preview">{{ result.headline | safe }}</div>
                             </div>
                             {% endif %}
