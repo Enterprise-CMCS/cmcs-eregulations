@@ -5,6 +5,7 @@ from django.db import models
 from regcore.models import Part
 from .models import SearchIndex
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchHeadline
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 
 class SearchViewSerializer(serializers.ModelSerializer):
@@ -18,6 +19,10 @@ class SearchViewSerializer(serializers.ModelSerializer):
         fields = ("type", "content", "headline", "label", "parent", "regulation_title", "title", "date")
 
 
+@extend_schema(
+        parameters=[
+          OpenApiParameter("q", str, OpenApiParameter.QUERY), ],
+    )
 class SearchView(generics.ListAPIView):
     serializer_class = SearchViewSerializer
 
