@@ -1,22 +1,24 @@
 from rest_framework import serializers
 
+from .models import Title
+
 
 class FlatContentsSerializer(serializers.Serializer):
     type = serializers.CharField()
     label = serializers.CharField()
-    parent = serializers.ListField(child=serializers.CharField())
+    parent = serializers.ListField(child=serializers.CharField(), allow_null=True, allow_empty=True)
     reserved = serializers.BooleanField()
     identifier = serializers.ListField(child=serializers.CharField())
     label_level = serializers.CharField()
-    parent_type = serializers.CharField()
-    descendant_range = serializers.ListField(child=serializers.CharField())
+    parent_type = serializers.CharField(allow_blank=True)
+    descendant_range = serializers.ListField(child=serializers.CharField(), allow_null=True, allow_empty=True)
     label_description = serializers.CharField()
 
 
 class ContentsSerializer(FlatContentsSerializer):
     def get_fields(self):
         fields = super(ContentsSerializer, self).get_fields()
-        fields['children'] = serializers.ListField(child=ContentsSerializer())
+        fields['children'] = serializers.ListField(child=ContentsSerializer(), allow_null=True, allow_empty=True)
         return fields
 
 
@@ -26,11 +28,19 @@ class TitlesSerializer(serializers.Serializer):
     last_updated = serializers.CharField()
 
 
-class TitleSerializer(serializers.Serializer):
+class TitleRetrieveSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     last_updated = serializers.CharField()
     toc = ContentsSerializer()
+
+
+class TitleUploadSerializer(serializers.ModelSerializer):
+    toc = ContentsSerializer()
+
+    class Meta:
+        model = Title
+        fields = ["name", "toc"]
 
 
 class PartsSerializer(serializers.Serializer):
