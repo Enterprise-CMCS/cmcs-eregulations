@@ -3,10 +3,13 @@ package main
 import (
 	"time"
 	"context"
+	"os"
 
-	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
 
 	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
+
+	"github.com/aws/aws-lambda-go/lambda"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -41,5 +44,5 @@ func main() {
 }
 
 func start() error {
-
+	return nil
 }
