@@ -1,10 +1,9 @@
-import json
 from django.http import JsonResponse
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import AbstractCategory, Section, SupplementalContent
+from .models import SupplementalContent
 from .views import SettingsAuthentication
 from .serializers import CreateSupplementalContentSerializer
 
@@ -36,5 +35,3 @@ class SupplementalContentViewSet(viewsets.ModelViewSet):
         else:
             response = {"error": sc.errors}
         return JsonResponse(response)
-
-
