@@ -42,6 +42,12 @@ class SearchView(generics.ListAPIView):
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
                 ),
+                parentHeadline=SearchHeadline(
+                    "parent__title",
+                    SearchQuery(q),
+                    start_sel="<span class='search-highlight'>",
+                    stop_sel='</span>',
+                ),
             )\
             .order_by('-rank')\
             .values("type", "content", "headline", "label", "parent", "part__document__title", "part__title", "part__date")
