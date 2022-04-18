@@ -53,3 +53,11 @@ def paragraph_formatter(title, node_label):
 def appendix_formatter(title, node_label):
     citation = " ".join(node_label)
     return strip_tags(f"{title} CFR {citation}")
+
+
+@register.filter
+def stripSurroundingQuotes(quotedString):
+    if quotedString.startswith('"') and quotedString.endswith('"'):
+        return quotedString[1:-1]
+    else:
+        return quotedString
