@@ -72,6 +72,7 @@ import {
     getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentNew,
+    getSupplementalContentSearchResults
 } from "@/utilities/api";
 
 export default {
@@ -146,6 +147,9 @@ export default {
         },
         resultsResourcesClass() {
             return `results-${this.resourcesDisplay}`;
+        },
+        searchQuery() {
+            return this.queryParams.q || "";
         },
         filterParams() {
             return {

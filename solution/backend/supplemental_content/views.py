@@ -6,6 +6,7 @@ from django.conf import settings
 from rest_framework.response import Response
 
 from django.db.models import Prefetch, Q, Count
+from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
@@ -32,7 +33,6 @@ from .serializers import (
     IndividualSupSerializer,
     SuppByLocationSerializer
 )
-
 
 class SettingsUser:
     is_authenticated = False
@@ -75,6 +75,8 @@ class SupplementalContentView(generics.ListAPIView):
         start = int(self.request.GET.get("start", 0))
         maxResults = int(self.request.GET.get("max_results", 1000))
 
+        q = self.request.query_params.get('q')
+
         if len(section_list) > 0 or len(subpart_list) > 0 or len(subjgrp_list) > 0:
             query = AbstractSupplementalContent.objects.filter(
                 Q(locations__section__section_id__in=section_list) |
@@ -93,6 +95,36 @@ class SupplementalContentView(generics.ListAPIView):
                 locations__part=part,
             )
 
+        if q:
+            search_type = 'plain'
+            cover_density = False
+
+            if (q.startswith('"')) and q.endswith('"'):
+                search_type = 'phrase'
+                cover_density = True
+
+            query = query.annotate(rank=SearchRank(
+                    SearchVector('supplementalcontent__name', weight='A', config='english')
+                    + SearchVector('supplementalcontent__description', weight='A', config='english'),
+                    SearchQuery(q, search_type=search_type, config='english'), cover_density=cover_density))
+
+            query = query.filter(rank__gte=0.2).annotate(
+                nameHeadline=SearchHeadline(
+                    "supplementalcontent__name",
+                    SearchQuery(query, search_type=search_type, config='english'),
+                    start_sel='<span class="search-highlight">',
+                    stop_sel='</span>',
+                    config='english'
+                ),
+                descriptionHeadline=SearchHeadline(
+                    "supplementalcontent__description",
+                    SearchQuery(query, search_type=search_type, config='english'),
+                    start_sel='<span class="search-highlight">',
+                    stop_sel='</span>',
+                    config='english'
+                )
+            )
+
         query = query.prefetch_related(
                     Prefetch(
                         'locations',
@@ -104,7 +136,7 @@ class SupplementalContentView(generics.ListAPIView):
                         queryset=AbstractCategory.objects.all().select_subclasses()
                     )
                 ).distinct().select_subclasses(SupplementalContent).order_by(
-                    "-supplementalcontent__date"
+                    "-rank" if q else "-supplementalcontent__date"
                 )[start:start+maxResults]
         serializer = SupplementalContentSerializer(query, many=True)
 
