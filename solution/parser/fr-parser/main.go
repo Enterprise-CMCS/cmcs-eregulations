@@ -109,10 +109,18 @@ func start() error {
 		for _, part := range parts {
 			content, err := fedreg.FetchContent(ctx, title.Title, part)
 			if err != nil {
-				log.Warn("[main] Failed to fetch FR docs for title ", title.Title, " part ", part, ": ", err)
+				log.Error("[main] Failed to fetch FR docs for title ", title.Title, " part ", part, ": ", err)
 				continue
 			}
-			log.Warn(content)
+
+			for _, c := range content {
+				sections, err := fedreg.FetchSections(ctx, c.Date, c.DocumentNumber)
+				if err != nil {
+					log.Error("[main] Failed to fetch list of sections FR doc ", c.DocumentNumber, ": ", err)
+					continue
+				}
+				c.Sections = sections
+			}
 		}
 	}
 

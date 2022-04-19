@@ -5,11 +5,16 @@ import (
 	"net/url"
 	"fmt"
 	"encoding/json"
+	"encoding/xml"
+	"io"
+	"strings"
+	"regexp"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 )
 
-var FedRegURL= "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
+var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
+var FedRegDocumentURL = "https://www.federalregister.gov/documents/full_text/xml/%s/%s/%s/%s.xml"
 
 type FRDoc struct {
 	Name string `json:"citation"`
@@ -19,6 +24,7 @@ type FRDoc struct {
 	Date string `json:"publication_date"`
 	DocketNumber string `json:"docket_id"`
 	DocumentNumber string `json:"document_number"`
+	Sections []string
 }
 
 type FRDocPage struct {
@@ -26,23 +32,81 @@ type FRDocPage struct {
 	Results []*FRDoc `json:"results"`
 }
 
-func FetchContent(ctx context.Context, title int, part string) ([]*FRDoc, error) {
-	startPath := fmt.Sprintf(FedRegURL, title, part)
-	return fetchContent(ctx, startPath)
-}
-
-func fetchContent(ctx context.Context, path string) ([]*FRDoc, error) {
+func fetch(ctx context.Context, path string) (io.Reader, error) {
 	frURL, err := url.Parse(path)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Failed to parse URL: %+v", err)
 	}
 
 	reader, code, err := network.Fetch(ctx, frURL, false)
 	if err != nil {
 		if code != -1 {
-			return nil, fmt.Errorf("Fetch failed with code %d: %+v", err)
+			return nil, fmt.Errorf("Fetch failed with code %d: %+v", code, err)
 		}
 		return nil, fmt.Errorf("Fetch failed: %+v", err)
+	}
+
+	return reader, nil
+}
+
+func FetchContent(ctx context.Context, title int, part string) ([]*FRDoc, error) {
+	startPath := fmt.Sprintf(FedRegContentURL, title, part)
+	return fetchContent(ctx, startPath)
+}
+
+type XMLQuery struct {
+	Loc string `xml:",chardata"`
+}
+
+func FetchSections(ctx context.Context, date string, id string) ([]string, error) {
+	dateParts := strings.Split(date, "-")
+	reader, err := fetch(ctx, fmt.Sprintf(FedRegDocumentURL, dateParts[0], dateParts[1], dateParts[2], id))
+	if err != nil {
+		return nil, err
+	}
+
+	var sections []string
+	d := xml.NewDecoder(reader)
+	for {
+		t, err := d.Token()
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return nil, fmt.Errorf("Failed to decode XML: %+v", err)
+		}
+		if se, ok := t.(xml.StartElement); ok {
+			if se.Name.Local == "SECTNO" {
+				var l XMLQuery
+				err = d.DecodeElement(&l, &se)
+				if err != nil {
+					return nil, fmt.Errorf("Failed to decode element: %+v", err)
+				}
+				section, err := extractSection(l.Loc)
+				if err != nil {
+					return nil, err
+				}
+				sections = append(sections, section)
+			}
+		}
+	}
+
+	return sections, nil
+}
+
+func extractSection(input string) (string, error) {
+	pat := regexp.MustCompile(`\w+.\d+`)
+	s := pat.FindString(input)
+	if s == "" {
+		return s, fmt.Errorf("Failed to extract section from %s", input)
+	}
+	return s, nil
+}
+
+func fetchContent(ctx context.Context, path string) ([]*FRDoc, error) {
+	reader, err := fetch(ctx, path)
+	if err != nil {
+		return nil, err
 	}
 
 	var p FRDocPage
