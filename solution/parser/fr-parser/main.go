@@ -4,10 +4,13 @@ import (
 	"time"
 	"context"
 	"os"
+	"fmt"
 
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
+	"github.com/cmsgov/cmcs-eregulations/fr-parser/fedreg"
 
 	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -22,8 +25,10 @@ var DefaultBaseURL = "http://localhost:8000/v2/"
 
 func init() {
 	eregs.BaseURL = os.Getenv("EREGS_API_URL")
+	ecfrEregs.BaseURL = os.Getenv("EREGS_API_URL")
 	if eregs.BaseURL == "" {
 		eregs.BaseURL = DefaultBaseURL
+		ecfrEregs.BaseURL = DefaultBaseURL
 	}
 }
 
@@ -56,7 +61,7 @@ func getLogLevel(l string) log.Level {
 	case "trace":
 		return log.TraceLevel
 	default:
-		log.Warn("[main] \"", config.LogLevel, "\" is an invalid log level, defaulting to \"warn\".")
+		log.Warn("[main] \"", l, "\" is an invalid log level, defaulting to \"warn\".")
 		return log.WarnLevel
 	}
 }
@@ -69,39 +74,47 @@ func loadConfig() (*ecfrEregs.ParserConfig, error) {
 	}
 
 	// parse config here
-	log.SetLevel(getLogLevel(c.LogLevel))
+	log.SetLevel(getLogLevel(config.LogLevel))
 
 	return config, nil
 }
 
-func getPartsList(c *ecfrEregs.ParserConfig) map[int][]string {
-	partMap := make(map[int][]string)
+func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
 	today := time.Now()
-	for _, title := range c.Titles {
-		var parts []string
-		for _, subchapter := range title.Subchapters {
-			log.Debug("[main] Fetching title ", title.Title, " subchapter ", subchapter, " parts list...")
-			subchapterParts, err := ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
-			if err != nil {
-				log.Error("[main] Failed to retrieve parts for title ", title.Title, " subchapter ", subchapter, ". Skipping.")
-				continue
-			}
-			parts = append(parts, subchapterParts...)
+	var parts []string
+	for _, subchapter := range t.Subchapters {
+		subchapterParts, err := ecfr.ExtractSubchapterParts(ctx, today, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+		if err != nil {
+			log.Error("[main] Failed to retrieve parts for title ", t.Title, " subchapter ", subchapter, ". Skipping.")
+			continue
 		}
-		parts = append(parts, title.Parts...)
-		partMap[title.Title] = parts
+		parts = append(parts, subchapterParts...)
 	}
-	return partsMap
+	parts = append(parts, t.Parts...)
+	return parts
 }
 
 func start() error {
+	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
+	defer cancel()
+
 	config, err := loadConfig()
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
 
-	partMap, err := getPartsList(config)
-	if err != nil {
-		return fmt.Errorf("Failed to compile list of parts: %+v", err)
+	for _, title := range config.Titles {
+		log.Debug("[main] Retrieving parts list for title ", title.Title)
+		parts := getPartsList(ctx, title)
+		for _, part := range parts {
+			content, err := fedreg.FetchContent(ctx, title.Title, part)
+			if err != nil {
+				log.Warn("[main] Failed to fetch FR docs for title ", title.Title, " part ", part, ": ", err)
+				continue
+			}
+			log.Warn(content)
+		}
 	}
+
+	return nil
 }
