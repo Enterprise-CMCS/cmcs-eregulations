@@ -34,6 +34,7 @@ from .serializers import (
     SuppByLocationSerializer
 )
 
+
 class SettingsUser:
     is_authenticated = False
 
@@ -111,14 +112,14 @@ class SupplementalContentView(generics.ListAPIView):
             query = query.filter(rank__gte=0.2).annotate(
                 nameHeadline=SearchHeadline(
                     "supplementalcontent__name",
-                    SearchQuery(query, search_type=search_type, config='english'),
+                    SearchQuery(q, search_type=search_type, config='english'),
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
                     config='english'
                 ),
                 descriptionHeadline=SearchHeadline(
                     "supplementalcontent__description",
-                    SearchQuery(query, search_type=search_type, config='english'),
+                    SearchQuery(q, search_type=search_type, config='english'),
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
                     config='english'
