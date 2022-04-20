@@ -5,6 +5,7 @@ import (
 	"context"
 	"os"
 	"fmt"
+	"strings"
 
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/fedreg"
@@ -24,12 +25,18 @@ const TIMELIMIT = 5000 * time.Second
 var DefaultBaseURL = "http://localhost:8000/v2/"
 
 func init() {
-	eregs.BaseURL = os.Getenv("EREGS_API_URL")
-	ecfrEregs.BaseURL = os.Getenv("EREGS_API_URL")
-	if eregs.BaseURL == "" {
-		eregs.BaseURL = DefaultBaseURL
-		ecfrEregs.BaseURL = DefaultBaseURL
+	url := os.Getenv("EREGS_API_URL")
+	if url == "" {
+		url = DefaultBaseURL
 	}
+
+	v3url := url
+	if strings.HasSuffix(v3url, "v2/") {
+		v3url = v3url[0:len(v3url)-3] + "v3/" // very bad!
+	}
+
+	ecfrEregs.BaseURL = url
+	eregs.BaseURL = v3url
 }
 
 func lambdaHandler(ctx context.Context) (string, error) {
@@ -148,7 +155,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 	if err != nil {
 		log.Error("[main] Failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
 	} else {
-		doc.Locations = eregs.CreateSections(string(title), sections)
+		doc.Locations = eregs.CreateSections(fmt.Sprintf("%d", title), sections)
 	}
 
 	log.Trace("[main] Sending title ", title, " part ", part, " doc ID ", content.DocumentNumber, " to eRegs")
