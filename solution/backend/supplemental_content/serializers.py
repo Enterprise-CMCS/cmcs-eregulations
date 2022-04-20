@@ -75,7 +75,7 @@ class SubjectGroupSerializer(serializers.Serializer):
         model = SubjectGroup
 
 
-class SectionSerializer(serializers.Serializer):
+class SectionSerializer(AbstractLocationSerializer):
     section_id = serializers.IntegerField()
 
     class Meta:
@@ -302,3 +302,49 @@ class SuppByLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = AbstractLocation
         fields = "__all__"
+
+
+class CreateSupplementalContentSerializer(serializers.Serializer):
+    category = serializers.CharField()
+    locations = SectionSerializer(many=True)
+    url = serializers.URLField()
+    description = serializers.CharField()
+    name = serializers.CharField()
+    docket_number = serializers.CharField()
+    date = serializers.CharField()
+    id = serializers.CharField(required=False)
+
+    def validate_category(self, value):
+        try:
+            AbstractCategory.objects.get(name=value)
+        except AbstractCategory.DoesNotExist:
+            raise serializers.ValidationError("Invalid category")
+        return value
+
+    def update(self, instance, validated_data):
+        # set basic fields
+        instance.url = validated_data.get('url', instance.url)
+        instance.description = validated_data.get('description', instance.description)
+        instance.name = validated_data.get('name', instance.name)
+        instance.docket_number = validated_data.get('docket_number', instance.docket_number)
+        instance.date = validated_data.get('date', instance.date)
+        instance.approved = True if instance.approved else False
+        # This will work because it was validated above
+        category = AbstractCategory.objects.get(name=validated_data["category"])
+        instance.category = category
+
+        # set the locations on the instance
+        locations = []
+        for loc in validated_data["locations"]:
+            title = loc["title"]
+            part = loc["part"]
+            section_id = loc["section_id"]
+            location, _ = Section.objects.get_or_create(title=title, part=part, section_id=section_id)
+            location.display_name = location.__str__()
+            location.save()
+            locations.append(location)
+        instance.locations.set(locations)
+
+        # save and return
+        instance.save()
+        return instance

@@ -13,7 +13,8 @@ from regcore.serializers import (
     FlatContentsSerializer,
     ContentsSerializer,
     TitlesSerializer,
-    TitleSerializer,
+    TitleRetrieveSerializer,
+    TitleUploadSerializer,
     PartsSerializer,
     VersionsSerializer,
 )
@@ -58,11 +59,15 @@ class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
 )
 class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     queryset = Title.objects.all()
-    serializer_class = TitleSerializer
     lookup_fields = {"name": "title"}
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.request.method == "POST" or self.request.method == "PUT":
+            return TitleUploadSerializer
+        return TitleRetrieveSerializer
 
 
 @extend_schema(
