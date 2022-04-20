@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Title
+from .models import Title, ParserResult
 
 
 class FlatContentsSerializer(serializers.Serializer):
@@ -55,3 +55,9 @@ class PartsSerializer(serializers.Serializer):
 class VersionsSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return instance
+
+
+class ParserResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ParserResult
+        fields = '__all__'

@@ -42,12 +42,14 @@ func (sl *SubchapterList) UnmarshalText(data []byte) error {
 	subchapters := strings.Split(string(data), ",")
 	*sl = make([]SubchapterArg, 0, len(subchapters))
 	for _, subchapter := range subchapters {
-		var sc SubchapterArg
-		err := sc.Set(strings.TrimSpace(subchapter))
-		if err != nil {
-			return err
+		if len(subchapter) > 0 {
+		    var sc SubchapterArg
+            err := sc.Set(strings.TrimSpace(subchapter))
+            if err != nil {
+                return err
+            }
+            *sl = append(*sl, sc)
 		}
-		*sl = append(*sl, sc)
 	}
 	return nil
 }

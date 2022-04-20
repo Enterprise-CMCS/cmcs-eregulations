@@ -7,6 +7,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 	"sort"
@@ -194,6 +195,15 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	start := time.Now()
 	today := time.Now()
 
+    result := eregs.ParserResult{
+        Start: start.Format(time.RFC3339),
+        Title: title.Title,
+        Parts: strings.Join(title.Parts[:], ","),
+        Subchapters: strings.Join(title.Parts[:], ","),
+        Workers: config.Workers,
+        Attempts: config.Attempts,
+    }
+
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
 	if err != nil {
@@ -328,6 +338,10 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	}
 
 	log.Info("[main] All parts of title ", title.Title, " finished processing in ", time.Since(start), "!")
+	result.End = time.Now().Format(time.RFC3339)
+	status, err := eregs.PostParserResult(ctx, &result)
+	log.Info(status)
+	log.Info(err)
 	return false, nil
 }
 

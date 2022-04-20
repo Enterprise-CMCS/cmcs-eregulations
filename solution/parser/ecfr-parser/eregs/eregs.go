@@ -49,6 +49,17 @@ type ExistingPart struct {
 	PartName []string `json:"partName"`
 }
 
+// Part is the struct used to send a part to the eRegs server
+type ParserResult struct {
+	Title     	   int             `json:"title,string" xml:"-"`
+	Start      	   string          `json:"start,date" xml:"-"`
+	End      	   string          `json:"end,date" xml:"-"`
+    Workers        int             `json:"workers,string" xml:"-"`
+    Attempts       int             `json:"attempts,string" xml:"-"`
+    Parts          string          `json:"parts,string" xml:"-"`
+    Subchapters    string          `json:"subchapters,string" xml:"-"`
+}
+
 // PostPart is the function that sends a part to the eRegs server
 func PostPart(ctx context.Context, p *Part) (int, error) {
 	eregsPath, err := url.Parse(BaseURL)
@@ -65,6 +76,21 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) (int, error) {
 		return -1, err
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, "/supplemental_content")
+	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
+}
+
+// PostParserResult is the function that sends a parser result to the eRegs server
+func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
+	eregsPath, err := url.Parse(BaseURL)
+	if err != nil {
+		return -1, err
+	}
+	// TODO: remove the following 2 lines on v3 move! BaseURL should point to v3.
+	if strings.HasSuffix(eregsPath.Path, "v2/") {
+		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	}
+	eregsPath.Path = path.Join(eregsPath.Path, "/parser_result/")
+	eregsPath.Path = path.Join(eregsPath.Path, string(p.Title))
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
 }
 
