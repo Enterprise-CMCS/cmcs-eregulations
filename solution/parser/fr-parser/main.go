@@ -104,24 +104,56 @@ func start() error {
 	}
 
 	for _, title := range config.Titles {
-		log.Debug("[main] Retrieving parts list for title ", title.Title)
+		log.Info("[main] Retrieving content for title ", title.Title)
 		parts := getPartsList(ctx, title)
 		for _, part := range parts {
-			content, err := fedreg.FetchContent(ctx, title.Title, part)
-			if err != nil {
-				log.Error("[main] Failed to fetch FR docs for title ", title.Title, " part ", part, ": ", err)
-				continue
-			}
-
-			for _, c := range content {
-				sections, err := fedreg.FetchSections(ctx, c.Date, c.DocumentNumber)
-				if err != nil {
-					log.Error("[main] Failed to fetch list of sections FR doc ", c.DocumentNumber, ": ", err)
-					continue
-				}
-				c.Sections = sections
+			if err := processPart(ctx, title.Title, part); err != nil {
+				log.Error("[main] Failed to process title ", title.Title, " part ", part, ": ", err)
 			}
 		}
+	}
+
+	return nil
+}
+
+func processPart(ctx context.Context, title int, part string) error {
+	log.Debug("[main] Retrieving list of content for title ", title, " part ", part)
+	content, err := fedreg.FetchContent(ctx, title, part)
+	if err != nil {
+		return fmt.Errorf("Fetch content failed: %+v", err)
+	}
+
+	log.Debug("[main] Processing content for title ", title, " part ", part)
+	for _, c := range content {
+		if err := processDocument(ctx, title, part, c); err != nil {
+			log.Error("[main] Failed to process title ", title, " part ", part, " doc ID ", c.DocumentNumber, ": ", err)
+		}
+	}
+
+	return nil
+}
+
+func processDocument(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
+	doc := &eregs.FRDoc{
+		Name: content.Name,
+		Description: content.Description,
+		Category: content.Category,
+		URL: content.URL,
+		Date: content.Date,
+		DocketNumber: content.DocketNumber,
+	}
+
+	log.Trace("[main] Retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
+	sections, err := fedreg.FetchSections(ctx, content.Date, content.DocumentNumber)
+	if err != nil {
+		log.Error("[main] Failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
+	} else {
+		doc.Locations = eregs.CreateSections(string(title), sections)
+	}
+
+	log.Trace("[main] Sending title ", title, " part ", part, " doc ID ", content.DocumentNumber, " to eRegs")
+	if err := eregs.SendDocument(ctx, doc); err != nil {
+		return fmt.Errorf("Failed to send document to eRegs: %+v", err)
 	}
 
 	return nil
