@@ -16,6 +16,7 @@ import (
 // BaseURL is the URL of the eRegs API
 var BaseURL string
 
+// DocumentURL is the relative path to post FR documents to
 var DocumentURL = "/supplemental_content"
 
 var postAuth = &network.PostAuth{
@@ -23,12 +24,14 @@ var postAuth = &network.PostAuth{
 	Password: os.Getenv("EREGS_PASSWORD"),
 }
 
+// Section represents a section identifier in the eRegs supplemental content system
 type Section struct {
 	Title string `json:"title"`
 	Part string `json:"part"`
 	Section string `json:"section_id"`
 }
 
+// FRDoc is eRegs' representation of Federal Register documents, including a list of sections
 type FRDoc struct {
 	Name string `json:"name"`
 	Description string `json:"description"`
@@ -39,6 +42,7 @@ type FRDoc struct {
 	Locations []*Section `json:"locations"`
 }
 
+// SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL
 func SendDocument(ctx context.Context, doc *FRDoc) error {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
@@ -55,6 +59,7 @@ func SendDocument(ctx context.Context, doc *FRDoc) error {
 	return nil
 }
 
+// CreateSections takes a list of strings and converts it to proper section identifiers
 func CreateSections(title string, s []string) []*Section {
 	sections := make([]*Section, len(s))
 
