@@ -144,3 +144,6 @@ class ParserResult(models.Model):
     parts = models.TextField(blank=True)
     workers = models.IntegerField()
     attempts = models.IntegerField()
+    totalVersions = models.IntegerField()
+    skippedVersions = models.IntegerField()
+    errors = models.IntegerField()

@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
@@ -51,13 +52,16 @@ type ExistingPart struct {
 
 // Part is the struct used to send a part to the eRegs server
 type ParserResult struct {
-	Title     	   int             `json:"title,string" xml:"-"`
-	Start      	   string          `json:"start,date" xml:"-"`
-	End      	   string          `json:"end,date" xml:"-"`
-    Workers        int             `json:"workers,string" xml:"-"`
-    Attempts       int             `json:"attempts,string" xml:"-"`
-    Parts          string          `json:"parts,string" xml:"-"`
-    Subchapters    string          `json:"subchapters,string" xml:"-"`
+	Title     	        int             `json:"title,string" xml:"-"`
+	Start      	        string          `json:"start,date" xml:"-"`
+	End      	        string          `json:"end,date" xml:"-"`
+    Workers             int             `json:"workers,string" xml:"-"`
+    Attempts            int             `json:"attempts,string" xml:"-"`
+    Parts               string          `json:"parts,string" xml:"-"`
+    Subchapters         string          `json:"subchapters,string" xml:"-"`
+    SkippedVersions     int             `json:"skippedVersions,string" xml:"-"`
+    TotalVersions       int             `json:"totalVersions,string" xml:"-"`
+    Errors              int             `json:"errors,string" xml:"-"`
 }
 
 // PostPart is the function that sends a part to the eRegs server
@@ -90,7 +94,8 @@ func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
 		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, "/parser_result/")
-	eregsPath.Path = path.Join(eregsPath.Path, string(p.Title))
+	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprint(p.Title))
+	p.End = time.Now().Format(time.RFC3339)
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
 }
 
