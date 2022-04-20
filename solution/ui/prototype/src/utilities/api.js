@@ -611,8 +611,10 @@ const getSupplementalContentNew = async (
     sections = [],
     subparts = [],
     start = 0,
-    max_results = 10000
+    max_results = 10000,
+    q = "",
 ) => {
+    const queryString = q ? `&q=${q}` : "";
     let sString = "";
     for (let s in sections) {
         sString = sString + "&sections=" + sections[s];
@@ -620,7 +622,7 @@ const getSupplementalContentNew = async (
     for (let sp in subparts) {
         sString = sString + "&subparts=" + subparts[sp];
     }
-    sString = sString + "&start=" + start + "&max_results=" + max_results
+    sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );

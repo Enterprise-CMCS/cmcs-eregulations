@@ -15,7 +15,8 @@
                         append-icon="mdi-magnify"
                         hide-details
                         dense
-                        @click:append="search"
+                        v-model="searchQuery"
+                        @click:clear="clearSearchQuery"
                     >
                     </v-text-field>
                 </form>
@@ -31,7 +32,8 @@
                         :filters="filters"
                         @select-filter="updateFilters"
                     />
-                    <ResourcesSidebarFilters v-else
+                    <ResourcesSidebarFilters
+                        v-else
                         :resourcesDisplay="resourcesDisplay"
                         :filters="filters"
                         @select-filter="updateFilters"
@@ -62,6 +64,7 @@ import ResourcesSidebarFilters from "@/components/resources/ResourcesSidebarFilt
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
+import _debounce from "lodash/debounce";
 import _difference from "lodash/difference";
 import _isEmpty from "lodash/isEmpty";
 import _uniq from "lodash/uniq";
@@ -72,7 +75,7 @@ import {
     getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentNew,
-    getSupplementalContentSearchResults
+    getSupplementalContentSearchResults,
 } from "@/utilities/api";
 
 export default {
@@ -148,12 +151,17 @@ export default {
         resultsResourcesClass() {
             return `results-${this.resourcesDisplay}`;
         },
-        searchQuery() {
-            return this.queryParams.q || "";
+        searchQuery: {
+            get() {
+                return this.queryParams.q || "";
+            },
+            set(value) {
+                this.debouncedSearch(value);
+            },
         },
         filterParams() {
             return {
-                title: this.queryParams.title || "42",
+                title: this.queryParams.title,
                 part: this.queryParams.part,
                 subpart: this.queryParams.subpart,
                 section: this.queryParams.section,
@@ -163,9 +171,18 @@ export default {
     },
 
     methods: {
-        search() {
-            console.log("search will happen here");
+        executeSearch(query) {
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: query,
+                },
+            });
         },
+        debouncedSearch: _debounce(function (query) {
+            this.executeSearch(query);
+        }, 500),
         clearSelections() {
             this.$router.push({
                 name: "resources",
@@ -175,6 +192,16 @@ export default {
                     subpart: undefined,
                     section: undefined,
                     resourceCategory: undefined,
+                    q: this.searchQuery,
+                },
+            });
+        },
+        clearSearchQuery() {
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: undefined,
                 },
             });
         },
@@ -222,10 +249,10 @@ export default {
 
             return filteredArray;
         },
-        async getSupplementalContent(dataQueryParams) {
+        async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
-            const queryParamsObj = { ...dataQueryParams };
-            if (queryParamsObj.part) {
+            if (dataQueryParams?.part) {
+                const queryParamsObj = { ...dataQueryParams };
                 queryParamsObj.part = queryParamsObj.part.split(",");
                 if (queryParamsObj.section) {
                     queryParamsObj.sections = queryParamsObj.section.split(",");
@@ -236,10 +263,13 @@ export default {
                 // map over parts and return promises to put in Promise.all
                 const partPromises = queryParamsObj.part.map((part) => {
                     return getSupplementalContentNew(
-                        queryParamsObj.title,
+                        42,
                         part,
                         queryParamsObj.sections,
-                        queryParamsObj.subparts
+                        queryParamsObj.subparts,
+                        0, // start
+                        10000, // max_results
+                        searchQuery
                     );
                 });
 
@@ -257,6 +287,20 @@ export default {
                     this.supplementalContent = this.queryParams.resourceCategory
                         ? this.filterCategories(finalArray)
                         : finalArray;
+                } catch (error) {
+                    console.error(error);
+                    this.supplementalContent = [];
+                } finally {
+                    this.isLoading = false;
+                }
+            } else if (searchQuery) {
+                try {
+                    const searchResults =
+                        await getSupplementalContentSearchResults(searchQuery);
+                    this.supplementalContent = searchResults.map((result) => {
+                        result.type = "searchQuery";
+                        return result;
+                    });
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -313,7 +357,6 @@ export default {
         "$route.params": {
             async handler(toParams, previousParams) {
                 // react to route changes...
-                console.log("toParams in watch", toParams);
             },
         },
         "$route.query": {
@@ -324,16 +367,20 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                if (_isEmpty(newParams.part)) {
-                    // only get content if a part is selected
+                if (_isEmpty(newParams.part) && _isEmpty(newParams.q)) {
+                    // only get content if a part is selected or there's a search query
                     // don't make supp content request here, but clear lists
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
                     this.supplementalContent = [];
-                } else {
-                    // always get content otherwise
-                    this.getSupplementalContent(this.queryParams);
 
+                    return;
+                }
+
+                // always get content otherwise
+                this.getSupplementalContent(this.queryParams, this.searchQuery);
+
+                if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
                         this.getFormattedSubpartsList(this.queryParams.part);
@@ -370,17 +417,18 @@ export default {
     beforeCreate() {},
 
     async created() {
-        console.log("route", this.$route);
         this.getFormattedPartsList();
         this.getCategoryList();
 
-        if (this.queryParams.part) {
-            this.getSupplementalContent(this.queryParams);
-            this.getFormattedSubpartsList(this.queryParams.part);
-            this.getFormattedSectionsList(
-                this.queryParams.part,
-                this.queryParams.subpart
-            );
+        if (this.queryParams.part || this.queryParams.q) {
+            this.getSupplementalContent(this.queryParams, this.searchQuery);
+            if (this.queryParams.part) {
+                this.getFormattedSubpartsList(this.queryParams.part);
+                this.getFormattedSectionsList(
+                    this.queryParams.part,
+                    this.queryParams.subpart
+                );
+            }
         }
     },
 

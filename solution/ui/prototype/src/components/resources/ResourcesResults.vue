@@ -26,7 +26,7 @@
                         <div class="result-content-wrapper">
                             <SupplementalContentObject
                                 :name="item.name"
-                                :description="item.description"
+                                :description="item.descriptionHeadline || item.description"
                                 :date="item.date"
                                 :url="item.url"
                             />
@@ -96,7 +96,11 @@ export default {
 
     computed: {
         sortedContent() {
-            let x = this.content
+            if (this.content?.[0]?.type === "searchQuery") {
+                return this.content;
+            }
+
+            let results = this.content
                 .filter((category) => {
                     return (
                         category.supplemental_content?.length ||
@@ -122,31 +126,29 @@ export default {
                                 item.sub_category = category.name;
                             } else {
                                 item.category = category.name;
-                            }                            
+                            }
                             returnArr.push(item);
                         });
                     }
 
                     return returnArr;
                 });
+
             //remove duplicates
-            x = _uniqBy(x, (item) => {
+            results = _uniqBy(results, (item) => {
                 return item.name;
             });
-            return x;
+
+            return results;
         },
     },
 
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
+    methods: {},
 
     watch: {
         content: {
             async handler() {
-                console.log(this.content);
+                /*console.log(this.content);*/
             },
         },
     },

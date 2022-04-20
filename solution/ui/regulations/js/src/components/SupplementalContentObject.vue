@@ -3,7 +3,12 @@
     <a class="supplemental-content-link" :href="url" target="_blank" rel="noopener noreferrer">
       <span class="supplemental-content-date" v-bind:class="{ 'supplemental-content-mid-bar': !isBlank(name) }" v-if="date">{{ date|formatDate }}</span>
       <span class="supplemental-content-title" v-bind:class="{ 'supplemental-content-external-link': isBlank(description) }" v-if="!isBlank(name)">{{ name }}</span>
-      <div v-if="!isBlank(description)" class="supplemental-content-description supplemental-content-external-link">{{ description }}</div>
+      <div
+          v-if="!isBlank(description)"
+          class="supplemental-content-description supplemental-content-external-link"
+        >
+          <span v-html="description"/>
+        </div>
     </a>
   </div>
 </template>
@@ -31,7 +36,7 @@ export default {
       required: true,
     },
   },
-  
+
   filters: {
     formatDate: function(value) {
       const date = new Date(value);
@@ -55,3 +60,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.search-highlight{
+    font-weight: bold;
+}
+</style>
