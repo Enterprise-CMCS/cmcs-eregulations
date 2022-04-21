@@ -304,6 +304,12 @@ class SuppByLocationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+Category_Map = {
+    "Rule": "Final Rules",
+    "Proposed Rule": "NPRMs (Connected to Final Rules)"
+}
+
+
 class CreateSupplementalContentSerializer(serializers.Serializer):
     category = serializers.CharField()
     locations = SectionSerializer(many=True)
@@ -315,11 +321,12 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
     id = serializers.CharField(required=False)
 
     def validate_category(self, value):
+        category_name = Category_Map.get(value, "")
         try:
-            AbstractCategory.objects.get(name=value)
+            AbstractCategory.objects.get(name=category_name)
         except AbstractCategory.DoesNotExist:
             raise serializers.ValidationError("Invalid category")
-        return value
+        return category_name
 
     def update(self, instance, validated_data):
         # set basic fields
