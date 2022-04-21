@@ -600,9 +600,10 @@ const getSupplementalContent = async (
 /**
  *
  * @param title {string} - The requested title, defaults to 42
- * @param part {string} - The part pf the title
+ * @param part {string} - The part of the title
  * @param sections {Array[string]} - a list of the sections desired ([1,2,3...)
  * @param subparts {Array[string]} - a list of the subparts desired (subpart=A&subpart=B...)
+ * @param q {string} - a word or phrase on which to search ("therapy")
  * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
  */
 const getSupplementalContentNew = async (

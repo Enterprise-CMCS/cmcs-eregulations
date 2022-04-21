@@ -96,10 +96,6 @@ export default {
 
     computed: {
         sortedContent() {
-            if (this.content?.[0]?.type === "searchQuery") {
-                return this.content;
-            }
-
             let results = this.content
                 .filter((category) => {
                     return (

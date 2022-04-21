@@ -295,12 +295,18 @@ export default {
                 }
             } else if (searchQuery) {
                 try {
-                    const searchResults =
-                        await getSupplementalContentSearchResults(searchQuery);
-                    this.supplementalContent = searchResults.map((result) => {
-                        result.type = "searchQuery";
-                        return result;
-                    });
+                    const searchResults = await getSupplementalContentNew(
+                        "all", // titles
+                        "all", // parts
+                        [],    // sections
+                        [],    // subparts
+                        0,     // start
+                        10000, // max_results
+                        searchQuery
+                    );
+                    this.supplementalContent = this.queryParams.resourceCategory
+                        ? this.filterCategories(searchResults)
+                        : searchResults;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
