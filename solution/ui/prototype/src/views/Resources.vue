@@ -3,7 +3,7 @@
         <div id="app" class="resources-view">
             <Header />
             <ResourcesNav :resourcesDisplay="resourcesDisplay">
-                <form class="search-resources-form" @submit.prevent="search">
+                <form class="search-resources-form" @submit.prevent="executeSearch">
                     <v-text-field
                         outlined
                         flat
@@ -15,7 +15,8 @@
                         append-icon="mdi-magnify"
                         hide-details
                         dense
-                        v-model="searchQuery"
+                        v-model="searchInputValue"
+                        @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
                     >
                     </v-text-field>
@@ -64,7 +65,6 @@ import ResourcesSidebarFilters from "@/components/resources/ResourcesSidebarFilt
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
-import _debounce from "lodash/debounce";
 import _difference from "lodash/difference";
 import _isEmpty from "lodash/isEmpty";
 import _uniq from "lodash/uniq";
@@ -138,6 +138,7 @@ export default {
                 },
             },
             supplementalContent: [],
+            searchInputValue: "",
         };
     },
 
@@ -156,7 +157,7 @@ export default {
                 return this.queryParams.q || "";
             },
             set(value) {
-                this.debouncedSearch(value);
+                this.searchInputValue = value;
             },
         },
         filterParams() {
@@ -171,18 +172,15 @@ export default {
     },
 
     methods: {
-        executeSearch(query) {
+        executeSearch() {
             this.$router.push({
                 name: "resources",
                 query: {
                     ...this.filterParams,
-                    q: query,
+                    q: this.searchInputValue,
                 },
             });
         },
-        debouncedSearch: _debounce(function (query) {
-            this.executeSearch(query);
-        }, 250),
         clearSelections() {
             this.$router.push({
                 name: "resources",
@@ -199,10 +197,7 @@ export default {
         clearSearchQuery() {
             this.$router.push({
                 name: "resources",
-                query: {
-                    ...this.filterParams,
-                    q: undefined,
-                },
+                query: { ...this.filterParams },
             });
         },
         removeChip(payload) {
@@ -426,9 +421,14 @@ export default {
         this.getFormattedPartsList();
         this.getCategoryList();
 
-        if (this.queryParams.part || this.queryParams.q) {
+        if (this.queryParams?.part || this.queryParams?.q) {
+            if (this.queryParams?.q) {
+                this.searchQuery = this.queryParams.q;
+            }
+
             this.getSupplementalContent(this.queryParams, this.searchQuery);
-            if (this.queryParams.part) {
+
+            if (this.queryParams?.part) {
                 this.getFormattedSubpartsList(this.queryParams.part);
                 this.getFormattedSectionsList(
                     this.queryParams.part,
