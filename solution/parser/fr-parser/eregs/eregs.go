@@ -61,20 +61,22 @@ func SendDocument(ctx context.Context, doc *FRDoc) error {
 
 // CreateSections takes a list of strings and converts it to proper section identifiers
 func CreateSections(title string, s []string) []*Section {
-	sections := make([]*Section, len(s))
+	var sections []*Section
 
-	for i, section := range s {
+	for _, section := range s {
 		sp := strings.Split(section, ".")
-		if len(sp) != 2 {
+		if len(sp) != 2 || sp[0] == "" || sp[1] == "" {
 			log.Warn("[eregs] Section identifier ", section, " is invalid.")
 			continue
 		}
 
-		sections[i] = &Section{
+		s := &Section{
 			Title: title,
 			Part: sp[0],
 			Section: sp[1],
 		}
+
+		sections = append(sections, s)
 	}
 	
 	return sections
