@@ -182,6 +182,7 @@ class SubpartContentsViewSet(PartPropertiesViewSet):
                 return Response(self.serializer_class(node["children"], many=True).data)
         raise Http404()
 
+
 @extend_schema(
     description="Retrieve the latest ECFRParserResult or create a new ECFRParserResult object for the title.",
     parameters=[OpenApiPathParameter("title", "Title the parser was run for, e.g. 42.", int)],

@@ -253,7 +253,7 @@ func TestSendTitle(t *testing.T) {
 
 func TestPostParserResult(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/parser_result/42" {
+		if r.URL.Path == "/ecfr_parser_result/42" {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte("OK"))
 		} else {
