@@ -78,23 +78,25 @@ class SupplementalContentView(generics.ListAPIView):
 
         q = self.request.query_params.get('q')
 
+        query = AbstractSupplementalContent.objects
+
         if len(section_list) > 0 or len(subpart_list) > 0 or len(subjgrp_list) > 0:
-            query = AbstractSupplementalContent.objects.filter(
+            query = query.filter(
                 Q(locations__section__section_id__in=section_list) |
                 Q(locations__subpart__subpart_id__in=subpart_list) |
                 Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part
             )
-        else:
-            query = AbstractSupplementalContent.objects.filter(
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part,
-            )
+
+        query = query.filter(
+            approved=True,
+            category__isnull=False,
+        )
+
+        if title != "all":
+            query = query.filter(locations__title=title)
+
+        if part != "all":
+            query = query.filter(locations__part=part)
 
         if q:
             search_type = 'plain'

@@ -182,7 +182,7 @@ export default {
         },
         debouncedSearch: _debounce(function (query) {
             this.executeSearch(query);
-        }, 500),
+        }, 250),
         clearSelections() {
             this.$router.push({
                 name: "resources",
