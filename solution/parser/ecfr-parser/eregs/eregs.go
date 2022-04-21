@@ -50,18 +50,18 @@ type ExistingPart struct {
 	PartName []string `json:"partName"`
 }
 
-// Part is the struct used to send a part to the eRegs server
+// ParserResult is the struct used to send results to the eRegs server
 type ParserResult struct {
-	Title     	        int             `json:"title,string" xml:"-"`
-	Start      	        string          `json:"start,date" xml:"-"`
-	End      	        string          `json:"end,date" xml:"-"`
-    Workers             int             `json:"workers,string" xml:"-"`
-    Attempts            int             `json:"attempts,string" xml:"-"`
-    Parts               string          `json:"parts,string" xml:"-"`
-    Subchapters         string          `json:"subchapters,string" xml:"-"`
-    SkippedVersions     int             `json:"skippedVersions,string" xml:"-"`
-    TotalVersions       int             `json:"totalVersions,string" xml:"-"`
-    Errors              int             `json:"errors,string" xml:"-"`
+	Title     	        int             `json:"title,string"`
+	Start      	        string          `json:"start,date"`
+	End      	        string          `json:"end,date"`
+    Workers             int             `json:"workers,string"`
+    Attempts            int             `json:"attempts,string"`
+    Parts               string          `json:"parts"`
+    Subchapters         string          `json:"subchapters"`
+    SkippedVersions     int             `json:"skippedVersions,string"`
+    TotalVersions       int             `json:"totalVersions,string"`
+    Errors              int             `json:"errors,string"`
 }
 
 // PostPart is the function that sends a part to the eRegs server
@@ -85,16 +85,12 @@ func PostSupplementalPart(ctx context.Context, p ecfr.Part) (int, error) {
 
 // PostParserResult is the function that sends a parser result to the eRegs server
 func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
-	eregsPath, err := url.Parse(BaseURL)
+	eregsPath, err := getV3URL()
 	if err != nil {
 		return -1, err
 	}
-	// TODO: remove the following 2 lines on v3 move! BaseURL should point to v3.
-	if strings.HasSuffix(eregsPath.Path, "v2/") {
-		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
-	}
-	eregsPath.Path = path.Join(eregsPath.Path, "/parser_result/")
-	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprint(p.Title))
+
+	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf( "/ecfr_parser_result/%d", p.Title))
 	p.End = time.Now().Format(time.RFC3339)
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
 }
@@ -108,13 +104,9 @@ func GetTitle(ctx context.Context, title int) (*Title, int, error) {
 		Modified: false,
 	}
 
-	eregsPath, err := url.Parse(BaseURL)
+	eregsPath, err := getV3URL()
 	if err != nil {
 		return emptyTitle, -1, err
-	}
-	// TODO: remove the following 2 lines on v3 move! BaseURL should point to v3.
-	if strings.HasSuffix(eregsPath.Path, "v2/") {
-		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%d", title))
 	
@@ -139,13 +131,9 @@ func GetTitle(ctx context.Context, title int) (*Title, int, error) {
 
 // SendTitle sends a title object to regcore in eRegs for table of contents tracking
 func SendTitle(ctx context.Context, t *Title) (int, error) {
-	eregsPath, err := url.Parse(BaseURL)
+	eregsPath, err := getV3URL()
 	if err != nil {
 		return -1, nil
-	}
-	// TODO: remove the following 2 lines on v3 move! BaseURL should point to v3.
-	if strings.HasSuffix(eregsPath.Path, "v2/") {
-		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
 	var method string
@@ -186,4 +174,16 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, int,
 	}
 
 	return result, code, nil
+}
+
+func getV3URL() (*url.URL, error){
+    eregsPath, err := url.Parse(BaseURL)
+    if err != nil {
+        log.Fatal(err)
+        return nil, err
+    }
+	if strings.HasSuffix(eregsPath.Path, "v2/") {
+		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
+	}
+	return eregsPath, nil
 }

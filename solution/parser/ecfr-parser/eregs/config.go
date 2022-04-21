@@ -86,7 +86,7 @@ type ParserConfig struct {
 	UploadSupplemental bool           `json:"upload_supplemental_locations"`
 	LogParseErrors     bool           `json:"log_parse_errors"`
 	SkipVersions       bool           `json:"skip_versions"`
-	Titles             []*TitleConfig `json:"titles"`
+	Titles             []*TitleConfig  `json:"titles"`
 }
 
 // RetrieveConfig fetches parser config from eRegs at /v2/parser_config

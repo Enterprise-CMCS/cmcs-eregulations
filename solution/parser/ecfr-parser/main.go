@@ -199,7 +199,6 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
         Start: start.Format(time.RFC3339),
         Title: title.Title,
         Parts: strings.Join(title.Parts[:], ","),
-        Subchapters: strings.Join(title.Parts[:], ","),
         Workers: config.Workers,
         Attempts: config.Attempts,
     }
@@ -216,6 +215,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	var parts []string
 	for _, subchapter := range title.Subchapters {
 		log.Debug("[main] Fetching title ", title.Title, " subchapter ", subchapter, " parts list...")
+		result.Subchapters = result.Subchapters + subchapter.String()
 		var err error
 		var subchapterParts []string
 		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
@@ -224,6 +224,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		}
 		parts = append(parts, subchapterParts...)
 	}
+
 	parts = append(parts, title.Parts...)
 
 	if len(parts) < 1 {

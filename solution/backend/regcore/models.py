@@ -136,7 +136,7 @@ class TitleConfiguration(models.Model):
         verbose_name_plural = "Titles"
 
 
-class ParserResult(models.Model):
+class AbstractParserResult(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     title = models.IntegerField()
@@ -144,6 +144,9 @@ class ParserResult(models.Model):
     parts = models.TextField(blank=True)
     workers = models.IntegerField()
     attempts = models.IntegerField()
+
+
+class ECFRParserResult(AbstractParserResult):
     totalVersions = models.IntegerField()
     skippedVersions = models.IntegerField()
     errors = models.IntegerField()

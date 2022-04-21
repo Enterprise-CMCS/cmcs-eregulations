@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Title, ParserResult
+from .models import Title, ECFRParserResult
 
 
 class FlatContentsSerializer(serializers.Serializer):
@@ -59,5 +59,5 @@ class VersionsSerializer(serializers.Serializer):
 
 class ParserResultSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ParserResult
+        model = ECFRParserResult
         fields = '__all__'
