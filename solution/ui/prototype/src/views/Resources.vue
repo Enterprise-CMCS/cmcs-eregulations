@@ -3,7 +3,10 @@
         <div id="app" class="resources-view">
             <Header />
             <ResourcesNav :resourcesDisplay="resourcesDisplay">
-                <form class="search-resources-form" @submit.prevent="executeSearch">
+                <form
+                    class="search-resources-form"
+                    @submit.prevent="executeSearch"
+                >
                     <v-text-field
                         outlined
                         flat
@@ -244,6 +247,20 @@ export default {
 
             return filteredArray;
         },
+        transformResults(results, flatten) {
+            const arrayToTransform = flatten ? results.flat() : results;
+            let returnArr = [];
+
+            for (const category of arrayToTransform) {
+                returnArr = returnArr.concat(category);
+                for (const subcategory of category.sub_categories) {
+                    subcategory.parent_category = category.name;
+                    returnArr = returnArr.concat(subcategory);
+                }
+            }
+
+            return returnArr;
+        },
         async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
             if (dataQueryParams?.part) {
@@ -270,18 +287,15 @@ export default {
 
                 try {
                     const resultArray = await Promise.all(partPromises);
-                    //flatten array
-                    let finalArray = [];
-                    for (const category of resultArray.flat()) {
-                        finalArray = finalArray.concat(category);
-                        for (const subcategory of category.sub_categories) {
-                            subcategory.parent_category = category.name;
-                            finalArray = finalArray.concat(subcategory);
-                        }
-                    }
+
+                    const transformedResults = this.transformResults(
+                        resultArray,
+                        true
+                    );
+
                     this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(finalArray)
-                        : finalArray;
+                        ? this.filterCategories(transformedResults)
+                        : transformedResults;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -293,15 +307,21 @@ export default {
                     const searchResults = await getSupplementalContentNew(
                         "all", // titles
                         "all", // parts
-                        [],    // sections
-                        [],    // subparts
-                        0,     // start
+                        [], // sections
+                        [], // subparts
+                        0, // start
                         10000, // max_results
                         searchQuery
                     );
+
+                    const transformedResults = this.transformResults(
+                        searchResults,
+                        false
+                    );
+
                     this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(searchResults)
-                        : searchResults;
+                        ? this.filterCategories(transformedResults)
+                        : transformedResults;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
