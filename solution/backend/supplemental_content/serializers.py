@@ -312,7 +312,7 @@ Category_Map = {
 
 class CreateSupplementalContentSerializer(serializers.Serializer):
     category = serializers.CharField()
-    locations = SectionSerializer(many=True)
+    locations = SectionSerializer(many=True, allow_null=True)
     url = serializers.URLField()
     description = serializers.CharField()
     name = serializers.CharField()
@@ -342,7 +342,7 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
 
         # set the locations on the instance
         locations = []
-        for loc in validated_data["locations"]:
+        for loc in (validated_data["locations"] or []):
             title = loc["title"]
             part = loc["part"]
             section_id = loc["section_id"]
