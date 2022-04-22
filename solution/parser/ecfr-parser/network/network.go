@@ -81,9 +81,15 @@ func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 
 	if resp.StatusCode >= 400 {
 		postError := &Error{}
-		err = json.NewDecoder(resp.Body).Decode(postError)
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return resp.StatusCode, fmt.Errorf("Received error code %d while %sing to %s, unable to extract error message", resp.StatusCode, method, postPath)
+		}
+		err = json.NewDecoder(bytes.NewReader(bodyBytes)).Decode(postError)
 		if err != nil {
 			return resp.StatusCode, fmt.Errorf("Received error code %d while %sing to %s, unable to extract error message: %+v", resp.StatusCode, method, postPath, err)
+		} else if postError.Exception == "" {
+			return resp.StatusCode, fmt.Errorf("Received error code %d while %sing to %s, unable to extract error message. Response body: %s", resp.StatusCode, method, postPath, string(bodyBytes))
 		}
 		return resp.StatusCode, fmt.Errorf("Received error code %d while %sing to %s: %s", resp.StatusCode, method, postPath, postError.Exception)
 	}
