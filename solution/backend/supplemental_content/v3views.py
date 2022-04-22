@@ -18,7 +18,7 @@ class SupplementalContentViewSet(viewsets.ModelViewSet):
         data = request.data
 
         # same docket number means update existing record
-        supplemental_content, _ = SupplementalContent.objects.get_or_create(docket_number=data["docket_number"])
+        supplemental_content, created = SupplementalContent.objects.get_or_create(docket_number=data["docket_number"])
 
         # slip this into the data for validation
         data["id"] = supplemental_content.pk
@@ -27,11 +27,13 @@ class SupplementalContentViewSet(viewsets.ModelViewSet):
         sc = self.get_serializer(supplemental_content, data=data)
 
         # save if valid
-        if sc.is_valid():
-            sc.save()
-            response = sc.validated_data
-
-        # return an error otherwise
-        else:
-            response = {"error": sc.errors}
-        return JsonResponse(response)
+        try:
+            if sc.is_valid(raise_exception=True):
+                sc.save()
+                response = sc.validated_data
+                return JsonResponse(response)
+        except Exception as e:
+            # If this was created earlier, delete it as it should nto have been created.
+            if created:
+                supplemental_content.delete()
+            raise e
