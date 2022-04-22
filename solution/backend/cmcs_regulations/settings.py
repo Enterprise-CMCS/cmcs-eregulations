@@ -187,7 +187,9 @@ OPENSEARCH_DSL = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",
-    "http://0.0.0.0:8081"
+    "http://0.0.0.0:8081",
+    # Storybook
+    "http://localhost:6006"
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [

@@ -50,6 +50,11 @@ export default {
             required: false,
             default: [],
         },
+        getSupplementalContentLegacy: {
+          type: Function,
+          required: false,
+          default: getSupplementalContentLegacy
+        }
     },
 
     data() {
@@ -117,7 +122,7 @@ export default {
     methods: {
         async fetch_content(title, part) {
             try {
-                const response = await getSupplementalContentLegacy(
+                const response = await this.getSupplementalContentLegacy(
                     this.api_url,
                     title,
                     part,
