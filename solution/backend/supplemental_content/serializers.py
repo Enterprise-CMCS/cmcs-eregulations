@@ -317,6 +317,7 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
     description = serializers.CharField()
     name = serializers.CharField()
     docket_number = serializers.CharField()
+    document_number = serializers.CharField()
     date = serializers.CharField()
     id = serializers.CharField(required=False)
 

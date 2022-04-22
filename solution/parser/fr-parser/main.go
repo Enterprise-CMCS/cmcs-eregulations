@@ -148,6 +148,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 		URL: content.URL,
 		Date: content.Date,
 		DocketNumber: content.DocketNumber,
+		DocumentNumber: content.DocumentNumber,
 	}
 
 	log.Trace("[main] Retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)

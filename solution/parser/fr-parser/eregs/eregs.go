@@ -39,6 +39,7 @@ type FRDoc struct {
 	URL string `json:"url"`
 	Date string `json:"date"`
 	DocketNumber string `json:"docket_number"`
+	DocumentNumber string `json:"document_number"`
 	Locations []*Section `json:"locations"`
 }
 
