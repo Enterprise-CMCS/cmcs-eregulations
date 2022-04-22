@@ -242,6 +242,8 @@ class SupplementalContentSerializer(serializers.Serializer):
     description = serializers.CharField()
     name = serializers.CharField()
     date = serializers.CharField()
+    nameHeadline = serializers.CharField(required=False)
+    descriptionHeadline = serializers.CharField(required=False)
 
     class Meta:
         model = SupplementalContent
