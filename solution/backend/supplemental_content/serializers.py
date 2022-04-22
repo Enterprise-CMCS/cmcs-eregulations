@@ -312,7 +312,7 @@ Category_Map = {
 
 class CreateSupplementalContentSerializer(serializers.Serializer):
     category = serializers.CharField()
-    locations = SectionSerializer(many=True)
+    locations = SectionSerializer(many=True, allow_null=True)
     url = serializers.URLField()
     description = serializers.CharField()
     name = serializers.CharField()
@@ -334,6 +334,7 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
         instance.description = validated_data.get('description', instance.description)
         instance.name = validated_data.get('name', instance.name)
         instance.docket_number = validated_data.get('docket_number', instance.docket_number)
+        instance.document_number = validated_data.get('document_number', instance.document_number)
         instance.date = validated_data.get('date', instance.date)
         instance.approved = True if instance.approved else False
         # This will work because it was validated above
@@ -342,7 +343,7 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
 
         # set the locations on the instance
         locations = []
-        for loc in validated_data["locations"]:
+        for loc in (validated_data["locations"] or []):
             title = loc["title"]
             part = loc["part"]
             section_id = loc["section_id"]
