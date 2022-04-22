@@ -154,6 +154,7 @@ class SupplementalContent(AbstractSupplementalContent):
     description = models.TextField(null=True, blank=True)
     url = models.URLField(max_length=512, null=True, blank=True)
     docket_number = models.CharField(max_length=255, blank=True, null=True)
+    document_number = models.CharField(max_length=255, blank=True, null=True)
 
     date = models.CharField(
         max_length=10,

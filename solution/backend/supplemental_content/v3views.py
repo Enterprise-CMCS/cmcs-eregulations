@@ -18,7 +18,7 @@ class SupplementalContentViewSet(viewsets.ModelViewSet):
         data = request.data
 
         # same docket number means update existing record
-        supplemental_content, created = SupplementalContent.objects.get_or_create(docket_number=data["docket_number"])
+        supplemental_content, created = SupplementalContent.objects.get_or_create(document_number=data["document_number"])
 
         # slip this into the data for validation
         data["id"] = supplemental_content.pk

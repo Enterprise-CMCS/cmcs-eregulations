@@ -334,6 +334,7 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
         instance.description = validated_data.get('description', instance.description)
         instance.name = validated_data.get('name', instance.name)
         instance.docket_number = validated_data.get('docket_number', instance.docket_number)
+        instance.document_number = validated_data.get('document_number', instance.document_number)
         instance.date = validated_data.get('date', instance.date)
         instance.approved = True if instance.approved else False
         # This will work because it was validated above
