@@ -130,15 +130,15 @@ func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool) (io.Reader, 
 		fetchError := &Error{}
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
-			return resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message", resp.StatusCode, method, postPath)
+			return nil, resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message", resp.StatusCode, fetchPath)
 		}
 		err = json.NewDecoder(bytes.NewReader(bodyBytes)).Decode(fetchError)
 		if err != nil {
-			return resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message: %+v", resp.StatusCode, method, postPath, err)
-		} else if postError.Exception == "" {
-			return resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message. Response body: %s", resp.StatusCode, method, postPath, string(bodyBytes))
+			return nil, resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message: %+v", resp.StatusCode, fetchPath, err)
+		} else if fetchError.Exception == "" {
+			return nil, resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s, unable to extract error message. Response body: %s", resp.StatusCode, fetchPath, string(bodyBytes))
 		}
-		return resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s: %s", resp.StatusCode, method, postPath, postError.Exception)
+		return nil, resp.StatusCode, fmt.Errorf("Received error code %d while fetching from %s: %s", resp.StatusCode, fetchPath, fetchError.Exception)
 	}
 
 	b, err := io.ReadAll(resp.Body)
