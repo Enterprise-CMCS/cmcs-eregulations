@@ -26,19 +26,35 @@
                         <div class="result-content-wrapper">
                             <SupplementalContentObject
                                 :name="item.name"
-                                :description="item.descriptionHeadline || item.description"
+                                :description="
+                                    item.descriptionHeadline || item.description
+                                "
                                 :date="item.date"
                                 :url="item.url"
                             />
                         </div>
                         <div class="related-sections">
                             <span class="related-sections-title">
-                                Related Sections:
+                                Related Section<span v-if="item.locations.length > 1">s</span>:
                             </span>
-                            §§ 433.51 | 435.219 | 441.510 | 441.515 | 441.520 |
-                            441.525 | 441.530 | 441.540 | 441.545 | 441.555 |
-                            441.560 | 441.565 | 441.570 | 441.575 | 441.580 |
-                            441.585
+                            <span v-if="item.locations.length > 1">§§ </span>
+                            <span v-else>§ </span>
+                            <span
+                                v-for="(location, idx) in item.locations"
+                                :key="location.display_name + idx"
+                                class="related-section-link"
+                            >
+                                <router-link
+                                    :to="{
+                                        name: 'part',
+                                        params: {
+                                            title: location.title,
+                                            part: location.part,
+                                        },
+                                    }"
+                                >{{location.display_name | locationLabel}}</router-link>
+                                <span v-if="idx + 1 != item.locations.length"> | </span>
+                            </span>
                         </div>
                     </div>
                 </template>
@@ -140,6 +156,12 @@ export default {
     },
 
     methods: {},
+
+    filters: {
+        locationLabel(value) {
+            return value.substring(3);
+        },
+    },
 
     watch: {
         content: {
