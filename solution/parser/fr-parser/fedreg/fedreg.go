@@ -59,6 +59,30 @@ func FetchContent(ctx context.Context, title int, part string) ([]*FRDoc, error)
 	return fetchContent(ctx, startPath)
 }
 
+func fetchContent(ctx context.Context, path string) ([]*FRDoc, error) {
+	reader, err := fetch(ctx, path)
+	if err != nil {
+		return nil, err
+	}
+
+	var p FRDocPage
+	d := json.NewDecoder(reader)
+	if err := d.Decode(&p); err != nil {
+		return nil, fmt.Errorf("Decode failed: %+v", err)
+	}
+
+	c := p.Results
+	if p.NextPageURL != "" {
+		docs, err := fetchContent(ctx, p.NextPageURL)
+		if err != nil {
+			return nil, err
+		}
+		c = append(c, docs...)
+	}
+
+	return c, nil
+}
+
 // XMLQuery represents the inner value of an XML tag
 type XMLQuery struct {
 	Loc string `xml:",chardata"`
@@ -108,28 +132,4 @@ func extractSection(input string) (string, error) {
 		return s, fmt.Errorf("Failed to extract section from %s", input)
 	}
 	return s, nil
-}
-
-func fetchContent(ctx context.Context, path string) ([]*FRDoc, error) {
-	reader, err := fetch(ctx, path)
-	if err != nil {
-		return nil, err
-	}
-
-	var p FRDocPage
-	d := json.NewDecoder(reader)
-	if err := d.Decode(&p); err != nil {
-		return nil, fmt.Errorf("Decode failed: %+v", err)
-	}
-
-	c := p.Results
-	if p.NextPageURL != "" {
-		docs, err := fetchContent(ctx, p.NextPageURL)
-		if err != nil {
-			return nil, err
-		}
-		c = append(c, docs...)
-	}
-
-	return c, nil
 }
