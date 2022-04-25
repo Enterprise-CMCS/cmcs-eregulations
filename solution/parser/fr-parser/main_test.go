@@ -111,7 +111,7 @@ func TestLoadConfig(t *testing.T) {
 		{
 			Name: "test-load-config-failure",
 			RetrieveConfigFunc: func() (*ecfrEregs.ParserConfig, int, error) {
-				return nil, 400, fmt.Errorf("This is expected")
+				return nil, 400, fmt.Errorf("this is expected")
 			},
 			GetLogLevelFunc: func(level string) log.Level {
 				return log.WarnLevel
@@ -146,7 +146,7 @@ func TestGetPartsList(t *testing.T) {
 		if sub.Chapter == "IV" && sub.Subchapter == "C" {
 			return []string{"4", "5", "6"}, nil
 		}
-		return nil, fmt.Errorf("This is expected!")
+		return nil, fmt.Errorf("this is expected")
 	}
 
 	expected := []string{"4", "5", "6", "1", "2", "3"}
@@ -207,7 +207,7 @@ func TestStart(t *testing.T) {
 		{
 			Name: "test-load-config-failure",
 			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
-				return nil, fmt.Errorf("This is expected!")
+				return nil, fmt.Errorf("this is expected")
 			},
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{}
@@ -248,7 +248,7 @@ func TestStart(t *testing.T) {
 				return []string{"1", "2", "3", "4", "5"}
 			},
 			ProcessPartFunc: func(ctx context.Context, title int, part string) error {
-				return fmt.Errorf("This is expected!")
+				return fmt.Errorf("this is expected")
 			},
 			Error: false,
 		},
@@ -309,7 +309,7 @@ func TestProcessPart(t *testing.T) {
 		{
 			Name: "test-fetch-fail",
 			FetchContentFunc: func(ctx context.Context, title int, part string) ([]*fedreg.FRDoc, error) {
-				return nil, fmt.Errorf("This is expected!")
+				return nil, fmt.Errorf("this is expected")
 			},
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 				return nil
@@ -341,7 +341,7 @@ func TestProcessPart(t *testing.T) {
 				}, nil
 			},
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
-				return fmt.Errorf("This is expected!")
+				return fmt.Errorf("this is expected")
 			},
 			Error: false,
 		},
@@ -385,11 +385,11 @@ func TestProcessDocument(t *testing.T) {
 		{
 			Name: "test-fetch-sections-failure",
 			FetchSectionsFunc: func(ctx context.Context, date string, doc string) ([]string, error) {
-				return nil, fmt.Errorf("This is expected!")
+				return nil, fmt.Errorf("this is expected")
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
 				if len(doc.Locations) != 0 {
-					return fmt.Errorf("Document locations length NOT zero!")
+					return fmt.Errorf("document locations length NOT zero")
 				}
 				return nil
 			},
@@ -401,7 +401,7 @@ func TestProcessDocument(t *testing.T) {
 				return []string{"433.12", "12.1", "1.1"}, nil
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
-				return fmt.Errorf("This is expected!")
+				return fmt.Errorf("this is expected")
 			},
 			Error: true,
 		},
