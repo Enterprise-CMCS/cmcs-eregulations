@@ -121,15 +121,29 @@ class AllSupplementalContentView(APIView):
     def get(self, *args, **kwargs):
         start = int(self.request.GET.get("start", 0))
         maxResults = int(self.request.GET.get("max_results", 1000))
+        categories = self.request.GET.getlist("category")
+
         query = AbstractSupplementalContent.objects.filter(
                 approved=True,
                 category__isnull=False
-            ).prefetch_related(
+            )
+
+        if len(categories) > 0:
+            query = query.filter(category__id__in=categories).prefetch_related(
                 Prefetch(
                     'category',
-                    queryset=AbstractCategory.objects.all().select_subclasses()
+                    queryset=AbstractCategory.objects.filter(category__id__in=categories).select_subclasses()
                 )
-            ).prefetch_related(
+            )
+        else:
+            query = query.prefetch_related(
+                    Prefetch(
+                        'category',
+                        queryset=AbstractCategory.objects.all().select_subclasses()
+                    )
+                )
+
+        query = query.prefetch_related(
                 Prefetch(
                     'locations',
                     queryset=AbstractLocation.objects.all()

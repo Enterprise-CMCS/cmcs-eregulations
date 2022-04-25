@@ -170,7 +170,6 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
         `${urlPath}`,
         {
             method: "GET",
-            headers: authHeader(token),
             params,
         },
         0, // retryCount, default
@@ -193,9 +192,19 @@ const getSupplementalContentLegacy = async (
     return result;
 };
 
+const getSupplementalContentByCategory = async (api_url, categories=[1,2]) =>{
+    const result = await httpApiGetLegacy(
+        `${api_url}all_sup?category=${categories.join("&category=")}&max_results=100`,
+        {}, // params, default
+        api_url
+    );
+    return result.filter(r => r.supplemental_content.length);
+}
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
     getSupplementalContentLegacy,
+    getSupplementalContentByCategory,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

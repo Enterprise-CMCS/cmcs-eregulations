@@ -19,7 +19,7 @@
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
-import { getSupplementalContentLegacy } from "../../api";
+import {getSupplementalContentByCategory, getSupplementalContentLegacy} from "../../api";
 
 export default {
     components: {
@@ -50,10 +50,15 @@ export default {
             required: false,
             default: [],
         },
-        getSupplementalContentLegacy: {
+        getSupplementalContent: {
           type: Function,
           required: false,
           default: getSupplementalContentLegacy
+        },
+        requested_categories:{
+          type: String,
+          required: false,
+          default: ""
         }
     },
 
@@ -120,15 +125,24 @@ export default {
     },
 
     methods: {
-        async fetch_content(title, part) {
+        async fetch_content() {
+          console.log(this.requested_categories)
             try {
-                const response = await this.getSupplementalContentLegacy(
+              if (this.requested_categories.length > 0){
+                this.categories = await getSupplementalContentByCategory(
                     this.api_url,
-                    title,
-                    part,
+                    this.requested_categories.split(",")
+                );
+              }
+              else {
+                this.categories = await this.getSupplementalContent(
+                    this.api_url,
+                    this.title,
+                    this.part,
                     this.joined_locations
                 );
-                this.categories = response;
+              }
+
             } catch (error) {
                 console.error(error);
             } finally {
