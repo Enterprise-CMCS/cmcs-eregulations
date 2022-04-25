@@ -102,7 +102,7 @@ func FetchSections(ctx context.Context, date string, id string) ([]string, error
 }
 
 func extractSection(input string) (string, error) {
-	pat := regexp.MustCompile(`\d+.\d+`)
+	pat := regexp.MustCompile(`\d+\.\d+`)
 	s := pat.FindString(input)
 	if s == "" {
 		return s, fmt.Errorf("Failed to extract section from %s", input)
