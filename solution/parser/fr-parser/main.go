@@ -73,9 +73,12 @@ func getLogLevel(l string) log.Level {
 	}
 }
 
+var retrieveConfigFunc = ecfrEregs.RetrieveConfig
+var getLogLevelFunc = getLogLevel
+
 func loadConfig() (*ecfrEregs.ParserConfig, error) {
 	log.Info("[main] Loading configuration...")
-	config, _, err := ecfrEregs.RetrieveConfig()
+	config, _, err := retrieveConfigFunc()
 	if err != nil {
 		return nil, err
 	}
@@ -86,11 +89,13 @@ func loadConfig() (*ecfrEregs.ParserConfig, error) {
 	return config, nil
 }
 
+var extractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
+
 func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
 	today := time.Now()
 	var parts []string
 	for _, subchapter := range t.Subchapters {
-		subchapterParts, err := ecfr.ExtractSubchapterParts(ctx, today, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+		subchapterParts, err := extractSubchapterPartsFunc(ctx, today, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
 			log.Error("[main] Failed to retrieve parts for title ", t.Title, " subchapter ", subchapter, ". Skipping.")
 			continue
@@ -101,20 +106,24 @@ func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
 	return parts
 }
 
+var loadConfigFunc = loadConfig
+var getPartsListFunc = getPartsList
+var processPartFunc = processPart
+
 func start() error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
-	config, err := loadConfig()
+	config, err := loadConfigFunc()
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
 
 	for _, title := range config.Titles {
 		log.Info("[main] Retrieving content for title ", title.Title)
-		parts := getPartsList(ctx, title)
+		parts := getPartsListFunc(ctx, title)
 		for _, part := range parts {
-			if err := processPart(ctx, title.Title, part); err != nil {
+			if err := processPartFunc(ctx, title.Title, part); err != nil {
 				log.Error("[main] Failed to process title ", title.Title, " part ", part, ": ", err)
 			}
 		}
@@ -123,22 +132,28 @@ func start() error {
 	return nil
 }
 
+var fetchContentFunc = fedreg.FetchContent
+var processDocumentFunc = processDocument
+
 func processPart(ctx context.Context, title int, part string) error {
 	log.Debug("[main] Retrieving list of content for title ", title, " part ", part)
-	content, err := fedreg.FetchContent(ctx, title, part)
+	content, err := fetchContentFunc(ctx, title, part)
 	if err != nil {
 		return fmt.Errorf("Fetch content failed: %+v", err)
 	}
 
 	log.Debug("[main] Processing content for title ", title, " part ", part)
 	for _, c := range content {
-		if err := processDocument(ctx, title, part, c); err != nil {
+		if err := processDocumentFunc(ctx, title, part, c); err != nil {
 			log.Error("[main] Failed to process title ", title, " part ", part, " doc ID ", c.DocumentNumber, ": ", err)
 		}
 	}
 
 	return nil
 }
+
+var fetchSectionsFunc = fedreg.FetchSections
+var sendDocumentFunc = eregs.SendDocument
 
 func processDocument(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 	doc := &eregs.FRDoc{
@@ -152,7 +167,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 	}
 
 	log.Trace("[main] Retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
-	sections, err := fedreg.FetchSections(ctx, content.Date, content.DocumentNumber)
+	sections, err := fetchSectionsFunc(ctx, content.Date, content.DocumentNumber)
 	if err != nil {
 		log.Error("[main] Failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
 	} else {
@@ -160,7 +175,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 	}
 
 	log.Trace("[main] Sending title ", title, " part ", part, " doc ID ", content.DocumentNumber, " to eRegs")
-	if err := eregs.SendDocument(ctx, doc); err != nil {
+	if err := sendDocumentFunc(ctx, doc); err != nil {
 		return fmt.Errorf("Failed to send document to eRegs: %+v", err)
 	}
 
