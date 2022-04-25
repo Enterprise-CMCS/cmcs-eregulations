@@ -44,6 +44,7 @@ urlpatterns = [
         path("title/<title>/existing", ExistingPartsView.as_view()),
     ])),
     path("v3/", include([
+        path("", include('supplemental_content.v3urls')),
         path("toc", ContentsViewSet.as_view({
             "get": "list",
         })),
