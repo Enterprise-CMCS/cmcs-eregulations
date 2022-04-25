@@ -88,22 +88,6 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
     data() {
         return {
             dataProp: "value",
@@ -155,19 +139,9 @@ export default {
         },
     },
 
-    methods: {},
-
     filters: {
         locationLabel(value) {
             return value.substring(3);
-        },
-    },
-
-    watch: {
-        content: {
-            async handler() {
-                /*console.log(this.content);*/
-            },
         },
     },
 };
