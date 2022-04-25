@@ -47,12 +47,9 @@ class SettingsAuthentication(authentication.BasicAuthentication):
         raise exceptions.AuthenticationFailed('No such user')
 
 
-class CategoriesViewSet(viewsets.ViewSet):
-
-    def list(self, request):
-        queryset = AbstractCategory.objects.all()
-        serializer = AbstractCategorySerializer(queryset, many=True)
-        return Response(serializer.data)
+class CategoriesViewSet(viewsets.ModelViewSet):
+    serializer_class = AbstractCategorySerializer
+    queryset = AbstractCategory.objects.all()
 
 
 class SupplementalContentView(generics.ListAPIView):
