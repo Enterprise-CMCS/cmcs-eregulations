@@ -1,0 +1,60 @@
+name: Federal Register Parser Checks
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    paths:
+      - 'solution/parser/fr-parser/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  ecfr-parser-checks:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Setup Go
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '^1.16' # The Go version to download (if necessary) and use.
+  
+    # set up build cache
+    - name: Set up build cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/go/pkg/mod
+          ~/go/bin
+          ~/.cache/go-build
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    # Run lint on the code
+    - name: Run lint
+      run: |
+        go install golang.org/x/lint/golint@latest
+        pushd solution/parser/fr-parser
+        golint -set_exit_status ./...
+        popd
+    
+    # Run tests and create coverage report
+    - name: Run tests and create report
+      run: |
+        pushd solution/parser/fr-parser
+        go test -coverprofile=cover.out ./...
+        go tool cover -html=cover.out -o coverage.html
+        popd
+
+    # Upload coverage report
+    - name: Upload report
+      uses: actions/upload-artifact@v2
+      with:
+        name: ecfr-parser-coverage
+        path: solution/parser/fr-parser/coverage.html
