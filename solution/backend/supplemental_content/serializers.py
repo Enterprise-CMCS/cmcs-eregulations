@@ -319,6 +319,7 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
     docket_number = serializers.CharField(allow_blank=True, allow_null=True)
     document_number = serializers.CharField(allow_blank=True, allow_null=True)
     date = serializers.CharField()
+    approved = serializers.BooleanField(required=False, default=False)
     id = serializers.CharField(required=False)
 
     def validate_category(self, value):
@@ -337,7 +338,7 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
         instance.docket_number = validated_data.get('docket_number', instance.docket_number)
         instance.document_number = validated_data.get('document_number', instance.document_number)
         instance.date = validated_data.get('date', instance.date)
-        instance.approved = True if instance.approved else False
+        instance.approved = validated_data.get('approved', instance.approved)
         # This will work because it was validated above
         category = AbstractCategory.objects.get(name=validated_data["category"])
         instance.category = category
