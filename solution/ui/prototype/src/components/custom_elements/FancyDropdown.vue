@@ -1,6 +1,6 @@
 <template>
     <div class="fancy-container">
-        <v-menu offset-y max-width="240" max-height="448">
+        <v-menu offset-y max-width="240" max-height="460">
             <template v-slot:activator="{ on, attrs }">
                 <label :for="buttonId">{{ label }}</label>
                 <v-btn
@@ -23,8 +23,6 @@
 export default {
     name: "FancyDropdown",
 
-    components: {},
-
     props: {
         label: {
             type: String,
@@ -43,36 +41,6 @@ export default {
             default: false,
         },
     },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
-
-    methods: {},
 };
 </script>
 

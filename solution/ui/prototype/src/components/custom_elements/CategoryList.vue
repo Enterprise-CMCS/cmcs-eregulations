@@ -32,8 +32,6 @@
 export default {
     name: "CategoryList",
 
-    components: {},
-
     props: {
         filterEmitter: {
             type: Function,
@@ -42,34 +40,6 @@ export default {
         listItems: {
             type: Array,
             required: true,
-        },
-    },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
         },
     },
 

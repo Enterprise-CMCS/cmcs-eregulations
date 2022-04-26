@@ -19,8 +19,6 @@
 export default {
     name: "SectionList",
 
-    components: {},
-
     props: {
         filterEmitter: {
             type: Function,
@@ -31,34 +29,6 @@ export default {
             required: true,
         },
     },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    /*data() {*/
-        /*return {*/
-            /*dataProp: "value",*/
-        /*}*/
-    /*},*/
-
-    /*computed: {*/
-        /*computedProp() {*/
-            /*return this.dataProp.toUpperCase();*/
-        /*},*/
-    /*},*/
 
     methods: {
         clickMethod(e) {
