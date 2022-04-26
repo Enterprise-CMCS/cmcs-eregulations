@@ -71,8 +71,8 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
-      - name: deploy parsers
-        id: deploy-parsers
+      - name: deploy and run eCFR parser
+        id: deploy-run-ecfr-parser
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -80,10 +80,11 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          serverless deploy --stage ${{ matrix.environment }}
+          serverless deploy --stage ${{ matrix.environment }} --config ./serverless-ecfr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage ${{ matrix.environment }} --config ./serverless-ecfr.yml
           popd
-      - name: run eCFR parser
-        id: run-ecfr-parser
+      - name: deploy and run FR parser
+        id: deploy-run-fr-parser
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -91,18 +92,8 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage ${{ matrix.environment }}
-          popd
-      - name: run Federal Register parser
-        id: run-fr-parser
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          pushd solution/parser
-          npm install serverless -g
-          npm install
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage ${{ matrix.environment }}
+          serverless deploy --stage ${{ matrix.environment }} --config ./serverless-fr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage ${{ matrix.environment }} --config ./serverless-fr.yml
           popd
       # build the static assets for the prototype website
       - name: build static assets and deploy prototype
