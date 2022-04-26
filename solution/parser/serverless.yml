@@ -18,20 +18,24 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   settings:
     eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v2/
-  go:
-    baseDir: .
 
 functions:
   ecfr_parser:
-    handler: ecfr-parser/.
+    handler: .
     timeout: 900
     events:
       - schedule: cron(0 0 * * ? *)
+    custom:
+      go:
+        baseDir: ecfr-parser/
   fr_parser:
-    handler: fr-parser/.
+    handler: .
     timeout: 900
     events:
-      - schedule: cron(0 0 * * ? *)
+      - schedule: cron(0 2 * * ? *)
+    custom:
+      go:
+        baseDir: fr-parser/
 
 resources:
 
