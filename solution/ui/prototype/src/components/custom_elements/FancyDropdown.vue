@@ -1,6 +1,6 @@
 <template>
     <div class="fancy-container">
-        <v-menu offset-y max-width="240" max-height="448">
+        <v-menu offset-y max-width="240" max-height="460">
             <template v-slot:activator="{ on, attrs }">
                 <label :for="buttonId">{{ label }}</label>
                 <v-btn
