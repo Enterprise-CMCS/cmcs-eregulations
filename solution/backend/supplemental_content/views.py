@@ -121,7 +121,8 @@ class SupplementalContentView(generics.ListAPIView):
                     SearchQuery(q, search_type=search_type, config='english'),
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
-                    config='english'
+                    config='english',
+                    highlight_all=True
                 )
             )
 
