@@ -52,7 +52,7 @@ export default {
 
     filters: {
         descriptionOnly(value) {
-            return value.split("-")[1];
+            return value.substring(value.indexOf("-") + 1);
         },
         formatRange(array) {
             if (_isEmpty(array)) return "";
