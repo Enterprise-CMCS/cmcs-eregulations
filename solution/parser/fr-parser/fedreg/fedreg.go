@@ -11,6 +11,8 @@ import (
 	"regexp"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // FedRegContentURL is the Federal Register API endpoint to retrieve a list of documents from
@@ -115,9 +117,10 @@ func FetchSections(ctx context.Context, date string, id string) ([]string, error
 				}
 				section, err := extractSection(l.Loc)
 				if err != nil {
-					return nil, err
+					log.Error("[fedreg] Failed to extract section from doc ID \"", id, "\" identifier \"", l.Loc, "\"")
+				} else {
+					sections = append(sections, section)
 				}
-				sections = append(sections, section)
 			}
 		}
 	}
