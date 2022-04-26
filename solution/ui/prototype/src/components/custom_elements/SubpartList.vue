@@ -30,8 +30,6 @@ import _isEmpty from "lodash/isEmpty";
 export default {
     name: "SubpartList",
 
-    components: {},
-
     props: {
         filterEmitter: {
             type: Function,
@@ -40,34 +38,6 @@ export default {
         listItems: {
             type: Array,
             required: true,
-        },
-    },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
         },
     },
 
@@ -82,7 +52,7 @@ export default {
 
     filters: {
         descriptionOnly(value) {
-            return value.split("-")[1];
+            return value.substring(value.indexOf("-") + 1);
         },
         formatRange(array) {
             if (_isEmpty(array)) return "";
