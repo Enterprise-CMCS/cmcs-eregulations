@@ -7,6 +7,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 	"sort"
@@ -194,6 +195,16 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	start := time.Now()
 	today := time.Now()
 
+    result := eregs.ParserResult{
+        Start: start.Format(time.RFC3339),
+        Title: title.Title,
+        Parts: strings.Join(title.Parts[:], ","),
+        Workers: config.Workers,
+        Attempts: config.Attempts,
+    }
+
+    defer eregs.PostParserResult(ctx, &result)
+
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
 	if err != nil {
@@ -204,6 +215,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	var parts []string
 	for _, subchapter := range title.Subchapters {
 		log.Debug("[main] Fetching title ", title.Title, " subchapter ", subchapter, " parts list...")
+		result.Subchapters = result.Subchapters + subchapter.String()
 		var err error
 		var subchapterParts []string
 		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
@@ -212,6 +224,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		}
 		parts = append(parts, subchapterParts...)
 	}
+
 	parts = append(parts, title.Parts...)
 
 	if len(parts) < 1 {
@@ -269,6 +282,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 
 	if skippedVersions > 0 {
 		log.Info("[main] Skipped ", skippedVersions, " versions of title ", title.Title, " because they were parsed previously")
+		result.SkippedVersions = skippedVersions
 	}
 
 	// Begin processing loop
@@ -277,7 +291,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 
 	for i := 0; i < config.Attempts; i++ {
 		log.Info("[main] Fetching and processing ", originalLength, " versions using ", config.Workers, " workers...")
-
+        result.TotalVersions = originalLength
 		ch := make(chan *list.List)
 		var wg sync.WaitGroup
 		for worker := 1; worker < config.Workers+1; worker++ {
@@ -320,6 +334,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		if currentLength == 0 {
 			break
 		} else if i >= config.Attempts-1 {
+		    result.Errors = currentLength
 			return false, fmt.Errorf("Some parts still failed to process after %d attempts", config.Attempts)
 		} else {
 			log.Warn("[main] Some parts failed to process. Retrying ", config.Attempts-i-1, " more times.")

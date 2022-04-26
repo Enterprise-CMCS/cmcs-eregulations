@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
-from regcore.models import Title, Part
+from regcore.models import Title, Part, ECFRParserResult
 from regcore.views import SettingsAuthentication
 
 from regcore.serializers import (
@@ -17,6 +17,7 @@ from regcore.serializers import (
     TitleUploadSerializer,
     PartsSerializer,
     VersionsSerializer,
+    ParserResultSerializer
 )
 
 
@@ -179,4 +180,21 @@ class SubpartContentsViewSet(PartPropertiesViewSet):
         for node in self.get_object().toc["children"]:
             if node["type"] == "subpart" and len(node["identifier"]) and node["identifier"][0] == self.kwargs.get("subpart"):
                 return Response(self.serializer_class(node["children"], many=True).data)
+        raise Http404()
+
+
+@extend_schema(
+    description="Retrieve the latest ECFRParserResult or create a new ECFRParserResult object for the title.",
+    parameters=[OpenApiPathParameter("title", "Title the parser was run for, e.g. 42.", int)],
+)
+class ParserResultViewSet(viewsets.ModelViewSet):
+    serializer_class = ParserResultSerializer
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def retrieve(self, request, title):
+        parserResult = ECFRParserResult.objects.filter(title=title).order_by("-end").first()
+        if parserResult:
+            serializer = self.serializer_class(parserResult)
+            return Response(serializer.data)
         raise Http404()

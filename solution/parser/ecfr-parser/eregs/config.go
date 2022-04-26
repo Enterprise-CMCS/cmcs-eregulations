@@ -42,12 +42,14 @@ func (sl *SubchapterList) UnmarshalText(data []byte) error {
 	subchapters := strings.Split(string(data), ",")
 	*sl = make([]SubchapterArg, 0, len(subchapters))
 	for _, subchapter := range subchapters {
-		var sc SubchapterArg
-		err := sc.Set(strings.TrimSpace(subchapter))
-		if err != nil {
-			return err
+		if len(subchapter) > 0 {
+		    var sc SubchapterArg
+            err := sc.Set(strings.TrimSpace(subchapter))
+            if err != nil {
+                return err
+            }
+            *sl = append(*sl, sc)
 		}
-		*sl = append(*sl, sc)
 	}
 	return nil
 }
@@ -84,7 +86,7 @@ type ParserConfig struct {
 	UploadSupplemental bool           `json:"upload_supplemental_locations"`
 	LogParseErrors     bool           `json:"log_parse_errors"`
 	SkipVersions       bool           `json:"skip_versions"`
-	Titles             []*TitleConfig `json:"titles"`
+	Titles             []*TitleConfig  `json:"titles"`
 }
 
 // RetrieveConfig fetches parser config from eRegs at /v2/parser_config
