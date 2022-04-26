@@ -23,8 +23,6 @@
 export default {
     name: "FancyDropdown",
 
-    components: {},
-
     props: {
         label: {
             type: String,
@@ -43,36 +41,6 @@ export default {
             default: false,
         },
     },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
-
-    methods: {},
 };
 </script>
 
