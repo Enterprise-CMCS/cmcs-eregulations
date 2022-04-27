@@ -7,7 +7,7 @@
                 <JumpTo />
             </div>
             <div class="links-container">
-                <router-link :to="{ name: 'search' }" class="header-link">
+                <router-link :to="{ name: 'resources' }" class="header-link">
                     Resources
                 </router-link>
                 <router-link :to="{ name: 'about' }" class="header-link">

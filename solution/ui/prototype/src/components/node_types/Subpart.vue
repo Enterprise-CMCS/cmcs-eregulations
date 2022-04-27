@@ -48,7 +48,7 @@ export default {
             required: false,
         },
         part: {
-            type: String,
+            type: String | Number,
             required: false,
         },
         node: {

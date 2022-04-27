@@ -19,8 +19,6 @@
 export default {
     name: "TitlePartList",
 
-    components: {},
-
     props: {
         filterEmitter: {
             type: Function,
@@ -32,48 +30,20 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    /*data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },*/
-
     methods: {
         clickMethod(e) {
             this.filterEmitter({
                 scope: "part",
-                selectedIdentifier: e.currentTarget.dataset.value
+                selectedIdentifier: e.currentTarget.dataset.value,
             });
         },
     },
 
     filters: {
         descriptionOnly(value) {
-            return value.split("-")[1];
+            return value.substring(value.indexOf("-") + 1);
         },
-    }
+    },
 };
 </script>
 

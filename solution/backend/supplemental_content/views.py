@@ -6,6 +6,7 @@ from django.conf import settings
 from rest_framework.response import Response
 
 from django.db.models import Prefetch, Q, Count
+from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import authentication
@@ -47,12 +48,9 @@ class SettingsAuthentication(authentication.BasicAuthentication):
         raise exceptions.AuthenticationFailed('No such user')
 
 
-class CategoriesViewSet(viewsets.ViewSet):
-
-    def list(self, request):
-        queryset = AbstractCategory.objects.all()
-        serializer = AbstractCategorySerializer(queryset, many=True)
-        return Response(serializer.data)
+class CategoriesViewSet(viewsets.ModelViewSet):
+    serializer_class = AbstractCategorySerializer
+    queryset = AbstractCategory.objects.all()
 
 
 class SupplementalContentView(generics.ListAPIView):
@@ -75,22 +73,57 @@ class SupplementalContentView(generics.ListAPIView):
         start = int(self.request.GET.get("start", 0))
         maxResults = int(self.request.GET.get("max_results", 1000))
 
+        q = self.request.query_params.get('q')
+
+        query = AbstractSupplementalContent.objects
+
         if len(section_list) > 0 or len(subpart_list) > 0 or len(subjgrp_list) > 0:
-            query = AbstractSupplementalContent.objects.filter(
+            query = query.filter(
                 Q(locations__section__section_id__in=section_list) |
                 Q(locations__subpart__subpart_id__in=subpart_list) |
                 Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part
             )
-        else:
-            query = AbstractSupplementalContent.objects.filter(
-                approved=True,
-                category__isnull=False,
-                locations__title=title,
-                locations__part=part,
+
+        query = query.filter(
+            approved=True,
+            category__isnull=False,
+        )
+
+        if title != "all":
+            query = query.filter(locations__title=title)
+
+        if part != "all":
+            query = query.filter(locations__part=part)
+
+        if q:
+            search_type = 'plain'
+            cover_density = False
+
+            if (q.startswith('"')) and q.endswith('"'):
+                search_type = 'phrase'
+                cover_density = True
+
+            query = query.annotate(rank=SearchRank(
+                    SearchVector('supplementalcontent__name', weight='A', config='english')
+                    + SearchVector('supplementalcontent__description', weight='A', config='english'),
+                    SearchQuery(q, search_type=search_type, config='english'), cover_density=cover_density))
+
+            query = query.filter(rank__gte=0.2).annotate(
+                nameHeadline=SearchHeadline(
+                    "supplementalcontent__name",
+                    SearchQuery(q, search_type=search_type, config='english'),
+                    start_sel='<span class="search-highlight">',
+                    stop_sel='</span>',
+                    config='english'
+                ),
+                descriptionHeadline=SearchHeadline(
+                    "supplementalcontent__description",
+                    SearchQuery(q, search_type=search_type, config='english'),
+                    start_sel='<span class="search-highlight">',
+                    stop_sel='</span>',
+                    config='english',
+                    highlight_all=True
+                )
             )
 
         query = query.prefetch_related(
@@ -104,7 +137,7 @@ class SupplementalContentView(generics.ListAPIView):
                         queryset=AbstractCategory.objects.all().select_subclasses()
                     )
                 ).distinct().select_subclasses(SupplementalContent).order_by(
-                    "-supplementalcontent__date"
+                    "-rank" if q else "-supplementalcontent__date"
                 )[start:start+maxResults]
         serializer = SupplementalContentSerializer(query, many=True)
 

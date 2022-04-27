@@ -1,5 +1,5 @@
 <template>
-    <div v-if="filterParams.part" class="selections-container">
+    <div v-if="filterParams.part || filterParams.resourceCategory" class="selections-container">
         <div class="selections-content">
             <template v-for="(array, name, idx) in splitParams">
                 <div
@@ -81,6 +81,7 @@ export default {
                     splitParams[key] = splitParams[key].split(",");
                 }
             }
+
             return splitParams;
         },
     },

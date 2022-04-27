@@ -23,6 +23,7 @@ from regcore.v3views import (
     PartSectionsViewSet,
     PartSubpartsViewSet,
     SubpartContentsViewSet,
+    ParserResultViewSet
 )
 
 
@@ -44,6 +45,7 @@ urlpatterns = [
         path("title/<title>/existing", ExistingPartsView.as_view()),
     ])),
     path("v3/", include([
+        path("", include('supplemental_content.v3urls')),
         path("toc", ContentsViewSet.as_view({
             "get": "list",
         })),
@@ -75,6 +77,10 @@ urlpatterns = [
         })),
         path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", SubpartContentsViewSet.as_view({
             "get": "retrieve",
+        })),
+        path("ecfr_parser_result/<title>", ParserResultViewSet.as_view({
+            "get": "retrieve",
+            "post": "create"
         })),
     ])),
 ]

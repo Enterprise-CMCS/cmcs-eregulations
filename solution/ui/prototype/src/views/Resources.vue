@@ -3,7 +3,10 @@
         <div id="app" class="resources-view">
             <Header />
             <ResourcesNav :resourcesDisplay="resourcesDisplay">
-                <form class="search-resources-form" @submit.prevent="search">
+                <form
+                    class="search-resources-form"
+                    @submit.prevent="executeSearch"
+                >
                     <v-text-field
                         outlined
                         flat
@@ -15,7 +18,9 @@
                         append-icon="mdi-magnify"
                         hide-details
                         dense
-                        @click:append="search"
+                        v-model="searchInputValue"
+                        @click:append="executeSearch"
+                        @click:clear="clearSearchQuery"
                     >
                     </v-text-field>
                 </form>
@@ -31,7 +36,8 @@
                         :filters="filters"
                         @select-filter="updateFilters"
                     />
-                    <ResourcesSidebarFilters v-else
+                    <ResourcesSidebarFilters
+                        v-else
                         :resourcesDisplay="resourcesDisplay"
                         :filters="filters"
                         @select-filter="updateFilters"
@@ -72,6 +78,7 @@ import {
     getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentNew,
+    getSupplementalContentSearchResults,
 } from "@/utilities/api";
 
 export default {
@@ -134,6 +141,7 @@ export default {
                 },
             },
             supplementalContent: [],
+            searchInputValue: "",
         };
     },
 
@@ -147,9 +155,17 @@ export default {
         resultsResourcesClass() {
             return `results-${this.resourcesDisplay}`;
         },
+        searchQuery: {
+            get() {
+                return this.queryParams.q || "";
+            },
+            set(value) {
+                this.searchInputValue = value;
+            },
+        },
         filterParams() {
             return {
-                title: this.queryParams.title || "42",
+                title: this.queryParams.title,
                 part: this.queryParams.part,
                 subpart: this.queryParams.subpart,
                 section: this.queryParams.section,
@@ -159,8 +175,14 @@ export default {
     },
 
     methods: {
-        search() {
-            console.log("search will happen here");
+        executeSearch() {
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: this.searchInputValue,
+                },
+            });
         },
         clearSelections() {
             this.$router.push({
@@ -171,7 +193,14 @@ export default {
                     subpart: undefined,
                     section: undefined,
                     resourceCategory: undefined,
+                    q: this.searchQuery,
                 },
+            });
+        },
+        clearSearchQuery() {
+            this.$router.push({
+                name: "resources",
+                query: { ...this.filterParams },
             });
         },
         removeChip(payload) {
@@ -218,10 +247,24 @@ export default {
 
             return filteredArray;
         },
-        async getSupplementalContent(dataQueryParams) {
+        transformResults(results, flatten) {
+            const arrayToTransform = flatten ? results.flat() : results;
+            let returnArr = [];
+
+            for (const category of arrayToTransform) {
+                returnArr = returnArr.concat(category);
+                for (const subcategory of category.sub_categories) {
+                    subcategory.parent_category = category.name;
+                    returnArr = returnArr.concat(subcategory);
+                }
+            }
+
+            return returnArr;
+        },
+        async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
-            const queryParamsObj = { ...dataQueryParams };
-            if (queryParamsObj.part) {
+            if (dataQueryParams?.part) {
+                const queryParamsObj = { ...dataQueryParams };
                 queryParamsObj.part = queryParamsObj.part.split(",");
                 if (queryParamsObj.section) {
                     queryParamsObj.sections = queryParamsObj.section.split(",");
@@ -232,27 +275,53 @@ export default {
                 // map over parts and return promises to put in Promise.all
                 const partPromises = queryParamsObj.part.map((part) => {
                     return getSupplementalContentNew(
-                        queryParamsObj.title,
+                        42,
                         part,
                         queryParamsObj.sections,
-                        queryParamsObj.subparts
+                        queryParamsObj.subparts,
+                        0, // start
+                        10000, // max_results
+                        searchQuery
                     );
                 });
 
                 try {
                     const resultArray = await Promise.all(partPromises);
-                    //flatten array
-                    let finalArray = [];
-                    for (const category of resultArray.flat()) {
-                        finalArray = finalArray.concat(category);
-                        for (const subcategory of category.sub_categories) {
-                            subcategory.parent_category = category.name;
-                            finalArray = finalArray.concat(subcategory);
-                        }
-                    }
+
+                    const transformedResults = this.transformResults(
+                        resultArray,
+                        true
+                    );
+
                     this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(finalArray)
-                        : finalArray;
+                        ? this.filterCategories(transformedResults)
+                        : transformedResults;
+                } catch (error) {
+                    console.error(error);
+                    this.supplementalContent = [];
+                } finally {
+                    this.isLoading = false;
+                }
+            } else if (searchQuery) {
+                try {
+                    const searchResults = await getSupplementalContentNew(
+                        "all", // titles
+                        "all", // parts
+                        [], // sections
+                        [], // subparts
+                        0, // start
+                        10000, // max_results
+                        searchQuery
+                    );
+
+                    const transformedResults = this.transformResults(
+                        searchResults,
+                        false
+                    );
+
+                    this.supplementalContent = this.queryParams.resourceCategory
+                        ? this.filterCategories(transformedResults)
+                        : transformedResults;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -309,7 +378,6 @@ export default {
         "$route.params": {
             async handler(toParams, previousParams) {
                 // react to route changes...
-                console.log("toParams in watch", toParams);
             },
         },
         "$route.query": {
@@ -320,16 +388,20 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                if (_isEmpty(newParams.part)) {
-                    // only get content if a part is selected
+                if (_isEmpty(newParams.part) && _isEmpty(newParams.q)) {
+                    // only get content if a part is selected or there's a search query
                     // don't make supp content request here, but clear lists
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
                     this.supplementalContent = [];
-                } else {
-                    // always get content otherwise
-                    this.getSupplementalContent(this.queryParams);
 
+                    return;
+                }
+
+                // always get content otherwise
+                this.getSupplementalContent(this.queryParams, this.searchQuery);
+
+                if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
                         this.getFormattedSubpartsList(this.queryParams.part);
@@ -366,17 +438,23 @@ export default {
     beforeCreate() {},
 
     async created() {
-        console.log("route", this.$route);
         this.getFormattedPartsList();
         this.getCategoryList();
 
-        if (this.queryParams.part) {
-            this.getSupplementalContent(this.queryParams);
-            this.getFormattedSubpartsList(this.queryParams.part);
-            this.getFormattedSectionsList(
-                this.queryParams.part,
-                this.queryParams.subpart
-            );
+        if (this.queryParams?.part || this.queryParams?.q) {
+            if (this.queryParams?.q) {
+                this.searchQuery = this.queryParams.q;
+            }
+
+            this.getSupplementalContent(this.queryParams, this.searchQuery);
+
+            if (this.queryParams?.part) {
+                this.getFormattedSubpartsList(this.queryParams.part);
+                this.getFormattedSectionsList(
+                    this.queryParams.part,
+                    this.queryParams.subpart
+                );
+            }
         }
     },
 

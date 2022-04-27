@@ -75,7 +75,7 @@ class SubjectGroupSerializer(serializers.Serializer):
         model = SubjectGroup
 
 
-class SectionSerializer(serializers.Serializer):
+class SectionSerializer(AbstractLocationSerializer):
     section_id = serializers.IntegerField()
 
     class Meta:
@@ -242,6 +242,8 @@ class SupplementalContentSerializer(serializers.Serializer):
     description = serializers.CharField()
     name = serializers.CharField()
     date = serializers.CharField()
+    nameHeadline = serializers.CharField(required=False)
+    descriptionHeadline = serializers.CharField(required=False)
 
     class Meta:
         model = SupplementalContent
@@ -302,3 +304,57 @@ class SuppByLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = AbstractLocation
         fields = "__all__"
+
+
+Category_Map = {
+    "Rule": "Final Rules",
+    "Proposed Rule": "NPRMs (Connected to Final Rules)"
+}
+
+
+class CreateSupplementalContentSerializer(serializers.Serializer):
+    category = serializers.CharField()
+    locations = SectionSerializer(many=True, allow_null=True)
+    url = serializers.URLField()
+    description = serializers.CharField()
+    name = serializers.CharField()
+    docket_number = serializers.CharField()
+    date = serializers.CharField()
+    id = serializers.CharField(required=False)
+
+    def validate_category(self, value):
+        category_name = Category_Map.get(value, "")
+        try:
+            AbstractCategory.objects.get(name=category_name)
+        except AbstractCategory.DoesNotExist:
+            raise serializers.ValidationError("Invalid category")
+        return category_name
+
+    def update(self, instance, validated_data):
+        # set basic fields
+        instance.url = validated_data.get('url', instance.url)
+        instance.description = validated_data.get('description', instance.description)
+        instance.name = validated_data.get('name', instance.name)
+        instance.docket_number = validated_data.get('docket_number', instance.docket_number)
+        instance.document_number = validated_data.get('document_number', instance.document_number)
+        instance.date = validated_data.get('date', instance.date)
+        instance.approved = True if instance.approved else False
+        # This will work because it was validated above
+        category = AbstractCategory.objects.get(name=validated_data["category"])
+        instance.category = category
+
+        # set the locations on the instance
+        locations = []
+        for loc in (validated_data["locations"] or []):
+            title = loc["title"]
+            part = loc["part"]
+            section_id = loc["section_id"]
+            location, _ = Section.objects.get_or_create(title=title, part=part, section_id=section_id)
+            location.display_name = location.__str__()
+            location.save()
+            locations.append(location)
+        instance.locations.set(locations)
+
+        # save and return
+        instance.save()
+        return instance
