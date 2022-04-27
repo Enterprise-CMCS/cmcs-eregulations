@@ -368,13 +368,13 @@ func TestProcessPart(t *testing.T) {
 func TestProcessDocument(t *testing.T) {
 	testTable := []struct {
 		Name string
-		FetchSectionsFunc func (context.Context, string, string) ([]string, error)
+		FetchSectionsFunc func (context.Context, string) ([]string, error)
 		SendDocumentFunc func (context.Context, *eregs.FRDoc) error
 		Error bool
 	}{
 		{
 			Name: "test-send",
-			FetchSectionsFunc: func(ctx context.Context, date string, doc string) ([]string, error) {
+			FetchSectionsFunc: func(ctx context.Context, path string) ([]string, error) {
 				return []string{"433.12", "12.1", "1.1"}, nil
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
@@ -384,7 +384,7 @@ func TestProcessDocument(t *testing.T) {
 		},
 		{
 			Name: "test-fetch-sections-failure",
-			FetchSectionsFunc: func(ctx context.Context, date string, doc string) ([]string, error) {
+			FetchSectionsFunc: func(ctx context.Context, path string) ([]string, error) {
 				return nil, fmt.Errorf("this is expected")
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
@@ -397,7 +397,7 @@ func TestProcessDocument(t *testing.T) {
 		},
 		{
 			Name: "test-send-document-failure",
-			FetchSectionsFunc: func(ctx context.Context, date string, doc string) ([]string, error) {
+			FetchSectionsFunc: func(ctx context.Context, path string) ([]string, error) {
 				return []string{"433.12", "12.1", "1.1"}, nil
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
@@ -423,6 +423,7 @@ func TestProcessDocument(t *testing.T) {
 				Date: "2021-01-31",
 				DocketNumber: "CMS-0000-F2",
 				DocumentNumber: "2021-12345",
+				FullTextURL: "http://test.gov/some/xml/url",
 			}
 
 			err := processDocument(ctx, 42, "433", &doc)

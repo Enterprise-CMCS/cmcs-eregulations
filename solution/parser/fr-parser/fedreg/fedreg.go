@@ -17,9 +17,6 @@ import (
 // FedRegContentURL is the Federal Register API endpoint to retrieve a list of documents from
 var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=full_text_xml_url&fields[]=citation&fields[]=docket_id&fields[]=document_number&fields[]=html_url&fields[]=publication_date&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
 
-// FedRegDocumentURL is the Federal Register API endpoint to retrieve the full text of a document from
-var FedRegDocumentURL = "https://www.federalregister.gov/documents/full_text/xml/%s/%s/%s/%s.xml"
-
 // FRDoc is the Federal Register's representation of a document
 type FRDoc struct {
 	Name string `json:"citation"`
