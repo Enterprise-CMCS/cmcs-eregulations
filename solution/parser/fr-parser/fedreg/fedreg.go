@@ -16,7 +16,7 @@ import (
 )
 
 // FedRegContentURL is the Federal Register API endpoint to retrieve a list of documents from
-var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
+var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=citation&fields[]=docket_id&fields[]=document_number&fields[]=html_url&fields[]=publication_date&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
 
 // FedRegDocumentURL is the Federal Register API endpoint to retrieve the full text of a document from
 var FedRegDocumentURL = "https://www.federalregister.gov/documents/full_text/xml/%s/%s/%s/%s.xml"
