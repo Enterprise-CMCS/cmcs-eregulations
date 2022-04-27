@@ -109,6 +109,7 @@ func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
 var loadConfigFunc = loadConfig
 var getPartsListFunc = getPartsList
 var processPartFunc = processPart
+var fetchDocumentListFunc = eregs.FetchDocumentList
 
 func start() error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
@@ -120,7 +121,7 @@ func start() error {
 	}
 
 	log.Debug("[main] Retrieving list of processed content")
-	existingDocsList, err := eregs.FetchDocumentList(ctx)
+	existingDocsList, err := fetchDocumentListFunc(ctx)
 	if err != nil {
 		return fmt.Errorf("Failed to retrieve list of already processed documents: %+v", err)
 	}

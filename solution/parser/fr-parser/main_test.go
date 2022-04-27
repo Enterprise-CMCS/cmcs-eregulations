@@ -166,7 +166,8 @@ func TestStart(t *testing.T) {
 		Name string
 		LoadConfigFunc func () (*ecfrEregs.ParserConfig, error)
 		GetPartsListFunc func (context.Context, *ecfrEregs.TitleConfig) []string
-		ProcessPartFunc func (context.Context, int, string) error
+		ProcessPartFunc func (context.Context, int, string, map[string]bool, bool) error
+		FetchDocumentListFunc func (context.Context) ([]string, error)
 		Error bool
 	}{
 		{
@@ -199,8 +200,11 @@ func TestStart(t *testing.T) {
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{"1", "2", "3", "4", "5"}
 			},
-			ProcessPartFunc: func(ctx context.Context, title int, part string) error {
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
 				return nil
+			},
+			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
+				return []string{"https://test.gov/test", "https://test.gov/test2"}, nil
 			},
 			Error: false,
 		},
@@ -212,9 +216,12 @@ func TestStart(t *testing.T) {
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{}
 			},
-			ProcessPartFunc: func(ctx context.Context, title int, part string) error {
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
 				return nil
 			},
+			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
+				return []string{"https://test.gov/test", "https://test.gov/test2"}, nil
+			},			
 			Error: true,
 		},
 		{
@@ -247,10 +254,51 @@ func TestStart(t *testing.T) {
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{"1", "2", "3", "4", "5"}
 			},
-			ProcessPartFunc: func(ctx context.Context, title int, part string) error {
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
 				return fmt.Errorf("this is expected")
 			},
+			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
+				return []string{"https://test.gov/test", "https://test.gov/test2"}, nil
+			},
 			Error: false,
+		},
+		{
+			Name: "test-fetch-document-list-failure",
+			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
+				return &ecfrEregs.ParserConfig{
+					Workers: 1,
+					Attempts: 1,
+					LogLevel: "warn",
+					Titles: []*ecfrEregs.TitleConfig{
+						&ecfrEregs.TitleConfig{
+							Title: 42,
+							Subchapters: ecfrEregs.SubchapterList{
+								ecfrEregs.SubchapterArg{"IV", "C"},
+								ecfrEregs.SubchapterArg{"IV", "D"},
+							},
+							Parts: ecfrEregs.PartList{"1", "2", "3"},
+						},
+						&ecfrEregs.TitleConfig{
+							Title: 45,
+							Subchapters: ecfrEregs.SubchapterList{
+								ecfrEregs.SubchapterArg{"AB", "C"},
+								ecfrEregs.SubchapterArg{"XY", "Z"},
+							},
+							Parts: ecfrEregs.PartList{"123", "456", "789"},
+						},
+					},
+				}, nil
+			},
+			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
+				return []string{"1", "2", "3", "4", "5"}
+			},
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
+				return fmt.Errorf("this is expected")
+			},
+			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
+				return nil, fmt.Errorf("this is expected")
+			},
+			Error: true,
 		},
 	}
 
@@ -259,6 +307,7 @@ func TestStart(t *testing.T) {
 			loadConfigFunc = tc.LoadConfigFunc
 			getPartsListFunc = tc.GetPartsListFunc
 			processPartFunc = tc.ProcessPartFunc
+			fetchDocumentListFunc = tc.FetchDocumentListFunc
 
 			err := start()
 			if err != nil && !tc.Error {
@@ -275,6 +324,8 @@ func TestProcessPart(t *testing.T) {
 		Name string
 		FetchContentFunc func (context.Context, int, string) ([]*fedreg.FRDoc, error)
 		ProcessDocumentFunc func (context.Context, int, string, *fedreg.FRDoc) error
+		ExistingDocs map[string]bool
+		SkipDocuments bool
 		Error bool
 	}{
 		{
@@ -304,6 +355,8 @@ func TestProcessPart(t *testing.T) {
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 				return nil
 			},
+			ExistingDocs: map[string]bool{},
+			SkipDocuments: false,
 			Error: false,
 		},
 		{
@@ -314,6 +367,8 @@ func TestProcessPart(t *testing.T) {
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 				return nil
 			},
+			ExistingDocs: map[string]bool{},
+			SkipDocuments: false,
 			Error: true,
 		},
 		{
@@ -343,6 +398,41 @@ func TestProcessPart(t *testing.T) {
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 				return fmt.Errorf("this is expected")
 			},
+			ExistingDocs: map[string]bool{},
+			SkipDocuments: false,
+			Error: false,
+		},
+		{
+			Name: "test-skip-documents",
+			FetchContentFunc: func(ctx context.Context, title int, part string) ([]*fedreg.FRDoc, error) {
+				return []*fedreg.FRDoc{
+					&fedreg.FRDoc{
+						Name: "a name",
+						Description: "a description",
+						Category: "a category",
+						URL: "https://test.gov/test",
+						Date: "2021-01-31",
+						DocketNumber: "CMS-0000-F2",
+						DocumentNumber: "2021-12345",
+					},
+					&fedreg.FRDoc{
+						Name: "a name 2",
+						Description: "a description 2",
+						Category: "a category 2",
+						URL: "https://test.gov/test/2",
+						Date: "2021-02-01",
+						DocketNumber: "CMS-0000-F3",
+						DocumentNumber: "2021-67890",
+					},
+				}, nil
+			},
+			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
+				return fmt.Errorf("this is expected")
+			},
+			ExistingDocs: map[string]bool{
+				"https://test.gov/test": true,
+			},
+			SkipDocuments: true,
 			Error: false,
 		},
 	}
@@ -355,7 +445,7 @@ func TestProcessPart(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			err := processPart(ctx, 42, "433")
+			err := processPart(ctx, 42, "433", tc.ExistingDocs, tc.SkipDocuments)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
