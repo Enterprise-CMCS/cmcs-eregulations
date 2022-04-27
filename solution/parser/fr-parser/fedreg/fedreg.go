@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"io"
-	"strings"
 	"regexp"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
@@ -92,9 +91,8 @@ type XMLQuery struct {
 }
 
 // FetchSections pulls the full document from the Federal Register and extracts all SECTNO tags
-func FetchSections(ctx context.Context, date string, id string) ([]string, error) {
-	dateParts := strings.Split(date, "-")
-	reader, err := fetch(ctx, fmt.Sprintf(FedRegDocumentURL, dateParts[0], dateParts[1], dateParts[2], id))
+func FetchSections(ctx context.Context, path string) ([]string, error) {
+	reader, err := fetch(ctx, path)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +116,7 @@ func FetchSections(ctx context.Context, date string, id string) ([]string, error
 				}
 				section, err := extractSection(l.Loc)
 				if err != nil {
-					log.Error("[fedreg] Failed to extract section from doc ID \"", id, "\" identifier \"", l.Loc, "\"")
+					log.Error("[fedreg] Failed to extract section from identifier \"", l.Loc, "\"")
 				} else {
 					sections = append(sections, section)
 				}

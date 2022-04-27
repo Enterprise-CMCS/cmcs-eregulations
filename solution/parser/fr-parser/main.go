@@ -166,12 +166,14 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 		DocumentNumber: content.DocumentNumber,
 	}
 
-	log.Trace("[main] Retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
-	sections, err := fetchSectionsFunc(ctx, content.Date, content.DocumentNumber)
-	if err != nil {
-		log.Error("[main] Failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
-	} else {
-		doc.Locations = eregs.CreateSections(fmt.Sprintf("%d", title), sections)
+	if content.FullTextURL != "" {
+		log.Trace("[main] Retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
+		sections, err := fetchSectionsFunc(ctx, content.FullTextURL)
+		if err != nil {
+			log.Error("[main] Failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
+		} else {
+			doc.Locations = eregs.CreateSections(fmt.Sprintf("%d", title), sections)
+		}
 	}
 
 	log.Trace("[main] Sending title ", title, " part ", part, " doc ID ", content.DocumentNumber, " to eRegs")
