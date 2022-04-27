@@ -16,7 +16,7 @@ import (
 )
 
 // FedRegContentURL is the Federal Register API endpoint to retrieve a list of documents from
-var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=citation&fields[]=docket_id&fields[]=document_number&fields[]=html_url&fields[]=publication_date&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
+var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=full_text_xml_url&fields[]=citation&fields[]=docket_id&fields[]=document_number&fields[]=html_url&fields[]=publication_date&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
 
 // FedRegDocumentURL is the Federal Register API endpoint to retrieve the full text of a document from
 var FedRegDocumentURL = "https://www.federalregister.gov/documents/full_text/xml/%s/%s/%s/%s.xml"
@@ -30,6 +30,7 @@ type FRDoc struct {
 	Date string `json:"publication_date"`
 	DocketNumber string `json:"docket_id"`
 	DocumentNumber string `json:"document_number"`
+	FullTextURL string `json:"full_text_xml_url"`
 }
 
 // FRDocPage represents a page containing many documents. NextPageURL is optional and points to the next page of docs, if one exists
