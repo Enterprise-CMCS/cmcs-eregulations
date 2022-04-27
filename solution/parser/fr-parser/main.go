@@ -174,6 +174,8 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 		} else {
 			doc.Locations = eregs.CreateSections(fmt.Sprintf("%d", title), sections)
 		}
+	} else {
+		log.Warn("[main] No list of sections available for FR doc ", content.DocumentNumber)
 	}
 
 	log.Trace("[main] Sending title ", title, " part ", part, " doc ID ", content.DocumentNumber, " to eRegs")
