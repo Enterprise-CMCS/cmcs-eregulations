@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"path"
 	"context"
+	"encoding/json"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 
@@ -18,6 +19,9 @@ var BaseURL string
 
 // DocumentURL is the relative path to post FR documents to
 var DocumentURL = "/supplemental_content"
+
+// DocListURL is the relative path to retrieve a list of FR docs that eRegs already has
+var DocListURL = "/frdoc_list"
 
 var postAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),
@@ -47,7 +51,7 @@ type FRDoc struct {
 func SendDocument(ctx context.Context, doc *FRDoc) error {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return fmt.Errorf("Failed to parse eRegs URL \"%s\"", BaseURL)
+		return fmt.Errorf("Failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocumentURL)
 	code, err := network.SendJSON(ctx, eregsURL, doc, true, postAuth, network.HTTPPut)
@@ -81,4 +85,30 @@ func CreateSections(title string, s []string) []*Section {
 	}
 	
 	return sections
+}
+
+// FetchDocumentList retrieves a list of URLs for each FR document already stored in Regs
+func FetchDocumentList(ctx context.Context) ([]string, error) {
+	eregsURL, err := url.Parse(BaseURL)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
+	}
+	eregsURL.Path = path.Join(eregsURL.Path, DocListURL)
+
+	reader, code, err := network.Fetch(ctx, eregsURL, true)
+	if err != nil {
+		if code != -1 {
+			return nil, fmt.Errorf("Fetch failed with code %d: %+v", code, err)
+		}
+		return nil, fmt.Errorf("Fetch failed: %+v", err)
+	}
+
+	var docs []string
+	d := json.NewDecoder(reader)
+	err = d.Decode(&docs)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse JSON response: %+v", err)
+	}
+
+	return docs, nil
 }

@@ -119,6 +119,12 @@ func start() error {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
 
+	log.Debug("[main] Retrieving list of processed content")
+	_, err = eregs.FetchDocumentList(ctx)
+	if err != nil {
+		return fmt.Errorf("Failed to retrieve list of already processed documents: %+v", err)
+	}
+
 	for _, title := range config.Titles {
 		log.Info("[main] Retrieving content for title ", title.Title)
 		parts := getPartsListFunc(ctx, title)
@@ -141,6 +147,11 @@ func processPart(ctx context.Context, title int, part string) error {
 	if err != nil {
 		return fmt.Errorf("Fetch content failed: %+v", err)
 	}
+
+	// log.Debug("[main] Removing content that has already been processed for title ", title, " part ", part)
+	// for _, c := range content {
+
+	// }
 
 	log.Debug("[main] Processing content for title ", title, " part ", part)
 	for _, c := range content {
