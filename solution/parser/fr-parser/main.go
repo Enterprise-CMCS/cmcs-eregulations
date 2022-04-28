@@ -156,7 +156,6 @@ func processPart(ctx context.Context, title int, part string, existingDocs map[s
 	var content []*fedreg.FRDoc
 	if skip {
 		removed := 0
-		log.Debug("[main] Skipping content that has already been processed for title ", title, " part ", part)
 		for _, c := range contentList {
 			if existingDocs[c.URL] {
 				removed++
@@ -164,7 +163,7 @@ func processPart(ctx context.Context, title int, part string, existingDocs map[s
 				content = append(content, c)
 			}
 		}
-		log.Debug("[main] Skipped ", removed, "/", len(contentList), " documents")
+		log.Debug("[main] Skipped ", removed, "/", len(contentList), " documents for title ", title, " part ", part)
 	} else {
 		content = contentList
 	}
