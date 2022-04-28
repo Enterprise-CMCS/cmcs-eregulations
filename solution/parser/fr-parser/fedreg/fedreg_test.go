@@ -333,13 +333,12 @@ func TestFetchSections(t *testing.T) {
 				w.WriteHeader(http.StatusOK)
 				w.Write(tc.InputXML)
 			}))
-			FedRegDocumentURL = server.URL + "/%s/%s/%s/%s"
 			defer server.Close()
 
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
 
-			output, err := FetchSections(ctx, "2021-01-31", "2021-12345")
+			output, err := FetchSections(ctx, server.URL)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {

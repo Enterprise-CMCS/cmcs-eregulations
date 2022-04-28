@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"io"
-	"strings"
 	"regexp"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
@@ -16,10 +15,7 @@ import (
 )
 
 // FedRegContentURL is the Federal Register API endpoint to retrieve a list of documents from
-var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=abstract&fields[]=citation&fields[]=correction_of&fields[]=action&fields[]=dates&fields[]=docket_id&fields[]=docket_ids&fields[]=document_number&fields[]=effective_on&fields[]=html_url&fields[]=publication_date&fields[]=regulation_id_number_info&fields[]=regulation_id_numbers&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
-
-// FedRegDocumentURL is the Federal Register API endpoint to retrieve the full text of a document from
-var FedRegDocumentURL = "https://www.federalregister.gov/documents/full_text/xml/%s/%s/%s/%s.xml"
+var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fields[]=type&fields[]=full_text_xml_url&fields[]=citation&fields[]=docket_id&fields[]=document_number&fields[]=html_url&fields[]=publication_date&fields[]=title&order=newest&conditions[cfr][title]=%d&conditions[cfr][part]=%s"
 
 // FRDoc is the Federal Register's representation of a document
 type FRDoc struct {
@@ -30,6 +26,7 @@ type FRDoc struct {
 	Date string `json:"publication_date"`
 	DocketNumber string `json:"docket_id"`
 	DocumentNumber string `json:"document_number"`
+	FullTextURL string `json:"full_text_xml_url"`
 }
 
 // FRDocPage represents a page containing many documents. NextPageURL is optional and points to the next page of docs, if one exists
@@ -91,9 +88,8 @@ type XMLQuery struct {
 }
 
 // FetchSections pulls the full document from the Federal Register and extracts all SECTNO tags
-func FetchSections(ctx context.Context, date string, id string) ([]string, error) {
-	dateParts := strings.Split(date, "-")
-	reader, err := fetch(ctx, fmt.Sprintf(FedRegDocumentURL, dateParts[0], dateParts[1], dateParts[2], id))
+func FetchSections(ctx context.Context, path string) ([]string, error) {
+	reader, err := fetch(ctx, path)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +113,7 @@ func FetchSections(ctx context.Context, date string, id string) ([]string, error
 				}
 				section, err := extractSection(l.Loc)
 				if err != nil {
-					log.Error("[fedreg] Failed to extract section from doc ID \"", id, "\" identifier \"", l.Loc, "\"")
+					log.Error("[fedreg] Failed to extract section from identifier \"", l.Loc, "\"")
 				} else {
 					sections = append(sections, section)
 				}
