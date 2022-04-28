@@ -1,5 +1,5 @@
 import SupplementalContent from '../js/src/components/SupplementalContent.vue';
-import {emptySupplementalContentResponse, supplementalContentResponse, rulesResponse} from "./apiResponses";
+import {emptySupplementalContentResponse, supplementalContentResponse, categoryResponse} from "./apiResponses";
 import {getSupplementalContentByCategory} from "../js/api";
 
 export default {
@@ -19,7 +19,7 @@ Basic.args = {
     "title": "42",
     "part": "433",
     "sections": ["100", "200", "300"],
-    "getSupplementalContentLegacy": () => Promise.resolve(supplementalContentResponse)
+    "getSupplementalContent": () => Promise.resolve(supplementalContentResponse)
 };
 
 export const EmptyCategories = Template.bind({});
@@ -28,7 +28,7 @@ EmptyCategories.args = {
     "title": "42",
     "part": "433",
     "sections": ["100", "200", "300"],
-    "getSupplementalContentLegacy": () => Promise.resolve(emptySupplementalContentResponse)
+    "getSupplementalContent": () => Promise.resolve(emptySupplementalContentResponse)
 };
 
 export const RulesOnly = Template.bind({});
@@ -37,5 +37,6 @@ RulesOnly.args = {
     "title": "42",
     "part": "433",
     "sections": ["100", "200", "300"],
-    "requested_categories": "1,2"
+    "requested_categories": "1,2",
+    "getSupplementalContentByCategory": () => Promise.resolve(categoryResponse)
 };

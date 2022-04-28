@@ -48,12 +48,19 @@ export default {
         subparts: {
             type: Array,
             required: false,
-            default: [],
+            default() {
+              return []
+            },
         },
         getSupplementalContent: {
           type: Function,
           required: false,
           default: getSupplementalContentLegacy
+        },
+        getSupplementalContentByCategory:{
+          type: Function,
+          required: false,
+          default: getSupplementalContentByCategory
         },
         requested_categories:{
           type: String,
@@ -102,7 +109,7 @@ export default {
     },
 
     created() {
-        this.fetch_content(this.title, this.part);
+        this.fetch_content();
     },
 
     mounted() {
@@ -126,22 +133,21 @@ export default {
 
     methods: {
         async fetch_content() {
-          console.log(this.requested_categories)
             try {
-              if (this.requested_categories.length > 0){
-                this.categories = await getSupplementalContentByCategory(
-                    this.api_url,
-                    this.requested_categories.split(",")
-                );
-              }
-              else {
-                this.categories = await this.getSupplementalContent(
-                    this.api_url,
-                    this.title,
-                    this.part,
-                    this.joined_locations
-                );
-              }
+                if (this.requested_categories.length > 0){
+                    this.categories = await this.getSupplementalContentByCategory(
+                        this.api_url,
+                        this.requested_categories.split(",")
+                    );
+                }
+                else {
+                    this.categories = await this.getSupplementalContent(
+                        this.api_url,
+                        this.title,
+                        this.part,
+                        this.joined_locations
+                    );
+                }
 
             } catch (error) {
                 console.error(error);
