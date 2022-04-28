@@ -109,6 +109,7 @@ func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
 var loadConfigFunc = loadConfig
 var getPartsListFunc = getPartsList
 var processPartFunc = processPart
+var fetchDocumentListFunc = eregs.FetchDocumentList
 
 func start() error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
@@ -119,11 +120,21 @@ func start() error {
 		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
 	}
 
+	log.Debug("[main] Retrieving list of processed content")
+	existingDocsList, err := fetchDocumentListFunc(ctx)
+	if err != nil {
+		return fmt.Errorf("Failed to retrieve list of already processed documents: %+v", err)
+	}
+	existingDocs := make(map[string]bool)
+	for _, i := range existingDocsList {
+		existingDocs[i] = true
+	}
+
 	for _, title := range config.Titles {
 		log.Info("[main] Retrieving content for title ", title.Title)
 		parts := getPartsListFunc(ctx, title)
 		for _, part := range parts {
-			if err := processPartFunc(ctx, title.Title, part); err != nil {
+			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipVersions); err != nil {
 				log.Error("[main] Failed to process title ", title.Title, " part ", part, ": ", err)
 			}
 		}
@@ -135,11 +146,26 @@ func start() error {
 var fetchContentFunc = fedreg.FetchContent
 var processDocumentFunc = processDocument
 
-func processPart(ctx context.Context, title int, part string) error {
+func processPart(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
 	log.Debug("[main] Retrieving list of content for title ", title, " part ", part)
-	content, err := fetchContentFunc(ctx, title, part)
+	contentList, err := fetchContentFunc(ctx, title, part)
 	if err != nil {
 		return fmt.Errorf("Fetch content failed: %+v", err)
+	}
+
+	var content []*fedreg.FRDoc
+	if skip {
+		removed := 0
+		for _, c := range contentList {
+			if existingDocs[c.URL] {
+				removed++
+			} else {
+				content = append(content, c)
+			}
+		}
+		log.Debug("[main] Skipped ", removed, "/", len(contentList), " documents for title ", title, " part ", part)
+	} else {
+		content = contentList
 	}
 
 	log.Debug("[main] Processing content for title ", title, " part ", part)

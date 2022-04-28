@@ -16,7 +16,7 @@ from regcore.serializers import (
     TitleRetrieveSerializer,
     TitleUploadSerializer,
     PartsSerializer,
-    VersionsSerializer,
+    StringListSerializer,
 )
 
 
@@ -101,7 +101,7 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
     responses={(200, "application/json"): {"type": "string"}},
 )
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = VersionsSerializer
+    serializer_class = StringListSerializer
 
     def get_queryset(self):
         title = self.kwargs.get("title")

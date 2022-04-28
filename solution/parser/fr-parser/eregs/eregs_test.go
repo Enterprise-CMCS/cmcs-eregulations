@@ -98,14 +98,6 @@ func TestSendDocument(t *testing.T) {
 			}
 		})
 	}
-
-	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-	}))
-	defer eregsServer.Close()
-	BaseURL = eregsServer.URL
-
-	
 }
 
 func TestCreateSections(t *testing.T) {
@@ -140,5 +132,73 @@ func TestCreateSections(t *testing.T) {
 	output := CreateSections("42", input)
 	if diff := deep.Equal(expected, output); diff != nil {
 		t.Errorf("output not as expected: %+v", diff)
+	}
+}
+
+func TestFetchDocumentList(t *testing.T) {
+	testTable := []struct {
+		Name string
+		Server *httptest.Server
+		Expected []string
+		Error bool
+	}{
+		{
+			Name: "test-success",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`[
+					"https://test.gov/test",
+					"https://test.gov/test2"
+				]`))
+			})),
+			Expected: []string{
+				"https://test.gov/test",
+				"https://test.gov/test2",
+			},
+			Error: false,
+		},
+		{
+			Name: "test-server-error",
+			Server: nil,
+			Expected: nil,
+			Error: true,
+		},
+		{
+			Name: "test-server-error",
+			Server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "this is expected" }`))
+			})),
+			Expected: nil,
+			Error: true,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func (t *testing.T) {
+			if tc.Server == nil {
+				tempServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+					w.WriteHeader(http.StatusInternalServerError)
+					w.Write([]byte(`{ "exception": "this should never appear" }`))
+				}))
+				BaseURL = tempServer.URL
+				tempServer.Close()
+			} else {
+				BaseURL = tc.Server.URL
+				defer tc.Server.Close()
+			}
+
+			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			defer cancel()
+
+			output, err := FetchDocumentList(ctx)
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received (%+v)", output)
+			} else if diff := deep.Equal(output, tc.Expected); diff != nil {
+				t.Errorf("output not as expected: (%+v)", diff)
+			}
+		})
 	}
 }
