@@ -323,11 +323,13 @@ class CreateSupplementalContentSerializer(serializers.Serializer):
     id = serializers.CharField(required=False)
 
     def validate_category(self, value):
-        category_name = Category_Map.get(value, "")
+        category_name = Category_Map.get(value, value)
         try:
             AbstractCategory.objects.get(name=category_name)
         except AbstractCategory.DoesNotExist:
-            raise serializers.ValidationError("Invalid category")
+            # Just make one that makes sense
+            # can't use get_or_create because it is not abstract
+            Category.objects.create(name=category_name)
         return category_name
 
     def update(self, instance, validated_data):
