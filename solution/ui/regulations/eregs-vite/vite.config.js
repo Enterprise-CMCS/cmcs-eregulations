@@ -11,4 +11,14 @@ export default defineConfig({
             resolvers: [VuetifyResolver()],
         }),
     ],
+    build: {
+        outDir: "../../../static-assets/regulations/vite",
+        rollupOptions: {
+            output: {
+                entryFileNames: `[name].js`,
+                chunkFileNames: `[name].js`,
+                assetFileNames: `[name].[ext]`,
+            },
+        },
+    },
 });

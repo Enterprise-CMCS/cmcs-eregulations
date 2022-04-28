@@ -1,20 +1,17 @@
 <script>
-    import HelloWorld from "./components/HelloWorld.vue";
+    import CacheExplorer from "../../../prototype/src/views/CacheExplorer.vue";
 
     export default {
         name: "App",
 
         components: {
-            HelloWorld,
+            CacheExplorer,
         }
     }
 </script>
 
 <template>
-    <div>
-        <v-btn>Test 2</v-btn>
-        <HelloWorld msg="Hello Vue 3 + Vite" />
-    </div>
+    <CacheExplorer />
 </template>
 
 <style>
