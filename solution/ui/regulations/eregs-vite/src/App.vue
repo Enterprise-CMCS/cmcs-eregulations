@@ -12,7 +12,7 @@
 
 <template>
     <div>
-        Test
+        <v-btn>Test 2</v-btn>
         <HelloWorld msg="Hello Vue 3 + Vite" />
     </div>
 </template>
