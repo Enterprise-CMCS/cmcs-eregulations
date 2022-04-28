@@ -1,11 +1,12 @@
 from django.http import JsonResponse
-
-from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import SupplementalContent
 from .views import SettingsAuthentication
 from .serializers import CreateSupplementalContentSerializer
+from regcore.serializers import StringListSerializer
 
 
 class SupplementalContentViewSet(viewsets.ModelViewSet):
@@ -37,3 +38,11 @@ class SupplementalContentViewSet(viewsets.ModelViewSet):
             if created:
                 supplemental_content.delete()
             raise e
+
+@extend_schema(
+    description="Retrieve a list of urls for federal register docs that have been previously imported.",
+    responses={(200, "application/json"): {"type": "string"}},
+)
+class FRDocListViewSet(viewsets.ModelViewSet):
+    serializer_class = StringListSerializer
+    queryset = SupplementalContent.objects.filter(url__startswith="https://www.federalregister.gov/documents").values_list('url', flat=True).distinct()
