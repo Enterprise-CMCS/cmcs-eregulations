@@ -92,6 +92,7 @@ jobs:
       # deploy and run eCFR parser
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
+        timeout-minutes: 20
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

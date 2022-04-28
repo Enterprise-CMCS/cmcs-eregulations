@@ -19,7 +19,7 @@
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
-import { getSupplementalContentLegacy } from "../../api";
+import {getSupplementalContentByCategory, getSupplementalContentLegacy} from "../../api";
 
 export default {
     components: {
@@ -48,8 +48,25 @@ export default {
         subparts: {
             type: Array,
             required: false,
-            default: [],
+            default() {
+              return []
+            },
         },
+        getSupplementalContent: {
+          type: Function,
+          required: false,
+          default: getSupplementalContentLegacy
+        },
+        getSupplementalContentByCategory:{
+          type: Function,
+          required: false,
+          default: getSupplementalContentByCategory
+        },
+        requested_categories:{
+          type: String,
+          required: false,
+          default: ""
+        }
     },
 
     data() {
@@ -92,7 +109,7 @@ export default {
     },
 
     created() {
-        this.fetch_content(this.title, this.part);
+        this.fetch_content();
     },
 
     mounted() {
@@ -115,15 +132,23 @@ export default {
     },
 
     methods: {
-        async fetch_content(title, part) {
+        async fetch_content() {
             try {
-                const response = await getSupplementalContentLegacy(
-                    this.api_url,
-                    title,
-                    part,
-                    this.joined_locations
-                );
-                this.categories = response;
+                if (this.requested_categories.length > 0){
+                    this.categories = await this.getSupplementalContentByCategory(
+                        this.api_url,
+                        this.requested_categories.split(",")
+                    );
+                }
+                else {
+                    this.categories = await this.getSupplementalContent(
+                        this.api_url,
+                        this.title,
+                        this.part,
+                        this.joined_locations
+                    );
+                }
+
             } catch (error) {
                 console.error(error);
             } finally {
