@@ -48,4 +48,4 @@ class FRDocListViewSet(viewsets.ModelViewSet):
     serializer_class = StringListSerializer
     queryset = SupplementalContent.objects.\
         filter(url__startswith="https://www.federalregister.gov/documents").\
-        values_list('url', flat=True).distinct()
+        filter(document_number__isnull=False).values_list('document_number', flat=True).distinct()
