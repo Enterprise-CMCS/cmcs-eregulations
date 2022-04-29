@@ -3,23 +3,33 @@
         CACHE EXPLORER
         <ul>
             <li v-for="key in cacheKeys" v-bind:key="key">
-                {{key}}
-                <v-btn class="button" @click="deleteCacheItem(key)">Delete</v-btn>
+                {{ key }}
+                <v-btn class="button" @click="deleteCacheItem(key)"
+                    >Delete</v-btn
+                >
                 <v-btn class="button" @click="editData(key)">Edit</v-btn>
             </li>
             <li>
-                <v-btn class="button" @click="deleteAllCacheItems()">Delete All Cache Items</v-btn>
+                <v-btn class="button" @click="deleteAllCacheItems()"
+                    >Delete All Cache Items</v-btn
+                >
             </li>
         </ul>
         <v-divider></v-divider>
         <v-container fluid>
             <v-row>
                 <v-label cols="2" for="path">Path: </v-label>
-                <v-text-field outlined cols="8" name="path" id="path" v-model="path"/>
+                <v-text-field
+                    outlined
+                    cols="8"
+                    name="path"
+                    id="path"
+                    v-model="path"
+                />
             </v-row>
             <v-row>
                 <v-label cols="2">Data: </v-label>
-                <v-textarea outlined cols="8" v-model="apiData"/>
+                <v-textarea outlined cols="8" v-model="apiData" />
             </v-row>
             <v-row>
                 <v-btn @click="addToCache">Add to Cache</v-btn>
@@ -30,22 +40,24 @@
 </template>
 
 <script>
+import {
+    getCacheKeys,
+    removeCacheItem,
+    getCacheItem,
+    setCacheItem,
+} from "../../../js/api.js";
 
-import {getCacheKeys, removeCacheItem, getCacheItem, setCacheItem} from "../../../js/api.js";
-
-
-const formatKey = key => key.replace("GET/", "")
+const formatKey = (key) => key.replace("GET/", "");
 
 export default {
     name: "CacheExplorer",
 
-    components: {
-    },
+    components: {},
 
     data() {
         return {
             cacheKeys: "",
-            path:"",
+            path: "",
             apiData: "",
             JSONError: false,
         };
@@ -53,32 +65,33 @@ export default {
     methods: {
         deleteCacheItem: async function (key) {
             console.log("Clearing Key: ", key);
-            await removeCacheItem(key)
+            await removeCacheItem(key);
             this.cacheKeys = await getCacheKeys();
         },
-        deleteAllCacheItems: async function(){
-          this.cacheKeys.forEach(async (key) => {
-            await removeCacheItem(key)
-          })
-          this.cacheKeys = await getCacheKeys();
+        deleteAllCacheItems: async function () {
+            this.cacheKeys.forEach(async (key) => {
+                await removeCacheItem(key);
+            });
+            this.cacheKeys = await getCacheKeys();
         },
         editData: async function (key) {
-          this.path = formatKey(key)
-          this.apiData = JSON.stringify(await getCacheItem(key))
+            this.path = formatKey(key);
+            this.apiData = JSON.stringify(await getCacheItem(key));
         },
-        addToCache: async function (){
+        addToCache: async function () {
             try {
-              await setCacheItem(`GET/${this.path}`, JSON.parse(this.apiData))
-              this.path = ""
-              this.apiData = ""
+                await setCacheItem(
+                    `GET/${this.path}`,
+                    JSON.parse(this.apiData)
+                );
+                this.path = "";
+                this.apiData = "";
             } catch {
-              this.JSONError = true
+                this.JSONError = true;
             }
 
             this.cacheKeys = await getCacheKeys();
-
-        }
-
+        },
     },
 
     async created() {
@@ -88,15 +101,14 @@ export default {
             console.error(error);
         }
     },
-
-}
+};
 </script>
 
 <style>
-.button{
-  margin: 7px;
+.button {
+    margin: 7px;
 }
-.v-divider{
-  margin: 10px;
+.v-divider {
+    margin: 10px;
 }
 </style>

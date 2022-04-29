@@ -21,9 +21,20 @@ static-assets/regulations/js/main.build.js: ui/regulations/js/main.js ui/regulat
 
 .PHONY: watch
 watch: ## Watch regulations static assets and rebuild when they're changed
-watch: ui/regulations/node_modules
+watch:
 	cd ui/regulations; \
 		(trap 'kill 0' SIGINT; npm run watch-js & npm run watch-css);
+
+.PHONY: watch-vite
+watch-vite: ## Watch vite components
+watch-vite:
+	cd ui/regulations/eregs-vite; \
+		(trap 'kill 0' SIGINT; npm run watch-build);
+
+.PHONY: watch-all
+watch-all: ## watch rollup and vite for changes
+watch-all:
+	${MAKE} -j2 watch watch-vite
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations
