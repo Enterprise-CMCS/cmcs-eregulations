@@ -1,5 +1,5 @@
 <script>
-    import CacheExplorer from "../../../prototype/src/views/CacheExplorer.vue";
+    import CacheExplorer from "./views/CacheExplorer.vue";
 
     export default {
         name: "App",
