@@ -27,5 +27,7 @@ class SearchView(TemplateView):
             'toc': structure,
             'results': results,
             'synonym': synonym,
+            'unquoted_search': not query.startswith('"') and not query.endswith('"') and len(query.split(" ")) > 1,
+            'query': query,
         }
         return {**context, **c, **self.request.GET.dict()}
