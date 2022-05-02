@@ -27,9 +27,22 @@
                             <i class="fa fa-search"></i>
                         </button>
                     </form>
+
+                    {% if  unquoted_search %}
+                        <div class="search-suggestion">
+                            Didn't find what you were looking for? Try searching for
+                            <a href="{% url 'search' %}?q=%22{{ query }}%22">"{{ query }}"</a>
+                        </div>
+                    {% endif %}
+
                     {% if synonym.filtered_synonyms.count %}
                         <div class="search-suggestion">
-                            Similar terms:
+                            {% if unquoted_search %}
+                                Or search
+                            {% else %}
+                                Search
+                            {% endif %}
+                            for similar terms:
                             {% for syn in synonym.filtered_synonyms %}
                                 <a href="{% url 'search' %}?q=%22{{ syn }}%22">{{ syn }}</a>{% if not forloop.last %},{% endif %}
                             {% endfor %}
