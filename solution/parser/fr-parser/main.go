@@ -157,7 +157,7 @@ func processPart(ctx context.Context, title int, part string, existingDocs map[s
 	if skip {
 		removed := 0
 		for _, c := range contentList {
-			if existingDocs[c.URL] {
+			if existingDocs[c.DocumentNumber] {
 				removed++
 			} else {
 				content = append(content, c)

@@ -306,21 +306,24 @@ class SuppByLocationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+# TODO: for v3, make this into a model
+# e.g. CategoryRule that contains 2 fields: 1 string representing name from parser,
+# 1 one-to-one field linked to an AbstractCategory object
 Category_Map = {
     "Rule": "Final Rules",
-    "Proposed Rule": "NPRMs (Connected to Final Rules)"
+    "Proposed Rule": "Proposed Rules"
 }
 
 
 class CreateSupplementalContentSerializer(serializers.Serializer):
     category = serializers.CharField()
     locations = SectionSerializer(many=True, allow_null=True)
-    url = serializers.URLField()
-    description = serializers.CharField()
-    name = serializers.CharField()
+    url = serializers.URLField(allow_blank=True, allow_null=True)
+    description = serializers.CharField(allow_blank=True, allow_null=True)
+    name = serializers.CharField(allow_blank=True, allow_null=True)
     docket_number = serializers.CharField(allow_blank=True, allow_null=True)
     document_number = serializers.CharField(allow_blank=True, allow_null=True)
-    date = serializers.CharField()
+    date = serializers.CharField(allow_blank=True, allow_null=True)
     approved = serializers.BooleanField(required=False, default=False)
     id = serializers.CharField(required=False)
 
