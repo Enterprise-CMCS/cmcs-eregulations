@@ -305,10 +305,12 @@ class SuppByLocationSerializer(serializers.ModelSerializer):
         model = AbstractLocation
         fields = "__all__"
 
-
+# TODO: for v3, make this into a model
+# e.g. CategoryRule that contains 2 fields: 1 string representing name from parser,
+# 1 one-to-one field linked to an AbstractCategory object
 Category_Map = {
     "Rule": "Final Rules",
-    "Proposed Rule": "NPRMs (Connected to Final Rules)"
+    "Proposed Rule": "Proposed Rules"
 }
 
 
