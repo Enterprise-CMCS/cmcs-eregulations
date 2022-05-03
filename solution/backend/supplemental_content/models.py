@@ -17,10 +17,11 @@ class AbstractCategory(models.Model):
 
     objects = InheritanceManager()
 
+    def __str__(self):
+        return f"{self.name} ({self._meta.verbose_name})"
+
 
 class Category(AbstractCategory):
-    def __str__(self):
-        return f"{self.name} (Category)"
 
     class Meta:
         verbose_name = "Category"
@@ -29,9 +30,6 @@ class Category(AbstractCategory):
 
 class SubCategory(AbstractCategory):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
-
-    def __str__(self):
-        return f"{self.name} (Sub-category)"
 
     class Meta:
         verbose_name = "Sub-category"
