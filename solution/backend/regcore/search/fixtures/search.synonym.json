@@ -17,8 +17,8 @@
     "isActive": true,
     "baseWord": "PASARR",
     "synonyms": [
-      10,
       11,
+      10,
       67
     ]
   }
@@ -56,9 +56,9 @@
     "isActive": true,
     "baseWord": "Intermediate Care Facilities for Individuals with Intellectual Disabilities",
     "synonyms": [
-      12,
       58,
-      59
+      59,
+      12
     ]
   }
 },
@@ -69,8 +69,8 @@
     "isActive": true,
     "baseWord": "Managed Care Entity",
     "synonyms": [
-      64,
-      43
+      43,
+      64
     ]
   }
 },
@@ -81,8 +81,8 @@
     "isActive": true,
     "baseWord": "APD",
     "synonyms": [
-      53,
-      7
+      7,
+      53
     ]
   }
 },
@@ -93,9 +93,9 @@
     "isActive": true,
     "baseWord": "Mechanized claims processing and information retrieval system",
     "synonyms": [
-      3,
+      5,
       2,
-      5
+      3
     ]
   }
 },
@@ -106,10 +106,10 @@
     "isActive": true,
     "baseWord": "Presumptive Eligibility",
     "synonyms": [
-      17,
-      14,
       62,
-      16
+      14,
+      16,
+      17
     ]
   }
 },
@@ -120,10 +120,10 @@
     "isActive": true,
     "baseWord": "PETI",
     "synonyms": [
-      22,
       19,
-      20,
-      21
+      22,
+      21,
+      20
     ]
   }
 },
@@ -134,10 +134,10 @@
     "isActive": true,
     "baseWord": "HPE",
     "synonyms": [
+      15,
       14,
       16,
-      17,
-      15
+      17
     ]
   }
 },
@@ -148,8 +148,8 @@
     "isActive": true,
     "baseWord": "Preadmission Screening and Resident Review",
     "synonyms": [
-      10,
       57,
+      10,
       67
     ]
   }
@@ -161,10 +161,10 @@
     "isActive": false,
     "baseWord": "TMSIS",
     "synonyms": [
-      55,
-      56,
       8,
-      9
+      9,
+      55,
+      56
     ]
   }
 },
@@ -175,8 +175,8 @@
     "isActive": false,
     "baseWord": "T-MSIS",
     "synonyms": [
-      9,
       54,
+      9,
       55,
       56
     ]
@@ -189,8 +189,8 @@
     "isActive": false,
     "baseWord": "Transformed Medicaid Statistical Information System",
     "synonyms": [
-      8,
       54,
+      8,
       55,
       56
     ]
@@ -204,9 +204,9 @@
     "baseWord": "Medicaid Statistical Information System",
     "synonyms": [
       54,
-      56,
       8,
-      9
+      9,
+      56
     ]
   }
 },
@@ -218,9 +218,9 @@
     "baseWord": "MSIS",
     "synonyms": [
       54,
-      55,
       8,
-      9
+      9,
+      55
     ]
   }
 },
@@ -266,8 +266,8 @@
     "isActive": true,
     "baseWord": "Post-Eligibility Treatment of Income",
     "synonyms": [
-      22,
       1,
+      22,
       21,
       20
     ]
@@ -280,9 +280,9 @@
     "isActive": true,
     "baseWord": "MCPIRS",
     "synonyms": [
-      3,
+      4,
       2,
-      4
+      3
     ]
   }
 },
@@ -293,9 +293,9 @@
     "isActive": true,
     "baseWord": "ICF/ID",
     "synonyms": [
-      13,
       58,
-      59
+      59,
+      13
     ]
   }
 },
@@ -306,10 +306,10 @@
     "isActive": false,
     "baseWord": "PE",
     "synonyms": [
-      17,
-      16,
+      15,
       62,
-      15
+      16,
+      17
     ]
   }
 },
@@ -332,10 +332,10 @@
     "isActive": true,
     "baseWord": "Presumptive eligibility determined by hospitals",
     "synonyms": [
-      17,
-      14,
+      15,
       62,
-      15
+      14,
+      17
     ]
   }
 },
@@ -371,9 +371,9 @@
     "isActive": true,
     "baseWord": "MCE",
     "synonyms": [
-      44,
+      63,
       64,
-      63
+      44
     ]
   }
 },
@@ -396,10 +396,10 @@
     "isActive": true,
     "baseWord": "Hospital PE",
     "synonyms": [
-      14,
       15,
-      16,
-      62
+      62,
+      14,
+      16
     ]
   }
 },
@@ -412,8 +412,8 @@
     "synonyms": [
       1,
       19,
-      20,
-      21
+      21,
+      20
     ]
   }
 },
@@ -457,8 +457,8 @@
     "isActive": false,
     "baseWord": "PASRR",
     "synonyms": [
-      11,
       57,
+      11,
       67
     ]
   }
@@ -471,8 +471,8 @@
     "baseWord": "Preadmission Screening and Annual Resident Review",
     "synonyms": [
       57,
-      10,
-      11
+      11,
+      10
     ]
   }
 },
@@ -517,9 +517,9 @@
     "isActive": true,
     "baseWord": "Application of patient income to the cost of care",
     "synonyms": [
-      22,
       1,
       19,
+      22,
       20
     ]
   }
@@ -531,10 +531,10 @@
     "isActive": true,
     "baseWord": "Post-Eligibility Financial Requirements",
     "synonyms": [
-      22,
       1,
-      21,
-      19
+      19,
+      22,
+      21
     ]
   }
 },
@@ -655,8 +655,8 @@
     "isActive": true,
     "baseWord": "ELE",
     "synonyms": [
-      38,
-      70
+      70,
+      38
     ]
   }
 },
@@ -667,8 +667,8 @@
     "isActive": true,
     "baseWord": "Express Lane Eligibility",
     "synonyms": [
-      37,
-      70
+      70,
+      37
     ]
   }
 },
@@ -701,9 +701,9 @@
     "isActive": true,
     "baseWord": "MMIS",
     "synonyms": [
-      3,
       4,
-      5
+      5,
+      3
     ]
   }
 },
@@ -780,8 +780,8 @@
     "isActive": false,
     "baseWord": "Advanced Planning Document",
     "synonyms": [
-      53,
-      6
+      6,
+      53
     ]
   }
 },
@@ -816,9 +816,9 @@
     "isActive": true,
     "baseWord": "Medicaid Management Information System",
     "synonyms": [
-      2,
       4,
-      5
+      5,
+      2
     ]
   }
 }

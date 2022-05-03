@@ -53,7 +53,9 @@ class SectionAdmin(BaseAdmin):
 
     def get_queryset(self, request):
         query = super().get_queryset(request)
-        return query.select_related("parent")
+        return query.prefetch_related(
+            Prefetch("parent", AbstractLocation.objects.all().select_subclasses()),
+        )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "parent":

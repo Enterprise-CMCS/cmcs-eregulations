@@ -1,24 +1,12 @@
 [
 {
   "model": "supplemental_content.abstractcategory",
-  "pk": 1,
-  "fields": {
-    "name": "NPRMs (Connected to Final Rules)",
-    "description": null,
-    "order": 0,
-    "show_if_empty": false,
-    "display_name": "NPRMs (Connected to Final Rules) (Category)"
-  }
-},
-{
-  "model": "supplemental_content.abstractcategory",
   "pk": 2,
   "fields": {
     "name": "Final Rules",
     "description": null,
     "order": 0,
-    "show_if_empty": false,
-    "display_name": "Final Rules (Category)"
+    "show_if_empty": false
   }
 },
 {
@@ -28,8 +16,7 @@
     "name": "Related Statutes",
     "description": "Statutes that relate to the subject matter of the Subpart",
     "order": 200,
-    "show_if_empty": false,
-    "display_name": "Related Statutes (Category)"
+    "show_if_empty": false
   }
 },
 {
@@ -39,8 +26,7 @@
     "name": "State Health Official (SHO) Letter",
     "description": "",
     "order": 200,
-    "show_if_empty": false,
-    "display_name": "State Health Official (SHO) Letter (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -50,8 +36,7 @@
     "name": "State Medicaid Director Letter (SMDL)",
     "description": "",
     "order": 100,
-    "show_if_empty": false,
-    "display_name": "State Medicaid Director Letter (SMDL) (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -61,8 +46,7 @@
     "name": "CMCS Informational Bulletin (CIB)",
     "description": "",
     "order": 300,
-    "show_if_empty": false,
-    "display_name": "CMCS Informational Bulletin (CIB) (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -72,8 +56,7 @@
     "name": "Frequently Asked Questions (FAQs)",
     "description": "",
     "order": 400,
-    "show_if_empty": false,
-    "display_name": "Frequently Asked Questions (FAQs) (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -83,8 +66,7 @@
     "name": "SPA Resources",
     "description": "",
     "order": 100,
-    "show_if_empty": false,
-    "display_name": "SPA Resources (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -94,8 +76,7 @@
     "name": "Technical Assistance for States",
     "description": "",
     "order": 200,
-    "show_if_empty": false,
-    "display_name": "Technical Assistance for States (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -105,8 +86,7 @@
     "name": "Templates",
     "description": "",
     "order": 300,
-    "show_if_empty": false,
-    "display_name": "Templates (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -116,8 +96,7 @@
     "name": "Toolkits",
     "description": "",
     "order": 500,
-    "show_if_empty": false,
-    "display_name": "Toolkits (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -127,8 +106,7 @@
     "name": "Waiver Resources",
     "description": "",
     "order": 600,
-    "show_if_empty": false,
-    "display_name": "Waiver Resources (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -138,8 +116,7 @@
     "name": "Requests for Information (RFIs)",
     "description": "RFIs published in the Federal Register",
     "order": 100,
-    "show_if_empty": false,
-    "display_name": "Requests for Information (RFIs) (Category)"
+    "show_if_empty": false
   }
 },
 {
@@ -149,8 +126,7 @@
     "name": "Oversight Reports",
     "description": "Reports from HHS Office of Inspector General and U.S. Government Accountability Office",
     "order": 600,
-    "show_if_empty": true,
-    "display_name": "Oversight Reports (Category)"
+    "show_if_empty": true
   }
 },
 {
@@ -160,8 +136,7 @@
     "name": "Related Regulations",
     "description": "Regulations outside the Subpart related to the subject matter",
     "order": 300,
-    "show_if_empty": false,
-    "display_name": "Related Regulations (Category)"
+    "show_if_empty": false
   }
 },
 {
@@ -171,8 +146,7 @@
     "name": "State Medicaid Manual (SMM)",
     "description": "",
     "order": 500,
-    "show_if_empty": false,
-    "display_name": "State Medicaid Manual (SMM) (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -182,8 +156,7 @@
     "name": "Subregulatory Guidance",
     "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
     "order": 400,
-    "show_if_empty": true,
-    "display_name": "Subregulatory Guidance (Category)"
+    "show_if_empty": true
   }
 },
 {
@@ -193,8 +166,7 @@
     "name": "Implementation Resources",
     "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
     "order": 500,
-    "show_if_empty": true,
-    "display_name": "Implementation Resources (Category)"
+    "show_if_empty": true
   }
 },
 {
@@ -204,8 +176,7 @@
     "name": "Reports to Congress",
     "description": "CMS policy analysis and research reports sent to Congress",
     "order": 501,
-    "show_if_empty": true,
-    "display_name": "Reports to Congress (Category)"
+    "show_if_empty": true
   }
 },
 {
@@ -215,8 +186,7 @@
     "name": "Terms",
     "description": "key abbreviations and definitions",
     "order": 700,
-    "show_if_empty": false,
-    "display_name": "Terms (Category)"
+    "show_if_empty": false
   }
 },
 {
@@ -226,8 +196,7 @@
     "name": "GAO Reports",
     "description": "",
     "order": 601,
-    "show_if_empty": false,
-    "display_name": "GAO Reports (Sub-category)"
+    "show_if_empty": false
   }
 },
 {
@@ -237,8 +206,17 @@
     "name": "OIG Reports",
     "description": "",
     "order": 0,
-    "show_if_empty": false,
-    "display_name": "OIG Reports (Sub-category)"
+    "show_if_empty": false
+  }
+},
+{
+  "model": "supplemental_content.abstractcategory",
+  "pk": 1,
+  "fields": {
+    "name": "Proposed Rules",
+    "description": "",
+    "order": 0,
+    "show_if_empty": false
   }
 },
 {
