@@ -3,21 +3,31 @@ help: ## Show this help.
 	@egrep '^[a-zA-Z_\.%-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 regulations: ## Build regulations assets
-regulations: ui/regulations/node_modules static-assets/regulations/css/main.css static-assets/regulations/js/main.build.js
+regulations: ui/regulations/node_modules static-assets/regulations/css/main.css static-assets/regulations/js/main.build.js ui/regulations/eregs-vite/node_modules build-vite
 
 ui/regulations/node_modules: ui/regulations/package.json
 	cd ui/regulations; \
+		npm install;
+
+ui/regulations/eregs-vite/node_modules: ui/regulations/eregs-vite/package.json
+	cd ui/regulations/eregs-vite; \
 		npm install;
 
 static-assets/regulations/css/main.css: ui/regulations/css/**/*.scss
 	cd ui/regulations; \
 		npm run css;\
 		mkdir ../../static-assets/regulations/css/admin/;\
-		cp css/admin/*.css ../../static-assets/regulations/css/admin/;\
+		cp css/admin/*.css ../../static-assets/regulations/css/admin/;
 
 static-assets/regulations/js/main.build.js: ui/regulations/js/main.js ui/regulations/js/src/components/*.vue
 	cd ui/regulations; \
 		npm run js;
+
+.PHONY: build-vite
+build-vite: ## Build vite assets
+build-vite:
+	cd ui/regulations/eregs-vite; \
+		npm run build;
 
 .PHONY: watch
 watch: ## Watch regulations static assets and rebuild when they're changed
