@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
-from django.db.models import Q, Prefetch
+from django.db.models import Prefetch
 
 # Register your models here.
 

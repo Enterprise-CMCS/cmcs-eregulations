@@ -74,7 +74,7 @@ class SupplementalContentView(generics.ListAPIView):
 
         query = AbstractSupplementalContent.objects
 
-        if len(section_list) > 0 or len(subpart_list) > 0 or len(subjgrp_list) > 0:
+        if len(section_list) > 0 or len(subpart_list) > 0:
             query = query.filter(
                 Q(locations__section__section_id__in=section_list) |
                 Q(locations__subpart__subpart_id__in=subpart_list),
