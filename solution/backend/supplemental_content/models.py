@@ -50,7 +50,12 @@ class SubCategory(AbstractCategory):
 
 
 class FederalRegisterCategoryLink(models.Model):
-    name = models.CharField(max_length=512, unique=True, help_text="Name of the category as sent from the Federal Register parser.")
+    name = models.CharField(
+        max_length=512,
+        unique=True,
+        help_text="Name of the category as sent from the Federal Register parser.",
+    )
+
     category = models.ForeignKey(
         AbstractCategory,
         on_delete=models.CASCADE,
