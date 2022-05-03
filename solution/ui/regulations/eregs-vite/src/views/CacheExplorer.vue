@@ -2,7 +2,7 @@
     <div id="app">
         CACHE EXPLORER
         <ul>
-            <li v-for="key in cacheKeys" v-bind:key="key">
+            <li v-for="key in cacheKeys" :key="key">
                 {{ key }}
                 <v-btn class="button" @click="deleteCacheItem(key)"
                     >Delete</v-btn
@@ -20,16 +20,16 @@
             <v-row>
                 <v-label cols="2" for="path">Path: </v-label>
                 <v-text-field
+                    id="path"
+                    v-model="path"
                     outlined
                     cols="8"
                     name="path"
-                    id="path"
-                    v-model="path"
                 />
             </v-row>
             <v-row>
                 <v-label cols="2">Data: </v-label>
-                <v-textarea outlined cols="8" v-model="apiData" />
+                <v-textarea v-model="apiData" outlined cols="8" />
             </v-row>
             <v-row>
                 <v-btn @click="addToCache">Add to Cache</v-btn>

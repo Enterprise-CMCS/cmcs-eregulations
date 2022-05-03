@@ -3,4 +3,4 @@ import App from "./App.vue";
 
 new Vue({
     render: (h) => h(App),
-}).$mount("#cache-container");
+}).$mount("#vite-app");
