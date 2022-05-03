@@ -28,8 +28,22 @@ def convert_old_supp_content(apps, schema_editor):
         # set common fields
         for field in ["created_at", "updated_at", "approved", "category", "name", "description", "url", "date"]:
             setattr(content, field, getattr(old_content, field))
-        content.locations.set(old_content.locations)
+        content.locations.add(*old_content.locations.all())
         content.save()
+
+
+def delete_old_abstract_content(apps, schema_editor):
+    AbstractSupplementalContent = apps.get_model("supplemental_content", "AbstractSupplementalContent")
+    for i in AbstractSupplementalContent.objects.all():
+        try:
+            _ = i.supplementalcontent
+            continue
+        except AbstractSupplementalContent.supplementalcontent.RelatedObjectDoesNotExist:
+            try:
+                _ = i.federalregisterdocument
+                continue
+            except AbstractSupplementalContent.federalregisterdocument.RelatedObjectDoesNotExist:
+                i.delete()
 
 
 class Migration(migrations.Migration):
@@ -101,4 +115,5 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name='TempSupplementalContent',
         ),
+        migrations.RunPython(delete_old_abstract_content),
     ]
