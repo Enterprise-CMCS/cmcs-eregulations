@@ -1,17 +1,15 @@
 <script>
-    import CacheExplorer from "./views/CacheExplorer.vue";
-
     export default {
         name: "App",
 
-        components: {
-            CacheExplorer,
-        }
+        components: {}
     }
 </script>
 
 <template>
-    <CacheExplorer />
+    <v-app>
+        <router-view />
+    </v-app>
 </template>
 
 <style>
