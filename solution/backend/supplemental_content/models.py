@@ -5,6 +5,15 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 
+# Various mixins
+
+class InternalNotesFieldMixin(models.Model):
+    internal_notes = models.TextField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
 # Category types
 # Current choice is one model per level due to constraint of exactly 2 levels.
 
@@ -91,7 +100,7 @@ class AbstractSupplementalContent(models.Model):
     objects = InheritanceManager()
 
 
-class TypicalSupplementalContentMixin(models.Model):
+class TypicalSupplementalContentMixin(InternalNotesFieldMixin):
     name = models.CharField(max_length=512, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     url = models.URLField(max_length=512, null=True, blank=True)

@@ -115,5 +115,15 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name='TempSupplementalContent',
         ),
-        migrations.RunPython(delete_old_abstract_content),
+        migrations.AddField(
+            model_name='federalregisterdocument',
+            name='internal_notes',
+            field=models.TextField(blank=True, null=True),
+        ),
+        migrations.AddField(
+            model_name='supplementalcontent',
+            name='internal_notes',
+            field=models.TextField(blank=True, null=True),
+        ),
+        migrations.RunPython(delete_old_abstract_content), # MUST BE LAST
     ]
