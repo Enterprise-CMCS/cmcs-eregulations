@@ -17,7 +17,7 @@ class AbstractModel:
 
 
 # Category types
-# Current choice is one model per level due to constraint of exactly 3 levels.
+# Current choice is one model per level due to constraint of exactly 2 levels.
 
 
 class AbstractCategory(models.Model, AbstractModel):
@@ -27,14 +27,14 @@ class AbstractCategory(models.Model, AbstractModel):
     show_if_empty = models.BooleanField(default=False)
     display_name = models.TextField(null=True, blank=True)
 
+    objects = InheritanceManager()
+
     def __str__(self):
         return self._get_string_repr()
 
     def save(self, *args, **kwargs):
         self.display_name = self._get_string_repr()
         super(AbstractCategory, self).save(*args, **kwargs)
-
-    objects = InheritanceManager()
 
 
 class Category(AbstractCategory):
@@ -55,17 +55,6 @@ class SubCategory(AbstractCategory):
     class Meta:
         verbose_name = "Sub-category"
         verbose_name_plural = "Sub-categories"
-
-
-class SubSubCategory(AbstractCategory):
-    parent = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="sub_sub_categories")
-
-    def __str__(self):
-        return f"{self.name} (Sub-sub-category)"
-
-    class Meta:
-        verbose_name = "Sub-sub-category"
-        verbose_name_plural = "Sub-sub-categories"
 
 
 # Location models

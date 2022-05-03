@@ -12,7 +12,6 @@ from .models import (
     AbstractCategory,
     Category,
     SubCategory,
-    SubSubCategory,
 )
 
 
@@ -96,7 +95,6 @@ class AbstractCategorySerializer(PolymorphicSerializer):
         return {
             Category: CategorySerializer,
             SubCategory: SubCategorySerializer,
-            SubSubCategory: SubSubCategorySerializer,
         }
 
     class Meta:
@@ -125,13 +123,6 @@ class SubCategorySerializer(serializers.Serializer):
 
     class Meta:
         model = SubCategory
-
-
-class SubSubCategorySerializer(serializers.Serializer):
-    parent = AbstractCategorySerializer()
-
-    class Meta:
-        model = SubSubCategory
 
 
 # Serializers for children of AbstractSupplementalContent

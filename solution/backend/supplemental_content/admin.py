@@ -10,7 +10,6 @@ from .models import (
     SupplementalContent,
     Category,
     SubCategory,
-    SubSubCategory,
     AbstractLocation,
     Section,
     SubjectGroup,
@@ -85,13 +84,6 @@ class CategoryAdmin(BaseAdmin):
 @admin.register(SubCategory)
 class SubCategoryAdmin(CategoryAdmin):
     admin_priority = 20
-    list_display = ("name", "description", "order", "show_if_empty", "parent")
-    ordering = ("name", "description", "order", "parent")
-
-
-@admin.register(SubSubCategory)
-class SubSubCategoryAdmin(CategoryAdmin):
-    admin_priority = 30
     list_display = ("name", "description", "order", "show_if_empty", "parent")
     ordering = ("name", "description", "order", "parent")
 
