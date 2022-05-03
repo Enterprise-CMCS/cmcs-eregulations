@@ -9,6 +9,7 @@ from django.db.models import Prefetch
 from .models import (
     SupplementalContent,
     FederalRegisterDocument,
+    FederalRegisterCategoryLink,
     AbstractCategory,
     Category,
     SubCategory,
@@ -66,6 +67,22 @@ class SubpartAdmin(BaseAdmin):
     list_display = ("title", "part", "subpart_id")
     search_fields = ["title", "part", "subpart_id"]
     ordering = ("title", "part", "subpart_id")
+
+
+@admin.register(FederalRegisterCategoryLink)
+class FederalRegisterCategoryLinkAdmin(BaseAdmin):
+    admin_priority = 100
+
+    def get_queryset(self, request):
+        query = super().get_queryset(request)
+        return query.prefetch_related(
+            Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
+        )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "category":
+            kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Category)

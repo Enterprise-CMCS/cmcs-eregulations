@@ -125,5 +125,17 @@ class Migration(migrations.Migration):
             name='internal_notes',
             field=models.TextField(blank=True, null=True),
         ),
+        migrations.CreateModel(
+            name='FederalRegisterCategoryLink',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(help_text='Name of the category as sent from the Federal Register parser.', max_length=512, unique=True)),
+                ('category', models.ForeignKey(help_text='The eRegs category to translate a Federal Register category into.', on_delete=django.db.models.deletion.CASCADE, related_name='federal_register_category_link', to='supplemental_content.abstractcategory')),
+            ],
+            options={
+                'verbose_name': 'Federal Register Category Link',
+                'verbose_name_plural': 'Federal Register Category Links',
+            },
+        ),
         migrations.RunPython(delete_old_abstract_content), # MUST BE LAST
     ]
