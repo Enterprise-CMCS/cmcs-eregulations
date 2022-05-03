@@ -20,7 +20,7 @@ from drf_spectacular.utils import (
 from .models import (
     AbstractSupplementalContent,
     AbstractCategory,
-    TempSupplementalContent,
+    SupplementalContent,
     AbstractLocation,
     Section,
     Subpart,
@@ -177,7 +177,7 @@ class AllSupplementalContentView(APIView):
                     'locations',
                     queryset=AbstractLocation.objects.all()
                 )
-            ).distinct().select_subclasses(TempSupplementalContent).order_by(
+            ).distinct().select_subclasses(SupplementalContent).order_by(
                 "-supplementalcontent__date"
             )[start:start+maxResults]
         serializer = SupplementalContentSerializer(query, many=True)
@@ -240,7 +240,7 @@ class SupByLocationViewSet(viewsets.ModelViewSet):
         queryset = AbstractLocation.objects.prefetch_related(
                     Prefetch(
                         'supplemental_content',
-                        queryset=AbstractSupplementalContent.objects.filter(approved=True).select_subclasses(TempSupplementalContent)
+                        queryset=AbstractSupplementalContent.objects.filter(approved=True).select_subclasses(SupplementalContent)
                     ))
         serializer = SuppByLocationSerializer(queryset, many=True)
         response_dict = {}
@@ -296,7 +296,7 @@ class SupByIdViewSet(viewsets.ViewSet):
                         'category',
                         queryset=AbstractCategory.objects.all().select_subclasses()
                     )
-                ).distinct().select_subclasses(TempSupplementalContent).order_by(
+                ).distinct().select_subclasses(SupplementalContent).order_by(
                     "-supplementalcontent__date"
                 )
         serializer = IndividualSupSerializer(queryset, many=True)

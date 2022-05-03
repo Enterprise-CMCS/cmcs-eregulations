@@ -98,4 +98,7 @@ class Migration(migrations.Migration):
             bases=('supplemental_content.abstractsupplementalcontent', models.Model),
         ),
         migrations.RunPython(convert_old_supp_content),
+        migrations.DeleteModel(
+            name='TempSupplementalContent',
+        ),
     ]

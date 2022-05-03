@@ -1,7 +1,7 @@
 from django.views.generic.base import TemplateView
 from django.http import Http404
 
-from supplemental_content.models import TempSupplementalContent
+from supplemental_content.models import SupplementalContent
 
 
 class SupplementalContentView(TemplateView):

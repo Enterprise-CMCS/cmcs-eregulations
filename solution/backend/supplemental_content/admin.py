@@ -7,7 +7,7 @@ from django.db.models import Q
 # Register your models here.
 
 from .models import (
-    TempSupplementalContent,
+    SupplementalContent,
     Category,
     SubCategory,
     AbstractLocation,
@@ -78,7 +78,7 @@ class SubCategoryAdmin(CategoryAdmin):
     ordering = ("name", "description", "order", "parent")
 
 
-@admin.register(TempSupplementalContent)
+@admin.register(SupplementalContent)
 class SupplementalContentAdmin(BaseAdmin):
     admin_priority = 0
     list_display = ("date", "name", "description", "category", "updated_at", "approved")

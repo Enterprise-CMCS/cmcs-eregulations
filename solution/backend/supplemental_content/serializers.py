@@ -4,7 +4,7 @@ from .utils import reverse_sort
 
 from .models import (
     AbstractSupplementalContent,
-    TempSupplementalContent,
+    SupplementalContent,
     AbstractLocation,
     Section,
     Subpart,
@@ -199,7 +199,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
 
     def get_serializer_map(self):
         return {
-            TempSupplementalContent: SupplementalContentSerializer,
+            SupplementalContent: SupplementalContentSerializer,
         }
 
     class Meta:
@@ -228,7 +228,7 @@ class SupplementalContentSerializer(serializers.Serializer):
     descriptionHeadline = serializers.CharField(required=False)
 
     class Meta:
-        model = TempSupplementalContent
+        model = SupplementalContent
         list_serializer_class = ApplicableSupplementalContentSerializer
 
 
@@ -268,7 +268,7 @@ class IndividualSupSerializer(PolymorphicSerializer):
 
     def get_serializer_map(self):
         return {
-            TempSupplementalContent: SupplementalContentSerializer,
+            SupplementalContent: SupplementalContentSerializer,
         }
 
     class Meta:
@@ -280,7 +280,7 @@ class SuppByLocationSerializer(serializers.ModelSerializer):
 
     def get_serializer_map(self):
         return {
-            TempSupplementalContent: SupIDSerializer,
+            SupplementalContent: SupIDSerializer,
         }
 
     class Meta:
