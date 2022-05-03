@@ -3,7 +3,7 @@ from datetime import datetime
 from django.urls import reverse
 
 from regcore.models import Part
-from supplemental_content.models import SupplementalContent
+from supplemental_content.models import TempSupplementalContent
 
 
 class PartSitemap(Sitemap):
@@ -63,7 +63,7 @@ class SupplementalContentSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return SupplementalContent.objects.filter(approved=True)
+        return TempSupplementalContent.objects.filter(approved=True)
 
     def lastmod(self, item):
         return item.updated_at

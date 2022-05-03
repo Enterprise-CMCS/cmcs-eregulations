@@ -32,4 +32,8 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name='SubjectGroup',
         ),
+        #migrations.RenameModel(
+        #    old_name='SupplementalContent',
+        #    new_name='TempSupplementalContent',
+        #),
     ]
