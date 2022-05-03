@@ -7,6 +7,7 @@ from regulations.views.regulation_landing import RegulationLandingView
 from regulations.views.homepage import HomepageView
 from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
+from regulations.views.resources import ResourcesView
 from regulations.views.supplemental_content import SupplementalContentView
 from regulations import converters
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -35,4 +36,5 @@ urlpatterns = [
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
     path('cache/', CacheView.as_view(), name='cache'),
+    path('resources/', ResourcesView.as_view(), name='resources'),
 ]

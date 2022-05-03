@@ -1,0 +1,21 @@
+{% extends "regulations/base.html" %}
+
+{% load static %}
+
+{% block title %}Cache Explorer{% endblock %}
+
+{% block flash_banner %}{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+<div id="vite-app"></div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+{% block post_footer %}
+    <link rel="stylesheet" href="{% static '/vite/index.css' %}" />
+    <script src="{% static '/vite/index.js' %}"></script>
+{% endblock %}

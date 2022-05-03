@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import CacheExplorer from "../views/CacheExplorer.vue";
+import Resources from "../views/Resources.vue";
 
 Vue.use(VueRouter);
 
@@ -9,7 +10,13 @@ const routes = [
         path: "/cache",
         name: "cache",
         component: CacheExplorer,
-    }
+    },
+
+    {
+        path: "/resources",
+        name: "resources",
+        component: Resources,
+    },
 ]
 
 const router = new VueRouter({
