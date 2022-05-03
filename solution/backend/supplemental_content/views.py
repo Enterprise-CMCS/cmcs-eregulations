@@ -60,8 +60,6 @@ class SupplementalContentView(generics.ListAPIView):
     @extend_schema(parameters=[OpenApiParameter(name='sections', description='Sections you want to search.', required=True,
                                                 type=arrayStrings),
                                OpenApiParameter(name='subparts', description='What subparts would you like to filter by.',
-                                                required=False, type=arrayStrings),
-                               OpenApiParameter(name='subjectgroups', description='Subject groups to filter by.',
                                                 required=False, type=arrayStrings)])
     @extend_schema(description='Get a list of supplemental content')
     def get(self, *args, **kwargs):
@@ -69,7 +67,6 @@ class SupplementalContentView(generics.ListAPIView):
         part = kwargs.get("part")
         section_list = self.request.GET.getlist("sections")
         subpart_list = self.request.GET.getlist("subparts")
-        subjgrp_list = self.request.GET.getlist("subjectgroups")
         start = int(self.request.GET.get("start", 0))
         maxResults = int(self.request.GET.get("max_results", 1000))
 
@@ -80,8 +77,7 @@ class SupplementalContentView(generics.ListAPIView):
         if len(section_list) > 0 or len(subpart_list) > 0 or len(subjgrp_list) > 0:
             query = query.filter(
                 Q(locations__section__section_id__in=section_list) |
-                Q(locations__subpart__subpart_id__in=subpart_list) |
-                Q(locations__subjectgroup__subject_group_id__in=subjgrp_list),
+                Q(locations__subpart__subpart_id__in=subpart_list),
             )
 
         query = query.filter(

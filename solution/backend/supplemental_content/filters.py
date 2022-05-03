@@ -46,8 +46,3 @@ class SectionFilter(ParameterFilter):
 class SubpartFilter(ParameterFilter):
     parameter_name = "locations__subpart__subpart_id"
     title = "Subpart"
-
-
-class SubjectGroupFilter(ParameterFilter):
-    parameter_name = "locations__subjectgroup__subject_group_id"
-    title = "Subject Group"

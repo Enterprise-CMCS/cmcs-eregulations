@@ -12,7 +12,6 @@ from .models import (
     SubCategory,
     AbstractLocation,
     Section,
-    SubjectGroup,
     Subpart,
 )
 
@@ -21,7 +20,6 @@ from .filters import (
     PartFilter,
     SectionFilter,
     SubpartFilter,
-    SubjectGroupFilter,
 )
 
 from .mixins import ExportCsvMixin
@@ -53,7 +51,7 @@ class SectionAdmin(BaseAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "parent":
-            kwargs["queryset"] = AbstractLocation.objects.filter(Q(subpart__isnull=False) | Q(subjectgroup__isnull=False))
+            kwargs["queryset"] = AbstractLocation.objects.filter(subpart__isnull=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -63,14 +61,6 @@ class SubpartAdmin(BaseAdmin):
     list_display = ("title", "part", "subpart_id")
     search_fields = ["title", "part", "subpart_id"]
     ordering = ("title", "part", "subpart_id")
-
-
-@admin.register(SubjectGroup)
-class SubjectGroupAdmin(BaseAdmin):
-    admin_priority = 60
-    list_display = ("title", "part", "subject_group_id")
-    search_fields = ["title", "part", "subject_group_id"]
-    ordering = ("title", "part", "subject_group_id")
 
 
 @admin.register(Category)
@@ -104,7 +94,6 @@ class SupplementalContentAdmin(BaseAdmin):
         PartFilter,
         SectionFilter,
         SubpartFilter,
-        SubjectGroupFilter,
     ]
 
 

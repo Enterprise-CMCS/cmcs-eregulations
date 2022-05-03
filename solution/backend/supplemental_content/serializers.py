@@ -8,7 +8,6 @@ from .models import (
     AbstractLocation,
     Section,
     Subpart,
-    SubjectGroup,
     AbstractCategory,
     Category,
     SubCategory,
@@ -43,7 +42,6 @@ class AbstractLocationSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
             Subpart: SubpartSerializer,
-            SubjectGroup: SubjectGroupSerializer,
             Section: SectionSerializer,
         }
 
@@ -65,13 +63,6 @@ class SubpartSerializer(serializers.Serializer):
 
     class Meta:
         model = Subpart
-
-
-class SubjectGroupSerializer(serializers.Serializer):
-    subject_group_id = serializers.CharField()
-
-    class Meta:
-        model = SubjectGroup
 
 
 class SectionSerializer(AbstractLocationSerializer):
