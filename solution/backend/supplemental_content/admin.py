@@ -2,12 +2,14 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 
 # Register your models here.
 
 from .models import (
     SupplementalContent,
+    FederalRegisterDocument,
+    AbstractCategory,
     Category,
     SubCategory,
     AbstractLocation,
@@ -31,7 +33,6 @@ class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_per_page = 200
     admin_priority = 20
     actions = ["export_as_csv"]
-    exclude = ["display_name"]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -49,9 +50,13 @@ class SectionAdmin(BaseAdmin):
     search_fields = ["title", "part", "section_id"]
     ordering = ("title", "part", "section_id", "parent")
 
+    def get_queryset(self, request):
+        query = super().get_queryset(request)
+        return query.select_related("parent")
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "parent":
-            kwargs["queryset"] = AbstractLocation.objects.filter(subpart__isnull=False)
+            kwargs["queryset"] = Subpart.objects.all()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -78,16 +83,13 @@ class SubCategoryAdmin(CategoryAdmin):
     ordering = ("name", "description", "order", "parent")
 
 
-@admin.register(SupplementalContent)
-class SupplementalContentAdmin(BaseAdmin):
-    admin_priority = 0
-    list_display = ("date", "name", "description", "category", "updated_at", "approved")
-    list_display_links = ("date", "name", "description", "category", "updated_at")
-    empty_value_display = 'NONE'
-    search_fields = ["date", "name", "description"]
-    ordering = ("-updated_at", "-date", "name", "category", "-created_at")
-    filter_horizontal = ("locations",)
+class AbstractSupplementalContentAdmin(BaseAdmin):
     actions = [actions.mark_approved, actions.mark_not_approved]
+    filter_horizontal = ("locations",)
+    admin_priority = 0
+    empty_value_display = "NONE"
+    ordering = ("-updated_at", "-date", "name", "category", "-created_at")
+
     list_filter = [
         "approved",
         TitleFilter,
@@ -95,6 +97,36 @@ class SupplementalContentAdmin(BaseAdmin):
         SectionFilter,
         SubpartFilter,
     ]
+
+    def get_queryset(self, request):
+        query = super().get_queryset(request)
+        return query.prefetch_related(
+            Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
+        )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "category":
+            kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "locations":
+            kwargs["queryset"] = AbstractLocation.objects.all().select_subclasses()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+@admin.register(SupplementalContent)
+class SupplementalContentAdmin(AbstractSupplementalContentAdmin):
+    list_display = ("date", "name", "description", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "category", "updated_at")
+    search_fields = ["date", "name", "description"]
+
+
+@admin.register(FederalRegisterDocument)
+class FederalRegisterDocumentAdmin(AbstractSupplementalContentAdmin):
+    list_display = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at")
+    search_fields = ["date", "name", "description", "docket_number", "document_number"]
 
 
 def get_app_list(self, request):
