@@ -94,6 +94,9 @@ class FederalRegisterCategoryLinkAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
+    def get_readonly_fields(self, request, obj=None):
+        return self.readonly_fields + (("name",) if obj else ())
+
 
 @admin.register(Category)
 class CategoryAdmin(BaseAdmin):
@@ -153,6 +156,7 @@ class FederalRegisterDocumentAdmin(AbstractSupplementalContentAdmin):
     search_fields = ["date", "name", "description", "docket_number", "document_number"]
 
 
+# Custom app list function, allows ordering Django Admin models by "admin_priority", low to high
 def get_app_list(self, request):
     app_dict = self._build_app_dict(request)
     for app_name in app_dict.keys():
@@ -169,4 +173,5 @@ def get_app_list(self, request):
         yield app
 
 
+# Patch Django's built in get_app_list function
 admin.AdminSite.get_app_list = get_app_list
