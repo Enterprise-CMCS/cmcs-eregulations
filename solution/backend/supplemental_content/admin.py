@@ -35,6 +35,18 @@ class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
     admin_priority = 20
     actions = ["export_as_csv"]
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        lookups = getattr(self, "foreignkey_lookups", {})
+        if db_field.name in lookups:
+            kwargs["queryset"] = lookups[db_field.name]()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        lookups = getattr(self, "manytomany_lookups", {})
+        if db_field.name in lookups:
+            kwargs["queryset"] = lookups[db_field.name]()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
@@ -51,16 +63,14 @@ class SectionAdmin(BaseAdmin):
     search_fields = ["title", "part", "section_id"]
     ordering = ("title", "part", "section_id", "parent")
 
+    foreignkey_lookups = {
+        "parent": lambda: Subpart.objects.all(),
+    }
+
     def get_queryset(self, request):
-        query = super().get_queryset(request)
-        return query.prefetch_related(
+        return super().get_queryset(request).prefetch_related(
             Prefetch("parent", AbstractLocation.objects.all().select_subclasses()),
         )
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "parent":
-            kwargs["queryset"] = Subpart.objects.all()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Subpart)
@@ -75,16 +85,14 @@ class SubpartAdmin(BaseAdmin):
 class FederalRegisterCategoryLinkAdmin(BaseAdmin):
     admin_priority = 100
 
+    foreignkey_lookups = {
+        "category": lambda: AbstractCategory.objects.all().select_subclasses(),
+    }
+
     def get_queryset(self, request):
-        query = super().get_queryset(request)
-        return query.prefetch_related(
+        return super().get_queryset(request).prefetch_related(
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "category":
-            kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Category)
@@ -117,21 +125,18 @@ class AbstractSupplementalContentAdmin(BaseAdmin):
         SubpartFilter,
     ]
 
+    foreignkey_lookups = {
+        "category": lambda: AbstractCategory.objects.all().select_subclasses(),
+    }
+
+    manytomany_lookups = {
+        "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
+    }
+
     def get_queryset(self, request):
-        query = super().get_queryset(request)
-        return query.prefetch_related(
+        return super().get_queryset(request).prefetch_related(
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "category":
-            kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "locations":
-            kwargs["queryset"] = AbstractLocation.objects.all().select_subclasses()
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
 @admin.register(SupplementalContent)
