@@ -1,7 +1,8 @@
 from django.views.generic.base import TemplateView
 from django.http import Http404
+from django.urls import reverse
 
-from supplemental_content.models import SupplementalContent
+from supplemental_content.models import AbstractSupplementalContent
 
 
 class SupplementalContentView(TemplateView):
@@ -11,15 +12,15 @@ class SupplementalContentView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         content_id = self.kwargs.get("id")
-        content = SupplementalContent.objects.filter(id=content_id, approved=True)
-        if len(content) < 1:
+        try:
+            content = AbstractSupplementalContent.objects.all().select_subclasses().get(id=content_id, approved=True)
+            c = {
+                "mod_time": content.updated_at.isoformat(),
+                "title": getattr(content, "name", "n/a"),
+                "description": getattr(content, "description", "n/a"),
+                "pub_time": getattr(content, "date", "n/a"),
+                "redirect_link": getattr(content, "url", reverse("homepage")),
+            }
+            return {**context, **c}
+        except AbstractSupplementalContent.DoesNotExist:
             raise Http404
-        content = content[0]
-        c = {
-            "title": content.name,
-            "description": content.description,
-            "pub_time": content.date,
-            "mod_time": content.updated_at.isoformat(),
-            "redirect_link": content.url,
-        }
-        return {**context, **c}

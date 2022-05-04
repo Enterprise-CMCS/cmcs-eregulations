@@ -95,7 +95,7 @@ class FederalRegisterCategoryLinkAdmin(BaseAdmin):
         )
 
     def get_readonly_fields(self, request, obj=None):
-        return self.readonly_fields + (("name",) if obj else ())
+        return self.readonly_fields + (("name",) if obj else ())  # prevent changing name field on existing objects
 
 
 @admin.register(Category)
