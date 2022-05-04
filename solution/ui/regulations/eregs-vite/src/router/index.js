@@ -22,6 +22,7 @@ const routes = [
 const router = new VueRouter({
     mode: "history",
     routes,
+    base: import.meta.env.VITE_API_URL,
     scrollBehavior(to) {
         if (to.hash) {
             return {

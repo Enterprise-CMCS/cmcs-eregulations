@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        {{ PR }}
+        {{ API_URL }}
         RESOURCES
         <v-btn>TEST BUTTON</v-btn>
     </div>
@@ -39,7 +39,7 @@ export default {
 
     data() {
         return {
-            PR: import.meta.env.VITE_PR,
+            API_URL: import.meta.env.VITE_API_URL,
         }
     },
 
