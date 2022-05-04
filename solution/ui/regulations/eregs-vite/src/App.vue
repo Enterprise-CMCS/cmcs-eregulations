@@ -1,14 +1,18 @@
 <script>
+    import Resources from "./views/Resources.vue";
+
     export default {
         name: "App",
 
-        components: {}
+        components: {
+            Resources,
+        }
     }
 </script>
 
 <template>
     <v-app>
-        <router-view />
+        <Resources />
     </v-app>
 </template>
 
