@@ -45,6 +45,7 @@ jobs:
         env:
           STATIC_URL: http://localhost:8888/
           STATIC_ROOT: ../static-assets/regulations
+          VITE_PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution
           make regulations

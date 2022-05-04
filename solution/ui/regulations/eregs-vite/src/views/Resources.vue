@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+        {{ PR }}
         RESOURCES
         <v-btn>TEST BUTTON</v-btn>
     </div>
@@ -21,8 +22,7 @@ export default {
     beforeCreate() {},
 
     created() {
-        console.log("CREATED");
-        console.log(this.$route.query);
+        console.log("import.meta", import.meta.env);
     },
 
     beforeMount() {},
@@ -39,7 +39,7 @@ export default {
 
     data() {
         return {
-            dataProp: "value",
+            PR: import.meta.env.VITE_PR,
         }
     },
 
