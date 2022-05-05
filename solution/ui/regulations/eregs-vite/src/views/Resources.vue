@@ -1,16 +1,18 @@
 <template>
     <div id="app">
-        {{ API_URL }}
-        RESOURCES
-        <v-btn>TEST BUTTON</v-btn>
+        <ResourcesNav />
     </div>
 </template>
 
 <script>
+import ResourcesNav from "@/components/resources/ResourcesNav.vue";
+
 export default {
     name: "Resources",
 
-    components: {},
+    components: {
+        ResourcesNav,
+    },
 
     props: {
         propName: {
