@@ -111,4 +111,7 @@ export default {
 .v-divider {
     margin: 10px;
 }
+ .v-input__slot {
+    max-width: 90%;
+ }
 </style>

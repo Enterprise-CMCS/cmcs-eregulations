@@ -4,6 +4,10 @@
 
 {% block title %}Cache Explorer{% endblock %}
 
+{% block spa_styles %}
+    <link rel="stylesheet" href="{% static '/vite/index.css' %}" />
+{% endblock %}
+
 {% block flash_banner %}{% endblock %}
 
 {% block header %}{% endblock %}
@@ -16,6 +20,5 @@
 {% endblock %}
 
 {% block post_footer %}
-    <link rel="stylesheet" href="{% static '/vite/index.css' %}" />
     <script src="{% static '/vite/index.js' %}"></script>
 {% endblock %}

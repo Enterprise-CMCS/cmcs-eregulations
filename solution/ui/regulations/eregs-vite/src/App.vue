@@ -1,9 +1,9 @@
 <script>
-    export default {
-        name: "App",
+export default {
+    name: "App",
 
-        components: {}
-    }
+    components: {},
+};
 </script>
 
 <template>
@@ -12,13 +12,24 @@
     </v-app>
 </template>
 
-<style>
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
+<style lang="scss">
+*,
+::before,
+::after {
+    box-sizing: unset;
+}
+
+input {
+    background-color: white;
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, p, ul {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+ul {
+    padding-inline-start: 40px;
 }
 </style>
