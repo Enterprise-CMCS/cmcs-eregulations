@@ -11,20 +11,32 @@ from .models import (
     AbstractCategory,
     Category,
     SubCategory,
+    AbstractLocation,
+    Subpart,
 )
 
 from .views import SettingsAuthentication
 
 from .v3serializers import (
     FederalRegisterDocumentCreateSerializer,
-    AbstractCategorySerializer
+    AbstractCategoryPolymorphicSerializer,
+    AbstractLocationPolymorphicSerializer,
 )
 from regcore.serializers import StringListSerializer
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
-    serializer_class = AbstractCategorySerializer
+    serializer_class = AbstractCategoryPolymorphicSerializer
+
+
+class LocationViewSet(viewsets.ModelViewSet):
+    queryset = AbstractLocation.objects.all().select_subclasses()
+    
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return AbstractLocationCreateSerializer
+        return AbstractLocationPolymorphicSerializer
 
 
 class SupplementalContentViewSet(viewsets.ReadOnlyModelViewSet):
@@ -33,7 +45,7 @@ class SupplementalContentViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class FederalRegisterDocumentViewSet(viewsets.ModelViewSet):
-    queryset = FederalRegisterDocument.objects.all()
+    queryset = FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -52,9 +64,6 @@ class FederalRegisterDocumentViewSet(viewsets.ModelViewSet):
             if created:
                 frdoc.delete()
             raise e
-    
-    def get_queryset(self):
-        return FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
 
     def get_serializer_class(self):
         if self.request.method == "PUT":

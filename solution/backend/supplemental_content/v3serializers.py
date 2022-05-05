@@ -5,6 +5,7 @@ from .models import (
     Category,
     SubCategory,
     Section,
+    Subpart,
     FederalRegisterCategoryLink,
 )
 
@@ -21,7 +22,7 @@ class PolymorphicSerializer(serializers.Serializer):
             return data
 
 
-class AbstractCategorySerializer(PolymorphicSerializer):
+class AbstractCategoryPolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
             Category: ("category", CategorySerializer),
@@ -37,19 +38,30 @@ class CategorySerializer(serializers.Serializer):
     show_if_empty = serializers.BooleanField()
 
 
-class CategoryIDSerializer(serializers.Serializer):
-    def to_representation(self, instance):
-        return instance.id
-
-
 class SubCategorySerializer(CategorySerializer):
     parent = CategorySerializer()
 
 
-class SectionSerializer(serializers.Serializer):
+class AbstractLocationPolymorphicSerializer(PolymorphicSerializer):
+    def get_serializer_map(self):
+        return {
+            Section: ("section", SectionSerializer),
+            Subpart: ("subpart", SubpartSerializer),
+        }
+
+
+class AbstractLocationSerializer(serializers.Serializer):
     title = serializers.IntegerField()
     part = serializers.IntegerField()
+
+
+class SubpartSerializer(AbstractLocationSerializer):
+    subpart_id = serializers.CharField()
+
+
+class SectionSerializer(AbstractLocationSerializer):
     section_id = serializers.IntegerField()
+    parent = serializers.PrimaryKeyRelatedField(read_only=True)
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):

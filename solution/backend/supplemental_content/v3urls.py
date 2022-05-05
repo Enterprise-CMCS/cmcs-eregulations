@@ -4,6 +4,7 @@ from .v3views import (
     SupplementalContentViewSet,
     FederalRegisterDocumentViewSet,
     CategoryViewSet,
+    LocationViewSet,
 )
 
 
@@ -22,9 +23,9 @@ urlpatterns = [
         # path("category_tree", CategoryTreeViewSet.as_view({
         #     "get": "list",
         # })),
-        # path("location", LocationViewSet.as_view({
-        #     "get": "list",
-        #     "post": "create",
-        # })),
+        path("location", LocationViewSet.as_view({
+            "get": "list",
+            "post": "create",
+        })),
     ])),
 ]
