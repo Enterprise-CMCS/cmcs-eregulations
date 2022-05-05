@@ -18,10 +18,10 @@ import (
 var BaseURL string
 
 // DocumentURL is the relative path to post FR documents to
-var DocumentURL = "/supplemental_content"
+var DocumentURL = "/supplemental_content/frdoc"
 
 // DocListURL is the relative path to retrieve a list of FR docs that eRegs already has
-var DocListURL = "/frdoc_list"
+var DocListURL = "/supplemental_content/frdoc"
 
 var postAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),

@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import SupplementalContent, FederalRegisterDocument
 from .views import SettingsAuthentication
-from .v3serializers import FRDocCreateSerializer
+from .v3serializers import FederalRegisterDocumentCreateSerializer
 
 from regcore.serializers import StringListSerializer
 
@@ -42,5 +42,5 @@ class FederalRegisterDocumentViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method == "PUT":
-            return FRDocCreateSerializer
+            return FederalRegisterDocumentCreateSerializer
         return StringListSerializer
