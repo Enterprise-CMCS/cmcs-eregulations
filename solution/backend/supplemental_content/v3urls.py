@@ -1,15 +1,19 @@
-from django.urls import path
+from django.urls import path, include
 
 from .v3views import (
-        SupplementalContentViewSet,
-        FRDocListViewSet
+    SupplementalContentViewSet,
+    FederalRegisterDocumentViewSet,
 )
 
-supplemental_content_view_set = SupplementalContentViewSet.as_view({'put': 'update'})
-frdoc_list_view_set = FRDocListViewSet.as_view({'get': 'list'})
 
 urlpatterns = [
-        path("supplemental_content", supplemental_content_view_set),
-        path("frdoc_list", frdoc_list_view_set),
-
+    path("supplemental_content/", include([
+        path("", SupplementalContentViewSet.as_view({
+            "get": "list",
+        })),
+        path("frdoc", FederalRegisterDocumentViewSet.as_view({
+            "get": "list",
+            "put": "update",
+        })),
+    ])),
 ]
