@@ -3,9 +3,47 @@ from rest_framework import serializers
 from .models import (
     AbstractCategory,
     Category,
+    SubCategory,
     Section,
     FederalRegisterCategoryLink,
 )
+
+
+class PolymorphicSerializer(serializers.Serializer):
+    def get_serializer_map(self):
+        raise NotImplementedError
+
+    def to_representation(self, instance):
+        instance_type = type(instance)
+        if instance_type in self.get_serializer_map():
+            data = self.get_serializer_map()[instance_type][1](instance=instance).data
+            data["type"] = self.get_serializer_map()[instance_type][0]
+            return data
+
+
+class AbstractCategorySerializer(PolymorphicSerializer):
+    def get_serializer_map(self):
+        return {
+            Category: ("category", CategorySerializer),
+            SubCategory: ("subcategory", SubCategorySerializer),
+        }
+
+
+class CategorySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    order = serializers.IntegerField()
+    show_if_empty = serializers.BooleanField()
+
+
+class CategoryIDSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return instance.id
+
+
+class SubCategorySerializer(CategorySerializer):
+    parent = CategorySerializer()
 
 
 class SectionSerializer(serializers.Serializer):

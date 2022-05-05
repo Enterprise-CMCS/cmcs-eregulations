@@ -2,18 +2,34 @@ from django.http import JsonResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.core.exceptions import BadRequest
+from django.db.models import Prefetch
 
-from .models import SupplementalContent, FederalRegisterDocument
+from .models import (
+    AbstractSupplementalContent,
+    FederalRegisterDocument,
+    AbstractCategory,
+    Category,
+    SubCategory,
+)
+
 from .views import SettingsAuthentication
-from .v3serializers import FederalRegisterDocumentCreateSerializer
 
+from .v3serializers import (
+    FederalRegisterDocumentCreateSerializer,
+    AbstractCategorySerializer
+)
 from regcore.serializers import StringListSerializer
 
 
-class SupplementalContentViewSet(viewsets.ModelViewSet):
-    authentication_classes = [SettingsAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = SupplementalContent.objects.all()
+class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+    serializer_class = AbstractCategorySerializer
+
+
+class SupplementalContentViewSet(viewsets.ReadOnlyModelViewSet):
+    def get_queryset(self):
+        query = AbstractSupplementalContent.objects.all()
 
 
 class FederalRegisterDocumentViewSet(viewsets.ModelViewSet):

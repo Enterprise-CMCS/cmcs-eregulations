@@ -3,6 +3,7 @@ from django.urls import path, include
 from .v3views import (
     SupplementalContentViewSet,
     FederalRegisterDocumentViewSet,
+    CategoryViewSet,
 )
 
 
@@ -15,5 +16,15 @@ urlpatterns = [
             "get": "list",
             "put": "update",
         })),
+        path("categories", CategoryViewSet.as_view({
+            "get": "list",
+        })),
+        # path("category_tree", CategoryTreeViewSet.as_view({
+        #     "get": "list",
+        # })),
+        # path("location", LocationViewSet.as_view({
+        #     "get": "list",
+        #     "post": "create",
+        # })),
     ])),
 ]
