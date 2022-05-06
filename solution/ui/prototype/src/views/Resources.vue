@@ -77,8 +77,7 @@ import {
     getCategories,
     getSectionObjects,
     getSubPartsForPart,
-    getSupplementalContentNew,
-    getSupplementalContentSearchResults,
+    getSupplementalContentNew
 } from "@/utilities/api";
 
 export default {
@@ -141,7 +140,7 @@ export default {
                 },
             },
             supplementalContent: [],
-            searchInputValue: "",
+            searchInputValue: ""
         };
     },
 
@@ -261,24 +260,53 @@ export default {
 
             return returnArr;
         },
+
         async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
             if (dataQueryParams?.part) {
                 const queryParamsObj = { ...dataQueryParams };
+                const parts = queryParamsObj.part.split(",");
                 queryParamsObj.part = queryParamsObj.part.split(",");
+                let partDict = {};
+                for (let x in parts) {
+                    partDict[parts[x]] = { sections: [], subparts: [] };
+                }
+
                 if (queryParamsObj.section) {
-                    queryParamsObj.sections = queryParamsObj.section.split(",");
+                    let sections = queryParamsObj.section
+                        .split(",")
+                        .map((x) => ({
+                            part: x.match(/^\d+/)[0],
+                            section: x.match(/\d+$/)[0],
+                        }));
+                    for (let section in sections) {
+                        partDict[sections[section].part].sections.push(
+                            sections[section].section
+                        );
+                    }
                 }
                 if (queryParamsObj.subpart) {
-                    queryParamsObj.subparts = queryParamsObj.subpart.split(",");
+                    let subparts = queryParamsObj.subpart
+                        .split(",")
+                        .map((x) => ({
+                            part: x.match(/^\d+/)[0],
+                            subparts: x.match(/\w+$/)[0],
+                        }));
+
+                    for (let subpart in subparts) {
+                        partDict[subparts[subpart].part].subparts.push(
+                            subparts[subpart].subparts
+                        );
+                    }
                 }
+
                 // map over parts and return promises to put in Promise.all
                 const partPromises = queryParamsObj.part.map((part) => {
                     return getSupplementalContentNew(
                         42,
                         part,
-                        queryParamsObj.sections,
-                        queryParamsObj.subparts,
+                        partDict[part].sections,
+                        partDict[part].subparts,
                         0, // start
                         10000, // max_results
                         searchQuery
@@ -292,7 +320,7 @@ export default {
                         resultArray,
                         true
                     );
-
+                    
                     this.supplementalContent = this.queryParams.resourceCategory
                         ? this.filterCategories(transformedResults)
                         : transformedResults;
@@ -335,6 +363,7 @@ export default {
         },
         async getFormattedPartsList() {
             const partsList = await getAllParts();
+
             this.filters.part.listItems = partsList.map((part) => {
                 return {
                     name: part.name,
@@ -399,6 +428,7 @@ export default {
                 }
 
                 // always get content otherwise
+
                 this.getSupplementalContent(this.queryParams, this.searchQuery);
 
                 if (newParams.part) {

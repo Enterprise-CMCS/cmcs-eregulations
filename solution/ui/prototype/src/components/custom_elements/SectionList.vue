@@ -5,7 +5,7 @@
                 v-for="item in listItems"
                 :key="item.identifier"
                 @click="clickMethod"
-                :data-value="item.identifier"
+                :data-value="item.part + '-' + item.identifier"
                 class="section-list-item"
             >
                 <span class="section-number">{{ item.label }} </span>
