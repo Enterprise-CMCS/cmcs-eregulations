@@ -32,20 +32,6 @@ def convert_old_supp_content(apps, schema_editor):
         content.save()
 
 
-def delete_old_abstract_content(apps, schema_editor):
-    AbstractSupplementalContent = apps.get_model("resources", "AbstractSupplementalContent")
-    for i in AbstractSupplementalContent.objects.all():
-        try:
-            _ = i.supplementalcontent
-            continue
-        except AbstractSupplementalContent.supplementalcontent.RelatedObjectDoesNotExist:
-            try:
-                _ = i.federalregisterdocument
-                continue
-            except AbstractSupplementalContent.federalregisterdocument.RelatedObjectDoesNotExist:
-                i.delete()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -75,6 +61,17 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name='SubjectGroup',
         ),
+        migrations.CreateModel(
+            name='AbstractResource',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('approved', models.BooleanField(default=True)),
+                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='resources', to='resources.abstractcategory')),
+                ('locations', models.ManyToManyField(blank=True, related_name='resources', to='resources.AbstractLocation')),
+            ],
+        ),
         migrations.RenameModel(
             old_name='SupplementalContent',
             new_name='TempSupplementalContent',
@@ -82,7 +79,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FederalRegisterDocument',
             fields=[
-                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractsupplementalcontent')),
+                ('abstractresource_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractresource')),
                 ('name', models.CharField(blank=True, max_length=512, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, max_length=512, null=True)),
@@ -94,12 +91,12 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Federal Register Document',
                 'verbose_name_plural': 'Federal Register Documents',
             },
-            bases=('resources.abstractsupplementalcontent', models.Model),
+            bases=('resources.abstractresource', models.Model),
         ),
         migrations.CreateModel(
             name='SupplementalContent',
             fields=[
-                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractsupplementalcontent')),
+                ('abstractresource_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractresource')),
                 ('name', models.CharField(blank=True, max_length=512, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, max_length=512, null=True)),
@@ -109,11 +106,14 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Supplemental Content',
                 'verbose_name_plural': 'Supplemental Content',
             },
-            bases=('resources.abstractsupplementalcontent', models.Model),
+            bases=('resources.abstractresource', models.Model),
         ),
         migrations.RunPython(convert_old_supp_content),
         migrations.DeleteModel(
             name='TempSupplementalContent',
+        ),
+        migrations.DeleteModel(
+            name='AbstractSupplementalContent',
         ),
         migrations.AddField(
             model_name='federalregisterdocument',
@@ -137,5 +137,4 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Federal Register Category Links',
             },
         ),
-        migrations.RunPython(delete_old_abstract_content), # MUST BE LAST
     ]
