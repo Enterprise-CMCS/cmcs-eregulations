@@ -18,7 +18,7 @@ from drf_spectacular.utils import (
 )
 
 from .models import (
-    AbstractSupplementalContent,
+    AbstractResource,
     AbstractCategory,
     SupplementalContent,
     AbstractLocation,
@@ -28,7 +28,7 @@ from .models import (
 
 from .serializers import (
     AbstractCategorySerializer,
-    AbstractSupplementalContentSerializer,
+    AbstractResourceSerializer,
     SupplementalContentSerializer,
     IndividualSupSerializer,
     SuppByLocationSerializer
@@ -54,7 +54,7 @@ class CategoriesViewSet(viewsets.ModelViewSet):
 
 
 class SupplementalContentView(generics.ListAPIView):
-    serializer_class = AbstractSupplementalContentSerializer
+    serializer_class = AbstractResourceSerializer
     arrayStrings = {'type': 'array', 'items': {'type': 'string'}}
 
     @extend_schema(parameters=[OpenApiParameter(name='sections', description='Sections you want to search.', required=True,
@@ -72,7 +72,7 @@ class SupplementalContentView(generics.ListAPIView):
 
         q = self.request.query_params.get('q')
 
-        query = AbstractSupplementalContent.objects
+        query = AbstractResource.objects
 
         if len(section_list) > 0 or len(subpart_list) > 0:
             query = query.filter(
@@ -152,7 +152,7 @@ class AllSupplementalContentView(APIView):
         maxResults = int(self.request.GET.get("max_results", 1000))
         categories = self.request.GET.getlist("category")
 
-        query = AbstractSupplementalContent.objects.filter(
+        query = AbstractResource.objects.filter(
                 approved=True,
                 category__isnull=False
             )
@@ -240,7 +240,7 @@ class SupByLocationViewSet(viewsets.ModelViewSet):
         queryset = AbstractLocation.objects.prefetch_related(
                     Prefetch(
                         'supplemental_content',
-                        queryset=AbstractSupplementalContent.objects.filter(approved=True).select_subclasses(SupplementalContent)
+                        queryset=AbstractResource.objects.filter(approved=True).select_subclasses(SupplementalContent)
                     ))
         serializer = SuppByLocationSerializer(queryset, many=True)
         response_dict = {}
@@ -281,7 +281,7 @@ class SupByIdViewSet(viewsets.ViewSet):
     def list(self, request, *args, **kwargs):
         title = kwargs.get("title")
         part = kwargs.get("part")
-        queryset = AbstractSupplementalContent.objects.filter(
+        queryset = AbstractResource.objects.filter(
             approved=True,
             category__isnull=False,
             locations__part=part,

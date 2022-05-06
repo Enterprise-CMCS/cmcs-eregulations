@@ -7,8 +7,8 @@ from django.db import migrations, models
 
 def resave_models(apps, schema_editor):
     try:
-        from resources.models import AbstractLocation, AbstractCategory, AbstractSupplementalContent
-        for i in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractSupplementalContent.objects.all()):
+        from resources.models import AbstractLocation, AbstractCategory, AbstractResource
+        for i in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractResource.objects.all()):
             i.save()
     except:
         pass

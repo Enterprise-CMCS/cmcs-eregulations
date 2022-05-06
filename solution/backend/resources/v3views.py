@@ -6,7 +6,7 @@ from django.core.exceptions import BadRequest
 from django.db.models import Prefetch
 
 from .models import (
-    AbstractSupplementalContent,
+    AbstractResource,
     FederalRegisterDocument,
     AbstractCategory,
     Category,
@@ -41,7 +41,7 @@ class LocationViewSet(viewsets.ModelViewSet):
 
 class SupplementalContentViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
-        query = AbstractSupplementalContent.objects.all()
+        query = AbstractResource.objects.all()
 
 
 class FederalRegisterDocumentViewSet(viewsets.ModelViewSet):

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .utils import reverse_sort
 
 from .models import (
-    AbstractSupplementalContent,
+    AbstractResource,
     SupplementalContent,
     AbstractLocation,
     Section,
@@ -116,7 +116,7 @@ class SubCategorySerializer(serializers.Serializer):
         model = SubCategory
 
 
-# Serializers for children of AbstractSupplementalContent
+# Serializers for children of AbstractResource
 
 
 class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
@@ -189,7 +189,7 @@ class ApplicableSupplementalContentSerializer(serializers.ListSerializer):
         return result
 
 
-class AbstractSupplementalContentSerializer(PolymorphicSerializer):
+class AbstractResourceSerializer(PolymorphicSerializer):
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
     approved = serializers.BooleanField()
@@ -203,7 +203,7 @@ class AbstractSupplementalContentSerializer(PolymorphicSerializer):
         }
 
     class Meta:
-        model = AbstractSupplementalContent
+        model = AbstractResource
         list_serializer_class = ApplicableSupplementalContentSerializer
 
 
@@ -211,7 +211,7 @@ class SupIDSerializer(serializers.Serializer):
     id = serializers.CharField()
 
     class Meta:
-        model = AbstractSupplementalContent
+        model = AbstractResource
 
 
 class SupplementalContentSerializer(serializers.Serializer):
@@ -246,7 +246,7 @@ class FlatSupplementalContentSerializer(serializers.Serializer):
     descriptionHeadline = serializers.SerializerMethodField()
 
     class Meta:
-        model = AbstractSupplementalContent
+        model = AbstractResource
 
     def get_nameHeadline(self, obj):
         try:
@@ -272,7 +272,7 @@ class IndividualSupSerializer(PolymorphicSerializer):
         }
 
     class Meta:
-        model = AbstractSupplementalContent
+        model = AbstractResource
 
 
 class SuppByLocationSerializer(serializers.ModelSerializer):

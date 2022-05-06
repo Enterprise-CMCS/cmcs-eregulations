@@ -113,7 +113,7 @@ class SubCategoryAdmin(CategoryAdmin):
     ordering = ("name", "description", "order", "parent")
 
 
-class AbstractSupplementalContentAdmin(BaseAdmin):
+class AbstractResourceAdmin(BaseAdmin):
     actions = [actions.mark_approved, actions.mark_not_approved]
     filter_horizontal = ("locations",)
     admin_priority = 0
@@ -143,14 +143,14 @@ class AbstractSupplementalContentAdmin(BaseAdmin):
 
 
 @admin.register(SupplementalContent)
-class SupplementalContentAdmin(AbstractSupplementalContentAdmin):
+class SupplementalContentAdmin(AbstractResourceAdmin):
     list_display = ("date", "name", "description", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
 
 
 @admin.register(FederalRegisterDocument)
-class FederalRegisterDocumentAdmin(AbstractSupplementalContentAdmin):
+class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     list_display = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at")
     search_fields = ["date", "name", "description", "docket_number", "document_number"]
