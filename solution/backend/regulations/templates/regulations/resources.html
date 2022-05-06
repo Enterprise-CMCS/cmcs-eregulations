@@ -11,7 +11,7 @@
 {% block flash_banner %}{% endblock %}
 
 {% block body %}
-<div id="vite-app"></div>
+    <div id="vite-app" data-api-url="{% url 'regcore' %}"></div>
 {% endblock %}
 
 {% block post_footer %}

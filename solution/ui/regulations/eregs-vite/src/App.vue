@@ -3,12 +3,19 @@ export default {
     name: "App",
 
     components: {},
+
+    props: {
+        apiUrl: {
+            type: String,
+            default: "wrong"
+        }
+    }
 };
 </script>
 
 <template>
     <v-app>
-        <router-view />
+        <router-view :api-url="apiUrl"/>
     </v-app>
 </template>
 
