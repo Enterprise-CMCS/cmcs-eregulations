@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0002_auto_20210712_1817'),
+        ('resources', '0002_auto_20210712_1817'),
     ]
 
     operations = [
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='supplementarycontent',
             name='category',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supplementary_content', to='supplemental_content.category'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supplementary_content', to='resources.category'),
         ),
         migrations.AlterField(
             model_name='supplementarycontent',

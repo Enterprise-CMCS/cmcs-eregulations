@@ -7,8 +7,8 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from regcore.models import Part
 from .models import SearchIndex
 
-from supplemental_content.models import AbstractSupplementalContent
-from supplemental_content.serializers import FlatSupplementalContentSerializer
+from resources.models import AbstractSupplementalContent
+from resources.serializers import FlatSupplementalContentSerializer
 
 
 class SearchViewSerializer(serializers.ModelSerializer):

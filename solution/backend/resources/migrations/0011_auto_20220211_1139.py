@@ -7,7 +7,7 @@ from django.db import migrations
 # This didn't work in the previous migration because the "get_model" func reconstructs models from migrations, and custom save hooks are not included in that.
 def resave_locations(apps, schema_editor):
     try:
-        from supplemental_content.models import AbstractLocation
+        from resources.models import AbstractLocation
         locations = AbstractLocation.objects.all()
         for location in locations:
             location.save()
@@ -18,7 +18,7 @@ def resave_locations(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0010_abstractlocation_display_name'),
+        ('resources', '0010_abstractlocation_display_name'),
     ]
 
     operations = [

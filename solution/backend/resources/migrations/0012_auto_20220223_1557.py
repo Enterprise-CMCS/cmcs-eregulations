@@ -4,7 +4,7 @@ from django.db import migrations, models
 
 
 def set_not_null(apps, schema_editor):
-    AbstractLocation = apps.get_model("supplemental_content", "AbstractLocation")
+    AbstractLocation = apps.get_model("resources", "AbstractLocation")
     for i in AbstractLocation.objects.all():
         if i.display_name is None:
             i.display_name = ""
@@ -14,7 +14,7 @@ def set_not_null(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0011_auto_20220211_1139'),
+        ('resources', '0011_auto_20220211_1139'),
     ]
 
     operations = [

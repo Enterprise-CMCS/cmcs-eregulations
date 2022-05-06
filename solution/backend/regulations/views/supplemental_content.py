@@ -2,7 +2,7 @@ from django.views.generic.base import TemplateView
 from django.http import Http404
 from django.urls import reverse
 
-from supplemental_content.models import AbstractSupplementalContent
+from resources.models import AbstractSupplementalContent
 
 
 class SupplementalContentView(TemplateView):

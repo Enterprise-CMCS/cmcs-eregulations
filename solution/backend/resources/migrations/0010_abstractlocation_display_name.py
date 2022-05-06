@@ -4,7 +4,7 @@ from django.db import migrations, models
 
 
 def resave_locations(apps, schema_editor):
-    AbstractLocation = apps.get_model("supplemental_content", "AbstractLocation")
+    AbstractLocation = apps.get_model("resources", "AbstractLocation")
     locations = AbstractLocation.objects.all()
     for location in locations:
         location.save()
@@ -13,7 +13,7 @@ def resave_locations(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0009_alter_abstractsupplementalcontent_approved'),
+        ('resources', '0009_alter_abstractsupplementalcontent_approved'),
     ]
 
     operations = [

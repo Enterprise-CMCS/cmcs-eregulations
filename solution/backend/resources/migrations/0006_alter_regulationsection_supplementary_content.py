@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0005_auto_20210826_1455'),
+        ('resources', '0005_auto_20210826_1455'),
     ]
 
     operations = [
         migrations.AlterField(
             model_name='regulationsection',
             name='supplementary_content',
-            field=models.ManyToManyField(blank=True, related_name='sections', to='supplemental_content.SupplementaryContent'),
+            field=models.ManyToManyField(blank=True, related_name='sections', to='resources.SupplementaryContent'),
         ),
     ]

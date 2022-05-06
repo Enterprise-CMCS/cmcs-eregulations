@@ -1,5 +1,5 @@
 from django.test import TestCase
-from supplemental_content.views import _make_category_tree
+from resources.views import _make_category_tree
 
 
 class CategoryTreeTestCase(TestCase):

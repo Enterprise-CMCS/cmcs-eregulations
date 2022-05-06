@@ -17,9 +17,9 @@ def make_category(id, title, description, order):
 
 
 def migrate_categories(apps, schema_editor):
-    OldCategory = apps.get_model("supplemental_content", "OldCategory")
-    Category = apps.get_model("supplemental_content", "Category")
-    SubCategory = apps.get_model("supplemental_content", "SubCategory")
+    OldCategory = apps.get_model("resources", "OldCategory")
+    Category = apps.get_model("resources", "Category")
+    SubCategory = apps.get_model("resources", "SubCategory")
 
     # no cases of 3-level depth before now, so deal with 2 levels only
     old_categories = OldCategory.objects.all()
@@ -60,8 +60,8 @@ def migrate_categories(apps, schema_editor):
 
 
 def migrate_sections(apps, schema_editor):
-    OldRegulationSection = apps.get_model("supplemental_content", "OldRegulationSection")
-    Section = apps.get_model("supplemental_content", "Section")
+    OldRegulationSection = apps.get_model("resources", "OldRegulationSection")
+    Section = apps.get_model("resources", "Section")
     for section in OldRegulationSection.objects.all():
         Section.objects.create(
             title=int(section.title),
@@ -72,10 +72,10 @@ def migrate_sections(apps, schema_editor):
 
 
 def migrate_supplemental_content(apps, schema_editor):
-    OldSupplementaryContent = apps.get_model("supplemental_content", "OldSupplementaryContent")
-    SupplementalContent = apps.get_model("supplemental_content", "SupplementalContent")
-    AbstractCategory = apps.get_model("supplemental_content", "AbstractCategory")
-    Section = apps.get_model("supplemental_content", "Section")
+    OldSupplementaryContent = apps.get_model("resources", "OldSupplementaryContent")
+    SupplementalContent = apps.get_model("resources", "SupplementalContent")
+    AbstractCategory = apps.get_model("resources", "AbstractCategory")
+    Section = apps.get_model("resources", "Section")
 
     for content in OldSupplementaryContent.objects.all():
         # acquire category from old ID
@@ -115,7 +115,7 @@ def migrate_supplemental_content(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0007_auto_20210831_1612'),
+        ('resources', '0007_auto_20210831_1612'),
     ]
 
     operations = [
@@ -159,88 +159,88 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('approved', models.BooleanField(default=False)),
-                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supplemental_content', to='supplemental_content.abstractcategory')),
-                ('locations', models.ManyToManyField(blank=True, null=True, related_name='supplemental_content', to='supplemental_content.AbstractLocation')),
+                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='supplemental_content', to='resources.abstractcategory')),
+                ('locations', models.ManyToManyField(blank=True, null=True, related_name='supplemental_content', to='resources.AbstractLocation')),
             ],
             bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('abstractcategory_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractcategory')),
+                ('abstractcategory_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractcategory')),
             ],
             options={
                 'verbose_name': 'Category',
                 'verbose_name_plural': 'Categories',
             },
-            bases=('supplemental_content.abstractcategory',),
+            bases=('resources.abstractcategory',),
         ),
         migrations.CreateModel(
             name='Section',
             fields=[
-                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractlocation')),
+                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractlocation')),
                 ('section_id', models.IntegerField()),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='supplemental_content.abstractlocation')),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='resources.abstractlocation')),
                 ('old_id', models.IntegerField()),
             ],
             options={
                 'verbose_name': 'Section',
                 'verbose_name_plural': 'Sections',
             },
-            bases=('supplemental_content.abstractlocation',),
+            bases=('resources.abstractlocation',),
         ),
         migrations.CreateModel(
             name='SubCategory',
             fields=[
-                ('abstractcategory_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractcategory')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_categories', to='supplemental_content.category')),
+                ('abstractcategory_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractcategory')),
+                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_categories', to='resources.category')),
             ],
             options={
                 'verbose_name': 'Sub-category',
                 'verbose_name_plural': 'Sub-categories',
             },
-            bases=('supplemental_content.abstractcategory',),
+            bases=('resources.abstractcategory',),
         ),
         migrations.CreateModel(
             name='SubjectGroup',
             fields=[
-                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractlocation')),
+                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractlocation')),
                 ('subject_group_id', models.CharField(max_length=512)),
             ],
             options={
                 'verbose_name': 'Subject Group',
                 'verbose_name_plural': 'Subject Groups',
             },
-            bases=('supplemental_content.abstractlocation',),
+            bases=('resources.abstractlocation',),
         ),
         migrations.CreateModel(
             name='Subpart',
             fields=[
-                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractlocation')),
+                ('abstractlocation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractlocation')),
                 ('subpart_id', models.CharField(max_length=12)),
             ],
             options={
                 'verbose_name': 'Subpart',
                 'verbose_name_plural': 'Subparts',
             },
-            bases=('supplemental_content.abstractlocation',),
+            bases=('resources.abstractlocation',),
         ),
         migrations.CreateModel(
             name='SubSubCategory',
             fields=[
-                ('abstractcategory_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractcategory')),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_sub_categories', to='supplemental_content.subcategory')),
+                ('abstractcategory_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractcategory')),
+                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sub_sub_categories', to='resources.subcategory')),
             ],
             options={
                 'verbose_name': 'Sub-sub-category',
                 'verbose_name_plural': 'Sub-sub-categories',
             },
-            bases=('supplemental_content.abstractcategory',),
+            bases=('resources.abstractcategory',),
         ),
         migrations.CreateModel(
             name='SupplementalContent',
             fields=[
-                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractsupplementalcontent')),
+                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractsupplementalcontent')),
                 ('name', models.CharField(blank=True, max_length=512, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, max_length=512, null=True)),
@@ -250,7 +250,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Supplemental Content',
                 'verbose_name_plural': 'Supplemental Content',
             },
-            bases=('supplemental_content.abstractsupplementalcontent',),
+            bases=('resources.abstractsupplementalcontent',),
         ),
         migrations.RunPython(migrate_sections),
         migrations.RunPython(migrate_categories),

@@ -3,7 +3,7 @@ from datetime import datetime
 from django.urls import reverse
 
 from regcore.models import Part
-from supplemental_content.models import AbstractSupplementalContent
+from resources.models import AbstractSupplementalContent
 
 
 class PartSitemap(Sitemap):

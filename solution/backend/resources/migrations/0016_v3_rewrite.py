@@ -10,9 +10,9 @@ def exists(field):
 
 
 def convert_old_supp_content(apps, schema_editor):
-    TempSupplementalContent = apps.get_model("supplemental_content", "TempSupplementalContent")
-    SupplementalContent = apps.get_model("supplemental_content", "SupplementalContent")
-    FederalRegisterDocument = apps.get_model("supplemental_content", "FederalRegisterDocument")
+    TempSupplementalContent = apps.get_model("resources", "TempSupplementalContent")
+    SupplementalContent = apps.get_model("resources", "SupplementalContent")
+    FederalRegisterDocument = apps.get_model("resources", "FederalRegisterDocument")
 
     for old_content in TempSupplementalContent.objects.all():
         if exists(old_content.docket_number) or exists(old_content.document_number):
@@ -33,7 +33,7 @@ def convert_old_supp_content(apps, schema_editor):
 
 
 def delete_old_abstract_content(apps, schema_editor):
-    AbstractSupplementalContent = apps.get_model("supplemental_content", "AbstractSupplementalContent")
+    AbstractSupplementalContent = apps.get_model("resources", "AbstractSupplementalContent")
     for i in AbstractSupplementalContent.objects.all():
         try:
             _ = i.supplementalcontent
@@ -49,7 +49,7 @@ def delete_old_abstract_content(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0015_supplementalcontent_document_number'),
+        ('resources', '0015_supplementalcontent_document_number'),
     ]
 
     operations = [
@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FederalRegisterDocument',
             fields=[
-                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractsupplementalcontent')),
+                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractsupplementalcontent')),
                 ('name', models.CharField(blank=True, max_length=512, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, max_length=512, null=True)),
@@ -94,12 +94,12 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Federal Register Document',
                 'verbose_name_plural': 'Federal Register Documents',
             },
-            bases=('supplemental_content.abstractsupplementalcontent', models.Model),
+            bases=('resources.abstractsupplementalcontent', models.Model),
         ),
         migrations.CreateModel(
             name='SupplementalContent',
             fields=[
-                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='supplemental_content.abstractsupplementalcontent')),
+                ('abstractsupplementalcontent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.abstractsupplementalcontent')),
                 ('name', models.CharField(blank=True, max_length=512, null=True)),
                 ('description', models.TextField(blank=True, null=True)),
                 ('url', models.URLField(blank=True, max_length=512, null=True)),
@@ -109,7 +109,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Supplemental Content',
                 'verbose_name_plural': 'Supplemental Content',
             },
-            bases=('supplemental_content.abstractsupplementalcontent', models.Model),
+            bases=('resources.abstractsupplementalcontent', models.Model),
         ),
         migrations.RunPython(convert_old_supp_content),
         migrations.DeleteModel(
@@ -130,7 +130,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Name of the category as sent from the Federal Register parser.', max_length=512, unique=True)),
-                ('category', models.ForeignKey(help_text='The eRegs category to translate a Federal Register category into.', on_delete=django.db.models.deletion.CASCADE, related_name='federal_register_category_link', to='supplemental_content.abstractcategory')),
+                ('category', models.ForeignKey(help_text='The eRegs category to translate a Federal Register category into.', on_delete=django.db.models.deletion.CASCADE, related_name='federal_register_category_link', to='resources.abstractcategory')),
             ],
             options={
                 'verbose_name': 'Federal Register Category Link',

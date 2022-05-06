@@ -7,7 +7,7 @@ from django.db import migrations, models
 
 def resave_models(apps, schema_editor):
     try:
-        from supplemental_content.models import AbstractLocation, AbstractCategory, AbstractSupplementalContent
+        from resources.models import AbstractLocation, AbstractCategory, AbstractSupplementalContent
         for i in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractSupplementalContent.objects.all()):
             i.save()
     except:
@@ -17,7 +17,7 @@ def resave_models(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('supplemental_content', '0012_auto_20220223_1557'),
+        ('resources', '0012_auto_20220223_1557'),
     ]
 
     operations = [

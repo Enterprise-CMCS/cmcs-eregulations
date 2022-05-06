@@ -4,7 +4,7 @@ from django.forms import TextInput
 
 from solo.admin import SingletonModelAdmin
 
-from supplemental_content.admin import BaseAdmin
+from resources.admin import BaseAdmin
 from .models import ParserConfiguration, TitleConfiguration
 from .search.models import Synonym
 
