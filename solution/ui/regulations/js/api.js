@@ -30,6 +30,8 @@ const authHeader = (tok) => ({
 });
 
 function fetchJson(url, options = {}, retryCount = 0, apiPath) {
+    console.log("fetchJson url", url);
+    console.log("fetchJson apiPath", apiPath);
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
     let httpStatus;
@@ -192,6 +194,22 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
 }
 
 // ---------- api calls ---------------
+
+
+/**
+ * Returns the result from the all_parts endpoint
+ *
+ * @returns {Array} - a list of objects that represent a part of title 42
+ */
+
+const getAllParts = async (apiUrl) => {
+    return await httpApiGetLegacy(
+        `${apiUrl}all_parts`,
+        {}, // params, default
+        apiUrl
+    );
+};
+
 const getSupplementalContentLegacy = async (
     api_url,
     title = "42",
@@ -206,10 +224,47 @@ const getSupplementalContentLegacy = async (
     return result;
 };
 
+
+/**
+ *
+ * @param title {string} - The requested title, defaults to 42
+ * @param part {string} - The part of the title
+ * @param sections {Array[string]} - a list of the sections desired ([1,2,3...)
+ * @param subparts {Array[string]} - a list of the subparts desired (subpart=A&subpart=B...)
+ * @param q {string} - a word or phrase on which to search ("therapy")
+ * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
+ */
+const getSupplementalContentNew = async (
+    title,
+    part,
+    sections = [],
+    subparts = [],
+    start = 0,
+    max_results = 10000,
+    q = "",
+) => {
+    const queryString = q ? `&q=${q}` : "";
+    let sString = "";
+    for (let s in sections) {
+        sString = sString + "&sections=" + sections[s];
+    }
+    for (let sp in subparts) {
+        sString = sString + "&subparts=" + subparts[sp];
+    }
+    sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
+    const result = await httpApiGet(
+        `title/${title}/part/${part}/supplemental_content?${sString}`
+    );
+
+    return result;
+};
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
+    getAllParts,
     getSupplementalContentLegacy,
+    getSupplementalContentNew,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,

@@ -1,7 +1,10 @@
 <template>
     <div id="app" class="resources-view">
-        <ResourcesNav>
-            <form class="search-resources-form" @submit.prevent="executeSearch">
+        <ResourcesNav :resourcesDisplay="resourcesDisplay">
+            <form
+                class="search-resources-form"
+                @submit.prevent="executeSearch"
+            >
                 <v-text-field
                     outlined
                     flat
@@ -26,33 +29,44 @@
         >
             <div :class="filtersResourcesClass">
                 <ResourcesFilters
-                    v-if="resourcesDisplay === 'column'"
                     :resourcesDisplay="resourcesDisplay"
                     :filters="filters"
                     @select-filter="updateFilters"
                 />
             </div>
             <div :class="resultsResourcesClass">
+                <ResourcesSelections
+                    :filterParams="filterParams"
+                    @chip-filter="removeChip"
+                    @clear-selections="clearSelections"
+                />
+                <ResourcesResults
+                    :isLoading="isLoading"
+                    :content="supplementalContent"
+                />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import ResourcesNav from "@/components/resources/ResourcesNav.vue";
-import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 
-import _difference from "lodash/difference";
-import _isEmpty from "lodash/isEmpty";
-import _uniq from "lodash/uniq";
-
-/*import {*/
-    /*getAllParts,*/
+import {
+    getAllParts,
     /*getCategories,*/
     /*getSectionObjects,*/
     /*getSubPartsForPart,*/
     /*getSupplementalContentNew,*/
-/*} from "../../../js/api.js";*/
+} from "legacy/js/api";
+
+import ResourcesNav from "@/components/resources/ResourcesNav.vue";
+import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
+import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
+import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+
+import _difference from "lodash/difference";
+import _isEmpty from "lodash/isEmpty";
+import _uniq from "lodash/uniq";
 
 export default {
     name: "Resources",
@@ -60,9 +74,16 @@ export default {
     components: {
         ResourcesNav,
         ResourcesFilters,
+        ResourcesSelections,
+        ResourcesResults,
     },
 
-    props: {},
+    props: {
+        apiUrl: {
+            type: String,
+            default: "wrong again"
+        }
+    },
 
     data() {
         return {
@@ -140,102 +161,6 @@ export default {
             };
         },
     },
-
-    watch: {
-        "$route.params": {
-            async handler(toParams, previousParams) {
-                // react to route changes...
-            },
-        },
-        "$route.query": {
-            async handler(toQueries, previousQueries) {
-                this.queryParams = toQueries;
-            },
-        },
-        queryParams: {
-            // beware, some yucky code ahead...
-            async handler(newParams, oldParams) {
-                if (_isEmpty(newParams.part) && _isEmpty(newParams.q)) {
-                    // only get content if a part is selected or there's a search query
-                    // don't make supp content request here, but clear lists
-                    this.filters.subpart.listItems = [];
-                    this.filters.section.listItems = [];
-                    this.supplementalContent = [];
-
-                    return;
-                }
-
-                // always get content otherwise
-                this.getSupplementalContent(this.queryParams, this.searchQuery);
-
-                if (newParams.part) {
-                    // logic for populating select dropdowns
-                    if (_isEmpty(oldParams.part) && newParams.part) {
-                        this.getFormattedSubpartsList(this.queryParams.part);
-                        this.getFormattedSectionsList(
-                            this.queryParams.part,
-                            this.queryParams.subpart
-                        );
-                    } else if (
-                        _isEmpty(oldParams.subpart) &&
-                        newParams.subpart
-                    ) {
-                        this.getFormattedSectionsList(
-                            this.queryParams.part,
-                            this.queryParams.subpart
-                        );
-                    } else {
-                        const oldParts = oldParams.part.split(",");
-                        const newParts = newParams.part.split(",");
-
-                        if (newParts.length > oldParts.length) {
-                            const newPart = _difference(newParts, oldParts)[0];
-                            this.getFormattedSubpartsList(newPart);
-                            this.getFormattedSectionsList(
-                                newPart,
-                                this.queryParams.subpart
-                            );
-                        }
-                    }
-                }
-            },
-        },
-    },
-
-    beforeCreate() {},
-
-    async created() {
-        this.getFormattedPartsList();
-        this.getCategoryList();
-
-        if (this.queryParams?.part || this.queryParams?.q) {
-            if (this.queryParams?.q) {
-                this.searchQuery = this.queryParams.q;
-            }
-
-            this.getSupplementalContent(this.queryParams, this.searchQuery);
-
-            if (this.queryParams?.part) {
-                this.getFormattedSubpartsList(this.queryParams.part);
-                this.getFormattedSectionsList(
-                    this.queryParams.part,
-                    this.queryParams.subpart
-                );
-            }
-        }
-    },
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
 
     methods: {
         executeSearch() {
@@ -397,45 +322,141 @@ export default {
             }
         },
         async getFormattedPartsList() {
-            /*const partsList = await getAllParts();*/
-            /*this.filters.part.listItems = partsList.map((part) => {*/
-                /*return {*/
-                    /*name: part.name,*/
-                    /*label: part.structure.children[0].children[0].children[0]*/
-                        /*.label,*/
-                /*};*/
-            /*});*/
+            const partsList = await getAllParts(this.apiUrl);
+            this.filters.part.listItems = partsList.map((part) => {
+                return {
+                    name: part.name,
+                    label: part.structure.children[0].children[0].children[0]
+                        .label,
+                };
+            });
         },
         async getFormattedSubpartsList(part) {
-            /*this.filters.subpart.listItems = await getSubPartsForPart(part);*/
+            this.filters.subpart.listItems = await getSubPartsForPart(part);
         },
         async getFormattedSectionsList(part, subpart) {
-            /*this.filters.section.listItems = await getSectionObjects(*/
-                /*part,*/
-                /*subpart*/
-            /*);*/
+            this.filters.section.listItems = await getSectionObjects(
+                part,
+                subpart
+            );
         },
         async getCategoryList() {
-            /*const rawCats = await getCategories();*/
-            /*const reducedCats = rawCats*/
-                /*.filter((item) => item.object_type === "category")*/
-                /*.sort((a, b) =>*/
-                    /*a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1*/
-                /*)*/
-                /*.reduce((acc, item) => {*/
-                    /*acc[item.name] = item;*/
-                    /*acc[item.name].subcategories = [];*/
-                    /*return acc;*/
-                /*}, {});*/
-            /*rawCats.forEach((item) => {*/
-                /*if (item.object_type === "subcategory") {*/
-                    /*reducedCats[item.parent.name].subcategories.push(item);*/
-                /*}*/
-            /*});*/
-            /*this.filters.resourceCategory.listItems =*/
-                /*Object.values(reducedCats);*/
+            const rawCats = await getCategories();
+            const reducedCats = rawCats
+                .filter((item) => item.object_type === "category")
+                .sort((a, b) =>
+                    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+                )
+                .reduce((acc, item) => {
+                    acc[item.name] = item;
+                    acc[item.name].subcategories = [];
+                    return acc;
+                }, {});
+            rawCats.forEach((item) => {
+                if (item.object_type === "subcategory") {
+                    reducedCats[item.parent.name].subcategories.push(item);
+                }
+            });
+            this.filters.resourceCategory.listItems =
+                Object.values(reducedCats);
         },
     },
+
+    watch: {
+        "$route.params": {
+            async handler(toParams, previousParams) {
+                // react to route changes...
+            },
+        },
+        "$route.query": {
+            async handler(toQueries, previousQueries) {
+                this.queryParams = toQueries;
+            },
+        },
+        queryParams: {
+            // beware, some yucky code ahead...
+            async handler(newParams, oldParams) {
+                if (_isEmpty(newParams.part) && _isEmpty(newParams.q)) {
+                    // only get content if a part is selected or there's a search query
+                    // don't make supp content request here, but clear lists
+                    this.filters.subpart.listItems = [];
+                    this.filters.section.listItems = [];
+                    this.supplementalContent = [];
+
+                    return;
+                }
+
+                // always get content otherwise
+                this.getSupplementalContent(this.queryParams, this.searchQuery);
+
+                if (newParams.part) {
+                    // logic for populating select dropdowns
+                    if (_isEmpty(oldParams.part) && newParams.part) {
+                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSectionsList(
+                            this.queryParams.part,
+                            this.queryParams.subpart
+                        );
+                    } else if (
+                        _isEmpty(oldParams.subpart) &&
+                        newParams.subpart
+                    ) {
+                        this.getFormattedSectionsList(
+                            this.queryParams.part,
+                            this.queryParams.subpart
+                        );
+                    } else {
+                        const oldParts = oldParams.part.split(",");
+                        const newParts = newParams.part.split(",");
+
+                        if (newParts.length > oldParts.length) {
+                            const newPart = _difference(newParts, oldParts)[0];
+                            this.getFormattedSubpartsList(newPart);
+                            this.getFormattedSectionsList(
+                                newPart,
+                                this.queryParams.subpart
+                            );
+                        }
+                    }
+                }
+            },
+        },
+    },
+
+    beforeCreate() {},
+
+    async created() {
+        this.getFormattedPartsList();
+        this.getCategoryList();
+
+        if (this.queryParams?.part || this.queryParams?.q) {
+            if (this.queryParams?.q) {
+                this.searchQuery = this.queryParams.q;
+            }
+
+            this.getSupplementalContent(this.queryParams, this.searchQuery);
+
+            if (this.queryParams?.part) {
+                this.getFormattedSubpartsList(this.queryParams.part);
+                this.getFormattedSectionsList(
+                    this.queryParams.part,
+                    this.queryParams.subpart
+                );
+            }
+        }
+    },
+
+    beforeMount() {},
+
+    mounted() {},
+
+    beforeUpdate() {},
+
+    updated() {},
+
+    beforeDestroy() {},
+
+    destroyed() {},
 };
 </script>
 
@@ -453,6 +474,22 @@ export default {
         display: flex;
         flex-direction: column;
         flex: 1;
+    }
+
+    .resources-content-container-sidebar {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .filters-sidebar {
+        display: flex;
+        flex: 0 0 430px;
+        max-width: 430px;
+    }
+
+    .results-sidebar {
+        flex: 1;
+        padding: 40px 80px 0;
     }
 
     .search-resources-form {

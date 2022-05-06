@@ -22,6 +22,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
+            legacy: path.resolve(__dirname, "../../regulations"),
             "@": path.resolve(__dirname, "src"),
         },
     },
