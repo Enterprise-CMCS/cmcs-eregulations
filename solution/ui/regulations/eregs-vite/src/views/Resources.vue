@@ -54,8 +54,8 @@
 import {
     getAllParts,
     getCategories,
-    /*getSectionObjects,*/
-    /*getSubPartsForPart,*/
+    getSectionObjects,
+    getSubPartsForPart,
     /*getSupplementalContentNew,*/
 } from "legacy/js/api";
 
@@ -332,12 +332,13 @@ export default {
             });
         },
         async getFormattedSubpartsList(part) {
-            this.filters.subpart.listItems = await getSubPartsForPart(part);
+            this.filters.subpart.listItems = await getSubPartsForPart(this.apiUril, part);
         },
         async getFormattedSectionsList(part, subpart) {
             this.filters.section.listItems = await getSectionObjects(
+                this.apiUrl,
                 part,
-                subpart
+                subpart,
             );
         },
         async getCategoryList() {

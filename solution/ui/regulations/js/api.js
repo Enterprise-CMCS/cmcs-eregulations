@@ -218,6 +218,74 @@ const getCategories = async (apiUrl) => httpApiGetLegacy(
     apiUrl
 );
 
+/**
+ *
+ * Fetches all_parts and returns a list of objects for the subparts in that part
+ * Each object has a label and an identifier
+ * @param {string} apiUrl - api url from django environment
+ * @param {string} part - the name of a part in title 42
+ * @returns {Object<{label:string, identifier:string}>}
+ */
+const getSubPartsForPart = async (apiUrl, part) => {
+    // if part is string of multiple parts, use final part
+    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
+    const all_parts = await getAllParts(apiUrl);
+    const parts = all_parts.map((d) => d.name);
+    const potentialSubParts =
+        all_parts[parts.indexOf(part)].structure.children[0].children[0]
+            .children[0].children;
+    const subParts = potentialSubParts.filter((p) => p.type === "subpart");
+    return subParts.map((s) => {
+        return {
+            label: s.label,
+            identifier: s.identifier[0],
+            range: s.descendant_range,
+        };
+    });
+};
+
+/**
+ *
+ * Fetches all_parts and returns formatted section objects for the part (and subpart if specified)
+ * @param {string} apiUrl - api url from django environment
+ * @param {string} part - a part in title 42
+ * @param {?string} subPart - a subpart in title 42 ("A", "B", etc) - undefined returns all sections for part
+ * @returns {Array[Object]} - an array of formatted objects for the section or subpart
+ */
+const getSectionObjects = async (apiUrl, part, subPart) => {
+    // if part is string of multiple parts, use final part
+    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
+    const all_parts = await getAllParts(apiUrl);
+    const parts = all_parts.map((d) => d.name);
+    const potentialSubParts =
+        all_parts[parts.indexOf(part)].structure.children[0].children[0]
+            .children[0].children;
+    if (subPart) {
+        const parent = potentialSubParts.find(
+            (p) => p.type === "subpart" && p.identifier[0] === subPart
+        );
+        return parent.children.map((c) => {
+            return {
+                identifier: c.identifier[1],
+                label: c.label_level,
+                description: c.label_description,
+            };
+        });
+    } else {
+        return potentialSubParts
+            .filter((p) => p.type === "subpart")
+            .flatMap((p) =>
+                p.children.map((c) => {
+                    return {
+                        identifier: c.identifier[1],
+                        label: c.label_level,
+                        description: c.label_description,
+                    };
+                })
+            );
+    }
+};
+
 const getSupplementalContentLegacy = async (
     api_url,
     title = "42",
@@ -272,6 +340,8 @@ const getSupplementalContentNew = async (
 export {
     getAllParts,
     getCategories,
+    getSectionObjects,
+    getSubPartsForPart,
     getSupplementalContentLegacy,
     getSupplementalContentNew,
     getCacheKeys,
