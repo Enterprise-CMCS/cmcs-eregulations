@@ -7,6 +7,9 @@ from .models import (
     Section,
     Subpart,
     FederalRegisterCategoryLink,
+    AbstractResource,
+    SupplementalContent,
+    FederalRegisterDocument,
 )
 
 
@@ -62,6 +65,41 @@ class SubpartSerializer(AbstractLocationSerializer):
 class SectionSerializer(AbstractLocationSerializer):
     section_id = serializers.IntegerField()
     parent = serializers.PrimaryKeyRelatedField(read_only=True)
+
+
+class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
+    def get_serializer_map(self):
+        return {
+            SupplementalContent: ("supplemental_content", SupplementalContentSerializer),
+            FederalRegisterDocument: ("federal_register_doc", FederalRegisterDocumentSerializer),
+        }
+
+
+class AbstractResourceSerializer(serializers.Serializer):
+    created_at = serializers.CharField()
+    updated_at = serializers.CharField()
+    approved = serializers.BooleanField()
+    category = AbstractCategoryPolymorphicSerializer()
+    locations = AbstractLocationPolymorphicSerializer(many=True)
+
+
+class DateFieldSerializer(serializers.Serializer):
+    date = serializers.CharField()
+
+
+class TypicalResourceFieldsSerializer(DateFieldSerializer):
+    name = serializers.CharField()
+    description = serializers.CharField()
+    url = serializers.CharField()
+
+
+class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
+    pass
+
+
+class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
+    docket_number = serializers.CharField()
+    document_number = serializers.CharField()
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):

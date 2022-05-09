@@ -22,11 +22,3 @@ urlpatterns = [
     path("sup_by_id/title/<title>/part/<part>", sup_list, name="sup-by-id-list"),
     path("all_sup", AllSupplementalContentView.as_view()),
 ]
-
-# /supplemental_content?title=42&part=433
-
-# /v3/supplemental_content/categories
-
-# categories - 
-# locations - 
-# sup_by_id - flat list of integers representing ids for supp content in <title>-<part>
