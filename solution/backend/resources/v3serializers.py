@@ -20,7 +20,7 @@ class PolymorphicSerializer(serializers.Serializer):
     def to_representation(self, instance):
         instance_type = type(instance)
         if instance_type in self.get_serializer_map():
-            data = self.get_serializer_map()[instance_type][1](instance=instance).data
+            data = self.get_serializer_map()[instance_type][1](instance=instance, context=self.context).data
             data["type"] = self.get_serializer_map()[instance_type][0]
             return data
 
@@ -98,10 +98,10 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     def get_name_headline(self, obj):
-        return getattr(obj, "supplementalcontent__name_headline", None)
+        return getattr(obj, self.context["search_map"]["supplementalcontent__name_headline"], None)
 
     def get_description_headline(self, obj):
-        return getattr(obj, "supplementalcontent__description_headline", None)
+        return getattr(obj, self.context["search_map"]["supplementalcontent__description_headline"], None)
 
 
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
@@ -109,16 +109,16 @@ class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResou
     document_number = serializers.CharField()
 
     def get_name_headline(self, obj):
-        return getattr(obj, "federalregisterdocument__name_headline", None)
+        return getattr(obj, self.context["search_map"]["federalregisterdocument__name_headline"], None)
 
     def get_description_headline(self, obj):
-        return getattr(obj, "federalregisterdocument__description_headline", None)
+        return getattr(obj, self.context["search_map"]["federalregisterdocument__description_headline"], None)
 
     def get_docket_number_headline(self, obj):
-        return getattr(obj, "federalregisterdocument__docket_number_headline", None)
+        return getattr(obj, self.context["search_map"]["federalregisterdocument__docket_number_headline"], None)
 
     def get_document_number_headline(self, obj):
-        return getattr(obj, "federalregisterdocument__document_number_headline", None)
+        return getattr(obj, self.context["search_map"]["federalregisterdocument__document_number_headline"], None)
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):

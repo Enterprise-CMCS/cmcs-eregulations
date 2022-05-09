@@ -28,6 +28,7 @@ from .v3serializers import (
     AbstractCategoryPolymorphicSerializer,
     AbstractLocationPolymorphicSerializer,
     AbstractResourcePolymorphicSerializer,
+    SupplementalContentSerializer,
 )
 from regcore.serializers import StringListSerializer
 
@@ -48,10 +49,7 @@ class LocationViewSet(viewsets.ModelViewSet):
 
 class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = AbstractResourcePolymorphicSerializer
-    queryset = AbstractResource.objects.all().select_subclasses().prefetch_related(
-        Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
-        Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
-    )
+    model = AbstractResource
 
     def get_search_fields(self):
         return [
@@ -62,7 +60,18 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
             ("federalregisterdocument__docket_number", "A"),
             ("federalregisterdocument__document_number", "A"),
         ]
-    
+
+    def get_search_map(self):
+        fields = {}
+        for i in self.get_search_fields():
+            fields[f"{i[0]}_headline"] = f"{i[0]}_headline"
+        return fields
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["search_map"] = self.get_search_map()
+        return context
+
     def get_search_vectors(self):
         fields = self.get_search_fields()
         v = SearchVector(fields[0][0], weight=fields[0][1], config="english")
@@ -109,7 +118,10 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
         return queries
 
     def get_queryset(self):
-        query = super().get_queryset()
+        query = self.model.objects.all().select_subclasses().prefetch_related(
+            Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
+            Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
+        )
 
         locations = self.request.GET.getlist("locations")
         categories = self.request.GET.getlist("categories")
@@ -141,9 +153,21 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
         return query
 
 
-class SupplementalContentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = SupplementalContent.objects.all()
+class SupplementalContentViewSet(AbstractResourceViewSet):
+    serializer_class = SupplementalContentSerializer
+    model = SupplementalContent
 
+    def get_search_fields(self):
+        return [
+            ("name", "A"),
+            ("description", "A"),
+        ]
+    
+    def get_search_map(self):
+        return {
+            "supplementalcontent__name_headline": "name_headline",
+            "supplementalcontent__description_headline": "description_headline",
+        }
 
 class FederalRegisterDocsViewSet(viewsets.ModelViewSet):
     queryset = FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
