@@ -83,11 +83,15 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
         search_query = self.request.GET.get("q")
 
         q_queries = self.parse_locations(locations)
+
         if q_queries:
             q_obj = q_queries[0]
             for q in q_queries[1:]:
                 q_obj |= q
             query = query.filter(q_obj)
+        
+        if categories:
+            query = query.filter(category__id__in=categories)
 
         return query
 
