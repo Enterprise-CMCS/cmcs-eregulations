@@ -42,9 +42,11 @@ jobs:
           pip install -r ./solution/static-assets/requirements.txt
       # build the static assets for the website
       - name: build static assets
+        if: success() && steps.findPr.outputs.number
         env:
           STATIC_URL: http://localhost:8888/
           STATIC_ROOT: ../static-assets/regulations
+          VITE_PR: dev-${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution
           make regulations

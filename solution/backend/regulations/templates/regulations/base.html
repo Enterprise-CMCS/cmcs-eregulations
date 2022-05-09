@@ -29,6 +29,7 @@ CSS/Javascript etc., should inherit from this template.
             {% endblock %}
         </title>
         {% include "regulations/partials/favicon.html" %}
+        {% block spa_styles %}{% endblock %}
         <link rel="stylesheet" href="{% static '/css/main.css' %}" />
     </head>
 
@@ -38,7 +39,9 @@ CSS/Javascript etc., should inherit from this template.
 
             {% include "../browser_not_supported.html" %}
 
-            {% include "regulations/partials/flash_banner.html" %}
+            {% block flash_banner %}
+                {% include "regulations/partials/flash_banner.html" %}
+            {% endblock %}
 
             {% block header %}
                 <header id="header" class="sticky">
