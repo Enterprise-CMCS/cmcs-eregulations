@@ -45,37 +45,35 @@ class LocationViewSet(viewsets.ModelViewSet):
 
 
 class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = AbstractResourcePolymorphicSerializer
     queryset = AbstractResource.objects.all().select_subclasses().prefetch_related(
         Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
         Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
     )
 
-    serializer_class = AbstractResourcePolymorphicSerializer
-
     def parse_locations(self, locations):
-        titles = []
-        parts = []
-        sections = []
-        subparts = []
-
+        queries = []
         for loc in locations:
             split = loc.split("-")
             length = len(split)
-            
+
             if length < 1 or \
                (length >= 1 and not is_int(split[0])) or \
                (length >= 2 and (not is_int(split[0]) or not is_int(split[1]))):
                 raise BadRequest(f"\"{loc}\" is not a valid title, part, section, or subpart!")
-            
-            if length == 1 and split[0] not in titles:
-                titles.append(split[0])
-            elif length == 2 and (split[0], split[1]) not in parts:
-                parts.append((split[0], split[1]))
-            elif length == 3:
-                l = (split[0], split[1], split[2])
-                (sections if is_int(l[2]) else subparts).append(l)
-        
-        return (titles, parts, sections, subparts)
+
+            q = Q(locations__title=split[0])
+            if length > 1:
+                q &= Q(locations__part=split[1])
+                if length > 2:
+                    q &= (
+                        Q(locations__section__section_id=split[2])
+                        if is_int(split[2])
+                        else Q(locations__subpart__subpart_id=split[2])
+                    )
+
+            queries.append(q)
+        return queries
 
     def get_queryset(self):
         query = super().get_queryset()
@@ -84,20 +82,13 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
 
-        (titles, parts, sections, subparts) = self.parse_locations(locations)
-
-        q_queries = []
-        if titles:
-            q_queries.append(Q(locations__title__in=titles))
-        for p in parts:
-            q_queries.append(Q(locations__title=p[0]) & Q(locations__part=p[1]))
-
-        q_obj = q_queries[0] if q_queries else None
-        if q_obj:
+        q_queries = self.parse_locations(locations)
+        if q_queries:
+            q_obj = q_queries[0]
             for q in q_queries[1:]:
                 q_obj |= q
-        
-        query = query.filter(q_obj)
+            query = query.filter(q_obj)
+
         return query
 
 
