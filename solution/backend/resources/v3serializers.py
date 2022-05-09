@@ -91,15 +91,34 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
     url = serializers.CharField()
+    
+    name_headline = serializers.SerializerMethodField()
+    description_headline = serializers.SerializerMethodField()
 
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
-    pass
+    def get_name_headline(self, obj):
+        return getattr(obj, "supplementalcontent__name_headline", None)
+
+    def get_description_headline(self, obj):
+        return getattr(obj, "supplementalcontent__description_headline", None)
 
 
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     docket_number = serializers.CharField()
     document_number = serializers.CharField()
+
+    def get_name_headline(self, obj):
+        return getattr(obj, "federalregisterdocument__name_headline", None)
+
+    def get_description_headline(self, obj):
+        return getattr(obj, "federalregisterdocument__description_headline", None)
+
+    def get_docket_number_headline(self, obj):
+        return getattr(obj, "federalregisterdocument__docket_number_headline", None)
+
+    def get_document_number_headline(self, obj):
+        return getattr(obj, "federalregisterdocument__document_number_headline", None)
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):

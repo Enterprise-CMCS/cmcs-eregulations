@@ -6,6 +6,8 @@ from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q
 from django.core.exceptions import BadRequest
 
+from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
+
 from .utils import is_int
 
 from .models import (
@@ -51,6 +53,37 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
         Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
     )
 
+    def get_search_fields(self):
+        return [
+            ("supplementalcontent__name", "A"),
+            ("supplementalcontent__description", "A"),
+            ("federalregisterdocument__name", "A"),
+            ("federalregisterdocument__description", "A"),
+            ("federalregisterdocument__docket_number", "A"),
+            ("federalregisterdocument__document_number", "A"),
+        ]
+    
+    def get_search_vectors(self):
+        fields = self.get_search_fields()
+        v = SearchVector(fields[0][0], weight=fields[0][1], config="english")
+        for i in fields[1:]:
+            v += SearchVector(i[0], weight=i[1], config="english")
+        return v
+    
+    def get_search_headlines(self, search_query, search_type):
+        fields = self.get_search_fields()
+        annotations = {}
+        for field in fields:
+            annotations[f"{field[0]}_headline"] = SearchHeadline(
+                field[0],
+                SearchQuery(search_query, search_type=search_type, config="english"),
+                start_sel='<span class="search-headline">',
+                stop_sel='</span>',
+                config="english",
+                highlight_all=True,
+            )
+        return annotations
+
     def parse_locations(self, locations):
         queries = []
         for loc in locations:
@@ -83,7 +116,6 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
         search_query = self.request.GET.get("q")
 
         q_queries = self.parse_locations(locations)
-
         if q_queries:
             q_obj = q_queries[0]
             for q in q_queries[1:]:
@@ -92,6 +124,19 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
         
         if categories:
             query = query.filter(category__id__in=categories)
+
+        if search_query:
+            (search_type, cover_density) = (
+                ("phrase", True)
+                if search_query.startswith('"') and search_query.endswith('"')
+                else ("plain", False)
+            )
+
+            query = query.annotate(rank=SearchRank(
+                self.get_search_vectors(),
+                SearchQuery(search_query, search_type=search_type, config="english"),
+                cover_density=cover_density,
+            )).filter(rank__gte=0.2).annotate(**self.get_search_headlines(search_query, search_type))
 
         return query
 
