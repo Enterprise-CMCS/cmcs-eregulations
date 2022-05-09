@@ -30,8 +30,6 @@ const authHeader = (tok) => ({
 });
 
 function fetchJson(url, options = {}, retryCount = 0, apiPath) {
-    console.log("fetchJson url", url);
-    console.log("fetchJson apiPath", apiPath);
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
     let httpStatus;
@@ -202,13 +200,23 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
  * @returns {Array} - a list of objects that represent a part of title 42
  */
 
-const getAllParts = async (apiUrl) => {
-    return await httpApiGetLegacy(
-        `${apiUrl}all_parts`,
-        {}, // params, default
-        apiUrl
-    );
-};
+const getAllParts = async (apiUrl) => httpApiGetLegacy(
+    `${apiUrl}all_parts`,
+    {}, // params, default
+    apiUrl
+);
+
+/**
+ * Returns the result from the categories endpoint
+ *
+ * @returns {Array} - a list of objects that represent possible supp content categories and subcategories
+ */
+
+const getCategories = async (apiUrl) => httpApiGetLegacy(
+    `${apiUrl}categories`,
+    {}, // params, default
+    apiUrl
+);
 
 const getSupplementalContentLegacy = async (
     api_url,
@@ -263,6 +271,7 @@ const getSupplementalContentNew = async (
 
 export {
     getAllParts,
+    getCategories,
     getSupplementalContentLegacy,
     getSupplementalContentNew,
     getCacheKeys,

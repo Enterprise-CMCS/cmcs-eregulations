@@ -53,7 +53,7 @@
 
 import {
     getAllParts,
-    /*getCategories,*/
+    getCategories,
     /*getSectionObjects,*/
     /*getSubPartsForPart,*/
     /*getSupplementalContentNew,*/
@@ -341,7 +341,7 @@ export default {
             );
         },
         async getCategoryList() {
-            const rawCats = await getCategories();
+            const rawCats = await getCategories(this.apiUrl);
             const reducedCats = rawCats
                 .filter((item) => item.object_type === "category")
                 .sort((a, b) =>
