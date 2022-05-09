@@ -12,7 +12,7 @@ import localforage from "localforage";
 
 import { delay, parseError } from "./utils";
 
-let config = {
+const config = {
     fetchMode: "cors",
     maxRetryCount: 2,
 };
@@ -164,6 +164,19 @@ function fetchJson(url, options = {}, retryCount = 0, apiPath) {
         });
 }
 
+// ---------- cache helpers -----------
+
+const getCacheKeys = async () => localforage.keys();
+
+const removeCacheItem = async (key) => localforage.removeItem(key);
+
+const getCacheItem = async (key) => localforage.getItem(key);
+
+const setCacheItem = async (key, data) => {
+    data.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
+    return localforage.setItem(key, data);
+};
+
 // ---------- helper functions ---------------
 function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
     return fetchJson(
@@ -197,5 +210,9 @@ const getSupplementalContentLegacy = async (
 
 export {
     getSupplementalContentLegacy,
+    getCacheKeys,
+    removeCacheItem,
+    getCacheItem,
+    setCacheItem,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

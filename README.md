@@ -67,7 +67,7 @@ Running `make test` after `make local` will run the cypress suite of end to end 
 
 ## Working with assets ##
 
-`make watch`: scss and js files can be watched an automatically compiled
+`make watch-all`: scss and js files can be watched an automatically compiled.
 
 ## Exporting data from Production ##
 
