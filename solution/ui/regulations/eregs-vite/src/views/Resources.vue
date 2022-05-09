@@ -56,7 +56,7 @@ import {
     getCategories,
     getSectionObjects,
     getSubPartsForPart,
-    /*getSupplementalContentNew,*/
+    getSupplementalContentNew,
 } from "legacy/js/api";
 
 import ResourcesNav from "@/components/resources/ResourcesNav.vue";
@@ -263,6 +263,7 @@ export default {
                 // map over parts and return promises to put in Promise.all
                 const partPromises = queryParamsObj.part.map((part) => {
                     return getSupplementalContentNew(
+                        this.apiUrl,
                         42,
                         part,
                         queryParamsObj.sections,

@@ -303,6 +303,7 @@ const getSupplementalContentLegacy = async (
 
 /**
  *
+ * @param {string} apiUrl - api url from django environment
  * @param title {string} - The requested title, defaults to 42
  * @param part {string} - The part of the title
  * @param sections {Array[string]} - a list of the sections desired ([1,2,3...)
@@ -311,6 +312,7 @@ const getSupplementalContentLegacy = async (
  * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
  */
 const getSupplementalContentNew = async (
+    apiUrl,
     title,
     part,
     sections = [],
@@ -328,8 +330,8 @@ const getSupplementalContentNew = async (
         sString = sString + "&subparts=" + subparts[sp];
     }
     sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
-    const result = await httpApiGet(
-        `title/${title}/part/${part}/supplemental_content?${sString}`
+    const result = await httpApiGetLegacy(
+        `${apiUrl}title/${title}/part/${part}/supplemental_content?${sString}`
     );
 
     return result;
