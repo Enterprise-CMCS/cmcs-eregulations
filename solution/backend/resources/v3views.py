@@ -29,6 +29,7 @@ from .v3serializers import (
     AbstractLocationPolymorphicSerializer,
     AbstractResourcePolymorphicSerializer,
     SupplementalContentSerializer,
+    FederalRegisterDocumentSerializer,
 )
 from regcore.serializers import StringListSerializer
 
@@ -169,8 +170,8 @@ class SupplementalContentViewSet(AbstractResourceViewSet):
             "supplementalcontent__description_headline": "description_headline",
         }
 
-class FederalRegisterDocsViewSet(viewsets.ModelViewSet):
-    queryset = FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
+class FederalRegisterDocsViewSet(AbstractResourceViewSet):
+    model = FederalRegisterDocument
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -193,4 +194,25 @@ class FederalRegisterDocsViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == "PUT":
             return FederalRegisterDocumentCreateSerializer
-        return StringListSerializer
+        return FederalRegisterDocumentSerializer
+
+    def get_search_fields(self):
+        return [
+            ("name", "A"),
+            ("description", "A"),
+            ("docket_number", "A"),
+            ("document_number", "A"),
+        ]
+
+    def get_search_map(self):
+        return {
+            "federalregisterdocument__name_headline": "name_headline",
+            "federalregisterdocument__description_headline": "description_headline",
+            "federalregisterdocument__docket_number_headline": "docket_number_headline",
+            "federalregisterdocument__document_number_headline": "document_number_headline",
+        }
+
+
+class FederalRegisterDocsNumberViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
+    serializer_class = StringListSerializer

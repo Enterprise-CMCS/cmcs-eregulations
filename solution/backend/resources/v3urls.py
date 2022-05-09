@@ -4,6 +4,7 @@ from .v3views import (
     AbstractResourceViewSet,
     SupplementalContentViewSet,
     FederalRegisterDocsViewSet,
+    FederalRegisterDocsNumberViewSet,
     CategoryViewSet,
     LocationViewSet,
 )
@@ -19,6 +20,9 @@ urlpatterns = [
     path("federal_register_docs", FederalRegisterDocsViewSet.as_view({
         "get": "list",
         "put": "update",
+    })),
+    path("federal_register_docs/by_doc_number", FederalRegisterDocsNumberViewSet.as_view({
+        "get": "list",
     })),
     path("categories", CategoryViewSet.as_view({
         "get": "list",
