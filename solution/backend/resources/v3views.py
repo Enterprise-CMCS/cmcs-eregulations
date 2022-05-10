@@ -3,7 +3,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.core.exceptions import BadRequest
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Case, When, F
 from django.core.exceptions import BadRequest
 
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
@@ -51,6 +51,9 @@ class LocationViewSet(viewsets.ModelViewSet):
 class ResourceExplorerViewSetMixin:
     def get_search_fields(self):
         raise NotImplementedError
+    
+    def compute_dates(self, query):
+        return query.annotate(date_annotated=F("date"))
     
     def get_search_map(self):
         fields = {}
@@ -141,12 +144,25 @@ class ResourceExplorerViewSetMixin:
                 cover_density=cover_density,
             )).filter(rank__gte=0.2).annotate(**self.get_search_headlines(search_query, search_type))
 
-        return query.distinct()
+        return self.compute_dates(query.distinct()).order_by("-rank" if search_query else "-date_annotated")
 
 
 class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = AbstractResourcePolymorphicSerializer
     model = AbstractResource
+
+    def compute_dates(self, query):
+        return query.annotate(date_annotated=Case(
+            When(
+                supplementalcontent__isnull=False,
+                then=F("supplementalcontent__date"),
+            ),
+            When(
+                federalregisterdocument__isnull=False,
+                then=F("federalregisterdocument__date"),
+            ),
+            default=None,
+        ))
 
     def get_search_fields(self):
         return {
