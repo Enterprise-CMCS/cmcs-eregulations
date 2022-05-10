@@ -35,7 +35,7 @@
                         </div>
                         <div class="related-sections">
                             <span class="related-sections-title">
-                                Related Section<span v-if="item.locations.length > 1">s</span>:
+                                Related Regulation<span v-if="item.locations.length > 1">s</span>:
                             </span>
                             <span v-if="item.locations.length > 1">§§ </span>
                             <span v-else>§ </span>
