@@ -77,7 +77,7 @@ import {
     getCategories,
     getSectionObjects,
     getSubPartsForPart,
-    getSupplementalContentNew
+    getSupplementalContentNew,
 } from "@/utilities/api";
 
 export default {
@@ -140,7 +140,7 @@ export default {
                 },
             },
             supplementalContent: [],
-            searchInputValue: ""
+            searchInputValue: "",
         };
     },
 
@@ -268,7 +268,7 @@ export default {
                 const parts = queryParamsObj.part.split(",");
                 queryParamsObj.part = queryParamsObj.part.split(",");
                 let partDict = {};
-                for (let x in parts) {
+                for (const x in parts) {
                     partDict[parts[x]] = { sections: [], subparts: [] };
                 }
 
@@ -279,21 +279,21 @@ export default {
                             part: x.match(/^\d+/)[0],
                             section: x.match(/\d+$/)[0],
                         }));
-                    for (let section in sections) {
+                    for (const section in sections) {
                         partDict[sections[section].part].sections.push(
                             sections[section].section
                         );
                     }
                 }
                 if (queryParamsObj.subpart) {
-                    let subparts = queryParamsObj.subpart
+                    const subparts = queryParamsObj.subpart
                         .split(",")
                         .map((x) => ({
                             part: x.match(/^\d+/)[0],
                             subparts: x.match(/\w+$/)[0],
                         }));
 
-                    for (let subpart in subparts) {
+                    for (const subpart in subparts) {
                         partDict[subparts[subpart].part].subparts.push(
                             subparts[subpart].subparts
                         );
@@ -320,7 +320,7 @@ export default {
                         resultArray,
                         true
                     );
-                    
+
                     this.supplementalContent = this.queryParams.resourceCategory
                         ? this.filterCategories(transformedResults)
                         : transformedResults;
