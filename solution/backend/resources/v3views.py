@@ -53,7 +53,10 @@ class ResourceExplorerViewSetMixin:
         raise NotImplementedError
     
     def get_search_map(self):
-        raise NotImplementedError
+        fields = {}
+        for i in self.get_search_fields().items():
+            fields[f"{i[0]}_headline"] = f"{i[1][0]}_headline"
+        return fields
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -61,14 +64,14 @@ class ResourceExplorerViewSetMixin:
         return context
 
     def get_search_vectors(self):
-        fields = self.get_search_fields()
+        fields = list(self.get_search_fields().values())
         v = SearchVector(fields[0][0], weight=fields[0][1], config="english")
         for i in fields[1:]:
             v += SearchVector(i[0], weight=i[1], config="english")
         return v
     
     def get_search_headlines(self, search_query, search_type):
-        fields = self.get_search_fields()
+        fields = self.get_search_fields().values()
         annotations = {}
         for field in fields:
             annotations[f"{field[0]}_headline"] = SearchHeadline(
@@ -146,20 +149,14 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
     model = AbstractResource
 
     def get_search_fields(self):
-        return [
-            ("supplementalcontent__name", "A"),
-            ("supplementalcontent__description", "A"),
-            ("federalregisterdocument__name", "A"),
-            ("federalregisterdocument__description", "A"),
-            ("federalregisterdocument__docket_number", "A"),
-            ("federalregisterdocument__document_number", "A"),
-        ]
-
-    def get_search_map(self):
-        fields = {}
-        for i in self.get_search_fields():
-            fields[f"{i[0]}_headline"] = f"{i[0]}_headline"
-        return fields
+        return {
+            "supplementalcontent__name": ("supplementalcontent__name", "A"),
+            "supplementalcontent__description": ("supplementalcontent__description", "A"),
+            "federalregisterdocument__name": ("federalregisterdocument__name", "A"),
+            "federalregisterdocument__description": ("federalregisterdocument__description", "A"),
+            "federalregisterdocument__docket_number": ("federalregisterdocument__docket_number", "A"),
+            "federalregisterdocument__document_number": ("federalregisterdocument__document_number", "A"),
+        }
 
 
 class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
@@ -167,16 +164,11 @@ class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnly
     model = SupplementalContent
 
     def get_search_fields(self):
-        return [
-            ("name", "A"),
-            ("description", "A"),
-        ]
-    
-    def get_search_map(self):
         return {
-            "supplementalcontent__name_headline": "name_headline",
-            "supplementalcontent__description_headline": "description_headline",
+            "supplementalcontent__name": ("name", "A"),
+            "supplementalcontent__description": ("description", "A"),
         }
+
 
 class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelViewSet):
     model = FederalRegisterDocument
@@ -205,19 +197,11 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         return FederalRegisterDocumentSerializer
 
     def get_search_fields(self):
-        return [
-            ("name", "A"),
-            ("description", "A"),
-            ("docket_number", "A"),
-            ("document_number", "A"),
-        ]
-
-    def get_search_map(self):
         return {
-            "federalregisterdocument__name_headline": "name_headline",
-            "federalregisterdocument__description_headline": "description_headline",
-            "federalregisterdocument__docket_number_headline": "docket_number_headline",
-            "federalregisterdocument__document_number_headline": "document_number_headline",
+            "federalregisterdocument__name": ("name", "A"),
+            "federalregisterdocument__description": ("description", "A"),
+            "federalregisterdocument__docket_number": ("docket_number", "A"),
+            "federalregisterdocument__document_number": ("document_number", "A"),
         }
 
 
