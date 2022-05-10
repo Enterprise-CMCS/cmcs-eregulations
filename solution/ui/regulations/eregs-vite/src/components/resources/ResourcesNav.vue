@@ -2,13 +2,24 @@
     <div class="nav-container">
         <div class="content">
             <h1>Resources</h1>
-            <p class="descriptive-text">
-                Resources are curated and updated by a Medicaid subject matter
-                expert. Final Rules, NPRMs, and RFIs  are automatically pulled
-                from the
-                <a href="https://www.federalregister.gov/" target="_blank"
-                    >Federal Register</a
-                >.
+            <p>
+                Find public documents related to policy research, including
+                proposed and final rules published
+                <a
+                    href="https://www.federalregister.gov/agencies/centers-for-medicare-medicaid-services"
+                    target="_blank"
+                    class="external"
+                >in the Federal Register</a>
+                and subregulatory guidance and implementation resources
+                published
+                <a
+                    href="https://www.medicaid.gov/federal-policy-guidance/index.html"
+                    target="_blank"
+                    class="external"
+                >by CMS</a>.
+            </p>
+            <p>
+                <a :href="aboutUrl">How these links are added and connected to regulation sections.</a>
             </p>
             <slot></slot>
         </div>
@@ -16,13 +27,17 @@
 </template>
 
 <script>
-
 export default {
     name: "ResourcesNav",
 
     components: {},
 
-    props: {},
+    props: {
+        aboutUrl: {
+            type: String,
+            default: "/about/"
+        },
+    },
 
     beforeCreate() {},
 
@@ -65,12 +80,8 @@ export default {
             margin-bottom: 15px;
         }
 
-        p.descriptive-text {
+        p:last-of-type {
             margin-bottom: 30px;
-        }
-
-        a::after {
-            @include external-link;
         }
     }
 }

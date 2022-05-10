@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="resources-view">
-        <ResourcesNav :resourcesDisplay="resourcesDisplay">
+        <ResourcesNav :resourcesDisplay="resourcesDisplay" :aboutUrl="aboutUrl">
             <form
                 class="search-resources-form"
                 @submit.prevent="executeSearch"
@@ -81,7 +81,11 @@ export default {
     props: {
         apiUrl: {
             type: String,
-            default: "wrong again"
+            default: "/v2/"
+        },
+        aboutUrl: {
+            type: String,
+            default: "/about/"
         }
     },
 
