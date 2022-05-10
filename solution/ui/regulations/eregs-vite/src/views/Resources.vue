@@ -91,14 +91,6 @@ export default {
             queryParams: this.$route.query,
             resourcesDisplay: "column",
             filters: {
-                title: {
-                    label: "Title",
-                    buttonTitle: "Select Title",
-                    buttonId: "select-title",
-                    listType: "TitlePartList",
-                    listItems: [],
-                    disabled: true,
-                },
                 part: {
                     label: "Part",
                     buttonTitle: "Select Parts",
