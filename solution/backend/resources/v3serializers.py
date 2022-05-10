@@ -79,8 +79,20 @@ class AbstractResourceSerializer(serializers.Serializer):
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
-    category = AbstractCategoryPolymorphicSerializer()
-    locations = AbstractLocationPolymorphicSerializer(many=True)
+
+    def get_fields(self):
+        fields = super(AbstractResourceSerializer, self).get_fields()
+        fields["category"] = (
+            AbstractCategoryPolymorphicSerializer()
+            if self.context.get("category_details", "true").lower() == "true"
+            else serializers.PrimaryKeyRelatedField(read_only=True)
+        )
+        fields["locations"] = (
+            AbstractLocationPolymorphicSerializer(many=True)
+            if self.context.get("location_details", "true").lower() == "true"
+            else serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+        )
+        return fields
 
 
 class DateFieldSerializer(serializers.Serializer):
@@ -107,6 +119,9 @@ class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceF
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     docket_number = serializers.CharField()
     document_number = serializers.CharField()
+
+    docket_number_headline = serializers.SerializerMethodField()
+    document_number_headline = serializers.SerializerMethodField()
 
     def get_name_headline(self, obj):
         return getattr(obj, self.context["search_map"]["federalregisterdocument__name_headline"], None)

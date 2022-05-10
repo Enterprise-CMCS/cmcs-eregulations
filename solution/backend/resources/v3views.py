@@ -64,6 +64,8 @@ class ResourceExplorerViewSetMixin:
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context["search_map"] = self.get_search_map()
+        context["category_details"] = self.request.GET.get("category_details", True)
+        context["location_details"] = self.request.GET.get("location_details", True)
         return context
 
     def get_search_vectors(self):
