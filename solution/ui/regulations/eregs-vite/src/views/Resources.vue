@@ -43,6 +43,7 @@
                 <ResourcesResults
                     :isLoading="isLoading"
                     :content="supplementalContent"
+                    :partsList="filters.part.listItems"
                 />
             </div>
         </div>
@@ -326,6 +327,7 @@ export default {
                     name: part.name,
                     label: part.structure.children[0].children[0].children[0]
                         .label,
+                    date: part.date,
                 };
             });
         },

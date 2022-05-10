@@ -39,22 +39,20 @@
                             </span>
                             <span v-if="item.locations.length > 1">§§ </span>
                             <span v-else>§ </span>
-                            <span
-                                v-for="(location, idx) in item.locations"
-                                :key="location.display_name + idx"
-                                class="related-section-link"
-                            >
-                                <router-link
-                                    :to="{
-                                        name: 'part',
-                                        params: {
-                                            title: location.title,
-                                            part: location.part,
-                                        },
-                                    }"
-                                >{{location.display_name | locationLabel}}</router-link>
-                                <span v-if="idx + 1 != item.locations.length"> | </span>
-                            </span>
+                            <template v-for="(location, i) in item.locations">
+                                <span
+                                    v-if="partsArray.includes(location.part)"
+                                    :key="location.display_name + i"
+                                    class="related-section-link"
+                                >
+                                    <a
+                                        :href="location | locationUrl(partsList)"
+                                    >
+                                        {{ location.display_name | locationLabel }}
+                                    </a>
+                                    <span v-if="i + 1 != item.locations.length" > | </span>
+                                </span>
+                            </template>
                         </div>
                     </div>
                 </template>
@@ -75,34 +73,52 @@ export default {
         SupplementalContentObject,
     },
 
+    filters: {
+        locationLabel(value) {
+            return value.substring(3);
+        },
+        locationUrl(value, partsList) {
+            const partDate = partsList.find(
+                (partObj) => parseInt(partObj.name, 10) === value.part
+            ).date;
+            const partHash = value.display_name
+                .split(" ")[1]
+                .replace(/\./g, "-");
+            return `/42/${value.part}/${partDate}/#${partHash}`;
+        },
+    },
+
     props: {
         content: {
             type: Array,
             required: false,
-            default: [],
+            default: () => [],
         },
         isLoading: {
             type: Boolean,
             required: false,
             default: false,
         },
+        partsList: {
+            type: Array,
+            required: true,
+            default: () => [],
+        },
     },
 
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
+    data() {},
 
     computed: {
+        partsArray() {
+            return this.partsList.map((part) => parseInt(part.name, 10));
+        },
         sortedContent() {
             let results = this.content
-                .filter((category) => {
-                    return (
+                .filter(
+                    (category) =>
                         category.supplemental_content?.length ||
                         category.sub_categories?.length
-                    );
-                })
+                )
                 .flatMap((category) => {
                     const returnArr = [];
                     if (category.sub_categories?.length) {
@@ -136,12 +152,6 @@ export default {
             });
 
             return results;
-        },
-    },
-
-    filters: {
-        locationLabel(value) {
-            return value.substring(3);
         },
     },
 };
@@ -205,6 +215,10 @@ export default {
             .related-sections-title {
                 font-weight: 600;
                 color: $dark_gray;
+            }
+
+            a {
+                text-decoration: none;
             }
         }
     }
