@@ -45,6 +45,10 @@ class SubCategorySerializer(CategorySerializer):
     parent = CategorySerializer()
 
 
+class CategoryTreeSerializer(CategorySerializer):
+    sub_categories = CategorySerializer(many=True)
+
+
 class AbstractLocationPolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {

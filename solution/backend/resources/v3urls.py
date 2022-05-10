@@ -6,6 +6,7 @@ from .v3views import (
     FederalRegisterDocsViewSet,
     FederalRegisterDocsNumberViewSet,
     CategoryViewSet,
+    CategoryTreeViewSet,
     LocationViewSet,
 )
 
@@ -27,16 +28,11 @@ urlpatterns = [
     path("categories", CategoryViewSet.as_view({
         "get": "list",
     })),
-    # path("category_tree", CategoryTreeViewSet.as_view({
-    #     "get": "list",
-    # })),
+    path("category_tree", CategoryTreeViewSet.as_view({
+        "get": "list",
+    })),
     path("locations", LocationViewSet.as_view({
         "get": "list",
         "post": "create",
     })),
 ]
-
-# resources/ - get all resources regardless of subtype
-#       - supplemental_content - get supplemental content specifically, list or single object
-#       - federal_register_doc - get fr doc list, single object, or put
-#       - 

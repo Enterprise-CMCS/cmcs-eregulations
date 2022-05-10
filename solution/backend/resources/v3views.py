@@ -30,17 +30,28 @@ from .v3serializers import (
     AbstractResourcePolymorphicSerializer,
     SupplementalContentSerializer,
     FederalRegisterDocumentSerializer,
+    CategoryTreeSerializer,
 )
 from regcore.serializers import StringListSerializer
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").order_by("order")
     serializer_class = AbstractCategoryPolymorphicSerializer
+
+
+class CategoryTreeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all().select_subclasses().prefetch_related(
+        Prefetch("sub_categories", SubCategory.objects.all().order_by("order")),
+    ).order_by("order")
+    serializer_class = CategoryTreeSerializer
 
 
 class LocationViewSet(viewsets.ModelViewSet):
     queryset = AbstractLocation.objects.all().select_subclasses()
+
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     
     def get_serializer_class(self):
         if self.request.method == "POST":
