@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q, Case, When, F
 from django.core.exceptions import BadRequest
+from rest_framework.pagination import PageNumberPagination
 
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 
@@ -35,19 +36,39 @@ from .v3serializers import (
 from regcore.serializers import StringListSerializer
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class ViewSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
+class OptionalPaginationMixin:
+    paginate_by_default = True
+
+    @property
+    def pagination_class(self):
+        paginate = self.request.GET.get(
+            "paginate",
+            "true" if self.paginate_by_default else "false"
+        ).lower() == "true"
+        return ViewSetPagination if paginate else None
+
+
+class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+    paginate_by_default = False
     queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").order_by("order")
     serializer_class = AbstractCategoryPolymorphicSerializer
 
 
-class CategoryTreeViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+    paginate_by_default = False
     queryset = Category.objects.all().select_subclasses().prefetch_related(
         Prefetch("sub_categories", SubCategory.objects.all().order_by("order")),
     ).order_by("order")
     serializer_class = CategoryTreeSerializer
 
 
-class LocationViewSet(viewsets.ModelViewSet):
+class LocationViewSet(OptionalPaginationMixin, viewsets.ModelViewSet):
     queryset = AbstractLocation.objects.all().select_subclasses()
 
     authentication_classes = [SettingsAuthentication]
@@ -59,7 +80,7 @@ class LocationViewSet(viewsets.ModelViewSet):
         return AbstractLocationPolymorphicSerializer
 
 
-class ResourceExplorerViewSetMixin:
+class ResourceExplorerViewSetMixin(OptionalPaginationMixin):
     def get_search_fields(self):
         raise NotImplementedError
     
@@ -75,8 +96,8 @@ class ResourceExplorerViewSetMixin:
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context["search_map"] = self.get_search_map()
-        context["category_details"] = self.request.GET.get("category_details", True)
-        context["location_details"] = self.request.GET.get("location_details", True)
+        context["category_details"] = self.request.GET.get("category_details", "true")
+        context["location_details"] = self.request.GET.get("location_details", "true")
         return context
 
     def get_search_vectors(self):
@@ -234,6 +255,7 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         }
 
 
-class FederalRegisterDocsNumberViewSet(viewsets.ReadOnlyModelViewSet):
+class FederalRegisterDocsNumberViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+    paginate_by_default = False
     queryset = FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
     serializer_class = StringListSerializer
