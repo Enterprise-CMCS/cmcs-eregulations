@@ -48,25 +48,12 @@ class LocationViewSet(viewsets.ModelViewSet):
         return AbstractLocationPolymorphicSerializer
 
 
-class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = AbstractResourcePolymorphicSerializer
-    model = AbstractResource
-
+class ResourceExplorerViewSetMixin:
     def get_search_fields(self):
-        return [
-            ("supplementalcontent__name", "A"),
-            ("supplementalcontent__description", "A"),
-            ("federalregisterdocument__name", "A"),
-            ("federalregisterdocument__description", "A"),
-            ("federalregisterdocument__docket_number", "A"),
-            ("federalregisterdocument__document_number", "A"),
-        ]
-
+        raise NotImplementedError
+    
     def get_search_map(self):
-        fields = {}
-        for i in self.get_search_fields():
-            fields[f"{i[0]}_headline"] = f"{i[0]}_headline"
-        return fields
+        raise NotImplementedError
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -151,10 +138,31 @@ class AbstractResourceViewSet(viewsets.ReadOnlyModelViewSet):
                 cover_density=cover_density,
             )).filter(rank__gte=0.2).annotate(**self.get_search_headlines(search_query, search_type))
 
-        return query
+        return query.distinct()
 
 
-class SupplementalContentViewSet(AbstractResourceViewSet):
+class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = AbstractResourcePolymorphicSerializer
+    model = AbstractResource
+
+    def get_search_fields(self):
+        return [
+            ("supplementalcontent__name", "A"),
+            ("supplementalcontent__description", "A"),
+            ("federalregisterdocument__name", "A"),
+            ("federalregisterdocument__description", "A"),
+            ("federalregisterdocument__docket_number", "A"),
+            ("federalregisterdocument__document_number", "A"),
+        ]
+
+    def get_search_map(self):
+        fields = {}
+        for i in self.get_search_fields():
+            fields[f"{i[0]}_headline"] = f"{i[0]}_headline"
+        return fields
+
+
+class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SupplementalContentSerializer
     model = SupplementalContent
 
@@ -170,7 +178,7 @@ class SupplementalContentViewSet(AbstractResourceViewSet):
             "supplementalcontent__description_headline": "description_headline",
         }
 
-class FederalRegisterDocsViewSet(AbstractResourceViewSet):
+class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelViewSet):
     model = FederalRegisterDocument
 
     authentication_classes = [SettingsAuthentication]

@@ -65,6 +65,9 @@ class AbstractCategory(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self._meta.verbose_name})"
+    
+    class Meta:
+        ordering = ["order", "name"]
 
 
 class Category(AbstractCategory):
@@ -168,6 +171,7 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
         return f"{self.date} {self.name} {self.description[:50]}"
 
     class Meta:
+        ordering = ["-date", "name", "description"]
         verbose_name = "Supplemental Content"
         verbose_name_plural = "Supplemental Content"
 
@@ -180,5 +184,6 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
         return f"{self.date} {self.document_number}: {self.name}"
 
     class Meta:
+        ordering = ["-date", "document_number", "docket_number", "name", "description"]
         verbose_name = "Federal Register Document"
         verbose_name_plural = "Federal Register Documents"

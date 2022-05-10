@@ -137,4 +137,16 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Federal Register Category Links',
             },
         ),
+        migrations.AlterModelOptions(
+            name='abstractcategory',
+            options={'ordering': ['order', 'name']},
+        ),
+        migrations.AlterModelOptions(
+            name='federalregisterdocument',
+            options={'ordering': ['-date', 'document_number', 'docket_number', 'name', 'description'], 'verbose_name': 'Federal Register Document', 'verbose_name_plural': 'Federal Register Documents'},
+        ),
+        migrations.AlterModelOptions(
+            name='supplementalcontent',
+            options={'ordering': ['-date', 'name', 'description'], 'verbose_name': 'Supplemental Content', 'verbose_name_plural': 'Supplemental Content'},
+        ),
     ]

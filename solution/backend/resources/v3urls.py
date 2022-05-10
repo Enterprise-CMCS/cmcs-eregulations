@@ -21,7 +21,7 @@ urlpatterns = [
         "get": "list",
         "put": "update",
     })),
-    path("federal_register_docs/by_doc_number", FederalRegisterDocsNumberViewSet.as_view({
+    path("federal_register_docs/doc_numbers", FederalRegisterDocsNumberViewSet.as_view({
         "get": "list",
     })),
     path("categories", CategoryViewSet.as_view({
