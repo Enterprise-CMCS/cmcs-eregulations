@@ -294,6 +294,7 @@ export default {
             } else if (searchQuery) {
                 try {
                     const searchResults = await getSupplementalContentNew(
+                        this.apiUrl,
                         "all", // titles
                         "all", // parts
                         [], // sections
