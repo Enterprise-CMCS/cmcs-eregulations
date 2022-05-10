@@ -12,6 +12,8 @@ from .views import (
 sup_list = SupByIdViewSet.as_view({'get': 'list'})
 location_sup_list = SupByLocationViewSet.as_view({'get': 'list'})
 
+# TODO: remove these endpoints after v3 move is complete
+
 category_list = CategoriesViewSet.as_view({'get': 'list'})
 urlpatterns = [
     path("title/<title>/part/<part>/supplemental_content", SupplementalContentView.as_view()),

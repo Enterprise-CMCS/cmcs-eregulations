@@ -13,6 +13,7 @@ from .models import (
     SubCategory,
 )
 
+# TODO: remove these serializers and replace with v3serializers.py
 
 class PolymorphicSerializer(serializers.Serializer):
     def get_serializer_map(self):

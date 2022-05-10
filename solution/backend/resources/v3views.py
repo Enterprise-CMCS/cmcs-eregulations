@@ -22,7 +22,7 @@ from .models import (
     Subpart,
 )
 
-from .views import SettingsAuthentication
+from regcore.views import SettingsAuthentication
 
 from .v3serializers import (
     FederalRegisterDocumentCreateSerializer,

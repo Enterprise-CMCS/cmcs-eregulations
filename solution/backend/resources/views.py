@@ -17,6 +17,8 @@ from drf_spectacular.utils import (
     OpenApiTypes,
 )
 
+from regcore.views import SettingsAuthentication
+
 from .models import (
     AbstractResource,
     AbstractCategory,
@@ -34,18 +36,7 @@ from .serializers import (
     SuppByLocationSerializer
 )
 
-
-class SettingsUser:
-    is_authenticated = False
-
-
-class SettingsAuthentication(authentication.BasicAuthentication):
-    def authenticate_credentials(self, userid, password, request=None):
-        if userid == settings.HTTP_AUTH_USER and password == settings.HTTP_AUTH_PASSWORD:
-            user = SettingsUser()
-            user.is_authenticated = True
-            return (user, None)
-        raise exceptions.AuthenticationFailed('No such user')
+# TODO: remove these views and replace with v3views.py
 
 
 class CategoriesViewSet(viewsets.ModelViewSet):
