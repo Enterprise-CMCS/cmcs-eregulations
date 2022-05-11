@@ -199,8 +199,8 @@ export default {
         routeToResources() {
             const identifiers = this.selectedIdentifier.reduce((acc, item) => {
                 acc[this.selectedScope]
-                    ? (acc[this.selectedScope] += `,${item}`)
-                    : (acc[this.selectedScope] = `${item}`);
+                    ? (acc[this.selectedScope] += `,${this.part}-${item}`)
+                    : (acc[this.selectedScope] = `${this.part}-${item}`);
                 return acc;
             }, {});
 
