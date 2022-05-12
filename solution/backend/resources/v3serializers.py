@@ -13,6 +13,20 @@ from .models import (
 )
 
 
+class OptionalFieldDetailsMixin:
+    def get_fields(self):
+        fields = super().get_fields()
+        d = getattr(self, "optional_details", None) 
+        if d:
+            for i in d.items():
+                fields[i[0]] = (
+                    i[1][2](many=i[1][3])
+                    if self.context.get(i[1][0], i[1][1]).lower() == "true"
+                    else serializers.PrimaryKeyRelatedField(many=i[1][3], read_only=True)
+                )
+        return fields
+
+
 class PolymorphicSerializer(serializers.Serializer):
     def get_serializer_map(self):
         raise NotImplementedError
@@ -23,6 +37,7 @@ class PolymorphicSerializer(serializers.Serializer):
             data = self.get_serializer_map()[instance_type][1](instance=instance, context=self.context).data
             data["type"] = self.get_serializer_map()[instance_type][0]
             return data
+        return "Serializer not available"
 
 
 class AbstractCategoryPolymorphicSerializer(PolymorphicSerializer):
@@ -41,8 +56,10 @@ class CategorySerializer(serializers.Serializer):
     show_if_empty = serializers.BooleanField()
 
 
-class SubCategorySerializer(CategorySerializer):
-    parent = CategorySerializer()
+class SubCategorySerializer(OptionalFieldDetailsMixin, CategorySerializer):
+    optional_details = {
+        "parent": ("parent_details", "true", CategorySerializer, False),
+    }
 
 
 class CategoryTreeSerializer(CategorySerializer):
@@ -79,24 +96,15 @@ class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
         }
 
 
-class AbstractResourceSerializer(serializers.Serializer):
+class AbstractResourceSerializer(OptionalFieldDetailsMixin, serializers.Serializer):
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
 
-    def get_fields(self):
-        fields = super(AbstractResourceSerializer, self).get_fields()
-        fields["category"] = (
-            AbstractCategoryPolymorphicSerializer()
-            if self.context.get("category_details", "true").lower() == "true"
-            else serializers.PrimaryKeyRelatedField(read_only=True)
-        )
-        fields["locations"] = (
-            AbstractLocationPolymorphicSerializer(many=True)
-            if self.context.get("location_details", "true").lower() == "true"
-            else serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-        )
-        return fields
+    optional_details = {
+        "category": ("category_details", "true", AbstractCategoryPolymorphicSerializer, False),
+        "locations": ("location_details", "true", AbstractLocationPolymorphicSerializer, True),
+    }
 
 
 class DateFieldSerializer(serializers.Serializer):

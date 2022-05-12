@@ -59,6 +59,11 @@ class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").order_by("order")
     serializer_class = AbstractCategoryPolymorphicSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["parent_details"] = self.request.GET.get("parent_details", "true")
+        return context
+
 
 class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
