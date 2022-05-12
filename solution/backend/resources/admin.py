@@ -147,6 +147,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     list_display = ("date", "name", "description", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
+    fields = ("approved", "name", "description", "date", "url", "category", "locations", "internal_notes")
 
 
 @admin.register(FederalRegisterDocument)
@@ -154,6 +155,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     list_display = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at")
     search_fields = ["date", "name", "description", "docket_number", "document_number"]
+    fields = ("approved", "docket_number", "document_number", "name", "description", "date", "url", "category", "locations", "internal_notes")
 
 
 # Custom app list function, allows ordering Django Admin models by "admin_priority", low to high
