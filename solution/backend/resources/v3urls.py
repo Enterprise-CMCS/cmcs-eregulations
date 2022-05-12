@@ -33,6 +33,6 @@ urlpatterns = [
     })),
     path("locations", LocationViewSet.as_view({
         "get": "list",
-        "post": "create",
+        #"post": "create", # TODO: add in another v3 ticket
     })),
 ]

@@ -166,7 +166,7 @@ class AllSupplementalContentView(APIView):
         query = query.prefetch_related(
                 Prefetch(
                     'locations',
-                    queryset=AbstractLocation.objects.all()
+                    queryset=AbstractLocation.objects.all().select_subclasses()
                 )
             ).distinct().select_subclasses(SupplementalContent).order_by(
                 "-supplementalcontent__date"
@@ -214,9 +214,9 @@ class SupplementalContentByPartView(APIView):
     )
     def get(self, request, format=None):
         part = request.GET.get('part', '')
-        results = AbstractLocation.objects.filter(part=part).annotate(
+        results = AbstractLocation.objects.filter(part=part).select_subclasses().annotate(
             num_locations=Count(
-                'supplemental_content', filter=Q(supplemental_content__approved="t")
+                'resources', filter=Q(resources__approved="t")
             )).filter(
             num_locations__gt=0)
         data = {}
@@ -228,10 +228,10 @@ class SupplementalContentByPartView(APIView):
 class SupByLocationViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
-        queryset = AbstractLocation.objects.prefetch_related(
+        queryset = AbstractLocation.objects.all().select_subclasses().prefetch_related(
                     Prefetch(
-                        'supplemental_content',
-                        queryset=AbstractResource.objects.filter(approved=True).select_subclasses(SupplementalContent)
+                        'resources',
+                        queryset=AbstractResource.objects.filter(approved=True).select_subclasses()
                     ))
         serializer = SuppByLocationSerializer(queryset, many=True)
         response_dict = {}
@@ -246,7 +246,7 @@ class SupByLocationViewSet(viewsets.ModelViewSet):
                 identifier = item['display_name'].split()[1].split('.')
 
             newsup = []
-            for content in item['supplemental_content']:
+            for content in item['resources']:
                 newsup.append(content['id'])
 
             if len(identifier) > 1 or is_subpart:
@@ -280,7 +280,7 @@ class SupByIdViewSet(viewsets.ViewSet):
         ).prefetch_related(
                     Prefetch(
                         'locations',
-                        queryset=AbstractLocation.objects.all()
+                        queryset=AbstractLocation.objects.all().select_subclasses()
                     )
                 ).prefetch_related(
                     Prefetch(

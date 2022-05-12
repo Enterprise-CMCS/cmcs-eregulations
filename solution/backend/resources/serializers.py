@@ -277,7 +277,8 @@ class IndividualSupSerializer(PolymorphicSerializer):
 
 
 class SuppByLocationSerializer(serializers.ModelSerializer):
-    supplemental_content = SupIDSerializer(many=True)
+    resources = SupIDSerializer(many=True)
+    display_name = serializers.CharField()
 
     def get_serializer_map(self):
         return {
