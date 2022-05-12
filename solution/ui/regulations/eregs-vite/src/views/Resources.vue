@@ -44,6 +44,7 @@
                     :isLoading="isLoading"
                     :content="supplementalContent"
                     :partsList="filters.part.listItems"
+                    :partsLastUpdated="partsLastUpdated"
                 />
             </div>
         </div>
@@ -55,6 +56,7 @@
 import {
     getAllParts,
     getCategories,
+    getLastUpdatedDates,
     getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentNew,
@@ -95,6 +97,7 @@ export default {
             isLoading: false,
             queryParams: this.$route.query,
             resourcesDisplay: "column",
+            partsLastUpdated: {},
             filters: {
                 part: {
                     label: "Part",
@@ -320,6 +323,10 @@ export default {
                 this.isLoading = false;
             }
         },
+        async getPartLastUpdatedDates() {
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
+            console.log(this.partsLastUpdated);
+        },
         async getFormattedPartsList() {
             const partsList = await getAllParts(this.apiUrl);
             this.filters.part.listItems = partsList.map((part) => {
@@ -332,7 +339,7 @@ export default {
             });
         },
         async getFormattedSubpartsList(part) {
-            this.filters.subpart.listItems = await getSubPartsForPart(this.apiUril, part);
+            this.filters.subpart.listItems = await getSubPartsForPart(this.apiUrl, part);
         },
         async getFormattedSectionsList(part, subpart) {
             this.filters.section.listItems = await getSectionObjects(
@@ -427,6 +434,7 @@ export default {
     beforeCreate() {},
 
     async created() {
+        this.getPartLastUpdatedDates()
         this.getFormattedPartsList();
         this.getCategoryList();
 

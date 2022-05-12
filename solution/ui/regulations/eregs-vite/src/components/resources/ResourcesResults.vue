@@ -41,12 +41,12 @@
                             <span v-else>§ </span>
                             <template v-for="(location, i) in item.locations">
                                 <span
-                                    v-if="partsArray.includes(location.part)"
+                                    v-if="partsLastUpdated[location.part]"
                                     :key="location.display_name + i"
                                     class="related-section-link"
                                 >
                                     <a
-                                        :href="location | locationUrl(partsList)"
+                                        :href="location | locationUrl(partsLastUpdated)"
                                     >
                                         {{ location.display_name | locationLabel }}
                                     </a>
@@ -63,7 +63,7 @@
 
 <script>
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
-import _uniqBy from "lodash/uniq";
+import _uniqBy from "lodash/uniqBy";
 import _has from "lodash/has";
 
 export default {
@@ -77,10 +77,8 @@ export default {
         locationLabel(value) {
             return value.substring(3);
         },
-        locationUrl(value, partsList) {
-            const partDate = partsList.find(
-                (partObj) => parseInt(partObj.name, 10) === value.part
-            ).date;
+        locationUrl(value, partsLastUpdated) {
+            const partDate = partsLastUpdated[value.part];
             const partHash = value.display_name
                 .split(" ")[1]
                 .replace(/\./g, "-");
@@ -99,19 +97,16 @@ export default {
             required: false,
             default: false,
         },
-        partsList: {
-            type: Array,
+        partsLastUpdated: {
+            type: Object,
             required: true,
-            default: () => [],
-        },
+            default: () => {},
+        }
     },
 
     data() {},
 
     computed: {
-        partsArray() {
-            return this.partsList.map((part) => parseInt(part.name, 10));
-        },
         sortedContent() {
             let results = this.content
                 .filter(

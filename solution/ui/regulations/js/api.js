@@ -192,7 +192,26 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
 }
 
 // ---------- api calls ---------------
+const getLastUpdatedDates = async (apiUrl, title = "42") => {
+    const reducer = (accumulator, currentValue) => {
+        // key by partname, value by latest date
+        // if partname is not in accumulator, add it
+        // if partname is in accumulator, compare the dates and update the accumulator
+        currentValue.partName.forEach((partName) => {
+            if (!accumulator[partName]) {
+                accumulator[partName] = currentValue.date;
+            } else if (currentValue.date > accumulator[partName]) {
+                accumulator[partName] = currentValue.date;
+            }
+        });
 
+        return accumulator;
+    };
+
+    const result = await httpApiGetLegacy(`${apiUrl}title/${title}/existing`);
+
+    return result.reduce(reducer, {});
+};
 
 /**
  * Returns the result from the all_parts endpoint
@@ -200,11 +219,12 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
  * @returns {Array} - a list of objects that represent a part of title 42
  */
 
-const getAllParts = async (apiUrl) => httpApiGetLegacy(
-    `${apiUrl}all_parts`,
-    {}, // params, default
-    apiUrl
-);
+const getAllParts = async (apiUrl) =>
+    httpApiGetLegacy(
+        `${apiUrl}all_parts`,
+        {}, // params, default
+        apiUrl
+    );
 
 /**
  * Returns the result from the categories endpoint
@@ -212,11 +232,12 @@ const getAllParts = async (apiUrl) => httpApiGetLegacy(
  * @returns {Array} - a list of objects that represent possible supp content categories and subcategories
  */
 
-const getCategories = async (apiUrl) => httpApiGetLegacy(
-    `${apiUrl}categories`,
-    {}, // params, default
-    apiUrl
-);
+const getCategories = async (apiUrl) =>
+    httpApiGetLegacy(
+        `${apiUrl}categories`,
+        {}, // params, default
+        apiUrl
+    );
 
 /**
  *
@@ -300,7 +321,6 @@ const getSupplementalContentLegacy = async (
     return result;
 };
 
-
 /**
  *
  * @param {string} apiUrl - api url from django environment
@@ -319,7 +339,7 @@ const getSupplementalContentNew = async (
     subparts = [],
     start = 0,
     max_results = 10000,
-    q = "",
+    q = ""
 ) => {
     const queryString = q ? `&q=${q}` : "";
     let sString = "";
@@ -329,7 +349,13 @@ const getSupplementalContentNew = async (
     for (let sp in subparts) {
         sString = sString + "&subparts=" + subparts[sp];
     }
-    sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
+    sString =
+        sString +
+        "&start=" +
+        start +
+        "&max_results=" +
+        max_results +
+        queryString;
     const result = await httpApiGetLegacy(
         `${apiUrl}title/${title}/part/${part}/supplemental_content?${sString}`
     );
@@ -342,6 +368,7 @@ const getSupplementalContentNew = async (
 export {
     getAllParts,
     getCategories,
+    getLastUpdatedDates,
     getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentLegacy,
