@@ -51,11 +51,17 @@ class TypicalResourceFieldsMixin(DateFieldMixin, InternalNotesFieldMixin):
         abstract = True
 
 
+class DisplayNameFieldMixin:
+    @property
+    def display_name(self):
+        return str(self)
+
+
 # Category types
 # Current choice is one model per level due to constraint of exactly 2 levels.
 
 
-class AbstractCategory(models.Model):
+class AbstractCategory(models.Model, DisplayNameFieldMixin):
     name = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
@@ -115,7 +121,7 @@ class FederalRegisterCategoryLink(models.Model):
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
 
 
-class AbstractLocation(models.Model):
+class AbstractLocation(models.Model, DisplayNameFieldMixin):
     title = models.IntegerField()
     part = models.IntegerField()
 
@@ -154,7 +160,7 @@ class Section(AbstractLocation):
 # All types of resources must inherit from AbstractResource.
 
 
-class AbstractResource(models.Model):
+class AbstractResource(models.Model, DisplayNameFieldMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=True)

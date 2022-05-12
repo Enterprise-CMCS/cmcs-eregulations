@@ -116,7 +116,7 @@ class SupplementalContentView(generics.ListAPIView):
         query = query.prefetch_related(
                     Prefetch(
                         'locations',
-                        queryset=AbstractLocation.objects.all()
+                        queryset=AbstractLocation.objects.all().select_subclasses()
                     )
                 ).prefetch_related(
                     Prefetch(
