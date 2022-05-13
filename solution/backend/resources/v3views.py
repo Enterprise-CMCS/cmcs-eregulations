@@ -37,12 +37,21 @@ from .v3serializers import (
     FullSectionSerializer,
     FullSubpartSerializer,
     AbstractResourceSerializer,
+    SubCategorySerializer,
+    AbstractLocationSerializer,
 )
 from regcore.serializers import StringListSerializer
 
 
 def OpenApiQueryParameter(name, description, type, required):
     return OpenApiParameter(name=name, description=description, required=required, type=type, location=OpenApiParameter.QUERY)
+
+
+# For viewsets where pagination is disabled by default
+PAGINATION_PARAMS = [
+    OpenApiQueryParameter("page", "A page number within the paginated result set.", int, False),
+    OpenApiQueryParameter("page_size", "Number of results to return per page.", int, False),
+]
 
 
 class ViewSetPagination(PageNumberPagination):
@@ -69,6 +78,13 @@ class OptionalPaginationMixin:
         return ViewSetPagination if paginate else None
 
 
+@extend_schema(
+    description="Retrieve a flat list of all categories. Pagination is disabled by default.",
+    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS + [
+        OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather than just the ID.", bool, False),
+    ],
+    responses=SubCategorySerializer,
+)
 class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
     queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").order_by("order")
@@ -80,6 +96,11 @@ class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
         return context
 
 
+@extend_schema(
+    description="Retrieve a top-down representation of categories, with each category containing zero or more sub-categories. "
+                "Pagination is disabled by default.",
+    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS,
+)
 class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
     queryset = Category.objects.all().select_subclasses().prefetch_related(
@@ -129,12 +150,13 @@ class LocationFiltererMixin:
             for q in queries[1:]:
                 q_obj |= q
             return q_obj
-
         return None
 
 
 # Provides a filterable location viewset
 class LocationExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
+    PARAMETERS = LocationFiltererMixin.PARAMETERS
+
     location_filter_prefix = ""
     location_filter_max_depth = 2
 
@@ -154,6 +176,18 @@ class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    @extend_schema(
+        description="Retrieve a list of all resource locations, filterable by title and part. Results are paginated by default.",
+        parameters=LocationExplorerViewSetMixin.PARAMETERS,
+        responses=AbstractLocationSerializer,
+    )
+    def list(self, request, **kwargs):
+        return super(LocationViewSet, self).list(request, **kwargs)
+    
+    # TODO: extend_schema for this method
+    def update(self, request, **kwargs):
+        return super(LocationViewSet, self).update(request, **kwargs)  # TODO: implement this!
     
     def get_serializer_class(self):
         if self.request.method == "POST":
@@ -161,6 +195,10 @@ class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
         return AbstractLocationPolymorphicSerializer
 
 
+@extend_schema(
+    description="Retrieve a list of all Section objects, filterable by title and part. Results are paginated by default.",
+    parameters=LocationExplorerViewSetMixin.PARAMETERS,
+)
 class SectionViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = FullSectionSerializer
     queryset = Section.objects.all().prefetch_related(
@@ -168,6 +206,10 @@ class SectionViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     )
 
 
+@extend_schema(
+    description="Retrieve a list of all Subpart objects, filterable by title and part. Results are paginated by default.",
+    parameters=LocationExplorerViewSetMixin.PARAMETERS,
+)
 class SubpartViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = FullSubpartSerializer
     queryset = Subpart.objects.all().prefetch_related(
@@ -176,7 +218,7 @@ class SubpartViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 
 
 # Provides a filterable and searchable viewset for any type of resource
-# Must implement get_search_fields as a map of strings to 2-tuples { "abstract_field_name": ("instance_field_name", "search weight") }
+# Must implement get_search_fields() as a map of strings to 2-tuples { "abstract_field_name": ("instance_field_name", "search weight") }
 # Must provide "model" as the resource model type to display
 # May override compute_dates for complex date lookups
 class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
@@ -265,7 +307,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 @extend_schema(
     description="Retrieve a list of all resources. Includes all types e.g. supplemental content, Federal Register Documents, etc. "
                 "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
-                "Results are paginated by default, but this can be disabled with the \"paginate\" parameter.",
+                "Results are paginated by default.",
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,
     responses=AbstractResourceSerializer,
 )
@@ -294,7 +336,7 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
 @extend_schema(
     description="Retrieve a list of all supplemental content. "
                 "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
-                "Results are paginated by default, but this can be disabled with the \"paginate\" parameter.",
+                "Results are paginated by default.",
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,
 )
 class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
@@ -317,7 +359,7 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
     @extend_schema(
         description="Retrieve a list of all Federal Register Documents. "
                     "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
-                    "Results are paginated by default, but this can be disabled with the \"paginate\" parameter.",
+                    "Results are paginated by default.",
         parameters=ResourceExplorerViewSetMixin.PARAMETERS,
     )
     def list(self, request, **kwargs):
@@ -354,6 +396,12 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         }
 
 
+@extend_schema(
+    description="Retrieve a list of document numbers from all Federal Register Documents. "
+                "Pagination is disabled by default.",
+    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS,
+    responses={(200, "application/json"): {"type": "string"}},
+)
 class FederalRegisterDocsNumberViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
     queryset = FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
