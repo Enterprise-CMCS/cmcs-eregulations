@@ -135,10 +135,10 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     def get_name_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["supplementalcontent__name_headline"], "ASDF")
+        return getattr(obj, "supplementalcontent_name_headline", getattr(obj, "name_headline", None))
 
     def get_description_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["supplementalcontent__description_headline"], "QWERTY")
+        return getattr(obj, "supplementalcontent_description_headline", getattr(obj, "description_headline", None))
 
 
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
@@ -149,16 +149,16 @@ class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResou
     document_number_headline = serializers.SerializerMethodField()
 
     def get_name_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["federalregisterdocument__name_headline"], None)
+        return getattr(obj, "federalregisterdocument_name_headline", getattr(obj, "name_headline", None))
 
     def get_description_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["federalregisterdocument__description_headline"], None)
+        return getattr(obj, "federalregisterdocument_description_headline", getattr(obj, "description_headline", None))
 
     def get_docket_number_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["federalregisterdocument__docket_number_headline"], None)
+        return getattr(obj, "federalregisterdocument_docket_number_headline", getattr(obj, "docket_number_headline", None))
 
     def get_document_number_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["federalregisterdocument__document_number_headline"], None)
+        return getattr(obj, "federalregisterdocument_document_number_headline", getattr(obj, "document_number_headline", None))
 
 
 class SectionCreateSerializer(serializers.ModelSerializer):

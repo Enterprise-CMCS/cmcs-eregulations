@@ -220,7 +220,7 @@ class SubpartViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 # Provides a filterable and searchable viewset for any type of resource
 # Must implement get_search_fields() as a map of strings to 2-tuples { "abstract_field_name": ("instance_field_name", "search weight") }
 # Must provide "model" as the resource model type to display
-# May override compute_dates for complex date lookups
+# May override annotate_date for complex date lookups
 class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
     PARAMETERS = [
         OpenApiQueryParameter("category_details", "Specify whether to show details of a category, or just the ID.", bool, False),
@@ -234,44 +234,53 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
     def get_search_fields(self):
         raise NotImplementedError
     
-    def compute_dates(self, query):
-        return query.annotate(date_annotated=F("date"))
-    
-    def get_search_map(self):
-        fields = {}
-        for i in self.get_search_fields().items():
-            fields[f"{i[0]}_headline"] = f"{i[1][0]}_headline"
-        return fields
+    def get_annotated_date(self):
+        return F("date")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context["search_map"] = self.get_search_map()
         context["category_details"] = self.request.GET.get("category_details", "true")
         context["location_details"] = self.request.GET.get("location_details", "true")
         return context
 
     def get_search_vectors(self):
-        fields = list(self.get_search_fields().values())
-        v = SearchVector(fields[0][0], weight=fields[0][1], config="english")
-        for i in fields[1:]:
-            v += SearchVector(i[0], weight=i[1], config="english")
+        v = None
+        search_fields = self.get_search_fields()
+        if isinstance(search_fields, type([])):
+            for field in search_fields:
+                vector = SearchVector(field, weight="A", config="english")
+                v = v + vector if v else vector
+        else:
+            for model in search_fields:
+                for field in search_fields[model]:
+                    vector = SearchVector(f"{model}__{field}", weight="A", config="english")
+                    v = v + vector if v else vector
         return v
     
+    def make_headline(self, field, search_query, search_type):
+        return SearchHeadline(
+            field,
+            SearchQuery(search_query, search_type=search_type, config="english"),
+            start_sel='<span class="search-headline">',
+            stop_sel='</span>',
+            config="english",
+            highlight_all=True,
+        )
+    
     def get_search_headlines(self, search_query, search_type):
-        fields = self.get_search_fields().values()
         annotations = {}
-        for field in fields:
-            annotations[f"{field[0]}_headline"] = SearchHeadline(
-                field[0],
-                SearchQuery(search_query, search_type=search_type, config="english"),
-                start_sel='<span class="search-headline">',
-                stop_sel='</span>',
-                config="english",
-                highlight_all=True,
-            )
+        search_fields = self.get_search_fields()
+        if isinstance(search_fields, type([])):
+            for field in search_fields:
+                annotations[f"{field}_headline"] = self.make_headline(field, search_query, search_type)
+        else:
+            for model in search_fields:
+                for field in search_fields[model]:
+                    annotations[f"{model}_{field}_headline"] = self.make_headline(f"{model}__{field}", search_query, search_type)
         return annotations
 
     def get_queryset(self):
+        annotations = {}
         query = self.model.objects.all().select_subclasses().prefetch_related(
             Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
             Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
@@ -294,14 +303,17 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                 if search_query.startswith('"') and search_query.endswith('"')
                 else ("plain", False)
             )
-
-            query = query.annotate(rank=SearchRank(
+            annotations["rank"] = SearchRank(
                 self.get_search_vectors(),
                 SearchQuery(search_query, search_type=search_type, config="english"),
                 cover_density=cover_density,
-            )).filter(rank__gte=0.2).annotate(**self.get_search_headlines(search_query, search_type))
+            )
+            annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
 
-        return self.compute_dates(query.distinct()).order_by("-rank" if search_query else "-date_annotated")
+        annotations["date_annotated"] = self.get_annotated_date()
+        query = query.annotate(**annotations)
+        query = query.filter(rank__gte=0.2) if search_query else query
+        return query.distinct().order_by("-rank" if search_query else "-date_annotated")
 
 
 @extend_schema(
@@ -315,21 +327,17 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
     serializer_class = AbstractResourcePolymorphicSerializer
     model = AbstractResource
 
-    def compute_dates(self, query):
-        return query.annotate(date_annotated=Case(
+    def get_annotated_date(self):
+        return Case(
             When(supplementalcontent__isnull=False, then=F("supplementalcontent__date")),
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__date")),
             default=None,
-        ))
+        )
 
     def get_search_fields(self):
         return {
-            "supplementalcontent__name": ("supplementalcontent__name", "A"),
-            "supplementalcontent__description": ("supplementalcontent__description", "A"),
-            "federalregisterdocument__name": ("federalregisterdocument__name", "A"),
-            "federalregisterdocument__description": ("federalregisterdocument__description", "A"),
-            "federalregisterdocument__docket_number": ("federalregisterdocument__docket_number", "A"),
-            "federalregisterdocument__document_number": ("federalregisterdocument__document_number", "A"),
+            "supplementalcontent": ["name", "description"],
+            "federalregisterdocument": ["name", "description", "docket_number", "document_number"],
         }
 
 
@@ -344,10 +352,7 @@ class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnly
     model = SupplementalContent
 
     def get_search_fields(self):
-        return {
-            "supplementalcontent__name": ("name", "A"),
-            "supplementalcontent__description": ("description", "A"),
-        }
+        return ["name", "description"]
 
 
 class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelViewSet):
@@ -388,12 +393,7 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         return FederalRegisterDocumentSerializer
 
     def get_search_fields(self):
-        return {
-            "federalregisterdocument__name": ("name", "A"),
-            "federalregisterdocument__description": ("description", "A"),
-            "federalregisterdocument__docket_number": ("docket_number", "A"),
-            "federalregisterdocument__document_number": ("document_number", "A"),
-        }
+        return ["name", "description", "docket_number", "document_number"]
 
 
 @extend_schema(
