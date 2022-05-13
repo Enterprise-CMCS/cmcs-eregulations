@@ -24,23 +24,23 @@ urlpatterns = [
         "get": "list",
         "put": "update",
     })),
-    path("federal_register_docs/doc_numbers", FederalRegisterDocsNumberViewSet.as_view({
-        "get": "list",
-    })),
-    path("categories", CategoryViewSet.as_view({
-        "get": "list",
-    })),
-    path("categories/tree", CategoryTreeViewSet.as_view({
-        "get": "list",
-    })),
-    path("locations", LocationViewSet.as_view({
-        "get": "list",
-        #"post": "create", # TODO: add in another v3 ticket
-    })),
-    path("locations/sections", SectionViewSet.as_view({
-        "get": "list",
-    })),
-    path("locations/subparts", SubpartViewSet.as_view({
-        "get": "list",
-    })),
+    # path("federal_register_docs/doc_numbers", FederalRegisterDocsNumberViewSet.as_view({
+    #     "get": "list",
+    # })),
+    # path("categories", CategoryViewSet.as_view({
+    #     "get": "list",
+    # })),
+    # path("categories/tree", CategoryTreeViewSet.as_view({
+    #     "get": "list",
+    # })),
+    # path("locations", LocationViewSet.as_view({
+    #     "get": "list",
+    #     #"post": "create", # TODO: add in another v3 ticket
+    # })),
+    # path("locations/sections", SectionViewSet.as_view({
+    #     "get": "list",
+    # })),
+    # path("locations/subparts", SubpartViewSet.as_view({
+    #     "get": "list",
+    # })),
 ]

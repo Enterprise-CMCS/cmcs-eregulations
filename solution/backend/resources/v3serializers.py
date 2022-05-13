@@ -135,10 +135,10 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     def get_name_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["supplementalcontent__name_headline"], None)
+        return getattr(obj, self.context["search_map"]["supplementalcontent__name_headline"], "ASDF")
 
     def get_description_headline(self, obj):
-        return getattr(obj, self.context["search_map"]["supplementalcontent__description_headline"], None)
+        return getattr(obj, self.context["search_map"]["supplementalcontent__description_headline"], "QWERTY")
 
 
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
@@ -161,9 +161,15 @@ class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResou
         return getattr(obj, self.context["search_map"]["federalregisterdocument__document_number_headline"], None)
 
 
+class SectionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields = "__all__"
+
+
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     category = serializers.CharField()
-    locations = SectionSerializer(many=True, allow_null=True)
+    locations = SectionCreateSerializer(many=True, allow_null=True)
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     name = serializers.CharField(allow_blank=True, allow_null=True)
@@ -207,7 +213,6 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             part = loc["part"]
             section_id = loc["section_id"]
             location, _ = Section.objects.get_or_create(title=title, part=part, section_id=section_id)
-            location.display_name = location.__str__()
             location.save()
             locations.append(location)
         instance.locations.set(locations)

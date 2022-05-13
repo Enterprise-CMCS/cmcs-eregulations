@@ -6,6 +6,7 @@ from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q, Case, When, F
 from django.core.exceptions import BadRequest
 from rest_framework.pagination import PageNumberPagination
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 
@@ -35,8 +36,13 @@ from .v3serializers import (
     CategoryTreeSerializer,
     FullSectionSerializer,
     FullSubpartSerializer,
+    AbstractResourceSerializer,
 )
 from regcore.serializers import StringListSerializer
+
+
+def OpenApiQueryParameter(name, description, type, required):
+    return OpenApiParameter(name=name, description=description, required=required, type=type, location=OpenApiParameter.QUERY)
 
 
 class ViewSetPagination(PageNumberPagination):
@@ -48,6 +54,10 @@ class ViewSetPagination(PageNumberPagination):
 # May define "paginate_by_default = False" to disable pagination unless explicitly requested
 # Pagination can be enabled/disabled with "?paginate=true/false"
 class OptionalPaginationMixin:
+    PARAMETERS = [
+        OpenApiQueryParameter("paginate", "Enable or disable pagination. If enabled, results will be wrapped in a JSON object. If disabled, a normal JSON array will be returned.", bool, False),
+    ]
+
     paginate_by_default = True
 
     @property
@@ -81,6 +91,10 @@ class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet
 # Must define "location_filter_prefix" (e.g. "" for none, or "locations__")
 # May define "location_filter_max_depth" to restrict to searching e.g. titles (=1), or titles and parts (=2)
 class LocationFiltererMixin:
+    PARAMETERS = [
+        OpenApiQueryParameter("locations", "Limit results to only resources linked to these locations. Use \"&locations=X&locations=Y\" for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
+    ]
+
     location_filter_max_depth = 100
 
     def get_location_filter(self, locations):
@@ -164,7 +178,15 @@ class SubpartViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 # Provides a filterable and searchable viewset for any type of resource
 # Must implement get_search_fields as a map of strings to 2-tuples { "abstract_field_name": ("instance_field_name", "search weight") }
 # Must provide "model" as the resource model type to display
+# May override compute_dates for complex date lookups
 class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
+    PARAMETERS = [
+        OpenApiQueryParameter("category_details", "Specify whether to show details of a category, or just the ID.", bool, False),
+        OpenApiQueryParameter("location_details", "Specify whether to show details of a location, or just the ID.", bool, False),
+        OpenApiQueryParameter("q", "Search query for resources. Supports literal phrase matching by surrounding the search with quotes.", str, False),
+        OpenApiQueryParameter("categories", "Limit results to only resources contained within these categories. Use \"&categories=X&categories=Y\" for multiple.", int, False),
+    ] + OptionalPaginationMixin.PARAMETERS + LocationFiltererMixin.PARAMETERS
+
     location_filter_prefix = "locations__"
 
     def get_search_fields(self):
@@ -240,20 +262,21 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         return self.compute_dates(query.distinct()).order_by("-rank" if search_query else "-date_annotated")
 
 
+@extend_schema(
+    description="Retrieve a list of all resources. Includes all types e.g. supplemental content, Federal Register Documents, etc. "
+                "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
+                "Results are paginated by default, but this can be disabled with the \"paginate\" parameter.",
+    parameters=ResourceExplorerViewSetMixin.PARAMETERS,
+    responses=AbstractResourceSerializer,
+)
 class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = AbstractResourcePolymorphicSerializer
     model = AbstractResource
 
     def compute_dates(self, query):
         return query.annotate(date_annotated=Case(
-            When(
-                supplementalcontent__isnull=False,
-                then=F("supplementalcontent__date"),
-            ),
-            When(
-                federalregisterdocument__isnull=False,
-                then=F("federalregisterdocument__date"),
-            ),
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__date")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__date")),
             default=None,
         ))
 
@@ -268,6 +291,12 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
         }
 
 
+@extend_schema(
+    description="Retrieve a list of all supplemental content. "
+                "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
+                "Results are paginated by default, but this can be disabled with the \"paginate\" parameter.",
+    parameters=ResourceExplorerViewSetMixin.PARAMETERS,
+)
 class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SupplementalContentSerializer
     model = SupplementalContent
@@ -285,6 +314,17 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    @extend_schema(
+        description="Retrieve a list of all Federal Register Documents. "
+                    "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
+                    "Results are paginated by default, but this can be disabled with the \"paginate\" parameter.",
+        parameters=ResourceExplorerViewSetMixin.PARAMETERS,
+    )
+    def list(self, request, **kwargs):
+        return super(FederalRegisterDocsViewSet, self).list(request, **kwargs)
+
+    @extend_schema(description="Upload a Federal Register Document to the eRegs Resources system. "
+                               "If the document already exists, it will be updated.")
     def update(self, request, **kwargs):
         data = request.data
         frdoc, created = FederalRegisterDocument.objects.get_or_create(document_number=data["document_number"])
