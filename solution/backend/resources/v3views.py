@@ -20,6 +20,7 @@ from .models import (
     SubCategory,
     AbstractLocation,
     Subpart,
+    Section,
 )
 
 from regcore.views import SettingsAuthentication
@@ -32,6 +33,8 @@ from .v3serializers import (
     SupplementalContentSerializer,
     FederalRegisterDocumentSerializer,
     CategoryTreeSerializer,
+    FullSectionSerializer,
+    FullSubpartSerializer,
 )
 from regcore.serializers import StringListSerializer
 
@@ -42,6 +45,8 @@ class ViewSetPagination(PageNumberPagination):
     page_size = 100
 
 
+# May define "paginate_by_default = False" to disable pagination unless explicitly requested
+# Pagination can be enabled/disabled with "?paginate=true/false"
 class OptionalPaginationMixin:
     paginate_by_default = True
 
@@ -73,7 +78,64 @@ class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet
     serializer_class = CategoryTreeSerializer
 
 
-class LocationViewSet(OptionalPaginationMixin, viewsets.ModelViewSet):
+# Must define "location_filter_prefix" (e.g. "" for none, or "locations__")
+# May define "location_filter_max_depth" to restrict to searching e.g. titles (=1), or titles and parts (=2)
+class LocationFiltererMixin:
+    location_filter_max_depth = 100
+
+    def get_location_filter(self, locations):
+        queries = []
+        for loc in locations:
+            split = loc.split(".")
+            length = len(split)
+
+            if length < 1 or \
+               (length >= 1 and not is_int(split[0])) or \
+               (length >= 2 and (not is_int(split[0]) or not is_int(split[1]))):
+                raise BadRequest(f"\"{loc}\" is not a valid title, part, section, or subpart!")
+
+            q = Q(**{f"{self.location_filter_prefix}title": split[0]})
+            if length > 1:
+                if self.location_filter_max_depth < 2:
+                    raise BadRequest(f"\"{loc}\" is too specific. You may only specify titles.")
+                q &= Q(**{f"{self.location_filter_prefix}part": split[1]})
+                if length > 2:
+                    if self.location_filter_max_depth < 3:
+                        raise BadRequest(f"\"{loc}\" is too specific. You may only specify titles and parts.")
+                    q &= (
+                        Q(**{f"{self.location_filter_prefix}section__section_id": split[2]})
+                        if is_int(split[2])
+                        else Q(**{f"{self.location_filter_prefix}subpart__subpart_id": split[2]})
+                    )
+
+            queries.append(q)
+        
+        if queries:
+            q_obj = queries[0]
+            for q in queries[1:]:
+                q_obj |= q
+            return q_obj
+
+        return None
+
+
+# Provides a filterable location viewset
+class LocationExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
+    location_filter_prefix = ""
+    location_filter_max_depth = 2
+
+    def get_queryset(self):
+        query = super().get_queryset()
+
+        locations = self.request.GET.getlist("locations")
+        q_obj = self.get_location_filter(locations)
+        if q_obj:
+            query = query.filter(q_obj)
+
+        return query.distinct()
+
+
+class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
     queryset = AbstractLocation.objects.all().select_subclasses()
 
     authentication_classes = [SettingsAuthentication]
@@ -85,7 +147,26 @@ class LocationViewSet(OptionalPaginationMixin, viewsets.ModelViewSet):
         return AbstractLocationPolymorphicSerializer
 
 
-class ResourceExplorerViewSetMixin(OptionalPaginationMixin):
+class SectionViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = FullSectionSerializer
+    queryset = Section.objects.all().prefetch_related(
+        Prefetch("parent", AbstractLocation.objects.all().select_subclasses()),
+    )
+
+
+class SubpartViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = FullSubpartSerializer
+    queryset = Subpart.objects.all().prefetch_related(
+        Prefetch("children", Section.objects.all()),
+    )
+
+
+# Provides a filterable and searchable viewset for any type of resource
+# Must implement get_search_fields as a map of strings to 2-tuples { "abstract_field_name": ("instance_field_name", "search weight") }
+# Must provide "model" as the resource model type to display
+class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
+    location_filter_prefix = "locations__"
+
     def get_search_fields(self):
         raise NotImplementedError
     
@@ -126,30 +207,6 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin):
             )
         return annotations
 
-    def parse_locations(self, locations):
-        queries = []
-        for loc in locations:
-            split = loc.split("-")
-            length = len(split)
-
-            if length < 1 or \
-               (length >= 1 and not is_int(split[0])) or \
-               (length >= 2 and (not is_int(split[0]) or not is_int(split[1]))):
-                raise BadRequest(f"\"{loc}\" is not a valid title, part, section, or subpart!")
-
-            q = Q(locations__title=split[0])
-            if length > 1:
-                q &= Q(locations__part=split[1])
-                if length > 2:
-                    q &= (
-                        Q(locations__section__section_id=split[2])
-                        if is_int(split[2])
-                        else Q(locations__subpart__subpart_id=split[2])
-                    )
-
-            queries.append(q)
-        return queries
-
     def get_queryset(self):
         query = self.model.objects.all().select_subclasses().prefetch_related(
             Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
@@ -160,11 +217,8 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin):
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
 
-        q_queries = self.parse_locations(locations)
-        if q_queries:
-            q_obj = q_queries[0]
-            for q in q_queries[1:]:
-                q_obj |= q
+        q_obj = self.get_location_filter(locations)
+        if q_obj:
             query = query.filter(q_obj)
         
         if categories:

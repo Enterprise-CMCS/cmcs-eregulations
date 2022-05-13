@@ -13,20 +13,24 @@ from .models import (
 )
 
 
+# Allows details of specified fields to be shown or hidden
+# Must specify "optional_details" as map of strings to 4-tuples:
+#    { "field_name": ("query_param", "default, true or false as a string", serializer class, many=True or False) }
 class OptionalFieldDetailsMixin:
     def get_fields(self):
         fields = super().get_fields()
-        d = getattr(self, "optional_details", None) 
-        if d:
-            for i in d.items():
-                fields[i[0]] = (
-                    i[1][2](many=i[1][3])
-                    if self.context.get(i[1][0], i[1][1]).lower() == "true"
-                    else serializers.PrimaryKeyRelatedField(many=i[1][3], read_only=True)
-                )
+        for i in self.optional_details.items():
+            fields[i[0]] = (
+                i[1][2](many=i[1][3])
+                if self.context.get(i[1][0], i[1][1]).lower() == "true"
+                else serializers.PrimaryKeyRelatedField(many=i[1][3], read_only=True)
+            )
         return fields
 
 
+# Allows subclasses to be serialized independently
+# Must implement get_serializer_map as map of classes to 2-tuples:
+#    { model_class: ("model_name", serializer_class) }
 class PolymorphicSerializer(serializers.Serializer):
     def get_serializer_map(self):
         raise NotImplementedError
@@ -88,6 +92,14 @@ class SectionSerializer(AbstractLocationSerializer):
     parent = serializers.PrimaryKeyRelatedField(read_only=True)
 
 
+class FullSectionSerializer(SectionSerializer):
+    parent = AbstractLocationPolymorphicSerializer()
+
+
+class FullSubpartSerializer(SubpartSerializer):
+    children = AbstractLocationPolymorphicSerializer(many=True)
+
+
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
@@ -111,6 +123,7 @@ class DateFieldSerializer(serializers.Serializer):
     date = serializers.CharField()
 
 
+# Provides fields most often used in resources
 class TypicalResourceFieldsSerializer(DateFieldSerializer):
     name = serializers.CharField()
     description = serializers.CharField()

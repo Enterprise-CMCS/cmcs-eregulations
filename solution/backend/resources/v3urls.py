@@ -8,6 +8,8 @@ from .v3views import (
     CategoryViewSet,
     CategoryTreeViewSet,
     LocationViewSet,
+    SectionViewSet,
+    SubpartViewSet,
 )
 
 
@@ -28,11 +30,17 @@ urlpatterns = [
     path("categories", CategoryViewSet.as_view({
         "get": "list",
     })),
-    path("category_tree", CategoryTreeViewSet.as_view({
+    path("categories/tree", CategoryTreeViewSet.as_view({
         "get": "list",
     })),
     path("locations", LocationViewSet.as_view({
         "get": "list",
         #"post": "create", # TODO: add in another v3 ticket
+    })),
+    path("locations/sections", SectionViewSet.as_view({
+        "get": "list",
+    })),
+    path("locations/subparts", SubpartViewSet.as_view({
+        "get": "list",
     })),
 ]
