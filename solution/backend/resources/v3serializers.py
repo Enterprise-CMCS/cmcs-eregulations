@@ -28,6 +28,18 @@ class OptionalFieldDetailsMixin:
         return fields
 
 
+# Retrieves automatically generated search headlines
+class HeadlineField(serializers.Field):
+    def __init__(self, model_name, **kwargs):
+        self.model_name = model_name
+        kwargs["source"] = '*'
+        kwargs["read_only"] = True
+        super().__init__(**kwargs)
+
+    def to_representation(self, obj):
+        return getattr(obj, f"{self.model_name}_{self.field_name}", getattr(obj, self.field_name, None))
+
+
 # Allows subclasses to be serialized independently
 # Must implement get_serializer_map as map of classes to 2-tuples:
 #    { model_class: ("model_name", serializer_class) }
@@ -128,37 +140,21 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
     url = serializers.CharField()
-    
-    name_headline = serializers.SerializerMethodField()
-    description_headline = serializers.SerializerMethodField()
 
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
-    def get_name_headline(self, obj):
-        return getattr(obj, "supplementalcontent_name_headline", getattr(obj, "name_headline", None))
-
-    def get_description_headline(self, obj):
-        return getattr(obj, "supplementalcontent_description_headline", getattr(obj, "description_headline", None))
+    name_headline = HeadlineField("supplementalcontent")
+    description_headline = HeadlineField("supplementalcontent")
 
 
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     docket_number = serializers.CharField()
     document_number = serializers.CharField()
 
-    docket_number_headline = serializers.SerializerMethodField()
-    document_number_headline = serializers.SerializerMethodField()
-
-    def get_name_headline(self, obj):
-        return getattr(obj, "federalregisterdocument_name_headline", getattr(obj, "name_headline", None))
-
-    def get_description_headline(self, obj):
-        return getattr(obj, "federalregisterdocument_description_headline", getattr(obj, "description_headline", None))
-
-    def get_docket_number_headline(self, obj):
-        return getattr(obj, "federalregisterdocument_docket_number_headline", getattr(obj, "docket_number_headline", None))
-
-    def get_document_number_headline(self, obj):
-        return getattr(obj, "federalregisterdocument_document_number_headline", getattr(obj, "document_number_headline", None))
+    name_headline = HeadlineField("federalregisterdocument")
+    description_headline = HeadlineField("federalregisterdocument")
+    docket_number_headline = HeadlineField("federalregisterdocument")
+    document_number_headline = HeadlineField("federalregisterdocument")
 
 
 class SectionCreateSerializer(serializers.ModelSerializer):
