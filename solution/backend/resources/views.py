@@ -2,15 +2,12 @@ from django.http import JsonResponse
 
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
-from django.conf import settings
 from rest_framework.response import Response
 
 from django.db.models import Prefetch, Q, Count
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework import authentication
-from rest_framework import exceptions
 from drf_spectacular.utils import (
     extend_schema,
     OpenApiParameter,

@@ -1,10 +1,8 @@
 from django.http import JsonResponse
-from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q, Case, When, F
-from django.core.exceptions import BadRequest
 from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
@@ -64,7 +62,8 @@ class ViewSetPagination(PageNumberPagination):
 # Pagination can be enabled/disabled with "?paginate=true/false"
 class OptionalPaginationMixin:
     PARAMETERS = [
-        OpenApiQueryParameter("paginate", "Enable or disable pagination. If enabled, results will be wrapped in a JSON object. If disabled, a normal JSON array will be returned.", bool, False),
+        OpenApiQueryParameter("paginate", "Enable or disable pagination. If enabled, results will be wrapped in a JSON object. "
+                              "If disabled, a normal JSON array will be returned.", bool, False),
     ]
 
     paginate_by_default = True
@@ -81,7 +80,8 @@ class OptionalPaginationMixin:
 @extend_schema(
     description="Retrieve a flat list of all categories. Pagination is disabled by default.",
     parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS + [
-        OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather than just the ID.", bool, False),
+        OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather "
+                              "than just the ID.", bool, False),
     ],
     responses=SubCategorySerializer,
 )
@@ -113,7 +113,9 @@ class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet
 # May define "location_filter_max_depth" to restrict to searching e.g. titles (=1), or titles and parts (=2)
 class LocationFiltererMixin:
     PARAMETERS = [
-        OpenApiQueryParameter("locations", "Limit results to only resources linked to these locations. Use \"&locations=X&locations=Y\" for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
+        OpenApiQueryParameter("locations",
+                              "Limit results to only resources linked to these locations. Use \"&locations=X&locations=Y\" "
+                              "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
     ]
 
     location_filter_max_depth = 100
@@ -144,7 +146,7 @@ class LocationFiltererMixin:
                     )
 
             queries.append(q)
-        
+
         if queries:
             q_obj = queries[0]
             for q in queries[1:]:
@@ -184,14 +186,14 @@ class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
     )
     def list(self, request, **kwargs):
         return super(LocationViewSet, self).list(request, **kwargs)
-    
+
     # TODO: extend_schema for this method
     def update(self, request, **kwargs):
         return super(LocationViewSet, self).update(request, **kwargs)  # TODO: implement this!
-    
+
     def get_serializer_class(self):
-        if self.request.method == "POST":
-            return AbstractLocationCreateSerializer
+        # if self.request.method == "POST":  # TODO: implement AbstractLocationCreateSerializer
+        #     return AbstractLocationCreateSerializer
         return AbstractLocationPolymorphicSerializer
 
 
@@ -218,22 +220,24 @@ class SubpartViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 
 
 # Provides a filterable and searchable viewset for any type of resource
-# Must implement get_search_fields() as a map of strings to 2-tuples { "abstract_field_name": ("instance_field_name", "search weight") }
+# Must implement get_search_fields() as a list of fields or a map of model names lists of fields
 # Must provide "model" as the resource model type to display
 # May override annotate_date for complex date lookups
 class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
     PARAMETERS = [
         OpenApiQueryParameter("category_details", "Specify whether to show details of a category, or just the ID.", bool, False),
         OpenApiQueryParameter("location_details", "Specify whether to show details of a location, or just the ID.", bool, False),
-        OpenApiQueryParameter("q", "Search query for resources. Supports literal phrase matching by surrounding the search with quotes.", str, False),
-        OpenApiQueryParameter("categories", "Limit results to only resources contained within these categories. Use \"&categories=X&categories=Y\" for multiple.", int, False),
+        OpenApiQueryParameter("q", "Search query for resources. Supports literal phrase matching by surrounding the "
+                              "search with quotes.", str, False),
+        OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
+                              "\"&categories=X&categories=Y\" for multiple.", int, False),
     ] + OptionalPaginationMixin.PARAMETERS + LocationFiltererMixin.PARAMETERS
 
     location_filter_prefix = "locations__"
 
     def get_search_fields(self):
         raise NotImplementedError
-    
+
     def get_annotated_date(self):
         return F("date")
 
@@ -256,7 +260,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                     vector = SearchVector(f"{model}__{field}", weight="A", config="english")
                     v = v + vector if v else vector
         return v
-    
+
     def make_headline(self, field, search_query, search_type):
         return SearchHeadline(
             field,
@@ -266,7 +270,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             config="english",
             highlight_all=True,
         )
-    
+
     def get_search_headlines(self, search_query, search_type):
         annotations = {}
         search_fields = self.get_search_fields()
@@ -293,7 +297,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         q_obj = self.get_location_filter(locations)
         if q_obj:
             query = query.filter(q_obj)
-        
+
         if categories:
             query = query.filter(category__id__in=categories)
 
@@ -317,7 +321,8 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
 
 @extend_schema(
-    description="Retrieve a list of all resources. Includes all types e.g. supplemental content, Federal Register Documents, etc. "
+    description="Retrieve a list of all resources. "
+                "Includes all types e.g. supplemental content, Federal Register Documents, etc. "
                 "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
                 "Results are paginated by default.",
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,

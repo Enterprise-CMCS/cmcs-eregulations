@@ -5,6 +5,7 @@ def is_int(x):
     except ValueError:
         return False
 
+
 # TODO: remove this after v3 move
 class reverse_sort:
     def __init__(self, obj):

@@ -71,7 +71,7 @@ class AbstractCategory(models.Model, DisplayNameFieldMixin):
 
     def __str__(self):
         return f"{self.name} ({self._meta.verbose_name})"
-    
+
     class Meta:
         ordering = ["order", "name"]
 

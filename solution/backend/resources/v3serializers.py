@@ -7,7 +7,6 @@ from .models import (
     Section,
     Subpart,
     FederalRegisterCategoryLink,
-    AbstractResource,
     SupplementalContent,
     FederalRegisterDocument,
 )

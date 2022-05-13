@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 
 from .v3views import (
     AbstractResourceViewSet,
@@ -35,7 +35,7 @@ urlpatterns = [
     })),
     path("locations", LocationViewSet.as_view({
         "get": "list",
-        #"post": "create", # TODO: add in another v3 ticket
+        # "post": "create", # TODO: add in another v3 ticket
     })),
     path("locations/sections", SectionViewSet.as_view({
         "get": "list",
