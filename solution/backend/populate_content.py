@@ -13,4 +13,5 @@ def handler(event, context):
     call_command('loaddata', 'resources.subpart.json')
     call_command('loaddata', 'resources.section.json')
     call_command('loaddata', 'resources.supplementalcontent.json')
-    call_command('loaddata', 'search.synonyms.json')
+    call_command('loaddata', 'resources.federalregistercategorylink.json')
+    call_command('loaddata', 'search.synonym.json')
