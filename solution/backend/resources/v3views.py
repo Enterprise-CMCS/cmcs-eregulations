@@ -157,7 +157,7 @@ class LocationFiltererMixin:
 
 # Provides a filterable location viewset
 class LocationExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
-    PARAMETERS = LocationFiltererMixin.PARAMETERS
+    PARAMETERS = LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS
 
     location_filter_prefix = ""
     location_filter_max_depth = 2
@@ -201,7 +201,7 @@ class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
     description="Retrieve a list of all Section objects, filterable by title and part. Results are paginated by default.",
     parameters=LocationExplorerViewSetMixin.PARAMETERS,
 )
-class SectionViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+class SectionViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = FullSectionSerializer
     queryset = Section.objects.all().prefetch_related(
         Prefetch("parent", AbstractLocation.objects.all().select_subclasses()),
@@ -212,7 +212,7 @@ class SectionViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     description="Retrieve a list of all Subpart objects, filterable by title and part. Results are paginated by default.",
     parameters=LocationExplorerViewSetMixin.PARAMETERS,
 )
-class SubpartViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+class SubpartViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = FullSubpartSerializer
     queryset = Subpart.objects.all().prefetch_related(
         Prefetch("children", Section.objects.all()),
