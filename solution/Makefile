@@ -134,10 +134,11 @@ test.local: ## run cypress tests locally without docker
 		npm run cypress:run;
 
 local.seed:
-	docker-compose exec regulations python manage.py loaddata supplemental_content.category.json
-	docker-compose exec regulations python manage.py loaddata supplemental_content.subcategory.json
-	docker-compose exec regulations python manage.py loaddata supplemental_content.subpart.json
-	docker-compose exec regulations python manage.py loaddata supplemental_content.section.json
-	docker-compose exec regulations python manage.py loaddata supplemental_content.supplementalcontent.json
-	docker-compose exec regulations python manage.py loaddata synonyms.json
+	docker-compose exec regulations python manage.py loaddata resources.category.json
+	docker-compose exec regulations python manage.py loaddata resources.subcategory.json
+	docker-compose exec regulations python manage.py loaddata resources.subpart.json
+	docker-compose exec regulations python manage.py loaddata resources.section.json
+	docker-compose exec regulations python manage.py loaddata resources.supplementalcontent.json
+	docker-compose exec regulations python manage.py loaddata resources.federalregistercategorylink.json
+	docker-compose exec regulations python manage.py loaddata search.synonym.json
 

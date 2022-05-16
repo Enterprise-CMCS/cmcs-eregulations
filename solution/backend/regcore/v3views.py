@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from regcore.models import Title, Part, ECFRParserResult
-from regcore.views import SettingsAuthentication
+from .views import SettingsAuthentication
 
 from regcore.serializers import (
     FlatContentsSerializer,
