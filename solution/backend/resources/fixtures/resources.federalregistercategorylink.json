@@ -1,6 +1,6 @@
 [
 {
-  "model": "supplemental_content.federalregistercategorylink",
+  "model": "resources.federalregistercategorylink",
   "pk": 1,
   "fields": {
     "name": "Rule",
@@ -8,7 +8,7 @@
   }
 },
 {
-  "model": "supplemental_content.federalregistercategorylink",
+  "model": "resources.federalregistercategorylink",
   "pk": 2,
   "fields": {
     "name": "Proposed Rule",
