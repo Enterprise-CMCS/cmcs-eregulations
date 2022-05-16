@@ -210,7 +210,6 @@ export default {
             );
 
             if (payload.scope === "part") {
-                console.log(newQueryParams.subpart);
                 if (newQueryParams.subpart) {
                     let sub = newQueryParams.subpart?.split(",");
                     newQueryParams.subpart = sub
