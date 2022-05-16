@@ -1,10 +1,7 @@
 <template>
     <div id="app" class="resources-view">
         <ResourcesNav :resourcesDisplay="resourcesDisplay" :aboutUrl="aboutUrl">
-            <form
-                class="search-resources-form"
-                @submit.prevent="executeSearch"
-            >
+            <form class="search-resources-form" @submit.prevent="executeSearch">
                 <v-text-field
                     outlined
                     flat
@@ -52,7 +49,6 @@
 </template>
 
 <script>
-
 import {
     getAllParts,
     getCategories,
@@ -84,12 +80,12 @@ export default {
     props: {
         apiUrl: {
             type: String,
-            default: "/v2/"
+            default: "/v2/",
         },
         aboutUrl: {
             type: String,
-            default: "/about/"
-        }
+            default: "/about/",
+        },
     },
 
     data() {
@@ -325,27 +321,48 @@ export default {
         },
         async getPartLastUpdatedDates() {
             this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
-            console.log(this.partsLastUpdated);
         },
         async getFormattedPartsList() {
             const partsList = await getAllParts(this.apiUrl);
             this.filters.part.listItems = partsList.map((part) => {
+                // get section parent (subpart) if exists.
+                // this will be included in response in v3 api
+                const sectionsArr = part.structure.children[0].children[0].children[0].children
+                    .map(
+                        (subpart) => {
+                            if (_isEmpty(subpart.children)) return [];
+
+                            const returnArray = subpart.children
+                                ? subpart.children.map((section) => ({
+                                      [section.identifier[1] ??
+                                      section.identifier[0]]: section.parent[0],
+                                  }))
+                                : [{ [subpart.identifier[1]]: "orphan" }];
+                            return returnArray;
+                        }
+                    )
+                    .filter((section) => !_isEmpty(section))
+                    .flat();
                 return {
                     name: part.name,
-                    label: part.structure.children[0].children[0].children[0]
-                        .label,
-                    date: part.date,
+                    label:
+                        part.structure.children[0].children[0].children[0]
+                            .label,
+                    sections: Object.assign({}, ...sectionsArr),
                 };
             });
         },
         async getFormattedSubpartsList(part) {
-            this.filters.subpart.listItems = await getSubPartsForPart(this.apiUrl, part);
+            this.filters.subpart.listItems = await getSubPartsForPart(
+                this.apiUrl,
+                part
+            );
         },
         async getFormattedSectionsList(part, subpart) {
             this.filters.section.listItems = await getSectionObjects(
                 this.apiUrl,
                 part,
-                subpart,
+                subpart
             );
         },
         async getCategoryList() {
@@ -365,8 +382,9 @@ export default {
                     reducedCats[item.parent.name].subcategories.push(item);
                 }
             });
-            this.filters.resourceCategory.listItems =
-                Object.values(reducedCats);
+            this.filters.resourceCategory.listItems = Object.values(
+                reducedCats
+            );
         },
     },
 
@@ -434,7 +452,7 @@ export default {
     beforeCreate() {},
 
     async created() {
-        this.getPartLastUpdatedDates()
+        this.getPartLastUpdatedDates();
         this.getFormattedPartsList();
         this.getCategoryList();
 

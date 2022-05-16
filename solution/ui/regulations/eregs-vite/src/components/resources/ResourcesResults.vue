@@ -35,7 +35,10 @@
                         </div>
                         <div class="related-sections">
                             <span class="related-sections-title">
-                                Related Regulation<span v-if="item.locations.length > 1">s</span>:
+                                Related Regulation<span
+                                    v-if="item.locations.length > 1"
+                                    >s</span
+                                >:
                             </span>
                             <span v-if="item.locations.length > 1">§§ </span>
                             <span v-else>§ </span>
@@ -46,11 +49,22 @@
                                     class="related-section-link"
                                 >
                                     <a
-                                        :href="location | locationUrl(partsLastUpdated)"
+                                        :href="
+                                            location
+                                                | locationUrl(
+                                                    partsList,
+                                                    partsLastUpdated
+                                                )
+                                        "
                                     >
-                                        {{ location.display_name | locationLabel }}
+                                        {{
+                                            location.display_name
+                                                | locationLabel
+                                        }}
                                     </a>
-                                    <span v-if="i + 1 != item.locations.length" > | </span>
+                                    <span v-if="i + 1 != item.locations.length">
+                                        |
+                                    </span>
                                 </span>
                             </template>
                         </div>
@@ -77,12 +91,23 @@ export default {
         locationLabel(value) {
             return value.substring(3);
         },
-        locationUrl(value, partsLastUpdated) {
-            const partDate = partsLastUpdated[value.part];
-            const partHash = value.display_name
-                .split(" ")[1]
-                .replace(/\./g, "-");
-            return `/42/${value.part}/${partDate}/#${partHash}`;
+        locationUrl(value, partsList, partsLastUpdated) {
+            // welp
+            let parent = "";
+            const partDate = `${partsLastUpdated[value.part]}/`;
+            const partAndSection = value.display_name.split(" ")[1];
+            const section = partAndSection.split(".")[1];
+            const partObj = partsList.find(
+                (part) => part.name === value.part.toString()
+            );
+            if (partObj.sections) {
+                const partSectionsDict = partObj.sections;
+                parent = partSectionsDict[section]
+                    ? `Subpart-${partSectionsDict[section]}/`
+                    : "";
+            }
+            const hash = `#${partAndSection.replace(/\./g, "-")}`;
+            return `/42/${value.part}/${parent}${partDate}${hash}`;
         },
     },
 
@@ -97,11 +122,16 @@ export default {
             required: false,
             default: false,
         },
+        partsList: {
+            type: Array,
+            required: true,
+            default: () => [],
+        },
         partsLastUpdated: {
             type: Object,
             required: true,
             default: () => {},
-        }
+        },
     },
 
     data() {},
