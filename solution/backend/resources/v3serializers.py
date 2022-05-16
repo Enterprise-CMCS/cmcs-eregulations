@@ -90,6 +90,7 @@ class AbstractLocationPolymorphicSerializer(PolymorphicSerializer):
 
 
 class AbstractLocationSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     title = serializers.IntegerField()
     part = serializers.IntegerField()
 
@@ -120,6 +121,7 @@ class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
 
 
 class AbstractResourceSerializer(OptionalFieldDetailsMixin, serializers.Serializer):
+    id = serializers.IntegerField()
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
