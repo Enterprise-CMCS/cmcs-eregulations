@@ -473,9 +473,11 @@ const getSubPartsForPart = async (part) => {
         all_parts[parts.indexOf(part)].structure.children[0].children[0]
             .children[0].children;
     const subParts = potentialSubParts.filter((p) => p.type === "subpart");
+
     return subParts.map((s) => {
         return {
             label: s.label,
+            part: s.parent[0],
             identifier: s.identifier[0],
             range: s.descendant_range,
         };
@@ -529,9 +531,11 @@ const getSectionObjects = async (part, subPart) => {
             (p) => p.type === "subpart" && p.identifier[0] === subPart
         );
         return parent.children.map((c) => {
+      
             return {
                 identifier: c.identifier[1],
                 label: c.label_level,
+                part: part,
                 description: c.label_description,
             };
         });
@@ -543,6 +547,7 @@ const getSectionObjects = async (part, subPart) => {
                     return {
                         identifier: c.identifier[1],
                         label: c.label_level,
+                        part:part,
                         description: c.label_description,
                     };
                 })
