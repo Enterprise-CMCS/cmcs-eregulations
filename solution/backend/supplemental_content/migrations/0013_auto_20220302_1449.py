@@ -6,12 +6,13 @@ from django.db import migrations, models
 
 
 def resave_models(apps, schema_editor):
-    try:
-        from supplemental_content.models import AbstractLocation, AbstractCategory, AbstractSupplementalContent
-        for i in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractSupplementalContent.objects.all()):
-            i.save()
-    except:
-        pass
+    # try:
+    #     from supplemental_content.models import AbstractLocation, AbstractCategory, AbstractSupplementalContent
+    #     for i in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractSupplementalContent.objects.all()):
+    #         i.save()
+    # except:
+    #     pass
+    pass
 
 
 class Migration(migrations.Migration):
