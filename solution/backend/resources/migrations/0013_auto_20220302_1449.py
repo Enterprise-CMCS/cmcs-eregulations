@@ -6,9 +6,10 @@ from django.db import migrations, models
 
 
 def resave_models(apps, schema_editor):
+    ### Disabled because this causes migrations to fail on AWS
     # try:
-    #     from resources.models import AbstractLocation, AbstractCategory, AbstractResource
-    #     for i in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractResource.objects.all()):
+    #     from supplemental_content.models import AbstractLocation, AbstractCategory, AbstractSupplementalContent
+    #     for i in chain(AbstractLocation.objects.all(), AbstractCategory.objects.all(), AbstractSupplementalContent.objects.all()):
     #         i.save()
     # except:
     #     pass

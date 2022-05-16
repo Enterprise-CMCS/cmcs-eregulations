@@ -1,5 +1,8 @@
 <template>
-    <div v-if="filterParams.part || filterParams.resourceCategory" class="selections-container">
+    <div
+        v-if="filterParams.part || filterParams.resourceCategory"
+        class="selections-container"
+    >
         <div class="selections-content">
             <template v-for="(array, name, idx) in splitParams">
                 <div
@@ -105,10 +108,12 @@ export default {
                     return `Part ${value}`;
                     break;
                 case "subpart":
-                    return `Subpart ${value}`;
+                    const part = value.match(/^\d+/)[0];
+                    const subpart = value.match(/\w+$/)[0];
+                    return `Part ${part} Subpart ${subpart}`;
                     break;
                 case "section":
-                    return `§ ${value}`;
+                    return `§ ${value.replace("-", ".")}`;
                     break;
                 case "resourceCategory":
                     return `${value}`;
@@ -116,7 +121,7 @@ export default {
                 default:
                     return `${name} ${value}`;
             }
-        }
+        },
     },
 };
 </script>
