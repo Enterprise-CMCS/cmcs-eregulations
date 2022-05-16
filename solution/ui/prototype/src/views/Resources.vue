@@ -208,9 +208,35 @@ export default {
             const newScopeVals = scopeVals.filter(
                 (val) => val !== payload.selectedIdentifier
             );
+
+            if (payload.scope === "part") {
+                console.log(newQueryParams.subpart);
+                if (newQueryParams.subpart) {
+                    let sub = newQueryParams.subpart?.split(",");
+                    newQueryParams.subpart = sub
+                        .filter(
+                            (subpart) =>
+                                !subpart.includes(payload.selectedIdentifier)
+                        )
+                        .join(",");
+                }
+
+                if (newQueryParams.section) {
+                    let sec = newQueryParams.section.split(",");
+
+                    newQueryParams.section = sec
+                        .filter(
+                            (section) =>
+                                !section.includes(payload.selectedIdentifier)
+                        )
+                        .join(",");
+                }
+            }
+
             newQueryParams[payload.scope] = _isEmpty(newScopeVals)
                 ? undefined
                 : newScopeVals.join(",");
+
             if (_isEmpty(newQueryParams.part)) {
                 newQueryParams.title = undefined;
                 newQueryParams.subpart = undefined;
