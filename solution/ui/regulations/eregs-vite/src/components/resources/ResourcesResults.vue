@@ -101,8 +101,17 @@ export default {
             const base = import.meta.env.VITE_PR
                 ? `/${import.meta.env.VITE_PR}`
                 : "";
-            console.log("base", base);
             const partDate = `${partsLastUpdated[value.part]}/`;
+
+            // early return if related regulation is a subpart and not a section
+            if (value.display_name.includes("Subpart")) {
+                const subpart = value.display_name
+                    .split(" ")
+                    .slice(2)
+                    .join("-");
+                return `${base}/42/${value.part}/${subpart}/${partDate}`;
+            }
+
             const partAndSection = value.display_name.split(" ")[1];
             const section = partAndSection.split(".")[1];
             const partObj = partsList.find(
