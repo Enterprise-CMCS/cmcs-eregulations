@@ -98,6 +98,8 @@ export default {
             // Thankfully v3 will add "latest" for date
             // and will better provide parent subpart in resource locations array.
             let parent = "";
+            const base = import.meta.env.VITE_PR || "/";
+            console.log("base", base);
             const partDate = `${partsLastUpdated[value.part]}/`;
             const partAndSection = value.display_name.split(" ")[1];
             const section = partAndSection.split(".")[1];
@@ -111,7 +113,7 @@ export default {
                     : "";
             }
             const hash = `#${partAndSection.replace(/\./g, "-")}`;
-            return `/42/${value.part}/${parent}${partDate}${hash}`;
+            return `${base}42/${value.part}/${parent}${partDate}${hash}`;
         },
     },
 
