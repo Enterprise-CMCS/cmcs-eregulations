@@ -503,20 +503,12 @@ export default {
         flex: 1;
     }
 
-    .resources-content-container-sidebar {
-        display: flex;
-        flex-direction: row;
-    }
+    .results-column {
+        padding: 0 $spacer-5;
 
-    .filters-sidebar {
-        display: flex;
-        flex: 0 0 430px;
-        max-width: 430px;
-    }
-
-    .results-sidebar {
-        flex: 1;
-        padding: 40px 80px 0;
+        @include screen-xl {
+            padding: 0 $spacer-4;
+        }
     }
 
     .search-resources-form {

@@ -68,8 +68,12 @@ export default {
 <style lang="scss">
 .nav-container {
     overflow: auto;
-    width: 100%;
     background: $lightest_blue;
+    padding: 0 $spacer-5;
+
+    @include screen-xl {
+        padding: 0 $spacer-4;
+    }
 
     .content {
         margin: 0 auto;

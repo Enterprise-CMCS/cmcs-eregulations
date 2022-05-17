@@ -88,8 +88,12 @@ export default {
 <style lang="scss">
 .filters-container {
     overflow: auto;
-    width: 100%;
-    padding-bottom: 30px;
+
+    padding: 0 $spacer-5 30px $spacer-5;
+
+    @include screen-xl {
+        padding: 0 $spacer-4 30px $spacer-4;
+    }
 
     .content-with-column {
         margin: 0 auto;
