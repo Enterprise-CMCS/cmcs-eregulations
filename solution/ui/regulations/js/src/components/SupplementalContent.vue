@@ -1,4 +1,9 @@
 <template>
+  <div>
+      <a v-if="activePart">View All Subpart B Resources  (48)</a>
+      <h2 id="subpart-resources-heading">
+        {{ activePart }} Resources
+    </h2>
     <div class="supplemental-content-container">
         <supplemental-content-category
             v-for="category in categories"
@@ -13,6 +18,7 @@
         </supplemental-content-category>
         <simple-spinner v-if="isFetching"></simple-spinner>
     </div>
+  </div>
 </template>
 
 <script>
@@ -20,6 +26,7 @@ import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
 import { getSupplementalContentLegacy } from "../../api";
+import {EventCodes} from "../../utils";
 
 export default {
     components: {
@@ -56,6 +63,7 @@ export default {
         return {
             categories: [],
             isFetching: true,
+            selectedPart: undefined
         };
     },
 
@@ -76,6 +84,14 @@ export default {
             });
             return output;
         },
+        activePart: function(){
+          if (this.selectedPart !== undefined) {
+
+            return this.selectedPart
+
+          }
+          return `Subpart ${this.subparts[0]}`
+        }
     },
 
     watch: {
@@ -89,6 +105,11 @@ export default {
             this.isFetching = true;
             this.fetch_content(this.title, this.part);
         },
+        selectedPart() {
+            this.categories = [];
+            this.isFetching = true;
+            this.fetch_content(this.title, this.part, `&sections=${this.selectedPart.split('.')[1]}`);
+        },
     },
 
     created() {
@@ -96,6 +117,9 @@ export default {
     },
 
     mounted() {
+        this.$root.$on(EventCodes.SetSection, (args) => {
+          this.selectedPart = args.section
+        })
         if (!document.getElementById("categories")) return;
 
         const rawCategories = JSON.parse(
@@ -115,13 +139,13 @@ export default {
     },
 
     methods: {
-        async fetch_content(title, part) {
+        async fetch_content(title, part, location) {
             try {
                 const response = await getSupplementalContentLegacy(
                     this.api_url,
                     title,
                     part,
-                    this.joined_locations
+                    location || this.joined_locations
                 );
                 this.categories = response;
             } catch (error) {
