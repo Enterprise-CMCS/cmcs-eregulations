@@ -316,21 +316,32 @@ export default {
                 // get section parent (subpart) if exists.
                 // this will be included in response in v3 api
                 const sectionsArr = part.structure.children[0].children[0].children[0].children
-                    .map(
-                        (subpart) => {
-                            if (_isEmpty(subpart.children)) return [];
+                    .map((subpart) => {
+                        if (_isEmpty(subpart.children)) return [];
 
-                            const returnArray = subpart.children
-                                ? subpart.children.map((section) => ({
-                                      [section.identifier[1] ??
-                                      section.identifier[0]]: section.parent[0],
-                                  }))
-                                : [{ [subpart.identifier[1]]: "orphan" }];
-                            return returnArray;
-                        }
-                    )
+                        // handle mixed sections and subject_groups
+                        const returnArray = subpart.children.map(
+                            (subpartChild) => {
+                                if (subpartChild.type === "section") {
+                                    return {
+                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]:
+                                        subpartChild.parent[0],
+                                    };
+                                }
+
+                                // TODO: handle appendices with no children
+                                if (_isEmpty(subpartChild.children)) return [];
+
+                                return subpartChild.children.map((section) => ({
+                                    [section.identifier[1] ?? section.identifier[0]]:
+                                    subpartChild.parent[0],
+                                }));
+                            }
+                        );
+                        return returnArray;
+                    })
                     .filter((section) => !_isEmpty(section))
-                    .flat();
+                    .flat(2);
                 return {
                     name: part.name,
                     label:
