@@ -12,7 +12,7 @@
     </h2>
 
     {% simple_section_formatter cfr_title node.label as simple_citation %}
-    <view-resources-link section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+    <view-resources-link type="link" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
 
     <div class="paragraphs">
         {{node.text | safe}}
@@ -21,5 +21,7 @@
             {% include "regulations/partials/node_types/node.html" %}
         {% endfor %}
     </div>
+
+    <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
 
 </section>

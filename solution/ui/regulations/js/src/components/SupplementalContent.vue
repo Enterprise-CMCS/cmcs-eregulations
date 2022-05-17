@@ -1,6 +1,6 @@
 <template>
   <div>
-      <a v-if="activePart">View All Subpart B Resources  (48)</a>
+      <a v-if="selectedPart" v-on:click="clearSection" style="color:#5B616B">View All Subpart {{subparts[0]}} Resources  ({{resourceCount}})</a>
       <h2 id="subpart-resources-heading">
         {{ activePart }} Resources
     </h2>
@@ -27,6 +27,10 @@ import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
 import { getSupplementalContentLegacy } from "../../api";
 import {EventCodes} from "../../utils";
+
+function reducer(previousValue, currentValue){
+  return previousValue + currentValue.supplemental_content.length + currentValue.sub_categories.reduce(reducer, 0)
+}
 
 export default {
     components: {
@@ -63,7 +67,8 @@ export default {
         return {
             categories: [],
             isFetching: true,
-            selectedPart: undefined
+            selectedPart: undefined,
+            resourceCount: 0
         };
     },
 
@@ -108,7 +113,12 @@ export default {
         selectedPart() {
             this.categories = [];
             this.isFetching = true;
-            this.fetch_content(this.title, this.part, `&sections=${this.selectedPart.split('.')[1]}`);
+            if (this.selectedPart) {
+              this.fetch_content(this.title, this.part, `&sections=${this.selectedPart.split('.')[1]}`);
+            }
+            else{
+              this.fetch_content(this.title, this.part);
+            }
         },
     },
 
@@ -148,12 +158,20 @@ export default {
                     location || this.joined_locations
                 );
                 this.categories = response;
+                console.log(this.categories)
+                if (!this.resourceCount)
+                  this.resourceCount = this.categories.reduce(reducer, 0);
+
             } catch (error) {
                 console.error(error);
             } finally {
                 this.isFetching = false;
             }
         },
+      clearSection(){
+          console.log("Clearing Section")
+          this.selectedPart = undefined
+      }
     },
 };
 </script>
