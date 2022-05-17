@@ -48,16 +48,18 @@ export default {
 .fancy-container {
     flex: 1;
 
-    &:first-child {
-        margin-right: 9px;
-    }
+    @include screen-md {
+        &:first-child {
+            margin-right: 9px;
+        }
 
-    &:last-child {
-        margin-left: 9px;
-    }
+        &:last-child {
+            margin-left: 9px;
+        }
 
-    &:not(:first-child):not(:last-child) {
-        margin: 0 9px;
+        &:not(:first-child):not(:last-child) {
+            margin: 0 9px;
+        }
     }
 
     label {

@@ -109,6 +109,10 @@ export default {
         .filters {
             display: flex;
             justify-content: space-between;
+
+            @include custom-max($mobile-max / 1px) {
+                flex-direction: column;
+            }
         }
     }
 }
