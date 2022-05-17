@@ -1,6 +1,6 @@
 <template>
     <div id="app" class="resources-view">
-        <ResourcesNav :resourcesDisplay="resourcesDisplay" :aboutUrl="aboutUrl">
+        <ResourcesNav :aboutUrl="aboutUrl">
             <form class="search-resources-form" @submit.prevent="executeSearch">
                 <v-text-field
                     outlined
@@ -21,17 +21,15 @@
             </form>
         </ResourcesNav>
         <div
-            class="resources-content-container"
-            :class="contentContainerResourcesClass"
+            class="resources-content-container resources-content-container-column"
         >
-            <div :class="filtersResourcesClass">
+            <div class="filters-column">
                 <ResourcesFilters
-                    :resourcesDisplay="resourcesDisplay"
                     :filters="filters"
                     @select-filter="updateFilters"
                 />
             </div>
-            <div :class="resultsResourcesClass">
+            <div class="results-column">
                 <ResourcesSelections
                     :filterParams="filterParams"
                     @chip-filter="removeChip"
@@ -92,7 +90,6 @@ export default {
         return {
             isLoading: false,
             queryParams: this.$route.query,
-            resourcesDisplay: "column",
             partsLastUpdated: {},
             filters: {
                 part: {
@@ -130,15 +127,6 @@ export default {
     },
 
     computed: {
-        contentContainerResourcesClass() {
-            return `resources-content-container-${this.resourcesDisplay}`;
-        },
-        filtersResourcesClass() {
-            return `filters-${this.resourcesDisplay}`;
-        },
-        resultsResourcesClass() {
-            return `results-${this.resourcesDisplay}`;
-        },
         searchQuery: {
             get() {
                 return this.queryParams.q || "";

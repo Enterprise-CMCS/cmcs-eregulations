@@ -92,7 +92,11 @@ export default {
             return value.substring(3);
         },
         locationUrl(value, partsList, partsLastUpdated) {
-            // welp
+            // getting parent and partDate for proper link to section
+            // e.g. /42/433/Subpart-A/2021-03-01/#433-10
+            // is not straightforward with v2.  See below.
+            // Thankfully v3 will add "latest" for date
+            // and will better provide parent subpart in resource locations array.
             let parent = "";
             const partDate = `${partsLastUpdated[value.part]}/`;
             const partAndSection = value.display_name.split(" ")[1];

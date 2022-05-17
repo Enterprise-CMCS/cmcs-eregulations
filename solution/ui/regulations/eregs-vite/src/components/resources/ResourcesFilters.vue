@@ -1,6 +1,6 @@
 <template>
     <div class="filters-container">
-        <div class="content" :class="resourcesClass">
+        <div class="content content-with-column">
             <h3>Filter Resources</h3>
             <div class="filters">
                 <template v-for="(value, name) in filters">
@@ -43,15 +43,15 @@ export default {
     },
 
     props: {
-        resourcesDisplay: {
-            type: String,
-            required: false,
-        },
         filters: {
             type: Object,
             required: true,
         },
     },
+
+    data() {},
+
+    computed: {},
 
     beforeCreate() {},
 
@@ -69,14 +69,6 @@ export default {
 
     destroyed() {},
 
-    /*data() {},*/
-
-    computed: {
-        resourcesClass() {
-            return `content-with-${this.resourcesDisplay}`;
-        },
-    },
-
     methods: {
         filterEmitter(payload) {
             this.$emit("select-filter", payload);
@@ -88,7 +80,6 @@ export default {
 <style lang="scss">
 .filters-container {
     overflow: auto;
-
     padding: 0 $spacer-5 30px $spacer-5;
 
     @include screen-xl {
@@ -97,10 +88,6 @@ export default {
 
     .content-with-column {
         margin: 0 auto;
-    }
-
-    .content-with-sidebar {
-        margin-left: 50px;
     }
 
     .content {
