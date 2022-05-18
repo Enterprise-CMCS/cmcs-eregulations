@@ -1,8 +1,8 @@
 <template>
   <div>
-      <a v-if="selectedPart" v-on:click="clearSection" style="color:#5B616B">View All Subpart {{subparts[0]}} Resources  ({{resourceCount}})</a>
-      <h2 id="subpart-resources-heading">
-        {{ activePart }} Resources
+    <a v-if="selectedPart" v-on:click="clearSection" style="color:#5B616B">View All Subpart {{subparts[0]}} Resources  ({{resourceCount}})</a>
+    <h2 v-if="!requested_categories" id="subpart-resources-heading">
+      {{ activePart }} Resources
     </h2>
     <div class="supplemental-content-container">
         <supplemental-content-category

@@ -1,11 +1,11 @@
 <template>
-    <div v-if="isLink" style="padding-left: 5px; font-size: 12px; margin-top: -10px;">
+    <div v-if="isLink()" style="padding-left: 5px; font-size: 12px; margin-top: -10px;">
       <a v-if="this.count !== '0'" v-on:click="clickHandler">View {{this.section}} resources ({{ this.count }})</a>
-      <a v-else>No resources for {{this.section}}</a>
+      <div v-else>No resources for {{this.section}}.</div>
     </div>
     <div v-else style="padding-left: 5px; font-size: 14px;">
       <button class="btn" v-if="this.count !== '0'" v-on:click="clickHandler">View {{this.section}} resources ({{ this.count }})</button>
-      <button class="btn" v-else>No resources for {{this.section}}</button>
+      <button class="btn disabled" v-else>{{this.section}} Resources (0)</button>
     </div>
 </template>
 
@@ -36,7 +36,7 @@ export default {
       },
       isLink(){
         return this.type === 'link'
-      }
+      },
     },
 };
 </script>
@@ -48,6 +48,11 @@ export default {
     border-radius: 3px;
     padding: 9px 10px 10px;
     border: none;
+  }
+  .disabled{
+    background-color: #D6D7D9;
+    color: #212121;
+
   }
 
 </style>

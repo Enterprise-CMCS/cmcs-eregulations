@@ -23,6 +23,7 @@ from .models import (
     AbstractLocation,
     Section,
     Subpart,
+    FederalRegisterDocument
 )
 
 from .serializers import (
@@ -165,7 +166,7 @@ class AllSupplementalContentView(APIView):
                     'locations',
                     queryset=AbstractLocation.objects.all().select_subclasses()
                 )
-            ).distinct().select_subclasses(SupplementalContent).order_by(
+            ).distinct().select_subclasses(SupplementalContent, FederalRegisterDocument).order_by(
                 "-supplementalcontent__date"
             )[start:start+maxResults]
         serializer = SupplementalContentSerializer(query, many=True)
