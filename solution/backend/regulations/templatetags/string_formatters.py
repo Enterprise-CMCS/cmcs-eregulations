@@ -32,6 +32,7 @@ def section_formatter(title, node_label):
 
     return strip_tags(f"{title} CFR § {part}.{subpart}")
 
+
 @register.simple_tag
 @stringfilter
 def simple_section_formatter(title, node_label):
