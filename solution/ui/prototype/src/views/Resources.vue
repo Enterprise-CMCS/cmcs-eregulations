@@ -77,6 +77,7 @@ import {
     getCategories,
     getSectionObjects,
     getSubPartsForPart,
+    getAllSections,
     getSupplementalContentNew,
 } from "@/utilities/api";
 
@@ -246,21 +247,60 @@ export default {
                 query: newQueryParams,
             });
         },
-        updateFilters(payload) {
+
+        async updateFilters(payload) {
             const newQueryParams = { ...this.queryParams };
+            console.log("updates");
+            console.log(payload);
             if (newQueryParams[payload.scope]) {
+                if (payload.scope === "subpart") {
+                    const subpart = payload.selectedIdentifier;
+                    let sections = await this.getSectionsBySubpart(subpart);
+
+                    if(newQueryParams["section"]){
+                        sections = _uniq(newQueryParams["section"].split(',').concat(sections))
+                    }
+
+                    newQueryParams["section"] = sections.join(',');
+                }
+
                 const scopeVals = newQueryParams[payload.scope].split(",");
+                console.log(scopeVals)
                 scopeVals.push(payload.selectedIdentifier);
                 const uniqScopeVals = _uniq(scopeVals);
                 newQueryParams[payload.scope] = uniqScopeVals.sort().join(",");
             } else {
                 newQueryParams.title = "42"; // hard coding for now
                 newQueryParams[payload.scope] = payload.selectedIdentifier;
+                if (payload.scope === "subpart") {
+                    const subpart = payload.selectedIdentifier;
+                    let sections = await this.getSectionsBySubpart(subpart);
+                    if(newQueryParams["section"]){
+                        sections = _uniq(newQueryParams["section"].split(',').concat(sections))
+                    }
+
+                    newQueryParams["section"] = sections.join(',');
+                }
+                console.log(newQueryParams);
             }
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
             });
+        },
+        async getSectionsBySubpart(subpart) {
+            let splitSubpart = subpart.split("-");
+            const allSections = await getAllSections();
+            const sectionList = allSections
+                .filter((sec) => {
+                    return (
+                        sec.part === splitSubpart[0] &&
+                        sec.subpart == splitSubpart[1]
+                    );
+                })
+                .map((sec) => sec.part + "-" + sec.identifier);
+
+            return sectionList;
         },
         filterCategories(resultArray) {
             const filteredArray = resultArray.filter((item) => {
@@ -397,15 +437,34 @@ export default {
                 };
             });
         },
-        async getFormattedSubpartsList(part) {
-            this.filters.subpart.listItems = await getSubPartsForPart(part);
+
+        async getFormattedSubpartsList(parts) {
+            this.filters.subpart.listItems = await getSubPartsForPart(parts);
         },
-        async getFormattedSectionsList(part, subpart) {
-            this.filters.section.listItems = await getSectionObjects(
-                part,
-                subpart
+
+        async getFormattedSectionsList(part, subparts) {
+            const allSections = await getAllSections();
+
+            let parts = this.queryParams.part.split(",");
+            let finalsSections = [];
+            let sectionList = [];
+
+            for (const part of parts) {
+                sectionList = allSections.filter((sec) => sec.part === part);
+                finalsSections = finalsSections.concat(sectionList);
+            }
+
+            this.filters.section.listItems = finalsSections.sort((a, b) =>
+                a.part > b.part
+                    ? 1
+                    : a.part === b.part
+                    ? parseInt(a.identifier) > parseInt(b.identifier)
+                        ? 1
+                        : -1
+                    : -1
             );
         },
+
         async getCategoryList() {
             const rawCats = await getCategories();
             const reducedCats = rawCats
@@ -455,7 +514,6 @@ export default {
                 // always get content otherwise
 
                 this.getSupplementalContent(this.queryParams, this.searchQuery);
-
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
@@ -473,17 +531,11 @@ export default {
                             this.queryParams.subpart
                         );
                     } else {
-                        const oldParts = oldParams.part.split(",");
-                        const newParts = newParams.part.split(",");
-
-                        if (newParts.length > oldParts.length) {
-                            const newPart = _difference(newParts, oldParts)[0];
-                            this.getFormattedSubpartsList(newPart);
-                            this.getFormattedSectionsList(
-                                newPart,
-                                this.queryParams.subpart
-                            );
-                        }
+                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSectionsList(
+                            this.queryParams.part,
+                            this.queryParams.subpart
+                        );
                     }
                 }
             },
