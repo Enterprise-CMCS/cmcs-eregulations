@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 
 from regcore.models import Part
 from supplemental_content.models import Category, SubCategory, AbstractLocation
+from resources.models import Category, SubCategory
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart

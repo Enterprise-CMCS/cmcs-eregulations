@@ -25,7 +25,7 @@
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
-import { getSupplementalContentLegacy } from "../../api";
+import {getSupplementalContentByCategory,  getSupplementalContentLegacy } from "../../api";
 import {EventCodes} from "../../utils";
 
 function reducer(previousValue, currentValue){
@@ -59,8 +59,25 @@ export default {
         subparts: {
             type: Array,
             required: false,
-            default: [],
+            default() {
+              return []
+            },
         },
+        getSupplementalContent: {
+          type: Function,
+          required: false,
+          default: getSupplementalContentLegacy
+        },
+        getSupplementalContentByCategory:{
+          type: Function,
+          required: false,
+          default: getSupplementalContentByCategory
+        },
+        requested_categories:{
+          type: String,
+          required: false,
+          default: ""
+        }
     },
 
     data() {
@@ -151,16 +168,24 @@ export default {
     methods: {
         async fetch_content(title, part, location) {
             try {
-                const response = await getSupplementalContentLegacy(
-                    this.api_url,
-                    title,
-                    part,
-                    location || this.joined_locations
-                );
-                this.categories = response;
-                console.log(this.categories)
-                if (!this.resourceCount)
-                  this.resourceCount = this.categories.reduce(reducer, 0);
+                if (this.requested_categories.length > 0){
+                    this.categories = await this.getSupplementalContentByCategory(
+                        this.api_url,
+                        this.requested_categories.split(",")
+                    );
+                }
+                else {
+                    this.categories = await this.getSupplementalContent(
+                        this.api_url,
+                        title,
+                        part,
+                        location || this.joined_locations
+                    );
+
+                    if (!this.resourceCount) {
+                      this.resourceCount = this.categories.reduce(reducer, 0);
+                    }
+                }
 
             } catch (error) {
                 console.error(error);

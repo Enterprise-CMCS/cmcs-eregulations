@@ -7,8 +7,8 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from regcore.models import Part
 from .models import SearchIndex
 
-from supplemental_content.models import AbstractSupplementalContent
-from supplemental_content.serializers import FlatSupplementalContentSerializer
+from resources.models import AbstractResource
+from resources.serializers import FlatSupplementalContentSerializer
 
 
 class SearchViewSerializer(serializers.ModelSerializer):
@@ -64,7 +64,7 @@ class SupplementalContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
             search_type = 'phrase'
             cover_density = True
 
-        return AbstractSupplementalContent.objects.filter(approved=True).annotate(rank=SearchRank(
+        return AbstractResource.objects.filter(approved=True).annotate(rank=SearchRank(
                 SearchVector('supplementalcontent__name', weight='A', config='english')
                 + SearchVector('supplementalcontent__description', weight='A', config='english'),
                 SearchQuery(query, search_type=search_type, config='english'), cover_density=cover_density))\
