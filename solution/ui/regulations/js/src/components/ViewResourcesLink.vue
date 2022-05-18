@@ -3,7 +3,7 @@
       <a v-if="this.count !== '0'" v-on:click="clickHandler">
         <span class="bold">View {{this.section}} resources</span> ({{ this.count }})
       </a>
-      <div v-else>No resources for {{this.section}}.</div>
+      <div v-else class="bold disabled" >No resources for {{this.section}}.</div>
     </div>
     <div v-else style="padding-left: 5px; font-size: 14px;">
       <button class="btn" v-if="this.count !== '0'" v-on:click="clickHandler">
@@ -43,21 +43,3 @@ export default {
     },
 };
 </script>
-
-<style>
-  .btn{
-    background-color: #046791;
-    color: #fff;
-    border-radius: 3px;
-    padding: 9px 10px 10px;
-    border: none;
-    cursor: pointer;
-  }
-  .disabled{
-    background-color: #D6D7D9;
-    color: #212121;
-  }
-  .bold{
-    font-weight: 600
-  }
-</style>
