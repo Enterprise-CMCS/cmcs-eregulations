@@ -249,23 +249,17 @@ export default {
         },
 
         async updateFilters(payload) {
-            const newQueryParams = { ...this.queryParams };
-            console.log("updates");
-            console.log(payload);
+            let newQueryParams = { ...this.queryParams };
+
             if (newQueryParams[payload.scope]) {
                 if (payload.scope === "subpart") {
-                    const subpart = payload.selectedIdentifier;
-                    let sections = await this.getSectionsBySubpart(subpart);
-
-                    if(newQueryParams["section"]){
-                        sections = _uniq(newQueryParams["section"].split(',').concat(sections))
-                    }
-
-                    newQueryParams["section"] = sections.join(',');
+                    newQueryParams = await this.combineSections(
+                        payload.selectedIdentifier,
+                        newQueryParams
+                    );
                 }
 
                 const scopeVals = newQueryParams[payload.scope].split(",");
-                console.log(scopeVals)
                 scopeVals.push(payload.selectedIdentifier);
                 const uniqScopeVals = _uniq(scopeVals);
                 newQueryParams[payload.scope] = uniqScopeVals.sort().join(",");
@@ -273,20 +267,28 @@ export default {
                 newQueryParams.title = "42"; // hard coding for now
                 newQueryParams[payload.scope] = payload.selectedIdentifier;
                 if (payload.scope === "subpart") {
-                    const subpart = payload.selectedIdentifier;
-                    let sections = await this.getSectionsBySubpart(subpart);
-                    if(newQueryParams["section"]){
-                        sections = _uniq(newQueryParams["section"].split(',').concat(sections))
-                    }
-
-                    newQueryParams["section"] = sections.join(',');
+                    newQueryParams = await this.combineSections(
+                        payload.selectedIdentifier,
+                        newQueryParams
+                    );
                 }
-                console.log(newQueryParams);
             }
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
             });
+        },
+
+        async combineSections(subpart, queryParams) {
+            let sections = await this.getSectionsBySubpart(subpart);
+            if (queryParams["section"]) {
+                sections = _uniq(
+                    queryParams["section"].split(",").concat(sections)
+                );
+            }
+
+            queryParams["section"] = sections.join(",");
+            return queryParams;
         },
         async getSectionsBySubpart(subpart) {
             let splitSubpart = subpart.split("-");
