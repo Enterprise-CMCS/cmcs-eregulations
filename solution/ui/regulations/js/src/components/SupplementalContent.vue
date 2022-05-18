@@ -1,6 +1,8 @@
 <template>
   <div>
-    <a v-if="selectedPart" v-on:click="clearSection" style="color:#5B616B">View All Subpart {{subparts[0]}} Resources  ({{resourceCount}})</a>
+    <a v-if="selectedPart" v-on:click="clearSection" style="color:#5B616B; font-size: 12px">
+      <span class="bold"> View All Subpart {{subparts[0]}} Resources</span>  ({{resourceCount}})
+    </a>
     <h2 v-if="!requested_categories" id="subpart-resources-heading">
       {{ activePart }} Resources
     </h2>
@@ -200,3 +202,8 @@ export default {
     },
 };
 </script>
+<style>
+  .bold{
+    font-weight: 600
+  }
+</style>
