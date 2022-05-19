@@ -5,10 +5,10 @@
       </a>
       <div v-else class="bold disabled" >No resources for {{this.section}}.</div>
     </div>
-    <div v-else style="padding-left: 5px; font-size: 14px;">
+    <div v-else style="padding-left: 5px; font-size: 12px;">
       <button class="btn" v-if="this.count !== '0'" v-on:click="clickHandler">
         <span class="bold">View {{this.section}} resources</span> ({{ this.count }})</button>
-      <button class="btn disabled" v-else>{{this.section}} Resources (0)</button>
+      <button class="btn disabled" v-else><span class="bold">{{this.section}} Resources</span> (0)</button>
     </div>
 </template>
 
