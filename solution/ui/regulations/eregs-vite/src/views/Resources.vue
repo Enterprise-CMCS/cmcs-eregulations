@@ -322,10 +322,13 @@ export default {
                         // handle mixed sections and subject_groups
                         const returnArray = subpart.children.map(
                             (subpartChild) => {
+                                const parentValue = _isEmpty(subpartChild.parent)
+                                    ? "orphan"
+                                    : subpartChild.parent[0];
+
                                 if (subpartChild.type === "section") {
                                     return {
-                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]:
-                                        subpartChild.parent[0],
+                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]: parentValue
                                     };
                                 }
 
@@ -333,8 +336,7 @@ export default {
                                 if (_isEmpty(subpartChild.children)) return [];
 
                                 return subpartChild.children.map((section) => ({
-                                    [section.identifier[1] ?? section.identifier[0]]:
-                                    subpartChild.parent[0],
+                                    [section.identifier[1] ?? section.identifier[0]]: parentValue
                                 }));
                             }
                         );
