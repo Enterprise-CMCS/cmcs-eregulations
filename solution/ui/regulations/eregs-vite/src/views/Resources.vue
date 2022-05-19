@@ -371,7 +371,7 @@ export default {
             const reducedCats = rawCats
                 .filter((item) => item.object_type === "category")
                 .sort((a, b) =>
-                    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+                    a.order > b.order ? 1 : -1
                 )
                 .reduce((acc, item) => {
                     acc[item.name] = item;
@@ -380,7 +380,11 @@ export default {
                 }, {});
             rawCats.forEach((item) => {
                 if (item.object_type === "subcategory") {
-                    reducedCats[item.parent.name].subcategories.push(item);
+                    reducedCats[item.parent.name].subcategories
+                        .sort((a, b) =>
+                            a.order > b.order ? 1 : -1
+                        )
+                        .push(item);
                 }
             });
             this.filters.resourceCategory.listItems = Object.values(
