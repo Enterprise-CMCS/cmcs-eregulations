@@ -381,6 +381,7 @@ export {
     getSubPartsForPart,
     getSupplementalContentLegacy,
     getSupplementalContentNew,
+    getSupplementalContentByCategory,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,
