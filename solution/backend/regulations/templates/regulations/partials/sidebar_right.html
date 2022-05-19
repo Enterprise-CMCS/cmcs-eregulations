@@ -9,16 +9,12 @@
     <hr />
 
     {% if node_list %}
-    <h2 id="subpart-resources-heading">
-        {% if view_type == "part" %} Part {{ reg_part }} {% endif %}
-        {% if view_type == "subpart" %} Subpart {{ subpart }} {% endif %}
-        Resources
-    </h2>
 
     <supplemental-content
         api_url="{% url 'regcore' %}"
         title="{{ title }}"
         part="{{ reg_part }}"
+
         :sections="{{ node_list.sections }}"
         :subparts="{{ node_list.subparts }}"
     ></supplemental-content>

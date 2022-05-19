@@ -2,12 +2,14 @@ from django.views.generic.base import (
     TemplateView,
     View,
 )
+from django.db.models import Q, Count
+
 from django.http import Http404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from regcore.models import Part
-from resources.models import Category, SubCategory
+from resources.models import Category, SubCategory, AbstractLocation
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
@@ -44,6 +46,15 @@ class ReaderView(CitationContextMixin, TemplateView):
         categories = list(Category.objects.filter(show_if_empty=True).order_by('order').values())
         sub_categories = list(SubCategory.objects.filter(show_if_empty=True).order_by('order').values())
 
+        locations = AbstractLocation.objects.filter(part=reg_part).select_subclasses().annotate(
+            num_locations=Count(
+                'resources', filter=Q(resources__approved="t")
+            )).filter(
+            num_locations__gt=0)
+        resource_count = {}
+        for location in locations:
+            resource_count[location.display_name] = location.num_locations
+
         c = {
             'tree':         tree,
             'title':        reg_title,
@@ -56,6 +67,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'view_type':    self.get_view_type(),
             'categories':   categories,
             'sub_categories': sub_categories,
+            'resource_count': resource_count
         }
 
         end = datetime.now().timestamp()
