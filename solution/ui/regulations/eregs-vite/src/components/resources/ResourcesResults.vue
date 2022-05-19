@@ -119,7 +119,7 @@ export default {
             );
             if (partObj.sections) {
                 const partSectionsDict = partObj.sections;
-                parent = partSectionsDict[section]
+                parent = partSectionsDict[section] && partSectionsDict[section] !== "orphan"
                     ? `Subpart-${partSectionsDict[section]}/`
                     : "";
             }
