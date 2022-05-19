@@ -252,13 +252,6 @@ export default {
             let newQueryParams = { ...this.queryParams };
 
             if (newQueryParams[payload.scope]) {
-                if (payload.scope === "subpart") {
-                    newQueryParams = await this.combineSections(
-                        payload.selectedIdentifier,
-                        newQueryParams
-                    );
-                }
-
                 const scopeVals = newQueryParams[payload.scope].split(",");
                 scopeVals.push(payload.selectedIdentifier);
                 const uniqScopeVals = _uniq(scopeVals);
@@ -266,12 +259,12 @@ export default {
             } else {
                 newQueryParams.title = "42"; // hard coding for now
                 newQueryParams[payload.scope] = payload.selectedIdentifier;
-                if (payload.scope === "subpart") {
-                    newQueryParams = await this.combineSections(
-                        payload.selectedIdentifier,
-                        newQueryParams
-                    );
-                }
+            }
+            if (payload.scope === "subpart") {
+                newQueryParams = await this.combineSections(
+                    payload.selectedIdentifier,
+                    newQueryParams
+                );
             }
             this.$router.push({
                 name: "resources",
