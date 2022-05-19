@@ -284,7 +284,7 @@ export default {
             return queryParams;
         },
         async getSectionsBySubpart(subpart) {
-            let splitSubpart = subpart.split("-");
+            const splitSubpart = subpart.split("-");
             const allSections = await getAllSections();
             const sectionList = allSections
                 .filter((sec) => {
