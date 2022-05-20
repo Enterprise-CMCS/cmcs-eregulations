@@ -33,7 +33,12 @@ function parseError(err) {
     }
 }
 
+const EventCodes = {
+    SetSection: 'SetSection'
+}
+
 export {
     delay,
     parseError,
+    EventCodes
 };

@@ -8,20 +8,13 @@
     <print-btn btn_type="labeled-icon"></print-btn>
     <hr />
 
-    <h2>Part {{ reg_part}} Federal Register Documents</h2>
-
-    <related-rules class="related-rules" title="{{ title }}" part="{{ reg_part }}" limit="2" ruletype="RULE"></related-rules>
     {% if node_list %}
-    <h2 id="subpart-resources-heading">
-        {% if view_type == "part" %} Part {{ reg_part }} {% endif %}
-        {% if view_type == "subpart" %} Subpart {{ subpart }} {% endif %}
-        Resources
-    </h2>
 
     <supplemental-content
         api_url="{% url 'regcore' %}"
         title="{{ title }}"
         part="{{ reg_part }}"
+
         :sections="{{ node_list.sections }}"
         :subparts="{{ node_list.subparts }}"
     ></supplemental-content>
