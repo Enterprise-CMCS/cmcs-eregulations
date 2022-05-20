@@ -35,6 +35,15 @@ def section_formatter(title, node_label):
 
 @register.simple_tag
 @stringfilter
+def simple_section_formatter(title, node_label):
+    part = node_label[0]
+    subpart = node_label[1]
+
+    return strip_tags(f"{title} {part}.{subpart}")
+
+
+@register.simple_tag
+@stringfilter
 def paragraph_formatter(title, node_label):
     part = node_label[0]
     section = node_label[1]

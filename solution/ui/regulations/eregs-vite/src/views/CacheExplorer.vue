@@ -47,12 +47,19 @@ import {
     setCacheItem,
 } from "../../../js/api.js";
 
-const formatKey = (key) => key.replace("GET/", "");
+const formatKey = (key) => key.replace("GET", "");
 
 export default {
     name: "CacheExplorer",
 
     components: {},
+
+    props: {
+        apiUrl: {
+            type: String,
+            default: "wrong again"
+        }
+    },
 
     data() {
         return {
@@ -81,7 +88,7 @@ export default {
         addToCache: async function () {
             try {
                 await setCacheItem(
-                    `GET/${this.path}`,
+                    `GET${this.path}`,
                     JSON.parse(this.apiData)
                 );
                 this.path = "";

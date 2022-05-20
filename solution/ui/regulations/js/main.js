@@ -7,6 +7,7 @@ import SupplementalContent from "../dist/SupplementalContent";
 import CopyBtn from "../dist/CopyBtn";
 import PrintBtn from "../dist/PrintBtn";
 import TableComponent from "../dist/TableComponent";
+import ViewResourcesLink from "../dist/ViewResourcesLink";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -150,6 +151,7 @@ function main() {
             CopyBtn,
             TableComponent,
             PrintBtn,
+            ViewResourcesLink,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");
