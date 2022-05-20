@@ -98,9 +98,10 @@ export default {
             // Thankfully v3 will add "latest" for date
             // and will better provide parent subpart in resource locations array.
             let parent = "";
-            const base = import.meta.env.VITE_ENV
-                ? `/${import.meta.env.VITE_ENV}`
-                : "";
+            const base =
+                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
+                    ? `/${import.meta.env.VITE_ENV}`
+                    : "";
             const partDate = `${partsLastUpdated[value.part]}/`;
 
             // early return if related regulation is a subpart and not a section
@@ -119,9 +120,11 @@ export default {
             );
             if (partObj.sections) {
                 const partSectionsDict = partObj.sections;
-                parent = partSectionsDict[section] && partSectionsDict[section] !== "orphan"
-                    ? `Subpart-${partSectionsDict[section]}/`
-                    : "";
+                parent =
+                    partSectionsDict[section] &&
+                    partSectionsDict[section] !== "orphan"
+                        ? `Subpart-${partSectionsDict[section]}/`
+                        : "";
             }
             const hash = `#${partAndSection.replace(/\./g, "-")}`;
             return `${base}/42/${value.part}/${parent}${partDate}${hash}`;
