@@ -98,8 +98,8 @@ export default {
             // Thankfully v3 will add "latest" for date
             // and will better provide parent subpart in resource locations array.
             let parent = "";
-            const base = import.meta.env.VITE_PR
-                ? `/${import.meta.env.VITE_PR}`
+            const base = import.meta.env.VITE_ENV
+                ? `/${import.meta.env.VITE_ENV}`
                 : "";
             const partDate = `${partsLastUpdated[value.part]}/`;
 
