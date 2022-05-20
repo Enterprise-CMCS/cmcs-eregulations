@@ -461,11 +461,6 @@ const getAllSections = async () => {
     const all_parts = await getAllParts()
     let subparts = []
     let allSections = []
-    // identifier: c.identifier[1],
-    // label: c.label_level,
-    // part: part,
-    // description: c.label_description,
-    console.log('hit')
     
     all_parts.forEach(part => part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
     for (const subpart of subparts) {
