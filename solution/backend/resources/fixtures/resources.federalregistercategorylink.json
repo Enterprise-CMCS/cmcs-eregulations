@@ -1,0 +1,18 @@
+[
+{
+  "model": "resources.federalregistercategorylink",
+  "pk": 1,
+  "fields": {
+    "name": "Rule",
+    "category": 2
+  }
+},
+{
+  "model": "resources.federalregistercategorylink",
+  "pk": 2,
+  "fields": {
+    "name": "Proposed Rule",
+    "category": 1
+  }
+}
+]
