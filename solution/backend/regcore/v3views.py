@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from regcore.models import Title, Part, ECFRParserResult
-from regcore.views import SettingsAuthentication
+from .views import SettingsAuthentication
 
 from regcore.serializers import (
     FlatContentsSerializer,
@@ -16,7 +16,7 @@ from regcore.serializers import (
     TitleRetrieveSerializer,
     TitleUploadSerializer,
     PartsSerializer,
-    VersionsSerializer,
+    StringListSerializer,
     ParserResultSerializer
 )
 
@@ -102,7 +102,7 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
     responses={(200, "application/json"): {"type": "string"}},
 )
 class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = VersionsSerializer
+    serializer_class = StringListSerializer
 
     def get_queryset(self):
         title = self.kwargs.get("title")

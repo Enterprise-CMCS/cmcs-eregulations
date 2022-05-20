@@ -80,8 +80,20 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          serverless deploy --stage ${{ matrix.environment }}
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage ${{ matrix.environment }}
+          serverless deploy --stage ${{ matrix.environment }} --config ./serverless-ecfr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage ${{ matrix.environment }} --config ./serverless-ecfr.yml
+          popd
+      - name: deploy and run FR parser
+        id: deploy-run-fr-parser
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          pushd solution/parser
+          npm install serverless -g
+          npm install
+          serverless deploy --stage ${{ matrix.environment }} --config ./serverless-fr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage ${{ matrix.environment }} --config ./serverless-fr.yml
           popd
       # build the static assets for the prototype website
       - name: build static assets and deploy prototype

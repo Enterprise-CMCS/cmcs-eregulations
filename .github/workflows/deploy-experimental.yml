@@ -91,9 +91,10 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
-      # deploy the ECFR parser
+      # deploy and run eCFR parser
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
+        timeout-minutes: 20
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -102,8 +103,22 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          serverless deploy --stage dev-${PR}
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev-${PR}
+          serverless deploy --stage dev-${PR} --config ./serverless-ecfr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev-${PR} --config ./serverless-ecfr.yml
+          popd
+      # deploy and run Federal Register parser
+      - name: deploy and run FR parser
+        id: deploy-run-fr-parser
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd solution/parser
+          npm install serverless -g
+          npm install
+          serverless deploy --stage dev-${PR} --config ./serverless-fr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev-${PR} --config ./serverless-fr.yml
           popd
       # Notify github that this is deployed and ready to look at
       - name: Create comment
