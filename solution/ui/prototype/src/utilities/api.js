@@ -429,21 +429,15 @@ const getSubPartsandSections = async () => {
             fullSelection.push({ label: subpart.data.label, id: subpart.data.label, location: { part: subpart.part, section: subpart.data.identifier[1] }, type: 'section' })
         }
         else {
+            let sections = subpart.data.children
             fullSelection.push({ label: "Part " + subpart.part + " " + subpart.data.label, label: "Part " + subpart.part + " " + subpart.data.label, location: { part: subpart.part, subpart: subpart.data.identifier[0] }, type: 'subpart' })
 
-            let sections = subpart.data.children
-
             for (const section of sections) {
-
                 if (section.type != "subject_group") {
-
                     fullSelection.push({ label: section.label, id: section.label, location: { part: subpart.part, section: section.identifier[1] }, part: subpart.part, type: 'section' })
-
                 }
                 else {
-
                     for (const s of section.children) {
-
                         fullSelection.push({ label: s.label, id: s.label, location: { part: subpart.part, section: s.identifier[1] }, part: subpart.part, type: 'section' })
                     }
                 }
@@ -461,26 +455,26 @@ const getAllSections = async () => {
     const all_parts = await getAllParts()
     let subparts = []
     let allSections = []
-    
+
     all_parts.forEach(part => part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
     for (const subpart of subparts) {
         let part = subpart.part
-        
+
         if (subpart.data.type === 'section') {
-            allSections.push({part: part, subpart: 'none', identifier: subpart.data.identifier[1], label: subpart.data.label_level, part: part, description:subpart.data.label_description })
+            allSections.push({ part: part, subpart: 'none', identifier: subpart.data.identifier[1], label: subpart.data.label_level, part: part, description: subpart.data.label_description })
         }
         else {
             let sections = subpart.data.children
             let sub = subpart.data.identifier[0]
-   
+
             for (const section of sections) {
 
                 if (section.type != "subject_group") {
-                    allSections.push({subpart: sub,identifier: section.identifier[1], label: section.label_level, part: part, description:section.label_description})
+                    allSections.push({ subpart: sub, identifier: section.identifier[1], label: section.label_level, part: part, description: section.label_description })
                 }
                 else {
                     for (const s of section.children) {
-                        allSections.push({subpart: sub,  identifier: s.identifier[1], label: s.label_level, part: part, description:s.label_description})
+                        allSections.push({ subpart: sub, identifier: s.identifier[1], label: s.label_level, part: part, description: s.label_description })
                     }
                 }
             }
@@ -488,275 +482,275 @@ const getAllSections = async () => {
     }
     return allSections;
 }
-    /**
-     *
-     * Fetches all_parts and returns a list of objects for the subparts in that part
-     * Each object has a label and an identifier
-     * @param {string} - the name of a part in title 42
-     * @returns {Object<{label:string, identifier:string}>}
-     */
-    const getSubPartsForPart = async (partParam) => {
-        // if part is string of multiple parts, use final part
-        let selectedParts = partParam.split(',')
-        const all_parts = await getAllParts();
-        const parts = all_parts.map((d) => d.name);
-        let potentialSubParts = []
-        for (const part of selectedParts) {
-            const subP = all_parts[parts.indexOf(part)].structure.children[0].children[0]
-                .children[0].children;
-            potentialSubParts = potentialSubParts.concat(subP)
-        }
-        const subParts = potentialSubParts.filter((p) => p.type === "subpart");
+/**
+ *
+ * Fetches all_parts and returns a list of objects for the subparts in that part
+ * Each object has a label and an identifier
+ * @param {string} - the name of a part in title 42
+ * @returns {Object<{label:string, identifier:string}>}
+ */
+const getSubPartsForPart = async (partParam) => {
+    // if part is string of multiple parts, use final part
+    let selectedParts = partParam.split(',')
+    const all_parts = await getAllParts();
+    const parts = all_parts.map((d) => d.name);
+    let potentialSubParts = []
+    for (const part of selectedParts) {
+        const subP = all_parts[parts.indexOf(part)].structure.children[0].children[0]
+            .children[0].children;
+        potentialSubParts = potentialSubParts.concat(subP)
+    }
+    const subParts = potentialSubParts.filter((p) => p.type === "subpart");
 
-        return subParts.map((s) => {
+    return subParts.map((s) => {
+        return {
+            label: s.label,
+            part: s.parent[0],
+            identifier: s.identifier[0],
+            range: s.descendant_range,
+        };
+    });
+};
+
+/**
+ *
+ * Fetches all_parts and returns a list of sections for the part and subpart specified
+ * @param part - a part in title 42
+ * @param subPart - a subpart in title 42 ("A", "B", etc)
+ * @returns {Array[string]} - a list of all sections in this subpart
+ */
+const getSectionsForSubPart = async (part, subPart) => {
+    const all_parts = await getAllParts()
+    const parts = all_parts.map(d => d.name)
+    const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
+    const parent = potentialSubParts.find(p => p.type === "subpart" && p.identifier[0] === subPart)
+    const sections = []
+    parent.children.forEach(c => {
+        if (c.type === "section" && !c.reserved) {
+            sections.push(c.identifier[1])
+        } else if (c.children) {
+            c.children.forEach(child => {
+                if (child.type === "section" && !c.reserved) {
+                    sections.push(child.identifier[1])
+                }
+            })
+        }
+    })
+    return sections
+};
+
+/**
+ *
+ * Fetches all_parts and returns formatted section objects for the part (and subpart if specified)
+ * @param {string} part - a part in title 42
+ * @param {?string} subPart - a subpart in title 42 ("A", "B", etc) - undefined returns all sections for part
+ * @returns {Array[Object]} - an array of formatted objects for the section or subpart
+ */
+const getSectionObjects = async (part, subPart) => {
+    // if part is string of multiple parts, use final part
+    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
+    const all_parts = await getAllParts();
+    const parts = all_parts.map((d) => d.name);
+    const potentialSubParts =
+        all_parts[parts.indexOf(part)].structure.children[0].children[0]
+            .children[0].children;
+    if (subPart) {
+        const parent = potentialSubParts.find(
+            (p) => p.type === "subpart" && p.identifier[0] === subPart
+        );
+        return parent.children.map((c) => {
+
             return {
-                label: s.label,
-                part: s.parent[0],
-                identifier: s.identifier[0],
-                range: s.descendant_range,
+                identifier: c.identifier[1],
+                label: c.label_level,
+                part: part,
+                description: c.label_description,
             };
         });
-    };
-
-    /**
-     *
-     * Fetches all_parts and returns a list of sections for the part and subpart specified
-     * @param part - a part in title 42
-     * @param subPart - a subpart in title 42 ("A", "B", etc)
-     * @returns {Array[string]} - a list of all sections in this subpart
-     */
-    const getSectionsForSubPart = async (part, subPart) => {
-        const all_parts = await getAllParts()
-        const parts = all_parts.map(d => d.name)
-        const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
-        const parent = potentialSubParts.find(p => p.type === "subpart" && p.identifier[0] === subPart)
-        const sections = []
-        parent.children.forEach(c => {
-            if (c.type === "section" && !c.reserved) {
-                sections.push(c.identifier[1])
-            } else if (c.children) {
-                c.children.forEach(child => {
-                    if (child.type === "section" && !c.reserved) {
-                        sections.push(child.identifier[1])
-                    }
+    } else {
+        return potentialSubParts
+            .filter((p) => p.type === "subpart")
+            .flatMap((p) =>
+                p.children.map((c) => {
+                    return {
+                        identifier: c.identifier[1],
+                        label: c.label_level,
+                        part: part,
+                        description: c.label_description,
+                    };
                 })
-            }
-        })
-        return sections
-    };
-
-    /**
-     *
-     * Fetches all_parts and returns formatted section objects for the part (and subpart if specified)
-     * @param {string} part - a part in title 42
-     * @param {?string} subPart - a subpart in title 42 ("A", "B", etc) - undefined returns all sections for part
-     * @returns {Array[Object]} - an array of formatted objects for the section or subpart
-     */
-    const getSectionObjects = async (part, subPart) => {
-        // if part is string of multiple parts, use final part
-        part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
-        const all_parts = await getAllParts();
-        const parts = all_parts.map((d) => d.name);
-        const potentialSubParts =
-            all_parts[parts.indexOf(part)].structure.children[0].children[0]
-                .children[0].children;
-        if (subPart) {
-            const parent = potentialSubParts.find(
-                (p) => p.type === "subpart" && p.identifier[0] === subPart
             );
-            return parent.children.map((c) => {
-
-                return {
-                    identifier: c.identifier[1],
-                    label: c.label_level,
-                    part: part,
-                    description: c.label_description,
-                };
-            });
-        } else {
-            return potentialSubParts
-                .filter((p) => p.type === "subpart")
-                .flatMap((p) =>
-                    p.children.map((c) => {
-                        return {
-                            identifier: c.identifier[1],
-                            label: c.label_level,
-                            part: part,
-                            description: c.label_description,
-                        };
-                    })
-                );
-        }
-    };
-
-    /**
-     *
-     * Fetches all_parts and returns a list of sections for the part and subpart specified
-     * @param part - a part in title 42
-     * @param subPart - a subpart in title 42 ("A", "B", etc)
-     * @returns {Array[Object>TOC>, Object<orphansAndSubparts>]} - a tuple with a Table of contents and a list of
-     * top level elements for the requested part
-     */
-
-    const getPart = async (title, part) => {
-        const result = await httpApiGet(
-            `${getKebabDate()}/title/${title}/part/${part}`
-        );
-
-        // mixing lodash get and optional chaining.  Both provide safeguards and do the same this
-        const toc = result?.toc;
-
-        const orphansAndSubparts = _get(result, "document.children");
-        return [toc, orphansAndSubparts];
-    };
-
-    /**
-     *
-     * @param title {string} - The requested title, defaults to 42
-     * @param part {string} - The part pf the title
-     * @param scope {string} - a formatted string of the sections desired ( section=1&section=2&section=3...)
-     * @param identifier {string} - a formatted string of the subparts desired (subpart=A&subpart=B...)
-     * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
-     */
-
-    const getAllSupplementalContentByPieces = async (start, max_results = 100) => {
-        const result = await (httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
-        return result;
     }
+};
 
-    const getSupplementalContent = async (
-        title = "42",
-        part,
-        scope,
-        identifier
-    ) => {
-        const result = await httpApiGet(
-            `title/${title}/part/${part}/supplemental_content?&${scope}s=${identifier}`
-        );
-        return result;
-    };
+/**
+ *
+ * Fetches all_parts and returns a list of sections for the part and subpart specified
+ * @param part - a part in title 42
+ * @param subPart - a subpart in title 42 ("A", "B", etc)
+ * @returns {Array[Object>TOC>, Object<orphansAndSubparts>]} - a tuple with a Table of contents and a list of
+ * top level elements for the requested part
+ */
 
-    /**
-     *
-     * @param title {string} - The requested title, defaults to 42
-     * @param part {string} - The part of the title
-     * @param sections {Array[string]} - a list of the sections desired ([1,2,3...)
-     * @param subparts {Array[string]} - a list of the subparts desired (subpart=A&subpart=B...)
-     * @param q {string} - a word or phrase on which to search ("therapy")
-     * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
-     */
-    const getSupplementalContentNew = async (
-        title,
-        part,
-        sections = [],
-        subparts = [],
-        start = 0,
-        max_results = 10000,
-        q = "",
-    ) => {
-        const queryString = q ? `&q=${q}` : "";
-        let sString = "";
-        for (let s in sections) {
-            sString = sString + "&sections=" + sections[s];
-        }
-        for (let sp in subparts) {
-            sString = sString + "&subparts=" + subparts[sp];
-        }
-        sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
-        const result = await httpApiGet(
-            `title/${title}/part/${part}/supplemental_content?${sString}`
-        );
+const getPart = async (title, part) => {
+    const result = await httpApiGet(
+        `${getKebabDate()}/title/${title}/part/${part}`
+    );
 
-        return result;
-    };
+    // mixing lodash get and optional chaining.  Both provide safeguards and do the same this
+    const toc = result?.toc;
 
-    const getSupIDByLocations = async () => {
-        const result = await httpApiGet('locations');
-        return result;
+    const orphansAndSubparts = _get(result, "document.children");
+    return [toc, orphansAndSubparts];
+};
+
+/**
+ *
+ * @param title {string} - The requested title, defaults to 42
+ * @param part {string} - The part pf the title
+ * @param scope {string} - a formatted string of the sections desired ( section=1&section=2&section=3...)
+ * @param identifier {string} - a formatted string of the subparts desired (subpart=A&subpart=B...)
+ * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
+ */
+
+const getAllSupplementalContentByPieces = async (start, max_results = 100) => {
+    const result = await (httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
+    return result;
+}
+
+const getSupplementalContent = async (
+    title = "42",
+    part,
+    scope,
+    identifier
+) => {
+    const result = await httpApiGet(
+        `title/${title}/part/${part}/supplemental_content?&${scope}s=${identifier}`
+    );
+    return result;
+};
+
+/**
+ *
+ * @param title {string} - The requested title, defaults to 42
+ * @param part {string} - The part of the title
+ * @param sections {Array[string]} - a list of the sections desired ([1,2,3...)
+ * @param subparts {Array[string]} - a list of the subparts desired (subpart=A&subpart=B...)
+ * @param q {string} - a word or phrase on which to search ("therapy")
+ * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
+ */
+const getSupplementalContentNew = async (
+    title,
+    part,
+    sections = [],
+    subparts = [],
+    start = 0,
+    max_results = 10000,
+    q = "",
+) => {
+    const queryString = q ? `&q=${q}` : "";
+    let sString = "";
+    for (let s in sections) {
+        sString = sString + "&sections=" + sections[s];
     }
-
-    const getSupByPart = async (title, part, subparts, sections) => {
-        const locations = await httpApiGet('locations');
-        const allIndex = sections.concat(subparts)
-
-        const supplemental = await httpApiGet(`sup_by_id/title/${title}/part/${part}`)
-
-        const supList = allIndex.length === 0
-            ? Object.keys(locations[title][part]).reduce((acc, x) => {
-                return acc.concat(locations[title][part][x])
-            }, [])
-            : allIndex.reduce((acc, sec) => {
-                return acc.concat(locations[title][part][sec])
-            }, [])
-
-        const contents = [...new Set(supList)].map(supId => {
-            const item = JSON.parse(JSON.stringify(supplemental[supId]))
-            item['category'] = item['category'].name
-            return item
-        })
-
-        return contents;
+    for (let sp in subparts) {
+        sString = sString + "&subparts=" + subparts[sp];
     }
-    const getCategories = async () => {
-        return await httpApiGet("categories");
-    };
+    sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
+    const result = await httpApiGet(
+        `title/${title}/part/${part}/supplemental_content?${sString}`
+    );
 
-    /**
-     *
-     * @param part {string} - a regulation part
-     * @returns {Object<string:number>} - an object where the keys represent the display name for each part and
-     * the value is the count of how many pieces of supplemental content exist for that part.
-     */
-    const getSupplementalContentCountForPart = async (part) => {
-        const result = await httpApiGet(
-            `supplemental_content_count_by_part?part=${part}`
-        );
-        return result;
-    };
+    return result;
+};
 
-    /**
-     *
-     * @param query {string} - a query string to search supplemental content
-     * @returns {Object<string:number>} - a list containing unstructured supplemental content search results
-     */
-    const getSupplementalContentSearchResults = async (query) => {
-        const result = await httpApiGet(
-            `supplemental_content/search?q=${query}`
-        );
-        return result;
-    };
+const getSupIDByLocations = async () => {
+    const result = await httpApiGet('locations');
+    return result;
+}
 
-    // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
+const getSupByPart = async (title, part, subparts, sections) => {
+    const locations = await httpApiGet('locations');
+    const allIndex = sections.concat(subparts)
 
-    export {
-        configure,
-        setIdToken,
-        getDecodedIdToken,
-        forgetIdToken,
-        config,
-        getLastUpdatedDate,
-        getHomepageStructure,
-        getPartNames,
-        getAllParts,
-        getSubPartsForPart,
-        getPart,
-        getCacheKeys,
-        removeCacheItem,
-        getCacheItem,
-        setCacheItem,
-        getSupplementalContent,
-        getSupplementalContentNew,
-        getPartsList,
-        getSectionsForSubPart,
-        getSectionObjects,
-        getSupplementalContentCountForPart,
-        getCategories,
-        getPartsDetails,
-        getSubPartsandSections,
-        getAllSupplementalContentByPieces,
-        getSupIDByLocations,
-        getSupByPart,
-        getAllSections,
-        getSupplementalContentSearchResults
-        // API Export Insertion Point (do not change this text, it is being used by hygen cli)
-    };
+    const supplemental = await httpApiGet(`sup_by_id/title/${title}/part/${part}`)
+
+    const supList = allIndex.length === 0
+        ? Object.keys(locations[title][part]).reduce((acc, x) => {
+            return acc.concat(locations[title][part][x])
+        }, [])
+        : allIndex.reduce((acc, sec) => {
+            return acc.concat(locations[title][part][sec])
+        }, [])
+
+    const contents = [...new Set(supList)].map(supId => {
+        const item = JSON.parse(JSON.stringify(supplemental[supId]))
+        item['category'] = item['category'].name
+        return item
+    })
+
+    return contents;
+}
+const getCategories = async () => {
+    return await httpApiGet("categories");
+};
+
+/**
+ *
+ * @param part {string} - a regulation part
+ * @returns {Object<string:number>} - an object where the keys represent the display name for each part and
+ * the value is the count of how many pieces of supplemental content exist for that part.
+ */
+const getSupplementalContentCountForPart = async (part) => {
+    const result = await httpApiGet(
+        `supplemental_content_count_by_part?part=${part}`
+    );
+    return result;
+};
+
+/**
+ *
+ * @param query {string} - a query string to search supplemental content
+ * @returns {Object<string:number>} - a list containing unstructured supplemental content search results
+ */
+const getSupplementalContentSearchResults = async (query) => {
+    const result = await httpApiGet(
+        `supplemental_content/search?q=${query}`
+    );
+    return result;
+};
+
+// API Functions Insertion Point (do not change this text, it is being used by hygen cli)
+
+export {
+    configure,
+    setIdToken,
+    getDecodedIdToken,
+    forgetIdToken,
+    config,
+    getLastUpdatedDate,
+    getHomepageStructure,
+    getPartNames,
+    getAllParts,
+    getSubPartsForPart,
+    getPart,
+    getCacheKeys,
+    removeCacheItem,
+    getCacheItem,
+    setCacheItem,
+    getSupplementalContent,
+    getSupplementalContentNew,
+    getPartsList,
+    getSectionsForSubPart,
+    getSectionObjects,
+    getSupplementalContentCountForPart,
+    getCategories,
+    getPartsDetails,
+    getSubPartsandSections,
+    getAllSupplementalContentByPieces,
+    getSupIDByLocations,
+    getSupByPart,
+    getAllSections,
+    getSupplementalContentSearchResults
+    // API Export Insertion Point (do not change this text, it is being used by hygen cli)
+};
