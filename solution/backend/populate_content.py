@@ -8,9 +8,11 @@ def handler(event, context):
     import django
     django.setup()
 
-    call_command('loaddata', 'supplemental_content.category.json')
-    call_command('loaddata', 'supplemental_content.subcategory.json')
-    call_command('loaddata', 'supplemental_content.subpart.json')
-    call_command('loaddata', 'supplemental_content.section.json')
-    call_command('loaddata', 'supplemental_content.supplementalcontent.json')
-    call_command('loaddata', 'synonyms.json')
+    call_command('loaddata', 'resources.category.json')
+    call_command('loaddata', 'resources.subcategory.json')
+    call_command('loaddata', 'resources.subpart.json')
+    call_command('loaddata', 'resources.section.json')
+    call_command('loaddata', 'resources.supplementalcontent.json')
+    call_command('loaddata', 'resources.federalregistercategorylink.json')
+    call_command('loaddata', 'resources.federalregisterdocument.json')
+    call_command('loaddata', 'search.synonym.json')

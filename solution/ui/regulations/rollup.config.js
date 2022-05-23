@@ -72,6 +72,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/ViewResourcesLink.vue",
+        output: {
+            format: "esm",
+            file: "dist/ViewResourcesLink.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",
