@@ -17,12 +17,15 @@ const routes = [
         name: "resources",
         component: Resources,
     },
-]
+];
 
 const router = new VueRouter({
     mode: "history",
     routes,
-    base: import.meta.env.VITE_PR || "/",
+    base:
+        import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
+            ? import.meta.env.VITE_ENV
+            : "/",
     scrollBehavior(to) {
         if (to.hash) {
             return {
