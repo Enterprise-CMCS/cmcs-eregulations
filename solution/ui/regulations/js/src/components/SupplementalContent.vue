@@ -154,16 +154,6 @@ export default {
               this.fetch_content(this.title, this.part);
             }
         },
-        selectedPart() {
-            this.categories = [];
-            this.isFetching = true;
-            if (this.selectedPart) {
-              this.fetch_content(this.title, this.part, `&sections=${this.selectedPart.split('.')[1]}`);
-            }
-            else{
-              this.fetch_content(this.title, this.part);
-            }
-        },
     },
 
     created() {
