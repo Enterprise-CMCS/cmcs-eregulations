@@ -322,13 +322,17 @@ export default {
                         // handle mixed sections and subject_groups
                         const returnArray = subpart.children.map(
                             (subpartChild) => {
-                                const parentValue = _isEmpty(subpartChild.parent)
+                                const parentValue = _isEmpty(
+                                    subpartChild.parent
+                                )
                                     ? "orphan"
                                     : subpartChild.parent[0];
 
                                 if (subpartChild.type === "section") {
                                     return {
-                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]: parentValue
+                                        [subpartChild.identifier[1] ??
+                                        subpartChild
+                                            .identifier[0]]: parentValue,
                                     };
                                 }
 
@@ -336,7 +340,8 @@ export default {
                                 if (_isEmpty(subpartChild.children)) return [];
 
                                 return subpartChild.children.map((section) => ({
-                                    [section.identifier[1] ?? section.identifier[0]]: parentValue
+                                    [section.identifier[1] ??
+                                    section.identifier[0]]: parentValue,
                                 }));
                             }
                         );
@@ -370,9 +375,6 @@ export default {
             const rawCats = await getCategories(this.apiUrl);
             const reducedCats = rawCats
                 .filter((item) => item.object_type === "category")
-                .sort((a, b) =>
-                    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
-                )
                 .reduce((acc, item) => {
                     acc[item.name] = item;
                     acc[item.name].subcategories = [];
@@ -383,9 +385,15 @@ export default {
                     reducedCats[item.parent.name].subcategories.push(item);
                 }
             });
-            this.filters.resourceCategory.listItems = Object.values(
-                reducedCats
+            const categories = Object.values(reducedCats).sort((a, b) =>
+                a.order - b.order
             );
+            categories.forEach((category) => {
+                category.subcategories = category.subcategories.sort((a, b) =>
+                    a.order - b.order
+                );
+            });
+            this.filters.resourceCategory.listItems = categories;
         },
     },
 
