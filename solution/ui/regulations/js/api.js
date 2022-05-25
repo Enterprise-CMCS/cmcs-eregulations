@@ -190,6 +190,20 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
     );
 }
 
+async function httpApiGetWithPagination(urlPath, { params } = {}, apiPath) {
+    let results = []
+    let url = urlPath
+    while (url) {
+        /* eslint-disable no-await-in-loop */
+        const response = await httpApiGetLegacy(url, { params }, apiPath)
+        results = results.concat(response.results ?? []);
+        url = response.next;
+        /* eslint-enable no-await-in-loop */
+    }
+
+    return results
+}
+
 // ---------- api calls ---------------
 const getSupplementalContentLegacy = async (
     api_url,
@@ -214,11 +228,24 @@ const getSupplementalContentByCategory = async (api_url, categories=[1,2]) =>{
     return result.filter(r => r.supplemental_content.length);
 }
 
+const v3GetSupplementalContent = async (apiURL, {locations, locationDetails=false}) =>{
+    // manually adjust to v3 if needed
+    const url = apiURL.replace('/v2/', '/v3/')
+
+    return httpApiGetWithPagination(
+        `${url}resources/supplemental_content?${locations}&paginate=true&location_details=${locationDetails}`,
+        {}, // params, default
+        apiURL
+    );
+
+}
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
     getSupplementalContentLegacy,
     getSupplementalContentByCategory,
+    v3GetSupplementalContent,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,
