@@ -292,7 +292,7 @@ export default {
             const sectionList = allSections
                 .filter((sec) => {
                     return (
-                        sec.part === splitSubpart[0] &&
+                        sec.part == splitSubpart[0] &&
                         sec.subpart == splitSubpart[1]
                     );
                 })
