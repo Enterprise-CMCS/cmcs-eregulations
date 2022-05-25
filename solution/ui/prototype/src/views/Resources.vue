@@ -77,6 +77,7 @@ import {
     getCategories,
     getSectionObjects,
     getSubPartsForPart,
+    getAllSections,
     getSupplementalContentNew,
 } from "@/utilities/api";
 
@@ -99,6 +100,7 @@ export default {
         return {
             isLoading: false,
             queryParams: this.$route.query,
+            partDict: {},
             resourcesDisplay:
                 this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
@@ -184,6 +186,7 @@ export default {
             });
         },
         clearSelections() {
+            this.partDict = {};
             this.$router.push({
                 name: "resources",
                 query: {
@@ -246,8 +249,10 @@ export default {
                 query: newQueryParams,
             });
         },
-        updateFilters(payload) {
-            const newQueryParams = { ...this.queryParams };
+
+        async updateFilters(payload) {
+            let newQueryParams = { ...this.queryParams };
+
             if (newQueryParams[payload.scope]) {
                 const scopeVals = newQueryParams[payload.scope].split(",");
                 scopeVals.push(payload.selectedIdentifier);
@@ -257,10 +262,43 @@ export default {
                 newQueryParams.title = "42"; // hard coding for now
                 newQueryParams[payload.scope] = payload.selectedIdentifier;
             }
+            if (payload.scope === "subpart") {
+                newQueryParams = await this.combineSections(
+                    payload.selectedIdentifier,
+                    newQueryParams
+                );
+                this.getPartDict(newQueryParams);
+            }
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
             });
+        },
+
+        async combineSections(subpart, queryParams) {
+            let sections = await this.getSectionsBySubpart(subpart);
+            if (queryParams["section"]) {
+                sections = _uniq(
+                    queryParams["section"].split(",").concat(sections)
+                );
+            }
+
+            queryParams["section"] = sections.join(",");
+            return queryParams;
+        },
+        async getSectionsBySubpart(subpart) {
+            const splitSubpart = subpart.split("-");
+            const allSections = await getAllSections();
+            const sectionList = allSections
+                .filter((sec) => {
+                    return (
+                        sec.part == splitSubpart[0] &&
+                        sec.subpart == splitSubpart[1]
+                    );
+                })
+                .map((sec) => sec.part + "-" + sec.identifier);
+
+            return sectionList;
         },
         filterCategories(resultArray) {
             const filteredArray = resultArray.filter((item) => {
@@ -285,53 +323,55 @@ export default {
 
             return returnArr;
         },
+        getPartDict(dataQueryParams) {
+            const parts = dataQueryParams.part.split(",");
+
+            for (const x in parts) {
+                this.partDict[parts[x]] = { sections: [], subparts: [] };
+            }
+
+            if (dataQueryParams.section) {
+                let sections = dataQueryParams.section.split(",").map((x) => ({
+                    part: x.match(/^\d+/)[0],
+                    section: x.match(/\d+$/)[0],
+                }));
+                for (const section in sections) {
+                    this.partDict[sections[section].part].sections.push(
+                        sections[section].section
+                    );
+                }
+            }
+            if (dataQueryParams.subpart) {
+                const subparts = dataQueryParams.subpart
+                    .split(",")
+                    .map((x) => ({
+                        part: x.match(/^\d+/)[0],
+                        subparts: x.match(/\w+$/)[0],
+                    }));
+
+                for (const subpart in subparts) {
+                    this.partDict[subparts[subpart].part].subparts.push(
+                        subparts[subpart].subparts
+                    );
+                }
+            }
+        },
 
         async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
             if (dataQueryParams?.part) {
                 const queryParamsObj = { ...dataQueryParams };
-                const parts = queryParamsObj.part.split(",");
                 queryParamsObj.part = queryParamsObj.part.split(",");
-                let partDict = {};
-                for (const x in parts) {
-                    partDict[parts[x]] = { sections: [], subparts: [] };
-                }
 
-                if (queryParamsObj.section) {
-                    let sections = queryParamsObj.section
-                        .split(",")
-                        .map((x) => ({
-                            part: x.match(/^\d+/)[0],
-                            section: x.match(/\d+$/)[0],
-                        }));
-                    for (const section in sections) {
-                        partDict[sections[section].part].sections.push(
-                            sections[section].section
-                        );
-                    }
-                }
-                if (queryParamsObj.subpart) {
-                    const subparts = queryParamsObj.subpart
-                        .split(",")
-                        .map((x) => ({
-                            part: x.match(/^\d+/)[0],
-                            subparts: x.match(/\w+$/)[0],
-                        }));
-
-                    for (const subpart in subparts) {
-                        partDict[subparts[subpart].part].subparts.push(
-                            subparts[subpart].subparts
-                        );
-                    }
-                }
+                this.getPartDict(dataQueryParams);
 
                 // map over parts and return promises to put in Promise.all
                 const partPromises = queryParamsObj.part.map((part) => {
                     return getSupplementalContentNew(
                         42,
                         part,
-                        partDict[part].sections,
-                        partDict[part].subparts,
+                        this.partDict[part].sections,
+                        this.partDict[part].subparts,
                         0, // start
                         10000, // max_results
                         searchQuery
@@ -397,15 +437,43 @@ export default {
                 };
             });
         },
-        async getFormattedSubpartsList(part) {
-            this.filters.subpart.listItems = await getSubPartsForPart(part);
+
+        async getFormattedSubpartsList(parts) {
+            this.filters.subpart.listItems = await getSubPartsForPart(parts);
         },
-        async getFormattedSectionsList(part, subpart) {
-            this.filters.section.listItems = await getSectionObjects(
-                part,
-                subpart
+
+        async getFormattedSectionsList() {
+            const allSections = await getAllSections();
+
+            let finalsSections = [];
+            let sectionList = [];
+            for (const part in this.partDict) {
+                const sections = this.partDict[part].sections;
+                const subparts = this.partDict[part].subparts;
+
+                sectionList = allSections.filter((sec) => sec.part === part);
+                if (subparts.length > 0) {
+                    sectionList = sectionList.filter((sec) => {
+                        return (
+                            subparts.includes(sec.subpart) ||
+                            sections.includes(sec.identifier)
+                        );
+                    });
+                }
+                finalsSections = finalsSections.concat(sectionList);
+            }
+
+            this.filters.section.listItems = finalsSections.sort((a, b) =>
+                a.part > b.part
+                    ? 1
+                    : a.part === b.part
+                    ? parseInt(a.identifier) > parseInt(b.identifier)
+                        ? 1
+                        : -1
+                    : -1
             );
         },
+
         async getCategoryList() {
             const rawCats = await getCategories();
             const reducedCats = rawCats
@@ -455,35 +523,19 @@ export default {
                 // always get content otherwise
 
                 this.getSupplementalContent(this.queryParams, this.searchQuery);
-
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
                         this.getFormattedSubpartsList(this.queryParams.part);
-                        this.getFormattedSectionsList(
-                            this.queryParams.part,
-                            this.queryParams.subpart
-                        );
+                        this.getFormattedSectionsList();
                     } else if (
                         _isEmpty(oldParams.subpart) &&
                         newParams.subpart
                     ) {
-                        this.getFormattedSectionsList(
-                            this.queryParams.part,
-                            this.queryParams.subpart
-                        );
+                        this.getFormattedSectionsList();
                     } else {
-                        const oldParts = oldParams.part.split(",");
-                        const newParts = newParams.part.split(",");
-
-                        if (newParts.length > oldParts.length) {
-                            const newPart = _difference(newParts, oldParts)[0];
-                            this.getFormattedSubpartsList(newPart);
-                            this.getFormattedSectionsList(
-                                newPart,
-                                this.queryParams.subpart
-                            );
-                        }
+                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSectionsList();
                     }
                 }
             },
