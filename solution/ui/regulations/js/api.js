@@ -390,7 +390,7 @@ const v3GetSupplementalContent = async (apiURL, {locations, locationDetails=fals
     const url = apiURL.replace('/v2/', '/v3/')
 
     return httpApiGetWithPagination(
-        `${url}resources/supplemental_content?${locations}&paginate=true&location_details=${locationDetails}`,
+        `${url}resources?${locations}&paginate=true&location_details=${locationDetails}`,
         {}, // params, default
         apiURL
     );
