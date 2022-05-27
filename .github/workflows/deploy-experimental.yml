@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  deploy:
+  deploy-static:
     environment:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
@@ -67,6 +67,36 @@ jobs:
           npm install
           serverless deploy --stage dev-${PR}
           popd
+  deploy-django:
+    environment:
+      name: "dev"
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
+    runs-on: ubuntu-latest
+    needs: deploy-static
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      # Find the PR number.  This is not always trivial which is why this uses an existign action
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+
+      # should build first and save the artifact
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      # setup python
+      - uses: actions/setup-python@v2
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: '3.8'
       # Deploy the regulation site to AWS
       - name: deploy regulations site server
         id: deploy-regulations-site-server
@@ -85,6 +115,13 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
+
+  deploy-go:
+    environment:
+      name: "dev"
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
+    runs-on: ubuntu-latest
+    steps:
       # Setup GO
       - name: Setup Go
         if: success() && steps.findPr.outputs.number
