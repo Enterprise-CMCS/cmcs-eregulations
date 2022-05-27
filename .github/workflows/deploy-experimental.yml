@@ -251,7 +251,7 @@ jobs:
       name: "dev"
       url: ${{ deploy-django.outputs.url }}
     runs-on: ubuntu-latest
-    needs: deploy-go
+    needs: [deploy-go, deploy-django]
     steps:
       # Checkout the code
       - name: Checkout
@@ -263,6 +263,6 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: solution/ui/e2e
-          config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
+          config: baseUrl=${{ url }}
         env:
           CYPRESS_DEPLOYING: true
