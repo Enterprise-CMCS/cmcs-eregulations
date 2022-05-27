@@ -185,7 +185,7 @@ jobs:
           pushd solution/ui/prototype
           npm install serverless -g
           serverless deploy --stage dev-${PR}
-          echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 12-)"
+          echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 14-)"
           popd
   deploy-go:
     environment:
