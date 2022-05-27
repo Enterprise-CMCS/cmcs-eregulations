@@ -230,20 +230,18 @@ jobs:
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      - name: set-variables
-        run: |
-          echo "::set-output name=django_url::${{ needs.deploy-django.outputs.url }}"
-          echo "::set-output name=prototype_url::${{ needs.deploy-prototype.outputs.url }}"
-
       # Notify github that this is deployed and ready to look at
       - name: Create django comment
         uses: peter-evans/create-or-update-comment@v1
+        env:
+          django_url: ${{ needs.deploy-django.outputs.url }}
+          prototype_url: ${{ needs.deploy-prototype.outputs.url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
             :sparkles: See the Django Site [in action][1] :sparkles:
             
-            [1]: ${{ steps.set-variables.django_url }}
+            [1]: ${{ env.django_url }}
           reactions: '+1'
       # Notify github that this is deployed and ready to look at
       - name: Create prototype comment
@@ -253,7 +251,7 @@ jobs:
           body: |
             :sparkles: See this Prototype Site [in action][1] :sparkles:
             
-            [1]: ${{ steps.set-variables.prototype_url }}
+            [1]: ${{ env.prototype_url }}
           reactions: '+1'
   test-cypress:
     needs: [deploy-go, deploy-django]
