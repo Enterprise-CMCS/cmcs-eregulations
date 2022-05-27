@@ -418,7 +418,7 @@ export default {
                     this.filterParams.resourceCategory.split(","), //subcategories
                     searchQuery,
                     0, // start
-                    1000 // max_results
+                    100 // max_results
                 );
                 this.isLoading = false;
             }
