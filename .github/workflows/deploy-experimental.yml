@@ -118,11 +118,10 @@ jobs:
           popd
 
   deploy-prototype:
-    environment:
-      name: "dev"
-      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     needs: deploy-django
+    outputs:
+      url: ${{ steps.build-static-assets-and-deploy-prototype.outputs.url }}
     steps:
       # Checkout the code
       - name: Checkout
@@ -214,11 +213,8 @@ jobs:
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev-${PR} --config ./serverless-fr.yml
           popd
   notify:
-    environment:
-      name: "dev"
-      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
-    needs: deploy-go
+    needs: [deploy-go, deploy-django, deploy-prototype]
     steps:
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -231,25 +227,25 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
+          url: ${{ needs.deploy-django.outputs.url }}
           body: |
             :sparkles: See this Pull Request [in action][1] :sparkles:
 
-            [1]: ${{ steps.deploy-regulations-site-server.outputs.url }}
+            [1]: ${{ url }}
           reactions: '+1'
       # Notify github that this is deployed and ready to look at
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
+          url: ${{ needs.deploy-prototype.outputs.url }}
           body: |
             :sparkles: See this Prototype Site [in action][1] :sparkles:
 
-            [1]: ${{ steps.build-static-assets-and-deploy-prototype.outputs.url }}
+            [1]: ${{ url }}
           reactions: '+1'
   test-cypress:
     needs: [deploy-go, deploy-django]
-    environment:
-      name: "dev"
     runs-on: ubuntu-latest
     steps:
       # Checkout the code
