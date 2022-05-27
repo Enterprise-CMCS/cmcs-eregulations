@@ -215,7 +215,6 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: [deploy-go, deploy-django, deploy-prototype]
-
     steps:
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -223,8 +222,8 @@ jobs:
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      -name: set-variables
-        - run: |
+      - name: set-variables
+        run: |
           echo "::set-output name=django_url::${{ needs.deploy-django.outputs.url }}"
           echo "::set-output name=prototype_url::${{ needs.deploy-prototype.outputs.url }}"
 
