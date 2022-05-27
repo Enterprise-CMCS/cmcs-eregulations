@@ -158,6 +158,7 @@ jobs:
           npm run build
           cd ../regulations
           npm ci
+          npm run css
           npm run build-storybook
           mkdir ../prototype/dist/storybook/
           cp storybook-static/* ../prototype/dist/storybook/
