@@ -235,7 +235,6 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         env:
           django_url: ${{ needs.deploy-django.outputs.url }}
-          prototype_url: ${{ needs.deploy-prototype.outputs.url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
@@ -246,6 +245,8 @@ jobs:
       # Notify github that this is deployed and ready to look at
       - name: Create prototype comment
         uses: peter-evans/create-or-update-comment@v1
+        env:
+          prototype_url: ${{ needs.deploy-prototype.outputs.url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
