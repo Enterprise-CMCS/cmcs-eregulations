@@ -41,6 +41,7 @@ class ExportCsvMixin:
         indent = 2
 
         model = self.model
+        pk_list = model.objects.values_list('pk', flat=True)
         queryset = model.objects.all()
         objects = list(queryset)
         parents = []
@@ -49,7 +50,7 @@ class ExportCsvMixin:
             # Model is the top level class that everything derives from
             while base.__name__ != 'Model':
                 print(base.__class__.__name__)
-                r = list(base.objects.all())
+                r = list(base.objects.filter(pk__in=pk_list))
                 base = r[0].__class__.__bases__[0]
                 parents = r + parents
 
