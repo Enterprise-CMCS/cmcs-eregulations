@@ -119,7 +119,7 @@ jobs:
   deploy-prototype:
     environment:
       name: "dev"
-      url: ${{ deploy-django.deploy-regulations-site-server.outputs.url }}
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     needs: deploy-django
     steps:
