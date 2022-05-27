@@ -215,6 +215,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: [deploy-go, deploy-django, deploy-prototype]
+
     steps:
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -222,27 +223,30 @@ jobs:
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
+      -name: set-variables
+        - run: |
+          echo "::set-output name=django_url::${{ needs.deploy-django.outputs.url }}"
+          echo "::set-output name=prototype_url::${{ needs.deploy-prototype.outputs.url }}"
+
       # Notify github that this is deployed and ready to look at
-      - name: Create comment
+      - name: Create django comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
-          url: ${{ needs.deploy-django.outputs.url }}
           body: |
-            :sparkles: See this Pull Request [in action][1] :sparkles:
-
-            [1]: ${{ url }}
+            :sparkles: See the Django Site [in action][1] :sparkles:
+            
+            [1]: ${{ steps.set-variables.django_url }}
           reactions: '+1'
       # Notify github that this is deployed and ready to look at
-      - name: Create comment
+      - name: Create prototype comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
-          url: ${{ needs.deploy-prototype.outputs.url }}
           body: |
             :sparkles: See this Prototype Site [in action][1] :sparkles:
-
-            [1]: ${{ url }}
+            
+            [1]: ${{ steps.set-variables.prototype_url }}
           reactions: '+1'
   test-cypress:
     needs: [deploy-go, deploy-django]
