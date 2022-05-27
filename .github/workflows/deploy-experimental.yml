@@ -70,6 +70,7 @@ jobs:
   deploy-django:
     environment:
       name: "dev"
+    outputs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-latest
     needs: deploy-static
@@ -248,7 +249,7 @@ jobs:
   test-cypress:
     environment:
       name: "dev"
-      url: ${{ deploy-django.steps.deploy-regulations-site-server.outputs.url }}
+      url: ${{ deploy-django.outputs.url }}
     runs-on: ubuntu-latest
     needs: deploy-go
     steps:
