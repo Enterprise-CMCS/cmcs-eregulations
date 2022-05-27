@@ -27,11 +27,28 @@
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
-import {getSupplementalContentByCategory,  getSupplementalContentLegacy } from "../../api";
-import {EventCodes} from "../../utils";
+import {getSupplementalContentByCategory, v3GetSupplementalContent} from "../../api";
+import {EventCodes, formatResourceCategories} from "../../utils";
 
-function reducer(previousValue, currentValue){
-  return previousValue + currentValue.supplemental_content.length + currentValue.sub_categories.reduce(reducer, 0)
+
+function getDefaultCategories(){
+    if (!document.getElementById("categories")) return[];
+
+    const rawCategories = JSON.parse(
+        document.getElementById("categories").textContent
+    );
+    const rawSubCategories = JSON.parse(
+        document.getElementById("sub_categories").textContent
+    );
+
+    return rawCategories.map((c) => {
+        const category = JSON.parse(JSON.stringify(c));
+        category.sub_categories = rawSubCategories.filter(
+            (subcategory) => subcategory.parent_id === category.id
+        );
+        return category;
+    });
+
 }
 
 export default {
@@ -68,7 +85,7 @@ export default {
         getSupplementalContent: {
           type: Function,
           required: false,
-          default: getSupplementalContentLegacy
+          default: v3GetSupplementalContent
         },
         getSupplementalContentByCategory:{
           type: Function,
@@ -99,14 +116,12 @@ export default {
             ];
         },
         joined_locations: function () {
-            let output = "";
-            this.params_array.forEach(function (param) {
-                if (param[1].length > 0) {
-                    const queryString = "&" + param[0] + "=";
-                    output += queryString + param[1].join(queryString);
-                }
-            });
-            return output;
+
+            const sectionsString = this.sections.reduce((previousValue, section) => `${previousValue}locations=${this.title}.${this.part}.${section}&`, "")
+
+            const subPartString = this.subparts.reduce((previousValue, subpart) => `${previousValue}locations=${this.title}.${this.part}.${subpart}&`, "")
+
+            return sectionsString + subPartString;
         },
         activePart: function(){
           if (this.selectedPart !== undefined) {
@@ -133,7 +148,7 @@ export default {
             this.categories = [];
             this.isFetching = true;
             if (this.selectedPart) {
-              this.fetch_content(this.title, this.part, `&sections=${this.selectedPart.split('.')[1]}`);
+              this.fetch_content(this.title, this.part, `locations=${this.title}.${this.part}.${this.selectedPart.split('.')[1]}`);
             }
             else{
               this.fetch_content(this.title, this.part);
@@ -149,44 +164,30 @@ export default {
         this.$root.$on(EventCodes.SetSection, (args) => {
           this.selectedPart = args.section
         })
-        if (!document.getElementById("categories")) return;
-
-        const rawCategories = JSON.parse(
-            document.getElementById("categories").textContent
-        );
-        const rawSubCategories = JSON.parse(
-            document.getElementById("sub_categories").textContent
-        );
-
-        this.categories = rawCategories.map((c) => {
-            const category = JSON.parse(JSON.stringify(c));
-            category.sub_categories = rawSubCategories.filter(
-                (subcategory) => subcategory.parent_id === category.id
-            );
-            return category;
-        });
+        this.categories = getDefaultCategories()
     },
 
     methods: {
         async fetch_content(title, part, location) {
             try {
                 if (this.requested_categories.length > 0){
+                    // todo convert this to V3 API
                     this.categories = await this.getSupplementalContentByCategory(
                         this.api_url,
                         this.requested_categories.split(",")
                     );
                 }
                 else {
-                    this.categories = await this.getSupplementalContent(
+                    const response = await v3GetSupplementalContent(
                         this.api_url,
-                        title,
-                        part,
-                        location || this.joined_locations
+                        {locations: location || this.joined_locations}
                     );
 
                     if (!this.resourceCount) {
-                      this.resourceCount = this.categories.reduce(reducer, 0);
+                      this.resourceCount = response.length
                     }
+
+                    this.categories = formatResourceCategories(response)
                 }
 
             } catch (error) {

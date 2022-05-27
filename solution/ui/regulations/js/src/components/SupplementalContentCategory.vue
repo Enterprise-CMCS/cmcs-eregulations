@@ -89,7 +89,7 @@ export default {
             return this.description && !/^\s*$/.test(this.description);
         },
         has_sub_categories() {
-            return this.sub_categories.length;
+            return this?.sub_categories?.length;
         },
         has_children () {
           return this.sub_categories?.length || this.supplemental_content?.length
