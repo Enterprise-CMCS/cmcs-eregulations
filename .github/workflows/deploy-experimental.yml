@@ -247,11 +247,11 @@ jobs:
             [1]: ${{ steps.build-static-assets-and-deploy-prototype.outputs.url }}
           reactions: '+1'
   test-cypress:
+    needs: [deploy-go, deploy-django]
     environment:
       name: "dev"
-      url: ${{ deploy-django.outputs.url }}
+      url: ${{ needs.deploy-django.outputs.url }}
     runs-on: ubuntu-latest
-    needs: [deploy-go, deploy-django]
     steps:
       # Checkout the code
       - name: Checkout
