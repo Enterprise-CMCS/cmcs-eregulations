@@ -4,17 +4,18 @@
             <hr class="top-rule" />
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
-                <span v-else>{{ sortedContent.length }} Results</span>
+                <span v-else>{{ content.length }} Results</span>
             </div>
             <div v-if="!isLoading">
-                <template v-for="(item, idx) in sortedContent">
-                    <div :key="item.created_at + idx">
+                <template v-for="(item, idx) in content">
+              
+                    <div :key="item.id + idx">
                         <div class="category-labels">
                             <div
                                 v-if="item.category"
                                 class="result-label category-label"
                             >
-                                {{ item.category }}
+                                {{ item.category.name }}
                             </div>
                             <div
                                 v-if="item.sub_category"
@@ -41,7 +42,7 @@
                             <span v-else>§ </span>
                             <span
                                 v-for="(location, idx) in item.locations"
-                                :key="location.display_name + idx"
+                                :key="location.part + ' '+ (location.section_id || location.subpart_id) + idx"
                                 class="related-section-link"
                             >
                                 <router-link
@@ -52,7 +53,7 @@
                                             part: location.part,
                                         },
                                     }"
-                                >{{location.display_name | locationLabel}}</router-link>
+                                >{{location.part + " " + (location.section_id || "Subpart " + location.subpart_id) }}</router-link>
                                 <span v-if="idx + 1 != item.locations.length"> | </span>
                             </span>
                         </div>
@@ -65,7 +66,7 @@
 
 <script>
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
-import _uniqBy from "lodash/uniq";
+import _uniq from "lodash/uniq";
 import _has from "lodash/has";
 
 export default {
@@ -79,7 +80,7 @@ export default {
         content: {
             type: Array,
             required: false,
-            default: [],
+            default: {},
         },
         isLoading: {
             type: Boolean,
@@ -94,56 +95,7 @@ export default {
         };
     },
 
-    computed: {
-        sortedContent() {
-            let results = this.content
-                .filter((category) => {
-                    return (
-                        category.supplemental_content?.length ||
-                        category.sub_categories?.length
-                    );
-                })
-                .flatMap((category) => {
-                    const returnArr = [];
-                    if (category.sub_categories?.length) {
-                        category.sub_categories.forEach((sub_category) => {
-                            sub_category.supplemental_content.forEach(
-                                (item) => {
-                                    item.category = category.name;
-                                    item.sub_category = sub_category.name;
-                                    returnArr.push(item);
-                                }
-                            );
-                        });
-                    } else {
-                        category.supplemental_content.forEach((item) => {
-                            if (_has(category, "parent_category")) {
-                                item.category = category.parent_category;
-                                item.sub_category = category.name;
-                            } else {
-                                item.category = category.name;
-                            }
-                            returnArr.push(item);
-                        });
-                    }
 
-                    return returnArr;
-                });
-
-            //remove duplicates
-            results = _uniqBy(results, (item) => {
-                return item.name;
-            });
-
-            return results;
-        },
-    },
-
-    filters: {
-        locationLabel(value) {
-            return value.substring(3);
-        },
-    },
 };
 </script>
 

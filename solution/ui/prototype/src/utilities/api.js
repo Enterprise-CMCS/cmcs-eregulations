@@ -16,9 +16,10 @@ import localforage from "localforage";
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
 const apiPath = `${process.env.VUE_APP_API_URL}/v2`;
-
+const apiPathV3 = `${process.env.VUE_APP_API_URL}/v3`;
 let config = {
     apiPath,
+    apiPathV3,
     fetchMode: "cors",
     maxRetryCount: 2,
 };
@@ -204,7 +205,13 @@ function httpApiGet(urlPath, { params } = {}) {
         params,
     });
 }
-
+function httpApiGetV3(urlPath, { params } = {}) {
+    return fetchJson(`${config.apiPathV3}/${urlPath}`, {
+        method: "GET",
+        headers: authHeader(token),
+        params,
+    });
+}
 function httpApiPost(urlPath, { data = {}, params } = {}) {
     console.log(data);
     return fetchJson(`${config.apiPath}/${urlPath}`, {
@@ -630,6 +637,75 @@ const getSupplementalContent = async (
     return result;
 };
 
+const getSupplementalContentV3 = async (
+    //title,
+    //part,
+    //sections,
+    //subparts,
+    //categories,
+    partDict,
+    categories,
+    q = "",
+    start,
+    max_results = 1000,
+    paginate = false,
+    page = 1,
+    cat_details = true,
+    page_size = 100,
+    location_details = true
+) => {
+    const queryString = q ? `&q=${q}` : "";
+    let sString = "";
+
+    for (const part in partDict) {
+
+        if (partDict === "all") {
+            sString = `locations=42`
+        }
+        else {
+
+        
+        for (const subpart of partDict[part].subparts) {
+            sString = sString + `&locations=${partDict[part].title}.${part}.${subpart}`
+
+        }
+        for (const section of partDict[part].sections) {
+            sString = sString + `&locations=${partDict[part].title}.${part}.${section}`
+        }
+        if (partDict[part].sections.length === 0 && partDict[part].subparts.length === 0) {
+            sString = sString + `&locations=${partDict[part].title}.${part}`
+        }
+    }
+}
+console.log('here')
+
+
+
+let catList = await getCategories()
+console.log(categories)
+for (const category of categories) {
+    let cat = catList.filter(x => x.name === category)[0]
+
+    sString = sString + "&categories=" + cat.id
+}
+
+sString = sString + "&category_details=" + cat_details
+sString = sString + "&location_details=" + location_details
+sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
+if (paginate) {
+    sString = sString + "&paginate=true&page_size=" + page_size + "&page=" + page
+}
+console.log(sString)
+const result = await httpApiGetV3(
+    `resources/supplemental_content?${sString}`
+);
+
+
+console.log(sString)
+console.log(result)
+return result;
+
+}
 /**
  *
  * @param title {string} - The requested title, defaults to 42
@@ -660,7 +736,6 @@ const getSupplementalContentNew = async (
     const result = await httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );
-
     return result;
 };
 
@@ -751,6 +826,7 @@ export {
     getSupIDByLocations,
     getSupByPart,
     getAllSections,
+    getSupplementalContentV3,
     getSupplementalContentSearchResults
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
