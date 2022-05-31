@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  deploy:
+  deploy-static:
     environment:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
@@ -67,6 +67,37 @@ jobs:
           npm install
           serverless deploy --stage dev-${PR}
           popd
+  deploy-django:
+    environment:
+      name: "dev"
+    outputs:
+      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
+    runs-on: ubuntu-latest
+    needs: deploy-static
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      # Find the PR number.  This is not always trivial which is why this uses an existign action
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+
+      # should build first and save the artifact
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      # setup python
+      - uses: actions/setup-python@v2
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: '3.8'
       # Deploy the regulation site to AWS
       - name: deploy regulations site server
         id: deploy-regulations-site-server
@@ -85,6 +116,95 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
+
+  deploy-prototype:
+    environment:
+      name: "dev"
+    runs-on: ubuntu-latest
+    needs: deploy-django
+    outputs:
+      url: ${{ steps.deploy-prototype.outputs.url }}
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      # Find the PR number.  This is not always trivial which is why this uses an existign action
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+
+      # should build first and save the artifact
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      # build the static assets for the website
+      - name: build vue assets
+        id: build-vue-assets
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
+          VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
+        run: |
+          pushd solution/ui/prototype
+          npm ci
+          npm install serverless -g
+          npm run build
+          popd
+      # build storybook
+      - name: build storybook
+        id: build-storybook
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
+          VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
+        run: |
+          pushd solution/ui/regulations
+          npm ci
+          npm run css
+          npm run build-storybook
+          mkdir ../prototype/dist/storybook/
+          cp storybook-static/* ../prototype/dist/storybook/
+          popd
+      # deploy assets to S3
+      - name: deploy prototype
+        id: deploy-prototype
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
+          VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
+        run: |
+          pushd solution/ui/prototype
+          npm install serverless -g
+          serverless deploy --stage dev-${PR}
+          echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 14-)"
+          popd
+  deploy-go:
+    environment:
+      name: "dev"
+    runs-on: ubuntu-latest
+    needs: deploy-django
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      # Find the PR number.  This is not always trivial which is why this uses an existign action
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
       # Setup GO
       - name: Setup Go
         if: success() && steps.findPr.outputs.number
@@ -120,48 +240,47 @@ jobs:
           serverless deploy --stage dev-${PR} --config ./serverless-fr.yml
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev-${PR} --config ./serverless-fr.yml
           popd
-      # Notify github that this is deployed and ready to look at
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v1
+  notify:
+    runs-on: ubuntu-latest
+    needs: [deploy-go, deploy-django, deploy-prototype]
+    steps:
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
         with:
-          issue-number: ${{ steps.findPr.outputs.pr }}
-          body: |
-            :sparkles: See this Pull Request [in action][1] :sparkles:
-
-            [1]: ${{ steps.deploy-regulations-site-server.outputs.url }}
-          reactions: '+1'
-
-      # build the static assets for the website
-      - name: build static assets and deploy prototype
-        id: build-static-assets-and-deploy-prototype
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+      # Notify github that this is deployed and ready to look at
+      - name: Create deployment comment
+        uses: peter-evans/create-or-update-comment@v1
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          PR: ${{ steps.findPr.outputs.pr }}
-          VUE_APP_API_URL: ${{ steps.deploy-regulations-site-server.outputs.url }}
-        run: |
-          pushd solution/ui/prototype
-          npm ci
-          npm install serverless -g
-          npm run build
-          serverless deploy --stage dev-${PR}
-          echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 12-)"
-          popd
-      # Notify github that this is deployed and ready to look at
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v1
+          django_url: ${{ needs.deploy-django.outputs.url }}
+          prototype_url: ${{ needs.deploy-prototype.outputs.url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
-            :sparkles: See this Prototype Site [in action][1] :sparkles:
-
-            [1]: ${{ steps.build-static-assets-and-deploy-prototype.outputs.url }}
+            :sparkles: See the Django Site [in action][1] :sparkles:
+            :sparkles: See this Prototype Site [in action][2] :sparkles:
+            :sparkles: See Stoybook [in action][3] :sparkles:
+            
+            [1]: ${{ env.django_url }}
+            [2]: ${{ env.prototype_url }}
+            [3]: ${{ env.prototype_url }}/storybook/index.html
           reactions: '+1'
+  test-cypress:
+    needs: [deploy-go, deploy-django]
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
       # Run the cypress tests
       - name: end-to-end tests
         uses: cypress-io/github-action@v2
         with:
           working-directory: solution/ui/e2e
-          config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
+          config: baseUrl=${{ needs.deploy-django.outputs.url }}
         env:
           CYPRESS_DEPLOYING: true

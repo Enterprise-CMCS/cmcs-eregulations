@@ -285,7 +285,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
     def get_queryset(self):
         annotations = {}
-        query = self.model.objects.all().select_subclasses().prefetch_related(
+        query = self.model.objects.filter(approved=True).select_subclasses().prefetch_related(
             Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
             Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
         )

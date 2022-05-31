@@ -79,6 +79,7 @@ import {
     getSubPartsForPart,
     getAllSections,
     getSupplementalContentV3,
+    getSupplementalContentNew,
 } from "@/utilities/api";
 
 export default {
@@ -240,7 +241,6 @@ export default {
             newQueryParams[payload.scope] = _isEmpty(newScopeVals)
                 ? undefined
                 : newScopeVals.join(",");
-
             if (_isEmpty(newQueryParams.part)) {
                 newQueryParams.title = undefined;
                 newQueryParams.subpart = undefined;
@@ -377,7 +377,7 @@ export default {
 
             if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
-                
+
                 // map over parts and return promises to put in Promise.all
                 const partPromises = await getSupplementalContentV3(
                     this.partDict,
