@@ -426,24 +426,18 @@ const getSubPartsandSections = async () => {
 
     for (const subpart of subparts) {
         if (subpart.data.type === 'section') {
-            fullSelection.push({ label: subpart.data.label, id: subpart.data.label, location: {part: subpart.part, section: subpart.data.identifier[1] }, type: 'section' })
+            fullSelection.push({ label: subpart.data.label, id: subpart.data.label, location: { part: subpart.part, section: subpart.data.identifier[1] }, type: 'section' })
         }
         else {
+            let sections = subpart.data.children
             fullSelection.push({ label: "Part " + subpart.part + " " + subpart.data.label, label: "Part " + subpart.part + " " + subpart.data.label, location: { part: subpart.part, subpart: subpart.data.identifier[0] }, type: 'subpart' })
 
-            let sections = subpart.data.children
-
             for (const section of sections) {
-               
                 if (section.type != "subject_group") {
-                  
                     fullSelection.push({ label: section.label, id: section.label, location: { part: subpart.part, section: section.identifier[1] }, part: subpart.part, type: 'section' })
-                    
                 }
                 else {
-                    
                     for (const s of section.children) {
-                      
                         fullSelection.push({ label: s.label, id: s.label, location: { part: subpart.part, section: s.identifier[1] }, part: subpart.part, type: 'section' })
                     }
                 }
@@ -457,6 +451,37 @@ const getSubPartsandSections = async () => {
 
 }
 
+const getAllSections = async () => {
+    const all_parts = await getAllParts()
+    let subparts = []
+    let allSections = []
+
+    all_parts.forEach(part => part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
+    for (const subpart of subparts) {
+        let part = subpart.part
+
+        if (subpart.data.type === 'section') {
+            allSections.push({ part: part, subpart: 'none', identifier: subpart.data.identifier[1], label: subpart.data.label_level, part: part, description: subpart.data.label_description })
+        }
+        else {
+            let sections = subpart.data.children
+            let sub = subpart.data.identifier[0]
+
+            for (const section of sections) {
+
+                if (section.type != "subject_group") {
+                    allSections.push({ subpart: sub, identifier: section.identifier[1], label: section.label_level, part: part, description: section.label_description })
+                }
+                else {
+                    for (const s of section.children) {
+                        allSections.push({ subpart: sub, identifier: s.identifier[1], label: s.label_level, part: part, description: s.label_description })
+                    }
+                }
+            }
+        }
+    }
+    return allSections;
+}
 /**
  *
  * Fetches all_parts and returns a list of objects for the subparts in that part
@@ -464,14 +489,17 @@ const getSubPartsandSections = async () => {
  * @param {string} - the name of a part in title 42
  * @returns {Object<{label:string, identifier:string}>}
  */
-const getSubPartsForPart = async (part) => {
+const getSubPartsForPart = async (partParam) => {
     // if part is string of multiple parts, use final part
-    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
+    let selectedParts = partParam.split(',')
     const all_parts = await getAllParts();
     const parts = all_parts.map((d) => d.name);
-    const potentialSubParts =
-        all_parts[parts.indexOf(part)].structure.children[0].children[0]
+    let potentialSubParts = []
+    for (const part of selectedParts) {
+        const subP = all_parts[parts.indexOf(part)].structure.children[0].children[0]
             .children[0].children;
+        potentialSubParts = potentialSubParts.concat(subP)
+    }
     const subParts = potentialSubParts.filter((p) => p.type === "subpart");
 
     return subParts.map((s) => {
@@ -531,7 +559,7 @@ const getSectionObjects = async (part, subPart) => {
             (p) => p.type === "subpart" && p.identifier[0] === subPart
         );
         return parent.children.map((c) => {
-      
+
             return {
                 identifier: c.identifier[1],
                 label: c.label_level,
@@ -547,7 +575,7 @@ const getSectionObjects = async (part, subPart) => {
                     return {
                         identifier: c.identifier[1],
                         label: c.label_level,
-                        part:part,
+                        part: part,
                         description: c.label_description,
                     };
                 })
@@ -722,6 +750,7 @@ export {
     getAllSupplementalContentByPieces,
     getSupIDByLocations,
     getSupByPart,
+    getAllSections,
     getSupplementalContentSearchResults
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
