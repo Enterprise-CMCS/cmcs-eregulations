@@ -44,6 +44,10 @@ custom:
     DB_NAME: eregs
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
+  cloudfrontInvalidate:
+    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
+      items:
+        - "/*"
 
 functions:
   reg_site:
@@ -232,3 +236,4 @@ plugins:
   - serverless-python-requirements
   - serverless-wsgi
   - serverless-go-plugin
+  - serverless-cloudfront-invalidate
