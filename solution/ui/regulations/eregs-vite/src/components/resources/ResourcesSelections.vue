@@ -1,5 +1,8 @@
 <template>
-    <div v-if="filterParams.part || filterParams.resourceCategory" class="selections-container">
+    <div
+        v-if="filterParams.part || filterParams.resourceCategory"
+        class="selections-container"
+    >
         <div class="selections-content">
             <template v-for="(array, name, idx) in splitParams">
                 <div
@@ -75,7 +78,6 @@ export default {
         },
         splitParams() {
             const splitParams = { ...this.filterParams };
-
             for (const key in splitParams) {
                 if (splitParams[key]) {
                     splitParams[key] = splitParams[key].split(",");
@@ -105,10 +107,12 @@ export default {
                     return `Part ${value}`;
                     break;
                 case "subpart":
-                    return `Subpart ${value}`;
+                    const part = value.match(/^\d+/)[0];
+                    const subpart = value.match(/\w+$/)[0];
+                    return `Part ${part} Subpart ${subpart}`;
                     break;
                 case "section":
-                    return `§ ${value}`;
+                    return `§ ${value.replace("-", ".")}`;
                     break;
                 case "resourceCategory":
                     return `${value}`;
@@ -116,12 +120,20 @@ export default {
                 default:
                     return `${name} ${value}`;
             }
-        }
+        },
     },
 };
 </script>
 
 <style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$additional-font-path: "~legacy-static/fonts"; // additional Open Sans fonts
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
+
 .selections-container {
     overflow: auto;
     width: 100%;

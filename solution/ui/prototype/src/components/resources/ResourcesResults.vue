@@ -80,7 +80,9 @@ export default {
         content: {
             type: Array,
             required: false,
-            default: {},
+            default() {
+              return []
+            },
         },
         isLoading: {
             type: Boolean,

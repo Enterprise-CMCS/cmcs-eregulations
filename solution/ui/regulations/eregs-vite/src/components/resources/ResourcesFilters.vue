@@ -1,6 +1,6 @@
 <template>
     <div class="filters-container">
-        <div class="content content-with-column">
+        <div class="content" :class="resourcesClass">
             <h3>Filter Resources</h3>
             <div class="filters">
                 <template v-for="(value, name) in filters">
@@ -43,15 +43,15 @@ export default {
     },
 
     props: {
+        resourcesDisplay: {
+            type: String,
+            required: false,
+        },
         filters: {
             type: Object,
             required: true,
         },
     },
-
-    data() {},
-
-    computed: {},
 
     beforeCreate() {},
 
@@ -69,6 +69,14 @@ export default {
 
     destroyed() {},
 
+    /*data() {},*/
+
+    computed: {
+        resourcesClass() {
+            return `content-with-${this.resourcesDisplay}`;
+        },
+    },
+
     methods: {
         filterEmitter(payload) {
             this.$emit("select-filter", payload);
@@ -78,16 +86,25 @@ export default {
 </script>
 
 <style lang="scss">
+$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
+$additional-font-path: "~legacy-static/fonts"; // additional Open Sans fonts
+$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$eregs-image-path: "~legacy-static/images";
+
+@import "legacy/css/scss/main.scss";
+
 .filters-container {
     overflow: auto;
-    padding: 0 $spacer-5 30px $spacer-5;
-
-    @include screen-xl {
-        padding: 0 $spacer-4 30px $spacer-4;
-    }
+    width: 100%;
+    padding-bottom: 30px;
 
     .content-with-column {
         margin: 0 auto;
+    }
+
+    .content-with-sidebar {
+        margin-left: 50px;
     }
 
     .content {
@@ -96,10 +113,6 @@ export default {
         .filters {
             display: flex;
             justify-content: space-between;
-
-            @include custom-max($mobile-max / 1px) {
-                flex-direction: column;
-            }
         }
     }
 }

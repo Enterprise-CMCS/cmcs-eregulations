@@ -15,10 +15,13 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-const apiPath = `${process.env.VUE_APP_API_URL}/v2`;
-const apiPathV3 = `${process.env.VUE_APP_API_URL}/v3`;
+const apiPath = `${import.meta.env.VITE_API_URL}`;
+const apiPathV2 = `${import.meta.env.VITE_API_URL}/v2`;
+const apiPathV3 = `${import.meta.env.VITE_API_URL}/v3`;
+
 let config = {
     apiPath,
+    apiPathV2,
     apiPathV3,
     fetchMode: "cors",
     maxRetryCount: 2,
@@ -199,12 +202,13 @@ function httpApiMock(verb, urlPath, { data, params, response } = {}) {
 }
 
 function httpApiGet(urlPath, { params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
+    return fetchJson(`${config.apiPathV2}/${urlPath}`, {
         method: "GET",
         headers: authHeader(token),
         params,
     });
 }
+
 function httpApiGetV3(urlPath, { params } = {}) {
     return fetchJson(`${config.apiPathV3}/${urlPath}`, {
         method: "GET",
@@ -216,6 +220,8 @@ function httpApiGetV3(urlPath, { params } = {}) {
 async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
     let results = []
     let url = `${config.apiPathV3}/${urlPath}`
+    console.log(url)
+    console.log(urlPath)
     while (url) {
         /* eslint-disable no-await-in-loop */
         const response = await fetchJson(url, {
@@ -230,6 +236,7 @@ async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
     console.log(results)
     return results
 }
+
 function httpApiPost(urlPath, { data = {}, params } = {}) {
     console.log(data);
     return fetchJson(`${config.apiPath}/${urlPath}`, {
@@ -310,7 +317,8 @@ const getPartNames = async (title = "42") => {
  */
 const getHomepageStructure = async () => {
     const reducer = (accumulator, currentValue) => {
-        const title = currentValue.title;
+        const {title} = currentValue;
+
         const chapter = _get(
             currentValue,
             "structure.children[0].identifier[0]"
@@ -422,7 +430,7 @@ const getHomepageStructure = async () => {
  */
 
 const getAllParts = async () => {
-    return await httpApiGet("all_parts");
+    return httpApiGet("all_parts");
 };
 
 /**

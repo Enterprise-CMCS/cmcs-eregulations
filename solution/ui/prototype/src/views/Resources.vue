@@ -21,8 +21,8 @@
                         v-model="searchInputValue"
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
-                    >
-                    </v-text-field>
+                    />
+
                 </form>
             </ResourcesNav>
             <div
@@ -51,7 +51,7 @@
                     />
                     <ResourcesResults
                         :isLoading="isLoading"
-                        :content="supplementalContent.results"
+                        :content="supplementalContent"
                     />
                 </div>
             </div>
@@ -107,14 +107,6 @@ export default {
             resourcesDisplay:
                 this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
-                title: {
-                    label: "Title",
-                    buttonTitle: "Select Title",
-                    buttonId: "select-title",
-                    listType: "TitlePartList",
-                    listItems: [],
-                    disabled: true,
-                },
                 part: {
                     label: "Part",
                     buttonTitle: "Select Parts",
@@ -379,16 +371,16 @@ export default {
                 this.getPartDict(dataQueryParams);
 
                 // map over parts and return promises to put in Promise.all
-                const partPromises = await getSupplementalContentV3(
-                    this.partDict,
-                    this.categories,
-                    searchQuery,
-                    0,
-                    1000
-                );
+                const partPromises = await getSupplementalContentV3({
+                  partDict:this.partDict,
+                  categories: this.categories,
+                  q: searchQuery,
+                });
 
                 try {
+                    console.log(partPromises)
                     this.supplementalContent = partPromises;
+                    console.log(this.supplementalContent)
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -397,13 +389,12 @@ export default {
                 }
             } else if (searchQuery) {
                 try {
-                    const searchResults = await getSupplementalContentV3(
-                        "all", // titles
-                        this.categories, //subcategories
-                        searchQuery,
-                        0, // start
-                        1000 // max_results
-                    );
+                    const searchResults = await getSupplementalContentV3({
+                      partDict: "all", // titles
+                      categories: this.categories, //subcategories
+                      q: searchQuery,
+                      paginate: true
+                    });
 
                     this.supplementalContent = searchResults;
                 } catch (error) {
@@ -413,13 +404,14 @@ export default {
                     this.isLoading = false;
                 }
             } else {
-                this.supplementalContent = await getSupplementalContentV3(
-                    "all", // titles
-                    this.filterParams.resourceCategory.split(","), //subcategories
-                    searchQuery,
-                    0, // start
-                    100 // max_results
-                );
+                this.supplementalContent = await getSupplementalContentV3({
+                  partDict: "all", // titles
+                  categories: this.filterParams.resourceCategory ? this.filterParams.resourceCategory.split(",") : "", //subcategories
+                  q: searchQuery,
+                  start: 0, // start
+                  max_results: 100, // max_results
+                  paginate:false,
+                });
                 this.isLoading = false;
             }
         },
