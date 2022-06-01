@@ -303,13 +303,16 @@
     .latest-changes {
         background: $secondary_background_color;
         padding: $spacer-3 $spacer-4;
+        padding-bottom: $spacer-6;
 
         @include screen-lg {
             padding: $spacer-4;
+            padding-bottom: $spacer-6;
         }
 
         @include screen-xl {
             padding: $spacer-4 $spacer-6;
+            padding-bottom: $spacer-6;
         }
 
         h3 {
@@ -318,9 +321,35 @@
             margin-bottom: $spacer-2;
         }
 
-        .see-fr {
-            font-style: italic;
-            font-size: $font-size-xs;
+        .latest-changes-horiz-rule {
+            color: red;
+            margin: $spacer-3 0;
+        }
+
+        .all-resources-header {
+            margin-bottom: 10px;
+        }
+
+        .resource-types {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 18px;
+            margin-bottom: 10px;
+            color: $mid_gray;
+        }
+
+        .resources-description {
+            margin-bottom: 20px;
+        }
+
+        .view-resources-btn {
+            text-decoration: none;
+            width: fit-content;
+            color: white;
+
+            &:hover {
+                color: white;
+            }
         }
     }
 }
