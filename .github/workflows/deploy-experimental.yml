@@ -233,6 +233,7 @@ jobs:
         run: |
           pushd solution/static-assets
           npm install serverless -g
+          npm install
           serverless deploy --stage dev-${PR}
           popd
 
@@ -317,7 +318,7 @@ jobs:
             [3]: ${{ env.prototype_url }}/storybook/index.html
           reactions: '+1'
   test-cypress:
-    needs: [deploy-go, deploy-django]
+    needs: [deploy-go, deploy-django, build-and-deploy-vue]
     runs-on: ubuntu-latest
     steps:
       # Checkout the code
