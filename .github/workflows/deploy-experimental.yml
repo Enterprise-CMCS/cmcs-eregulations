@@ -233,7 +233,6 @@ jobs:
         run: |
           pushd solution/static-assets
           npm install serverless -g
-          npm install
           serverless deploy --stage dev-${PR}
           popd
 
