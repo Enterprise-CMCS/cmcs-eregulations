@@ -16,7 +16,7 @@
 
             <main class="match-middle">
                 <div class="container">
-                    <div class="search-context">This site searches Title 42: Parts 400, 430-460</div>
+                    <div class="search-context">This site searches Title 42, Parts 400 and 430-460</div>
 
                     <form class="search-box" action="{% url 'search' %}">
                         <input id="search-field" type="text" name="q" placeholder="Search Regulations" value="{{ q }}"></input>
@@ -28,7 +28,7 @@
                         </button>
                     </form>
 
-                    {% if  unquoted_search %}
+                    {% if unquoted_search %}
                         <div class="search-suggestion">
                             Didn't find what you were looking for? Try searching for
                             <a href="{% url 'search' %}?q=%22{{ query }}%22">"{{ query }}"</a>
@@ -48,24 +48,30 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <div class="search-displayed-by">{{ results | length }} results, displayed by relevance</div>
+                    <div class="search-results-count">{{ results | length }} results in Medicaid & CHIP Regulations</div>
 
                     <div class="search-results">
-                        <search-empty-state></search-empty-state>
-                        {% for result in results %}
-                            {% if result.label|length > 1 %}
-                            <div class="result">
-                                <!--{{ result.rank }}-->
-                                <div class="results-part">{{ result.part.document.title | title}}</div>
-                                <div class="results-section">
-                                    <a href="{% url 'reader_view' result.part.title result.label.0 result.label.1 result.part.date %}#{{ result.label | join:'-' }}">
-                                        {{ result.parentHeadline | stripSurroundingQuotes | safe }}
-                                    </a>
+                        {% if results|length > 0 %}
+                            {% for result in results %}
+                                {% if result.label|length > 1 %}
+                                <div class="result">
+                                    <!--{{ result.rank }}-->
+                                    <div class="results-part">{{ result.part.document.title | title}}</div>
+                                    <div class="results-section">
+                                        <a href="{% url 'reader_view' result.part.title result.label.0 result.label.1 result.part.date %}#{{ result.label | join:'-' }}">
+                                            {{ result.parentHeadline | stripSurroundingQuotes | safe }}
+                                        </a>
+                                    </div>
+                                    <div class="results-preview">{{ result.headline | safe }}</div>
                                 </div>
-                                <div class="results-preview">{{ result.headline | safe }}</div>
-                            </div>
-                            {% endif %}
-                        {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                        <search-empty-state
+                            eregs_url="{% url 'resources' %}?q={{ query }}"
+                            query="{{ query }}"
+                        ></search-empty-state>
+                        {% endif %}
                     </div>
                 </div>
             </main>
