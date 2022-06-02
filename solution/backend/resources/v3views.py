@@ -239,7 +239,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         raise NotImplementedError
 
     def get_annotated_date(self):
-        return F("date")
+        return F("date").desc(nulls_last=True)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -317,7 +317,10 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         annotations["date_annotated"] = self.get_annotated_date()
         query = query.annotate(**annotations)
         query = query.filter(rank__gte=0.2) if search_query else query
-        return query.distinct().order_by("-rank" if search_query else "-date_annotated")
+        if search_query:
+            return query.distinct().order_by(F("date_annotated").desc(nulls_last=True))
+        else:
+            return query.distinct().order_by("-rank")
 
 
 @extend_schema(
