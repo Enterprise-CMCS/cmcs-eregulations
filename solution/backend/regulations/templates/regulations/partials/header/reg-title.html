@@ -2,13 +2,20 @@
 
 {% if part %}
     <div class="reg-title">
-        <a href="{% url 'regulation_landing_view' title reg_part %}">
-            <strong>{{title}} CFR Part {{ part }}</strong>
-            <span class="header-part-name">
-                {% if part_label %}
-                - {{ part_label }}
-                {% endif %}
-            </span>
-        </a>
+        <div style="display:flex; flex-direction: row; flex-wrap: wrap; width: 100%; align-items:center">
+            <div style="flex:60%">
+                <a href="{% url 'regulation_landing_view' title reg_part %}">
+                    <strong>{{title}} CFR Part {{ part }}</strong>
+                    <span class="header-part-name">
+                        {% if part_label %}
+                        - {{ part_label }}
+                        {% endif %}
+                    </span>
+                </a>
+            </div>
+            <div style="flex:40%">
+                <a href="resources" class="btn inverted" style="float:right">View All Resources</a>
+            </div>
+        </div>
     </div>
 {% endif %}
