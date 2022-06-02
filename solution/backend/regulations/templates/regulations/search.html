@@ -51,6 +51,7 @@
                     <div class="search-displayed-by">{{ results | length }} results, displayed by relevance</div>
 
                     <div class="search-results">
+                        <search-empty-state></search-empty-state>
                         {% for result in results %}
                             {% if result.label|length > 1 %}
                             <div class="result">

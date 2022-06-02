@@ -7,6 +7,9 @@
                 <span v-else>{{ sortedContent.length }} Results</span>
             </div>
             <div v-if="!isLoading">
+                <template v-if="sortedContent.length == 0">
+                    <SearchEmptyState />
+                </template>
                 <template v-for="(item, idx) in sortedContent">
                     <div :key="item.created_at + idx">
                         <div class="category-labels">
@@ -76,14 +79,17 @@
 </template>
 
 <script>
-import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 import _uniqBy from "lodash/uniqBy";
 import _has from "lodash/has";
+
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 
 export default {
     name: "ResourcesResults",
 
     components: {
+        SearchEmptyState,
         SupplementalContentObject,
     },
 

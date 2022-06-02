@@ -80,6 +80,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "eregs-vite/src/components/SearchEmptyState.vue",
+        output: {
+            format: "esm",
+            file: "dist/SearchEmptyState.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",
