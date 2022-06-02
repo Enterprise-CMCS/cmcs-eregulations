@@ -1,6 +1,6 @@
 <template>
     <div class="nav-container">
-        <div class="content" :class="filtersClass">
+        <div class="content">
             <h1>Resources</h1>
             <p>
                 Find public documents related to policy research, including
@@ -27,15 +27,15 @@
 </template>
 
 <script>
-
 export default {
     name: "ResourcesNav",
 
     components: {},
 
     props: {
-        resourcesDisplay: {
+        aboutUrl: {
             type: String,
+            default: "/about/"
         },
     },
 
@@ -55,11 +55,7 @@ export default {
 
     destroyed() {},
 
-    computed: {
-        filtersClass() {
-            return `content-with-${this.resourcesDisplay}`;
-        },
-    },
+    computed: {},
 
     methods: {
         methodName() {
@@ -70,28 +66,17 @@ export default {
 </script>
 
 <style lang="scss">
-$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
-$additional-font-path: "~legacy-static/fonts"; // additional Open Sans fonts
-$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-$eregs-image-path: "~legacy-static/images";
-
-@import "legacy/css/scss/main.scss";
-
 .nav-container {
     overflow: auto;
-    width: 100%;
     background: $lightest_blue;
+    padding: 0 $spacer-5;
 
-    .content-with-column {
-        margin: 0 auto;
-    }
-
-    .content-with-sidebar {
-        margin-left: 50px;
+    @include screen-xl {
+        padding: 0 $spacer-4;
     }
 
     .content {
+        margin: 0 auto;
         max-width: $text-max-width;
 
         h1 {
@@ -99,12 +84,8 @@ $eregs-image-path: "~legacy-static/images";
             margin-bottom: 15px;
         }
 
-        p.descriptive-text {
+        p:last-of-type {
             margin-bottom: 30px;
-        }
-
-        a::after {
-            @include external-link;
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <body class="ds-base">
         <div id="app" class="resources-view">
-            <ResourcesNav :resourcesDisplay="resourcesDisplay">
+            <ResourcesNav :aboutUrl="aboutUrl">
                 <form
                     class="search-resources-form"
                     @submit.prevent="executeSearch"
@@ -51,6 +51,8 @@
                     <ResourcesResults
                         :isLoading="isLoading"
                         :content="supplementalContent"
+                        :partsList="filters.part.listItems"
+                        :partsLastUpdated="partsLastUpdated"
                     />
                 </div>
             </div>
@@ -75,6 +77,7 @@ import {
     getSubPartsForPart,
     getAllSections,
     getSupplementalContentV3,
+    getLastUpdatedDates,
 
 } from "../utilities/api";
 
@@ -88,12 +91,18 @@ export default {
         ResourcesResults,
     },
 
-    props: {},
+    props: {
+        aboutUrl: {
+            type: String,
+            default: "/about/",
+        },
+    },
 
     data() {
         return {
             isLoading: false,
             queryParams: this.$route.query,
+            partsLastUpdated: {},
             partDict: {},
             categories: [],
             testSup: [],
@@ -239,6 +248,7 @@ export default {
         },
 
         async updateFilters(payload) {
+            console.log(payload)
             let newQueryParams = { ...this.queryParams };
 
             if (newQueryParams[payload.scope]) {
@@ -255,6 +265,7 @@ export default {
                     payload.selectedIdentifier,
                     newQueryParams
                 );
+                console.log(newQueryParams)
                 this.getPartDict(newQueryParams);
             }
             this.$router.push({
@@ -318,6 +329,7 @@ export default {
             return returnArr;
         },
         getPartDict(dataQueryParams) {
+            console.log(dataQueryParams)
             const parts = dataQueryParams.part.split(",");
 
             for (const x in parts) {
@@ -342,10 +354,13 @@ export default {
             if (dataQueryParams.subpart) {
                 const subparts = dataQueryParams.subpart
                     .split(",")
-                    .map((x) => ({
+                    .map((x) => {
+                      console.log(x)
+                      return ({
                         part: x.match(/^\d+/)[0],
                         subparts: x.match(/\w+$/)[0],
-                    }));
+                        })
+                    });
 
                 for (const subpart in subparts) {
                     this.partDict[subparts[subpart].part].subparts.push(
@@ -411,13 +426,40 @@ export default {
             }
         },
         async getFormattedPartsList() {
-            const partsList = await getAllParts();
-
+            const partsList = await getAllParts(this.apiUrl);
             this.filters.part.listItems = partsList.map((part) => {
+                // get section parent (subpart) if exists.
+                // this will be included in response in v3 api
+                const sectionsArr = part.structure.children[0].children[0].children[0].children
+                    .map((subpart) => {
+                        if (_isEmpty(subpart.children)) return [];
+                        // handle mixed sections and subject_groups
+                        const returnArray = subpart.children.map(
+                            (subpartChild) => {
+                                if (subpartChild.type === "section") {
+                                    return {
+                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]:
+                                        subpartChild.parent[0],
+                                    };
+                                }
+                                // TODO: handle appendices with no children
+                                if (_isEmpty(subpartChild.children)) return [];
+                                return subpartChild.children.map((section) => ({
+                                    [section.identifier[1] ?? section.identifier[0]]:
+                                    subpartChild.parent[0],
+                                }));
+                            }
+                        );
+                        return returnArray;
+                    })
+                    .filter((section) => !_isEmpty(section))
+                    .flat(2);
                 return {
                     name: part.name,
-                    label: part.structure.children[0].children[0].children[0]
-                        .label,
+                    label:
+                        part.structure.children[0].children[0].children[0]
+                            .label,
+                    sections: Object.assign({}, ...sectionsArr),
                 };
             });
         },
@@ -462,26 +504,35 @@ export default {
                     : -1
             );
         },
-
+        async getPartLastUpdatedDates() {
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
+        },
         async getCategoryList() {
             const rawCats = await getCategories();
             const reducedCats = rawCats
-                .filter((item) => item.object_type === "category")
-                .sort((a, b) =>
-                    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
-                )
+                .filter((item) => item.type === "category")
                 .reduce((acc, item) => {
                     acc[item.name] = item;
                     acc[item.name].subcategories = [];
                     return acc;
                 }, {});
+            console.log(JSON.stringify(reducedCats))
             rawCats.forEach((item) => {
-                if (item.object_type === "subcategory") {
+                if (item.type === "subcategory") {
                     reducedCats[item.parent.name].subcategories.push(item);
                 }
             });
-            this.filters.resourceCategory.listItems =
-                Object.values(reducedCats);
+            console.log(JSON.stringify(rawCats))
+            const categories = Object.values(reducedCats).sort((a, b) =>
+                a.order - b.order
+            );
+            categories.forEach((category) => {
+                category.subcategories.sort((a, b) =>
+                    a.order - b.order
+                );
+            });
+            console.log(categories)
+            this.filters.resourceCategory.listItems = categories
         },
     },
 
@@ -537,6 +588,7 @@ export default {
     beforeCreate() {},
 
     async created() {
+        this.getPartLastUpdatedDates();
         this.getFormattedPartsList();
         this.getCategoryList();
         console.log('created')

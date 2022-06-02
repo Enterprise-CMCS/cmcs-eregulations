@@ -8,7 +8,7 @@
                     :data-value="item.name"
                     class="category-list-item"
                 >
-                    <span :class="item.object_type">{{
+                    <span :class="item.type">{{
                         item.name
                     }}</span>
                 </v-list-item>
@@ -19,7 +19,7 @@
                     :data-value="subItem.name"
                     class="category-list-item"
                 >
-                    <span :class="subItem.object_type">{{
+                    <span :class="subItem.type">{{
                         subItem.name
                     }}</span>
                 </v-list-item>

@@ -220,8 +220,6 @@ function httpApiGetV3(urlPath, { params } = {}) {
 async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
     let results = []
     let url = `${config.apiPathV3}/${urlPath}`
-    console.log(url)
-    console.log(urlPath)
     while (url) {
         /* eslint-disable no-await-in-loop */
         const response = await fetchJson(url, {
@@ -233,7 +231,6 @@ async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
         url = response.next;
         /* eslint-enable no-await-in-loop */
     }
-    console.log(results)
     return results
 }
 
@@ -296,6 +293,27 @@ const getLastUpdatedDate = async (title = "42") => {
     const result = await httpApiGet(`title/${title}/existing`);
 
     return niceDate(_get(result.reduce(reducer), "date"));
+};
+
+const getLastUpdatedDates = async (apiUrl, title = "42") => {
+    const reducer = (accumulator, currentValue) => {
+        // key by partname, value by latest date
+        // if partname is not in accumulator, add it
+        // if partname is in accumulator, compare the dates and update the accumulator
+        currentValue.partName.forEach((partName) => {
+            if (!accumulator[partName]) {
+                accumulator[partName] = currentValue.date;
+            } else if (currentValue.date > accumulator[partName]) {
+                accumulator[partName] = currentValue.date;
+            }
+        });
+
+        return accumulator;
+    };
+
+    const result = await httpApiGet(`title/${title}/existing`);
+
+    return result.reduce(reducer, {});
 };
 /**
  *
@@ -794,7 +812,7 @@ const getSupByPart = async (title, part, subparts, sections) => {
     return contents;
 }
 const getCategories = async () => {
-    return await httpApiGet("categories");
+    return  httpApiGetV3("resources/categories");
 };
 
 /**
@@ -854,6 +872,7 @@ export {
     getSupByPart,
     getAllSections,
     getSupplementalContentV3,
-    getSupplementalContentSearchResults
+    getSupplementalContentSearchResults,
+    getLastUpdatedDates
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

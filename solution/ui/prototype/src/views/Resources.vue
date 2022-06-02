@@ -95,7 +95,12 @@ export default {
         ResourcesResults,
     },
 
-    props: {},
+    props: {
+        aboutUrl: {
+            type: String,
+            default: "/about/",
+        },
+    },
 
     data() {
         return {
@@ -245,6 +250,7 @@ export default {
         },
 
         async updateFilters(payload) {
+            console.log(payload)
             let newQueryParams = { ...this.queryParams };
 
             if (newQueryParams[payload.scope]) {
@@ -261,6 +267,7 @@ export default {
                     payload.selectedIdentifier,
                     newQueryParams
                 );
+                console.log(newQueryParams)
                 this.getPartDict(newQueryParams);
             }
             this.$router.push({
@@ -324,6 +331,7 @@ export default {
             return returnArr;
         },
         getPartDict(dataQueryParams) {
+            console.log(dataQueryParams)
             const parts = dataQueryParams.part.split(",");
 
             for (const x in parts) {

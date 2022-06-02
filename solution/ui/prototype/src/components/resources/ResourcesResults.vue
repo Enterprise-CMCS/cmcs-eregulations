@@ -9,7 +9,7 @@
             <div v-if="!isLoading">
                 <template v-for="(item, idx) in content">
               
-                    <div :key="item.id + idx">
+                    <div :key="`${item.id}}-${idx}`">
                         <div class="category-labels">
                             <div
                                 v-if="item.category"

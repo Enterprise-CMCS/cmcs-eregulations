@@ -34,8 +34,9 @@ export default {
     components: {},
 
     props: {
-        resourcesDisplay: {
+        aboutUrl: {
             type: String,
+            default: "/about/"
         },
     },
 

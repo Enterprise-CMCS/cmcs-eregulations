@@ -527,7 +527,7 @@ const getSubPartsForPart = async (partParam) => {
     }
     const subParts = potentialSubParts.filter((p) => p.type === "subpart");
 
-    return subParts.map((s) => {
+    const toReturn = subParts.map((s) => {
         return {
             label: s.label,
             part: s.parent[0],
@@ -535,6 +535,9 @@ const getSubPartsForPart = async (partParam) => {
             range: s.descendant_range,
         };
     });
+    console.log('************************************************')
+    console.log(toReturn)
+    return toReturn
 };
 
 /**
