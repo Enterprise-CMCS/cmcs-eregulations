@@ -64,8 +64,6 @@ export default {
 
     destroyed() {},
 
-    data() {},
-
     computed: {
         ecfrLink() {
             return `https://www.ecfr.gov/search?search[hierarchy][title]=42&search[query]=${this.query}`;
