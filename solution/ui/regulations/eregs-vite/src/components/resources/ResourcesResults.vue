@@ -4,11 +4,22 @@
             <hr class="top-rule" />
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
-                <span v-else>{{ sortedContent.length }} Results</span>
+                <span v-else
+                    >{{ sortedContent.length }} Result<span
+                        v-if="sortedContent.length != 1"
+                        >s</span
+                    >
+                    in Resources</span
+                >
             </div>
             <div v-if="!isLoading">
                 <template v-if="sortedContent.length == 0">
-                    <SearchEmptyState />
+                    <SearchEmptyState
+                        eregs_url=""
+                        eregs_url_label="eRegulations regulation text"
+                        eregs_sublabel="(Medicaid & CHIP regulations)"
+                        query=""
+                    />
                 </template>
                 <template v-for="(item, idx) in sortedContent">
                     <div :key="item.created_at + idx">

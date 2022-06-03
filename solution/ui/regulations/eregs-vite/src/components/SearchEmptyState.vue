@@ -3,8 +3,8 @@
         Expand your search:
         <ul>
             <li>
-                <a :href="eregs_url">eRegulations resource links</a>
-                <span> (subregulatory guidance and implementation resources)</span>
+                <a :href="eregs_url">{{ eregs_url_label }}</a>
+                <span> {{ eregs_sublabel }}</span>
             </li>
             <li>
                 <a :href="ecfrLink" class="external" target="_blank">eCFR</a>
@@ -26,6 +26,14 @@ export default {
 
     props: {
         eregs_url: {
+            type: String,
+            required: true,
+        },
+        eregs_url_label: {
+            type: String,
+            required: true,
+        },
+        eregs_sublabel: {
             type: String,
             required: true,
         },
