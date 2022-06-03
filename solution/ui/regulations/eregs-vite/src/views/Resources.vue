@@ -626,53 +626,29 @@ export default {
 </script>
 
 <style lang="scss">
-$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
-$additional-font-path: "~legacy-static/fonts"; // additional Open Sans fonts
-$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-$eregs-image-path: "~legacy-static/images";
-
-@import "legacy/css/scss/main.scss";
-
-$sidebar-top-margin: 40px;
-
 #app.resources-view {
     display: flex;
     flex-direction: column;
-
     .resources-content-container {
         display: flex;
         flex-direction: column;
     }
-
     .resources-content-container-column {
         display: flex;
         flex-direction: column;
         flex: 1;
     }
-
-    .resources-content-container-sidebar {
-        display: flex;
-        flex-direction: row;
+    .results-column {
+        padding: 0 $spacer-5;
+        @include screen-xl {
+            padding: 0 $spacer-4;
+        }
     }
-
-    .filters-sidebar {
-        display: flex;
-        flex: 0 0 430px;
-        max-width: 430px;
-    }
-
-    .results-sidebar {
-        flex: 1;
-        padding: 40px 80px 0;
-    }
-
     .search-resources-form {
         .search-field {
             width: calc(100% - 25px);
             height: 40px;
             margin-bottom: 50px;
-
             .v-input__icon.v-input__icon--append button {
                 color: $mid_blue;
             }
@@ -680,3 +656,10 @@ $sidebar-top-margin: 40px;
     }
 }
 </style>
+
+
+
+
+
+
+

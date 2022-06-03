@@ -7,7 +7,7 @@
                 <span v-else>{{ content.length }} Results</span>
             </div>
             <div v-if="!isLoading">
-                <template v-for="(item, idx) in content">
+                <template v-for="(item, idx) in filteredContent">
                     <div :key="item.created_at + idx">
                         <div class="category-labels">
                             <div
@@ -43,7 +43,6 @@
                             <span v-else>§ </span>
                             <template v-for="(location, i) in item.locations">
                                 <span
-                                    v-if="partsLastUpdated[location.part]"
                                     :key="location.display_name + i"
                                     class="related-section-link"
                                 >
@@ -150,47 +149,13 @@ export default {
     data() {},
 
     computed: {
-        sortedContent() {
-            let results = this.content
-                .filter(
-                    (category) =>
-                        category.supplemental_content?.length ||
-                        category.sub_categories?.length
-                )
-                .flatMap((category) => {
-                    const returnArr = [];
-                    if (category.sub_categories?.length) {
-                        category.sub_categories.forEach((sub_category) => {
-                            sub_category.supplemental_content.forEach(
-                                (item) => {
-                                    item.category = category.name;
-                                    item.sub_category = sub_category.name;
-                                    returnArr.push(item);
-                                }
-                            );
-                        });
-                    } else {
-                        category.supplemental_content.forEach((item) => {
-                            if (_has(category, "parent_category")) {
-                                item.category = category.parent_category;
-                                item.sub_category = category.name;
-                            } else {
-                                item.category = category.name;
-                            }
-                            returnArr.push(item);
-                        });
-                    }
-
-                    return returnArr;
-                });
-
-            //remove duplicates
-            results = _uniqBy(results, (item) => {
-                return item.name;
-            });
-
-            return results;
-        },
+      filteredContent(){
+        return this.content.map(item => {
+          const copiedItem = JSON.parse(JSON.stringify(item))
+          copiedItem.locations = item.locations.filter(location => this.partsLastUpdated[location.part])
+          return copiedItem
+        })
+      }
     },
 };
 </script>
@@ -200,25 +165,20 @@ export default {
     overflow: auto;
     width: 100%;
     margin-bottom: 30px;
-
     .results-content {
         max-width: $text-max-width;
         margin: 0 auto;
-
         .top-rule {
             border-top: 1px solid #dddddd;
             margin-bottom: 30px;
         }
-
         .results-count {
             font-size: 15px;
             font-weight: bold;
             margin-bottom: 40px;
         }
-
         .category-labels {
             margin-bottom: 5px;
-
             .result-label {
                 font-size: 11px;
                 display: inline;
@@ -226,16 +186,13 @@ export default {
                 background: #e3eef9;
                 border-radius: 3px;
                 padding: 2px 5px 3px;
-
                 &.category-label {
                     font-weight: 600;
                 }
             }
         }
-
         .result-content-wrapper {
             margin-bottom: 20px;
-
             .supplemental-content a.supplemental-content-link {
                 .supplemental-content-date,
                 .supplemental-content-title,
@@ -244,17 +201,14 @@ export default {
                 }
             }
         }
-
         .related-sections {
             margin-bottom: 40px;
             font-size: 12px;
             color: $mid_gray;
-
             .related-sections-title {
                 font-weight: 600;
                 color: $dark_gray;
             }
-
             a {
                 text-decoration: none;
             }

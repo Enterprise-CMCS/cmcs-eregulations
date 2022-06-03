@@ -86,33 +86,23 @@ export default {
 </script>
 
 <style lang="scss">
-$font-path: "~@cmsgov/design-system/dist/fonts/"; // cmsgov font path
-$additional-font-path: "~legacy-static/fonts"; // additional Open Sans fonts
-$image-path: "~@cmsgov/design-system/dist/images/"; // cmsgov image path
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-$eregs-image-path: "~legacy-static/images";
-
-@import "legacy/css/scss/main.scss";
-
 .filters-container {
     overflow: auto;
-    width: 100%;
-    padding-bottom: 30px;
-
+    padding: 0 $spacer-5 30px $spacer-5;
+    @include screen-xl {
+        padding: 0 $spacer-4 30px $spacer-4;
+    }
     .content-with-column {
         margin: 0 auto;
     }
-
-    .content-with-sidebar {
-        margin-left: 50px;
-    }
-
     .content {
         max-width: $text-max-width;
-
         .filters {
             display: flex;
             justify-content: space-between;
+            @include custom-max($mobile-max / 1px) {
+                flex-direction: column;
+            }
         }
     }
 }
