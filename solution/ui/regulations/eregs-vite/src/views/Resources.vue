@@ -265,7 +265,7 @@ export default {
                     payload.selectedIdentifier,
                     newQueryParams
                 );
-                console.log(newQueryParams)
+
                 this.getPartDict(newQueryParams);
             }
             this.$router.push({
@@ -329,16 +329,19 @@ export default {
             return returnArr;
         },
         getPartDict(dataQueryParams) {
-            console.log(dataQueryParams)
-            const parts = dataQueryParams.part.split(",");
 
-            for (const x in parts) {
-                this.partDict[parts[x]] = {
+            const parts = dataQueryParams.part.split(",");
+            const newPartDict = {}
+
+            parts.forEach(x => {
+                newPartDict[x] = {
                     title: "42",
                     sections: [],
                     subparts: [],
                 };
-            }
+            })
+
+            this.partDict = newPartDict
 
             if (dataQueryParams.section) {
                 let sections = dataQueryParams.section.split(",").map((x) => ({
@@ -370,6 +373,8 @@ export default {
             }
             if (dataQueryParams.resourceCategory) {
                this.categories = dataQueryParams.resourceCategory.split(",");
+            } else{
+              this.categories = []
             }
         },
 
@@ -387,9 +392,7 @@ export default {
                 });
 
                 try {
-                    console.log(partPromises)
                     this.supplementalContent = partPromises;
-                    console.log(this.supplementalContent)
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -400,7 +403,7 @@ export default {
                 try {
                     const searchResults = await getSupplementalContentV3({
                       partDict: "all", // titles
-                      categories: this.categories, //subcategories
+                      categories: this.categories, // subcategories
                       q: searchQuery,
                       paginate: true
                     });
@@ -415,7 +418,7 @@ export default {
             } else {
                 this.supplementalContent = await getSupplementalContentV3({
                   partDict: "all", // titles
-                  categories: this.filterParams.resourceCategory ? this.filterParams.resourceCategory.split(",") : "", //subcategories
+                  categories: this.categories,
                   q: searchQuery,
                   start: 0, // start
                   max_results: 100, // max_results
@@ -473,7 +476,6 @@ export default {
             let finalsSections = [];
             let sectionList = [];
             for (const part in this.partDict) {
-                console.log(this.partDict)
                 const sections = this.partDict[part].sections;
                 const subparts = this.partDict[part].subparts;
                 sectionList = allSections.filter((sec) => sec.part == part);
