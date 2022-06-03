@@ -33,7 +33,7 @@ describe("Search flow", () => {
     it("displays results of the search", () => {
         cy.viewport("macbook-15");
         cy.visit("/search/?q=State", { timeout: 60000 });
-        cy.findByText(/\d+ results, displayed by relevance/).should(
+        cy.findByText(/\d+ results in Medicaid & CHIP Regulations/).should(
             "be.visible"
         );
         cy.findByRole("link", {
