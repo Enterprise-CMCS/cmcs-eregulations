@@ -2,8 +2,6 @@ name: Deploy
 
 on:
   # Remove this before committing to main
-  pull_request:
-    types: [ opened, synchronize, reopened ]
   workflow_dispatch:
   push:
     branches:
@@ -14,9 +12,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        # revert this before committing to main.
-        # environment: ["dev", "val", "prod"]
-        environment: ["dev",]
+        environment: ["dev", "val", "prod"]
     environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}

@@ -1,6 +1,5 @@
 <template>
     <div id="app" class="resources-view">
-        {{apiPath}}
         <ResourcesNav :aboutUrl="aboutUrl">
             <form class="search-resources-form" @submit.prevent="executeSearch">
                 <v-text-field
@@ -89,7 +88,6 @@ export default {
 
     data() {
         return {
-            apiPath: import.meta.env.VITE_API_URL,
             isLoading: false,
             queryParams: this.$route.query,
             partsLastUpdated: {},
