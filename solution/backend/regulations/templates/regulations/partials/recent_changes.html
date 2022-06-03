@@ -1,10 +1,4 @@
-{% comment %}
-    Prototype for latest changes display
-{% endcomment %}
-
 {% load site_statistics %}
-
-<!-- <div class="last-update-external">Regulations last updated from <a href="https://www.ecfr.gov" target="_blank" class="external">eCFR</a> on {% last_updated%}.</div> -->
 
 <div class="latest-changes">
 
@@ -12,6 +6,13 @@
 
     <supplemental-content class="related-rules" api_url="{% url 'regcore' %}" requested_categories="1,2"></supplemental-content>
 
-    <p class="see-fr">For more changes, see the <a href="https://www.federalregister.gov/" target="_blank" class="external">Federal Register</a>.</p>
+    <hr class="latest-changes-horiz-rule"/>
 
+    <h3 class="all-resources-header">All Resources</h3>
+
+    <span class="resource-types">SMDLs  |  SHOs  |  CIBs  |  Rules  |  NPRMs</span>
+
+    <p class="resourcs-description">Links to subregulatory guidance and implementation resources for regulation sections.</p>
+
+    <a href="{% url 'resources' %}" class="action-btn default-btn view-resources-btn">View All Resources</a>
 </div>
