@@ -1,6 +1,5 @@
 import _filter from "lodash/filter";
 import _get from "lodash/get";
-import _isArray from "lodash/isArray";
 import _isBoolean from "lodash/isBoolean";
 import _isFunction from "lodash/isFunction";
 import _isNil from "lodash/isNil";
@@ -19,7 +18,7 @@ const apiPath = `${import.meta.env.VITE_API_URL}`;
 const apiPathV2 = `${import.meta.env.VITE_API_URL}/v2`;
 const apiPathV3 = `${import.meta.env.VITE_API_URL}/v3`;
 
-let config = {
+const config = {
     apiPath,
     apiPathV2,
     apiPathV3,
@@ -716,12 +715,9 @@ const getSupplementalContentV3 = async (
             }
         }
     }
-    console.log('here')
-
-
 
     let catList = await getCategories()
-    console.log(categories)
+
     for (const category of categories) {
         let cat = catList.filter(x => x.name === category)[0]
 
@@ -734,19 +730,14 @@ const getSupplementalContentV3 = async (
     if (paginate) {
         sString = sString + "&paginate=true&page_size=" + page_size + "&page=" + page
     }
-    console.log(sString)
 
     if (paginate){
         const result = await httpApiGetV3WithPagination(`resources/?${sString}`)
-        console.log(sString)
-        console.log(result)
         return result;
 
     }
     else{
         const response = await httpApiGetV3(`resources/?${sString}`)
-        console.log(sString)
-        console.log(response.results)
         return response.results;
     }
 

@@ -413,7 +413,6 @@ export default {
                     this.isLoading = false;
                 }
             } else {
-                console.log('loading fresh data')
                 this.supplementalContent = await getSupplementalContentV3({
                   partDict: "all", // titles
                   categories: this.filterParams.resourceCategory ? this.filterParams.resourceCategory.split(",") : "", //subcategories
@@ -477,11 +476,7 @@ export default {
                 console.log(this.partDict)
                 const sections = this.partDict[part].sections;
                 const subparts = this.partDict[part].subparts;
-                console.log(part)
-                console.log(allSections)
                 sectionList = allSections.filter((sec) => sec.part == part);
-                console.log(sectionList)
-                console.log(subparts)
                 if (subparts.length >0) {
                     sectionList = sectionList.filter((sec) => {
                         return (
@@ -492,8 +487,6 @@ export default {
                 }
                 finalsSections = finalsSections.concat(sectionList);
             }
-            console.log('dkfjd')
-            console.log(finalsSections)
             this.filters.section.listItems = finalsSections.sort((a, b) =>
                 a.part > b.part
                     ? 1
@@ -516,13 +509,13 @@ export default {
                     acc[item.name].subcategories = [];
                     return acc;
                 }, {});
-            console.log(JSON.stringify(reducedCats))
+
             rawCats.forEach((item) => {
                 if (item.type === "subcategory") {
                     reducedCats[item.parent.name].subcategories.push(item);
                 }
             });
-            console.log(JSON.stringify(rawCats))
+
             const categories = Object.values(reducedCats).sort((a, b) =>
                 a.order - b.order
             );
@@ -531,7 +524,6 @@ export default {
                     a.order - b.order
                 );
             });
-            console.log(categories)
             this.filters.resourceCategory.listItems = categories
         },
     },
@@ -591,7 +583,6 @@ export default {
         this.getPartLastUpdatedDates();
         this.getFormattedPartsList();
         this.getCategoryList();
-        console.log('created')
         if (this.queryParams?.part || this.queryParams?.q) {
             if (this.queryParams?.q) {
                 this.searchQuery = this.queryParams.q;
