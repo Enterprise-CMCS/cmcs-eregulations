@@ -323,7 +323,6 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             return query.distinct().order_by(F("date_annotated").desc(nulls_last=True))
 
 
-
 @extend_schema(
     description="Retrieve a list of all resources. "
                 "Includes all types e.g. supplemental content, Federal Register Documents, etc. "
