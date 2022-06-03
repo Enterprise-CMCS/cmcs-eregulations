@@ -90,6 +90,7 @@ jobs:
           pushd solution
           make regulations
           popd
+          pushd solution/static-assets
           serverless deploy --stage ${{ matrix.environment }}
           popd
       - uses: actions/setup-go@v2
