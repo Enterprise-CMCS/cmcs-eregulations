@@ -1,7 +1,6 @@
 name: Deploy
 
 on:
-  # Remove this before committing to main
   workflow_dispatch:
   push:
     branches:
@@ -69,7 +68,7 @@ jobs:
           serverless invoke --function create_su --stage ${{ matrix.environment }}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
-      # vite needs the .env file in order to
+      # vite needs the .env file in order to know the URL of the api.
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
