@@ -188,11 +188,30 @@ header {
             padding-left: $spacer-2;
             margin-left: $spacer-2;
             border-left: 1px solid $border_color;
+
         }
 
         a {
             max-width: $text-max-width;
             display: inline-block;
+        }
+        .flex-container {
+            display:flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            align-items:center;
+            justify-content: space-between;
+            .flex-header{
+                flex: 1 0;
+            }
+
+            .view-resources-btn {
+                flex: 0 1 auto;
+                @include custom-max($tablet-max / 1px) {
+                    display: none;
+                }
+            }
         }
     }
 
