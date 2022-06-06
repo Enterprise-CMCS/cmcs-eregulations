@@ -105,7 +105,6 @@ export default {
             partsLastUpdated: {},
             partDict: {},
             categories: [],
-            testSup: [],
             resourcesDisplay:
                 this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
@@ -248,7 +247,6 @@ export default {
         },
 
         async updateFilters(payload) {
-            console.log(payload)
             let newQueryParams = { ...this.queryParams };
 
             if (newQueryParams[payload.scope]) {
@@ -310,12 +308,6 @@ export default {
         },
         transformResults(results, flatten) {
             const arrayToTransform = flatten ? results.flat() : results;
-            let res = [];
-
-            for (const r of this.testSup) {
-                res = res.concat(r.results);
-            }
-            this.testSup = res;
 
             let returnArr = [];
             for (const category of arrayToTransform) {
@@ -358,7 +350,6 @@ export default {
                 const subparts = dataQueryParams.subpart
                     .split(",")
                     .map((x) => {
-                      console.log(x)
                       return ({
                         part: x.match(/^\d+/)[0],
                         subparts: x.match(/\w+$/)[0],
