@@ -17,7 +17,17 @@ module.exports = {
         }
     },
     staticDirs: [
-        { from: "../../../static-assets/regulations/images", to: "images" },
-        { from: "../../../static-assets/regulations/fonts", to: "fonts" },
+        {
+            from: "../../../static-assets/regulations/images",
+            to: process.env.STORYBOOK_BASE
+                ? `${process.env.STORYBOOK_BASE}/images`
+                : "images",
+        },
+        {
+            from: "../../../static-assets/regulations/fonts",
+            to: process.env.STORYBOOK_BASE
+                ? `${process.env.STORYBOOK_BASE}/fonts`
+                : "fonts",
+        },
     ],
 };
