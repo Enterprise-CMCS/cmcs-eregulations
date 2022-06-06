@@ -165,7 +165,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
           VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-          STORYBOOK_BASE: dev-${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/ui/regulations
           npm ci
