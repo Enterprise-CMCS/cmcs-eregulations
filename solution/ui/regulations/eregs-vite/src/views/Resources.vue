@@ -371,19 +371,18 @@ export default {
                     );
                 }
             }
-            if (dataQueryParams.resourceCategory) {
-               this.categories = dataQueryParams.resourceCategory.split(",");
-            } else{
-              this.categories = []
-            }
         },
 
         async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
 
+            if (dataQueryParams.resourceCategory) {
+               this.categories = dataQueryParams.resourceCategory.split(",");
+            } else{
+              this.categories = []
+            }
             if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
-
                 // map over parts and return promises to put in Promise.all
                 const partPromises = await getSupplementalContentV3({
                   partDict:this.partDict,
@@ -585,23 +584,21 @@ export default {
         this.getPartLastUpdatedDates();
         this.getFormattedPartsList();
         this.getCategoryList();
-        if (this.queryParams?.part || this.queryParams?.q) {
-            if (this.queryParams?.q) {
-                this.searchQuery = this.queryParams.q;
-            }
 
-            this.getSupplementalContent(this.queryParams, this.searchQuery);
-
-            if (this.queryParams?.part) {
-                this.getFormattedSubpartsList(this.queryParams.part);
-                this.getFormattedSectionsList(
-                    this.queryParams.part,
-                    this.queryParams.subpart
-                );
-            }
-        } else {
-            this.getSupplementalContent([], "");
+        if (this.queryParams.q) {
+            this.searchQuery = this.queryParams.q;
         }
+
+        if (this.queryParams.part) {
+            this.getFormattedSubpartsList(this.queryParams.part);
+            this.getFormattedSectionsList(
+                this.queryParams.part,
+                this.queryParams.subpart
+            );
+        }
+
+        this.getSupplementalContent(this.queryParams, this.searchQuery);
+
     },
 
     beforeMount() {},
