@@ -9,7 +9,7 @@ module.exports = {
         builder: "webpack5",
     },
     staticDirs: [
-        { from: "../../../static-assets/regulations/images", to: "storybook/images" },
-        { from: "../../../static-assets/regulations/fonts", to: "storybook/fonts" },
+        { from: "../../../static-assets/regulations/images", to: "images" },
+        { from: "../../../static-assets/regulations/fonts", to: "fonts" },
     ],
 };
