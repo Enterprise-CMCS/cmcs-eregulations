@@ -8,6 +8,14 @@ module.exports = {
     core: {
         builder: "webpack5",
     },
+    managerHead: (head, { configType }) => {
+        if (configType === "PRODUCTION") {
+            return `
+                ${head}
+                <base href="/${process.env.STORYBOOK_BASE}/">
+              `;
+        }
+    },
     staticDirs: [
         { from: "../../../static-assets/regulations/images", to: "images" },
         { from: "../../../static-assets/regulations/fonts", to: "fonts" },
