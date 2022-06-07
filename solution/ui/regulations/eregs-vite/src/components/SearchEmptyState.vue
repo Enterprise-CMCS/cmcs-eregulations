@@ -45,9 +45,7 @@ export default {
 
     beforeCreate() {},
 
-    created() {
-        console.log(this.eregs_url);
-    },
+    created() {},
 
     beforeMount() {},
 
