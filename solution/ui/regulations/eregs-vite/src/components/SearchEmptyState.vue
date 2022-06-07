@@ -3,8 +3,8 @@
         Expand your search:
         <ul>
             <li>
-                <a :href="eregs_url">{{ eregs_url_label }}</a>
-                <span> {{ eregs_sublabel }}</span>
+                <a :href="eregsLink">{{ eregs_url_label }}</a>
+                <span> ({{ eregs_sublabel }})</span>
             </li>
             <li>
                 <a :href="ecfrLink" class="external" target="_blank">eCFR</a>
@@ -51,10 +51,7 @@ export default {
 
     beforeMount() {},
 
-    mounted() {
-        console.log(this.eregs_url);
-        console.log(this.query);
-    },
+    mounted() {},
 
     beforeUpdate() {},
 
@@ -65,6 +62,9 @@ export default {
     destroyed() {},
 
     computed: {
+        eregsLink() {
+            return this.query ? `${this.eregs_url}?q=${this.query}` : this.eregs_url;
+        },
         ecfrLink() {
             return `https://www.ecfr.gov/search?search[hierarchy][title]=42&search[query]=${this.query}`;
         },

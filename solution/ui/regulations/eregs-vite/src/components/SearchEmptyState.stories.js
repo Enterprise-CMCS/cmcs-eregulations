@@ -15,7 +15,7 @@ export const Basic = Template.bind({});
 Basic.args = {
     eregs_url: "https://www.google.com",
     eregs_url_label: "eRegulations resource links",
-    eregs_sublabel: "(subregulatory guidance and implementation resources)",
+    eregs_sublabel: "subregulatory guidance and implementation resources",
     query: "test",
 };
 

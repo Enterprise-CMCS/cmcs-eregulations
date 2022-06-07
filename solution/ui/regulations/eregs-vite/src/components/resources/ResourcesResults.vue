@@ -17,7 +17,7 @@
                     <SearchEmptyState
                         :eregs_url="regulationsSearchUrl"
                         eregs_url_label="eRegulations regulation text"
-                        eregs_sublabel="(Medicaid & CHIP regulations)"
+                        eregs_sublabel="Medicaid & CHIP regulations"
                         :query="query"
                     />
                 </template>
@@ -171,9 +171,7 @@ export default {
 
     computed: {
         regulationsSearchUrl() {
-            return this.query
-                ? `${this.base}/search/?q=${this.query}`
-                : `${this.base}/search/`;
+            return `${this.base}/search/`;
         },
         filteredContent() {
             return this.content.map((item) => {

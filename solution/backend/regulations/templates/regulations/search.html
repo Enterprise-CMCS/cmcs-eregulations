@@ -68,9 +68,9 @@
                             {% endfor %}
                         {% else %}
                         <search-empty-state
-                            eregs_url="{% url 'resources' %}?q={{ query }}"
+                            eregs_url="{% url 'resources' %}"
                             eregs_url_label="eRegulations resource links"
-                            eregs_sublabel="(subregulatory guidance and implementation resources)"
+                            eregs_sublabel="subregulatory guidance and implementation resources"
                             query="{{ query }}"
                         ></search-empty-state>
                         {% endif %}
