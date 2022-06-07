@@ -72,12 +72,6 @@ export default {
             return `https://www.federalregister.gov/documents/search?conditions[agencies][]=centers-for-medicare-medicaid-services&conditions[term]=${this.query}`
         }
     },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
 };
 </script>
 

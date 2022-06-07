@@ -53,6 +53,7 @@
                         :content="supplementalContent"
                         :partsList="filters.part.listItems"
                         :partsLastUpdated="partsLastUpdated"
+                        :query="searchQuery"
                     />
                 </div>
             </div>

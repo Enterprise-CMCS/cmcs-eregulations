@@ -15,25 +15,27 @@
             <div v-if="!isLoading">
                 <template v-if="filteredContent && filteredContent.length == 0">
                     <SearchEmptyState
-                        eregs_url=""
+                        :eregs_url="regulationsSearchUrl"
                         eregs_url_label="eRegulations regulation text"
                         eregs_sublabel="(Medicaid & CHIP regulations)"
-                        query=""
+                        :query="query"
                     />
                 </template>
                 <template v-for="(item, idx) in filteredContent">
                     <div :key="item.created_at + idx">
                         <div class="category-labels">
-                            <div
-                                class="result-label category-label"
-                            >
-                               {{ item.category.parent ? item.category.parent.name : item.category.name}}
+                            <div class="result-label category-label">
+                                {{
+                                    item.category.parent
+                                        ? item.category.parent.name
+                                        : item.category.name
+                                }}
                             </div>
                             <div
                                 v-if="item.category.parent"
                                 class="result-label subcategory-label"
                             >
-                               {{ item.category.name }}
+                                {{ item.category.name }}
                             </div>
                         </div>
                         <div class="result-content-wrapper">
@@ -69,10 +71,7 @@
                                                 )
                                         "
                                     >
-                                        {{
-                                            location
-                                                | locationLabel
-                                        }}
+                                        {{ location | locationLabel }}
                                     </a>
                                     <span v-if="i + 1 != item.locations.length">
                                         |
@@ -104,8 +103,9 @@ export default {
 
     filters: {
         locationLabel(value) {
-
-            return value.type.toLowerCase() === 'section' ? `${value.part}.${value.section_id}` : `${value.part} Subpart ${value.subpart_id}`
+            return value.type.toLowerCase() === "section"
+                ? `${value.part}.${value.section_id}`
+                : `${value.part} Subpart ${value.subpart_id}`;
         },
         locationUrl(value, partsList, partsLastUpdated) {
             // getting parent and partDate for proper link to section
@@ -113,28 +113,20 @@ export default {
             // is not straightforward with v2.  See below.
             // Thankfully v3 will add "latest" for date
             // and will better provide parent subpart in resource locations array.
-            const {part, section_id, type, title, subpart_id} = value;
-            const base =
-                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-                    ? `/${import.meta.env.VITE_ENV}`
-                    : "";
+            const { part, section_id, type, title, subpart_id } = value;
             const partDate = `${partsLastUpdated[part]}/`;
 
             // early return if related regulation is a subpart and not a section
             if (type.toLowerCase() === "subpart") {
-                return `${base}/${title}/${part}/Subpart-${subpart_id}/${partDate}`;
+                return `${this.base}/${title}/${part}/Subpart-${subpart_id}/${partDate}`;
             }
-            const partObj = partsList.find(
-                (parts) => parts.name == part
-            );
-            const subpart = partObj.sections[section_id]
+            const partObj = partsList.find((parts) => parts.name == part);
+            const subpart = partObj.sections[section_id];
 
             // todo: Figure out which no subpart sections are invalid and which are orphans
-            return subpart ?
-                `${base}/${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
-                :
-                `${base}/${title}/${part}/${partDate}#${part}-${section_id}`
-
+            return subpart
+                ? `${this.base}/${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
+                : `${this.base}/${title}/${part}/${partDate}#${part}-${section_id}`;
         },
     },
 
@@ -143,7 +135,7 @@ export default {
             type: Array,
             required: false,
             default() {
-              return []
+                return [];
             },
         },
         isLoading: {
@@ -161,18 +153,37 @@ export default {
             required: true,
             default: () => {},
         },
+        query: {
+            type: String,
+            required: false,
+            default: "",
+        },
     },
 
-    data() {},
+    data() {
+        return {
+            base:
+                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
+                    ? `/${import.meta.env.VITE_ENV}`
+                    : "",
+        };
+    },
 
     computed: {
-      filteredContent(){
-        return this.content.map(item => {
-          const copiedItem = JSON.parse(JSON.stringify(item))
-          copiedItem.locations = item.locations.filter(location => this.partsLastUpdated[location.part])
-          return copiedItem
-        })
-      }
+        regulationsSearchUrl() {
+            return this.query
+                ? `${this.base}/search/?q=${this.query}`
+                : `${this.base}/search/`;
+        },
+        filteredContent() {
+            return this.content.map((item) => {
+                const copiedItem = JSON.parse(JSON.stringify(item));
+                copiedItem.locations = item.locations.filter(
+                    (location) => this.partsLastUpdated[location.part]
+                );
+                return copiedItem;
+            });
+        },
     },
 };
 </script>
