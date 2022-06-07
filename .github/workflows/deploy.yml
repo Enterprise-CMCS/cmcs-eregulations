@@ -130,9 +130,10 @@ jobs:
           popd
           pushd solution/ui/regulations
           npm ci
+          npm run css-deploy
           npm run build-storybook
           mkdir ../prototype/dist/storybook/
-          cp storybook-static/* ../prototype/dist/storybook/
+          cp -r storybook-static/* ../prototype/dist/storybook/
           popd
           pushd solution/ui/prototype
           serverless deploy --stage ${{ matrix.environment }}
