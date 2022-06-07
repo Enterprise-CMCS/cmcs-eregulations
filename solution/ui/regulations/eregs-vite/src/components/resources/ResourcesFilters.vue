@@ -79,6 +79,7 @@ export default {
 
     methods: {
         filterEmitter(payload) {
+            console.log(payload)
             this.$emit("select-filter", payload);
         },
     },

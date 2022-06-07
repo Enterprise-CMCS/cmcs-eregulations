@@ -78,6 +78,8 @@ import {
     getAllSections,
     getSupplementalContentV3,
     getLastUpdatedDates,
+    getTOC,
+    getPartTOC
 
 } from "../utilities/api";
 
@@ -263,7 +265,7 @@ export default {
                     payload.selectedIdentifier,
                     newQueryParams
                 );
-
+                console.log(newQueryParams)
                 this.getPartDict(newQueryParams);
             }
             this.$router.push({
@@ -418,46 +420,33 @@ export default {
             }
         },
         async getFormattedPartsList() {
-            const partsList = await getAllParts(this.apiUrl);
-            this.filters.part.listItems = partsList.map((part) => {
-                // get section parent (subpart) if exists.
-                // this will be included in response in v3 api
-                const sectionsArr = part.structure.children[0].children[0].children[0].children
-                    .map((subpart) => {
-                        if (_isEmpty(subpart.children)) return [];
-                        // handle mixed sections and subject_groups
-                        const returnArray = subpart.children.map(
-                            (subpartChild) => {
-                                if (subpartChild.type === "section") {
-                                    return {
-                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]:
-                                        subpartChild.parent[0],
-                                    };
-                                }
-                                // TODO: handle appendices with no children
-                                if (_isEmpty(subpartChild.children)) return [];
-                                return subpartChild.children.map((section) => ({
-                                    [section.identifier[1] ?? section.identifier[0]]:
-                                    subpartChild.parent[0],
-                                }));
-                            }
-                        );
-                        return returnArray;
-                    })
-                    .filter((section) => !_isEmpty(section))
-                    .flat(2);
-                return {
-                    name: part.name,
-                    label:
-                        part.structure.children[0].children[0].children[0]
-                            .label,
-                    sections: Object.assign({}, ...sectionsArr),
-                };
-            });
+            const TOC = await getTOC();
+            const partsList = TOC[0].children[0].children.map(
+                subChapter => subChapter.children.map(part => (
+                    {label: part.label, name:part.identifier[0]}
+                ))
+            ).flat(1)
+
+            this.filters.part.listItems = await Promise.all(partsList.map(async part =>{
+                const newPart = JSON.parse(JSON.stringify(part))
+                const PartToc = await getPartTOC(42, part.name)
+                const sections = {}
+                PartToc.children.filter(TOCpart => TOCpart.type==="subpart").forEach(subpart => {
+
+                    subpart.children.filter(section =>
+                        section.type==="section").forEach(c=>{
+                          sections[c.identifier[c.identifier.length-1]] = c.parent[0]
+                    })})
+                newPart.sections = sections
+                return newPart
+            }))
+
         },
+
 
         async getFormattedSubpartsList(parts) {
             this.filters.subpart.listItems = await getSubPartsForPart(parts);
+            console.log(JSON.stringify(this.filters.subpart.listItems))
         },
 
         async getFormattedSectionsList() {
