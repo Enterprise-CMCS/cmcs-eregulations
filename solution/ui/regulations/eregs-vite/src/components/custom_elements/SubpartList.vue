@@ -3,9 +3,9 @@
         <v-list-item-group class="subpart-list-item-group">
             <v-list-item
                 v-for="item in listItems"
-                :key="item.identifier"
+                :key="item.part + item.identifier"
                 @click="clickMethod"
-                :data-value="item.identifier"
+                :data-value="item.part + '-' + item.identifier"
                 class="subpart-list-item"
             >
                 <div>

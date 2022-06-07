@@ -48,9 +48,7 @@ jobs:
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: dev-${{ steps.findPr.outputs.pr }}
         run: |
-          pushd solution
-          make regulations
-          cd backend
+          pushd solution/backend
           python manage.py collectstatic --noinput
           cd ..
           popd
@@ -187,6 +185,60 @@ jobs:
           serverless deploy --stage dev-${PR}
           echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 14-)"
           popd
+  build-and-deploy-vue:
+    environment:
+      name: "dev"
+    runs-on: ubuntu-latest
+    needs: deploy-django
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      # Find the PR number.  This is not always trivial which is why this uses an existing action
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+      # Setup node environment
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_VITE_API_URL: ${{ needs.deploy-django.outputs.url }}
+          directory: solution/ui/regulations/eregs-vite
+          file_name: .env
+      # build the static assets for the website
+      - name: build static assets
+        if: success() && steps.findPr.outputs.number
+        env:
+          STATIC_URL: http://localhost:8888/
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: dev-${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd solution
+          make regulations
+          popd
+      # deploy static assets to AWS
+      - name: deploy static assets
+        if: success() && steps.findPr.outputs.number
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          PR: ${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd solution/static-assets
+          npm install serverless -g
+          npm install
+          serverless deploy --stage dev-${PR}
+          popd
+
   deploy-go:
     environment:
       name: "dev"
@@ -268,7 +320,7 @@ jobs:
             [3]: ${{ env.prototype_url }}/storybook/index.html
           reactions: '+1'
   test-cypress:
-    needs: [deploy-go, deploy-django]
+    needs: [deploy-go, deploy-django, build-and-deploy-vue]
     runs-on: ubuntu-latest
     steps:
       # Checkout the code
