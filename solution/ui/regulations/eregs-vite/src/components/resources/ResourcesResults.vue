@@ -5,15 +5,15 @@
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
                 <span v-else
-                    >{{ sortedContent.length }} Result<span
-                        v-if="sortedContent.length != 1"
+                    >{{ filteredContent.length }} Result<span
+                        v-if="filteredContent.length != 1"
                         >s</span
                     >
                     in Resources</span
                 >
             </div>
             <div v-if="!isLoading">
-                <template v-if="sortedContent.length == 0">
+                <template v-if="filteredContent && filteredContent.length == 0">
                     <SearchEmptyState
                         eregs_url=""
                         eregs_url_label="eRegulations regulation text"
