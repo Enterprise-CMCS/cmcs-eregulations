@@ -78,7 +78,6 @@ export default {
         },
         splitParams() {
             const splitParams = { ...this.filterParams };
-
             for (const key in splitParams) {
                 if (splitParams[key]) {
                     splitParams[key] = splitParams[key].split(",");

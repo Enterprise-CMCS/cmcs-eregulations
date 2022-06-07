@@ -1,69 +1,85 @@
 <template>
-    <div id="app" class="resources-view">
-        <ResourcesNav :aboutUrl="aboutUrl">
-            <form class="search-resources-form" @submit.prevent="executeSearch">
-                <v-text-field
-                    outlined
-                    flat
-                    solo
-                    clearable
-                    label="Search Resources"
-                    type="text"
-                    class="search-field"
-                    append-icon="mdi-magnify"
-                    hide-details
-                    dense
-                    v-model="searchInputValue"
-                    @click:append="executeSearch"
-                    @click:clear="clearSearchQuery"
+    <body class="ds-base">
+        <div id="app" class="resources-view">
+            <ResourcesNav :aboutUrl="aboutUrl">
+                <form
+                    class="search-resources-form"
+                    @submit.prevent="executeSearch"
                 >
-                </v-text-field>
-            </form>
-        </ResourcesNav>
-        <div
-            class="resources-content-container resources-content-container-column"
-        >
-            <div class="filters-column">
-                <ResourcesFilters
-                    :filters="filters"
-                    @select-filter="updateFilters"
-                />
-            </div>
-            <div class="results-column">
-                <ResourcesSelections
-                    :filterParams="filterParams"
-                    @chip-filter="removeChip"
-                    @clear-selections="clearSelections"
-                />
-                <ResourcesResults
-                    :isLoading="isLoading"
-                    :content="supplementalContent"
-                    :partsList="filters.part.listItems"
-                    :partsLastUpdated="partsLastUpdated"
-                />
+                    <v-text-field
+                        outlined
+                        flat
+                        solo
+                        clearable
+                        label="Search Resources"
+                        type="text"
+                        class="search-field"
+                        append-icon="mdi-magnify"
+                        hide-details
+                        dense
+                        v-model="searchInputValue"
+                        @click:append="executeSearch"
+                        @click:clear="clearSearchQuery"
+                    />
+
+                </form>
+            </ResourcesNav>
+            <div
+                class="resources-content-container"
+                :class="contentContainerResourcesClass"
+            >
+                <div :class="filtersResourcesClass">
+                    <ResourcesFilters
+                        v-if="resourcesDisplay === 'column'"
+                        :resourcesDisplay="resourcesDisplay"
+                        :filters="filters"
+                        @select-filter="updateFilters"
+                    />
+                    <ResourcesSidebarFilters
+                        v-else
+                        :resourcesDisplay="resourcesDisplay"
+                        :filters="filters"
+                        @select-filter="updateFilters"
+                    />
+                </div>
+                <div :class="resultsResourcesClass">
+                    <ResourcesSelections
+                        :filterParams="filterParams"
+                        @chip-filter="removeChip"
+                        @clear-selections="clearSelections"
+                    />
+                    <ResourcesResults
+                        :isLoading="isLoading"
+                        :content="supplementalContent"
+                        :partsList="filters.part.listItems"
+                        :partsLastUpdated="partsLastUpdated"
+                    />
+                </div>
             </div>
         </div>
-    </div>
+    </body>
 </template>
 
 <script>
-import {
-    getAllParts,
-    getCategories,
-    getLastUpdatedDates,
-    getSectionObjects,
-    getSubPartsForPart,
-    getSupplementalContentNew,
-} from "legacy/js/api";
+
+import _isEmpty from "lodash/isEmpty";
+import _uniq from "lodash/uniq";
+
 
 import ResourcesNav from "@/components/resources/ResourcesNav.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
-import _difference from "lodash/difference";
-import _isEmpty from "lodash/isEmpty";
-import _uniq from "lodash/uniq";
+import {
+    getAllParts,
+    getCategories,
+    getSubPartsForPart,
+    getAllSections,
+    getSupplementalContentV3,
+    getLastUpdatedDates,
+
+} from "../utilities/api";
 
 export default {
     name: "Resources",
@@ -76,10 +92,6 @@ export default {
     },
 
     props: {
-        apiUrl: {
-            type: String,
-            default: "/v2/",
-        },
         aboutUrl: {
             type: String,
             default: "/about/",
@@ -91,6 +103,10 @@ export default {
             isLoading: false,
             queryParams: this.$route.query,
             partsLastUpdated: {},
+            partDict: {},
+            categories: [],
+            resourcesDisplay:
+                this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
                 part: {
                     label: "Part",
@@ -123,10 +139,20 @@ export default {
             },
             supplementalContent: [],
             searchInputValue: "",
+            URL: import.meta.env.VITE_API_URL
         };
     },
 
     computed: {
+        contentContainerResourcesClass() {
+            return `resources-content-container-${this.resourcesDisplay}`;
+        },
+        filtersResourcesClass() {
+            return `filters-${this.resourcesDisplay}`;
+        },
+        resultsResourcesClass() {
+            return `results-${this.resourcesDisplay}`;
+        },
         searchQuery: {
             get() {
                 return this.queryParams.q || "";
@@ -157,6 +183,7 @@ export default {
             });
         },
         clearSelections() {
+            this.partDict = {};
             this.$router.push({
                 name: "resources",
                 query: {
@@ -181,6 +208,30 @@ export default {
             const newScopeVals = scopeVals.filter(
                 (val) => val !== payload.selectedIdentifier
             );
+
+            if (payload.scope === "part") {
+                if (newQueryParams.subpart) {
+                    let sub = newQueryParams.subpart?.split(",");
+                    newQueryParams.subpart = sub
+                        .filter(
+                            (subpart) =>
+                                !subpart.includes(payload.selectedIdentifier)
+                        )
+                        .join(",");
+                }
+
+                if (newQueryParams.section) {
+                    let sec = newQueryParams.section.split(",");
+
+                    newQueryParams.section = sec
+                        .filter(
+                            (section) =>
+                                !section.includes(payload.selectedIdentifier)
+                        )
+                        .join(",");
+                }
+            }
+
             newQueryParams[payload.scope] = _isEmpty(newScopeVals)
                 ? undefined
                 : newScopeVals.join(",");
@@ -194,8 +245,10 @@ export default {
                 query: newQueryParams,
             });
         },
-        updateFilters(payload) {
-            const newQueryParams = { ...this.queryParams };
+
+        async updateFilters(payload) {
+            let newQueryParams = { ...this.queryParams };
+
             if (newQueryParams[payload.scope]) {
                 const scopeVals = newQueryParams[payload.scope].split(",");
                 scopeVals.push(payload.selectedIdentifier);
@@ -205,10 +258,44 @@ export default {
                 newQueryParams.title = "42"; // hard coding for now
                 newQueryParams[payload.scope] = payload.selectedIdentifier;
             }
+            if (payload.scope === "subpart") {
+                newQueryParams = await this.combineSections(
+                    payload.selectedIdentifier,
+                    newQueryParams
+                );
+
+                this.getPartDict(newQueryParams);
+            }
             this.$router.push({
                 name: "resources",
                 query: newQueryParams,
             });
+        },
+
+        async combineSections(subpart, queryParams) {
+            let sections = await this.getSectionsBySubpart(subpart);
+            if (queryParams["section"]) {
+                sections = _uniq(
+                    queryParams["section"].split(",").concat(sections)
+                );
+            }
+
+            queryParams["section"] = sections.join(",");
+            return queryParams;
+        },
+        async getSectionsBySubpart(subpart) {
+            const splitSubpart = subpart.split("-");
+            const allSections = await getAllSections();
+            const sectionList = allSections
+                .filter((sec) => {
+                    return (
+                        sec.part == splitSubpart[0] &&
+                        sec.subpart == splitSubpart[1]
+                    );
+                })
+                .map((sec) => sec.part + "-" + sec.identifier);
+
+            return sectionList;
         },
         filterCategories(resultArray) {
             const filteredArray = resultArray.filter((item) => {
@@ -221,8 +308,8 @@ export default {
         },
         transformResults(results, flatten) {
             const arrayToTransform = flatten ? results.flat() : results;
-            let returnArr = [];
 
+            let returnArr = [];
             for (const category of arrayToTransform) {
                 returnArr = returnArr.concat(category);
                 for (const subcategory of category.sub_categories) {
@@ -233,42 +320,69 @@ export default {
 
             return returnArr;
         },
+        getPartDict(dataQueryParams) {
+
+            const parts = dataQueryParams.part.split(",");
+            const newPartDict = {}
+
+            parts.forEach(x => {
+                newPartDict[x] = {
+                    title: "42",
+                    sections: [],
+                    subparts: [],
+                };
+            })
+
+            this.partDict = newPartDict
+
+            if (dataQueryParams.section) {
+                let sections = dataQueryParams.section.split(",").map((x) => ({
+                    part: x.match(/^\d+/)[0],
+                    section: x.match(/\d+$/)[0],
+                }));
+                for (const section in sections) {
+                    this.partDict[sections[section].part].sections.push(
+                        sections[section].section
+                    );
+                }
+            }
+            if (dataQueryParams.subpart) {
+                const subparts = dataQueryParams.subpart
+                    .split(",")
+                    .map((x) => {
+                      return ({
+                        part: x.match(/^\d+/)[0],
+                        subparts: x.match(/\w+$/)[0],
+                        })
+                    });
+
+                for (const subpart in subparts) {
+                    this.partDict[subparts[subpart].part].subparts.push(
+                        subparts[subpart].subparts
+                    );
+                }
+            }
+        },
+
         async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
+
+            if (dataQueryParams.resourceCategory) {
+               this.categories = dataQueryParams.resourceCategory.split(",");
+            } else{
+              this.categories = []
+            }
             if (dataQueryParams?.part) {
-                const queryParamsObj = { ...dataQueryParams };
-                queryParamsObj.part = queryParamsObj.part.split(",");
-                if (queryParamsObj.section) {
-                    queryParamsObj.sections = queryParamsObj.section.split(",");
-                }
-                if (queryParamsObj.subpart) {
-                    queryParamsObj.subparts = queryParamsObj.subpart.split(",");
-                }
+                this.getPartDict(dataQueryParams);
                 // map over parts and return promises to put in Promise.all
-                const partPromises = queryParamsObj.part.map((part) => {
-                    return getSupplementalContentNew(
-                        this.apiUrl,
-                        42,
-                        part,
-                        queryParamsObj.sections,
-                        queryParamsObj.subparts,
-                        0, // start
-                        10000, // max_results
-                        searchQuery
-                    );
+                const partPromises = await getSupplementalContentV3({
+                  partDict:this.partDict,
+                  categories: this.categories,
+                  q: searchQuery,
                 });
 
                 try {
-                    const resultArray = await Promise.all(partPromises);
-
-                    const transformedResults = this.transformResults(
-                        resultArray,
-                        true
-                    );
-
-                    this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(transformedResults)
-                        : transformedResults;
+                    this.supplementalContent = partPromises;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -277,25 +391,14 @@ export default {
                 }
             } else if (searchQuery) {
                 try {
-                    const searchResults = await getSupplementalContentNew(
-                        this.apiUrl,
-                        "all", // titles
-                        "all", // parts
-                        [], // sections
-                        [], // subparts
-                        0, // start
-                        10000, // max_results
-                        searchQuery
-                    );
+                    const searchResults = await getSupplementalContentV3({
+                      partDict: "all", // titles
+                      categories: this.categories, // subcategories
+                      q: searchQuery,
+                      paginate: true
+                    });
 
-                    const transformedResults = this.transformResults(
-                        searchResults,
-                        false
-                    );
-
-                    this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(transformedResults)
-                        : transformedResults;
+                    this.supplementalContent = searchResults;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -303,12 +406,16 @@ export default {
                     this.isLoading = false;
                 }
             } else {
-                this.supplementalContent = [];
+                this.supplementalContent = await getSupplementalContentV3({
+                  partDict: "all", // titles
+                  categories: this.categories,
+                  q: searchQuery,
+                  start: 0, // start
+                  max_results: 100, // max_results
+                  paginate:false,
+                });
                 this.isLoading = false;
             }
-        },
-        async getPartLastUpdatedDates() {
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
         },
         async getFormattedPartsList() {
             const partsList = await getAllParts(this.apiUrl);
@@ -318,30 +425,20 @@ export default {
                 const sectionsArr = part.structure.children[0].children[0].children[0].children
                     .map((subpart) => {
                         if (_isEmpty(subpart.children)) return [];
-
                         // handle mixed sections and subject_groups
                         const returnArray = subpart.children.map(
                             (subpartChild) => {
-                                const parentValue = _isEmpty(
-                                    subpartChild.parent
-                                )
-                                    ? "orphan"
-                                    : subpartChild.parent[0];
-
                                 if (subpartChild.type === "section") {
                                     return {
-                                        [subpartChild.identifier[1] ??
-                                        subpartChild
-                                            .identifier[0]]: parentValue,
+                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]:
+                                        subpartChild.parent[0],
                                     };
                                 }
-
                                 // TODO: handle appendices with no children
                                 if (_isEmpty(subpartChild.children)) return [];
-
                                 return subpartChild.children.map((section) => ({
-                                    [section.identifier[1] ??
-                                    section.identifier[0]]: parentValue,
+                                    [section.identifier[1] ?? section.identifier[0]]:
+                                    subpartChild.parent[0],
                                 }));
                             }
                         );
@@ -358,42 +455,68 @@ export default {
                 };
             });
         },
-        async getFormattedSubpartsList(part) {
-            this.filters.subpart.listItems = await getSubPartsForPart(
-                this.apiUrl,
-                part
+
+        async getFormattedSubpartsList(parts) {
+            this.filters.subpart.listItems = await getSubPartsForPart(parts);
+        },
+
+        async getFormattedSectionsList() {
+            const allSections = await getAllSections();
+
+            let finalsSections = [];
+            let sectionList = [];
+            for (const part in this.partDict) {
+                const sections = this.partDict[part].sections;
+                const subparts = this.partDict[part].subparts;
+                sectionList = allSections.filter((sec) => sec.part == part);
+                if (subparts.length >0) {
+                    sectionList = sectionList.filter((sec) => {
+                        return (
+                            subparts.includes(sec.subpart) ||
+                            sections.includes(sec.identifier)
+                        );
+                    });
+                }
+                finalsSections = finalsSections.concat(sectionList);
+            }
+            this.filters.section.listItems = finalsSections.sort((a, b) =>
+                a.part > b.part
+                    ? 1
+                    : a.part == b.part
+                    ? parseInt(a.identifier) > parseInt(b.identifier)
+                        ? 1
+                        : -1
+                    : -1
             );
         },
-        async getFormattedSectionsList(part, subpart) {
-            this.filters.section.listItems = await getSectionObjects(
-                this.apiUrl,
-                part,
-                subpart
-            );
+        async getPartLastUpdatedDates() {
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
         },
         async getCategoryList() {
-            const rawCats = await getCategories(this.apiUrl);
+            const rawCats = await getCategories();
             const reducedCats = rawCats
-                .filter((item) => item.object_type === "category")
+                .filter((item) => item.type === "category")
                 .reduce((acc, item) => {
                     acc[item.name] = item;
                     acc[item.name].subcategories = [];
                     return acc;
                 }, {});
+
             rawCats.forEach((item) => {
-                if (item.object_type === "subcategory") {
+                if (item.type === "subcategory") {
                     reducedCats[item.parent.name].subcategories.push(item);
                 }
             });
+
             const categories = Object.values(reducedCats).sort((a, b) =>
                 a.order - b.order
             );
             categories.forEach((category) => {
-                category.subcategories = category.subcategories.sort((a, b) =>
+                category.subcategories.sort((a, b) =>
                     a.order - b.order
                 );
             });
-            this.filters.resourceCategory.listItems = categories;
+            this.filters.resourceCategory.listItems = categories
         },
     },
 
@@ -411,7 +534,11 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                if (_isEmpty(newParams.part) && _isEmpty(newParams.q)) {
+                if (
+                    _isEmpty(newParams.part) &&
+                    _isEmpty(newParams.q) &&
+                    _isEmpty(newParams.resourceCategory)
+                ) {
                     // only get content if a part is selected or there's a search query
                     // don't make supp content request here, but clear lists
                     this.filters.subpart.listItems = [];
@@ -423,35 +550,19 @@ export default {
 
                 // always get content otherwise
                 this.getSupplementalContent(this.queryParams, this.searchQuery);
-
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
                         this.getFormattedSubpartsList(this.queryParams.part);
-                        this.getFormattedSectionsList(
-                            this.queryParams.part,
-                            this.queryParams.subpart
-                        );
+                        this.getFormattedSectionsList();
                     } else if (
                         _isEmpty(oldParams.subpart) &&
                         newParams.subpart
                     ) {
-                        this.getFormattedSectionsList(
-                            this.queryParams.part,
-                            this.queryParams.subpart
-                        );
+                        this.getFormattedSectionsList();
                     } else {
-                        const oldParts = oldParams.part.split(",");
-                        const newParts = newParams.part.split(",");
-
-                        if (newParts.length > oldParts.length) {
-                            const newPart = _difference(newParts, oldParts)[0];
-                            this.getFormattedSubpartsList(newPart);
-                            this.getFormattedSectionsList(
-                                newPart,
-                                this.queryParams.subpart
-                            );
-                        }
+                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSectionsList();
                     }
                 }
             },
@@ -465,21 +576,20 @@ export default {
         this.getFormattedPartsList();
         this.getCategoryList();
 
-        if (this.queryParams?.part || this.queryParams?.q) {
-            if (this.queryParams?.q) {
-                this.searchQuery = this.queryParams.q;
-            }
-
-            this.getSupplementalContent(this.queryParams, this.searchQuery);
-
-            if (this.queryParams?.part) {
-                this.getFormattedSubpartsList(this.queryParams.part);
-                this.getFormattedSectionsList(
-                    this.queryParams.part,
-                    this.queryParams.subpart
-                );
-            }
+        if (this.queryParams.q) {
+            this.searchQuery = this.queryParams.q;
         }
+
+        if (this.queryParams.part) {
+            this.getFormattedSubpartsList(this.queryParams.part);
+            this.getFormattedSectionsList(
+                this.queryParams.part,
+                this.queryParams.subpart
+            );
+        }
+
+        this.getSupplementalContent(this.queryParams, this.searchQuery);
+
     },
 
     beforeMount() {},
@@ -500,32 +610,26 @@ export default {
 #app.resources-view {
     display: flex;
     flex-direction: column;
-
     .resources-content-container {
         display: flex;
         flex-direction: column;
     }
-
     .resources-content-container-column {
         display: flex;
         flex-direction: column;
         flex: 1;
     }
-
     .results-column {
         padding: 0 $spacer-5;
-
         @include screen-xl {
             padding: 0 $spacer-4;
         }
     }
-
     .search-resources-form {
         .search-field {
             width: calc(100% - 25px);
             height: 40px;
             margin-bottom: 50px;
-
             .v-input__icon.v-input__icon--append button {
                 color: $mid_blue;
             }
@@ -533,3 +637,10 @@ export default {
     }
 }
 </style>
+
+
+
+
+
+
+

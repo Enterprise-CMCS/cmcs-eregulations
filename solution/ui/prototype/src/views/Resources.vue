@@ -21,8 +21,8 @@
                         v-model="searchInputValue"
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
-                    >
-                    </v-text-field>
+                    />
+
                 </form>
             </ResourcesNav>
             <div
@@ -78,6 +78,7 @@ import {
     getSectionObjects,
     getSubPartsForPart,
     getAllSections,
+    getSupplementalContentV3,
     getSupplementalContentNew,
 } from "@/utilities/api";
 
@@ -94,24 +95,23 @@ export default {
         ResourcesResults,
     },
 
-    props: {},
+    props: {
+        aboutUrl: {
+            type: String,
+            default: "/about/",
+        },
+    },
 
     data() {
         return {
             isLoading: false,
             queryParams: this.$route.query,
             partDict: {},
+            categories: [],
+            testSup: [],
             resourcesDisplay:
                 this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
-                title: {
-                    label: "Title",
-                    buttonTitle: "Select Title",
-                    buttonId: "select-title",
-                    listType: "TitlePartList",
-                    listItems: [],
-                    disabled: true,
-                },
                 part: {
                     label: "Part",
                     buttonTitle: "Select Parts",
@@ -238,7 +238,6 @@ export default {
             newQueryParams[payload.scope] = _isEmpty(newScopeVals)
                 ? undefined
                 : newScopeVals.join(",");
-
             if (_isEmpty(newQueryParams.part)) {
                 newQueryParams.title = undefined;
                 newQueryParams.subpart = undefined;
@@ -251,6 +250,7 @@ export default {
         },
 
         async updateFilters(payload) {
+            console.log(payload)
             let newQueryParams = { ...this.queryParams };
 
             if (newQueryParams[payload.scope]) {
@@ -267,6 +267,7 @@ export default {
                     payload.selectedIdentifier,
                     newQueryParams
                 );
+                console.log(newQueryParams)
                 this.getPartDict(newQueryParams);
             }
             this.$router.push({
@@ -311,8 +312,14 @@ export default {
         },
         transformResults(results, flatten) {
             const arrayToTransform = flatten ? results.flat() : results;
-            let returnArr = [];
+            let res = [];
 
+            for (const r of this.testSup) {
+                res = res.concat(r.results);
+            }
+            this.testSup = res;
+
+            let returnArr = [];
             for (const category of arrayToTransform) {
                 returnArr = returnArr.concat(category);
                 for (const subcategory of category.sub_categories) {
@@ -324,10 +331,15 @@ export default {
             return returnArr;
         },
         getPartDict(dataQueryParams) {
+            console.log(dataQueryParams)
             const parts = dataQueryParams.part.split(",");
 
             for (const x in parts) {
-                this.partDict[parts[x]] = { sections: [], subparts: [] };
+                this.partDict[parts[x]] = {
+                    title: "42",
+                    sections: [],
+                    subparts: [],
+                };
             }
 
             if (dataQueryParams.section) {
@@ -355,40 +367,28 @@ export default {
                     );
                 }
             }
+            if (dataQueryParams.resourceCategory) {
+               this.categories = dataQueryParams.resourceCategory.split(",");
+            }
         },
 
         async getSupplementalContent(dataQueryParams, searchQuery) {
             this.isLoading = true;
-            if (dataQueryParams?.part) {
-                const queryParamsObj = { ...dataQueryParams };
-                queryParamsObj.part = queryParamsObj.part.split(",");
 
+            if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
 
                 // map over parts and return promises to put in Promise.all
-                const partPromises = queryParamsObj.part.map((part) => {
-                    return getSupplementalContentNew(
-                        42,
-                        part,
-                        this.partDict[part].sections,
-                        this.partDict[part].subparts,
-                        0, // start
-                        10000, // max_results
-                        searchQuery
-                    );
+                const partPromises = await getSupplementalContentV3({
+                  partDict:this.partDict,
+                  categories: this.categories,
+                  q: searchQuery,
                 });
 
                 try {
-                    const resultArray = await Promise.all(partPromises);
-
-                    const transformedResults = this.transformResults(
-                        resultArray,
-                        true
-                    );
-
-                    this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(transformedResults)
-                        : transformedResults;
+                    console.log(partPromises)
+                    this.supplementalContent = partPromises;
+                    console.log(this.supplementalContent)
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -397,24 +397,14 @@ export default {
                 }
             } else if (searchQuery) {
                 try {
-                    const searchResults = await getSupplementalContentNew(
-                        "all", // titles
-                        "all", // parts
-                        [], // sections
-                        [], // subparts
-                        0, // start
-                        10000, // max_results
-                        searchQuery
-                    );
+                    const searchResults = await getSupplementalContentV3({
+                      partDict: "all", // titles
+                      categories: this.categories, //subcategories
+                      q: searchQuery,
+                      paginate: true
+                    });
 
-                    const transformedResults = this.transformResults(
-                        searchResults,
-                        false
-                    );
-
-                    this.supplementalContent = this.queryParams.resourceCategory
-                        ? this.filterCategories(transformedResults)
-                        : transformedResults;
+                    this.supplementalContent = searchResults;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
@@ -422,7 +412,14 @@ export default {
                     this.isLoading = false;
                 }
             } else {
-                this.supplementalContent = [];
+                this.supplementalContent = await getSupplementalContentV3({
+                  partDict: "all", // titles
+                  categories: this.filterParams.resourceCategory ? this.filterParams.resourceCategory.split(",") : "", //subcategories
+                  q: searchQuery,
+                  start: 0, // start
+                  max_results: 100, // max_results
+                  paginate:false,
+                });
                 this.isLoading = false;
             }
         },
@@ -448,11 +445,15 @@ export default {
             let finalsSections = [];
             let sectionList = [];
             for (const part in this.partDict) {
+                console.log(this.partDict)
                 const sections = this.partDict[part].sections;
                 const subparts = this.partDict[part].subparts;
-
-                sectionList = allSections.filter((sec) => sec.part === part);
-                if (subparts.length > 0) {
+                console.log(part)
+                console.log(allSections)
+                sectionList = allSections.filter((sec) => sec.part == part);
+                console.log(sectionList)
+                console.log(subparts)
+                if (subparts.length >0) {
                     sectionList = sectionList.filter((sec) => {
                         return (
                             subparts.includes(sec.subpart) ||
@@ -462,11 +463,12 @@ export default {
                 }
                 finalsSections = finalsSections.concat(sectionList);
             }
-
+            console.log('dkfjd')
+            console.log(finalsSections)
             this.filters.section.listItems = finalsSections.sort((a, b) =>
                 a.part > b.part
                     ? 1
-                    : a.part === b.part
+                    : a.part == b.part
                     ? parseInt(a.identifier) > parseInt(b.identifier)
                         ? 1
                         : -1
@@ -510,7 +512,11 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                if (_isEmpty(newParams.part) && _isEmpty(newParams.q)) {
+                if (
+                    _isEmpty(newParams.part) &&
+                    _isEmpty(newParams.q) &&
+                    _isEmpty(newParams.resourceCategory)
+                ) {
                     // only get content if a part is selected or there's a search query
                     // don't make supp content request here, but clear lists
                     this.filters.subpart.listItems = [];
@@ -521,7 +527,6 @@ export default {
                 }
 
                 // always get content otherwise
-
                 this.getSupplementalContent(this.queryParams, this.searchQuery);
                 if (newParams.part) {
                     // logic for populating select dropdowns
@@ -562,6 +567,8 @@ export default {
                     this.queryParams.subpart
                 );
             }
+        } else {
+            this.getSupplementalContent([], "");
         }
     },
 
