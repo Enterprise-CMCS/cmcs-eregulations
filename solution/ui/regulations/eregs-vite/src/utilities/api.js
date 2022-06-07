@@ -1,6 +1,5 @@
 import _filter from "lodash/filter";
 import _get from "lodash/get";
-import _isArray from "lodash/isArray";
 import _isBoolean from "lodash/isBoolean";
 import _isFunction from "lodash/isFunction";
 import _isNil from "lodash/isNil";
@@ -15,10 +14,13 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-const apiPath = `${process.env.VUE_APP_API_URL}/v2`;
-const apiPathV3 = `${process.env.VUE_APP_API_URL}/v3`;
+const apiPath = `${import.meta.env.VITE_API_URL}`;
+const apiPathV2 = `${import.meta.env.VITE_API_URL}/v2`;
+const apiPathV3 = `${import.meta.env.VITE_API_URL}/v3`;
+
 let config = {
     apiPath,
+    apiPathV2,
     apiPathV3,
     fetchMode: "cors",
     maxRetryCount: 2,
@@ -199,12 +201,13 @@ function httpApiMock(verb, urlPath, { data, params, response } = {}) {
 }
 
 function httpApiGet(urlPath, { params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
+    return fetchJson(`${config.apiPathV2}/${urlPath}`, {
         method: "GET",
         headers: authHeader(token),
         params,
     });
 }
+
 function httpApiGetV3(urlPath, { params } = {}) {
     return fetchJson(`${config.apiPathV3}/${urlPath}`, {
         method: "GET",
@@ -227,9 +230,9 @@ async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
         url = response.next;
         /* eslint-enable no-await-in-loop */
     }
-    console.log(results)
     return results
 }
+
 function httpApiPost(urlPath, { data = {}, params } = {}) {
     console.log(data);
     return fetchJson(`${config.apiPath}/${urlPath}`, {
@@ -261,17 +264,14 @@ function httpApiDelete(urlPath, { data, params } = {}) {
 }
 // ---------- cache helpers -----------
 
-const getCacheKeys = async () => {
-    return localforage.keys();
-};
+const getCacheKeys = async () => localforage.keys();
 
-const removeCacheItem = async (key) => {
-    return localforage.removeItem(key);
-};
 
-const getCacheItem = async (key) => {
-    return localforage.getItem(key);
-};
+const removeCacheItem = async (key) => localforage.removeItem(key);
+
+
+const getCacheItem = async (key) => localforage.getItem(key);
+
 
 const setCacheItem = async (key, data) => {
     data.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
@@ -280,15 +280,34 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 const getLastUpdatedDate = async (title = "42") => {
-    const reducer = (accumulator, currentValue) => {
-        return currentValue.date > accumulator.date
+    const reducer = (accumulator, currentValue) => currentValue.date > accumulator.date
             ? currentValue
             : accumulator;
-    };
 
     const result = await httpApiGet(`title/${title}/existing`);
 
     return niceDate(_get(result.reduce(reducer), "date"));
+};
+
+const getLastUpdatedDates = async (apiUrl, title = "42") => {
+    const reducer = (accumulator, currentValue) => {
+        // key by partname, value by latest date
+        // if partname is not in accumulator, add it
+        // if partname is in accumulator, compare the dates and update the accumulator
+        currentValue.partName.forEach((partName) => {
+            if (!accumulator[partName]) {
+                accumulator[partName] = currentValue.date;
+            } else if (currentValue.date > accumulator[partName]) {
+                accumulator[partName] = currentValue.date;
+            }
+        });
+
+        return accumulator;
+    };
+
+    const result = await httpApiGet(`title/${title}/existing`);
+
+    return result.reduce(reducer, {});
 };
 /**
  *
@@ -303,6 +322,15 @@ const getPartNames = async (title = "42") => {
 };
 
 /**
+ * Returns the result from the all_parts endpoint
+ *
+ * @returns {Array} - a list of objects that represent a part of title 42
+ */
+
+const getAllParts = async () => httpApiGet("all_parts");
+
+
+/**
  *
  * Fetches the data and formats it for the home page
  *
@@ -310,7 +338,8 @@ const getPartNames = async (title = "42") => {
  */
 const getHomepageStructure = async () => {
     const reducer = (accumulator, currentValue) => {
-        const title = currentValue.title;
+        const {title} = currentValue;
+
         const chapter = _get(
             currentValue,
             "structure.children[0].identifier[0]"
@@ -416,95 +445,124 @@ const getHomepageStructure = async () => {
 };
 
 /**
- * Returns the result from the all_parts endpoint
- *
- * @returns {Array} - a list of objects that represent a part of title 42
- */
-
-const getAllParts = async () => {
-    return await httpApiGet("all_parts");
-};
-
-/**
  *
  * Fetches all_parts and returns a list of those parts by name
  *
  * @returns {Array[string]} - a list pf parts for title 42
  */
 const getPartsList = async () => {
-    const all_parts = await getAllParts()
-    return all_parts.map(d => d.name)
+    const allParts = await getAllParts()
+    return allParts.map(d => d.name)
 }
 
 const getPartsDetails = async () => {
-    const all_parts = await getAllParts()
-    return all_parts.map(part => { return { 'id': part.name, 'name': part.structure.children[0].children[0].children[0].label } })
+    const allParts = await getAllParts()
+    return allParts.map(part => { return { 'id': part.name, 'name': part.structure.children[0].children[0].children[0].label } })
 }
+
 const getSubPartsandSections = async () => {
-    const all_parts = await getAllParts()
-    let subparts = []
+    const allParts = await getAllParts()
+    let subParts = []
     let fullSelection = []
 
-    all_parts.forEach(part =>
+    allParts.forEach(part =>
+        part.structure.children[0].children[0].children[0].children.forEach(subpart => subParts.push({ part: part.name, data: subpart }
+        )))
 
-        part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
-
-    for (const subpart of subparts) {
-        if (subpart.data.type === 'section') {
-            fullSelection.push({ label: subpart.data.label, id: subpart.data.label, location: { part: subpart.part, section: subpart.data.identifier[1] }, type: 'section' })
+    subParts.forEach( subPart => {
+        if (subPart.data.type === 'section') {
+            fullSelection.push({ label: subPart.data.label, id: subPart.data.label, location: { part: subPart.part, section: subPart.data.identifier[1] }, type: 'section' })
         }
         else {
-            let sections = subpart.data.children
-            fullSelection.push({ label: "Part " + subpart.part + " " + subpart.data.label, label: "Part " + subpart.part + " " + subpart.data.label, location: { part: subpart.part, subpart: subpart.data.identifier[0] }, type: 'subpart' })
+            const sections = subPart.data.children
+            fullSelection.push({
+                label: `Part ${  subPart.part  } ${  subPart.data.label}`,
+                location: { part: subPart.part, subpart: subPart.data.identifier[0] },
+                type: 'subpart'
+            })
 
-            for (const section of sections) {
-                if (section.type != "subject_group") {
-                    fullSelection.push({ label: section.label, id: section.label, location: { part: subpart.part, section: section.identifier[1] }, part: subpart.part, type: 'section' })
+            sections.forEach(section => {
+                if (section.type !== "subject_group") {
+                    fullSelection.push({
+                        label: section.label, id: section.label,
+                        location: { part: subPart.part, section: section.identifier[1] },
+                        part: subPart.part,
+                        type: 'section'
+                    })
                 }
                 else {
-                    for (const s of section.children) {
-                        fullSelection.push({ label: s.label, id: s.label, location: { part: subpart.part, section: s.identifier[1] }, part: subpart.part, type: 'section' })
-                    }
+                    section.children.forEach( section => {
+                        fullSelection.push({
+                            label: section.label,
+                            id: section.label,
+                            location: {
+                                part: subPart.part,
+                                section: section.identifier[1]
+                            },
+                            part: subPart.part,
+                            type: 'section'
+                        })
+                    })
                 }
-            }
+            })
         }
-    }
+    })
 
 
     return fullSelection
-    //potentialSubParts = all_parts[parts.indexOf('400')].structure.children[0].children[0].children[0].children
+    // potentialSubParts = all_parts[parts.indexOf('400')].structure.children[0].children[0].children[0].children
 
 }
 
 const getAllSections = async () => {
-    const all_parts = await getAllParts()
-    let subparts = []
-    let allSections = []
+    const allParts = await getAllParts()
+    const subParts = []
+    const allSections = []
 
-    all_parts.forEach(part => part.structure.children[0].children[0].children[0].children.forEach(subpart => subparts.push({ part: part.name, data: subpart })))
-    for (const subpart of subparts) {
-        let part = subpart.part
+    allParts.forEach(
+        part => part.structure.children[0].children[0].children[0].children.forEach(
+            subpart => subParts.push({ part: part.name, data: subpart })
+        )
+    )
+    subParts.forEach( subPart => {
+        const {part} = subPart
 
-        if (subpart.data.type === 'section') {
-            allSections.push({ part: part, subpart: 'none', identifier: subpart.data.identifier[1], label: subpart.data.label_level, part: part, description: subpart.data.label_description })
+        if (subPart.data.type === 'section') {
+            allSections.push({
+                part,
+                subpart: 'none',
+                identifier: subPart.data.identifier[1],
+                label: subPart.data.label_level,
+                description: subPart.data.label_description
+            })
         }
         else {
-            let sections = subpart.data.children
-            let sub = subpart.data.identifier[0]
+            const sections = subPart.data.children
+            const sub = subPart.data.identifier[0]
 
-            for (const section of sections) {
+            sections.forEach( section => {
 
-                if (section.type != "subject_group") {
-                    allSections.push({ subpart: sub, identifier: section.identifier[1], label: section.label_level, part: part, description: section.label_description })
+                if (section.type !== "subject_group") {
+                    allSections.push({
+                        part,
+                        subpart: sub,
+                        identifier: section.identifier[1],
+                        label: section.label_level,
+                        description: section.label_description })
                 }
                 else {
-                    for (const s of section.children) {
-                        allSections.push({ subpart: sub, identifier: s.identifier[1], label: s.label_level, part: part, description: s.label_description })
-                    }
+                    section.children.forEach( s => {
+                        allSections.push({
+                            part,
+                            subpart: sub,
+                            identifier: s.identifier[1],
+                            label: s.label_level,
+                            description: s.label_description })
+                    })
                 }
-            }
+            })
         }
-    }
+    })
     return allSections;
 }
 /**
@@ -516,18 +574,18 @@ const getAllSections = async () => {
  */
 const getSubPartsForPart = async (partParam) => {
     // if part is string of multiple parts, use final part
-    let selectedParts = partParam.split(',')
-    const all_parts = await getAllParts();
-    const parts = all_parts.map((d) => d.name);
+    const selectedParts = partParam.split(',')
+    const allParts = await getAllParts();
+    const parts = allParts.map((d) => d.name);
     let potentialSubParts = []
-    for (const part of selectedParts) {
-        const subP = all_parts[parts.indexOf(part)].structure.children[0].children[0]
+    selectedParts.forEach( part => {
+        const subP = allParts[parts.indexOf(part)].structure.children[0].children[0]
             .children[0].children;
         potentialSubParts = potentialSubParts.concat(subP)
-    }
+    })
     const subParts = potentialSubParts.filter((p) => p.type === "subpart");
 
-    const toReturn = subParts.map((s) => {
+    return subParts.map((s) => {
         return {
             label: s.label,
             part: s.parent[0],
@@ -535,9 +593,6 @@ const getSubPartsForPart = async (partParam) => {
             range: s.descendant_range,
         };
     });
-    console.log('************************************************')
-    console.log(toReturn)
-    return toReturn
 };
 
 /**
@@ -548,9 +603,9 @@ const getSubPartsForPart = async (partParam) => {
  * @returns {Array[string]} - a list of all sections in this subpart
  */
 const getSectionsForSubPart = async (part, subPart) => {
-    const all_parts = await getAllParts()
-    const parts = all_parts.map(d => d.name)
-    const potentialSubParts = all_parts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
+    const allParts = await getAllParts()
+    const parts = allParts.map(d => d.name)
+    const potentialSubParts = allParts[parts.indexOf(part)].structure.children[0].children[0].children[0].children
     const parent = potentialSubParts.find(p => p.type === "subpart" && p.identifier[0] === subPart)
     const sections = []
     parent.children.forEach(c => {
@@ -577,10 +632,10 @@ const getSectionsForSubPart = async (part, subPart) => {
 const getSectionObjects = async (part, subPart) => {
     // if part is string of multiple parts, use final part
     part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
-    const all_parts = await getAllParts();
-    const parts = all_parts.map((d) => d.name);
+    const allParts = await getAllParts();
+    const parts = allParts.map((d) => d.name);
     const potentialSubParts =
-        all_parts[parts.indexOf(part)].structure.children[0].children[0]
+        allParts[parts.indexOf(part)].structure.children[0].children[0]
             .children[0].children;
     if (subPart) {
         const parent = potentialSubParts.find(
@@ -591,7 +646,7 @@ const getSectionObjects = async (part, subPart) => {
             return {
                 identifier: c.identifier[1],
                 label: c.label_level,
-                part: part,
+                part,
                 description: c.label_description,
             };
         });
@@ -603,7 +658,7 @@ const getSectionObjects = async (part, subPart) => {
                     return {
                         identifier: c.identifier[1],
                         label: c.label_level,
-                        part: part,
+                        part,
                         description: c.label_description,
                     };
                 })
@@ -628,8 +683,8 @@ const getPart = async (title, part) => {
     // mixing lodash get and optional chaining.  Both provide safeguards and do the same this
     const toc = result?.toc;
 
-    const orphansAndSubparts = _get(result, "document.children");
-    return [toc, orphansAndSubparts];
+    const orphansAndSubParts = _get(result, "document.children");
+    return [toc, orphansAndSubParts];
 };
 
 /**
@@ -658,6 +713,7 @@ const getSupplementalContent = async (
     return result;
 };
 
+// todo: make these JS style camel case
 const getSupplementalContentV3 = async (
     {
         partDict,
@@ -674,56 +730,45 @@ const getSupplementalContentV3 = async (
 ) => {
     const queryString = q ? `&q=${q}` : "";
     let sString = "";
-
-    for (const part in partDict) {
-
-        if (partDict === "all") {
-            sString = `locations=42`
-        }
-        else {
-            for (const subpart of partDict[part].subparts) {
-                sString = sString + `&locations=${partDict[part].title}.${part}.${subpart}`
-
-            }
-            for (const section of partDict[part].sections) {
-                sString = sString + `&locations=${partDict[part].title}.${part}.${section}`
-            }
-            if (partDict[part].sections.length === 0 && partDict[part].subparts.length === 0) {
-                sString = sString + `&locations=${partDict[part].title}.${part}`
-            }
-        }
+    if (partDict === "all") {
+        sString = `locations=42`
     }
-    console.log('here')
+    else {
 
-
-
-    let catList = await getCategories()
-    console.log(categories)
-    for (const category of categories) {
-        let cat = catList.filter(x => x.name === category)[0]
-
-        sString = sString + "&categories=" + cat.id
+        Object.keys(partDict).forEach(partKey => {
+            const part = partDict[partKey]
+            part.subparts.forEach(subPart => {
+                sString = `${sString}&locations=${part.title}.${partKey}.${subPart}`
+            })
+            part.sections.forEach(section => {
+                sString = `${sString}&locations=${part.title}.${partKey}.${section}`
+            })
+            if (part.sections.length === 0 && part.subparts.length === 0) {
+                sString = `${sString}&locations=${part.title}.${partKey}`
+            }
+        })
+    }
+    if (categories) {
+        const catList = await getCategories()
+        categories.forEach(category => {
+            sString = `${sString}&categories=${catList.find(x => x.name === category).id}`
+        })
     }
 
-    sString = sString + "&category_details=" + cat_details
-    sString = sString + "&location_details=" + location_details
-    sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
+    sString = `${sString}&category_details=${cat_details}`
+    sString = `${sString}&location_details=${location_details}`
+    sString = `${sString}&start=${start}&max_results=${max_results}${queryString}`;
     if (paginate) {
-        sString = sString + "&paginate=true&page_size=" + page_size + "&page=" + page
+        sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     }
-    console.log(sString)
 
     if (paginate){
-        const result = await httpApiGetV3WithPagination(`resources/?${sString}`)
-        console.log(sString)
-        console.log(result)
-        return result;
+       return httpApiGetV3WithPagination(`resources/?${sString}`)
+
 
     }
     else{
         const response = await httpApiGetV3(`resources/?${sString}`)
-        console.log(sString)
-        console.log(response.results)
         return response.results;
     }
 
@@ -748,17 +793,16 @@ const getSupplementalContentNew = async (
 ) => {
     const queryString = q ? `&q=${q}` : "";
     let sString = "";
-    for (let s in sections) {
-        sString = sString + "&sections=" + sections[s];
-    }
-    for (let sp in subparts) {
-        sString = sString + "&subparts=" + subparts[sp];
-    }
-    sString = sString + "&start=" + start + "&max_results=" + max_results + queryString;
-    const result = await httpApiGet(
+    sections.forEach(s => {
+        sString = `${sString  }&sections=${  sections[s]}`;
+    })
+    subparts.forEach(sp => {
+        sString = `${sString  }&subparts=${  subparts[sp]}`;
+    })
+    sString = `${sString  }&start=${  start  }&max_results=${max_results}${queryString}`;
+    return httpApiGet(
         `title/${title}/part/${part}/supplemental_content?${sString}`
     );
-    return result;
 };
 
 const getSupIDByLocations = async () => {
@@ -780,17 +824,14 @@ const getSupByPart = async (title, part, subparts, sections) => {
             return acc.concat(locations[title][part][sec])
         }, [])
 
-    const contents = [...new Set(supList)].map(supId => {
+    return [...new Set(supList)].map(supId => {
         const item = JSON.parse(JSON.stringify(supplemental[supId]))
-        item['category'] = item['category'].name
+        item.category = item.category.name
         return item
     })
 
-    return contents;
 }
-const getCategories = async () => {
-    return await httpApiGet("categories");
-};
+const getCategories = async () =>  httpApiGetV3("resources/categories");
 
 /**
  *
@@ -849,6 +890,7 @@ export {
     getSupByPart,
     getAllSections,
     getSupplementalContentV3,
-    getSupplementalContentSearchResults
+    getSupplementalContentSearchResults,
+    getLastUpdatedDates
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

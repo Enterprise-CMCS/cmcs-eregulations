@@ -4,23 +4,22 @@
             <hr class="top-rule" />
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
-                <span v-else>{{ sortedContent.length }} Results</span>
+                <span v-else>{{ content.length }} Results</span>
             </div>
             <div v-if="!isLoading">
-                <template v-for="(item, idx) in sortedContent">
+                <template v-for="(item, idx) in filteredContent">
                     <div :key="item.created_at + idx">
                         <div class="category-labels">
                             <div
-                                v-if="item.category"
                                 class="result-label category-label"
                             >
-                                {{ item.category }}
+                               {{ item.category.parent ? item.category.parent.name : item.category.name}}
                             </div>
                             <div
-                                v-if="item.sub_category"
+                                v-if="item.category.parent"
                                 class="result-label subcategory-label"
                             >
-                                {{ item.sub_category }}
+                               {{ item.category.name }}
                             </div>
                         </div>
                         <div class="result-content-wrapper">
@@ -44,7 +43,6 @@
                             <span v-else>§ </span>
                             <template v-for="(location, i) in item.locations">
                                 <span
-                                    v-if="partsLastUpdated[location.part]"
                                     :key="location.display_name + i"
                                     class="related-section-link"
                                 >
@@ -58,7 +56,7 @@
                                         "
                                     >
                                         {{
-                                            location.display_name
+                                            location
                                                 | locationLabel
                                         }}
                                     </a>
@@ -89,7 +87,8 @@ export default {
 
     filters: {
         locationLabel(value) {
-            return value.substring(3);
+
+            return value.type.toLowerCase() === 'section' ? `${value.part}.${value.section_id}` : `${value.part} Subpart ${value.subpart_id}`
         },
         locationUrl(value, partsList, partsLastUpdated) {
             // getting parent and partDate for proper link to section
@@ -97,37 +96,28 @@ export default {
             // is not straightforward with v2.  See below.
             // Thankfully v3 will add "latest" for date
             // and will better provide parent subpart in resource locations array.
-            let parent = "";
+            const {part, section_id, type, title, subpart_id} = value;
             const base =
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "";
-            const partDate = `${partsLastUpdated[value.part]}/`;
+            const partDate = `${partsLastUpdated[part]}/`;
 
             // early return if related regulation is a subpart and not a section
-            if (value.display_name.includes("Subpart")) {
-                const subpart = value.display_name
-                    .split(" ")
-                    .slice(2)
-                    .join("-");
-                return `${base}/42/${value.part}/${subpart}/${partDate}`;
+            if (type.toLowerCase() === "subpart") {
+                return `${base}/${title}/${part}/Subpart-${subpart_id}/${partDate}`;
             }
-
-            const partAndSection = value.display_name.split(" ")[1];
-            const section = partAndSection.split(".")[1];
             const partObj = partsList.find(
-                (part) => part.name === value.part.toString()
+                (parts) => parts.name == part
             );
-            if (partObj.sections) {
-                const partSectionsDict = partObj.sections;
-                parent =
-                    partSectionsDict[section] &&
-                    partSectionsDict[section] !== "orphan"
-                        ? `Subpart-${partSectionsDict[section]}/`
-                        : "";
-            }
-            const hash = `#${partAndSection.replace(/\./g, "-")}`;
-            return `${base}/42/${value.part}/${parent}${partDate}${hash}`;
+            const subpart = partObj.sections[section_id]
+
+            // todo: Figure out which no subpart sections are invalid and which are orphans
+            return subpart ?
+                `${base}/${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
+                :
+                `${base}/${title}/${part}/${partDate}#${part}-${section_id}`
+
         },
     },
 
@@ -135,7 +125,9 @@ export default {
         content: {
             type: Array,
             required: false,
-            default: () => [],
+            default() {
+              return []
+            },
         },
         isLoading: {
             type: Boolean,
@@ -157,47 +149,13 @@ export default {
     data() {},
 
     computed: {
-        sortedContent() {
-            let results = this.content
-                .filter(
-                    (category) =>
-                        category.supplemental_content?.length ||
-                        category.sub_categories?.length
-                )
-                .flatMap((category) => {
-                    const returnArr = [];
-                    if (category.sub_categories?.length) {
-                        category.sub_categories.forEach((sub_category) => {
-                            sub_category.supplemental_content.forEach(
-                                (item) => {
-                                    item.category = category.name;
-                                    item.sub_category = sub_category.name;
-                                    returnArr.push(item);
-                                }
-                            );
-                        });
-                    } else {
-                        category.supplemental_content.forEach((item) => {
-                            if (_has(category, "parent_category")) {
-                                item.category = category.parent_category;
-                                item.sub_category = category.name;
-                            } else {
-                                item.category = category.name;
-                            }
-                            returnArr.push(item);
-                        });
-                    }
-
-                    return returnArr;
-                });
-
-            //remove duplicates
-            results = _uniqBy(results, (item) => {
-                return item.name;
-            });
-
-            return results;
-        },
+      filteredContent(){
+        return this.content.map(item => {
+          const copiedItem = JSON.parse(JSON.stringify(item))
+          copiedItem.locations = item.locations.filter(location => this.partsLastUpdated[location.part])
+          return copiedItem
+        })
+      }
     },
 };
 </script>
@@ -207,25 +165,20 @@ export default {
     overflow: auto;
     width: 100%;
     margin-bottom: 30px;
-
     .results-content {
         max-width: $text-max-width;
         margin: 0 auto;
-
         .top-rule {
             border-top: 1px solid #dddddd;
             margin-bottom: 30px;
         }
-
         .results-count {
             font-size: 15px;
             font-weight: bold;
             margin-bottom: 40px;
         }
-
         .category-labels {
             margin-bottom: 5px;
-
             .result-label {
                 font-size: 11px;
                 display: inline;
@@ -233,16 +186,13 @@ export default {
                 background: #e3eef9;
                 border-radius: 3px;
                 padding: 2px 5px 3px;
-
                 &.category-label {
                     font-weight: 600;
                 }
             }
         }
-
         .result-content-wrapper {
             margin-bottom: 20px;
-
             .supplemental-content a.supplemental-content-link {
                 .supplemental-content-date,
                 .supplemental-content-title,
@@ -251,17 +201,14 @@ export default {
                 }
             }
         }
-
         .related-sections {
             margin-bottom: 40px;
             font-size: 12px;
             color: $mid_gray;
-
             .related-sections-title {
                 font-weight: 600;
                 color: $dark_gray;
             }
-
             a {
                 text-decoration: none;
             }
