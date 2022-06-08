@@ -18,7 +18,7 @@ const apiPath = `${import.meta.env.VITE_ENV === "prod" ? "https://regulations-pi
 const apiPathV2 = `${apiPath}/v2`;
 const apiPathV3 = `${apiPath}/v3`;
 
-let config = {
+const config = {
     apiPath,
     apiPathV2,
     apiPathV3,
@@ -575,24 +575,15 @@ const getAllSections = async () => {
 const getSubPartsForPart = async (partParam) => {
     // if part is string of multiple parts, use final part
     const selectedParts = partParam.split(',')
-    const allParts = await getAllParts();
-    const parts = allParts.map((d) => d.name);
-    let potentialSubParts = []
-    selectedParts.forEach( part => {
-        const subP = allParts[parts.indexOf(part)].structure.children[0].children[0]
-            .children[0].children;
-        potentialSubParts = potentialSubParts.concat(subP)
-    })
-    const subParts = potentialSubParts.filter((p) => p.type === "subpart");
-
-    return subParts.map((s) => {
-        return {
-            label: s.label,
-            part: s.parent[0],
-            identifier: s.identifier[0],
-            range: s.descendant_range,
-        };
-    });
+    const partTocs = await Promise.all(selectedParts.map(async part => getPartTOC(42, part)))
+    return partTocs.map(partToc =>
+        partToc.children.filter(sp => sp.type === "subpart").map(subpart => ({
+          label:subpart.label,
+          range: subpart.descendant_range,
+          part: subpart.parent[0],
+          identifier: subpart.identifier[0]
+        }))
+    ).flat(1)
 };
 
 /**
@@ -833,6 +824,15 @@ const getSupByPart = async (title, part, subparts, sections) => {
 }
 const getCategories = async () =>  httpApiGetV3("resources/categories");
 
+const getTOC = async (title) =>  httpApiGetV3(title? `title/${title}/toc`:`toc`);
+
+const getPartTOC = async (title, part) =>  httpApiGetV3(`title/${title}/part/${part}/version/latest/toc`);
+
+const getSectionsForPart = async (title, part) => httpApiGetV3(`title/${title}/part/${part}/version/latest/sections`)
+
+const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
+
+
 /**
  *
  * @param part {string} - a regulation part
@@ -891,6 +891,10 @@ export {
     getAllSections,
     getSupplementalContentV3,
     getSupplementalContentSearchResults,
-    getLastUpdatedDates
+    getLastUpdatedDates,
+    getTOC,
+    getPartTOC,
+    getSectionsForPart,
+    getSubpartTOC
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
