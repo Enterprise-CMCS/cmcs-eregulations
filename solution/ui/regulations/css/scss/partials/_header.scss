@@ -244,6 +244,10 @@ header {
         right: 0;
         border-left: none;
         height: 40px;
+
+        .fa{
+            font-size: 16px
+        }
     }
 
     @include screen-md {
@@ -257,7 +261,9 @@ header {
 
     .search-box {
         display: none;
-
+        input{
+            width: calc(100% - 32px);
+        }
         @include screen-md {
             width: 230px;
             display: inline-block;
@@ -269,6 +275,8 @@ header {
 
             .search-submit{
                 height: 45px;
+                width: 48px;
+                line-height: 16px;
             }
         }
 
