@@ -5,7 +5,7 @@
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
                 <span v-else
-                    >{{ filteredContent.length }} Result<span
+                    >{{ filteredContent.length }} result<span
                         v-if="filteredContent.length != 1"
                         >s</span
                     >
