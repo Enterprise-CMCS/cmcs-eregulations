@@ -81,6 +81,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          VITE_ENV: dev-${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution
           make regulations
