@@ -14,11 +14,11 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-const apiPath = `${import.meta.env.VITE_API_URL}`;
-const apiPathV2 = `${import.meta.env.VITE_API_URL}/v2`;
-const apiPathV3 = `${import.meta.env.VITE_API_URL}/v3`;
+const apiPath = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}`;
+const apiPathV2 = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/v2`;
+const apiPathV3 = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/v3`;
 
-let config = {
+const config = {
     apiPath,
     apiPathV2,
     apiPathV3,

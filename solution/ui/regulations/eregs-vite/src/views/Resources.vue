@@ -275,30 +275,25 @@ export default {
 
         async combineSections(subpart, queryParams) {
             let sections = await this.getSectionsBySubpart(subpart);
-            if (queryParams["section"]) {
+            if (queryParams.section) {
                 sections = _uniq(
-                    queryParams["section"].split(",").concat(sections)
+                    queryParams.section.split(",").concat(sections)
                 );
             }
 
-            queryParams["section"] = sections.join(",");
+            queryParams.section = sections.join(",");
             return queryParams;
         },
         async getSectionsBySubpart(subpart) {
             const splitSubpart = subpart.split("-");
             const allSections = await getSubpartTOC(42, splitSubpart[0], splitSubpart[1])
             const sectionList = allSections
+                .filter(sec => sec.type === "section")
                 .map((sec) => `${sec.identifier[0]}-${sec.identifier[1]}`);
             return sectionList;
         },
         filterCategories(resultArray) {
-            const filteredArray = resultArray.filter((item) => {
-                if (this.queryParams.resourceCategory.includes(item.name)) {
-                    return true;
-                }
-            });
-
-            return filteredArray;
+            return  resultArray.filter((item) => this.queryParams.resourceCategory.includes(item.name));
         },
         transformResults(results, flatten) {
             const arrayToTransform = flatten ? results.flat() : results;
@@ -330,31 +325,38 @@ export default {
             this.partDict = newPartDict
 
             if (dataQueryParams.section) {
-                let sections = dataQueryParams.section.split(",").map((x) => ({
-                    part: x.match(/^\d+/)[0],
-                    section: x.match(/\d+$/)[0],
+
+                const sections = dataQueryParams.section
+                    .split(",")
+                    .filter(x =>
+                        x.match(/^\d+/) && x.match(/\d+$/)
+                    )
+                    .map((x) => ({
+                      part: x.match(/^\d+/)[0],
+                      section: x.match(/\d+$/)[0],
                 }));
-                for (const section in sections) {
+                Object.keys(sections).forEach(section => {
                     this.partDict[sections[section].part].sections.push(
                         sections[section].section
                     );
-                }
+                })
             }
             if (dataQueryParams.subpart) {
                 const subparts = dataQueryParams.subpart
                     .split(",")
-                    .map((x) => {
-                      return ({
+                    .filter(x =>
+                        x.match(/^\d+/) && x.match(/\w+$/)
+                    )
+                    .map((x) => ({
                         part: x.match(/^\d+/)[0],
                         subparts: x.match(/\w+$/)[0],
-                        })
-                    });
+                    }));
 
-                for (const subpart in subparts) {
+                Object.keys(subparts).forEach(subpart => {
                     this.partDict[subparts[subpart].part].subparts.push(
                         subparts[subpart].subparts
                     );
-                }
+                })
             }
         },
 
