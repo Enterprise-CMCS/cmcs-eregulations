@@ -110,6 +110,7 @@ header {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                color: $mid_blue;
 
                 @include custom-max($iphoneSE-max / 1px) {
                     flex: 0 0 36px;
@@ -188,11 +189,30 @@ header {
             padding-left: $spacer-2;
             margin-left: $spacer-2;
             border-left: 1px solid $border_color;
+
         }
 
         a {
             max-width: $text-max-width;
             display: inline-block;
+        }
+        .flex-container {
+            display:flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            align-items:center;
+            justify-content: space-between;
+            .flex-header{
+                flex: 1 0;
+            }
+
+            .view-resources-btn {
+                flex: 0 1 auto;
+                @include custom-max($tablet-max / 1px) {
+                    display: none;
+                }
+            }
         }
     }
 
@@ -219,6 +239,17 @@ header {
     flex: 0 0 48px;
     height: 48px;
 
+    .search-submit{
+        position: absolute;
+        right: 0;
+        border-left: none;
+        height: 40px;
+
+        .fa{
+            font-size: 16px
+        }
+    }
+
     @include screen-md {
         flex: 0 0 230px;
         height: auto;
@@ -230,7 +261,9 @@ header {
 
     .search-box {
         display: none;
-
+        input{
+            width: calc(100% - 32px);
+        }
         @include screen-md {
             width: 230px;
             display: inline-block;
@@ -239,6 +272,12 @@ header {
         @include screen-lg {
             width: 250px;
             display: inline-block;
+
+            .search-submit{
+                height: 45px;
+                width: 48px;
+                line-height: 16px;
+            }
         }
 
         @include screen-xl {
@@ -251,6 +290,7 @@ header {
 
         input {
             border: 1px solid $border_color;
+            border-right: none;
         }
     }
 }

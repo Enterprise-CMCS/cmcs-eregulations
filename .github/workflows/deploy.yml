@@ -73,6 +73,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_VITE_API_URL: ${{ steps.deploy-regulations-site-server.outputs.url }}
+          envkey_VITE_ENV: ${{matrix.environment}}
           directory: solution/ui/regulations/eregs-vite
           file_name: .env
 
@@ -81,6 +82,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          VITE_ENV: ${{ matrix.environment }}
         run: |
           pushd solution
           make regulations

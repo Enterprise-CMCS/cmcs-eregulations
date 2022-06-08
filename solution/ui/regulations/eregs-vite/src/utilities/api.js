@@ -14,9 +14,9 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-const apiPath = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}`;
-const apiPathV2 = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/v2`;
-const apiPathV3 = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/v3`;
+const apiPath = `${import.meta.env.VITE_ENV === "prod" ? "https://regulations-pilot.cms.gov": import.meta.env.VITE_API_URL || "http://localhost:8000"}`;
+const apiPathV2 = `${apiPath}/v2`;
+const apiPathV3 = `${apiPath}/v3`;
 
 const config = {
     apiPath,
