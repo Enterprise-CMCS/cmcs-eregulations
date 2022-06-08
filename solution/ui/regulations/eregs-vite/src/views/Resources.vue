@@ -72,12 +72,14 @@ import ResourcesSelections from "@/components/resources/ResourcesSelections.vue"
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
 import {
-    getAllParts,
     getCategories,
     getSubPartsForPart,
-    getAllSections,
     getSupplementalContentV3,
     getLastUpdatedDates,
+    getTOC,
+    getPartTOC,
+    getSectionsForPart,
+    getSubpartTOC
 
 } from "../utilities/api";
 
@@ -263,7 +265,6 @@ export default {
                     payload.selectedIdentifier,
                     newQueryParams
                 );
-
                 this.getPartDict(newQueryParams);
             }
             this.$router.push({
@@ -274,37 +275,25 @@ export default {
 
         async combineSections(subpart, queryParams) {
             let sections = await this.getSectionsBySubpart(subpart);
-            if (queryParams["section"]) {
+            if (queryParams.section) {
                 sections = _uniq(
-                    queryParams["section"].split(",").concat(sections)
+                    queryParams.section.split(",").concat(sections)
                 );
             }
 
-            queryParams["section"] = sections.join(",");
+            queryParams.section = sections.join(",");
             return queryParams;
         },
         async getSectionsBySubpart(subpart) {
             const splitSubpart = subpart.split("-");
-            const allSections = await getAllSections();
+            const allSections = await getSubpartTOC(42, splitSubpart[0], splitSubpart[1])
             const sectionList = allSections
-                .filter((sec) => {
-                    return (
-                        sec.part == splitSubpart[0] &&
-                        sec.subpart == splitSubpart[1]
-                    );
-                })
-                .map((sec) => sec.part + "-" + sec.identifier);
-
+                .filter(sec => sec.type === "section")
+                .map((sec) => `${sec.identifier[0]}-${sec.identifier[1]}`);
             return sectionList;
         },
         filterCategories(resultArray) {
-            const filteredArray = resultArray.filter((item) => {
-                if (this.queryParams.resourceCategory.includes(item.name)) {
-                    return true;
-                }
-            });
-
-            return filteredArray;
+            return  resultArray.filter((item) => this.queryParams.resourceCategory.includes(item.name));
         },
         transformResults(results, flatten) {
             const arrayToTransform = flatten ? results.flat() : results;
@@ -336,31 +325,38 @@ export default {
             this.partDict = newPartDict
 
             if (dataQueryParams.section) {
-                let sections = dataQueryParams.section.split(",").map((x) => ({
-                    part: x.match(/^\d+/)[0],
-                    section: x.match(/\d+$/)[0],
+
+                const sections = dataQueryParams.section
+                    .split(",")
+                    .filter(x =>
+                        x.match(/^\d+/) && x.match(/\d+$/)
+                    )
+                    .map((x) => ({
+                      part: x.match(/^\d+/)[0],
+                      section: x.match(/\d+$/)[0],
                 }));
-                for (const section in sections) {
+                Object.keys(sections).forEach(section => {
                     this.partDict[sections[section].part].sections.push(
                         sections[section].section
                     );
-                }
+                })
             }
             if (dataQueryParams.subpart) {
                 const subparts = dataQueryParams.subpart
                     .split(",")
-                    .map((x) => {
-                      return ({
+                    .filter(x =>
+                        x.match(/^\d+/) && x.match(/\w+$/)
+                    )
+                    .map((x) => ({
                         part: x.match(/^\d+/)[0],
                         subparts: x.match(/\w+$/)[0],
-                        })
-                    });
+                    }));
 
-                for (const subpart in subparts) {
+                Object.keys(subparts).forEach(subpart => {
                     this.partDict[subparts[subpart].part].subparts.push(
                         subparts[subpart].subparts
                     );
-                }
+                })
             }
         },
 
@@ -418,68 +414,46 @@ export default {
             }
         },
         async getFormattedPartsList() {
-            const partsList = await getAllParts(this.apiUrl);
-            this.filters.part.listItems = partsList.map((part) => {
-                // get section parent (subpart) if exists.
-                // this will be included in response in v3 api
-                const sectionsArr = part.structure.children[0].children[0].children[0].children
-                    .map((subpart) => {
-                        if (_isEmpty(subpart.children)) return [];
-                        // handle mixed sections and subject_groups
-                        const returnArray = subpart.children.map(
-                            (subpartChild) => {
-                                if (subpartChild.type === "section") {
-                                    return {
-                                        [subpartChild.identifier[1] ?? subpartChild.identifier[0]]:
-                                        subpartChild.parent[0],
-                                    };
-                                }
-                                // TODO: handle appendices with no children
-                                if (_isEmpty(subpartChild.children)) return [];
-                                return subpartChild.children.map((section) => ({
-                                    [section.identifier[1] ?? section.identifier[0]]:
-                                    subpartChild.parent[0],
-                                }));
-                            }
-                        );
-                        return returnArray;
-                    })
-                    .filter((section) => !_isEmpty(section))
-                    .flat(2);
-                return {
-                    name: part.name,
-                    label:
-                        part.structure.children[0].children[0].children[0]
-                            .label,
-                    sections: Object.assign({}, ...sectionsArr),
-                };
-            });
+            const TOC = await getTOC();
+            const partsList = TOC[0].children[0].children.map(
+                subChapter => subChapter.children.map(part => (
+                    {label: part.label, name:part.identifier[0]}
+                ))
+            ).flat(1)
+
+            this.filters.part.listItems = await Promise.all(partsList.map(async part =>{
+                const newPart = JSON.parse(JSON.stringify(part))
+                const PartToc = await getPartTOC(42, part.name)
+                const sections = {}
+                PartToc.children.filter(TOCpart => TOCpart.type==="subpart").forEach(subpart => {
+
+                    subpart.children.filter(section =>
+                        section.type==="section").forEach(c=>{
+                          sections[c.identifier[c.identifier.length-1]] = c.parent[0]
+                    })})
+                newPart.sections = sections
+                return newPart
+            }))
+
         },
+
 
         async getFormattedSubpartsList(parts) {
             this.filters.subpart.listItems = await getSubPartsForPart(parts);
         },
 
         async getFormattedSectionsList() {
-            const allSections = await getAllSections();
+            const rawSections = await Promise.all(Object.keys(this.partDict).map(async part =>getSectionsForPart("42", part)))
 
-            let finalsSections = [];
-            let sectionList = [];
-            for (const part in this.partDict) {
-                const sections = this.partDict[part].sections;
-                const subparts = this.partDict[part].subparts;
-                sectionList = allSections.filter((sec) => sec.part == part);
-                if (subparts.length >0) {
-                    sectionList = sectionList.filter((sec) => {
-                        return (
-                            subparts.includes(sec.subpart) ||
-                            sections.includes(sec.identifier)
-                        );
-                    });
-                }
-                finalsSections = finalsSections.concat(sectionList);
-            }
-            this.filters.section.listItems = finalsSections.sort((a, b) =>
+            const finalSections = rawSections.flat(1).map(section =>({
+                label: section.label_level,
+                description: section.label_description,
+                part: section.identifier[0],
+                [section.parent_type]: section.parent[0],
+                identifier: section.identifier[section.identifier.length-1],
+            }))
+
+            this.filters.section.listItems = finalSections.flat(1).sort((a, b) =>
                 a.part > b.part
                     ? 1
                     : a.part == b.part
