@@ -71,7 +71,7 @@
                             eregs_url="{% url 'resources' %}"
                             eregs_url_label="eRegulations resource links"
                             eregs_sublabel="subregulatory guidance and implementation resources"
-                            query="{{ query }}"
+                            query="{{ query|default_if_none:'' }}"
                         ></search-empty-state>
                         {% endif %}
                     </div>
