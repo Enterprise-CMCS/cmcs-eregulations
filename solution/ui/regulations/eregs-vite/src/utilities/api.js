@@ -576,7 +576,6 @@ const getSubPartsForPart = async (partParam) => {
     // if part is string of multiple parts, use final part
     const selectedParts = partParam.split(',')
     const partTocs = await Promise.all(selectedParts.map(async part => getPartTOC(42, part)))
-    console.log(partTocs)
     return partTocs.map(partToc =>
         partToc.children.filter(sp => sp.type === "subpart").map(subpart => ({
           label:subpart.label,
@@ -829,6 +828,10 @@ const getTOC = async (title) =>  httpApiGetV3(title? `title/${title}/toc`:`toc`)
 
 const getPartTOC = async (title, part) =>  httpApiGetV3(`title/${title}/part/${part}/version/latest/toc`);
 
+const getSectionsForPart = async (title, part) => httpApiGetV3(`title/${title}/part/${part}/version/latest/sections`)
+
+const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
+
 
 /**
  *
@@ -890,6 +893,8 @@ export {
     getSupplementalContentSearchResults,
     getLastUpdatedDates,
     getTOC,
-    getPartTOC
+    getPartTOC,
+    getSectionsForPart,
+    getSubpartTOC
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

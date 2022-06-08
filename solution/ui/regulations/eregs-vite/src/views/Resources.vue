@@ -72,14 +72,14 @@ import ResourcesSelections from "@/components/resources/ResourcesSelections.vue"
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
 import {
-    getAllParts,
     getCategories,
     getSubPartsForPart,
-    getAllSections,
     getSupplementalContentV3,
     getLastUpdatedDates,
     getTOC,
-    getPartTOC
+    getPartTOC,
+    getSectionsForPart,
+    getSubpartTOC
 
 } from "../utilities/api";
 
@@ -265,7 +265,6 @@ export default {
                     payload.selectedIdentifier,
                     newQueryParams
                 );
-                console.log(newQueryParams)
                 this.getPartDict(newQueryParams);
             }
             this.$router.push({
@@ -287,16 +286,9 @@ export default {
         },
         async getSectionsBySubpart(subpart) {
             const splitSubpart = subpart.split("-");
-            const allSections = await getAllSections();
+            const allSections = await getSubpartTOC(42, splitSubpart[0], splitSubpart[1])
             const sectionList = allSections
-                .filter((sec) => {
-                    return (
-                        sec.part == splitSubpart[0] &&
-                        sec.subpart == splitSubpart[1]
-                    );
-                })
-                .map((sec) => sec.part + "-" + sec.identifier);
-
+                .map((sec) => `${sec.identifier[0]}-${sec.identifier[1]}`);
             return sectionList;
         },
         filterCategories(resultArray) {
@@ -446,29 +438,20 @@ export default {
 
         async getFormattedSubpartsList(parts) {
             this.filters.subpart.listItems = await getSubPartsForPart(parts);
-            console.log(JSON.stringify(this.filters.subpart.listItems))
         },
 
         async getFormattedSectionsList() {
-            const allSections = await getAllSections();
+            const rawSections = await Promise.all(Object.keys(this.partDict).map(async part =>getSectionsForPart("42", part)))
 
-            let finalsSections = [];
-            let sectionList = [];
-            for (const part in this.partDict) {
-                const sections = this.partDict[part].sections;
-                const subparts = this.partDict[part].subparts;
-                sectionList = allSections.filter((sec) => sec.part == part);
-                if (subparts.length >0) {
-                    sectionList = sectionList.filter((sec) => {
-                        return (
-                            subparts.includes(sec.subpart) ||
-                            sections.includes(sec.identifier)
-                        );
-                    });
-                }
-                finalsSections = finalsSections.concat(sectionList);
-            }
-            this.filters.section.listItems = finalsSections.sort((a, b) =>
+            const finalSections = rawSections.flat(1).map(section =>({
+                label: section.label_level,
+                description: section.label_description,
+                part: section.identifier[0],
+                [section.parent_type]: section.parent[0],
+                identifier: section.identifier[section.identifier.length-1],
+            }))
+
+            this.filters.section.listItems = finalSections.flat(1).sort((a, b) =>
                 a.part > b.part
                     ? 1
                     : a.part == b.part
