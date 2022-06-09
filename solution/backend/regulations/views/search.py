@@ -21,13 +21,15 @@ class SearchView(TemplateView):
         if not parts:
             raise Http404
         structure = get_structure(parts)
-        synonym = Synonym.objects.filter(isActive=True, baseWord__iexact=query.strip('\"')).first()
+        synonym = None
+        if query:
+            synonym = Synonym.objects.filter(isActive=True, baseWord__iexact=query.strip('\"')).first()
         c = {
             'parts': parts,
             'toc': structure,
             'results': results,
             'synonym': synonym,
-            'unquoted_search': not query.startswith('"') and not query.endswith('"') and len(query.split(" ")) > 1,
+            'unquoted_search': query and not query.startswith('"') and not query.endswith('"') and len(query.split(" ")) > 1,
             'query': query,
         }
         return {**context, **c, **self.request.GET.dict()}

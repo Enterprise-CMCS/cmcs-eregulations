@@ -166,10 +166,10 @@ jobs:
         run: |
           pushd solution/ui/regulations
           npm ci
-          npm run css
+          npm run css-deploy
           npm run build-storybook
           mkdir ../prototype/dist/storybook/
-          cp storybook-static/* ../prototype/dist/storybook/
+          cp -r storybook-static/* ../prototype/dist/storybook/
           popd
       # deploy assets to S3
       - name: deploy prototype
