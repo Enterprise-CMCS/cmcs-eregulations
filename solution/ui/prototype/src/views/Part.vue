@@ -96,17 +96,17 @@ export default {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
-            resourcesDisplay: this.$route.params.resourcesDisplay || "drawer",
+            resourcesDisplay: "drawer",
+            tabParam: this.$route.params.tab,
             structure: null,
             sections: [],
-            tab: 1, // index 1, "Part"
             tabsShape: [
                 {
                     label: "Table of Contents",
                     value: "tocContent",
                     type: "button",
                     component: "PartToc",
-                    disabled: true,
+                    disabled: false,
                 },
                 {
                     label: "Part",
@@ -119,13 +119,13 @@ export default {
                     label: "Subpart",
                     value: "subpart",
                     type: "dropdown",
-                    disabled: true,
+                    disabled: false,
                 },
                 {
                     label: "Section",
                     value: "section",
                     type: "dropdown",
-                    disabled: true,
+                    disabled: false,
                 },
             ],
             selectedIdentifier: null,
@@ -135,6 +135,21 @@ export default {
     },
 
     computed: {
+        tab() {
+            console.log("this.tabParam", this.tabParam);
+            switch(this.tabParam) {
+                case "toc":
+                    return 0;
+                case "part":
+                    return 1;
+                case "subpart":
+                    return 2;
+                case "section":
+                    return 3;
+                default:
+                    return 1;
+            }
+        },
         tocContent() {
             return this.structure?.[0];
         },
