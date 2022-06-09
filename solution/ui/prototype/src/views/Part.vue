@@ -20,7 +20,12 @@
                         :disabled="item.disabled"
                     >
                         {{ item.label }}
-                        <template v-if="item.value === 'subpart' || item.value === 'section'">
+                        <template
+                            v-if="
+                                item.value === 'subpart' ||
+                                item.value === 'section'
+                            "
+                        >
                             <FancyDropdown
                                 label=""
                                 buttonTitle=""
@@ -28,15 +33,14 @@
                             >
                                 <component
                                     :is="item.listType"
+                                    :listItems="item.listItems"
                                 ></component>
                             </FancyDropdown>
                         </template>
                     </v-tab>
                 </v-tabs>
             </PartNav>
-            <div
-                class="content-container content-container-sidebar"
-            >
+            <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(item, index) in tabsShape" :key="index">
                         <component
@@ -79,7 +83,11 @@ import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
 
-import { getPart, getSupplementalContentCountForPart } from "@/utilities/api";
+import {
+    getPart,
+    getSubPartsForPart,
+    getSupplementalContentCountForPart,
+} from "@/utilities/api";
 
 export default {
     components: {
@@ -125,6 +133,7 @@ export default {
                     listType: "SubpartList",
                     type: "dropdown",
                     disabled: false,
+                    listItems: [],
                 },
                 {
                     label: "Section",
@@ -132,6 +141,7 @@ export default {
                     listType: "SectionList",
                     type: "dropdown",
                     disabled: false,
+                    listItems: [],
                 },
             ],
             selectedIdentifier: null,
@@ -234,6 +244,7 @@ export default {
         );
 
         await this.getPartStructure();
+        await this.getFormattedSubpartsList(this.part);
     },
 
     methods: {
@@ -277,6 +288,13 @@ export default {
                     ...identifiers,
                 },
             });
+        },
+        async getFormattedSubpartsList(part) {
+            const formattedSubpartsList = await getSubPartsForPart(part);
+            const tabIndex = this.tabsShape.findIndex(
+                (tab) => tab.value === "subpart"
+            );
+            this.tabsShape[tabIndex].listItems = formattedSubpartsList;
         },
     },
 
