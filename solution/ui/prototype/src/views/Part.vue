@@ -96,8 +96,8 @@ export default {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
-            resourcesDisplay: "drawer",
             tabParam: this.$route.params.tab,
+            resourcesDisplay: "drawer",
             structure: null,
             sections: [],
             tabsShape: [
@@ -135,20 +135,65 @@ export default {
     },
 
     computed: {
-        tab() {
-            console.log("this.tabParam", this.tabParam);
-            switch(this.tabParam) {
-                case "toc":
-                    return 0;
-                case "part":
-                    return 1;
-                case "subpart":
-                    return 2;
-                case "section":
-                    return 3;
-                default:
-                    return 1;
-            }
+        tab: {
+            get() {
+                switch (this.tabParam) {
+                    case "toc":
+                        return 0;
+                    case "part":
+                        return 1;
+                    case "subpart":
+                        return 2;
+                    case "section":
+                        return 3;
+                    default:
+                        return 1;
+                }
+            },
+            set(value) {
+                switch (value) {
+                    case 0:
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                title: this.title,
+                                part: this.part,
+                                tab: "toc",
+                            },
+                        });
+                        break;
+                    case 1:
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                title: this.title,
+                                part: this.part,
+                                tab: "part",
+                            },
+                        });
+                        break;
+                    case 2:
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                title: this.title,
+                                part: this.part,
+                                tab: "subpart",
+                            },
+                        });
+                        break;
+                    case 3:
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                title: this.title,
+                                part: this.part,
+                                tab: "section",
+                            },
+                        });
+                        break;
+                }
+            },
         },
         tocContent() {
             return this.structure?.[0];
@@ -172,13 +217,15 @@ export default {
             () => this.$route.params,
             (toParams, previousParams) => {
                 // react to route changes...
+                if (toParams.tab !== previousParams.tab) {
+                    this.tabParam = toParams.tab;
+                }
+
                 if (toParams.part !== previousParams.part) {
                     this.structure = null;
                     this.clearResourcesParams();
                     this.title = toParams.title;
                     this.part = toParams.part;
-                    this.resourcesDisplay =
-                        toParams.resourcesDisplay || "drawer";
                 }
             }
         );
@@ -200,8 +247,8 @@ export default {
         },
         setResourcesParams(payload) {
             console.log("payload", payload);
-            if (payload.scope === "rendered"){
-              return
+            if (payload.scope === "rendered") {
+                return;
             }
             this.selectedIdentifier = payload.identifier;
             this.selectedScope = payload.scope;
