@@ -20,6 +20,17 @@
                         :disabled="item.disabled"
                     >
                         {{ item.label }}
+                        <template v-if="item.value === 'subpart' || item.value === 'section'">
+                            <FancyDropdown
+                                label=""
+                                buttonTitle=""
+                                type="splitTab"
+                            >
+                                <component
+                                    :is="item.listType"
+                                ></component>
+                            </FancyDropdown>
+                        </template>
                     </v-tab>
                 </v-tabs>
             </PartNav>
@@ -57,6 +68,7 @@
 </template>
 
 <script>
+import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
@@ -64,18 +76,23 @@ import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
+import SubpartList from "@/components/custom_elements/SubpartList.vue";
+import SectionList from "@/components/custom_elements/SectionList.vue";
 
 import { getPart, getSupplementalContentCountForPart } from "@/utilities/api";
 
 export default {
     components: {
         SectionResourcesSidebar,
+        FancyDropdown,
         FlashBanner,
         Footer,
         Header,
         PartContent,
         PartNav,
         PartToc,
+        SubpartList,
+        SectionList,
     },
 
     name: "Part",
@@ -105,12 +122,14 @@ export default {
                 {
                     label: "Subpart",
                     value: "subpart",
+                    listType: "SubpartList",
                     type: "dropdown",
                     disabled: false,
                 },
                 {
                     label: "Section",
                     value: "section",
+                    listType: "SectionList",
                     type: "dropdown",
                     disabled: false,
                 },

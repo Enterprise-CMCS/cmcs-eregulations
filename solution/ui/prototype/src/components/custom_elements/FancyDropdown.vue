@@ -1,17 +1,22 @@
 <template>
-    <div class="fancy-container">
+    <div class="fancy-container" :class="containerClass">
         <v-menu offset-y max-width="240" max-height="460">
             <template v-slot:activator="{ on, attrs }">
-                <label :for="buttonId">{{ label }}</label>
+                <label v-if="label" :for="buttonId">{{ label }}</label>
                 <v-btn
                     :id="buttonId"
-                    class="ds-c-field select-btn"
+                    class="ds-c-field"
+                    :class="btnTypeClass"
                     v-bind="attrs"
                     v-on="on"
                     depressed
                     :disabled="disabled"
                 >
                     {{ buttonTitle }}
+                    <i
+                        v-if="type === 'splitTab'"
+                        class="fa fa-chevron-down"
+                    ></i>
                 </v-btn>
             </template>
             <slot></slot>
@@ -39,6 +44,19 @@ export default {
         disabled: {
             type: Boolean,
             default: false,
+        },
+        type: {
+            type: String,
+            required: false,
+        },
+    },
+
+    computed: {
+        btnTypeClass() {
+            return this.type === "splitTab" ? "split-tab-btn" : "select-btn";
+        },
+        containerClass() {
+            return this.type === "splitTab" ? "split-tab-container" : "";
         },
     },
 };
@@ -73,28 +91,44 @@ $eregs-image-path: "~legacy-static/images";
         font-size: 14px;
     }
 
-    button.v-btn.select-btn {
-        background-color: #fff;
-        background-image: url(#{$eregs-image-path}/arrow-both.svg);
-        background-position: right 10px center;
-        border: 1px solid $light_gray;
-        height: 36px;
-        border-radius: 3px;
-        padding: 0 0 0 10px;
+    &.split-tab-container {
+        margin: 0;
+    }
 
-        span.v-btn__content {
-            font-size: 14px;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            letter-spacing: initial;
-            color: $dark_gray;
-            text-transform: capitalize;
+    button.v-btn {
+        &.select-btn {
+            background-color: #fff;
+            background-image: url(#{$eregs-image-path}/arrow-both.svg);
+            background-position: right 10px center;
+            border: 1px solid $light_gray;
+            height: 36px;
+            border-radius: 3px;
+            padding: 0 0 0 10px;
 
-            i.v-icon {
-                color: $mid_gray;
-                margin-right: 5px;
+            span.v-btn__content {
+                font-size: 14px;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                letter-spacing: initial;
+                color: $dark_gray;
+                text-transform: capitalize;
+
+                i.v-icon {
+                    color: $mid_gray;
+                    margin-right: 5px;
+                }
             }
+        }
+
+        &.split-tab-btn {
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+            height: 48px;
+            min-width: 35px;
+
         }
     }
 }
