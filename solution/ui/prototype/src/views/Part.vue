@@ -6,7 +6,7 @@
                 :title="title"
                 :part="part"
                 :partLabel="partLabel"
-                :resourcesDisplay="resourcesDisplay"
+                resourcesDisplay="sidebar"
             >
                 <v-tabs
                     slider-size="5"
@@ -24,8 +24,7 @@
                 </v-tabs>
             </PartNav>
             <div
-                class="content-container"
-                :class="contentContainerResourcesClass"
+                class="content-container content-container-sidebar"
             >
                 <v-tabs-items v-model="tab">
                     <v-tab-item v-for="(item, index) in tabsShape" :key="index">
@@ -34,7 +33,7 @@
                             :structure="tabsContent[index]"
                             :title="title"
                             :part="part"
-                            :resourcesDisplay="resourcesDisplay"
+                            resourcesDisplay="sidebar"
                             :selectedIdentifier="selectedIdentifier"
                             :selectedScope="selectedScope"
                             :supplementalContentCount="supplementalContentCount"
@@ -42,7 +41,7 @@
                         ></component>
                     </v-tab-item>
                 </v-tabs-items>
-                <div class="sidebar" v-show="resourcesDisplay === 'sidebar'">
+                <div class="sidebar" v-show="tabParam !== 'toc'">
                     <SectionResourcesSidebar
                         :title="title"
                         :part="part"
@@ -52,15 +51,6 @@
                     />
                 </div>
             </div>
-            <SectionResources
-                v-if="resourcesDisplay === 'drawer' && selectedIdentifier"
-                :title="title"
-                :part="part"
-                :selectedIdentifier="selectedIdentifier"
-                :selectedScope="selectedScope"
-                :routeToResources="routeToResources"
-                @close="clearResourcesParams"
-            />
             <Footer />
         </div>
     </body>
@@ -73,14 +63,12 @@ import Header from "@/components/Header.vue";
 import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
-import SectionResources from "@/components/SectionResources.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 
 import { getPart, getSupplementalContentCountForPart } from "@/utilities/api";
 
 export default {
     components: {
-        SectionResources,
         SectionResourcesSidebar,
         FlashBanner,
         Footer,
@@ -97,7 +85,6 @@ export default {
             title: this.$route.params.title,
             part: this.$route.params.part,
             tabParam: this.$route.params.tab,
-            resourcesDisplay: "drawer",
             structure: null,
             sections: [],
             tabsShape: [
@@ -207,9 +194,6 @@ export default {
         tabsContent() {
             return [this.tocContent, this.partContent, null, null];
         },
-        contentContainerResourcesClass() {
-            return `content-container-${this.resourcesDisplay}`;
-        },
     },
 
     async created() {
@@ -266,13 +250,8 @@ export default {
                 return acc;
             }, {});
 
-            const routeName =
-                this.resourcesDisplay === "sidebar"
-                    ? "resources-sidebar"
-                    : "resources";
-
             this.$router.push({
-                name: routeName,
+                name: "resources",
                 query: {
                     title: this.title,
                     part: this.part,
@@ -317,10 +296,6 @@ $sidebar-top-margin: 40px;
 .content-container {
     display: flex;
     flex-direction: row;
-}
-
-.content-container-drawer {
-    justify-content: center;
 }
 
 .content-container-sidebar {
