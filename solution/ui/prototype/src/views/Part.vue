@@ -84,6 +84,7 @@ import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
 
 import {
+    getAllSections,
     getPart,
     getSubPartsForPart,
     getSupplementalContentCountForPart,
@@ -245,6 +246,7 @@ export default {
 
         await this.getPartStructure();
         await this.getFormattedSubpartsList(this.part);
+        await this.getFormattedSectionsList(this.part, this.subpart);
     },
 
     methods: {
@@ -295,6 +297,32 @@ export default {
                 (tab) => tab.value === "subpart"
             );
             this.tabsShape[tabIndex].listItems = formattedSubpartsList;
+        },
+        async getFormattedSectionsList() {
+            const allSections = await getAllSections();
+
+            let finalsSections = [];
+            let sectionList = [];
+            console.log("allSections", allSections);
+            const filteredSections = allSections.filter(
+                (section) =>
+                    section.part === this.part &&
+                    !section.identifier.includes("-")
+            );
+            console.log("filteredSections", filteredSections);
+            const tabIndex = this.tabsShape.findIndex(
+                (tab) => tab.value === "section"
+            );
+            this.tabsShape[tabIndex].listItems = filteredSections;
+            /*this.filters.section.listItems = finalsSections.sort((a, b) =>*/
+                /*a.part > b.part*/
+                    /*? 1*/
+                    /*: a.part == b.part*/
+                    /*? parseInt(a.identifier) > parseInt(b.identifier)*/
+                        /*? 1*/
+                        /*: -1*/
+                    /*: -1*/
+            /*);*/
         },
     },
 
