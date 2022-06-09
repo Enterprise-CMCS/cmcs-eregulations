@@ -64,9 +64,8 @@
 
     // i.e. "18 results, displayed by relevance"
 
-    .search-displayed-by {
-        font-size: 0.8em;
-        color: $secondary_text_color;
+    .search-results-count {
+        font-weight: bold;
         margin: $spacer-3 0;
     }
 

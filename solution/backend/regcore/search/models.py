@@ -18,7 +18,7 @@ class SearchIndexQuerySet(models.QuerySet):
     def search(self, query):
         search_type = "plain"
         cover_density = False
-        if query.startswith('"') and query.endswith('"'):
+        if query and query.startswith('"') and query.endswith('"'):
             search_type = "phrase"
             cover_density = True
 
