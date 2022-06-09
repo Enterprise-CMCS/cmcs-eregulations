@@ -1,38 +1,47 @@
 <template>
-  <div>
-    <a v-if="selectedPart" v-on:click="clearSection" class="show-subpart-resources">
-      <span class="bold"> View All Subpart {{subparts[0]}} Resources</span>  ({{resourceCount}})
-    </a>
-    <h2 v-if="!requested_categories" id="subpart-resources-heading">
-      {{ activePart }} Resources
-    </h2>
-    <div class="supplemental-content-container">
-        <supplemental-content-category
-            v-for="category in categories"
-            :key="category.name"
-            :name="category.name"
-            :subcategory="false"
-            :description="category.description"
-            :supplemental_content="category.supplemental_content"
-            :sub_categories="category.sub_categories"
-            :isFetching="isFetching"
+    <div>
+        <a
+            v-if="selectedPart"
+            v-on:click="clearSection"
+            class="show-subpart-resources"
         >
-        </supplemental-content-category>
-        <simple-spinner v-if="isFetching"></simple-spinner>
+            <span class="bold">
+                View All Subpart {{ subparts[0] }} Resources</span
+            >
+            ({{ resourceCount }})
+        </a>
+        <h2 v-if="!requested_categories" id="subpart-resources-heading">
+            {{ activePart }} Resources
+        </h2>
+        <div class="supplemental-content-container">
+            <supplemental-content-category
+                v-for="category in categories"
+                :key="category.name"
+                :name="category.name"
+                :subcategory="false"
+                :description="category.description"
+                :supplemental_content="category.supplemental_content"
+                :sub_categories="category.sub_categories"
+                :isFetching="isFetching"
+            >
+            </supplemental-content-category>
+            <simple-spinner v-if="isFetching"></simple-spinner>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
-import {getSupplementalContentByCategory, v3GetSupplementalContent} from "../../api";
-import {EventCodes, formatResourceCategories} from "../../utils";
+import {
+    getSupplementalContentByCategory,
+    v3GetSupplementalContent,
+} from "../../api";
+import { EventCodes, formatResourceCategories } from "../../utils";
 
-
-function getDefaultCategories(){
-    if (!document.getElementById("categories")) return[];
+function getDefaultCategories() {
+    if (!document.getElementById("categories")) return [];
 
     const rawCategories = JSON.parse(
         document.getElementById("categories").textContent
@@ -48,7 +57,6 @@ function getDefaultCategories(){
         );
         return category;
     });
-
 }
 
 export default {
@@ -79,24 +87,24 @@ export default {
             type: Array,
             required: false,
             default() {
-              return []
+                return [];
             },
         },
         getSupplementalContent: {
-          type: Function,
-          required: false,
-          default: v3GetSupplementalContent
+            type: Function,
+            required: false,
+            default: v3GetSupplementalContent,
         },
-        getSupplementalContentByCategory:{
-          type: Function,
-          required: false,
-          default: getSupplementalContentByCategory
+        getSupplementalContentByCategory: {
+            type: Function,
+            required: false,
+            default: getSupplementalContentByCategory,
         },
-        requested_categories:{
-          type: String,
-          required: false,
-          default: ""
-        }
+        requested_categories: {
+            type: String,
+            required: false,
+            default: "",
+        },
     },
 
     data() {
@@ -104,7 +112,7 @@ export default {
             categories: [],
             isFetching: true,
             selectedPart: undefined,
-            resourceCount: 0
+            resourceCount: 0,
         };
     },
 
@@ -116,21 +124,26 @@ export default {
             ];
         },
         joined_locations: function () {
+            const sectionsString = this.sections.reduce(
+                (previousValue, section) =>
+                    `${previousValue}locations=${this.title}.${this.part}.${section}&`,
+                ""
+            );
 
-            const sectionsString = this.sections.reduce((previousValue, section) => `${previousValue}locations=${this.title}.${this.part}.${section}&`, "")
-
-            const subPartString = this.subparts.reduce((previousValue, subpart) => `${previousValue}locations=${this.title}.${this.part}.${subpart}&`, "")
+            const subPartString = this.subparts.reduce(
+                (previousValue, subpart) =>
+                    `${previousValue}locations=${this.title}.${this.part}.${subpart}&`,
+                ""
+            );
 
             return sectionsString + subPartString;
         },
-        activePart: function(){
-          if (this.selectedPart !== undefined) {
-
-            return this.selectedPart
-
-          }
-          return `Subpart ${this.subparts[0]}`
-        }
+        activePart: function () {
+            if (this.selectedPart !== undefined) {
+                return this.selectedPart;
+            }
+            return `Subpart ${this.subparts[0]}`;
+        },
     },
 
     watch: {
@@ -148,58 +161,75 @@ export default {
             this.categories = [];
             this.isFetching = true;
             if (this.selectedPart) {
-              this.fetch_content(this.title, this.part, `locations=${this.title}.${this.part}.${this.selectedPart.split('.')[1]}`);
-            }
-            else{
-              this.fetch_content(this.title, this.part);
+                this.fetch_content(
+                    this.title,
+                    this.part,
+                    `locations=${this.title}.${this.part}.${
+                        this.selectedPart.split(".")[1]
+                    }`
+                );
+            } else {
+                this.fetch_content(this.title, this.part);
             }
         },
     },
 
     created() {
-        this.fetch_content(this.title, this.part);
+        if (window.location.hash) {
+            const section = window.location.hash
+                .substring(1)
+                .replace("-", ".");
+
+            this.fetch_content(
+                this.title,
+                this.part,
+                `locations=${this.title}.${section}`
+            )
+                            this.selectedPart = `§ ${section}`;
+        } else {
+            this.fetch_content(this.title, this.part);
+        }
     },
 
     mounted() {
         this.$root.$on(EventCodes.SetSection, (args) => {
-          this.selectedPart = args.section
-        })
-        this.categories = getDefaultCategories()
+            this.selectedPart = args.section;
+        });
+        this.categories = getDefaultCategories();
     },
 
     methods: {
         async fetch_content(title, part, location) {
             try {
-                if (this.requested_categories.length > 0){
+                if (this.requested_categories.length > 0) {
                     // todo convert this to V3 API
-                    this.categories = await this.getSupplementalContentByCategory(
-                        this.api_url,
-                        this.requested_categories.split(",")
-                    );
-                }
-                else {
+                    this.categories =
+                        await this.getSupplementalContentByCategory(
+                            this.api_url,
+                            this.requested_categories.split(",")
+                        );
+                } else {
                     const response = await v3GetSupplementalContent(
                         this.api_url,
-                        {locations: location || this.joined_locations}
+                        { locations: location || this.joined_locations }
                     );
 
                     if (!this.resourceCount) {
-                      this.resourceCount = response.length
+                        this.resourceCount = response.length;
                     }
 
-                    this.categories = formatResourceCategories(response)
+                    this.categories = formatResourceCategories(response);
                 }
-
             } catch (error) {
                 console.error(error);
             } finally {
                 this.isFetching = false;
             }
         },
-      clearSection(){
-          console.log("Clearing Section")
-          this.selectedPart = undefined
-      }
+        clearSection() {
+            console.log("Clearing Section");
+            this.selectedPart = undefined;
+        },
     },
 };
 </script>
