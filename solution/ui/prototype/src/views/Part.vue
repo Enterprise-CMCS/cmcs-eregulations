@@ -34,6 +34,7 @@
                                 <component
                                     :is="item.listType"
                                     :listItems="item.listItems"
+                                    :filterEmitter="setQueryParam"
                                 ></component>
                             </FancyDropdown>
                         </template>
@@ -111,6 +112,7 @@ export default {
             title: this.$route.params.title,
             part: this.$route.params.part,
             tabParam: this.$route.params.tab,
+            queryParams: this.$route.query,
             structure: null,
             sections: [],
             tabsShape: [
@@ -168,45 +170,49 @@ export default {
                 }
             },
             set(value) {
+                const urlParams = {
+                    title: this.title,
+                    part: this.part
+                }
                 switch (value) {
                     case 0:
                         this.$router.push({
                             name: "part",
                             params: {
-                                title: this.title,
-                                part: this.part,
+                                ...urlParams,
                                 tab: "toc",
                             },
+                            query: this.queryParams
                         });
                         break;
                     case 1:
                         this.$router.push({
                             name: "part",
                             params: {
-                                title: this.title,
-                                part: this.part,
+                                ...urlParams,
                                 tab: "part",
                             },
+                            query: this.queryParams
                         });
                         break;
                     case 2:
                         this.$router.push({
                             name: "part",
                             params: {
-                                title: this.title,
-                                part: this.part,
+                                ...urlParams,
                                 tab: "subpart",
                             },
+                            query: this.queryParams
                         });
                         break;
                     case 3:
                         this.$router.push({
                             name: "part",
                             params: {
-                                title: this.title,
-                                part: this.part,
+                                ...urlParams,
                                 tab: "section",
                             },
+                            query: this.queryParams
                         });
                         break;
                 }
@@ -227,29 +233,26 @@ export default {
     },
 
     async created() {
-        this.$watch(
-            () => this.$route.params,
-            (toParams, previousParams) => {
-                // react to route changes...
-                if (toParams.tab !== previousParams.tab) {
-                    this.tabParam = toParams.tab;
-                }
-
-                if (toParams.part !== previousParams.part) {
-                    this.structure = null;
-                    this.clearResourcesParams();
-                    this.title = toParams.title;
-                    this.part = toParams.part;
-                }
-            }
-        );
-
         await this.getPartStructure();
         await this.getFormattedSubpartsList(this.part);
         await this.getFormattedSectionsList(this.part, this.subpart);
     },
 
     methods: {
+        setQueryParam(payload) {
+            this.$router.push({
+                name: "part",
+                params: {
+                    title: this.title,
+                    part: this.part,
+                    tab: this.tabParam,
+                },
+                query: {
+                    ...this.queryParams,
+                    [payload.scope]: payload.selectedIdentifier.split("-")[1],
+                },
+            });
+        },
         async getPartStructure() {
             try {
                 this.structure = await getPart(this.title, this.part);
@@ -303,13 +306,11 @@ export default {
 
             let finalsSections = [];
             let sectionList = [];
-            console.log("allSections", allSections);
             const filteredSections = allSections.filter(
                 (section) =>
                     section.part === this.part &&
                     !section.identifier.includes("-")
             );
-            console.log("filteredSections", filteredSections);
             const tabIndex = this.tabsShape.findIndex(
                 (tab) => tab.value === "section"
             );
@@ -327,6 +328,26 @@ export default {
     },
 
     watch: {
+        "$route.params": {
+            async handler(toParams, previousParams) {
+                // react to route changes...
+                if (toParams.tab !== previousParams.tab) {
+                    this.tabParam = toParams.tab;
+                }
+
+                if (toParams.part !== previousParams.part) {
+                    this.structure = null;
+                    this.clearResourcesParams();
+                    this.title = toParams.title;
+                    this.part = toParams.part;
+                }
+            }
+        },
+        "$route.query": {
+            async handler(toQueries, previousQueries) {
+                this.queryParams = toQueries;
+            },
+        },
         async part(newPart) {
             await this.getPartStructure();
         },
