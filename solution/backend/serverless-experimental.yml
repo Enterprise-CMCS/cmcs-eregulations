@@ -66,6 +66,8 @@ functions:
       - http: ANY /
       - http: ANY /{proxy+}
   reg_core_migrate:
+    environment:
+      STAGE: ${self:custom.stage}
     handler: migrate.handler
     timeout: 300
     layers:
@@ -77,6 +79,13 @@ functions:
       - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   populate_content:
     handler: populate_content.handler
+    timeout: 300
+    layers:
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+  drop_database:
+    environment:
+      STAGE: ${self:custom.stage}
+    handler: dropdb.handler
     timeout: 300
     layers:
       - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}

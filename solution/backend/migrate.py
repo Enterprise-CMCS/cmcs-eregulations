@@ -10,7 +10,14 @@ def handler(event, context):
     from django.db import connection
     connection.ensure_connection()
     if not connection.is_usable():
-        raise Exception("database is unreachable")
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(f"CREATE DATABASE ${os.environ.get('STAGE', '')} WITH TEMPLATE main OWNER eregsuser")
+            connection.ensure_connection()
+            if not connection.is_usable():
+                raise Exception("failed to create database")
+        except Exception:
+            raise Exception("database is unreachable")
 
     from django.apps import apps
     installed_apps = []
