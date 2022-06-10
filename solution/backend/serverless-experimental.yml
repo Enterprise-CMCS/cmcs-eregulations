@@ -22,7 +22,7 @@ provider:
     STATIC_URL: ${self:custom.settings.static_url}
   vpc:
     securityGroupIds:
-      - !Ref ServerlessSecurityGroup
+      - ${ssm:/eregulations/aws/securitygroupid}
     subnetIds:
       - ${ssm:/account_vars/vpc/subnets/private/a/id}
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
@@ -133,15 +133,6 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-
-    ServerlessSecurityGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: SecurityGroup for Serverless Functions
-        VpcId: ${ssm:/account_vars/vpc/id}
-        Tags:
-          - Key: "Name"
-            Value: "ServerlessSecurityGroup"
 
 plugins:
   - serverless-wsgi
