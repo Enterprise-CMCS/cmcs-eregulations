@@ -43,7 +43,10 @@
             </PartNav>
             <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab">
-                    <v-tab-item v-for="(item, index) in tabsShape" :key="index">
+                    <v-tab-item
+                        v-for="(item, key, index) in tabsShape"
+                        :key="index"
+                    >
                         <component
                             :is="item.component"
                             :structure="tabsContent[index]"
@@ -115,22 +118,22 @@ export default {
             queryParams: this.$route.query,
             structure: null,
             sections: [],
-            tabsShape: [
-                {
+            tabsShape: {
+                toc: {
                     label: "Table of Contents",
                     value: "tocContent",
                     type: "button",
                     component: "PartToc",
                     disabled: false,
                 },
-                {
+                part: {
                     label: "Part",
                     value: "partContent",
                     type: "button",
                     component: "PartContent",
                     disabled: false,
                 },
-                {
+                subpart: {
                     label: "Subpart",
                     value: "subpart",
                     listType: "SubpartList",
@@ -138,7 +141,7 @@ export default {
                     disabled: false,
                     listItems: [],
                 },
-                {
+                section: {
                     label: "Section",
                     value: "section",
                     listType: "SectionList",
@@ -146,7 +149,7 @@ export default {
                     disabled: false,
                     listItems: [],
                 },
-            ],
+            },
             selectedIdentifier: null,
             selectedScope: null,
             supplementalContentCount: {},
@@ -172,8 +175,9 @@ export default {
             set(value) {
                 const urlParams = {
                     title: this.title,
-                    part: this.part
-                }
+                    part: this.part,
+                };
+                console.log("tabValue", value);
                 switch (value) {
                     case 0:
                         this.$router.push({
@@ -182,7 +186,7 @@ export default {
                                 ...urlParams,
                                 tab: "toc",
                             },
-                            query: this.queryParams
+                            query: this.queryParams,
                         });
                         break;
                     case 1:
@@ -192,7 +196,7 @@ export default {
                                 ...urlParams,
                                 tab: "part",
                             },
-                            query: this.queryParams
+                            query: this.queryParams,
                         });
                         break;
                     case 2:
@@ -202,7 +206,7 @@ export default {
                                 ...urlParams,
                                 tab: "subpart",
                             },
-                            query: this.queryParams
+                            query: this.queryParams,
                         });
                         break;
                     case 3:
@@ -212,7 +216,7 @@ export default {
                                 ...urlParams,
                                 tab: "section",
                             },
-                            query: this.queryParams
+                            query: this.queryParams,
                         });
                         break;
                 }
@@ -239,6 +243,20 @@ export default {
     },
 
     methods: {
+        formatTabLabel(type) {
+            switch (type) {
+                case "subpart":
+                    return this.queryParams.subpart
+                        ? `Subpart ${this.queryParams.subpart}`
+                        : "Subpart";
+                    break;
+                case "section":
+                    return this.queryParams.section
+                        ? `§ ${this.part}.${this.queryParams.section}`
+                        : "Section";
+                    break;
+            }
+        },
         setQueryParam(payload) {
             this.$router.push({
                 name: "part",
@@ -296,10 +314,7 @@ export default {
         },
         async getFormattedSubpartsList(part) {
             const formattedSubpartsList = await getSubPartsForPart(part);
-            const tabIndex = this.tabsShape.findIndex(
-                (tab) => tab.value === "subpart"
-            );
-            this.tabsShape[tabIndex].listItems = formattedSubpartsList;
+            this.tabsShape.subpart.listItems = formattedSubpartsList;
         },
         async getFormattedSectionsList() {
             const allSections = await getAllSections();
@@ -311,18 +326,15 @@ export default {
                     section.part === this.part &&
                     !section.identifier.includes("-")
             );
-            const tabIndex = this.tabsShape.findIndex(
-                (tab) => tab.value === "section"
-            );
-            this.tabsShape[tabIndex].listItems = filteredSections;
+            this.tabsShape.section.listItems = filteredSections;
             /*this.filters.section.listItems = finalsSections.sort((a, b) =>*/
-                /*a.part > b.part*/
-                    /*? 1*/
-                    /*: a.part == b.part*/
-                    /*? parseInt(a.identifier) > parseInt(b.identifier)*/
-                        /*? 1*/
-                        /*: -1*/
-                    /*: -1*/
+            /*a.part > b.part*/
+            /*? 1*/
+            /*: a.part == b.part*/
+            /*? parseInt(a.identifier) > parseInt(b.identifier)*/
+            /*? 1*/
+            /*: -1*/
+            /*: -1*/
             /*);*/
         },
     },
@@ -341,11 +353,14 @@ export default {
                     this.title = toParams.title;
                     this.part = toParams.part;
                 }
-            }
+            },
         },
         "$route.query": {
             async handler(toQueries, previousQueries) {
                 this.queryParams = toQueries;
+                for (const [key, value] of Object.entries(toQueries)) {
+                    this.tabsShape[key].label = this.formatTabLabel(key);
+                }
             },
         },
         async part(newPart) {
