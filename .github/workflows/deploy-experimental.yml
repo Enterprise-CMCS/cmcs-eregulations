@@ -63,7 +63,7 @@ jobs:
           pushd solution/static-assets
           npm install serverless -g
           npm install
-          serverless deploy --stage dev-${PR}
+          serverless deploy --stage dev${PR}
           popd
   deploy-django:
     environment:
@@ -108,10 +108,10 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          serverless deploy --config ./serverless-experimental.yml --stage dev-${PR} | tee output.log
-          serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev-${PR}
-          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev-${PR}
-          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev-${PR}
+          serverless deploy --config ./serverless-experimental.yml --stage dev${PR} | tee output.log
+          serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev${PR}
+          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev${PR}
+          serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev${PR}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
 
@@ -182,8 +182,8 @@ jobs:
         run: |
           pushd solution/ui/prototype
           npm install serverless -g
-          serverless deploy --stage dev-${PR}
-          echo "::set-output name=url::$(serverless info --stage dev-${PR} --verbose | grep StaticURL | cut -c 14-)"
+          serverless deploy --stage dev${PR}
+          echo "::set-output name=url::$(serverless info --stage dev${PR} --verbose | grep StaticURL | cut -c 14-)"
           popd
   build-and-deploy-vue:
     environment:
@@ -236,7 +236,7 @@ jobs:
           pushd solution/static-assets
           npm install serverless -g
           npm install
-          serverless deploy --stage dev-${PR}
+          serverless deploy --stage dev${PR}
           popd
 
   deploy-go:
@@ -275,8 +275,8 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          serverless deploy --stage dev-${PR} --config ./serverless-ecfr.yml
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev-${PR} --config ./serverless-ecfr.yml
+          serverless deploy --stage dev${PR} --config ./serverless-ecfr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev${PR} --config ./serverless-ecfr.yml
           popd
       # deploy and run Federal Register parser
       - name: deploy and run FR parser
@@ -289,8 +289,8 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          serverless deploy --stage dev-${PR} --config ./serverless-fr.yml
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev-${PR} --config ./serverless-fr.yml
+          serverless deploy --stage dev${PR} --config ./serverless-fr.yml
+          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev${PR} --config ./serverless-fr.yml
           popd
   notify:
     runs-on: ubuntu-latest
