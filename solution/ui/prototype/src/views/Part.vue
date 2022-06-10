@@ -237,6 +237,9 @@ export default {
     },
 
     async created() {
+        for (const [key, value] of Object.entries(this.queryParams)) {
+            this.tabsShape[key].label = this.formatTabLabel(key);
+        }
         await this.getPartStructure();
         await this.getFormattedSubpartsList(this.part);
         await this.getFormattedSectionsList(this.part, this.subpart);
