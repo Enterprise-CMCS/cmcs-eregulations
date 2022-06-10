@@ -44,6 +44,7 @@
             <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab">
                     <v-tab-item
+                        :transition="false"
                         v-for="(item, key, index) in tabsShape"
                         :key="index"
                     >
