@@ -15,11 +15,11 @@
                     ref="tabs"
                 >
                     <v-tab
-                        v-for="item in tabsShape"
+                        v-for="(item, key, index) in tabsShape"
                         :key="item.label"
                         :disabled="item.disabled"
                     >
-                        {{ item.label }}
+                        {{ tabLabels[index] }}
                         <template
                             v-if="
                                 item.value === 'subpart' ||
@@ -151,6 +151,12 @@ export default {
                     listItems: [],
                 },
             },
+            tabLabels: [
+                "Table of Contents",
+                "Part",
+                "Subpart",
+                "Section",
+            ],
             selectedIdentifier: null,
             selectedScope: null,
             supplementalContentCount: {},
@@ -237,8 +243,12 @@ export default {
     },
 
     async created() {
-        for (const [key, value] of Object.entries(this.queryParams)) {
-            this.tabsShape[key].label = this.formatTabLabel(key);
+        for (const key of Object.keys(this.queryParams)) {
+            if (key == "subpart") {
+                this.tabLabels[2] = this.formatTabLabel(key);
+            } else if (key == "section") {
+                this.tabLabels[3] = this.formatTabLabel(key);
+            }
         }
         await this.getPartStructure();
         await this.getFormattedSubpartsList(this.part);
@@ -266,7 +276,7 @@ export default {
                 params: {
                     title: this.title,
                     part: this.part,
-                    tab: this.tabParam,
+                    tab: payload.scope,
                 },
                 query: {
                     ...this.queryParams,
@@ -353,8 +363,12 @@ export default {
         "$route.query": {
             async handler(toQueries, previousQueries) {
                 this.queryParams = toQueries;
-                for (const [key, value] of Object.entries(toQueries)) {
-                    this.tabsShape[key].label = this.formatTabLabel(key);
+                for (const key of Object.keys(toQueries)) {
+                    if (key == "subpart") {
+                        this.tabLabels[2] = this.formatTabLabel(key);
+                    } else if (key == "section") {
+                        this.tabLabels[3] = this.formatTabLabel(key);
+                    }
                 }
                 if (toQueries.subpart !== previousQueries.subpart) {
                     await this.getFormattedSectionsList(this.part, toQueries.subpart);
