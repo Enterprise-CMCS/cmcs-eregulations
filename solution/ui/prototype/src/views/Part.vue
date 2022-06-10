@@ -178,7 +178,6 @@ export default {
                     title: this.title,
                     part: this.part,
                 };
-                console.log("tabValue", value);
                 switch (value) {
                     case 0:
                         this.$router.push({
@@ -243,7 +242,7 @@ export default {
         }
         await this.getPartStructure();
         await this.getFormattedSubpartsList(this.part);
-        await this.getFormattedSectionsList(this.part, this.subpart);
+        await this.getFormattedSectionsList(this.part, this.queryParams.subpart);
     },
 
     methods: {
@@ -287,7 +286,6 @@ export default {
             }
         },
         setResourcesParams(payload) {
-            console.log("payload", payload);
             if (payload.scope === "rendered") {
                 return;
             }
@@ -320,26 +318,19 @@ export default {
             const formattedSubpartsList = await getSubPartsForPart(part);
             this.tabsShape.subpart.listItems = formattedSubpartsList;
         },
-        async getFormattedSectionsList() {
+        async getFormattedSectionsList(part, subpart) {
             const allSections = await getAllSections();
 
             let finalsSections = [];
             let sectionList = [];
-            const filteredSections = allSections.filter(
-                (section) =>
-                    section.part === this.part &&
+            const filteredSections = allSections.filter((section) => {
+                return (
+                    section.part == part &&
+                    (subpart ? section.subpart == subpart : true) &&
                     !section.identifier.includes("-")
-            );
+                );
+            });
             this.tabsShape.section.listItems = filteredSections;
-            /*this.filters.section.listItems = finalsSections.sort((a, b) =>*/
-            /*a.part > b.part*/
-            /*? 1*/
-            /*: a.part == b.part*/
-            /*? parseInt(a.identifier) > parseInt(b.identifier)*/
-            /*? 1*/
-            /*: -1*/
-            /*: -1*/
-            /*);*/
         },
     },
 
@@ -364,6 +355,9 @@ export default {
                 this.queryParams = toQueries;
                 for (const [key, value] of Object.entries(toQueries)) {
                     this.tabsShape[key].label = this.formatTabLabel(key);
+                }
+                if (toQueries.subpart !== previousQueries.subpart) {
+                    await this.getFormattedSectionsList(this.part, toQueries.subpart);
                 }
             },
         },
