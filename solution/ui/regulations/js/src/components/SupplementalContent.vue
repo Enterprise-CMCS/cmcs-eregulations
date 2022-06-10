@@ -176,16 +176,14 @@ export default {
 
     created() {
         if (window.location.hash) {
-            const section = window.location.hash
-                .substring(1)
-                .replace("-", ".");
+            const section = window.location.hash.substring(1).replace("-", ".");
 
             this.fetch_content(
                 this.title,
                 this.part,
                 `locations=${this.title}.${section}`
-            )
-                            this.selectedPart = `§ ${section}`;
+            );
+            this.selectedPart = `§ ${section}`;
         } else {
             this.fetch_content(this.title, this.part);
         }
