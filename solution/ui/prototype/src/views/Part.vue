@@ -95,6 +95,8 @@ import {
     getSupplementalContentCountForPart,
 } from "@/utilities/api";
 
+import _isUndefined from "lodash/isUndefined";
+
 export default {
     components: {
         SectionResourcesSidebar,
@@ -151,12 +153,7 @@ export default {
                     listItems: [],
                 },
             },
-            tabLabels: [
-                "Table of Contents",
-                "Part",
-                "Subpart",
-                "Section",
-            ],
+            tabLabels: ["Table of Contents", "Part", "Subpart", "Section"],
             selectedIdentifier: null,
             selectedScope: null,
             supplementalContentCount: {},
@@ -184,45 +181,62 @@ export default {
                     title: this.title,
                     part: this.part,
                 };
-                switch (value) {
-                    case 0:
+                const qParams = { ...this.queryParams };
+                const valueType = Object.keys(this.tabsShape)[value];
+
+                switch (valueType) {
+                    case "toc":
                         this.$router.push({
                             name: "part",
                             params: {
                                 ...urlParams,
                                 tab: "toc",
                             },
-                            query: this.queryParams,
+                            query: qParams,
                         });
                         break;
-                    case 1:
+                    case "part":
                         this.$router.push({
                             name: "part",
                             params: {
                                 ...urlParams,
                                 tab: "part",
                             },
-                            query: this.queryParams,
+                            query: qParams,
                         });
                         break;
-                    case 2:
+                    case "subpart":
                         this.$router.push({
                             name: "part",
                             params: {
                                 ...urlParams,
                                 tab: "subpart",
                             },
-                            query: this.queryParams,
+                            query: _isUndefined(qParams[valueType])
+                                ? {
+                                      ...qParams,
+                                      [valueType]:
+                                          this.tabsShape[valueType].listItems[0]
+                                              .identifier,
+                                  }
+                                : qParams,
                         });
                         break;
-                    case 3:
+                    case "section":
                         this.$router.push({
                             name: "part",
                             params: {
                                 ...urlParams,
                                 tab: "section",
                             },
-                            query: this.queryParams,
+                            query: _isUndefined(qParams[valueType])
+                                ? {
+                                      ...qParams,
+                                      [valueType]:
+                                          this.tabsShape[valueType].listItems[0]
+                                              .identifier,
+                                  }
+                                : qParams,
                         });
                         break;
                 }
@@ -252,7 +266,10 @@ export default {
         }
         await this.getPartStructure();
         await this.getFormattedSubpartsList(this.part);
-        await this.getFormattedSectionsList(this.part, this.queryParams.subpart);
+        await this.getFormattedSectionsList(
+            this.part,
+            this.queryParams.subpart
+        );
     },
 
     methods: {
@@ -371,7 +388,10 @@ export default {
                     }
                 }
                 if (toQueries.subpart !== previousQueries.subpart) {
-                    await this.getFormattedSectionsList(this.part, toQueries.subpart);
+                    await this.getFormattedSectionsList(
+                        this.part,
+                        toQueries.subpart
+                    );
                 }
             },
         },
