@@ -340,10 +340,10 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: cmcs-eregulations/solution/ui/e2e/cypress/sreenshots/
+          path: solution/ui/e2e/cypress/sreenshots/
       # Test run video was always captured, so this action uses "always()" condition
       - uses: actions/upload-artifact@v2
         if: always()
         with:
           name: cypress-videos
-          path: cypress/videos/
+          path: /solution/ui/e2e/cypress/videos/
