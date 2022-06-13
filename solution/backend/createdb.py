@@ -13,6 +13,5 @@ def handler(event, context):
         raise Exception("database is unreachable")
 
     with connection.cursor() as cursor:
-        cursor.execute(f"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{os.environ.get('STAGE', '')}'")
-        cursor.execute(f"DROP DATABASE {os.environ.get('STAGE', '')}")
-    print(f"Database {os.environ.get('STAGE', '')} has been removed")
+        cursor.execute(
+            f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE main OWNER {os.environ.get('DB_USER')}")
