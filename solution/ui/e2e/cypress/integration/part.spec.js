@@ -10,7 +10,7 @@ describe("Part View", () => {
         cy.visit("/42/433/");
 
         cy.injectAxe();
-        cy.contains("Part 433 - State Fiscal Administration").should(
+        cy.contains("Part 433 - KNOLL State Fiscal Administration").should(
             "be.visible"
         );
         cy.checkAccessibility();
