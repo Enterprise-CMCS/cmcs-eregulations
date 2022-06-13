@@ -402,18 +402,30 @@ export default {
         "$route.query": {
             async handler(toQueries, previousQueries) {
                 this.queryParams = toQueries;
-                for (const key of Object.keys(toQueries)) {
-                    if (key == "subpart") {
-                        this.tabLabels[key] = this.formatTabLabel(key);
-                    } else if (key == "section") {
-                        this.tabLabels[key] = this.formatTabLabel(key);
-                    }
-                }
                 if (toQueries.subpart !== previousQueries.subpart) {
+                    this.tabLabels.subpart = this.formatTabLabel("subpart");
                     await this.getFormattedSectionsList(
                         this.part,
                         toQueries.subpart
                     );
+
+                    if (!_isUndefined(previousQueries.subpart)) {
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                title: this.title,
+                                part: this.part,
+                                tab: this.tabParam,
+                            },
+                            query: {
+                                subpart: toQueries.subpart,
+                            },
+                        });
+                    }
+                }
+
+                if (toQueries.section !== previousQueries.section) {
+                    this.tabLabels.section = this.formatTabLabel("section");
                 }
             },
         },
