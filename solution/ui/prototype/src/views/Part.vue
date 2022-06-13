@@ -95,6 +95,7 @@ import {
     getSupplementalContentCountForPart,
 } from "@/utilities/api";
 
+import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
 export default {
@@ -223,6 +224,23 @@ export default {
                         });
                         break;
                     case "section":
+                        const subpartSelection = _isEmpty(qParams)
+                            ? {
+                                  subpart:
+                                      this.tabsShape.subpart.listItems[0]
+                                          .identifier,
+                              }
+                            : {};
+
+                        const sectionSelection = _isUndefined(
+                            qParams[valueType]
+                        )
+                            ? {
+                                  section:
+                                      this.tabsShape.section.listItems[0]
+                                          .identifier,
+                              }
+                            : {};
                         this.$router.push({
                             name: "part",
                             params: {
@@ -232,9 +250,8 @@ export default {
                             query: _isUndefined(qParams[valueType])
                                 ? {
                                       ...qParams,
-                                      [valueType]:
-                                          this.tabsShape[valueType].listItems[0]
-                                              .identifier,
+                                      ...subpartSelection,
+                                      ...sectionSelection,
                                   }
                                 : qParams,
                         });
