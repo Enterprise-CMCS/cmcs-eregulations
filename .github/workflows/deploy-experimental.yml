@@ -346,4 +346,4 @@ jobs:
         if: always()
         with:
           name: cypress-videos
-          path: /solution/ui/e2e/cypress/videos
+          path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/videos/*
