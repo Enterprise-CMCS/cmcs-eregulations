@@ -19,7 +19,7 @@
                         :key="item.label"
                         :disabled="item.disabled"
                     >
-                        {{ tabLabels[index] }}
+                        {{ tabLabels[key] }}
                         <template
                             v-if="
                                 item.value === 'subpart' ||
@@ -154,7 +154,12 @@ export default {
                     listItems: [],
                 },
             },
-            tabLabels: ["Table of Contents", "Part", "Subpart", "Section"],
+            tabLabels: {
+                toc: "Table of Contents",
+                part: "Part",
+                subpart: "Subpart",
+                section: "Section",
+            },
             selectedIdentifier: null,
             selectedScope: null,
             supplementalContentCount: {},
@@ -276,9 +281,9 @@ export default {
     async created() {
         for (const key of Object.keys(this.queryParams)) {
             if (key == "subpart") {
-                this.tabLabels[2] = this.formatTabLabel(key);
+                this.tabLabels[key] = this.formatTabLabel(key);
             } else if (key == "section") {
-                this.tabLabels[3] = this.formatTabLabel(key);
+                this.tabLabels[key] = this.formatTabLabel(key);
             }
         }
         await this.getPartStructure();
@@ -399,9 +404,9 @@ export default {
                 this.queryParams = toQueries;
                 for (const key of Object.keys(toQueries)) {
                     if (key == "subpart") {
-                        this.tabLabels[2] = this.formatTabLabel(key);
+                        this.tabLabels[key] = this.formatTabLabel(key);
                     } else if (key == "section") {
-                        this.tabLabels[3] = this.formatTabLabel(key);
+                        this.tabLabels[key] = this.formatTabLabel(key);
                     }
                 }
                 if (toQueries.subpart !== previousQueries.subpart) {
