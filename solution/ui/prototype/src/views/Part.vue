@@ -292,6 +292,30 @@ export default {
             this.part,
             this.queryParams.subpart
         );
+
+        if (_isEmpty(this.queryParams)) {
+            let paramsToSet = {};
+            if (this.tabParam == "subpart") {
+                paramsToSet = {
+                    subpart: this.tabsShape.subpart.listItems[0].identifier,
+                };
+            }
+            if (this.tabParam == "section") {
+                paramsToSet = {
+                    subpart: this.tabsShape.subpart.listItems[0].identifier,
+                    section: this.tabsShape.section.listItems[0].identifier,
+                };
+            }
+            this.$router.push({
+                name: "part",
+                params: {
+                    title: this.title,
+                    part: this.part,
+                    tab: this.tabParam,
+                },
+                query: paramsToSet,
+            });
+        }
     },
 
     methods: {
@@ -313,7 +337,6 @@ export default {
             const valueToSet = payload.selectedIdentifier.split("-")[1];
             let updatedQueryParams = {};
             // get associated subpart for section
-            // TODO make method if keeping this
             if (payload.scope == "section") {
                 const sectionSubpart = this.tabsShape.section.listItems.find(
                     (item) => {
