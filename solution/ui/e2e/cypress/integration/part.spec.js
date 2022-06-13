@@ -38,7 +38,7 @@ describe("Part View", () => {
         cy.url().should("include", "Subpart-B");
         cy.get("#433-51-title").should("be.visible");
         cy.get(".latest-version").should("exist");
-        cy.get("#subpart-resources-heading").contains("Subpart B Resources");
+        cy.get("#subpart-resources-heading").contains("433.51 Resources");
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "433-51");
         });
