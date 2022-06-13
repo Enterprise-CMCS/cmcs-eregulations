@@ -310,6 +310,28 @@ export default {
             }
         },
         setQueryParam(payload) {
+            const valueToSet = payload.selectedIdentifier.split("-")[1];
+            let updatedQueryParams = {};
+            // get associated subpart for section
+            // TODO make method if keeping this
+            if (payload.scope == "section") {
+                const sectionSubpart = this.tabsShape.section.listItems.find(
+                    (item) => {
+                        return item.identifier == valueToSet;
+                    }
+                ).subpart;
+                updatedQueryParams = {
+                    ...this.queryParams,
+                    subpart: sectionSubpart,
+                    section: valueToSet,
+                };
+            } else {
+                updatedQueryParams = {
+                    ...this.queryParams,
+                    [payload.scope]: valueToSet,
+                };
+            }
+
             this.$router.push({
                 name: "part",
                 params: {
@@ -317,10 +339,7 @@ export default {
                     part: this.part,
                     tab: payload.scope,
                 },
-                query: {
-                    ...this.queryParams,
-                    [payload.scope]: payload.selectedIdentifier.split("-")[1],
-                },
+                query: updatedQueryParams,
             });
         },
         async getPartStructure() {
