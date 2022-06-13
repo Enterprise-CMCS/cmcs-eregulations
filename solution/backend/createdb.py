@@ -11,7 +11,10 @@ def handler(event, context):
     connection.ensure_connection()
     if not connection.is_usable():
         raise Exception("database is unreachable")
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE main OWNER {os.environ.get('DB_USER')}")
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE main OWNER {os.environ.get('DB_USER')}")
+    except:
+        # The next step will tell us if this is a problem.
+        pass
