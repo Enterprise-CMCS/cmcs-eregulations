@@ -5,7 +5,6 @@
                 <label v-if="label" :for="buttonId">{{ label }}</label>
                 <v-btn
                     :id="buttonId"
-                    class="ds-c-field"
                     :class="btnTypeClass"
                     v-bind="attrs"
                     v-on="on"
