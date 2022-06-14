@@ -15,8 +15,9 @@
                         type="text"
                         class="search-field"
                         append-icon="mdi-magnify"
-                        hide-details
                         dense
+                        hint="Search resources using keywords or citations."
+                        persistent-hint
                         v-model="searchInputValue"
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
@@ -181,7 +182,7 @@ export default {
                     selectedIdentifier: this.searchInputValue.replace(".", "-"),
                     searchSection: true,
                 };
-                this.updateFilters(payload);
+                return this.updateFilters(payload);
             }
             this.$router.push({
                 name: "resources",
@@ -366,8 +367,8 @@ export default {
             const parts = dataQueryParams.part.split(",");
             const newPartDict = {};
 
-            parts.forEach((x) => {
-                newPartDict[x] = {
+            parts.forEach((part) => {
+                newPartDict[part] = {
                     title: "42",
                     sections: [],
                     subparts: [],
