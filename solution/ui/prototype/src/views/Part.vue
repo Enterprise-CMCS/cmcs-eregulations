@@ -343,9 +343,10 @@ export default {
                         return item.identifier == valueToSet;
                     }
                 ).subpart;
+                const subpartToSet = sectionSubpart == "none" ? {} : { subpart: sectionSubpart };
                 updatedQueryParams = {
                     ...this.queryParams,
-                    subpart: sectionSubpart,
+                    ...subpartToSet,
                     section: valueToSet,
                 };
             } else {
