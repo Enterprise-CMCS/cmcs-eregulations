@@ -11,13 +11,12 @@
                         flat
                         solo
                         clearable
-                        label="Search Resources"
+                        label="Search resources using keywords or citations."
                         type="text"
                         class="search-field"
                         append-icon="mdi-magnify"
+                        hide-details
                         dense
-                        hint="Search resources using keywords or citations."
-                        persistent-hint
                         v-model="searchInputValue"
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
