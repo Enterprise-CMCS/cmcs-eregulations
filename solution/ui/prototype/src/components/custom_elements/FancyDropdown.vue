@@ -52,7 +52,7 @@ export default {
 
     computed: {
         btnTypeClass() {
-            return this.type === "splitTab" ? "split-tab-btn" : "select-btn";
+            return this.type === "splitTab" ? "split-tab-btn" : "select-btn ds-c-field";
         },
         containerClass() {
             return this.type === "splitTab" ? "split-tab-container" : "";
