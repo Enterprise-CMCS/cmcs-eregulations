@@ -121,13 +121,18 @@ $eregs-image-path: "~legacy-static/images";
         }
 
         &.split-tab-btn {
+            border-radius: 0;
             border: none;
             background-color: transparent;
             padding: 0;
-            margin: 0;
+            margin: 0 0 0 10px;
             height: 48px;
             min-width: 35px;
 
+            .v-btn__content {
+                height: 60%;
+                border-left: 1px solid #9D9D9D;
+            }
         }
     }
 }
