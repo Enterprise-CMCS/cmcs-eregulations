@@ -279,8 +279,9 @@ export default {
                     newQueryParams.title = "42"; // hard coding for now
                     if (payload.scope === "section") {
                         if (newQueryParams.part) {
-                            newQueryParams.part =
-                                newQueryParams.part + "," + splitSection[0];
+                            if (!newQueryParams.part.includes(splitSection[0])) {
+                                newQueryParams.part = newQueryParams.part + "," + splitSection[0];
+                            }
                         } else {
                             newQueryParams.part = splitSection[0];
                         }
@@ -289,7 +290,7 @@ export default {
                 }
 
                 if (payload.scope === "subpart") {
-                      newQueryParams = await this.combineSections(
+                    newQueryParams = await this.combineSections(
                         payload.selectedIdentifier,
                         newQueryParams
                     );
@@ -300,7 +301,7 @@ export default {
                     this.searchInputValue = "";
                 }
 
-                this.getPartDict(newQueryParams)
+                this.getPartDict(newQueryParams);
 
                 this.$router.push({
                     name: "resources",
@@ -314,7 +315,7 @@ export default {
 
             if (partExist && scope === "section") {
                 const sectionList = await getSectionsForPart(42, payload[0]);
-                return sectionList.filter((section) => section.identifier[1] == payload[1]).length >0;
+                return (sectionList.filter((section) => section.identifier[1] == payload[1]).length > 0);
             }
             return partExist;
         },
