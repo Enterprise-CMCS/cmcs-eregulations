@@ -331,6 +331,9 @@ export default {
                         ? `§ ${this.part}.${this.queryParams.section}`
                         : "Section";
                     break;
+                default:
+                    return "N/A";
+                    break;
             }
         },
         setQueryParam(payload) {
