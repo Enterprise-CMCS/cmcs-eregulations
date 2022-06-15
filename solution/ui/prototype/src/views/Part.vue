@@ -91,7 +91,6 @@ import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
 
 import {
-    getAllSections,
     getPart,
     getSupplementalContentCountForPart,
     getPartTOC,
@@ -100,7 +99,6 @@ import {
 
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
-import {getSubpartTOC} from "../utilities/api";
 
 export default {
     components: {
