@@ -93,12 +93,14 @@ import SectionList from "@/components/custom_elements/SectionList.vue";
 import {
     getAllSections,
     getPart,
-    getSubPartsForPart,
     getSupplementalContentCountForPart,
+    getPartTOC,
+    getSectionsForPart,
 } from "@/utilities/api";
 
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
+import {getSubpartTOC} from "../utilities/api";
 
 export default {
     components: {
@@ -293,11 +295,12 @@ export default {
             this.tabLabels.section = this.formatTabLabel("section");
         }
         await this.getPartStructure();
-        await this.getFormattedSubpartsList(this.part);
-        await this.getFormattedSectionsList(
-            this.part,
-            this.queryParams.subpart
-        );
+        await this.getFormattedSubpartsList({title: this.title, part:this.part});
+        await this.getFormattedSectionsList({
+          title: this.title,
+          part: this.part,
+          subpart: this.queryParams.subpart
+        });
 
         if (_isEmpty(this.queryParams)) {
             let paramsToSet = {};
@@ -415,22 +418,28 @@ export default {
                 },
             });
         },
-        async getFormattedSubpartsList(part) {
-            const formattedSubpartsList = await getSubPartsForPart(part);
-            this.tabsShape.subpart.listItems = formattedSubpartsList;
+        async getFormattedSubpartsList({title, part}) {
+            const partTOC = await getPartTOC(title, part)
+            this.tabsShape.subpart.listItems = partTOC.children.filter(child => child.type ==="subpart").map(subpart => ({
+              label: subpart.label,
+              part: subpart.parent[0],
+              identifier: subpart.identifier[0],
+              range: subpart.descendant_range,
+            }));
         },
-        async getFormattedSectionsList(part, subpart) {
-            const allSections = await getAllSections();
+        async getFormattedSectionsList({title, part, subpart}) {
 
-            let finalsSections = [];
-            let sectionList = [];
-            const filteredSections = allSections.filter((section) => {
-                return (
-                    section.part == part &&
-                    (subpart ? section.subpart == subpart : true) &&
-                    !section.identifier.includes("-")
-                );
-            });
+            const allSections = await getSectionsForPart(title, part)
+            const filteredSections = allSections
+                .filter((section) =>
+                  subpart ? section.parent_type === "subpart" && section.parent[0] === subpart : true)
+                .map(section =>({
+                  subpart:section.parent[0],
+                  identifier: section.identifier[1],
+                  label: section.label_level,
+                  description: section.label_description,
+                  part
+            }));
             this.tabsShape.section.listItems = filteredSections;
         },
     },
@@ -456,10 +465,11 @@ export default {
                 this.queryParams = toQueries;
                 if (toQueries.subpart !== previousQueries.subpart) {
                     this.tabLabels.subpart = this.formatTabLabel("subpart");
-                    await this.getFormattedSectionsList(
-                        this.part,
-                        toQueries.subpart
-                    );
+                    await this.getFormattedSectionsList({
+                      title: this.title,
+                      part: this.part,
+                      subpart: toQueries.subpart
+                    });
 
                     if (!_isUndefined(previousQueries.subpart)) {
                         this.$router.push({
