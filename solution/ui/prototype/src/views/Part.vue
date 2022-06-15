@@ -6,7 +6,7 @@
                 :title="title"
                 :part="part"
                 :partLabel="partLabel"
-                :resourcesDisplay="resourcesDisplay"
+                resourcesDisplay="sidebar"
             >
                 <v-tabs
                     slider-size="5"
@@ -15,26 +15,45 @@
                     ref="tabs"
                 >
                     <v-tab
-                        v-for="item in tabsShape"
+                        v-for="(item, key, index) in tabsShape"
                         :key="item.label"
                         :disabled="item.disabled"
                     >
-                        {{ item.label }}
+                        {{ tabLabels[key] }}
+                        <template
+                            v-if="
+                                item.value === 'subpart' ||
+                                item.value === 'section'
+                            "
+                        >
+                            <FancyDropdown
+                                label=""
+                                buttonTitle=""
+                                type="splitTab"
+                            >
+                                <component
+                                    :is="item.listType"
+                                    :listItems="item.listItems"
+                                    :filterEmitter="setQueryParam"
+                                ></component>
+                            </FancyDropdown>
+                        </template>
                     </v-tab>
                 </v-tabs>
             </PartNav>
-            <div
-                class="content-container"
-                :class="contentContainerResourcesClass"
-            >
+            <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab">
-                    <v-tab-item v-for="(item, index) in tabsShape" :key="index">
+                    <v-tab-item
+                        :transition="false"
+                        v-for="(item, key, index) in tabsShape"
+                        :key="index"
+                    >
                         <component
                             :is="item.component"
                             :structure="tabsContent[index]"
                             :title="title"
                             :part="part"
-                            :resourcesDisplay="resourcesDisplay"
+                            resourcesDisplay="sidebar"
                             :selectedIdentifier="selectedIdentifier"
                             :selectedScope="selectedScope"
                             :supplementalContentCount="supplementalContentCount"
@@ -42,7 +61,7 @@
                         ></component>
                     </v-tab-item>
                 </v-tabs-items>
-                <div class="sidebar" v-show="resourcesDisplay === 'sidebar'">
+                <div class="sidebar" v-show="tabParam !== 'toc'">
                     <SectionResourcesSidebar
                         :title="title"
                         :part="part"
@@ -52,42 +71,49 @@
                     />
                 </div>
             </div>
-            <SectionResources
-                v-if="resourcesDisplay === 'drawer' && selectedIdentifier"
-                :title="title"
-                :part="part"
-                :selectedIdentifier="selectedIdentifier"
-                :selectedScope="selectedScope"
-                :routeToResources="routeToResources"
-                @close="clearResourcesParams"
-            />
             <Footer />
         </div>
     </body>
 </template>
 
 <script>
+import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
-import SectionResources from "@/components/SectionResources.vue";
+import PartSubpart from "@/components/part/PartSubpart.vue";
+import PartSection from "@/components/part/PartSection.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
+import SubpartList from "@/components/custom_elements/SubpartList.vue";
+import SectionList from "@/components/custom_elements/SectionList.vue";
 
-import { getPart, getSupplementalContentCountForPart } from "@/utilities/api";
+import {
+    getAllSections,
+    getPart,
+    getSubPartsForPart,
+    getSupplementalContentCountForPart,
+} from "@/utilities/api";
+
+import _isEmpty from "lodash/isEmpty";
+import _isUndefined from "lodash/isUndefined";
 
 export default {
     components: {
-        SectionResources,
         SectionResourcesSidebar,
+        FancyDropdown,
         FlashBanner,
         Footer,
         Header,
         PartContent,
         PartNav,
         PartToc,
+        PartSubpart,
+        PartSection,
+        SubpartList,
+        SectionList,
     },
 
     name: "Part",
@@ -96,38 +122,50 @@ export default {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
-            resourcesDisplay: this.$route.params.resourcesDisplay || "drawer",
+            tabParam: this.$route.params.tab,
+            queryParams: this.$route.query,
             structure: null,
             sections: [],
-            tab: 1, // index 1, "Part"
-            tabsShape: [
-                {
+            tabsShape: {
+                toc: {
                     label: "Table of Contents",
                     value: "tocContent",
                     type: "button",
                     component: "PartToc",
-                    disabled: true,
+                    disabled: false,
                 },
-                {
+                part: {
                     label: "Part",
                     value: "partContent",
                     type: "button",
                     component: "PartContent",
                     disabled: false,
                 },
-                {
+                subpart: {
                     label: "Subpart",
                     value: "subpart",
+                    listType: "SubpartList",
                     type: "dropdown",
-                    disabled: true,
+                    component: "PartSubpart",
+                    disabled: false,
+                    listItems: [],
                 },
-                {
+                section: {
                     label: "Section",
                     value: "section",
+                    listType: "SectionList",
                     type: "dropdown",
-                    disabled: true,
+                    component: "PartSection",
+                    disabled: false,
+                    listItems: [],
                 },
-            ],
+            },
+            tabLabels: {
+                toc: "Table of Contents",
+                part: "Part",
+                subpart: "Subpart",
+                section: "Section",
+            },
             selectedIdentifier: null,
             selectedScope: null,
             supplementalContentCount: {},
@@ -135,6 +173,103 @@ export default {
     },
 
     computed: {
+        tab: {
+            get() {
+                switch (this.tabParam) {
+                    case "toc":
+                        return 0;
+                    case "part":
+                        return 1;
+                    case "subpart":
+                        return 2;
+                    case "section":
+                        return 3;
+                    default:
+                        return 1;
+                }
+            },
+            set(value) {
+                const urlParams = {
+                    title: this.title,
+                    part: this.part,
+                };
+                const qParams = { ...this.queryParams };
+                const valueType = Object.keys(this.tabsShape)[value];
+
+                switch (valueType) {
+                    case "toc":
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                ...urlParams,
+                                tab: "toc",
+                            },
+                            query: qParams,
+                        });
+                        break;
+                    case "part":
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                ...urlParams,
+                                tab: "part",
+                            },
+                            query: qParams,
+                        });
+                        break;
+                    case "subpart":
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                ...urlParams,
+                                tab: "subpart",
+                            },
+                            query: _isUndefined(qParams[valueType])
+                                ? {
+                                      ...qParams,
+                                      [valueType]:
+                                          this.tabsShape[valueType].listItems[0]
+                                              .identifier,
+                                  }
+                                : qParams,
+                        });
+                        break;
+                    case "section":
+                        const subpartSelection = _isEmpty(qParams)
+                            ? {
+                                  subpart:
+                                      this.tabsShape.subpart.listItems[0]
+                                          .identifier,
+                              }
+                            : {};
+
+                        const sectionSelection = _isUndefined(
+                            qParams[valueType]
+                        )
+                            ? {
+                                  section:
+                                      this.tabsShape.section.listItems[0]
+                                          .identifier,
+                              }
+                            : {};
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                ...urlParams,
+                                tab: "section",
+                            },
+                            query: _isUndefined(qParams[valueType])
+                                ? {
+                                      ...qParams,
+                                      ...subpartSelection,
+                                      ...sectionSelection,
+                                  }
+                                : qParams,
+                        });
+                        break;
+                }
+            },
+        },
         tocContent() {
             return this.structure?.[0];
         },
@@ -147,31 +282,99 @@ export default {
         tabsContent() {
             return [this.tocContent, this.partContent, null, null];
         },
-        contentContainerResourcesClass() {
-            return `content-container-${this.resourcesDisplay}`;
-        },
     },
 
     async created() {
-        this.$watch(
-            () => this.$route.params,
-            (toParams, previousParams) => {
-                // react to route changes...
-                if (toParams.part !== previousParams.part) {
-                    this.structure = null;
-                    this.clearResourcesParams();
-                    this.title = toParams.title;
-                    this.part = toParams.part;
-                    this.resourcesDisplay =
-                        toParams.resourcesDisplay || "drawer";
-                }
-            }
+        if (this.queryParams.subpart) {
+            this.tabLabels.subpart = this.formatTabLabel("subpart");
+        }
+
+        if (this.queryParams.section) {
+            this.tabLabels.section = this.formatTabLabel("section");
+        }
+        await this.getPartStructure();
+        await this.getFormattedSubpartsList(this.part);
+        await this.getFormattedSectionsList(
+            this.part,
+            this.queryParams.subpart
         );
 
-        await this.getPartStructure();
+        if (_isEmpty(this.queryParams)) {
+            let paramsToSet = {};
+            if (this.tabParam == "subpart") {
+                paramsToSet = {
+                    subpart: this.tabsShape.subpart.listItems[0].identifier,
+                };
+            }
+            if (this.tabParam == "section") {
+                paramsToSet = {
+                    subpart: this.tabsShape.subpart.listItems[0].identifier,
+                    section: this.tabsShape.section.listItems[0].identifier,
+                };
+            }
+            this.$router.push({
+                name: "part",
+                params: {
+                    title: this.title,
+                    part: this.part,
+                    tab: this.tabParam,
+                },
+                query: paramsToSet,
+            });
+        }
     },
 
     methods: {
+        formatTabLabel(type) {
+            switch (type) {
+                case "subpart":
+                    return this.queryParams.subpart
+                        ? `Subpart ${this.queryParams.subpart}`
+                        : "Subpart";
+                    break;
+                case "section":
+                    return this.queryParams.section
+                        ? `§ ${this.part}.${this.queryParams.section}`
+                        : "Section";
+                    break;
+                default:
+                    return "N/A";
+                    break;
+            }
+        },
+        setQueryParam(payload) {
+            const valueToSet = payload.selectedIdentifier.split("-")[1];
+            let updatedQueryParams = {};
+            // get associated subpart for section
+            if (payload.scope == "section") {
+                const sectionSubpart = this.tabsShape.section.listItems.find(
+                    (item) => {
+                        return item.identifier == valueToSet;
+                    }
+                ).subpart;
+                const subpartToSet = sectionSubpart == "none" ? {} : { subpart: sectionSubpart };
+                updatedQueryParams = {
+                    ...this.queryParams,
+                    ...subpartToSet,
+                    section: valueToSet,
+                };
+            } else {
+                updatedQueryParams = {
+                    ...this.queryParams,
+                    [payload.scope]: valueToSet,
+                };
+            }
+
+            this.$router.push({
+                name: "part",
+                params: {
+                    title: this.title,
+                    part: this.part,
+                    tab: payload.scope,
+                },
+                query: updatedQueryParams,
+            });
+        },
         async getPartStructure() {
             try {
                 this.structure = await getPart(this.title, this.part);
@@ -184,9 +387,8 @@ export default {
             }
         },
         setResourcesParams(payload) {
-            console.log("payload", payload);
-            if (payload.scope === "rendered"){
-              return
+            if (payload.scope === "rendered") {
+                return;
             }
             this.selectedIdentifier = payload.identifier;
             this.selectedScope = payload.scope;
@@ -204,13 +406,8 @@ export default {
                 return acc;
             }, {});
 
-            const routeName =
-                this.resourcesDisplay === "sidebar"
-                    ? "resources-sidebar"
-                    : "resources";
-
             this.$router.push({
-                name: routeName,
+                name: "resources",
                 query: {
                     title: this.title,
                     part: this.part,
@@ -218,9 +415,72 @@ export default {
                 },
             });
         },
+        async getFormattedSubpartsList(part) {
+            const formattedSubpartsList = await getSubPartsForPart(part);
+            this.tabsShape.subpart.listItems = formattedSubpartsList;
+        },
+        async getFormattedSectionsList(part, subpart) {
+            const allSections = await getAllSections();
+
+            let finalsSections = [];
+            let sectionList = [];
+            const filteredSections = allSections.filter((section) => {
+                return (
+                    section.part == part &&
+                    (subpart ? section.subpart == subpart : true) &&
+                    !section.identifier.includes("-")
+                );
+            });
+            this.tabsShape.section.listItems = filteredSections;
+        },
     },
 
     watch: {
+        "$route.params": {
+            async handler(toParams, previousParams) {
+                // react to route changes...
+                if (toParams.tab !== previousParams.tab) {
+                    this.tabParam = toParams.tab;
+                }
+
+                if (toParams.part !== previousParams.part) {
+                    this.structure = null;
+                    this.clearResourcesParams();
+                    this.title = toParams.title;
+                    this.part = toParams.part;
+                }
+            },
+        },
+        "$route.query": {
+            async handler(toQueries, previousQueries) {
+                this.queryParams = toQueries;
+                if (toQueries.subpart !== previousQueries.subpart) {
+                    this.tabLabels.subpart = this.formatTabLabel("subpart");
+                    await this.getFormattedSectionsList(
+                        this.part,
+                        toQueries.subpart
+                    );
+
+                    if (!_isUndefined(previousQueries.subpart)) {
+                        this.$router.push({
+                            name: "part",
+                            params: {
+                                title: this.title,
+                                part: this.part,
+                                tab: this.tabParam,
+                            },
+                            query: {
+                                subpart: toQueries.subpart,
+                            },
+                        });
+                    }
+                }
+
+                if (toQueries.section !== previousQueries.section) {
+                    this.tabLabels.section = this.formatTabLabel("section");
+                }
+            },
+        },
         async part(newPart) {
             await this.getPartStructure();
         },
@@ -255,10 +515,6 @@ $sidebar-top-margin: 40px;
 .content-container {
     display: flex;
     flex-direction: row;
-}
-
-.content-container-drawer {
-    justify-content: center;
 }
 
 .content-container-sidebar {
