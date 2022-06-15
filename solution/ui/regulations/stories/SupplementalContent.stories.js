@@ -3,7 +3,7 @@ import {emptySupplementalContentResponse, supplementalContentResponse, categoryR
 import {getSupplementalContentByCategory} from "../js/api";
 
 export default {
-  title: 'SupplementalContent/SupplementalContent',
+  title: 'Supplemental Content/Supplemental Content',
   component: SupplementalContent,
 };
 

@@ -1,7 +1,7 @@
 import PartButton from '../js/src/components/PartButton.vue'
 
 export default {
-  title: 'Button/Part Button',
+  title: 'Components/Button/Part Button',
   component: PartButton,
 }
 

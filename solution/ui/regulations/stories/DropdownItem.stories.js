@@ -1,7 +1,7 @@
 import DropdownItem from '../js/src/components/DropdownItem.vue';
 
 export default {
-  title: 'Dropdown/Dropdown Item',
+  title: 'Components/Dropdown/Dropdown Item',
   component: DropdownItem,
 }
 

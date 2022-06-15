@@ -1,7 +1,7 @@
 import SupplementalContentList from '../js/src/components/SupplementalContentList.vue';
 
 export default {
-  title: 'SupplementalContent/SupplementalContentList',
+  title: 'Supplemental Content/Supplemental Content List',
   component: SupplementalContentList,
 };
 
