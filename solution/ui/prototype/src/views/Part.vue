@@ -279,12 +279,12 @@ export default {
     },
 
     async created() {
-        for (const key of Object.keys(this.queryParams)) {
-            if (key == "subpart") {
-                this.tabLabels[key] = this.formatTabLabel(key);
-            } else if (key == "section") {
-                this.tabLabels[key] = this.formatTabLabel(key);
-            }
+        if (this.queryParams.subpart) {
+            this.tabLabels.subpart = this.formatTabLabel("subpart");
+        }
+
+        if (this.queryParams.section) {
+            this.tabLabels.section = this.formatTabLabel("section");
         }
         await this.getPartStructure();
         await this.getFormattedSubpartsList(this.part);
