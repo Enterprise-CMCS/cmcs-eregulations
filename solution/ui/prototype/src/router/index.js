@@ -40,7 +40,7 @@ const routes = [
         component: PDPart,
     },
     {
-        path: "/:title/:part/:resourcesDisplay?", // resourcesDisplay will be "drawer" or "sidebar"
+        path: "/:title/:part/:tab?", // tab will be "toc", "subpart", or "section". default: "part"
         name: "part",
         component: Part,
     },

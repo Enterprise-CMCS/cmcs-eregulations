@@ -71,7 +71,7 @@ $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
 
-.subpart-list-item {
+.subpart-list-item-group .v-list-item.subpart-list-item {
     display: inline-block;
     min-height: unset;
     padding-top: 5px;
