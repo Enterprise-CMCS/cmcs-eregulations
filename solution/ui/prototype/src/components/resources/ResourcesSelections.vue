@@ -17,6 +17,7 @@
                         close-icon="mdi-close"
                         text-color="#046791"
                         @click:close="handleClose(value, name)"
+                        class="selection-chip"
                     >
                         {{ value | formatChipLabel(name) }}
                     </v-chip>
@@ -151,10 +152,13 @@ $eregs-image-path: "~legacy-static/images";
             color: $mid_blue;
             font-size: 15px;
             font-weight: 600;
-            background: $lightest_blue;
             border: 1px solid #c0eaf8;
             margin-right: 10px;
             margin-bottom: 10px;
+
+            &.selection-chip {
+                background: $lightest_blue;
+            }
 
             &.v-chip--outlined.clear-all-chip {
                 text-transform: uppercase;

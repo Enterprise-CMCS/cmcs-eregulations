@@ -91,10 +91,18 @@ $eregs-image-path: "~legacy-static/images";
                 letter-spacing: 0.02em;
                 font-size: 18px;
 
+                .split-tab-container .split-tab-btn {
+                    color: $mid_gray;
+                }
+
                 &.v-tab--active {
                     color: $teal_blue;
                     letter-spacing: 0.01em;
                     font-weight: 600;
+
+                    .split-tab-container .split-tab-btn {
+                        color: $teal_blue;
+                    }
                 }
             }
 
