@@ -138,7 +138,7 @@ export default {
             },
             supplementalContent: [],
             searchInputValue: "",
-            URL: import.meta.env.VITE_API_URL,
+            URL: import.meta.env.VITE_API_URL
         };
     },
 
@@ -311,11 +311,11 @@ export default {
         },
 
         async checkPart(payload, scope) {
-            const partExist = this.filters.part.listItems.filter((part) => part.name == payload[0]).length > 0;
+            const partExist = this.filters.part.listItems.find((part) => part.name == payload[0]);
 
             if (partExist && scope === "section") {
                 const sectionList = await getSectionsForPart(42, payload[0]);
-                return (sectionList.filter((section) => section.identifier[1] == payload[1]).length > 0);
+                return (sectionList.find((section) => section.identifier[1] == payload[1]));
             }
             return partExist;
         },
@@ -379,7 +379,7 @@ export default {
             if (dataQueryParams.section) {
                 const sections = dataQueryParams.section
                     .split(",")
-                    .filter((x) => x.match(/^\d+/) && x.match(/\d+$/))
+                    .filter((section) => section.match(/^\d+/) && section.match(/\d+$/))
                     .map((x) => ({
                         part: x.match(/^\d+/)[0],
                         section: x.match(/\d+$/)[0],
@@ -393,12 +393,12 @@ export default {
             if (dataQueryParams.subpart) {
                 const subparts = dataQueryParams.subpart
                     .split(",")
-                    .filter((x) => x.match(/^\d+/) && x.match(/\w+$/))
+                    .filter((section) => section.match(/^\d+/) && section.match(/\w+$/))
                     .map((x) => ({
                         part: x.match(/^\d+/)[0],
                         subparts: x.match(/\w+$/)[0],
                     }));
-
+                
                 Object.keys(subparts).forEach((subpart) => {
                     this.partDict[subparts[subpart].part].subparts.push(
                         subparts[subpart].subparts
