@@ -422,7 +422,7 @@ const getHomepageStructure = async () => {
  */
 
 const getAllParts = async () => {
-    return undefined;
+    return await httpApiGet("all_parts");
 };
 
 /**
