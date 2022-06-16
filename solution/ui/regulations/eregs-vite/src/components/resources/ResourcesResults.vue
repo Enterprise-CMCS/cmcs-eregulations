@@ -67,7 +67,8 @@
                                             location
                                                 | locationUrl(
                                                     partsList,
-                                                    partsLastUpdated
+                                                    partsLastUpdated,
+                                                    base
                                                 )
                                         "
                                     >
@@ -107,7 +108,7 @@ export default {
                 ? `${value.part}.${value.section_id}`
                 : `${value.part} Subpart ${value.subpart_id}`;
         },
-        locationUrl(value, partsList, partsLastUpdated) {
+        locationUrl(value, partsList, partsLastUpdated, base) {
             // getting parent and partDate for proper link to section
             // e.g. /42/433/Subpart-A/2021-03-01/#433-10
             // is not straightforward with v2.  See below.
@@ -118,15 +119,15 @@ export default {
 
             // early return if related regulation is a subpart and not a section
             if (type.toLowerCase() === "subpart") {
-                return `${this.base}/${title}/${part}/Subpart-${subpart_id}/${partDate}`;
+                return `${base}/${title}/${part}/Subpart-${subpart_id}/${partDate}`;
             }
             const partObj = partsList.find((parts) => parts.name == part);
             const subpart = partObj.sections[section_id];
 
             // todo: Figure out which no subpart sections are invalid and which are orphans
             return subpart
-                ? `${this.base}/${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
-                : `${this.base}/${title}/${part}/${partDate}#${part}-${section_id}`;
+                ? `${base}/${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
+                : `${base}/${title}/${part}/${partDate}#${part}-${section_id}`;
         },
     },
 
