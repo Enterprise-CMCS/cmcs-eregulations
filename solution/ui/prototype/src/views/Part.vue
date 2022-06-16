@@ -146,7 +146,7 @@ export default {
                     value: "subpart",
                     listType: "SubpartList",
                     type: "dropdown",
-                    component: "PartSubpart",
+                    component: "PartContent",
                     disabled: false,
                     listItems: [],
                 },
@@ -155,7 +155,7 @@ export default {
                     value: "section",
                     listType: "SectionList",
                     type: "dropdown",
-                    component: "PartSection",
+                    component: "PartContent",
                     disabled: false,
                     listItems: [],
                 },
@@ -195,7 +195,6 @@ export default {
                 };
                 const qParams = { ...this.queryParams };
                 const valueType = Object.keys(this.tabsShape)[value];
-
                 switch (valueType) {
                     case "toc":
                         this.$router.push({
@@ -213,8 +212,7 @@ export default {
                             params: {
                                 ...urlParams,
                                 tab: "part",
-                            },
-                            query: qParams,
+                            }
                         });
                         break;
                     case "subpart":
@@ -242,7 +240,6 @@ export default {
                                           .identifier,
                               }
                             : {};
-
                         const sectionSelection = _isUndefined(
                             qParams[valueType]
                         )
@@ -279,8 +276,23 @@ export default {
         partContent() {
             return this.structure?.[1];
         },
+        subpartContent(){
+          return this.structure?.[1].filter(child =>
+              child.node_type === "SUBPART" && child.label[0] === this.queryParams.subpart
+          )
+        },
+        sectionContent(){
+          if (this.subpartContent && this.subpartContent.length > 0){
+            return this.subpartContent[0].children.filter(child =>
+                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
+            )
+          }
+          return this.structure?.[1].filter(child =>
+              child.node_type === "SECTION" && child.label[1] === this.queryParams.section
+          )
+        },
         tabsContent() {
-            return [this.tocContent, this.partContent, null, null];
+            return [this.tocContent, this.partContent, this.subpartContent, this.sectionContent];
         },
     },
 
@@ -353,7 +365,7 @@ export default {
                         return item.identifier == valueToSet;
                     }
                 ).subpart;
-                const subpartToSet = sectionSubpart == "none" ? {} : { subpart: sectionSubpart };
+                const subpartToSet = /^\d+$/.test(sectionSubpart) ? {} : { subpart: sectionSubpart };
                 updatedQueryParams = {
                     ...this.queryParams,
                     ...subpartToSet,
@@ -489,8 +501,14 @@ export default {
                 }
             },
         },
-        async part(newPart) {
+        async part() {
             await this.getPartStructure();
+            await this.getFormattedSubpartsList({title: this.title, part:this.part});
+            await this.getFormattedSectionsList({
+              title: this.title,
+              part: this.part,
+              subpart: this.queryParams.subpart
+            });
         },
     },
 
