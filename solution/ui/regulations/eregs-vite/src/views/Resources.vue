@@ -379,9 +379,9 @@ export default {
                 const sections = dataQueryParams.section
                     .split(",")
                     .filter((section) => section.match(/^\d+/) && section.match(/\d+$/))
-                    .map((x) => ({
-                        part: x.match(/^\d+/)[0],
-                        section: x.match(/\d+$/)[0],
+                    .map((section) => ({
+                        part: section.match(/^\d+/)[0],
+                        section: section.match(/\d+$/)[0],
                     }));
                 Object.keys(sections).forEach((section) => {
                     this.partDict[sections[section].part].sections.push(
@@ -393,9 +393,9 @@ export default {
                 const subparts = dataQueryParams.subpart
                     .split(",")
                     .filter((section) => section.match(/^\d+/) && section.match(/\w+$/))
-                    .map((x) => ({
-                        part: x.match(/^\d+/)[0],
-                        subparts: x.match(/\w+$/)[0],
+                    .map((section) => ({
+                        part: section.match(/^\d+/)[0],
+                        subparts: section.match(/\w+$/)[0],
                     }));
                 
                 Object.keys(subparts).forEach((subpart) => {
