@@ -1,7 +1,7 @@
 import SupplementalContentObject from '../js/src/components/SupplementalContentObject.vue';
 
 export default {
-  title: 'Supplemental Content/Supplemental Content Object',
+  title: 'Supplemental Resources/Supplemental Content Object',
   component: SupplementalContentObject,
 };
 
