@@ -3,7 +3,7 @@ import DropdownHeader from '../js/src/components/DropdownHeader.vue';
 import DropdownItem from '../js/src/components/DropdownItem.vue'
 
 export default {
-  title: 'Dropdown/Dropdown Content',
+  title: 'Components/Dropdown/Dropdown Content',
   component: DropdownContent,
 }
 

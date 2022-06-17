@@ -2,7 +2,7 @@ import CollapseButton from '../js/src/components/CollapseButton.vue';
 import Collapsible from '../js/src/components/Collapsible.vue';
 
 export default {
-  title: 'Site/Collapsible',
+  title: 'Components/Collapsible',
   component: CollapseButton,
   subcomponents: { Collapsible },
 };
