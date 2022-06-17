@@ -11,7 +11,6 @@ def handler(event, context):
     connection.ensure_connection()
     if not connection.is_usable():
         raise Exception("database is unreachable")
-
     from django.apps import apps
     installed_apps = []
     for app in apps.get_app_configs():
