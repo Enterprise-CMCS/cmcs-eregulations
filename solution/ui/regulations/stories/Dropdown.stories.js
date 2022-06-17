@@ -5,7 +5,7 @@ import DropdownItem from '../js/src/components/DropdownItem.vue';
 import PartButton from '../js/src/components/PartButton.vue';
 
 export default {
-  title: 'Dropdown/Dropdown',
+  title: 'Components/Dropdown/Dropdown',
   component: Dropdown,
 }
 
