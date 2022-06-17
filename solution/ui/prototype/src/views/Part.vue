@@ -84,8 +84,6 @@ import Header from "@/components/Header.vue";
 import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
-import PartSubpart from "@/components/part/PartSubpart.vue";
-import PartSection from "@/components/part/PartSection.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
