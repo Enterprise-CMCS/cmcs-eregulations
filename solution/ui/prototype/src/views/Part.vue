@@ -212,7 +212,8 @@ export default {
                             params: {
                                 ...urlParams,
                                 tab: "part",
-                            }
+                            },
+                            query: qParams,
                         });
                         break;
                     case "subpart":
