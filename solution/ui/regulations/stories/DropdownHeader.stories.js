@@ -1,7 +1,7 @@
 import DropdownHeader from '../js/src/components/DropdownHeader.vue';
 
 export default {
-  title: 'Dropdown/Dropdown Header',
+  title: 'Components/Dropdown/Dropdown Header',
   component: DropdownHeader,
 }
 

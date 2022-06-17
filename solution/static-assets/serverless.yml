@@ -10,6 +10,7 @@ custom:
   s3Sync:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
+      deleteRemoved: false
   pythonRequirements:
     layer:
       name: python-django
