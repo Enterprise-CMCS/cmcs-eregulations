@@ -108,8 +108,6 @@ export default {
         PartContent,
         PartNav,
         PartToc,
-        PartSubpart,
-        PartSection,
         SubpartList,
         SectionList,
     },
