@@ -38,8 +38,8 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          serverless remove --stage dev-${PR} --config ./serverless-ecfr.yml
-          serverless remove --stage dev-${PR} --config ./serverless-fr.yml
+          serverless remove --stage dev${PR} --config ./serverless-ecfr.yml
+          serverless remove --stage dev${PR} --config ./serverless-fr.yml
           popd
       # remove the regulations site
       - name: remove experimental regulations site server
@@ -51,7 +51,8 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          serverless remove --config ./serverless-experimental.yml --stage dev-${PR}
+          serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
+          serverless remove --config ./serverless-experimental.yml --stage dev${PR}
           popd
       # Remove the static assets
       - name: remove static assets
@@ -63,5 +64,5 @@ jobs:
           pushd solution/static-assets
           npm install serverless -g
           npm install
-          serverless remove --stage dev-${PR}
+          serverless remove --stage dev${PR}
           popd
