@@ -1,7 +1,7 @@
 <template>
     <div>
         <a
-            v-if="selectedPart"
+            v-if="selectedPart && subparts.length ===1"
             v-on:click="clearSection"
             class="show-subpart-resources"
         >
@@ -37,8 +37,10 @@ import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 import {
     getSupplementalContentByCategory,
     v3GetSupplementalContent,
+    getSubPartsForPart
 } from "../../api";
 import { EventCodes, formatResourceCategories } from "../../utils";
+import { getSubpartTOC } from '../../../eregs-vite/src/utilities/api';
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];
@@ -113,6 +115,7 @@ export default {
             isFetching: true,
             selectedPart: undefined,
             resourceCount: 0,
+            joined_locations:""
         };
     },
 
@@ -123,21 +126,7 @@ export default {
                 ["subparts", this.subparts],
             ];
         },
-        joined_locations: function () {
-            const sectionsString = this.sections.reduce(
-                (previousValue, section) =>
-                    `${previousValue}locations=${this.title}.${this.part}.${section}&`,
-                ""
-            );
 
-            const subPartString = this.subparts.reduce(
-                (previousValue, subpart) =>
-                    `${previousValue}locations=${this.title}.${this.part}.${subpart}&`,
-                ""
-            );
-
-            return sectionsString + subPartString;
-        },
         activePart: function () {
             if (this.selectedPart !== undefined) {
                 return this.selectedPart;
@@ -207,13 +196,18 @@ export default {
                             this.requested_categories.split(",")
                         );
                 } else {
+                    await this.get_location_string()
                     const response = await v3GetSupplementalContent(
                         this.api_url,
-                        { locations: location || this.joined_locations }
+                        {locations: location || this.joined_locations }
                     );
 
+                    const subpart_response = await v3GetSupplementalContent(
+                        this.api_url,
+                        {locations: this.joined_locations}
+                    )
                     if (!this.resourceCount) {
-                        this.resourceCount = response.length;
+                        this.resourceCount = subpart_response.length;
                     }
 
                     this.categories = formatResourceCategories(response);
@@ -224,9 +218,14 @@ export default {
                 this.isFetching = false;
             }
         },
+        async get_location_string(){
+            const sections = await getSubpartTOC(this.title, this.part, this.subparts[0])
+            this.joined_locations= sections.reduce((previousValue, section) =>  `${previousValue}locations=${this.title}.${this.part}.${section.identifier[1]}&`, "")+ `locations=${this.title}.${this.part}.${this.subparts[0]}`;
+        },
         clearSection() {
             console.log("Clearing Section");
             this.selectedPart = undefined;
+            this.location= undefined;
         },
     },
 };
