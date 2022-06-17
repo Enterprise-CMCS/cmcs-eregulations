@@ -34,5 +34,5 @@ jobs:
           pushd solution/ui/prototype
           npm install serverless -g
           npm install
-          serverless remove --stage dev-${PR}
+          serverless remove --stage dev${PR}
           popd
