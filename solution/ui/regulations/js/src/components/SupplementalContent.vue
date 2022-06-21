@@ -37,10 +37,10 @@ import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 import {
     getSupplementalContentByCategory,
     v3GetSupplementalContent,
-    getSubPartsForPart
+    getSubPartsForPart,
+    getSubpartTOC
 } from "../../api";
 import { EventCodes, formatResourceCategories } from "../../utils";
-import { getSubpartTOC } from '../../../eregs-vite/src/utilities/api';
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];

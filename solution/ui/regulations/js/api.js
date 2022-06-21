@@ -397,6 +397,7 @@ const v3GetSupplementalContent = async (apiURL, {locations, locationDetails=fals
 
 }
 
+const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
@@ -413,5 +414,6 @@ export {
     removeCacheItem,
     getCacheItem,
     setCacheItem,
+    getSubpartTOC
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
