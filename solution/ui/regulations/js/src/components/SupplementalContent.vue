@@ -219,7 +219,7 @@ export default {
             }
         },
         async get_location_string(){
-            const sections = await getSubpartTOC(this.title, this.part, this.subparts[0])
+            const sections = await getSubpartTOC(this.api_url, this.title, this.part, this.subparts[0])
             this.joined_locations= sections.reduce((previousValue, section) =>  `${previousValue}locations=${this.title}.${this.part}.${section.identifier[1]}&`, "")+ `locations=${this.title}.${this.part}.${this.subparts[0]}`;
         },
         clearSection() {
