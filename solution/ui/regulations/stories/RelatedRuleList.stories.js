@@ -2,7 +2,7 @@ import RelatedRuleList from "../js/src/components/RelatedRuleList.vue";
 import { relatedRulesResponse } from "./apiResponses";
 
 export default {
-    title: "SupplementalContent/Related Rule List",
+    title: "Supplemental Resources/Related Rule List",
     component: RelatedRuleList,
 };
 

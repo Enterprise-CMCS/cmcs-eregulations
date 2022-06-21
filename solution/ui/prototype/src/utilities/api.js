@@ -817,6 +817,15 @@ const getSupplementalContentSearchResults = async (query) => {
     return result;
 };
 
+const getTOC = async (title) =>  httpApiGetV3(title? `title/${title}/toc`:`toc`);
+
+const getPartTOC = async (title, part) =>  httpApiGetV3(`title/${title}/part/${part}/version/latest/toc`);
+
+const getSectionsForPart = async (title, part) => httpApiGetV3(`title/${title}/part/${part}/version/latest/sections`)
+
+const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
+
+
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
@@ -849,6 +858,10 @@ export {
     getSupByPart,
     getAllSections,
     getSupplementalContentV3,
-    getSupplementalContentSearchResults
+    getSupplementalContentSearchResults,
+    getTOC,
+    getPartTOC,
+    getSectionsForPart,
+    getSubpartTOC
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

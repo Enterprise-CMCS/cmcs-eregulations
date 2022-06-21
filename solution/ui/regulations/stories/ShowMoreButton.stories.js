@@ -1,7 +1,7 @@
 import ShowMoreButton from '../js/src/components/ShowMoreButton.vue'
 
 export default {
-  title: 'Button/Show More Button',
+  title: 'Components/Button/Show More Button',
   component: ShowMoreButton,
 }
 
