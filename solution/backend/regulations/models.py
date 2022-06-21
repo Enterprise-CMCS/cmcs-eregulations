@@ -8,6 +8,6 @@ class SiteConfiguration(SingletonModel):
 
     def __str__(self):
         return "Site Configuration"
-    
+
     class Meta:
         verbose_name = "Site Configuration"
