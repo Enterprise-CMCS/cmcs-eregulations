@@ -5,7 +5,7 @@ from django.forms import TextInput
 from solo.admin import SingletonModelAdmin
 
 from resources.admin import BaseAdmin
-from .models import ParserConfiguration, TitleConfiguration
+from .models import ParserConfiguration, TitleConfiguration, SiteConfiguration
 from .search.models import Synonym
 
 
@@ -49,3 +49,8 @@ class SectionAdmin(BaseAdmin):
         css = {
             "all": ("css/admin/synonym.css",)
         }
+
+
+@admin.register(SiteConfiguration)
+class SiteConfigurationAdmin(SingletonModelAdmin):
+    pass
