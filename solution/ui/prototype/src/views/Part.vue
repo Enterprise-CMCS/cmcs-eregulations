@@ -42,7 +42,7 @@
                 </v-tabs>
             </PartNav>
             <div class="content-container content-container-sidebar">
-                <v-tabs-items v-model="tab">
+                <v-tabs-items v-model="tab" class="tab-content">
                     <v-tab-item
                         :transition="false"
                         v-for="(item, key, index) in tabsShape"
@@ -542,6 +542,10 @@ $sidebar-top-margin: 40px;
 
 .content-container-sidebar {
     justify-content: space-between;
+}
+
+.tab-content{
+  padding-right: 25px;
 }
 
 .sidebar {
