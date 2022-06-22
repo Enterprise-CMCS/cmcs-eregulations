@@ -42,7 +42,7 @@
                 </v-tabs>
             </PartNav>
             <div class="content-container content-container-sidebar">
-                <v-tabs-items v-model="tab">
+                <v-tabs-items v-model="tab" class="tab-content">
                     <v-tab-item
                         :transition="false"
                         v-for="(item, key, index) in tabsShape"
@@ -84,8 +84,6 @@ import Header from "@/components/Header.vue";
 import PartContent from "@/components/part/PartContent.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
-import PartSubpart from "@/components/part/PartSubpart.vue";
-import PartSection from "@/components/part/PartSection.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
@@ -110,8 +108,6 @@ export default {
         PartContent,
         PartNav,
         PartToc,
-        PartSubpart,
-        PartSection,
         SubpartList,
         SectionList,
     },
@@ -146,7 +142,7 @@ export default {
                     value: "subpart",
                     listType: "SubpartList",
                     type: "dropdown",
-                    component: "PartSubpart",
+                    component: "PartContent",
                     disabled: false,
                     listItems: [],
                 },
@@ -155,7 +151,7 @@ export default {
                     value: "section",
                     listType: "SectionList",
                     type: "dropdown",
-                    component: "PartSection",
+                    component: "PartContent",
                     disabled: false,
                     listItems: [],
                 },
@@ -195,7 +191,6 @@ export default {
                 };
                 const qParams = { ...this.queryParams };
                 const valueType = Object.keys(this.tabsShape)[value];
-
                 switch (valueType) {
                     case "toc":
                         this.$router.push({
@@ -242,7 +237,6 @@ export default {
                                           .identifier,
                               }
                             : {};
-
                         const sectionSelection = _isUndefined(
                             qParams[valueType]
                         )
@@ -279,8 +273,23 @@ export default {
         partContent() {
             return this.structure?.[1];
         },
+        subpartContent(){
+          return this.structure?.[1].filter(child =>
+              child.node_type === "SUBPART" && child.label[0] === this.queryParams.subpart
+          )
+        },
+        sectionContent(){
+          if (this.subpartContent && this.subpartContent.length > 0){
+            return this.subpartContent[0].children.filter(child =>
+                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
+            )
+          }
+          return this.structure?.[1].filter(child =>
+              child.node_type === "SECTION" && child.label[1] === this.queryParams.section
+          )
+        },
         tabsContent() {
-            return [this.tocContent, this.partContent, null, null];
+            return [this.tocContent, this.partContent, this.subpartContent, this.sectionContent];
         },
     },
 
@@ -353,13 +362,14 @@ export default {
                         return item.identifier == valueToSet;
                     }
                 ).subpart;
-                const subpartToSet = sectionSubpart == "none" ? {} : { subpart: sectionSubpart };
+                const subpartToSet = /^\d+$/.test(sectionSubpart) ? {} : { subpart: sectionSubpart };
                 updatedQueryParams = {
                     ...this.queryParams,
                     ...subpartToSet,
                     section: valueToSet,
                 };
             } else {
+                console.log("YOLO")
                 updatedQueryParams = {
                     ...this.queryParams,
                     [payload.scope]: valueToSet,
@@ -468,20 +478,18 @@ export default {
                       part: this.part,
                       subpart: toQueries.subpart
                     });
+                    this.$router.push({
+                        name: "part",
+                        params: {
+                            title: this.title,
+                            part: this.part,
+                            tab: this.tabParam,
+                        },
+                        query: {
+                            subpart: toQueries.subpart,
+                        },
+                    });
 
-                    if (!_isUndefined(previousQueries.subpart)) {
-                        this.$router.push({
-                            name: "part",
-                            params: {
-                                title: this.title,
-                                part: this.part,
-                                tab: this.tabParam,
-                            },
-                            query: {
-                                subpart: toQueries.subpart,
-                            },
-                        });
-                    }
                 }
 
                 if (toQueries.section !== previousQueries.section) {
@@ -489,8 +497,14 @@ export default {
                 }
             },
         },
-        async part(newPart) {
+        async part() {
             await this.getPartStructure();
+            await this.getFormattedSubpartsList({title: this.title, part:this.part});
+            await this.getFormattedSectionsList({
+              title: this.title,
+              part: this.part,
+              subpart: this.queryParams.subpart
+            });
         },
     },
 
@@ -527,6 +541,10 @@ $sidebar-top-margin: 40px;
 
 .content-container-sidebar {
     justify-content: space-between;
+}
+
+.tab-content{
+  padding-right: 25px;
 }
 
 .sidebar {
