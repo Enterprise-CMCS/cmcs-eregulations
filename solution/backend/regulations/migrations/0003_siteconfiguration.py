@@ -3,6 +3,12 @@
 from django.db import migrations, models
 
 
+def create_default_site_config(apps, schema_editor):
+    SiteConfiguration = apps.get_model("regulations", "SiteConfiguration")
+    if len(SiteConfiguration.objects.all()) < 1:
+        SiteConfiguration.objects.create()
+
+
 class Migration(migrations.Migration):
 
     initial = True
@@ -22,4 +28,5 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Site Configuration',
             },
         ),
+        migrations.RunPython(create_default_site_config),
     ]
