@@ -164,18 +164,20 @@ export default {
     },
 
     created() {
+        let location = ""
         if (window.location.hash) {
             const section = window.location.hash.substring(1).replace("-", ".");
-
-            this.fetch_content(
-                this.title,
-                this.part,
-                `locations=${this.title}.${section}`
-            );
-            this.selectedPart = `§ ${section}`;
+            if (isNaN(section)) {
+                location = `locations=${this.title}.${this.part}.${section}`
+            }
+            else {
+                location = `locations=${this.title}.${section}`
+                this.selectedPart = `§ ${section}`;
+        }
         } else {
             this.fetch_content(this.title, this.part);
         }
+        this.fetch_content(this.title, this.part, location)
     },
 
     mounted() {
