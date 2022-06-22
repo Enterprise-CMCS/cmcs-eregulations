@@ -369,6 +369,7 @@ export default {
                     section: valueToSet,
                 };
             } else {
+                console.log("YOLO")
                 updatedQueryParams = {
                     ...this.queryParams,
                     [payload.scope]: valueToSet,
@@ -477,20 +478,18 @@ export default {
                       part: this.part,
                       subpart: toQueries.subpart
                     });
+                    this.$router.push({
+                        name: "part",
+                        params: {
+                            title: this.title,
+                            part: this.part,
+                            tab: this.tabParam,
+                        },
+                        query: {
+                            subpart: toQueries.subpart,
+                        },
+                    });
 
-                    if (!_isUndefined(previousQueries.subpart)) {
-                        this.$router.push({
-                            name: "part",
-                            params: {
-                                title: this.title,
-                                part: this.part,
-                                tab: this.tabParam,
-                            },
-                            query: {
-                                subpart: toQueries.subpart,
-                            },
-                        });
-                    }
                 }
 
                 if (toQueries.section !== previousQueries.section) {
