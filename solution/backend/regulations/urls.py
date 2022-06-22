@@ -9,7 +9,6 @@ from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
 from regulations.views.resources import ResourcesView
 from regulations.views.supplemental_content import SupplementalContentView
-from regulations.views.robots_dot_txt import RobotsDotTxtView
 from regulations import converters
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -19,7 +18,6 @@ register_converter(converters.VersionConverter, 'version')
 
 urlpatterns = [
     path('', HomepageView.as_view(), name='homepage'),
-    path('robots.txt', RobotsDotTxtView.as_view(), name="robots_dot_txt"),
     path('about/', AboutView.as_view(), name='about'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),
