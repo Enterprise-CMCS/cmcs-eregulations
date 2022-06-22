@@ -397,12 +397,13 @@ const v3GetSupplementalContent = async (apiURL, {locations, locationDetails=fals
 
 }
 
-const getSubpartTOC = async (apiURL, title, part, subPart) => 
-{
+const getSubpartTOC = async (apiURL, title, part, subPart) => {
     const url = apiURL.replace('/v2/', '/v3/')
 
     return httpApiGetLegacy(`${url}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
-}// API Functions Insertion Point (do not change this text, it is being used by hygen cli)
+}
+
+// API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
 export {
     getAllParts,
