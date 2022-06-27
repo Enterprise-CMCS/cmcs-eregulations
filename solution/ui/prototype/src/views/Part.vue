@@ -1,41 +1,19 @@
 <template>
+
     <body class="ds-base">
         <div id="app">
             <Header />
-            <PartNav
-                :title="title"
-                :part="part"
-                :partLabel="partLabel"
-                resourcesDisplay="sidebar"
-            >
-                <v-tabs
-                    slider-size="5"
-                    class="nav-tabs"
-                    v-model="tab"
-                    ref="tabs"
-                >
-                    <v-tab
-                        v-for="(item, key, index) in tabsShape"
-                        :key="item.label"
-                        :disabled="item.disabled"
-                    >
+            <PartNav :title="title" :part="part" :partLabel="partLabel" resourcesDisplay="sidebar">
+                <v-tabs slider-size="5" class="nav-tabs" v-model="tab" ref="tabs">
+                    <v-tab v-for="(item, key, index) in tabsShape" :key="item.label" :disabled="item.disabled">
                         {{ tabLabels[key] }}
-                        <template
-                            v-if="
+                        <template v-if="
                                 item.value === 'subpart' ||
                                 item.value === 'section'
-                            "
-                        >
-                            <FancyDropdown
-                                label=""
-                                buttonTitle=""
-                                type="splitTab"
-                            >
-                                <component
-                                    :is="item.listType"
-                                    :listItems="item.listItems"
-                                    :filterEmitter="setQueryParam"
-                                ></component>
+                            ">
+                            <FancyDropdown label="" buttonTitle="" type="splitTab">
+                                <component :is="item.listType" :listItems="item.listItems"
+                                    :filterEmitter="setQueryParam"></component>
                             </FancyDropdown>
                         </template>
                     </v-tab>
@@ -43,34 +21,42 @@
             </PartNav>
             <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab" class="tab-content">
-                    <v-tab-item
-                        :transition="false"
-                        v-for="(item, key, index) in tabsShape"
-                        :key="index"
-                    >
-                        <component
-                            :is="item.component"
-                            :structure="tabsContent[index]"
-                            :title="title"
-                            :part="part"
-                            resourcesDisplay="sidebar"
-                            :selectedIdentifier="selectedIdentifier"
-                            :selectedScope="selectedScope"
-                            :supplementalContentCount="supplementalContentCount"
-                            @view-resources="setResourcesParams"
-                        ></component>
+                    <v-tab-item :transition="false" v-for="(item, key, index) in tabsShape" :key="index">
+                        <component :is="item.component" :structure="tabsContent[index]" :title="title" :part="part"
+                            resourcesDisplay="sidebar" :selectedIdentifier="selectedIdentifier"
+                            :selectedScope="selectedScope" :supplementalContentCount="supplementalContentCount"
+                            @view-resources="setResourcesParams"></component>
                     </v-tab-item>
                 </v-tabs-items>
                 <div class="sidebar" v-show="tabParam !== 'toc'">
-                    <SectionResourcesSidebar
-                        :title="title"
-                        :part="part"
-                        :selectedIdentifier="selectedIdentifier"
-                        :selectedScope="selectedScope"
-                        :routeToResources="routeToResources"
-                    />
+                    <SectionResourcesSidebar :title="title" :part="part" :selectedIdentifier="selectedIdentifier"
+                        :selectedScope="selectedScope" :routeToResources="routeToResources" />
                 </div>
+
             </div>
+            <v-card fixed outlined class="mx-auto sticky-card">
+                <v-btn class="nav-button"
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[tabIndex-1]})"
+                    color="#EEFAFE" v-if="this.tabIndex > 0 && this.tabParam==='subpart'">
+                    <v-icon>mdi-chevron-left</v-icon>Subpart {{this.subpartNav[this.tabIndex-1]}}
+                </v-btn>
+                <v-btn class="nav-button"
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[tabIndex+1]})"
+                    color="#EEFAFE" v-if="this.tabIndex < this.subpartNav.length-1&& this.tabParam==='subpart'">
+                    Subpart {{this.subpartNav[this.tabIndex+1]}}
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+                <v-btn class="nav-button"
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[tabIndex-1]})"
+                    color="#EEFAFE" v-if="this.tabIndex >0 && this.tabParam==='section'">
+                    <v-icon>mdi-chevron-left</v-icon>§{{this.part}}.{{this.sectionNav[this.tabIndex-1]}}
+                </v-btn>
+                <v-btn class="nav-button"
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[tabIndex+1]})"
+                    color="#EEFAFE" v-if="this.tabIndex  < this.sectionNav.length-1&& this.tabParam==='section'">
+                    §{{this.part}}.{{this.sectionNav[this.tabIndex+1]}} <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+            </v-card>
             <Footer />
         </div>
     </body>
@@ -120,6 +106,7 @@ export default {
             part: this.$route.params.part,
             tabParam: this.$route.params.tab,
             queryParams: this.$route.query,
+            tabIndex:0,
             structure: null,
             sections: [],
             tabsShape: {
@@ -291,6 +278,20 @@ export default {
         tabsContent() {
             return [this.tocContent, this.partContent, this.subpartContent, this.sectionContent];
         },
+        subpartNav() {
+            if (this.queryParams.subpart && this.tocContent) {
+                return this.tocContent.children.map(subpart => subpart.identifier[0])
+            }
+            return []
+        },
+        sectionNav() {
+            if (this.queryParams.section && this.tocContent) {
+                let sections = this.tocContent.children.filter(subpart => subpart.identifier[0] === this.queryParams.subpart)
+                return sections[0].children.map(sec => sec.identifier[1])
+            }
+            return []
+        }
+
     },
 
     async created() {
@@ -308,8 +309,13 @@ export default {
           part: this.part,
           subpart: this.queryParams.subpart
         });
-
-        if (_isEmpty(this.queryParams)) {
+        if(this.tabParam=="section"){
+            this.tabIndex=this.sectionNav.indexOf(this.queryParams.section)
+        }
+        else if(this.tabParam=="subpart"){
+            this.tabIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+        }
+        else if (_isEmpty(this.queryParams)) {
             let paramsToSet = {};
             if (this.tabParam == "subpart") {
                 paramsToSet = {
@@ -357,6 +363,8 @@ export default {
             let updatedQueryParams = {};
             // get associated subpart for section
             if (payload.scope == "section") {
+                const sections = this.tabsShape.section.listItems.map(sec => sec.identifier)
+                this.tabIndex = sections.indexOf(valueToSet)
                 const sectionSubpart = this.tabsShape.section.listItems.find(
                     (item) => {
                         return item.identifier == valueToSet;
@@ -369,7 +377,7 @@ export default {
                     section: valueToSet,
                 };
             } else {
-                console.log("YOLO")
+                this.tabIndex = this.subpartNav.indexOf(valueToSet)
                 updatedQueryParams = {
                     ...this.queryParams,
                     [payload.scope]: valueToSet,
@@ -557,5 +565,22 @@ $sidebar-top-margin: 40px;
     padding: 0 25px;
     border-left: 1px solid $light_gray;
     overflow: scroll;
+}
+.nav-button.v-btn{
+    color: #046791;
+    font-family: 'Open Sans';
+    font-weight: 400;
+    font-size: 14px;
+}
+.sticky-card.v-card.v-sheet.v-sheet--outlined {
+
+  position: sticky;
+    bottom:0px;
+  z-index: 1;
+  /* centering */
+  
+  left:50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);  
 }
 </style>
