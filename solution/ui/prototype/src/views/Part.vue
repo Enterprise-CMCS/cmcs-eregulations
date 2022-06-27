@@ -449,11 +449,28 @@ export default {
         async getFormattedSectionsList({title, part, subpart}) {
 
             const toc = await getPartTOC(title, part)
+
             const subParts = toc.children
                 .filter(child => child.type==="subpart")
                 .filter(subPart => subpart ? subPart.identifier[0] === subpart: true)
 
-            const filteredSections = subParts.map( sp => sp.children.filter(child => child.type=== 'section'))
+            if (!subpart){
+                console.log("NO SUBPART SELECTED")
+                console.log(subParts)
+                console.log(toc.children
+                .filter(child => child.type==="section")
+                .map(section =>({
+                          subpart:section.parent[0],
+                          identifier: section.identifier[1],
+                          label: section.label_level,
+                          description: section.label_description,
+                          part
+                      }))
+                )
+                console.log(subParts)
+            }
+
+            let filteredSections = subParts.map( sp => sp.children.filter(child => child.type=== 'section'))
                 .flat(1)
                 .map(section =>({
                     subpart:section.parent[0],
@@ -462,7 +479,20 @@ export default {
                     description: section.label_description,
                     part
                 }))
-
+            if (!subpart){
+                const orphanSections = toc.children
+                    .filter(child => child.type === "section")
+                    .map(section =>({
+                        subpart:section.parent[0],
+                        identifier: section.identifier[1],
+                        label: section.label_level,
+                        description: section.label_description,
+                        part
+                    }))
+                filteredSections = filteredSections.concat(orphanSections)
+                console.log(orphanSections)
+                console.log(filteredSections.length)
+            }
             const subjectGroups = subParts.map( sp => sp.children.filter(child => child.type=== 'subject_group')).flat(1)
             subjectGroups.forEach(subject_group => {
                 const subPart = subject_group.parent[0]
