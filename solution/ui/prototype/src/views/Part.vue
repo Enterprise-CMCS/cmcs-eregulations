@@ -280,9 +280,21 @@ export default {
         },
         sectionContent(){
           if (this.subpartContent && this.subpartContent.length > 0){
-            return this.subpartContent[0].children.filter(child =>
+            const section = this.subpartContent[0].children.find(child =>
                 child.node_type === "SECTION" && child.label[1] === this.queryParams.section
             )
+
+            if (section){
+              return [section]
+            }
+
+            return [this.subpartContent[0].children.filter(child =>
+                child.node_type === "SUBJGRP"
+            ).map(sg => sg.children).flat(1)
+            .find(child =>
+                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
+            )]
+
           }
           return this.structure?.[1].filter(child =>
               child.node_type === "SECTION" && child.label[1] === this.queryParams.section
@@ -369,7 +381,6 @@ export default {
                     section: valueToSet,
                 };
             } else {
-                console.log("YOLO")
                 updatedQueryParams = {
                     ...this.queryParams,
                     [payload.scope]: valueToSet,
@@ -437,17 +448,36 @@ export default {
         },
         async getFormattedSectionsList({title, part, subpart}) {
 
-            const allSections = await getSectionsForPart(title, part)
-            const filteredSections = allSections
-                .filter((section) =>
-                  subpart ? section.parent_type === "subpart" && section.parent[0] === subpart : true)
+            const toc = await getPartTOC(title, part)
+            const subParts = toc.children
+                .filter(child => child.type==="subpart")
+                .filter(subPart => subpart ? subPart.identifier[0] === subpart: true)
+
+            const filteredSections = subParts.map( sp => sp.children.filter(child => child.type=== 'section'))
+                .flat(1)
                 .map(section =>({
-                  subpart:section.parent[0],
-                  identifier: section.identifier[1],
-                  label: section.label_level,
-                  description: section.label_description,
-                  part
-            }));
+                    subpart:section.parent[0],
+                    identifier: section.identifier[1],
+                    label: section.label_level,
+                    description: section.label_description,
+                    part
+                }))
+
+            const subjectGroups = subParts.map( sp => sp.children.filter(child => child.type=== 'subject_group')).flat(1)
+            subjectGroups.forEach(subject_group => {
+                const subPart = subject_group.parent[0]
+                subject_group.children.forEach( section => {
+                    filteredSections.push({
+                        subpart:subPart,
+                        identifier: section.identifier[1],
+                        label: section.label_level,
+                        description: section.label_description,
+                        part
+                    })
+                })
+            })
+            filteredSections.sort((a,b) => Number(a.identifier) > Number(b.identifier))
+
             this.tabsShape.section.listItems = filteredSections;
         },
     },
@@ -478,17 +508,22 @@ export default {
                       part: this.part,
                       subpart: toQueries.subpart
                     });
+                    const query = {
+                        subpart: toQueries.subpart,
+                    }
+                    if (toQueries.section !== previousQueries.section) {
+                      query.section = toQueries.section
+                    }
                     this.$router.push({
-                        name: "part",
-                        params: {
-                            title: this.title,
-                            part: this.part,
-                            tab: this.tabParam,
-                        },
-                        query: {
-                            subpart: toQueries.subpart,
-                        },
+                      name: "part",
+                      params: {
+                        title: this.title,
+                        part: this.part,
+                        tab: this.tabParam,
+                      },
+                      query,
                     });
+
 
                 }
 

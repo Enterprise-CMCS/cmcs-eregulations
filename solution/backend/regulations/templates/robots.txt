@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /
+{% if allow_indexing %}Allow{% else %}Disallow{% endif %}: /
 
 Sitemap: https://{{request.META.HTTP_HOST}}/sitemap.xml

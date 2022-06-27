@@ -78,6 +78,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     # Put your context processors here
 
     'django.core.context_processors.request',
+    'regulations.context_processors.site_config',
 )
 
 ROOT_URLCONF = 'cmcs_regulations.urls'
@@ -104,7 +105,8 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
                 "cmcs_regulations.context_processors.google_analytics",
-                "cmcs_regulations.context_processors.automated_testing"
+                "cmcs_regulations.context_processors.automated_testing",
+                'regulations.context_processors.site_config',
             ),
         },
         "DIRS": [
