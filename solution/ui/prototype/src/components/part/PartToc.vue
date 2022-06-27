@@ -1,7 +1,7 @@
 <template>
     <div v-if="structure" class="toc">
         <div class="toc-body">
-            <ul class="toc-list">
+            <ul class="toc-list" style="padding:0">
                 <li
                     v-for="child in structure.children"
                     :key="child.identifier.join('-')"
