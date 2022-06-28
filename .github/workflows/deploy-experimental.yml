@@ -265,6 +265,7 @@ jobs:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
       # deploy and run eCFR parser
       - name: deploy and run eCFR parser
+        continue-on-error: true
         id: deploy-run-ecfr-parser
         timeout-minutes: 20
         env:
@@ -280,6 +281,7 @@ jobs:
           popd
       # deploy and run Federal Register parser
       - name: deploy and run FR parser
+        continue-on-error: true
         id: deploy-run-fr-parser
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

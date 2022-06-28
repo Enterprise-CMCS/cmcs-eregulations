@@ -193,7 +193,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	defer cancel()
 
 	start := time.Now()
-	today := time.Now().AddDate(0, 0, -4)
+	today := time.Now()
 
     result := eregs.ParserResult{
         Start: start.Format(time.RFC3339),

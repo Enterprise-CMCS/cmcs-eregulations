@@ -332,7 +332,6 @@ export default {
                 };
             }
             if (this.tabParam == "section") {
-                console.log("YOLO")
                 paramsToSet = {
                     subpart: this.tabsShape.subpart.listItems[0].identifier,
                     section: this.tabsShape.section.listItems[0].identifier,
@@ -457,22 +456,6 @@ export default {
             const subParts = toc.children
                 .filter(child => child.type==="subpart")
                 .filter(subPart => subpart ? subPart.identifier[0] === subpart: true)
-
-            if (!subpart){
-                console.log("NO SUBPART SELECTED")
-                console.log(subParts)
-                console.log(toc.children
-                .filter(child => child.type==="section")
-                .map(section =>({
-                          subpart:section.parent[0],
-                          identifier: section.identifier[1],
-                          label: section.label_level,
-                          description: section.label_description,
-                          part
-                      }))
-                )
-                console.log(subParts)
-            }
 
             let filteredSections = subParts.map( sp => sp.children.filter(child => child.type=== 'section'))
                 .flat(1)
