@@ -193,7 +193,7 @@ export default {
                 const qParams = { ...this.queryParams };
                 const valueType = Object.keys(this.tabsShape)[value];
                 switch (valueType) {
-                    case "toc":
+                    case "toc":{
                         this.$router.push({
                             name: "part",
                             params: {
@@ -203,7 +203,8 @@ export default {
                             query: qParams,
                         });
                         break;
-                    case "part":
+                    }
+                    case "part":{
                         this.$router.push({
                             name: "part",
                             params: {
@@ -213,7 +214,8 @@ export default {
                             query: qParams,
                         });
                         break;
-                    case "subpart":
+                    }
+                    case "subpart":{
                         this.$router.push({
                             name: "part",
                             params: {
@@ -230,40 +232,37 @@ export default {
                                 : qParams,
                         });
                         break;
-                    case "section":
-                        const subpartSelection = _isEmpty(qParams)
-                          // only chose the subpart if the first subpart identifier matches the subpart of the section chosen.
-                          && this.tabsShape.section.listItems[0].subpart === this.tabsShape.subpart.listItems[0].identifier
-                            ? {
-                                  subpart:
-                                      this.tabsShape.subpart.listItems[0]
-                                          .identifier,
-                              }
-                            : {};
-                        const sectionSelection = _isUndefined(
-                            qParams[valueType]
-                        )
-                            ? {
-                                  section:
-                                      this.tabsShape.section.listItems[0]
-                                          .identifier,
-                              }
-                            : {};
+                    }
+                    case "section": {
+
+                        const section = this.tabsShape.section.listItems[0]
+                        const subPart = this.tabsShape.subpart.listItems.find(subpart => subpart.identifier === section.subpart)
+                        const subpartSelection = _isEmpty(qParams) && subPart
+                            ?
+                            {subpart: subPart.identifier}
+                            :
+                            {};
+                        const sectionSelection = _isUndefined(qParams[valueType])
+                            ?
+                            {section: section.identifier}
+                            :
+                            {};
                         this.$router.push({
                             name: "part",
                             params: {
-                                ...urlParams,
-                                tab: "section",
+                              ...urlParams,
+                              tab: "section",
                             },
                             query: _isUndefined(qParams[valueType])
                                 ? {
-                                      ...qParams,
-                                      ...subpartSelection,
-                                      ...sectionSelection,
-                                  }
+                                  ...qParams,
+                                  ...subpartSelection,
+                                  ...sectionSelection,
+                                }
                                 : qParams,
                         });
                         break;
+                    }
                 }
             },
         },
