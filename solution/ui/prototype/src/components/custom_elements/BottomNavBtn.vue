@@ -1,5 +1,8 @@
 <template>
-    <h1>{{ direction }}</h1>
+    <div class="direction-btn" :class="directionClass">
+        <span class="label-span">{{ direction }}</span>
+        <i class="fa" :class="chevronClass"></i>
+    </div>
 </template>
 
 <script>
@@ -15,8 +18,40 @@ export default {
             default: "forward",
         },
     },
-}
+
+    computed: {
+        chevronClass() {
+            return this.direction === "forward"
+                ? "fa-chevron-right"
+                : "fa-chevron-left";
+        },
+        directionClass() {
+            return `${this.direction}-btn`;
+        },
+    },
+};
 </script>
 
-<style></style>
+<style>
+.direction-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 106px;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 10px;
+}
 
+.forward-btn {
+    flex-direction: row;
+}
+
+.back-btn {
+    flex-direction: row-reverse;
+}
+
+.label-span {
+
+}
+</style>
