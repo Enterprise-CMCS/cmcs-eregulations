@@ -490,7 +490,7 @@ export default {
                     })
                 })
             })
-            filteredSections.sort((a,b) => Number(a.identifier) > Number(b.identifier))
+            filteredSections.sort((a,b) => Number(a.identifier) - Number(b.identifier))
 
             this.tabsShape.section.listItems = filteredSections;
         },
