@@ -185,6 +185,7 @@ export default {
                 }
             },
             set(value) {
+
                 const urlParams = {
                     title: this.title,
                     part: this.part,
@@ -231,6 +232,8 @@ export default {
                         break;
                     case "section":
                         const subpartSelection = _isEmpty(qParams)
+                          // only chose the subpart if the first subpart identifier matches the subpart of the section chosen.
+                          && this.tabsShape.section.listItems[0].subpart === this.tabsShape.subpart.listItems[0].identifier
                             ? {
                                   subpart:
                                       this.tabsShape.subpart.listItems[0]
@@ -329,6 +332,7 @@ export default {
                 };
             }
             if (this.tabParam == "section") {
+                console.log("YOLO")
                 paramsToSet = {
                     subpart: this.tabsShape.subpart.listItems[0].identifier,
                     section: this.tabsShape.section.listItems[0].identifier,
@@ -490,8 +494,6 @@ export default {
                         part
                     }))
                 filteredSections = filteredSections.concat(orphanSections)
-                console.log(orphanSections)
-                console.log(filteredSections.length)
             }
             const subjectGroups = subParts.map( sp => sp.children.filter(child => child.type=== 'subject_group')).flat(1)
             subjectGroups.forEach(subject_group => {
