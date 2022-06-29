@@ -1,10 +1,10 @@
 <template>
-    <div class="direction-btn" :class="directionClass">
+    <button class="direction-btn" :class="directionClass">
         <span class="label">{{ label }}</span>
         <span class="icon">
             <i class="fa" :class="chevronClass"></i>
         </span>
-    </div>
+    </button>
 </template>
 
 <script>
@@ -49,6 +49,9 @@ $eregs-image-path: "~legacy-static/images";
 @import "legacy/css/scss/main.scss";
 
 .direction-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
     color: $mid_blue;
     display: flex;
     align-items: center;
@@ -56,11 +59,7 @@ $eregs-image-path: "~legacy-static/images";
     width: 106px;
     font-size: 14px;
     font-weight: 400;
-    padding: 10px 0;
-
-    .label {
-
-    }
+    padding: 12px 0;
 
     .icon {
         margin: 0 10px;
