@@ -35,10 +35,15 @@
         <v-expansion-panels>
             <v-expansion-panel>
                 <v-expansion-panel-header>
-                    Table of Contents
+                    <span class="v-expansion-panel-header-text">Table of Contents</span>
+                    <template v-slot:actions>
+                        <v-icon color="black">
+                            mdi-plus
+                        </v-icon>
+                    </template>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                    TABLE OF CONTENTS HERE
+                    <PartToc :structure="tocContent" navName="PDpart" />
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
@@ -60,10 +65,12 @@
 <script>
 import PartContent from "@/components/part/PartContent.vue";
 import Breadcrumbs from "@/components/PDPart/Breadcrumbs.vue";
+import PartToc from "@/components/part/PartToc";
 
 export default {
     name: "LeftColumn",
     components: {
+      PartToc,
         PartContent,
         Breadcrumbs,
     },
@@ -73,6 +80,7 @@ export default {
         subPart: { type: String },
         section: { type: String },
         structure: { type: Array },
+        tocContent: {type: Object},
         navigation: { type: Object },
         supplementalContentCount: { type: Object },
         partLabel: {type: String},
@@ -100,5 +108,25 @@ export default {
       line-height: 30px;
       letter-spacing: 0em;
       text-align: left;
+  }
+  .toc-group{
+    margin-top: 5px;
+  }
+  .toc{
+    margin-left:0;
+  }
+  .v-expansion-panel{
+    border: 3px solid #f3f3f3;
+  }
+
+  .v-expansion-panel-header{
+    background-color: #f3f3f3;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px
+  }
+  .v-expansion-panel-header-text{
+    padding:18px;
   }
 </style>
