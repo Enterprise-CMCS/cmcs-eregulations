@@ -9,7 +9,7 @@ module.exports = {
             files: "**/*.stories.*"
         },
     ],
-    addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
+    addons: ["@storybook/addon-links", "@storybook/addon-essentials", "@storybook/preset-scss"],
     core: {
         builder: "webpack5",
     },

@@ -32,7 +32,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .direction-btn {
     display: flex;
     align-items: center;
@@ -41,6 +41,8 @@ export default {
     font-size: 14px;
     font-weight: 400;
     padding: 10px;
+
+    .label-span {}
 }
 
 .forward-btn {
@@ -49,9 +51,5 @@ export default {
 
 .back-btn {
     flex-direction: row-reverse;
-}
-
-.label-span {
-
 }
 </style>
