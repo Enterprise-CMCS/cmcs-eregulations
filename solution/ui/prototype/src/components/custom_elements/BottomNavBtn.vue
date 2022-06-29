@@ -1,7 +1,9 @@
 <template>
     <div class="direction-btn" :class="directionClass">
-        <span class="label-span">{{ direction }}</span>
-        <i class="fa" :class="chevronClass"></i>
+        <span class="label">{{ label }}</span>
+        <span class="icon">
+            <i class="fa" :class="chevronClass"></i>
+        </span>
     </div>
 </template>
 
@@ -17,6 +19,11 @@ export default {
             required: true,
             default: "forward",
         },
+        label: {
+            type: String,
+            required: true,
+            default: "Loading...",
+        }
     },
 
     computed: {
@@ -42,16 +49,22 @@ $eregs-image-path: "~legacy-static/images";
 @import "legacy/css/scss/main.scss";
 
 .direction-btn {
-    background: $mid_blue;
+    color: $mid_blue;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     width: 106px;
     font-size: 14px;
     font-weight: 400;
-    padding: 10px;
+    padding: 10px 0;
 
-    .label-span {}
+    .label {
+
+    }
+
+    .icon {
+        margin: 0 10px;
+    }
 }
 
 .forward-btn {

@@ -1,20 +1,23 @@
 import BottomNavBtn from "./BottomNavBtn.vue";
 
 export default {
-    title: "Prototype/Components/Bottom Navigation Button",
+    title: "Prototype/Components/Floating Bottom Navigation/Button",
     component: BottomNavBtn,
     argTypes: {
         direction: {
             name: "Direction of Movement",
-            description: "Button to move backwards or forwards through subparts or sections",
+            description:
+                "Styles button to indicate if moving backwards or forwards through subparts or sections",
             defaultValue: "forward",
-            options: [
-                "back",
-                "forward"
-            ],
+            options: ["back", "forward"],
             control: {
                 type: "radio",
             },
+        },
+        label: {
+            name: "Section or Subpart Label",
+            description: "Button label to indicate if stepping through Subparts or Sections",
+            defaultValue: "Subpart B",
         },
     },
 };
