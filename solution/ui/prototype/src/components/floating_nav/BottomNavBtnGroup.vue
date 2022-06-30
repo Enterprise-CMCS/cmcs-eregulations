@@ -1,8 +1,6 @@
 <template>
     <div class="floating-btn-group">
-        <BottomNavBtn direction="back" label="Subpart C" />
-        <div class="vertical-rule"></div>
-        <BottomNavBtn direction="forward" label="Subpart E" />
+        <slot/>
     </div>
 </template>
 
@@ -70,11 +68,6 @@ $eregs-image-path: "~legacy-static/images";
     display: flex;
     align-items: center;
     width: fit-content;
-
-    .vertical-rule {
-        border-left: 1px solid $pale_blue;
-        height: 30px;
-    }
 }
 
 </style>
