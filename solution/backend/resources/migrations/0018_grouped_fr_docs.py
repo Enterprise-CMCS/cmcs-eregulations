@@ -14,7 +14,7 @@ def convert_docket_number_to_list(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0017_grouped_fr_docs'),
+        ('resources', '0017_create_docket_array'),
     ]
 
     operations = [
