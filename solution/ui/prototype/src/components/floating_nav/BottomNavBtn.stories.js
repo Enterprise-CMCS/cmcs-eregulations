@@ -22,10 +22,33 @@ export default {
     },
 };
 
-const Template = (args, { argTypes }) => ({
+export const Back = (args, { argTypes }) => ({
+    props: Object.keys(argTypes),
+    components: { BottomNavBtn },
+    template: '<BottomNavBtn direction="back" label="Subpart A" />',
+});
+Back.parameters = {
+    controls: {
+        hideNoControlsWarning: true,
+        include: [],
+    }
+}
+
+export const Forward = (args, { argTypes }) => ({
+    props: Object.keys(argTypes),
+    components: { BottomNavBtn },
+    template: '<BottomNavBtn direction="forward" label="Subpart B" />',
+});
+Forward.parameters = {
+    controls: {
+        hideNoControlsWarning: true,
+        include: [],
+    }
+}
+
+export const Interactive = (args, { argTypes }) => ({
     props: Object.keys(argTypes),
     components: { BottomNavBtn },
     template: '<BottomNavBtn v-bind="$props" />',
 });
 
-export const Basic = Template.bind({});
