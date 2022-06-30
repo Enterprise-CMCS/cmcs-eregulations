@@ -34,7 +34,14 @@
                 </div>
 
             </div>
-            <v-card fixed outlined class="mx-auto sticky-card">
+            <div class="sticky-bottom">
+                <BottomNavBtnGroup>
+                    <BottomNavBtn direction="back" label="Subpart C" />
+                    <VerticalRule />
+                    <BottomNavBtn direction="forward" label="Subpart E" />
+                </BottomNavBtnGroup>
+            </div>
+            <v-card fixed outlined class="sticky-card">
                 <v-btn class="nav-button"
                     @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[tabIndex-1]})"
                     color="#EEFAFE" v-if="this.tabIndex > 0 && this.tabParam==='subpart'">
@@ -63,6 +70,8 @@
 </template>
 
 <script>
+import BottomNavBtn from "@/components/floating_nav/BottomNavBtn.vue";
+import BottomNavBtnGroup from "@/components/floating_nav/BottomNavBtnGroup.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
@@ -73,6 +82,7 @@ import PartToc from "@/components/part/PartToc.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
+import VerticalRule from "@/components/floating_nav/VerticalRule.vue";
 
 import {
     getPart,
@@ -86,6 +96,8 @@ import _isUndefined from "lodash/isUndefined";
 
 export default {
     components: {
+        BottomNavBtn,
+        BottomNavBtnGroup,
         SectionResourcesSidebar,
         FancyDropdown,
         FlashBanner,
@@ -96,6 +108,7 @@ export default {
         PartToc,
         SubpartList,
         SectionList,
+        VerticalRule,
     },
 
     name: "Part",
@@ -622,15 +635,26 @@ $sidebar-top-margin: 40px;
     font-weight: 400;
     font-size: 14px;
 }
+.sticky-bottom {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
+}
 .sticky-card.v-card.v-sheet.v-sheet--outlined {
 
   position: sticky;
     bottom:0px;
   z-index: 1;
+  margin-left: auto;
   /* centering */
   
-  left:50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);  
+  /*left:50%;*/
+  /*transform: translate(-50%, -50%);*/
+  /*-webkit-transform: translate(-50%, -50%);  */
 }
 </style>

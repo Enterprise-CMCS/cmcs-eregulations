@@ -58,8 +58,11 @@ $eregs-image-path: "~legacy-static/images";
     justify-content: flex-end;
     width: 106px;
     font-size: 14px;
-    font-weight: 400;
     padding: 12px 0;
+
+    .label {
+        font-weight: 400;
+    }
 
     .icon {
         margin: 0 10px;
