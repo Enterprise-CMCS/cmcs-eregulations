@@ -37,7 +37,7 @@
             <div class="sticky-bottom" v-if="this.tabParam === 'subpart' || this.tabParam === 'section'">
                 <BottomNavBtnGroup>
                     <BottomNavBtn
-                        v-if="this.floatingBackBtnLabel && !this.floatingBackBtnLabel.includes('undefined') "
+                        v-if="this.floatingBackBtnLabel"
                         direction="back"
                         :label="floatingBackBtnLabel"
                         @click.native="floatingBackClick"
@@ -46,7 +46,7 @@
                         v-if="this.showFloatingVerticalRule"
                     />
                     <BottomNavBtn
-                        v-if="this.floatingForwardBtnLabel && !this.floatingForwardBtnLabel.includes('undefined') "
+                        v-if="this.floatingForwardBtnLabel"
                         direction="forward"
                         :label="floatingForwardBtnLabel"
                         @click.native="floatingForwardClick"
@@ -331,27 +331,41 @@ export default {
             return []
         },
         floatingBackBtnLabel() {
-            if (this.tabParam === "subpart" && this.subpartNav.length > 0) {
-                return `Subpart ${this.subpartNav[this.tabIndex - 1]}`
-            } else if (this.tabParam === "section" && this.sectionNav.length > 0) {
-                return `§${this.part}.${this.sectionNav[this.tabIndex - 1]}`;
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[this.tabIndex - 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[this.tabIndex - 1]}`
+            } else {
+                return undefined;
             }
         },
         floatingForwardBtnLabel() {
-            if (this.tabParam === "subpart" && this.subpartNav.length > 0) {
-                return `Subpart ${this.subpartNav[this.tabIndex + 1]}`
-            } else if (this.tabParam === "section" && this.sectionNav.length > 0) {
-                return `§${this.part}.${this.sectionNav[this.tabIndex + 1]}`;
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[this.tabIndex + 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[this.tabIndex + 1]}`
+            } else {
+                return undefined;
             }
         },
         showFloatingVerticalRule() {
-            if (this.tabParam === "subpart"
-                && this.tabIndex < this.subpartNav.length - 1
-                && this.tabIndex > 0
-            ) {
-                return true;
-            } else if (this.tabParam == "section"
-                && this.tabIndex < this.sectionNav.length - 1
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            if (this.tabIndex < arrayOfInterest.length - 1
                 && this.tabIndex > 0
             ) {
                 return true;
