@@ -56,7 +56,6 @@ $eregs-image-path: "~legacy-static/images";
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 106px;
     font-size: 14px;
     padding: 12px 0;
 
@@ -71,9 +70,17 @@ $eregs-image-path: "~legacy-static/images";
 
 .forward-btn {
     flex-direction: row;
+
+    .label {
+        padding-left: 10px;
+    }
 }
 
 .back-btn {
     flex-direction: row-reverse;
+
+    .label {
+        padding-right: 10px;
+    }
 }
 </style>

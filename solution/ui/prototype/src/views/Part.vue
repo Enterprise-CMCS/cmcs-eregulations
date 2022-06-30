@@ -34,11 +34,21 @@
                 </div>
 
             </div>
-            <div class="sticky-bottom">
+            <div class="sticky-bottom" v-if="this.tabParam === 'subpart' || this.tabParam === 'section'">
                 <BottomNavBtnGroup>
-                    <BottomNavBtn direction="back" label="Subpart C" />
-                    <VerticalRule />
-                    <BottomNavBtn direction="forward" label="Subpart E" />
+                    <BottomNavBtn
+                        v-if="this.floatingBackBtnLabel && !this.floatingBackBtnLabel.includes('undefined') "
+                        direction="back"
+                        :label="floatingBackBtnLabel"
+                    />
+                    <VerticalRule
+                        v-if="this.showFloatingVerticalRule"
+                    />
+                    <BottomNavBtn
+                        v-if="this.floatingForwardBtnLabel && !this.floatingForwardBtnLabel.includes('undefined') "
+                        direction="forward"
+                        :label="floatingForwardBtnLabel"
+                    />
                 </BottomNavBtnGroup>
             </div>
             <v-card fixed outlined class="sticky-card">
@@ -317,8 +327,36 @@ export default {
                 return sections[0].children.map(sec => sec.identifier[1])
             }
             return []
-        }
+        },
+        floatingBackBtnLabel() {
+            if (this.tabParam === "subpart" && this.subpartNav.length > 0) {
+                return `Subpart ${this.subpartNav[this.tabIndex - 1]}`
+            } else if (this.tabParam === "section" && this.sectionNav.length > 0) {
+                return `§${this.part}.${this.sectionNav[this.tabIndex - 1]}`;
+            }
+        },
+        floatingForwardBtnLabel() {
+            if (this.tabParam === "subpart" && this.subpartNav.length > 0) {
+                return `Subpart ${this.subpartNav[this.tabIndex + 1]}`
+            } else if (this.tabParam === "section" && this.sectionNav.length > 0) {
+                return `§${this.part}.${this.sectionNav[this.tabIndex + 1]}`;
+            }
+        },
+        showFloatingVerticalRule() {
+            if (this.tabParam === "subpart"
+                && this.tabIndex < this.subpartNav.length - 1
+                && this.tabIndex > 0
+            ) {
+                return true;
+            } else if (this.tabParam == "section"
+                && this.tabIndex < this.sectionNav.length - 1
+                && this.tabIndex > 0
+            ) {
+                return true;
+            }
 
+            return false;
+        },
     },
 
     async created() {
@@ -645,6 +683,7 @@ $sidebar-top-margin: 40px;
     margin-left: auto;
     margin-right: auto;
 }
+
 .sticky-card.v-card.v-sheet.v-sheet--outlined {
 
   position: sticky;
@@ -652,7 +691,7 @@ $sidebar-top-margin: 40px;
   z-index: 1;
   margin-left: auto;
   /* centering */
-  
+
   /*left:50%;*/
   /*transform: translate(-50%, -50%);*/
   /*-webkit-transform: translate(-50%, -50%);  */
