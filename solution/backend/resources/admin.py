@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
 
 # Register your models here.
 
@@ -16,6 +16,7 @@ from .models import (
     AbstractLocation,
     Section,
     Subpart,
+    FederalRegisterDocumentGroup,
 )
 
 from .filters import (
@@ -157,6 +158,21 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "document_number", "name",
               "description", "date", "url", "category", "locations", "internal_notes")
+
+
+@admin.register(FederalRegisterDocumentGroup)
+class FederalRegisterDocumentGroupAdmin(BaseAdmin):
+    admin_priority = 250
+    filter_horizontal = ("documents",)
+    list_display = ("docket_number_prefixes", "number_of_documents")
+    list_display_links = ("docket_number_prefixes", "number_of_documents")
+    search_fields = ["docket_number_prefixes"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(number_of_documents=Count("documents"))
+
+    def number_of_documents(self, obj):
+        return obj.number_of_documents
 
 
 # Custom app list function, allows ordering Django Admin models by "admin_priority", low to high

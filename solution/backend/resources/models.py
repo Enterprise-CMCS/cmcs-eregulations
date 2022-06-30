@@ -199,5 +199,20 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
 # Resource grouping models
 
 
-#class FederalRegisterDocumentGroup(models.Model):
+class FederalRegisterDocumentGroup(models.Model):
+    docket_number_prefixes = ArrayField(
+        models.CharField(max_length=255, blank=True, null=True),
+        default=list,
+        blank=True,
+        help_text="Common prefixes to use when grouping Federal Register Documents, "
+                  "e.g. \"CMS-1234-\" to match any docket number starting with that string.",
+    )
+    documents = models.ManyToManyField(FederalRegisterDocument, blank=True, related_name="group")
 
+    def __str__(self):
+        prefixes = ", ".join(self.docket_number_prefixes)
+        return f"\"{prefixes}\" group"
+    
+    class Meta:
+        verbose_name = "FR Document Group"
+        verbose_name_plural = "FR Document Groups"
