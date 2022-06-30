@@ -9,7 +9,7 @@
                     :section="section"
                 />
             </h2>
-            <span style="float: right" class="breadcrumbs">
+            <span style="float: right" class="breadcrumbs" v-if="subPart != 'Subpart-undefined'">
                 <router-link
                     v-if="navigation.previous"
                     :to="{
@@ -19,7 +19,7 @@
                     >Previous</router-link
                 >
                 <span v-else>Previous</span>
-                /
+                <span v-if="navigation.previous && navigation.next">/</span>
                 <router-link
                     v-if="navigation.next"
                     :to="{
@@ -28,7 +28,7 @@
                     }"
                     >Next</router-link
                 >
-                <span v-else>Next</span>
+                    <span v-else>Next</span>
             </span>
         </div>
 
@@ -49,7 +49,7 @@
             :title="title"
             :part="part"
             resourcesDisplay="drawer"
-            :showResourceButtons="false"
+            :showResourceButtons="true"
             :supplementalContentCount="supplementalContentCount"
             @view-resources="setResourcesParams"
         />

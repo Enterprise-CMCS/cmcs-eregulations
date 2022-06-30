@@ -10,7 +10,7 @@
             Part {{ this.part }}
         </router-link>
         <span v-else>Part {{ this.part }}</span>
-        <template v-if="subPart">
+        <template v-if="subPart && subPart != 'Subpart-undefined'">
             > 
             <router-link
                 v-if="section"
@@ -21,11 +21,10 @@
             >
                 Subpart {{ this.subPart.split("-")[1] }}</router-link>
             <span v-else>Subpart {{ this.subPart.split("-")[1] }}</span>
-
-            <template v-if="section">
+        </template>
+                    <template v-if="section">
                 > <span>§ {{ this.part }}.{{ this.section }}</span>
             </template>
-        </template>
     </span>
 </template>
 

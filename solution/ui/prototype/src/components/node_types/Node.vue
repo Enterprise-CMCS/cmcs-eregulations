@@ -10,6 +10,7 @@
         :supplementalContentCount="supplementalContentCount"
         :title="title"
         :part="part"
+        :subpart="subpart"
     ></component>
 </template>
 
@@ -49,6 +50,10 @@ export default {
         node: {
             type: Object,
             required: true,
+        },
+        subpart:{
+            type: String,
+            required:false
         },
         resourceParamsEmitter: {
             type: Function,

@@ -1,30 +1,24 @@
 <template>
     <article>
         <h1 tabindex="-1" :id="kebabTitle">
-            <button
-                v-if="numSupplementalContent && !showResourceButtons"
-                v-on:click="handleBlueBtnClick"
-                class="supplemental-content-count"
-            >
+            <button v-if="numSupplementalContent && !showResourceButtons" v-on:click="handleBlueBtnClick"
+                class="supplemental-content-count">
                 {{ numSupplementalContent }}
             </button>
-            {{ node.title }}
+
+            <router-link :to="{
+                name: 'PDpart-subPart',
+                params: { title: this.title, part: this.part, subPart: 'Subpart-'+this.node.label[0]}
+            }">
+                {{node.title}}
+            </router-link>
         </h1>
         <div v-if="showResourceButtons  && numDirectContent" class="btn-container">
-            <ResourcesBtn
-                :clickHandler="handleBtnClick"
-                label="Subpart"
-                size="small"
-            />
+            <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" size="small" />
         </div>
         <template v-for="child in node.children">
-            <Node
-                :node="child"
-                :key="child.title"
-                :resource-params-emitter="resourceParamsEmitter"
-                :showResourceButtons="showResourceButtons"
-                :supplementalContentCount="supplementalContentCount"
-            />
+            <Node :node="child" :subpart="node.label[0]" :key="child.title" :resource-params-emitter="resourceParamsEmitter"
+                :showResourceButtons="showResourceButtons" :supplementalContentCount="supplementalContentCount" />
         </template>
     </article>
 </template>

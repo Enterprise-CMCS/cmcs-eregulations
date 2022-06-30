@@ -108,6 +108,14 @@ export default {
             },
             immediate: true,
         },
+        subPart:{
+            async handler(){
+                                        this.sections = await getSectionsForSubPart(
+                            this.part,
+                            this.subPart.split("-")[1]
+                        );
+            }
+        }
     },
     async mounted(){
       try {
@@ -148,20 +156,30 @@ export default {
         partContent() {
             let results = this.structure?.[1];
             if (results && this.subPart) {
+                if(this.subPart == "Subpart-undefined"){
+                    return results.filter((section)=>{
+                        return section.label[1] === this.section;
+                    })
+                }
+                else{
                 results = results.filter((subPart) => {
                     return subPart.label[0] === this.subPart.split("-")[1];
-                });
+                })};
 
                 if (this.section) {
                     const sections = results[0].children.filter(section => {
-                          if (section.label[1] === this.section && section.node_type === "SECTION"){
+                        if(section.label){
+
+                        
+                          if (section.node_type === "SECTION" && section.label[1] == this.section){
                             return true
-                          } else{
+                          } 
+                        else if(section.label[1] == this.section){
                             return section.children.filter(subSection =>{
                               return subSection.label && subSection.label[1] === this.section && subSection.node_type === "SECTION"
                             }).length
                           }
-                        }
+                        }}
                     );
                     if (sections[0].node_type === "SECTION"){
                       return [sections[0]]

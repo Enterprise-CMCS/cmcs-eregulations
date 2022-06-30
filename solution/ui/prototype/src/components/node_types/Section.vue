@@ -13,7 +13,12 @@
             >
                 {{ numSupplementalContent }}
             </button>
-            {{ node.title }}
+            <router-link :to="{
+                name: 'PDpart-section',
+                params: { title: '42', part: this.node.label[0], subPart: 'Subpart-'+this.subpart, section: this.node.label[1]}
+            }">
+                {{node.title}}
+            </router-link>
         </h2>
 
         <div class="paragraphs">
@@ -57,6 +62,10 @@ export default {
         part: {
             type: String,
             required: false,
+        },
+        subpart: {
+            type: String,
+            required: false
         },
         node: {
             type: Object,
@@ -119,5 +128,8 @@ export default {
     border-radius: 3px;
     font-size: 12px;
     line-height: 20px;
+}
+.content-container .content .content-with-drawer{
+    margin:0;
 }
 </style>
