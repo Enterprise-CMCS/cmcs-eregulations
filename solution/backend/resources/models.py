@@ -3,6 +3,7 @@ from model_utils.managers import InheritanceManager
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 # Field mixins
@@ -183,13 +184,20 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 
 
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
-    docket_number = models.CharField(max_length=255, blank=True, null=True)
+    docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), null=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"{self.date} {self.document_number}: {self.name}"
 
     class Meta:
-        ordering = ["-date", "document_number", "docket_number", "name", "description"]
+        ordering = ["-date", "document_number", "name", "description"]
         verbose_name = "Federal Register Document"
         verbose_name_plural = "Federal Register Documents"
+
+
+# Resource grouping models
+
+
+#class FederalRegisterDocumentGroup(models.Model):
+
