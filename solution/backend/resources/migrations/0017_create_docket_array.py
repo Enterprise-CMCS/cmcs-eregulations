@@ -4,14 +4,6 @@ import django_jsonform.models.fields
 from django.db import migrations, models
 
 
-def convert_docket_number_to_list(apps, schema_editor):
-    FederalRegisterDocument = apps.get_model("resources", "FederalRegisterDocument")
-    for doc in FederalRegisterDocument.objects.all():
-        if doc.docket_number_tmp is not None and doc.docket_number_tmp != "":
-            doc.docket_numbers.append(doc.docket_number_tmp)
-            doc.save()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -32,10 +24,5 @@ class Migration(migrations.Migration):
             model_name='federalregisterdocument',
             name='docket_numbers',
             field=django_jsonform.models.fields.ArrayField(base_field=models.CharField(blank=True, max_length=255, null=True), default=list, blank=True, size=None),
-        ),
-        migrations.RunPython(convert_docket_number_to_list),
-        migrations.RemoveField(
-            model_name='federalregisterdocument',
-            name='docket_number_tmp',
         ),
     ]
