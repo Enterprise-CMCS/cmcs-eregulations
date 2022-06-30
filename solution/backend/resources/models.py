@@ -3,7 +3,7 @@ from model_utils.managers import InheritanceManager
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django_jsonform.models.fields import ArrayField
 
 
 # Field mixins
@@ -184,7 +184,7 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 
 
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
-    docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), null=True)
+    docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
