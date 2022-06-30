@@ -152,9 +152,9 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
 
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
-    #list_display = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at", "approved")
-    #list_display_links = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at")
-    #search_fields = ["date", "name", "description", "docket_number", "document_number"]
+    list_display = ("date", "name", "description", "docket_numbers", "document_number", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "docket_numbers", "document_number", "category", "updated_at")
+    search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "document_number", "name",
               "description", "date", "url", "category", "locations", "internal_notes")
 
