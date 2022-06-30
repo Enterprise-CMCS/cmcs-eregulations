@@ -40,6 +40,7 @@
                         v-if="this.floatingBackBtnLabel && !this.floatingBackBtnLabel.includes('undefined') "
                         direction="back"
                         :label="floatingBackBtnLabel"
+                        @click.native="floatingBackClick"
                     />
                     <VerticalRule
                         v-if="this.showFloatingVerticalRule"
@@ -48,6 +49,7 @@
                         v-if="this.floatingForwardBtnLabel && !this.floatingForwardBtnLabel.includes('undefined') "
                         direction="forward"
                         :label="floatingForwardBtnLabel"
+                        @click.native="floatingForwardClick"
                     />
                 </BottomNavBtnGroup>
             </div>
@@ -554,6 +556,20 @@ export default {
 
             this.tabsShape.section.listItems = filteredSections;
         },
+        floatingBackClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.tabIndex - 1]}`
+                : `${this.part}-${this.sectionNav[this.tabIndex - 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        },
+        floatingForwardClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.tabIndex + 1]}`
+                : `${this.part}-${this.sectionNav[this.tabIndex + 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        }
     },
 
     watch: {
