@@ -172,6 +172,7 @@ export default {
                 }
             },
             set(value) {
+
                 const urlParams = {
                     title: this.title,
                     part: this.part,
@@ -179,7 +180,7 @@ export default {
                 const qParams = { ...this.queryParams };
                 const valueType = Object.keys(this.tabsShape)[value];
                 switch (valueType) {
-                    case "toc":
+                    case "toc":{
                         this.$router.push({
                             name: "part",
                             params: {
@@ -189,7 +190,8 @@ export default {
                             query: qParams,
                         });
                         break;
-                    case "part":
+                    }
+                    case "part":{
                         this.$router.push({
                             name: "part",
                             params: {
@@ -199,7 +201,8 @@ export default {
                             query: qParams,
                         });
                         break;
-                    case "subpart":
+                    }
+                    case "subpart":{
                         this.$router.push({
                             name: "part",
                             params: {
@@ -216,38 +219,37 @@ export default {
                                 : qParams,
                         });
                         break;
-                    case "section":
-                        const subpartSelection = _isEmpty(qParams)
-                            ? {
-                                  subpart:
-                                      this.tabsShape.subpart.listItems[0]
-                                          .identifier,
-                              }
-                            : {};
-                        const sectionSelection = _isUndefined(
-                            qParams[valueType]
-                        )
-                            ? {
-                                  section:
-                                      this.tabsShape.section.listItems[0]
-                                          .identifier,
-                              }
-                            : {};
+                    }
+                    case "section": {
+
+                        const section = this.tabsShape.section.listItems[0]
+                        const subPart = this.tabsShape.subpart.listItems.find(subpart => subpart.identifier === section.subpart)
+                        const subpartSelection = _isEmpty(qParams) && subPart
+                            ?
+                            {subpart: subPart.identifier}
+                            :
+                            {};
+                        const sectionSelection = _isUndefined(qParams[valueType])
+                            ?
+                            {section: section.identifier}
+                            :
+                            {};
                         this.$router.push({
                             name: "part",
                             params: {
-                                ...urlParams,
-                                tab: "section",
+                              ...urlParams,
+                              tab: "section",
                             },
                             query: _isUndefined(qParams[valueType])
                                 ? {
-                                      ...qParams,
-                                      ...subpartSelection,
-                                      ...sectionSelection,
-                                  }
+                                  ...qParams,
+                                  ...subpartSelection,
+                                  ...sectionSelection,
+                                }
                                 : qParams,
                         });
                         break;
+                    }
                 }
             },
         },
@@ -267,9 +269,21 @@ export default {
         },
         sectionContent(){
           if (this.subpartContent && this.subpartContent.length > 0){
-            return this.subpartContent[0].children.filter(child =>
+            const section = this.subpartContent[0].children.find(child =>
                 child.node_type === "SECTION" && child.label[1] === this.queryParams.section
             )
+
+            if (section){
+              return [section]
+            }
+
+            return [this.subpartContent[0].children.filter(child =>
+                child.node_type === "SUBJGRP"
+            ).map(sg => sg.children).flat(1)
+            .find(child =>
+                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
+            )]
+
           }
           return this.structure?.[1].filter(child =>
               child.node_type === "SECTION" && child.label[1] === this.queryParams.section
@@ -445,17 +459,48 @@ export default {
         },
         async getFormattedSectionsList({title, part, subpart}) {
 
-            const allSections = await getSectionsForPart(title, part)
-            const filteredSections = allSections
-                .filter((section) =>
-                  subpart ? section.parent_type === "subpart" && section.parent[0] === subpart : true)
+            const toc = await getPartTOC(title, part)
+
+            const subParts = toc.children
+                .filter(child => child.type==="subpart")
+                .filter(subPart => subpart ? subPart.identifier[0] === subpart: true)
+
+            let filteredSections = subParts.map( sp => sp.children.filter(child => child.type=== 'section'))
+                .flat(1)
                 .map(section =>({
-                  subpart:section.parent[0],
-                  identifier: section.identifier[1],
-                  label: section.label_level,
-                  description: section.label_description,
-                  part
-            }));
+                    subpart:section.parent[0],
+                    identifier: section.identifier[1],
+                    label: section.label_level,
+                    description: section.label_description,
+                    part
+                }))
+            if (!subpart){
+                const orphanSections = toc.children
+                    .filter(child => child.type === "section")
+                    .map(section =>({
+                        subpart:section.parent[0],
+                        identifier: section.identifier[1],
+                        label: section.label_level,
+                        description: section.label_description,
+                        part
+                    }))
+                filteredSections = filteredSections.concat(orphanSections)
+            }
+            const subjectGroups = subParts.map( sp => sp.children.filter(child => child.type=== 'subject_group')).flat(1)
+            subjectGroups.forEach(subject_group => {
+                const subPart = subject_group.parent[0]
+                subject_group.children.forEach( section => {
+                    filteredSections.push({
+                        subpart:subPart,
+                        identifier: section.identifier[1],
+                        label: section.label_level,
+                        description: section.label_description,
+                        part
+                    })
+                })
+            })
+            filteredSections.sort((a,b) => Number(a.identifier) - Number(b.identifier))
+
             this.tabsShape.section.listItems = filteredSections;
         },
     },
@@ -486,17 +531,22 @@ export default {
                       part: this.part,
                       subpart: toQueries.subpart
                     });
+                    const query = {
+                        subpart: toQueries.subpart,
+                    }
+                    if (toQueries.section !== previousQueries.section) {
+                      query.section = toQueries.section
+                    }
                     this.$router.push({
-                        name: "part",
-                        params: {
-                            title: this.title,
-                            part: this.part,
-                            tab: this.tabParam,
-                        },
-                        query: {
-                            subpart: toQueries.subpart,
-                        },
+                      name: "part",
+                      params: {
+                        title: this.title,
+                        part: this.part,
+                        tab: this.tabParam,
+                      },
+                      query,
                     });
+
 
                 }
 
