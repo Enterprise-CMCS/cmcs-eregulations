@@ -1,5 +1,5 @@
 <template>
-    <header id="header" :class="stickyClass">
+    <header id="header" :class="headerClasses">
         <!-- desktop -->
         <div class="flexbox header-large">
             <div class="title-container">
@@ -92,10 +92,11 @@ export default {
     },
 
     computed: {
-        stickyClass() {
-            return this.stickyMode === "hideOnScrollDown" || "normal"
-                ? "sticky"
-                : "";
+        headerClasses() {
+            return {
+                sticky: this.stickyMode === "hideOnScrollDown" || "normal",
+                "sticky-hide": !this.showNavbar,
+            }
         },
     },
 
@@ -129,6 +130,7 @@ export default {
 header {
     box-sizing: border-box;
     border: 1px solid #d6d7d9;
+    transition: transform 0.3s ease-in-out;
 }
 .links-container {
     padding-right: 10px;
@@ -142,5 +144,10 @@ header {
 .header-link {
     color: #212121;
     padding-right: 20px;
+}
+
+.sticky-hide {
+    box-shadow: none;
+    transform: translate3d(0, -100%, 0);
 }
 </style>
