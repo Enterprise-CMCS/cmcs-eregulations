@@ -1,48 +1,37 @@
 <template>
-    <div class="nav-container">
-        <div class="content" :class="resourcesClass">
-            <h1>
-                <span> {{ title }} CFR Part {{ part }} - </span>
-                <span v-if="partLabel">{{ partLabel }}</span>
-                <span v-else>
-                    <InlineLoader />
-                </span>
-            </h1>
+    <div class="part-nav-tabs" :class="partNavTabClasses">
+        <div class="tabs-container">
             <slot></slot>
         </div>
     </div>
 </template>
 
 <script>
-import InlineLoader from "@/components/InlineLoader.vue";
-
 export default {
-    components: {
-        InlineLoader,
-    },
+    components: {},
 
     name: "PartNav",
 
     props: {
-        title: {
-            type: String,
-            required: true,
+        stickyMode: {
+            validator: function (value) {
+                return ["hideOnScrollDown", "normal", "disabled"].includes(
+                    value
+                );
+            },
+            default: "normal",
         },
-        part: {
-            type: String,
-            required: true,
-        },
-        partLabel: {
-            type: String,
-        },
-        resourcesDisplay: {
-            type: String,
-        },
+        showHeader: {
+            type: Boolean,
+            default: true,
+        }
     },
 
     computed: {
-        resourcesClass() {
-            return `content-with-${this.resourcesDisplay}`;
+        partNavTabClasses() {
+            return {
+                "top-header-hidden": !this.showHeader,
+            };
         },
     },
 };
@@ -57,26 +46,31 @@ $eregs-image-path: "~legacy-static/images";
 
 @import "legacy/css/scss/main.scss";
 
-.nav-container {
-    overflow: auto;
-    width: 100%;
+$sidebar-top-margin: 40px;
+
+.part-nav-tabs {
+    position: sticky;
+    z-index: 1;
     background: $lightest_blue;
+    transition: top 0.3s ease-in-out;
 
-    .content-with-drawer {
-        margin: 0 auto;
+    top: $header_height_mobile;
+
+    @include screen-md {
+        top: $header_height_tablet;
     }
 
-    .content-with-sidebar {
+    @include screen-lg {
+        top: $header_height;
+    }
+
+    &.top-header-hidden {
+        top: 0;
+    }
+
+    .tabs-container {
         margin-left: 50px;
-    }
-
-    .content {
         max-width: $text-max-width;
-
-        h1 {
-            margin-top: 55px;
-            margin-bottom: 40px;
-        }
 
         .nav-tabs.v-tabs .v-tabs-bar {
             background-color: transparent;

@@ -63,14 +63,6 @@ export default {
         JumpTo,
     },
 
-    mounted() {
-        window.addEventListener("scroll", this.onScroll);
-    },
-
-    beforeDestroy() {
-        window.removeEventListener("scroll", this.onScroll);
-    },
-
     props: {
         stickyMode: {
             validator: function (value) {
@@ -80,14 +72,16 @@ export default {
             },
             default: "normal",
         },
+        showHeader: {
+            type: Boolean,
+            default: true,
+        }
     },
 
     data() {
         return {
             action: "open",
             state: "expanded",
-            showNavbar: true,
-            lastScrollPosition: 0,
         };
     },
 
@@ -95,7 +89,7 @@ export default {
         headerClasses() {
             return {
                 sticky: this.stickyMode === "hideOnScrollDown" || "normal",
-                "sticky-hide": !this.showNavbar,
+                "sticky-hide": !this.showHeader,
             };
         },
     },
@@ -104,24 +98,6 @@ export default {
         toggleState(payload) {
             this.action = payload.action;
             this.state = payload.state;
-        },
-        onScroll() {
-            if (this.stickyMode === "hideOnScrollDown") {
-                const scrollPosition = window.scrollY;
-                const scrollDirection =
-                    scrollPosition > 0 &&
-                    scrollPosition > this.lastScrollPosition
-                        ? "down"
-                        : "up";
-
-                this.lastScrollPosition = scrollPosition;
-
-                if (scrollDirection === "down") {
-                    this.showNavbar = false;
-                } else {
-                    this.showNavbar = true;
-                }
-            }
         },
     },
 };
@@ -133,6 +109,7 @@ header {
     border: 1px solid #d6d7d9;
     transition: transform 0.3s ease-in-out;
 }
+
 .links-container {
     padding-right: 10px;
 }
