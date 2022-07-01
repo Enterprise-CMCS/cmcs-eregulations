@@ -53,29 +53,6 @@
                     />
                 </BottomNavBtnGroup>
             </div>
-            <v-card fixed outlined class="sticky-card">
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[subIndex-1]})"
-                    color="#EEFAFE" v-if="this.subIndex > 0 && this.tabParam==='subpart'">
-                    <v-icon>mdi-chevron-left</v-icon>Subpart {{this.subpartNav[this.subIndex-1]}}
-                </v-btn>
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[subIndex+1]})"
-                    color="#EEFAFE" v-if="this.subIndex < this.subpartNav.length-1&& this.tabParam==='subpart'">
-                    Subpart {{this.subpartNav[this.subIndex+1]}}
-                    <v-icon>mdi-chevron-right</v-icon>
-                </v-btn>
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[secIndex-1]})"
-                    color="#EEFAFE" v-if="this.secIndex >0 && this.tabParam==='section'">
-                    <v-icon>mdi-chevron-left</v-icon>§{{this.part}}.{{this.sectionNav[this.secIndex-1]}}
-                </v-btn>
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[secIndex+1]})"
-                    color="#EEFAFE" v-if="this.secIndex  < this.sectionNav.length-1&& this.tabParam==='section'">
-                    §{{this.part}}.{{this.sectionNav[this.secIndex+1]}} <v-icon>mdi-chevron-right</v-icon>
-                </v-btn>
-            </v-card>
             <Footer />
         </div>
     </body>
@@ -703,12 +680,7 @@ $sidebar-top-margin: 40px;
     border-left: 1px solid $light_gray;
     overflow: scroll;
 }
-.nav-button.v-btn{
-    color: #046791;
-    font-family: 'Open Sans';
-    font-weight: 400;
-    font-size: 14px;
-}
+
 .sticky-bottom {
     position: -webkit-sticky;
     position: sticky;
@@ -718,18 +690,5 @@ $sidebar-top-margin: 40px;
     z-index: 1;
     margin-left: auto;
     margin-right: auto;
-}
-
-.sticky-card.v-card.v-sheet.v-sheet--outlined {
-
-  position: sticky;
-    bottom:0px;
-  z-index: 1;
-  margin-left: auto;
-  /* centering */
-
-  /*left:50%;*/
-  /*transform: translate(-50%, -50%);*/
-  /*-webkit-transform: translate(-50%, -50%);  */
 }
 </style>
