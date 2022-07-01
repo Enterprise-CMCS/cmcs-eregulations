@@ -34,35 +34,33 @@
                 </div>
 
             </div>
-            <v-card fixed outlined class="mx-auto sticky-card">
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[subIndex-1]})"
-                    color="#EEFAFE" v-if="this.subIndex > 0 && this.tabParam==='subpart'">
-                    <v-icon>mdi-chevron-left</v-icon>Subpart {{this.subpartNav[this.subIndex-1]}}
-                </v-btn>
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[subIndex+1]})"
-                    color="#EEFAFE" v-if="this.subIndex < this.subpartNav.length-1&& this.tabParam==='subpart'">
-                    Subpart {{this.subpartNav[this.subIndex+1]}}
-                    <v-icon>mdi-chevron-right</v-icon>
-                </v-btn>
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[secIndex-1]})"
-                    color="#EEFAFE" v-if="this.secIndex >0 && this.tabParam==='section'">
-                    <v-icon>mdi-chevron-left</v-icon>§{{this.part}}.{{this.sectionNav[this.secIndex-1]}}
-                </v-btn>
-                <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[secIndex+1]})"
-                    color="#EEFAFE" v-if="this.secIndex  < this.sectionNav.length-1&& this.tabParam==='section'">
-                    §{{this.part}}.{{this.sectionNav[this.secIndex+1]}} <v-icon>mdi-chevron-right</v-icon>
-                </v-btn>
-            </v-card>
+            <div class="sticky-bottom" v-if="this.tabParam === 'subpart' || this.tabParam === 'section'">
+                <BottomNavBtnGroup>
+                    <BottomNavBtn
+                        v-if="this.floatingBackBtnLabel"
+                        direction="back"
+                        :label="floatingBackBtnLabel"
+                        @click.native="floatingBackClick"
+                    />
+                    <VerticalRule
+                        v-if="this.showFloatingVerticalRule"
+                    />
+                    <BottomNavBtn
+                        v-if="this.floatingForwardBtnLabel"
+                        direction="forward"
+                        :label="floatingForwardBtnLabel"
+                        @click.native="floatingForwardClick"
+                    />
+                </BottomNavBtnGroup>
+            </div>
             <Footer />
         </div>
     </body>
 </template>
 
 <script>
+import BottomNavBtn from "@/components/floating_nav/BottomNavBtn.vue";
+import BottomNavBtnGroup from "@/components/floating_nav/BottomNavBtnGroup.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
@@ -73,6 +71,7 @@ import PartToc from "@/components/part/PartToc.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
+import VerticalRule from "@/components/floating_nav/VerticalRule.vue";
 
 import {
     getPart,
@@ -86,6 +85,8 @@ import _isUndefined from "lodash/isUndefined";
 
 export default {
     components: {
+        BottomNavBtn,
+        BottomNavBtnGroup,
         SectionResourcesSidebar,
         FancyDropdown,
         FlashBanner,
@@ -96,6 +97,7 @@ export default {
         PartToc,
         SubpartList,
         SectionList,
+        VerticalRule,
     },
 
     name: "Part",
@@ -298,8 +300,62 @@ export default {
         },
         sectionNav() {
             return this.tabsShape.section.listItems.map(section => section.identifier)
-        }
+        },
+        floatingBackBtnLabel() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
 
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest - 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest - 1]}`
+            } else {
+                return undefined;
+            }
+        },
+        floatingForwardBtnLabel() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest + 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest + 1]}`
+            } else {
+                return undefined;
+            }
+        },
+        showFloatingVerticalRule() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+
+            if (indexOfInterest < arrayOfInterest.length - 1
+                && indexOfInterest > 0
+            ) {
+                return true;
+            }
+            return false;
+        },
     },
 
     async created() {
@@ -319,6 +375,9 @@ export default {
         });
         if(this.tabParam=="section"){
             this.secIndex=this.sectionNav.indexOf(this.queryParams.section)
+            if(this.queryParams.subpart){
+                this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+            }
             if(this.queryParams.subpart){
                 this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
             }
@@ -500,6 +559,20 @@ export default {
 
             this.tabsShape.section.listItems = filteredSections;
         },
+        floatingBackClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.subIndex - 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex - 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        },
+        floatingForwardClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.subIndex + 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex  + 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        }
     },
 
     watch: {
@@ -613,21 +686,15 @@ $sidebar-top-margin: 40px;
     border-left: 1px solid $light_gray;
     overflow: scroll;
 }
-.nav-button.v-btn{
-    color: #046791;
-    font-family: 'Open Sans';
-    font-weight: 400;
-    font-size: 14px;
-}
-.sticky-card.v-card.v-sheet.v-sheet--outlined {
 
-  position: sticky;
-    bottom:0px;
-  z-index: 1;
-  /* centering */
-  
-  left:50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);  
+.sticky-bottom {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>
