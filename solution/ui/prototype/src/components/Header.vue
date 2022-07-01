@@ -1,5 +1,5 @@
 <template>
-    <header id="header" class="sticky">
+    <header id="header" :class="stickyClass">
         <!-- desktop -->
         <div class="flexbox header-large">
             <div class="title-container">
@@ -63,17 +63,63 @@ export default {
         JumpTo,
     },
 
+    mounted() {
+        window.addEventListener("scroll", this.onScroll);
+    },
+
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.onScroll);
+    },
+
+    props: {
+        stickyMode: {
+            validator: function (value) {
+                return ["hideOnScrollDown", "normal", "disabled"].includes(
+                    value
+                );
+            },
+            default: "normal",
+        },
+    },
+
     data() {
         return {
             action: "open",
             state: "expanded",
+            showNavbar: true,
+            lastScrollPosition: 0,
         };
+    },
+
+    computed: {
+        stickyClass() {
+            return this.stickyMode === "hideOnScrollDown" || "normal"
+                ? "sticky"
+                : "";
+        },
     },
 
     methods: {
         toggleState(payload) {
             this.action = payload.action;
             this.state = payload.state;
+        },
+        onScroll() {
+            if (this.stickyMode === "hideOnScrollDown") {
+                const scrollPosition = window.scrollY;
+                const scrollDirection =
+                    scrollPosition > this.lastScrollPosition ? "down" : "up";
+
+                this.lastScrollPosition = scrollPosition;
+
+                if (scrollDirection === "down") {
+                    console.log("hide header!");
+                    this.showNavbar = false;
+                } else {
+                    console.log("show header!");
+                    this.showNavbar = true;
+                }
+            }
         },
     },
 };

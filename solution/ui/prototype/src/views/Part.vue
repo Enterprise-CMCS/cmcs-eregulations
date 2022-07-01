@@ -1,7 +1,7 @@
 <template>
     <body class="ds-base">
         <div id="app">
-            <Header />
+            <Header stickyMode="hideOnScrollDown" />
             <PartNav
                 :title="title"
                 :part="part"
