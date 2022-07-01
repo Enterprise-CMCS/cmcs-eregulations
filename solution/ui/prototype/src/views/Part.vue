@@ -329,12 +329,16 @@ export default {
                 ? this.subpartNav
                 : this.sectionNav;
 
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
             const labelFirstHalf = this.tabParam == "subpart"
                 ? "Subpart "
                 : `§${this.part}.`;
 
-            if (this.subpartNav.length > 0 && arrayOfInterest[this.tabIndex - 1] != undefined) {
-                return `${labelFirstHalf}${arrayOfInterest[this.tabIndex - 1]}`
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest - 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest - 1]}`
             } else {
                 return undefined;
             }
@@ -344,12 +348,16 @@ export default {
                 ? this.subpartNav
                 : this.sectionNav;
 
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
             const labelFirstHalf = this.tabParam == "subpart"
                 ? "Subpart "
                 : `§${this.part}.`;
 
-            if (this.subpartNav.length > 0 && arrayOfInterest[this.tabIndex + 1] != undefined) {
-                return `${labelFirstHalf}${arrayOfInterest[this.tabIndex + 1]}`
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest + 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest + 1]}`
             } else {
                 return undefined;
             }
@@ -359,8 +367,13 @@ export default {
                 ? this.subpartNav
                 : this.sectionNav;
 
-            if (this.tabIndex < arrayOfInterest.length - 1
-                && this.tabIndex > 0
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+
+            if (indexOfInterest < arrayOfInterest.length - 1
+                && indexOfInterest > 0
             ) {
                 return true;
             }
@@ -565,15 +578,15 @@ export default {
         },
         floatingBackClick() {
             const selectedIdentifier = this.tabParam == "subpart"
-                ? `${this.part}-${this.subpartNav[this.tabIndex - 1]}`
-                : `${this.part}-${this.sectionNav[this.tabIndex - 1]}`
+                ? `${this.part}-${this.subpartNav[this.subIndex - 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex - 1]}`
 
             this.setQueryParam({scope: this.tabParam, selectedIdentifier});
         },
         floatingForwardClick() {
             const selectedIdentifier = this.tabParam == "subpart"
-                ? `${this.part}-${this.subpartNav[this.tabIndex + 1]}`
-                : `${this.part}-${this.sectionNav[this.tabIndex + 1]}`
+                ? `${this.part}-${this.subpartNav[this.subIndex + 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex  + 1]}`
 
             this.setQueryParam({scope: this.tabParam, selectedIdentifier});
         }
