@@ -8,6 +8,8 @@
                 :partLabel="partLabel"
                 resourcesDisplay="sidebar"
             >
+            </PartNav>
+            <div class="part-nav-tabs">
                 <v-tabs
                     slider-size="5"
                     class="nav-tabs"
@@ -40,7 +42,7 @@
                         </template>
                     </v-tab>
                 </v-tabs>
-            </PartNav>
+            </div>
             <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab" class="tab-content">
                     <v-tab-item
