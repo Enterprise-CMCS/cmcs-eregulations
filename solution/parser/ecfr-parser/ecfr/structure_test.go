@@ -338,7 +338,7 @@ func TestExtractSubchapterParts(t *testing.T) {
 				Subchapter: "C",
 			}
 
-			out, err := ExtractSubchapterParts(ctx, time.Now(), 42, &subchapter)
+			out, err := ExtractSubchapterParts(ctx, 42, &subchapter)
 
 			diff := deep.Equal(out, tc.Expected)
 			if err != nil && !tc.Error {
