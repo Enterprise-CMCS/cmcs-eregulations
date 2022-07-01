@@ -96,7 +96,7 @@ export default {
             return {
                 sticky: this.stickyMode === "hideOnScrollDown" || "normal",
                 "sticky-hide": !this.showNavbar,
-            }
+            };
         },
     },
 
@@ -109,15 +109,16 @@ export default {
             if (this.stickyMode === "hideOnScrollDown") {
                 const scrollPosition = window.scrollY;
                 const scrollDirection =
-                    scrollPosition > this.lastScrollPosition ? "down" : "up";
+                    scrollPosition > 0 &&
+                    scrollPosition > this.lastScrollPosition
+                        ? "down"
+                        : "up";
 
                 this.lastScrollPosition = scrollPosition;
 
                 if (scrollDirection === "down") {
-                    console.log("hide header!");
                     this.showNavbar = false;
                 } else {
-                    console.log("show header!");
                     this.showNavbar = true;
                 }
             }
