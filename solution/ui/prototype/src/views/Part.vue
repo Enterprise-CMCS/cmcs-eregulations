@@ -1,7 +1,9 @@
 <template>
     <body class="ds-base">
+        <LeftNav/>
         <div id="app">
             <Header />
+
             <PartNav
                 :title="title"
                 :part="part"
@@ -92,14 +94,15 @@ import {
     getPart,
     getSupplementalContentCountForPart,
     getPartTOC,
-    getSectionsForPart,
 } from "@/utilities/api";
 
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
+import LeftNav from "@/components/part/LeftNav";
 
 export default {
     components: {
+        LeftNav,
         SectionResourcesSidebar,
         FancyDropdown,
         FlashBanner,
