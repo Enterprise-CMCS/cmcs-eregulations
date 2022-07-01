@@ -319,6 +319,9 @@ export default {
         });
         if(this.tabParam=="section"){
             this.secIndex=this.sectionNav.indexOf(this.queryParams.section)
+            if(this.queryParams.subpart){
+                this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+            }
         }
         else if(this.tabParam=="subpart"){
             this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
