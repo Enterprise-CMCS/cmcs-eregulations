@@ -1,6 +1,6 @@
 <template>
     <article>
-        <h1 tabindex="-1" :id="kebabTitle">
+        <h1 tabindex="-1" :id="kebabTitle" class="subpart-title">
             <button v-if="numSupplementalContent && !showResourceButtons" v-on:click="handleBlueBtnClick"
                 class="supplemental-content-count">
                 {{ numSupplementalContent }}
@@ -10,15 +10,17 @@
                 name: 'PDpart-subPart',
                 params: { title: this.title, part: this.part, subPart: 'Subpart-'+this.node.label[0]}
             }">
-                {{node.title}}
+                <v-tooltip top color="#EEFAFE" ><template v-slot:activator="{ on, attrs }"><span v-bind="attrs"
+                            v-on="on">{{node.title}}</span></template><span class="tooltip-text">Click to zoom into the heading</span></v-tooltip>
             </router-link>
         </h1>
         <div v-if="showResourceButtons  && numDirectContent" class="btn-container">
             <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" size="small" />
         </div>
         <template v-for="child in node.children">
-            <Node :node="child" :subpart="node.label[0]" :key="child.title" :resource-params-emitter="resourceParamsEmitter"
-                :showResourceButtons="showResourceButtons" :supplementalContentCount="supplementalContentCount" />
+            <Node :node="child" :subpart="node.label[0]" :key="child.title"
+                :resource-params-emitter="resourceParamsEmitter" :showResourceButtons="showResourceButtons"
+                :supplementalContentCount="supplementalContentCount" />
         </template>
     </article>
 </template>
@@ -102,4 +104,9 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style >
+.subpart-title a{
+    text-decoration: none;
+    
+    }
+    </style>

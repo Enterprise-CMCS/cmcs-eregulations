@@ -19,7 +19,7 @@
                     >Previous</router-link
                 >
                 <span v-else>Previous</span>
-                <span v-if="navigation.previous && navigation.next">/</span>
+                /
                 <router-link
                     v-if="navigation.next"
                     :to="{

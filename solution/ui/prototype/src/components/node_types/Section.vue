@@ -1,42 +1,29 @@
 <template>
-    <section
-        :aria-labelledby="kebabTitle"
-        tabindex="-1"
-        :id="kebabTitle"
-        class="reg-section"
-    >
+    <section :aria-labelledby="kebabTitle" tabindex="-1" :id="kebabTitle" class="reg-section">
         <h2 class="section-title" :id="kebabTitle">
-            <button
-                v-on:click="handleBtnClick"
-                v-if="numSupplementalContent && !showResourceButtons"
-                class="supplemental-content-count"
-            >
+            <button v-on:click="handleBtnClick" v-if="numSupplementalContent && !showResourceButtons"
+                class="supplemental-content-count">
                 {{ numSupplementalContent }}
             </button>
-            <router-link :to="{
+            <router-link v-if="node.children" :to="{
                 name: 'PDpart-section',
                 params: { title: '42', part: this.node.label[0], subPart: 'Subpart-'+this.subpart, section: this.node.label[1]}
             }">
-                {{node.title}}
+                <v-tooltip top color="#EEFAFE"><template v-slot:activator="{ on, attrs }"><span v-bind="attrs" class="header-text"
+                    v-on="on">{{node.title}}</span></template><span class="tooltip-text">Click to zoom into the
+                    heading</span></v-tooltip>
             </router-link>
+            <span v-else>{{node.title}}</span>
         </h2>
 
         <div class="paragraphs">
             <template v-for="child in node.children">
-                <Node
-                    :node="child"
-                    :key="child.title"
-                    :showResourceButtons="showResourceButtons"
-                    :supplementalContentCount="supplementalContentCount"
-                />
+                <Node :node="child" :key="child.title" :showResourceButtons="showResourceButtons"
+                    :supplementalContentCount="supplementalContentCount" />
             </template>
         </div>
         <div v-if="showResourceButtons && numSupplementalContent" class="btn-container">
-            <ResourcesBtn
-                :clickHandler="handleBtnClick"
-                label="Section"
-                size="small"
-            />
+            <ResourcesBtn :clickHandler="handleBtnClick" label="Section" size="small" />
         </div>
     </section>
 </template>
@@ -131,5 +118,18 @@ export default {
 }
 .content-container .content .content-with-drawer{
     margin:0;
+}
+.section-title a{
+    text-decoration: none;
+}
+.v-tooltip__content {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+}
+.tooltip-text{
+    font-size: 12px !important;
+    
+  
+      display: block !important;
+  color:#212121;
 }
 </style>
