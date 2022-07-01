@@ -36,25 +36,25 @@
             </div>
             <v-card fixed outlined class="mx-auto sticky-card">
                 <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[tabIndex-1]})"
-                    color="#EEFAFE" v-if="this.tabIndex > 0 && this.tabParam==='subpart'">
-                    <v-icon>mdi-chevron-left</v-icon>Subpart {{this.subpartNav[this.tabIndex-1]}}
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[subIndex-1]})"
+                    color="#EEFAFE" v-if="this.subIndex > 0 && this.tabParam==='subpart'">
+                    <v-icon>mdi-chevron-left</v-icon>Subpart {{this.subpartNav[this.subIndex-1]}}
                 </v-btn>
                 <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[tabIndex+1]})"
-                    color="#EEFAFE" v-if="this.tabIndex < this.subpartNav.length-1&& this.tabParam==='subpart'">
-                    Subpart {{this.subpartNav[this.tabIndex+1]}}
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + subpartNav[subIndex+1]})"
+                    color="#EEFAFE" v-if="this.subIndex < this.subpartNav.length-1&& this.tabParam==='subpart'">
+                    Subpart {{this.subpartNav[this.subIndex+1]}}
                     <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
                 <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[tabIndex-1]})"
-                    color="#EEFAFE" v-if="this.tabIndex >0 && this.tabParam==='section'">
-                    <v-icon>mdi-chevron-left</v-icon>§{{this.part}}.{{this.sectionNav[this.tabIndex-1]}}
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[secIndex-1]})"
+                    color="#EEFAFE" v-if="this.secIndex >0 && this.tabParam==='section'">
+                    <v-icon>mdi-chevron-left</v-icon>§{{this.part}}.{{this.sectionNav[this.secIndex-1]}}
                 </v-btn>
                 <v-btn class="nav-button"
-                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[tabIndex+1]})"
-                    color="#EEFAFE" v-if="this.tabIndex  < this.sectionNav.length-1&& this.tabParam==='section'">
-                    §{{this.part}}.{{this.sectionNav[this.tabIndex+1]}} <v-icon>mdi-chevron-right</v-icon>
+                    @click="setQueryParam({scope: tabParam, selectedIdentifier: part +'-' + sectionNav[secIndex+1]})"
+                    color="#EEFAFE" v-if="this.secIndex  < this.sectionNav.length-1&& this.tabParam==='section'">
+                    §{{this.part}}.{{this.sectionNav[this.secIndex+1]}} <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
             </v-card>
             <Footer />
@@ -106,7 +106,8 @@ export default {
             part: this.$route.params.part,
             tabParam: this.$route.params.tab,
             queryParams: this.$route.query,
-            tabIndex:0,
+            subIndex:0,
+            secIndex:0,
             structure: null,
             sections: [],
             tabsShape: {
@@ -293,17 +294,10 @@ export default {
             return [this.tocContent, this.partContent, this.subpartContent, this.sectionContent];
         },
         subpartNav() {
-            if (this.queryParams.subpart && this.tocContent) {
-                return this.tocContent.children.map(subpart => subpart.identifier[0])
-            }
-            return []
+            return this.tabsShape.subpart.listItems.map(subpart => subpart.identifier)
         },
         sectionNav() {
-            if (this.queryParams.section && this.tocContent) {
-                let sections = this.tocContent.children.filter(subpart => subpart.identifier[0] === this.queryParams.subpart)
-                return sections[0].children.map(sec => sec.identifier[1])
-            }
-            return []
+            return this.tabsShape.section.listItems.map(section => section.identifier)
         }
 
     },
@@ -324,10 +318,10 @@ export default {
           subpart: this.queryParams.subpart
         });
         if(this.tabParam=="section"){
-            this.tabIndex=this.sectionNav.indexOf(this.queryParams.section)
+            this.secIndex=this.sectionNav.indexOf(this.queryParams.section)
         }
         else if(this.tabParam=="subpart"){
-            this.tabIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+            this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
         }
         else if (_isEmpty(this.queryParams)) {
             let paramsToSet = {};
@@ -378,7 +372,7 @@ export default {
             // get associated subpart for section
             if (payload.scope == "section") {
                 const sections = this.tabsShape.section.listItems.map(sec => sec.identifier)
-                this.tabIndex = sections.indexOf(valueToSet)
+                this.secIndex = sections.indexOf(valueToSet)
                 const sectionSubpart = this.tabsShape.section.listItems.find(
                     (item) => {
                         return item.identifier == valueToSet;
@@ -391,7 +385,7 @@ export default {
                     section: valueToSet,
                 };
             } else {
-                this.tabIndex = this.subpartNav.indexOf(valueToSet)
+                this.subIndex = this.subpartNav.indexOf(valueToSet)
                 updatedQueryParams = {
                     ...this.queryParams,
                     [payload.scope]: valueToSet,
