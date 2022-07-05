@@ -77,6 +77,7 @@ const router = new VueRouter({
                 offset: { x: 0, y: 80 },
             };
         }
+        return { x: 0, y: 0 };
     },
 });
 
