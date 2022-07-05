@@ -109,6 +109,7 @@ import {
 } from "@/utilities/api";
 
 import _isEmpty from "lodash/isEmpty";
+import _throttle from "lodash/throttle";
 import _isUndefined from "lodash/isUndefined";
 
 export default {
@@ -552,7 +553,7 @@ export default {
 
             this.tabsShape.section.listItems = filteredSections;
         },
-        onScroll() {
+        onScroll: _throttle(function() {
             if (this.stickyMode === "hideOnScrollDown") {
                 const scrollPosition = window.scrollY;
                 const scrollDirection =
@@ -569,7 +570,7 @@ export default {
                     this.showHeader = true;
                 }
             }
-        },
+        }, 100),
     },
 
     watch: {
