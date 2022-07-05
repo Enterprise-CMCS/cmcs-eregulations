@@ -12,6 +12,7 @@
                         :section="section"
                         :partLabel="partLabel"
                         :structure="partContent"
+                        :tocContent="tocContent"
                         :navigation="navigation"
                         :supplementalContentCount="supplementalContentCount"
                         @view-resources="setResourcesParams"
