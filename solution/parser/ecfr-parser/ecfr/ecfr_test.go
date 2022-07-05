@@ -69,9 +69,9 @@ func TestFetchFunctions(t *testing.T) {
 		},
 		{
 			Name: "test-fetch-structure",
-			Path: "/" + fmt.Sprintf(ecfrStructureJSON, "2022-01-01", 42),
+			Path: "/" + fmt.Sprintf(ecfrStructureJSON, 42),
 			Function: func(ctx context.Context, opts ...network.FetchOption) (int, error) {
-				_, code, err := FetchStructure(ctx, "2022-01-01", 42, opts...)
+				_, code, err := FetchStructure(ctx, 42, opts...)
 				return code, err
 			},
 		},
