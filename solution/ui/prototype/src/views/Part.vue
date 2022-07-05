@@ -8,39 +8,50 @@
                 :partLabel="partLabel"
                 resourcesDisplay="sidebar"
             />
-            <PartNav :stickyMode="stickyMode" :showHeader="showHeader">
-                <v-tabs
-                    slider-size="5"
-                    class="nav-tabs"
-                    v-model="tab"
-                    ref="tabs"
-                >
-                    <v-tab
-                        v-for="(item, key) in tabsShape"
-                        :key="item.label"
-                        :disabled="item.disabled"
+            <PartNav
+                :stickyMode="stickyMode"
+                :showHeader="showHeader"
+                :lastScrollPosition="lastScrollPosition"
+             >
+                <template v-slot:titlePart>
+                    <div>
+                        {{ title }} CFR Part {{ part }}
+                    </div>
+                </template>
+                <template v-slot:tabs>
+                    <v-tabs
+                        slider-size="5"
+                        class="nav-tabs"
+                        v-model="tab"
+                        ref="tabs"
                     >
-                        {{ tabLabels[key] }}
-                        <template
-                            v-if="
-                                item.value === 'subpart' ||
-                                item.value === 'section'
-                            "
+                        <v-tab
+                            v-for="(item, key) in tabsShape"
+                            :key="item.label"
+                            :disabled="item.disabled"
                         >
-                            <FancyDropdown
-                                label=""
-                                buttonTitle=""
-                                type="splitTab"
+                            {{ tabLabels[key] }}
+                            <template
+                                v-if="
+                                    item.value === 'subpart' ||
+                                    item.value === 'section'
+                                "
                             >
-                                <component
-                                    :is="item.listType"
-                                    :listItems="item.listItems"
-                                    :filterEmitter="setQueryParam"
-                                ></component>
-                            </FancyDropdown>
-                        </template>
-                    </v-tab>
-                </v-tabs>
+                                <FancyDropdown
+                                    label=""
+                                    buttonTitle=""
+                                    type="splitTab"
+                                >
+                                    <component
+                                        :is="item.listType"
+                                        :listItems="item.listItems"
+                                        :filterEmitter="setQueryParam"
+                                    ></component>
+                                </FancyDropdown>
+                            </template>
+                        </v-tab>
+                    </v-tabs>
+                </template>
             </PartNav>
             <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab" class="tab-content">

@@ -1,7 +1,10 @@
 <template>
     <div class="part-nav-tabs" :class="partNavTabClasses">
         <div class="tabs-container">
-            <slot></slot>
+            <div class="scroll-info" :class="scrollInfoClasses">
+                <slot name="titlePart"></slot>
+            </div>
+            <slot name="tabs"></slot>
         </div>
     </div>
 </template>
@@ -24,13 +27,22 @@ export default {
         showHeader: {
             type: Boolean,
             default: true,
-        }
+        },
+        lastScrollPosition: {
+            type: Number,
+            default: 0,
+        },
     },
 
     computed: {
         partNavTabClasses() {
             return {
                 "top-header-hidden": !this.showHeader,
+            };
+        },
+        scrollInfoClasses() {
+            return {
+                "is-pinned": this.lastScrollPosition >= 280, // magic number for now
             };
         },
     },
@@ -69,8 +81,29 @@ $sidebar-top-margin: 40px;
     }
 
     .tabs-container {
+        display: flex;
         margin-left: 50px;
         max-width: $text-max-width;
+
+        .scroll-info {
+            display: none;
+            overflow: hidden;
+
+            &.is-pinned {
+                display: flex;
+                align-items: center;
+                width: fit-content;
+                padding-right: 20px;
+                margin-right: 20px;
+                border-right: 1px solid $light_gray;
+                font-size: 18px;
+                font-weight: 700;
+            }
+        }
+
+        .nav-tabs.v-tabs {
+            width: unset;
+        }
 
         .nav-tabs.v-tabs .v-tabs-bar {
             background-color: transparent;
