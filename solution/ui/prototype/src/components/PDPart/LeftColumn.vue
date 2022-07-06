@@ -2,33 +2,18 @@
     <div style="width: 100%; margin: 20px">
         <div>
             <h2 style="display: inline">
-                <Breadcrumbs
-                    :title="title"
-                    :part="part"
-                    :subPart="subPart"
-                    :section="section"
-                />
+                <Breadcrumbs :title="title" :part="part" :subPart="subPart" :section="section" />
             </h2>
-            <span style="float: right" class="breadcrumbs">
-                <router-link
-                    v-if="navigation.previous"
-                    :to="{
-                        name: navigation.name,
-                        params: navigation.previous,
-                    }"
-                    >Previous</router-link
-                >
-                <span v-else>Previous</span>
-                /
-                <router-link
-                    v-if="navigation.next"
-                    :to="{
-                        name: navigation.name,
-                        params: navigation.next,
-                    }"
-                    >Next</router-link
-                >
-                <span v-else>Next</span>
+            <span style="float: right" class="breadcrumbs" v-if="subPart != 'Subpart-undefined'">
+                <router-link v-if="navigation.previous" :to="{
+                    name: navigation.name,
+                    params: navigation.previous,
+                }">Previous</router-link>
+                <span v-if="navigation.previous && navigation.next"> | </span>
+                <router-link v-if="navigation.next" :to="{
+                    name: navigation.name,
+                    params: navigation.next,
+                }">Next</router-link>
             </span>
         </div>
 
@@ -47,17 +32,10 @@
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
-        <h1 style="margin-bottom:0px" v-if="!subPart && !section">Part {{this.part}} - {{ this.partLabel }}</h1>
-        <PartContent
-            v-if="structure.length"
-            :structure="structure"
-            :title="title"
-            :part="part"
-            resourcesDisplay="drawer"
-            :showResourceButtons="false"
-            :supplementalContentCount="supplementalContentCount"
-            @view-resources="setResourcesParams"
-        />
+        <h1 style="margin-bottom:0px" v-if="!subPart && !section">Part {{ this.part }} - {{ this.partLabel }}</h1>
+        <PartContent v-if="structure.length" :structure="structure" :title="title" :part="part" :subpart="subPart"
+            resourcesDisplay="drawer" :showResourceButtons="true" :supplementalContentCount="supplementalContentCount" :headerLinks="true"
+            @view-resources="setResourcesParams" />
         <div v-else>Regulation not found</div>
     </div>
 </template>
@@ -83,7 +61,7 @@ export default {
         tocContent: {type: Object},
         navigation: { type: Object },
         supplementalContentCount: { type: Object },
-        partLabel: {type: String},
+        partLabel: { type: String },
     },
     methods: {
         setResourcesParams(payload) {
