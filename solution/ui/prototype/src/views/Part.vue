@@ -1,76 +1,87 @@
 <template>
     <body class="ds-base">
-        <LeftNav/>
         <div id="app">
             <Header />
-
-            <PartNav
-                :title="title"
-                :part="part"
-                :partLabel="partLabel"
-                resourcesDisplay="sidebar"
-            >
-                <v-tabs
-                    slider-size="5"
-                    class="nav-tabs"
-                    v-model="tab"
-                    ref="tabs"
-                >
-                    <v-tab
-                        v-for="(item, key, index) in tabsShape"
-                        :key="item.label"
-                        :disabled="item.disabled"
-                    >
-                        {{ tabLabels[key] }}
-                        <template
-                            v-if="
-                                item.value === 'subpart' ||
-                                item.value === 'section'
-                            "
-                        >
-                            <FancyDropdown
-                                label=""
-                                buttonTitle=""
-                                type="splitTab"
-                            >
-                                <component
-                                    :is="item.listType"
-                                    :listItems="item.listItems"
-                                    :filterEmitter="setQueryParam"
-                                ></component>
-                            </FancyDropdown>
-                        </template>
-                    </v-tab>
-                </v-tabs>
-            </PartNav>
-            <div class="content-container content-container-sidebar">
-                <v-tabs-items v-model="tab" class="tab-content">
-                    <v-tab-item
-                        :transition="false"
-                        v-for="(item, key, index) in tabsShape"
-                        :key="index"
-                    >
-                        <component
-                            :is="item.component"
-                            :structure="tabsContent[index]"
-                            :title="title"
-                            :part="part"
-                            resourcesDisplay="sidebar"
-                            :selectedIdentifier="selectedIdentifier"
-                            :selectedScope="selectedScope"
-                            :supplementalContentCount="supplementalContentCount"
-                            @view-resources="setResourcesParams"
-                        ></component>
-                    </v-tab-item>
-                </v-tabs-items>
-                <div class="sidebar" v-show="tabParam !== 'toc'">
-                    <SectionResourcesSidebar
+            <div class="flex-container" style="display: flex">
+                <div >
+                    <LeftNav />
+                </div>
+                <div >
+                    <PartNav
                         :title="title"
                         :part="part"
-                        :selectedIdentifier="selectedIdentifier"
-                        :selectedScope="selectedScope"
-                        :routeToResources="routeToResources"
-                    />
+                        :part-label="partLabel"
+                        resources-display="sidebar"
+                    >
+                        <v-tabs
+                            ref="tabs"
+                            v-model="tab"
+                            slider-size="5"
+                            class="nav-tabs"
+                        >
+                            <v-tab
+                                v-for="(item, key, index) in tabsShape"
+                                :key="item.label"
+                                :disabled="item.disabled"
+                            >
+                                {{ tabLabels[key] }}
+                                <template
+                                    v-if="
+                                        item.value === 'subpart' ||
+                                            item.value === 'section'
+                                    "
+                                >
+                                    <FancyDropdown
+                                        label=""
+                                        button-title=""
+                                        type="splitTab"
+                                    >
+                                        <component
+                                            :is="item.listType"
+                                            :list-items="item.listItems"
+                                            :filter-emitter="setQueryParam"
+                                        />
+                                    </FancyDropdown>
+                                </template>
+                            </v-tab>
+                        </v-tabs>
+                    </PartNav>
+                    <div class="content-container content-container-sidebar">
+                        <v-tabs-items
+                            v-model="tab"
+                            class="tab-content"
+                        >
+                            <v-tab-item
+                                v-for="(item, key, index) in tabsShape"
+                                :key="index"
+                                :transition="false"
+                            >
+                                <component
+                                    :is="item.component"
+                                    :structure="tabsContent[index]"
+                                    :title="title"
+                                    :part="part"
+                                    resources-display="sidebar"
+                                    :selected-identifier="selectedIdentifier"
+                                    :selected-scope="selectedScope"
+                                    :supplemental-content-count="supplementalContentCount"
+                                    @view-resources="setResourcesParams"
+                                />
+                            </v-tab-item>
+                        </v-tabs-items>
+                        <div
+                            v-show="tabParam !== 'toc'"
+                            class="sidebar"
+                        >
+                            <SectionResourcesSidebar
+                                :title="title"
+                                :part="part"
+                                :selected-identifier="selectedIdentifier"
+                                :selected-scope="selectedScope"
+                                :route-to-resources="routeToResources"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
             <Footer />
@@ -101,6 +112,8 @@ import _isUndefined from "lodash/isUndefined";
 import LeftNav from "@/components/part/LeftNav";
 
 export default {
+
+    name: "Part",
     components: {
         LeftNav,
         SectionResourcesSidebar,
@@ -114,8 +127,6 @@ export default {
         SubpartList,
         SectionList,
     },
-
-    name: "Part",
 
     data() {
         return {
@@ -310,6 +321,67 @@ export default {
         },
     },
 
+    watch: {
+        "$route.params": {
+            async handler(toParams, previousParams) {
+                // react to route changes...
+                if (toParams.tab !== previousParams.tab) {
+                    this.tabParam = toParams.tab;
+                }
+
+                if (toParams.part !== previousParams.part) {
+                    this.structure = null;
+                    this.clearResourcesParams();
+                    this.title = toParams.title;
+                    this.part = toParams.part;
+                }
+            },
+        },
+        "$route.query": {
+            async handler(toQueries, previousQueries) {
+                this.queryParams = toQueries;
+                if (toQueries.subpart !== previousQueries.subpart) {
+                    this.tabLabels.subpart = this.formatTabLabel("subpart");
+                    await this.getFormattedSectionsList({
+                      title: this.title,
+                      part: this.part,
+                      subpart: toQueries.subpart
+                    });
+                    const query = {
+                        subpart: toQueries.subpart,
+                    }
+                    if (toQueries.section !== previousQueries.section) {
+                      query.section = toQueries.section
+                    }
+                    this.$router.push({
+                      name: "part",
+                      params: {
+                        title: this.title,
+                        part: this.part,
+                        tab: this.tabParam,
+                      },
+                      query,
+                    });
+
+
+                }
+
+                if (toQueries.section !== previousQueries.section) {
+                    this.tabLabels.section = this.formatTabLabel("section");
+                }
+            },
+        },
+        async part() {
+            await this.getPartStructure();
+            await this.getFormattedSubpartsList({title: this.title, part:this.part});
+            await this.getFormattedSectionsList({
+              title: this.title,
+              part: this.part,
+              subpart: this.queryParams.subpart
+            });
+        },
+    },
+
     async created() {
         if (this.queryParams.subpart) {
             this.tabLabels.subpart = this.formatTabLabel("subpart");
@@ -349,6 +421,14 @@ export default {
                 query: paramsToSet,
             });
         }
+    },
+
+    updated() {
+        this.$nextTick(function () {
+            // call onResize to fix tab highlight misalignment bug
+            // https://github.com/vuetifyjs/vuetify/issues/4733
+            this.$refs.tabs && this.$refs.tabs.onResize();
+        });
     },
 
     methods: {
@@ -497,75 +577,6 @@ export default {
 
             this.tabsShape.section.listItems = filteredSections;
         },
-    },
-
-    watch: {
-        "$route.params": {
-            async handler(toParams, previousParams) {
-                // react to route changes...
-                if (toParams.tab !== previousParams.tab) {
-                    this.tabParam = toParams.tab;
-                }
-
-                if (toParams.part !== previousParams.part) {
-                    this.structure = null;
-                    this.clearResourcesParams();
-                    this.title = toParams.title;
-                    this.part = toParams.part;
-                }
-            },
-        },
-        "$route.query": {
-            async handler(toQueries, previousQueries) {
-                this.queryParams = toQueries;
-                if (toQueries.subpart !== previousQueries.subpart) {
-                    this.tabLabels.subpart = this.formatTabLabel("subpart");
-                    await this.getFormattedSectionsList({
-                      title: this.title,
-                      part: this.part,
-                      subpart: toQueries.subpart
-                    });
-                    const query = {
-                        subpart: toQueries.subpart,
-                    }
-                    if (toQueries.section !== previousQueries.section) {
-                      query.section = toQueries.section
-                    }
-                    this.$router.push({
-                      name: "part",
-                      params: {
-                        title: this.title,
-                        part: this.part,
-                        tab: this.tabParam,
-                      },
-                      query,
-                    });
-
-
-                }
-
-                if (toQueries.section !== previousQueries.section) {
-                    this.tabLabels.section = this.formatTabLabel("section");
-                }
-            },
-        },
-        async part() {
-            await this.getPartStructure();
-            await this.getFormattedSubpartsList({title: this.title, part:this.part});
-            await this.getFormattedSectionsList({
-              title: this.title,
-              part: this.part,
-              subpart: this.queryParams.subpart
-            });
-        },
-    },
-
-    updated() {
-        this.$nextTick(function () {
-            // call onResize to fix tab highlight misalignment bug
-            // https://github.com/vuetifyjs/vuetify/issues/4733
-            this.$refs.tabs && this.$refs.tabs.onResize();
-        });
     },
 };
 </script>

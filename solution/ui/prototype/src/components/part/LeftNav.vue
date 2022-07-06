@@ -1,36 +1,47 @@
 <template>
-    <v-navigation-drawer
-        v-model="drawer"
-
-        absolute
-        left
-        permanent
-        mini-variant-width="40"
-        width="458"
-        style="padding-top: 75px; background-color:#254C68"
+    <div
+        :class="[mini ? 'mini': 'maxi']"
+        class="left-nav"
     >
-        <v-list-item v-if="mini" class="px-2">
-            <v-btn
-                icon
-                @click.stop="mini = false"
-            >
-                <v-icon style="color:#CCF2FF">mdi-menu</v-icon>
-            </v-btn>
-        </v-list-item>
+        <v-btn
+            v-if="mini"
+            icon
+            @click.stop="mini = !mini"
+            style="color:#CCF2FF; padding: 10px"
+        >
+            <v-icon>
+                mdi-menu
+            </v-icon>
+        </v-btn>
+        <v-btn
+            v-else
+            icon
+            style="float:right; padding:5px; color:#CCF2FF"
+            @click.stop="mini = !mini"
+        >
+            <v-icon>
+                mdi-close
+            </v-icon>
+        </v-btn>
 
-        <div v-if="!mini" class="leftNav-body">
+        <div
+            v-if="!mini"
+            class="leftNav-body"
+        >
             <v-tabs
-                fixed-tabs
                 v-model="tab"
+                background-color="#254C68"
+                color="#FFF"
             >
                 <v-tab
                     v-for="title in toc"
                     :key="title.label_level"
+                    style="color:#FFF"
                 >
-                    {{title.label_level}}
+                    {{ title.label_level }}
                 </v-tab>
             </v-tabs>
-
+            <v-divider style="border-color:#046791"/>
             <v-tabs-items v-model="tab">
                 <v-tab-item
                     v-for="title in toc"
@@ -38,16 +49,29 @@
                 >
                     <div class="leftNav-item">
                         <div class="leftNav-header">
-                            <div class="header">{{ title.label }}</div>
-                            <div class="subheader">{{ title.children[0].label }}</div>
+                            <div class="header">
+                                {{ title.label }}
+                            </div>
+                            <div class="subheader">
+                                {{ title.children[0].label }}
+                            </div>
                         </div>
                         <ul class="leftNav-list">
                             <li v-for="subChapter in title.children[0].children">
-                                <div class="leftNav-subchapter">{{ subChapter.label }}</div>
+                                <div class="leftNav-subchapter">
+                                    {{ subChapter.label }}
+                                </div>
                                 <ul class="leftNav-list leftNav-sectionlist">
-                                      <li v-for="part in subChapter.children">
-                                        <div style="width:100%"><v-icon style="float:right; color:#CCF2FF">mdi-chevron-right</v-icon> {{ part.label }} </div>
-                                      </li>
+                                    <li v-for="part in subChapter.children">
+                                        <div style="width:100%; padding:6px; display:flex; justify-content: space-between; align-items:center">
+                                            <div>{{ part.label }} </div>
+                                            <div>
+                                                <v-icon style="float:right; color:#CCF2FF">
+                                                    mdi-chevron-right
+                                                </v-icon>
+                                            </div>
+                                        </div>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -55,7 +79,7 @@
                 </v-tab-item>
             </v-tabs-items>
         </div>
-    </v-navigation-drawer>
+    </div>
 </template>
 
 <script>
@@ -63,32 +87,39 @@ import InlineLoader from "@/components/InlineLoader.vue";
 import {getTOC} from "@/utilities/api";
 
 export default {
+
+    name: "LeftNav",
     components: {
         InlineLoader,
     },
-
-    name: "LeftNav",
+    props: {},
     data () {
       return {
         drawer: true,
         tab: null,
-        mini: false,
+        mini: true,
         toc: []
       }
     },
-    props: {},
+    computed: {},
     async created() {
       this.toc = await getTOC()
     },
-    computed: {},
 };
 </script>
 
 <style lang="scss">
-.leftNav-body{
+.mini{
+  width: 60px;
+}
+.maxi{
+  width: 450px;
+}
+.left-nav{
   color: white;
   background-color:#254C68;
-  font-family: "Open Sans"
+  font-family: "Open Sans";
+  height: 100%;
 }
 .leftNav-item{
   color: white;
