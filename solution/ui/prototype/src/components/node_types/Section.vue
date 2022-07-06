@@ -7,7 +7,7 @@
             </button>
             <router-link v-if="node.children" :to="{
                 name: 'PDpart-section',
-                params: { title: '42', part: this.node.label[0], subPart: 'Subpart-'+this.subpart, section: this.node.label[1]}
+                params: { title: '42', part: this.node.label[0], subPart: this.formattedSubpart, section: this.node.label[1]}
             }">
                 <v-tooltip top color="#EEFAFE"><template v-slot:activator="{ on, attrs }"><span v-bind="attrs" class="header-text"
                     v-on="on">{{node.title}}</span></template><span class="tooltip-text">Click to zoom into the
@@ -81,6 +81,9 @@ export default {
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);
+        },
+        formattedSubpart(){
+            return this.subpart.includes("Subpart") ? this.subpart : 'Subpart-'+this.subpart
         },
         numSupplementalContent() {
             return this.supplementalContentCount

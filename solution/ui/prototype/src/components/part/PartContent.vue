@@ -14,6 +14,7 @@
                 :supplementalContentCount="supplementalContentCount"
                 :title="title"
                 :part="part"
+                :subpart="subpart"
             />
         </div>
         <div v-else>
@@ -42,6 +43,10 @@ export default {
         part: {
             type: String,
             required: true,
+        },
+        subpart:{
+            type: String,
+            required: true
         },
         structure: {
             type: Array,
