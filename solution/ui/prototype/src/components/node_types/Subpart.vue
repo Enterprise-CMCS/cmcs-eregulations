@@ -8,13 +8,16 @@
 
             <router-link :to="{
                 name: 'PDpart-subPart',
-                params: { title: this.title, part: this.part, subPart: 'Subpart-'+this.node.label[0]}
+                params: { title: this.title, part: this.part, subPart: 'Subpart-' + this.node.label[0] }
             }">
-                <v-tooltip top color="#EEFAFE" ><template v-slot:activator="{ on, attrs }"><span v-bind="attrs"
-                            v-on="on">{{node.title}}</span></template><span class="tooltip-text">Click to zoom into the heading</span></v-tooltip>
+                <v-tooltip top color="#EEFAFE">
+                    <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">{{ node.title }}</span>
+                    </template>
+                    <span class="tooltip-text">Click to zoom into the heading</span></v-tooltip>
             </router-link>
         </h1>
-        <div v-if="showResourceButtons  && numDirectContent" class="btn-container">
+        <div v-if="showResourceButtons && numDirectContent" class="btn-container">
             <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" size="small" />
         </div>
         <template v-for="child in node.children">
@@ -61,9 +64,9 @@ export default {
             default: true
         },
         supplementalContentCount: {
-            type:Object,
+            type: Object,
             required: false,
-            default: () => {}
+            default: () => { }
         },
 
     },
@@ -72,18 +75,18 @@ export default {
         kebabTitle() {
             return getKebabTitle(this.node.label);
         },
-        numSupplementalContent(){
-          let total = 0
-          if (this.supplementalContentCount && this.node.children ) {
+        numSupplementalContent() {
+            let total = 0
+            if (this.supplementalContentCount && this.node.children) {
 
-            total = this.node.children.reduce((count, node) => {
-              return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
-            }, 0)
-          }
-          return total
+                total = this.node.children.reduce((count, node) => {
+                    return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
+                }, 0)
+            }
+            return total
         },
-        numDirectContent(){
-          return this.supplementalContentCount[`${this.title} ${this.part} Subpart ${this.node.label[0]}`]
+        numDirectContent() {
+            return this.supplementalContentCount[`${this.title} ${this.part} Subpart ${this.node.label[0]}`]
         }
     },
 
@@ -92,21 +95,20 @@ export default {
             this.resourceParamsEmitter("subpart", [this.node.label[0]]);
         },
         handleBlueBtnClick() {
-          this.resourceParamsEmitter(
-              "subpart",
-              {
-                subPart: this.node.label[0],
-                sections: this.node.children.filter(c => c.label).map(child => child.label[1])
-              }
-          );
+            this.resourceParamsEmitter(
+                "subpart",
+                {
+                    subPart: this.node.label[0],
+                    sections: this.node.children.filter(c => c.label).map(child => child.label[1])
+                }
+            );
         }
     },
 };
 </script>
 
 <style >
-.subpart-title a{
+.subpart-title a {
     text-decoration: none;
-    
-    }
-    </style>
+}
+</style>

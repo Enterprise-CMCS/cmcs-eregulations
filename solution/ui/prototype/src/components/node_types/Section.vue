@@ -7,13 +7,16 @@
             </button>
             <router-link v-if="node.children" :to="{
                 name: 'PDpart-section',
-                params: { title: '42', part: this.node.label[0], subPart: this.formattedSubpart, section: this.node.label[1]}
+                params: { title: '42', part: this.node.label[0], subPart: this.formattedSubpart, section: this.node.label[1] }
             }">
-                <v-tooltip top color="#EEFAFE"><template v-slot:activator="{ on, attrs }"><span v-bind="attrs" class="header-text"
-                    v-on="on">{{node.title}}</span></template><span class="tooltip-text">Click to zoom into the
-                    heading</span></v-tooltip>
+                <v-tooltip top color="#EEFAFE">
+                    <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" class="header-text" v-on="on">{{ node.title }}</span>
+                    </template>
+                    <span class="tooltip-text">Click to zoom into the heading</span>
+                </v-tooltip>
             </router-link>
-            <span v-else>{{node.title}}</span>
+            <span v-else>{{ node.title }}</span>
         </h2>
 
         <div class="paragraphs">
@@ -70,7 +73,7 @@ export default {
         supplementalContentCount: {
             type: Object,
             required: false,
-            default: () => {},
+            default: () => { },
         },
     },
 
@@ -82,8 +85,8 @@ export default {
         kebabTitle() {
             return getKebabTitle(this.node.label);
         },
-        formattedSubpart(){
-            return this.subpart.includes("Subpart") ? this.subpart : 'Subpart-'+this.subpart
+        formattedSubpart() {
+            return this.subpart.includes("Subpart") ? this.subpart : 'Subpart-' + this.subpart
         },
         numSupplementalContent() {
             return this.supplementalContentCount
@@ -97,7 +100,7 @@ export default {
             this.resourceParamsEmitter("section", [this.node.label[1]]);
         },
     },
-    created(){
+    created() {
         this.resourceParamsEmitter("rendered", this.node.label[1]);
     }
 };
@@ -107,9 +110,11 @@ export default {
 .btn-container {
     margin: 20px 0px 50px;
 }
+
 .btn-container {
     margin: 20px 0px 50px;
 }
+
 .supplemental-content-count {
     background-color: #eefafe;
     color: #046791;
@@ -119,20 +124,24 @@ export default {
     font-size: 12px;
     line-height: 20px;
 }
-.content-container .content .content-with-drawer{
-    margin:0;
+
+.content-container .content .content-with-drawer {
+    margin: 0;
 }
-.section-title a{
+
+.section-title a {
     text-decoration: none;
 }
+
 .v-tooltip__content {
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
 }
-.tooltip-text{
+
+.tooltip-text {
     font-size: 12px !important;
-    
-  
-      display: block !important;
-  color:#212121;
+
+
+    display: block !important;
+    color: #212121;
 }
 </style>
