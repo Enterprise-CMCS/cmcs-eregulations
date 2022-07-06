@@ -91,7 +91,10 @@ export default {
             return getKebabTitle(this.node.label);
         },
         formattedSubpart() {
-            return this.subpart.includes("Subpart") ? this.subpart : 'Subpart-' + this.subpart
+            if(this.subpart){
+               return this.subpart.includes("Subpart") ? this.subpart : 'Subpart-' + this.subpart 
+            }
+            return 'Subpart-undefined'
         },
         numSupplementalContent() {
             return this.supplementalContentCount
