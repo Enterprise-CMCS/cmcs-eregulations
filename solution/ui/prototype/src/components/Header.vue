@@ -1,5 +1,5 @@
 <template>
-    <header id="header" class="sticky">
+    <header id="header" :class="headerClasses">
         <!-- desktop -->
         <div class="flexbox header-large">
             <div class="title-container">
@@ -63,11 +63,35 @@ export default {
         JumpTo,
     },
 
+    props: {
+        stickyMode: {
+            validator: function (value) {
+                return ["hideOnScrollDown", "normal", "disabled"].includes(
+                    value
+                );
+            },
+            default: "normal",
+        },
+        showHeader: {
+            type: Boolean,
+            default: true,
+        }
+    },
+
     data() {
         return {
             action: "open",
             state: "expanded",
         };
+    },
+
+    computed: {
+        headerClasses() {
+            return {
+                sticky: this.stickyMode === "hideOnScrollDown" || "normal",
+                "sticky-hide": !this.showHeader,
+            };
+        },
     },
 
     methods: {
@@ -83,7 +107,9 @@ export default {
 header {
     box-sizing: border-box;
     border: 1px solid #d6d7d9;
+    transition: transform 0.3s ease-in-out;
 }
+
 .links-container {
     padding-right: 10px;
 }
@@ -96,5 +122,10 @@ header {
 .header-link {
     color: #212121;
     padding-right: 20px;
+}
+
+.sticky-hide {
+    box-shadow: none;
+    transform: translate3d(0, -100%, 0);
 }
 </style>
