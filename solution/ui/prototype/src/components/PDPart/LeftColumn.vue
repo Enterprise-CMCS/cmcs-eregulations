@@ -33,7 +33,6 @@
             </v-expansion-panel>
         </v-expansion-panels>
         <h1 style="margin-bottom:0px" v-if="!subPart && !section">Part {{ this.part }} - {{ this.partLabel }}</h1>
-        <span>{{ this.subPart }}</span>
         <PartContent v-if="structure.length" :structure="structure" :title="title" :part="part" :subpart="subPart"
             resourcesDisplay="drawer" :showResourceButtons="true" :supplementalContentCount="supplementalContentCount"
             @view-resources="setResourcesParams" />
