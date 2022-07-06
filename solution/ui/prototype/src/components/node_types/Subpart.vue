@@ -5,8 +5,8 @@
                 class="supplemental-content-count">
                 {{ numSupplementalContent }}
             </button>
-
-            <router-link :to="{
+            <span v-if="!headerLinks">{{node.title}}</span>
+            <router-link v-else :to="{
                 name: 'PDpart-subPart',
                 params: { title: this.title, part: this.part, subPart: 'Subpart-' + this.node.label[0] }
             }">
@@ -22,7 +22,7 @@
         </div>
         <template v-for="child in node.children">
             <Node :node="child" :subpart="node.label[0]" :key="child.title"
-                :resource-params-emitter="resourceParamsEmitter" :showResourceButtons="showResourceButtons"
+                :resource-params-emitter="resourceParamsEmitter" :showResourceButtons="showResourceButtons" :headerLinks="headerLinks"
                 :supplementalContentCount="supplementalContentCount" />
         </template>
     </article>
@@ -53,6 +53,11 @@ export default {
         node: {
             type: Object,
             required: true,
+        },
+        headerLinks: {
+            types: Boolean,
+            required: false,
+            default: false,
         },
         resourceParamsEmitter: {
             type: Function,

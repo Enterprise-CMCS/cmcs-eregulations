@@ -11,6 +11,7 @@
         :title="title"
         :part="part"
         :subpart="subpart"
+        :headerLinks="headerLinks"
     ></component>
 </template>
 
@@ -54,6 +55,11 @@ export default {
         subpart:{
             type: String,
             required:false
+        },
+        headerLinks:{
+            type: Boolean,
+            required: false,
+            default: false
         },
         resourceParamsEmitter: {
             type: Function,

@@ -15,6 +15,7 @@
                 :title="title"
                 :part="part"
                 :subpart="subpart"
+                :headerLinks="headerLinks"
             />
         </div>
         <div v-else>
@@ -55,6 +56,11 @@ export default {
         resourcesDisplay: {
             type: String,
             required: true,
+        },
+        headerLinks: {
+            type: Boolean,
+            required:false,
+            default:false
         },
         showResourceButtons: {
             type: Boolean,

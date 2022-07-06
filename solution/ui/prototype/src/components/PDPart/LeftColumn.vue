@@ -34,7 +34,7 @@
         </v-expansion-panels>
         <h1 style="margin-bottom:0px" v-if="!subPart && !section">Part {{ this.part }} - {{ this.partLabel }}</h1>
         <PartContent v-if="structure.length" :structure="structure" :title="title" :part="part" :subpart="subPart"
-            resourcesDisplay="drawer" :showResourceButtons="true" :supplementalContentCount="supplementalContentCount"
+            resourcesDisplay="drawer" :showResourceButtons="true" :supplementalContentCount="supplementalContentCount" :headerLinks="true"
             @view-resources="setResourcesParams" />
         <div v-else>Regulation not found</div>
     </div>

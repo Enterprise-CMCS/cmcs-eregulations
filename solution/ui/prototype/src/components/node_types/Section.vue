@@ -5,7 +5,7 @@
                 class="supplemental-content-count">
                 {{ numSupplementalContent }}
             </button>
-            <router-link v-if="node.children" :to="{
+            <router-link v-if="node.children && headerLinks" :to="{
                 name: 'PDpart-section',
                 params: { title: '42', part: this.node.label[0], subPart: this.formattedSubpart, section: this.node.label[1] }
             }">
@@ -60,6 +60,11 @@ export default {
         node: {
             type: Object,
             required: true,
+        },
+        headerLinks:{
+            type:Boolean,
+            required: false,
+            default: false
         },
         resourceParamsEmitter: {
             type: Function,
