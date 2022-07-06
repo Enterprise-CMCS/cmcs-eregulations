@@ -299,9 +299,9 @@ export default {
                     newQueryParams.q = "";
                     this.searchInputValue = "";
                 }
-
-                this.getPartDict(newQueryParams);
-
+                if (newQueryParams.part) {
+                  this.getPartDict(newQueryParams);
+                }
                 this.$router.push({
                     name: "resources",
                     query: newQueryParams,
