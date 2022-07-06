@@ -1,4 +1,5 @@
 <template>
+
     <body class="ds-base">
         <div id="app">
             <Header :stickyMode="stickyMode" :showHeader="showHeader" />
@@ -55,33 +56,37 @@
             </PartNav>
             <div class="content-container content-container-sidebar">
                 <v-tabs-items v-model="tab" class="tab-content">
-                    <v-tab-item
-                        :transition="false"
-                        v-for="(item, key, index) in tabsShape"
-                        :key="index"
-                    >
-                        <component
-                            :is="item.component"
-                            :structure="tabsContent[index]"
-                            :title="title"
-                            :part="part"
-                            resourcesDisplay="sidebar"
-                            :selectedIdentifier="selectedIdentifier"
-                            :selectedScope="selectedScope"
-                            :supplementalContentCount="supplementalContentCount"
-                            @view-resources="setResourcesParams"
-                        ></component>
+                    <v-tab-item :transition="false" v-for="(item, key, index) in tabsShape" :key="index">
+                        <component :is="item.component" :structure="tabsContent[index]" :title="title" :part="part"
+                            resourcesDisplay="sidebar" :selectedIdentifier="selectedIdentifier"
+                            :selectedScope="selectedScope" :supplementalContentCount="supplementalContentCount"
+                            @view-resources="setResourcesParams"></component>
                     </v-tab-item>
                 </v-tabs-items>
                 <div class="sidebar" v-show="tabParam !== 'toc'">
-                    <SectionResourcesSidebar
-                        :title="title"
-                        :part="part"
-                        :selectedIdentifier="selectedIdentifier"
-                        :selectedScope="selectedScope"
-                        :routeToResources="routeToResources"
-                    />
+                    <SectionResourcesSidebar :title="title" :part="part" :selectedIdentifier="selectedIdentifier"
+                        :selectedScope="selectedScope" :routeToResources="routeToResources" />
                 </div>
+
+            </div>
+            <div class="sticky-bottom" v-if="this.tabParam === 'subpart' || this.tabParam === 'section'">
+                <BottomNavBtnGroup>
+                    <BottomNavBtn
+                        v-if="this.floatingBackBtnLabel"
+                        direction="back"
+                        :label="floatingBackBtnLabel"
+                        @click.native="floatingBackClick"
+                    />
+                    <VerticalRule
+                        v-if="this.showFloatingVerticalRule"
+                    />
+                    <BottomNavBtn
+                        v-if="this.floatingForwardBtnLabel"
+                        direction="forward"
+                        :label="floatingForwardBtnLabel"
+                        @click.native="floatingForwardClick"
+                    />
+                </BottomNavBtnGroup>
             </div>
             <Footer />
         </div>
@@ -89,6 +94,8 @@
 </template>
 
 <script>
+import BottomNavBtn from "@/components/floating_nav/BottomNavBtn.vue";
+import BottomNavBtnGroup from "@/components/floating_nav/BottomNavBtnGroup.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
@@ -100,6 +107,7 @@ import PartToc from "@/components/part/PartToc.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
+import VerticalRule from "@/components/floating_nav/VerticalRule.vue";
 
 import {
     getPart,
@@ -114,6 +122,8 @@ import _isUndefined from "lodash/isUndefined";
 
 export default {
     components: {
+        BottomNavBtn,
+        BottomNavBtnGroup,
         SectionResourcesSidebar,
         FancyDropdown,
         FlashBanner,
@@ -125,6 +135,7 @@ export default {
         PartToc,
         SubpartList,
         SectionList,
+        VerticalRule,
     },
 
     name: "Part",
@@ -135,6 +146,8 @@ export default {
             part: this.$route.params.part,
             tabParam: this.$route.params.tab,
             queryParams: this.$route.query,
+            subIndex:0,
+            secIndex:0,
             structure: null,
             sections: [],
             tabsShape: {
@@ -337,6 +350,67 @@ export default {
                 this.sectionContent,
             ];
         },
+        subpartNav() {
+            return this.tabsShape.subpart.listItems.map(subpart => subpart.identifier)
+        },
+        sectionNav() {
+            return this.tabsShape.section.listItems.map(section => section.identifier)
+        },
+        floatingBackBtnLabel() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest - 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest - 1]}`
+            } else {
+                return undefined;
+            }
+        },
+        floatingForwardBtnLabel() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest + 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest + 1]}`
+            } else {
+                return undefined;
+            }
+        },
+        showFloatingVerticalRule() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+
+            if (indexOfInterest < arrayOfInterest.length - 1
+                && indexOfInterest > 0
+            ) {
+                return true;
+            }
+            return false;
+        },
     },
 
     mounted() {
@@ -365,8 +439,19 @@ export default {
             part: this.part,
             subpart: this.queryParams.subpart,
         });
-
-        if (_isEmpty(this.queryParams)) {
+        if(this.tabParam=="section"){
+            this.secIndex=this.sectionNav.indexOf(this.queryParams.section)
+            if(this.queryParams.subpart){
+                this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+            }
+            if(this.queryParams.subpart){
+                this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+            }
+        }
+        else if(this.tabParam=="subpart"){
+            this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+        }
+        else if (_isEmpty(this.queryParams)) {
             let paramsToSet = {};
             if (this.tabParam == "subpart") {
                 paramsToSet = {
@@ -414,6 +499,8 @@ export default {
             let updatedQueryParams = {};
             // get associated subpart for section
             if (payload.scope == "section") {
+                const sections = this.tabsShape.section.listItems.map(sec => sec.identifier)
+                this.secIndex = sections.indexOf(valueToSet)
                 const sectionSubpart = this.tabsShape.section.listItems.find(
                     (item) => {
                         return item.identifier == valueToSet;
@@ -428,6 +515,7 @@ export default {
                     section: valueToSet,
                 };
             } else {
+                this.subIndex = this.subpartNav.indexOf(valueToSet)
                 updatedQueryParams = {
                     ...this.queryParams,
                     [payload.scope]: valueToSet,
@@ -571,6 +659,20 @@ export default {
                 }
             }
         }, 100),
+        floatingBackClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.subIndex - 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex - 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        },
+        floatingForwardClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.subIndex + 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex  + 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        }
     },
 
     watch: {
@@ -684,5 +786,16 @@ $sidebar-top-margin: 40px;
     padding: 0 25px;
     border-left: 1px solid $light_gray;
     overflow: scroll;
+}
+
+.sticky-bottom {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>

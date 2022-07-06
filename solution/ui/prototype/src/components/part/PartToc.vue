@@ -40,6 +40,11 @@ export default {
         structure: {
             type: Object,
             required: false
+        },
+        navName : {
+          type: String,
+          required: false,
+          default: 'part'
         }
     },
     data() {
@@ -67,7 +72,7 @@ export default {
             query.subpart = item.parent[item.parent.length-1]
           }
           this.$router.push({
-              name: "part",
+              name: this.navName,
               params: {
                   ...urlParams,
                   tab: item.type,
