@@ -10,6 +10,8 @@
         :supplementalContentCount="supplementalContentCount"
         :title="title"
         :part="part"
+        :subpart="subpart"
+        :headerLinks="headerLinks"
     ></component>
 </template>
 
@@ -49,6 +51,15 @@ export default {
         node: {
             type: Object,
             required: true,
+        },
+        subpart:{
+            type: String,
+            required:false
+        },
+        headerLinks:{
+            type: Boolean,
+            required: false,
+            default: false
         },
         resourceParamsEmitter: {
             type: Function,

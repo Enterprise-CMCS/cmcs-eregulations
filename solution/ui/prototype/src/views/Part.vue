@@ -3,50 +3,62 @@
     <body class="ds-base">
         <div id="app">
             <Header />
+            <PartHero
+                :title="title"
+                :part="part"
+                :partLabel="partLabel"
+                resourcesDisplay="sidebar"
+            />
             <div class="flex-container" style="display: flex">
                 <div >
                     <LeftNav />
                 </div>
                 <div >
-                    <PartNav
-                        :title="title"
-                        :part="part"
-                        :part-label="partLabel"
-                        resources-display="sidebar"
+            <PartNav
+                :stickyMode="stickyMode"
+                :showHeader="showHeader"
+                :lastScrollPosition="lastScrollPosition"
+             >
+                <template v-slot:titlePart>
+                    <div>
+                        {{ title }} CFR Part {{ part }}
+                    </div>
+                </template>
+                <template v-slot:tabs>
+                    <v-tabs
+                        slider-size="5"
+                        class="nav-tabs"
+                        v-model="tab"
+                        ref="tabs"
                     >
-                        <v-tabs
-                            ref="tabs"
-                            v-model="tab"
-                            slider-size="5"
-                            class="nav-tabs"
+                        <v-tab
+                            v-for="(item, key) in tabsShape"
+                            :key="item.label"
+                            :disabled="item.disabled"
                         >
-                            <v-tab
-                                v-for="(item, key, index) in tabsShape"
-                                :key="item.label"
-                                :disabled="item.disabled"
+                            {{ tabLabels[key] }}
+                            <template
+                                v-if="
+                                    item.value === 'subpart' ||
+                                    item.value === 'section'
+                                "
                             >
-                                {{ tabLabels[key] }}
-                                <template
-                                    v-if="
-                                        item.value === 'subpart' ||
-                                            item.value === 'section'
-                                    "
+                                <FancyDropdown
+                                    label=""
+                                    buttonTitle=""
+                                    type="splitTab"
                                 >
-                                    <FancyDropdown
-                                        label=""
-                                        button-title=""
-                                        type="splitTab"
-                                    >
-                                        <component
-                                            :is="item.listType"
-                                            :list-items="item.listItems"
-                                            :filter-emitter="setQueryParam"
-                                        />
-                                    </FancyDropdown>
-                                </template>
-                            </v-tab>
-                        </v-tabs>
-                    </PartNav>
+                                    <component
+                                        :is="item.listType"
+                                        :listItems="item.listItems"
+                                        :filterEmitter="setQueryParam"
+                                    ></component>
+                                </FancyDropdown>
+                            </template>
+                        </v-tab>
+                    </v-tabs>
+                </template>
+            </PartNav>
                     <div class="content-container content-container-sidebar">
                         <v-tabs-items
                             v-model="tab"
@@ -117,6 +129,7 @@ import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import PartContent from "@/components/part/PartContent.vue";
+import PartHero from "@/components/part/PartHero.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
@@ -131,6 +144,7 @@ import {
 } from "@/utilities/api";
 
 import _isEmpty from "lodash/isEmpty";
+import _throttle from "lodash/throttle";
 import _isUndefined from "lodash/isUndefined";
 import LeftNav from "@/components/part/LeftNav";
 
@@ -147,6 +161,7 @@ export default {
         Footer,
         Header,
         PartContent,
+        PartHero,
         PartNav,
         PartToc,
         SubpartList,
@@ -207,6 +222,9 @@ export default {
             selectedIdentifier: null,
             selectedScope: null,
             supplementalContentCount: {},
+            stickyMode: "hideOnScrollDown",
+            showHeader: true,
+            lastScrollPosition: 0,
         };
     },
 
@@ -227,7 +245,6 @@ export default {
                 }
             },
             set(value) {
-
                 const urlParams = {
                     title: this.title,
                     part: this.part,
@@ -235,7 +252,7 @@ export default {
                 const qParams = { ...this.queryParams };
                 const valueType = Object.keys(this.tabsShape)[value];
                 switch (valueType) {
-                    case "toc":{
+                    case "toc": {
                         this.$router.push({
                             name: "part",
                             params: {
@@ -246,7 +263,7 @@ export default {
                         });
                         break;
                     }
-                    case "part":{
+                    case "part": {
                         this.$router.push({
                             name: "part",
                             params: {
@@ -257,7 +274,7 @@ export default {
                         });
                         break;
                     }
-                    case "subpart":{
+                    case "subpart": {
                         this.$router.push({
                             name: "part",
                             params: {
@@ -276,31 +293,31 @@ export default {
                         break;
                     }
                     case "section": {
-
-                        const section = this.tabsShape.section.listItems[0]
-                        const subPart = this.tabsShape.subpart.listItems.find(subpart => subpart.identifier === section.subpart)
-                        const subpartSelection = _isEmpty(qParams) && subPart
-                            ?
-                            {subpart: subPart.identifier}
-                            :
-                            {};
-                        const sectionSelection = _isUndefined(qParams[valueType])
-                            ?
-                            {section: section.identifier}
-                            :
-                            {};
+                        const section = this.tabsShape.section.listItems[0];
+                        const subPart = this.tabsShape.subpart.listItems.find(
+                            (subpart) => subpart.identifier === section.subpart
+                        );
+                        const subpartSelection =
+                            _isEmpty(qParams) && subPart
+                                ? { subpart: subPart.identifier }
+                                : {};
+                        const sectionSelection = _isUndefined(
+                            qParams[valueType]
+                        )
+                            ? { section: section.identifier }
+                            : {};
                         this.$router.push({
                             name: "part",
                             params: {
-                              ...urlParams,
-                              tab: "section",
+                                ...urlParams,
+                                tab: "section",
                             },
                             query: _isUndefined(qParams[valueType])
                                 ? {
-                                  ...qParams,
-                                  ...subpartSelection,
-                                  ...sectionSelection,
-                                }
+                                      ...qParams,
+                                      ...subpartSelection,
+                                      ...sectionSelection,
+                                  }
                                 : qParams,
                         });
                         break;
@@ -317,35 +334,50 @@ export default {
         partContent() {
             return this.structure?.[1];
         },
-        subpartContent(){
-          return this.structure?.[1].filter(child =>
-              child.node_type === "SUBPART" && child.label[0] === this.queryParams.subpart
-          )
+        subpartContent() {
+            return this.structure?.[1].filter(
+                (child) =>
+                    child.node_type === "SUBPART" &&
+                    child.label[0] === this.queryParams.subpart
+            );
         },
-        sectionContent(){
-          if (this.subpartContent && this.subpartContent.length > 0){
-            const section = this.subpartContent[0].children.find(child =>
-                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
-            )
+        sectionContent() {
+            if (this.subpartContent && this.subpartContent.length > 0) {
+                const section = this.subpartContent[0].children.find(
+                    (child) =>
+                        child.node_type === "SECTION" &&
+                        child.label[1] === this.queryParams.section
+                );
 
-            if (section){
-              return [section]
+                if (section) {
+                    return [section];
+                }
+
+                return [
+                    this.subpartContent[0].children
+                        .filter((child) => child.node_type === "SUBJGRP")
+                        .map((sg) => sg.children)
+                        .flat(1)
+                        .find(
+                            (child) =>
+                                child.node_type === "SECTION" &&
+                                child.label[1] === this.queryParams.section
+                        ),
+                ];
             }
-
-            return [this.subpartContent[0].children.filter(child =>
-                child.node_type === "SUBJGRP"
-            ).map(sg => sg.children).flat(1)
-            .find(child =>
-                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
-            )]
-
-          }
-          return this.structure?.[1].filter(child =>
-              child.node_type === "SECTION" && child.label[1] === this.queryParams.section
-          )
+            return this.structure?.[1].filter(
+                (child) =>
+                    child.node_type === "SECTION" &&
+                    child.label[1] === this.queryParams.section
+            );
         },
         tabsContent() {
-            return [this.tocContent, this.partContent, this.subpartContent, this.sectionContent];
+            return [
+                this.tocContent,
+                this.partContent,
+                this.subpartContent,
+                this.sectionContent,
+            ];
         },
         subpartNav() {
             return this.tabsShape.subpart.listItems.map(subpart => subpart.identifier)
@@ -408,6 +440,14 @@ export default {
             }
             return false;
         },
+    },
+
+    mounted() {
+        window.addEventListener("scroll", this.onScroll);
+    },
+
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.onScroll);
     },
 
     watch: {
@@ -480,11 +520,14 @@ export default {
             this.tabLabels.section = this.formatTabLabel("section");
         }
         await this.getPartStructure();
-        await this.getFormattedSubpartsList({title: this.title, part:this.part});
+        await this.getFormattedSubpartsList({
+            title: this.title,
+            part: this.part,
+        });
         await this.getFormattedSectionsList({
-          title: this.title,
-          part: this.part,
-          subpart: this.queryParams.subpart
+            title: this.title,
+            part: this.part,
+            subpart: this.queryParams.subpart,
         });
         if(this.tabParam=="section"){
             this.secIndex=this.sectionNav.indexOf(this.queryParams.section)
@@ -561,7 +604,9 @@ export default {
                         return item.identifier == valueToSet;
                     }
                 ).subpart;
-                const subpartToSet = /^\d+$/.test(sectionSubpart) ? {} : { subpart: sectionSubpart };
+                const subpartToSet = /^\d+$/.test(sectionSubpart)
+                    ? {}
+                    : { subpart: sectionSubpart };
                 updatedQueryParams = {
                     ...this.queryParams,
                     ...subpartToSet,
@@ -625,61 +670,93 @@ export default {
                 },
             });
         },
-        async getFormattedSubpartsList({title, part}) {
-            const partTOC = await getPartTOC(title, part)
-            this.tabsShape.subpart.listItems = partTOC.children.filter(child => child.type ==="subpart").map(subpart => ({
-              label: subpart.label,
-              part: subpart.parent[0],
-              identifier: subpart.identifier[0],
-              range: subpart.descendant_range,
-            }));
+        async getFormattedSubpartsList({ title, part }) {
+            const partTOC = await getPartTOC(title, part);
+            this.tabsShape.subpart.listItems = partTOC.children
+                .filter((child) => child.type === "subpart")
+                .map((subpart) => ({
+                    label: subpart.label,
+                    part: subpart.parent[0],
+                    identifier: subpart.identifier[0],
+                    range: subpart.descendant_range,
+                }));
         },
-        async getFormattedSectionsList({title, part, subpart}) {
-
-            const toc = await getPartTOC(title, part)
+        async getFormattedSectionsList({ title, part, subpart }) {
+            const toc = await getPartTOC(title, part);
 
             const subParts = toc.children
-                .filter(child => child.type==="subpart")
-                .filter(subPart => subpart ? subPart.identifier[0] === subpart: true)
+                .filter((child) => child.type === "subpart")
+                .filter((subPart) =>
+                    subpart ? subPart.identifier[0] === subpart : true
+                );
 
-            let filteredSections = subParts.map( sp => sp.children.filter(child => child.type=== 'section'))
+            let filteredSections = subParts
+                .map((sp) =>
+                    sp.children.filter((child) => child.type === "section")
+                )
                 .flat(1)
-                .map(section =>({
-                    subpart:section.parent[0],
+                .map((section) => ({
+                    subpart: section.parent[0],
                     identifier: section.identifier[1],
                     label: section.label_level,
                     description: section.label_description,
-                    part
-                }))
-            if (!subpart){
+                    part,
+                }));
+            if (!subpart) {
                 const orphanSections = toc.children
-                    .filter(child => child.type === "section")
-                    .map(section =>({
-                        subpart:section.parent[0],
+                    .filter((child) => child.type === "section")
+                    .map((section) => ({
+                        subpart: section.parent[0],
                         identifier: section.identifier[1],
                         label: section.label_level,
                         description: section.label_description,
-                        part
-                    }))
-                filteredSections = filteredSections.concat(orphanSections)
+                        part,
+                    }));
+                filteredSections = filteredSections.concat(orphanSections);
             }
-            const subjectGroups = subParts.map( sp => sp.children.filter(child => child.type=== 'subject_group')).flat(1)
-            subjectGroups.forEach(subject_group => {
-                const subPart = subject_group.parent[0]
-                subject_group.children.forEach( section => {
+            const subjectGroups = subParts
+                .map((sp) =>
+                    sp.children.filter(
+                        (child) => child.type === "subject_group"
+                    )
+                )
+                .flat(1);
+            subjectGroups.forEach((subject_group) => {
+                const subPart = subject_group.parent[0];
+                subject_group.children.forEach((section) => {
                     filteredSections.push({
-                        subpart:subPart,
+                        subpart: subPart,
                         identifier: section.identifier[1],
                         label: section.label_level,
                         description: section.label_description,
-                        part
-                    })
-                })
-            })
-            filteredSections.sort((a,b) => Number(a.identifier) - Number(b.identifier))
+                        part,
+                    });
+                });
+            });
+            filteredSections.sort(
+                (a, b) => Number(a.identifier) - Number(b.identifier)
+            );
 
             this.tabsShape.section.listItems = filteredSections;
         },
+        onScroll: _throttle(function() {
+            if (this.stickyMode === "hideOnScrollDown") {
+                const scrollPosition = window.scrollY;
+                const scrollDirection =
+                    scrollPosition > 80 &&
+                    scrollPosition > this.lastScrollPosition
+                        ? "down"
+                        : "up";
+
+                this.lastScrollPosition = scrollPosition;
+
+                if (scrollDirection === "down") {
+                    this.showHeader = false;
+                } else {
+                    this.showHeader = true;
+                }
+            }
+        }, 100),
         floatingBackClick() {
             const selectedIdentifier = this.tabParam == "subpart"
                 ? `${this.part}-${this.subpartNav[this.subIndex - 1]}`
@@ -723,8 +800,8 @@ $sidebar-top-margin: 40px;
     justify-content: space-between;
 }
 
-.tab-content{
-  padding-right: 25px;
+.tab-content {
+    padding-right: 25px;
 }
 
 .sidebar {
