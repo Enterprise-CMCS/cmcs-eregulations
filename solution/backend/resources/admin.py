@@ -163,7 +163,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
 @admin.register(FederalRegisterDocumentGroup)
 class FederalRegisterDocumentGroupAdmin(BaseAdmin):
     admin_priority = 250
-    filter_horizontal = ("documents",)
+    #filter_horizontal = ("documents",)
     list_display = ("docket_number_prefixes", "number_of_documents")
     list_display_links = ("docket_number_prefixes", "number_of_documents")
     search_fields = ["docket_number_prefixes"]

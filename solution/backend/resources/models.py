@@ -157,6 +157,27 @@ class Section(AbstractLocation):
         ordering = ["title", "part", "section_id"]
 
 
+# Resource grouping models
+
+
+class FederalRegisterDocumentGroup(models.Model):
+    docket_number_prefixes = ArrayField(
+        models.CharField(max_length=255, blank=True, null=True),
+        default=list,
+        blank=True,
+        help_text="Common prefixes to use when grouping Federal Register Documents, "
+                  "e.g. \"CMS-1234-\" to match any docket number starting with that string.",
+    )
+
+    def __str__(self):
+        prefixes = ", ".join(self.docket_number_prefixes)
+        return f"\"{prefixes}\" group"
+    
+    class Meta:
+        verbose_name = "Federal Register Doc Group"
+        verbose_name_plural = "Federal Register Doc Groups"
+
+
 # Resource models
 # All types of resources must inherit from AbstractResource.
 
@@ -186,6 +207,7 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
+    group = models.ForeignKey(FederalRegisterDocumentGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="documents")
 
     def __str__(self):
         return f"{self.date} {self.document_number}: {self.name}"
@@ -194,25 +216,3 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
         ordering = ["-date", "document_number", "name", "description"]
         verbose_name = "Federal Register Document"
         verbose_name_plural = "Federal Register Documents"
-
-
-# Resource grouping models
-
-
-class FederalRegisterDocumentGroup(models.Model):
-    docket_number_prefixes = ArrayField(
-        models.CharField(max_length=255, blank=True, null=True),
-        default=list,
-        blank=True,
-        help_text="Common prefixes to use when grouping Federal Register Documents, "
-                  "e.g. \"CMS-1234-\" to match any docket number starting with that string.",
-    )
-    documents = models.ManyToManyField(FederalRegisterDocument, blank=True, related_name="group")
-
-    def __str__(self):
-        prefixes = ", ".join(self.docket_number_prefixes)
-        return f"\"{prefixes}\" group"
-    
-    class Meta:
-        verbose_name = "FR Document Group"
-        verbose_name_plural = "FR Document Groups"
