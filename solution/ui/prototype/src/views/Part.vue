@@ -2,23 +2,18 @@
 
     <body class="ds-base">
         <div id="app">
-            <Header />
+            <Header  :stickyMode="stickyMode" :showHeader="showHeader" />
             <PartHero
                 :title="title"
                 :part="part"
                 :partLabel="partLabel"
                 resourcesDisplay="sidebar"
             />
-            <div class="flex-container" style="display: flex">
-                <div >
-                    <LeftNav />
-                </div>
-                <div >
             <PartNav
                 :stickyMode="stickyMode"
                 :showHeader="showHeader"
                 :lastScrollPosition="lastScrollPosition"
-             >
+            >
                 <template v-slot:titlePart>
                     <div>
                         {{ title }} CFR Part {{ part }}
@@ -59,43 +54,48 @@
                     </v-tabs>
                 </template>
             </PartNav>
-                    <div class="content-container content-container-sidebar">
-                        <v-tabs-items
-                            v-model="tab"
-                            class="tab-content"
+            <div class="flex-container" style="display: flex">
+                <div>
+                    <LeftNav />
+                </div>
+
+                <div class="content-container content-container-sidebar">
+                    <v-tabs-items
+                        v-model="tab"
+                        class="tab-content"
+                    >
+                        <v-tab-item
+                            v-for="(item, key, index) in tabsShape"
+                            :key="index"
+                            :transition="false"
                         >
-                            <v-tab-item
-                                v-for="(item, key, index) in tabsShape"
-                                :key="index"
-                                :transition="false"
-                            >
-                                <component
-                                    :is="item.component"
-                                    :structure="tabsContent[index]"
-                                    :title="title"
-                                    :part="part"
-                                    resources-display="sidebar"
-                                    :selected-identifier="selectedIdentifier"
-                                    :selected-scope="selectedScope"
-                                    :supplemental-content-count="supplementalContentCount"
-                                    @view-resources="setResourcesParams"
-                                />
-                            </v-tab-item>
-                        </v-tabs-items>
-                        <div
-                            v-show="tabParam !== 'toc'"
-                            class="sidebar"
-                        >
-                            <SectionResourcesSidebar
+                            <component
+                                :is="item.component"
+                                :structure="tabsContent[index]"
                                 :title="title"
                                 :part="part"
+                                resources-display="sidebar"
                                 :selected-identifier="selectedIdentifier"
                                 :selected-scope="selectedScope"
-                                :route-to-resources="routeToResources"
+                                :supplemental-content-count="supplementalContentCount"
+                                @view-resources="setResourcesParams"
                             />
-                        </div>
+                        </v-tab-item>
+                    </v-tabs-items>
+                    <div
+                        v-show="tabParam !== 'toc'"
+                        class="sidebar"
+                    >
+                        <SectionResourcesSidebar
+                            :title="title"
+                            :part="part"
+                            :selected-identifier="selectedIdentifier"
+                            :selected-scope="selectedScope"
+                            :route-to-resources="routeToResources"
+                        />
                     </div>
                 </div>
+
             </div>
             <div class="sticky-bottom" v-if="this.tabParam === 'subpart' || this.tabParam === 'section'">
                 <BottomNavBtnGroup>
