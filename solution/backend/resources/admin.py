@@ -3,6 +3,9 @@ from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
 from django.db.models import Prefetch, Count
+from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+
 
 # Register your models here.
 
@@ -156,14 +159,40 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     list_display = ("date", "name", "description", "docket_numbers", "document_number", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "docket_numbers", "document_number", "category", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
-    fields = ("approved", "docket_numbers", "document_number", "name",
+    fields = ("approved", "docket_numbers", "group", "document_number", "name",
               "description", "date", "url", "category", "locations", "internal_notes")
+
+
+class FederalRegisterDocumentGroupForm(forms.ModelForm):
+    documents = forms.ModelMultipleChoiceField(
+        queryset=FederalRegisterDocument.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name="Documents",
+            is_stacked=False,
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields["documents"].initial = self.instance.documents.all()
+
+    def save(self, commit=True):
+        group = super().save(commit=False)
+        group.documents.set(self.cleaned_data["documents"])
+        group.save()
+        return group
+
+    class Meta:
+        model = FederalRegisterDocumentGroup
+        fields = ("docket_number_prefixes", "documents")
 
 
 @admin.register(FederalRegisterDocumentGroup)
 class FederalRegisterDocumentGroupAdmin(BaseAdmin):
+    form = FederalRegisterDocumentGroupForm
     admin_priority = 250
-    #filter_horizontal = ("documents",)
     list_display = ("docket_number_prefixes", "number_of_documents")
     list_display_links = ("docket_number_prefixes", "number_of_documents")
     search_fields = ["docket_number_prefixes"]
