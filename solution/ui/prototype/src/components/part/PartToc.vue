@@ -67,20 +67,20 @@ export default {
                     title: this.title,
                     part: this.part,
                 };
-          if(this.navName=="PDpart"){
-            let navigation =""
+          if(this.navName == "PDpart"){
+            let navigation = ""
               if(item.type == "section"){
                 urlParams.section = item.identifier[1]
-                navigation ="PDpart-section"
+                navigation = "PDpart-section"
                 if (item.parent_type === "subpart"){
-                  urlParams.subPart = "Subpart-" + item.parent[0]
+                  urlParams.subPart = `Subpart-${item.parent[0]}`
                 }                
                 else{
                   urlParams.subPart = "Subpart-undefined"
                 }
               }
               else{
-                urlParams.subPart ="Subpart-"+ item.identifier[0]
+                urlParams.subPart = `Subpart-${item.parent[0]}`
                 navigation = "PDpart-subPart"
               }
 
