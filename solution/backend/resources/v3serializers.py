@@ -222,7 +222,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             if len(d) > 1:
                 prefixes.append("-".join(d[0:-1]) + "-")
         if len(prefixes) > 0:
-            groups = FederalRegisterDocumentGroup.objects.all().filter(docket_number_prefixes__overlap=prefixes)
+            groups = FederalRegisterDocumentGroup.objects.filter(docket_number_prefixes__overlap=prefixes)
             if len(groups) == 0:
                 group = FederalRegisterDocumentGroup.objects.create(docket_number_prefixes=prefixes)
             else:

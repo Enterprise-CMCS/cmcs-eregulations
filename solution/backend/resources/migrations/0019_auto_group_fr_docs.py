@@ -30,7 +30,7 @@ def group_existing_fr_docs(apps, schema_editor):
         if len(prefixes) == 0:
             continue # skip auto-grouping docs with no valid docket numbers
         # get or create group
-        groups = FederalRegisterDocumentGroup.objects.all().filter(docket_number_prefixes__overlap=prefixes)
+        groups = FederalRegisterDocumentGroup.objects.filter(docket_number_prefixes__overlap=prefixes)
         if len(groups) == 0:
             group = FederalRegisterDocumentGroup.objects.create(docket_number_prefixes=prefixes)
         else:
