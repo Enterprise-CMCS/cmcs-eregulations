@@ -19,7 +19,7 @@
 
         <v-expansion-panels>
             <v-expansion-panel>
-                <v-expansion-panel-header>
+                <v-expansion-panel-header disable-icon-rotate>
                     <span class="v-expansion-panel-header-text">Table of Contents</span>
                     <template v-slot:actions>
                         <v-icon color="black">
@@ -55,7 +55,7 @@ export default {
     props: {
         title: { type: String },
         part: { type: String },
-        subPart: { type: String },
+        subPart: { type: String, required: false, default: "" },
         section: { type: String },
         structure: { type: Array },
         tocContent: {type: Object},
@@ -96,6 +96,9 @@ export default {
   .v-expansion-panel{
     border: 3px solid #f3f3f3;
   }
+  .v-expansion-panel button {
+    padding: 0;
+  }
 
   .v-expansion-panel-header{
     background-color: #f3f3f3;
@@ -104,6 +107,11 @@ export default {
     font-size: 16px;
     line-height: 20px
   }
+
+  .v-expansion-panel-header__icon.v-expansion-panel-header__icon--disable-rotate i {
+    width: 40px;
+  }
+
   .v-expansion-panel-header-text{
     padding:18px;
   }
