@@ -4,28 +4,31 @@ from django.db import migrations
 
 
 def combine_groups(groups):
-    docs = groups[0].documents.all()
-    prefixes = groups[0].docket_number_prefixes
+    main = groups[0]
+    docs = main.documents.all()
+    prefixes = main.docket_number_prefixes
     for group in groups[1:]:
         docs |= group.documents.all()
         prefixes += group.docket_number_prefixes
         group.delete()
-    groups[0].documents.set(docs.distinct())
-    groups[0].docket_number_prefixes = list(set(prefixes))
-    groups[0].save()
-    return groups[0]
+    main.documents.set(docs.distinct())
+    main.docket_number_prefixes = list(set(prefixes))
+    main.save()
+    return main
 
 
 def group_existing_fr_docs(apps, schema_editor):
     FederalRegisterDocument = apps.get_model("resources", "FederalRegisterDocument")
     FederalRegisterDocumentGroup = apps.get_model("resources", "FederalRegisterDocumentGroup")
     for doc in FederalRegisterDocument.objects.all().order_by("date").filter(docket_numbers__isnull=False):
-        if len(doc.docket_numbers) < 1:
-            continue
         # compute prefixes
         prefixes = []
         for i in doc.docket_numbers:
-                prefixes.append("-".join(i.split("-")[0:-1]) + "-")
+            d = i.split("-")
+            if len(d) > 1: # check for invalid docket numbers (no dashes)
+                prefixes.append("-".join(d[0:-1]) + "-")
+        if len(prefixes) == 0:
+            continue # skip auto-grouping docs with no valid docket numbers
         # get or create group
         groups = FederalRegisterDocumentGroup.objects.all().filter(docket_number_prefixes__overlap=prefixes)
         if len(groups) == 0:
