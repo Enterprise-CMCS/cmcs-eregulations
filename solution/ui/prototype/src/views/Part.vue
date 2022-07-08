@@ -128,6 +128,7 @@ import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
+import LeftNav from "@/components/part/LeftNav";
 import PartContent from "@/components/part/PartContent.vue";
 import PartHero from "@/components/part/PartHero.vue";
 import PartNav from "@/components/part/PartNav.vue";
@@ -146,7 +147,6 @@ import {
 import _isEmpty from "lodash/isEmpty";
 import _throttle from "lodash/throttle";
 import _isUndefined from "lodash/isUndefined";
-import LeftNav from "@/components/part/LeftNav";
 
 export default {
 
