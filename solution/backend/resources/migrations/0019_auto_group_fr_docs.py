@@ -35,6 +35,9 @@ def group_existing_fr_docs(apps, schema_editor):
             group = FederalRegisterDocumentGroup.objects.create(docket_number_prefixes=prefixes)
         else:
             group = combine_groups(groups) if len(groups) > 1 else groups[0]
+        # update group prefixes list
+        group.docket_number_prefixes = list(set(group.docket_number_prefixes + prefixes))
+        group.save()
         # assign this doc to the group
         doc.group = group
         doc.save()
