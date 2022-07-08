@@ -172,7 +172,7 @@ class FederalRegisterDocumentGroup(models.Model):
     def __str__(self):
         prefixes = ", ".join(self.docket_number_prefixes)
         return f"\"{prefixes}\" group"
-    
+
     class Meta:
         verbose_name = "Federal Register Doc Group"
         verbose_name_plural = "Federal Register Doc Groups"
@@ -207,7 +207,13 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
-    group = models.ForeignKey(FederalRegisterDocumentGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="documents")
+    group = models.ForeignKey(
+        FederalRegisterDocumentGroup,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="documents",
+    )
 
     def __str__(self):
         return f"{self.date} {self.document_number}: {self.name}"
