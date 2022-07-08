@@ -2,7 +2,7 @@
 
     <body class="ds-base">
         <div id="app">
-            <Header :stickyMode="stickyMode" :showHeader="showHeader" />
+            <Header  :stickyMode="stickyMode" :showHeader="showHeader" />
             <PartHero
                 :title="title"
                 :part="part"
@@ -13,7 +13,7 @@
                 :stickyMode="stickyMode"
                 :showHeader="showHeader"
                 :lastScrollPosition="lastScrollPosition"
-             >
+            >
                 <template v-slot:titlePart>
                     <div>
                         {{ title }} CFR Part {{ part }}
@@ -54,18 +54,46 @@
                     </v-tabs>
                 </template>
             </PartNav>
-            <div class="content-container content-container-sidebar">
-                <v-tabs-items v-model="tab" class="tab-content">
-                    <v-tab-item :transition="false" v-for="(item, key, index) in tabsShape" :key="index">
-                        <component :is="item.component" :structure="tabsContent[index]" :title="title" :part="part"
-                            resourcesDisplay="sidebar" :selectedIdentifier="selectedIdentifier"
-                            :selectedScope="selectedScope" :supplementalContentCount="supplementalContentCount"
-                            @view-resources="setResourcesParams"></component>
-                    </v-tab-item>
-                </v-tabs-items>
-                <div class="sidebar" v-show="tabParam !== 'toc'">
-                    <SectionResourcesSidebar :title="title" :part="part" :selectedIdentifier="selectedIdentifier"
-                        :selectedScope="selectedScope" :routeToResources="routeToResources" />
+            <div class="flex-container" style="display: flex">
+                <div>
+                    <LeftNav />
+                </div>
+
+                <div class="content-container content-container-sidebar">
+                    <v-tabs-items
+                        v-model="tab"
+                        class="tab-content"
+                    >
+                        <v-tab-item
+                            v-for="(item, key, index) in tabsShape"
+                            :key="index"
+                            :transition="false"
+                        >
+                            <component
+                                :is="item.component"
+                                :structure="tabsContent[index]"
+                                :title="title"
+                                :part="part"
+                                resources-display="sidebar"
+                                :selected-identifier="selectedIdentifier"
+                                :selected-scope="selectedScope"
+                                :supplemental-content-count="supplementalContentCount"
+                                @view-resources="setResourcesParams"
+                            />
+                        </v-tab-item>
+                    </v-tabs-items>
+                    <div
+                        v-show="tabParam !== 'toc'"
+                        class="sidebar"
+                    >
+                        <SectionResourcesSidebar
+                            :title="title"
+                            :part="part"
+                            :selected-identifier="selectedIdentifier"
+                            :selected-scope="selectedScope"
+                            :route-to-resources="routeToResources"
+                        />
+                    </div>
                 </div>
 
             </div>
@@ -100,6 +128,7 @@ import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
+import LeftNav from "@/components/part/LeftNav";
 import PartContent from "@/components/part/PartContent.vue";
 import PartHero from "@/components/part/PartHero.vue";
 import PartNav from "@/components/part/PartNav.vue";
@@ -113,7 +142,6 @@ import {
     getPart,
     getSupplementalContentCountForPart,
     getPartTOC,
-    getSectionsForPart,
 } from "@/utilities/api";
 
 import _isEmpty from "lodash/isEmpty";
@@ -121,9 +149,12 @@ import _throttle from "lodash/throttle";
 import _isUndefined from "lodash/isUndefined";
 
 export default {
+
+    name: "Part",
     components: {
         BottomNavBtn,
         BottomNavBtnGroup,
+        LeftNav,
         SectionResourcesSidebar,
         FancyDropdown,
         FlashBanner,
@@ -137,8 +168,6 @@ export default {
         SectionList,
         VerticalRule,
     },
-
-    name: "Part",
 
     data() {
         return {
@@ -421,6 +450,67 @@ export default {
         window.removeEventListener("scroll", this.onScroll);
     },
 
+    watch: {
+        "$route.params": {
+            async handler(toParams, previousParams) {
+                // react to route changes...
+                if (toParams.tab !== previousParams.tab) {
+                    this.tabParam = toParams.tab;
+                }
+
+                if (toParams.part !== previousParams.part) {
+                    this.structure = null;
+                    this.clearResourcesParams();
+                    this.title = toParams.title;
+                    this.part = toParams.part;
+                }
+            },
+        },
+        "$route.query": {
+            async handler(toQueries, previousQueries) {
+                this.queryParams = toQueries;
+                if (toQueries.subpart !== previousQueries.subpart) {
+                    this.tabLabels.subpart = this.formatTabLabel("subpart");
+                    await this.getFormattedSectionsList({
+                      title: this.title,
+                      part: this.part,
+                      subpart: toQueries.subpart
+                    });
+                    const query = {
+                        subpart: toQueries.subpart,
+                    }
+                    if (toQueries.section !== previousQueries.section) {
+                      query.section = toQueries.section
+                    }
+                    this.$router.push({
+                      name: "part",
+                      params: {
+                        title: this.title,
+                        part: this.part,
+                        tab: this.tabParam,
+                      },
+                      query,
+                    });
+
+
+                }
+
+                if (toQueries.section !== previousQueries.section) {
+                    this.tabLabels.section = this.formatTabLabel("section");
+                }
+            },
+        },
+        async part() {
+            await this.getPartStructure();
+            await this.getFormattedSubpartsList({title: this.title, part:this.part});
+            await this.getFormattedSectionsList({
+              title: this.title,
+              part: this.part,
+              subpart: this.queryParams.subpart
+            });
+        },
+    },
+
     async created() {
         if (this.queryParams.subpart) {
             this.tabLabels.subpart = this.formatTabLabel("subpart");
@@ -474,6 +564,14 @@ export default {
                 query: paramsToSet,
             });
         }
+    },
+
+    updated() {
+        this.$nextTick(function () {
+            // call onResize to fix tab highlight misalignment bug
+            // https://github.com/vuetifyjs/vuetify/issues/4733
+            this.$refs.tabs && this.$refs.tabs.onResize();
+        });
     },
 
     methods: {
@@ -673,76 +771,6 @@ export default {
 
             this.setQueryParam({scope: this.tabParam, selectedIdentifier});
         }
-    },
-
-    watch: {
-        "$route.params": {
-            async handler(toParams, previousParams) {
-                // react to route changes...
-                if (toParams.tab !== previousParams.tab) {
-                    this.tabParam = toParams.tab;
-                }
-
-                if (toParams.part !== previousParams.part) {
-                    this.structure = null;
-                    this.clearResourcesParams();
-                    this.title = toParams.title;
-                    this.part = toParams.part;
-                }
-            },
-        },
-        "$route.query": {
-            async handler(toQueries, previousQueries) {
-                this.queryParams = toQueries;
-                if (toQueries.subpart !== previousQueries.subpart) {
-                    this.tabLabels.subpart = this.formatTabLabel("subpart");
-                    await this.getFormattedSectionsList({
-                        title: this.title,
-                        part: this.part,
-                        subpart: toQueries.subpart,
-                    });
-                    const query = {
-                        subpart: toQueries.subpart,
-                    };
-                    if (toQueries.section !== previousQueries.section) {
-                        query.section = toQueries.section;
-                    }
-                    this.$router.push({
-                        name: "part",
-                        params: {
-                            title: this.title,
-                            part: this.part,
-                            tab: this.tabParam,
-                        },
-                        query,
-                    });
-                }
-
-                if (toQueries.section !== previousQueries.section) {
-                    this.tabLabels.section = this.formatTabLabel("section");
-                }
-            },
-        },
-        async part() {
-            await this.getPartStructure();
-            await this.getFormattedSubpartsList({
-                title: this.title,
-                part: this.part,
-            });
-            await this.getFormattedSectionsList({
-                title: this.title,
-                part: this.part,
-                subpart: this.queryParams.subpart,
-            });
-        },
-    },
-
-    updated() {
-        this.$nextTick(function () {
-            // call onResize to fix tab highlight misalignment bug
-            // https://github.com/vuetifyjs/vuetify/issues/4733
-            this.$refs.tabs && this.$refs.tabs.onResize();
-        });
     },
 };
 </script>
