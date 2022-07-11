@@ -63,23 +63,49 @@ export default {
     methods: {
       doNavigation(item){
           window.scrollTo(0, 0);
-          const urlParams = {
+          let urlParams = {
                     title: this.title,
                     part: this.part,
                 };
-          const query = {[item.type]: item.identifier[item.identifier.length -1] }
-          if (item.parent_type === "subpart"){
-            query.subpart = item.parent[item.parent.length-1]
-          }
-          this.$router.push({
-              name: this.navName,
-              params: {
-                  ...urlParams,
-                  tab: item.type,
-              },
-              query,
-          });
+          if(this.navName == "PDpart"){
+            let navigation = ""
+              if(item.type == "section"){
+                urlParams.section = item.identifier[1]
+                navigation = "PDpart-section"
+                if (item.parent_type === "subpart"){
+                  urlParams.subPart = `Subpart-${item.parent[0]}`
+                }                
+                else{
+                  urlParams.subPart = "Subpart-undefined"
+                }
+              }
+              else{
+                urlParams.subPart = `Subpart-${item.parent[0]}`
+                navigation = "PDpart-subPart"
+              }
 
+              this.$router.push({
+                name: navigation,
+                params:{
+                  ...urlParams,
+                }
+              })
+          }
+          else{
+            const query = {[item.type]: item.identifier[item.identifier.length -1] }
+            if (item.parent_type === "subpart"){
+              query.subpart = item.parent[item.parent.length-1]
+            }
+            
+            this.$router.push({
+                name: this.navName,
+                params: {
+                    ...urlParams,
+                    tab: item.type,
+                },
+                query,
+            });
+          }
       }
     },
 }
