@@ -16,7 +16,7 @@
                     v-model="selectedTitle"
                 >
                     <option value="" disabled selected>Title</option>
-                    <option value="42">42</option>
+                    <option v-for="title in this.titles" :value="title">{{ title }}</option>
                 </select>
                 §
                 <select
@@ -25,6 +25,7 @@
                     aria-label="Regulation part number"
                     v-model="selectedPart"
                     required
+                    :disabled="!partNames"
                 >
                     <template v-if="partNames">
                         <option value="" disable selected>Part</option>
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-import { getPartNames } from "@/utilities/api";
+import {getTOC, getPartNames} from "@/utilities/api";
 
 export default {
     name: "JumpTo",
@@ -73,14 +74,23 @@ export default {
     data() {
         return {
             partNames: null,
+            titles: [],
             selectedPart: "",
             selectedTitle: "",
         };
     },
+    watch :{
+      async selectedTitle(newTitle) {
+        console.log(newTitle)
+        this.partNames = await getPartNames(newTitle);
+      }
+    },
 
     async created() {
         try {
-            this.partNames = await getPartNames();
+            const toc = await getTOC()
+            this.titles = toc.map(title => title.identifier[0])
+
         } catch (error) {
             console.error(error);
         }
@@ -104,7 +114,7 @@ export default {
                 },
             });
         },
-    },
+    }
 };
 </script>
 
