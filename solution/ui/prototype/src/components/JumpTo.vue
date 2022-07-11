@@ -43,6 +43,7 @@
                     name="section"
                     placeholder=""
                     type="text"
+                    v-model="selectedSection"
                     pattern="\d+"
                     title="Regulation section number, i.e. 111"
                     aria-label="Regulation section number, i.e. 111"
@@ -55,7 +56,8 @@
 </template>
 
 <script>
-import { getPartNames } from "@/utilities/api";
+import {getPartNames, getPartTOC} from "@/utilities/api";
+import {flattenSubpart} from "@/utilities/utils";
 
 export default {
     name: "JumpTo",
@@ -75,6 +77,7 @@ export default {
             partNames: null,
             selectedPart: "",
             selectedTitle: "",
+            selectedSection: "",
         };
     },
 
@@ -91,18 +94,76 @@ export default {
       }
     },
     methods: {
-        formSubmit() {
+        async formSubmit() {
             const resourcesDisplay = window.location.pathname.indexOf('sidebar') >= 0 ? "sidebar" : "drawer"
-            const name = window.location.pathname.indexOf('PD') >= 0 ? "PDpart" : "part"
+            let urlParams = {
+                title: this.selectedTitle,
+                part: this.selectedPart,
+            };
+            let name = window.location.pathname.indexOf('zoom') >= 0 ? "PDpart" : "part"
+            const partToc = await getPartTOC(this.selectedTitle, this.selectedPart)
+            let subpart
+            const orphans = partToc.children.filter( child => child.type === "section"
+                  && child.identifier[0] === this.selectedPart
+                  && child.identifier[1] === this.selectedSection
+            )
+            if (!orphans.length){
+              // keep looking
+              subpart =  partToc.children.filter( child => child.type === "subpart")
+              .find( sp =>
+                  Number(sp.descendant_range[0].split(".")[1]) <= this.selectedSection
+                  && Number(sp.descendant_range[1].split(".")[1]) >= this.selectedSection
+              )
 
-            this.$router.push({
-                name,
-                params: {
-                  title: this.selectedTitle,
-                  part: this.selectedPart,
-                  resourcesDisplay
-                },
-            });
+              if (subpart){
+                  const flatSubpart = flattenSubpart(subpart)
+                  const section = flatSubpart.children.find(section => section.identifier[1] === this.selectedSection)
+                  subpart = flatSubpart.identifier[0]
+                  if (!section){
+                      this.selectedSection = undefined
+                  }
+              }
+
+            }
+
+            if(name === "PDpart"){
+                if (this.selectedSection) {
+                    name = "PDpart-section"
+                    urlParams.section = this.selectedSection
+                    if (subpart) {
+                      urlParams.subPart = `Subpart-${subpart}`
+                    } else {
+                      urlParams.subPart = "Subpart-undefined"
+                    }
+                }
+                this.$router.push({
+                    name,
+                    params:{
+                      ...urlParams,
+                      resourcesDisplay
+                    }
+                })
+            }
+            else{
+                const query = {}
+                let tab = "part"
+                if (this.selectedSection) {
+                    tab = "section"
+                    query.section = this.selectedSection
+                    if (subpart) {
+                      query.subpart = subpart
+                    }
+                }
+                this.$router.push({
+                    name: this.navName,
+                    params: {
+                        ...urlParams,
+                        tab,
+                        resourcesDisplay
+                    },
+                    query,
+                });
+            }
         },
     },
 };

@@ -535,8 +535,6 @@ const getSubPartsForPart = async (partParam) => {
             range: s.descendant_range,
         };
     });
-    console.log('************************************************')
-    console.log(toReturn)
     return toReturn
 };
 
