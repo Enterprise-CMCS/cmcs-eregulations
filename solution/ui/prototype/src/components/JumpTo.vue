@@ -119,7 +119,8 @@ export default {
             )
             if (!orphans.length){
               // keep looking
-              subpart =  partToc.children.filter( child => child.type === "subpart")
+              // also, reserved subparts have no children or descendant range.
+              subpart =  partToc.children.filter( child => child.type === "subpart" && child.reserved === false)
               .find( sp =>
                   Number(sp.descendant_range[0].split(".")[1]) <= this.selectedSection
                   && Number(sp.descendant_range[1].split(".")[1]) >= this.selectedSection
