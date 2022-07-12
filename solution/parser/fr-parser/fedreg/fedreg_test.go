@@ -30,7 +30,10 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type",
 							"html_url": "https://test.gov/test",
 							"publication_date": "2021-01-31",
-							"docket_id": "CMS-0000-F2",
+							"docket_ids": [
+								"CMS-0000-F2",
+								"CMS-0001-C1"
+							],
 							"document_number": "2021-12345"
 						},
 						{
@@ -39,7 +42,9 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type 2",
 							"html_url": "https://test.gov/test/2",
 							"publication_date": "2021-02-01",
-							"docket_id": "CMS-0000-F3",
+							"docket_ids": [
+								"CMS-0000-F3"
+							],
 							"document_number": "2021-67890"
 						}
 					]
@@ -52,7 +57,10 @@ func TestFetchContent(t *testing.T) {
 					Category: "a type",
 					URL: "https://test.gov/test",
 					Date: "2021-01-31",
-					DocketNumber: "CMS-0000-F2",
+					DocketNumbers: []string{
+						"CMS-0000-F2",
+						"CMS-0001-C1",
+					},
 					DocumentNumber: "2021-12345",
 				},
 				&FRDoc{
@@ -61,7 +69,7 @@ func TestFetchContent(t *testing.T) {
 					Category: "a type 2",
 					URL: "https://test.gov/test/2",
 					Date: "2021-02-01",
-					DocketNumber: "CMS-0000-F3",
+					DocketNumbers: []string{"CMS-0000-F3"},
 					DocumentNumber: "2021-67890",
 				},
 			},
@@ -79,7 +87,10 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type",
 							"html_url": "https://test.gov/test",
 							"publication_date": "2021-01-31",
-							"docket_id": "CMS-0000-F2",
+							"docket_ids": [
+								"CMS-0000-F2",
+								"CMS-0001-C1"
+							],
 							"document_number": "2021-12345"
 						},
 						{
@@ -88,7 +99,9 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type 2",
 							"html_url": "https://test.gov/test/2",
 							"publication_date": "2021-02-01",
-							"docket_id": "CMS-0000-F3",
+							"docket_ids": [
+								"CMS-0000-F3"
+							],
 							"document_number": "2021-67890"
 						}
 					]
@@ -101,7 +114,9 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type 3",
 							"html_url": "https://test.gov/test/3",
 							"publication_date": "2021-02-02",
-							"docket_id": "CMS-0000-F4",
+							"docket_ids": [
+								"CMS-0000-F4"
+							],
 							"document_number": "2021-09876"
 						},
 						{
@@ -110,7 +125,9 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type 4",
 							"html_url": "https://test.gov/test/4",
 							"publication_date": "2021-02-03",
-							"docket_id": "CMS-0000-F5",
+							"docket_ids": [
+								"CMS-0000-F5"
+							],
 							"document_number": "2021-54321"
 						}
 					]
@@ -123,7 +140,10 @@ func TestFetchContent(t *testing.T) {
 					Category: "a type",
 					URL: "https://test.gov/test",
 					Date: "2021-01-31",
-					DocketNumber: "CMS-0000-F2",
+					DocketNumbers: []string{
+						"CMS-0000-F2",
+						"CMS-0001-C1",
+					},
 					DocumentNumber: "2021-12345",
 				},
 				&FRDoc{
@@ -132,7 +152,7 @@ func TestFetchContent(t *testing.T) {
 					Category: "a type 2",
 					URL: "https://test.gov/test/2",
 					Date: "2021-02-01",
-					DocketNumber: "CMS-0000-F3",
+					DocketNumbers: []string{"CMS-0000-F3"},
 					DocumentNumber: "2021-67890",
 				},
 				&FRDoc{
@@ -141,7 +161,7 @@ func TestFetchContent(t *testing.T) {
 					Category: "a type 3",
 					URL: "https://test.gov/test/3",
 					Date: "2021-02-02",
-					DocketNumber: "CMS-0000-F4",
+					DocketNumbers: []string{"CMS-0000-F4"},
 					DocumentNumber: "2021-09876",
 				},
 				&FRDoc{
@@ -150,7 +170,7 @@ func TestFetchContent(t *testing.T) {
 					Category: "a type 4",
 					URL: "https://test.gov/test/4",
 					Date: "2021-02-03",
-					DocketNumber: "CMS-0000-F5",
+					DocketNumbers: []string{"CMS-0000-F5"},
 					DocumentNumber: "2021-54321",
 				},
 			},
@@ -168,7 +188,10 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type",
 							"html_url": "https://test.gov/test",
 							"publication_date": "2021-01-31",
-							"docket_id": "CMS-0000-F2",
+							"docket_ids": [
+								"CMS-0000-F2",
+								"CMS-0001-C1"
+							],
 							"document_number": "2021-12345"
 						},
 						{
@@ -177,7 +200,9 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type 2",
 							"html_url": "https://test.gov/test/2",
 							"publication_date": "2021-02-01",
-							"docket_id": "CMS-0000-F3",
+							"docket_ids": [
+								"CMS-0000-F3"
+							],
 							"document_number": "2021-67890"
 						}
 					]
@@ -191,7 +216,9 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type 3",
 							"html_url": "https://test.gov/test/3",
 							"publication_date": "2021-02-02",
-							"docket_id": "CMS-0000-F4",
+							"docket_ids": [
+								"CMS-0000-F4"
+							],
 							"document_number": "2021-09876"
 						},
 						{
@@ -200,7 +227,9 @@ func TestFetchContent(t *testing.T) {
 							"type": "a type 4",
 							"html_url": "https://test.gov/test/4",
 							"publication_date": "2021-02-03",
-							"docket_id": "CMS-0000-F5",
+							"docket_ids": [
+								"CMS-0000-F5"
+							],
 							"document_number": "2021-54321"
 						}
 					]
