@@ -8,8 +8,8 @@ import django.db.models.deletion
 def convert_docket_number_to_list(apps, schema_editor):
     FederalRegisterDocument = apps.get_model("resources", "FederalRegisterDocument")
     for doc in FederalRegisterDocument.objects.all():
-        if doc.docket_number_tmp is not None and doc.docket_number_tmp != "":
-            nums = doc.docket_number_tmp.split(",")
+        if doc.docket_number is not None and doc.docket_number != "":
+            nums = doc.docket_number.split(",")
             for num in nums:
                 doc.docket_numbers.append(num.strip())
             doc.save()
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.RunPython(convert_docket_number_to_list),
         migrations.RemoveField(
             model_name='federalregisterdocument',
-            name='docket_number_tmp',
+            name='docket_number',
         ),
         migrations.CreateModel(
             name='FederalRegisterDocumentGroup',
