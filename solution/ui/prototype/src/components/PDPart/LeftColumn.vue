@@ -80,12 +80,13 @@ export default {
 <style scoped>
   .breadcrumbs{
       font-family: Open Sans;
-      font-size: 12px;
+      font-size: 14px;
       font-style: normal;
-      font-weight: 700;
+      font-weight: 400;
       line-height: 30px;
       letter-spacing: 0em;
       text-align: left;
+      padding-bottom: 20px;
   }
   .toc-group{
     margin-top: 5px;
