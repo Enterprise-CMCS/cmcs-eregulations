@@ -92,10 +92,9 @@ func loadConfig() (*ecfrEregs.ParserConfig, error) {
 var extractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
 
 func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
-	today := time.Now()
 	var parts []string
 	for _, subchapter := range t.Subchapters {
-		subchapterParts, err := extractSubchapterPartsFunc(ctx, today, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+		subchapterParts, err := extractSubchapterPartsFunc(ctx, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
 			log.Error("[main] Failed to retrieve parts for title ", t.Title, " subchapter ", subchapter, ". Skipping.")
 			continue

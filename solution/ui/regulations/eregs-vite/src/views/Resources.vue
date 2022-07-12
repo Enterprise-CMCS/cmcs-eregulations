@@ -299,9 +299,9 @@ export default {
                     newQueryParams.q = "";
                     this.searchInputValue = "";
                 }
-
-                this.getPartDict(newQueryParams);
-
+                if (newQueryParams.part) {
+                  this.getPartDict(newQueryParams);
+                }
                 this.$router.push({
                     name: "resources",
                     query: newQueryParams,
@@ -340,7 +340,13 @@ export default {
             const sectionList = allSections
                 .filter((sec) => sec.type === "section")
                 .map((sec) => `${sec.identifier[0]}-${sec.identifier[1]}`);
-            return sectionList;
+            // subject groups are a bit lower down the tree, need to look there too.
+            const subjectGroupSections = allSections
+                .filter((sec) => sec.type === "subject_group")
+                .map(subjgrp => subjgrp.children
+                .map( sec => `${sec.identifier[0]}-${sec.identifier[1]}`))
+                .flat(1);
+            return sectionList.concat(subjectGroupSections).sort();
         },
         filterCategories(resultArray) {
             return resultArray.filter((item) =>

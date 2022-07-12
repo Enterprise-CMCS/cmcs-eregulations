@@ -142,7 +142,7 @@ func TestGetPartsList(t *testing.T) {
 		Parts: ecfrEregs.PartList{"1", "2", "3"},
 	}
 
-	extractSubchapterPartsFunc = func(ctx context.Context, date time.Time, title int, sub *ecfr.SubchapterOption) ([]string, error) {
+	extractSubchapterPartsFunc = func(ctx context.Context, title int, sub *ecfr.SubchapterOption) ([]string, error) {
 		if sub.Chapter == "IV" && sub.Subchapter == "C" {
 			return []string{"4", "5", "6"}, nil
 		}

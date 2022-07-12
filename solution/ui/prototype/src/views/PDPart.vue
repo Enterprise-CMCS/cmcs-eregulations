@@ -3,32 +3,23 @@
         <div id="app">
             <FlashBanner />
             <Header />
-            <splitpanes v-on:changeSection="updateSection($event)">
-                <pane min-size="30">
-                    <left-column
-                        :title="title"
-                        :part="part"
-                        :subPart="subPart"
-                        :section="section"
-                        :partLabel="partLabel"
-                        :structure="partContent"
-                        :navigation="navigation"
-                        :supplementalContentCount="supplementalContentCount"
-                        @view-resources="setResourcesParams"
-                    />
-                </pane>
-                <pane min-size="30">
-                    <right-column
-                        :title="title"
-                        :part="part"
-                        :subPart="subPart"
-                        :section="section"
-                        :supList="supList"
-                        :suggestedTab="suggestedTab"
-                        :suggestedSubPart="suggestedSubPart"
-                    />
-                </pane>
-            </splitpanes>
+            <div class="content-container content-container-sidebar">
+                <LeftColumn
+                    :title="title"
+                    :part="part"
+                    :subPart="subPart"
+                    :section="section"
+                    :partLabel="partLabel"
+                    :structure="partContent"
+                    :tocContent="tocContent"
+                    :navigation="navigation"
+                    :supplementalContentCount="supplementalContentCount"
+                    @view-resources="setResourcesParams"
+                />
+                <div class="sidebar">
+                    <SectionResourcesSidebar :title="title" :part="part" />
+                </div>
+            </div>
             <Footer />
         </div>
     </body>
@@ -38,28 +29,24 @@
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
-import { Splitpanes, Pane } from "splitpanes";
-import "splitpanes/dist/splitpanes.css";
 import LeftColumn from "@/components/PDPart/LeftColumn";
-import RightColumn from "@/components/PDPart/RightColumn";
+import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import {
     getPart,
     getSubPartsForPart,
     getPartsList,
-    getSectionsForSubPart,
+    getPartTOC,
     getSupplementalContentCountForPart,
-    getSupplementalContentNew
+    getSupplementalContentNew,
 } from "@/utilities/api";
 export default {
     name: "Part",
     components: {
-        RightColumn,
         LeftColumn,
         FlashBanner,
         Footer,
         Header,
-        Splitpanes,
-        Pane,
+        SectionResourcesSidebar,
     },
     watch: {
         "$route.params": {
@@ -87,10 +74,11 @@ export default {
                     this.subPartList = await getSubPartsForPart(this.part);
                     this.partsList = await getPartsList();
                     if (this.subPart) {
-                        this.sections = await getSectionsForSubPart(
-                            this.part,
-                            this.subPart.split("-")[1]
-                        );
+                        this.sections = await this.getFormattedSectionsList({
+                            title: this.title,
+                            part: this.part,
+                            subpart: this.subPart.split("-")[1],
+                        });
                     }
                     this.supplementalContentCount =
                         await getSupplementalContentCountForPart(this.part);
@@ -99,27 +87,41 @@ export default {
                         this.title,
                         this.part,
                         this.section ? [this.section] : this.renderedSections,
-                        this.subPart ? [this.subPart] : this.subPartList.map(sp => sp.identifier),
-                    )
-
+                        this.subPart
+                            ? [this.subPart]
+                            : this.subPartList.map((sp) => sp.identifier)
+                    );
                 } catch (error) {
                     console.error(error);
                 }
             },
             immediate: true,
         },
+        subPart: {
+            async handler() {
+                this.sections = await this.getFormattedSectionsList({
+                    title: this.title,
+                    part: this.part,
+                    subpart: this.subpart
+                        ? this.subPart.split("-")[1]
+                        : this.subpart,
+                });
+            },
+        },
     },
-    async mounted(){
-      try {
-        this.supList = await getSupplementalContentNew(
-            this.title,
-            this.part,
-            this.section ? [this.section] : this.renderedSections,
-            this.subPart ? [this.subPart] : this.subPartList.map(sp => sp.identifier),
-        )
-      } catch (error) {
-          console.error(error);
-      }
+    async mounted() {
+        try {
+            this.supList = await getSupplementalContentNew(
+                this.title,
+                this.part,
+                this.section ? [this.section] : this.renderedSections,
+                this.subPart
+                    ? [this.subPart]
+                    : this.subPartList.map((sp) => sp.identifier)
+            );
+        } catch (error) {
+            console.error(error);
+        }
     },
     data() {
         return {
@@ -133,47 +135,71 @@ export default {
             partsList: [],
             sections: [],
             supplementalContentCount: {},
-            suggestedTab:"",
-            suggestedSubPart:"",
-            renderedSections: []
+            renderedSections: [],
         };
     },
+    async created() {
+        this.structure = await getPart(this.title, this.part);
+    },
     computed: {
+        subpartContent() {
+            let subpart = this.subPart.split("-")[1];
+            return this.structure[1]
+                ? this.structure[1].filter(
+                      (child) =>
+                          child.node_type === "SUBPART" &&
+                          child.label[0] === subpart
+                  )
+                : [];
+        },
+        sectionContent() {
+            if (this.subpartContent && this.subpartContent.length > 0) {
+                const section = this.subpartContent[0].children.find(
+                    (child) =>
+                        child.node_type === "SECTION" &&
+                        child.label[1] === this.section
+                );
+
+                if (section) {
+                    return [section];
+                }
+
+                return [
+                    this.subpartContent[0].children
+                        .filter((child) => child.node_type === "SUBJGRP")
+                        .map((sg) => sg.children)
+                        .flat(1)
+                        .find(
+                            (child) =>
+                                child.node_type === "SECTION" &&
+                                child.label[1] === this.section
+                        ),
+                ];
+            }
+            return this.structure?.[1].filter(
+                (child) =>
+                    child.node_type === "SECTION" &&
+                    child.label[1] === this.section
+            );
+        },
         tocContent() {
             return this.structure?.[0];
         },
         partLabel() {
-            return this.structure?.[0] ? this.structure?.[0].label_description ?? "N/A" : null;
+            return this.structure?.[0]
+                ? this.structure?.[0].label_description ?? "N/A"
+                : null;
         },
-        partContent() {
-            let results = this.structure?.[1];
-            if (results && this.subPart) {
-                results = results.filter((subPart) => {
-                    return subPart.label[0] === this.subPart.split("-")[1];
-                });
 
-                if (this.section) {
-                    const sections = results[0].children.filter(section => {
-                          if (section.label[1] === this.section && section.node_type === "SECTION"){
-                            return true
-                          } else{
-                            return section.children.filter(subSection =>{
-                              return subSection.label && subSection.label[1] === this.section && subSection.node_type === "SECTION"
-                            }).length
-                          }
-                        }
-                    );
-                    if (sections[0].node_type === "SECTION"){
-                      return [sections[0]]
-                    }
-                    else{
-                      return sections[0].children.filter(subSection =>{
-                          return subSection.label[1] === this.section && subSection.node_type === "SECTION"
-                      })
-                    }
-                }
+        partContent() {
+            if (this.subPart && !this.section) {
+                return this.subpartContent;
             }
-            return results || [];
+            if (this.section) {
+                return this.sectionContent;
+            }
+
+            return this.structure?.[1] || [];
         },
         navigation() {
             const results = { name: "PDpart", previous: null, next: null };
@@ -200,9 +226,9 @@ export default {
                         : null;
             } else if (this.subPart) {
                 results.name = "PDpart-subPart";
-                const currentIndex = this.subPartList.findIndex(
-                    sub => { return sub.identifier === this.subPart.split("-")[1]}
-                );
+                const currentIndex = this.subPartList.findIndex((sub) => {
+                    return sub.identifier === this.subPart.split("-")[1];
+                });
                 results.previous =
                     currentIndex > 0
                         ? {
@@ -246,15 +272,15 @@ export default {
     },
     methods: {
         async setResourcesParams(payload) {
-            if (payload["scope"] === "rendered"){
-              this.renderedSections.push(payload["identifier"])
-              return
+            if (payload["scope"] === "rendered") {
+                this.renderedSections.push(payload["identifier"]);
+                return;
             }
-            this.suggestedTab = payload["scope"]
+            this.suggestedTab = payload["scope"];
             // skip this for subparts
-            if (payload["scope"] === "subpart"){
-              this.suggestedSubPart = payload["identifier"]["subPart"]
-              return
+            if (payload["scope"] === "subpart") {
+                this.suggestedSubPart = payload["identifier"]["subPart"];
+                return;
             }
             try {
                 this.supList = await getSupplementalContentNew(
@@ -266,31 +292,47 @@ export default {
                 console.error(error);
             } finally {
                 console.log(this.supList);
-                this.suggestedTab = payload["scope"]
+                this.suggestedTab = payload["scope"];
             }
             // Implement response to user choosing a section or subpart here
         },
-        changeSection: function (updatedSection) {
-            this.sec = updatedSection;
+        async getFormattedSectionsList({ title, part, subpart }) {
+            const toc = await getPartTOC(title, part);
+            const subParts = toc.children
+                .filter((child) => child.type === "subpart")
+                .filter((subPart) =>
+                    subpart ? subPart.identifier[0] === subpart : true
+                );
+
+            let filteredSections = subParts
+                .map((sp) =>
+                    sp.children.filter((child) => child.type === "section")
+                )
+                .flat(1)
+                .map((section) => section.identifier[1]);
+            if (subpart === "Subpart-undefined") {
+                const orphanSections = toc.children
+                    .filter((child) => child.type === "section")
+                    .map((section) => section.identifier[1]);
+                filteredSections = filteredSections.concat(orphanSections);
+            }
+            const subjectGroups = subParts
+                .map((sp) =>
+                    sp.children.filter(
+                        (child) => child.type === "subject_group"
+                    )
+                )
+                .flat(1);
+            subjectGroups.forEach((subject_group) => {
+                const subPart = subject_group.parent[0];
+                subject_group.children.forEach((section) => {
+                    filteredSections.push(section.identifier[1]);
+                });
+            });
+            filteredSections.sort((a, b) => Number(a) - Number(b));
+
+            return filteredSections;
         },
     },
 };
 </script>
-
-<style>
-.splitpanes__pane {
-    justify-content: left;
-    align-items: flex-start;
-    display: flex;
-    position: -webkit-sticky;
-    position: sticky;
-    overflow: scroll;
-    height: calc(100vh - 124px);
-}
-
-.splitpanes--vertical > .splitpanes__splitter {
-    min-width: 6px;
-    background: #a3e8ff;
-}
-</style>
-

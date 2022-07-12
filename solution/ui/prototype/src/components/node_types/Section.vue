@@ -1,37 +1,32 @@
 <template>
-    <section
-        :aria-labelledby="kebabTitle"
-        tabindex="-1"
-        :id="kebabTitle"
-        class="reg-section"
-    >
+    <section :aria-labelledby="kebabTitle" tabindex="-1" :id="kebabTitle" class="reg-section">
         <h2 class="section-title" :id="kebabTitle">
-            <button
-                v-on:click="handleBtnClick"
-                v-if="numSupplementalContent && !showResourceButtons"
-                class="supplemental-content-count"
-            >
+            <button v-on:click="handleBtnClick" v-if="numSupplementalContent && !showResourceButtons"
+                class="supplemental-content-count">
                 {{ numSupplementalContent }}
             </button>
-            {{ node.title }}
+            <router-link v-if="node.children && headerLinks" :to="{
+                name: 'PDpart-section',
+                params: { title: '42', part: this.node.label[0], subPart: this.formattedSubpart, section: this.node.label[1] }
+            }">
+                <v-tooltip top color="#EEFAFE">
+                    <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" class="header-text" v-on="on">{{ node.title }}</span>
+                    </template>
+                    <span class="tooltip-text">Click to zoom into the heading</span>
+                </v-tooltip>
+            </router-link>
+            <span v-else>{{ node.title }}</span>
         </h2>
 
         <div class="paragraphs">
             <template v-for="child in node.children">
-                <Node
-                    :node="child"
-                    :key="child.title"
-                    :showResourceButtons="showResourceButtons"
-                    :supplementalContentCount="supplementalContentCount"
-                />
+                <Node :node="child" :key="child.title" :showResourceButtons="showResourceButtons"
+                    :supplementalContentCount="supplementalContentCount" />
             </template>
         </div>
         <div v-if="showResourceButtons && numSupplementalContent" class="btn-container">
-            <ResourcesBtn
-                :clickHandler="handleBtnClick"
-                label="Section"
-                size="small"
-            />
+            <ResourcesBtn :clickHandler="handleBtnClick" label="Section" size="small" />
         </div>
     </section>
 </template>
@@ -58,9 +53,18 @@ export default {
             type: String,
             required: false,
         },
+        subpart: {
+            type: String,
+            required: false
+        },
         node: {
             type: Object,
             required: true,
+        },
+        headerLinks:{
+            type:Boolean,
+            required: false,
+            default: false
         },
         resourceParamsEmitter: {
             type: Function,
@@ -74,7 +78,7 @@ export default {
         supplementalContentCount: {
             type: Object,
             required: false,
-            default: () => {},
+            default: () => { },
         },
     },
 
@@ -85,6 +89,12 @@ export default {
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);
+        },
+        formattedSubpart() {
+            if(this.subpart){
+               return this.subpart.includes("Subpart") ? this.subpart : 'Subpart-' + this.subpart 
+            }
+            return 'Subpart-undefined'
         },
         numSupplementalContent() {
             return this.supplementalContentCount
@@ -98,7 +108,7 @@ export default {
             this.resourceParamsEmitter("section", [this.node.label[1]]);
         },
     },
-    created(){
+    created() {
         this.resourceParamsEmitter("rendered", this.node.label[1]);
     }
 };
@@ -108,9 +118,11 @@ export default {
 .btn-container {
     margin: 20px 0px 50px;
 }
+
 .btn-container {
     margin: 20px 0px 50px;
 }
+
 .supplemental-content-count {
     background-color: #eefafe;
     color: #046791;
@@ -119,5 +131,25 @@ export default {
     border-radius: 3px;
     font-size: 12px;
     line-height: 20px;
+}
+
+.content-container .content .content-with-drawer {
+    margin: 0;
+}
+
+.section-title a {
+    text-decoration: none;
+}
+
+.v-tooltip__content {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+}
+
+.tooltip-text {
+    font-size: 12px !important;
+
+
+    display: block !important;
+    color: #212121;
 }
 </style>

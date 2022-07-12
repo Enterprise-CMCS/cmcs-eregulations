@@ -75,12 +75,17 @@
     }
 }
 
-.copy-tooltip {
+@mixin default-tooltip {
     cursor: default;
-    z-index: 3;
-    position: absolute;
     background: $lightest_blue;
     box-shadow: 0px 0px 20px 0px #00000040;
+}
+
+.copy-tooltip {
+    @include default-tooltip;
+
+    z-index: 3;
+    position: absolute;
 
     p {
         color: $dark_gray;
