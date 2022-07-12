@@ -25,12 +25,15 @@ class HomepageView(TemplateView):
             return context
 
         full_structure = get_structure(parts)
+        # find the identifier for each part in the structure
+        titles = [part.structure['identifier'] for part in parts]
 
         c = {
             'structure': full_structure,
             'regulations': parts,
             'cfr_title_text': parts[0].structure['label_description'],
-            'cfr_title_number': parts[0].structure['identifier'],
+            # for now, the lowest numerical value for title is correct
+            'cfr_title_number': min(titles),
         }
 
         return {**context, **c}
