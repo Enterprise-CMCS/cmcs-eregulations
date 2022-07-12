@@ -41,7 +41,7 @@
                     {{ title.label_level }}
                 </v-tab>
             </v-tabs>
-            <v-divider style="border-color:#046791"/>
+            <v-divider style="border-color:#046791; margin: 0px" />
             <v-tabs-items v-model="tab">
                 <v-tab-item
                     v-for="title in toc"
