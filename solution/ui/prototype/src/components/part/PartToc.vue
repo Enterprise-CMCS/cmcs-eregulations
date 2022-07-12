@@ -106,6 +106,7 @@ export default {
                 query,
             });
           }
+          this.$emit("exitTOC");
       }
     },
 }
