@@ -38,7 +38,10 @@ func TestSendDocument(t *testing.T) {
 				Category: "this is a category",
 				URL: "https://test.gov/test",
 				Date: "2021-01-31",
-				DocketNumber: "CMS-0000-F2",
+				DocketNumbers: []string{
+					"CMS-0000-F2",
+					"CMS-0001-C1",
+				},
 				DocumentNumber: "2021-12345",
 				Locations: []*Section{
 					&Section{
