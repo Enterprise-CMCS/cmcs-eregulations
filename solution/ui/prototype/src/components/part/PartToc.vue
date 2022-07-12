@@ -67,6 +67,7 @@ export default {
                     title: this.title,
                     part: this.part,
                 };
+          console.log(item)
           if(this.navName == "PDpart"){
             let navigation = ""
               if(item.type == "section"){
@@ -80,8 +81,8 @@ export default {
                 }
               }
               else{
-                urlParams.subPart = `Subpart-${item.parent[0]}`
-                navigation = "PDpart-subPart"
+                  urlParams.subPart = `Subpart-${item.identifier[0]}`
+                  navigation = "PDpart-subPart"
               }
 
               this.$router.push({
