@@ -1,5 +1,5 @@
 <template>
-    <div class="related-rule recent-change">
+    <div class="related-rule recent-change" :class="ruleClasses">
         <a
             class="related-rule-title"
             :href="html_url"
@@ -94,6 +94,11 @@ export default {
             }
 
             return "Unknown";
+        },
+        ruleClasses() {
+            return {
+                grouped: this.grouped,
+            };
         },
         indicatorClasses() {
             return {

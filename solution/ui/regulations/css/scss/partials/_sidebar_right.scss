@@ -30,8 +30,8 @@ aside.right-sidebar {
         }
     }
 
-    #subpart-resources-heading{
-        margin-bottom:0px;
+    #subpart-resources-heading {
+        margin-bottom: 0px;
     }
 
     #view-button {
@@ -140,6 +140,26 @@ aside.right-sidebar {
         font-weight: normal;
         color: $primary_text_color;
         padding-right: $spacer-4;
+    }
+}
+
+.related-rule {
+    &.grouped {
+        display: block;
+        position: relative;
+        padding-left: 20px;
+
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 7px;
+            left: -2px;
+            width: 15px;
+            height: 20px;
+            border: solid $light_gray;
+            border-width: 0 0 1px 1px;
+        }
     }
 }
 
@@ -295,7 +315,6 @@ aside.right-sidebar {
 }
 
 .category-content {
-
     &.additional-rules .related-rule:first-child {
         padding: 0;
     }
@@ -307,7 +326,7 @@ aside.right-sidebar {
         }
     }
 }
-button.collapsible-title{
+button.collapsible-title {
     cursor: pointer;
 }
 .collapsible-title {
@@ -373,11 +392,11 @@ button.collapsible-title{
     margin-top: $spacer-2;
 }
 
-.show-subpart-resources{
+.show-subpart-resources {
     color: $mid_gray;
-    font-size: 12px
+    font-size: 12px;
 }
 
-.bold{
-    font-weight: 600
+.bold {
+    font-weight: 600;
 }
