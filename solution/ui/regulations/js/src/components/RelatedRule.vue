@@ -7,13 +7,18 @@
             rel="noopener noreferrer"
         >
             <span class="link-heading">
-                <span :class="getClassList">{{ expandedType }}</span>
+                <span class="recent-flag indicator" :class="indicatorClasses">{{
+                    expandedType
+                }}</span>
                 <span v-if="publication_date" class="recent-date">{{
                     publication_date | formatDate
                 }}</span>
-                | <span class="recent-fr">{{ citation }}</span>
+                |
+                <span class="recent-fr-citation" :class="citationClasses">{{
+                    citation
+                }}</span>
             </span>
-            <div class="recent-title">{{ title }}</div>
+            <div v-if="!grouped" class="recent-title">{{ title }}</div>
         </a>
     </div>
 </template>
@@ -44,6 +49,11 @@ export default {
         type: {
             type: String,
             required: true,
+        },
+        grouped: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         citation: {
             type: String,
@@ -85,10 +95,16 @@ export default {
 
             return "Unknown";
         },
-        getClassList() {
-            return this.expandedType === "Final"
-                ? "recent-flag indicator"
-                : "recent-flag indicator secondary-indicator";
+        indicatorClasses() {
+            return {
+                "secondary-indicator":
+                    this.grouped || this.expandedType !== "Final",
+            };
+        },
+        citationClasses() {
+            return {
+                grouped: this.grouped,
+            };
         },
     },
 

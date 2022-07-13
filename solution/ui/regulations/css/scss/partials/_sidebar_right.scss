@@ -207,8 +207,12 @@ aside.right-sidebar {
         font-weight: bold;
     }
 
-    .recent-fr {
+    .recent-fr-citation {
         font-weight: bold;
+
+        &.grouped {
+            font-weight: normal;
+        }
     }
 
     .recent-title {

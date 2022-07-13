@@ -243,6 +243,7 @@ $width-3xl: 1920px; // The largest the site container will get
 // -------------------------
 
 .indicator {
+    font-weight: 600;
     background: $primary_indicator_background;
     text-transform: uppercase;
     color: $primary_indicator_text;
