@@ -8,7 +8,7 @@
         >
             <span class="link-heading">
                 <span :class="getClassList">{{ expandedType }}</span>
-                <span class="recent-date" v-if="publication_date">{{
+                <span v-if="publication_date" class="recent-date">{{
                     publication_date | formatDate
                 }}</span>
                 | <span class="recent-fr">{{ citation }}</span>
@@ -20,7 +20,21 @@
 
 <script>
 export default {
-    name: "related-rule",
+    name: "RelatedRule",
+
+    filters: {
+        formatDate(value) {
+            const date = new Date(value);
+            const options = {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                timeZone: "UTC",
+            };
+            const format = new Intl.DateTimeFormat("en-US", options);
+            return format.format(date);
+        },
+    },
 
     props: {
         title: {
@@ -50,23 +64,28 @@ export default {
     },
 
     computed: {
-        expandedType: function () {
+        expandedType() {
             if (this.type === "Rule") {
                 return "Final";
-            } else if (
+            }
+
+            if (
                 this.type === "Proposed Rule" &&
                 this.action === "Proposed rule."
             ) {
                 return "NPRM";
-            } else if (
+            }
+
+            if (
                 this.type === "Proposed Rule" &&
                 this.action === "Request for information."
             ) {
                 return "RFI";
             }
+
             return "Unknown";
         },
-        getClassList: function () {
+        getClassList() {
             return this.expandedType === "Final"
                 ? "recent-flag indicator"
                 : "recent-flag indicator secondary-indicator";
@@ -74,18 +93,5 @@ export default {
     },
 
     methods: {},
-    filters: {
-        formatDate: function (value) {
-            const date = new Date(value);
-            const options = {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                timeZone: "UTC",
-            };
-            const format = new Intl.DateTimeFormat("en-US", options);
-            return format.format(date);
-        },
-    },
 };
 </script>
