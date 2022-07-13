@@ -15,11 +15,6 @@ class Migration(migrations.Migration):
             name='federalregisterdocument',
             options={'ordering': ['-date', 'document_number', 'name', 'description'], 'verbose_name': 'Federal Register Document', 'verbose_name_plural': 'Federal Register Documents'},
         ),
-        migrations.RenameField(
-            model_name='federalregisterdocument',
-            old_name='docket_number',
-            new_name='docket_number_tmp',
-        ),
         migrations.AddField(
             model_name='federalregisterdocument',
             name='docket_numbers',
