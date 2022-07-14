@@ -123,7 +123,11 @@ export default {
                 subpart =  partToc.children.filter( child => child.type === "subpart" && child.reserved === false)
                 .find( sp =>
                     Number(sp.descendant_range[0].split(".")[1]) <= this.selectedSection
-                    && Number(sp.descendant_range[1].split(".")[1]) >= this.selectedSection
+                    && (sp.descendant_range.length > 1 ?
+                            Number(sp.descendant_range[1].split(".")[1]) >= this.selectedSection
+                        :
+                            true
+                        )
                 )
 
                 if (subpart){
