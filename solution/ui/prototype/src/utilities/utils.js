@@ -466,8 +466,7 @@ function flattenSubpart(subpart){
     const result = JSON.parse(JSON.stringify(subpart))
     const subjectGroupSections = subpart.children
         .filter(child => child.type=== 'subject_group')
-        .map(subjgrp => subjgrp.children)
-        .flat(1)
+        .flatMap(subjgrp => subjgrp.children)
         .filter(child => child.type ==="section")
 
 
