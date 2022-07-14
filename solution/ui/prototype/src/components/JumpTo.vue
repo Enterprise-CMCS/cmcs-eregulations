@@ -118,22 +118,24 @@ export default {
                   && child.identifier[1] === this.selectedSection
             )
             if (!orphans.length){
-              // keep looking
-              // also, reserved subparts have no children or descendant range.
-              subpart =  partToc.children.filter( child => child.type === "subpart" && child.reserved === false)
-              .find( sp =>
-                  Number(sp.descendant_range[0].split(".")[1]) <= this.selectedSection
-                  && Number(sp.descendant_range[1].split(".")[1]) >= this.selectedSection
-              )
+                // keep looking
+                // also, reserved subparts have no children or descendant range.
+                subpart =  partToc.children.filter( child => child.type === "subpart" && child.reserved === false)
+                .find( sp =>
+                    Number(sp.descendant_range[0].split(".")[1]) <= this.selectedSection
+                    && Number(sp.descendant_range[1].split(".")[1]) >= this.selectedSection
+                )
 
-              if (subpart){
-                  const flatSubpart = flattenSubpart(subpart)
-                  const section = flatSubpart.children.find(section => section.identifier[1] === this.selectedSection)
-                  subpart = flatSubpart.identifier[0]
-                  if (!section){
-                      this.selectedSection = undefined
-                  }
-              }
+                if (subpart){
+                    const flatSubpart = flattenSubpart(subpart)
+                    const section = flatSubpart.children.find(section => section.identifier[1] === this.selectedSection)
+                    subpart = flatSubpart.identifier[0]
+                    if (!section){
+                        this.selectedSection = undefined
+                    }
+                } else {
+                    this.selectedSection = undefined
+                }
 
             }
 
