@@ -121,7 +121,4 @@ export default {
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     background: #EEFAFE;
 }
-.v-tooltip__content.menuable__content__active{
-    opacity: 1;
-}
 </style>
