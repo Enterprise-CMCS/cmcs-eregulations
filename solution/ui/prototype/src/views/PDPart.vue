@@ -167,8 +167,7 @@ export default {
                 return [
                     this.subpartContent[0].children
                         .filter((child) => child.node_type === "SUBJGRP")
-                        .map((sg) => sg.children)
-                        .flat(1)
+                        .flatMap((sg) => sg.children)
                         .find(
                             (child) =>
                                 child.node_type === "SECTION" &&
@@ -305,10 +304,9 @@ export default {
                 );
 
             let filteredSections = subParts
-                .map((sp) =>
+                .flatMap((sp) =>
                     sp.children.filter((child) => child.type === "section")
                 )
-                .flat(1)
                 .map((section) => section.identifier[1]);
             if (subpart === "Subpart-undefined") {
                 const orphanSections = toc.children
@@ -317,12 +315,11 @@ export default {
                 filteredSections = filteredSections.concat(orphanSections);
             }
             const subjectGroups = subParts
-                .map((sp) =>
+                .flatMap((sp) =>
                     sp.children.filter(
                         (child) => child.type === "subject_group"
                     )
                 )
-                .flat(1);
             subjectGroups.forEach((subject_group) => {
                 const subPart = subject_group.parent[0];
                 subject_group.children.forEach((section) => {
