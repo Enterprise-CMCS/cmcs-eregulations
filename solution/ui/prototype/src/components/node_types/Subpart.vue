@@ -122,6 +122,6 @@ export default {
     background: #EEFAFE;
 }
 .v-tooltip__content.menuable__content__active{
-  opacity: 1;
+    opacity: 1;
 }
 </style>

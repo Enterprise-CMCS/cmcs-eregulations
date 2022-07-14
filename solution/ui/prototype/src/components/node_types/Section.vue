@@ -116,8 +116,6 @@ export default {
 
 <style lang="scss">
 
-$tooltip-opacity: 1;
-
 .btn-container {
     margin: 20px 0px 50px;
 }
@@ -149,7 +147,7 @@ $tooltip-opacity: 1;
     background: #EEFAFE;
 }
 .v-tooltip__content.menuable__content__active{
-  opacity: 1;
+    opacity: 1;
 }
 .tooltip-text {
     font-size: 12px !important;
