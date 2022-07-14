@@ -102,12 +102,13 @@ export default {
                 this.sections = await this.getFormattedSectionsList({
                     title: this.title,
                     part: this.part,
-                    subpart: this.subpart
+                    subpart: this.subPart
                         ? this.subPart.split("-")[1]
-                        : this.subpart,
+                        : this.subPart,
                 });
             },
         },
+
     },
     async mounted() {
         try {
@@ -298,40 +299,17 @@ export default {
         },
         async getFormattedSectionsList({ title, part, subpart }) {
             const toc = await getPartTOC(title, part);
-            const subParts = toc.children
-                .filter((child) => child.type === "subpart")
-                .filter((subPart) =>
-                    subpart ? subPart.identifier[0] === subpart : true
-                );
+ 
+            if(subpart != "undefined"){
+                const totalSubpart =  toc.children.filter((sub)=> sub.identifier[0] === subpart)[0].children
+                const sections = totalSubpart.filter((child)=>child.type==="section" && !child.reserved).map(sec=>sec.identifier[1])
+                const groupSections = totalSubpart.filter((child)=>child.type==="subject_group").map(sub => sub.children.filter(sec => !sec.reserved).map(sec=>sec.identifier[1])).flat()
 
-            let filteredSections = subParts
-                .map((sp) =>
-                    sp.children.filter((child) => child.type === "section")
-                )
-                .flat(1)
-                .map((section) => section.identifier[1]);
-            if (subpart === "Subpart-undefined") {
-                const orphanSections = toc.children
-                    .filter((child) => child.type === "section")
-                    .map((section) => section.identifier[1]);
-                filteredSections = filteredSections.concat(orphanSections);
+                return sections.concat(groupSections)
             }
-            const subjectGroups = subParts
-                .map((sp) =>
-                    sp.children.filter(
-                        (child) => child.type === "subject_group"
-                    )
-                )
-                .flat(1);
-            subjectGroups.forEach((subject_group) => {
-                const subPart = subject_group.parent[0];
-                subject_group.children.forEach((section) => {
-                    filteredSections.push(section.identifier[1]);
-                });
-            });
-            filteredSections.sort((a, b) => Number(a) - Number(b));
-
-            return filteredSections;
+            else{
+                return []
+            }
         },
     },
 };
