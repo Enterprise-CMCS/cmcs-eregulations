@@ -17,7 +17,7 @@
             </span>
         </div>
 
-        <v-expansion-panels>
+        <v-expansion-panels v-model="panel">
             <v-expansion-panel>
                 <v-expansion-panel-header disable-icon-rotate>
                     <span class="v-expansion-panel-header-text">Table of Contents</span>
@@ -28,7 +28,7 @@
                     </template>
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
-                    <PartToc :structure="tocContent" navName="PDpart" />
+                    <PartToc :structure="tocContent" navName="PDpart" @exitTOC="closeTOC" />
                 </v-expansion-panel-content>
             </v-expansion-panel>
         </v-expansion-panels>
@@ -63,6 +63,11 @@ export default {
         supplementalContentCount: { type: Object },
         partLabel: { type: String },
     },
+    data(){
+        return{
+            panel:[]
+        }
+    },
     methods: {
         setResourcesParams(payload) {
             let scope = payload["scope"];
@@ -73,6 +78,9 @@ export default {
                 identifier,
             });
         },
+        closeTOC(){
+            this.panel=[]
+        }
     },
 };
 </script>
