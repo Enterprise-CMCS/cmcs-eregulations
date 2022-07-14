@@ -12,6 +12,8 @@
                 :resource-params-emitter="resourceParamsEmitter"
                 :showResourceButtons="showResourceButtons"
                 :supplementalContentCount="supplementalContentCount"
+                :subpart="subpart"
+                :headerLinks="headerLinks"
             />
         </template>
     </div>
@@ -47,6 +49,15 @@ export default {
             required: false,
             default: () => {}
         },
+        subpart: {
+            type:String,
+            required: false
+        },
+        headerLinks:{
+            type: Boolean,
+            required: false,
+            default: false
+        }
     },
 
     computed: {
