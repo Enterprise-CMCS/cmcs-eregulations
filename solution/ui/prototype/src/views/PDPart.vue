@@ -93,12 +93,13 @@ export default {
                 this.sections = await this.getFormattedSectionsList({
                     title: this.title,
                     part: this.part,
-                    subpart: this.subpart
+                    subpart: this.subPart
                         ? this.subPart.split("-")[1]
-                        : this.subpart,
+                        : this.subPart,
                 });
             },
         },
+
     },
     data() {
         return {
@@ -262,38 +263,18 @@ export default {
         },
         async getFormattedSectionsList({ title, part, subpart }) {
             const toc = await getPartTOC(title, part);
-            const subParts = toc.children
-                .filter((child) => child.type === "subpart")
-                .filter((subPart) =>
-                    subpart ? subPart.identifier[0] === subpart : true
-                );
 
-            let filteredSections = subParts
-                .flatMap((sp) =>
-                    sp.children.filter((child) => child.type === "section")
-                )
-                .map((section) => section.identifier[1]);
-            if (subpart === "Subpart-undefined") {
-                const orphanSections = toc.children
-                    .filter((child) => child.type === "section")
-                    .map((section) => section.identifier[1]);
-                filteredSections = filteredSections.concat(orphanSections);
+            if(subpart != "undefined"){
+                const totalSubpart =  toc.children.filter((sub)=> sub.identifier[0] === subpart)[0].children
+                const sections = totalSubpart.filter((child)=>child.type==="section" && !child.reserved).map(sec=>sec.identifier[1])
+                const groupSections = totalSubpart.filter((child)=>child.type==="subject_group").map(sub => sub.children.filter(sec => !sec.reserved).map(sec=>sec.identifier[1])).flat()
+
+                return sections.concat(groupSections)
             }
-            const subjectGroups = subParts
-                .flatMap((sp) =>
-                    sp.children.filter(
-                        (child) => child.type === "subject_group"
-                    )
-                )
-            subjectGroups.forEach((subject_group) => {
+            else{
+                return []
+            }
 
-                subject_group.children.forEach((section) => {
-                    filteredSections.push(section.identifier[1]);
-                });
-            });
-            filteredSections.sort((a, b) => Number(a) - Number(b));
-
-            return filteredSections;
         },
     },
 };
