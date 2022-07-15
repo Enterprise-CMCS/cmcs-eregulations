@@ -44,7 +44,7 @@ describe("Search flow", () => {
         cy.findByRole("link", {
             name: "§ 447.203 Documentation of access to care and service payment rates.",
         }).click({ force: true });
-        cy.url().should("include", "/447/Subpart-B/2022-06-15/#447-203");
+        cy.url().should("include", "/447/Subpart-B/2022-07-01/#447-203");
     });
 
     it("checks a11y for search page", () => {
