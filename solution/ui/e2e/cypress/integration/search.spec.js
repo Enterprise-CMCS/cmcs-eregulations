@@ -9,10 +9,10 @@ describe("Search flow", () => {
     it("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".search-header > form > input").should("be.visible").type("State");
+        cy.get(".search-header > form > input").should("be.visible").type("telemedicine");
         cy.get(".search-header > form").submit();
 
-        cy.url().should("include", "/search/?q=State");
+        cy.url().should("include", "/search/?q=telemedicine");
     });
 
     it("shows when mobile search open icon is clicked", () => {
@@ -23,28 +23,28 @@ describe("Search flow", () => {
             .click({ force: true });
         cy.get("form.search-borderless > input")
             .should("be.visible")
-            .type("State");
+            .type("telemedicine");
 
         cy.get("form.search-borderless").submit();
 
-        cy.url().should("include", "/search/?q=State");
+        cy.url().should("include", "/search/?q=telemedicine");
     });
 
     it("displays results of the search", () => {
         cy.viewport("macbook-15");
-        cy.visit("/search/?q=State", { timeout: 60000 });
+        cy.visit("/search/?q=telemedicine", { timeout: 60000 });
         cy.findByText(/\d+ results in Medicaid & CHIP Regulations/).should(
             "be.visible"
         );
         cy.findByRole("link", {
-            name: "§ 431.958 Definitions and use of terms.",
+            name: "§ 447.203 Documentation of access to care and service payment rates.",
         })
             .should("be.visible")
             .and("have.attr", "href");
         cy.findByRole("link", {
-            name: "§ 431.958 Definitions and use of terms.",
+            name: "§ 447.203 Documentation of access to care and service payment rates.",
         }).click({ force: true });
-        cy.url().should("include", "/431/Subpart-Q/2020-06-30/#431-958");
+        cy.url().should("include", "/447/Subpart-B/2022-07-01/#447-203");
     });
 
     it("checks a11y for search page", () => {
@@ -56,7 +56,7 @@ describe("Search flow", () => {
 
     it("should have a working searchbox", () => {
         cy.viewport("macbook-15");
-        cy.visit("/search/?q=State", { timeout: 60000 });
+        cy.visit("/search/?q=telemedicine", { timeout: 60000 });
         cy.scrollTo("top");
         cy.get(".search-reset").click({ force: true });
         cy.findByRole("textbox")
@@ -68,7 +68,7 @@ describe("Search flow", () => {
 
     it("should be able to clear the searchbox", () => {
         cy.viewport("macbook-15");
-        cy.visit("/search/?q=State", { timeout: 60000 });
+        cy.visit("/search/?q=telemedicine", { timeout: 60000 });
         cy.scrollTo("top");
 
         cy.get(".search-reset").click({ force: true });

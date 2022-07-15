@@ -6,12 +6,11 @@ import (
 	"errors"
 	"html"
 	"strings"
-	"time"
 )
 
 // Structure is the struct that represents the structure of a regulation part at eCFR
 type Structure struct {
-	Identifier       IdentifierString `json:"identifier"`
+	Identifier       IdentifierString   `json:"identifier"`
 	Label            HTMLString       `json:"label"`
 	LabelLevel       string           `json:"label_level"`
 	LabelDescription string           `json:"label_description"`
@@ -76,7 +75,7 @@ func (is *IdentifierString) UnmarshalJSON(data []byte) error {
 }
 
 var (
-    // ErrUnexpectedStructure is an error for when the structure does not appear to be formatted correctly
+	// ErrUnexpectedStructure is an error for when the structure does not appear to be formatted correctly
 	ErrUnexpectedStructure = errors.New("the structure had an unexpected number of children")
 )
 
@@ -92,8 +91,8 @@ func SubchapterParts(s *Structure) ([]*Structure, error) {
 }
 
 // ExtractSubchapterParts extracts the subchapter parts from eCFR and returns then as an array of strings
-func ExtractSubchapterParts(ctx context.Context, date time.Time, title int, sub *SubchapterOption) ([]string, error) {
-	sbody, _, err := FetchStructure(ctx, date.Format("2006-01-02"), title, sub)
+func ExtractSubchapterParts(ctx context.Context, title int, sub *SubchapterOption) ([]string, error) {
+	sbody, _, err := FetchStructure(ctx, title, sub)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +120,7 @@ func DeterminePartDepth(s *Structure, part string) int {
 	for _, child := range s.Children {
 		depth := DeterminePartDepth(child, part)
 		if depth != -1 {
-			return depth+1
+			return depth + 1
 		}
 	}
 	return -1

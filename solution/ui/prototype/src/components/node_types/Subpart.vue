@@ -1,30 +1,29 @@
 <template>
     <article>
-        <h1 tabindex="-1" :id="kebabTitle">
-            <button
-                v-if="numSupplementalContent && !showResourceButtons"
-                v-on:click="handleBlueBtnClick"
-                class="supplemental-content-count"
-            >
+        <h1 tabindex="-1" :id="kebabTitle" class="subpart-title">
+            <button v-if="numSupplementalContent && !showResourceButtons" v-on:click="handleBlueBtnClick"
+                class="supplemental-content-count">
                 {{ numSupplementalContent }}
             </button>
-            {{ node.title }}
+            <span v-if="!headerLinks || hideHyperlink">{{node.title}}</span>
+            <router-link v-else :to="{
+                name: 'PDpart-subPart',
+                params: { title: this.title, part: this.part, subPart: 'Subpart-' + this.node.label[0] }
+            }">
+                <v-tooltip top color="#EEFAFE">
+                    <template v-slot:activator="{ on, attrs }">
+                        <span v-bind="attrs" v-on="on">{{ node.title }}</span>
+                    </template>
+                    <span class="tooltip-text">View Subpart {{this.node.label[0]}}</span></v-tooltip>
+            </router-link>
         </h1>
-        <div v-if="showResourceButtons  && numDirectContent" class="btn-container">
-            <ResourcesBtn
-                :clickHandler="handleBtnClick"
-                label="Subpart"
-                size="small"
-            />
+        <div v-if="showResourceButtons && numDirectContent" class="btn-container">
+            <ResourcesBtn :clickHandler="handleBtnClick" label="Subpart" size="small" />
         </div>
         <template v-for="child in node.children">
-            <Node
-                :node="child"
-                :key="child.title"
-                :resource-params-emitter="resourceParamsEmitter"
-                :showResourceButtons="showResourceButtons"
-                :supplementalContentCount="supplementalContentCount"
-            />
+            <Node :node="child" :subpart="node.label[0]" :key="child.title"
+                :resource-params-emitter="resourceParamsEmitter" :showResourceButtons="showResourceButtons" :headerLinks="headerLinks"
+                :supplementalContentCount="supplementalContentCount" />
         </template>
     </article>
 </template>
@@ -55,6 +54,11 @@ export default {
             type: Object,
             required: true,
         },
+        headerLinks: {
+            types: Boolean,
+            required: false,
+            default: false,
+        },
         resourceParamsEmitter: {
             type: Function,
             required: false,
@@ -65,9 +69,9 @@ export default {
             default: true
         },
         supplementalContentCount: {
-            type:Object,
+            type: Object,
             required: false,
-            default: () => {}
+            default: () => { }
         },
 
     },
@@ -76,18 +80,21 @@ export default {
         kebabTitle() {
             return getKebabTitle(this.node.label);
         },
-        numSupplementalContent(){
-          let total = 0
-          if (this.supplementalContentCount && this.node.children ) {
-
-            total = this.node.children.reduce((count, node) => {
-              return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
-            }, 0)
-          }
-          return total
+        hideHyperlink(){
+            return this.$route.name =='PDpart-subPart'
         },
-        numDirectContent(){
-          return this.supplementalContentCount[`${this.title} ${this.part} Subpart ${this.node.label[0]}`]
+        numSupplementalContent() {
+            let total = 0
+            if (this.supplementalContentCount && this.node.children) {
+
+                total = this.node.children.reduce((count, node) => {
+                    return count + Number(this.supplementalContentCount[getDisplayName(node.label)] || 0)
+                }, 0)
+            }
+            return total
+        },
+        numDirectContent() {
+            return this.supplementalContentCount[`${this.title} ${this.part} Subpart ${this.node.label[0]}`]
         }
     },
 
@@ -96,16 +103,25 @@ export default {
             this.resourceParamsEmitter("subpart", [this.node.label[0]]);
         },
         handleBlueBtnClick() {
-          this.resourceParamsEmitter(
-              "subpart",
-              {
-                subPart: this.node.label[0],
-                sections: this.node.children.filter(c => c.label).map(child => child.label[1])
-              }
-          );
+            this.resourceParamsEmitter(
+                "subpart",
+                {
+                    subPart: this.node.label[0],
+                    sections: this.node.children.filter(c => c.label).map(child => child.label[1])
+                }
+            );
         }
     },
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.subpart-title a {
+    text-decoration: none;
+}
+
+.v-tooltip__content {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+    background: #EEFAFE;
+}
+</style>
