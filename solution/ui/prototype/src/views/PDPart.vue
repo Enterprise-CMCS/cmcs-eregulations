@@ -168,8 +168,7 @@ export default {
                 return [
                     this.subpartContent[0].children
                         .filter((child) => child.node_type === "SUBJGRP")
-                        .map((sg) => sg.children)
-                        .flat(1)
+                        .flatMap((sg) => sg.children)
                         .find(
                             (child) =>
                                 child.node_type === "SECTION" &&
