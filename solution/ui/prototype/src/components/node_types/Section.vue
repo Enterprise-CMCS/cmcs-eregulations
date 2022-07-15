@@ -117,7 +117,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+
 .btn-container {
     margin: 20px 0px 50px;
 }
@@ -146,12 +147,11 @@ export default {
 
 .v-tooltip__content {
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+    background: #EEFAFE;
 }
 
 .tooltip-text {
     font-size: 12px !important;
-
-
     display: block !important;
     color: #212121;
 }
