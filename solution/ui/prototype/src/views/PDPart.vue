@@ -37,7 +37,6 @@ import {
     getPartsList,
     getPartTOC,
     getSupplementalContentCountForPart,
-    getSupplementalContentNew,
 } from "@/utilities/api";
 export default {
     name: "Part",
@@ -83,14 +82,6 @@ export default {
                     this.supplementalContentCount =
                         await getSupplementalContentCountForPart(this.part);
 
-                    this.supList = await getSupplementalContentNew(
-                        this.title,
-                        this.part,
-                        this.section ? [this.section] : this.renderedSections,
-                        this.subPart
-                            ? [this.subPart]
-                            : this.subPartList.map((sp) => sp.identifier)
-                    );
                 } catch (error) {
                     console.error(error);
                 }
@@ -110,27 +101,12 @@ export default {
         },
 
     },
-    async mounted() {
-        try {
-            this.supList = await getSupplementalContentNew(
-                this.title,
-                this.part,
-                this.section ? [this.section] : this.renderedSections,
-                this.subPart
-                    ? [this.subPart]
-                    : this.subPartList.map((sp) => sp.identifier)
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    },
     data() {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
             subPart: this.$route.params.subPart,
             section: this.$route.params.section,
-            supList: [],
             structure: [],
             subPartList: [],
             partsList: [],
@@ -282,23 +258,12 @@ export default {
                 this.suggestedSubPart = payload["identifier"]["subPart"];
                 return;
             }
-            try {
-                this.supList = await getSupplementalContentNew(
-                    this.title,
-                    this.part,
-                    payload["identifier"]
-                );
-            } catch (error) {
-                console.error(error);
-            } finally {
-                console.log(this.supList);
-                this.suggestedTab = payload["scope"];
-            }
+
             // Implement response to user choosing a section or subpart here
         },
         async getFormattedSectionsList({ title, part, subpart }) {
             const toc = await getPartTOC(title, part);
- 
+
             if(subpart != "undefined"){
                 const totalSubpart =  toc.children.filter((sub)=> sub.identifier[0] === subpart)[0].children
                 const sections = totalSubpart.filter((child)=>child.type==="section" && !child.reserved).map(sec=>sec.identifier[1])
@@ -309,6 +274,7 @@ export default {
             else{
                 return []
             }
+
         },
     },
 };
