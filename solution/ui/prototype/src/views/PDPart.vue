@@ -37,7 +37,6 @@ import {
     getPartsList,
     getPartTOC,
     getSupplementalContentCountForPart,
-    getSupplementalContentNew,
 } from "@/utilities/api";
 export default {
     name: "Part",
@@ -83,14 +82,6 @@ export default {
                     this.supplementalContentCount =
                         await getSupplementalContentCountForPart(this.part);
 
-                    this.supList = await getSupplementalContentNew(
-                        this.title,
-                        this.part,
-                        this.section ? [this.section] : this.renderedSections,
-                        this.subPart
-                            ? [this.subPart]
-                            : this.subPartList.map((sp) => sp.identifier)
-                    );
                 } catch (error) {
                     console.error(error);
                 }
@@ -109,27 +100,12 @@ export default {
             },
         },
     },
-    async mounted() {
-        try {
-            this.supList = await getSupplementalContentNew(
-                this.title,
-                this.part,
-                this.section ? [this.section] : this.renderedSections,
-                this.subPart
-                    ? [this.subPart]
-                    : this.subPartList.map((sp) => sp.identifier)
-            );
-        } catch (error) {
-            console.error(error);
-        }
-    },
     data() {
         return {
             title: this.$route.params.title,
             part: this.$route.params.part,
             subPart: this.$route.params.subPart,
             section: this.$route.params.section,
-            supList: [],
             structure: [],
             subPartList: [],
             partsList: [],
@@ -281,18 +257,7 @@ export default {
                 this.suggestedSubPart = payload["identifier"]["subPart"];
                 return;
             }
-            try {
-                this.supList = await getSupplementalContentNew(
-                    this.title,
-                    this.part,
-                    payload["identifier"]
-                );
-            } catch (error) {
-                console.error(error);
-            } finally {
-                console.log(this.supList);
-                this.suggestedTab = payload["scope"];
-            }
+
             // Implement response to user choosing a section or subpart here
         },
         async getFormattedSectionsList({ title, part, subpart }) {
@@ -321,7 +286,7 @@ export default {
                     )
                 )
             subjectGroups.forEach((subject_group) => {
-                const subPart = subject_group.parent[0];
+
                 subject_group.children.forEach((section) => {
                     filteredSections.push(section.identifier[1]);
                 });

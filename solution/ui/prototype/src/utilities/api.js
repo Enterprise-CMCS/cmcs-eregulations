@@ -741,7 +741,7 @@ const getSupplementalContentNew = async (
     sections = [],
     subparts = [],
     start = 0,
-    max_results = 10000,
+    max_results = 100,
     q = "",
 ) => {
     const queryString = q ? `&q=${q}` : "";
