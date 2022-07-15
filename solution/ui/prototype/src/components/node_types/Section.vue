@@ -5,7 +5,7 @@
                 class="supplemental-content-count">
                 {{ numSupplementalContent }}
             </button>
-            <router-link v-if="node.children && headerLinks" :to="{
+            <router-link v-if="node.children && headerLinks && !hideHyperlink" :to="{
                 name: 'PDpart-section',
                 params: { title: '42', part: this.node.label[0], subPart: this.formattedSubpart, section: this.node.label[1] }
             }">
@@ -13,7 +13,7 @@
                     <template v-slot:activator="{ on, attrs }">
                         <span v-bind="attrs" class="header-text" v-on="on">{{ node.title }}</span>
                     </template>
-                    <span class="tooltip-text">Click to zoom into the heading</span>
+                    <span class="tooltip-text">View § {{this.node.label[0]}}.{{this.node.label[1]}}</span>
                 </v-tooltip>
             </router-link>
             <span v-else>{{ node.title }}</span>
@@ -89,6 +89,9 @@ export default {
     computed: {
         kebabTitle() {
             return getKebabTitle(this.node.label);
+        },
+        hideHyperlink(){
+            return this.$route.name === "PDpart-section"
         },
         formattedSubpart() {
             if(this.subpart){
