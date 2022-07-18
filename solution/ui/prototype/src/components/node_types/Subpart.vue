@@ -115,8 +115,13 @@ export default {
 };
 </script>
 
-<style >
+<style lang="scss">
 .subpart-title a {
     text-decoration: none;
+}
+
+.v-tooltip__content {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+    background: #EEFAFE;
 }
 </style>

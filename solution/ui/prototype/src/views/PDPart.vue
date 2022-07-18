@@ -37,7 +37,6 @@ import {
     getPartsList,
     getPartTOC,
     getSupplementalContentCountForPart,
-    getSupplementalContentNew,
 } from "@/utilities/api";
 export default {
     name: "Part",
@@ -83,14 +82,6 @@ export default {
                     this.supplementalContentCount =
                         await getSupplementalContentCountForPart(this.part);
 
-                    this.supList = await getSupplementalContentNew(
-                        this.title,
-                        this.part,
-                        this.section ? [this.section] : this.renderedSections,
-                        this.subPart
-                            ? [this.subPart]
-                            : this.subPartList.map((sp) => sp.identifier)
-                    );
                 } catch (error) {
                     console.error(error);
                 }
@@ -102,26 +93,13 @@ export default {
                 this.sections = await this.getFormattedSectionsList({
                     title: this.title,
                     part: this.part,
-                    subpart: this.subpart
+                    subpart: this.subPart
                         ? this.subPart.split("-")[1]
-                        : this.subpart,
+                        : this.subPart,
                 });
             },
         },
-    },
-    async mounted() {
-        try {
-            this.supList = await getSupplementalContentNew(
-                this.title,
-                this.part,
-                this.section ? [this.section] : this.renderedSections,
-                this.subPart
-                    ? [this.subPart]
-                    : this.subPartList.map((sp) => sp.identifier)
-            );
-        } catch (error) {
-            console.error(error);
-        }
+
     },
     data() {
         return {
@@ -129,7 +107,6 @@ export default {
             part: this.$route.params.part,
             subPart: this.$route.params.subPart,
             section: this.$route.params.section,
-            supList: [],
             structure: [],
             subPartList: [],
             partsList: [],
@@ -281,54 +258,23 @@ export default {
                 this.suggestedSubPart = payload["identifier"]["subPart"];
                 return;
             }
-            try {
-                this.supList = await getSupplementalContentNew(
-                    this.title,
-                    this.part,
-                    payload["identifier"]
-                );
-            } catch (error) {
-                console.error(error);
-            } finally {
-                console.log(this.supList);
-                this.suggestedTab = payload["scope"];
-            }
+
             // Implement response to user choosing a section or subpart here
         },
         async getFormattedSectionsList({ title, part, subpart }) {
             const toc = await getPartTOC(title, part);
-            const subParts = toc.children
-                .filter((child) => child.type === "subpart")
-                .filter((subPart) =>
-                    subpart ? subPart.identifier[0] === subpart : true
-                );
 
-            let filteredSections = subParts
-                .flatMap((sp) =>
-                    sp.children.filter((child) => child.type === "section")
-                )
-                .map((section) => section.identifier[1]);
-            if (subpart === "Subpart-undefined") {
-                const orphanSections = toc.children
-                    .filter((child) => child.type === "section")
-                    .map((section) => section.identifier[1]);
-                filteredSections = filteredSections.concat(orphanSections);
+            if(subpart != "undefined"){
+                const totalSubpart =  toc.children.filter((sub)=> sub.identifier[0] === subpart)[0].children
+                const sections = totalSubpart.filter((child)=>child.type==="section" && !child.reserved).map(sec=>sec.identifier[1])
+                const groupSections = totalSubpart.filter((child)=>child.type==="subject_group").map(sub => sub.children.filter(sec => !sec.reserved).map(sec=>sec.identifier[1])).flat()
+
+                return sections.concat(groupSections)
             }
-            const subjectGroups = subParts
-                .flatMap((sp) =>
-                    sp.children.filter(
-                        (child) => child.type === "subject_group"
-                    )
-                )
-            subjectGroups.forEach((subject_group) => {
-                const subPart = subject_group.parent[0];
-                subject_group.children.forEach((section) => {
-                    filteredSections.push(section.identifier[1]);
-                });
-            });
-            filteredSections.sort((a, b) => Number(a) - Number(b));
+            else{
+                return []
+            }
 
-            return filteredSections;
         },
     },
 };
