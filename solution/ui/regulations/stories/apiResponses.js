@@ -1,3 +1,84 @@
+const groupedFinalRuleResponse = [
+    {
+        id: 2175,
+        created_at: "2022-05-20 15:50:55.570469",
+        updated_at: "2022-06-08 15:42:35.203820",
+        approved: true,
+        date: "2022-05-16",
+        name: "87 FR 29675",
+        description:
+            "Medicaid Program; Reassignment of Medicaid Provider Claims",
+        url:
+            "https://www.federalregister.gov/documents/2022/05/16/2022-10225/medicaid-program-reassignment-of-medicaid-provider-claims",
+        docket_number: "CMS-2444-F",
+        document_number: "2022-10225",
+        name_headline: null,
+        description_headline: null,
+        docket_number_headline: null,
+        document_number_headline: null,
+        category: {
+            id: 2,
+            name: "Final Rules",
+            description: "Final regulatory policy decision by the agency",
+            order: 0,
+            show_if_empty: true,
+            type: "category",
+        },
+        locations: [
+            {
+                id: 467,
+                title: 42,
+                part: 447,
+                section_id: 10,
+                parent: 1195,
+                type: "section",
+            },
+        ],
+        type: "federal_register_doc",
+        related_docs: [
+            // new part
+            {
+                id: 2175,
+                created_at: "2022-05-20 15:50:55.570469",
+                updated_at: "2022-06-08 15:42:35.203820",
+                approved: true,
+                date: "2022-05-16",
+                name: "87 FR 29675",
+                description:
+                    "Medicaid Program; Reassignment of Medicaid Provider Claims",
+                url:
+                    "https://www.federalregister.gov/documents/2022/05/16/2022-10225/medicaid-program-reassignment-of-medicaid-provider-claims",
+                docket_number: "CMS-2444-F",
+                document_number: "2022-10225",
+                name_headline: null,
+                description_headline: null,
+                docket_number_headline: null,
+                document_number_headline: null,
+                category: {
+                    id: 2,
+                    name: "Final Rules",
+                    description:
+                        "Final regulatory policy decision by the agency",
+                    order: 0,
+                    show_if_empty: true,
+                    type: "category",
+                },
+                locations: [
+                    {
+                        id: 467,
+                        title: 42,
+                        part: 447,
+                        section_id: 10,
+                        parent: 1195,
+                        type: "section",
+                    },
+                ],
+                type: "federal_register_doc",
+            },
+        ],
+    },
+];
+
 const supplementalContentResponse = [
     {
         name: "Subregulatory Guidance",
@@ -6066,6 +6147,7 @@ const relatedRulesResponse = [
 ];
 
 export {
+    groupedFinalRuleResponse,
     supplementalContentResponse,
     emptySupplementalContentResponse,
     categoryResponse,
