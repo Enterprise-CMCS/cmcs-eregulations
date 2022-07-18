@@ -596,8 +596,6 @@ export default {
             let updatedQueryParams = {};
             // get associated subpart for section
             if (payload.scope == "section") {
-                const sections = this.tabsShape.section.listItems.map(sec => sec.identifier)
-                this.secIndex = sections.indexOf(valueToSet)
                 const sectionSubpart = this.tabsShape.section.listItems.find(
                     (item) => {
                         return item.identifier == valueToSet;
@@ -606,6 +604,10 @@ export default {
                 const subpartToSet = /^\d+$/.test(sectionSubpart)
                     ? {}
                     : { subpart: sectionSubpart };
+                    
+                const sections = this.tabsShape.section.listItems.filter(sec => sec.subpart ==sectionSubpart).map(sec => sec.identifier)
+                this.secIndex = sections.indexOf(valueToSet)
+
                 updatedQueryParams = {
                     ...this.queryParams,
                     ...subpartToSet,
