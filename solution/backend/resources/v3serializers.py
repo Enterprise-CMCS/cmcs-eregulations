@@ -150,12 +150,12 @@ class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceF
 
 
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
-    docket_number = serializers.CharField()
+    docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField()
 
     name_headline = HeadlineField("federalregisterdocument")
     description_headline = HeadlineField("federalregisterdocument")
-    docket_number_headline = HeadlineField("federalregisterdocument")
+    #docket_numbers_headline = HeadlineField("federalregisterdocument")
     document_number_headline = HeadlineField("federalregisterdocument")
 
 

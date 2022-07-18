@@ -289,6 +289,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
             Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
         )
+        #).distinct("federalregisterdocument__group")
 
         locations = self.request.GET.getlist("locations")
         categories = self.request.GET.getlist("categories")
@@ -345,7 +346,8 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
     def get_search_fields(self):
         return {
             "supplementalcontent": ["name", "description"],
-            "federalregisterdocument": ["name", "description", "docket_number", "document_number"],
+            #"federalregisterdocument": ["name", "description", "docket_numbers", "document_number"],
+            "federalregisterdocument": ["name", "description", "document_number"],
         }
 
 
@@ -401,7 +403,8 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         return FederalRegisterDocumentSerializer
 
     def get_search_fields(self):
-        return ["name", "description", "docket_number", "document_number"]
+        #return ["name", "description", "docket_numbers", "document_number"]
+        return ["name", "description", "document_number"]
 
 
 @extend_schema(
