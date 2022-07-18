@@ -75,7 +75,7 @@ export default {
 
     computed: {
         expandedType() {
-            if (this.type === "Rule") {
+            if (this.type === "Rule" || this.type === "Final Rules") {
                 return "Final";
             }
 

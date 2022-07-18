@@ -147,14 +147,15 @@ aside.right-sidebar {
     &.grouped {
         display: block;
         position: relative;
-        padding-left: 20px;
+        margin-top: -4px;
+        padding-left: 24px;
 
         &::before {
             content: "";
             display: block;
             position: absolute;
             top: 7px;
-            left: -2px;
+            left: 0;
             width: 15px;
             height: 20px;
             border: solid $light_gray;

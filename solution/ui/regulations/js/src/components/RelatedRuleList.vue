@@ -1,17 +1,31 @@
 <template>
     <div class="related-rule-list" v-if="rules.length">
-        <related-rule
-            v-for="(rule, index) in limitedRules"
-            :key="index"
-            :title="rule.title"
-            :type="rule.type"
-            :citation="rule.citation"
-            :publication_date="rule.publication_date"
-            :document_number="rule.document_number"
-            :html_url="rule.html_url"
-            :action="rule.action"
-        >
-        </related-rule>
+        <template v-for="(rule, i) in limitedRules">
+            <related-rule
+                :key="i"
+                :title="ruleTitle(rule)"
+                :type="type(rule)"
+                :citation="citation(rule)"
+                :publication_date="publication_date(rule)"
+                :document_number="rule.document_number"
+                :html_url="html_url(rule)"
+                :action="rule.action"
+            />
+            <template v-if="rule.related_docs && rule.related_docs.length > 0">
+                <related-rule
+                    v-for="(related_doc, ii) in rule.related_docs"
+                    :key="ii + 'grouped'"
+                    :title="ruleTitle(related_doc)"
+                    :type="type(related_doc)"
+                    :citation="citation(related_doc)"
+                    :publication_date="publication_date(related_doc)"
+                    :document_number="related_doc.document_number"
+                    :html_url="html_url(related_doc)"
+                    :action="related_doc.action"
+                    grouped
+                />
+            </template>
+        </template>
         <collapse-button
             v-if="showMoreNeeded && rulesCount > 10"
             :name="innerName"
@@ -39,12 +53,12 @@
             <related-rule
                 v-for="(rule, index) in additionalRules"
                 :key="index"
-                :title="rule.title"
-                :type="rule.type"
-                :citation="rule.citation"
-                :publication_date="rule.publication_date"
+                :title="ruleTitle(rule)"
+                :type="type(rule)"
+                :citation="citation(rule)"
+                :publication_date="publication_date(rule)"
                 :document_number="rule.document_number"
-                :html_url="rule.html_url"
+                :html_url="html_url(rule)"
                 :action="rule.action"
             >
             </related-rule>
@@ -101,6 +115,15 @@ export default {
         },
     },
 
+    data() {
+        return {
+            limitedList: true,
+            innerName: Math.random()
+                .toString(36)
+                .replace(/[^a-z]+/g, ""),
+        };
+    },
+
     computed: {
         limitedRules() {
             return this.rules.slice(0, this.limit);
@@ -113,21 +136,27 @@ export default {
         },
         showMoreNeeded() {
             return this.rulesCount > this.limit;
-        }
-    },
-
-    data() {
-        return {
-            limitedList: true,
-            innerName: Math.random()
-                .toString(36)
-                .replace(/[^a-z]+/g, ""),
-        };
+        },
     },
 
     methods: {
         showMore() {
             this.limitedList = !this.limitedList;
+        },
+        ruleTitle(rule) {
+            return rule.title || rule.description;
+        },
+        type(rule) {
+            return rule.category?.name || rule.type;
+        },
+        citation(rule) {
+            return rule.citation || rule.name;
+        },
+        html_url(rule) {
+            return rule.html_url || rule.url;
+        },
+        publication_date(rule) {
+            return rule.publication_date || rule.date;
         },
     },
 
