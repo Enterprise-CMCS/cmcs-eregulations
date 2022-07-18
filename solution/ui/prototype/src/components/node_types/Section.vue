@@ -147,6 +147,7 @@ export default {
 
 .v-tooltip__content {
     box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+    opacity: 1!important;
     background: #EEFAFE;
 }
 
@@ -154,5 +155,18 @@ export default {
     font-size: 12px !important;
     display: block !important;
     color: #212121;
+}
+.tooltip-text::after {
+    border-right: solid 5px transparent;
+    border-left: solid 5px transparent;
+    border-top: solid 5px #EEFAFE;
+    transform: translateX(-50%);
+    position: absolute;
+    z-index: -1;
+    content: "";
+    top: 100%;
+    left: 50%;
+    height: 0;
+    width: 0;
 }
 </style>
