@@ -220,9 +220,9 @@ class SubpartViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet
 
 
 # Provides a filterable and searchable viewset for any type of resource
-# Must implement get_search_fields() as a list of fields or a map of model names lists of fields
+# Must implement get_search_fields() as a list of fields or a map of model names to lists of fields
 # Must provide "model" as the resource model type to display
-# May override annotate_date for complex date lookups
+# May override get_annotated_date() for complex date lookups
 class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
     PARAMETERS = [
         OpenApiQueryParameter("category_details", "Specify whether to show details of a category, or just the ID.", bool, False),
@@ -239,7 +239,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         raise NotImplementedError
 
     def get_annotated_date(self):
-        return F("date").desc(nulls_last=True)
+        return F("date")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
