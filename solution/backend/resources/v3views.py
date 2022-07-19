@@ -424,6 +424,9 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         #return ["name", "description", "docket_numbers", "document_number"]
         return ["name", "description", "document_number"]
 
+    def get_annotated_group(self):
+        return F("group")
+
 
 @extend_schema(
     description="Retrieve a list of document numbers from all Federal Register Documents. "
