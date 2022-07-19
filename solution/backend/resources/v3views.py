@@ -223,6 +223,8 @@ class SubpartViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet
 # Must implement get_search_fields() as a list of fields or a map of model names to lists of fields
 # Must provide "model" as the resource model type to display
 # May override get_annotated_date() for complex date lookups
+# May override get_annotated_group() to limit particular model types to one result per group
+#     (By default, -1*pk is used so that no resource gets removed)
 class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
     PARAMETERS = [
         OpenApiQueryParameter("category_details", "Specify whether to show details of a category, or just the ID.", bool, False),
@@ -241,7 +243,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
     def get_annotated_date(self):
         return F("date")
     
-    def get_group_ids(self):
+    def get_annotated_group(self):
         return -1*F("pk")
 
     def get_serializer_context(self):
@@ -293,7 +295,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
         id_query = self.model.objects\
                         .filter(approved=True)\
-                        .annotate(group_annotated=self.get_group_ids())
+                        .annotate(group_annotated=self.get_annotated_group())
 
         q_obj = self.get_location_filter(locations)
         if q_obj:
@@ -302,48 +304,36 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         if categories:
             id_query = id_query.filter(category__id__in=categories)
 
-        id_query = id_query.order_by("group_annotated").distinct("group_annotated").values_list("id", "group_annotated")
-        ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
+        if not search_query:
+            id_query = id_query.order_by("group_annotated").distinct("group_annotated")
 
+        annotations = {}
+        ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
         query = self.model.objects.filter(id__in=ids).select_subclasses().prefetch_related(
             Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
             Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
         )
 
-        return query.annotate(date_annotated=self.get_annotated_date())\
-                    .order_by(F("date_annotated").desc(nulls_last=True)).distinct()
+        if search_query:
+            (search_type, cover_density) = (
+                ("phrase", True)
+                if search_query.startswith('"') and search_query.endswith('"')
+                else ("plain", False)
+            )
+            annotations["rank"] = SearchRank(
+                self.get_search_vectors(),
+                SearchQuery(search_query, search_type=search_type, config="english"),
+                cover_density=cover_density,
+            )
+            annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
         
+        annotations["date_annotated"] = self.get_annotated_date()
+        query = query.annotate(**annotations)
 
-        # annotations = {}
-        # query = self.model.objects.filter(approved=True).select_subclasses().prefetch_related(
-        #     Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
-        #     Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
-        # )
-
-        # if search_query:
-        #     (search_type, cover_density) = (
-        #         ("phrase", True)
-        #         if search_query.startswith('"') and search_query.endswith('"')
-        #         else ("plain", False)
-        #     )
-        #     annotations["rank"] = SearchRank(
-        #         self.get_search_vectors(),
-        #         SearchQuery(search_query, search_type=search_type, config="english"),
-        #         cover_density=cover_density,
-        #     )
-        #     annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
-
-        # query = query.annotate(**annotations)
-        # query = query.filter(rank__gte=0.2) if search_query else query
-        # if search_query:
-        #     return query.distinct().order_by("-rank")
-        # else:
-        #     ids = [i[0] for i in query.order_by("group_annotated").distinct("group_annotated").values_list("id", "group_annotated")]
-        #     return self.model.objects\
-        #             .filter(id__in=ids)\
-        #             .select_subclasses()\
-        #             .annotate(date_annotated=self.get_annotated_date())\
-        #             .order_by(F("date_annotated").desc(nulls_last=True)).distinct()
+        if search_query:
+            return query.filter(rank__gte=0.2).distinct().order_by("-rank")
+        else: 
+            return query.order_by(F("date_annotated").desc(nulls_last=True)).distinct()
 
 
 @extend_schema(
@@ -365,7 +355,7 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
             default=None,
         )
     
-    def get_group_ids(self):
+    def get_annotated_group(self):
         return Case(
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
             default=-1*F("pk"),
