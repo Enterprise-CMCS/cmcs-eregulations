@@ -240,6 +240,9 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
     def get_annotated_date(self):
         return F("date")
+    
+    def get_group_ids(self):
+        return -1*F("pk")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -284,44 +287,63 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         return annotations
 
     def get_queryset(self):
-        annotations = {}
-        query = self.model.objects.filter(approved=True).select_subclasses().prefetch_related(
-            Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
-            Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
-        )
-        #).distinct("federalregisterdocument__group")
-
         locations = self.request.GET.getlist("locations")
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
 
+        id_query = self.model.objects\
+                        .filter(approved=True)\
+                        .annotate(group_annotated=self.get_group_ids())
+
         q_obj = self.get_location_filter(locations)
         if q_obj:
-            query = query.filter(q_obj)
+            id_query = id_query.filter(q_obj)
 
         if categories:
-            query = query.filter(category__id__in=categories)
+            id_query = id_query.filter(category__id__in=categories)
 
-        if search_query:
-            (search_type, cover_density) = (
-                ("phrase", True)
-                if search_query.startswith('"') and search_query.endswith('"')
-                else ("plain", False)
-            )
-            annotations["rank"] = SearchRank(
-                self.get_search_vectors(),
-                SearchQuery(search_query, search_type=search_type, config="english"),
-                cover_density=cover_density,
-            )
-            annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
+        id_query = id_query.order_by("group_annotated").distinct("group_annotated").values_list("id", "group_annotated")
+        ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
 
-        annotations["date_annotated"] = self.get_annotated_date()
-        query = query.annotate(**annotations)
-        query = query.filter(rank__gte=0.2) if search_query else query
-        if search_query:
-            return query.distinct().order_by("-rank")
-        else:
-            return query.distinct().order_by(F("date_annotated").desc(nulls_last=True))
+        query = self.model.objects.filter(id__in=ids).select_subclasses().prefetch_related(
+            Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
+            Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
+        )
+
+        return query.annotate(date_annotated=self.get_annotated_date())\
+                    .order_by(F("date_annotated").desc(nulls_last=True)).distinct()
+        
+
+        # annotations = {}
+        # query = self.model.objects.filter(approved=True).select_subclasses().prefetch_related(
+        #     Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
+        #     Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
+        # )
+
+        # if search_query:
+        #     (search_type, cover_density) = (
+        #         ("phrase", True)
+        #         if search_query.startswith('"') and search_query.endswith('"')
+        #         else ("plain", False)
+        #     )
+        #     annotations["rank"] = SearchRank(
+        #         self.get_search_vectors(),
+        #         SearchQuery(search_query, search_type=search_type, config="english"),
+        #         cover_density=cover_density,
+        #     )
+        #     annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
+
+        # query = query.annotate(**annotations)
+        # query = query.filter(rank__gte=0.2) if search_query else query
+        # if search_query:
+        #     return query.distinct().order_by("-rank")
+        # else:
+        #     ids = [i[0] for i in query.order_by("group_annotated").distinct("group_annotated").values_list("id", "group_annotated")]
+        #     return self.model.objects\
+        #             .filter(id__in=ids)\
+        #             .select_subclasses()\
+        #             .annotate(date_annotated=self.get_annotated_date())\
+        #             .order_by(F("date_annotated").desc(nulls_last=True)).distinct()
 
 
 @extend_schema(
@@ -341,6 +363,12 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
             When(supplementalcontent__isnull=False, then=F("supplementalcontent__date")),
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__date")),
             default=None,
+        )
+    
+    def get_group_ids(self):
+        return Case(
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
+            default=-1*F("pk"),
         )
 
     def get_search_fields(self):
