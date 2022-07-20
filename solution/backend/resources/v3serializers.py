@@ -149,7 +149,6 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
         return reverse('supplemental_content', kwargs={'id': obj.pk})
 
 
-
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     name_headline = HeadlineField("supplementalcontent")
     description_headline = HeadlineField("supplementalcontent")
