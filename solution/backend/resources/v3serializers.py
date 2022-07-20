@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from rest_framework import serializers
 
 from .models import (
@@ -141,6 +143,10 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
     url = serializers.CharField()
+    internalURL = serializers.SerializerMethodField()
+
+    def get_internalURL(self, obj):
+        return reverse('supplemental_content', kwargs={'id': obj.pk})
 
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
