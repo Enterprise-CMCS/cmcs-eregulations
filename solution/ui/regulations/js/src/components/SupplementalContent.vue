@@ -37,10 +37,9 @@ import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 import {
     getSupplementalContentByCategory,
     v3GetSupplementalContent,
-    getSubPartsForPart,
     getSubpartTOC
 } from "../../api";
-import { EventCodes, formatResourceCategories } from "../../utils";
+import {EventCodes, flattenSubpart, formatResourceCategories} from "../../utils";
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];
@@ -222,7 +221,8 @@ export default {
         },
         async get_location_string(){
             const sections = await getSubpartTOC(this.api_url, this.title, this.part, this.subparts[0])
-            this.joined_locations= sections.reduce((previousValue, section) =>  `${previousValue}locations=${this.title}.${this.part}.${section.identifier[1]}&`, "")+ `locations=${this.title}.${this.part}.${this.subparts[0]}`;
+            const flatSections = flattenSubpart({children: sections})
+            this.joined_locations = `${flatSections.children.reduce((previousValue, section) =>  `${previousValue}locations=${this.title}.${this.part}.${section.identifier[1]}&`, "") }locations=${this.title}.${this.part}.${this.subparts[0]}`;
         },
         clearSection() {
             console.log("Clearing Section");
