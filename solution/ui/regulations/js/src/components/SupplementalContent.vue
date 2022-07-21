@@ -166,7 +166,11 @@ export default {
     created() {
         let location = ""
         if (window.location.hash) {
-            const section = window.location.hash.substring(1).replace("-", ".");
+            let section = window.location.hash.substring(1).replace("-", ".");
+            if (section.includes("-")) {
+                // eslint-prefer-destructuring, kinda cool
+                [section] = section.split("-");
+            }
             if (isNaN(section)) {
                 location = `locations=${this.title}.${this.part}.${section}`
             }
