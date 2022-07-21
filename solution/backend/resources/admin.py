@@ -184,6 +184,7 @@ class FederalRegisterDocumentGroupForm(forms.ModelForm):
 
     def save(self, commit=True):
         group = super().save(commit=False)
+        group.save()
         group.documents.set(self.cleaned_data["documents"])
         group.save()
         return group
