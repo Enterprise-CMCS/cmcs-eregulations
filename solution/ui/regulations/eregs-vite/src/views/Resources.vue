@@ -575,7 +575,7 @@ export default {
                 .filter((item) => item.type === "category")
                 .reduce((acc, item) => {
                     acc[item.name] = item;
-                    acc[item.name].subcategories = [];
+                    acc[item.name].subcategories = [item.name];
                     return acc;
                 }, {});
             // Not a top level category, no need to continue
@@ -587,7 +587,7 @@ export default {
                     reducedCats[item.parent.name].subcategories.push(item.name);
                 }
             });
-            reducedCats[selectedCategory].subcategories.push(selectedCategory)
+
             return reducedCats[selectedCategory].subcategories
         }
     },
