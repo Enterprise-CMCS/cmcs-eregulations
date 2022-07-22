@@ -7,6 +7,7 @@
                     @submit.prevent="executeSearch"
                 >
                     <v-text-field
+                        v-model="searchInputValue"
                         outlined
                         flat
                         solo
@@ -17,7 +18,6 @@
                         append-icon="mdi-magnify"
                         hide-details
                         dense
-                        v-model="searchInputValue"
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
                     />
@@ -81,7 +81,7 @@ import {
 } from "../utilities/api";
 
 export default {
-    name: "Resources",
+    name: "ResourcesView",
 
     components: {
         ResourcesNav,
@@ -175,20 +175,21 @@ export default {
             const sectionRegex = /^\d{2,3}\.(\d{1,4})$/;
 
             if (sectionRegex.test(this.searchInputValue)) {
-                let payload = {
+                const payload = {
                     scope: "section",
                     selectedIdentifier: this.searchInputValue.replace(".", "-"),
                     searchSection: true,
                 };
-                return this.updateFilters(payload);
+                this.updateFilters(payload);
+            } else {
+                this.$router.push({
+                    name: "resources",
+                    query: {
+                        ...this.filterParams,
+                        q: this.searchInputValue,
+                    },
+                });
             }
-            this.$router.push({
-                name: "resources",
-                query: {
-                    ...this.filterParams,
-                    q: this.searchInputValue,
-                },
-            });
         },
         clearSelections() {
             this.partDict = {};
