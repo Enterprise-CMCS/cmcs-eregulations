@@ -11,6 +11,31 @@
                     >
                     in Resources</span
                 >
+                <div class="sort-control">
+                    <span>Sort By</span>
+                    <FancyDropdown>
+                        <v-list class="sort-options-list">
+                            <v-list-item-group
+                                class="sort-options-list-item-group"
+                            >
+                                <v-list-item
+                                    data-value="relevance"
+                                    class="sort-options-list-item"
+                                    @click="clickMethod"
+                                >
+                                    <span>Relevance</span>
+                                </v-list-item>
+                                <v-list-item
+                                    data-value="date"
+                                    class="sort-options-list-item"
+                                    @click="clickMethod"
+                                >
+                                    <span>Date</span>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+                    </FancyDropdown>
+                </div>
             </div>
             <div v-if="!isLoading">
                 <template v-if="filteredContent && filteredContent.length == 0">
@@ -91,6 +116,7 @@
 import _uniqBy from "lodash/uniqBy";
 import _has from "lodash/has";
 
+import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 
@@ -98,6 +124,7 @@ export default {
     name: "ResourcesResults",
 
     components: {
+        FancyDropdown,
         SearchEmptyState,
         SupplementalContentObject,
     },
@@ -184,6 +211,13 @@ export default {
             });
         },
     },
+
+    methods: {
+        clickMethod(e) {
+            console.log(e.currentTarget.dataset.value)
+        },
+    },
+
 };
 </script>
 
@@ -203,6 +237,18 @@ export default {
             font-size: 15px;
             font-weight: bold;
             margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sort-control {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+
+            div:first-of-type {
+                width: 120px;
+            }
         }
         .category-labels {
             margin-bottom: 5px;
