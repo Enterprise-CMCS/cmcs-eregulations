@@ -2,11 +2,11 @@ package fedreg
 
 import (
 	"context"
-	"net/url"
-	"fmt"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
+	"net/url"
 	"regexp"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
@@ -19,20 +19,20 @@ var FedRegContentURL = "https://www.federalregister.gov/api/v1/documents.json?fi
 
 // FRDoc is the Federal Register's representation of a document
 type FRDoc struct {
-	Name string `json:"citation"`
-	Description string `json:"title"`
-	Category string `json:"type"`
-	URL string `json:"html_url"`
-	Date string `json:"publication_date"`
-	DocketNumber string `json:"docket_id"`
+	Name           string `json:"citation"`
+	Description    string `json:"title"`
+	Category       string `json:"type"`
+	URL            string `json:"html_url"`
+	Date           string `json:"publication_date"`
+	DocketNumber   string `json:"docket_id"`
 	DocumentNumber string `json:"document_number"`
-	FullTextURL string `json:"full_text_xml_url"`
+	FullTextURL    string `json:"full_text_xml_url"`
 }
 
 // FRDocPage represents a page containing many documents. NextPageURL is optional and points to the next page of docs, if one exists
 type FRDocPage struct {
-	NextPageURL string `json:"next_page_url"`
-	Results []*FRDoc `json:"results"`
+	NextPageURL string   `json:"next_page_url"`
+	Results     []*FRDoc `json:"results"`
 }
 
 func fetch(ctx context.Context, path string) (io.Reader, error) {

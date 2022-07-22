@@ -1,15 +1,15 @@
 package network
 
 import (
-	"net/http"
-	"net/url"
-	"time"
 	"bytes"
-	"fmt"
 	"context"
 	"encoding/json"
-	"os"
+	"fmt"
 	"io"
+	"net/http"
+	"net/url"
+	"os"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -37,7 +37,7 @@ type Error struct {
 // Represents HTTP POST and PUT methods
 const (
 	HTTPPost string = http.MethodPost
-	HTTPPut string = http.MethodPut
+	HTTPPut  string = http.MethodPut
 )
 
 // SendJSON attempts to send arbitrary JSON data to a given URL using a specified method

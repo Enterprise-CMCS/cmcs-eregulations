@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -25,7 +25,7 @@ var client = &http.Client{
 	Transport: &http.Transport{},
 }
 
-var partURL  = "/title/%d/existing"
+var partURL = "/title/%d/existing"
 
 var postAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),
@@ -34,13 +34,13 @@ var postAuth = &network.PostAuth{
 
 // Part is the struct used to send a part to the eRegs server
 type Part struct {
-	Title     	   int             `json:"title,string" xml:"-"`
-	Name      	   string          `json:"name" xml:"-"`
-	Date      	   string          `json:"date" xml:"-"`
-	Structure 	   *ecfr.Structure `json:"structure" xml:"-"`
-	Document  	   *parsexml.Part  `json:"document"`
-	Depth	  	   int			   `json:"depth"`
-	Processed 	   bool
+	Title          int             `json:"title,string" xml:"-"`
+	Name           string          `json:"name" xml:"-"`
+	Date           string          `json:"date" xml:"-"`
+	Structure      *ecfr.Structure `json:"structure" xml:"-"`
+	Document       *parsexml.Part  `json:"document"`
+	Depth          int             `json:"depth"`
+	Processed      bool
 	UploadContents bool
 }
 
@@ -52,16 +52,16 @@ type ExistingPart struct {
 
 // ParserResult is the struct used to send results to the eRegs server
 type ParserResult struct {
-	Title     	        int             `json:"title,string"`
-	Start      	        string          `json:"start,date"`
-	End      	        string          `json:"end,date"`
-    Workers             int             `json:"workers,string"`
-    Attempts            int             `json:"attempts,string"`
-    Parts               string          `json:"parts"`
-    Subchapters         string          `json:"subchapters"`
-    SkippedVersions     int             `json:"skippedVersions,string"`
-    TotalVersions       int             `json:"totalVersions,string"`
-    Errors              int             `json:"errors,string"`
+	Title           int    `json:"title,string"`
+	Start           string `json:"start,date"`
+	End             string `json:"end,date"`
+	Workers         int    `json:"workers,string"`
+	Attempts        int    `json:"attempts,string"`
+	Parts           string `json:"parts"`
+	Subchapters     string `json:"subchapters"`
+	SkippedVersions int    `json:"skippedVersions,string"`
+	TotalVersions   int    `json:"totalVersions,string"`
+	Errors          int    `json:"errors,string"`
 }
 
 // PostPart is the function that sends a part to the eRegs server
@@ -90,7 +90,7 @@ func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
 		return -1, err
 	}
 
-	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf( "/ecfr_parser_result/%d", p.Title))
+	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/ecfr_parser_result/%d", p.Title))
 	p.End = time.Now().Format(time.RFC3339)
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
 }
@@ -98,9 +98,9 @@ func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
 // GetTitle retrieves a title object from regcore in eRegs
 func GetTitle(ctx context.Context, title int) (*Title, int, error) {
 	emptyTitle := &Title{
-		Name: fmt.Sprintf("%d", title),
+		Name:     fmt.Sprintf("%d", title),
 		Contents: &ecfr.Structure{},
-		Exists: false,
+		Exists:   false,
 		Modified: false,
 	}
 
@@ -109,7 +109,7 @@ func GetTitle(ctx context.Context, title int) (*Title, int, error) {
 		return emptyTitle, -1, err
 	}
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%d", title))
-	
+
 	log.Trace("[eregs] Retrieving title ", title, " from eRegs")
 
 	body, code, err := network.Fetch(ctx, eregsPath, true)
@@ -122,7 +122,7 @@ func GetTitle(ctx context.Context, title int) (*Title, int, error) {
 	if err := d.Decode(&t); err != nil {
 		return emptyTitle, code, fmt.Errorf("Unable to decode response body while retrieving title object: %+v", err)
 	}
-	
+
 	t.Exists = true
 	t.Modified = false
 
@@ -176,12 +176,12 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, int,
 	return result, code, nil
 }
 
-func getV3URL() (*url.URL, error){
-    eregsPath, err := url.Parse(BaseURL)
-    if err != nil {
-        log.Fatal(err)
-        return nil, err
-    }
+func getV3URL() (*url.URL, error) {
+	eregsPath, err := url.Parse(BaseURL)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
 	if strings.HasSuffix(eregsPath.Path, "v2/") {
 		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
 	}

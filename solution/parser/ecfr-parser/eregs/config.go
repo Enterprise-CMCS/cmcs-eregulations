@@ -1,14 +1,14 @@
 package eregs
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
-	"context"
 	"path"
+	"strconv"
 	"strings"
 	"time"
-	"strconv"
-	"encoding/json"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 
@@ -25,7 +25,7 @@ func (sc *SubchapterArg) String() string {
 // Set is to validate and set the subchapter
 func (sc *SubchapterArg) Set(s string) error {
 	*sc = strings.Split(s, "-")
-	if len(*sc) != 2 || strings.TrimSpace((*sc)[0]) == "" || strings.TrimSpace((*sc)[1]) == ""{
+	if len(*sc) != 2 || strings.TrimSpace((*sc)[0]) == "" || strings.TrimSpace((*sc)[1]) == "" {
 		return fmt.Errorf("Subchapter is expected to be of the form <Roman Numeral>-<Letter>")
 	}
 	return nil
@@ -43,12 +43,12 @@ func (sl *SubchapterList) UnmarshalText(data []byte) error {
 	*sl = make([]SubchapterArg, 0, len(subchapters))
 	for _, subchapter := range subchapters {
 		if len(subchapter) > 0 {
-		    var sc SubchapterArg
-            err := sc.Set(strings.TrimSpace(subchapter))
-            if err != nil {
-                return err
-            }
-            *sl = append(*sl, sc)
+			var sc SubchapterArg
+			err := sc.Set(strings.TrimSpace(subchapter))
+			if err != nil {
+				return err
+			}
+			*sl = append(*sl, sc)
 		}
 	}
 	return nil
@@ -75,7 +75,7 @@ type TitleConfig struct {
 	Title       int            `json:"title"`
 	Subchapters SubchapterList `json:"subchapters"`
 	Parts       PartList       `json:"parts"`
-	Contents	*Title
+	Contents    *Title
 }
 
 // ParserConfig represents configuration for the parser as a whole
@@ -86,7 +86,7 @@ type ParserConfig struct {
 	UploadSupplemental bool           `json:"upload_supplemental_locations"`
 	LogParseErrors     bool           `json:"log_parse_errors"`
 	SkipVersions       bool           `json:"skip_versions"`
-	Titles             []*TitleConfig  `json:"titles"`
+	Titles             []*TitleConfig `json:"titles"`
 }
 
 // RetrieveConfig fetches parser config from eRegs at /v2/parser_config
@@ -99,7 +99,7 @@ func RetrieveConfig() (*ParserConfig, int, error) {
 
 	log.Debug("[config] Retrieving parser configuration from ", configURL.String())
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	body, code, err := network.Fetch(ctx, configURL, true)
 	if err != nil {

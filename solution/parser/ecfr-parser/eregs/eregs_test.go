@@ -1,12 +1,12 @@
 package eregs
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
 	"context"
-	"time"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 
@@ -26,15 +26,15 @@ func TestPostPart(t *testing.T) {
 	defer server.Close()
 	BaseURL = server.URL
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	part := &Part{
-		Title: 1,
-		Name: "test",
-		Date: "2022-01-01",
+		Title:     1,
+		Name:      "test",
+		Date:      "2022-01-01",
 		Structure: nil,
-		Document: nil,
+		Document:  nil,
 	}
 
 	code, err := PostPart(ctx, part)
@@ -61,16 +61,16 @@ func TestPostSupplementalPart(t *testing.T) {
 	defer server.Close()
 	BaseURL = server.URL
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	part := ecfr.Part{
-		Name: "test",
+		Name:  "test",
 		Title: "1",
 		Sections: []ecfr.Section{
 			ecfr.Section{
-				Title: "1",
-				Part: "2",
+				Title:   "1",
+				Part:    "2",
 				Section: "3",
 			},
 		},
@@ -129,11 +129,11 @@ func TestGetExistingParts(t *testing.T) {
 	defer server.Close()
 	BaseURL = server.URL
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	results, code, err := GetExistingParts(ctx, 42)
-	
+
 	if err != nil {
 		t.Errorf("received error (%+v)", err)
 	}
@@ -155,28 +155,28 @@ func TestGetExistingParts(t *testing.T) {
 }
 
 func TestGetTitle(t *testing.T) {
-	testTable := []struct{
-		Name string
-		Title int
-		Error bool
+	testTable := []struct {
+		Name         string
+		Title        int
+		Error        bool
 		ExpectedCode int
 	}{
 		{
-			Name: "test-valid-title",
-			Title: 42,
-			Error: false,
+			Name:         "test-valid-title",
+			Title:        42,
+			Error:        false,
 			ExpectedCode: http.StatusOK,
 		},
 		{
-			Name: "test-404",
-			Title: 43,
-			Error: true,
+			Name:         "test-404",
+			Title:        43,
+			Error:        true,
 			ExpectedCode: http.StatusNotFound,
 		},
 		{
-			Name: "test-server-error",
-			Title: 44,
-			Error: true,
+			Name:         "test-server-error",
+			Title:        44,
+			Error:        true,
 			ExpectedCode: http.StatusInternalServerError,
 		},
 	}
@@ -201,7 +201,7 @@ func TestGetTitle(t *testing.T) {
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 			_, code, err := GetTitle(ctx, tc.Title)
 			if err != nil && !tc.Error {
@@ -231,13 +231,13 @@ func TestSendTitle(t *testing.T) {
 	BaseURL = server.URL
 
 	title := Title{
-		Name: "42",
+		Name:     "42",
 		Contents: &ecfr.Structure{},
-		Exists: false,
+		Exists:   false,
 		Modified: true,
 	}
-	
-	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	code, err := SendTitle(ctx, &title)
@@ -265,18 +265,18 @@ func TestPostParserResult(t *testing.T) {
 	BaseURL = server.URL
 
 	result := ParserResult{
-        Start: time.Now().Format(time.RFC3339),
-        Title: 42,
-        Parts: "1,2,3",
-        Subchapters: "A,B,C",
-        Workers: 3,
-        Attempts: 5,
-        Errors: 0,
-        TotalVersions: 100,
-        SkippedVersions: 99,
-    }
+		Start:           time.Now().Format(time.RFC3339),
+		Title:           42,
+		Parts:           "1,2,3",
+		Subchapters:     "A,B,C",
+		Workers:         3,
+		Attempts:        5,
+		Errors:          0,
+		TotalVersions:   100,
+		SkippedVersions: 99,
+	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	code, err := PostParserResult(ctx, &result)

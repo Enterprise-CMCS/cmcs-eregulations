@@ -1,24 +1,24 @@
 package main
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
-	"context"
-	"time"
-	"strings"
-	"encoding/xml"
-	"encoding/json"
-	"fmt"
 	"container/list"
+	"context"
+	"encoding/json"
+	"encoding/xml"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"sync"
+	"testing"
+	"time"
 
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/go-test/deep"
+	log "github.com/sirupsen/logrus"
 )
 
 func TestInit(t *testing.T) {
@@ -29,49 +29,49 @@ func TestInit(t *testing.T) {
 
 func TestGetLogLevel(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input string
+		Name     string
+		Input    string
 		Expected log.Level
 	}{
 		{
-			Name: "test-warn",
-			Input: "warn",
+			Name:     "test-warn",
+			Input:    "warn",
 			Expected: log.WarnLevel,
 		},
 		{
-			Name: "test-fatal",
-			Input: "fatal",
+			Name:     "test-fatal",
+			Input:    "fatal",
 			Expected: log.FatalLevel,
 		},
 		{
-			Name: "test-error",
-			Input: "error",
+			Name:     "test-error",
+			Input:    "error",
 			Expected: log.ErrorLevel,
 		},
 		{
-			Name: "test-info",
-			Input: "info",
+			Name:     "test-info",
+			Input:    "info",
 			Expected: log.InfoLevel,
 		},
 		{
-			Name: "test-debug",
-			Input: "debug",
+			Name:     "test-debug",
+			Input:    "debug",
 			Expected: log.DebugLevel,
 		},
 		{
-			Name: "test-trace",
-			Input: "trace",
+			Name:     "test-trace",
+			Input:    "trace",
 			Expected: log.TraceLevel,
 		},
 		{
-			Name: "test-default",
-			Input: "not a valid level",
+			Name:     "test-default",
+			Input:    "not a valid level",
 			Expected: log.WarnLevel,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			out := getLogLevel(tc.Input)
 			if out != tc.Expected {
 				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
@@ -82,52 +82,52 @@ func TestGetLogLevel(t *testing.T) {
 
 func TestParseConfig(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input eregs.ParserConfig
+		Name     string
+		Input    eregs.ParserConfig
 		Expected eregs.ParserConfig
 	}{
 		{
 			Name: "test-valid-config",
 			Input: eregs.ParserConfig{
-				Workers: 3,
-				Attempts: 4,
-				LogLevel: "info",
+				Workers:            3,
+				Attempts:           4,
+				LogLevel:           "info",
 				UploadSupplemental: true,
-				LogParseErrors: false,
-				SkipVersions: true,
+				LogParseErrors:     false,
+				SkipVersions:       true,
 			},
 			Expected: eregs.ParserConfig{
-				Workers: 3,
-				Attempts: 4,
-				LogLevel: "info",
+				Workers:            3,
+				Attempts:           4,
+				LogLevel:           "info",
 				UploadSupplemental: true,
-				LogParseErrors: false,
-				SkipVersions: true,
+				LogParseErrors:     false,
+				SkipVersions:       true,
 			},
 		},
 		{
 			Name: "test-bad-config",
 			Input: eregs.ParserConfig{
-				Workers: -1,
-				Attempts: -2,
-				LogLevel: "warn",
+				Workers:            -1,
+				Attempts:           -2,
+				LogLevel:           "warn",
 				UploadSupplemental: true,
-				LogParseErrors: false,
-				SkipVersions: true,
+				LogParseErrors:     false,
+				SkipVersions:       true,
 			},
 			Expected: eregs.ParserConfig{
-				Workers: 1,
-				Attempts: 1,
-				LogLevel: "warn",
+				Workers:            1,
+				Attempts:           1,
+				LogLevel:           "warn",
 				UploadSupplemental: true,
-				LogParseErrors: false,
-				SkipVersions: true,
+				LogParseErrors:     false,
+				SkipVersions:       true,
 			},
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			parseConfig(&tc.Input)
 			if diff := deep.Equal(tc.Input, tc.Expected); diff != nil {
 				t.Errorf("output not as expected: %+v", diff)
@@ -139,10 +139,9 @@ func TestParseConfig(t *testing.T) {
 	}
 }
 
-
 func TestStart(t *testing.T) {
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if (r.Method == "POST" || r.Method == "PUT") {
+		if r.Method == "POST" || r.Method == "PUT" {
 			if r.URL.Path == "/title/42" || r.URL.Path == "/title/43" {
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(`OK!`))
@@ -261,9 +260,9 @@ func TestStart(t *testing.T) {
 	eregs.BaseURL = eregsServer.URL
 
 	testTable := []struct {
-		Name string
-		ParseTitleFunc func (*eregs.TitleConfig) (bool, error)
-		Error bool
+		Name           string
+		ParseTitleFunc func(*eregs.TitleConfig) (bool, error)
+		Error          bool
 	}{
 		{
 			Name: "test-valid",
@@ -297,7 +296,7 @@ func TestStart(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			ParseTitleFunc = tc.ParseTitleFunc
 			err := start()
 			if err != nil && !tc.Error {
@@ -486,9 +485,9 @@ func TestParseTitle(t *testing.T) {
 		}
 	}))
 	defer eregsServer.Close()
-	eregs.BaseURL = eregsServer.URL	
+	eregs.BaseURL = eregsServer.URL
 
-	var WorkerFunc func (*eregs.Part)
+	var WorkerFunc func(*eregs.Part)
 
 	StartHandlePartVersionWorkerFunc = func(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
 		for versionList := range ch {
@@ -501,11 +500,11 @@ func TestParseTitle(t *testing.T) {
 	}
 
 	testTable := []struct {
-		Name string
-		WorkerFunc func (*eregs.Part)
-		Input eregs.TitleConfig
-		Retry bool
-		Error bool
+		Name       string
+		WorkerFunc func(*eregs.Part)
+		Input      eregs.TitleConfig
+		Retry      bool
+		Error      bool
 	}{
 		{
 			Name: "test-valid",
@@ -549,9 +548,9 @@ func TestParseTitle(t *testing.T) {
 				version.Processed = false
 			},
 			Input: eregs.TitleConfig{
-				Title: 42,
+				Title:       42,
 				Subchapters: eregs.SubchapterList{},
-				Parts: eregs.PartList{},
+				Parts:       eregs.PartList{},
 				Contents: &eregs.Title{
 					Contents: &ecfr.Structure{},
 				},
@@ -565,9 +564,9 @@ func TestParseTitle(t *testing.T) {
 				version.Processed = true
 			},
 			Input: eregs.TitleConfig{
-				Title: 42,
+				Title:       42,
 				Subchapters: eregs.SubchapterList{},
-				Parts: eregs.PartList{},
+				Parts:       eregs.PartList{},
 				Contents: &eregs.Title{
 					Contents: &ecfr.Structure{},
 				},
@@ -620,45 +619,45 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 		[]eregs.Part{
 			eregs.Part{
 				Title: 42,
-				Name: "433",
-				Date: "2022-01-01",
+				Name:  "433",
+				Date:  "2022-01-01",
 			},
 			eregs.Part{
 				Title: 42,
-				Name: "433",
-				Date: "2022-02-01",
+				Name:  "433",
+				Date:  "2022-02-01",
 			},
 		},
 		[]eregs.Part{
 			eregs.Part{
 				Title: 42,
-				Name: "450",
-				Date: "2022-03-01",
+				Name:  "450",
+				Date:  "2022-03-01",
 			},
 			eregs.Part{
 				Title: 42,
-				Name: "433",
-				Date: "2022-04-01",
+				Name:  "433",
+				Date:  "2022-04-01",
 			},
 		},
 	}
 
 	testTable := []struct {
-		Name string
-		ShouldProcess bool
+		Name                  string
+		ShouldProcess         bool
 		HandlePartVersionFunc func(context.Context, int, *eregs.Part) error
 	}{
 		{
-			Name: "test-valid-run",
+			Name:          "test-valid-run",
 			ShouldProcess: true,
 			HandlePartVersionFunc: func(ctx context.Context, thread int, part *eregs.Part) error {
 				return nil
 			},
 		},
 		{
-			Name: "test-fail-run",
+			Name:          "test-fail-run",
 			ShouldProcess: false,
-			HandlePartVersionFunc: func(ctx context.Context, thread int,  part *eregs.Part) error {
+			HandlePartVersionFunc: func(ctx context.Context, thread int, part *eregs.Part) error {
 				return fmt.Errorf("Oops something bad happened")
 			},
 		},
@@ -678,7 +677,7 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 			}
 
 			ch := make(chan *list.List)
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			var wg sync.WaitGroup
@@ -872,66 +871,66 @@ func TestHandlePartVersion(t *testing.T) {
 	defer eregsServer.Close()
 	eregs.BaseURL = eregsServer.URL
 
-	testTable := []struct{
-		Name string
-		Input eregs.Part
+	testTable := []struct {
+		Name     string
+		Input    eregs.Part
 		Expected eregs.Part
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-valid",
 			Input: eregs.Part{
-				Title: 42,
-				Name: "433",
-				Date: "2022-01-01",
+				Title:     42,
+				Name:      "433",
+				Date:      "2022-01-01",
 				Structure: &ecfr.Structure{},
-				Document: &parsexml.Part{},
+				Document:  &parsexml.Part{},
 			},
 			Expected: eregs.Part{
 				Title: 42,
-				Name: "433",
-				Date: "2022-01-01",
+				Name:  "433",
+				Date:  "2022-01-01",
 				Structure: &ecfr.Structure{
-					Identifier: ecfr.IdentifierString{"42"},
-					Label: "Title 42 - Public Health",
-					LabelLevel: "Title 42",
+					Identifier:       ecfr.IdentifierString{"42"},
+					Label:            "Title 42 - Public Health",
+					LabelLevel:       "Title 42",
 					LabelDescription: "Public Health",
-					Reserved: false,
-					Type: "title",
+					Reserved:         false,
+					Type:             "title",
 					Children: []*ecfr.Structure{
 						&ecfr.Structure{
-							Identifier: ecfr.IdentifierString{"IV"},
-							Label: " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
-							LabelLevel: " Chapter IV",
+							Identifier:       ecfr.IdentifierString{"IV"},
+							Label:            " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
+							LabelLevel:       " Chapter IV",
 							LabelDescription: "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
-							Reserved: false,
-							Type: "chapter",
+							Reserved:         false,
+							Type:             "chapter",
 							Children: []*ecfr.Structure{
 								&ecfr.Structure{
-									Identifier: ecfr.IdentifierString{"C"},
-									Label: "Subchapter C - Medical Assistance Programs",
-									LabelLevel: "Subchapter C",
+									Identifier:       ecfr.IdentifierString{"C"},
+									Label:            "Subchapter C - Medical Assistance Programs",
+									LabelLevel:       "Subchapter C",
 									LabelDescription: "Medical Assistance Programs",
-									Reserved: false,
-									Type: "subchapter",
+									Reserved:         false,
+									Type:             "subchapter",
 									Children: []*ecfr.Structure{
 										&ecfr.Structure{
-											Identifier: ecfr.IdentifierString{"433"},
-											Label: "Part 433 - State Fiscal Administration",
-											LabelLevel: "Part 433",
+											Identifier:       ecfr.IdentifierString{"433"},
+											Label:            "Part 433 - State Fiscal Administration",
+											LabelLevel:       "Part 433",
 											LabelDescription: "State Fiscal Administration",
-											Reserved: false,
-											Type: "part",
+											Reserved:         false,
+											Type:             "part",
 											Children: []*ecfr.Structure{
 												&ecfr.Structure{
-													Identifier: ecfr.IdentifierString{"433", "1"},
-													Label: "§ 433.1 Purpose.",
-													LabelLevel: "§ 433.1",
+													Identifier:       ecfr.IdentifierString{"433", "1"},
+													Label:            "§ 433.1 Purpose.",
+													LabelLevel:       "§ 433.1",
 													LabelDescription: "Purpose.",
-													Reserved: false,
-													Type: "section",
-													Children: nil,
-													DescendantRange: nil,
+													Reserved:         false,
+													Type:             "section",
+													Children:         nil,
+													DescendantRange:  nil,
 												},
 											},
 											DescendantRange: nil,
@@ -951,28 +950,28 @@ func TestHandlePartVersion(t *testing.T) {
 						Local: "DIV5",
 					},
 					Structure: nil,
-					Citation: parsexml.SectionCitation{"433"},
-					Type: "PART",
-					Header: "PART 433 - STATE FISCAL ADMINISTRATION ",
+					Citation:  parsexml.SectionCitation{"433"},
+					Type:      "PART",
+					Header:    "PART 433 - STATE FISCAL ADMINISTRATION ",
 					Authority: parsexml.Authority{
-						Header: "Authority:",
+						Header:  "Authority:",
 						Content: "42 U.S.C. 1302. ",
 					},
 					Source: parsexml.Source{
-						Header: "Source:",
+						Header:  "Source:",
 						Content: "43 FR 45201, Sept. 29, 1978, unless otherwise noted. ",
 					},
 					Children: parsexml.PartChildren{
 						&parsexml.Section{
-							Type: "SECTION",
+							Type:     "SECTION",
 							Citation: parsexml.SectionCitation{"433", "1"},
-							Header: "§ 433.1 Purpose.",
+							Header:   "§ 433.1 Purpose.",
 							Children: parsexml.SectionChildren{
 								&parsexml.Paragraph{
-									Type: "Paragraph",
-									Content: "This part specifies the rates of FFP for services and administration, and prescribes requirements, prohibitions, and FFP conditions relating to State fiscal activities. ",
+									Type:     "Paragraph",
+									Content:  "This part specifies the rates of FFP for services and administration, and prescribes requirements, prohibitions, and FFP conditions relating to State fiscal activities. ",
 									Citation: parsexml.SectionCitation{"433", "1", "d78835ad878d59bddbcde2a31249107c"},
-									Marker: nil,
+									Marker:   nil,
 								},
 							},
 						},
@@ -984,32 +983,32 @@ func TestHandlePartVersion(t *testing.T) {
 		{
 			Name: "test-bad-fetch-structure",
 			Input: eregs.Part{
-				Title: 43,
-				Name: "433",
-				Date: "2022-01-01",
+				Title:     43,
+				Name:      "433",
+				Date:      "2022-01-01",
 				Structure: &ecfr.Structure{},
-				Document: &parsexml.Part{},
+				Document:  &parsexml.Part{},
 			},
 			Expected: eregs.Part{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-unrecognized-path",
 			Input: eregs.Part{
-				Title: 44,
-				Name: "433",
-				Date: "2022-01-01",
+				Title:     44,
+				Name:      "433",
+				Date:      "2022-01-01",
 				Structure: &ecfr.Structure{},
-				Document: &parsexml.Part{},
+				Document:  &parsexml.Part{},
 			},
 			Expected: eregs.Part{},
-			Error: true,
+			Error:    true,
 		},
 	}
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 			err := handlePartVersion(ctx, 1, &tc.Input)
 			diff := deep.Equal(tc.Input.Document, tc.Expected.Document)
@@ -1026,27 +1025,27 @@ func TestHandlePartVersion(t *testing.T) {
 
 func TestContains(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Array []string
-		String string
+		Name     string
+		Array    []string
+		String   string
 		Expected bool
 	}{
 		{
-			Name: "test-in-array",
-			Array: []string{"aaa", "bbb", "ccc"},
-			String: "bbb",
+			Name:     "test-in-array",
+			Array:    []string{"aaa", "bbb", "ccc"},
+			String:   "bbb",
 			Expected: true,
 		},
 		{
-			Name: "test-last-element",
-			Array: []string{"aaa", "bbb", "ccc"},
-			String: "ccc",
+			Name:     "test-last-element",
+			Array:    []string{"aaa", "bbb", "ccc"},
+			String:   "ccc",
 			Expected: true,
 		},
 		{
-			Name: "test-not-in-array",
-			Array: []string{"aaa", "bbb", "ccc"},
-			String: "ddd",
+			Name:     "test-not-in-array",
+			Array:    []string{"aaa", "bbb", "ccc"},
+			String:   "ddd",
 			Expected: false,
 		},
 	}

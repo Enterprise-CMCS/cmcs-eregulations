@@ -1,13 +1,13 @@
 package eregs
 
 import (
-	"strings"
-	"net/url"
-	"os"
-	"fmt"
-	"path"
 	"context"
 	"encoding/json"
+	"fmt"
+	"net/url"
+	"os"
+	"path"
+	"strings"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 
@@ -30,21 +30,21 @@ var postAuth = &network.PostAuth{
 
 // Section represents a section identifier in the eRegs supplemental content system
 type Section struct {
-	Title string `json:"title"`
-	Part string `json:"part"`
+	Title   string `json:"title"`
+	Part    string `json:"part"`
 	Section string `json:"section_id"`
 }
 
 // FRDoc is eRegs' representation of Federal Register documents, including a list of sections
 type FRDoc struct {
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Category string `json:"category"`
-	URL string `json:"url"`
-	Date string `json:"date"`
-	DocketNumber string `json:"docket_number"`
-	DocumentNumber string `json:"document_number"`
-	Locations []*Section `json:"locations"`
+	Name           string     `json:"name"`
+	Description    string     `json:"description"`
+	Category       string     `json:"category"`
+	URL            string     `json:"url"`
+	Date           string     `json:"date"`
+	DocketNumber   string     `json:"docket_number"`
+	DocumentNumber string     `json:"document_number"`
+	Locations      []*Section `json:"locations"`
 }
 
 // SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL
@@ -76,14 +76,14 @@ func CreateSections(title string, s []string) []*Section {
 		}
 
 		s := &Section{
-			Title: title,
-			Part: sp[0],
+			Title:   title,
+			Part:    sp[0],
 			Section: sp[1],
 		}
 
 		sections = append(sections, s)
 	}
-	
+
 	return sections
 }
 
