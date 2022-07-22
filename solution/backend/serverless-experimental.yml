@@ -93,6 +93,11 @@ functions:
     timeout: 300
     layers:
       - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+  create_su:
+    handler: createsu.handler
+    layers:
+      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+    timeout: 300
 
 resources:
 
