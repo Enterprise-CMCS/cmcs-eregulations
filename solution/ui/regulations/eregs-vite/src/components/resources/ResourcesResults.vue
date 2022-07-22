@@ -13,7 +13,9 @@
                 >
                 <div class="sort-control">
                     <span class="sort-control-label">Sort By</span>
-                    <FancyDropdown>
+                    <FancyDropdown
+                        :buttonTitle="sortMethod"
+                    >
                         <v-list class="sort-options-list">
                             <v-list-item-group
                                 class="sort-options-list-item-group"
@@ -190,6 +192,7 @@ export default {
 
     data() {
         return {
+            sortMethod: "relevance", // relevance || date
             base:
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
@@ -214,7 +217,17 @@ export default {
 
     methods: {
         clickMethod(e) {
-            console.log(e.currentTarget.dataset.value)
+            const dataValue = e.currentTarget.dataset.value;
+            switch (dataValue) {
+                case "relevance":
+                    this.sortMethod = "relevance";
+                    break;
+                case "date":
+                    this.sortMethod = "date";
+                    break;
+                default:
+                    this.sortMethod = "relevance";
+            }
         },
     },
 
