@@ -23,7 +23,8 @@ from regcore.v3views import (
     PartSectionsViewSet,
     PartSubpartsViewSet,
     SubpartContentsViewSet,
-    ParserResultViewSet
+    ParserResultViewSet,
+    SynonymViewSet
 )
 
 
@@ -82,5 +83,8 @@ urlpatterns = [
             "get": "retrieve",
             "post": "create"
         })),
+        path("synonym/<synonym>", SynonymViewSet.as_view({
+            "get": "list"
+        }) )
     ])),
 ]

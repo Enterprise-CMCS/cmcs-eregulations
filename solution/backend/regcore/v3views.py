@@ -1,3 +1,4 @@
+import string
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
@@ -7,6 +8,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from regcore.models import Title, Part, ECFRParserResult
+from regcore.search.models import  Synonym
 from .views import SettingsAuthentication
 
 from regcore.serializers import (
@@ -17,7 +19,8 @@ from regcore.serializers import (
     TitleUploadSerializer,
     PartsSerializer,
     StringListSerializer,
-    ParserResultSerializer
+    ParserResultSerializer,
+    SynonymsSerializer
 )
 
 
@@ -198,3 +201,14 @@ class ParserResultViewSet(viewsets.ModelViewSet):
             serializer = self.serializer_class(parserResult)
             return Response(serializer.data)
         raise Http404()
+
+@extend_schema(
+    description="Rerieve a synonym for a word",
+    parameters=[OpenApiPathParameter("synonym", "Word you are looking for a synonym for.", str)]
+)
+class SynonymViewSet(viewsets.ModelViewSet):
+    serializer_class = SynonymsSerializer
+
+    def get_queryset(self):
+        syn =  self.kwargs.get("synonym")
+        return  Synonym.objects.filter(baseWord=syn)
