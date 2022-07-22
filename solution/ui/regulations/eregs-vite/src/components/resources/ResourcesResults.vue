@@ -12,7 +12,7 @@
                     in Resources</span
                 >
                 <div class="sort-control">
-                    <span>Sort By</span>
+                    <span class="sort-control-label">Sort By</span>
                     <FancyDropdown>
                         <v-list class="sort-options-list">
                             <v-list-item-group
@@ -248,6 +248,12 @@ export default {
 
             div:first-of-type {
                 width: 120px;
+            }
+
+            @include custom-max($mobile-max / 1px) {
+                .sort-control-label {
+                    margin-right: 9px;
+                }
             }
         }
         .category-labels {
