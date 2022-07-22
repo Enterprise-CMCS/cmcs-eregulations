@@ -207,5 +207,26 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 	if err := sendDocumentFunc(ctx, doc); err != nil {
 		return fmt.Errorf("Failed to send document to eRegs: %+v", err)
 	}
-return nil
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	return nil
 }
