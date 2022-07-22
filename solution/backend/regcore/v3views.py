@@ -203,7 +203,7 @@ class ParserResultViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema(
-    description="Rerieve a synonym for a word",
+    description="Retrieve relevant synonyms for a word or phrase",
     parameters=[OpenApiPathParameter("synonym", "Word you are looking for a synonym for.", str)]
 )
 class SynonymViewSet(viewsets.ModelViewSet):

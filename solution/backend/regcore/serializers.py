@@ -74,6 +74,3 @@ class SynonymsSerializer(serializers.Serializer):
     baseWord = serializers.CharField()
     synonyms = SynonymSerializer(read_only=True, many=True)
 
-    class Meta:
-        model = Synonym
-        fields = ('__all__')
