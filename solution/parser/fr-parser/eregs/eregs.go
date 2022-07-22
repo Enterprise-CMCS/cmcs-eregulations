@@ -51,15 +51,15 @@ type FRDoc struct {
 func SendDocument(ctx context.Context, doc *FRDoc) error {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return fmt.Errorf("Failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
+		return fmt.Errorf("failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocumentURL)
 	code, err := network.SendJSON(ctx, eregsURL, doc, true, postAuth, network.HTTPPut)
 	if err != nil {
 		if code != -1 {
-			return fmt.Errorf("Send failed with code %d: %+v", code, err)
+			return fmt.Errorf("send failed with code %d: %+v", code, err)
 		}
-		return fmt.Errorf("Send failed: %+v", err)
+		return fmt.Errorf("send failed: %+v", err)
 	}
 	return nil
 }
@@ -91,23 +91,23 @@ func CreateSections(title string, s []string) []*Section {
 func FetchDocumentList(ctx context.Context) ([]string, error) {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
+		return nil, fmt.Errorf("failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocListURL)
 
 	reader, code, err := network.Fetch(ctx, eregsURL, true)
 	if err != nil {
 		if code != -1 {
-			return nil, fmt.Errorf("Fetch failed with code %d: %+v", code, err)
+			return nil, fmt.Errorf("fetch failed with code %d: %+v", code, err)
 		}
-		return nil, fmt.Errorf("Fetch failed: %+v", err)
+		return nil, fmt.Errorf("fetch failed: %+v", err)
 	}
 
 	var docs []string
 	d := json.NewDecoder(reader)
 	err = d.Decode(&docs)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse JSON response: %+v", err)
+		return nil, fmt.Errorf("failed to parse JSON response: %+v", err)
 	}
 
 	return docs, nil

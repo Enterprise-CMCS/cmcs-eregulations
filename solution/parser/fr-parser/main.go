@@ -74,7 +74,7 @@ func getLogLevel(l string) log.Level {
 }
 
 var retrieveConfigFunc = ecfrEregs.RetrieveConfig
-var getLogLevelFunc = getLogLevel
+//var getLogLevelFunc = getLogLevel
 
 func loadConfig() (*ecfrEregs.ParserConfig, error) {
 	log.Info("[main] Loading configuration...")
@@ -96,7 +96,7 @@ func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
 	for _, subchapter := range t.Subchapters {
 		subchapterParts, err := extractSubchapterPartsFunc(ctx, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
-			log.Error("[main] Failed to retrieve parts for title ", t.Title, " subchapter ", subchapter, ". Skipping.")
+			log.Error("[main] failed to retrieve parts for title ", t.Title, " subchapter ", subchapter, ". Skipping.")
 			continue
 		}
 		parts = append(parts, subchapterParts...)
@@ -116,13 +116,13 @@ func start() error {
 
 	config, err := loadConfigFunc()
 	if err != nil {
-		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
+		return fmt.Errorf("failed to retrieve configuration: %+v", err)
 	}
 
-	log.Debug("[main] Retrieving list of processed content")
+	log.Debug("[main] retrieving list of processed content")
 	existingDocsList, err := fetchDocumentListFunc(ctx)
 	if err != nil {
-		return fmt.Errorf("Failed to retrieve list of already processed documents: %+v", err)
+		return fmt.Errorf("failed to retrieve list of already processed documents: %+v", err)
 	}
 	existingDocs := make(map[string]bool)
 	for _, i := range existingDocsList {
@@ -130,11 +130,11 @@ func start() error {
 	}
 
 	for _, title := range config.Titles {
-		log.Info("[main] Retrieving content for title ", title.Title)
+		log.Info("[main] retrieving content for title ", title.Title)
 		parts := getPartsListFunc(ctx, title)
 		for _, part := range parts {
 			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipVersions); err != nil {
-				log.Error("[main] Failed to process title ", title.Title, " part ", part, ": ", err)
+				log.Error("[main] failed to process title ", title.Title, " part ", part, ": ", err)
 			}
 		}
 	}
@@ -146,10 +146,10 @@ var fetchContentFunc = fedreg.FetchContent
 var processDocumentFunc = processDocument
 
 func processPart(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
-	log.Debug("[main] Retrieving list of content for title ", title, " part ", part)
+	log.Debug("[main] retrieving list of content for title ", title, " part ", part)
 	contentList, err := fetchContentFunc(ctx, title, part)
 	if err != nil {
-		return fmt.Errorf("Fetch content failed: %+v", err)
+		return fmt.Errorf("fetch content failed: %+v", err)
 	}
 
 	var content []*fedreg.FRDoc
@@ -170,7 +170,7 @@ func processPart(ctx context.Context, title int, part string, existingDocs map[s
 	log.Debug("[main] Processing content for title ", title, " part ", part)
 	for _, c := range content {
 		if err := processDocumentFunc(ctx, title, part, c); err != nil {
-			log.Error("[main] Failed to process title ", title, " part ", part, " doc ID ", c.DocumentNumber, ": ", err)
+			log.Error("[main] failed to process title ", title, " part ", part, " doc ID ", c.DocumentNumber, ": ", err)
 		}
 	}
 
@@ -192,20 +192,20 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 	}
 
 	if content.FullTextURL != "" {
-		log.Trace("[main] Retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
+		log.Trace("[main] retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
 		sections, err := fetchSectionsFunc(ctx, content.FullTextURL)
 		if err != nil {
-			log.Error("[main] Failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
+			log.Error("[main] failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
 		} else {
 			doc.Locations = eregs.CreateSections(fmt.Sprintf("%d", title), sections)
 		}
 	} else {
-		log.Warn("[main] No list of sections available for FR doc ", content.DocumentNumber)
+		log.Warn("[main] no list of sections available for FR doc ", content.DocumentNumber)
 	}
 
-	log.Trace("[main] Sending title ", title, " part ", part, " doc ID ", content.DocumentNumber, " to eRegs")
+	log.Trace("[main] sending title ", title, " part ", part, " doc ID ", content.DocumentNumber, " to eRegs")
 	if err := sendDocumentFunc(ctx, doc); err != nil {
-		return fmt.Errorf("Failed to send document to eRegs: %+v", err)
+		return fmt.Errorf("failed to send document to eRegs: %+v", err)
 	}
 
 	return nil
