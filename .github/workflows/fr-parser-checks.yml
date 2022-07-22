@@ -41,7 +41,9 @@ jobs:
       run: |
         go install golang.org/x/lint/golint@latest
         pushd solution/parser/fr-parser
-        gofmt -d ./..
+        if gofmt -s -l . > /dev/null; 
+        then exit 1 
+        fi
         popd
     # Run lint on the code
     - name: Run lint
