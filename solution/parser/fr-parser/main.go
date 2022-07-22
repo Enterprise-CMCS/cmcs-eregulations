@@ -1,17 +1,17 @@
 package main
 
 import (
-	"time"
 	"context"
-	"os"
 	"fmt"
+	"os"
 	"strings"
+	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/fedreg"
 
-	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
+	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -182,12 +182,12 @@ var sendDocumentFunc = eregs.SendDocument
 
 func processDocument(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 	doc := &eregs.FRDoc{
-		Name: content.Name,
-		Description: content.Description,
-		Category: content.Category,
-		URL: content.URL,
-		Date: content.Date,
-		DocketNumber: content.DocketNumber,
+		Name:           content.Name,
+		Description:    content.Description,
+		Category:       content.Category,
+		URL:            content.URL,
+		Date:           content.Date,
+		DocketNumber:   content.DocketNumber,
 		DocumentNumber: content.DocumentNumber,
 	}
 
@@ -207,6 +207,5 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 	if err := sendDocumentFunc(ctx, doc); err != nil {
 		return fmt.Errorf("Failed to send document to eRegs: %+v", err)
 	}
-
-	return nil
+return nil
 }
