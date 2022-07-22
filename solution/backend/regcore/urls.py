@@ -85,6 +85,6 @@ urlpatterns = [
         })),
         path("synonym/<synonym>", SynonymViewSet.as_view({
             "get": "list"
-        }) )
+        }))
     ])),
 ]
