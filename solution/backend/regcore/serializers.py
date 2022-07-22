@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from regcore.search.models import Synonym
 
 from .models import Title, ECFRParserResult
 
@@ -73,4 +72,3 @@ class SynonymsSerializer(serializers.Serializer):
     isActive = serializers.BooleanField()
     baseWord = serializers.CharField()
     synonyms = SynonymSerializer(read_only=True, many=True)
-
