@@ -261,6 +261,7 @@ export default {
 
             //Checks that the part in the query is valid or is a resource category
             if ((await this.checkPart(splitSection, payload.scope)) || payload.scope == "resourceCategory") {
+
                 if (newQueryParams[payload.scope]) {
                     if (payload.searchSection) {
                         if (!newQueryParams.part.includes(splitSection[0])) {
@@ -269,7 +270,13 @@ export default {
                         }
                     }
                     const scopeVals = newQueryParams[payload.scope].split(",");
-                    scopeVals.push(payload.selectedIdentifier);
+                    if (payload.scope === "resourceCategory"){
+                        const cats = await this.getSubCategories(payload.selectedIdentifier)
+                        cats.forEach(cat => scopeVals.push(cat))
+                    } else {
+                        scopeVals.push(payload.selectedIdentifier);
+                    }
+
                     const uniqScopeVals = _uniq(scopeVals);
                     newQueryParams[payload.scope] = uniqScopeVals
                         .sort()
@@ -285,7 +292,12 @@ export default {
                             newQueryParams.part = splitSection[0];
                         }
                     }
-                    newQueryParams[payload.scope] = payload.selectedIdentifier;
+                    if (payload.scope === "resourceCategory"){
+                        newQueryParams[payload.scope] = (await this.getSubCategories(payload.selectedIdentifier)).join(",");
+                    } else {
+                        newQueryParams[payload.scope] = payload.selectedIdentifier;
+                    }
+
                 }
 
                 if (payload.scope === "subpart") {
@@ -403,7 +415,7 @@ export default {
                         part: section.match(/^\d+/)[0],
                         subparts: section.match(/\w+$/)[0],
                     }));
-                
+
                 Object.keys(subparts).forEach((subpart) => {
                     this.partDict[subparts[subpart].part].subparts.push(
                         subparts[subpart].subparts
@@ -556,6 +568,28 @@ export default {
             });
             this.filters.resourceCategory.listItems = categories;
         },
+        async getSubCategories(selectedCategory){
+
+            const rawCats = await getCategories();
+            const reducedCats = rawCats
+                .filter((item) => item.type === "category")
+                .reduce((acc, item) => {
+                    acc[item.name] = item;
+                    acc[item.name].subcategories = [item.name];
+                    return acc;
+                }, {});
+            // Not a top level category, no need to continue
+            if (!reducedCats[selectedCategory]){
+              return [selectedCategory]
+            }
+            rawCats.forEach((item) => {
+                if (item.type === "subcategory") {
+                    reducedCats[item.parent.name].subcategories.push(item.name);
+                }
+            });
+
+            return reducedCats[selectedCategory].subcategories
+        }
     },
 
     watch: {
