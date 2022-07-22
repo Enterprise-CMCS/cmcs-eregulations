@@ -75,7 +75,7 @@ func getLogLevel(l string) log.Level {
 
 var retrieveConfigFunc = ecfrEregs.RetrieveConfig
 
-//lint:ignore SA4000
+//lint:ignore U1000 This is required for the tests to work, even if it is not used in this file.
 var getLogLevelFunc = getLogLevel
 
 func loadConfig() (*ecfrEregs.ParserConfig, error) {
