@@ -74,6 +74,7 @@ func getLogLevel(l string) log.Level {
 }
 
 var retrieveConfigFunc = ecfrEregs.RetrieveConfig
+
 //lint:ignore SA4000
 var getLogLevelFunc = getLogLevel
 
