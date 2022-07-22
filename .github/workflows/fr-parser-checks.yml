@@ -36,13 +36,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
+
     # Run go fmt on the code
     - name: Run gofmt
-      run: |
-        go install golang.org/x/lint/golint@latest
-        pushd solution/parser/fr-parser
-        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
-        popd
+      uses: Jerome1337/gofmt-action@v1.0.4
+      with:
+        gofmt-path: './solution/parser/fr-parser'
+        gofmt-flags: '-l -d'
+
     # Run lint on the code
     - name: Run lint
       run: |
