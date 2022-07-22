@@ -43,6 +43,12 @@ jobs:
         gofmt-path: './solution/parser/ecfr-parser'
         gofmt-flags: '-l -d'
 
+    - uses: dominikh/staticcheck-action@v1.2.0
+      with:
+        version: "2022.1"
+        install-go: false
+        working-directory: "./solution/parser/ecfr-parser"
+
     # Run lint on the code
     - name: Run lint
       run: |
