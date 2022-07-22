@@ -1,16 +1,5 @@
 package main
 
-
-
-
-
-
-
-
-
-
-
-
 import (
 	"container/list"
 	"context"
