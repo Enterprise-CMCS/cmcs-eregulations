@@ -74,6 +74,7 @@ func getLogLevel(l string) log.Level {
 }
 
 var retrieveConfigFunc = ecfrEregs.RetrieveConfig
+
 //var getLogLevelFunc = getLogLevel
 
 func loadConfig() (*ecfrEregs.ParserConfig, error) {
