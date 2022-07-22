@@ -313,9 +313,7 @@ func TestParseTitle(t *testing.T) {
 	config.Attempts = 3
 	config.Workers = 3
 
-	SleepFunc = func(t time.Duration) {
-		return
-	}
+	SleepFunc = func(t time.Duration) {	}
 
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -611,9 +609,7 @@ func TestParseTitle(t *testing.T) {
 }
 
 func TestStartHandlePartVersionWorker(t *testing.T) {
-	SleepFunc = func(t time.Duration) {
-		return
-	}
+	SleepFunc = func(t time.Duration) {}
 
 	input := [][]eregs.Part{
 		[]eregs.Part{

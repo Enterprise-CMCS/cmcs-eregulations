@@ -26,7 +26,7 @@ func (sc *SubchapterArg) String() string {
 func (sc *SubchapterArg) Set(s string) error {
 	*sc = strings.Split(s, "-")
 	if len(*sc) != 2 || strings.TrimSpace((*sc)[0]) == "" || strings.TrimSpace((*sc)[1]) == "" {
-		return fmt.Errorf("Subchapter is expected to be of the form <Roman Numeral>-<Letter>")
+		return fmt.Errorf("subchapter is expected to be of the form <Roman Numeral>-<Letter>")
 	}
 	return nil
 }
@@ -109,7 +109,7 @@ func RetrieveConfig() (*ParserConfig, int, error) {
 	var config ParserConfig
 	d := json.NewDecoder(body)
 	if err := d.Decode(&config); err != nil {
-		return nil, code, fmt.Errorf("Unable to decode configuration from response body: %+v", err)
+		return nil, code, fmt.Errorf("unable to decode configuration from response body: %+v", err)
 	}
 
 	return &config, code, nil

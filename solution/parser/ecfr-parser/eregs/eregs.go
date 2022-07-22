@@ -21,10 +21,6 @@ import (
 // BaseURL is the URL of the eRegs service that will accept the post requests
 var BaseURL string
 
-var client = &http.Client{
-	Transport: &http.Transport{},
-}
-
 var partURL = "/title/%d/existing"
 
 var postAuth = &network.PostAuth{
@@ -53,8 +49,8 @@ type ExistingPart struct {
 // ParserResult is the struct used to send results to the eRegs server
 type ParserResult struct {
 	Title           int    `json:"title,string"`
-	Start           string `json:"start,date"`
-	End             string `json:"end,date"`
+	Start           string `json:"start"`
+	End             string `json:"end"`
 	Workers         int    `json:"workers,string"`
 	Attempts        int    `json:"attempts,string"`
 	Parts           string `json:"parts"`
@@ -120,7 +116,7 @@ func GetTitle(ctx context.Context, title int) (*Title, int, error) {
 	var t Title
 	d := json.NewDecoder(body)
 	if err := d.Decode(&t); err != nil {
-		return emptyTitle, code, fmt.Errorf("Unable to decode response body while retrieving title object: %+v", err)
+		return emptyTitle, code, fmt.Errorf("unable to decode response body while retrieving title object: %+v", err)
 	}
 
 	t.Exists = true
@@ -164,7 +160,7 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, int,
 	var vs []ExistingPart
 	d := json.NewDecoder(body)
 	if err := d.Decode(&vs); err != nil {
-		return nil, code, fmt.Errorf("Unable to decode response body while checking existing versions: %+v", err)
+		return nil, code, fmt.Errorf("unable to decode response body while checking existing versions: %+v", err)
 	}
 
 	// reduce the results to the desired format
