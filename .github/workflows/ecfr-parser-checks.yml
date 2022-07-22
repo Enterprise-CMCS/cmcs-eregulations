@@ -36,6 +36,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
+      # Run go fmt on the code
+    - name: Run gofmt
+      uses: Jerome1337/gofmt-action@v1.0.4
+      with:
+        gofmt-path: './solution/parser/ecfr-parser'
+        gofmt-flags: '-l -d'
+
     # Run lint on the code
     - name: Run lint
       run: |
