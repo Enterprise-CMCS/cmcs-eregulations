@@ -248,7 +248,7 @@ func TestStart(t *testing.T) {
 		} else if r.URL.Path == "/title/43" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(`{ "exception": "404 not found!" }`))
-		} else if r.URL.Path == "/title/43" {
+		} else if r.URL.Path == "/title/44" {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{ "exception": "Something happened!" }`))
 		} else {

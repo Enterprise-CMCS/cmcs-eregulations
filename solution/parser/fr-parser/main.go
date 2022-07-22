@@ -74,8 +74,8 @@ func getLogLevel(l string) log.Level {
 }
 
 var retrieveConfigFunc = ecfrEregs.RetrieveConfig
-
-//var getLogLevelFunc = getLogLevel
+//lint:ignore SA4000
+var getLogLevelFunc = getLogLevel
 
 func loadConfig() (*ecfrEregs.ParserConfig, error) {
 	log.Info("[main] Loading configuration...")
