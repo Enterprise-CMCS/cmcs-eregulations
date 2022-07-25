@@ -97,9 +97,25 @@ const formatResourceCategories = (resources) => {
     return categories
 }
 
+function flattenSubpart(subpart){
+    const result = JSON.parse(JSON.stringify(subpart))
+    const subjectGroupSections = subpart.children
+        .filter(child => child.type=== 'subject_group')
+        .flatMap(subjgrp => subjgrp.children)
+        .filter(child => child.type ==="section")
+
+
+    result.children = result.children
+        .concat(subjectGroupSections)
+        .filter(child => child.type ==="section")
+
+    return result
+}
+
 export {
     delay,
     parseError,
     formatResourceCategories,
-    EventCodes
+    EventCodes,
+    flattenSubpart
 };
