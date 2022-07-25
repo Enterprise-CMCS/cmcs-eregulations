@@ -53,6 +53,8 @@
                         :partsList="filters.part.listItems"
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
+                        :sortMethod="sortMethod"
+                        @sort="setSortMethod"
                     />
                 </div>
             </div>
@@ -138,6 +140,7 @@ export default {
             },
             supplementalContent: [],
             searchInputValue: "",
+            sortMethod: "relevance"
         };
     },
 
@@ -590,7 +593,10 @@ export default {
             });
 
             return reducedCats[selectedCategory].subcategories
-        }
+        },
+        setSortMethod(payload) {
+            this.sortMethod = payload;
+        },
     },
 
     watch: {
