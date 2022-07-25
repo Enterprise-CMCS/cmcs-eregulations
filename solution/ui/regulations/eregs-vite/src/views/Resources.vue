@@ -139,7 +139,7 @@ export default {
                 },
             },
             supplementalContent: [],
-            searchInputValue: "",
+            searchInputValue: undefined,
         };
     },
 
@@ -155,7 +155,7 @@ export default {
         },
         searchQuery: {
             get() {
-                return this.queryParams.q || "";
+                return this.queryParams.q || undefined;
             },
             set(value) {
                 this.searchInputValue = value;
@@ -315,7 +315,7 @@ export default {
 
                 if (payload.searchSection) {
                     newQueryParams.q = "";
-                    this.searchInputValue = "";
+                    this.searchInputValue = undefined;
                 }
                 if (newQueryParams.part) {
                   this.getPartDict(newQueryParams);
@@ -601,7 +601,9 @@ export default {
                 name: "resources",
                 query: {
                     ...this.filterParams,
-                    q: this.searchInputValue,
+                    q: this.searchInputValue === null // getting set to null somewhere...
+                        ? undefined
+                        : this.searchInputValue,
                     sort: payload,
                 }
             })
