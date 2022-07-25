@@ -140,7 +140,6 @@ export default {
             },
             supplementalContent: [],
             searchInputValue: "",
-            sortMethod: "relevance"
         };
     },
 
@@ -171,6 +170,9 @@ export default {
                 resourceCategory: this.queryParams.resourceCategory,
             };
         },
+        sortMethod() {
+            return this.queryParams.sort || "relevance";
+        },
     },
 
     methods: {
@@ -190,6 +192,7 @@ export default {
                     query: {
                         ...this.filterParams,
                         q: this.searchInputValue,
+                        sort: this.sortMethod,
                     },
                 });
             }
@@ -199,19 +202,18 @@ export default {
             this.$router.push({
                 name: "resources",
                 query: {
-                    title: undefined,
-                    part: undefined,
-                    subpart: undefined,
-                    section: undefined,
-                    resourceCategory: undefined,
                     q: this.searchQuery,
+                    sort: this.sortMethod
                 },
             });
         },
         clearSearchQuery() {
             this.$router.push({
                 name: "resources",
-                query: { ...this.filterParams },
+                query: {
+                    ...this.filterParams,
+                    sort: this.sortMethod,
+                },
             });
         },
 
@@ -595,7 +597,14 @@ export default {
             return reducedCats[selectedCategory].subcategories
         },
         setSortMethod(payload) {
-            this.sortMethod = payload;
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: this.searchInputValue,
+                    sort: payload,
+                }
+            })
         },
     },
 
