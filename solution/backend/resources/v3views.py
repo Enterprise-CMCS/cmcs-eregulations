@@ -20,7 +20,6 @@ from .models import (
     AbstractLocation,
     Subpart,
     Section,
-    FederalRegisterDocumentGroup,
 )
 
 from regcore.views import SettingsAuthentication
@@ -243,7 +242,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
     def get_annotated_date(self):
         return F("date")
-    
+
     def get_annotated_group(self):
         return -1*F("pk")
 
@@ -295,8 +294,8 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         search_query = self.request.GET.get("q")
 
         id_query = self.model.objects\
-                        .filter(approved=True)\
-                        .annotate(group_annotated=self.get_annotated_group())
+                       .filter(approved=True)\
+                       .annotate(group_annotated=self.get_annotated_group())
 
         q_obj = self.get_location_filter(locations)
         if q_obj:
@@ -333,13 +332,13 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                 cover_density=cover_density,
             )
             annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
-        
+
         annotations["date_annotated"] = self.get_annotated_date()
         query = query.annotate(**annotations)
 
         if search_query:
             return query.filter(rank__gte=0.2).distinct().order_by("-rank")
-        else: 
+        else:
             return query.order_by(F("date_annotated").desc(nulls_last=True)).distinct()
 
 
@@ -361,7 +360,7 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__date")),
             default=None,
         )
-    
+
     def get_annotated_group(self):
         return Case(
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),

@@ -210,7 +210,7 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
-    
+
     group = models.ForeignKey(
         FederalRegisterDocumentGroup,
         null=True,
@@ -241,9 +241,11 @@ def update_related_docs(group_id):
     post_save.connect(post_save_fr_doc, sender=FederalRegisterDocument)
     post_save.connect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
 
+
 @receiver(post_save, sender=FederalRegisterDocumentGroup)
 def post_save_fr_doc_group(sender, instance, **kwargs):
     update_related_docs(instance.id)
+
 
 @receiver(post_save, sender=FederalRegisterDocument)
 def post_save_fr_doc(sender, instance, **kwargs):
