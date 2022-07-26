@@ -206,9 +206,9 @@ class ParserResultViewSet(viewsets.ModelViewSet):
     description="Retrieve relevant synonyms for a word or phrase",
     parameters=[OpenApiPathParameter("synonym", "Word you are looking for a synonym for.", str)]
 )
-class SynonymViewSet(viewsets.ModelViewSet):
+class SynonymViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SynonymsSerializer
 
     def get_queryset(self):
         syn = self.kwargs.get("synonym")
-        return Synonym.objects.filter(baseWord=syn)
+        return Synonym.objects.filter(baseWord__iexact=syn)
