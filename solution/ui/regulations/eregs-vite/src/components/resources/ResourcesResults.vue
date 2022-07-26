@@ -12,7 +12,7 @@
                     in Resources</span
                 >
                 <div class="sort-control">
-                    <span class="sort-control-label">Sort By</span>
+                    <span class="sort-control-label">Sort by</span>
                     <FancyDropdown
                         :buttonTitle="sortMethodTitle"
                         :disabled="sortDisabled"
