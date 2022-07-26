@@ -13,24 +13,27 @@
                 >
                 <div class="sort-control">
                     <span class="sort-control-label">Sort By</span>
-                    <FancyDropdown :buttonTitle="sortMethod">
+                    <FancyDropdown
+                        :buttonTitle="sortMethodTitle"
+                        :disabled="sortDisabled"
+                    >
                         <v-list class="sort-options-list">
                             <v-list-item-group
                                 class="sort-options-list-item-group"
                             >
+                                <v-list-item
+                                    data-value="newest"
+                                    class="sort-options-list-item"
+                                    @click="clickMethod"
+                                >
+                                    <span>Date (Newest)</span>
+                                </v-list-item>
                                 <v-list-item
                                     data-value="relevance"
                                     class="sort-options-list-item"
                                     @click="clickMethod"
                                 >
                                     <span>Relevance</span>
-                                </v-list-item>
-                                <v-list-item
-                                    data-value="date"
-                                    class="sort-options-list-item"
-                                    @click="clickMethod"
-                                >
-                                    <span>Date</span>
                                 </v-list-item>
                             </v-list-item-group>
                         </v-list>
@@ -116,9 +119,15 @@
 import _uniqBy from "lodash/uniqBy";
 import _has from "lodash/has";
 
+import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
-import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
+
+const SORT_METHODS = {
+    newest: "Date (Newest)",
+    oldest: "Date (Oldest)",
+    relevance: "relevance",
+};
 
 export default {
     name: "ResourcesResults",
@@ -187,9 +196,14 @@ export default {
             default: "",
         },
         sortMethod: {
-            validator: (value) => ["relevance", "date"].includes(value),
+            validator: (value) => Object.keys(SORT_METHODS).includes(value),
             required: false,
-            default: "relevance",
+            default: "newest",
+        },
+        sortDisabled: {
+            type: Boolean,
+            required: false,
+            default: true,
         },
     },
 
@@ -214,6 +228,9 @@ export default {
                 );
                 return copiedItem;
             });
+        },
+        sortMethodTitle() {
+            return SORT_METHODS[this.sortMethod];
         },
     },
 
@@ -251,7 +268,7 @@ export default {
             font-weight: normal;
 
             div:first-of-type {
-                width: 120px;
+                width: 140px;
             }
 
             @include custom-max($mobile-max / 1px) {

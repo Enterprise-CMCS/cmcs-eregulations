@@ -54,6 +54,7 @@
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
                         :sortMethod="sortMethod"
+                        :sortDisabled="sortDisabled"
                         @sort="setSortMethod"
                     />
                 </div>
@@ -171,7 +172,10 @@ export default {
             };
         },
         sortMethod() {
-            return this.queryParams.sort || "relevance";
+            return this.queryParams.sort || "newest";
+        },
+        sortDisabled() {
+            return _isEmpty(this.searchQuery);
         },
     },
 
@@ -212,7 +216,6 @@ export default {
                 name: "resources",
                 query: {
                     ...this.filterParams,
-                    sort: this.sortMethod,
                 },
             });
         },
