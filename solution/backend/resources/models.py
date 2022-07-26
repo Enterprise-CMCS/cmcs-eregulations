@@ -190,6 +190,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources"
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
+    related = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     objects = InheritanceManager()
 
@@ -207,6 +208,7 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
+    
     group = models.ForeignKey(
         FederalRegisterDocumentGroup,
         null=True,
@@ -222,3 +224,26 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
         ordering = ["-date", "document_number", "name", "description"]
         verbose_name = "Federal Register Document"
         verbose_name_plural = "Federal Register Documents"
+
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+def update_related_docs(group_id):
+    post_save.disconnect(post_save_fr_doc, sender=FederalRegisterDocument)
+    post_save.disconnect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
+    docs = FederalRegisterDocument.objects.filter(group=group_id)
+    for doc in docs:
+        doc.related.set(doc.group.documents.exclude(id=doc.id).order_by("-date"))
+        doc.save()
+    post_save.connect(post_save_fr_doc, sender=FederalRegisterDocument)
+    post_save.connect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
+
+@receiver(post_save, sender=FederalRegisterDocumentGroup)
+def post_save_fr_doc_group(sender, instance, **kwargs):
+    update_related_docs(instance.id)
+
+@receiver(post_save, sender=FederalRegisterDocument)
+def post_save_fr_doc(sender, instance, **kwargs):
+    if instance.group:
+        update_related_docs(instance.group)

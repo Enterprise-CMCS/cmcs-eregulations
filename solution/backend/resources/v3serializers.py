@@ -149,9 +149,17 @@ class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceF
     description_headline = HeadlineField("supplementalcontent")
 
 
+#class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
+class SimpleFederalRegisterDocumentSerializer(serializers.Serializer):
+    docket_numbers = serializers.ListField(child=serializers.CharField())
+    document_number = serializers.CharField()
+
+
 class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField()
+
+    related = SimpleFederalRegisterDocumentSerializer(many=True)
 
     name_headline = HeadlineField("federalregisterdocument")
     description_headline = HeadlineField("federalregisterdocument")
