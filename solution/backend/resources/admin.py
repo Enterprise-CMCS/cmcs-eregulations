@@ -166,6 +166,11 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         group = str(obj.group)
         return group[0:20] + "..." if len(group) > 20 else group
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
+        )
+
 
 class FederalRegisterDocumentGroupForm(forms.ModelForm):
     documents = forms.ModelMultipleChoiceField(
