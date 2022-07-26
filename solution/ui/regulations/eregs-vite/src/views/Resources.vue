@@ -433,7 +433,7 @@ export default {
             }
         },
 
-        async getSupplementalContent(dataQueryParams, searchQuery) {
+        async getSupplementalContent(dataQueryParams, searchQuery, sortMethod) {
             this.isLoading = true;
 
             if (dataQueryParams.resourceCategory) {
@@ -448,6 +448,7 @@ export default {
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
+                    sortMethod,
                 });
 
                 try {
@@ -465,6 +466,7 @@ export default {
                         categories: this.categories, // subcategories
                         q: searchQuery,
                         paginate: true,
+                        sortMethod,
                     });
 
                     this.supplementalContent = searchResults;
@@ -482,6 +484,7 @@ export default {
                     start: 0, // start
                     max_results: 100, // max_results
                     paginate: false,
+                    sortMethod,
                 });
                 this.isLoading = false;
             }
@@ -642,7 +645,7 @@ export default {
                 }
 
                 // always get content otherwise
-                this.getSupplementalContent(this.queryParams, this.searchQuery);
+                this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
@@ -681,7 +684,7 @@ export default {
             );
         }
 
-        this.getSupplementalContent(this.queryParams, this.searchQuery);
+        this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
     },
 
     beforeMount() {},
