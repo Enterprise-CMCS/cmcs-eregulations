@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='abstractresource',
-            name='related',
+            name='related_resources',
             field=models.ManyToManyField(blank=True, to='resources.AbstractResource'),
         ),
     ]

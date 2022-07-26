@@ -159,7 +159,7 @@ class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResou
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField()
 
-    related = SimpleFederalRegisterDocumentSerializer(many=True)
+    related_resources = SimpleFederalRegisterDocumentSerializer(many=True)
 
     name_headline = HeadlineField("federalregisterdocument")
     description_headline = HeadlineField("federalregisterdocument")

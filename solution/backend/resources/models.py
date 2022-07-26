@@ -190,7 +190,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources"
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
-    related = models.ManyToManyField("self", blank=True, symmetrical=False)
+    related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     objects = InheritanceManager()
 
@@ -234,7 +234,7 @@ def update_related_docs(group_id):
     post_save.disconnect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
     docs = FederalRegisterDocument.objects.filter(group=group_id)
     for doc in docs:
-        doc.related.set(doc.group.documents.exclude(id=doc.id).order_by("-date"))
+        doc.related_resources.set(doc.group.documents.exclude(id=doc.id).order_by("-date"))
         doc.save()
     post_save.connect(post_save_fr_doc, sender=FederalRegisterDocument)
     post_save.connect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)

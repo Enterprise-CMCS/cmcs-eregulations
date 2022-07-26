@@ -313,7 +313,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         query = self.model.objects.filter(id__in=ids).select_subclasses().prefetch_related(
             Prefetch("locations", AbstractLocation.objects.all().select_subclasses()),
             Prefetch("category", AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")),
-            Prefetch("related", AbstractResource.objects.all().select_subclasses()),
+            Prefetch("related_resources", AbstractResource.objects.all().select_subclasses()),
         )
 
         if search_query:
