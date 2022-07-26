@@ -366,7 +366,6 @@ class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyMod
     def get_search_fields(self):
         return {
             "supplementalcontent": ["name", "description"],
-            #"federalregisterdocument": ["name", "description", "docket_numbers", "document_number"],
             "federalregisterdocument": ["name", "description", "document_number"],
         }
 
@@ -423,7 +422,6 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         return FederalRegisterDocumentSerializer
 
     def get_search_fields(self):
-        #return ["name", "description", "docket_numbers", "document_number"]
         return ["name", "description", "document_number"]
 
     def get_annotated_group(self):

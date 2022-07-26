@@ -4,6 +4,8 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
 from django_jsonform.models.fields import ArrayField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Field mixins
@@ -226,8 +228,8 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
         verbose_name_plural = "Federal Register Documents"
 
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# Receiver hooks for updating resource groupings on save
+
 
 def update_related_docs(group_id):
     post_save.disconnect(post_save_fr_doc, sender=FederalRegisterDocument)
