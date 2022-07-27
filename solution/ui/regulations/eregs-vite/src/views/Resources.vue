@@ -23,6 +23,10 @@
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
                     />
+                    <div class="search-suggestion" v-if="multiWordQuery">
+                        Didn't find what you were looking for? Try searching for
+                      <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
+                    </div>
                 </form>
             </ResourcesNav>
             <div
@@ -164,6 +168,9 @@ export default {
                 this.searchInputValue = value;
             },
         },
+        multiWordQuery() {
+          return this.searchQuery.split(" ").length > 1 && (this.searchQuery[0] !== '"' && this.searchQuery[this.searchQuery.length-1] !== '"' )
+        },
         filterParams() {
             return {
                 title: this.queryParams.title,
@@ -218,6 +225,16 @@ export default {
                 name: "resources",
                 query: {
                     ...this.filterParams,
+                },
+            });
+        },
+        doQuoteSearch(){
+            this.searchInputValue = `"${this.searchInputValue}"`
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: `"${this.searchQuery}"`,
                 },
             });
         },
@@ -731,7 +748,12 @@ export default {
                 color: $mid_blue;
             }
         }
+        .search-suggestion{
+            margin-top: -50px;
+            margin-bottom: 50px;
+        }
     }
+
 }
 </style>
 
