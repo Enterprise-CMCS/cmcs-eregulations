@@ -490,7 +490,7 @@ func TestParseTitle(t *testing.T) {
 
 	var WorkerFunc func (*eregs.Part)
 
-	StartHandlePartVersionWorkerFunc = func(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup, date time.Time) {
+	StartHandlePartVersionWorkerFunc = func(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
 		for versionList := range ch {
 			for versionElement := versionList.Front(); versionElement != nil; versionElement = versionElement.Next() {
 				version := versionElement.Value.(*eregs.Part)
@@ -646,19 +646,19 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 	testTable := []struct {
 		Name string
 		ShouldProcess bool
-		HandlePartVersionFunc func(context.Context, int, time.Time, *eregs.Part) error
+		HandlePartVersionFunc func(context.Context, int, *eregs.Part) error
 	}{
 		{
 			Name: "test-valid-run",
 			ShouldProcess: true,
-			HandlePartVersionFunc: func(ctx context.Context, thread int, date time.Time, part *eregs.Part) error {
+			HandlePartVersionFunc: func(ctx context.Context, thread int, part *eregs.Part) error {
 				return nil
 			},
 		},
 		{
 			Name: "test-fail-run",
 			ShouldProcess: false,
-			HandlePartVersionFunc: func(ctx context.Context, thread int, date time.Time, part *eregs.Part) error {
+			HandlePartVersionFunc: func(ctx context.Context, thread int,  part *eregs.Part) error {
 				return fmt.Errorf("Oops something bad happened")
 			},
 		},
@@ -680,11 +680,10 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 			ch := make(chan *list.List)
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
-			date := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
 
 			var wg sync.WaitGroup
 			wg.Add(1)
-			go startHandlePartVersionWorker(ctx, 1, ch, &wg, date)
+			go startHandlePartVersionWorker(ctx, 1, ch, &wg)
 			for versionList := parts.Front(); versionList != nil; versionList = versionList.Next() {
 				ch <- versionList.Value.(*list.List)
 			}
@@ -1012,8 +1011,7 @@ func TestHandlePartVersion(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
 			defer cancel()
-			date := time.Date(2022, time.January, 1, 0, 0, 0, 0, time.UTC)
-			err := handlePartVersion(ctx, 1, date, &tc.Input)
+			err := handlePartVersion(ctx, 1, &tc.Input)
 			diff := deep.Equal(tc.Input.Document, tc.Expected.Document)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)

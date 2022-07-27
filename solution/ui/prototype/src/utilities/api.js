@@ -535,8 +535,6 @@ const getSubPartsForPart = async (partParam) => {
             range: s.descendant_range,
         };
     });
-    console.log('************************************************')
-    console.log(toReturn)
     return toReturn
 };
 
@@ -743,7 +741,7 @@ const getSupplementalContentNew = async (
     sections = [],
     subparts = [],
     start = 0,
-    max_results = 10000,
+    max_results = 100,
     q = "",
 ) => {
     const queryString = q ? `&q=${q}` : "";
@@ -817,7 +815,7 @@ const getSupplementalContentSearchResults = async (query) => {
     return result;
 };
 
-const getTOC = async (title) =>  httpApiGetV3(title? `title/${title}/toc`:`toc`);
+const getTOC = async (title) =>  httpApiGetV3(title ? `title/${title}/toc`:`toc`);
 
 const getPartTOC = async (title, part) =>  httpApiGetV3(`title/${title}/part/${part}/version/latest/toc`);
 

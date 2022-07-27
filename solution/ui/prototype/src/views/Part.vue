@@ -1,75 +1,120 @@
 <template>
+
     <body class="ds-base">
         <div id="app">
-            <Header />
-            <PartNav
+            <Header  :stickyMode="stickyMode" :showHeader="showHeader" />
+            <PartHero
                 :title="title"
                 :part="part"
                 :partLabel="partLabel"
                 resourcesDisplay="sidebar"
+            />
+            <PartNav
+                :stickyMode="stickyMode"
+                :showHeader="showHeader"
+                :lastScrollPosition="lastScrollPosition"
             >
-                <v-tabs
-                    slider-size="5"
-                    class="nav-tabs"
-                    v-model="tab"
-                    ref="tabs"
-                >
-                    <v-tab
-                        v-for="(item, key, index) in tabsShape"
-                        :key="item.label"
-                        :disabled="item.disabled"
+                <template v-slot:titlePart>
+                    <div>
+                        {{ title }} CFR Part {{ part }}
+                    </div>
+                </template>
+                <template v-slot:tabs>
+                    <v-tabs
+                        slider-size="5"
+                        class="nav-tabs"
+                        v-model="tab"
+                        ref="tabs"
                     >
-                        {{ tabLabels[key] }}
-                        <template
-                            v-if="
-                                item.value === 'subpart' ||
-                                item.value === 'section'
-                            "
+                        <v-tab
+                            v-for="(item, key) in tabsShape"
+                            :key="item.label"
+                            :disabled="item.disabled"
                         >
-                            <FancyDropdown
-                                label=""
-                                buttonTitle=""
-                                type="splitTab"
+                            {{ tabLabels[key] }}
+                            <template
+                                v-if="
+                                    item.value === 'subpart' ||
+                                    item.value === 'section'
+                                "
                             >
-                                <component
-                                    :is="item.listType"
-                                    :listItems="item.listItems"
-                                    :filterEmitter="setQueryParam"
-                                ></component>
-                            </FancyDropdown>
-                        </template>
-                    </v-tab>
-                </v-tabs>
+                                <FancyDropdown
+                                    label=""
+                                    buttonTitle=""
+                                    type="splitTab"
+                                >
+                                    <component
+                                        :is="item.listType"
+                                        :listItems="item.listItems"
+                                        :filterEmitter="setQueryParam"
+                                    ></component>
+                                </FancyDropdown>
+                            </template>
+                        </v-tab>
+                    </v-tabs>
+                </template>
             </PartNav>
-            <div class="content-container content-container-sidebar">
-                <v-tabs-items v-model="tab" class="tab-content">
-                    <v-tab-item
-                        :transition="false"
-                        v-for="(item, key, index) in tabsShape"
-                        :key="index"
+            <div class="flex-container" style="display: flex">
+                <div>
+                    <LeftNav />
+                </div>
+
+                <div class="content-container content-container-sidebar">
+                    <v-tabs-items
+                        v-model="tab"
+                        class="tab-content"
                     >
-                        <component
-                            :is="item.component"
-                            :structure="tabsContent[index]"
+                        <v-tab-item
+                            v-for="(item, key, index) in tabsShape"
+                            :key="index"
+                            :transition="false"
+                        >
+                            <component
+                                :is="item.component"
+                                :structure="tabsContent[index]"
+                                :title="title"
+                                :part="part"
+                                resources-display="sidebar"
+                                :selected-identifier="selectedIdentifier"
+                                :selected-scope="selectedScope"
+                                :supplemental-content-count="supplementalContentCount"
+                                @view-resources="setResourcesParams"
+                            />
+                        </v-tab-item>
+                    </v-tabs-items>
+                    <div
+                        v-show="tabParam !== 'toc'"
+                        class="sidebar"
+                    >
+                        <SectionResourcesSidebar
                             :title="title"
                             :part="part"
-                            resourcesDisplay="sidebar"
-                            :selectedIdentifier="selectedIdentifier"
-                            :selectedScope="selectedScope"
-                            :supplementalContentCount="supplementalContentCount"
-                            @view-resources="setResourcesParams"
-                        ></component>
-                    </v-tab-item>
-                </v-tabs-items>
-                <div class="sidebar" v-show="tabParam !== 'toc'">
-                    <SectionResourcesSidebar
-                        :title="title"
-                        :part="part"
-                        :selectedIdentifier="selectedIdentifier"
-                        :selectedScope="selectedScope"
-                        :routeToResources="routeToResources"
-                    />
+                            :selected-identifier="selectedIdentifier"
+                            :selected-scope="selectedScope"
+                            :route-to-resources="routeToResources"
+                        />
+                    </div>
                 </div>
+
+            </div>
+            <div class="sticky-bottom" v-if="this.tabParam === 'subpart' || this.tabParam === 'section'">
+                <BottomNavBtnGroup>
+                    <BottomNavBtn
+                        v-if="this.floatingBackBtnLabel"
+                        direction="back"
+                        :label="floatingBackBtnLabel"
+                        @click.native="floatingBackClick"
+                    />
+                    <VerticalRule
+                        v-if="this.showFloatingVerticalRule"
+                    />
+                    <BottomNavBtn
+                        v-if="this.floatingForwardBtnLabel"
+                        direction="forward"
+                        :label="floatingForwardBtnLabel"
+                        @click.native="floatingForwardClick"
+                    />
+                </BottomNavBtnGroup>
             </div>
             <Footer />
         </div>
@@ -77,42 +122,52 @@
 </template>
 
 <script>
+import BottomNavBtn from "@/components/floating_nav/BottomNavBtn.vue";
+import BottomNavBtnGroup from "@/components/floating_nav/BottomNavBtnGroup.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
+import LeftNav from "@/components/part/LeftNav";
 import PartContent from "@/components/part/PartContent.vue";
+import PartHero from "@/components/part/PartHero.vue";
 import PartNav from "@/components/part/PartNav.vue";
 import PartToc from "@/components/part/PartToc.vue";
 import SectionResourcesSidebar from "@/components/SectionResourcesSidebar.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
+import VerticalRule from "@/components/floating_nav/VerticalRule.vue";
 
 import {
     getPart,
     getSupplementalContentCountForPart,
     getPartTOC,
-    getSectionsForPart,
 } from "@/utilities/api";
 
 import _isEmpty from "lodash/isEmpty";
+import _throttle from "lodash/throttle";
 import _isUndefined from "lodash/isUndefined";
 
 export default {
+
+    name: "Part",
     components: {
+        BottomNavBtn,
+        BottomNavBtnGroup,
+        LeftNav,
         SectionResourcesSidebar,
         FancyDropdown,
         FlashBanner,
         Footer,
         Header,
         PartContent,
+        PartHero,
         PartNav,
         PartToc,
         SubpartList,
         SectionList,
+        VerticalRule,
     },
-
-    name: "Part",
 
     data() {
         return {
@@ -120,6 +175,8 @@ export default {
             part: this.$route.params.part,
             tabParam: this.$route.params.tab,
             queryParams: this.$route.query,
+            subIndex:0,
+            secIndex:0,
             structure: null,
             sections: [],
             tabsShape: {
@@ -165,6 +222,9 @@ export default {
             selectedIdentifier: null,
             selectedScope: null,
             supplementalContentCount: {},
+            stickyMode: "hideOnScrollDown",
+            showHeader: true,
+            lastScrollPosition: 0,
         };
     },
 
@@ -185,7 +245,6 @@ export default {
                 }
             },
             set(value) {
-
                 const urlParams = {
                     title: this.title,
                     part: this.part,
@@ -193,7 +252,7 @@ export default {
                 const qParams = { ...this.queryParams };
                 const valueType = Object.keys(this.tabsShape)[value];
                 switch (valueType) {
-                    case "toc":{
+                    case "toc": {
                         this.$router.push({
                             name: "part",
                             params: {
@@ -204,7 +263,7 @@ export default {
                         });
                         break;
                     }
-                    case "part":{
+                    case "part": {
                         this.$router.push({
                             name: "part",
                             params: {
@@ -215,7 +274,7 @@ export default {
                         });
                         break;
                     }
-                    case "subpart":{
+                    case "subpart": {
                         this.$router.push({
                             name: "part",
                             params: {
@@ -234,31 +293,31 @@ export default {
                         break;
                     }
                     case "section": {
-
-                        const section = this.tabsShape.section.listItems[0]
-                        const subPart = this.tabsShape.subpart.listItems.find(subpart => subpart.identifier === section.subpart)
-                        const subpartSelection = _isEmpty(qParams) && subPart
-                            ?
-                            {subpart: subPart.identifier}
-                            :
-                            {};
-                        const sectionSelection = _isUndefined(qParams[valueType])
-                            ?
-                            {section: section.identifier}
-                            :
-                            {};
+                        const section = this.tabsShape.section.listItems[0];
+                        const subPart = this.tabsShape.subpart.listItems.find(
+                            (subpart) => subpart.identifier === section.subpart
+                        );
+                        const subpartSelection =
+                            _isEmpty(qParams) && subPart
+                                ? { subpart: subPart.identifier }
+                                : {};
+                        const sectionSelection = _isUndefined(
+                            qParams[valueType]
+                        )
+                            ? { section: section.identifier }
+                            : {};
                         this.$router.push({
                             name: "part",
                             params: {
-                              ...urlParams,
-                              tab: "section",
+                                ...urlParams,
+                                tab: "section",
                             },
                             query: _isUndefined(qParams[valueType])
                                 ? {
-                                  ...qParams,
-                                  ...subpartSelection,
-                                  ...sectionSelection,
-                                }
+                                      ...qParams,
+                                      ...subpartSelection,
+                                      ...sectionSelection,
+                                  }
                                 : qParams,
                         });
                         break;
@@ -275,225 +334,119 @@ export default {
         partContent() {
             return this.structure?.[1];
         },
-        subpartContent(){
-          return this.structure?.[1].filter(child =>
-              child.node_type === "SUBPART" && child.label[0] === this.queryParams.subpart
-          )
+        subpartContent() {
+            return this.structure?.[1].filter(
+                (child) =>
+                    child.node_type === "SUBPART" &&
+                    child.label[0] === this.queryParams.subpart
+            );
         },
-        sectionContent(){
-          if (this.subpartContent && this.subpartContent.length > 0){
-            const section = this.subpartContent[0].children.find(child =>
-                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
-            )
+        sectionContent() {
+            if (this.subpartContent && this.subpartContent.length > 0) {
+                const section = this.subpartContent[0].children.find(
+                    (child) =>
+                        child.node_type === "SECTION" &&
+                        child.label[1] === this.queryParams.section
+                );
 
-            if (section){
-              return [section]
+                if (section) {
+                    return [section];
+                }
+
+                return [
+                    this.subpartContent[0].children
+                        .filter((child) => child.node_type === "SUBJGRP")
+                        .flatMap((sg) => sg.children)
+                        .find(
+                            (child) =>
+                                child.node_type === "SECTION" &&
+                                child.label[1] === this.queryParams.section
+                        ),
+                ];
             }
-
-            return [this.subpartContent[0].children.filter(child =>
-                child.node_type === "SUBJGRP"
-            ).map(sg => sg.children).flat(1)
-            .find(child =>
-                child.node_type === "SECTION" && child.label[1] === this.queryParams.section
-            )]
-
-          }
-          return this.structure?.[1].filter(child =>
-              child.node_type === "SECTION" && child.label[1] === this.queryParams.section
-          )
+            return this.structure?.[1].filter(
+                (child) =>
+                    child.node_type === "SECTION" &&
+                    child.label[1] === this.queryParams.section
+            );
         },
         tabsContent() {
-            return [this.tocContent, this.partContent, this.subpartContent, this.sectionContent];
+            return [
+                this.tocContent,
+                this.partContent,
+                this.subpartContent,
+                this.sectionContent,
+            ];
         },
-    },
-
-    async created() {
-        if (this.queryParams.subpart) {
-            this.tabLabels.subpart = this.formatTabLabel("subpart");
-        }
-
-        if (this.queryParams.section) {
-            this.tabLabels.section = this.formatTabLabel("section");
-        }
-        await this.getPartStructure();
-        await this.getFormattedSubpartsList({title: this.title, part:this.part});
-        await this.getFormattedSectionsList({
-          title: this.title,
-          part: this.part,
-          subpart: this.queryParams.subpart
-        });
-
-        if (_isEmpty(this.queryParams)) {
-            let paramsToSet = {};
-            if (this.tabParam == "subpart") {
-                paramsToSet = {
-                    subpart: this.tabsShape.subpart.listItems[0].identifier,
-                };
-            }
-            if (this.tabParam == "section") {
-                paramsToSet = {
-                    subpart: this.tabsShape.subpart.listItems[0].identifier,
-                    section: this.tabsShape.section.listItems[0].identifier,
-                };
-            }
-            this.$router.push({
-                name: "part",
-                params: {
-                    title: this.title,
-                    part: this.part,
-                    tab: this.tabParam,
-                },
-                query: paramsToSet,
-            });
-        }
-    },
-
-    methods: {
-        formatTabLabel(type) {
-            switch (type) {
-                case "subpart":
-                    return this.queryParams.subpart
-                        ? `Subpart ${this.queryParams.subpart}`
-                        : "Subpart";
-                    break;
-                case "section":
-                    return this.queryParams.section
-                        ? `§ ${this.part}.${this.queryParams.section}`
-                        : "Section";
-                    break;
-                default:
-                    return "N/A";
-                    break;
-            }
+        subpartNav() {
+            return this.tabsShape.subpart.listItems.map(subpart => subpart.identifier)
         },
-        setQueryParam(payload) {
-            const valueToSet = payload.selectedIdentifier.split("-")[1];
-            let updatedQueryParams = {};
-            // get associated subpart for section
-            if (payload.scope == "section") {
-                const sectionSubpart = this.tabsShape.section.listItems.find(
-                    (item) => {
-                        return item.identifier == valueToSet;
-                    }
-                ).subpart;
-                const subpartToSet = /^\d+$/.test(sectionSubpart) ? {} : { subpart: sectionSubpart };
-                updatedQueryParams = {
-                    ...this.queryParams,
-                    ...subpartToSet,
-                    section: valueToSet,
-                };
+        sectionNav() {
+            return this.tabsShape.section.listItems.map(section => section.identifier)
+        },
+        floatingBackBtnLabel() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest - 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest - 1]}`
             } else {
-                updatedQueryParams = {
-                    ...this.queryParams,
-                    [payload.scope]: valueToSet,
-                };
-            }
-
-            this.$router.push({
-                name: "part",
-                params: {
-                    title: this.title,
-                    part: this.part,
-                    tab: payload.scope,
-                },
-                query: updatedQueryParams,
-            });
-        },
-        async getPartStructure() {
-            try {
-                this.structure = await getPart(this.title, this.part);
-                this.supplementalContentCount =
-                    await getSupplementalContentCountForPart(this.part);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                console.log(this.structure);
+                return undefined;
             }
         },
-        setResourcesParams(payload) {
-            if (payload.scope === "rendered") {
-                return;
+        floatingForwardBtnLabel() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
+
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
+
+            const labelFirstHalf = this.tabParam == "subpart"
+                ? "Subpart "
+                : `§${this.part}.`;
+
+            if (this.subpartNav.length > 0 && arrayOfInterest[indexOfInterest + 1] != undefined) {
+                return `${labelFirstHalf}${arrayOfInterest[indexOfInterest + 1]}`
+            } else {
+                return undefined;
             }
-            this.selectedIdentifier = payload.identifier;
-            this.selectedScope = payload.scope;
         },
-        clearResourcesParams() {
-            console.log("clear resource params");
-            this.selectedIdentifier = null;
-            this.selectedScope = null;
-        },
-        routeToResources() {
-            const identifiers = this.selectedIdentifier.reduce((acc, item) => {
-                acc[this.selectedScope]
-                    ? (acc[this.selectedScope] += `,${this.part}-${item}`)
-                    : (acc[this.selectedScope] = `${this.part}-${item}`);
-                return acc;
-            }, {});
+        showFloatingVerticalRule() {
+            const arrayOfInterest = this.tabParam == "subpart"
+                ? this.subpartNav
+                : this.sectionNav;
 
-            this.$router.push({
-                name: "resources",
-                query: {
-                    title: this.title,
-                    part: this.part,
-                    ...identifiers,
-                },
-            });
-        },
-        async getFormattedSubpartsList({title, part}) {
-            const partTOC = await getPartTOC(title, part)
-            this.tabsShape.subpart.listItems = partTOC.children.filter(child => child.type ==="subpart").map(subpart => ({
-              label: subpart.label,
-              part: subpart.parent[0],
-              identifier: subpart.identifier[0],
-              range: subpart.descendant_range,
-            }));
-        },
-        async getFormattedSectionsList({title, part, subpart}) {
+            const indexOfInterest = this.tabParam == "subpart"
+                ? this.subIndex
+                : this.secIndex;
 
-            const toc = await getPartTOC(title, part)
 
-            const subParts = toc.children
-                .filter(child => child.type==="subpart")
-                .filter(subPart => subpart ? subPart.identifier[0] === subpart: true)
-
-            let filteredSections = subParts.map( sp => sp.children.filter(child => child.type=== 'section'))
-                .flat(1)
-                .map(section =>({
-                    subpart:section.parent[0],
-                    identifier: section.identifier[1],
-                    label: section.label_level,
-                    description: section.label_description,
-                    part
-                }))
-            if (!subpart){
-                const orphanSections = toc.children
-                    .filter(child => child.type === "section")
-                    .map(section =>({
-                        subpart:section.parent[0],
-                        identifier: section.identifier[1],
-                        label: section.label_level,
-                        description: section.label_description,
-                        part
-                    }))
-                filteredSections = filteredSections.concat(orphanSections)
+            if (indexOfInterest < arrayOfInterest.length - 1
+                && indexOfInterest > 0
+            ) {
+                return true;
             }
-            const subjectGroups = subParts.map( sp => sp.children.filter(child => child.type=== 'subject_group')).flat(1)
-            subjectGroups.forEach(subject_group => {
-                const subPart = subject_group.parent[0]
-                subject_group.children.forEach( section => {
-                    filteredSections.push({
-                        subpart:subPart,
-                        identifier: section.identifier[1],
-                        label: section.label_level,
-                        description: section.label_description,
-                        part
-                    })
-                })
-            })
-            filteredSections.sort((a,b) => Number(a.identifier) - Number(b.identifier))
-
-            this.tabsShape.section.listItems = filteredSections;
+            return false;
         },
+    },
+
+    mounted() {
+        window.addEventListener("scroll", this.onScroll);
+    },
+
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.onScroll);
     },
 
     watch: {
@@ -557,12 +510,264 @@ export default {
         },
     },
 
+    async created() {
+        if (this.queryParams.subpart) {
+            this.tabLabels.subpart = this.formatTabLabel("subpart");
+        }
+
+        if (this.queryParams.section) {
+            this.tabLabels.section = this.formatTabLabel("section");
+        }
+        await this.getPartStructure();
+        await this.getFormattedSubpartsList({
+            title: this.title,
+            part: this.part,
+        });
+        await this.getFormattedSectionsList({
+            title: this.title,
+            part: this.part,
+            subpart: this.queryParams.subpart,
+        });
+        if(this.tabParam=="section"){
+            this.secIndex=this.sectionNav.indexOf(this.queryParams.section)
+            if(this.queryParams.subpart){
+                this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+            }
+            if(this.queryParams.subpart){
+                this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+            }
+        }
+        else if(this.tabParam=="subpart"){
+            this.subIndex=this.subpartNav.indexOf(this.queryParams.subpart)
+        }
+        else if (_isEmpty(this.queryParams)) {
+            let paramsToSet = {};
+            if (this.tabParam == "subpart") {
+                paramsToSet = {
+                    subpart: this.tabsShape.subpart.listItems[0].identifier,
+                };
+            }
+            if (this.tabParam == "section") {
+                paramsToSet = {
+                    subpart: this.tabsShape.subpart.listItems[0].identifier,
+                    section: this.tabsShape.section.listItems[0].identifier,
+                };
+            }
+            this.$router.push({
+                name: "part",
+                params: {
+                    title: this.title,
+                    part: this.part,
+                    tab: this.tabParam,
+                },
+                query: paramsToSet,
+            });
+        }
+    },
+
     updated() {
         this.$nextTick(function () {
             // call onResize to fix tab highlight misalignment bug
             // https://github.com/vuetifyjs/vuetify/issues/4733
             this.$refs.tabs && this.$refs.tabs.onResize();
         });
+    },
+
+    methods: {
+        formatTabLabel(type) {
+            switch (type) {
+                case "subpart":
+                    return this.queryParams.subpart
+                        ? `Subpart ${this.queryParams.subpart}`
+                        : "Subpart";
+                    break;
+                case "section":
+                    return this.queryParams.section
+                        ? `§ ${this.part}.${this.queryParams.section}`
+                        : "Section";
+                    break;
+                default:
+                    return "N/A";
+                    break;
+            }
+        },
+        setQueryParam(payload) {
+            const valueToSet = payload.selectedIdentifier.split("-")[1];
+            let updatedQueryParams = {};
+            // get associated subpart for section
+            if (payload.scope == "section") {
+                const sections = this.tabsShape.section.listItems.map(sec => sec.identifier)
+                this.secIndex = sections.indexOf(valueToSet)
+                const sectionSubpart = this.tabsShape.section.listItems.find(
+                    (item) => {
+                        return item.identifier == valueToSet;
+                    }
+                ).subpart;
+                const subpartToSet = /^\d+$/.test(sectionSubpart)
+                    ? {}
+                    : { subpart: sectionSubpart };
+                updatedQueryParams = {
+                    ...this.queryParams,
+                    ...subpartToSet,
+                    section: valueToSet,
+                };
+            } else {
+                this.subIndex = this.subpartNav.indexOf(valueToSet)
+                updatedQueryParams = {
+                    ...this.queryParams,
+                    [payload.scope]: valueToSet,
+                };
+            }
+
+            this.$router.push({
+                name: "part",
+                params: {
+                    title: this.title,
+                    part: this.part,
+                    tab: payload.scope,
+                },
+                query: updatedQueryParams,
+            });
+        },
+        async getPartStructure() {
+            try {
+                this.structure = await getPart(this.title, this.part);
+                this.supplementalContentCount =
+                    await getSupplementalContentCountForPart(this.part);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                console.log(this.structure);
+            }
+        },
+        setResourcesParams(payload) {
+            if (payload.scope === "rendered") {
+                return;
+            }
+            this.selectedIdentifier = payload.identifier;
+            this.selectedScope = payload.scope;
+        },
+        clearResourcesParams() {
+            console.log("clear resource params");
+            this.selectedIdentifier = null;
+            this.selectedScope = null;
+        },
+        routeToResources() {
+            const identifiers = this.selectedIdentifier.reduce((acc, item) => {
+                acc[this.selectedScope]
+                    ? (acc[this.selectedScope] += `,${this.part}-${item}`)
+                    : (acc[this.selectedScope] = `${this.part}-${item}`);
+                return acc;
+            }, {});
+
+            this.$router.push({
+                name: "resources",
+                query: {
+                    title: this.title,
+                    part: this.part,
+                    ...identifiers,
+                },
+            });
+        },
+        async getFormattedSubpartsList({ title, part }) {
+            const partTOC = await getPartTOC(title, part);
+            this.tabsShape.subpart.listItems = partTOC.children
+                .filter((child) => child.type === "subpart")
+                .map((subpart) => ({
+                    label: subpart.label,
+                    part: subpart.parent[0],
+                    identifier: subpart.identifier[0],
+                    range: subpart.descendant_range,
+                }));
+        },
+        async getFormattedSectionsList({ title, part, subpart }) {
+            const toc = await getPartTOC(title, part);
+
+            const subParts = toc.children
+                .filter((child) => child.type === "subpart")
+                .filter((subPart) =>
+                    subpart ? subPart.identifier[0] === subpart : true
+                );
+
+            let filteredSections = subParts
+                .flatMap((sp) =>
+                    sp.children.filter((child) => child.type === "section")
+                )
+                .map((section) => ({
+                    subpart: section.parent[0],
+                    identifier: section.identifier[1],
+                    label: section.label_level,
+                    description: section.label_description,
+                    part,
+                }));
+            if (!subpart) {
+                const orphanSections = toc.children
+                    .filter((child) => child.type === "section")
+                    .map((section) => ({
+                        subpart: section.parent[0],
+                        identifier: section.identifier[1],
+                        label: section.label_level,
+                        description: section.label_description,
+                        part,
+                    }));
+                filteredSections = filteredSections.concat(orphanSections);
+            }
+            const subjectGroups = subParts
+                .flatMap((sp) =>
+                    sp.children.filter(
+                        (child) => child.type === "subject_group"
+                    )
+                )
+            subjectGroups.forEach((subject_group) => {
+                const subPart = subject_group.parent[0];
+                subject_group.children.forEach((section) => {
+                    filteredSections.push({
+                        subpart: subPart,
+                        identifier: section.identifier[1],
+                        label: section.label_level,
+                        description: section.label_description,
+                        part,
+                    });
+                });
+            });
+            filteredSections.sort(
+                (a, b) => Number(a.identifier) - Number(b.identifier)
+            );
+
+            this.tabsShape.section.listItems = filteredSections;
+        },
+        onScroll: _throttle(function() {
+            if (this.stickyMode === "hideOnScrollDown") {
+                const scrollPosition = window.scrollY;
+                const scrollDirection =
+                    scrollPosition > 80 &&
+                    scrollPosition > this.lastScrollPosition
+                        ? "down"
+                        : "up";
+
+                this.lastScrollPosition = scrollPosition;
+
+                if (scrollDirection === "down") {
+                    this.showHeader = false;
+                } else {
+                    this.showHeader = true;
+                }
+            }
+        }, 100),
+        floatingBackClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.subIndex - 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex - 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        },
+        floatingForwardClick() {
+            const selectedIdentifier = this.tabParam == "subpart"
+                ? `${this.part}-${this.subpartNav[this.subIndex + 1]}`
+                : `${this.part}-${this.sectionNav[this.secIndex  + 1]}`
+
+            this.setQueryParam({scope: this.tabParam, selectedIdentifier});
+        }
     },
 };
 </script>
@@ -592,8 +797,8 @@ $sidebar-top-margin: 40px;
     justify-content: space-between;
 }
 
-.tab-content{
-  padding-right: 25px;
+.tab-content {
+    padding-right: 25px;
 }
 
 .sidebar {
@@ -606,5 +811,16 @@ $sidebar-top-margin: 40px;
     padding: 0 25px;
     border-left: 1px solid $light_gray;
     overflow: scroll;
+}
+
+.sticky-bottom {
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>

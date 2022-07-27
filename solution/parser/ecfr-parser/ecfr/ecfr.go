@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/url"
 	"path"
-	
+
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 )
 
@@ -16,7 +16,7 @@ var EcfrSite = "https://ecfr.gov/api/versioner/v1/"
 var (
 	ecfrFullXML       = "full/%s/title-%d.xml"
 	ecfrVersionsXML   = "versions/title-%d"
-	ecfrStructureJSON = "structure/%s/title-%d.json"
+	ecfrStructureJSON = "structure/current/title-%d.json"
 )
 
 // FetchFull fetches the full regulation from eCFR
@@ -30,12 +30,12 @@ func FetchFull(ctx context.Context, date string, title int, opts ...network.Fetc
 }
 
 // FetchStructure fetches the structure for a given title and options
-func FetchStructure(ctx context.Context, date string, title int, opts ...network.FetchOption) (io.Reader, int, error) {
+func FetchStructure(ctx context.Context, title int, opts ...network.FetchOption) (io.Reader, int, error) {
 	ecfrURL, err := url.Parse(EcfrSite)
 	if err != nil {
 		return nil, -1, err
 	}
-	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrStructureJSON, date, title))
+	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrStructureJSON, title))
 	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
 }
 

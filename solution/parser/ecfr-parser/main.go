@@ -6,12 +6,12 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"net/http"
 	"os"
+	"sort"
 	"strings"
 	"sync"
 	"time"
-	"sort"
-	"net/http"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
@@ -30,10 +30,10 @@ var DefaultBaseURL = "http://localhost:8000/v2/"
 
 // Functions for easy testing via patching
 var (
-	ParseTitleFunc = parseTitle
+	ParseTitleFunc                   = parseTitle
 	StartHandlePartVersionWorkerFunc = startHandlePartVersionWorker
-	HandlePartVersionFunc = handlePartVersion
-	SleepFunc = time.Sleep
+	HandlePartVersionFunc            = handlePartVersion
+	SleepFunc                        = time.Sleep
 )
 
 var config = &eregs.ParserConfig{}
@@ -108,7 +108,7 @@ func start() error {
 	queue := list.New()
 	for _, title := range config.Titles {
 		log.Debug("[main] Fetching table of contents for title ", title.Title, "...")
-		ctx, cancel := context.WithTimeout(context.Background(), 15 * time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 		toc, code, err := eregs.GetTitle(ctx, title.Title)
 		if err != nil {
@@ -158,7 +158,7 @@ func start() error {
 
 			if title.Contents.Modified {
 				log.Debug("[main] Uploading Title ", title.Title, "'s table of contents to eRegs...")
-				ctx, cancel := context.WithTimeout(context.Background(), 15 * time.Second)
+				ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 				defer cancel()
 				if _, err := eregs.SendTitle(ctx, title.Contents); err != nil {
 					log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
@@ -193,17 +193,16 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	defer cancel()
 
 	start := time.Now()
-	today := time.Now()
 
-    result := eregs.ParserResult{
-        Start: start.Format(time.RFC3339),
-        Title: title.Title,
-        Parts: strings.Join(title.Parts[:], ","),
-        Workers: config.Workers,
-        Attempts: config.Attempts,
-    }
+	result := eregs.ParserResult{
+		Start:    start.Format(time.RFC3339),
+		Title:    title.Title,
+		Parts:    strings.Join(title.Parts[:], ","),
+		Workers:  config.Workers,
+		Attempts: config.Attempts,
+	}
 
-    defer eregs.PostParserResult(ctx, &result)
+	defer eregs.PostParserResult(ctx, &result)
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
@@ -218,7 +217,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		result.Subchapters = result.Subchapters + subchapter.String()
 		var err error
 		var subchapterParts []string
-		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, today, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
 			return true, err
 		}
@@ -260,12 +259,12 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 			}
 
 			version := &eregs.Part{
-				Title:     		title.Title,
-				Name:      		part,
-				Date:      		date,
-				Structure: 		&ecfr.Structure{},
-				Document:  		&parsexml.Part{},
-				Processed: 	    false,
+				Title:          title.Title,
+				Name:           part,
+				Date:           date,
+				Structure:      &ecfr.Structure{},
+				Document:       &parsexml.Part{},
+				Processed:      false,
 				UploadContents: false,
 			}
 
@@ -291,12 +290,12 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 
 	for i := 0; i < config.Attempts; i++ {
 		log.Info("[main] Fetching and processing ", originalLength, " versions using ", config.Workers, " workers...")
-        result.TotalVersions = originalLength
+		result.TotalVersions = originalLength
 		ch := make(chan *list.List)
 		var wg sync.WaitGroup
 		for worker := 1; worker < config.Workers+1; worker++ {
 			wg.Add(1)
-			go StartHandlePartVersionWorkerFunc(ctx, worker, ch, &wg, today)
+			go StartHandlePartVersionWorkerFunc(ctx, worker, ch, &wg)
 		}
 
 		for versionList := partList.Front(); versionList != nil; versionList = versionList.Next() {
@@ -334,7 +333,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		if currentLength == 0 {
 			break
 		} else if i >= config.Attempts-1 {
-		    result.Errors = currentLength
+			result.Errors = currentLength
 			return false, fmt.Errorf("Some parts still failed to process after %d attempts", config.Attempts)
 		} else {
 			log.Warn("[main] Some parts failed to process. Retrying ", config.Attempts-i-1, " more times.")
@@ -346,7 +345,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	return false, nil
 }
 
-func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup, date time.Time) {
+func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
 	processingAttempts := 0
 	processedParts := 0
 	processedVersions := 0
@@ -357,7 +356,7 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 			processingAttempts++
 			version := versionElement.Value.(*eregs.Part)
 			log.Debug("[worker ", thread, "] Processing part ", version.Name, " version ", version.Date)
-			err := HandlePartVersionFunc(ctx, thread, date, version)
+			err := HandlePartVersionFunc(ctx, thread, version)
 			if err == nil {
 				version.Processed = true
 				processedVersions++
@@ -372,11 +371,11 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 	wg.Done()
 }
 
-func handlePartVersion(ctx context.Context, thread int, date time.Time, version *eregs.Part) error {
+func handlePartVersion(ctx context.Context, thread int, version *eregs.Part) error {
 	start := time.Now()
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", version.Name, " version ", version.Date)
-	sbody, _, err := ecfr.FetchStructure(ctx, date.Format("2006-01-02"), version.Title, &ecfr.PartOption{version.Name})
+	sbody, _, err := ecfr.FetchStructure(ctx, version.Title, &ecfr.PartOption{version.Name})
 
 	if err != nil {
 		return err

@@ -14,6 +14,8 @@
                 :supplementalContentCount="supplementalContentCount"
                 :title="title"
                 :part="part"
+                :subpart="subpart"
+                :headerLinks="headerLinks"
             />
         </div>
         <div v-else>
@@ -43,6 +45,10 @@ export default {
             type: String,
             required: true,
         },
+        subpart:{
+            type: String,
+            required: true
+        },
         structure: {
             type: Array,
             required: false,
@@ -50,6 +56,11 @@ export default {
         resourcesDisplay: {
             type: String,
             required: true,
+        },
+        headerLinks: {
+            type: Boolean,
+            required:false,
+            default:false
         },
         showResourceButtons: {
             type: Boolean,
@@ -96,7 +107,7 @@ $eregs-image-path: "~legacy-static/images";
     flex-direction: row;
 
     .content-with-drawer {
-        margin: 0 auto;
+        margin: 0;
     }
 
     .content-with-sidebar {
@@ -116,5 +127,18 @@ $eregs-image-path: "~legacy-static/images";
             margin-bottom: 40px;
         }
     }
+}
+.v-application a{
+    text-decoration: none;
+}
+.v-tooltip__content {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+}
+.tooltip-text{
+    font-size: 12px !important;
+    
+  
+      display: block !important;
+  color:#212121;
 }
 </style>

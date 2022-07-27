@@ -456,6 +456,26 @@ function capitalizeFirstLetter(string) {
     return string[0].toUpperCase() + string.slice(1);
 }
 
+/**
+ *
+ * @param subpart {Object} - the TOC for a subpart
+ * @returns {Object} - The subpart, but with  sections in subject groups in children and not children of subject groups
+ *
+ */
+function flattenSubpart(subpart){
+    const result = JSON.parse(JSON.stringify(subpart))
+    const subjectGroupSections = subpart.children
+        .filter(child => child.type=== 'subject_group')
+        .flatMap(subjgrp => subjgrp.children)
+        .filter(child => child.type ==="section")
+
+
+    result.children = result.children
+        .concat(subjectGroupSections)
+        .filter(child => child.type ==="section")
+
+    return result
+}
 
 export {
     mapToArray,
@@ -487,5 +507,6 @@ export {
     getParagraphDepth,
     getDisplayName,
     getCategoryTree,
-    capitalizeFirstLetter
+    capitalizeFirstLetter,
+    flattenSubpart
 };
