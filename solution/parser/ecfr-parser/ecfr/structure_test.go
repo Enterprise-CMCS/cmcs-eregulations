@@ -1,29 +1,29 @@
 package ecfr
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
 	"context"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 	"time"
 
 	"github.com/go-test/deep"
 )
 
 func TestRangeStringUnmarshal(t *testing.T) {
-	testTable := []struct{
-		Name string
-		Input []byte
+	testTable := []struct {
+		Name     string
+		Input    []byte
 		Expected RangeString
 	}{
 		{
-			Name: "test-range-string",
-			Input: []byte("432.1 – 432.200"),
+			Name:     "test-range-string",
+			Input:    []byte("432.1 – 432.200"),
 			Expected: RangeString{"432.1", "432.200"},
 		},
 		{
-			Name: "test-array-input",
-			Input: []byte("[\"432.1\", \"432.200\"]"),
+			Name:     "test-array-input",
+			Input:    []byte("[\"432.1\", \"432.200\"]"),
 			Expected: RangeString{"432.1", "432.200"},
 		},
 	}
@@ -51,53 +51,53 @@ func TestHTMLStringUnmarshal(t *testing.T) {
 
 func TestIdentifierStringUnmarshal(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected IdentifierString
 	}{
 		{
-			Name: "test-title-identifier",
-			Input: []byte("42"),
+			Name:     "test-title-identifier",
+			Input:    []byte("42"),
 			Expected: IdentifierString{"42"},
 		},
 		{
-			Name: "test-chapter-identifier",
-			Input: []byte("IV"),
+			Name:     "test-chapter-identifier",
+			Input:    []byte("IV"),
 			Expected: IdentifierString{"IV"},
 		},
 		{
-			Name: "test-subchapter-identifier",
-			Input: []byte("C"),
+			Name:     "test-subchapter-identifier",
+			Input:    []byte("C"),
 			Expected: IdentifierString{"C"},
 		},
 		{
-			Name: "test-part-identifier",
-			Input: []byte("430"),
+			Name:     "test-part-identifier",
+			Input:    []byte("430"),
 			Expected: IdentifierString{"430"},
 		},
 		{
-			Name: "test-subpart-identifier",
-			Input: []byte("A"),
+			Name:     "test-subpart-identifier",
+			Input:    []byte("A"),
 			Expected: IdentifierString{"A"},
 		},
 		{
-			Name: "test-subjectgroup-identifier",
-			Input: []byte("ECFR370de681c5a0a70"),
+			Name:     "test-subjectgroup-identifier",
+			Input:    []byte("ECFR370de681c5a0a70"),
 			Expected: IdentifierString{"ECFR370de681c5a0a70"},
 		},
 		{
-			Name: "test-section-identifier",
-			Input: []byte("430.1"),
+			Name:     "test-section-identifier",
+			Input:    []byte("430.1"),
 			Expected: IdentifierString{"430", "1"},
 		},
 		{
-			Name: "test-paragraph-identifier",
-			Input: []byte("430.1 a 1"),
+			Name:     "test-paragraph-identifier",
+			Input:    []byte("430.1 a 1"),
 			Expected: IdentifierString{"430", "1", "a", "1"},
 		},
 		{
-			Name: "test-array-input",
-			Input: []byte("[\"430\", \"12\"]"),
+			Name:     "test-array-input",
+			Input:    []byte("[\"430\", \"12\"]"),
 			Expected: IdentifierString{"430", "12"},
 		},
 	}
@@ -115,10 +115,10 @@ func TestIdentifierStringUnmarshal(t *testing.T) {
 
 func TestSubchapterParts(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input Structure
+		Name     string
+		Input    Structure
 		Expected []*Structure
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-one-level",
@@ -126,7 +126,7 @@ func TestSubchapterParts(t *testing.T) {
 				Children: []*Structure{},
 			},
 			Expected: []*Structure{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-two-levels",
@@ -138,7 +138,7 @@ func TestSubchapterParts(t *testing.T) {
 				},
 			},
 			Expected: []*Structure{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-three-levels",
@@ -195,10 +195,10 @@ func TestSubchapterParts(t *testing.T) {
 
 func TestExtractSubchapterParts(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Server *httptest.Server
+		Name     string
+		Server   *httptest.Server
 		Expected []string
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-valid-response",
@@ -277,7 +277,7 @@ func TestExtractSubchapterParts(t *testing.T) {
 				}`))
 			})),
 			Expected: []string{"430", "431", "432"},
-			Error: false,
+			Error:    false,
 		},
 		{
 			Name: "test-server-error",
@@ -286,7 +286,7 @@ func TestExtractSubchapterParts(t *testing.T) {
 				w.Write([]byte(`{ "exception": "All is well" }`))
 			})),
 			Expected: []string{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-bad-json",
@@ -295,7 +295,7 @@ func TestExtractSubchapterParts(t *testing.T) {
 				w.Write([]byte(`{ "what" "this json won't decode properly"`))
 			})),
 			Expected: []string{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-bad-depth",
@@ -323,7 +323,7 @@ func TestExtractSubchapterParts(t *testing.T) {
 				}`))
 			})),
 			Expected: []string{},
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -331,10 +331,10 @@ func TestExtractSubchapterParts(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			defer tc.Server.Close()
 			EcfrSite = tc.Server.URL
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 			subchapter := SubchapterOption{
-				Chapter: "IV",
+				Chapter:    "IV",
 				Subchapter: "C",
 			}
 
@@ -353,40 +353,40 @@ func TestExtractSubchapterParts(t *testing.T) {
 }
 
 func TestDeterminePartDepth(t *testing.T) {
-	testTable := []struct{
-		Name string
+	testTable := []struct {
+		Name      string
 		Structure Structure
-		Part string
-		Depth int
+		Part      string
+		Depth     int
 	}{
 		{
 			Name: "test-level-zero",
 			Structure: Structure{
 				Identifier: IdentifierString{"433"},
-				Children: []*Structure{},
-				Type: "part",
+				Children:   []*Structure{},
+				Type:       "part",
 			},
-			Part: "433",
+			Part:  "433",
 			Depth: 0,
 		},
 		{
 			Name: "test-level-3",
 			Structure: Structure{
 				Identifier: IdentifierString{"42"},
-				Type: "title",
+				Type:       "title",
 				Children: []*Structure{
 					&Structure{
 						Identifier: IdentifierString{"IV"},
-						Type: "chapter",
+						Type:       "chapter",
 						Children: []*Structure{
 							&Structure{
 								Identifier: IdentifierString{"C"},
-								Type: "subchapter",
+								Type:       "subchapter",
 								Children: []*Structure{
 									&Structure{
 										Identifier: IdentifierString{"433"},
-										Type: "part",
-										Children: []*Structure{},
+										Type:       "part",
+										Children:   []*Structure{},
 									},
 								},
 							},
@@ -394,42 +394,42 @@ func TestDeterminePartDepth(t *testing.T) {
 					},
 				},
 			},
-			Part: "433",
+			Part:  "433",
 			Depth: 3,
 		},
 		{
 			Name: "test-multiple-children",
 			Structure: Structure{
 				Identifier: IdentifierString{"42"},
-				Type: "title",
+				Type:       "title",
 				Children: []*Structure{
 					&Structure{
 						Identifier: IdentifierString{"440"},
-						Type: "part",
-						Children: []*Structure{},
+						Type:       "part",
+						Children:   []*Structure{},
 					},
 					&Structure{
 						Identifier: IdentifierString{"IV"},
-						Type: "chapter",
+						Type:       "chapter",
 						Children: []*Structure{
 							&Structure{
 								Identifier: IdentifierString{"C"},
-								Type: "subchapter",
+								Type:       "subchapter",
 								Children: []*Structure{
 									&Structure{
 										Identifier: IdentifierString{"200"},
-										Type: "part",
-										Children: []*Structure{},
+										Type:       "part",
+										Children:   []*Structure{},
 									},
 									&Structure{
 										Identifier: IdentifierString{"300"},
-										Type: "part",
-										Children: []*Structure{},
-									},									
+										Type:       "part",
+										Children:   []*Structure{},
+									},
 									&Structure{
 										Identifier: IdentifierString{"433"},
-										Type: "part",
-										Children: []*Structure{},
+										Type:       "part",
+										Children:   []*Structure{},
 									},
 								},
 							},
@@ -437,27 +437,27 @@ func TestDeterminePartDepth(t *testing.T) {
 					},
 				},
 			},
-			Part: "433",
+			Part:  "433",
 			Depth: 3,
 		},
 		{
 			Name: "test-not-found",
 			Structure: Structure{
 				Identifier: IdentifierString{"42"},
-				Type: "title",
+				Type:       "title",
 				Children: []*Structure{
 					&Structure{
 						Identifier: IdentifierString{"IV"},
-						Type: "chapter",
+						Type:       "chapter",
 						Children: []*Structure{
 							&Structure{
 								Identifier: IdentifierString{"C"},
-								Type: "subchapter",
+								Type:       "subchapter",
 								Children: []*Structure{
 									&Structure{
 										Identifier: IdentifierString{"200"},
-										Type: "part",
-										Children: []*Structure{},
+										Type:       "part",
+										Children:   []*Structure{},
 									},
 								},
 							},
@@ -465,7 +465,7 @@ func TestDeterminePartDepth(t *testing.T) {
 					},
 				},
 			},
-			Part: "443",
+			Part:  "443",
 			Depth: -1,
 		},
 	}
@@ -483,35 +483,35 @@ func TestDeterminePartDepth(t *testing.T) {
 func TestDetermineParents(t *testing.T) {
 	structure := Structure{
 		Identifier: IdentifierString{"42"},
-		Type: "title",
+		Type:       "title",
 		Children: []*Structure{
 			&Structure{
 				Identifier: IdentifierString{"440"},
-				Type: "part",
-				Children: []*Structure{},
+				Type:       "part",
+				Children:   []*Structure{},
 			},
 			&Structure{
 				Identifier: IdentifierString{"IV"},
-				Type: "chapter",
+				Type:       "chapter",
 				Children: []*Structure{
 					&Structure{
 						Identifier: IdentifierString{"C"},
-						Type: "subchapter",
+						Type:       "subchapter",
 						Children: []*Structure{
 							&Structure{
 								Identifier: IdentifierString{"200"},
-								Type: "part",
-								Children: []*Structure{},
+								Type:       "part",
+								Children:   []*Structure{},
 							},
 							&Structure{
 								Identifier: IdentifierString{"300"},
-								Type: "part",
-								Children: []*Structure{},
-							},									
+								Type:       "part",
+								Children:   []*Structure{},
+							},
 							&Structure{
 								Identifier: IdentifierString{"433"},
-								Type: "part",
-								Children: []*Structure{},
+								Type:       "part",
+								Children:   []*Structure{},
 							},
 						},
 					},
@@ -522,49 +522,49 @@ func TestDetermineParents(t *testing.T) {
 
 	expected := Structure{
 		Identifier: IdentifierString{"42"},
-		Type: "title",
-		Parent: IdentifierString{},
+		Type:       "title",
+		Parent:     IdentifierString{},
 		ParentType: "",
 		Children: []*Structure{
 			&Structure{
 				Identifier: IdentifierString{"440"},
-				Type: "part",
-				Parent: IdentifierString{"42"},
+				Type:       "part",
+				Parent:     IdentifierString{"42"},
 				ParentType: "title",
-				Children: []*Structure{},
+				Children:   []*Structure{},
 			},
 			&Structure{
 				Identifier: IdentifierString{"IV"},
-				Type: "chapter",
-				Parent: IdentifierString{"42"},
+				Type:       "chapter",
+				Parent:     IdentifierString{"42"},
 				ParentType: "title",
 				Children: []*Structure{
 					&Structure{
 						Identifier: IdentifierString{"C"},
-						Type: "subchapter",
-						Parent: IdentifierString{"IV"},
+						Type:       "subchapter",
+						Parent:     IdentifierString{"IV"},
 						ParentType: "chapter",
 						Children: []*Structure{
 							&Structure{
 								Identifier: IdentifierString{"200"},
-								Type: "part",
-								Parent: IdentifierString{"C"},
+								Type:       "part",
+								Parent:     IdentifierString{"C"},
 								ParentType: "subchapter",
-								Children: []*Structure{},
+								Children:   []*Structure{},
 							},
 							&Structure{
 								Identifier: IdentifierString{"300"},
-								Type: "part",
-								Parent: IdentifierString{"C"},
+								Type:       "part",
+								Parent:     IdentifierString{"C"},
 								ParentType: "subchapter",
-								Children: []*Structure{},
-							},									
+								Children:   []*Structure{},
+							},
 							&Structure{
 								Identifier: IdentifierString{"433"},
-								Type: "part",
-								Parent: IdentifierString{"C"},
+								Type:       "part",
+								Parent:     IdentifierString{"C"},
 								ParentType: "subchapter",
-								Children: []*Structure{},
+								Children:   []*Structure{},
 							},
 						},
 					},

@@ -2,6 +2,15 @@
 
 <html>
     <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_ID }}"></script>
+        <script>
+            window["ga-disable-{{ GA_ID }}"] = {{ AUTOMATED_TEST | yesno:"true,false" }};
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag("js", new Date());
+            gtag("config", "{{ GA_ID }}");
+        </script>
         <title>{{ title }}</title>
         <meta name="description" content="{{ description }}" />
         <meta property="og:title" content="{{ title }}" />

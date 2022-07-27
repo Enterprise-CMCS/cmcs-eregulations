@@ -101,7 +101,7 @@ func start() error {
 	var err error
 	config, _, err = eregs.RetrieveConfig()
 	if err != nil {
-		return fmt.Errorf("Failed to retrieve configuration: %+v", err)
+		return fmt.Errorf("failed to retrieve configuration: %+v", err)
 	}
 	parseConfig(config)
 
@@ -182,7 +182,7 @@ func start() error {
 	}
 
 	if failed {
-		return fmt.Errorf("Some titles failed to process after %d attempts", config.Attempts)
+		return fmt.Errorf("some titles failed to process after %d attempts", config.Attempts)
 	}
 	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(start))
 	return nil
@@ -227,7 +227,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 	parts = append(parts, title.Parts...)
 
 	if len(parts) < 1 {
-		return false, fmt.Errorf("Some number of parts must be specified")
+		return false, fmt.Errorf("some number of parts must be specified")
 	}
 
 	log.Debug("[main] Extracting versions for title ", title.Title, "...")
@@ -334,7 +334,7 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 			break
 		} else if i >= config.Attempts-1 {
 			result.Errors = currentLength
-			return false, fmt.Errorf("Some parts still failed to process after %d attempts", config.Attempts)
+			return false, fmt.Errorf("some parts still failed to process after %d attempts", config.Attempts)
 		} else {
 			log.Warn("[main] Some parts failed to process. Retrying ", config.Attempts-i-1, " more times.")
 			SleepFunc(3 * time.Second)
@@ -405,7 +405,7 @@ func handlePartVersion(ctx context.Context, thread int, version *eregs.Part) err
 	log.Trace("[worker ", thread, "] Determining depth of part ", version.Name, " version ", version.Date)
 	version.Depth = ecfr.DeterminePartDepth(version.Structure, version.Name)
 	if version.Depth == -1 {
-		return fmt.Errorf("Unable to determine depth of part in structure")
+		return fmt.Errorf("unable to determine depth of part in structure")
 	}
 
 	log.Trace("[worker ", thread, "] Computing section parents for part ", version.Name, " version ", version.Date)

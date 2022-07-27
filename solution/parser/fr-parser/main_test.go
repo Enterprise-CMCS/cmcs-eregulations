@@ -1,15 +1,15 @@
 package main
 
 import (
-	"testing"
 	"context"
-	"time"
 	"fmt"
+	"testing"
+	"time"
 
+	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
+	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/fedreg"
-	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
 
 	"github.com/go-test/deep"
 	log "github.com/sirupsen/logrus"
@@ -26,49 +26,49 @@ func TestInit(t *testing.T) {
 
 func TestGetLogLevel(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input string
+		Name     string
+		Input    string
 		Expected log.Level
 	}{
 		{
-			Name: "test-warn",
-			Input: "warn",
+			Name:     "test-warn",
+			Input:    "warn",
 			Expected: log.WarnLevel,
 		},
 		{
-			Name: "test-fatal",
-			Input: "fatal",
+			Name:     "test-fatal",
+			Input:    "fatal",
 			Expected: log.FatalLevel,
 		},
 		{
-			Name: "test-error",
-			Input: "error",
+			Name:     "test-error",
+			Input:    "error",
 			Expected: log.ErrorLevel,
 		},
 		{
-			Name: "test-info",
-			Input: "info",
+			Name:     "test-info",
+			Input:    "info",
 			Expected: log.InfoLevel,
 		},
 		{
-			Name: "test-debug",
-			Input: "debug",
+			Name:     "test-debug",
+			Input:    "debug",
 			Expected: log.DebugLevel,
 		},
 		{
-			Name: "test-trace",
-			Input: "trace",
+			Name:     "test-trace",
+			Input:    "trace",
 			Expected: log.TraceLevel,
 		},
 		{
-			Name: "test-default",
-			Input: "not a valid level",
+			Name:     "test-default",
+			Input:    "not a valid level",
 			Expected: log.WarnLevel,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			out := getLogLevel(tc.Input)
 			if out != tc.Expected {
 				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
@@ -79,16 +79,16 @@ func TestGetLogLevel(t *testing.T) {
 
 func TestLoadConfig(t *testing.T) {
 	testTable := []struct {
-		Name string
-		RetrieveConfigFunc func () (*ecfrEregs.ParserConfig, int, error)
-		GetLogLevelFunc func (string) log.Level
-		Error bool
+		Name               string
+		RetrieveConfigFunc func() (*ecfrEregs.ParserConfig, int, error)
+		GetLogLevelFunc    func(string) log.Level
+		Error              bool
 	}{
 		{
 			Name: "test-load-config",
 			RetrieveConfigFunc: func() (*ecfrEregs.ParserConfig, int, error) {
 				return &ecfrEregs.ParserConfig{
-					Workers: 1,
+					Workers:  1,
 					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
@@ -151,7 +151,7 @@ func TestGetPartsList(t *testing.T) {
 
 	expected := []string{"4", "5", "6", "1", "2", "3"}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	output := getPartsList(ctx, input)
@@ -163,18 +163,18 @@ func TestGetPartsList(t *testing.T) {
 
 func TestStart(t *testing.T) {
 	testTable := []struct {
-		Name string
-		LoadConfigFunc func () (*ecfrEregs.ParserConfig, error)
-		GetPartsListFunc func (context.Context, *ecfrEregs.TitleConfig) []string
-		ProcessPartFunc func (context.Context, int, string, map[string]bool, bool) error
-		FetchDocumentListFunc func (context.Context) ([]string, error)
-		Error bool
+		Name                  string
+		LoadConfigFunc        func() (*ecfrEregs.ParserConfig, error)
+		GetPartsListFunc      func(context.Context, *ecfrEregs.TitleConfig) []string
+		ProcessPartFunc       func(context.Context, int, string, map[string]bool, bool) error
+		FetchDocumentListFunc func(context.Context) ([]string, error)
+		Error                 bool
 	}{
 		{
 			Name: "test-start",
 			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
 				return &ecfrEregs.ParserConfig{
-					Workers: 1,
+					Workers:  1,
 					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
@@ -221,14 +221,14 @@ func TestStart(t *testing.T) {
 			},
 			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
 				return []string{"https://test.gov/test", "https://test.gov/test2"}, nil
-			},			
+			},
 			Error: true,
 		},
 		{
 			Name: "test-process-part-failure",
 			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
 				return &ecfrEregs.ParserConfig{
-					Workers: 1,
+					Workers:  1,
 					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
@@ -266,7 +266,7 @@ func TestStart(t *testing.T) {
 			Name: "test-fetch-document-list-failure",
 			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
 				return &ecfrEregs.ParserConfig{
-					Workers: 1,
+					Workers:  1,
 					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
@@ -303,7 +303,7 @@ func TestStart(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			loadConfigFunc = tc.LoadConfigFunc
 			getPartsListFunc = tc.GetPartsListFunc
 			processPartFunc = tc.ProcessPartFunc
@@ -321,12 +321,12 @@ func TestStart(t *testing.T) {
 
 func TestProcessPart(t *testing.T) {
 	testTable := []struct {
-		Name string
-		FetchContentFunc func (context.Context, int, string) ([]*fedreg.FRDoc, error)
-		ProcessDocumentFunc func (context.Context, int, string, *fedreg.FRDoc) error
-		ExistingDocs map[string]bool
-		SkipDocuments bool
-		Error bool
+		Name                string
+		FetchContentFunc    func(context.Context, int, string) ([]*fedreg.FRDoc, error)
+		ProcessDocumentFunc func(context.Context, int, string, *fedreg.FRDoc) error
+		ExistingDocs        map[string]bool
+		SkipDocuments       bool
+		Error               bool
 	}{
 		{
 			Name: "test-process",
@@ -358,9 +358,9 @@ func TestProcessPart(t *testing.T) {
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 				return nil
 			},
-			ExistingDocs: map[string]bool{},
+			ExistingDocs:  map[string]bool{},
 			SkipDocuments: false,
-			Error: false,
+			Error:         false,
 		},
 		{
 			Name: "test-fetch-fail",
@@ -370,9 +370,9 @@ func TestProcessPart(t *testing.T) {
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 				return nil
 			},
-			ExistingDocs: map[string]bool{},
+			ExistingDocs:  map[string]bool{},
 			SkipDocuments: false,
-			Error: true,
+			Error:         true,
 		},
 		{
 			Name: "test-process-fail",
@@ -404,9 +404,9 @@ func TestProcessPart(t *testing.T) {
 			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 				return fmt.Errorf("this is expected")
 			},
-			ExistingDocs: map[string]bool{},
+			ExistingDocs:  map[string]bool{},
 			SkipDocuments: false,
-			Error: false,
+			Error:         false,
 		},
 		{
 			Name: "test-skip-documents",
@@ -442,16 +442,16 @@ func TestProcessPart(t *testing.T) {
 				"https://test.gov/test": true,
 			},
 			SkipDocuments: true,
-			Error: false,
+			Error:         false,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			fetchContentFunc = tc.FetchContentFunc
 			processDocumentFunc = tc.ProcessDocumentFunc
 
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			err := processPart(ctx, 42, "433", tc.ExistingDocs, tc.SkipDocuments)
@@ -466,10 +466,10 @@ func TestProcessPart(t *testing.T) {
 
 func TestProcessDocument(t *testing.T) {
 	testTable := []struct {
-		Name string
-		FetchSectionsFunc func (context.Context, string) ([]string, error)
-		SendDocumentFunc func (context.Context, *eregs.FRDoc) error
-		Error bool
+		Name              string
+		FetchSectionsFunc func(context.Context, string) ([]string, error)
+		SendDocumentFunc  func(context.Context, *eregs.FRDoc) error
+		Error             bool
 	}{
 		{
 			Name: "test-send",
@@ -507,11 +507,11 @@ func TestProcessDocument(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			fetchSectionsFunc = tc.FetchSectionsFunc
 			sendDocumentFunc = tc.SendDocumentFunc
 
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			doc := fedreg.FRDoc{
@@ -525,7 +525,7 @@ func TestProcessDocument(t *testing.T) {
 					"CMS-0001-C1",
 				},
 				DocumentNumber: "2021-12345",
-				FullTextURL: "http://test.gov/some/xml/url",
+				FullTextURL:    "http://test.gov/some/xml/url",
 			}
 
 			err := processDocument(ctx, 42, "433", &doc)
