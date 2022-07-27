@@ -184,12 +184,12 @@ var sendDocumentFunc = eregs.SendDocument
 
 func processDocument(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
 	doc := &eregs.FRDoc{
-		Name: content.Name,
-		Description: content.Description,
-		Category: content.Category,
-		URL: content.URL,
-		Date: content.Date,
-		DocketNumbers: content.DocketNumbers,
+		Name:           content.Name,
+		Description:    content.Description,
+		Category:       content.Category,
+		URL:            content.URL,
+		Date:           content.Date,
+		DocketNumbers:  content.DocketNumbers,
 		DocumentNumber: content.DocumentNumber,
 	}
 

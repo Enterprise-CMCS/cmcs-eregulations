@@ -37,14 +37,14 @@ type Section struct {
 
 // FRDoc is eRegs' representation of Federal Register documents, including a list of sections
 type FRDoc struct {
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Category string `json:"category"`
-	URL string `json:"url"`
-	Date string `json:"date"`
-	DocketNumbers []string `json:"docket_numbers"`
-	DocumentNumber string `json:"document_number"`
-	Locations []*Section `json:"locations"`
+	Name           string     `json:"name"`
+	Description    string     `json:"description"`
+	Category       string     `json:"category"`
+	URL            string     `json:"url"`
+	Date           string     `json:"date"`
+	DocketNumbers  []string   `json:"docket_numbers"`
+	DocumentNumber string     `json:"document_number"`
+	Locations      []*Section `json:"locations"`
 }
 
 // SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL
