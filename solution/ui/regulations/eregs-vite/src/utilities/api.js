@@ -832,7 +832,7 @@ const getSectionsForPart = async (title, part) => httpApiGetV3(`title/${title}/p
 
 const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
 
-
+const getSynonyms = async(query) => httpApiGetV3(`synonym/${query}`);
 /**
  *
  * @param part {string} - a regulation part
@@ -895,6 +895,7 @@ export {
     getTOC,
     getPartTOC,
     getSectionsForPart,
-    getSubpartTOC
+    getSubpartTOC,
+    getSynonyms
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
