@@ -1,9 +1,9 @@
 package parsexml
 
 import (
-	"testing"
-	"encoding/xml"
 	"bytes"
+	"encoding/xml"
+	"testing"
 
 	"github.com/go-test/deep"
 )
@@ -30,10 +30,10 @@ func TestLogParseError(t *testing.T) {
 
 func TestParsePart(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected Part
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-valid-part",
@@ -71,21 +71,21 @@ func TestParsePart(t *testing.T) {
 					Local: "DIV5",
 				},
 				Citation: SectionCitation{"433"},
-				Type: "PART",
-				Header: "PART 399 - EMPLOYEE SAFETY AND HEALTH STANDARDS",
+				Type:     "PART",
+				Header:   "PART 399 - EMPLOYEE SAFETY AND HEALTH STANDARDS",
 				Authority: Authority{
-					Header: "Authority:",
+					Header:  "Authority:",
 					Content: "49 U.S.C. 31502; and 49 CFR 1.87. ",
 				},
 				Source: Source{
-					Header: "Source:",
+					Header:  "Source:",
 					Content: "44 FR 43732, July 26, 1979, unless otherwise noted. ",
 				},
 				Children: PartChildren{
 					&Subpart{
-						Type: "SUBPART",
+						Type:     "SUBPART",
 						Citation: SectionCitation{"L"},
-						Header: "Subpart L - Step, Handhold, and Deck Requirements...",
+						Header:   "Subpart L - Step, Handhold, and Deck Requirements...",
 						Children: SubpartChildren{
 							&SubjectGroup{
 								Type: "SUBJGRP",
@@ -95,16 +95,16 @@ func TestParsePart(t *testing.T) {
 								Citation: SectionCitation{"ECFRb511534bf191cab"},
 								Children: SubjectGroupChildren{
 									&Section{
-										Type: "SECTION",
+										Type:     "SECTION",
 										Citation: SectionCitation{"433", "145"},
-										Header: "§ 433.145 Assignment of rights to benefits - State plan requirements.",
+										Header:   "§ 433.145 Assignment of rights to benefits - State plan requirements.",
 										Children: SectionChildren{
 											&Paragraph{
-												Type: "Paragraph",
+												Type:    "Paragraph",
 												Content: "(a) A State plan must provide that, as a condition of eligibility, each legally...",
 											},
 											&Paragraph{
-												Type: "Paragraph",
+												Type:    "Paragraph",
 												Content: "(1) Assign to the Medicaid agency his or her rights, or the rights of any other...",
 											},
 										},
@@ -114,12 +114,12 @@ func TestParsePart(t *testing.T) {
 						},
 					},
 					&Section{
-						Type: "SECTION",
+						Type:     "SECTION",
 						Citation: SectionCitation{"433", "146"},
-						Header: "§ 433.146 Rights assigned; assignment method.",
+						Header:   "§ 433.146 Rights assigned; assignment method.",
 						Children: SectionChildren{
 							&Paragraph{
-								Type: "Paragraph",
+								Type:    "Paragraph",
 								Content: "(a) Except as specified in paragraph (b) of this section, the agency must require...",
 							},
 						},
@@ -137,13 +137,13 @@ func TestParsePart(t *testing.T) {
 				</DIV8>
 			`),
 			Expected: Part{},
-			Error: true,
+			Error:    true,
 		},
 		{
-			Name: "test-bad-xml",
-			Input: []byte("<PThis is bad XML"),
+			Name:     "test-bad-xml",
+			Input:    []byte("<PThis is bad XML"),
 			Expected: Part{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-deep-bad-xml",
@@ -172,7 +172,7 @@ func TestParsePart(t *testing.T) {
 				</DIV5>
 			`),
 			Expected: Part{},
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -199,21 +199,21 @@ func TestPartPostProcess(t *testing.T) {
 			Local: "DIV5",
 		},
 		Citation: SectionCitation{"some", "part"},
-		Type: "PART",
-		Header: "Some header",
+		Type:     "PART",
+		Header:   "Some header",
 		Children: PartChildren{
 			&Subpart{
-				Header: "Some subpart",
+				Header:   "Some subpart",
 				Citation: SectionCitation{"A"},
-				Type: "SUBPART",
+				Type:     "SUBPART",
 				Children: SubpartChildren{
 					&Section{
-						Type: "SECTION",
+						Type:     "SECTION",
 						Citation: SectionCitation{"433", "11"},
-						Header: "§ 433.11 Enhanced FMAP rate for children.",
+						Header:   "§ 433.11 Enhanced FMAP rate for children.",
 						Children: SectionChildren{
 							&Paragraph{
-								Type: "Paragraph",
+								Type:    "Paragraph",
 								Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 							},
 						},
@@ -229,24 +229,24 @@ func TestPartPostProcess(t *testing.T) {
 			Local: "DIV5",
 		},
 		Citation: SectionCitation{"some", "part"},
-		Type: "PART",
-		Header: "Some header",
+		Type:     "PART",
+		Header:   "Some header",
 		Children: PartChildren{
 			&Subpart{
-				Header: "Some subpart",
+				Header:   "Some subpart",
 				Citation: SectionCitation{"A"},
-				Type: "SUBPART",
+				Type:     "SUBPART",
 				Children: SubpartChildren{
 					&Section{
-						Type: "SECTION",
+						Type:     "SECTION",
 						Citation: SectionCitation{"433", "11"},
-						Header: "§ 433.11 Enhanced FMAP rate for children.",
+						Header:   "§ 433.11 Enhanced FMAP rate for children.",
 						Children: SectionChildren{
 							&Paragraph{
-								Type: "Paragraph",
-								Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+								Type:     "Paragraph",
+								Content:  "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 								Citation: []string{"433", "11", "a"},
-								Marker: []string{"a"},
+								Marker:   []string{"a"},
 							},
 						},
 					},
@@ -263,10 +263,10 @@ func TestPartPostProcess(t *testing.T) {
 
 func TestPartChildrenUnmarshalXML(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected PartChildren
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-subpart",
@@ -289,9 +289,9 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: PartChildren{
 				&Subpart{
-					Type: "SUBPART",
+					Type:     "SUBPART",
 					Citation: SectionCitation{"L"},
-					Header: "Subpart L - Step, Handhold, and Deck Requirements...",
+					Header:   "Subpart L - Step, Handhold, and Deck Requirements...",
 					Children: SubpartChildren{
 						&SubjectGroup{
 							Type: "SUBJGRP",
@@ -301,16 +301,16 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 							Citation: SectionCitation{"ECFRb511534bf191cab"},
 							Children: SubjectGroupChildren{
 								&Section{
-									Type: "SECTION",
+									Type:     "SECTION",
 									Citation: SectionCitation{"433", "145"},
-									Header: "§ 433.145 Assignment of rights to benefits - State plan requirements.",
+									Header:   "§ 433.145 Assignment of rights to benefits - State plan requirements.",
 									Children: SectionChildren{
 										&Paragraph{
-											Type: "Paragraph",
+											Type:    "Paragraph",
 											Content: "(a) A State plan must provide that, as a condition of eligibility, each legally...",
 										},
 										&Paragraph{
-											Type: "Paragraph",
+											Type:    "Paragraph",
 											Content: "(1) Assign to the Medicaid agency his or her rights, or the rights of any other...",
 										},
 									},
@@ -318,12 +318,12 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 							},
 						},
 						&Section{
-							Type: "SECTION",
+							Type:     "SECTION",
 							Citation: SectionCitation{"433", "146"},
-							Header: "§ 433.146 Rights assigned; assignment method.",
+							Header:   "§ 433.146 Rights assigned; assignment method.",
 							Children: SectionChildren{
 								&Paragraph{
-									Type: "Paragraph",
+									Type:    "Paragraph",
 									Content: "(a) Except as specified in paragraph (b) of this section, the agency must require...",
 								},
 							},
@@ -343,12 +343,12 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: PartChildren{
 				&Section{
-					Type: "SECTION",
+					Type:     "SECTION",
 					Citation: SectionCitation{"399", "201"},
-					Header: "§ 399.201 Purpose and scope.",
+					Header:   "§ 399.201 Purpose and scope.",
 					Children: SectionChildren{
 						&Paragraph{
-							Type: "Paragraph",
+							Type:    "Paragraph",
 							Content: "This subpart prescribes step, handhold, and deck requirements on...",
 						},
 					},
@@ -357,16 +357,16 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 			Error: false,
 		},
 		{
-			Name: "test-unknown-type",
-			Input: []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
+			Name:     "test-unknown-type",
+			Input:    []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
 			Expected: nil,
-			Error: false,
+			Error:    false,
 		},
 		{
-			Name: "test-bad-xml",
-			Input: []byte("<BADXML>This is bad XML</"),
+			Name:     "test-bad-xml",
+			Input:    []byte("<BADXML>This is bad XML</"),
 			Expected: nil,
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -390,17 +390,17 @@ func TestPartChildrenUnmarshalXML(t *testing.T) {
 
 func TestSubpartPostProcess(t *testing.T) {
 	input := Subpart{
-		Header: "Some subpart",
+		Header:   "Some subpart",
 		Citation: SectionCitation{"A"},
-		Type: "SUBPART",
+		Type:     "SUBPART",
 		Children: SubpartChildren{
 			&Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"433", "11"},
-				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Header:   "§ 433.11 Enhanced FMAP rate for children.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 					},
 				},
@@ -409,20 +409,20 @@ func TestSubpartPostProcess(t *testing.T) {
 	}
 
 	expected := Subpart{
-		Header: "Some subpart",
+		Header:   "Some subpart",
 		Citation: SectionCitation{"A"},
-		Type: "SUBPART",
+		Type:     "SUBPART",
 		Children: SubpartChildren{
 			&Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"433", "11"},
-				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Header:   "§ 433.11 Enhanced FMAP rate for children.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+						Type:     "Paragraph",
+						Content:  "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 						Citation: []string{"433", "11", "a"},
-						Marker: []string{"a"},
+						Marker:   []string{"a"},
 					},
 				},
 			},
@@ -432,15 +432,15 @@ func TestSubpartPostProcess(t *testing.T) {
 	input.PostProcess()
 	if diff := deep.Equal(input, expected); diff != nil {
 		t.Errorf("output not as expected: %+v", diff)
-	}	
+	}
 }
 
 func TestSubpartChildrenUnmarshalXML(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected SubpartChildren
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-section",
@@ -452,12 +452,12 @@ func TestSubpartChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: SubpartChildren{
 				&Section{
-					Type: "SECTION",
+					Type:     "SECTION",
 					Citation: SectionCitation{"399", "201"},
-					Header: "§ 399.201 Purpose and scope.",
+					Header:   "§ 399.201 Purpose and scope.",
 					Children: SectionChildren{
 						&Paragraph{
-							Type: "Paragraph",
+							Type:    "Paragraph",
 							Content: "This subpart prescribes step, handhold, and deck requirements on...",
 						},
 					},
@@ -490,27 +490,27 @@ func TestSubpartChildrenUnmarshalXML(t *testing.T) {
 					Citation: SectionCitation{"ECFRb511534bf191cab"},
 					Children: SubjectGroupChildren{
 						&Section{
-							Type: "SECTION",
+							Type:     "SECTION",
 							Citation: SectionCitation{"433", "145"},
-							Header: "§ 433.145 Assignment of rights to benefits - State plan requirements.",
+							Header:   "§ 433.145 Assignment of rights to benefits - State plan requirements.",
 							Children: SectionChildren{
 								&Paragraph{
-									Type: "Paragraph",
+									Type:    "Paragraph",
 									Content: "(a) A State plan must provide that, as a condition of eligibility, each legally...",
 								},
 								&Paragraph{
-									Type: "Paragraph",
+									Type:    "Paragraph",
 									Content: "(1) Assign to the Medicaid agency his or her rights, or the rights of any other...",
 								},
 							},
 						},
 						&Section{
-							Type: "SECTION",
+							Type:     "SECTION",
 							Citation: SectionCitation{"433", "146"},
-							Header: "§ 433.146 Rights assigned; assignment method.",
+							Header:   "§ 433.146 Rights assigned; assignment method.",
 							Children: SectionChildren{
 								&Paragraph{
-									Type: "Paragraph",
+									Type:    "Paragraph",
 									Content: "(a) Except as specified in paragraph (b) of this section, the agency must require...",
 								},
 							},
@@ -530,12 +530,12 @@ func TestSubpartChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: SubpartChildren{
 				&Appendix{
-					Type: "APPENDIX",
+					Type:     "APPENDIX",
 					Citation: AppendixCitation{"Appendix", "A", "to", "Subchapter", "B", "of", "Chapter", "III"},
-					Header: "Appendix A to Subchapter B of Chapter III [Reserved]",
+					Header:   "Appendix A to Subchapter B of Chapter III [Reserved]",
 					Children: AppendixChildren{
 						&Paragraph{
-							Type: "Paragraph",
+							Type:    "Paragraph",
 							Content: "This appendix describes the...",
 						},
 					},
@@ -553,24 +553,24 @@ func TestSubpartChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: SubpartChildren{
 				&Source{
-					Type: "Source",
-					Header: "Source:",
+					Type:    "Source",
+					Header:  "Source:",
 					Content: "44 FR 43732, July 26, 1979, unless otherwise noted.",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-unknown-type",
-			Input: []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
+			Name:     "test-unknown-type",
+			Input:    []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
 			Expected: nil,
-			Error: false,
+			Error:    false,
 		},
 		{
-			Name: "test-bad-xml",
-			Input: []byte("<BADXML>This is bad XML</"),
+			Name:     "test-bad-xml",
+			Input:    []byte("<BADXML>This is bad XML</"),
 			Expected: nil,
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -612,16 +612,16 @@ func TestSubjectGroupPostProcess(t *testing.T) {
 		Citation: SectionCitation{"some", "subject", "group"},
 		Children: SubjectGroupChildren{
 			&Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"433", "11"},
-				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Header:   "§ 433.11 Enhanced FMAP rate for children.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 					},
 				},
-			},		
+			},
 		},
 	}
 
@@ -633,18 +633,18 @@ func TestSubjectGroupPostProcess(t *testing.T) {
 		Citation: SectionCitation{"some", "subject", "group"},
 		Children: SubjectGroupChildren{
 			&Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"433", "11"},
-				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Header:   "§ 433.11 Enhanced FMAP rate for children.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+						Type:     "Paragraph",
+						Content:  "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 						Citation: []string{"433", "11", "a"},
-						Marker: []string{"a"},
+						Marker:   []string{"a"},
 					},
 				},
-			},		
+			},
 		},
 	}
 
@@ -656,10 +656,10 @@ func TestSubjectGroupPostProcess(t *testing.T) {
 
 func TestSubjectGroupChildrenUnmarshalXML(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected SubjectGroupChildren
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-section",
@@ -671,12 +671,12 @@ func TestSubjectGroupChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: SubjectGroupChildren{
 				&Section{
-					Type: "SECTION",
+					Type:     "SECTION",
 					Citation: SectionCitation{"399", "201"},
-					Header: "§ 399.201 Purpose and scope.",
+					Header:   "§ 399.201 Purpose and scope.",
 					Children: SectionChildren{
 						&Paragraph{
-							Type: "Paragraph",
+							Type:    "Paragraph",
 							Content: "This subpart prescribes step, handhold, and deck requirements on...",
 						},
 					},
@@ -685,27 +685,27 @@ func TestSubjectGroupChildrenUnmarshalXML(t *testing.T) {
 			Error: false,
 		},
 		{
-			Name: "test-footnote",
+			Name:  "test-footnote",
 			Input: []byte("<FTNT>This is a footnote</FTNT>"),
 			Expected: SubjectGroupChildren{
 				&FootNote{
-					Type: "FootNote",
+					Type:    "FootNote",
 					Content: "This is a footnote",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-unknown-type",
-			Input: []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
+			Name:     "test-unknown-type",
+			Input:    []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
 			Expected: nil,
-			Error: false,
+			Error:    false,
 		},
 		{
-			Name: "test-bad-xml",
-			Input: []byte("<BADXML>This is bad XML</"),
+			Name:     "test-bad-xml",
+			Input:    []byte("<BADXML>This is bad XML</"),
 			Expected: nil,
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -729,120 +729,120 @@ func TestSubjectGroupChildrenUnmarshalXML(t *testing.T) {
 
 func TestSectionPostProcess(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input Section
+		Name     string
+		Input    Section
 		Expected Section
 	}{
 		{
 			Name: "test-full-valid-section",
 			Input: Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"433", "11"},
-				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Header:   "§ 433.11 Enhanced FMAP rate for children.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(1) Services provided to optional targeted low-income children described in § 435...",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(2) Services provided to children born before October 1, 1983, with or without...",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(i) They had been born on or after that date; and ",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(ii) They would not qualify for medical assistance under the State plan in effect...",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(b) Enhanced FMAP is not available if - ",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(1) A State adopts income and resource standards and methodologies for purposes of...",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(2) No funds are available in the State's title XXI allotment, as determined under...",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(3) The State fails to maintain a valid method of identifying services provided on...",
 					},
 					&Citation{
-						Type: "Citation",
+						Type:    "Citation",
 						Content: "[66 FR 2666, Jan. 11, 2001] ",
 					},
 				},
 			},
 			Expected: Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"433", "11"},
-				Header: "§ 433.11 Enhanced FMAP rate for children.",
+				Header:   "§ 433.11 Enhanced FMAP rate for children.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
+						Type:     "Paragraph",
+						Content:  "(a) Subject to the conditions in paragraph (b) of this section, the enhanced...",
 						Citation: []string{"433", "11", "a"},
-						Marker: []string{"a"},
+						Marker:   []string{"a"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(1) Services provided to optional targeted low-income children described in § 435...",
+						Type:     "Paragraph",
+						Content:  "(1) Services provided to optional targeted low-income children described in § 435...",
 						Citation: []string{"433", "11", "a", "1"},
-						Marker: []string{"1"},
+						Marker:   []string{"1"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(2) Services provided to children born before October 1, 1983, with or without...",
+						Type:     "Paragraph",
+						Content:  "(2) Services provided to children born before October 1, 1983, with or without...",
 						Citation: []string{"433", "11", "a", "2"},
-						Marker: []string{"2"},
+						Marker:   []string{"2"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(i) They had been born on or after that date; and ",
+						Type:     "Paragraph",
+						Content:  "(i) They had been born on or after that date; and ",
 						Citation: []string{"433", "11", "a", "2", "i"},
-						Marker: []string{"i"},
+						Marker:   []string{"i"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(ii) They would not qualify for medical assistance under the State plan in effect...",
+						Type:     "Paragraph",
+						Content:  "(ii) They would not qualify for medical assistance under the State plan in effect...",
 						Citation: []string{"433", "11", "a", "2", "ii"},
-						Marker: []string{"ii"},
+						Marker:   []string{"ii"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(b) Enhanced FMAP is not available if - ",
+						Type:     "Paragraph",
+						Content:  "(b) Enhanced FMAP is not available if - ",
 						Citation: []string{"433", "11", "b"},
-						Marker: []string{"b"},
+						Marker:   []string{"b"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(1) A State adopts income and resource standards and methodologies for purposes of...",
+						Type:     "Paragraph",
+						Content:  "(1) A State adopts income and resource standards and methodologies for purposes of...",
 						Citation: []string{"433", "11", "b", "1"},
-						Marker: []string{"1"},
+						Marker:   []string{"1"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(2) No funds are available in the State's title XXI allotment, as determined under...",
+						Type:     "Paragraph",
+						Content:  "(2) No funds are available in the State's title XXI allotment, as determined under...",
 						Citation: []string{"433", "11", "b", "2"},
-						Marker: []string{"2"},
+						Marker:   []string{"2"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(3) The State fails to maintain a valid method of identifying services provided on...",
+						Type:     "Paragraph",
+						Content:  "(3) The State fails to maintain a valid method of identifying services provided on...",
 						Citation: []string{"433", "11", "b", "3"},
-						Marker: []string{"3"},
+						Marker:   []string{"3"},
 					},
 					&Citation{
-						Type: "Citation",
+						Type:    "Citation",
 						Content: "[66 FR 2666, Jan. 11, 2001] ",
 					},
 				},
@@ -851,26 +851,26 @@ func TestSectionPostProcess(t *testing.T) {
 		{
 			Name: "test-md5-hash-citation",
 			Input: Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"432", "1"},
-				Header: "§ 432.1 Basis and purpose.",
+				Header:   "§ 432.1 Basis and purpose.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "This part prescribes regulations to implement section 1902(a)(4) of the Act, which relates to a merit system of State personnel administration and training and use of subprofessional staff and volunteers in State Medicaid programs, and section 1903(a), rates of FFP for Medicaid staffing and training costs. It also prescribes regulations, based on the general administrative authority in section 1902(a)(4), for State training programs for all staff. ",
 					},
 				},
 			},
 			Expected: Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"432", "1"},
-				Header: "§ 432.1 Basis and purpose.",
+				Header:   "§ 432.1 Basis and purpose.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "This part prescribes regulations to implement section 1902(a)(4) of the Act, which relates to a merit system of State personnel administration and training and use of subprofessional staff and volunteers in State Medicaid programs, and section 1903(a), rates of FFP for Medicaid staffing and training costs. It also prescribes regulations, based on the general administrative authority in section 1902(a)(4), for State training programs for all staff. ",
+						Type:     "Paragraph",
+						Content:  "This part prescribes regulations to implement section 1902(a)(4) of the Act, which relates to a merit system of State personnel administration and training and use of subprofessional staff and volunteers in State Medicaid programs, and section 1903(a), rates of FFP for Medicaid staffing and training costs. It also prescribes regulations, based on the general administrative authority in section 1902(a)(4), for State training programs for all staff. ",
 						Citation: []string{"432", "1", "a9b4ca164fc8bf23d8d44767a9940bf2"},
-						Marker: nil,
+						Marker:   nil,
 					},
 				},
 			},
@@ -878,36 +878,36 @@ func TestSectionPostProcess(t *testing.T) {
 		{
 			Name: "test-paragraph-bad-order",
 			Input: Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"432", "1"},
-				Header: "§ 432.1 Basis and purpose.",
+				Header:   "§ 432.1 Basis and purpose.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(b) <I>Negative case reviews.</I> Except as provided in paragraph (c) of this...",
 					},
 					&Paragraph{
-						Type: "Paragraph",
+						Type:    "Paragraph",
 						Content: "(iv) Individuals whose eligibility was determined under a State's option under...",
 					},
 				},
 			},
 			Expected: Section{
-				Type: "SECTION",
+				Type:     "SECTION",
 				Citation: SectionCitation{"432", "1"},
-				Header: "§ 432.1 Basis and purpose.",
+				Header:   "§ 432.1 Basis and purpose.",
 				Children: SectionChildren{
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(b) <I>Negative case reviews.</I> Except as provided in paragraph (c) of this...",
+						Type:     "Paragraph",
+						Content:  "(b) <I>Negative case reviews.</I> Except as provided in paragraph (c) of this...",
 						Citation: []string{"432", "1", "b"},
-						Marker: []string{"b"},
+						Marker:   []string{"b"},
 					},
 					&Paragraph{
-						Type: "Paragraph",
-						Content: "(iv) Individuals whose eligibility was determined under a State's option under...",
+						Type:     "Paragraph",
+						Content:  "(iv) Individuals whose eligibility was determined under a State's option under...",
 						Citation: []string{"432", "1", "76f6ff614229c6d44034872f9922375d"},
-						Marker: []string{"iv"},
+						Marker:   []string{"iv"},
 					},
 				},
 			},
@@ -926,10 +926,10 @@ func TestSectionPostProcess(t *testing.T) {
 
 func TestSectionChildrenUnmarshalXML(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected SectionChildren
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-paragraph",
@@ -938,106 +938,106 @@ func TestSectionChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: SectionChildren{
 				&Paragraph{
-					Type: "Paragraph",
+					Type:    "Paragraph",
 					Content: "This is a paragraph",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-flush-paragraph",
+			Name:  "test-flush-paragraph",
 			Input: []byte("<FP>This is a flush paragraph</FP>"),
 			Expected: SectionChildren{
 				&FlushParagraph{
-					Type: "FlushParagraph",
+					Type:    "FlushParagraph",
 					Content: "This is a flush paragraph",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-flush-paragraph-1",
+			Name:  "test-flush-paragraph-1",
 			Input: []byte("<FP-1>This is a flush paragraph (1)</FP-1>"),
 			Expected: SectionChildren{
 				&FlushParagraph{
-					Type: "FlushParagraph",
+					Type:    "FlushParagraph",
 					Content: "This is a flush paragraph (1)",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-flush-paragraph-2",
+			Name:  "test-flush-paragraph-2",
 			Input: []byte("<FP-2>This is a flush paragraph (2)</FP-2>"),
 			Expected: SectionChildren{
 				&FlushParagraph{
-					Type: "FlushParagraph",
+					Type:    "FlushParagraph",
 					Content: "This is a flush paragraph (2)",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-image",
+			Name:  "test-image",
 			Input: []byte("<img src=\"images/test.png\" />"),
 			Expected: SectionChildren{
 				&Image{
-					Type: "Image",
+					Type:   "Image",
 					Source: "images/test.png",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-extract",
+			Name:  "test-extract",
 			Input: []byte("<EXTRACT>This is an extract</EXTRACT>"),
 			Expected: SectionChildren{
 				&Extract{
-					Type: "Extract",
+					Type:    "Extract",
 					Content: "This is an extract",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-citation",
+			Name:  "test-citation",
 			Input: []byte("<CITA TYPE=\"N\">This is a citation</CITA>"),
 			Expected: SectionChildren{
 				&Citation{
-					Type: "Citation",
+					Type:    "Citation",
 					Content: "This is a citation",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-section-authority",
+			Name:  "test-section-authority",
 			Input: []byte("<SECAUTH TYPE=\"N\">This is a section authority</SECAUTH>"),
 			Expected: SectionChildren{
 				&SectionAuthority{
-					Type: "SectionAuthority",
+					Type:    "SectionAuthority",
 					Content: "This is a section authority",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-footnote",
+			Name:  "test-footnote",
 			Input: []byte("<FTNT>This is a footnote</FTNT>"),
 			Expected: SectionChildren{
 				&FootNote{
-					Type: "FootNote",
+					Type:    "FootNote",
 					Content: "This is a footnote",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-division",
+			Name:  "test-division",
 			Input: []byte("<DIV>This is a division</DIV>"),
 			Expected: SectionChildren{
 				&Division{
-					Type: "Division",
+					Type:    "Division",
 					Content: "This is a division",
 				},
 			},
@@ -1053,24 +1053,24 @@ func TestSectionChildrenUnmarshalXML(t *testing.T) {
 			`),
 			Expected: SectionChildren{
 				&EffectiveDateNote{
-					Type: "EffectiveDateNote",
-					Header: "Effective Date Note:",
+					Type:    "EffectiveDateNote",
+					Header:  "Effective Date Note:",
 					Content: "This is an effective date note",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-unknown-type",
-			Input: []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
+			Name:     "test-unknown-type",
+			Input:    []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
 			Expected: nil,
-			Error: false,
+			Error:    false,
 		},
 		{
-			Name: "test-bad-xml",
-			Input: []byte("<BADXML>This is bad XML</"),
+			Name:     "test-bad-xml",
+			Input:    []byte("<BADXML>This is bad XML</"),
 			Expected: nil,
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -1094,28 +1094,28 @@ func TestSectionChildrenUnmarshalXML(t *testing.T) {
 
 func TestSectionCitationUnmarshalText(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected SectionCitation
 	}{
 		{
-			Name: "test-part",
-			Input: []byte("430"),
+			Name:     "test-part",
+			Input:    []byte("430"),
 			Expected: SectionCitation{"430"},
 		},
 		{
-			Name: "test-subpart",
-			Input: []byte("A"),
+			Name:     "test-subpart",
+			Input:    []byte("A"),
 			Expected: SectionCitation{"A"},
 		},
 		{
-			Name: "test-subject-group",
-			Input: []byte("ECFR14123c518724401"),
+			Name:     "test-subject-group",
+			Input:    []byte("ECFR14123c518724401"),
 			Expected: SectionCitation{"ECFR14123c518724401"},
 		},
 		{
-			Name: "test-section",
-			Input: []byte("430.1"),
+			Name:     "test-section",
+			Input:    []byte("430.1"),
 			Expected: SectionCitation{"430", "1"},
 		},
 	}
@@ -1128,49 +1128,49 @@ func TestSectionCitationUnmarshalText(t *testing.T) {
 				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
-	}	
+	}
 }
 
 func TestAppendixChildrenUnmarshalXML(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name     string
+		Input    []byte
 		Expected AppendixChildren
-		Error bool
+		Error    bool
 	}{
 		{
-			Name: "test-paragraph",
+			Name:  "test-paragraph",
 			Input: []byte("<P>This is a paragraph</P>"),
 			Expected: AppendixChildren{
 				&Paragraph{
-					Type: "Paragraph",
+					Type:    "Paragraph",
 					Content: "This is a paragraph",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-heading",
+			Name:  "test-heading",
 			Input: []byte("<HD1>This is a heading</HD1>"),
 			Expected: AppendixChildren{
 				&Heading{
-					Type: "Heading",
+					Type:    "Heading",
 					Content: "This is a heading",
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-unknown-type",
-			Input: []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
+			Name:     "test-unknown-type",
+			Input:    []byte("<UNKNOWN>This is an unknown type</UNKNOWN>"),
 			Expected: nil,
-			Error: false,
+			Error:    false,
 		},
 		{
-			Name: "test-bad-xml",
-			Input: []byte("<BADXML>This is bad XML</"),
+			Name:     "test-bad-xml",
+			Input:    []byte("<BADXML>This is bad XML</"),
 			Expected: nil,
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -1204,8 +1204,8 @@ func TestAppendixCitationUnmarshalText(t *testing.T) {
 
 func TestParagraphLevel(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input Paragraph
+		Name     string
+		Input    Paragraph
 		Expected int
 	}{
 		{
@@ -1250,33 +1250,33 @@ func TestParagraphLevel(t *testing.T) {
 
 func TestImagePostProcess(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input string
+		Name     string
+		Input    string
 		Expected string
 	}{
 		{
-			Name: "test-good-image",
-			Input: "https://images.federalregister.gov/ABCDEF/large.png",
+			Name:     "test-good-image",
+			Input:    "https://images.federalregister.gov/ABCDEF/large.png",
 			Expected: "https://images.federalregister.gov/ABCDEF/large.png",
 		},
 		{
-			Name: "test-rewrite",
-			Input: "/graphics/er27jn96.010.gif",
+			Name:     "test-rewrite",
+			Input:    "/graphics/er27jn96.010.gif",
 			Expected: "https://images.federalregister.gov/ER27JN96.010/large.png",
 		},
 		{
-			Name: "test-eps-rewrite",
-			Input: "/graphics/716-106a.eps.gif",
+			Name:     "test-eps-rewrite",
+			Input:    "/graphics/716-106a.eps.gif",
 			Expected: "https://images.federalregister.gov/716-106A/large.png",
 		},
 		{
-			Name: "test-bad-path-1",
-			Input: "/graphics/",
+			Name:     "test-bad-path-1",
+			Input:    "/graphics/",
 			Expected: "/graphics/",
 		},
 		{
-			Name: "test-bad-path-2",
-			Input: "/graphics",
+			Name:     "test-bad-path-2",
+			Input:    "/graphics",
 			Expected: "/graphics",
 		},
 	}
@@ -1284,7 +1284,7 @@ func TestImagePostProcess(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			img := Image{
-				Type: "Image",
+				Type:   "Image",
 				Source: tc.Input,
 			}
 			img.PostProcess()

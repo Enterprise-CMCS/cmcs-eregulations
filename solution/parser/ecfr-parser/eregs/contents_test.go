@@ -10,7 +10,7 @@ import (
 
 func TestAddPart(t *testing.T) {
 	title := Title{
-		Name: "42",
+		Name:     "42",
 		Contents: &ecfr.Structure{},
 	}
 
@@ -18,16 +18,16 @@ func TestAddPart(t *testing.T) {
 		Name: "42",
 		Contents: &ecfr.Structure{
 			Identifier: ecfr.IdentifierString{"42"},
-			Type: "title",
+			Type:       "title",
 			Children: []*ecfr.Structure{
 				&ecfr.Structure{
 					Identifier: ecfr.IdentifierString{"A"},
-					Type: "subchapter",
+					Type:       "subchapter",
 					Children: []*ecfr.Structure{
 						&ecfr.Structure{
 							Identifier: ecfr.IdentifierString{"400"},
-							Type: "part",
-							Children: []*ecfr.Structure{},
+							Type:       "part",
+							Children:   []*ecfr.Structure{},
 						},
 					},
 				},
@@ -43,41 +43,41 @@ func TestAddPart(t *testing.T) {
 
 	secondAddition := ecfr.Structure{
 		Identifier: ecfr.IdentifierString{"42"},
-		Type: "title",
+		Type:       "title",
 		Children: []*ecfr.Structure{
 			&ecfr.Structure{
 				Identifier: ecfr.IdentifierString{"A"},
-				Type: "subchapter",
+				Type:       "subchapter",
 				Children: []*ecfr.Structure{
 					&ecfr.Structure{
 						Identifier: ecfr.IdentifierString{"401"},
-						Type: "part",
-						Children: []*ecfr.Structure{},
+						Type:       "part",
+						Children:   []*ecfr.Structure{},
 					},
 				},
 			},
-		},	
+		},
 	}
 
 	secondExpected := Title{
 		Name: "42",
 		Contents: &ecfr.Structure{
 			Identifier: ecfr.IdentifierString{"42"},
-			Type: "title",
+			Type:       "title",
 			Children: []*ecfr.Structure{
 				&ecfr.Structure{
 					Identifier: ecfr.IdentifierString{"A"},
-					Type: "subchapter",
+					Type:       "subchapter",
 					Children: []*ecfr.Structure{
 						&ecfr.Structure{
 							Identifier: ecfr.IdentifierString{"400"},
-							Type: "part",
-							Children: []*ecfr.Structure{},
+							Type:       "part",
+							Children:   []*ecfr.Structure{},
 						},
 						&ecfr.Structure{
 							Identifier: ecfr.IdentifierString{"401"},
-							Type: "part",
-							Children: []*ecfr.Structure{},
+							Type:       "part",
+							Children:   []*ecfr.Structure{},
 						},
 					},
 				},
@@ -103,21 +103,21 @@ func TestRemovePart(t *testing.T) {
 		Name: "42",
 		Contents: &ecfr.Structure{
 			Identifier: ecfr.IdentifierString{"42"},
-			Type: "title",
+			Type:       "title",
 			Children: []*ecfr.Structure{
 				&ecfr.Structure{
 					Identifier: ecfr.IdentifierString{"A"},
-					Type: "subchapter",
+					Type:       "subchapter",
 					Children: []*ecfr.Structure{
 						&ecfr.Structure{
 							Identifier: ecfr.IdentifierString{"400"},
-							Type: "part",
-							Children: []*ecfr.Structure{},
+							Type:       "part",
+							Children:   []*ecfr.Structure{},
 						},
 						&ecfr.Structure{
 							Identifier: ecfr.IdentifierString{"401"},
-							Type: "part",
-							Children: []*ecfr.Structure{},
+							Type:       "part",
+							Children:   []*ecfr.Structure{},
 						},
 					},
 				},
@@ -129,16 +129,16 @@ func TestRemovePart(t *testing.T) {
 		Name: "42",
 		Contents: &ecfr.Structure{
 			Identifier: ecfr.IdentifierString{"42"},
-			Type: "title",
+			Type:       "title",
 			Children: []*ecfr.Structure{
 				&ecfr.Structure{
 					Identifier: ecfr.IdentifierString{"A"},
-					Type: "subchapter",
+					Type:       "subchapter",
 					Children: []*ecfr.Structure{
 						&ecfr.Structure{
 							Identifier: ecfr.IdentifierString{"401"},
-							Type: "part",
-							Children: []*ecfr.Structure{},
+							Type:       "part",
+							Children:   []*ecfr.Structure{},
 						},
 					},
 				},
@@ -160,8 +160,8 @@ func TestRemovePart(t *testing.T) {
 		Name: "42",
 		Contents: &ecfr.Structure{
 			Identifier: ecfr.IdentifierString{"42"},
-			Type: "title",
-			Children: []*ecfr.Structure{},
+			Type:       "title",
+			Children:   []*ecfr.Structure{},
 		},
 	}
 
@@ -183,34 +183,34 @@ func TestRemovePart(t *testing.T) {
 }
 
 func TestIdentifierStringEqual(t *testing.T) {
-	testTable := []struct{
-		Name string
-		One ecfr.IdentifierString
-		Two ecfr.IdentifierString
+	testTable := []struct {
+		Name  string
+		One   ecfr.IdentifierString
+		Two   ecfr.IdentifierString
 		Equal bool
 	}{
 		{
-			Name: "test-single-element-equal",
-			One: ecfr.IdentifierString{"A"},
-			Two: ecfr.IdentifierString{"A"},
+			Name:  "test-single-element-equal",
+			One:   ecfr.IdentifierString{"A"},
+			Two:   ecfr.IdentifierString{"A"},
 			Equal: true,
 		},
 		{
-			Name: "test-two-elements-equal",
-			One: ecfr.IdentifierString{"A", "42"},
-			Two: ecfr.IdentifierString{"A", "42"},
+			Name:  "test-two-elements-equal",
+			One:   ecfr.IdentifierString{"A", "42"},
+			Two:   ecfr.IdentifierString{"A", "42"},
 			Equal: true,
 		},
 		{
-			Name: "test-length-not-equal",
-			One: ecfr.IdentifierString{"A"},
-			Two: ecfr.IdentifierString{"A", "B"},
+			Name:  "test-length-not-equal",
+			One:   ecfr.IdentifierString{"A"},
+			Two:   ecfr.IdentifierString{"A", "B"},
 			Equal: false,
 		},
 		{
-			Name: "test-not-equal",
-			One: ecfr.IdentifierString{"A"},
-			Two: ecfr.IdentifierString{"B"},
+			Name:  "test-not-equal",
+			One:   ecfr.IdentifierString{"A"},
+			Two:   ecfr.IdentifierString{"B"},
 			Equal: false,
 		},
 	}
@@ -229,12 +229,12 @@ func TestIdentifierStringEqual(t *testing.T) {
 
 func TestCopyStructure(t *testing.T) {
 	a := ecfr.Structure{
-		Identifier: ecfr.IdentifierString{"A", "B"},
-		Label: "Test",
-		LabelLevel: "TestLevel",
+		Identifier:       ecfr.IdentifierString{"A", "B"},
+		Label:            "Test",
+		LabelLevel:       "TestLevel",
 		LabelDescription: "TestDescription",
-		Reserved: true,
-		Type: "title",
+		Reserved:         true,
+		Type:             "title",
 		Children: []*ecfr.Structure{
 			&ecfr.Structure{
 				Identifier: ecfr.IdentifierString{"42"},
@@ -244,14 +244,14 @@ func TestCopyStructure(t *testing.T) {
 	}
 
 	expected := ecfr.Structure{
-		Identifier: ecfr.IdentifierString{"A", "B"},
-		Label: "Test",
-		LabelLevel: "TestLevel",
+		Identifier:       ecfr.IdentifierString{"A", "B"},
+		Label:            "Test",
+		LabelLevel:       "TestLevel",
 		LabelDescription: "TestDescription",
-		Reserved: true,
-		Type: "title",
-		Children: []*ecfr.Structure{},
-		DescendantRange: ecfr.RangeString{"abc", "xyz"},
+		Reserved:         true,
+		Type:             "title",
+		Children:         []*ecfr.Structure{},
+		DescendantRange:  ecfr.RangeString{"abc", "xyz"},
 	}
 
 	output := copyStructure(&a)
