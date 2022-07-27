@@ -1,9 +1,9 @@
 package eregs
 
 import (
-	"testing"
-	"net/http/httptest"
 	"net/http"
+	"net/http/httptest"
+	"testing"
 
 	"github.com/go-test/deep"
 )
@@ -18,22 +18,22 @@ func TestSubchapterArgString(t *testing.T) {
 
 func TestSubchapterArgSet(t *testing.T) {
 	testTable := []struct {
-		Name string
+		Name  string
 		Input string
 		Error bool
 	}{
 		{
-			Name: "test-single-arg",
+			Name:  "test-single-arg",
 			Input: "one",
 			Error: true,
 		},
 		{
-			Name: "test-two-args",
+			Name:  "test-two-args",
 			Input: "one-two",
 			Error: false,
 		},
 		{
-			Name: "test-bad-args",
+			Name:  "test-bad-args",
 			Input: "one-",
 			Error: true,
 		},
@@ -56,13 +56,13 @@ func TestSubchapterArgSet(t *testing.T) {
 
 func TestSubchapterListUnmarshalText(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name   string
+		Input  []byte
 		Output *SubchapterList
-		Error bool
+		Error  bool
 	}{
 		{
-			Name: "test-single-good",
+			Name:  "test-single-good",
 			Input: []byte("IV-C"),
 			Output: &SubchapterList{
 				SubchapterArg{"IV", "C"},
@@ -70,7 +70,7 @@ func TestSubchapterListUnmarshalText(t *testing.T) {
 			Error: false,
 		},
 		{
-			Name: "test-multi-good",
+			Name:  "test-multi-good",
 			Input: []byte("IV-C, AB-C, EF-G"),
 			Output: &SubchapterList{
 				SubchapterArg{"IV", "C"},
@@ -80,7 +80,7 @@ func TestSubchapterListUnmarshalText(t *testing.T) {
 			Error: false,
 		},
 		{
-			Name: "test-inconsistent-spacing",
+			Name:  "test-inconsistent-spacing",
 			Input: []byte("IV-C, AB-C,EF-G"),
 			Output: &SubchapterList{
 				SubchapterArg{"IV", "C"},
@@ -90,22 +90,22 @@ func TestSubchapterListUnmarshalText(t *testing.T) {
 			Error: false,
 		},
 		{
-			Name: "test-first-arg-bad",
-			Input: []byte("IV"),
+			Name:   "test-first-arg-bad",
+			Input:  []byte("IV"),
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 		{
-			Name: "test-second-arg-bad",
-			Input: []byte("-C"),
+			Name:   "test-second-arg-bad",
+			Input:  []byte("-C"),
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 		{
-			Name: "test-empty-args",
-			Input: []byte("-"),
+			Name:   "test-empty-args",
+			Input:  []byte("-"),
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 	}
 
@@ -128,38 +128,38 @@ func TestSubchapterListUnmarshalText(t *testing.T) {
 
 func TestPartListUnmarshalText(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []byte
+		Name   string
+		Input  []byte
 		Output *PartList
 	}{
 		{
-			Name: "test-single-good",
-			Input: []byte("123"),
+			Name:   "test-single-good",
+			Input:  []byte("123"),
 			Output: &PartList{"123"},
 		},
 		{
-			Name: "test-multi-good",
-			Input: []byte("123, 456, 789"),
+			Name:   "test-multi-good",
+			Input:  []byte("123, 456, 789"),
 			Output: &PartList{"123", "456", "789"},
 		},
 		{
-			Name: "test-inconsistent-spacing",
-			Input: []byte("123, 456,789"),
+			Name:   "test-inconsistent-spacing",
+			Input:  []byte("123, 456,789"),
 			Output: &PartList{"123", "456", "789"},
 		},
 		{
-			Name: "test-invalid-middle-number",
-			Input: []byte("123, a, 456"),
+			Name:   "test-invalid-middle-number",
+			Input:  []byte("123, a, 456"),
 			Output: &PartList{"123", "456"},
 		},
 		{
-			Name: "test-single-letter",
-			Input: []byte("a"),
+			Name:   "test-single-letter",
+			Input:  []byte("a"),
 			Output: &PartList{},
 		},
 		{
-			Name: "test-bad-number",
-			Input: []byte("12a3"),
+			Name:   "test-bad-number",
+			Input:  []byte("12a3"),
 			Output: &PartList{},
 		},
 	}
@@ -168,7 +168,7 @@ func TestPartListUnmarshalText(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			var pl PartList
 			pl.UnmarshalText(tc.Input)
-			
+
 			if diff := deep.Equal(&pl, tc.Output); diff != nil {
 				t.Errorf("output not as expected: %+v", diff)
 			}
@@ -178,10 +178,10 @@ func TestPartListUnmarshalText(t *testing.T) {
 
 func TestRetrieveConfig(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Server *httptest.Server
-		Output *ParserConfig
-		Error bool
+		Name         string
+		Server       *httptest.Server
+		Output       *ParserConfig
+		Error        bool
 		ExpectedCode int
 	}{
 		{
@@ -215,12 +215,12 @@ func TestRetrieveConfig(t *testing.T) {
 				}
 			})),
 			Output: &ParserConfig{
-				Workers: 3,
-				Attempts: 1,
-				LogLevel: "info",
+				Workers:            3,
+				Attempts:           1,
+				LogLevel:           "info",
 				UploadSupplemental: false,
-				LogParseErrors: true,
-				SkipVersions: false,
+				LogParseErrors:     true,
+				SkipVersions:       false,
 				Titles: []*TitleConfig{
 					&TitleConfig{
 						Title: 4,
@@ -240,7 +240,7 @@ func TestRetrieveConfig(t *testing.T) {
 					},
 				},
 			},
-			Error: false,
+			Error:        false,
 			ExpectedCode: http.StatusOK,
 		},
 		{
@@ -268,8 +268,8 @@ func TestRetrieveConfig(t *testing.T) {
 					]
 				}`))
 			})),
-			Output: nil,
-			Error: true,
+			Output:       nil,
+			Error:        true,
 			ExpectedCode: http.StatusOK,
 		},
 		{
@@ -278,8 +278,8 @@ func TestRetrieveConfig(t *testing.T) {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(`{ "exception": "Expected failure" }`))
 			})),
-			Output: nil,
-			Error: true,
+			Output:       nil,
+			Error:        true,
 			ExpectedCode: http.StatusInternalServerError,
 		},
 	}

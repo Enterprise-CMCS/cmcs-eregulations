@@ -10,9 +10,9 @@ import (
 
 // Title represents a title object from eRegs, specifically for table of contents processing
 type Title struct {
-	Name string `json:"name"`
+	Name     string          `json:"name"`
 	Contents *ecfr.Structure `json:"toc"`
-	Exists bool
+	Exists   bool
 	Modified bool
 }
 
@@ -35,16 +35,16 @@ func identifierStringEqual(one *ecfr.IdentifierString, two *ecfr.IdentifierStrin
 
 func copyStructure(src *ecfr.Structure) *ecfr.Structure {
 	return &ecfr.Structure{
-		Identifier: src.Identifier,
-		Label: src.Label,
-		LabelLevel: src.LabelLevel,
+		Identifier:       src.Identifier,
+		Label:            src.Label,
+		LabelLevel:       src.LabelLevel,
 		LabelDescription: src.LabelDescription,
-		Reserved: src.Reserved,
-		Type: src.Type,
-		DescendantRange: src.DescendantRange,
-		Children: []*ecfr.Structure{},
-		Parent: src.Parent,
-		ParentType: src.ParentType,
+		Reserved:         src.Reserved,
+		Type:             src.Type,
+		DescendantRange:  src.DescendantRange,
+		Children:         []*ecfr.Structure{},
+		Parent:           src.Parent,
+		ParentType:       src.ParentType,
 	}
 }
 

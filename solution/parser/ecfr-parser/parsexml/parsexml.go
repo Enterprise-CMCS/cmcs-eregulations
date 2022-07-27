@@ -429,10 +429,10 @@ func (img *Image) PostProcess() {
 			return //Invalid filename: have "X", need "X.Y", so leave unchanged
 		}
 		var nameSlice []string
-		if len(splitName) > 2 && strings.ToLower(splitName[len(splitName) - 2]) == "eps" {
-			nameSlice = splitName[0:len(splitName)-2] //Remove file extension and "eps" (e.g. "X.eps.gif")
+		if len(splitName) > 2 && strings.ToLower(splitName[len(splitName)-2]) == "eps" {
+			nameSlice = splitName[0 : len(splitName)-2] //Remove file extension and "eps" (e.g. "X.eps.gif")
 		} else {
-			nameSlice = splitName[0:len(splitName)-1] //Only remove file extension (e.g. "X.gif")
+			nameSlice = splitName[0 : len(splitName)-1] //Only remove file extension (e.g. "X.gif")
 		}
 		imgName := strings.ToUpper(strings.Join(nameSlice, "."))
 		img.Source = fmt.Sprintf("https://images.federalregister.gov/%s/large.png", imgName)

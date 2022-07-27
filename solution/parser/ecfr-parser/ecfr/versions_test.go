@@ -1,10 +1,10 @@
 package ecfr
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
 	"context"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 	"time"
 
 	"github.com/go-test/deep"
@@ -60,10 +60,10 @@ func TestPartVersions(t *testing.T) {
 
 func TestExtractVersions(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Server *httptest.Server
+		Name     string
+		Server   *httptest.Server
 		Expected map[string]map[string]struct{}
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-valid-response",
@@ -132,7 +132,7 @@ func TestExtractVersions(t *testing.T) {
 							"type": "section"
 						}
 					]
-				}`))				
+				}`))
 			})),
 			Expected: map[string]map[string]struct{}{
 				"10": map[string]struct{}{
@@ -154,7 +154,7 @@ func TestExtractVersions(t *testing.T) {
 				w.Write([]byte(`{ "exception": "this is expected" }`))
 			})),
 			Expected: map[string]map[string]struct{}{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-bad-json",
@@ -163,7 +163,7 @@ func TestExtractVersions(t *testing.T) {
 				w.Write([]byte(`{ "exception" "this is bad JSON" `))
 			})),
 			Expected: map[string]map[string]struct{}{},
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -171,7 +171,7 @@ func TestExtractVersions(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			defer tc.Server.Close()
 			EcfrSite = tc.Server.URL
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			out, err := ExtractVersions(ctx, 42)
@@ -190,10 +190,10 @@ func TestExtractVersions(t *testing.T) {
 
 func TestExtractPartVersions(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Server *httptest.Server
+		Name     string
+		Server   *httptest.Server
 		Expected map[string]struct{}
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-valid-response",
@@ -262,7 +262,7 @@ func TestExtractPartVersions(t *testing.T) {
 							"type": "section"
 						}
 					]
-				}`))				
+				}`))
 			})),
 			Expected: map[string]struct{}{
 				"2017-01-01": struct{}{},
@@ -277,7 +277,7 @@ func TestExtractPartVersions(t *testing.T) {
 				w.Write([]byte(`{ "exception": "this is expected" }`))
 			})),
 			Expected: map[string]struct{}{},
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-bad-json",
@@ -286,7 +286,7 @@ func TestExtractPartVersions(t *testing.T) {
 				w.Write([]byte(`{ "exception" "this is bad JSON" `))
 			})),
 			Expected: map[string]struct{}{},
-			Error: true,
+			Error:    true,
 		},
 	}
 
@@ -294,7 +294,7 @@ func TestExtractPartVersions(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			defer tc.Server.Close()
 			EcfrSite = tc.Server.URL
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			part := PartOption{
