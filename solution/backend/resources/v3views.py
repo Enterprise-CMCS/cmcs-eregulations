@@ -231,7 +231,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                               "search with quotes.", str, False),
         OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
                               "\"&categories=X&categories=Y\" for multiple.", int, False),
-        OpenApiQueryParameter("sort", "Sort results by this field. Valid values are \"newest\", \"oldest\", and \"relevance\". "
+        OpenApiQueryParameter("sort", "Sort results by this field. Valid values are \"newest\" and \"relevance\". "
                               "Newest is the default, and relevance requires a search query.", str, False),
     ] + OptionalPaginationMixin.PARAMETERS + LocationFiltererMixin.PARAMETERS
 
