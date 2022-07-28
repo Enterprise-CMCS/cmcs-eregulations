@@ -29,7 +29,7 @@
                         <div class="synonyms" v-if="synonyms.length > 0"> 
                             <span v-if="multiWordQuery">Or </span>Search for similar terms:
                             <span v-bind:key=a v-for="a in synonyms">
-                                "<a @click="synonymLinks(a)">{{a}}</a>"
+                                <a @click="synonymLinks(a)">{{a}}</a>
                                 <span v-if="synonyms[synonyms.length-1] != a">, </span>
                             </span>
                         </div>
@@ -212,14 +212,7 @@ export default {
         },
         async synonymLinks(synonym){
             this.searchInputValue = synonym
-            this.synonyms  = await this.retrieveSynonyms(synonym)
-            this.$router.push({
-                name: "resources",
-                query: {
-                    ...this.filterParams,
-                    q: synonym
-                }
-            })
+            await this.executeSearch()
         },
         clearSelections() {
             this.partDict = {};
