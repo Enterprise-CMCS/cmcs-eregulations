@@ -244,6 +244,16 @@ export default {
                 },
             });
         },
+        doQuoteSearch(){
+            this.searchInputValue = `"${this.searchInputValue}"`
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: `"${this.searchQuery}"`,
+                },
+            });
+        },
 
         removeChip(payload) {
             const newQueryParams = { ...this.queryParams };
