@@ -246,7 +246,6 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
     def combine_groups(self, groups):
         main = groups[0]
-        main = groups[0]
         docs = main.documents.all()
         prefixes = main.docket_number_prefixes
         for group in groups[1:]:
