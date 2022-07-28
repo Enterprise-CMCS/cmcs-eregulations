@@ -1,6 +1,8 @@
 <template>
     <body class="ds-base">
         <div id="app" class="resources-view">
+
+
             <ResourcesNav :aboutUrl="aboutUrl">
                 <form
                     class="search-resources-form"
