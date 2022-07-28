@@ -25,7 +25,7 @@
                     />
                     <div class="search-suggestion" v-if="multiWordQuery">
                         Didn't find what you were looking for? Try searching for
-                      <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
+                        <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
                     </div>
                 </form>
             </ResourcesNav>
@@ -169,7 +169,13 @@ export default {
             },
         },
         multiWordQuery() {
-          return this.searchQuery.split(" ").length > 1 && (this.searchQuery[0] !== '"' && this.searchQuery[this.searchQuery.length-1] !== '"' )
+            if (this.searchQuery === undefined) return false;
+
+            return (
+                this.searchQuery.split(" ").length > 1
+                    && (this.searchQuery[0] !== '"'
+                    && this.searchQuery[this.searchQuery.length-1] !== '"' )
+            );
         },
         filterParams() {
             return {
