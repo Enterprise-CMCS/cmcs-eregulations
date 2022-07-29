@@ -293,6 +293,12 @@ aside.right-sidebar {
     margin-right: 20px;
 }
 
+.supplemental-content-container
+    .supplemental-content-category
+    .category-content.additional-rules {
+        margin: inherit;
+}
+
 .supplemental-content-category {
     display: table;
     width: 100%;

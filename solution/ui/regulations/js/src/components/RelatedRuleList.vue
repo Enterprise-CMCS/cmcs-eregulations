@@ -50,18 +50,35 @@
             state="collapsed"
             class="category-content additional-rules"
         >
-            <related-rule
-                v-for="(rule, index) in additionalRules"
-                :key="index"
-                :title="ruleTitle(rule)"
-                :type="type(rule)"
-                :citation="citation(rule)"
-                :publication_date="publication_date(rule)"
-                :document_number="rule.document_number"
-                :html_url="html_url(rule)"
-                :action="rule.action"
-            >
-            </related-rule>
+            <template v-for="(rule, i) in additionalRules">
+                <related-rule
+                    :key="i"
+                    :title="ruleTitle(rule)"
+                    :type="type(rule)"
+                    :citation="citation(rule)"
+                    :publication_date="publication_date(rule)"
+                    :document_number="rule.document_number"
+                    :html_url="html_url(rule)"
+                    :action="rule.action"
+                >
+                </related-rule>
+                <template
+                    v-if="rule.related_docs && rule.related_docs.length > 0"
+                >
+                    <related-rule
+                        v-for="(related_doc, ii) in rule.related_docs"
+                        :key="ii + 'grouped'"
+                        :title="ruleTitle(related_doc)"
+                        :type="type(related_doc)"
+                        :citation="citation(related_doc)"
+                        :publication_date="publication_date(related_doc)"
+                        :document_number="related_doc.document_number"
+                        :html_url="html_url(related_doc)"
+                        :action="related_doc.action"
+                        grouped
+                    />
+                </template>
+            </template>
             <collapse-button
                 v-if="showMoreNeeded && rulesCount > 0"
                 :name="innerName"
