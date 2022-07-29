@@ -61,8 +61,8 @@ export default {
             height: "auto",
             visible: false,
             styles: {
-                overflow: this.overflow ? "visible" : "hidden",
                 transition: this.transition,
+                overflow: "hidden",
             },
         };
     },
@@ -74,14 +74,19 @@ export default {
         toggleDisplay: function (e) {
             if (this.visible) {
                 this.$refs.target.style.height = "auto";
+                if (this.state === "collapsed" && this.overflow) {
+                    this.$refs.target.style.overflow = "visible"
+                }
             } else {
                 this.$refs.target.classList.add("display-none");
+                this.$refs.target.style.oveflow = "hidden";
             }
         },
         toggle: function (target) {
             if (this.dataName === target) {
                 if (this.$refs.target) {
                     this.$refs.target.classList.remove("display-none");
+                    this.$refs.target.style.overflow = "hidden"
                 }
                 requestAnimationFrame(() => {
                     this.computeHeight();
