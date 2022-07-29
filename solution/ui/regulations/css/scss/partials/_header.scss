@@ -239,14 +239,16 @@ header {
     flex: 0 0 48px;
     height: 48px;
 
-    .search-submit{
+    .search-submit {
         position: absolute;
         right: 0;
         border-left: none;
         height: 40px;
+        width: 40px;
+        box-sizing: border-box;
 
-        .fa{
-            font-size: 16px
+        .fa {
+            font-size: 16px;
         }
     }
 
@@ -273,7 +275,7 @@ header {
             width: 250px;
             display: inline-block;
 
-            .search-submit{
+            .search-submit {
                 height: 45px;
                 width: 48px;
                 line-height: 16px;

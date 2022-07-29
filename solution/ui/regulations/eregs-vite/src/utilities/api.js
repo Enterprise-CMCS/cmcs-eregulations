@@ -716,7 +716,8 @@ const getSupplementalContentV3 = async (
         page = 1,
         cat_details = true,
         page_size = 100,
-        location_details = true
+        location_details = true,
+        sortMethod = "newest"
     }
 ) => {
     const queryString = q ? `&q=${q}` : "";
@@ -749,21 +750,17 @@ const getSupplementalContentV3 = async (
     sString = `${sString}&category_details=${cat_details}`
     sString = `${sString}&location_details=${location_details}`
     sString = `${sString}&start=${start}&max_results=${max_results}${queryString}`;
+    sString = `${sString}&sort=${sortMethod}`;
+
     if (paginate) {
         sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
+        return httpApiGetV3WithPagination(`resources/?${sString}`)
     }
 
-    if (paginate){
-       return httpApiGetV3WithPagination(`resources/?${sString}`)
+    const response = await httpApiGetV3(`resources/?${sString}`)
+    return response.results;
 
-
-    }
-    else{
-        const response = await httpApiGetV3(`resources/?${sString}`)
-        return response.results;
-    }
-
-    }
+}
 /**
  *
  * @param title {string} - The requested title, defaults to 42

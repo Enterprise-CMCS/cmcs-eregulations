@@ -1,12 +1,15 @@
 <template>
     <body class="ds-base">
         <div id="app" class="resources-view">
+
+
             <ResourcesNav :aboutUrl="aboutUrl">
                 <form
                     class="search-resources-form"
                     @submit.prevent="executeSearch"
                 >
                     <v-text-field
+                        v-model="searchInputValue"
                         outlined
                         flat
                         solo
@@ -17,13 +20,12 @@
                         append-icon="mdi-magnify"
                         hide-details
                         dense
-                        v-model="searchInputValue"
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
                     />
                     <div class="search-suggestion" v-if="multiWordQuery">
                         Didn't find what you were looking for? Try searching for
-                      <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
+                        <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
                     </div>
                 </form>
             </ResourcesNav>
@@ -57,6 +59,9 @@
                         :partsList="filters.part.listItems"
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
+                        :sortMethod="sortMethod"
+                        :sortDisabled="sortDisabled"
+                        @sort="setSortMethod"
                     />
                 </div>
             </div>
@@ -85,7 +90,7 @@ import {
 } from "../utilities/api";
 
 export default {
-    name: "Resources",
+    name: "ResourcesView",
 
     components: {
         ResourcesNav,
@@ -141,7 +146,7 @@ export default {
                 },
             },
             supplementalContent: [],
-            searchInputValue: "",
+            searchInputValue: undefined,
         };
     },
 
@@ -157,14 +162,20 @@ export default {
         },
         searchQuery: {
             get() {
-                return this.queryParams.q || "";
+                return this.queryParams.q || undefined;
             },
             set(value) {
                 this.searchInputValue = value;
             },
         },
         multiWordQuery() {
-          return this.searchQuery.split(" ").length > 1 && (this.searchQuery[0] !== '"' && this.searchQuery[this.searchQuery.length-1] !== '"' )
+            if (this.searchQuery === undefined) return false;
+
+            return (
+                this.searchQuery.split(" ").length > 1
+                    && (this.searchQuery[0] !== '"'
+                    && this.searchQuery[this.searchQuery.length-1] !== '"' )
+            );
         },
         filterParams() {
             return {
@@ -175,6 +186,12 @@ export default {
                 resourceCategory: this.queryParams.resourceCategory,
             };
         },
+        sortMethod() {
+            return this.queryParams.sort || "newest";
+        },
+        sortDisabled() {
+            return _isEmpty(this.searchQuery);
+        },
     },
 
     methods: {
@@ -182,39 +199,49 @@ export default {
             const sectionRegex = /^\d{2,3}\.(\d{1,4})$/;
 
             if (sectionRegex.test(this.searchInputValue)) {
-                let payload = {
+                const payload = {
                     scope: "section",
                     selectedIdentifier: this.searchInputValue.replace(".", "-"),
                     searchSection: true,
                 };
-                return this.updateFilters(payload);
+                this.updateFilters(payload);
+            } else {
+                this.$router.push({
+                    name: "resources",
+                    query: {
+                        ...this.filterParams,
+                        q: this.searchInputValue,
+                        sort: this.sortMethod,
+                    },
+                });
             }
-            this.$router.push({
-                name: "resources",
-                query: {
-                    ...this.filterParams,
-                    q: this.searchInputValue,
-                },
-            });
         },
         clearSelections() {
             this.partDict = {};
             this.$router.push({
                 name: "resources",
                 query: {
-                    title: undefined,
-                    part: undefined,
-                    subpart: undefined,
-                    section: undefined,
-                    resourceCategory: undefined,
                     q: this.searchQuery,
+                    sort: this.sortMethod
                 },
             });
         },
         clearSearchQuery() {
             this.$router.push({
                 name: "resources",
-                query: { ...this.filterParams },
+                query: {
+                    ...this.filterParams,
+                },
+            });
+        },
+        doQuoteSearch(){
+            this.searchInputValue = `"${this.searchInputValue}"`
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: `"${this.searchQuery}"`,
+                },
             });
         },
         doQuoteSearch(){
@@ -326,7 +353,7 @@ export default {
 
                 if (payload.searchSection) {
                     newQueryParams.q = "";
-                    this.searchInputValue = "";
+                    this.searchInputValue = undefined;
                 }
                 if (newQueryParams.part) {
                   this.getPartDict(newQueryParams);
@@ -441,7 +468,7 @@ export default {
             }
         },
 
-        async getSupplementalContent(dataQueryParams, searchQuery) {
+        async getSupplementalContent(dataQueryParams, searchQuery, sortMethod) {
             this.isLoading = true;
 
             if (dataQueryParams.resourceCategory) {
@@ -456,6 +483,7 @@ export default {
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
+                    sortMethod,
                 });
 
                 try {
@@ -473,6 +501,7 @@ export default {
                         categories: this.categories, // subcategories
                         q: searchQuery,
                         paginate: true,
+                        sortMethod,
                     });
 
                     this.supplementalContent = searchResults;
@@ -490,6 +519,7 @@ export default {
                     start: 0, // start
                     max_results: 100, // max_results
                     paginate: false,
+                    sortMethod,
                 });
                 this.isLoading = false;
             }
@@ -606,7 +636,19 @@ export default {
             });
 
             return reducedCats[selectedCategory].subcategories
-        }
+        },
+        setSortMethod(payload) {
+            this.$router.push({
+                name: "resources",
+                query: {
+                    ...this.filterParams,
+                    q: this.searchInputValue === null // getting set to null somewhere...
+                        ? undefined
+                        : this.searchInputValue,
+                    sort: payload,
+                }
+            })
+        },
     },
 
     watch: {
@@ -638,7 +680,7 @@ export default {
                 }
 
                 // always get content otherwise
-                this.getSupplementalContent(this.queryParams, this.searchQuery);
+                this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
@@ -677,7 +719,7 @@ export default {
             );
         }
 
-        this.getSupplementalContent(this.queryParams, this.searchQuery);
+        this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
     },
 
     beforeMount() {},
