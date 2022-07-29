@@ -144,6 +144,10 @@ aside.right-sidebar {
 }
 
 .related-rule {
+    &.ungrouped {
+        padding-top: 26px;
+    }
+
     &.grouped {
         display: block;
         position: relative;

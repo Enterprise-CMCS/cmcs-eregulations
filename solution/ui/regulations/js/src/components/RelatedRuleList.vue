@@ -49,6 +49,7 @@
             :name="innerName"
             state="collapsed"
             class="category-content additional-rules"
+            overflow
         >
             <template v-for="(rule, i) in additionalRules">
                 <related-rule

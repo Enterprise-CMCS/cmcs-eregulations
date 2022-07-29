@@ -48,6 +48,11 @@ export default {
             required: false,
             default: "0.5s",
         },
+        overflow: {
+            type: Boolean,
+            required: false,
+            default: false,
+        }
     },
 
     data: function () {
@@ -56,7 +61,7 @@ export default {
             height: "auto",
             visible: false,
             styles: {
-                overflow: "hidden",
+                overflow: this.overflow ? "visible" : "hidden",
                 transition: this.transition,
             },
         };

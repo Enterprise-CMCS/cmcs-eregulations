@@ -101,6 +101,7 @@ export default {
         ruleClasses() {
             return {
                 grouped: this.grouped,
+                ungrouped: !this.grouped,
             };
         },
         indicatorClasses() {

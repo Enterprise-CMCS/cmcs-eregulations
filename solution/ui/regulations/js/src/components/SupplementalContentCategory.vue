@@ -34,6 +34,7 @@
                 :name="name"
                 state="collapsed"
                 class="category-content"
+                overflow
             >
                 <supplemental-content-category
                     v-for="category in sub_categories"
