@@ -1,22 +1,22 @@
 package eregs
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
 	"context"
-	"time"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
 
 	"github.com/go-test/deep"
 )
 
 func TestSendDocument(t *testing.T) {
 	testTable := []struct {
-		Name string
+		Name   string
 		Server *httptest.Server
-		Input FRDoc
-		Error bool
+		Input  FRDoc
+		Error  bool
 	}{
 		{
 			Name: "test-valid",
@@ -33,11 +33,11 @@ func TestSendDocument(t *testing.T) {
 				}
 			})),
 			Input: FRDoc{
-				Name: "this is a name",
+				Name:        "this is a name",
 				Description: "this is a description",
-				Category: "this is a category",
-				URL: "https://test.gov/test",
-				Date: "2021-01-31",
+				Category:    "this is a category",
+				URL:         "https://test.gov/test",
+				Date:        "2021-01-31",
 				DocketNumbers: []string{
 					"CMS-0000-F2",
 					"CMS-0001-C1",
@@ -45,13 +45,13 @@ func TestSendDocument(t *testing.T) {
 				DocumentNumber: "2021-12345",
 				Locations: []*Section{
 					&Section{
-						Title: "42",
-						Part: "433",
+						Title:   "42",
+						Part:    "433",
 						Section: "1",
 					},
 					&Section{
-						Title: "45",
-						Part: "450",
+						Title:   "45",
+						Part:    "450",
 						Section: "10",
 					},
 				},
@@ -68,15 +68,15 @@ func TestSendDocument(t *testing.T) {
 			Error: true,
 		},
 		{
-			Name: "test-no-connection",
+			Name:   "test-no-connection",
 			Server: nil,
-			Input: FRDoc{},
-			Error: true,
+			Input:  FRDoc{},
+			Error:  true,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			if tc.Server != nil {
 				defer tc.Server.Close()
 				BaseURL = tc.Server.URL
@@ -89,7 +89,7 @@ func TestSendDocument(t *testing.T) {
 				server.Close()
 			}
 
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			err := SendDocument(ctx, &tc.Input)
@@ -116,18 +116,18 @@ func TestCreateSections(t *testing.T) {
 
 	expected := []*Section{
 		&Section{
-			Title: "42",
-			Part: "443",
+			Title:   "42",
+			Part:    "443",
 			Section: "42",
 		},
 		&Section{
-			Title: "42",
-			Part: "1",
+			Title:   "42",
+			Part:    "1",
 			Section: "1",
 		},
 		&Section{
-			Title: "42",
-			Part: "123",
+			Title:   "42",
+			Part:    "123",
 			Section: "45",
 		},
 	}
@@ -140,10 +140,10 @@ func TestCreateSections(t *testing.T) {
 
 func TestFetchDocumentList(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Server *httptest.Server
+		Name     string
+		Server   *httptest.Server
 		Expected []string
-		Error bool
+		Error    bool
 	}{
 		{
 			Name: "test-success",
@@ -161,10 +161,10 @@ func TestFetchDocumentList(t *testing.T) {
 			Error: false,
 		},
 		{
-			Name: "test-server-error",
-			Server: nil,
+			Name:     "test-server-error",
+			Server:   nil,
 			Expected: nil,
-			Error: true,
+			Error:    true,
 		},
 		{
 			Name: "test-server-error",
@@ -173,12 +173,12 @@ func TestFetchDocumentList(t *testing.T) {
 				w.Write([]byte(`{ "exception": "this is expected" }`))
 			})),
 			Expected: nil,
-			Error: true,
+			Error:    true,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			if tc.Server == nil {
 				tempServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 					w.WriteHeader(http.StatusInternalServerError)
@@ -191,7 +191,7 @@ func TestFetchDocumentList(t *testing.T) {
 				defer tc.Server.Close()
 			}
 
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			output, err := FetchDocumentList(ctx)

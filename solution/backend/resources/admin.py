@@ -156,11 +156,22 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
 
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
-    list_display = ("date", "name", "description", "docket_numbers", "document_number", "category", "updated_at", "approved")
-    list_display_links = ("date", "name", "description", "docket_numbers", "document_number", "category", "updated_at")
+    list_display = ("date", "name", "description", "in_group", "docket_numbers",
+                    "document_number", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
+                          "document_number", "category", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "group", "document_number", "name",
               "description", "date", "url", "category", "locations", "internal_notes")
+
+    def in_group(self, obj):
+        group = str(obj.group)
+        return group[0:20] + "..." if len(group) > 20 else group
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
+        )
 
 
 class FederalRegisterDocumentGroupForm(forms.ModelForm):
@@ -180,6 +191,7 @@ class FederalRegisterDocumentGroupForm(forms.ModelForm):
 
     def save(self, commit=True):
         group = super().save(commit=False)
+        group.save()
         group.documents.set(self.cleaned_data["documents"])
         group.save()
         return group

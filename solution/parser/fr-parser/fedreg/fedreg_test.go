@@ -1,23 +1,23 @@
 package fedreg
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
 	"context"
-	"time"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"strconv"
+	"testing"
+	"time"
 
 	"github.com/go-test/deep"
 )
 
 func TestFetchContent(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Pages [][]byte
+		Name   string
+		Pages  [][]byte
 		Output []*FRDoc
-		Error bool
+		Error  bool
 	}{
 		{
 			Name: "test-single-page",
@@ -52,11 +52,11 @@ func TestFetchContent(t *testing.T) {
 			},
 			Output: []*FRDoc{
 				&FRDoc{
-					Name: "a citation",
+					Name:        "a citation",
 					Description: "a title",
-					Category: "a type",
-					URL: "https://test.gov/test",
-					Date: "2021-01-31",
+					Category:    "a type",
+					URL:         "https://test.gov/test",
+					Date:        "2021-01-31",
 					DocketNumbers: []string{
 						"CMS-0000-F2",
 						"CMS-0001-C1",
@@ -64,12 +64,12 @@ func TestFetchContent(t *testing.T) {
 					DocumentNumber: "2021-12345",
 				},
 				&FRDoc{
-					Name: "a citation 2",
-					Description: "a title 2",
-					Category: "a type 2",
-					URL: "https://test.gov/test/2",
-					Date: "2021-02-01",
-					DocketNumbers: []string{"CMS-0000-F3"},
+					Name:           "a citation 2",
+					Description:    "a title 2",
+					Category:       "a type 2",
+					URL:            "https://test.gov/test/2",
+					Date:           "2021-02-01",
+					DocketNumbers:  []string{"CMS-0000-F3"},
 					DocumentNumber: "2021-67890",
 				},
 			},
@@ -135,11 +135,11 @@ func TestFetchContent(t *testing.T) {
 			},
 			Output: []*FRDoc{
 				&FRDoc{
-					Name: "a citation",
+					Name:        "a citation",
 					Description: "a title",
-					Category: "a type",
-					URL: "https://test.gov/test",
-					Date: "2021-01-31",
+					Category:    "a type",
+					URL:         "https://test.gov/test",
+					Date:        "2021-01-31",
 					DocketNumbers: []string{
 						"CMS-0000-F2",
 						"CMS-0001-C1",
@@ -147,30 +147,30 @@ func TestFetchContent(t *testing.T) {
 					DocumentNumber: "2021-12345",
 				},
 				&FRDoc{
-					Name: "a citation 2",
-					Description: "a title 2",
-					Category: "a type 2",
-					URL: "https://test.gov/test/2",
-					Date: "2021-02-01",
-					DocketNumbers: []string{"CMS-0000-F3"},
+					Name:           "a citation 2",
+					Description:    "a title 2",
+					Category:       "a type 2",
+					URL:            "https://test.gov/test/2",
+					Date:           "2021-02-01",
+					DocketNumbers:  []string{"CMS-0000-F3"},
 					DocumentNumber: "2021-67890",
 				},
 				&FRDoc{
-					Name: "a citation 3",
-					Description: "a title 3",
-					Category: "a type 3",
-					URL: "https://test.gov/test/3",
-					Date: "2021-02-02",
-					DocketNumbers: []string{"CMS-0000-F4"},
+					Name:           "a citation 3",
+					Description:    "a title 3",
+					Category:       "a type 3",
+					URL:            "https://test.gov/test/3",
+					Date:           "2021-02-02",
+					DocketNumbers:  []string{"CMS-0000-F4"},
 					DocumentNumber: "2021-09876",
 				},
 				&FRDoc{
-					Name: "a citation 4",
-					Description: "a title 4",
-					Category: "a type 4",
-					URL: "https://test.gov/test/4",
-					Date: "2021-02-03",
-					DocketNumbers: []string{"CMS-0000-F5"},
+					Name:           "a citation 4",
+					Description:    "a title 4",
+					Category:       "a type 4",
+					URL:            "https://test.gov/test/4",
+					Date:           "2021-02-03",
+					DocketNumbers:  []string{"CMS-0000-F5"},
 					DocumentNumber: "2021-54321",
 				},
 			},
@@ -236,12 +236,12 @@ func TestFetchContent(t *testing.T) {
 				}`),
 			},
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				keys, ok := r.URL.Query()["page"]
 				if !ok || len(keys[0]) < 1 {
@@ -266,7 +266,7 @@ func TestFetchContent(t *testing.T) {
 				tc.Pages[i] = []byte(fmt.Sprintf(string(page), server.URL))
 			}
 
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			output, err := FetchContent(ctx, 42, "433")
@@ -283,10 +283,10 @@ func TestFetchContent(t *testing.T) {
 
 func TestFetchSections(t *testing.T) {
 	testTable := []struct {
-		Name string
+		Name     string
 		InputXML []byte
-		Output []string
-		Error bool
+		Output   []string
+		Error    bool
 	}{
 		{
 			Name: "test-valid-sections",
@@ -308,7 +308,7 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Output: []string{"447.502", "33.118"},
-			Error: false,
+			Error:  false,
 		},
 		{
 			Name: "test-bad-xml",
@@ -330,7 +330,7 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 		{
 			Name: "test-bad-sectno",
@@ -352,19 +352,19 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(http.StatusOK)
 				w.Write(tc.InputXML)
 			}))
 			defer server.Close()
 
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			output, err := FetchSections(ctx, server.URL)
@@ -381,39 +381,39 @@ func TestFetchSections(t *testing.T) {
 
 func TestExtractSection(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input string
+		Name   string
+		Input  string
 		Output string
-		Error bool
+		Error  bool
 	}{
 		{
-			Name: "test-valid",
-			Input: "§ 430.12",
+			Name:   "test-valid",
+			Input:  "§ 430.12",
 			Output: "430.12",
-			Error: false,
+			Error:  false,
 		},
 		{
-			Name: "test-invisible-space",
-			Input: "§ㅤ430.11",
+			Name:   "test-invisible-space",
+			Input:  "§ㅤ430.11",
 			Output: "430.11",
-			Error: false,
+			Error:  false,
 		},
 		{
-			Name: "test-invalid",
-			Input: "§ 430",
+			Name:   "test-invalid",
+			Input:  "§ 430",
 			Output: "",
-			Error: true,
+			Error:  true,
 		},
 		{
-			Name: "test-no-symbol",
-			Input: "430.10",
+			Name:   "test-no-symbol",
+			Input:  "430.10",
 			Output: "430.10",
-			Error: false,
+			Error:  false,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func (t *testing.T) {
+		t.Run(tc.Name, func(t *testing.T) {
 			output, err := extractSection(tc.Input)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)

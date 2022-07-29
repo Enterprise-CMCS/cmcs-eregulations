@@ -1,27 +1,27 @@
 package network
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
-	"net/url"
 	"context"
-	"time"
-	"io"
 	"encoding/json"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"sort"
+	"testing"
+	"time"
 
 	"github.com/go-test/deep"
 )
 
 func TestFetch(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Server *httptest.Server
+		Name             string
+		Server           *httptest.Server
 		ExpectedResponse []byte
-		ErrorExpected bool
-		ExpectedCode int
-		JSONErrors bool
+		ErrorExpected    bool
+		ExpectedCode     int
+		JSONErrors       bool
 	}{
 		{
 			Name: "fetch-succeed-test",
@@ -30,9 +30,9 @@ func TestFetch(t *testing.T) {
 				w.Write([]byte("This is an arbitrary array of bytes"))
 			})),
 			ExpectedResponse: []byte("This is an arbitrary array of bytes"),
-			ErrorExpected: false,
-			ExpectedCode: http.StatusOK,
-			JSONErrors: false,
+			ErrorExpected:    false,
+			ExpectedCode:     http.StatusOK,
+			JSONErrors:       false,
 		},
 		{
 			Name: "fetch-fail-test",
@@ -41,9 +41,9 @@ func TestFetch(t *testing.T) {
 				w.Write([]byte(`{ "exception": "This request failed, as expected" }`))
 			})),
 			ExpectedResponse: nil,
-			ErrorExpected: true,
-			ExpectedCode: http.StatusInternalServerError,
-			JSONErrors: false,
+			ErrorExpected:    true,
+			ExpectedCode:     http.StatusInternalServerError,
+			JSONErrors:       false,
 		},
 		{
 			Name: "fetch-json-errors-test",
@@ -57,9 +57,9 @@ func TestFetch(t *testing.T) {
 				}
 			})),
 			ExpectedResponse: []byte("json_errors parameter found!"),
-			ErrorExpected: false,
-			ExpectedCode: http.StatusOK,
-			JSONErrors: true,
+			ErrorExpected:    false,
+			ExpectedCode:     http.StatusOK,
+			JSONErrors:       true,
 		},
 		{
 			Name: "fetch-timeout-test",
@@ -69,9 +69,9 @@ func TestFetch(t *testing.T) {
 				w.Write([]byte("This request will cause a context timeout"))
 			})),
 			ExpectedResponse: nil,
-			ErrorExpected: true,
-			ExpectedCode: -1,
-			JSONErrors: false,
+			ErrorExpected:    true,
+			ExpectedCode:     -1,
+			JSONErrors:       false,
 		},
 	}
 
@@ -82,7 +82,7 @@ func TestFetch(t *testing.T) {
 			if err != nil {
 				t.Errorf("error parsing url \"%s\": %+v", tc.Server.URL, err)
 			}
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			body, code, err := Fetch(ctx, testURL, tc.JSONErrors)
@@ -113,21 +113,21 @@ func TestFetch(t *testing.T) {
 }
 
 type PostData struct {
-	Name   string `json:"name"`
-	ID     int    `json:"id"`
-	Valid  bool   `json:"yes"`
+	Name  string `json:"name"`
+	ID    int    `json:"id"`
+	Valid bool   `json:"yes"`
 }
 
 func TestSendJSON(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Server *httptest.Server
-		PostData *PostData
+		Name          string
+		Server        *httptest.Server
+		PostData      *PostData
 		ErrorExpected bool
-		ExpectedCode int
-		JSONErrors bool
-		PostAuth *PostAuth
-		Method string
+		ExpectedCode  int
+		JSONErrors    bool
+		PostAuth      *PostAuth
+		Method        string
 	}{
 		{
 			Name: "post-succeed-test",
@@ -147,15 +147,15 @@ func TestSendJSON(t *testing.T) {
 				}
 			})),
 			PostData: &PostData{
-				Name: "test",
-				ID: 5,
+				Name:  "test",
+				ID:    5,
 				Valid: true,
 			},
 			ErrorExpected: false,
-			ExpectedCode: http.StatusOK,
-			JSONErrors: false,
-			PostAuth: nil,
-			Method: HTTPPost,
+			ExpectedCode:  http.StatusOK,
+			JSONErrors:    false,
+			PostAuth:      nil,
+			Method:        HTTPPost,
 		},
 		{
 			Name: "post-fail-test",
@@ -163,12 +163,12 @@ func TestSendJSON(t *testing.T) {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(`{ "exception": "Expected failure" }`))
 			})),
-			PostData: &PostData{},
+			PostData:      &PostData{},
 			ErrorExpected: true,
-			ExpectedCode: http.StatusInternalServerError,
-			JSONErrors: false,
-			PostAuth: nil,
-			Method: HTTPPost,
+			ExpectedCode:  http.StatusInternalServerError,
+			JSONErrors:    false,
+			PostAuth:      nil,
+			Method:        HTTPPost,
 		},
 		{
 			Name: "post-json-errors-test",
@@ -182,12 +182,12 @@ func TestSendJSON(t *testing.T) {
 					w.Write([]byte("OK"))
 				}
 			})),
-			PostData: &PostData{},
+			PostData:      &PostData{},
 			ErrorExpected: false,
-			ExpectedCode: http.StatusOK,
-			JSONErrors: true,
-			PostAuth: nil,
-			Method: HTTPPost,
+			ExpectedCode:  http.StatusOK,
+			JSONErrors:    true,
+			PostAuth:      nil,
+			Method:        HTTPPost,
 		},
 		{
 			Name: "post-timeout-test",
@@ -196,12 +196,12 @@ func TestSendJSON(t *testing.T) {
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte("This request will cause a context timeout"))
 			})),
-			PostData: &PostData{},
+			PostData:      &PostData{},
 			ErrorExpected: true,
-			ExpectedCode: -1,
-			JSONErrors: false,
-			PostAuth: nil,
-			Method: HTTPPost,
+			ExpectedCode:  -1,
+			JSONErrors:    false,
+			PostAuth:      nil,
+			Method:        HTTPPost,
 		},
 		{
 			Name: "post-auth-test",
@@ -223,10 +223,10 @@ func TestSendJSON(t *testing.T) {
 					w.Write([]byte(`{ "exception": "Failed to retrieve auth parameters!" }`))
 				}
 			})),
-			PostData: &PostData{},
+			PostData:      &PostData{},
 			ErrorExpected: false,
-			ExpectedCode: http.StatusOK,
-			JSONErrors: false,
+			ExpectedCode:  http.StatusOK,
+			JSONErrors:    false,
 			PostAuth: &PostAuth{
 				Username: "testusername",
 				Password: "testpassword",
@@ -254,15 +254,15 @@ func TestSendJSON(t *testing.T) {
 				}
 			})),
 			PostData: &PostData{
-				Name: "test",
-				ID: 5,
+				Name:  "test",
+				ID:    5,
 				Valid: true,
 			},
 			ErrorExpected: false,
-			JSONErrors: false,
-			ExpectedCode: http.StatusOK,
-			PostAuth: nil,
-			Method: HTTPPut,
+			JSONErrors:    false,
+			ExpectedCode:  http.StatusOK,
+			PostAuth:      nil,
+			Method:        HTTPPut,
 		},
 	}
 
@@ -273,7 +273,7 @@ func TestSendJSON(t *testing.T) {
 			if err != nil {
 				t.Errorf("error parsing url \"%s\": %+v", tc.Server.URL, err)
 			}
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			code, err := SendJSON(ctx, testURL, tc.PostData, tc.JSONErrors, tc.PostAuth, tc.Method)
@@ -292,7 +292,7 @@ func TestSendJSON(t *testing.T) {
 }
 
 type TestOption struct {
-	Name string
+	Name  string
 	Value string
 }
 
@@ -304,13 +304,13 @@ func (t *TestOption) Values() url.Values {
 
 func TestBuildQuery(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input []FetchOption
+		Name   string
+		Input  []FetchOption
 		Output string
 	}{
 		{
-			Name: "test-empty-options",
-			Input: []FetchOption{},
+			Name:   "test-empty-options",
+			Input:  []FetchOption{},
 			Output: "",
 		},
 		{
@@ -361,14 +361,14 @@ func TestFetchWithOptions(t *testing.T) {
 	}))
 
 	testTable := []struct {
-		Name string
+		Name         string
 		FetchOptions []FetchOption
-		Result []byte
+		Result       []byte
 	}{
 		{
-			Name: "test-fetch-no-options",
+			Name:         "test-fetch-no-options",
 			FetchOptions: []FetchOption{},
-			Result: []byte(""),
+			Result:       []byte(""),
 		},
 		{
 			Name: "test-fetch-one-option",
@@ -396,7 +396,7 @@ func TestFetchWithOptions(t *testing.T) {
 			if err != nil {
 				t.Errorf("error parsing url \"%s\": %+v", server.URL, err)
 			}
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
 			body, code, err := FetchWithOptions(ctx, testURL, false, tc.FetchOptions)

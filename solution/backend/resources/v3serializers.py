@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from rest_framework import serializers
 
 from .models import (
@@ -142,6 +144,10 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
     url = serializers.CharField()
+    internalURL = serializers.SerializerMethodField()
+
+    def get_internalURL(self, obj):
+        return reverse('supplemental_content', kwargs={'id': obj.pk})
 
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
@@ -149,14 +155,17 @@ class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceF
     description_headline = HeadlineField("supplementalcontent")
 
 
-class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
-    docket_number = serializers.CharField()
+class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
+    docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField()
 
     name_headline = HeadlineField("federalregisterdocument")
     description_headline = HeadlineField("federalregisterdocument")
-    docket_number_headline = HeadlineField("federalregisterdocument")
     document_number_headline = HeadlineField("federalregisterdocument")
+
+
+class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer):
+    related_docs = SimpleFederalRegisterDocumentSerializer(many=True, source="related_resources")
 
 
 class SectionCreateSerializer(serializers.ModelSerializer):
@@ -236,7 +245,6 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         return instance
 
     def combine_groups(self, groups):
-        main = groups[0]
         main = groups[0]
         docs = main.documents.all()
         prefixes = main.docket_number_prefixes

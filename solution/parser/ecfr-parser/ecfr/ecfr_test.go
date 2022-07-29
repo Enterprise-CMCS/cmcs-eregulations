@@ -1,12 +1,12 @@
 package ecfr
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
-	"net/url"
 	"context"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"testing"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
@@ -14,7 +14,7 @@ import (
 )
 
 type TestOption struct {
-	Name string
+	Name  string
 	Value string
 }
 
@@ -26,7 +26,7 @@ func (t *TestOption) Values() url.Values {
 
 func TestFetchFunctions(t *testing.T) {
 	var path string
-	
+
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != path {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -53,10 +53,10 @@ func TestFetchFunctions(t *testing.T) {
 	}))
 	defer server.Close()
 	EcfrSite = server.URL
-	
+
 	testTable := []struct {
-		Name string
-		Path string
+		Name     string
+		Path     string
 		Function func(context.Context, ...network.FetchOption) (int, error)
 	}{
 		{
@@ -90,7 +90,7 @@ func TestFetchFunctions(t *testing.T) {
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-			ctx, cancel := context.WithTimeout(context.Background(), 1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 			path = tc.Path
 			code, err := tc.Function(ctx, &opt1, &opt2)
@@ -106,19 +106,19 @@ func TestFetchFunctions(t *testing.T) {
 
 func TestPartOptionValues(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input PartOption
+		Name   string
+		Input  PartOption
 		Output url.Values
 	}{
 		{
-			Name: "test-valid-partoption",
+			Name:  "test-valid-partoption",
 			Input: PartOption{"100"},
 			Output: url.Values{
 				"part": []string{"100"},
 			},
 		},
 		{
-			Name: "test-empty-partoption",
+			Name:  "test-empty-partoption",
 			Input: PartOption{},
 			Output: url.Values{
 				"part": []string{""},
@@ -138,26 +138,26 @@ func TestPartOptionValues(t *testing.T) {
 
 func TestSubchapterOptionValues(t *testing.T) {
 	testTable := []struct {
-		Name string
-		Input SubchapterOption
+		Name   string
+		Input  SubchapterOption
 		Output url.Values
 	}{
 		{
 			Name: "test-valid-subchapteroption",
 			Input: SubchapterOption{
-				Chapter: "IV",
+				Chapter:    "IV",
 				Subchapter: "C",
 			},
 			Output: url.Values{
-				"chapter": []string{"IV"},
-				"subchapter": []string{"C"},				
+				"chapter":    []string{"IV"},
+				"subchapter": []string{"C"},
 			},
 		},
 		{
-			Name: "test-empty-subchapteroption",
+			Name:  "test-empty-subchapteroption",
 			Input: SubchapterOption{},
 			Output: url.Values{
-				"chapter": []string{""},
+				"chapter":    []string{""},
 				"subchapter": []string{""},
 			},
 		},
@@ -167,7 +167,7 @@ func TestSubchapterOptionValues(t *testing.T) {
 				Chapter: "ABC",
 			},
 			Output: url.Values{
-				"chapter": []string{"ABC"},
+				"chapter":    []string{"ABC"},
 				"subchapter": []string{""},
 			},
 		},

@@ -356,8 +356,7 @@ export default {
                 return [
                     this.subpartContent[0].children
                         .filter((child) => child.node_type === "SUBJGRP")
-                        .map((sg) => sg.children)
-                        .flat(1)
+                        .flatMap((sg) => sg.children)
                         .find(
                             (child) =>
                                 child.node_type === "SECTION" &&
@@ -597,8 +596,6 @@ export default {
             let updatedQueryParams = {};
             // get associated subpart for section
             if (payload.scope == "section") {
-                const sections = this.tabsShape.section.listItems.map(sec => sec.identifier)
-                this.secIndex = sections.indexOf(valueToSet)
                 const sectionSubpart = this.tabsShape.section.listItems.find(
                     (item) => {
                         return item.identifier == valueToSet;
@@ -607,6 +604,10 @@ export default {
                 const subpartToSet = /^\d+$/.test(sectionSubpart)
                     ? {}
                     : { subpart: sectionSubpart };
+                    
+                const sections = this.tabsShape.section.listItems.filter(sec => sec.subpart ==sectionSubpart).map(sec => sec.identifier)
+                this.secIndex = sections.indexOf(valueToSet)
+
                 updatedQueryParams = {
                     ...this.queryParams,
                     ...subpartToSet,
@@ -691,10 +692,9 @@ export default {
                 );
 
             let filteredSections = subParts
-                .map((sp) =>
+                .flatMap((sp) =>
                     sp.children.filter((child) => child.type === "section")
                 )
-                .flat(1)
                 .map((section) => ({
                     subpart: section.parent[0],
                     identifier: section.identifier[1],
@@ -715,12 +715,11 @@ export default {
                 filteredSections = filteredSections.concat(orphanSections);
             }
             const subjectGroups = subParts
-                .map((sp) =>
+                .flatMap((sp) =>
                     sp.children.filter(
                         (child) => child.type === "subject_group"
                     )
                 )
-                .flat(1);
             subjectGroups.forEach((subject_group) => {
                 const subPart = subject_group.parent[0];
                 subject_group.children.forEach((section) => {
