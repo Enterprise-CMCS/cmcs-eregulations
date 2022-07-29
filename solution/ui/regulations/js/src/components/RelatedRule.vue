@@ -7,9 +7,13 @@
             rel="noopener noreferrer"
         >
             <span class="link-heading">
-                <span class="recent-flag indicator" :class="indicatorClasses">{{
-                    expandedType
-                }}</span>
+                <span
+                    v-if="expandedType !== 'Unknown'"
+                    class="recent-flag indicator"
+                    :class="indicatorClasses"
+                >
+                    {{ expandedType }}
+                </span>
                 <span v-if="publication_date" class="recent-date">{{
                     publication_date | formatDate
                 }}</span>
@@ -80,8 +84,9 @@ export default {
             }
 
             if (
-                this.type === "Proposed Rule" &&
-                this.action === "Proposed rule."
+                this.type === "Proposed Rules" ||
+                (this.type === "Proposed Rule" &&
+                    this.action === "Proposed rule.")
             ) {
                 return "NPRM";
             }

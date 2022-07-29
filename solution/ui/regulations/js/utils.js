@@ -50,7 +50,6 @@ const formatResourceCategories = (resources) => {
                 existingCategory.supplemental_content = []
             }
             existingCategory.supplemental_content.push(resource)
-            console.log(existingCategory)
 
         } else{
           const newCategory = JSON.parse(JSON.stringify(resource.category))

@@ -28,11 +28,21 @@
                     :isFetching="isFetching"
                 >
                 </supplemental-content-category>
-                <supplemental-content-list
-                    :supplemental_content="supplemental_content"
-                    :has_sub_categories="has_sub_categories"
-                    v-if="supplemental_content"
-                />
+                <template
+                    v-if="name === 'Final Rules' || name === 'Proposed Rules'"
+                >
+                    <related-rule-list
+                        v-if="supplemental_content"
+                        :rules="supplemental_content"
+                    />
+                </template>
+                <template v-else>
+                    <supplemental-content-list
+                        :supplemental_content="supplemental_content"
+                        :has_sub_categories="has_sub_categories"
+                        v-if="supplemental_content"
+                    />
+                </template>
             </collapsible>
 
         </div>
@@ -40,6 +50,7 @@
 </template>
 
 <script>
+import RelatedRuleList from './RelatedRuleList.vue'
 import SupplementalContentList from "./SupplementalContentList.vue";
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
@@ -49,6 +60,7 @@ export default {
     name: "supplemental-content-category",
 
     components: {
+        RelatedRuleList,
         SupplementalContentList,
         CollapseButton,
         Collapsible,
