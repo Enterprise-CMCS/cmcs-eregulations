@@ -231,6 +231,8 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                               "search with quotes.", str, False),
         OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
                               "\"&categories=X&categories=Y\" for multiple.", int, False),
+        OpenApiQueryParameter("sort", "Sort results by this field. Valid values are \"newest\" and \"relevance\". "
+                              "Newest is the default, and relevance requires a search query.", str, False),
     ] + OptionalPaginationMixin.PARAMETERS + LocationFiltererMixin.PARAMETERS
 
     location_filter_prefix = "locations__"
@@ -293,6 +295,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         locations = self.request.GET.getlist("locations")
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
+        sort_method = self.request.GET.get("sort")
 
         q_obj = self.get_location_filter(locations)
         if q_obj:
@@ -317,7 +320,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         annotations["date_annotated"] = self.get_annotated_date()
         query = query.annotate(**annotations)
         query = query.filter(rank__gte=0.2) if search_query else query
-        if search_query:
+        if search_query and sort_method == "relevance":
             return query.distinct().order_by("-rank")
         else:
             return query.distinct().order_by(F("date_annotated").desc(nulls_last=True))

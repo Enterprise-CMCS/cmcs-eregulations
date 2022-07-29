@@ -11,6 +11,34 @@
                     >
                     in Resources</span
                 >
+                <div class="sort-control">
+                    <span class="sort-control-label">Sort by</span>
+                    <FancyDropdown
+                        :buttonTitle="sortMethodTitle"
+                        :disabled="sortDisabled"
+                    >
+                        <v-list class="sort-options-list">
+                            <v-list-item-group
+                                class="sort-options-list-item-group"
+                            >
+                                <v-list-item
+                                    data-value="newest"
+                                    class="sort-options-list-item"
+                                    @click="clickMethod"
+                                >
+                                    <span>Date (Newest)</span>
+                                </v-list-item>
+                                <v-list-item
+                                    data-value="relevance"
+                                    class="sort-options-list-item"
+                                    @click="clickMethod"
+                                >
+                                    <span>Relevance</span>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+                    </FancyDropdown>
+                </div>
             </div>
             <div v-if="!isLoading">
                 <template v-if="filteredContent && filteredContent.length == 0">
@@ -91,13 +119,21 @@
 import _uniqBy from "lodash/uniqBy";
 import _has from "lodash/has";
 
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
+import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
+
+const SORT_METHODS = {
+    newest: "Date (Newest)",
+    oldest: "Date (Oldest)",
+    relevance: "relevance",
+};
 
 export default {
     name: "ResourcesResults",
 
     components: {
+        FancyDropdown,
         SearchEmptyState,
         SupplementalContentObject,
     },
@@ -159,6 +195,16 @@ export default {
             required: false,
             default: "",
         },
+        sortMethod: {
+            validator: (value) => Object.keys(SORT_METHODS).includes(value),
+            required: false,
+            default: "newest",
+        },
+        sortDisabled: {
+            type: Boolean,
+            required: false,
+            default: true,
+        },
     },
 
     data() {
@@ -183,6 +229,15 @@ export default {
                 return copiedItem;
             });
         },
+        sortMethodTitle() {
+            return SORT_METHODS[this.sortMethod];
+        },
+    },
+
+    methods: {
+        clickMethod(e) {
+            this.$emit("sort", e.currentTarget.dataset.value);
+        },
     },
 };
 </script>
@@ -203,6 +258,24 @@ export default {
             font-size: 15px;
             font-weight: bold;
             margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sort-control {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+
+            div:first-of-type {
+                width: 140px;
+            }
+
+            @include custom-max($mobile-max / 1px) {
+                .sort-control-label {
+                    margin-right: 9px;
+                }
+            }
         }
         .category-labels {
             margin-bottom: 5px;
