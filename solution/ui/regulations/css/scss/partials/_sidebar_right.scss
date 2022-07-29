@@ -203,7 +203,9 @@ aside.right-sidebar {
     }
 }
 .related-rule-list {
-    padding-left: $spacer-2;
+    div:first-of-type {
+        padding: 0;
+    }
 }
 
 .rules-with-preamble {

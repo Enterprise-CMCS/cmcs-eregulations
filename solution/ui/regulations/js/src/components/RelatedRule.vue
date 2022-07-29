@@ -11,9 +11,7 @@
                     v-if="expandedType !== 'Unknown'"
                     class="recent-flag indicator"
                     :class="indicatorClasses"
-                >
-                    {{ expandedType }}
-                </span>
+                >{{expandedType}}</span>
                 <span v-if="publication_date" class="recent-date">{{
                     publication_date | formatDate
                 }}</span>
