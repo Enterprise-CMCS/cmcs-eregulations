@@ -248,9 +248,12 @@ $width-3xl: 1920px; // The largest the site container will get
     text-transform: uppercase;
     color: $primary_indicator_text;
     font-size: 11px;
-    padding: 2px 5px;
+    padding: 2px 0;
     border-radius: $border-radius;
     margin-right: 4px;
+    display: inline-block;
+    width: 42px;
+    text-align: center;
 }
 
 .secondary-indicator {
