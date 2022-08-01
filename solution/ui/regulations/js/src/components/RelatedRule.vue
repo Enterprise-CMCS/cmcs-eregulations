@@ -13,7 +13,7 @@
                     :class="indicatorClasses"
                 >{{expandedType}}</span>
                 <span v-if="publication_date" class="recent-date">{{
-                    publication_date | formatDate
+                    publication_date | formatPubDate
                 }}</span>
                 |
                 <span class="recent-fr-citation" :class="citationClasses">{{
@@ -26,20 +26,14 @@
 </template>
 
 <script>
+import { formatDate } from "../../utils";
+
 export default {
     name: "RelatedRule",
 
     filters: {
-        formatDate(value) {
-            const date = new Date(value);
-            const options = {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                timeZone: "UTC",
-            };
-            const format = new Intl.DateTimeFormat("en-US", options);
-            return format.format(date);
+        formatPubDate(value) {
+            return formatDate(value);
         },
     },
 
