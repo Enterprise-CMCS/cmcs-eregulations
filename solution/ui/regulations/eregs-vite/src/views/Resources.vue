@@ -23,7 +23,7 @@
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
                     />
-                    <div class="search-suggestion">
+                    <div v-if="synonyms.length > 0 || multiWordQuery" class="search-suggestion">
                         <div v-if="multiWordQuery">
                             Didn't find what you were looking for? Try searching for
                             <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
@@ -209,7 +209,6 @@ export default {
     methods: {
         async executeSearch() {
             const sectionRegex = /^\d{2,3}\.(\d{1,4})$/;
-
             if (sectionRegex.test(this.searchInputValue)) {
                 const payload = {
                     scope: "section",
@@ -244,6 +243,7 @@ export default {
             await this.executeSearch()
         },
         clearSearchQuery() {
+            this.synonyms = []
             this.$router.push({
                 name: "resources",
                 query: {
