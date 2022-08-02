@@ -167,6 +167,14 @@ class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, Typica
 class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer):
     related_docs = SimpleFederalRegisterDocumentSerializer(many=True, source="related_resources")
 
+    def to_representation(self, instance):
+        obj = super().to_representation(instance)
+        docs = [obj] + obj["related_docs"]
+        del obj["related_docs"]
+        docs = sorted(docs, key=lambda i: i["date"], reverse=True)
+        docs[0]["related_docs"] = docs[1:]
+        return docs[0]
+
 
 class SectionCreateSerializer(serializers.ModelSerializer):
     class Meta:
