@@ -339,7 +339,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         annotations["date_annotated"] = self.get_annotated_date()
         query = query.annotate(**annotations)
 
-        if search_query:
+        if search_query and sort_method == "relevance":
             return query.filter(rank__gte=0.2).distinct().order_by("-rank")
         else:
             return query.order_by(F("date_annotated").desc(nulls_last=True)).distinct()
