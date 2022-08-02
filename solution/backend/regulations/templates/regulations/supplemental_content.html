@@ -20,7 +20,7 @@
     </head>
     <body>
         <script type="text/javascript">
-            window.location = '{{ redirect_link }}';
+            window.location = '{% autoescape off %}{{ redirect_link }}{% endautoescape %}';
         </script>
     </body>
 </html>
