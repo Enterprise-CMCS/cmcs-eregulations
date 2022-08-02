@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.forms import TextInput
+from django.shortcuts import render
 
 from solo.admin import SingletonModelAdmin
 
@@ -41,9 +42,14 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
 
 
 @admin.register(Synonym)
-class SectionAdmin(BaseAdmin):
+class SynonymAdmin(BaseAdmin):
+    change_list_template = "admin/synonyms.html"
     admin_priority = 20
     ordering = ('baseWord',)
+
+    @admin.action(description='Import Synonyms')
+    def add_synonyms(self, request, queryset):
+        return render(request, "add_synonym.html", context={})
 
     class Media:
         css = {

@@ -2,9 +2,15 @@ from datetime import date
 
 from rest_framework import generics, serializers
 from django.conf import settings
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.postgres.aggregates import StringAgg
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.views import View
 
 from regcore.models import Part, ParserConfiguration
+
+from regcore.search.models import Synonym
 
 from rest_framework.response import Response
 
@@ -174,3 +180,41 @@ class ParserConfigurationView(generics.RetrieveAPIView):
 
     def get_object(self):
         return ParserConfiguration.objects.all()[0]
+
+
+def process_body(raw_synonyms):
+    new_synonyms = []
+    existing_synonyms = []
+    for line in raw_synonyms:
+        related_words = []
+        for syn in line.split(","):
+            new_syn, created = Synonym.objects.get_or_create(isActive=True, baseWord=syn.strip())
+            if created:
+                new_synonyms.append(syn)
+            else:
+                existing_synonyms.append(syn)
+            for word in related_words:
+                new_syn.synonyms.add(word)
+            related_words.append(new_syn)
+
+    return new_synonyms, existing_synonyms
+
+
+class BulkSynonymView(PermissionRequiredMixin, View):
+    permission_required = 'search.add_synonym'
+
+    def get(self, request):
+
+        return render(request, 'add_synonym.html', {})
+
+    def post(self, request):
+
+        raw_synonyms = request.POST['raw_synonyms'].split("\r\n")
+        new_synonyms, existing_synonyms = process_body(raw_synonyms)
+
+        if len(new_synonyms):
+            messages.add_message(request, messages.INFO, "The following synonyms have been added: " + ", ".join(new_synonyms))
+        if len(existing_synonyms):
+            messages.add_message(request, messages.WARNING, "The following synonyms have not been added because they already exist: " + ", ".join(existing_synonyms))
+        return redirect("admin/search/synonym/")
+

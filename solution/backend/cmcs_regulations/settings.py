@@ -59,8 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'regulations.middleware.json_errors.JsonErrors',
-    'regcore.middleware.html_api.HtmlApi',
+    #'regulations.middleware.json_errors.JsonErrors',
+    #'regcore.middleware.html_api.HtmlApi',
 ]
 
 REST_FRAMEWORK = {
@@ -203,6 +203,8 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'CMCS eRegulations API',
     'DESCRIPTION': 'Medicaid and CHIP regulation content and associated supplemental content (such as subregulatory guidance)'
 }
+
+LOGIN_URL = "/admin"
 
 if DEBUG:
     import os  # only if you haven't already imported this
