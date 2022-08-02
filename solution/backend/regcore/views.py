@@ -226,5 +226,3 @@ class BulkSynonymView(PermissionRequiredMixin, View):
                 ", ".join(existing_synonyms)
             )
         return redirect("admin/search/synonym/")
-
-
