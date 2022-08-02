@@ -213,8 +213,18 @@ class BulkSynonymView(PermissionRequiredMixin, View):
         new_synonyms, existing_synonyms = process_body(raw_synonyms)
 
         if len(new_synonyms):
-            messages.add_message(request, messages.INFO, "The following synonyms have been added: " + ", ".join(new_synonyms))
+            messages.add_message(
+                request,
+                messages.INFO,
+                "The following synonyms have been added: " + ", ".join(new_synonyms)
+            )
         if len(existing_synonyms):
-            messages.add_message(request, messages.WARNING, "The following synonyms have not been added because they already exist: " + ", ".join(existing_synonyms))
+            messages.add_message(
+                request,
+                messages.WARNING,
+                "The following synonyms have not been added because they already exist: " +
+                ", ".join(existing_synonyms)
+            )
         return redirect("admin/search/synonym/")
+
 
