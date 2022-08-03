@@ -1,5 +1,6 @@
 describe("Resources page", () => {
     beforeEach(() => {
+        indexedDB.deleteDatabase('eregs')
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] =
                 Cypress.env("DEPLOYING");
@@ -9,8 +10,11 @@ describe("Resources page", () => {
     it("renders correctly", () => {
         cy.viewport("macbook-15");
         cy.visit("/resources");
+
         cy.get("h1").contains('Resources')
         cy.get("h3").contains('Filter Resources')
+        // This is an anti pattern, sue me
+        cy.wait(5000)
         cy.contains("100 results in Resources")
     });
 
