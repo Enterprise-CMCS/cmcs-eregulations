@@ -171,7 +171,7 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
         obj = super().to_representation(instance)
         docs = [obj] + obj["related_docs"]
         del obj["related_docs"]
-        docs = sorted(docs, key=lambda i: i["date"], reverse=True)
+        docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
         docs[0]["related_docs"] = docs[1:]
         return docs[0]
 
