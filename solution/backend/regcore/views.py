@@ -225,4 +225,4 @@ class BulkSynonymView(PermissionRequiredMixin, View):
                 "The following synonyms have not been added because they already exist: " +
                 ", ".join(existing_synonyms)
             )
-        return redirect("admin/search/synonym/")
+        return redirect("search/synonym/")
