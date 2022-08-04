@@ -1,3 +1,4 @@
+import csv
 from datetime import date
 
 from rest_framework import generics, serializers
@@ -185,9 +186,10 @@ class ParserConfigurationView(generics.RetrieveAPIView):
 def process_body(raw_synonyms):
     new_synonyms = []
     existing_synonyms = []
-    for line in raw_synonyms:
+    reader = csv.reader(raw_synonyms, delimiter=',')
+    for row in reader:
         related_words = []
-        for syn in line.split(","):
+        for syn in row:
             new_syn, created = Synonym.objects.get_or_create(isActive=True, baseWord=syn.strip())
             if created:
                 new_synonyms.append(syn)
@@ -208,8 +210,9 @@ class BulkSynonymView(PermissionRequiredMixin, View):
         return render(request, 'add_synonym.html', {})
 
     def post(self, request):
-
-        raw_synonyms = request.POST['raw_synonyms'].split("\r\n")
+        # csv package accepts this foo,"bar, baz" by default, but foo, "bar, baz" is not handled.  This allows for one
+        # space to still work correctly.
+        raw_synonyms = request.POST['raw_synonyms'].replace(', "', ',"').split("\r\n")
         new_synonyms, existing_synonyms = process_body(raw_synonyms)
 
         if len(new_synonyms):
