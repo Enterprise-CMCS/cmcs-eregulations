@@ -70,7 +70,7 @@
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
                         :sortMethod="sortMethod"
-                        :sortDisabled="sortDisabled"
+                        :disabledSortOptions="disabledSortOptions"
                         @sort="setSortMethod"
                     />
                 </div>
@@ -201,8 +201,8 @@ export default {
         sortMethod() {
             return this.queryParams.sort || "newest";
         },
-        sortDisabled() {
-            return _isEmpty(this.searchQuery);
+        disabledSortOptions() {
+            return _isEmpty(this.searchQuery) ? ["relevance"] : [];
         },
     },
 
