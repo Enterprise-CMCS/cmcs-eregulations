@@ -3,7 +3,8 @@ from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
 from django.db.models import Prefetch
-
+from django import forms
+from django.contrib import messages
 # Register your models here.
 
 from .models import (
@@ -142,12 +143,93 @@ class AbstractResourceAdmin(BaseAdmin):
         )
 
 
+class SupContentForm(forms.ModelForm):
+    class Meta:
+        model = SupplementalContent
+        fields = "__all__"
+
+    bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
+    bulk_locations = forms.CharField(
+                        widget=forms.Textarea,
+                        required=False,
+                        help_text="Add a list of locations seperated by a comma.  ex. 42 430.10, 42 430 Subpart B, 45 18.150")
+
+    def save(self, commit=True):
+        return super(SupContentForm, self).save(commit=commit)
+
+
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):
+    form = SupContentForm
     list_display = ("date", "name", "description", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
-    fields = ("approved", "name", "description", "date", "url", "category", "locations", "internal_notes")
+    fields = ("approved", "name", "description", "date", "url", "category",
+              "locations", "bulk_title", "bulk_locations", "internal_notes")
+
+    def save_related(self, request, form, formsets, change):
+        bulk_locations = form.cleaned_data.get("bulk_locations")
+        bulk_title = form.cleaned_data.get("bulk_title")
+        bad_locations = []
+        
+        super().save_related(request, form, formsets, change)
+        if bulk_locations:
+            split_locations = bulk_locations.split(",")
+            for location in split_locations:
+                a = self.build_location(location.strip(), bulk_title)
+                if a:
+                    form.instance.locations.add(a)
+                else:
+                    bad_locations.append(location)
+            if bad_locations:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "The following locations were not added %s" % ((", ").join(bad_locations))
+                )
+
+    def build_location(self, location, default_title):
+        found_location = location.split(" ")
+        if len(found_location) == 1 or len(found_location) == 2:
+            if default_title != "":
+                title = default_title
+                part = location.split(".")[0]
+                section = location.split(".")[1]
+            else:
+                title = found_location[0]
+                part = found_location[1].split(".")[0]
+                section = found_location[1].split(".")[1]
+            if self.check_values(title, part, section, ""):
+                try:
+                    return Section.objects.get(title=title, part=part, section_id=section).abstractlocation_ptr
+                except Section.DoesNotExist:
+                    return None
+
+        elif len(found_location) == 3 or len(found_location) == 4:
+            if default_title != "":
+                title = default_title
+                part = found_location[0]
+                subpart = found_location[2]
+            else:
+                title = found_location[0]
+                part = found_location[1]
+                subpart = found_location[3]
+            if self.check_values(title, part, "", subpart):
+                try:
+                    return Subpart.objects.get(title=title, part=part, subpart_id=subpart).abstractlocation_ptr
+                except Subpart.DoesNotExist:
+                    return None
+
+        return None
+
+    def check_values(self, title, part, section, subpart):
+        if not title.isdigit() or not part.isdigit():
+            return False
+        if section != "" and not section.isdigit():
+            return False
+        if subpart != "" and not isinstance(subpart, str):
+            return False
+        return True
 
 
 @admin.register(FederalRegisterDocument)
