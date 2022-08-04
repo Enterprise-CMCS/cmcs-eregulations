@@ -19,8 +19,10 @@ from regcore.serializers import (
     PartsSerializer,
     StringListSerializer,
     ParserResultSerializer,
-    SynonymsSerializer
+    SynonymsSerializer,
 )
+
+from regcore.part_serializers import PartNodeSerializer
 
 
 def OpenApiPathParameter(name, description, type):
@@ -129,6 +131,14 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
         "name": "part",
         "date": "version",
     }
+
+
+class PartViewSet(PartPropertiesViewSet):
+    serializer_class = PartNodeSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.serializer_class(self.get_object().document)
+        return Response(serializer.data)
 
 
 @extend_schema(description="Retrieve the table of contents for a specific version of a specific Part of a specific Title, "
