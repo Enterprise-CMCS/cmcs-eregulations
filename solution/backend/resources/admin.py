@@ -142,36 +142,11 @@ class AbstractResourceAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
-
-class SupContentForm(forms.ModelForm):
-    class Meta:
-        model = SupplementalContent
-        fields = "__all__"
-
-    bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
-    bulk_locations = forms.CharField(
-                        widget=forms.Textarea,
-                        required=False,
-                        help_text="Add a list of locations seperated by a comma.  ex. 42 430.10, 42 430 Subpart B, 45 18.150")
-
-    def save(self, commit=True):
-        return super(SupContentForm, self).save(commit=commit)
-
-
-@admin.register(SupplementalContent)
-class SupplementalContentAdmin(AbstractResourceAdmin):
-    form = SupContentForm
-    list_display = ("date", "name", "description", "category", "updated_at", "approved")
-    list_display_links = ("date", "name", "description", "category", "updated_at")
-    search_fields = ["date", "name", "description"]
-    fields = ("approved", "name", "description", "date", "url", "category",
-              "locations", "bulk_title", "bulk_locations", "internal_notes")
-
     def save_related(self, request, form, formsets, change):
         bulk_locations = form.cleaned_data.get("bulk_locations")
         bulk_title = form.cleaned_data.get("bulk_title")
         bad_locations = []
-        
+
         super().save_related(request, form, formsets, change)
         if bulk_locations:
             split_locations = bulk_locations.split(",")
@@ -232,13 +207,54 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
         return True
 
 
+class SupContentForm(forms.ModelForm):
+    class Meta:
+        model = SupplementalContent
+        fields = "__all__"
+
+    bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
+    bulk_locations = forms.CharField(
+                        widget=forms.Textarea,
+                        required=False,
+                        help_text="Add a list of locations seperated by a comma.  ex. 42 430.10, 42 430 Subpart B, 45 18.150")
+
+    def save(self, commit=True):
+        return super(SupContentForm, self).save(commit=commit)
+
+
+class FederalResourceForm(forms.ModelForm):
+    class Meta:
+        model = FederalRegisterDocument
+        fields = "__all__"
+
+    bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
+    bulk_locations = forms.CharField(
+                        widget=forms.Textarea,
+                        required=False,
+                        help_text="Add a list of locations seperated by a comma.  ex. 42 430.10, 42 430 Subpart B, 45 18.150")
+
+    def save(self, commit=True):
+        return super(FederalResourceForm, self).save(commit=commit)
+
+
+@admin.register(SupplementalContent)
+class SupplementalContentAdmin(AbstractResourceAdmin):
+    form = SupContentForm
+    list_display = ("date", "name", "description", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "category", "updated_at")
+    search_fields = ["date", "name", "description"]
+    fields = ("approved", "name", "description", "date", "url", "category",
+              "locations", "bulk_title", "bulk_locations", "internal_notes")
+
+
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
+    form = FederalResourceForm
     list_display = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at")
     search_fields = ["date", "name", "description", "docket_number", "document_number"]
     fields = ("approved", "docket_number", "document_number", "name",
-              "description", "date", "url", "category", "locations", "internal_notes")
+              "description", "date", "url", "category", "locations", "bulk_title", "bulk_locations", "internal_notes")
 
 
 # Custom app list function, allows ordering Django Admin models by "admin_priority", low to high
