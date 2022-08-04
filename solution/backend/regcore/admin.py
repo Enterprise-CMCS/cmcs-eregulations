@@ -46,12 +46,3 @@ class SynonymAdmin(BaseAdmin):
     change_list_template = "admin/synonyms.html"
     admin_priority = 20
     ordering = ('baseWord',)
-
-    @admin.action(description='Import Synonyms')
-    def add_synonyms(self, request, queryset):
-        return render(request, "add_synonym.html", context={})
-
-    class Media:
-        css = {
-            "all": ("css/admin/synonym.css",)
-        }
