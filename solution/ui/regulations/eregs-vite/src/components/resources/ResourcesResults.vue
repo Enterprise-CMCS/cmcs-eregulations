@@ -160,8 +160,6 @@ export default {
             const partObj = partsList.find((parts) => parts.name == part);
             const subpart = partObj?.sections?.[section_id];
 
-            console.log("subpart", subpart);
-
             // todo: Figure out which no subpart sections are invalid and which are orphans
             return subpart
                 ? `${base}/${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
