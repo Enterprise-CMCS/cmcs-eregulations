@@ -8,9 +8,17 @@
 <form action="{% url 'bulk_synonyms' %}" method="post">
     {% csrf_token %}
     <label for="raw_synonyms">
-        Please paste in your list of synonyms to add.<br/>
-        All words on each row will be associated with each other.<br/>
-        Double Quotes (") will be treated as escape characters so foo, "bar, baz" will result in 2 synonyms, not 3<br/>
+        Please paste in your list of synonyms to add.
+        <br/>
+        All words on each row will be associated with each other. For example:
+        <br/><br/>
+        <b>
+        ABC,Alphabet,Alphabet Broadcasting Corporation<br>
+        CMS, Center for Medicare &amp; Medicaid Services<br>
+        WIC, "Special Supplemental Nutrition Program for Women, Infants, and Children"
+        </b>
+        <br/><br/>
+        Double quotes (") are treated as escape characters. This means that <b>foo, "bar, baz"</b> results in 2 synonyms, not 3.
     </label>
     <br/>
     <textarea id="raw_synonyms" name="raw_synonyms" rows="15" cols="50"></textarea>
