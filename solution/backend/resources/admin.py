@@ -168,17 +168,24 @@ class AbstractResourceAdmin(BaseAdmin):
         if len(found_location) == 1 or len(found_location) == 2:
             if default_title != "":
                 title = default_title
-                part = location.split(".")[0]
-                section = location.split(".")[1]
+                loc = location
             else:
                 title = found_location[0]
-                part = found_location[1].split(".")[0]
-                section = found_location[1].split(".")[1]
-            if self.check_values(title, part, section, ""):
-                try:
-                    return Section.objects.get(title=title, part=part, section_id=section).abstractlocation_ptr
-                except Section.DoesNotExist:
-                    return None
+                loc = found_location[1]
+            if "." in loc:
+                part = loc.split(".")[0]
+                section = loc.split(".")[1]
+                if self.check_values(title, part, section, ""):
+                    try:
+                        return Section.objects.get(
+                            title=title,
+                            part=part,
+                            section_id=section
+                        ).abstractlocation_ptr
+                    except Section.DoesNotExist:
+                        return None
+            else:
+                return None
 
         elif len(found_location) == 3 or len(found_location) == 4:
             if default_title != "":
@@ -198,6 +205,7 @@ class AbstractResourceAdmin(BaseAdmin):
         return None
 
     def check_values(self, title, part, section, subpart):
+
         if not title.isdigit() or not part.isdigit():
             return False
         if section != "" and not section.isdigit():
