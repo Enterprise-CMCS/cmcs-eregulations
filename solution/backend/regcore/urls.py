@@ -25,7 +25,9 @@ from regcore.v3views import (
     SubpartContentsViewSet,
     ParserResultViewSet,
     SynonymViewSet,
-    PartViewSet
+    PartViewSet,
+    PartSectionViewSet,
+    SubpartViewSet,
 )
 
 
@@ -77,15 +79,15 @@ urlpatterns = [
         path("title/<title>/part/<part>/version/<version>/sections", PartSectionsViewSet.as_view({
             "get": "retrieve",
         })),
-        # path("title/<title>/part/<part>/version/<version>/section/<section>", SectionViewSet.as_view({
-        #     "get": "retrieve",
-        # })),
+        path("title/<title>/part/<part>/version/<version>/section/<section>", PartSectionViewSet.as_view({
+            "get": "retrieve",
+        })),
         path("title/<title>/part/<part>/version/<version>/subparts", PartSubpartsViewSet.as_view({
             "get": "retrieve",
         })),
-        # path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", SubpartViewSet.as_view({
-        #     "get": "retrieve",
-        # })),
+        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", SubpartViewSet.as_view({
+            "get": "retrieve",
+        })),
         path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", SubpartContentsViewSet.as_view({
             "get": "retrieve",
         })),

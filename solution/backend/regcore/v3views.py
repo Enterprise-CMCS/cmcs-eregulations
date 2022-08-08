@@ -29,8 +29,8 @@ def OpenApiPathParameter(name, description, type):
     return OpenApiParameter(name=name, description=description, required=True, type=type, location=OpenApiParameter.PATH)
 
 
+# must define lookup_fields mapping with entries like { "field_name": "url_parameter", ... }
 class MultipleFieldLookupMixin(object):
-    # must define lookup_fields mapping with entries like { "field_name": "url_parameter", ... }
     def get_object(self):
         queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
@@ -42,7 +42,7 @@ class MultipleFieldLookupMixin(object):
                 latest_field = field
             elif value:
                 filter[field] = value
-        return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)
+        return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)  
 
 
 @extend_schema(description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "
@@ -133,6 +133,33 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
     }
 
 
+# For retrieving a specific node from within a document tree structure
+# Must define "node_type" as a string representing the value of "node_type" in the JSON
+# Must define "label_index" as an integer representing the index in the label to identify the node
+# Must define "parameter" as the URL parameter to use for identifying the node
+class NodeFinderMixin(object):
+    def retrieve(self, request, *args, **kwargs):
+        node = kwargs.get(self.parameter, None)
+        document = self.get_object().document
+        node_content = self.find_node(document["children"], node)
+        if not node_content:
+            raise Http404()
+        serializer = self.serializer_class(node_content)
+        return Response(serializer.data)
+
+    def find_node(self, node_children, node):
+        for i in node_children:
+            if i["node_type"] == self.node_type:
+                if i["label"][self.label_index] == node:
+                    return i
+                continue
+            if "children" in i:
+                s = self.find_node(i["children"], node)
+                if s:
+                    return s
+        return None
+
+
 @extend_schema(
     description="Retrieve the full textual contents and structure of a regulation Part. "
                 "Note that children of a Part object will vary with object type. "
@@ -181,9 +208,35 @@ class PartSectionsViewSet(PartStructureNodesViewSet):
     node_type = "section"
 
 
+@extend_schema(
+    description="Retrieve the full textual contents and structure of a section within a regulation's Part. "
+                "Note that children of a Section object will vary with object type. "
+                "Users should view real API responses for accurate examples.",
+    responses=PartNodeSerializer,
+)
+class PartSectionViewSet(NodeFinderMixin, PartPropertiesViewSet):
+    serializer_class = RawDictionarySerializer
+    parameter = "section"
+    node_type = "SECTION"
+    label_index = 1
+
+
 @extend_schema(description="Retrieve a list of Subparts contained within a version of a Part.")
 class PartSubpartsViewSet(PartStructureNodesViewSet):
     node_type = "subpart"
+
+
+@extend_schema(
+    description="Retrieve the full textual contents and structure of a subpart within a regulation's Part. "
+                "Note that children of a Subpart object will vary with object type. "
+                "Users should view real API responses for accurate examples.",
+    responses=PartNodeSerializer,
+)
+class SubpartViewSet(NodeFinderMixin, PartPropertiesViewSet):
+    serializer_class = RawDictionarySerializer
+    parameter = "subpart"
+    node_type = "SUBPART"
+    label_index = 0
 
 
 @extend_schema(
