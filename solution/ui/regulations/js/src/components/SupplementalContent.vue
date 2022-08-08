@@ -13,6 +13,7 @@
         <h2 v-if="!requested_categories" id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
+        <input class="search_resource_btn" type="submit" value="Search These Resources">
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"
@@ -236,3 +237,19 @@ export default {
     },
 };
 </script>
+
+<style lang="scss">
+
+.search_resource_btn {
+    background-color: #046791;
+    border:none;
+    color:white;
+    text-align: center;
+    border-radius: 3px;
+    font-weight: 400;
+    font-size:14px;
+    line-height: 18px;
+    padding: 5px 12px 5px 12px;
+    font-family: 'Open Sans';
+}
+</style>
