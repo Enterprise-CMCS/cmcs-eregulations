@@ -70,6 +70,7 @@
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
                         :sortMethod="sortMethod"
+                        :disabledSortOptions="disabledSortOptions"
                         :sortDisabled="sortDisabled"
                         @sort="setSortMethod"
                     />
@@ -159,6 +160,7 @@ export default {
             },
             supplementalContent: [],
             searchInputValue: undefined,
+            sortDisabled: true,
         };
     },
 
@@ -201,8 +203,8 @@ export default {
         sortMethod() {
             return this.queryParams.sort || "newest";
         },
-        sortDisabled() {
-            return _isEmpty(this.searchQuery);
+        disabledSortOptions() {
+            return _isEmpty(this.searchQuery) ? ["relevance"] : [];
         },
     },
 
@@ -686,6 +688,10 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
+                if (this.sortDisabled) {
+                    this.sortDisabled = false;
+                }
+
                 if (
                     _isEmpty(newParams.part) &&
                     _isEmpty(newParams.q) &&
@@ -738,6 +744,10 @@ export default {
                 this.queryParams.part,
                 this.queryParams.subpart
             );
+        }
+
+        if (!_isEmpty(this.queryParams)) {
+            this.sortDisabled = false;
         }
 
         this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
