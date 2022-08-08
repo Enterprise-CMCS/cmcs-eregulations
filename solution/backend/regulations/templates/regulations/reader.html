@@ -1,6 +1,7 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 {% load render_nested %}
+{% load url_formatters %}
 
 {% block pre_header %}
     <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
@@ -15,10 +16,11 @@
             </aside>
 
             <main class="reg-text match-middle" id="main-content">
+                {% ecfr_part_url_formatter title reg_part as ecfr_part_url %}
                 {% if isLatestVersion %}
                     <p class="latest-version{{ subpart|yesno:" subpart," }}">
-                        {{ toc.label_level }} up to date from <a href="https://www.ecfr.gov/current/title-{{title}}/part-{{reg_part}}" target="_blank" class="external">eCFR</a> as of {{ last_updated|date:"M j, Y" }}; last amended {{ formattedLatestVersion }}
-                        </p>
+                        {{ toc.label_level }} up to date from <a href="{{ecfr_part_url}}" target="_blank" class="external">eCFR</a> as of {{ last_updated|date:"M j, Y" }}; last amended {{ formattedLatestVersion }}
+                            </p>
                 {% endif %}
                 {% include "regulations/partials/node_types/node.html" with resource_count=resource_count node=tree cfr_title=title citation=citation version=version %}
                 {% include "regulations/partials/navigation.html" %}
