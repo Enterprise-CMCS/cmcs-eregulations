@@ -20,9 +20,9 @@ from regcore.serializers import (
     StringListSerializer,
     ParserResultSerializer,
     SynonymsSerializer,
+    RawDictionarySerializer,
+    PartNodeSerializer,
 )
-
-from regcore.part_serializers import PartNodeSerializer
 
 
 def OpenApiPathParameter(name, description, type):
@@ -133,8 +133,14 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
     }
 
 
+@extend_schema(
+    description="Retrieve the full textual contents and structure of a regulation Part. "
+                "Note that children of a Part object will vary with object type. "
+                "Users should view real API responses for accurate examples.",
+    responses=PartNodeSerializer,
+)
 class PartViewSet(PartPropertiesViewSet):
-    serializer_class = PartNodeSerializer
+    serializer_class = RawDictionarySerializer
 
     def retrieve(self, request, *args, **kwargs):
         serializer = self.serializer_class(self.get_object().document)

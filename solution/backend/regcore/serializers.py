@@ -52,9 +52,30 @@ class PartsSerializer(serializers.Serializer):
     title_object = serializers.IntegerField()
 
 
-class StringListSerializer(serializers.Serializer):
+# Note this serializer is only used for generating Swagger docs
+class MiniPartNodeSerializer(serializers.Serializer):
+    node_type = serializers.CharField()
+    header = serializers.CharField()
+    content = serializers.CharField()
+
+
+# Note this serializer is only used for generating Swagger docs
+class PartNodeSerializer(MiniPartNodeSerializer):
+    label = serializers.ListField(child=serializers.CharField())
+    title = serializers.CharField()
+    authority = MiniPartNodeSerializer()
+    source = MiniPartNodeSerializer()
+    editorial_node = MiniPartNodeSerializer()
+    children = MiniPartNodeSerializer(many=True)
+
+
+class RawDictionarySerializer(serializers.Serializer):
     def to_representation(self, instance):
         return instance
+
+
+class StringListSerializer(RawDictionarySerializer):
+    pass
 
 
 class ParserResultSerializer(serializers.ModelSerializer):
