@@ -17,8 +17,8 @@
             <main class="reg-text match-middle" id="main-content">
                 {% if isLatestVersion %}
                     <p class="latest-version{{ subpart|yesno:" subpart," }}">
-                        <b>Latest Version</b> as of {{ formattedLatestVersion }}
-                    </p>
+                        {{ toc.label_level }} up to date from <a href="https://www.ecfr.gov/current/title-{{title}}/part-{{reg_part}}" target="_blank" class="external">eCFR</a> as of {{ last_updated|date:"M j, Y" }}; last amended {{ formattedLatestVersion }}
+                        </p>
                 {% endif %}
                 {% include "regulations/partials/node_types/node.html" with resource_count=resource_count node=tree cfr_title=title citation=citation version=version %}
                 {% include "regulations/partials/navigation.html" %}
