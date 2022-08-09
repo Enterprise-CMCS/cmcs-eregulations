@@ -214,8 +214,9 @@ class PartSectionsViewSet(PartStructureNodesViewSet):
 @extend_schema(
     description="Retrieve the full textual contents and structure of a section within a regulation's Part. "
                 "Note that children of a Section object will vary with object type. ",
+    parameters=[OpenApiPathParameter("section", "Section number to retrieve.", int)],
 )
-class PartSectionViewSet(NodeFinderViewSet):
+class SectionViewSet(NodeFinderViewSet):
     serializer_class = SectionSerializer
     parameter = "section"
     node_type = "SECTION"
@@ -230,6 +231,7 @@ class PartSubpartsViewSet(PartStructureNodesViewSet):
 @extend_schema(
     description="Retrieve the full textual contents and structure of a subpart within a regulation's Part. "
                 "Note that children of a Subpart object will vary with object type. ",
+    parameters=[OpenApiPathParameter("subpart", "Subpart to retrieve, e.g. A.", str)],
 )
 class SubpartViewSet(NodeFinderViewSet):
     serializer_class = SubpartSerializer
