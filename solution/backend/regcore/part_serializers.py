@@ -28,6 +28,10 @@ class HeaderNodeSerializer(PartNodeSerializer):
     header = serializers.CharField()
 
 
+class HeaderContentNodeSerializer(ContentNodeSerializer, PartNodeSerializer):
+    pass
+
+
 # Bottom-level nodes (e.g. paragraph, image)
 
 
@@ -37,7 +41,7 @@ class ParagraphSerializer(PartNodeSerializer):
     marker = serializers.ListField(child=serializers.CharField())
 
 
-class EffectiveDateNoteSerializer(HeaderNodeSerializer, ContentNodeSerializer):
+class EffectiveDateNoteSerializer(HeaderContentNodeSerializer):
     pass
 
 
@@ -65,15 +69,15 @@ class SectionAuthoritySerializer(ContentNodeSerializer):
     pass
 
 
-class EdNoteSerializer(HeaderNodeSerializer, ContentNodeSerializer):
+class EdNoteSerializer(HeaderContentNodeSerializer):
     pass
 
 
-class AuthoritySerializer(HeaderNodeSerializer, ContentNodeSerializer):
+class AuthoritySerializer(HeaderContentNodeSerializer):
     pass
 
 
-class SourceSerializer(HeaderNodeSerializer, ContentNodeSerializer):
+class SourceSerializer(HeaderContentNodeSerializer):
     pass
 
 
@@ -93,14 +97,9 @@ class ExtractSerializer(ContentNodeSerializer):
         component_name="SectionChildrenField",
         serializers=[
             ParagraphSerializer,
-            FlushParagraphSerializer,
+            ContentNodeSerializer,
             ImageSerializer,
-            ExtractSerializer,
-            CitationSerializer,
-            SectionAuthoritySerializer,
-            FootNoteSerializer,
-            DivisionSerializer,
-            EffectiveDateNoteSerializer,
+            HeaderContentNodeSerializer,
         ],
         resource_type_field_name="node_type",
     )
