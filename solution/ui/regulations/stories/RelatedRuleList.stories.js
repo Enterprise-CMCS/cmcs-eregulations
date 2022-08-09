@@ -1,5 +1,5 @@
 import RelatedRuleList from "../js/src/components/RelatedRuleList.vue";
-import { relatedRulesResponse } from "./apiResponses";
+import { groupedFinalRuleResponse, relatedRulesResponse } from "./apiResponses";
 
 export default {
     title: "Supplemental Resources/Related Rule List",
@@ -15,4 +15,9 @@ const Template = (args, { argTypes }) => ({
 export const Basic = Template.bind({});
 Basic.args = {
     rules: relatedRulesResponse,
+};
+
+export const Grouped = Template.bind({});
+Grouped.args = {
+    rules: groupedFinalRuleResponse,
 };

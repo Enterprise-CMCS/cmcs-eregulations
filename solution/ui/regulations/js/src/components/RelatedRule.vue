@@ -1,5 +1,5 @@
 <template>
-    <div class="related-rule recent-change">
+    <div class="related-rule recent-change" :class="ruleClasses">
         <a
             class="related-rule-title"
             :href="html_url"
@@ -7,20 +7,35 @@
             rel="noopener noreferrer"
         >
             <span class="link-heading">
-                <span :class="getClassList">{{ expandedType }}</span>
-                <span class="recent-date" v-if="publication_date">{{
-                    publication_date | formatDate
+                <span
+                    v-if="expandedType !== 'Unknown'"
+                    class="recent-flag indicator"
+                    :class="indicatorClasses"
+                >{{expandedType}}</span>
+                <span v-if="publication_date" class="recent-date">{{
+                    publication_date | formatPubDate
                 }}</span>
-                | <span class="recent-fr">{{ citation }}</span>
+                |
+                <span class="recent-fr-citation" :class="citationClasses">{{
+                    citation
+                }}</span>
             </span>
-            <div class="recent-title">{{ title }}</div>
+            <div v-if="!grouped" class="recent-title">{{ title }}</div>
         </a>
     </div>
 </template>
 
 <script>
+import { formatDate } from "../../utils";
+
 export default {
-    name: "related-rule",
+    name: "RelatedRule",
+
+    filters: {
+        formatPubDate(value) {
+            return formatDate(value);
+        },
+    },
 
     props: {
         title: {
@@ -30,6 +45,11 @@ export default {
         type: {
             type: String,
             required: true,
+        },
+        grouped: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         citation: {
             type: String,
@@ -50,42 +70,47 @@ export default {
     },
 
     computed: {
-        expandedType: function () {
-            if (this.type === "Rule") {
+        expandedType() {
+            if (this.type === "Rule" || this.type === "Final Rules") {
                 return "Final";
-            } else if (
-                this.type === "Proposed Rule" &&
-                this.action === "Proposed rule."
+            }
+
+            if (
+                this.type === "Proposed Rules" ||
+                (this.type === "Proposed Rule" &&
+                    this.action === "Proposed rule.")
             ) {
                 return "NPRM";
-            } else if (
+            }
+
+            if (
                 this.type === "Proposed Rule" &&
                 this.action === "Request for information."
             ) {
                 return "RFI";
             }
+
             return "Unknown";
         },
-        getClassList: function () {
-            return this.expandedType === "Final"
-                ? "recent-flag indicator"
-                : "recent-flag indicator secondary-indicator";
+        ruleClasses() {
+            return {
+                grouped: this.grouped,
+                ungrouped: !this.grouped,
+            };
+        },
+        indicatorClasses() {
+            return {
+                "secondary-indicator":
+                    this.grouped || this.expandedType !== "Final",
+            };
+        },
+        citationClasses() {
+            return {
+                grouped: this.grouped,
+            };
         },
     },
 
     methods: {},
-    filters: {
-        formatDate: function (value) {
-            const date = new Date(value);
-            const options = {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                timeZone: "UTC",
-            };
-            const format = new Intl.DateTimeFormat("en-US", options);
-            return format.format(date);
-        },
-    },
 };
 </script>

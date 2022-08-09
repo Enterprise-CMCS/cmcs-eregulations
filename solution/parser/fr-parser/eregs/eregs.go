@@ -42,7 +42,7 @@ type FRDoc struct {
 	Category       string     `json:"category"`
 	URL            string     `json:"url"`
 	Date           string     `json:"date"`
-	DocketNumber   string     `json:"docket_number"`
+	DocketNumbers  []string   `json:"docket_numbers"`
 	DocumentNumber string     `json:"document_number"`
 	Locations      []*Section `json:"locations"`
 }
