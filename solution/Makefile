@@ -140,6 +140,7 @@ local.seed:
 	docker-compose exec regulations python manage.py loaddata resources.section.json
 	docker-compose exec regulations python manage.py loaddata resources.supplementalcontent.json
 	docker-compose exec regulations python manage.py loaddata resources.federalregistercategorylink.json
+	docker-compose exec regulations python manage.py loaddata resources.federalregisterdocumentgroup.json
 	docker-compose exec regulations python manage.py loaddata resources.federalregisterdocument.json
 	docker-compose exec regulations python manage.py loaddata search.synonym.json
 

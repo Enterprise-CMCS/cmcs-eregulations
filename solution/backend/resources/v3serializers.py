@@ -11,6 +11,7 @@ from .models import (
     FederalRegisterCategoryLink,
     SupplementalContent,
     FederalRegisterDocument,
+    FederalRegisterDocumentGroup,
 )
 
 
@@ -154,14 +155,25 @@ class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceF
     description_headline = HeadlineField("supplementalcontent")
 
 
-class FederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
-    docket_number = serializers.CharField()
+class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
+    docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField()
 
     name_headline = HeadlineField("federalregisterdocument")
     description_headline = HeadlineField("federalregisterdocument")
-    docket_number_headline = HeadlineField("federalregisterdocument")
     document_number_headline = HeadlineField("federalregisterdocument")
+
+
+class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer):
+    related_docs = SimpleFederalRegisterDocumentSerializer(many=True, source="related_resources")
+
+    def to_representation(self, instance):
+        obj = super().to_representation(instance)
+        docs = [obj] + obj["related_docs"]
+        del obj["related_docs"]
+        docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
+        docs[0]["related_docs"] = docs[1:]
+        return docs[0]
 
 
 class SectionCreateSerializer(serializers.ModelSerializer):
@@ -176,7 +188,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     name = serializers.CharField(allow_blank=True, allow_null=True)
-    docket_number = serializers.CharField(allow_blank=True, allow_null=True)
+    docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField(allow_blank=True, allow_null=True)
     date = serializers.CharField(allow_blank=True, allow_null=True)
     approved = serializers.BooleanField(required=False, default=False)
@@ -201,7 +213,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         instance.url = validated_data.get('url', instance.url)
         instance.description = validated_data.get('description', instance.description)
         instance.name = validated_data.get('name', instance.name)
-        instance.docket_number = validated_data.get('docket_number', instance.docket_number)
+        instance.docket_numbers = validated_data.get('docket_numbers', instance.docket_numbers)
         instance.document_number = validated_data.get('document_number', instance.document_number)
         instance.date = validated_data.get('date', instance.date)
         instance.approved = validated_data.get('approved', instance.approved)
@@ -220,6 +232,35 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             locations.append(location)
         instance.locations.set(locations)
 
+        # set the group on the instance
+        prefixes = []
+        for i in instance.docket_numbers:
+            d = i.split("-")
+            if len(d) > 1:
+                prefixes.append("-".join(d[0:-1]) + "-")
+        if len(prefixes) > 0:
+            groups = FederalRegisterDocumentGroup.objects.filter(docket_number_prefixes__overlap=prefixes)
+            if len(groups) == 0:
+                group = FederalRegisterDocumentGroup.objects.create(docket_number_prefixes=prefixes)
+            else:
+                group = self.combine_groups(groups) if len(groups) > 1 else groups[0]
+            group.docket_number_prefixes = list(set(group.docket_number_prefixes + prefixes))
+            group.save()
+            instance.group = group
+
         # save and return
         instance.save()
         return instance
+
+    def combine_groups(self, groups):
+        main = groups[0]
+        docs = main.documents.all()
+        prefixes = main.docket_number_prefixes
+        for group in groups[1:]:
+            docs |= group.documents.all()
+            prefixes += group.docket_number_prefixes
+            group.delete()
+        main.documents.set(docs.distinct())
+        main.docket_number_prefixes = list(set(prefixes))
+        main.save()
+        return main
