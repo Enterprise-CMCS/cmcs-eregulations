@@ -42,7 +42,7 @@ class MultipleFieldLookupMixin(object):
                 latest_field = field
             elif value:
                 filter[field] = value
-        return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)  
+        return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)
 
 
 @extend_schema(description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "
