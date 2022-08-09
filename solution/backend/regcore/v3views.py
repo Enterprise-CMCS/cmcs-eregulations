@@ -21,7 +21,11 @@ from regcore.serializers import (
     ParserResultSerializer,
     SynonymsSerializer,
     RawDictionarySerializer,
-    PartNodeSerializer,
+)
+
+from regcore.part_serializers import (
+    V3PartSerializer,
+    PartNodeSwaggerSerializer,
 )
 
 
@@ -132,15 +136,14 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
         "date": "version",
     }
 
-
+from drf_spectacular.utils import PolymorphicProxySerializer
 @extend_schema(
     description="Retrieve the full textual contents and structure of a regulation Part. "
                 "Note that children of a Part object will vary with object type. "
                 "Users should view real API responses for accurate examples.",
-    responses=PartNodeSerializer,
 )
 class PartViewSet(PartPropertiesViewSet):
-    serializer_class = RawDictionarySerializer
+    serializer_class = V3PartSerializer
 
     def retrieve(self, request, *args, **kwargs):
         serializer = self.serializer_class(self.get_object().document)
@@ -214,7 +217,7 @@ class PartSectionsViewSet(PartStructureNodesViewSet):
     description="Retrieve the full textual contents and structure of a section within a regulation's Part. "
                 "Note that children of a Section object will vary with object type. "
                 "Users should view real API responses for accurate examples.",
-    responses=PartNodeSerializer,
+    responses=PartNodeSwaggerSerializer,
 )
 class PartSectionViewSet(NodeFinderViewSet):
     parameter = "section"
@@ -231,7 +234,7 @@ class PartSubpartsViewSet(PartStructureNodesViewSet):
     description="Retrieve the full textual contents and structure of a subpart within a regulation's Part. "
                 "Note that children of a Subpart object will vary with object type. "
                 "Users should view real API responses for accurate examples.",
-    responses=PartNodeSerializer,
+    responses=PartNodeSwaggerSerializer,
 )
 class SubpartViewSet(NodeFinderViewSet):
     parameter = "subpart"

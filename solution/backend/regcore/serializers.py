@@ -52,23 +52,6 @@ class PartsSerializer(serializers.Serializer):
     title_object = serializers.IntegerField()
 
 
-# Note this serializer is only used for generating OpenAPI docs
-class MiniPartNodeSerializer(serializers.Serializer):
-    node_type = serializers.CharField()
-    header = serializers.CharField()
-    content = serializers.CharField()
-
-
-# Note this serializer is only used for generating OpenAPI docs
-class PartNodeSerializer(MiniPartNodeSerializer):
-    label = serializers.ListField(child=serializers.CharField())
-    title = serializers.CharField()
-    authority = MiniPartNodeSerializer()
-    source = MiniPartNodeSerializer()
-    editorial_node = MiniPartNodeSerializer()
-    children = MiniPartNodeSerializer(many=True)
-
-
 class RawDictionarySerializer(serializers.Serializer):
     def to_representation(self, instance):
         return instance
