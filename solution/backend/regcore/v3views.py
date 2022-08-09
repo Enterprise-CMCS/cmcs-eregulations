@@ -133,33 +133,6 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
     }
 
 
-# For retrieving a specific node from within a document tree structure
-# Must define "node_type" as a string representing the value of "node_type" in the JSON
-# Must define "label_index" as an integer representing the index in the label to identify the node
-# Must define "parameter" as the URL parameter to use for identifying the node
-class NodeFinderMixin(object):
-    def retrieve(self, request, *args, **kwargs):
-        node = kwargs.get(self.parameter, None)
-        document = self.get_object().document
-        node_content = self.find_node(document["children"], node)
-        if not node_content:
-            raise Http404()
-        serializer = self.serializer_class(node_content)
-        return Response(serializer.data)
-
-    def find_node(self, node_children, node):
-        for i in node_children:
-            if i["node_type"] == self.node_type:
-                if i["label"][self.label_index] == node:
-                    return i
-                continue
-            if "children" in i:
-                s = self.find_node(i["children"], node)
-                if s:
-                    return s
-        return None
-
-
 @extend_schema(
     description="Retrieve the full textual contents and structure of a regulation Part. "
                 "Note that children of a Part object will vary with object type. "
@@ -203,6 +176,35 @@ class PartStructureNodesViewSet(PartPropertiesViewSet):
         return Response(self.serializer_class(nodes, many=True).data)
 
 
+# For retrieving a specific node from within a document tree structure
+# Must define "node_type" as a string representing the value of "node_type" in the JSON
+# Must define "label_index" as an integer representing the index in the label to identify the node
+# Must define "parameter" as the URL parameter to use for identifying the node
+class NodeFinderViewSet(PartPropertiesViewSet):
+    serializer_class = RawDictionarySerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        node = kwargs.get(self.parameter, None)
+        document = self.get_object().document
+        node_content = self.find_node(document["children"], node)
+        if not node_content:
+            raise Http404()
+        serializer = self.serializer_class(node_content)
+        return Response(serializer.data)
+
+    def find_node(self, node_children, node):
+        for i in node_children:
+            if i["node_type"] == self.node_type:
+                if i["label"][self.label_index] == node:
+                    return i
+                continue
+            if "children" in i:
+                s = self.find_node(i["children"], node)
+                if s:
+                    return s
+        return None
+
+
 @extend_schema(description="Retrieve a list of Sections contained within a version of a Part.")
 class PartSectionsViewSet(PartStructureNodesViewSet):
     node_type = "section"
@@ -214,8 +216,7 @@ class PartSectionsViewSet(PartStructureNodesViewSet):
                 "Users should view real API responses for accurate examples.",
     responses=PartNodeSerializer,
 )
-class PartSectionViewSet(NodeFinderMixin, PartPropertiesViewSet):
-    serializer_class = RawDictionarySerializer
+class PartSectionViewSet(NodeFinderViewSet):
     parameter = "section"
     node_type = "SECTION"
     label_index = 1
@@ -232,8 +233,7 @@ class PartSubpartsViewSet(PartStructureNodesViewSet):
                 "Users should view real API responses for accurate examples.",
     responses=PartNodeSerializer,
 )
-class SubpartViewSet(NodeFinderMixin, PartPropertiesViewSet):
-    serializer_class = RawDictionarySerializer
+class SubpartViewSet(NodeFinderViewSet):
     parameter = "subpart"
     node_type = "SUBPART"
     label_index = 0
