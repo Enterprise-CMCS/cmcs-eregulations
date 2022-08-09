@@ -11,6 +11,34 @@
                     >
                     in Resources</span
                 >
+                <div class="sort-control">
+                    <span class="sort-control-label">Sort by</span>
+                    <FancyDropdown
+                        :buttonTitle="sortMethodTitle"
+                        :disabled="sortDisabled"
+                    >
+                        <v-list class="sort-options-list">
+                            <v-list-item-group
+                                v-model="sortOptions"
+                                class="sort-options-list-item-group"
+                            >
+                                <template
+                                    v-for="(sortOption, index) in sortOptions"
+                                >
+                                    <v-list-item
+                                        :key="sortOption.value + index"
+                                        :data-value="sortOption.value"
+                                        :disabled="sortOption.disabled"
+                                        :inactive="sortOption.disabled"
+                                        @click="clickMethod"
+                                    >
+                                        <span>{{ sortOption.label }}</span>
+                                    </v-list-item>
+                                </template>
+                            </v-list-item-group>
+                        </v-list>
+                    </FancyDropdown>
+                </div>
             </div>
             <div v-if="!isLoading">
                 <template v-if="filteredContent && filteredContent.length == 0">
@@ -91,13 +119,21 @@
 import _uniqBy from "lodash/uniqBy";
 import _has from "lodash/has";
 
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
+import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
+
+const SORT_METHODS = {
+    newest: "Date (Newest)",
+    oldest: "Date (Oldest)",
+    relevance: "Relevance",
+};
 
 export default {
     name: "ResourcesResults",
 
     components: {
+        FancyDropdown,
         SearchEmptyState,
         SupplementalContentObject,
     },
@@ -122,7 +158,7 @@ export default {
                 return `${base}/${title}/${part}/Subpart-${subpart_id}/${partDate}`;
             }
             const partObj = partsList.find((parts) => parts.name == part);
-            const subpart = partObj.sections[section_id];
+            const subpart = partObj?.sections?.[section_id];
 
             // todo: Figure out which no subpart sections are invalid and which are orphans
             return subpart
@@ -159,10 +195,28 @@ export default {
             required: false,
             default: "",
         },
+        sortMethod: {
+            validator: (value) => Object.keys(SORT_METHODS).includes(value),
+            required: false,
+            default: "newest",
+        },
+        sortDisabled: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        disabledSortOptions: {
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            },
+        },
     },
 
     data() {
         return {
+            activeSortMethod: this.sortMethod,
             base:
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
@@ -183,6 +237,22 @@ export default {
                 return copiedItem;
             });
         },
+        sortMethodTitle() {
+            return SORT_METHODS[this.sortMethod];
+        },
+        sortOptions() {
+            return Object.keys(SORT_METHODS).map((key) => ({
+                label: SORT_METHODS[key],
+                value: key,
+                disabled: this.disabledSortOptions.includes(key),
+            }));
+        },
+    },
+
+    methods: {
+        clickMethod(e) {
+            this.$emit("sort", e.currentTarget.dataset.value);
+        },
     },
 };
 </script>
@@ -192,20 +262,44 @@ export default {
     overflow: auto;
     width: 100%;
     margin-bottom: 30px;
+
     .results-content {
         max-width: $text-max-width;
         margin: 0 auto;
+
         .top-rule {
             border-top: 1px solid #dddddd;
             margin-bottom: 30px;
         }
+
         .results-count {
             font-size: 15px;
             font-weight: bold;
             margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
+        .sort-control {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+
+            div:first-of-type {
+                width: 140px;
+            }
+
+            @include custom-max($mobile-max / 1px) {
+                .sort-control-label {
+                    margin-right: 9px;
+                }
+            }
+        }
+
         .category-labels {
             margin-bottom: 5px;
+
             .result-label {
                 font-size: 11px;
                 display: inline;
@@ -218,8 +312,10 @@ export default {
                 }
             }
         }
+
         .result-content-wrapper {
             margin-bottom: 20px;
+
             .supplemental-content a.supplemental-content-link {
                 .supplemental-content-date,
                 .supplemental-content-title,
@@ -228,14 +324,17 @@ export default {
                 }
             }
         }
+
         .related-sections {
             margin-bottom: 40px;
             font-size: 12px;
             color: $mid_gray;
+
             .related-sections-title {
                 font-weight: 600;
                 color: $dark_gray;
             }
+
             a {
                 text-decoration: none;
             }

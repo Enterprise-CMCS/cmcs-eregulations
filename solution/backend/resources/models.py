@@ -3,6 +3,9 @@ from model_utils.managers import InheritanceManager
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
+from django_jsonform.models.fields import ArrayField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Field mixins
@@ -156,6 +159,27 @@ class Section(AbstractLocation):
         ordering = ["title", "part", "section_id"]
 
 
+# Resource grouping models
+
+
+class FederalRegisterDocumentGroup(models.Model):
+    docket_number_prefixes = ArrayField(
+        models.CharField(max_length=255, blank=True, null=True),
+        default=list,
+        blank=True,
+        help_text="Common prefixes to use when grouping Federal Register Documents, "
+                  "e.g. \"CMS-1234-\" to match any docket number starting with that string.",
+    )
+
+    def __str__(self):
+        prefixes = ", ".join(self.docket_number_prefixes)
+        return f"\"{prefixes}\" group"
+
+    class Meta:
+        verbose_name = "Federal Register Doc Group"
+        verbose_name_plural = "Federal Register Doc Groups"
+
+
 # Resource models
 # All types of resources must inherit from AbstractResource.
 
@@ -168,6 +192,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources"
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
+    related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     objects = InheritanceManager()
 
@@ -183,13 +208,46 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 
 
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
-    docket_number = models.CharField(max_length=255, blank=True, null=True)
+    docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
+
+    group = models.ForeignKey(
+        FederalRegisterDocumentGroup,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="documents",
+    )
 
     def __str__(self):
         return f"{self.date} {self.document_number}: {self.name}"
 
     class Meta:
-        ordering = ["-date", "document_number", "docket_number", "name", "description"]
+        ordering = ["-date", "document_number", "name", "description"]
         verbose_name = "Federal Register Document"
         verbose_name_plural = "Federal Register Documents"
+
+
+# Receiver hooks for updating resource groupings on save
+
+
+def update_related_docs(group_id):
+    post_save.disconnect(post_save_fr_doc, sender=FederalRegisterDocument)
+    post_save.disconnect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
+    docs = FederalRegisterDocument.objects.filter(group=group_id)
+    for doc in docs:
+        doc.related_resources.set(doc.group.documents.exclude(id=doc.id).order_by("-date"))
+        doc.save()
+    post_save.connect(post_save_fr_doc, sender=FederalRegisterDocument)
+    post_save.connect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
+
+
+@receiver(post_save, sender=FederalRegisterDocumentGroup)
+def post_save_fr_doc_group(sender, instance, **kwargs):
+    update_related_docs(instance.id)
+
+
+@receiver(post_save, sender=FederalRegisterDocument)
+def post_save_fr_doc(sender, instance, **kwargs):
+    if instance.group:
+        update_related_docs(instance.group)

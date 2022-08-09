@@ -1,21 +1,40 @@
 <template>
     <div class="supplemental-content-category">
         <div class="category">
-            <collapse-button v-if="has_children" v-bind:class="{ subcategory: subcategory }" :name="name" state="collapsed" class="category-title">
-              <template v-slot:expanded>{{ name }} <i v-if="has_children" class="fa fa-chevron-up"></i></template>
-              <template v-slot:collapsed>{{ name }} <i v-if="has_children" class="fa fa-chevron-down"></i></template>
+            <collapse-button
+                v-if="has_children"
+                v-bind:class="{ subcategory: subcategory }"
+                :name="name"
+                state="collapsed"
+                class="category-title"
+            >
+                <template v-slot:expanded
+                    >{{ name }}
+                    <i v-if="has_children" class="fa fa-chevron-up"></i
+                ></template>
+                <template v-slot:collapsed
+                    >{{ name }}
+                    <i v-if="has_children" class="fa fa-chevron-down"></i
+                ></template>
             </collapse-button>
             <div v-else class="category-title childless collapsible-title">
-              {{name}}
+                {{ name }}
             </div>
             <span v-if="isFetching"></span>
-            <span v-else-if="!has_children" class="childless category-description">None</span>
-            <span v-else-if="showDescription" class="category-description">{{ description }}</span>
+            <span
+                v-else-if="!has_children"
+                class="childless category-description"
+                >None</span
+            >
+            <span v-else-if="showDescription" class="category-description">{{
+                description
+            }}</span>
 
             <collapsible
                 :name="name"
                 state="collapsed"
                 class="category-content"
+                overflow
             >
                 <supplemental-content-category
                     v-for="category in sub_categories"
@@ -28,18 +47,28 @@
                     :isFetching="isFetching"
                 >
                 </supplemental-content-category>
-                <supplemental-content-list
-                    :supplemental_content="supplemental_content"
-                    :has_sub_categories="has_sub_categories"
-                    v-if="supplemental_content"
-                />
+                <template
+                    v-if="name === 'Final Rules' || name === 'Proposed Rules'"
+                >
+                    <related-rule-list
+                        v-if="supplemental_content"
+                        :rules="supplemental_content"
+                    />
+                </template>
+                <template v-else>
+                    <supplemental-content-list
+                        :supplemental_content="supplemental_content"
+                        :has_sub_categories="has_sub_categories"
+                        v-if="supplemental_content"
+                    />
+                </template>
             </collapsible>
-
         </div>
     </div>
 </template>
 
 <script>
+import RelatedRuleList from "./RelatedRuleList.vue";
 import SupplementalContentList from "./SupplementalContentList.vue";
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
@@ -49,10 +78,11 @@ export default {
     name: "supplemental-content-category",
 
     components: {
+        RelatedRuleList,
         SupplementalContentList,
         CollapseButton,
         Collapsible,
-        SimpleSpinner
+        SimpleSpinner,
     },
 
     props: {
@@ -85,15 +115,17 @@ export default {
     },
 
     computed: {
-        showDescription () {
+        showDescription() {
             return this.description && !/^\s*$/.test(this.description);
         },
         has_sub_categories() {
             return this?.sub_categories?.length;
         },
-        has_children () {
-          return this.sub_categories?.length || this.supplemental_content?.length
-        }
+        has_children() {
+            return (
+                this.sub_categories?.length || this.supplemental_content?.length
+            );
+        },
     },
 };
 </script>

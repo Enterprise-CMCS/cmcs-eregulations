@@ -16,5 +16,6 @@
         "vue"
     ],
     "rules": {
+        "vue/order-in-components": "off"
     }
 }
