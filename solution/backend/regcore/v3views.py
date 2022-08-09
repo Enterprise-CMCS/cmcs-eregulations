@@ -20,12 +20,12 @@ from regcore.serializers import (
     StringListSerializer,
     ParserResultSerializer,
     SynonymsSerializer,
-    RawDictionarySerializer,
 )
 
 from regcore.part_serializers import (
     V3PartSerializer,
-    PartNodeSwaggerSerializer,
+    SectionSerializer,
+    SubpartSerializer,
 )
 
 
@@ -136,11 +136,10 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
         "date": "version",
     }
 
-from drf_spectacular.utils import PolymorphicProxySerializer
+
 @extend_schema(
     description="Retrieve the full textual contents and structure of a regulation Part. "
                 "Note that children of a Part object will vary with object type. "
-                "Users should view real API responses for accurate examples.",
 )
 class PartViewSet(PartPropertiesViewSet):
     serializer_class = V3PartSerializer
@@ -183,9 +182,8 @@ class PartStructureNodesViewSet(PartPropertiesViewSet):
 # Must define "node_type" as a string representing the value of "node_type" in the JSON
 # Must define "label_index" as an integer representing the index in the label to identify the node
 # Must define "parameter" as the URL parameter to use for identifying the node
+# Must define "serializer_class"
 class NodeFinderViewSet(PartPropertiesViewSet):
-    serializer_class = RawDictionarySerializer
-
     def retrieve(self, request, *args, **kwargs):
         node = kwargs.get(self.parameter, None)
         document = self.get_object().document
@@ -215,11 +213,10 @@ class PartSectionsViewSet(PartStructureNodesViewSet):
 
 @extend_schema(
     description="Retrieve the full textual contents and structure of a section within a regulation's Part. "
-                "Note that children of a Section object will vary with object type. "
-                "Users should view real API responses for accurate examples.",
-    responses=PartNodeSwaggerSerializer,
+                "Note that children of a Section object will vary with object type. ",
 )
 class PartSectionViewSet(NodeFinderViewSet):
+    serializer_class = SectionSerializer
     parameter = "section"
     node_type = "SECTION"
     label_index = 1
@@ -232,11 +229,10 @@ class PartSubpartsViewSet(PartStructureNodesViewSet):
 
 @extend_schema(
     description="Retrieve the full textual contents and structure of a subpart within a regulation's Part. "
-                "Note that children of a Subpart object will vary with object type. "
-                "Users should view real API responses for accurate examples.",
-    responses=PartNodeSwaggerSerializer,
+                "Note that children of a Subpart object will vary with object type. ",
 )
 class SubpartViewSet(NodeFinderViewSet):
+    serializer_class = SubpartSerializer
     parameter = "subpart"
     node_type = "SUBPART"
     label_index = 0

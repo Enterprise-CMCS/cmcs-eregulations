@@ -1,36 +1,20 @@
 from rest_framework import serializers
+from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_field
 
 
-class NodeTypeSerializer(serializers.Serializer):
+class NodeChildrenField(serializers.DictField):
     def get_serializer_map(self):
         raise NotImplementedError()
 
-    def to_representation(self, instance):
-        node_type = instance["node_type"]
+    def to_representation(self, obj):
+        node_type = obj["node_type"]
         if node_type in self.get_serializer_map():
-            data = self.get_serializer_map()[node_type](instance=instance, context=self.context).data
-            return data
+            return self.get_serializer_map()[node_type](instance=obj, context=self.context).data
         return "Serializer not available"
 
 
-# Note this serializer is only used for generating OpenAPI docs
-class MiniPartNodeSwaggerSerializer(serializers.Serializer):
-    node_type = serializers.CharField()
-    header = serializers.CharField()
-    content = serializers.CharField()
-
-
-# Note this serializer is only used for generating OpenAPI docs
-class PartNodeSwaggerSerializer(MiniPartNodeSwaggerSerializer):
-    label = serializers.ListField(child=serializers.CharField())
-    title = serializers.CharField()
-    authority = MiniPartNodeSwaggerSerializer()
-    source = MiniPartNodeSwaggerSerializer()
-    editorial_node = MiniPartNodeSwaggerSerializer()
-    children = MiniPartNodeSwaggerSerializer(many=True)
-
-
 # Base serializers for node types
+
 
 class PartNodeSerializer(serializers.Serializer):
     node_type = serializers.CharField()
@@ -103,7 +87,25 @@ class ExtractSerializer(ContentNodeSerializer):
 
 # Second-level serializers (e.g. subpart, section, appendix)
 
-class SectionChildrenSerializer(NodeTypeSerializer):
+
+@extend_schema_field(
+    PolymorphicProxySerializer(
+        component_name="SectionChildrenField",
+        serializers=[
+            ParagraphSerializer,
+            FlushParagraphSerializer,
+            ImageSerializer,
+            ExtractSerializer,
+            CitationSerializer,
+            SectionAuthoritySerializer,
+            FootNoteSerializer,
+            DivisionSerializer,
+            EffectiveDateNoteSerializer,
+        ],
+        resource_type_field_name="node_type",
+    )
+)
+class SectionChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
             "Paragraph": ParagraphSerializer,
@@ -121,10 +123,17 @@ class SectionChildrenSerializer(NodeTypeSerializer):
 class SectionSerializer(PartNodeSerializer):
     title = serializers.CharField()
     label = serializers.ListField(child=serializers.CharField())
-    children = SectionChildrenSerializer(many=True)  
+    children = serializers.ListField(child=SectionChildrenField())
 
 
-class AppendixChildrenSerializer(NodeTypeSerializer):
+@extend_schema_field(
+    PolymorphicProxySerializer(
+        component_name="AppendixChildrenField",
+        serializers=[ParagraphSerializer, HeadingSerializer],
+        resource_type_field_name="node_type",
+    )
+)
+class AppendixChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
             "Paragraph": ParagraphSerializer,
@@ -135,10 +144,17 @@ class AppendixChildrenSerializer(NodeTypeSerializer):
 class AppendixSerializer(PartNodeSerializer):
     title = serializers.CharField()
     label = serializers.ListField(child=serializers.CharField())
-    children = AppendixChildrenSerializer(many=True)  
+    children = serializers.ListField(child=AppendixChildrenField())
 
 
-class SubjectGroupChildrenSerializer(NodeTypeSerializer):
+@extend_schema_field(
+    PolymorphicProxySerializer(
+        component_name="SubjectGroupChildrenField",
+        serializers=[SectionSerializer, FootNoteSerializer],
+        resource_type_field_name="node_type",
+    )
+)
+class SubjectGroupChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
             "SECTION": SectionSerializer,
@@ -149,10 +165,22 @@ class SubjectGroupChildrenSerializer(NodeTypeSerializer):
 class SubjectGroupSerializer(PartNodeSerializer):
     title = serializers.CharField()
     label = serializers.ListField(child=serializers.CharField())
-    children = SubjectGroupChildrenSerializer(many=True)    
+    children = serializers.ListField(child=SubjectGroupChildrenField())
 
 
-class SubpartChildrenSerializer(NodeTypeSerializer):
+@extend_schema_field(
+    PolymorphicProxySerializer(
+        component_name="SubpartChildrenField",
+        serializers=[
+            SectionSerializer,
+            SubjectGroupSerializer,
+            AppendixSerializer,
+            SourceSerializer,
+        ],
+        resource_type_field_name="node_type",
+    )
+)
+class SubpartChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
             "SECTION": SectionSerializer,
@@ -165,12 +193,20 @@ class SubpartChildrenSerializer(NodeTypeSerializer):
 class SubpartSerializer(PartNodeSerializer):
     title = serializers.CharField()
     label = serializers.ListField(child=serializers.CharField())
-    children = SubpartChildrenSerializer(many=True)
+    children = serializers.ListField(child=SubpartChildrenField())
 
 
 # First-level serializer for part objects
 
-class PartChildrenSerializer(NodeTypeSerializer):
+
+@extend_schema_field(
+    PolymorphicProxySerializer(
+        component_name="PartChildrenField",
+        serializers=[SubpartSerializer, SectionSerializer],
+        resource_type_field_name="node_type",
+    )
+)
+class PartChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
             "SUBPART": SubpartSerializer,
@@ -185,4 +221,4 @@ class V3PartSerializer(PartNodeSerializer):
     authority = AuthoritySerializer()
     source = SourceSerializer()
     editorial_note = EdNoteSerializer()
-    children = PartChildrenSerializer(many=True)
+    children = serializers.ListField(child=PartChildrenField())
