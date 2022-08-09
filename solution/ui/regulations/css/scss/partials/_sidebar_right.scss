@@ -30,8 +30,8 @@ aside.right-sidebar {
         }
     }
 
-    #subpart-resources-heading{
-        margin-bottom:0px;
+    #subpart-resources-heading {
+        margin-bottom: 0px;
     }
 
     #view-button {
@@ -143,6 +143,31 @@ aside.right-sidebar {
     }
 }
 
+.related-rule {
+    &.ungrouped {
+        padding-top: 26px;
+    }
+
+    &.grouped {
+        display: block;
+        position: relative;
+        margin-top: -4px;
+        padding-left: 24px;
+
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 7px;
+            left: 0;
+            width: 15px;
+            height: 20px;
+            border: solid $light_gray;
+            border-width: 0 0 1px 1px;
+        }
+    }
+}
+
 .related-rule-type {
     border-radius: 3px;
 }
@@ -182,7 +207,9 @@ aside.right-sidebar {
     }
 }
 .related-rule-list {
-    padding-left: $spacer-2;
+    div:first-of-type {
+        padding: 0;
+    }
 }
 
 .rules-with-preamble {
@@ -207,8 +234,12 @@ aside.right-sidebar {
         font-weight: bold;
     }
 
-    .recent-fr {
+    .recent-fr-citation {
         font-weight: bold;
+
+        &.grouped {
+            font-weight: normal;
+        }
     }
 
     .recent-title {
@@ -266,6 +297,12 @@ aside.right-sidebar {
     margin-right: 20px;
 }
 
+.supplemental-content-container
+    .supplemental-content-category
+    .category-content.additional-rules {
+        margin: inherit;
+}
+
 .supplemental-content-category {
     display: table;
     width: 100%;
@@ -291,7 +328,6 @@ aside.right-sidebar {
 }
 
 .category-content {
-
     &.additional-rules .related-rule:first-child {
         padding: 0;
     }
@@ -303,7 +339,7 @@ aside.right-sidebar {
         }
     }
 }
-button.collapsible-title{
+button.collapsible-title {
     cursor: pointer;
 }
 .collapsible-title {
@@ -369,11 +405,11 @@ button.collapsible-title{
     margin-top: $spacer-2;
 }
 
-.show-subpart-resources{
+.show-subpart-resources {
     color: $mid_gray;
-    font-size: 12px
+    font-size: 12px;
 }
 
-.bold{
-    font-weight: 600
+.bold {
+    font-weight: 600;
 }

@@ -34,51 +34,60 @@ function parseError(err) {
 }
 
 const EventCodes = {
-    SetSection: 'SetSection'
-}
+    SetSection: "SetSection",
+};
 
 const formatResourceCategories = (resources) => {
     const rawCategories = JSON.parse(
         document.getElementById("categories").textContent
     );
 
-    resources.filter((resource)=> resource.category.type ==="category").forEach(resource => {
-        const existingCategory = rawCategories.find(category => category.name === resource.category.name)
+    resources
+        .filter((resource) => resource.category.type === "category")
+        .forEach((resource) => {
+            const existingCategory = rawCategories.find(
+                (category) => category.name === resource.category.name
+            );
 
-        if (existingCategory){
-            if (!existingCategory.supplemental_content){
-                existingCategory.supplemental_content = []
+            if (existingCategory) {
+                if (!existingCategory.supplemental_content) {
+                    existingCategory.supplemental_content = [];
+                }
+                existingCategory.supplemental_content.push(resource);
+            } else {
+                const newCategory = JSON.parse(
+                    JSON.stringify(resource.category)
+                );
+                newCategory.supplemental_content = [resource];
+                newCategory.sub_categories = [];
+                rawCategories.push(newCategory);
             }
-            existingCategory.supplemental_content.push(resource)
-            console.log(existingCategory)
-
-        } else{
-          const newCategory = JSON.parse(JSON.stringify(resource.category))
-          newCategory.supplemental_content = [resource]
-          newCategory.sub_categories = []
-          rawCategories.push(newCategory)
-        }
-    })
+        });
 
     const rawSubCategories = JSON.parse(
         document.getElementById("sub_categories").textContent
     );
 
-    resources.filter((resource)=> resource.category.type ==="subcategory").forEach(resource => {
-        const existingSubCategory = rawSubCategories.find(category => category.name === resource.category.name)
+    resources
+        .filter((resource) => resource.category.type === "subcategory")
+        .forEach((resource) => {
+            const existingSubCategory = rawSubCategories.find(
+                (category) => category.name === resource.category.name
+            );
 
-        if (existingSubCategory){
-            if (!existingSubCategory.supplemental_content){
-                existingSubCategory.supplemental_content = []
+            if (existingSubCategory) {
+                if (!existingSubCategory.supplemental_content) {
+                    existingSubCategory.supplemental_content = [];
+                }
+                existingSubCategory.supplemental_content.push(resource);
+            } else {
+                const newSubCategory = JSON.parse(
+                    JSON.stringify(resource.category)
+                );
+                newSubCategory.supplemental_content = [resource];
+                rawSubCategories.push(newSubCategory);
             }
-            existingSubCategory.supplemental_content.push(resource)
-
-        } else{
-          const newSubCategory = JSON.parse(JSON.stringify(resource.category))
-          newSubCategory.supplemental_content = [resource]
-          rawSubCategories.push(newSubCategory)
-        }
-    })
+        });
     const categories = rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
         category.sub_categories = rawSubCategories.filter(
@@ -86,36 +95,55 @@ const formatResourceCategories = (resources) => {
         );
         return category;
     });
-    categories.sort((a, b) =>
-        a.order - b.order
-    );
+    categories.sort((a, b) => a.order - b.order);
     categories.forEach((category) => {
-        category.sub_categories.sort((a, b) =>
-            a.order - b.order
-        );
+        category.sub_categories.sort((a, b) => a.order - b.order);
     });
-    return categories
-}
+    return categories;
+};
 
-function flattenSubpart(subpart){
-    const result = JSON.parse(JSON.stringify(subpart))
+function flattenSubpart(subpart) {
+    const result = JSON.parse(JSON.stringify(subpart));
     const subjectGroupSections = subpart.children
-        .filter(child => child.type=== 'subject_group')
-        .flatMap(subjgrp => subjgrp.children)
-        .filter(child => child.type ==="section")
-
+        .filter((child) => child.type === "subject_group")
+        .flatMap((subjgrp) => subjgrp.children)
+        .filter((child) => child.type === "section");
 
     result.children = result.children
         .concat(subjectGroupSections)
-        .filter(child => child.type ==="section")
+        .filter((child) => child.type === "section");
 
-    return result
+    return result;
 }
+
+const formatDate = (value) => {
+    const date = new Date(value);
+    const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+    };
+    const format = new Intl.DateTimeFormat("en-US", options);
+
+    const formattedDate = format.format(date);
+    const splitDate = formattedDate.split(" ");
+
+    if (splitDate[0] && splitDate[0].length > 4) {
+        const month = splitDate[0];
+        const abbrMonth = month.slice(0, 3);
+        splitDate[0] = abbrMonth;
+        return splitDate.join(" ");
+    }
+
+    return formattedDate;
+};
 
 export {
     delay,
     parseError,
+    formatDate,
     formatResourceCategories,
     EventCodes,
-    flattenSubpart
+    flattenSubpart,
 };
