@@ -13,6 +13,9 @@
         <h2 v-if="!requested_categories" id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
+        <div class="resource_btn_container">
+            <a :href="resourceLink" class="search_resource_btn" >Search These Resources</a>
+        </div>
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"
@@ -132,6 +135,20 @@ export default {
             }
             return `Subpart ${this.subparts[0]}`;
         },
+
+        resourceLink: function () {
+            let qString = "/resources\\?title=42&part=" + this.part
+
+            if (this.activePart.includes("Subpart")){
+                qString = qString + "&subpart="+this.part + "-" + this.params_array[1][1] 
+                return qString + "&section="+this.part + "-" 
+                        + this.sections.join(","+this.part+"-")
+            }
+            else{
+                const selection = this.activePart.split(" ")[1].replace(".","-");
+                return qString + "&section=" + selection;
+            }
+        },
     },
 
     watch: {
@@ -236,3 +253,27 @@ export default {
     },
 };
 </script>
+
+<style lang="scss">
+.resource_btn_container {
+    padding-top:10px;
+    padding-bottom: 10px;   
+}
+.search_resource_btn {
+    background-color: #046791;
+    border:none;
+    color:white;
+    text-align: center;
+    border-radius: 3px;
+    font-weight: 400;
+    font-size:14px;
+    line-height: 18px;
+    padding: 5px 12px 5px 12px;
+    font-family: 'Open Sans';
+    text-decoration: none;
+    
+}
+a.search_resource_btn:visited{
+    color:white
+}
+</style>
