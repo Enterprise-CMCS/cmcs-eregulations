@@ -333,12 +333,15 @@ func TestProcessPart(t *testing.T) {
 			FetchContentFunc: func(ctx context.Context, title int, part string) ([]*fedreg.FRDoc, error) {
 				return []*fedreg.FRDoc{
 					&fedreg.FRDoc{
-						Name:           "a name",
-						Description:    "a description",
-						Category:       "a category",
-						URL:            "https://test.gov/test",
-						Date:           "2021-01-31",
-						DocketNumber:   "CMS-0000-F2",
+						Name:        "a name",
+						Description: "a description",
+						Category:    "a category",
+						URL:         "https://test.gov/test",
+						Date:        "2021-01-31",
+						DocketNumbers: []string{
+							"CMS-0000-F2",
+							"CMS-0001-C1",
+						},
 						DocumentNumber: "2021-12345",
 					},
 					&fedreg.FRDoc{
@@ -347,7 +350,7 @@ func TestProcessPart(t *testing.T) {
 						Category:       "a category 2",
 						URL:            "https://test.gov/test/2",
 						Date:           "2021-02-01",
-						DocketNumber:   "CMS-0000-F3",
+						DocketNumbers:  []string{"CMS-0000-F3"},
 						DocumentNumber: "2021-67890",
 					},
 				}, nil
@@ -376,12 +379,15 @@ func TestProcessPart(t *testing.T) {
 			FetchContentFunc: func(ctx context.Context, title int, part string) ([]*fedreg.FRDoc, error) {
 				return []*fedreg.FRDoc{
 					&fedreg.FRDoc{
-						Name:           "a name",
-						Description:    "a description",
-						Category:       "a category",
-						URL:            "https://test.gov/test",
-						Date:           "2021-01-31",
-						DocketNumber:   "CMS-0000-F2",
+						Name:        "a name",
+						Description: "a description",
+						Category:    "a category",
+						URL:         "https://test.gov/test",
+						Date:        "2021-01-31",
+						DocketNumbers: []string{
+							"CMS-0000-F2",
+							"CMS-0001-C1",
+						},
 						DocumentNumber: "2021-12345",
 					},
 					&fedreg.FRDoc{
@@ -390,7 +396,7 @@ func TestProcessPart(t *testing.T) {
 						Category:       "a category 2",
 						URL:            "https://test.gov/test/2",
 						Date:           "2021-02-01",
-						DocketNumber:   "CMS-0000-F3",
+						DocketNumbers:  []string{"CMS-0000-F3"},
 						DocumentNumber: "2021-67890",
 					},
 				}, nil
@@ -407,12 +413,15 @@ func TestProcessPart(t *testing.T) {
 			FetchContentFunc: func(ctx context.Context, title int, part string) ([]*fedreg.FRDoc, error) {
 				return []*fedreg.FRDoc{
 					&fedreg.FRDoc{
-						Name:           "a name",
-						Description:    "a description",
-						Category:       "a category",
-						URL:            "https://test.gov/test",
-						Date:           "2021-01-31",
-						DocketNumber:   "CMS-0000-F2",
+						Name:        "a name",
+						Description: "a description",
+						Category:    "a category",
+						URL:         "https://test.gov/test",
+						Date:        "2021-01-31",
+						DocketNumbers: []string{
+							"CMS-0000-F2",
+							"CMS-0001-C1",
+						},
 						DocumentNumber: "2021-12345",
 					},
 					&fedreg.FRDoc{
@@ -421,7 +430,7 @@ func TestProcessPart(t *testing.T) {
 						Category:       "a category 2",
 						URL:            "https://test.gov/test/2",
 						Date:           "2021-02-01",
-						DocketNumber:   "CMS-0000-F3",
+						DocketNumbers:  []string{"CMS-0000-F3"},
 						DocumentNumber: "2021-67890",
 					},
 				}, nil
@@ -506,12 +515,15 @@ func TestProcessDocument(t *testing.T) {
 			defer cancel()
 
 			doc := fedreg.FRDoc{
-				Name:           "a name",
-				Description:    "a description",
-				Category:       "a category",
-				URL:            "https://test.gov/test",
-				Date:           "2021-01-31",
-				DocketNumber:   "CMS-0000-F2",
+				Name:        "a name",
+				Description: "a description",
+				Category:    "a category",
+				URL:         "https://test.gov/test",
+				Date:        "2021-01-31",
+				DocketNumbers: []string{
+					"CMS-0000-F2",
+					"CMS-0001-C1",
+				},
 				DocumentNumber: "2021-12345",
 				FullTextURL:    "http://test.gov/some/xml/url",
 			}

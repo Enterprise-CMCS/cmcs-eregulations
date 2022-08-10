@@ -2,9 +2,11 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
 from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
+
 # Register your models here.
 
 from .models import (
@@ -17,6 +19,7 @@ from .models import (
     AbstractLocation,
     Section,
     Subpart,
+    FederalRegisterDocumentGroup,
 )
 
 from .filters import (
@@ -258,11 +261,64 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     form = FederalResourceForm
-    list_display = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at", "approved")
-    list_display_links = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at")
-    search_fields = ["date", "name", "description", "docket_number", "document_number"]
-    fields = ("approved", "docket_number", "document_number", "name",
+    list_display = ("date", "name", "description", "in_group", "docket_numbers",
+                    "document_number", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
+                          "document_number", "category", "updated_at")
+    search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
+    fields = ("approved", "docket_numbers", "group", "document_number", "name",
               "description", "date", "url", "category", "locations", "bulk_title", "bulk_locations", "internal_notes")
+
+    def in_group(self, obj):
+        group = str(obj.group)
+        return group[0:20] + "..." if len(group) > 20 else group
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
+        )
+
+
+class FederalRegisterDocumentGroupForm(forms.ModelForm):
+    documents = forms.ModelMultipleChoiceField(
+        queryset=FederalRegisterDocument.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name="Documents",
+            is_stacked=False,
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields["documents"].initial = self.instance.documents.all()
+
+    def save(self, commit=True):
+        group = super().save(commit=False)
+        group.save()
+        group.documents.set(self.cleaned_data["documents"])
+        group.save()
+        return group
+
+    class Meta:
+        model = FederalRegisterDocumentGroup
+        fields = ("docket_number_prefixes", "documents")
+
+
+@admin.register(FederalRegisterDocumentGroup)
+class FederalRegisterDocumentGroupAdmin(BaseAdmin):
+    form = FederalRegisterDocumentGroupForm
+    admin_priority = 250
+    list_display = ("docket_number_prefixes", "number_of_documents")
+    list_display_links = ("docket_number_prefixes", "number_of_documents")
+    search_fields = ["docket_number_prefixes"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(number_of_documents=Count("documents"))
+
+    def number_of_documents(self, obj):
+        return obj.number_of_documents
 
 
 # Custom app list function, allows ordering Django Admin models by "admin_priority", low to high

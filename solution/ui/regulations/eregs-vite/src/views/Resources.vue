@@ -23,11 +23,21 @@
                         @click:append="executeSearch"
                         @click:clear="clearSearchQuery"
                     />
-                    <div class="search-suggestion" v-if="multiWordQuery">
-                        Didn't find what you were looking for? Try searching for
-                        <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
+                    <div v-if="synonyms.length > 0 || multiWordQuery" class="search-suggestion">
+                        <div v-if="multiWordQuery">
+                            Didn't find what you were looking for? Try searching for
+                            <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
+                        </div>
+                        <div class="synonyms" v-if="synonyms.length > 0"> 
+                            <span v-if="multiWordQuery">Or </span>Search for similar terms:
+                            <span v-bind:key=a v-for="a in synonyms">
+                                <a @click="synonymLinks(a)">{{a}}</a>
+                                <span v-if="synonyms[synonyms.length-1] != a">, </span>
+                            </span>
+                        </div>
                     </div>
                 </form>
+
             </ResourcesNav>
             <div
                 class="resources-content-container"
@@ -60,6 +70,7 @@
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
                         :sortMethod="sortMethod"
+                        :disabledSortOptions="disabledSortOptions"
                         :sortDisabled="sortDisabled"
                         @sort="setSortMethod"
                     />
@@ -87,6 +98,7 @@ import {
     getPartTOC,
     getSectionsForPart,
     getSubpartTOC,
+    getSynonyms
 } from "../utilities/api";
 
 export default {
@@ -113,6 +125,7 @@ export default {
             partsLastUpdated: {},
             partDict: {},
             categories: [],
+            synonyms:[],
             resourcesDisplay:
                 this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
@@ -147,6 +160,7 @@ export default {
             },
             supplementalContent: [],
             searchInputValue: undefined,
+            sortDisabled: true,
         };
     },
 
@@ -189,15 +203,14 @@ export default {
         sortMethod() {
             return this.queryParams.sort || "newest";
         },
-        sortDisabled() {
-            return _isEmpty(this.searchQuery);
+        disabledSortOptions() {
+            return _isEmpty(this.searchQuery) ? ["relevance"] : [];
         },
     },
 
     methods: {
-        executeSearch() {
+        async executeSearch() {
             const sectionRegex = /^\d{2,3}\.(\d{1,4})$/;
-
             if (sectionRegex.test(this.searchInputValue)) {
                 const payload = {
                     scope: "section",
@@ -215,6 +228,7 @@ export default {
                     },
                 });
             }
+            this.synonyms = await this.retrieveSynonyms(this.searchInputValue)
         },
         clearSelections() {
             this.partDict = {};
@@ -226,7 +240,12 @@ export default {
                 },
             });
         },
+        async synonymLinks(synonym){
+            this.searchInputValue = synonym
+            await this.executeSearch()
+        },
         clearSearchQuery() {
+            this.synonyms = []
             this.$router.push({
                 name: "resources",
                 query: {
@@ -298,7 +317,11 @@ export default {
                 query: newQueryParams,
             });
         },
-
+        async retrieveSynonyms(query){
+            let synonyms = await getSynonyms(query)
+            synonyms = synonyms.map(word => word.synonyms.map(word => word.baseWord))[0]
+            return synonyms ? synonyms : []
+        },
         async updateFilters(payload) {
             let newQueryParams = { ...this.queryParams };
             const splitSection = payload.selectedIdentifier.split("-");
@@ -665,6 +688,10 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
+                if (this.sortDisabled) {
+                    this.sortDisabled = false;
+                }
+
                 if (
                     _isEmpty(newParams.part) &&
                     _isEmpty(newParams.q) &&
@@ -717,6 +744,10 @@ export default {
                 this.queryParams.part,
                 this.queryParams.subpart
             );
+        }
+
+        if (!_isEmpty(this.queryParams)) {
+            this.sortDisabled = false;
         }
 
         this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
