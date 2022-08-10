@@ -13,7 +13,9 @@
         <h2 v-if="!requested_categories" id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
-        <a :href="resourceLink" class="search_resource_btn" >Search These Resources</a>
+        <div class="resource_btn_container">
+            <a :href="resourceLink" class="search_resource_btn" >Search These Resources</a>
+        </div>
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"
@@ -135,8 +137,18 @@ export default {
         },
 
         resourceLink: function () {
-            return this.build_resources_url()
-        }
+            let qString = "/resources\\?title=42&part=" + this.part
+
+            if (this.activePart.includes("Subpart")){
+                qString = qString + "&subpart="+this.part + "-" + this.params_array[1][1] 
+                return qString + "&section="+this.part + "-" 
+                        + this.sections.join(","+this.part+"-")
+            }
+            else{
+                const selection = this.activePart.split(" ")[1].replace(".","-");
+                return qString + "&section=" + selection;
+            }
+        },
     },
 
     watch: {
@@ -196,21 +208,6 @@ export default {
     },
 
     methods: {
-        build_resources_url(){
-            let qString = "?title=42&part=" + this.part
-
-            if (this.activePart.includes("Subpart")){
-                qString = qString + "&subpart="+this.part + "-" + this.params_array[1][1] 
-                qString = qString + "&section="+this.part + "-"+ this.sections.join(","+this.part+"-")
-            }
-            else{
-                const selection = this.activePart.split(" ")[1].replace(".","-")
-                qString= qString + "&section=" + selection 
-            }
-            console.log(qString)
-            qString = "/resources\\"+qString
-            return qString
-        },
         async fetch_content(title, part, location) {
             try {
                 if (this.requested_categories.length > 0) {
@@ -258,7 +255,10 @@ export default {
 </script>
 
 <style lang="scss">
-
+.resource_btn_container {
+    padding-top:10px;
+    padding-bottom: 10px;   
+}
 .search_resource_btn {
     background-color: #046791;
     border:none;
@@ -271,6 +271,7 @@ export default {
     padding: 5px 12px 5px 12px;
     font-family: 'Open Sans';
     text-decoration: none;
+    
 }
 a.search_resource_btn:visited{
     color:white
