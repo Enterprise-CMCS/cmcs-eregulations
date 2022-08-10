@@ -71,6 +71,7 @@ def footer_date_formatter(footer_date):
     new_date = datetime.strptime(footer_date, '%b %d, %Y')
     return new_date.strftime('%b %-d, %Y')
 
+
 @register.filter
 def stripSurroundingQuotes(quotedString):
     if quotedString.startswith('"') and quotedString.endswith('"'):
