@@ -1,6 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.html import strip_tags
+from datetime import datetime
 
 register = template.Library()
 
@@ -63,6 +64,12 @@ def appendix_formatter(title, node_label):
     citation = " ".join(node_label)
     return strip_tags(f"{title} CFR {citation}")
 
+
+@register.filter
+@stringfilter
+def footer_date_formatter(footer_date):
+    new_date = datetime.strptime(footer_date, '%b %d, %Y')
+    return new_date.strftime('%b %-d, %Y')
 
 @register.filter
 def stripSurroundingQuotes(quotedString):
