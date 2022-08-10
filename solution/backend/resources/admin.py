@@ -6,6 +6,7 @@ from django.db.models import Prefetch, Count
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 # Register your models here.
 
@@ -218,31 +219,31 @@ class AbstractResourceAdmin(BaseAdmin):
         return True
 
 
-class SupContentForm(forms.ModelForm):
-    class Meta:
-        model = SupplementalContent
-        fields = "__all__"
-
+class ResourceForm(forms.ModelForm):
     bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
     bulk_locations = forms.CharField(
                         widget=forms.Textarea,
                         required=False,
-                        help_text="Add a list of locations seperated by a comma.  ex. 42 430.10, 42 430 Subpart B, 45 18.150")
+                        help_text=mark_safe("Add a list of locations seperated by a comma.  " +
+                                            "ex. 42 430.10, 42 430 Subpart B, 45 18.150 " +
+                                            "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
+                                            "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
+                                            "target='blank'>Click here for detailed documentation.</a>"))
+
+
+class SupContentForm(ResourceForm):
+    class Meta:
+        model = SupplementalContent
+        fields = "__all__"
 
     def save(self, commit=True):
         return super(SupContentForm, self).save(commit=commit)
 
 
-class FederalResourceForm(forms.ModelForm):
+class FederalResourceForm(ResourceForm):
     class Meta:
         model = FederalRegisterDocument
         fields = "__all__"
-
-    bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
-    bulk_locations = forms.CharField(
-                        widget=forms.Textarea,
-                        required=False,
-                        help_text="Add a list of locations seperated by a comma.  ex. 42 430.10, 42 430 Subpart B, 45 18.150")
 
     def save(self, commit=True):
         return super(FederalResourceForm, self).save(commit=commit)
