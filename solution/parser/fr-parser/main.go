@@ -189,7 +189,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 		Category:       content.Category,
 		URL:            content.URL,
 		Date:           content.Date,
-		DocketNumber:   content.DocketNumber,
+		DocketNumbers:  content.DocketNumbers,
 		DocumentNumber: content.DocumentNumber,
 	}
 
