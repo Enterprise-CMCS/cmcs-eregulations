@@ -27377,14 +27377,6 @@
 },
 {
   "model": "resources.section",
-  "pk": 2470,
-  "fields": {
-    "section_id": 606,
-    "parent": null
-  }
-},
-{
-  "model": "resources.section",
   "pk": 2471,
   "fields": {
     "section_id": 610,
@@ -33981,14 +33973,6 @@
   "fields": {
     "section_id": 395,
     "parent": 1128
-  }
-},
-{
-  "model": "resources.section",
-  "pk": 2882,
-  "fields": {
-    "section_id": 1,
-    "parent": null
   }
 },
 {
