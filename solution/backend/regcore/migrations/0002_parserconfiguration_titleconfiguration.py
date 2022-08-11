@@ -17,11 +17,6 @@ def create_default_parser_config(apps, schema_editor):
             parts="400, 457, 460",
             parser_config=parser_config,
         )
-        TitleConfiguration.objects.create(
-            title=45,
-            parts="75, 95, 155",
-            parser_config=parser_config,
-        )
 
 
 class Migration(migrations.Migration):
