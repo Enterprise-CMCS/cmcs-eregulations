@@ -215,13 +215,13 @@ class BulkSynonymView(PermissionRequiredMixin, View):
         raw_synonyms = request.POST['raw_synonyms'].replace(', "', ',"').split("\r\n")
         new_synonyms, existing_synonyms = process_body(raw_synonyms)
 
-        if len(new_synonyms):
+        if new_synonyms:
             messages.add_message(
                 request,
                 messages.INFO,
                 "The following synonyms have been added: " + ", ".join(new_synonyms)
             )
-        if len(existing_synonyms):
+        if existing_synonyms:
             messages.add_message(
                 request,
                 messages.WARNING,
