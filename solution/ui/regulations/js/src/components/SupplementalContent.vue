@@ -13,8 +13,8 @@
         <h2 v-if="!requested_categories" id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
-        <div class="resource_btn_container">
-            <a :href="resourceLink" class="search_resource_btn" >Search These Resources</a>
+        <div class="resource_btn_container" v-if="resource_display">
+            <a :href="resourceLink" class=" default-btn action-btn search_resource_btn" >Search These Resources</a>
         </div>
         <div class="supplemental-content-container">
             <supplemental-content-category
@@ -103,6 +103,11 @@ export default {
             type: Function,
             required: false,
             default: getSupplementalContentByCategory,
+        },
+        resource_display:{
+            type: Boolean,
+            required: false,
+            default: false
         },
         requested_categories: {
             type: String,
@@ -257,23 +262,15 @@ export default {
 <style lang="scss">
 .resource_btn_container {
     padding-top:10px;
-    padding-bottom: 10px;   
+    padding-bottom: 10px;  
+    padding: 5px 12px 5px 12px;
 }
 .search_resource_btn {
-    background-color: #046791;
-    border:none;
-    color:white;
-    text-align: center;
-    border-radius: 3px;
-    font-weight: 400;
-    font-size:14px;
+    width: fit-content;
     line-height: 18px;
     padding: 5px 12px 5px 12px;
-    font-family: 'Open Sans';
+    border: none;
     text-decoration: none;
     
-}
-a.search_resource_btn:visited{
-    color:white
 }
 </style>
