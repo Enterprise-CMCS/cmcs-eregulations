@@ -28,7 +28,7 @@ class HeaderNodeSerializer(PartNodeSerializer):
     header = serializers.CharField()
 
 
-class HeaderContentNodeSerializer(ContentNodeSerializer, PartNodeSerializer):
+class HeaderContentNodeSerializer(HeaderNodeSerializer, ContentNodeSerializer):
     pass
 
 
