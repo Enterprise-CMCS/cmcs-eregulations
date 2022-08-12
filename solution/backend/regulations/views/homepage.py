@@ -3,7 +3,7 @@ import logging
 
 from django.views.generic.base import TemplateView
 
-from regcore.models import Part
+from regcore.models import Part, ECFRParserResult
 from .utils import get_structure
 
 
@@ -21,6 +21,7 @@ class HomepageView(TemplateView):
 
         today = date.today()
         parts = Part.objects.effective(today)
+        parserResult = ECFRParserResult.objects.filter(errors=0).order_by("-end").first()
         if not parts:
             return context
 
@@ -29,6 +30,7 @@ class HomepageView(TemplateView):
         c = {
             'structure': full_structure,
             'regulations': parts,
+            'parser_last_success': parserResult.end if parserResult else None,
             'cfr_title_text': parts[0].structure['label_description'],
             'cfr_title_number': parts[0].structure['identifier'],
         }

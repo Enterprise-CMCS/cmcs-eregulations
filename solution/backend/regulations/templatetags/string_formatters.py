@@ -67,9 +67,12 @@ def appendix_formatter(title, node_label):
 
 @register.filter
 @stringfilter
-def footer_date_formatter(footer_date):
-    new_date = datetime.strptime(footer_date, '%b %d, %Y')
-    return new_date.strftime('%b %-d, %Y')
+def parser_success_date_formatter(success_date):
+    if success_date == "None":
+        return "unknown date. Parser has not yet run"
+    else:
+        new_date = datetime.strptime(success_date, "%Y-%m-%d %H:%M:%S")
+        return new_date.strftime('%b %-d, %Y')
 
 
 @register.filter
