@@ -138,7 +138,7 @@ class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
 
     def __str__(self):
-        return f'{self.title} {self.part} Subpart {self.subpart_id}'
+        return f'{self.title} CFR {self.part} Subpart {self.subpart_id}'
 
     class Meta:
         verbose_name = "Subpart"
@@ -151,7 +151,7 @@ class Section(AbstractLocation):
     parent = models.ForeignKey(AbstractLocation, null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
 
     def __str__(self):
-        return f'{self.title} {self.part}.{self.section_id}'
+        return f'{self.title} CFR {self.part}.{self.section_id}'
 
     class Meta:
         verbose_name = "Section"

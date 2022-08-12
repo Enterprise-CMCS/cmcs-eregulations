@@ -10,6 +10,7 @@ from regcore.views import (
     ExistingPartsView,
     ParserConfigurationView,
     PartListView,
+    BulkSynonymView
 )
 
 from regcore.v3views import (
@@ -34,7 +35,9 @@ from regcore.v3views import (
 router = DefaultRouter()
 router.register("toc", ContentsViewSet)
 
+
 urlpatterns = [
+    path("admin/bulk_synonyms", BulkSynonymView.as_view(), name="bulk_synonyms"),
     path("v2/", include([
         path("", include('regcore.search.urls')),
         path("", include('resources.urls')),

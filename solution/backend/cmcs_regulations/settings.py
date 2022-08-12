@@ -205,6 +205,8 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Medicaid and CHIP regulation content and associated supplemental content (such as subregulatory guidance)'
 }
 
+LOGIN_URL = "/admin"
+
 if DEBUG:
     import os  # only if you haven't already imported this
     import socket  # only if you haven't already imported this
