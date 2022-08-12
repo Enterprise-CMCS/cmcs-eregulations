@@ -119,7 +119,7 @@ class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
             SupplementalContent: ("supplemental_content", SupplementalContentSerializer),
-            FederalRegisterDocument: ("federal_register_doc", FederalRegisterDocumentSerializer),  
+            FederalRegisterDocument: ("federal_register_doc", FederalRegisterDocumentSerializer),
         }
 
 
