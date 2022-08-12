@@ -3,7 +3,7 @@ from django.views.generic.base import TemplateView
 from django.http import Http404
 from datetime import date, datetime
 
-from regcore.models import Part
+from regcore.models import Part, ECFRParserResult
 
 
 class RegulationLandingView(TemplateView):
@@ -23,6 +23,7 @@ class RegulationLandingView(TemplateView):
             raise Http404
 
         parts = Part.objects.effective(date.today()).filter(title=title)
+        parserResult = ECFRParserResult.objects.filter(errors=0).order_by("-end").first()
         reg_version = current.date.isoformat()
         reg_version_string = datetime.strftime(current.date, "%b %-d, %Y")
         toc = current.toc
@@ -40,6 +41,7 @@ class RegulationLandingView(TemplateView):
             'part_label': part_label,
             'reg_part': reg_part, 'parts': parts,
             'last_updated': current.last_updated,
+            'parser_last_success': parserResult.end if parserResult else None,
             'authority': authority,
             'source': source,
             'editorial_note': editorial_note,

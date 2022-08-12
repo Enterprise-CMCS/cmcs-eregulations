@@ -8,7 +8,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
-from regcore.models import Part
+from regcore.models import Part, ECFRParserResult
 from resources.models import Category, SubCategory, AbstractLocation
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
@@ -38,6 +38,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         version_info = self.get_version_info(reg_version, reg_title, reg_part)
 
         parts = Part.objects.filter(title=reg_title).effective(reg_version)
+        parserResult = ECFRParserResult.objects.filter(errors=0).order_by("-end").first()
         document = query.document
         toc = query.toc
         part_label = toc['label_description']
@@ -68,7 +69,8 @@ class ReaderView(CitationContextMixin, TemplateView):
             'categories':   categories,
             'sub_categories': sub_categories,
             'resource_count': resource_count,
-            'last_updated':   query.last_updated
+            'last_updated':   query.last_updated,
+            'parser_last_success': parserResult.end if parserResult else None,
         }
 
         end = datetime.now().timestamp()
