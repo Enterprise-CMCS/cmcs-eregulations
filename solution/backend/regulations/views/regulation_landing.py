@@ -39,7 +39,6 @@ class RegulationLandingView(TemplateView):
             'part': reg_part,
             'part_label': part_label,
             'reg_part': reg_part, 'parts': parts,
-            'last_updated': current.last_updated,
             'authority': authority,
             'source': source,
             'editorial_note': editorial_note,
