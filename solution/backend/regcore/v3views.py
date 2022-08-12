@@ -19,7 +19,13 @@ from regcore.serializers import (
     PartsSerializer,
     StringListSerializer,
     ParserResultSerializer,
-    SynonymsSerializer
+    SynonymsSerializer,
+)
+
+from regcore.part_serializers import (
+    V3PartSerializer,
+    SectionSerializer,
+    SubpartSerializer,
 )
 
 
@@ -27,8 +33,8 @@ def OpenApiPathParameter(name, description, type):
     return OpenApiParameter(name=name, description=description, required=True, type=type, location=OpenApiParameter.PATH)
 
 
+# must define lookup_fields mapping with entries like { "field_name": "url_parameter", ... }
 class MultipleFieldLookupMixin(object):
-    # must define lookup_fields mapping with entries like { "field_name": "url_parameter", ... }
     def get_object(self):
         queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
@@ -131,6 +137,18 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
     }
 
 
+@extend_schema(
+    description="Retrieve the full textual contents and structure of a regulation Part. "
+                "Note that children of a Part object will vary with object type. "
+)
+class PartViewSet(PartPropertiesViewSet):
+    serializer_class = V3PartSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.serializer_class(self.get_object().document)
+        return Response(serializer.data)
+
+
 @extend_schema(description="Retrieve the table of contents for a specific version of a specific Part of a specific Title, "
                            "with detail down to the Section level.")
 class PartContentsViewSet(PartPropertiesViewSet):
@@ -160,14 +178,66 @@ class PartStructureNodesViewSet(PartPropertiesViewSet):
         return Response(self.serializer_class(nodes, many=True).data)
 
 
+# For retrieving a specific node from within a document tree structure
+# Must define "node_type" as a string representing the value of "node_type" in the JSON
+# Must define "label_index" as an integer representing the index in the label to identify the node
+# Must define "parameter" as the URL parameter to use for identifying the node
+# Must define "serializer_class"
+class NodeFinderViewSet(PartPropertiesViewSet):
+    def retrieve(self, request, *args, **kwargs):
+        node = kwargs.get(self.parameter, None)
+        document = self.get_object().document
+        node_content = self.find_node(document["children"], node)
+        if not node_content:
+            raise Http404()
+        serializer = self.serializer_class(node_content)
+        return Response(serializer.data)
+
+    def find_node(self, node_children, node):
+        for i in node_children:
+            if i["node_type"] == self.node_type:
+                if i["label"][self.label_index] == node:
+                    return i
+                continue
+            if "children" in i:
+                s = self.find_node(i["children"], node)
+                if s:
+                    return s
+        return None
+
+
 @extend_schema(description="Retrieve a list of Sections contained within a version of a Part.")
 class PartSectionsViewSet(PartStructureNodesViewSet):
     node_type = "section"
 
 
+@extend_schema(
+    description="Retrieve the full textual contents and structure of a section within a regulation's Part. "
+                "Note that children of a Section object will vary with object type. ",
+    parameters=[OpenApiPathParameter("section", "Section number to retrieve.", int)],
+)
+class SectionViewSet(NodeFinderViewSet):
+    serializer_class = SectionSerializer
+    parameter = "section"
+    node_type = "SECTION"
+    label_index = 1
+
+
 @extend_schema(description="Retrieve a list of Subparts contained within a version of a Part.")
 class PartSubpartsViewSet(PartStructureNodesViewSet):
     node_type = "subpart"
+
+
+@extend_schema(
+    description="Retrieve the full textual contents and structure of a subpart within a regulation's Part. "
+                "Note that children of a Subpart object will vary with object type. ",
+    parameters=[OpenApiPathParameter("subpart", "Subpart to retrieve, e.g. A.", str)],
+)
+class SubpartViewSet(NodeFinderViewSet):
+    serializer_class = SubpartSerializer
+    parameter = "subpart"
+    node_type = "SUBPART"
+    label_index = 0
 
 
 @extend_schema(
