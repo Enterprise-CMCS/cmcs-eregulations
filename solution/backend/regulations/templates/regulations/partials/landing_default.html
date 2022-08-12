@@ -1,12 +1,14 @@
 {% load render_nested %}
 {% load citation %}
+{% load url_formatters %}
 <h1>
     {% if toc.label_level %}
         <span>{{ toc.label_level }} - </span>
     {% endif %}
     {{ toc.label_description }}
 </h1>
-<p class="last-updated">{{ toc.label_level }} last updated from <a href="https://www.ecfr.gov/" class="external" target="_blank" rel="noopener noreferrer">eCFR</a> on {{ last_updated|date:"M d, Y" }}.</p>
+{% ecfr_part_url_formatter title reg_part as ecfr_part_url %}
+<p class="last-updated">{{ toc.label_level }} up to date from <a href="{{ecfr_part_url}}" class="external" target="_blank" rel="noopener noreferrer">eCFR</a> as of {{ last_updated|date:"M j, Y" }}; last amended {{ version_string }}.</p>
 
 <section class="part-meta"><b>{{ authority.header }}</b> {{ authority.content }}</section>
 <section class="part-meta"><b>{{ source.header }}</b> {{ source.content | citation }}</section>
