@@ -3,8 +3,7 @@ import logging
 
 from django.views.generic.base import TemplateView
 
-from regcore.models import Part
-from .utils import get_structure
+from regcore.models import Part, Title
 
 
 logger = logging.getLogger(__name__)
@@ -24,7 +23,7 @@ class HomepageView(TemplateView):
         if not parts:
             return context
 
-        full_structure = get_structure(parts)
+        full_structure = Title.objects.all().values_list("toc", flat=True)
 
         c = {
             'structure': full_structure,

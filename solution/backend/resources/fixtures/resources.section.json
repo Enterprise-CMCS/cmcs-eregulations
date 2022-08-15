@@ -11537,14 +11537,6 @@
 },
 {
   "model": "resources.abstractlocation",
-  "pk": 2912,
-  "fields": {
-    "title": 42,
-    "part": 438
-  }
-},
-{
-  "model": "resources.abstractlocation",
   "pk": 661,
   "fields": {
     "title": 42,
@@ -12309,14 +12301,6 @@
   "fields": {
     "title": 42,
     "part": 440
-  }
-},
-{
-  "model": "resources.abstractlocation",
-  "pk": 2882,
-  "fields": {
-    "title": 42,
-    "part": 441
   }
 },
 {
@@ -33209,14 +33193,6 @@
 },
 {
   "model": "resources.section",
-  "pk": 2912,
-  "fields": {
-    "section_id": 606,
-    "parent": null
-  }
-},
-{
-  "model": "resources.section",
   "pk": 661,
   "fields": {
     "section_id": 608,
@@ -33981,14 +33957,6 @@
   "fields": {
     "section_id": 395,
     "parent": 1128
-  }
-},
-{
-  "model": "resources.section",
-  "pk": 2882,
-  "fields": {
-    "section_id": 1,
-    "parent": null
   }
 },
 {
