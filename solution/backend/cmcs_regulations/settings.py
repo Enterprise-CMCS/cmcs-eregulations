@@ -80,6 +80,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'django.core.context_processors.request',
     'regulations.context_processors.site_config',
+    'regcore.context_processors.regcore_config',
 )
 
 ROOT_URLCONF = 'cmcs_regulations.urls'
@@ -108,6 +109,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.automated_testing",
                 'regulations.context_processors.site_config',
+                'regcore.context_processors.regcore_config',
             ),
         },
         "DIRS": [

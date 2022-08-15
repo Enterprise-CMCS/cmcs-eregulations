@@ -1,6 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.html import strip_tags
+from datetime import datetime
 
 register = template.Library()
 
@@ -62,6 +63,16 @@ def paragraph_formatter(title, node_label):
 def appendix_formatter(title, node_label):
     citation = " ".join(node_label)
     return strip_tags(f"{title} CFR {citation}")
+
+
+@register.filter
+@stringfilter
+def parser_success_date_formatter(success_date):
+    if success_date == "None" or success_date == "":
+        return "an unknown date"
+    else:
+        new_date = datetime.strptime(success_date, "%Y-%m-%d %H:%M:%S")
+        return new_date.strftime('%b %-d, %Y')
 
 
 @register.filter

@@ -1,6 +1,8 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 {% load render_nested %}
+{% load url_formatters %}
+{% load string_formatters %}
 
 {% block pre_header %}
     <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
@@ -15,11 +17,10 @@
             </aside>
 
             <main class="reg-text match-middle" id="main-content">
-                {% if isLatestVersion %}
-                    <p class="latest-version{{ subpart|yesno:" subpart," }}">
-                        <b>Latest Version</b> as of {{ formattedLatestVersion }}
-                    </p>
-                {% endif %}
+                {% ecfr_part_url_formatter title reg_part as ecfr_part_url %}
+                <p class="up-to-date{{ subpart|yesno:" subpart," }}">
+                {{ toc.label_level }} up to date from <a href="{{ecfr_part_url}}" target="_blank" class="external">eCFR</a> as of {{ parser_last_success|parser_success_date_formatter }}{% if isLatestVersion %}<span class="latest-version">; last amended </span>{{ formattedLatestVersion }}{% endif %}.
+                </p>
                 {% include "regulations/partials/node_types/node.html" with resource_count=resource_count node=tree cfr_title=title citation=citation version=version %}
                 {% include "regulations/partials/navigation.html" %}
             </main>
