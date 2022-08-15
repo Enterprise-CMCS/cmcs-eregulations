@@ -33,8 +33,8 @@ const API_ENDPOINTS_V3 = [
 ];
 
 describe("API testing", () => {
-    it("sends GET request and checks for a 200 response", () => {
-        cy.wrap(API_ENDPOINTS_V3).each((endpoint, i, array) => {
+    API_ENDPOINTS_V3.forEach(endpoint => {
+        it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
             cy.request(endpoint).as("request");
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
