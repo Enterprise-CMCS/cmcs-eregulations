@@ -74,6 +74,10 @@ export default {
             type: String,
             required: true,
         },
+        resources_url: {
+            type: String,
+            required: false
+        },
         title: {
             type: String,
             required: true,
@@ -142,16 +146,16 @@ export default {
         },
 
         resourceLink: function () {
-            let qString = "/resources\\?title=42&part=" + this.part
+            let qString = `${this.resources_url}\?title=42&part=${this.part}`
 
             if (this.activePart.includes("Subpart")){
-                qString = qString + "&subpart="+this.part + "-" + this.params_array[1][1] 
-                return qString + "&section="+this.part + "-" 
-                        + this.sections.join(","+this.part+"-")
+                qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}` 
+                let sections = `${this.part}-${this.sections.join(`,${this.part}-`)}`
+                return `${qString}&section=${sections}`
             }
             else{
                 const selection = this.activePart.split(" ")[1].replace(".","-");
-                return qString + "&section=" + selection;
+                return `${qString}&section=${selection}`;
             }
         },
     },
@@ -271,6 +275,8 @@ export default {
     padding: 5px 12px 5px 12px;
     border: none;
     text-decoration: none;
-    
+}
+a.search_resource_btn:visited{
+    color:white
 }
 </style>

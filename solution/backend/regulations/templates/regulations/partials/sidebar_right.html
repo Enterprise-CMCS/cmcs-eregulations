@@ -14,6 +14,7 @@
         api_url="{% url 'regcore' %}"
         title="{{ title }}"
         part="{{ reg_part }}"
+        resources_url="{% url 'resources' %}"
         :resource_display=true
         :sections="{{ node_list.sections }}"
         :subparts="{{ node_list.subparts }}"
