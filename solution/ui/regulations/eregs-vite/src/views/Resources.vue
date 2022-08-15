@@ -29,7 +29,7 @@
                             <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
                         </div>
                         <div class="synonyms" v-if="synonyms.length > 0"> 
-                            <span v-if="multiWordQuery">Or </span>search for similar terms:
+                            <span v-if="multiWordQuery">Or s</span><span v-else>S</span>earch for similar terms:
                             <span v-bind:key=a v-for="a in synonyms">
                                 <a @click="synonymLinks(a)">{{a}}</a>
                                 <span v-if="synonyms[synonyms.length-1] != a">, </span>
