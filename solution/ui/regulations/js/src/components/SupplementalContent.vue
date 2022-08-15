@@ -146,7 +146,7 @@ export default {
         },
 
         resourceLink: function () {
-            let qString = `${this.resources_url}\?title=42&part=${this.part}`
+            let qString = `${this.resources_url}\?title=${this.title}&part=${this.part}`
 
             if (this.activePart.includes("Subpart")){
                 qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}` 
