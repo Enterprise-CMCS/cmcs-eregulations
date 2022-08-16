@@ -278,7 +278,6 @@ a.search_resource_btn:visited{
     color:white
 }
 a.search_resource_btn:hover{
-    color:white;
-    background-color: #046791;
+    color : white;
 }
 </style>
