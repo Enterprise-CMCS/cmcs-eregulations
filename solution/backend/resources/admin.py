@@ -2,7 +2,11 @@ from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
 from django.urls import path
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
+from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 # Register your models here.
 
@@ -16,6 +20,7 @@ from .models import (
     AbstractLocation,
     Section,
     Subpart,
+    FederalRegisterDocumentGroup,
 )
 
 from .filters import (
@@ -141,22 +146,180 @@ class AbstractResourceAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
+    def save_related(self, request, form, formsets, change):
+        bulk_locations = form.cleaned_data.get("bulk_locations")
+        bulk_title = form.cleaned_data.get("bulk_title")
+        bad_locations = []
+
+        super().save_related(request, form, formsets, change)
+        if bulk_locations:
+            split_locations = bulk_locations.split(",")
+            for location in split_locations:
+                a = self.build_location(location.strip(), bulk_title)
+                if a:
+                    form.instance.locations.add(a)
+                else:
+                    bad_locations.append(location)
+            if bad_locations:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "The following locations were not added %s" % ((", ").join(bad_locations))
+                )
+
+    def build_location(self, location, default_title):
+        found_location = location.split(" ")
+        if len(found_location) == 1 or len(found_location) == 2:
+            if default_title != "":
+                title = default_title
+                loc = location
+            else:
+                title = found_location[0]
+                loc = found_location[1]
+            if "." in loc:
+                part = loc.split(".")[0]
+                section = loc.split(".")[1]
+                if self.check_values(title, part, section, ""):
+                    try:
+                        return Section.objects.get(
+                            title=title,
+                            part=part,
+                            section_id=section
+                        ).abstractlocation_ptr
+                    except Section.DoesNotExist:
+                        return None
+            else:
+                return None
+
+        elif len(found_location) == 3 or len(found_location) == 4:
+            if default_title != "":
+                title = default_title
+                part = found_location[0]
+                subpart = found_location[2]
+            else:
+                title = found_location[0]
+                part = found_location[1]
+                subpart = found_location[3]
+            if self.check_values(title, part, "", subpart):
+                try:
+                    return Subpart.objects.get(title=title, part=part, subpart_id=subpart).abstractlocation_ptr
+                except Subpart.DoesNotExist:
+                    return None
+
+        return None
+
+    def check_values(self, title, part, section, subpart):
+
+        if not title.isdigit() or not part.isdigit():
+            return False
+        if section != "" and not section.isdigit():
+            return False
+        if subpart != "" and not isinstance(subpart, str):
+            return False
+        return True
+
+
+class ResourceForm(forms.ModelForm):
+    bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
+    bulk_locations = forms.CharField(
+                        widget=forms.Textarea,
+                        required=False,
+                        help_text=mark_safe("Add a list of locations seperated by a comma.  " +
+                                            "ex. 42 430.10, 42 430 Subpart B, 45 18.150 " +
+                                            "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
+                                            "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
+                                            "target='blank'>Click here for detailed documentation.</a>"))
+
+
+class SupContentForm(ResourceForm):
+    class Meta:
+        model = SupplementalContent
+        fields = "__all__"
+
+    def save(self, commit=True):
+        return super(SupContentForm, self).save(commit=commit)
+
+
+class FederalResourceForm(ResourceForm):
+    class Meta:
+        model = FederalRegisterDocument
+        fields = "__all__"
+
+    def save(self, commit=True):
+        return super(FederalResourceForm, self).save(commit=commit)
+
 
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):
+    form = SupContentForm
     list_display = ("date", "name", "description", "category", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
-    fields = ("approved", "name", "description", "date", "url", "category", "locations", "internal_notes")
+    fields = ("approved", "name", "description", "date", "url", "category",
+              "locations", "bulk_title", "bulk_locations", "internal_notes")
 
 
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
-    list_display = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at", "approved")
-    list_display_links = ("date", "name", "description", "docket_number", "document_number", "category", "updated_at")
-    search_fields = ["date", "name", "description", "docket_number", "document_number"]
-    fields = ("approved", "docket_number", "document_number", "name",
-              "description", "date", "url", "category", "locations", "internal_notes")
+    form = FederalResourceForm
+    list_display = ("date", "name", "description", "in_group", "docket_numbers",
+                    "document_number", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
+                          "document_number", "category", "updated_at")
+    search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
+    fields = ("approved", "docket_numbers", "group", "document_number", "name",
+              "description", "date", "url", "category", "locations", "bulk_title", "bulk_locations", "internal_notes")
+
+    def in_group(self, obj):
+        group = str(obj.group)
+        return group[0:20] + "..." if len(group) > 20 else group
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
+        )
+
+
+class FederalRegisterDocumentGroupForm(forms.ModelForm):
+    documents = forms.ModelMultipleChoiceField(
+        queryset=FederalRegisterDocument.objects.all(),
+        required=False,
+        widget=FilteredSelectMultiple(
+            verbose_name="Documents",
+            is_stacked=False,
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields["documents"].initial = self.instance.documents.all()
+
+    def save(self, commit=True):
+        group = super().save(commit=False)
+        group.save()
+        group.documents.set(self.cleaned_data["documents"])
+        group.save()
+        return group
+
+    class Meta:
+        model = FederalRegisterDocumentGroup
+        fields = ("docket_number_prefixes", "documents")
+
+
+@admin.register(FederalRegisterDocumentGroup)
+class FederalRegisterDocumentGroupAdmin(BaseAdmin):
+    form = FederalRegisterDocumentGroupForm
+    admin_priority = 250
+    list_display = ("docket_number_prefixes", "number_of_documents")
+    list_display_links = ("docket_number_prefixes", "number_of_documents")
+    search_fields = ["docket_number_prefixes"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(number_of_documents=Count("documents"))
+
+    def number_of_documents(self, obj):
+        return obj.number_of_documents
 
 
 # Custom app list function, allows ordering Django Admin models by "admin_priority", low to high

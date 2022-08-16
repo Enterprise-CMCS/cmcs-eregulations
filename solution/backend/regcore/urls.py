@@ -10,6 +10,7 @@ from regcore.views import (
     ExistingPartsView,
     ParserConfigurationView,
     PartListView,
+    BulkSynonymView
 )
 
 from regcore.v3views import (
@@ -24,14 +25,19 @@ from regcore.v3views import (
     PartSubpartsViewSet,
     SubpartContentsViewSet,
     ParserResultViewSet,
-    SynonymViewSet
+    SynonymViewSet,
+    PartViewSet,
+    SectionViewSet,
+    SubpartViewSet,
 )
 
 
 router = DefaultRouter()
 router.register("toc", ContentsViewSet)
 
+
 urlpatterns = [
+    path("admin/bulk_synonyms", BulkSynonymView.as_view(), name="bulk_synonyms"),
     path("v2/", include([
         path("", include('regcore.search.urls')),
         path("", include('resources.urls')),
@@ -67,13 +73,22 @@ urlpatterns = [
         path("title/<title>/part/<part>/versions", VersionsViewSet.as_view({
             "get": "list",
         })),
+        path("title/<title>/part/<part>/version/<version>", PartViewSet.as_view({
+            "get": "retrieve",
+        })),
         path("title/<title>/part/<part>/version/<version>/toc", PartContentsViewSet.as_view({
             "get": "retrieve",
         })),
         path("title/<title>/part/<part>/version/<version>/sections", PartSectionsViewSet.as_view({
             "get": "retrieve",
         })),
+        path("title/<title>/part/<part>/version/<version>/section/<section>", SectionViewSet.as_view({
+            "get": "retrieve",
+        })),
         path("title/<title>/part/<part>/version/<version>/subparts", PartSubpartsViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", SubpartViewSet.as_view({
             "get": "retrieve",
         })),
         path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", SubpartContentsViewSet.as_view({

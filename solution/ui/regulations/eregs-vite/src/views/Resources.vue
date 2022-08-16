@@ -29,7 +29,7 @@
                             <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
                         </div>
                         <div class="synonyms" v-if="synonyms.length > 0"> 
-                            <span v-if="multiWordQuery">Or </span>Search for similar terms:
+                            <span v-if="multiWordQuery">Or s</span><span v-else>S</span>earch for similar terms:
                             <span v-bind:key=a v-for="a in synonyms">
                                 <a @click="synonymLinks(a)">{{a}}</a>
                                 <span v-if="synonyms[synonyms.length-1] != a">, </span>
@@ -70,6 +70,7 @@
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
                         :sortMethod="sortMethod"
+                        :disabledSortOptions="disabledSortOptions"
                         :sortDisabled="sortDisabled"
                         @sort="setSortMethod"
                     />
@@ -159,6 +160,7 @@ export default {
             },
             supplementalContent: [],
             searchInputValue: undefined,
+            sortDisabled: true,
         };
     },
 
@@ -201,8 +203,8 @@ export default {
         sortMethod() {
             return this.queryParams.sort || "newest";
         },
-        sortDisabled() {
-            return _isEmpty(this.searchQuery);
+        disabledSortOptions() {
+            return _isEmpty(this.searchQuery) ? ["relevance"] : [];
         },
     },
 
@@ -239,7 +241,7 @@ export default {
             });
         },
         async synonymLinks(synonym){
-            this.searchInputValue = synonym
+            this.searchInputValue = `"${synonym}"`
             await this.executeSearch()
         },
         clearSearchQuery() {
@@ -248,16 +250,6 @@ export default {
                 name: "resources",
                 query: {
                     ...this.filterParams,
-                },
-            });
-        },
-        doQuoteSearch(){
-            this.searchInputValue = `"${this.searchInputValue}"`
-            this.$router.push({
-                name: "resources",
-                query: {
-                    ...this.filterParams,
-                    q: `"${this.searchQuery}"`,
                 },
             });
         },
@@ -316,8 +308,11 @@ export default {
             });
         },
         async retrieveSynonyms(query){
+            if(query.charAt(0) == '"' && query.charAt(query.length-1) == '"'){
+                query = query.slice(1,-1)
+            }
             let synonyms = await getSynonyms(query)
-            synonyms = synonyms.map(word => word.synonyms.map(word => word.baseWord))[0]
+            synonyms = synonyms.map(word => word.synonyms.filter(word=>word.isActive==true).map(word => word.baseWord))[0]
             return synonyms ? synonyms : []
         },
         async updateFilters(payload) {
@@ -491,7 +486,6 @@ export default {
 
         async getSupplementalContent(dataQueryParams, searchQuery, sortMethod) {
             this.isLoading = true;
-
             if (dataQueryParams.resourceCategory) {
                 this.categories = dataQueryParams.resourceCategory.split(",");
             } else {
@@ -686,6 +680,10 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
+                if (this.sortDisabled) {
+                    this.sortDisabled = false;
+                }
+
                 if (
                     _isEmpty(newParams.part) &&
                     _isEmpty(newParams.q) &&
@@ -730,6 +728,8 @@ export default {
 
         if (this.queryParams.q) {
             this.searchQuery = this.queryParams.q;
+            this.synonyms = await this.retrieveSynonyms(this.queryParams.q)
+            this.multiWordQuery()
         }
 
         if (this.queryParams.part) {
@@ -738,6 +738,10 @@ export default {
                 this.queryParams.part,
                 this.queryParams.subpart
             );
+        }
+
+        if (!_isEmpty(this.queryParams)) {
+            this.sortDisabled = false;
         }
 
         this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
@@ -788,6 +792,7 @@ export default {
         .search-suggestion{
             margin-top: -50px;
             margin-bottom: 50px;
+            font-size: 14px;
         }
     }
 

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
+    'django_jsonform',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'django.core.context_processors.request',
     'regulations.context_processors.site_config',
+    'regcore.context_processors.regcore_config',
 )
 
 ROOT_URLCONF = 'cmcs_regulations.urls'
@@ -107,6 +109,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.automated_testing",
                 'regulations.context_processors.site_config',
+                'regcore.context_processors.regcore_config',
             ),
         },
         "DIRS": [
@@ -203,6 +206,8 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'CMCS eRegulations API',
     'DESCRIPTION': 'Medicaid and CHIP regulation content and associated supplemental content (such as subregulatory guidance)'
 }
+
+LOGIN_URL = "/admin"
 
 if DEBUG:
     import os  # only if you haven't already imported this

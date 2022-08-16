@@ -98,7 +98,7 @@ $reverse_text_color: $white;
 $primary_indicator_background: $teal;
 $primary_indicator_text: $white;
 
-$secondary_indicator_background: $mid_gray_2;
+$secondary_indicator_background: $light_gray;
 $secondary_indicator_text: $title_color;
 
 // Formulae
@@ -243,13 +243,17 @@ $width-3xl: 1920px; // The largest the site container will get
 // -------------------------
 
 .indicator {
+    font-weight: 600;
     background: $primary_indicator_background;
     text-transform: uppercase;
     color: $primary_indicator_text;
     font-size: 11px;
-    padding: 2px 5px;
+    padding: 2px 0;
     border-radius: $border-radius;
     margin-right: 4px;
+    display: inline-block;
+    width: 42px;
+    text-align: center;
 }
 
 .secondary-indicator {

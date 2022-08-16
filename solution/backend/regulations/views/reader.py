@@ -67,7 +67,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'view_type':    self.get_view_type(),
             'categories':   categories,
             'sub_categories': sub_categories,
-            'resource_count': resource_count
+            'resource_count': resource_count,
         }
 
         end = datetime.now().timestamp()
