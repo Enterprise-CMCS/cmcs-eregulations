@@ -18,7 +18,7 @@ describe("Resources page", () => {
         cy.contains("100 results in Resources")
     });
 
-    it("Selects parts and sections correctly", () => {
+    it("Selects parts correctly", () => {
         cy.clearLocalStorage()
         cy.viewport("macbook-15");
         cy.visit("/resources");
@@ -27,6 +27,15 @@ describe("Resources page", () => {
         cy.get('[data-value="433"]').click();
         cy.url().should("include", "part=433");
         cy.url().should("include", "title=42");
+    })
+    it("Selects subparts correctly", () => {
+        cy.clearLocalStorage()
+        cy.intercept('/v3/title/42/part/433/version/latest/toc').as('TOC')
+        // /v3/title/42/part/433/version/latest/toc
+        cy.viewport("macbook-15");
+        cy.visit("/resources?part=433&title=42");
+        cy.wait('@TOC')
+        cy.wait(1000)
         // Select subPart B
         cy.get('#select-subparts > .v-btn__content').click();
         cy.get('[data-value="433-B"]').click();
