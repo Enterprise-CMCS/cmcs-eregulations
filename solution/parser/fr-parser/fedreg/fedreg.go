@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/url"
 	"regexp"
+	"strings"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
 
@@ -94,7 +95,9 @@ func FetchSections(ctx context.Context, path string) ([]string, error) {
 		return nil, err
 	}
 
+	//var cfrs map[string]string
 	var sections []string
+
 	d := xml.NewDecoder(reader)
 	for {
 		t, err := d.Token()
@@ -105,17 +108,28 @@ func FetchSections(ctx context.Context, path string) ([]string, error) {
 			return nil, fmt.Errorf("failed to decode XML: %+v", err)
 		}
 		if se, ok := t.(xml.StartElement); ok {
-			if se.Name.Local == "SECTNO" {
+			if se.Name.Local == "SECTNO" || se.Name.Local == "CFR" {
 				var l XMLQuery
 				err = d.DecodeElement(&l, &se)
 				if err != nil {
 					return nil, fmt.Errorf("failed to decode element: %+v", err)
 				}
-				section, err := extractSection(l.Loc)
-				if err != nil {
-					log.Error("[fedreg] failed to extract section from identifier \"", l.Loc, "\"")
-				} else {
-					sections = append(sections, section)
+				// if se.Name.Local == "CFR" {
+				// 	// extract CFR information and put it in the CFR table
+				// 	title, parts, err := extractCFR(l.Loc)
+				// 	if err != nil {
+				// 		log.Error("[fedreg] failed to extract CFR information from \"", l.Loc, "\"")
+				// 	} else {
+
+				// 	}
+				//} else if se.Name.Local == "SECTNO" {
+				if se.Name.Local == "SECTNO" {
+					section, err := extractSection(l.Loc)
+					if err != nil {
+						log.Error("[fedreg] failed to extract section from identifier \"", l.Loc, "\"")
+					} else {
+						sections = append(sections, section)
+					}
 				}
 			}
 		}
@@ -131,4 +145,37 @@ func extractSection(input string) (string, error) {
 		return s, fmt.Errorf("failed to extract section from %s", input)
 	}
 	return s, nil
+}
+
+func extractCFR(input string) (string, []string, error) {
+	var parts []string
+	split := strings.Split(input, " ")
+	if len(split) < 1 {
+		return "", nil, fmt.Errorf("the CFR string is empty")
+	}
+
+	//extract title
+	title := split[0]
+	if !regexp.MustCompile(`\d+`).MatchString(title) {
+		return "", nil, fmt.Errorf("title \"%s\" is not a valid title", title)
+	}
+
+	// extract parts
+	if len(split) < 2 {
+		return "", nil, fmt.Errorf("the CFR string contains a title but no parts")
+	}
+	
+	for _, p := range split[1:] {
+		part := strings.Trim(strings.TrimSpace(p), ".,;:")
+		is_numeric := regexp.MustCompile(`\d+`).MatchString(part)
+		if is_numeric {
+			parts = append(parts, part)
+		}
+	}
+
+	if len(parts) < 1 {
+		return "", nil, fmt.Errorf("parts list is empty")
+	}
+
+	return title, parts, nil
 }

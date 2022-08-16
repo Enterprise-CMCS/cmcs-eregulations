@@ -425,3 +425,64 @@ func TestExtractSection(t *testing.T) {
 		})
 	}
 }
+
+func TestExtractCFR(t *testing.T) {
+	testTable := []struct {
+		Name   string
+		Input  string
+		Title string
+		Parts []string
+		Error  bool
+	}{
+		{
+			Name:   "test-multi-part",
+			Input:  "45 CFR Parts 80, 84, 86, 91, 92, 147, 155, and 156",
+			Title: "45",
+			Parts: []string{"80", "84", "86", "91", "92", "147", "155", "156"},
+			Error:  false,
+		},
+		{
+			Name:   "test-single-part",
+			Input:  "42 CFR Part 438.",
+			Title: "42",
+			Parts: []string{"438"},
+			Error:  false,
+		},
+		{
+			Name:   "test-no-parts",
+			Input:  "42 CFR Part",
+			Title: "",
+			Parts: nil,
+			Error:  true,
+		},
+		{
+			Name:   "test-empty-string",
+			Input:  "   ",
+			Title: "",
+			Parts: nil,
+			Error:  true,
+		},
+		{
+			Name:   "test-invalid-title",
+			Input:  "blah CFR Part 438.",
+			Title: "",
+			Parts: nil,
+			Error:  true,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			title, parts, err := extractCFR(tc.Input)
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received title (%s) parts (%+v)", title, parts)
+			} else if title != tc.Title {
+				t.Errorf("expected title (%s), received title (%s)", tc.Title, title)
+			} else if diff := deep.Equal(parts, tc.Parts); diff != nil {
+				t.Errorf("output not as expected: (%+v)", diff)
+			}
+		})
+	}
+}
