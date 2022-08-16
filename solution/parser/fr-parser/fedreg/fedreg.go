@@ -163,7 +163,7 @@ func extractCFR(input string) (string, []string, error) {
 	if !regexp.MustCompile(`\d+`).MatchString(title) {
 		return "", nil, fmt.Errorf("title '%s' is not a valid title", title)
 	}
-	
+
 	for _, p := range split[1:] {
 		part := strings.Trim(strings.TrimSpace(p), ".,;:")
 		if regexp.MustCompile(`\d+`).MatchString(part) {

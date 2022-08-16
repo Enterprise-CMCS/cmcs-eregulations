@@ -285,8 +285,8 @@ func TestFetchSections(t *testing.T) {
 	testTable := []struct {
 		Name     string
 		InputXML []byte
-		Sections   []string
-		PartMap map[string]string
+		Sections []string
+		PartMap  map[string]string
 		Error    bool
 	}{
 		{
@@ -325,9 +325,9 @@ func TestFetchSections(t *testing.T) {
 				"440": "42",
 				"457": "42",
 				"460": "42",
-				"41": "45",
+				"41":  "45",
 			},
-			Error:  false,
+			Error: false,
 		},
 		{
 			Name: "test-bad-xml",
@@ -349,8 +349,8 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Sections: nil,
-			PartMap: nil,
-			Error:  true,
+			PartMap:  nil,
+			Error:    true,
 		},
 		{
 			Name: "test-bad-sectno",
@@ -372,8 +372,8 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Sections: nil,
-			PartMap: nil,
-			Error:  true,
+			PartMap:  nil,
+			Error:    true,
 		},
 	}
 
@@ -459,53 +459,53 @@ func TestExtractSection(t *testing.T) {
 
 func TestExtractCFR(t *testing.T) {
 	testTable := []struct {
-		Name   string
-		Input  string
+		Name  string
+		Input string
 		Title string
 		Parts []string
-		Error  bool
+		Error bool
 	}{
 		{
-			Name:   "test-multi-part",
-			Input:  "45 CFR Parts 80, 84, 86, 91, 92, 147, 155, and 156",
+			Name:  "test-multi-part",
+			Input: "45 CFR Parts 80, 84, 86, 91, 92, 147, 155, and 156",
 			Title: "45",
 			Parts: []string{"80", "84", "86", "91", "92", "147", "155", "156"},
-			Error:  false,
+			Error: false,
 		},
 		{
-			Name:   "test-single-part",
-			Input:  "42 CFR Part 438.",
+			Name:  "test-single-part",
+			Input: "42 CFR Part 438.",
 			Title: "42",
 			Parts: []string{"438"},
-			Error:  false,
+			Error: false,
 		},
 		{
-			Name:   "test-no-parts",
-			Input:  "42 CFR Part",
+			Name:  "test-no-parts",
+			Input: "42 CFR Part",
 			Title: "",
 			Parts: nil,
-			Error:  true,
+			Error: true,
 		},
 		{
-			Name:   "test-empty-string",
-			Input:  "   ",
+			Name:  "test-empty-string",
+			Input: "   ",
 			Title: "",
 			Parts: nil,
-			Error:  true,
+			Error: true,
 		},
 		{
-			Name:   "test-invalid-title",
-			Input:  "blah CFR Part 438.",
+			Name:  "test-invalid-title",
+			Input: "blah CFR Part 438.",
 			Title: "",
 			Parts: nil,
-			Error:  true,
+			Error: true,
 		},
 		{
-			Name:   "test-title-only",
-			Input:  "42",
+			Name:  "test-title-only",
+			Input: "42",
 			Title: "",
 			Parts: nil,
-			Error:  true,
+			Error: true,
 		},
 	}
 
