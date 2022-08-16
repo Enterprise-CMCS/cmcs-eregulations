@@ -90,7 +90,7 @@ type XMLQuery struct {
 
 // FetchSections pulls the full document from the Federal Register and extracts all SECTNO tags
 // Returns a list of sections and a map of parts => titles
-func FetchSections(ctx context.Context, path string) ([]string, map[string]string, error) {
+func FetchSections(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
 	reader, err := fetch(ctx, path)
 	if err != nil {
 		return nil, nil, err
@@ -120,7 +120,7 @@ func FetchSections(ctx context.Context, path string) ([]string, map[string]strin
 					title, parts, err := extractCFR(l.Loc)
 					if err != nil {
 						log.Warn("[fedreg] failed to extract CFR information from '", l.Loc, "': ", err)
-					} else {
+					} else if _, exists := titles[title]; exists {
 						for _, part := range parts {
 							if _, exists := cfrs[part]; !exists {
 								cfrs[part] = title

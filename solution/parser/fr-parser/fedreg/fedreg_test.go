@@ -296,28 +296,36 @@ func TestFetchSections(t *testing.T) {
 					<PREAMB>
 						<SUBAGY>Centers for Medicare &amp; Medicaid Services</SUBAGY>
 						<CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
+						<CFR>45 CFR Parts 41.</CFR>
+						<CFR>47 CFR Parts 123</CFR>
 					</PREAMB>
 					<TEST>Some data</TEST>
 					<SUPLINF>
 						<SECTION>
-							<SECTNO>§ 447.502 </SECTNO>
+							<SECTNO>§ 438.502 </SECTNO>
 							<SUBJECT>Definitions.</SUBJECT>
 							<STARS/>
 						</SECTION>
 						<SECTION>
-							<SECTNO>§ 33.118 </SECTNO>
+							<SECTNO>§ 41.118 </SECTNO>
 							<SUBJECT>abc xyz...</SUBJECT>
+							<STARS/>
+						</SECTION>
+						<SECTION>
+							<SECTNO>§ 123.1418 </SECTNO>
+							<SUBJECT>abc xyz asdfasdf...</SUBJECT>
 							<STARS/>
 						</SECTION>
 					</SUPLINF>
 				</PRORULE>
 			`),
-			Sections: []string{"447.502", "33.118"},
+			Sections: []string{"438.502", "41.118", "123.1418"},
 			PartMap: map[string]string{
 				"438": "42",
 				"440": "42",
 				"457": "42",
 				"460": "42",
+				"41": "45",
 			},
 			Error:  false,
 		},
@@ -369,6 +377,11 @@ func TestFetchSections(t *testing.T) {
 		},
 	}
 
+	titleMap := map[string]struct{}{
+		"42": struct{}{},
+		"45": struct{}{},
+	}
+
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -380,7 +393,7 @@ func TestFetchSections(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			sections, partMap, err := FetchSections(ctx, server.URL)
+			sections, partMap, err := FetchSections(ctx, server.URL, titleMap)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {

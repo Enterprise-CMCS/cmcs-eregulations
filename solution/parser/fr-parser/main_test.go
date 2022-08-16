@@ -166,7 +166,7 @@ func TestStart(t *testing.T) {
 		Name                  string
 		LoadConfigFunc        func() (*ecfrEregs.ParserConfig, error)
 		GetPartsListFunc      func(context.Context, *ecfrEregs.TitleConfig) []string
-		ProcessPartFunc       func(context.Context, int, string, map[string]bool, bool) error
+		ProcessPartFunc       func(context.Context, int, string, map[string]bool, bool, map[string]struct{}) error
 		FetchDocumentListFunc func(context.Context) ([]string, error)
 		Error                 bool
 	}{
@@ -200,7 +200,7 @@ func TestStart(t *testing.T) {
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{"1", "2", "3", "4", "5"}
 			},
-			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return nil
 			},
 			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
@@ -216,7 +216,7 @@ func TestStart(t *testing.T) {
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{}
 			},
-			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return nil
 			},
 			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
@@ -254,7 +254,7 @@ func TestStart(t *testing.T) {
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{"1", "2", "3", "4", "5"}
 			},
-			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return fmt.Errorf("this is expected")
 			},
 			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
@@ -292,7 +292,7 @@ func TestStart(t *testing.T) {
 			GetPartsListFunc: func(ctx context.Context, title *ecfrEregs.TitleConfig) []string {
 				return []string{"1", "2", "3", "4", "5"}
 			},
-			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
+			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return fmt.Errorf("this is expected")
 			},
 			FetchDocumentListFunc: func(ctx context.Context) ([]string, error) {
@@ -323,7 +323,7 @@ func TestProcessPart(t *testing.T) {
 	testTable := []struct {
 		Name                string
 		FetchContentFunc    func(context.Context, int, string) ([]*fedreg.FRDoc, error)
-		ProcessDocumentFunc func(context.Context, int, string, *fedreg.FRDoc) error
+		ProcessDocumentFunc func(context.Context, int, string, *fedreg.FRDoc, map[string]struct{}) error
 		ExistingDocs        map[string]bool
 		SkipDocuments       bool
 		Error               bool
@@ -355,7 +355,7 @@ func TestProcessPart(t *testing.T) {
 					},
 				}, nil
 			},
-			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
+			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc, titles map[string]struct{}) error {
 				return nil
 			},
 			ExistingDocs:  map[string]bool{},
@@ -367,7 +367,7 @@ func TestProcessPart(t *testing.T) {
 			FetchContentFunc: func(ctx context.Context, title int, part string) ([]*fedreg.FRDoc, error) {
 				return nil, fmt.Errorf("this is expected")
 			},
-			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
+			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc, titles map[string]struct{}) error {
 				return nil
 			},
 			ExistingDocs:  map[string]bool{},
@@ -401,7 +401,7 @@ func TestProcessPart(t *testing.T) {
 					},
 				}, nil
 			},
-			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
+			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc, titles map[string]struct{}) error {
 				return fmt.Errorf("this is expected")
 			},
 			ExistingDocs:  map[string]bool{},
@@ -435,7 +435,7 @@ func TestProcessPart(t *testing.T) {
 					},
 				}, nil
 			},
-			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
+			ProcessDocumentFunc: func(ctx context.Context, title int, part string, content *fedreg.FRDoc, titles map[string]struct{}) error {
 				return fmt.Errorf("this is expected")
 			},
 			ExistingDocs: map[string]bool{
@@ -454,7 +454,7 @@ func TestProcessPart(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			err := processPart(ctx, 42, "433", tc.ExistingDocs, tc.SkipDocuments)
+			err := processPart(ctx, 42, "433", tc.ExistingDocs, tc.SkipDocuments, map[string]struct{}{"42": struct{}{}})
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
@@ -467,13 +467,13 @@ func TestProcessPart(t *testing.T) {
 func TestProcessDocument(t *testing.T) {
 	testTable := []struct {
 		Name              string
-		FetchSectionsFunc func(context.Context, string) ([]string, map[string]string, error)
+		FetchSectionsFunc func(context.Context, string, map[string]struct{}) ([]string, map[string]string, error)
 		SendDocumentFunc  func(context.Context, *eregs.FRDoc) error
 		Error             bool
 	}{
 		{
 			Name: "test-send",
-			FetchSectionsFunc: func(ctx context.Context, path string) ([]string, map[string]string, error) {
+			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
 				return []string{"433.12", "12.1", "1.1"}, map[string]string{"433": "42", "12": "42", "1": "45"}, nil
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
@@ -483,7 +483,7 @@ func TestProcessDocument(t *testing.T) {
 		},
 		{
 			Name: "test-fetch-sections-failure",
-			FetchSectionsFunc: func(ctx context.Context, path string) ([]string, map[string]string, error) {
+			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
 				return nil, nil, fmt.Errorf("this is expected")
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
@@ -496,7 +496,7 @@ func TestProcessDocument(t *testing.T) {
 		},
 		{
 			Name: "test-send-document-failure",
-			FetchSectionsFunc: func(ctx context.Context, path string) ([]string, map[string]string, error) {
+			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
 				return []string{"433.12", "12.1", "1.1"}, map[string]string{"433": "42", "12": "42", "1": "45"}, nil
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
@@ -528,7 +528,7 @@ func TestProcessDocument(t *testing.T) {
 				FullTextURL:    "http://test.gov/some/xml/url",
 			}
 
-			err := processDocument(ctx, 42, "433", &doc)
+			err := processDocument(ctx, 42, "433", &doc, map[string]struct{}{"42": struct{}{}})
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {

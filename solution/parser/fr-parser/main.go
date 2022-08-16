@@ -131,11 +131,16 @@ func start() error {
 		existingDocs[i] = true
 	}
 
+	titles := make(map[string]struct{})
+	for _, title := range config.Titles {
+		titles[fmt.Sprintf("%d", title.Title)] = struct{}{}
+	}
+
 	for _, title := range config.Titles {
 		log.Info("[main] retrieving content for title ", title.Title)
 		parts := getPartsListFunc(ctx, title)
 		for _, part := range parts {
-			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipVersions); err != nil {
+			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipVersions, titles); err != nil {
 				log.Error("[main] failed to process title ", title.Title, " part ", part, ": ", err)
 			}
 		}
@@ -147,7 +152,7 @@ func start() error {
 var fetchContentFunc = fedreg.FetchContent
 var processDocumentFunc = processDocument
 
-func processPart(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool) error {
+func processPart(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 	log.Debug("[main] retrieving list of content for title ", title, " part ", part)
 	contentList, err := fetchContentFunc(ctx, title, part)
 	if err != nil {
@@ -171,7 +176,7 @@ func processPart(ctx context.Context, title int, part string, existingDocs map[s
 
 	log.Debug("[main] Processing content for title ", title, " part ", part)
 	for _, c := range content {
-		if err := processDocumentFunc(ctx, title, part, c); err != nil {
+		if err := processDocumentFunc(ctx, title, part, c, titles); err != nil {
 			log.Error("[main] failed to process title ", title, " part ", part, " doc ID ", c.DocumentNumber, ": ", err)
 		}
 	}
@@ -182,7 +187,7 @@ func processPart(ctx context.Context, title int, part string, existingDocs map[s
 var fetchSectionsFunc = fedreg.FetchSections
 var sendDocumentFunc = eregs.SendDocument
 
-func processDocument(ctx context.Context, title int, part string, content *fedreg.FRDoc) error {
+func processDocument(ctx context.Context, title int, part string, content *fedreg.FRDoc, titles map[string]struct{}) error {
 	doc := &eregs.FRDoc{
 		Name:           content.Name,
 		Description:    content.Description,
@@ -195,7 +200,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 
 	if content.FullTextURL != "" {
 		log.Trace("[main] retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
-		sections, partMap, err := fetchSectionsFunc(ctx, content.FullTextURL)
+		sections, partMap, err := fetchSectionsFunc(ctx, content.FullTextURL, titles)
 		if err != nil {
 			log.Error("[main] failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
 		} else {
