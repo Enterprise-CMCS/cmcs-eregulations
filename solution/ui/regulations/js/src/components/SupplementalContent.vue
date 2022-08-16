@@ -265,9 +265,7 @@ export default {
 
 <style lang="scss">
 .resource_btn_container {
-    padding-top:10px;
-    padding-bottom: 10px;  
-    padding: 5px 12px 5px 12px;
+    padding: 5px 12px 5px 0px;
 }
 .search_resource_btn {
     width: fit-content;
@@ -278,5 +276,9 @@ export default {
 }
 a.search_resource_btn:visited{
     color:white
+}
+a.search_resource_btn:hover{
+    color:white;
+    background-color: #046791;
 }
 </style>
