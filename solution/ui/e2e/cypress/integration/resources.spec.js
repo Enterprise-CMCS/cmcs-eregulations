@@ -30,11 +30,13 @@ describe("Resources page", () => {
     })
     it("Selects subparts correctly", () => {
         cy.clearLocalStorage()
-        cy.intercept('/v3/title/42/part/433/version/latest/toc').as('TOC')
+        cy.intercept('*/v3/title/42/part/433/version/latest/toc').as('TOC')
         // /v3/title/42/part/433/version/latest/toc
         cy.viewport("macbook-15");
         cy.visit("/resources?part=433&title=42");
+        // Wait for the TOC to load
         cy.wait('@TOC')
+        // Then give it a second
         cy.wait(1000)
         // Select subPart B
         cy.get('#select-subparts > .v-btn__content').click();
