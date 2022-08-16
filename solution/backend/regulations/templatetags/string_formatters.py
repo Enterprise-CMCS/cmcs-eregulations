@@ -40,7 +40,7 @@ def simple_section_formatter(title, node_label):
     part = node_label[0]
     subpart = node_label[1]
 
-    return strip_tags(f"{title} {part}.{subpart}")
+    return strip_tags(f"{title} CFR {part}.{subpart}")
 
 
 @register.simple_tag
