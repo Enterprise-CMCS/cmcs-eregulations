@@ -30,17 +30,20 @@ describe("Resources page", () => {
     })
     it("Selects subparts correctly", () => {
         cy.clearLocalStorage()
-        cy.intercept('*/v3/title/42/part/433/version/latest/toc').as('TOC')
+        cy.intercept('*/title/42/part/433/version/latest/toc').as('TOC')
+        cy.intercept('*/resources/?*&locations=42.433*&page=4*').as('RESOURCES')
         // /v3/title/42/part/433/version/latest/toc
         cy.viewport("macbook-15");
         cy.visit("/resources?part=433&title=42");
         // Wait for the TOC to load
+        cy.wait(5000)
         cy.wait('@TOC')
+        cy.wait('@RESOURCES')
         // Then give it a second
-        cy.wait(1000)
+        //cy.wait(1000)
         // Select subPart B
-        cy.get('#select-subparts > .v-btn__content').click();
-        cy.get('[data-value="433-B"]').click();
+        cy.get('#select-subparts > .v-btn__content').click({force:true});
+        cy.get('[data-value="433-B"]').click({force:true});
         cy.url().should("include", "part=433");
         cy.url().should("include", "title=42");
         cy.url().should("include", "subpart=433-B");
