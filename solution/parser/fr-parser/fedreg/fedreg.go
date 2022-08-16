@@ -119,7 +119,7 @@ func FetchSections(ctx context.Context, path string) ([]string, map[string]strin
 					// extract CFR information and put it in the CFR table
 					title, parts, err := extractCFR(l.Loc)
 					if err != nil {
-						log.Warn("[fedreg] failed to extract CFR information from \"", l.Loc, "\": ", err)
+						log.Warn("[fedreg] failed to extract CFR information from '", l.Loc, "': ", err)
 					} else {
 						for _, part := range parts {
 							if _, exists := cfrs[part]; !exists {
@@ -161,7 +161,7 @@ func extractCFR(input string) (string, []string, error) {
 	//extract title
 	title := split[0]
 	if !regexp.MustCompile(`\d+`).MatchString(title) {
-		return "", nil, fmt.Errorf("title \"%s\" is not a valid title", title)
+		return "", nil, fmt.Errorf("title '%s' is not a valid title", title)
 	}
 	
 	for _, p := range split[1:] {

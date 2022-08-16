@@ -51,7 +51,7 @@ type FRDoc struct {
 func SendDocument(ctx context.Context, doc *FRDoc) error {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return fmt.Errorf("failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
+		return fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocumentURL)
 	code, err := network.SendJSON(ctx, eregsURL, doc, true, postAuth, network.HTTPPut)
@@ -97,7 +97,7 @@ func CreateSections(s []string, pm map[string]string) []*Section {
 func FetchDocumentList(ctx context.Context) ([]string, error) {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
+		return nil, fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocListURL)
 

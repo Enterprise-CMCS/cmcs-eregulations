@@ -60,7 +60,7 @@ func getLogLevel(l string) log.Level {
 	case "trace":
 		return log.TraceLevel
 	default:
-		log.Warn("[main] \"", config.LogLevel, "\" is an invalid log level, defaulting to \"warn\".")
+		log.Warn("[main] '", config.LogLevel, "' is an invalid log level, defaulting to 'warn'.")
 		return log.WarnLevel
 	}
 }
