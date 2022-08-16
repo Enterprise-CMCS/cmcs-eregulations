@@ -190,14 +190,15 @@ def process_body(raw_synonyms):
     for row in reader:
         related_words = []
         for syn in row:
-            new_syn, created = Synonym.objects.get_or_create(isActive=True, baseWord=syn.strip())
-            if created:
-                new_synonyms.append(syn)
-            else:
-                existing_synonyms.append(syn)
-            for word in related_words:
-                new_syn.synonyms.add(word)
-            related_words.append(new_syn)
+            if syn:
+                new_syn, created = Synonym.objects.get_or_create(isActive=True, baseWord=syn.strip())
+                if created:
+                    new_synonyms.append(syn)
+                else:
+                    existing_synonyms.append(syn)
+                for word in related_words:
+                    new_syn.synonyms.add(word)
+                related_words.append(new_syn)
 
     return new_synonyms, existing_synonyms
 
