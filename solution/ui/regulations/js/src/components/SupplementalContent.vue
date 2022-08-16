@@ -278,6 +278,6 @@ a.search_resource_btn:visited{
     color:white
 }
 a.search_resource_btn:hover{
-    color : white;
+    color: white;
 }
 </style>
