@@ -89,13 +89,14 @@ type XMLQuery struct {
 }
 
 // FetchSections pulls the full document from the Federal Register and extracts all SECTNO tags
-func FetchSections(ctx context.Context, path string) ([]string, error) {
+// Returns a list of sections and a map of parts => titles
+func FetchSections(ctx context.Context, path string) ([]string, map[string]string, error) {
 	reader, err := fetch(ctx, path)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	//var cfrs map[string]string
+	var cfrs map[string]string
 	var sections []string
 
 	d := xml.NewDecoder(reader)
@@ -105,28 +106,31 @@ func FetchSections(ctx context.Context, path string) ([]string, error) {
 			if err == io.EOF {
 				break
 			}
-			return nil, fmt.Errorf("failed to decode XML: %+v", err)
+			return nil, nil, fmt.Errorf("failed to decode XML: %+v", err)
 		}
 		if se, ok := t.(xml.StartElement); ok {
 			if se.Name.Local == "SECTNO" || se.Name.Local == "CFR" {
 				var l XMLQuery
 				err = d.DecodeElement(&l, &se)
 				if err != nil {
-					return nil, fmt.Errorf("failed to decode element: %+v", err)
+					return nil, nil, fmt.Errorf("failed to decode element: %+v", err)
 				}
-				// if se.Name.Local == "CFR" {
-				// 	// extract CFR information and put it in the CFR table
-				// 	title, parts, err := extractCFR(l.Loc)
-				// 	if err != nil {
-				// 		log.Error("[fedreg] failed to extract CFR information from \"", l.Loc, "\"")
-				// 	} else {
-
-				// 	}
-				//} else if se.Name.Local == "SECTNO" {
-				if se.Name.Local == "SECTNO" {
+				if se.Name.Local == "CFR" {
+					// extract CFR information and put it in the CFR table
+					title, parts, err := extractCFR(l.Loc)
+					if err != nil {
+						log.Warn("[fedreg] failed to extract CFR information from \"", l.Loc, "\": ", err)
+					} else {
+						for _, part := range parts {
+							if _, exists := cfrs[part]; !exists {
+								cfrs[part] = title
+							}
+						}
+					}
+				} else if se.Name.Local == "SECTNO" {
 					section, err := extractSection(l.Loc)
 					if err != nil {
-						log.Error("[fedreg] failed to extract section from identifier \"", l.Loc, "\"")
+						log.Warn("[fedreg] ", err)
 					} else {
 						sections = append(sections, section)
 					}
@@ -135,7 +139,7 @@ func FetchSections(ctx context.Context, path string) ([]string, error) {
 		}
 	}
 
-	return sections, nil
+	return sections, cfrs, nil
 }
 
 func extractSection(input string) (string, error) {
@@ -167,8 +171,7 @@ func extractCFR(input string) (string, []string, error) {
 	
 	for _, p := range split[1:] {
 		part := strings.Trim(strings.TrimSpace(p), ".,;:")
-		is_numeric := regexp.MustCompile(`\d+`).MatchString(part)
-		if is_numeric {
+		if regexp.MustCompile(`\d+`).MatchString(part) {
 			parts = append(parts, part)
 		}
 	}
