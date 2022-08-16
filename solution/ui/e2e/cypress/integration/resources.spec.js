@@ -8,14 +8,15 @@ describe("Resources page", () => {
     })
 
     it("renders correctly", () => {
+        cy.intercept('*/resources/?locations=42*', {fixture:'resources.json'}).as('resources')
+        cy.intercept('*v2/title/42/existing', {fixture: '42-existing.json'}).as('existing')
+        cy.intercept( '*v3/toc', {fixture: 'toc.json'}).as('toc')
         cy.viewport("macbook-15");
         cy.visit("/resources");
-
+        cy.wait("@resources")
         cy.get("h1").contains('Resources')
         cy.get("h3").contains('Filter Resources')
-        // This is an anti pattern, sue me
-        cy.wait(5000)
-        cy.contains("100 results in Resources")
+        cy.contains("7 results in Resources")
     });
 
     it("Selects parts correctly", () => {
@@ -31,14 +32,16 @@ describe("Resources page", () => {
     it("Selects subparts correctly", () => {
         cy.clearLocalStorage()
         cy.intercept('*/title/42/part/433/version/latest/toc').as('TOC')
-        cy.intercept('*/resources/?*&locations=42.433*&page=4*').as('RESOURCES')
+        cy.intercept('*/title/42/part/433/version/latest/sections', {fixture:'42.433.sections.json' }).as('sections')
+        cy.intercept('*v3/resources/?&locations=42.433*', {fixture:'resources.json'}).as('resources')
+        //cy.intercept('*/resources/?*&locations=42.433*&page=4*').as('RESOURCES')
         // /v3/title/42/part/433/version/latest/toc
         cy.viewport("macbook-15");
         cy.visit("/resources?part=433&title=42");
         // Wait for the TOC to load
         cy.wait(5000)
         cy.wait('@TOC')
-        cy.wait('@RESOURCES')
+        cy.wait('@resources')
         // Then give it a second
         //cy.wait(1000)
         // Select subPart B

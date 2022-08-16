@@ -1,0 +1,570 @@
+[
+  {
+    "type": "title",
+    "label": "Title 42 - Public Health",
+    "parent": [],
+    "reserved": false,
+    "identifier": [
+      "42"
+    ],
+    "label_level": "Title 42",
+    "parent_type": "",
+    "descendant_range": null,
+    "label_description": "Public Health",
+    "children": [
+      {
+        "type": "chapter",
+        "label": "Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
+        "parent": [
+          "42"
+        ],
+        "reserved": false,
+        "identifier": [
+          "IV"
+        ],
+        "label_level": "Chapter IV",
+        "parent_type": "title",
+        "descendant_range": [
+          "400",
+          "699"
+        ],
+        "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
+        "children": [
+          {
+            "type": "subchapter",
+            "label": "Subchapter A - General Provisions",
+            "parent": [
+              "IV"
+            ],
+            "reserved": false,
+            "identifier": [
+              "A"
+            ],
+            "label_level": "Subchapter A",
+            "parent_type": "chapter",
+            "descendant_range": [
+              "400",
+              "403"
+            ],
+            "label_description": "General Provisions",
+            "children": [
+              {
+                "type": "part",
+                "label": "Part 400 - Introduction; Definitions",
+                "parent": [
+                  "A"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "400"
+                ],
+                "label_level": "Part 400",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "400.200",
+                  "400.203"
+                ],
+                "label_description": "Introduction; Definitions",
+                "children": []
+              }
+            ]
+          },
+          {
+            "type": "subchapter",
+            "label": "Subchapter C - Medical Assistance Programs",
+            "parent": [
+              "IV"
+            ],
+            "reserved": false,
+            "identifier": [
+              "C"
+            ],
+            "label_level": "Subchapter C",
+            "parent_type": "chapter",
+            "descendant_range": [
+              "430",
+              "456"
+            ],
+            "label_description": "Medical Assistance Programs",
+            "children": [
+              {
+                "type": "part",
+                "label": "Part 430 - Grants to States for Medical Assistance Programs",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "430"
+                ],
+                "label_level": "Part 430",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "430.0",
+                  "430.104"
+                ],
+                "label_description": "Grants to States for Medical Assistance Programs",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 431 - State Organization and General Administration",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "431"
+                ],
+                "label_level": "Part 431",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "431.1",
+                  "431.1010"
+                ],
+                "label_description": "State Organization and General Administration",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 432 - State Personnel Administration",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "432"
+                ],
+                "label_level": "Part 432",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "432.1",
+                  "432.55"
+                ],
+                "label_description": "State Personnel Administration",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 433 - State Fiscal Administration",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "433"
+                ],
+                "label_level": "Part 433",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "433.1",
+                  "433.400"
+                ],
+                "label_description": "State Fiscal Administration",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 434 - Contracts",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "434"
+                ],
+                "label_level": "Part 434",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "434.1",
+                  "434.78"
+                ],
+                "label_description": "Contracts",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 435 - Eligibility in the States, District of Columbia, the Northern Mariana Islands, and American Samoa",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "435"
+                ],
+                "label_level": "Part 435",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "435.2",
+                  "435.1205"
+                ],
+                "label_description": "Eligibility in the States, District of Columbia, the Northern Mariana Islands, and American Samoa",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 436 - Eligibility in Guam, Puerto Rico, and the Virgin Islands",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "436"
+                ],
+                "label_level": "Part 436",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "436.1",
+                  "436.1102"
+                ],
+                "label_description": "Eligibility in Guam, Puerto Rico, and the Virgin Islands",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 438 - Managed Care",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "438"
+                ],
+                "label_level": "Part 438",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "438.1",
+                  "438.930"
+                ],
+                "label_description": "Managed Care",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 440 - Services: General Provisions",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "440"
+                ],
+                "label_level": "Part 440",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "440.1",
+                  "440.395"
+                ],
+                "label_description": "Services: General Provisions",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 441 - Services: Requirements and Limits Applicable to Specific Services",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "441"
+                ],
+                "label_level": "Part 441",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "441.1",
+                  "441.745"
+                ],
+                "label_description": "Services: Requirements and Limits Applicable to Specific Services",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 442 - Standards for Payment to Nursing Facilities and Intermediate Care Facilities for Individuals with Intellectual Disabilities",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "442"
+                ],
+                "label_level": "Part 442",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "442.1",
+                  "442.119"
+                ],
+                "label_description": "Standards for Payment to Nursing Facilities and Intermediate Care Facilities for Individuals with Intellectual Disabilities",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 447 - Payments for Services",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "447"
+                ],
+                "label_level": "Part 447",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "447.1",
+                  "447.522"
+                ],
+                "label_description": "Payments for Services",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 455 - Program Integrity: Medicaid",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "455"
+                ],
+                "label_level": "Part 455",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "455.1",
+                  "455.518"
+                ],
+                "label_description": "Program Integrity: Medicaid",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 456 - Utilization Control",
+                "parent": [
+                  "C"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "456"
+                ],
+                "label_level": "Part 456",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "456.1",
+                  "456.725"
+                ],
+                "label_description": "Utilization Control",
+                "children": []
+              }
+            ]
+          },
+          {
+            "type": "subchapter",
+            "label": "Subchapter D - State Children's Health Insurance Programs (SCHIPs)",
+            "parent": [
+              "IV"
+            ],
+            "reserved": false,
+            "identifier": [
+              "D"
+            ],
+            "label_level": "Subchapter D",
+            "parent_type": "chapter",
+            "descendant_range": [
+              "457"
+            ],
+            "label_description": "State Children's Health Insurance Programs (SCHIPs)",
+            "children": [
+              {
+                "type": "part",
+                "label": "Part 457 - Allotments and Grants to States",
+                "parent": [
+                  "D"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "457"
+                ],
+                "label_level": "Part 457",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "457.1",
+                  "457.1285"
+                ],
+                "label_description": "Allotments and Grants to States",
+                "children": []
+              }
+            ]
+          },
+          {
+            "type": "subchapter",
+            "label": "Subchapter E - Programs of All-Inclusive Care for the Elderly (PACE)",
+            "parent": [
+              "IV"
+            ],
+            "reserved": false,
+            "identifier": [
+              "E"
+            ],
+            "label_level": "Subchapter E",
+            "parent_type": "chapter",
+            "descendant_range": [
+              "460"
+            ],
+            "label_description": "Programs of All-Inclusive Care for the Elderly (PACE)",
+            "children": [
+              {
+                "type": "part",
+                "label": "Part 460 - Programs of All-Inclusive Care for the Elderly (PACE)",
+                "parent": [
+                  "E"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "460"
+                ],
+                "label_level": "Part 460",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "460.2",
+                  "460.210"
+                ],
+                "label_description": "Programs of All-Inclusive Care for the Elderly (PACE)",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "title",
+    "label": "Title 45 - Public Welfare",
+    "parent": [],
+    "reserved": false,
+    "identifier": [
+      "45"
+    ],
+    "label_level": "Title 45",
+    "parent_type": "",
+    "descendant_range": null,
+    "label_description": "Public Welfare",
+    "children": [
+      {
+        "type": "subtitle",
+        "label": "Subtitle A - Department of Health and Human Services",
+        "parent": [
+          "45"
+        ],
+        "reserved": false,
+        "identifier": [
+          "A"
+        ],
+        "label_level": "Subtitle A",
+        "parent_type": "title",
+        "descendant_range": [
+          "1",
+          "199"
+        ],
+        "label_description": "Department of Health and Human Services",
+        "children": [
+          {
+            "type": "subchapter",
+            "label": "Subchapter A - General Administration",
+            "parent": [
+              "A"
+            ],
+            "reserved": false,
+            "identifier": [
+              "A"
+            ],
+            "label_level": "Subchapter A",
+            "parent_type": "subtitle",
+            "descendant_range": [
+              "1",
+              "102"
+            ],
+            "label_description": "General Administration",
+            "children": [
+              {
+                "type": "part",
+                "label": "Part 75 - Uniform Administrative Requirements, Cost Principles, and Audit Requirements for HHS Awards",
+                "parent": [
+                  "A"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "75"
+                ],
+                "label_level": "Part 75",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "75.1",
+                  "75.521"
+                ],
+                "label_description": "Uniform Administrative Requirements, Cost Principles, and Audit Requirements for HHS Awards",
+                "children": []
+              },
+              {
+                "type": "part",
+                "label": "Part 95 - General Administration - Grant Programs (Public Assistance, Medical Assistance and State Children's Health Insurance Programs)",
+                "parent": [
+                  "A"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "95"
+                ],
+                "label_level": "Part 95",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "95.1",
+                  "95.707"
+                ],
+                "label_description": "General Administration - Grant Programs (Public Assistance, Medical Assistance and State Children's Health Insurance Programs)",
+                "children": []
+              }
+            ]
+          },
+          {
+            "type": "subchapter",
+            "label": "Subchapter B - Requirements Relating to Health Care Access",
+            "parent": [
+              "A"
+            ],
+            "reserved": false,
+            "identifier": [
+              "B"
+            ],
+            "label_level": "Subchapter B",
+            "parent_type": "subtitle",
+            "descendant_range": [
+              "140",
+              "159"
+            ],
+            "label_description": "Requirements Relating to Health Care Access",
+            "children": [
+              {
+                "type": "part",
+                "label": "Part 155 - Exchange Establishment Standards and Other Related Standards Under the Affordable Care Act",
+                "parent": [
+                  "B"
+                ],
+                "reserved": false,
+                "identifier": [
+                  "155"
+                ],
+                "label_level": "Part 155",
+                "parent_type": "subchapter",
+                "descendant_range": [
+                  "155.10",
+                  "155.1405"
+                ],
+                "label_description": "Exchange Establishment Standards and Other Related Standards Under the Affordable Care Act",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
