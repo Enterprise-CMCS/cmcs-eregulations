@@ -96,7 +96,7 @@ func FetchSections(ctx context.Context, path string) ([]string, map[string]strin
 		return nil, nil, err
 	}
 
-	var cfrs map[string]string
+	cfrs := make(map[string]string)
 	var sections []string
 
 	d := xml.NewDecoder(reader)
@@ -162,11 +162,6 @@ func extractCFR(input string) (string, []string, error) {
 	title := split[0]
 	if !regexp.MustCompile(`\d+`).MatchString(title) {
 		return "", nil, fmt.Errorf("title \"%s\" is not a valid title", title)
-	}
-
-	// extract parts
-	if len(split) < 2 {
-		return "", nil, fmt.Errorf("the CFR string contains a title but no parts")
 	}
 	
 	for _, p := range split[1:] {

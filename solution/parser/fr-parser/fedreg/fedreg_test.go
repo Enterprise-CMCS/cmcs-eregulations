@@ -285,13 +285,18 @@ func TestFetchSections(t *testing.T) {
 	testTable := []struct {
 		Name     string
 		InputXML []byte
-		Output   []string
+		Sections   []string
+		PartMap map[string]string
 		Error    bool
 	}{
 		{
 			Name: "test-valid-sections",
 			InputXML: []byte(`
 				<PRORULE>
+					<PREAMB>
+						<SUBAGY>Centers for Medicare &amp; Medicaid Services</SUBAGY>
+						<CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
+					</PREAMB>
 					<TEST>Some data</TEST>
 					<SUPLINF>
 						<SECTION>
@@ -307,7 +312,13 @@ func TestFetchSections(t *testing.T) {
 					</SUPLINF>
 				</PRORULE>
 			`),
-			Output: []string{"447.502", "33.118"},
+			Sections: []string{"447.502", "33.118"},
+			PartMap: map[string]string{
+				"438": "42",
+				"440": "42",
+				"457": "42",
+				"460": "42",
+			},
 			Error:  false,
 		},
 		{
@@ -329,7 +340,8 @@ func TestFetchSections(t *testing.T) {
 					</SUPLINF>
 				</PRORULE>
 			`),
-			Output: nil,
+			Sections: nil,
+			PartMap: nil,
 			Error:  true,
 		},
 		{
@@ -351,7 +363,8 @@ func TestFetchSections(t *testing.T) {
 					</SUPLINF>
 				</PRORULE>
 			`),
-			Output: nil,
+			Sections: nil,
+			PartMap: nil,
 			Error:  true,
 		},
 	}
@@ -367,13 +380,18 @@ func TestFetchSections(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			output, err := FetchSections(ctx, server.URL)
+			sections, partMap, err := FetchSections(ctx, server.URL)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
-				t.Errorf("expected error, received (%+v)", output)
-			} else if diff := deep.Equal(output, tc.Output); diff != nil {
-				t.Errorf("output not as expected: (%+v)", diff)
+				t.Errorf("expected error, received sections (%+v), part map (%+v)", sections, partMap)
+			} else {
+				if diff := deep.Equal(sections, tc.Sections); diff != nil {
+					t.Errorf("sections not as expected: (%+v)", diff)
+				}
+				if diff := deep.Equal(partMap, tc.PartMap); diff != nil {
+					t.Errorf("part map not as expected: (%+v)", diff)
+				}
 			}
 		})
 	}
@@ -465,6 +483,13 @@ func TestExtractCFR(t *testing.T) {
 		{
 			Name:   "test-invalid-title",
 			Input:  "blah CFR Part 438.",
+			Title: "",
+			Parts: nil,
+			Error:  true,
+		},
+		{
+			Name:   "test-title-only",
+			Input:  "42",
 			Title: "",
 			Parts: nil,
 			Error:  true,
