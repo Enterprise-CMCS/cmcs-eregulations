@@ -285,30 +285,49 @@ func TestFetchSections(t *testing.T) {
 	testTable := []struct {
 		Name     string
 		InputXML []byte
-		Output   []string
+		Sections []string
+		PartMap  map[string]string
 		Error    bool
 	}{
 		{
 			Name: "test-valid-sections",
 			InputXML: []byte(`
 				<PRORULE>
+					<PREAMB>
+						<SUBAGY>Centers for Medicare &amp; Medicaid Services</SUBAGY>
+						<CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
+						<CFR>45 CFR Parts 41.</CFR>
+						<CFR>47 CFR Parts 123</CFR>
+					</PREAMB>
 					<TEST>Some data</TEST>
 					<SUPLINF>
 						<SECTION>
-							<SECTNO>§ 447.502 </SECTNO>
+							<SECTNO>§ 438.502 </SECTNO>
 							<SUBJECT>Definitions.</SUBJECT>
 							<STARS/>
 						</SECTION>
 						<SECTION>
-							<SECTNO>§ 33.118 </SECTNO>
+							<SECTNO>§ 41.118 </SECTNO>
 							<SUBJECT>abc xyz...</SUBJECT>
+							<STARS/>
+						</SECTION>
+						<SECTION>
+							<SECTNO>§ 123.1418 </SECTNO>
+							<SUBJECT>abc xyz asdfasdf...</SUBJECT>
 							<STARS/>
 						</SECTION>
 					</SUPLINF>
 				</PRORULE>
 			`),
-			Output: []string{"447.502", "33.118"},
-			Error:  false,
+			Sections: []string{"438.502", "41.118", "123.1418"},
+			PartMap: map[string]string{
+				"438": "42",
+				"440": "42",
+				"457": "42",
+				"460": "42",
+				"41":  "45",
+			},
+			Error: false,
 		},
 		{
 			Name: "test-bad-xml",
@@ -329,8 +348,9 @@ func TestFetchSections(t *testing.T) {
 					</SUPLINF>
 				</PRORULE>
 			`),
-			Output: nil,
-			Error:  true,
+			Sections: nil,
+			PartMap:  nil,
+			Error:    true,
 		},
 		{
 			Name: "test-bad-sectno",
@@ -351,9 +371,15 @@ func TestFetchSections(t *testing.T) {
 					</SUPLINF>
 				</PRORULE>
 			`),
-			Output: nil,
-			Error:  true,
+			Sections: nil,
+			PartMap:  nil,
+			Error:    true,
 		},
+	}
+
+	titleMap := map[string]struct{}{
+		"42": struct{}{},
+		"45": struct{}{},
 	}
 
 	for _, tc := range testTable {
@@ -367,13 +393,18 @@ func TestFetchSections(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			output, err := FetchSections(ctx, server.URL)
+			sections, partMap, err := FetchSections(ctx, server.URL, titleMap)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
-				t.Errorf("expected error, received (%+v)", output)
-			} else if diff := deep.Equal(output, tc.Output); diff != nil {
-				t.Errorf("output not as expected: (%+v)", diff)
+				t.Errorf("expected error, received sections (%+v), part map (%+v)", sections, partMap)
+			} else {
+				if diff := deep.Equal(sections, tc.Sections); diff != nil {
+					t.Errorf("sections not as expected: (%+v)", diff)
+				}
+				if diff := deep.Equal(partMap, tc.PartMap); diff != nil {
+					t.Errorf("part map not as expected: (%+v)", diff)
+				}
 			}
 		})
 	}
@@ -420,6 +451,74 @@ func TestExtractSection(t *testing.T) {
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%s)", output)
 			} else if diff := deep.Equal(output, tc.Output); diff != nil {
+				t.Errorf("output not as expected: (%+v)", diff)
+			}
+		})
+	}
+}
+
+func TestExtractCFR(t *testing.T) {
+	testTable := []struct {
+		Name  string
+		Input string
+		Title string
+		Parts []string
+		Error bool
+	}{
+		{
+			Name:  "test-multi-part",
+			Input: "45 CFR Parts 80, 84, 86, 91, 92, 147, 155, and 156",
+			Title: "45",
+			Parts: []string{"80", "84", "86", "91", "92", "147", "155", "156"},
+			Error: false,
+		},
+		{
+			Name:  "test-single-part",
+			Input: "42 CFR Part 438.",
+			Title: "42",
+			Parts: []string{"438"},
+			Error: false,
+		},
+		{
+			Name:  "test-no-parts",
+			Input: "42 CFR Part",
+			Title: "",
+			Parts: nil,
+			Error: true,
+		},
+		{
+			Name:  "test-empty-string",
+			Input: "   ",
+			Title: "",
+			Parts: nil,
+			Error: true,
+		},
+		{
+			Name:  "test-invalid-title",
+			Input: "blah CFR Part 438.",
+			Title: "",
+			Parts: nil,
+			Error: true,
+		},
+		{
+			Name:  "test-title-only",
+			Input: "42",
+			Title: "",
+			Parts: nil,
+			Error: true,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			title, parts, err := extractCFR(tc.Input)
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received title (%s) parts (%+v)", title, parts)
+			} else if title != tc.Title {
+				t.Errorf("expected title (%s), received title (%s)", tc.Title, title)
+			} else if diff := deep.Equal(parts, tc.Parts); diff != nil {
 				t.Errorf("output not as expected: (%+v)", diff)
 			}
 		})

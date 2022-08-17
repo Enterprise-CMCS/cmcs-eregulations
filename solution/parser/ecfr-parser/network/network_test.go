@@ -80,7 +80,7 @@ func TestFetch(t *testing.T) {
 			defer tc.Server.Close()
 			testURL, err := url.Parse(tc.Server.URL)
 			if err != nil {
-				t.Errorf("error parsing url \"%s\": %+v", tc.Server.URL, err)
+				t.Errorf("error parsing url '%s': %+v", tc.Server.URL, err)
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
@@ -271,7 +271,7 @@ func TestSendJSON(t *testing.T) {
 			defer tc.Server.Close()
 			testURL, err := url.Parse(tc.Server.URL)
 			if err != nil {
-				t.Errorf("error parsing url \"%s\": %+v", tc.Server.URL, err)
+				t.Errorf("error parsing url '%s': %+v", tc.Server.URL, err)
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
@@ -394,7 +394,7 @@ func TestFetchWithOptions(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			testURL, err := url.Parse(server.URL)
 			if err != nil {
-				t.Errorf("error parsing url \"%s\": %+v", server.URL, err)
+				t.Errorf("error parsing url '%s': %+v", server.URL, err)
 			}
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
