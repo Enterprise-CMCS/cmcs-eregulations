@@ -51,7 +51,7 @@ type FRDoc struct {
 func SendDocument(ctx context.Context, doc *FRDoc) error {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return fmt.Errorf("failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
+		return fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocumentURL)
 	code, err := network.SendJSON(ctx, eregsURL, doc, true, postAuth, network.HTTPPut)
@@ -65,13 +65,19 @@ func SendDocument(ctx context.Context, doc *FRDoc) error {
 }
 
 // CreateSections takes a list of strings and converts it to proper section identifiers
-func CreateSections(title string, s []string) []*Section {
+func CreateSections(s []string, pm map[string]string) []*Section {
 	var sections []*Section
 
 	for _, section := range s {
 		sp := strings.Split(section, ".")
 		if len(sp) != 2 || sp[0] == "" || sp[1] == "" {
 			log.Warn("[eregs] Section identifier ", section, " is invalid.")
+			continue
+		}
+
+		title, exists := pm[sp[0]]
+		if !exists {
+			log.Warn("[eregs] Section identifier ", section, " has no matching title.")
 			continue
 		}
 
@@ -91,7 +97,7 @@ func CreateSections(title string, s []string) []*Section {
 func FetchDocumentList(ctx context.Context) ([]string, error) {
 	eregsURL, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse eRegs URL \"%s\": %+v", BaseURL, err)
+		return nil, fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocListURL)
 
