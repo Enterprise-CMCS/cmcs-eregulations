@@ -13,6 +13,9 @@
         <h2 v-if="!requested_categories" id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
+        <div class="resource_btn_container" v-if="resource_display">
+            <a :href="resourceLink" class=" default-btn action-btn search_resource_btn" >Search These Resources</a>
+        </div>
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"
@@ -71,6 +74,10 @@ export default {
             type: String,
             required: true,
         },
+        resources_url: {
+            type: String,
+            required: false
+        },
         title: {
             type: String,
             required: true,
@@ -100,6 +107,11 @@ export default {
             type: Function,
             required: false,
             default: getSupplementalContentByCategory,
+        },
+        resource_display:{
+            type: Boolean,
+            required: false,
+            default: false
         },
         requested_categories: {
             type: String,
@@ -131,6 +143,20 @@ export default {
                 return this.selectedPart;
             }
             return `Subpart ${this.subparts[0]}`;
+        },
+
+        resourceLink: function () {
+            let qString = `${this.resources_url}\?title=${this.title}&part=${this.part}`
+
+            if (this.activePart.includes("Subpart")){
+                qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}` 
+                let sections = `${this.part}-${this.sections.join(`,${this.part}-`)}`
+                return `${qString}&section=${sections}`
+            }
+            else{
+                const selection = this.activePart.split(" ")[1].replace(".","-");
+                return `${qString}&section=${selection}`;
+            }
         },
     },
 
@@ -236,3 +262,22 @@ export default {
     },
 };
 </script>
+
+<style lang="scss">
+.resource_btn_container {
+    padding: 5px 12px 5px 0px;
+}
+.search_resource_btn {
+    width: fit-content;
+    line-height: 18px;
+    padding: 5px 12px 5px 12px;
+    border: none;
+    text-decoration: none;
+}
+a.search_resource_btn:visited{
+    color:white
+}
+a.search_resource_btn:hover{
+    color: white;
+}
+</style>
