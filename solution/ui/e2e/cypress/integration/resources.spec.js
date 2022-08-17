@@ -9,12 +9,12 @@ describe("Resources page", () => {
 
     it("renders correctly", () => {
         // THis is to prove the concept of fetching the resources not from our API, but from a cypress fixture
-        cy.intercept('*/resources/?locations=42*', {fixture:'resources.json'}).as('resources')
+        cy.intercept('**/resources/?locations=42**', {fixture:'resources.json'}).as('resources')
         cy.intercept('*v2/title/42/existing', {fixture: '42-existing.json'}).as('existing')
         cy.intercept( '*v3/toc', {fixture: 'toc.json'}).as('toc')
         cy.viewport("macbook-15");
         cy.visit("/resources");
-        //cy.wait("@resources")
+        cy.wait("@resources")
         cy.get("h1").contains('Resources')
         cy.get("h3").contains('Filter Resources')
         cy.contains("7 results in Resources")
