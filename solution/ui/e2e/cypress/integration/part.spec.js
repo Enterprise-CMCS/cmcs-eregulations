@@ -39,8 +39,27 @@ describe("Part View", () => {
         cy.get("#433-51-title").should("be.visible");
         cy.get(".latest-version").should("exist");
         cy.get("#subpart-resources-heading").contains("433.51 Resources");
+
+        cy.get(".right-sidebar").should("be.visible", "display", "none");
+
+        cy.get(".view-resources-link").should(($link) => {
+            expect($link.first()).to.be.visible;
+        });
+
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "433-51");
+        });
+    });
+
+    it("loads a subpart view in a mobile width", () => {
+        cy.viewport("iphone-x");
+        cy.visit("/42/433/");
+        cy.contains("433.51").click({ force: true });
+
+        cy.get(".right-sidebar").should("have.css", "display", "none");
+
+        cy.get(".view-resources-link").should(($link) => {
+            expect($link.first()).to.not.be.visible;
         });
     });
 
