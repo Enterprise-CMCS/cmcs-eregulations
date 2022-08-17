@@ -1,6 +1,6 @@
 describe("Resources page", () => {
     beforeEach(() => {
-        indexedDB.deleteDatabase('eregs')
+        cy.clearLocalStorage()
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] =
                 Cypress.env("DEPLOYING");
@@ -8,12 +8,13 @@ describe("Resources page", () => {
     })
 
     it("renders correctly", () => {
+        // THis is to prove the concept of fetching the resources not from our API, but from a cypress fixture
         cy.intercept('*/resources/?locations=42*', {fixture:'resources.json'}).as('resources')
         cy.intercept('*v2/title/42/existing', {fixture: '42-existing.json'}).as('existing')
         cy.intercept( '*v3/toc', {fixture: 'toc.json'}).as('toc')
         cy.viewport("macbook-15");
         cy.visit("/resources");
-        cy.wait("@resources")
+        //cy.wait("@resources")
         cy.get("h1").contains('Resources')
         cy.get("h3").contains('Filter Resources')
         cy.contains("7 results in Resources")
@@ -29,34 +30,16 @@ describe("Resources page", () => {
         cy.url().should("include", "part=433");
         cy.url().should("include", "title=42");
     })
-    it("Selects subparts correctly", () => {
-        cy.clearLocalStorage()
-        cy.intercept('*/title/42/part/433/version/latest/toc').as('TOC')
-        cy.intercept('*/title/42/part/433/version/latest/sections', {fixture:'42.433.sections.json' }).as('sections')
-        cy.intercept('*v3/resources/?&locations=42.433*', {fixture:'resources.json'}).as('resources')
-        //cy.intercept('*/resources/?*&locations=42.433*&page=4*').as('RESOURCES')
-        // /v3/title/42/part/433/version/latest/toc
+
+    it("Chips follow the URL values correctly", () => {
+        const sectionString = "433-50,433-51,433-52,433-53,433-54,433-55,433-56,433-57,433-58-433,433-66,433-67,433-68,433-70,433-72,433-74"
         cy.viewport("macbook-15");
-        cy.visit("/resources?part=433&title=42");
-        // Wait for the TOC to load
-        cy.wait(5000)
-        cy.wait('@TOC')
-        cy.wait('@resources')
-        // Then give it a second
-        //cy.wait(1000)
-        // Select subPart B
-        cy.get('#select-subparts > .v-btn__content').click({force:true});
-        cy.get('[data-value="433-B"]').click({force:true});
-        cy.url().should("include", "part=433");
-        cy.url().should("include", "title=42");
-        cy.url().should("include", "subpart=433-B");
-        // This might be brittle, but let's see how it goes
-        cy.url().should("include", "section=433-50,433-51,433-52,433-53,433-54,433-55,433-56,433-57,433-58-433,433-66,433-67,433-68,433-70,433-72,433-74");
-        // Just check on a random chip
-        cy.get(".v-chip__content").contains("§ 433.53")
+        cy.visit(`/resources?title=42&part=433&subpart=433-B&section=${sectionString}`);
+        sectionString.split(',').forEach( ss =>{
+            cy.get(".v-chip__content").contains(`§ ${ss.replace('-', '.')}`)
+        })
         // Select an additional section
-        cy.get('#select-sections > .v-btn__content').click();
-        cy.get('[data-value="433-11"]').click();
+        cy.visit("/resources?title=42&part=433&subpart=433-B&section=433-11");
         cy.url().should("include", "433-11")
         cy.get(".v-chip__content").contains("§ 433.11")
         cy.go('back')
@@ -67,7 +50,6 @@ describe("Resources page", () => {
     });
 
     it("Selects categories correctly", () => {
-        cy.clearLocalStorage()
         cy.viewport("macbook-15");
         cy.visit("/resources");
         cy.get('#select-resource-categories > .v-btn__content').click();
