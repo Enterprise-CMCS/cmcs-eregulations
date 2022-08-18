@@ -22,6 +22,16 @@ def convert_categories_to_doc_type(apps, schema_editor):
         )
 
     for doc in FederalRegisterDocument.objects.all():
+        try:
+            value = FederalRegisterCategoryLink.objects.get(category=doc.category).name
+        except FederalRegisterCategoryLink.DoesNotExist:
+            value = ""
+
+        if value == "Rule" or value == "Final Rules":
+            doc.doc_type = "Final"
+        elif value == "Proposed Rules" or value == "Proposed Rule":
+            doc.doc_type = "NPRM"
+
         doc.category = category
         doc.save()
 
@@ -33,4 +43,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(convert_categories_to_doc_type),
     ]
