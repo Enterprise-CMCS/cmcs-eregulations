@@ -70,6 +70,25 @@ export default {
     },
 
     computed: {
+         expandedType() {
+            if (this.type === "Rule" || this.type === "Final Rules") {
+                return "Final";
+            }
+            if (
+                this.type === "Proposed Rules" ||
+                (this.type === "Proposed Rule" &&
+                    this.action === "Proposed rule.")
+            ) {
+                return "NPRM";
+            }
+            if (
+                this.type === "Proposed Rule" &&
+                this.action === "Request for information."
+            ) {
+                return "RFI";
+            }
+            return "Unknown";
+        },
         ruleClasses() {
             return {
                 grouped: this.grouped,

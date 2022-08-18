@@ -48,7 +48,7 @@
                 >
                 </supplemental-content-category>
                 <template
-                    v-if="name === 'Final Rules' || name === 'Proposed Rules'"
+                    v-if="name === 'FR_Doc'"
                 >
                     <related-rule-list
                         v-if="supplemental_content"
