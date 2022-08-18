@@ -1,0 +1,1075 @@
+[
+  {
+    "type": "section",
+    "label": "§ 433.1 Purpose.",
+    "parent": [
+      "433"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "1"
+    ],
+    "label_level": "§ 433.1",
+    "parent_type": "part",
+    "descendant_range": null,
+    "label_description": "Purpose."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.8 [Reserved]",
+    "parent": [
+      "A"
+    ],
+    "reserved": true,
+    "identifier": [
+      "433",
+      "8"
+    ],
+    "label_level": "§ 433.8",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "§ 433.8 [Reserved]"
+  },
+  {
+    "type": "section",
+    "label": "§ 433.10 Rates of FFP for program services.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "10"
+    ],
+    "label_level": "§ 433.10",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Rates of FFP for program services."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.11 Enhanced FMAP rate for children.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "11"
+    ],
+    "label_level": "§ 433.11",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Enhanced FMAP rate for children."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.15 Rates of FFP for administration.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "15"
+    ],
+    "label_level": "§ 433.15",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Rates of FFP for administration."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.32 Fiscal policies and accountability.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "32"
+    ],
+    "label_level": "§ 433.32",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Fiscal policies and accountability."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.34 Cost allocation.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "34"
+    ],
+    "label_level": "§ 433.34",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Cost allocation."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.35 Equipment - Federal financial participation.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "35"
+    ],
+    "label_level": "§ 433.35",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Equipment - Federal financial participation."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.36 Liens and recoveries.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "36"
+    ],
+    "label_level": "§ 433.36",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Liens and recoveries."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.37 Reporting provider payments to Internal Revenue Service.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "37"
+    ],
+    "label_level": "§ 433.37",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Reporting provider payments to Internal Revenue Service."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.38 Interest charge on disallowed claims for FFP.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "38"
+    ],
+    "label_level": "§ 433.38",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Interest charge on disallowed claims for FFP."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.40 Treatment of uncashed or cancelled (voided) Medicaid checks.",
+    "parent": [
+      "A"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "40"
+    ],
+    "label_level": "§ 433.40",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Treatment of uncashed or cancelled (voided) Medicaid checks."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.50 Basis, scope, and applicability.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "50"
+    ],
+    "label_level": "§ 433.50",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Basis, scope, and applicability."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.51 Public Funds as the State share of financial participation.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "51"
+    ],
+    "label_level": "§ 433.51",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Public Funds as the State share of financial participation."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.52 General definitions.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "52"
+    ],
+    "label_level": "§ 433.52",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "General definitions."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.53 State plan requirements.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "53"
+    ],
+    "label_level": "§ 433.53",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "State plan requirements."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.54 Bona fide donations.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "54"
+    ],
+    "label_level": "§ 433.54",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Bona fide donations."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.55 Health care-related taxes defined.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "55"
+    ],
+    "label_level": "§ 433.55",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Health care-related taxes defined."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.56 Classes of health care services and providers defined.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "56"
+    ],
+    "label_level": "§ 433.56",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Classes of health care services and providers defined."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.57 General rules regarding revenues from provider-related donations and health care-related taxes.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "57"
+    ],
+    "label_level": "§ 433.57",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "General rules regarding revenues from provider-related donations and health care-related taxes."
+  },
+  {
+    "type": "section",
+    "label": "§§ 433.58-433.60 [Reserved]",
+    "parent": [
+      "B"
+    ],
+    "reserved": true,
+    "identifier": [
+      "433",
+      "58-433",
+      "60"
+    ],
+    "label_level": "§§ 433.58-433.60",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "§§ 433.58-433.60 [Reserved]"
+  },
+  {
+    "type": "section",
+    "label": "§ 433.66 Permissible provider-related donations.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "66"
+    ],
+    "label_level": "§ 433.66",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Permissible provider-related donations."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.67 Limitations on level of FFP for permissible provider-related donations.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "67"
+    ],
+    "label_level": "§ 433.67",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Limitations on level of FFP for permissible provider-related donations."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.68 Permissible health care-related taxes.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "68"
+    ],
+    "label_level": "§ 433.68",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Permissible health care-related taxes."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.70 Limitation on level of FFP for revenues from health care-related taxes.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "70"
+    ],
+    "label_level": "§ 433.70",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Limitation on level of FFP for revenues from health care-related taxes."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.72 Waiver provisions applicable to health care-related taxes.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "72"
+    ],
+    "label_level": "§ 433.72",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Waiver provisions applicable to health care-related taxes."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.74 Reporting requirements.",
+    "parent": [
+      "B"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "74"
+    ],
+    "label_level": "§ 433.74",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Reporting requirements."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.110 Basis, purpose, and applicability.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "110"
+    ],
+    "label_level": "§ 433.110",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Basis, purpose, and applicability."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.111 Definitions.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "111"
+    ],
+    "label_level": "§ 433.111",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Definitions."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.112 FFP for design, development, installation or enhancement of mechanized processing and information retrieval systems.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "112"
+    ],
+    "label_level": "§ 433.112",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "FFP for design, development, installation or enhancement of mechanized processing and information retrieval systems."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.114 Procedures for obtaining initial approval; notice of decision.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "114"
+    ],
+    "label_level": "§ 433.114",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Procedures for obtaining initial approval; notice of decision."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.116 FFP for operation of mechanized claims processing and information retrieval systems.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "116"
+    ],
+    "label_level": "§ 433.116",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "FFP for operation of mechanized claims processing and information retrieval systems."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.117 Initial approval of replacement systems.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "117"
+    ],
+    "label_level": "§ 433.117",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Initial approval of replacement systems."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.119 Conditions for reapproval; notice of decision.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "119"
+    ],
+    "label_level": "§ 433.119",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Conditions for reapproval; notice of decision."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.120 Procedures for reduction of FFP after reapproval review.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "120"
+    ],
+    "label_level": "§ 433.120",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Procedures for reduction of FFP after reapproval review."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.121 Reconsideration of the decision to reduce FFP after reapproval review.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "121"
+    ],
+    "label_level": "§ 433.121",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Reconsideration of the decision to reduce FFP after reapproval review."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.122 Reapproval of a disapproved system.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "122"
+    ],
+    "label_level": "§ 433.122",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Reapproval of a disapproved system."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.123 Notification of changes in system requirements, performance standards or other conditions for approval or reapproval.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "123"
+    ],
+    "label_level": "§ 433.123",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Notification of changes in system requirements, performance standards or other conditions for approval or reapproval."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.127 Termination of FFP for failure to provide access to claims processing and information retrieval systems.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "127"
+    ],
+    "label_level": "§ 433.127",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Termination of FFP for failure to provide access to claims processing and information retrieval systems."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.131 Waiver for noncompliance with conditions of approval and reapproval.",
+    "parent": [
+      "C"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "131"
+    ],
+    "label_level": "§ 433.131",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Waiver for noncompliance with conditions of approval and reapproval."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.135 Basis and purpose.",
+    "parent": [
+      "D"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "135"
+    ],
+    "label_level": "§ 433.135",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Basis and purpose."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.136 Definitions.",
+    "parent": [
+      "D"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "136"
+    ],
+    "label_level": "§ 433.136",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Definitions."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.137 State plan requirements.",
+    "parent": [
+      "D"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "137"
+    ],
+    "label_level": "§ 433.137",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "State plan requirements."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.138 Identifying liable third parties.",
+    "parent": [
+      "D"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "138"
+    ],
+    "label_level": "§ 433.138",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Identifying liable third parties."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.139 Payment of claims.",
+    "parent": [
+      "D"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "139"
+    ],
+    "label_level": "§ 433.139",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Payment of claims."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.140 FFP and repayment of Federal share.",
+    "parent": [
+      "D"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "140"
+    ],
+    "label_level": "§ 433.140",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "FFP and repayment of Federal share."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.145 Assignment of rights to benefits - State plan requirements.",
+    "parent": [
+      "ECFRb511534bf191cab"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "145"
+    ],
+    "label_level": "§ 433.145",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Assignment of rights to benefits - State plan requirements."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.146 Rights assigned; assignment method.",
+    "parent": [
+      "ECFRb511534bf191cab"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "146"
+    ],
+    "label_level": "§ 433.146",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Rights assigned; assignment method."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.147 Cooperation in establishing the identity of a child's parents and in obtaining medical support and payments and in identifying and providing information to assist in pursuing third parties who may be liable to pay.",
+    "parent": [
+      "ECFRb511534bf191cab"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "147"
+    ],
+    "label_level": "§ 433.147",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Cooperation in establishing the identity of a child's parents and in obtaining medical support and payments and in identifying and providing information to assist in pursuing third parties who may be liable to pay."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.148 Denial or termination of eligibility.",
+    "parent": [
+      "ECFRb511534bf191cab"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "148"
+    ],
+    "label_level": "§ 433.148",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Denial or termination of eligibility."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.151 Cooperative agreements and incentive payments - State plan requirements.",
+    "parent": [
+      "ECFR5408c1a1f3180e1"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "151"
+    ],
+    "label_level": "§ 433.151",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Cooperative agreements and incentive payments - State plan requirements."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.152 Requirements for cooperative agreements for third party collections.",
+    "parent": [
+      "ECFR5408c1a1f3180e1"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "152"
+    ],
+    "label_level": "§ 433.152",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Requirements for cooperative agreements for third party collections."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.153 Incentive payments to States and political subdivisions.",
+    "parent": [
+      "ECFR5408c1a1f3180e1"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "153"
+    ],
+    "label_level": "§ 433.153",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Incentive payments to States and political subdivisions."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.154 Distribution of collections.",
+    "parent": [
+      "ECFR5408c1a1f3180e1"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "154"
+    ],
+    "label_level": "§ 433.154",
+    "parent_type": "subject_group",
+    "descendant_range": null,
+    "label_description": "Distribution of collections."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.202 Scope.",
+    "parent": [
+      "E"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "202"
+    ],
+    "label_level": "§ 433.202",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Scope."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.204 Definitions.",
+    "parent": [
+      "E"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "204"
+    ],
+    "label_level": "§ 433.204",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Definitions."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.206 Threshold methodology.",
+    "parent": [
+      "E"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "206"
+    ],
+    "label_level": "§ 433.206",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Threshold methodology."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.300 Basis.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "300"
+    ],
+    "label_level": "§ 433.300",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Basis."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.302 Scope of subpart.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "302"
+    ],
+    "label_level": "§ 433.302",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Scope of subpart."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.304 Definitions.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "304"
+    ],
+    "label_level": "§ 433.304",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Definitions."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.310 Applicability of requirements.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "310"
+    ],
+    "label_level": "§ 433.310",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Applicability of requirements."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.312 Basic requirements for refunds.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "312"
+    ],
+    "label_level": "§ 433.312",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Basic requirements for refunds."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.316 When discovery of overpayment occurs and its significance.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "316"
+    ],
+    "label_level": "§ 433.316",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "When discovery of overpayment occurs and its significance."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.318 Overpayments involving providers who are bankrupt or out of business.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "318"
+    ],
+    "label_level": "§ 433.318",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Overpayments involving providers who are bankrupt or out of business."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.320 Procedures for refunds to CMS.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "320"
+    ],
+    "label_level": "§ 433.320",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Procedures for refunds to CMS."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.322 Maintenance of Records.",
+    "parent": [
+      "F"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "322"
+    ],
+    "label_level": "§ 433.322",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Maintenance of Records."
+  },
+  {
+    "type": "section",
+    "label": "§ 433.400 Continued enrollment for temporary FMAP increase.",
+    "parent": [
+      "G"
+    ],
+    "reserved": false,
+    "identifier": [
+      "433",
+      "400"
+    ],
+    "label_level": "§ 433.400",
+    "parent_type": "subpart",
+    "descendant_range": null,
+    "label_description": "Continued enrollment for temporary FMAP increase."
+  }
+]
