@@ -14,5 +14,13 @@
     "name": "Proposed Rule",
     "category": 1
   }
+},
+{
+  "model": "resources.federalregistercategorylink",
+  "pk": 3,
+  "fields": {
+    "name": "FR_Doc",
+    "category": 26
+  }
 }
 ]

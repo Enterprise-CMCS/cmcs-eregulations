@@ -11,6 +11,16 @@
 },
 {
   "model": "resources.abstractcategory",
+  "pk": 26,
+  "fields": {
+    "name": "FR_Doc",
+    "description": null,
+    "order": 0,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "resources.abstractcategory",
   "pk": 1,
   "fields": {
     "name": "Proposed Rules",
@@ -92,6 +102,11 @@
 {
   "model": "resources.category",
   "pk": 2,
+  "fields": {}
+},
+{
+  "model": "resources.category",
+  "pk": 26,
   "fields": {}
 },
 {
