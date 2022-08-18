@@ -186,7 +186,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 	doc := &eregs.FRDoc{
 		Name:           content.Name,
 		Description:    content.Description,
-		Category:       content.Category,
+		DocType:       	content.Category,
 		URL:            content.URL,
 		Date:           content.Date,
 		DocketNumbers:  content.DocketNumbers,

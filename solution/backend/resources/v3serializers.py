@@ -1,3 +1,4 @@
+from urllib import request
 from django.urls import reverse
 
 from rest_framework import serializers
@@ -183,7 +184,6 @@ class SectionCreateSerializer(serializers.ModelSerializer):
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
-    category = serializers.CharField()
     locations = SectionCreateSerializer(many=True, allow_null=True)
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
@@ -193,20 +193,28 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     date = serializers.CharField(allow_blank=True, allow_null=True)
     approved = serializers.BooleanField(required=False, default=False)
     id = serializers.CharField(required=False)
-
-    def validate_category(self, value):
+    doc_type = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    
+    def get_category(self):
         try:
-            category_link = FederalRegisterCategoryLink.objects.get(name=value)
+            category_link = FederalRegisterCategoryLink.objects.get(name="FR_Doc")
         except FederalRegisterCategoryLink.DoesNotExist:
             try:
-                category = AbstractCategory.objects.get(name=value)
+                category = AbstractCategory.objects.get(name="FR_Doc")
             except AbstractCategory.DoesNotExist:
-                category = Category.objects.create(name=value).abstractcategory_ptr
+                category = Category.objects.create(name="FR_Doc").abstractcategory_ptr
             category_link = FederalRegisterCategoryLink.objects.create(
-                name=value,
+                name="FR_Doc",
                 category=category,
             )
         return category_link.category.name
+
+    def validate_doc_type(self, value):
+        if value == "Rule" or value == "Final Rules":
+            return "Final"
+        if value == "Proposed Rules" or value == "Proposed Rule":
+            return "NPRM"
+        return value
 
     def update(self, instance, validated_data):
         # set basic fields
@@ -218,8 +226,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         instance.date = validated_data.get('date', instance.date)
         instance.approved = validated_data.get('approved', instance.approved)
         # This will work because it was validated above
-        category = AbstractCategory.objects.get(name=validated_data["category"])
-        instance.category = category
+        instance.category = AbstractCategory.objects.get(name=self.get_category())
+        instance.doc_type = validated_data.get('doc_type', instance.doc_type)
 
         # set the locations on the instance
         locations = []

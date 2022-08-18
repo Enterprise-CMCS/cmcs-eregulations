@@ -104,7 +104,6 @@ class FederalRegisterCategoryLink(models.Model):
         unique=True,
         help_text="Name of the category as sent from the Federal Register parser.",
     )
-
     category = models.ForeignKey(
         AbstractCategory,
         on_delete=models.CASCADE,
@@ -210,6 +209,11 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
+    
+    doc_type = models.CharField(
+        blank=True,
+        max_length=255
+    )
 
     group = models.ForeignKey(
         FederalRegisterDocumentGroup,

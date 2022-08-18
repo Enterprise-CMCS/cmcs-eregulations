@@ -99,9 +99,6 @@ class FederalRegisterCategoryLinkAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
-    def get_readonly_fields(self, request, obj=None):
-        return self.readonly_fields + (("name",) if obj else ())  # prevent changing name field on existing objects
-
 
 @admin.register(Category)
 class CategoryAdmin(BaseAdmin):
@@ -268,7 +265,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
                           "document_number", "category", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "group", "document_number", "name",
-              "description", "date", "url", "category", "locations", "bulk_title", "bulk_locations", "internal_notes")
+              "description", "date", "url", "category", "doc_type", "locations", "bulk_title", "bulk_locations", "internal_notes")
 
     def in_group(self, obj):
         group = str(obj.group)
