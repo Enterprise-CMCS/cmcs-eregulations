@@ -9,6 +9,10 @@ def convert_categories_to_doc_type(apps, schema_editor):
     Category = apps.get_model("resources", "Category")
     AbstractCategory = apps.get_model("resources", "AbstractCategory")
 
+    docs = FederalRegisterDocument.objects.all()
+    if len(docs) < 1:
+        return # only create FR doc category if we have existing docs in the database (i.e. in prod)
+
     try:
         category = FederalRegisterCategoryLink.objects.get(name="FR_Doc").category
     except FederalRegisterCategoryLink.DoesNotExist:
