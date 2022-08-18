@@ -1,4 +1,3 @@
-from urllib import request
 from django.urls import reverse
 
 from rest_framework import serializers
@@ -195,7 +194,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     approved = serializers.BooleanField(required=False, default=False)
     id = serializers.CharField(required=False)
     doc_type = serializers.CharField(required=False, allow_null=True, allow_blank=True)
-    
+
     def get_category(self):
         try:
             category_link = FederalRegisterCategoryLink.objects.get(name="FR_Doc")

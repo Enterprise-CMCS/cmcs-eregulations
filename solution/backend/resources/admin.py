@@ -276,6 +276,9 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
             Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
         )
 
+    def get_readonly_fields(self, request, obj=None):
+        return self.readonly_fields + (("doc_type",) if obj else ())  # prevent changing name field on existing objects
+
 
 class FederalRegisterDocumentGroupForm(forms.ModelForm):
     documents = forms.ModelMultipleChoiceField(
