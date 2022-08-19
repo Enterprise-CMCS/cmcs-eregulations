@@ -146,6 +146,8 @@ class AbstractResourceAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
+    # Overrides the save method in django admin to handle many to many relationships.
+    # Looks at the locations added in bulk uploads and adds them if allowed, sends error message if not.
     def save_related(self, request, form, formsets, change):
         bulk_locations = form.cleaned_data.get("bulk_locations")
         bulk_title = form.cleaned_data.get("bulk_title")
@@ -167,13 +169,16 @@ class AbstractResourceAdmin(BaseAdmin):
                     "The following locations were not added %s" % ((", ").join(bad_locations))
                 )
 
+    # Checks the location for the formats.  Sections will only have a split legnth of 1 or 2 and contain a "."
+    # Subparts will only be a legnth of 3 or 4.  Doesnt have to contain the word subpart based on the code.
     def build_location(self, location, default_title):
         found_location = location.split(" ")
+
         if len(found_location) == 1 or len(found_location) == 2:
-            if default_title != "":
+            if len(found_location) == 1 and default_title != "":
                 title = default_title
                 loc = location
-            else:
+            if len(found_location) == 2:
                 title = found_location[0]
                 loc = found_location[1]
             if "." in loc:
@@ -192,11 +197,11 @@ class AbstractResourceAdmin(BaseAdmin):
                 return None
 
         elif len(found_location) == 3 or len(found_location) == 4:
-            if default_title != "":
+            if len(found_location) == 3 and default_title != "":
                 title = default_title
                 part = found_location[0]
                 subpart = found_location[2]
-            else:
+            if len(found_location) == 4:
                 title = found_location[0]
                 part = found_location[1]
                 subpart = found_location[3]
@@ -208,8 +213,8 @@ class AbstractResourceAdmin(BaseAdmin):
 
         return None
 
+    # Makes sure each value is the correct format for querying the locations
     def check_values(self, title, part, section, subpart):
-
         if not title.isdigit() or not part.isdigit():
             return False
         if section != "" and not section.isdigit():
