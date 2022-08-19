@@ -26,6 +26,9 @@ describe("Print Styles", () => {
         cy.visit(destination);
 
         cy.get(".right-sidebar").should("be.visible");
+        cy.get(".view-resources-link").should(($link) => {
+            expect($link.first()).to.be.visible;
+        });
 
         cy.get("footer .print-footer").should("have.css", "display", "none");
 
@@ -35,6 +38,10 @@ describe("Print Styles", () => {
         cy.get(".right-sidebar").should("have.css", "display", "none");
         cy.get("footer .site-footer").should("have.css", "display", "none");
         cy.get(".left-sidebar").should("have.css", "display", "none");
+
+        cy.get(".view-resources-link").should(($link) => {
+            expect($link.first()).to.not.be.visible;
+        });
 
         cy.get("footer .print-footer").should("have.css", "display", "block");
 
