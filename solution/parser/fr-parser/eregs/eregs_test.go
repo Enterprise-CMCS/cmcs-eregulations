@@ -35,7 +35,7 @@ func TestSendDocument(t *testing.T) {
 			Input: FRDoc{
 				Name:        "this is a name",
 				Description: "this is a description",
-				Category:    "this is a category",
+				DocType:     "this is a doc type",
 				URL:         "https://test.gov/test",
 				Date:        "2021-01-31",
 				DocketNumbers: []string{
