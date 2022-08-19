@@ -1,5 +1,9 @@
-{% extends "regulations/base.html" %} {% load static %} {% block title %}About
-This Tool | Medicaid & CHIP eRegulations{% endblock %} {% block body %}
+{% extends "regulations/base.html" %}
+{% load static %}
+
+{% block title %}About This Tool | Medicaid & CHIP eRegulations{% endblock %}
+
+{% block body %}
 <div class="site-container">
     <main class="about">
         <h1>About This Tool</h1>
@@ -249,6 +253,8 @@ This Tool | Medicaid & CHIP eRegulations{% endblock %} {% block body %}
         </section>
     </main>
 </div>
-{% endblock %} {% block post_footer %}
+{% endblock %}
+
+{% block post_footer %}
 <script src="{% static '/js/main.build.js' %}"></script>
 {% endblock %}
