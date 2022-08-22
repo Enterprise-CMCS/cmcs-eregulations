@@ -60,9 +60,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'regulations.middleware.json_errors.JsonErrors',
-    'regulations.middleware.noindex.NoIndex',
-    'regcore.middleware.html_api.HtmlApi',
+    'regulations.middleware.JsonErrors',
+    'regulations.middleware.NoIndex',
+    'regcore.middleware.HtmlApi',
 ]
 
 REST_FRAMEWORK = {
