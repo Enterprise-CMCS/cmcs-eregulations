@@ -335,7 +335,7 @@ func TestProcessPart(t *testing.T) {
 					&fedreg.FRDoc{
 						Name:        "a name",
 						Description: "a description",
-						DocType:     "a doc type",
+						Category:    "a doc type",
 						URL:         "https://test.gov/test",
 						Date:        "2021-01-31",
 						DocketNumbers: []string{
