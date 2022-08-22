@@ -196,6 +196,12 @@
             opacity: 1;
         }
     }
+
+    .view-resources-link {
+        @include custom-max($mobile-max / 1px) {
+            display: none;
+        }
+    }
 }
 
 aside.right-sidebar {

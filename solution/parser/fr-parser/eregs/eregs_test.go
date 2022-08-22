@@ -104,7 +104,7 @@ func TestSendDocument(t *testing.T) {
 }
 
 func TestCreateSections(t *testing.T) {
-	input := []string{
+	sections := []string{
 		"443.42",
 		"1.1",
 		"443.",
@@ -114,6 +114,11 @@ func TestCreateSections(t *testing.T) {
 		"123.45",
 	}
 
+	partMap := map[string]string{
+		"443": "42",
+		"123": "45",
+	}
+
 	expected := []*Section{
 		&Section{
 			Title:   "42",
@@ -121,18 +126,13 @@ func TestCreateSections(t *testing.T) {
 			Section: "42",
 		},
 		&Section{
-			Title:   "42",
-			Part:    "1",
-			Section: "1",
-		},
-		&Section{
-			Title:   "42",
+			Title:   "45",
 			Part:    "123",
 			Section: "45",
 		},
 	}
 
-	output := CreateSections("42", input)
+	output := CreateSections(sections, partMap)
 	if diff := deep.Equal(expected, output); diff != nil {
 		t.Errorf("output not as expected: %+v", diff)
 	}

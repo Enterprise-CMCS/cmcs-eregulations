@@ -23,9 +23,7 @@ CSS/Javascript etc., should inherit from this template.
         <meta name="msvalidate.01" content="2564ADEFA9801CDF3DD1287C2109D2A9" />
         <meta name="google-site-verification" content="iNAu2rAPdykHG6aKtClENiu_fRheE-TBM4drtyCVlWk" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        {% if not allow_indexing %}
-            <meta name="robots" content="noindex" />
-        {% endif %}
+        {% if not allow_indexing %}<meta name="robots" content="noindex" />{% endif %}
         <title>
             {% block title %}
                 {{title}} CFR {{reg_part}} {% if subpart %} Subpart {{subpart}} {% endif %} | Medicaid &amp; CHIP eRegulations

@@ -1,4 +1,10 @@
 User-agent: *
 {% if allow_indexing %}Allow{% else %}Disallow{% endif %}: /
+{% if not allow_indexing %}
+User-agent: Googlebot
+Allow: /
 
+User-agent: bingbot
+Allow: /
+{% endif %}
 Sitemap: https://{{request.META.HTTP_HOST}}/sitemap.xml
