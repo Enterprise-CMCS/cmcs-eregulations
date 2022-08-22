@@ -1,5 +1,3 @@
-from django.http.response import HttpResponse
-
 from regulations.models import SiteConfiguration
 
 
