@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'regulations.middleware.json_errors.JsonErrors',
+    'regulations.middleware.noindex.NoIndex',
     'regcore.middleware.html_api.HtmlApi',
 ]
 
