@@ -7,7 +7,7 @@ describe("Resources page", () => {
         });
     })
 
-    it("renders correctly", () => {
+    it.skip("renders correctly", () => {
         // THis is to prove the concept of fetching the resources not from our API, but from a cypress fixture
         cy.intercept('**/resources/?locations=42**', {fixture:'resources.json'}).as('resources')
         cy.intercept('*v2/title/42/existing', {fixture: '42-existing.json'}).as('existing')
@@ -20,7 +20,7 @@ describe("Resources page", () => {
         cy.contains("7 results in Resources")
     });
 
-    it("Selects parts correctly", () => {
+    it.skip("Selects parts correctly", () => {
         cy.clearLocalStorage()
         cy.viewport("macbook-15");
         cy.visit("/resources");
@@ -31,7 +31,7 @@ describe("Resources page", () => {
         cy.url().should("include", "title=42");
     })
 
-    it("Chips follow the URL values correctly", () => {
+    it.skip("Chips follow the URL values correctly", () => {
         const sectionString = "433-50,433-51,433-52,433-53,433-54,433-55,433-56,433-57,433-58-433,433-66,433-67,433-68,433-70,433-72,433-74"
         cy.viewport("macbook-15");
         cy.visit(`/resources?title=42&part=433&subpart=433-B&section=${sectionString}`);
@@ -49,7 +49,7 @@ describe("Resources page", () => {
 
     });
 
-    it("Selects categories correctly", () => {
+    it.skip("Selects categories correctly", () => {
         cy.viewport("macbook-15");
         cy.visit("/resources");
         cy.get('#select-resource-categories > .v-btn__content').click();
