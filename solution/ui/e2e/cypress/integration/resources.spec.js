@@ -1,4 +1,4 @@
-describe("Resources page", () => {
+describe.skip("Resources page", () => {
     beforeEach(() => {
         cy.clearLocalStorage()
         cy.intercept("/**", (req) => {
