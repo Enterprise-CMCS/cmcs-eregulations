@@ -1,5 +1,9 @@
 <template>
-    <h1>Hello</h1>
+    <div class="pagination-controls">
+        <div class="left-control">Previous</div>
+        <div class="pages">1 2 3 4 5 ... 7</div>
+        <div class="right-control">Next</div>
+    </div>
 </template>
 
 <script>
@@ -53,6 +57,9 @@ export default {
 </script>
 
 <style>
-
+    .pagination-controls {
+        display: flex;
+        justify-content: space-between;
+    }
 </style>
 
