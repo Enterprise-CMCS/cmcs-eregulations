@@ -1,16 +1,24 @@
 <template>
     <div class="pagination-controls">
-        <div class="left-control">Previous</div>
+        <div class="left-control">
+            <NavBtn direction="back" label="Previous" />
+        </div>
         <div class="pages">1 2 3 4 5 ... 7</div>
-        <div class="right-control">Next</div>
+        <div class="right-control">
+            <NavBtn direction="forward" label="Next" />
+        </div>
     </div>
 </template>
 
 <script>
+import NavBtn from "@/components/floating_nav/NavBtn.vue";
+
 export default {
     name: "PaginationController",
 
-    components: {},
+    components: {
+        NavBtn,
+    },
 
     props: {
         propName: {
@@ -56,10 +64,18 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
     .pagination-controls {
         display: flex;
         justify-content: space-between;
+
+        .left-control .icon {
+            margin-left: 0;
+        }
+
+        .right-control .icon {
+            margin-right: 0;
+        }
     }
 </style>
 
