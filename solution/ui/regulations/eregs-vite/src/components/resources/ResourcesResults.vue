@@ -14,7 +14,7 @@
                 <div class="sort-control">
                     <span class="sort-control-label">Sort by</span>
                     <FancyDropdown
-                        :buttonTitle="sortMethodTitle"
+                        :button-title="sortMethodTitle"
                         :disabled="sortDisabled"
                     >
                         <v-list class="sort-options-list">
@@ -116,8 +116,6 @@
 </template>
 
 <script>
-import _uniqBy from "lodash/uniqBy";
-import _has from "lodash/has";
 
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
@@ -217,10 +215,9 @@ export default {
     data() {
         return {
             activeSortMethod: this.sortMethod,
-            base:
-                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-                    ? `/${import.meta.env.VITE_ENV}`
-                    : "",
+            base: (import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod")
+                ? `/${import.meta.env.VITE_ENV}`
+                : "",
         };
     },
 
