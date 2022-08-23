@@ -120,7 +120,7 @@ export default {
 
     data() {
         return {
-            isLoading: false,
+            isLoading: true,
             queryParams: this.$route.query,
             partsLastUpdated: {},
             partDict: {},
