@@ -729,7 +729,6 @@ export default {
         if (this.queryParams.q) {
             this.searchQuery = this.queryParams.q;
             this.synonyms = await this.retrieveSynonyms(this.queryParams.q)
-            this.multiWordQuery()
         }
 
         if (this.queryParams.part) {
