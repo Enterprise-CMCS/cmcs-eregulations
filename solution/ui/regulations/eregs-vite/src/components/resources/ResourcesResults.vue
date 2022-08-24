@@ -5,8 +5,8 @@
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
                 <span v-else
-                    >{{ filteredContent.length }} result<span
-                        v-if="filteredContent.length != 1"
+                    >{{ count }} result<span
+                        v-if="count != 1"
                         >s</span
                     >
                     in Resources</span
@@ -176,6 +176,11 @@ export default {
             default() {
                 return [];
             },
+        },
+        count: {
+            type: Number,
+            required: false,
+            default: 0,
         },
         isLoading: {
             type: Boolean,

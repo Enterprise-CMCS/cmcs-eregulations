@@ -66,6 +66,7 @@
                     <ResourcesResults
                         :isLoading="isLoading"
                         :content="supplementalContent"
+                        :count="supplementalContentCount"
                         :partsList="filters.part.listItems"
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
@@ -159,6 +160,7 @@ export default {
                 },
             },
             supplementalContent: [],
+            supplementalContentCount: 0,
             searchInputValue: undefined,
             sortDisabled: true,
         };
@@ -493,8 +495,7 @@ export default {
             }
             if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
-                // map over parts and return promises to put in Promise.all
-                const partPromises = await getSupplementalContentV3({
+                const responseContent = await getSupplementalContentV3({
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
@@ -502,10 +503,12 @@ export default {
                 });
 
                 try {
-                    this.supplementalContent = partPromises;
+                    this.supplementalContent = responseContent.results;
+                    this.supplementalContentCount = responseContent.count;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
+                    this.supplementalContentCount = 0;
                 } finally {
                     this.isLoading = false;
                 }
@@ -519,15 +522,17 @@ export default {
                         sortMethod,
                     });
 
-                    this.supplementalContent = searchResults;
+                    this.supplementalContent = searchResults.results;
+                    this.supplementalContentCount = searchResults.count;
                 } catch (error) {
                     console.error(error);
                     this.supplementalContent = [];
+                    this.supplementalContentCount = 0;
                 } finally {
                     this.isLoading = false;
                 }
             } else {
-                this.supplementalContent = await getSupplementalContentV3({
+                const allResults = await getSupplementalContentV3({
                     partDict: "all", // titles
                     categories: this.categories,
                     q: searchQuery,
@@ -536,7 +541,9 @@ export default {
                     paginate: false,
                     sortMethod,
                 });
-                this.isLoading = false;
+                this.supplementalContent = allResults.results;
+                this.supplementalContentCount = allResults.count;
+            this.isLoading = false;
             }
         },
         async getFormattedPartsList() {
@@ -694,6 +701,7 @@ export default {
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
                     this.supplementalContent = [];
+                    this.supplementalContentCount = 0;
 
                     return;
                 }

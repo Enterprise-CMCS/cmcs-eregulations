@@ -722,11 +722,12 @@ const getSupplementalContentV3 = async (
 ) => {
     const queryString = q ? `&q=${q}` : "";
     let sString = "";
+
     if (partDict === "all") {
         sString = `locations=42`
     }
-    else {
 
+    else {
         Object.keys(partDict).forEach(partKey => {
             const part = partDict[partKey]
             part.subparts.forEach(subPart => {
@@ -740,6 +741,7 @@ const getSupplementalContentV3 = async (
             }
         })
     }
+
     if (categories) {
         const catList = await getCategories()
         categories.forEach(category => {
@@ -752,13 +754,13 @@ const getSupplementalContentV3 = async (
     sString = `${sString}&start=${start}&max_results=${max_results}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
 
-    if (paginate) {
-        sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
-        return httpApiGetV3WithPagination(`resources/?${sString}`)
-    }
+    //if (paginate) {
+        //sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
+        //return httpApiGetV3WithPagination(`resources/?${sString}`)
+    //}
 
     const response = await httpApiGetV3(`resources/?${sString}`)
-    return response.results;
+    return response;
 
 }
 /**
