@@ -754,11 +754,7 @@ const getSupplementalContentV3 = async (
     sString = `${sString}&start=${start}&max_results=${max_results}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
 
-    //if (paginate) {
-        //sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
-        //return httpApiGetV3WithPagination(`resources/?${sString}`)
-    //}
-
+    sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     const response = await httpApiGetV3(`resources/?${sString}`)
     return response;
 

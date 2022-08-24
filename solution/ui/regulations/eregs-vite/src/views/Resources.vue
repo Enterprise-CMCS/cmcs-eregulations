@@ -176,6 +176,9 @@ export default {
         resultsResourcesClass() {
             return `results-${this.resourcesDisplay}`;
         },
+        page() {
+            return this.queryParams.page;
+        },
         searchQuery: {
             get() {
                 return this.queryParams.q || undefined;
@@ -496,6 +499,7 @@ export default {
             if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
                 const responseContent = await getSupplementalContentV3({
+                    page: this.page,
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
@@ -515,10 +519,10 @@ export default {
             } else if (searchQuery) {
                 try {
                     const searchResults = await getSupplementalContentV3({
+                        page: this.page,
                         partDict: "all", // titles
                         categories: this.categories, // subcategories
                         q: searchQuery,
-                        paginate: true,
                         sortMethod,
                     });
 
@@ -533,12 +537,12 @@ export default {
                 }
             } else {
                 const allResults = await getSupplementalContentV3({
+                    page: this.page,
                     partDict: "all", // titles
                     categories: this.categories,
                     q: searchQuery,
                     start: 0, // start
                     max_results: 100, // max_results
-                    paginate: false,
                     sortMethod,
                 });
                 this.supplementalContent = allResults.results;
