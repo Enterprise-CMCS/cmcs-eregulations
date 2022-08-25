@@ -35,16 +35,24 @@ type Section struct {
 	Section string `json:"section_id"`
 }
 
+type SectionRanges struct {
+	Title    string `json:"title"`
+	Part     string `json:"part"`
+	FirstSec string `json:"first_sec"`
+	LastSec  string `json:"last_sec"`
+}
+
 // FRDoc is eRegs' representation of Federal Register documents, including a list of sections
 type FRDoc struct {
-	Name           string     `json:"name"`
-	Description    string     `json:"description"`
-	Category       string     `json:"category"`
-	URL            string     `json:"url"`
-	Date           string     `json:"date"`
-	DocketNumbers  []string   `json:"docket_numbers"`
-	DocumentNumber string     `json:"document_number"`
-	Locations      []*Section `json:"locations"`
+	Name           string           `json:"name"`
+	Description    string           `json:"description"`
+	Category       string           `json:"category"`
+	URL            string           `json:"url"`
+	Date           string           `json:"date"`
+	DocketNumbers  []string         `json:"docket_numbers"`
+	DocumentNumber string           `json:"document_number"`
+	Locations      []*Section       `json:"locations"`
+	LocationRanges []*SectionRanges `json:"ranges`
 }
 
 // SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL
@@ -91,6 +99,43 @@ func CreateSections(s []string, pm map[string]string) []*Section {
 	}
 
 	return sections
+}
+
+func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
+	var ranges []*SectionRanges
+
+	for _, secRange := range s {
+		splitSections := strings.Split(secRange, "-")
+		if len(splitSections) != 2 || splitSections[0] == "" || splitSections[1] == "" {
+			log.Warn("[eregs] section range ", secRange, "is invalid")
+			continue
+		}
+		sections := CreateSections(splitSections, pm)
+
+		if len(sections) != 2 {
+			log.warn("[eregs] section range ", secRange, "is invalid")
+			continue
+		}
+		title, exist := pm[sections[0].Part]
+
+		if !exist {
+			log.Warn("[eregs] Section identifier ", secRange, " has no matching title.")
+			continue
+		}
+		if sections[0].Part != sections[1].Part {
+			log.Warn("[eregs] Section identifier ", secRange, " is contains different parts.")
+			continue
+		}
+		s := &SectionRanges{
+			Title:    title,
+			Part:     sections[0].Part,
+			FirstSec: sections[0].Section,
+			LastSec:  sections[1].Section,
+		}
+
+		ranges = append(ranges, s)
+	}
+	return ranges
 }
 
 // FetchDocumentList retrieves a list of URLs for each FR document already stored in Regs
