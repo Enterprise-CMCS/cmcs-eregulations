@@ -1,5 +1,5 @@
 <template>
-    <button class="direction-btn" :class="directionClass">
+    <button class="direction-btn" :class="directionClass" :disabled="isDisabled">
         <span class="label">{{ label }}</span>
         <span class="icon">
             <i class="fa" :class="chevronClass"></i>
@@ -23,7 +23,12 @@ export default {
             type: String,
             required: true,
             default: "Loading...",
-        }
+        },
+        isDisabled: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
     },
 
     computed: {

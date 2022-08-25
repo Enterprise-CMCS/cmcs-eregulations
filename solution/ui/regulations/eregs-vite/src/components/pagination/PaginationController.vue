@@ -1,18 +1,26 @@
 <template>
     <div class="pagination-controls">
         <div class="left-control">
-            <router-link
-                :to="{
-                    name: view,
-                    query: { ...$route.query, page: page - 1 },
-                }"
-            >
+            <template v-if="page == 1">
                 <NavBtn
                     direction="back"
                     label="Previous"
-                    disabled="page == 1"
+                    is-disabled
                 />
-            </router-link>
+            </template>
+            <template v-else>
+                <router-link
+                    :to="{
+                        name: view,
+                        query: { ...$route.query, page: page - 1 },
+                    }"
+                >
+                    <NavBtn
+                        direction="back"
+                        label="Previous"
+                    />
+                </router-link>
+            </template>
         </div>
         <ul class="pages">
             <li v-for="pageNum in pagesArr" :key="pageNum">
@@ -31,18 +39,26 @@
             </li>
         </ul>
         <div class="right-control">
-            <router-link
-                :to="{
-                    name: view,
-                    query: { ...$route.query, page: page + 1 },
-                }"
-            >
+            <template v-if="page == pagesArr[pagesArr.length - 1]">
                 <NavBtn
                     direction="forward"
                     label="Next"
-                    disabled="page == pagesArr[pagesArr.length - 1]"
+                    is-disabled
                 />
-            </router-link>
+            </template>
+            <template v-else>
+                <router-link
+                    :to="{
+                        name: view,
+                        query: { ...$route.query, page: page + 1 },
+                    }"
+                >
+                    <NavBtn
+                        direction="forward"
+                        label="Next"
+                    />
+                </router-link>
+            </template>
         </div>
     </div>
 </template>
