@@ -8,6 +8,8 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 
+from solo.admin import SingletonModelAdmin
+
 # Register your models here.
 
 from .models import (
@@ -21,6 +23,7 @@ from .models import (
     Section,
     Subpart,
     FederalRegisterDocumentGroup,
+    ResourcesConfiguration,
 )
 
 from .filters import (
@@ -59,6 +62,16 @@ class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
             path('export_all_json/', self.export_all_as_json),
         ]
         return my_urls + urls
+
+
+@admin.register(ResourcesConfiguration)
+class ResourcesConfigurationAdmin(SingletonModelAdmin):
+    admin_priority = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "fr_doc_category":
+            kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Section)

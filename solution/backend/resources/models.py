@@ -6,6 +6,7 @@ from django.db import models
 from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from solo.models import SingletonModel
 
 
 # Field mixins
@@ -255,3 +256,16 @@ def post_save_fr_doc_group(sender, instance, **kwargs):
 def post_save_fr_doc(sender, instance, **kwargs):
     if instance.group:
         update_related_docs(instance.group)
+
+
+# Singleton model for configuring resources app
+
+class ResourcesConfiguration(SingletonModel):
+    fr_doc_category = models.ForeignKey(AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return "Resources Configuration"
+
+    class Meta:
+        verbose_name = "Resources Configuration"
+        verbose_name_plural = "Resources Configuration"
