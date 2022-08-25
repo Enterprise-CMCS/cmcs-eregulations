@@ -184,9 +184,9 @@ export default {
             },
         },
         page: {
-            type: String,
+            type: Number,
             required: false,
-            default: "1"
+            default: 1
         },
         pageSize: {
             type: Number,

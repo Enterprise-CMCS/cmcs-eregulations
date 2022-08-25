@@ -180,7 +180,7 @@ export default {
             return `results-${this.resourcesDisplay}`;
         },
         page() {
-            return this.queryParams.page;
+            return parseInt(this.queryParams.page, 10);
         },
         searchQuery: {
             get() {

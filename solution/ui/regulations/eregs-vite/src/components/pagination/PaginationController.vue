@@ -1,7 +1,18 @@
 <template>
     <div class="pagination-controls">
         <div class="left-control">
-            <NavBtn direction="back" label="Previous" />
+            <router-link
+                :to="{
+                    name: view,
+                    query: { ...$route.query, page: page - 1 },
+                }"
+            >
+                <NavBtn
+                    direction="back"
+                    label="Previous"
+                    disabled="page == 1"
+                />
+            </router-link>
         </div>
         <ul class="pages">
             <li v-for="pageNum in pagesArr" :key="pageNum">
@@ -20,7 +31,18 @@
             </li>
         </ul>
         <div class="right-control">
-            <NavBtn direction="forward" label="Next" />
+            <router-link
+                :to="{
+                    name: view,
+                    query: { ...$route.query, page: page + 1 },
+                }"
+            >
+                <NavBtn
+                    direction="forward"
+                    label="Next"
+                    disabled="page == pagesArr[pagesArr.length - 1]"
+                />
+            </router-link>
         </div>
     </div>
 </template>
@@ -44,9 +66,9 @@ export default {
             default: 0,
         },
         page: {
-            type: String,
+            type: Number,
             required: false,
-            default: "1",
+            default: 1,
         },
         pageSize: {
             type: Number,
@@ -80,13 +102,6 @@ export default {
             return createOneIndexedArray(Math.ceil(this.count / this.pageSize));
         },
     },
-
-    methods: {
-        goToPage(e) {
-            console.log(e);
-            this.$router.push({ query: { ...this.$route.query, page: 3 } });
-        },
-    },
 };
 </script>
 
@@ -94,6 +109,10 @@ export default {
 .pagination-controls {
     display: flex;
     justify-content: space-between;
+
+    a {
+        text-decoration: none;
+    }
 
     .left-control .icon {
         margin-left: 0;
