@@ -65,6 +65,8 @@
                     />
                     <ResourcesResults
                         :isLoading="isLoading"
+                        :page="page"
+                        :page-size="pageSize"
                         :content="supplementalContent"
                         :count="supplementalContentCount"
                         :partsList="filters.part.listItems"
@@ -163,6 +165,7 @@ export default {
             supplementalContentCount: 0,
             searchInputValue: undefined,
             sortDisabled: true,
+            pageSize: "100"
         };
     },
 
@@ -500,6 +503,7 @@ export default {
                 this.getPartDict(dataQueryParams);
                 const responseContent = await getSupplementalContentV3({
                     page: this.page,
+                    page_size: this.pageSize,
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
@@ -520,6 +524,7 @@ export default {
                 try {
                     const searchResults = await getSupplementalContentV3({
                         page: this.page,
+                        page_size: this.pageSize,
                         partDict: "all", // titles
                         categories: this.categories, // subcategories
                         q: searchQuery,
@@ -536,8 +541,10 @@ export default {
                     this.isLoading = false;
                 }
             } else {
+                console.log("this is now");
                 const allResults = await getSupplementalContentV3({
                     page: this.page,
+                    page_size: this.pageSize,
                     partDict: "all", // titles
                     categories: this.categories,
                     q: searchQuery,

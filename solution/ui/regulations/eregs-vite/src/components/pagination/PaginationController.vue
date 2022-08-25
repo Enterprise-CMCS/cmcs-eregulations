@@ -3,7 +3,22 @@
         <div class="left-control">
             <NavBtn direction="back" label="Previous" />
         </div>
-        <div class="pages">1 2 3 4 5 ... 7</div>
+        <ul class="pages">
+            <li v-for="pageNum in pagesArr" :key="pageNum">
+                <router-link
+                    v-if="page != pageNum"
+                    :to="{
+                        name: view,
+                        query: { ...$route.query, page: pageNum },
+                    }"
+                >
+                    {{ pageNum }}
+                </router-link>
+                <span v-else class="current-page">
+                    {{ pageNum }}
+                </span>
+            </li>
+        </ul>
         <div class="right-control">
             <NavBtn direction="forward" label="Next" />
         </div>
@@ -11,7 +26,9 @@
 </template>
 
 <script>
-import NavBtn from "@/components/floating_nav/NavBtn.vue";
+import NavBtn from "@/components/navigation/NavBtn.vue";
+
+import { createOneIndexedArray } from "@/utilities/utils";
 
 export default {
     name: "PaginationController",
@@ -21,7 +38,22 @@ export default {
     },
 
     props: {
-        propName: {
+        count: {
+            type: Number,
+            required: false,
+            default: 0,
+        },
+        page: {
+            type: String,
+            required: false,
+            default: "1",
+        },
+        pageSize: {
+            type: Number,
+            required: false,
+            default: 100,
+        },
+        view: {
             type: String,
             required: true,
         },
@@ -43,39 +75,37 @@ export default {
 
     destroyed() {},
 
-    data() {
-        return {
-            dataProp: "value",
-        }
-    },
-
     computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
+        pagesArr() {
+            return createOneIndexedArray(Math.ceil(this.count / this.pageSize));
         },
     },
 
     methods: {
-        methodName() {
-            console.log("method has been invoked");
+        goToPage(e) {
+            console.log(e);
+            this.$router.push({ query: { ...this.$route.query, page: 3 } });
         },
     },
-
-}
+};
 </script>
 
 <style lang="scss">
-    .pagination-controls {
-        display: flex;
-        justify-content: space-between;
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
 
-        .left-control .icon {
-            margin-left: 0;
-        }
-
-        .right-control .icon {
-            margin-right: 0;
-        }
+    .left-control .icon {
+        margin-left: 0;
     }
-</style>
 
+    .right-control .icon {
+        margin-right: 0;
+    }
+
+    ul.pages li {
+        display: inline;
+        list-style: none;
+    }
+}
+</style>

@@ -8,8 +8,9 @@
                     >{{ count }} result<span
                         v-if="count != 1"
                         >s</span
-                    >
-                    in Resources</span
+                    > {{ filteredContent.length }} array count in Resources
+                     Page {{ page }}
+                    </span
                 >
                 <div class="sort-control">
                     <span class="sort-control-label">Sort by</span>
@@ -111,7 +112,12 @@
                             </div>
                         </div>
                     </template>
-                    <PaginationController />
+                    <PaginationController
+                        :count="count"
+                        :page="page"
+                        :page-size="pageSize"
+                        view="resources"
+                    />
                 </template>
             </div>
         </div>
@@ -176,6 +182,16 @@ export default {
             default() {
                 return [];
             },
+        },
+        page: {
+            type: String,
+            required: false,
+            default: "1"
+        },
+        pageSize: {
+            type: Number,
+            required: false,
+            default: 100,
         },
         count: {
             type: Number,
