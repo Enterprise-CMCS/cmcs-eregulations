@@ -98,6 +98,7 @@ func start() error {
 	if err != nil {
 		return fmt.Errorf("failed to retrieve configuration: %+v", err)
 	}
+	parseConfig(config)
 
 	start := time.Now()
 	failed := 0
@@ -118,7 +119,7 @@ func start() error {
 	if failed > 0 {
 		return fmt.Errorf("the following titles failed to parse: %s", failedTitles)
 	}
-	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(part))
+	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(start))
 	return nil
 }
 
@@ -130,8 +131,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 	toc, code, err := eregs.GetTitle(ctx, title.Title)
 	if err != nil {
 		if code != http.StatusNotFound {
-			log.Error("[main] Failed to retrieve existing table of contents for title ", title.Title, ". Error code is ", code, ", so processing of this title will be skipped. Error: ", err)
-			continue
+			return fmt.Errorf("failed to retrieve existing table of contents for title %s. Error code is %d, so processing of this title will be skipped. Error: %+v", title.Title, code, err)
 		}
 		log.Info("[main] Received 404 while trying to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one.")
 	}
@@ -185,7 +185,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 	// Create list of versions to process
 	partList := list.New()
 	skippedVersions := 0
-	versions := 0
+	numVersions := 0
 	for _, part := range parts {
 		versionList := list.New()
 
@@ -215,7 +215,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 			}
 
 			versionList.PushBack(version)
-			versions++
+			numVersions++
 		}
 
 		if versionList.Len() > 0 {
@@ -229,11 +229,11 @@ func parseTitle(title *eregs.TitleConfig) error {
 		log.Info("[main] Skipped ", skippedVersions, " versions of title ", title.Title, " because they were parsed previously")
 		result.SkippedVersions = skippedVersions
 	}
-	result.TotalVersions = versions
+	result.TotalVersions = numVersions
 
 	// Spawn worker threads that parse versions in the queue
 	// Then wait for worker threads to quit
-	log.Info("[main] Fetching and processing ", versions, " versions using ", config.Workers, " workers...")
+	log.Info("[main] Fetching and processing ", numVersions, " versions using ", config.Workers, " workers...")
 	ch := make(chan *list.List)
 	var wg sync.WaitGroup
 	for worker := 1; worker < config.Workers+1; worker++ {
@@ -269,7 +269,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 		}
 	}
 
-	log.Info("[main] Successfully processed ", processed, "/", versions, " versions of title ", title.Title, " in ", time.Since(start))
+	log.Info("[main] Successfully processed ", processed, "/", numVersions, " versions of title ", title.Title, " in ", time.Since(start))
 	if len(failed) > 0 {
 		return fmt.Errorf("the following versions failed to process: %s", strings.Join(failed, ", "))
 	}
@@ -287,7 +287,7 @@ func startVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg 
 			processingAttempts++
 			version := versionElement.Value.(*eregs.Part)
 			log.Debug("[worker ", thread, "] Processing part ", version.Name, " version ", version.Date)
-			err := HandlePartVersionFunc(ctx, thread, version)
+			err := HandleVersionFunc(ctx, thread, version)
 			if err == nil {
 				version.Processed = true
 				processedVersions++
@@ -302,7 +302,7 @@ func startVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg 
 	wg.Done()
 }
 
-func handlePartVersion(ctx context.Context, thread int, version *eregs.Part) error {
+func handleVersion(ctx context.Context, thread int, version *eregs.Part) error {
 	start := time.Now()
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", version.Name, " version ", version.Date)
