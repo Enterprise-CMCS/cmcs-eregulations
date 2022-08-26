@@ -35,7 +35,7 @@ type Section struct {
 	Section string `json:"section_id"`
 }
 
-// Represents a range of sections in the eregs supplemental content
+// SectionRanges represents a range of sections in the eregs supplemental content
 type SectionRanges struct {
 	Title    string `json:"title"`
 	Part     string `json:"part"`
