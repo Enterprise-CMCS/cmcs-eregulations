@@ -103,13 +103,13 @@ func start() error {
 	start := time.Now()
 	failed := 0
 	processed := 0
-	failedTitles := ""
+	failedTitles := []string{}
 
 	for _, title := range config.Titles {
 		if err := ParseTitleFunc(title); err != nil {
 			failed++
 			log.Error("[main] Failed to parse title ", title.Title, ": ", err)
-			failedTitles = fmt.Sprintf("%s, %d", failedTitles, title.Title)
+			failedTitles = append(failedTitles, fmt.Sprintf("%d", title.Title))
 		} else {
 			processed++
 		}
@@ -117,7 +117,7 @@ func start() error {
 
 	log.Info("[main] Successfully parsed ", processed, "/", len(config.Titles), " titles.")
 	if failed > 0 {
-		return fmt.Errorf("the following titles failed to parse: %s", failedTitles)
+		return fmt.Errorf("the following titles failed to parse: %s", strings.Join(failedTitles, ", "))
 	}
 	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(start))
 	return nil
