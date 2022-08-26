@@ -85,6 +85,7 @@
 
 <script>
 import _isEmpty from "lodash/isEmpty";
+import _isUndefined from "lodash/isUndefined";
 import _uniq from "lodash/uniq";
 
 import ResourcesNav from "@/components/resources/ResourcesNav.vue";
@@ -180,7 +181,9 @@ export default {
             return `results-${this.resourcesDisplay}`;
         },
         page() {
-            return parseInt(this.queryParams.page, 10);
+            return _isUndefined(this.queryParams.page)
+                ? this.queryParams.page
+                : parseInt(this.queryParams.page, 10);
         },
         searchQuery: {
             get() {
@@ -541,7 +544,6 @@ export default {
                     this.isLoading = false;
                 }
             } else {
-                console.log("this is now");
                 const allResults = await getSupplementalContentV3({
                     page: this.page,
                     page_size: this.pageSize,
