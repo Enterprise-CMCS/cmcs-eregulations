@@ -58,7 +58,8 @@ export default {
             return this.pagesArray.slice(1, 5);
         },
         shortMiddlePages() {
-            // slice of three pages surrounding current page
+            // three-page slice of page before current page,
+            // current page, and page after current page
             return this.pagesArray.slice(
                 this.currentPage - 2,
                 this.currentPage + 1
@@ -69,29 +70,25 @@ export default {
             return this.pagesArray.slice(1, -1);
         },
         backFour() {
-            // slice of last five pages
+            // slice of n - 5 to n - 1
             return this.pagesArray.slice(-5, -1);
         },
         lastPage() {
             return this.pagesArray[this.pagesArray.length - 1];
         },
         iterablePages() {
-            if (this.pagesArray.length > 7 && this.currentPage < 5) {
-                return this.frontFour;
-            }
+            if (this.pagesArray.length > 7) {
+                if (this.currentPage < 5) {
+                    return this.frontFour;
+                }
 
-            if (
-                this.pagesArray.length > 7 &&
-                this.pagesArray.length - 3 <= this.currentPage
-            ) {
-                return this.backFour;
-            }
+                if (this.pagesArray.length - 3 <= this.currentPage) {
+                    return this.backFour;
+                }
 
-            if (
-                this.pagesArray.length > 7 &&
-                this.pagesArray.length > this.currentPage
-            ) {
-                return this.shortMiddlePages;
+                if (this.pagesArray.length > this.currentPage) {
+                    return this.shortMiddlePages;
+                }
             }
 
             return this.allMiddlePages;
@@ -108,6 +105,6 @@ export default {
 
 <style lang="scss" scoped>
 ul.pages {
-    padding: 0;
+    padding-left: 0;
 }
 </style>
