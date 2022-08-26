@@ -90,7 +90,6 @@ func TestParseConfig(t *testing.T) {
 			Name: "test-valid-config",
 			Input: eregs.ParserConfig{
 				Workers:            3,
-				Attempts:           4,
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -98,7 +97,6 @@ func TestParseConfig(t *testing.T) {
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            3,
-				Attempts:           4,
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -109,7 +107,6 @@ func TestParseConfig(t *testing.T) {
 			Name: "test-bad-config",
 			Input: eregs.ParserConfig{
 				Workers:            -1,
-				Attempts:           -2,
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -117,7 +114,6 @@ func TestParseConfig(t *testing.T) {
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            1,
-				Attempts:           1,
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -153,7 +149,6 @@ func TestStart(t *testing.T) {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{
 				"workers": 3,
-				"attempts": 3,
 				"loglevel": "trace",
 				"upload_supplemental_locations": true,
 				"log_parse_errors": false,
@@ -176,81 +171,6 @@ func TestStart(t *testing.T) {
 					}
 				]
 			}`))
-		} else if r.URL.Path == "/title/42" {
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
-				"id": 1,
-				"name": "42",
-				"last_updated": "2022-03-21T17:09:10.628069",
-				"toc": {
-				  "type": "title",
-				  "label": "Title 42 - Public Health",
-				  "children": [
-					{
-					  "type": "chapter",
-					  "label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
-					  "children": [
-						{
-						  "type": "subchapter",
-						  "label": "Subchapter A - General Provisions",
-						  "children": [
-							{
-							  "type": "part",
-							  "label": "Part 400 - Introduction; Definitions",
-							  "children": null,
-							  "reserved": false,
-							  "identifier": [
-								"400"
-							  ],
-							  "label_level": "Part 400",
-							  "descendant_range": [
-								"400.200",
-								"400.203"
-							  ],
-							  "label_description": "Introduction; Definitions"
-							}
-						  ],
-						  "reserved": false,
-						  "identifier": [
-							"A"
-						  ],
-						  "label_level": "Subchapter A",
-						  "descendant_range": [
-							"400",
-							"404"
-						  ],
-						  "label_description": "General Provisions"
-						}
-					  ],
-					  "reserved": false,
-					  "identifier": [
-						"IV"
-					  ],
-					  "label_level": " Chapter IV",
-					  "descendant_range": [
-						"400",
-						"699"
-					  ],
-					  "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
-					}
-				  ],
-				  "reserved": false,
-				  "identifier": [
-					"42"
-				  ],
-				  "label_level": "Title 42",
-				  "descendant_range": [
-					"null"
-				  ],
-				  "label_description": "Public Health"
-				}
-			  }`))
-		} else if r.URL.Path == "/title/43" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(`{ "exception": "404 not found!" }`))
-		} else if r.URL.Path == "/title/44" {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Something happened!" }`))
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{ "exception": "Invalid path '` + r.URL.Path + `'" }`))
@@ -261,37 +181,22 @@ func TestStart(t *testing.T) {
 
 	testTable := []struct {
 		Name           string
-		ParseTitleFunc func(*eregs.TitleConfig) (bool, error)
+		ParseTitleFunc func(*eregs.TitleConfig) error
 		Error          bool
 	}{
 		{
-			Name: "test-valid",
-			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
-				return false, nil
+			Name: "test-success",
+			ParseTitleFunc: func(title *eregs.TitleConfig) error {
+				return nil
 			},
 			Error: false,
 		},
 		{
-			Name: "test-retry-fail",
-			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
-				return true, fmt.Errorf("something bad happened")
+			Name: "test-failure",
+			ParseTitleFunc: func(title *eregs.TitleConfig) error {
+				return fmt.Errorf("something bad happened")
 			},
 			Error: true,
-		},
-		{
-			Name: "test-total-failure",
-			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
-				return false, fmt.Errorf("something REALLY bad happened")
-			},
-			Error: true,
-		},
-		{
-			Name: "test-toc-modified",
-			ParseTitleFunc: func(title *eregs.TitleConfig) (bool, error) {
-				title.Contents.Modified = true
-				return false, nil
-			},
-			Error: false,
 		},
 	}
 
@@ -310,7 +215,6 @@ func TestStart(t *testing.T) {
 
 func TestParseTitle(t *testing.T) {
 	config.SkipVersions = true
-	config.Attempts = 3
 	config.Workers = 3
 
 	SleepFunc = func(t time.Duration) {}
@@ -459,27 +363,101 @@ func TestParseTitle(t *testing.T) {
 			return
 		}
 
-		path := strings.Split(r.URL.Path, "/")
-		if len(path) < 4 {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Invalid path length '` + r.URL.Path + `'" }`))
-			return
-		}
-
-		if path[2] == "42" {
+		if r.URL.Path == "/title/42" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`[
-				{
-					"date": "2019-01-01",
-					"partName": [
-						"433"
-					]
+			w.Write([]byte(`{
+				"id": 1,
+				"name": "42",
+				"last_updated": "2022-03-21T17:09:10.628069",
+				"toc": {
+				  "type": "title",
+				  "label": "Title 42 - Public Health",
+				  "children": [
+					{
+					  "type": "chapter",
+					  "label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
+					  "children": [
+						{
+						  "type": "subchapter",
+						  "label": "Subchapter A - General Provisions",
+						  "children": [
+							{
+							  "type": "part",
+							  "label": "Part 400 - Introduction; Definitions",
+							  "children": null,
+							  "reserved": false,
+							  "identifier": [
+								"400"
+							  ],
+							  "label_level": "Part 400",
+							  "descendant_range": [
+								"400.200",
+								"400.203"
+							  ],
+							  "label_description": "Introduction; Definitions"
+							}
+						  ],
+						  "reserved": false,
+						  "identifier": [
+							"A"
+						  ],
+						  "label_level": "Subchapter A",
+						  "descendant_range": [
+							"400",
+							"404"
+						  ],
+						  "label_description": "General Provisions"
+						}
+					  ],
+					  "reserved": false,
+					  "identifier": [
+						"IV"
+					  ],
+					  "label_level": " Chapter IV",
+					  "descendant_range": [
+						"400",
+						"699"
+					  ],
+					  "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
+					}
+				  ],
+				  "reserved": false,
+				  "identifier": [
+					"42"
+				  ],
+				  "label_level": "Title 42",
+				  "descendant_range": [
+					"null"
+				  ],
+				  "label_description": "Public Health"
 				}
-			]`))
+			  }`))
+		} else if r.URL.Path == "/title/43" {
+			w.WriteHeader(http.StatusNotFound)
+			w.Write([]byte(`{ "exception": "404 not found!" }`))
 		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Unrecognized title" }`))
-			return
+			path := strings.Split(r.URL.Path, "/")
+			if len(path) < 4 {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "Invalid path length '` + r.URL.Path + `'" }`))
+				return
+			}
+
+			if path[2] == "42" {
+				w.WriteHeader(http.StatusOK)
+				w.Write([]byte(`[
+					{
+						"date": "2019-01-01",
+						"partName": [
+							"433"
+						]
+					}
+				]`))
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(`{ "exception": "Unrecognized title" }`))
+				return
+			}
 		}
 	}))
 	defer eregsServer.Close()
@@ -487,7 +465,7 @@ func TestParseTitle(t *testing.T) {
 
 	var WorkerFunc func(*eregs.Part)
 
-	StartHandlePartVersionWorkerFunc = func(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
+	StartVersionWorkerFunc = func(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
 		for versionList := range ch {
 			for versionElement := versionList.Front(); versionElement != nil; versionElement = versionElement.Next() {
 				version := versionElement.Value.(*eregs.Part)
@@ -501,7 +479,6 @@ func TestParseTitle(t *testing.T) {
 		Name       string
 		WorkerFunc func(*eregs.Part)
 		Input      eregs.TitleConfig
-		Retry      bool
 		Error      bool
 	}{
 		{
@@ -519,7 +496,6 @@ func TestParseTitle(t *testing.T) {
 					Contents: &ecfr.Structure{},
 				},
 			},
-			Retry: false,
 			Error: false,
 		},
 		{
@@ -537,7 +513,6 @@ func TestParseTitle(t *testing.T) {
 					Contents: &ecfr.Structure{},
 				},
 			},
-			Retry: false,
 			Error: true,
 		},
 		{
@@ -553,7 +528,6 @@ func TestParseTitle(t *testing.T) {
 					Contents: &ecfr.Structure{},
 				},
 			},
-			Retry: false,
 			Error: true,
 		},
 		{
@@ -569,7 +543,23 @@ func TestParseTitle(t *testing.T) {
 					Contents: &ecfr.Structure{},
 				},
 			},
-			Retry: false,
+			Error: true,
+		},
+		{
+			Name: "test-no-toc",
+			WorkerFunc: func(version *eregs.Part) {
+				return
+			},
+			Input: eregs.TitleConfig{
+				Title:       43,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"IV", "C"},
+				},
+				Parts:       eregs.PartList{"433"},
+				Contents: &eregs.Title{
+					Contents: &ecfr.Structure{},
+				},
+			},
 			Error: true,
 		},
 		{
@@ -587,7 +577,6 @@ func TestParseTitle(t *testing.T) {
 					Contents: &ecfr.Structure{},
 				},
 			},
-			Retry: false,
 			Error: true,
 		},
 	}
@@ -595,12 +584,9 @@ func TestParseTitle(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			WorkerFunc = tc.WorkerFunc
-			retry, err := parseTitle(&tc.Input)
+			err := parseTitle(&tc.Input)
 			if err != nil && !tc.Error {
 				t.Errorf("received unexpected error (%+v)", err)
-				if retry != tc.Retry {
-					t.Errorf("retry should be (%t), is (%t)", tc.Retry, retry)
-				}
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received none")
 			}
@@ -641,19 +627,19 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 	testTable := []struct {
 		Name                  string
 		ShouldProcess         bool
-		HandlePartVersionFunc func(context.Context, int, *eregs.Part) error
+		HandleVersionFunc func(context.Context, int, *eregs.Part) error
 	}{
 		{
 			Name:          "test-valid-run",
 			ShouldProcess: true,
-			HandlePartVersionFunc: func(ctx context.Context, thread int, part *eregs.Part) error {
+			HandleVersionFunc: func(ctx context.Context, thread int, part *eregs.Part) error {
 				return nil
 			},
 		},
 		{
 			Name:          "test-fail-run",
 			ShouldProcess: false,
-			HandlePartVersionFunc: func(ctx context.Context, thread int, part *eregs.Part) error {
+			HandleVersionFunc: func(ctx context.Context, thread int, part *eregs.Part) error {
 				return fmt.Errorf("Oops something bad happened")
 			},
 		},
@@ -661,7 +647,7 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-			HandlePartVersionFunc = tc.HandlePartVersionFunc
+			HandleVersionFunc = tc.HandleVersionFunc
 
 			parts := list.New()
 			for _, part := range input {
@@ -678,7 +664,7 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 
 			var wg sync.WaitGroup
 			wg.Add(1)
-			go startHandlePartVersionWorker(ctx, 1, ch, &wg)
+			go startVersionWorker(ctx, 1, ch, &wg)
 			for versionList := parts.Front(); versionList != nil; versionList = versionList.Next() {
 				ch <- versionList.Value.(*list.List)
 			}
@@ -1006,7 +992,7 @@ func TestHandlePartVersion(t *testing.T) {
 		t.Run(tc.Name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
-			err := handlePartVersion(ctx, 1, &tc.Input)
+			err := handleVersion(ctx, 1, &tc.Input)
 			diff := deep.Equal(tc.Input.Document, tc.Expected.Document)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)

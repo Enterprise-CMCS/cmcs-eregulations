@@ -131,7 +131,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 	toc, code, err := eregs.GetTitle(ctx, title.Title)
 	if err != nil {
 		if code != http.StatusNotFound {
-			return fmt.Errorf("failed to retrieve existing table of contents for title %s. Error code is %d, so processing of this title will be skipped. Error: %+v", title.Title, code, err)
+			return fmt.Errorf("failed to retrieve existing table of contents for title %d. Error code is %d, so processing of this title will be skipped. Error: %+v", title.Title, code, err)
 		}
 		log.Info("[main] Received 404 while trying to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one.")
 	}
@@ -147,7 +147,6 @@ func parseTitle(title *eregs.TitleConfig) error {
 		Title:    title.Title,
 		Parts:    strings.Join(title.Parts[:], ","),
 		Workers:  config.Workers,
-		Attempts: config.Attempts,
 	}
 	defer eregs.PostParserResult(ctx, &result)
 
