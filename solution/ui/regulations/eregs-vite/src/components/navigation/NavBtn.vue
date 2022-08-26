@@ -44,7 +44,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .direction-btn {
     border: none;
     background: none;
@@ -62,6 +62,11 @@ export default {
 
     .icon {
         margin: 0 10px;
+    }
+
+    &:disabled {
+        color: $mid_gray_3;
+        cursor: default;
     }
 }
 

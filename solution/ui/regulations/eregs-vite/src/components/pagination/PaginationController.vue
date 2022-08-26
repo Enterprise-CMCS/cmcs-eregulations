@@ -1,5 +1,5 @@
 <template>
-    <div class="pagination-controls">
+    <nav class="pagination-controls">
         <div class="left-control">
             <template v-if="page == 1">
                 <NavBtn
@@ -60,7 +60,7 @@
                 </router-link>
             </template>
         </div>
-    </div>
+    </nav>
 </template>
 
 <script>
@@ -121,10 +121,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .pagination-controls {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     a {
         text-decoration: none;
