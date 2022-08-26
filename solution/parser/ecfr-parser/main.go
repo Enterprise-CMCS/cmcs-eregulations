@@ -30,10 +30,10 @@ var DefaultBaseURL = "http://localhost:8000/v2/"
 
 // Functions for easy testing via patching
 var (
-	ParseTitleFunc = parseTitle
+	ParseTitleFunc         = parseTitle
 	StartVersionWorkerFunc = startVersionWorker
-	HandleVersionFunc = handleVersion
-	SleepFunc = time.Sleep
+	HandleVersionFunc      = handleVersion
+	SleepFunc              = time.Sleep
 )
 
 var config = &eregs.ParserConfig{}
@@ -143,10 +143,10 @@ func parseTitle(title *eregs.TitleConfig) error {
 	start := time.Now()
 
 	result := eregs.ParserResult{
-		Start:    start.Format(time.RFC3339),
-		Title:    title.Title,
-		Parts:    strings.Join(title.Parts[:], ","),
-		Workers:  config.Workers,
+		Start:   start.Format(time.RFC3339),
+		Title:   title.Title,
+		Parts:   strings.Join(title.Parts[:], ","),
+		Workers: config.Workers,
 	}
 	defer eregs.PostParserResult(ctx, &result)
 
@@ -223,7 +223,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 
 		partList.PushBack(versionList)
 	}
-	
+
 	if skippedVersions > 0 {
 		log.Info("[main] Skipped ", skippedVersions, " versions of title ", title.Title, " because they were parsed previously")
 		result.SkippedVersions = skippedVersions

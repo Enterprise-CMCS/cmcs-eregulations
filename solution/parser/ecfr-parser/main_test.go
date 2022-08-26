@@ -551,11 +551,11 @@ func TestParseTitle(t *testing.T) {
 				return
 			},
 			Input: eregs.TitleConfig{
-				Title:       43,
+				Title: 43,
 				Subchapters: eregs.SubchapterList{
 					eregs.SubchapterArg{"IV", "C"},
 				},
-				Parts:       eregs.PartList{"433"},
+				Parts: eregs.PartList{"433"},
 				Contents: &eregs.Title{
 					Contents: &ecfr.Structure{},
 				},
@@ -625,8 +625,8 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 	}
 
 	testTable := []struct {
-		Name                  string
-		ShouldProcess         bool
+		Name              string
+		ShouldProcess     bool
 		HandleVersionFunc func(context.Context, int, *eregs.Part) error
 	}{
 		{
