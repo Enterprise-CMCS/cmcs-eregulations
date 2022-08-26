@@ -72,14 +72,6 @@ class ParserConfiguration(SingletonModel):
             message="Number of workers must be at least 1!",
         )],
     )
-    attempts = models.IntegerField(
-        default=3,
-        help_text="Number of times to retry parsing if it fails to complete.",
-        validators=[MinValueValidator(
-            limit_value=1,
-            message="Number of attempts must be at least 1!"
-        )],
-    )
     loglevel = models.CharField(
         max_length=5,
         choices=LOGLEVEL_CHOICES,
@@ -143,7 +135,6 @@ class AbstractParserResult(models.Model):
     subchapters = models.TextField(blank=True)
     parts = models.TextField(blank=True)
     workers = models.IntegerField()
-    attempts = models.IntegerField()
 
 
 class ECFRParserResult(AbstractParserResult):

@@ -270,7 +270,6 @@ func TestPostParserResult(t *testing.T) {
 		Parts:           "1,2,3",
 		Subchapters:     "A,B,C",
 		Workers:         3,
-		Attempts:        5,
 		Errors:          0,
 		TotalVersions:   100,
 		SkippedVersions: 99,

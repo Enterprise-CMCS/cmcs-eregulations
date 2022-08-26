@@ -51,7 +51,6 @@ type ParserResult struct {
 	Start           string `json:"start"`
 	End             string `json:"end"`
 	Workers         int    `json:"workers,string"`
-	Attempts        int    `json:"attempts,string"`
 	Parts           string `json:"parts"`
 	Subchapters     string `json:"subchapters"`
 	SkippedVersions int    `json:"skippedVersions,string"`

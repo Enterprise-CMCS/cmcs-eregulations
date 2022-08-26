@@ -167,7 +167,6 @@ class ParserConfigurationSerializer(serializers.ModelSerializer):
         model = ParserConfiguration
         fields = (
             "workers",
-            "attempts",
             "loglevel",
             "upload_supplemental_locations",
             "log_parse_errors",
