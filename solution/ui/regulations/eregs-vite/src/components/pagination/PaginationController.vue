@@ -15,22 +15,7 @@
                 </router-link>
             </template>
         </div>
-        <ul class="pages">
-            <li v-for="pageNum in pagesArr" :key="pageNum">
-                <router-link
-                    v-if="page != pageNum"
-                    :to="{
-                        name: view,
-                        query: { ...$route.query, page: pageNum },
-                    }"
-                >
-                    <PageNumber :number="pageNum" />
-                </router-link>
-                <span v-else class="current-page">
-                    <PageNumber :number="pageNum" selected />
-                </span>
-            </li>
-        </ul>
+        <PagesList :current-page="page" :pages-array="pagesArr" />
         <div class="right-control">
             <template v-if="page == pagesArr[pagesArr.length - 1]">
                 <NavBtn direction="forward" label="Next" is-disabled />
@@ -50,7 +35,7 @@
 </template>
 
 <script>
-import PageNumber from "@/components/pagination/PageNumber.vue";
+import PagesList from "@/components/pagination/PagesList.vue";
 import NavBtn from "@/components/navigation/NavBtn.vue";
 
 import { createOneIndexedArray } from "@/utilities/utils";
@@ -124,23 +109,6 @@ nav.pagination-controls {
 
     .right-control .icon {
         margin-right: 0;
-    }
-
-    ul.pages {
-        padding: 0;
-
-        li {
-            display: inline-block;
-            list-style: none;
-            width: 44px;
-            text-align: center;
-
-            a {
-                &:visited {
-                    color: $mid_blue;
-                }
-            }
-        }
     }
 }
 </style>

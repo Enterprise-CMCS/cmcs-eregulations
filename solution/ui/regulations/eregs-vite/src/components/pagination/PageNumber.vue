@@ -1,7 +1,22 @@
 <template>
-    <span class="page-number" :class="numberClasses">
-        {{ number }}
-    </span>
+    <li class="page-number-li">
+        <router-link
+            v-if="currentPage != number"
+            :to="{
+                name: view,
+                query: { ...$route.query, page: number },
+            }"
+        >
+            <span class="page-number" :class="numberClasses">
+                {{ number }}
+            </span>
+        </router-link>
+        <span v-else class="current-page">
+            <span class="page-number" :class="numberClasses">
+                {{ number }}
+            </span>
+        </span>
+    </li>
 </template>
 
 <script>
@@ -11,15 +26,15 @@ export default {
     components: {},
 
     props: {
-        number: {
+        currentPage: {
             type: Number,
             required: false,
             default: 1,
         },
-        selected: {
-            type: Boolean,
+        number: {
+            type: Number,
             required: false,
-            default: false,
+            default: 1,
         },
     },
 
@@ -42,14 +57,12 @@ export default {
     data() {
         return {
             dataProp: "value",
-        }
+        };
     },
 
     computed: {
         numberClasses() {
-            return {
-                selected: this.selected,
-            };
+            return this.currentPage == this.number ? "selected" : "unselected";
         },
     },
 
@@ -58,18 +71,30 @@ export default {
             console.log("method has been invoked");
         },
     },
-
-}
+};
 </script>
 
 <style lang="scss" scoped>
-.page-number {
-    min-width: 44px;
+li.page-number-li {
+    display: inline-block;
+    list-style: none;
+    width: 44px;
+    text-align: center;
 
-    &.selected {
-        font-weight: bold;
+    a {
+        text-decoration: none;
+
+        &:visited {
+            color: $mid_blue;
+        }
+    }
+
+    .page-number {
+        min-width: 44px;
+
+        &.selected {
+            font-weight: bold;
+        }
     }
 }
-
 </style>
-
