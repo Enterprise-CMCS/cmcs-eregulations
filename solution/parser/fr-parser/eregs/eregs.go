@@ -113,7 +113,7 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 		sections := CreateSections(splitSections, pm)
 
 		if len(sections) != 2 {
-			log.warn("[eregs] section range ", secRange, "is invalid")
+			log.Warn("[eregs] section range ", secRange, "is invalid")
 			continue
 		}
 		title, exist := pm[sections[0].Part]

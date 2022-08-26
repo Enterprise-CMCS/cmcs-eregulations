@@ -467,14 +467,14 @@ func TestProcessPart(t *testing.T) {
 func TestProcessDocument(t *testing.T) {
 	testTable := []struct {
 		Name              string
-		FetchSectionsFunc func(context.Context, string, map[string]struct{}) ([]string, map[string]string, error)
+		FetchSectionsFunc func(context.Context, string, map[string]struct{}) ([]string, []string, map[string]string, error)
 		SendDocumentFunc  func(context.Context, *eregs.FRDoc) error
 		Error             bool
 	}{
 		{
 			Name: "test-send",
-			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
-				return []string{"433.12", "12.1", "1.1"}, map[string]string{"433": "42", "12": "42", "1": "45"}, nil
+			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, []string, map[string]string, error) {
+				return []string{"433.12", "12.1", "1.1"}, nil, map[string]string{"433": "42", "12": "42", "1": "45"}, nil
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
 				return nil
@@ -483,8 +483,8 @@ func TestProcessDocument(t *testing.T) {
 		},
 		{
 			Name: "test-fetch-sections-failure",
-			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
-				return nil, nil, fmt.Errorf("this is expected")
+			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, []string, map[string]string, error) {
+				return nil, nil, nil, fmt.Errorf("this is expected")
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
 				if len(doc.Locations) != 0 {
@@ -496,8 +496,8 @@ func TestProcessDocument(t *testing.T) {
 		},
 		{
 			Name: "test-send-document-failure",
-			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
-				return []string{"433.12", "12.1", "1.1"}, map[string]string{"433": "42", "12": "42", "1": "45"}, nil
+			FetchSectionsFunc: func(ctx context.Context, path string, titles map[string]struct{}) ([]string, []string, map[string]string, error) {
+				return []string{"433.12", "12.1", "1.1"}, nil, map[string]string{"433": "42", "12": "42", "1": "45"}, nil
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
 				return fmt.Errorf("this is expected")

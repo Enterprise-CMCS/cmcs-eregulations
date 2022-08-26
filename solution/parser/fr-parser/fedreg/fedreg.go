@@ -90,7 +90,7 @@ type XMLQuery struct {
 
 // FetchSections pulls the full document from the Federal Register and extracts all SECTNO tags
 // Returns a list of sections and a map of parts => titles
-func FetchSections(ctx context.Context, path string, titles map[string]struct{}) ([]string, [][]string, map[string]string, error) {
+func FetchSections(ctx context.Context, path string, titles map[string]struct{}) ([]string, []string, map[string]string, error) {
 	reader, err := fetch(ctx, path)
 	if err != nil {
 		return nil, nil, nil, err
@@ -98,7 +98,7 @@ func FetchSections(ctx context.Context, path string, titles map[string]struct{})
 
 	cfrs := make(map[string]string)
 	var sections []string
-	var ranges [][]string
+	var ranges []string
 
 	d := xml.NewDecoder(reader)
 	for {
@@ -132,7 +132,7 @@ func FetchSections(ctx context.Context, path string, titles map[string]struct{})
 					section, sectionRanges, err := extractSection(l.Loc)
 					if err != nil {
 						log.Warn("[fedreg] ", err)
-					} else if sectionRanges != nil {
+					} else if sectionRanges != "" {
 						ranges = append(ranges, sectionRanges)
 					} else {
 						sections = append(sections, section)
@@ -145,19 +145,18 @@ func FetchSections(ctx context.Context, path string, titles map[string]struct{})
 	return sections, ranges, cfrs, nil
 }
 
-func extractSection(input string) (string, []string, error) {
+func extractSection(input string) (string, string, error) {
 	rangePat := regexp.MustCompile(`\d+\.\d+-\d+\.\d+`)
 	pat := regexp.MustCompile(`\d+\.\d+`)
 	r := rangePat.FindString(input)
 	if r != "" {
-		splitLocations := strings.Split(input, "-")
-		return "", splitLocations, nil
+		return "", input, nil
 	}
 	s := pat.FindString(input)
 	if s == "" {
-		return s, nil, fmt.Errorf("failed to extract section from %s", input)
+		return s, "", fmt.Errorf("failed to extract section from %s", input)
 	}
-	return s, nil, nil
+	return s, "", nil
 }
 
 func extractCFR(input string) (string, []string, error) {
