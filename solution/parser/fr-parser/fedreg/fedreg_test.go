@@ -393,10 +393,12 @@ func TestFetchSections(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			sections, partMap, err := FetchSections(ctx, server.URL, titleMap)
+			sections, sectionRanges, partMap, err := FetchSections(ctx, server.URL, titleMap)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received sections (%+v), part map (%+v)", sections, partMap)
+			} else if sectionRanges != nil {
 				t.Errorf("expected error, received sections (%+v), part map (%+v)", sections, partMap)
 			} else {
 				if diff := deep.Equal(sections, tc.Sections); diff != nil {
@@ -445,14 +447,17 @@ func TestExtractSection(t *testing.T) {
 
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
-			output, err := extractSection(tc.Input)
+			output, ranges, err := extractSection(tc.Input)
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received (%s)", output)
 			} else if diff := deep.Equal(output, tc.Output); diff != nil {
 				t.Errorf("output not as expected: (%+v)", diff)
+			} else if ranges != "" {
+				t.Errorf("output not as expected: (%+v)", diff)
 			}
+
 		})
 	}
 }
