@@ -2,11 +2,7 @@
     <nav class="pagination-controls">
         <div class="left-control">
             <template v-if="page == 1">
-                <NavBtn
-                    direction="back"
-                    label="Previous"
-                    is-disabled
-                />
+                <NavBtn direction="back" label="Previous" is-disabled />
             </template>
             <template v-else>
                 <router-link
@@ -15,10 +11,7 @@
                         query: { ...$route.query, page: page - 1 },
                     }"
                 >
-                    <NavBtn
-                        direction="back"
-                        label="Previous"
-                    />
+                    <NavBtn direction="back" label="Previous" />
                 </router-link>
             </template>
         </div>
@@ -31,20 +24,16 @@
                         query: { ...$route.query, page: pageNum },
                     }"
                 >
-                    {{ pageNum }}
+                    <PageNumber :number="pageNum" />
                 </router-link>
                 <span v-else class="current-page">
-                    {{ pageNum }}
+                    <PageNumber :number="pageNum" selected />
                 </span>
             </li>
         </ul>
         <div class="right-control">
             <template v-if="page == pagesArr[pagesArr.length - 1]">
-                <NavBtn
-                    direction="forward"
-                    label="Next"
-                    is-disabled
-                />
+                <NavBtn direction="forward" label="Next" is-disabled />
             </template>
             <template v-else>
                 <router-link
@@ -53,10 +42,7 @@
                         query: { ...$route.query, page: page + 1 },
                     }"
                 >
-                    <NavBtn
-                        direction="forward"
-                        label="Next"
-                    />
+                    <NavBtn direction="forward" label="Next" />
                 </router-link>
             </template>
         </div>
@@ -64,6 +50,7 @@
 </template>
 
 <script>
+import PageNumber from "@/components/pagination/PageNumber.vue";
 import NavBtn from "@/components/navigation/NavBtn.vue";
 
 import { createOneIndexedArray } from "@/utilities/utils";
@@ -122,7 +109,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.pagination-controls {
+nav.pagination-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -139,9 +126,21 @@ export default {
         margin-right: 0;
     }
 
-    ul.pages li {
-        display: inline;
-        list-style: none;
+    ul.pages {
+        padding: 0;
+
+        li {
+            display: inline-block;
+            list-style: none;
+            width: 44px;
+            text-align: center;
+
+            a {
+                &:visited {
+                    color: $mid_blue;
+                }
+            }
+        }
     }
 }
 </style>

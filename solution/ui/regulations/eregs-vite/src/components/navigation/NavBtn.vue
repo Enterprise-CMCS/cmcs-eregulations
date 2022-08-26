@@ -61,7 +61,7 @@ export default {
     }
 
     .icon {
-        margin: 0 10px;
+        margin: 0 10px -2px;
     }
 
     &:disabled {
@@ -73,6 +73,10 @@ export default {
 .forward-btn {
     flex-direction: row;
 
+    .icon {
+        margin-right: 0px;
+    }
+
     .label {
         padding-left: 10px;
     }
@@ -80,6 +84,10 @@ export default {
 
 .back-btn {
     flex-direction: row-reverse;
+
+    .icon {
+        margin-left: 0px;
+    }
 
     .label {
         padding-right: 10px;
