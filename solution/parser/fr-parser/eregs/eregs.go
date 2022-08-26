@@ -35,6 +35,7 @@ type Section struct {
 	Section string `json:"section_id"`
 }
 
+// Represents a range of sections in the eregs supplemental content
 type SectionRanges struct {
 	Title    string `json:"title"`
 	Part     string `json:"part"`
@@ -101,6 +102,7 @@ func CreateSections(s []string, pm map[string]string) []*Section {
 	return sections
 }
 
+// CreateSectionRanges get a list of ranges and converts them into the range objects
 func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 	var ranges []*SectionRanges
 
