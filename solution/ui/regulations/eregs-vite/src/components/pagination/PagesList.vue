@@ -1,10 +1,29 @@
 <template>
     <ul class="pages">
         <PageNumber
-            v-for="pageNum in pagesArray"
+            v-if="pagesArray.length > 0"
+            :current-page="currentPage"
+            :number="firstPage"
+        />
+        <span v-if="pagesArray.length > 7 && currentPage > 4" class="ellipses">
+            …
+        </span>
+        <PageNumber
+            v-for="pageNum in iterablePages"
             :key="pageNum"
             :current-page="currentPage"
             :number="pageNum"
+        />
+        <span
+            v-if="pagesArray.length > 7 && pagesArray.length > currentPage + 3"
+            class="ellipses"
+        >
+            …
+        </span>
+        <PageNumber
+            v-if="pagesArray.length > 1"
+            :current-page="currentPage"
+            :number="lastPage"
         />
     </ul>
 </template>
@@ -30,31 +49,52 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
     computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
+        firstPage() {
+            return this.pagesArray[0];
+        },
+        frontFour() {
+            // slice of pages 2 through 5
+            return this.pagesArray.slice(1, 5);
+        },
+        shortMiddlePages() {
+            // slice of three pages surrounding current page
+            return this.pagesArray.slice(
+                this.currentPage - 2,
+                this.currentPage + 1
+            );
+        },
+        allMiddlePages() {
+            // slice of all pages between first and last page
+            return this.pagesArray.slice(1, -1);
+        },
+        backFour() {
+            // slice of last five pages
+            return this.pagesArray.slice(-5, -1);
+        },
+        lastPage() {
+            return this.pagesArray[this.pagesArray.length - 1];
+        },
+        iterablePages() {
+            if (this.pagesArray.length > 7 && this.currentPage < 5) {
+                return this.frontFour;
+            }
+
+            if (
+                this.pagesArray.length > 7 &&
+                this.pagesArray.length - 3 <= this.currentPage
+            ) {
+                return this.backFour;
+            }
+
+            if (
+                this.pagesArray.length > 7 &&
+                this.pagesArray.length > this.currentPage
+            ) {
+                return this.shortMiddlePages;
+            }
+
+            return this.allMiddlePages;
         },
     },
 
