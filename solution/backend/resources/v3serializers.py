@@ -72,6 +72,13 @@ class CategorySerializer(serializers.Serializer):
     description = serializers.CharField()
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
+    is_fr_doc_category = serializers.SerializerMethodField()
+
+    def get_is_fr_doc_category(self, obj):
+        try:
+            return obj.is_fr_doc_category
+        except:
+            return False
 
 
 class SubCategorySerializer(OptionalFieldDetailsMixin, CategorySerializer):

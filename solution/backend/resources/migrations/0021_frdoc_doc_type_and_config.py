@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             name='ResourcesConfiguration',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fr_doc_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='resources.abstractcategory', help_text='The category that contains Federal Register Documents. This affects all newly uploaded Federal Register Documents.')),
+                ('fr_doc_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='resources.abstractcategory', related_name='fr_doc_category_config', help_text='The category that contains Federal Register Documents. This affects all newly uploaded Federal Register Documents.')),
             ],
             options={
                 'verbose_name': 'Resources Configuration',

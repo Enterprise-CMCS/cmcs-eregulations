@@ -241,6 +241,7 @@ class ResourcesConfiguration(SingletonModel):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name="fr_doc_category_config",
         help_text="The category that contains Federal Register Documents. This affects "
                   "all newly uploaded Federal Register Documents.",
     )

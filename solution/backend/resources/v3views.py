@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.core.exceptions import BadRequest
-from django.db.models import Prefetch, Q, Case, When, F
+from django.db.models import Prefetch, Q, Case, When, F, BooleanField, ExpressionWrapper
 from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
@@ -77,6 +77,13 @@ class OptionalPaginationMixin:
         return ViewSetPagination if paginate else None
 
 
+class AnnotateCategoriesMixin:
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            is_fr_doc_category=ExpressionWrapper(~Q(fr_doc_category_config=None), output_field=BooleanField()),
+        )
+
+
 @extend_schema(
     description="Retrieve a flat list of all categories. Pagination is disabled by default.",
     parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS + [
@@ -85,10 +92,10 @@ class OptionalPaginationMixin:
     ],
     responses=SubCategorySerializer,
 )
-class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+class CategoryViewSet(AnnotateCategoriesMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
-    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").order_by("order")
     serializer_class = AbstractCategoryPolymorphicSerializer
+    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").order_by("order")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -101,10 +108,12 @@ class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
                 "Pagination is disabled by default.",
     parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS,
 )
-class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+class CategoryTreeViewSet(AnnotateCategoriesMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
     queryset = Category.objects.all().select_subclasses().prefetch_related(
-        Prefetch("sub_categories", SubCategory.objects.all().order_by("order")),
+        Prefetch("sub_categories", SubCategory.objects.all().order_by("order").annotate(
+            is_fr_doc_category=ExpressionWrapper(~Q(fr_doc_category_config=None), output_field=BooleanField()),
+        )),
     ).order_by("order")
     serializer_class = CategoryTreeSerializer
 
