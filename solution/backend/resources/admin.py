@@ -15,7 +15,6 @@ from solo.admin import SingletonModelAdmin
 from .models import (
     SupplementalContent,
     FederalRegisterDocument,
-    FederalRegisterCategoryLink,
     AbstractCategory,
     Category,
     SubCategory,
@@ -97,20 +96,6 @@ class SubpartAdmin(BaseAdmin):
     list_display = ("title", "part", "subpart_id")
     search_fields = ["title", "part", "subpart_id"]
     ordering = ("title", "part", "subpart_id")
-
-
-@admin.register(FederalRegisterCategoryLink)
-class FederalRegisterCategoryLinkAdmin(BaseAdmin):
-    admin_priority = 100
-
-    foreignkey_lookups = {
-        "category": lambda: AbstractCategory.objects.all().select_subclasses(),
-    }
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related(
-            Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
-        )
 
 
 @admin.register(Category)

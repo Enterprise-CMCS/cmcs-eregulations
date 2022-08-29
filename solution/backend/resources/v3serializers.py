@@ -8,7 +8,6 @@ from .models import (
     SubCategory,
     Section,
     Subpart,
-    FederalRegisterCategoryLink,
     SupplementalContent,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,

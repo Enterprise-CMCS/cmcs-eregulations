@@ -95,31 +95,6 @@ class SubCategory(AbstractCategory):
         verbose_name_plural = "Sub-categories"
 
 
-# Federal Register Category Link
-# For FR parser to translate internal names to categories
-
-
-class FederalRegisterCategoryLink(models.Model):
-    name = models.CharField(
-        max_length=512,
-        unique=True,
-        help_text="Name of the category as sent from the Federal Register parser.",
-    )
-    category = models.ForeignKey(
-        AbstractCategory,
-        on_delete=models.CASCADE,
-        related_name="federal_register_category_link",
-        help_text="The eRegs category to translate a Federal Register category into.",
-    )
-
-    def __str__(self):
-        return f"FR category \"{self.name}\" ➔ eRegs category \"{self.category}\""
-
-    class Meta:
-        verbose_name = "Federal Register Category Link"
-        verbose_name_plural = "Federal Register Category Links"
-
-
 # Location models
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
 
