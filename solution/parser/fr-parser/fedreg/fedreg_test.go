@@ -417,30 +417,42 @@ func TestExtractSection(t *testing.T) {
 		Name   string
 		Input  string
 		Output string
+		Ranges string
 		Error  bool
 	}{
 		{
 			Name:   "test-valid",
 			Input:  "§ 430.12",
 			Output: "430.12",
+			Ranges: "",
 			Error:  false,
 		},
 		{
 			Name:   "test-invisible-space",
 			Input:  "§ㅤ430.11",
 			Output: "430.11",
+			Ranges: "",
 			Error:  false,
 		},
 		{
 			Name:   "test-invalid",
 			Input:  "§ 430",
 			Output: "",
+			Ranges: "",
 			Error:  true,
 		},
 		{
 			Name:   "test-no-symbol",
 			Input:  "430.10",
 			Output: "430.10",
+			Ranges: "",
+			Error:  false,
+		},
+		{
+			Name:   "test-ranges",
+			Input:  "430.10-430.20",
+			Output: "",
+			Ranges: "430.10-430.20",
 			Error:  false,
 		},
 	}
@@ -454,8 +466,8 @@ func TestExtractSection(t *testing.T) {
 				t.Errorf("expected error, received (%s)", output)
 			} else if diff := deep.Equal(output, tc.Output); diff != nil {
 				t.Errorf("output not as expected: (%+v)", diff)
-			} else if ranges != "" {
-				t.Errorf("output not as expected: (%+v)", diff)
+			} else if ranges != tc.Ranges && ranges != "" {
+				t.Errorf("rangegs not as expected: (%+v)", ranges)
 			}
 
 		})

@@ -150,7 +150,7 @@ func extractSection(input string) (string, string, error) {
 	pat := regexp.MustCompile(`\d+\.\d+`)
 	r := rangePat.FindString(input)
 	if r != "" {
-		return "", input, nil
+		return "", r, nil
 	}
 	s := pat.FindString(input)
 	if s == "" {
