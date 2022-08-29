@@ -497,11 +497,13 @@ export default {
 
         async getSupplementalContent(dataQueryParams, searchQuery, sortMethod) {
             this.isLoading = true;
+
             if (dataQueryParams.resourceCategory) {
                 this.categories = dataQueryParams.resourceCategory.split(",");
             } else {
                 this.categories = [];
             }
+
             if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
                 const responseContent = await getSupplementalContentV3({
