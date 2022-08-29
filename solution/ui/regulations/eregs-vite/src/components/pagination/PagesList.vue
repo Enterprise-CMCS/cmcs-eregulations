@@ -1,31 +1,42 @@
 <template>
-    <ul class="pages">
-        <PageNumber
-            v-if="pagesArray.length > 0"
-            :current-page="currentPage"
-            :number="firstPage"
-        />
-        <span v-if="pagesArray.length > 7 && currentPage > 4" class="ellipses">
-            …
-        </span>
-        <PageNumber
-            v-for="pageNum in iterablePages"
-            :key="pageNum"
-            :current-page="currentPage"
-            :number="pageNum"
-        />
-        <span
-            v-if="pagesArray.length > 7 && pagesArray.length > currentPage + 3"
-            class="ellipses"
-        >
-            …
-        </span>
-        <PageNumber
-            v-if="pagesArray.length > 1"
-            :current-page="currentPage"
-            :number="lastPage"
-        />
-    </ul>
+    <div class="list-container">
+        <ul class="pages desktop-list">
+            <PageNumber
+                v-if="pagesArray.length > 0"
+                :current-page="currentPage"
+                :number="firstPage"
+            />
+            <span
+                v-if="pagesArray.length > 7 && currentPage > 4"
+                class="ellipses"
+            >
+                …
+            </span>
+            <PageNumber
+                v-for="pageNum in iterablePages"
+                :key="pageNum"
+                :current-page="currentPage"
+                :number="pageNum"
+            />
+            <span
+                v-if="
+                    pagesArray.length > 7 && pagesArray.length > currentPage + 3
+                "
+                class="ellipses"
+            >
+                …
+            </span>
+            <PageNumber
+                v-if="pagesArray.length > 1"
+                :current-page="currentPage"
+                :number="lastPage"
+            />
+        </ul>
+        <div class="mobile-list">
+            Page <span class="mobile-page-number">{{ currentPage }}</span> of
+            <span class="mobile-page-number">{{ lastPage }}</span>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -104,7 +115,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ul.pages {
+.list-container ul.pages {
     padding-left: 0;
+}
+
+.desktop-list {
+    @include custom-max($mobile-max / 1px) {
+        display: none;
+    }
+}
+
+.mobile-list {
+    @include screen-md {
+        display: none;
+    }
+
+    .mobile-page-number {
+        font-weight: bold;
+    }
 }
 </style>
