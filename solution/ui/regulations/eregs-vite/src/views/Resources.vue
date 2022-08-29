@@ -258,7 +258,8 @@ export default {
             this.$router.push({
                 name: "resources",
                 query: {
-                    ...this.filterParams,
+                    ...this.queryParams,
+                    q: undefined,
                 },
             });
         },
@@ -267,7 +268,7 @@ export default {
             this.$router.push({
                 name: "resources",
                 query: {
-                    ...this.filterParams,
+                    ...this.queryParams,
                     q: `"${this.searchQuery}"`,
                 },
             });
