@@ -1,22 +1,22 @@
 [
 {
   "model": "resources.abstractcategory",
+  "pk": 26,
+  "fields": {
+    "name": "Federal Register Docs",
+    "description": null,
+    "order": 0,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "resources.abstractcategory",
   "pk": 2,
   "fields": {
     "name": "Final Rules",
     "description": "Final regulatory policy decision by the agency",
     "order": 0,
     "show_if_empty": true
-  }
-},
-{
-  "model": "resources.abstractcategory",
-  "pk": 26,
-  "fields": {
-    "name": "FR_Doc",
-    "description": null,
-    "order": 0,
-    "show_if_empty": false
   }
 },
 {
@@ -101,12 +101,12 @@
 },
 {
   "model": "resources.category",
-  "pk": 2,
+  "pk": 26,
   "fields": {}
 },
 {
   "model": "resources.category",
-  "pk": 26,
+  "pk": 2,
   "fields": {}
 },
 {
