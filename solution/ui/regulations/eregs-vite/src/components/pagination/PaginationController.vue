@@ -1,6 +1,6 @@
 <template>
-    <nav class="pagination-controls">
-        <div class="left-control">
+    <nav class="pagination-controls" aria-label="Pagination">
+        <div class="pagination-control left-control">
             <template v-if="page == 1">
                 <NavBtn direction="back" label="Previous" is-disabled />
             </template>
@@ -16,7 +16,7 @@
             </template>
         </div>
         <PagesList :current-page="page" :pages-array="pagesArr" />
-        <div class="right-control">
+        <div class="pagination-control right-control">
             <template v-if="page == pagesArr[pagesArr.length - 1]">
                 <NavBtn direction="forward" label="Next" is-disabled />
             </template>
@@ -103,12 +103,21 @@ nav.pagination-controls {
         text-decoration: none;
     }
 
+    .pagination-control {
+        min-width: 85px;
+    }
+
     .left-control .icon {
         margin-left: 0;
     }
 
-    .right-control .icon {
-        margin-right: 0;
+    .right-control {
+        display: flex;
+        justify-content: end;
+
+        .icon {
+            margin-right: 0;
+        }
     }
 }
 </style>
