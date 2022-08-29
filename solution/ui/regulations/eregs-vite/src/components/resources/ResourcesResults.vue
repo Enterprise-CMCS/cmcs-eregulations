@@ -4,14 +4,10 @@
             <hr class="top-rule" />
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
-                <span v-else
-                    >{{ count }} result<span
-                        v-if="count != 1"
-                        >s</span
-                    > {{ filteredContent.length }} array count in Resources
-                     Page {{ page }}
-                    </span
-                >
+                <span v-else>
+                    <span v-if="count > 0">{{ currentPageResultsRange[0] }} - {{ currentPageResultsRange[1] }} of</span>
+                    {{ count }} result<span v-if="count != 1">s</span> in Resources
+                </span>
                 <div class="sort-control">
                     <span class="sort-control-label">Sort by</span>
                     <FancyDropdown
@@ -72,7 +68,8 @@
                                 <SupplementalContentObject
                                     :name="item.name"
                                     :description="
-                                        item.descriptionHeadline || item.description
+                                        item.descriptionHeadline ||
+                                        item.description
                                     "
                                     :date="item.date"
                                     :url="item.url"
@@ -85,9 +82,13 @@
                                         >s</span
                                     >:
                                 </span>
-                                <span v-if="item.locations.length > 1">§§ </span>
+                                <span v-if="item.locations.length > 1"
+                                    >§§
+                                </span>
                                 <span v-else>§ </span>
-                                <template v-for="(location, i) in item.locations">
+                                <template
+                                    v-for="(location, i) in item.locations"
+                                >
                                     <span
                                         :key="location.display_name + i"
                                         class="related-section-link"
@@ -104,7 +105,11 @@
                                         >
                                             {{ location | locationLabel }}
                                         </a>
-                                        <span v-if="i + 1 != item.locations.length">
+                                        <span
+                                            v-if="
+                                                i + 1 != item.locations.length
+                                            "
+                                        >
                                             |
                                         </span>
                                     </span>
@@ -125,7 +130,6 @@
 </template>
 
 <script>
-
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
@@ -186,7 +190,7 @@ export default {
         page: {
             type: Number,
             required: false,
-            default: 1
+            default: 1,
         },
         pageSize: {
             type: Number,
@@ -240,9 +244,10 @@ export default {
     data() {
         return {
             activeSortMethod: this.sortMethod,
-            base: (import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod")
-                ? `/${import.meta.env.VITE_ENV}`
-                : "",
+            base:
+                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
+                    ? `/${import.meta.env.VITE_ENV}`
+                    : "",
         };
     },
 
@@ -268,6 +273,18 @@ export default {
                 value: key,
                 disabled: this.disabledSortOptions.includes(key),
             }));
+        },
+        currentPageResultsRange() {
+            const maxInRange = this.page * this.pageSize;
+            const minInRange = maxInRange - this.pageSize;
+
+            const firstInRange = minInRange + 1;
+            const lastInRange =
+                maxInRange > this.count
+                    ? (this.count % this.pageSize) + minInRange
+                    : maxInRange;
+
+            return [firstInRange, lastInRange];
         },
     },
 
