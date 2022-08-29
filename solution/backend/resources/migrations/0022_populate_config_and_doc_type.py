@@ -3,27 +3,29 @@
 from django.db import migrations
 
 
-def convert_categories_to_doc_type(apps, schema_editor):
+def populate_config_and_doctype(apps, schema_editor):
     FederalRegisterCategoryLink = apps.get_model("resources", "FederalRegisterCategoryLink")
     FederalRegisterDocument = apps.get_model("resources", "FederalRegisterDocument")
     Category = apps.get_model("resources", "Category")
     AbstractCategory = apps.get_model("resources", "AbstractCategory")
-
+    ResourcesConfiguration = apps.get_model("resources", "ResourcesConfiguration")
+    
+    config = (ResourcesConfiguration.objects.create()
+                if len(ResourcesConfiguration.objects.all()) < 1
+                else ResourceConfiguration.objects.first())
+    
     docs = FederalRegisterDocument.objects.all()
     if len(docs) < 1:
         return # only create FR doc category if we have existing docs in the database (i.e. in prod)
 
-    try:
-        category = FederalRegisterCategoryLink.objects.get(name="FR_Doc").category
-    except FederalRegisterCategoryLink.DoesNotExist:
+    if not config.fr_doc_category:
         try:
-            category = AbstractCategory.objects.get(name="FR_Doc")
+            category = AbstractCategory.objects.get(name="Federal Register Docs")
         except AbstractCategory.DoesNotExist:
-            category = Category.objects.create(name="FR_Doc").abstractcategory_ptr
-        FederalRegisterCategoryLink.objects.create(
-            name="FR_Doc",
-            category=category,
-        )
+            category = Category.objects.create(name="Federal Register Docs")
+        config.fr_doc_category = category
+        config.save()
+    category = config.fr_doc_category
 
     for doc in FederalRegisterDocument.objects.all():
         try:
@@ -43,9 +45,9 @@ def convert_categories_to_doc_type(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0021_federalregisterdocument_doc_type'),
+        ('resources', '0021_frdoc_doc_type_and_config'),
     ]
 
     operations = [
-        migrations.RunPython(convert_categories_to_doc_type),
+        migrations.RunPython(populate_config_and_doctype),
     ]

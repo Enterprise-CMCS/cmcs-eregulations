@@ -12,6 +12,7 @@ from .models import (
     SupplementalContent,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
+    ResourcesConfiguration,
 )
 
 
@@ -196,18 +197,16 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     doc_type = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     def get_category(self):
-        try:
-            category_link = FederalRegisterCategoryLink.objects.get(name="FR_Doc")
-        except FederalRegisterCategoryLink.DoesNotExist:
+        config = ResourcesConfiguration.objects.first()
+        category = config.fr_doc_category
+        if not category:
             try:
-                category = AbstractCategory.objects.get(name="FR_Doc")
+                category = AbstractCategory.objects.get(name="Federal Register Docs")
             except AbstractCategory.DoesNotExist:
-                category = Category.objects.create(name="FR_Doc").abstractcategory_ptr
-            category_link = FederalRegisterCategoryLink.objects.create(
-                name="FR_Doc",
-                category=category,
-            )
-        return category_link.category.name
+                category = Category.objects.create(name="Federal Register Docs")
+            config.fr_doc_category = category
+            config.save()
+        return category
 
     def validate_doc_type(self, value):
         if value == "Rule" or value == "Final Rules":
@@ -225,9 +224,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         instance.document_number = validated_data.get('document_number', instance.document_number)
         instance.date = validated_data.get('date', instance.date)
         instance.approved = validated_data.get('approved', instance.approved)
-        # This will work because it was validated above
-        instance.category = AbstractCategory.objects.get(name=self.get_category())
         instance.doc_type = validated_data.get('doc_type', instance.doc_type)
+        instance.category = self.get_category()
 
         # set the locations on the instance
         locations = []

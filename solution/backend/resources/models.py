@@ -261,11 +261,17 @@ def post_save_fr_doc(sender, instance, **kwargs):
 # Singleton model for configuring resources app
 
 class ResourcesConfiguration(SingletonModel):
-    fr_doc_category = models.ForeignKey(AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL)
+    fr_doc_category = models.ForeignKey(
+        AbstractCategory,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        help_text="The category that contains Federal Register Documents. This affects "
+                  "all newly uploaded Federal Register Documents.",
+    )
 
     def __str__(self):
         return "Resources Configuration"
 
     class Meta:
         verbose_name = "Resources Configuration"
-        verbose_name_plural = "Resources Configuration"
