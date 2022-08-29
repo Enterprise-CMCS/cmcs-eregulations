@@ -1,8 +1,6 @@
 <template>
     <body class="ds-base">
         <div id="app" class="resources-view">
-
-
             <ResourcesNav :aboutUrl="aboutUrl">
                 <form
                     class="search-resources-form"
@@ -165,7 +163,7 @@ export default {
             supplementalContent: [],
             supplementalContentCount: 0,
             searchInputValue: undefined,
-            sortDisabled: true,
+            sortDisabled: false,
             pageSize: "100"
         };
     },
@@ -709,7 +707,9 @@ export default {
                 if (
                     _isEmpty(newParams.part) &&
                     _isEmpty(newParams.q) &&
-                    _isEmpty(newParams.resourceCategory)
+                    _isEmpty(newParams.resourceCategory) &&
+                    _isEmpty(newParams.sort) &&
+                    _isUndefined(newParams.page)
                 ) {
                     // only get content if a part is selected or there's a search query
                     // don't make supp content request here, but clear lists
@@ -760,10 +760,6 @@ export default {
                 this.queryParams.part,
                 this.queryParams.subpart
             );
-        }
-
-        if (!_isEmpty(this.queryParams)) {
-            this.sortDisabled = false;
         }
 
         this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
