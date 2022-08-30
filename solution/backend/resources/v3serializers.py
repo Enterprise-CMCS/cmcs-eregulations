@@ -77,7 +77,7 @@ class CategorySerializer(serializers.Serializer):
     def get_is_fr_doc_category(self, obj):
         try:
             return obj.is_fr_doc_category
-        except:
+        except Exception:
             return False
 
 
