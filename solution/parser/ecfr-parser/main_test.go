@@ -547,9 +547,7 @@ func TestParseTitle(t *testing.T) {
 		},
 		{
 			Name: "test-no-toc",
-			WorkerFunc: func(version *eregs.Part) {
-				return
-			},
+			WorkerFunc: func(version *eregs.Part) {},
 			Input: eregs.TitleConfig{
 				Title: 43,
 				Subchapters: eregs.SubchapterList{
