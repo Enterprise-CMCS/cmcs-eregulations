@@ -286,6 +286,7 @@ func TestFetchSections(t *testing.T) {
 		Name     string
 		InputXML []byte
 		Sections []string
+		Ranges   []string
 		PartMap  map[string]string
 		Error    bool
 	}{
@@ -320,6 +321,79 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Sections: []string{"438.502", "41.118", "123.1418"},
+			Ranges:   nil,
+			PartMap: map[string]string{
+				"438": "42",
+				"440": "42",
+				"457": "42",
+				"460": "42",
+				"41":  "45",
+			},
+			Error: false,
+		},
+		{
+			Name: "test-valid-section-range",
+			InputXML: []byte(`
+				<PRORULE>
+					<PREAMB>
+						<SUBAGY>Centers for Medicare &amp; Medicaid Services</SUBAGY>
+						<CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
+						<CFR>45 CFR Parts 41.</CFR>
+						<CFR>47 CFR Parts 123</CFR>
+					</PREAMB>
+					<TEST>Some data</TEST>
+					<SUPLINF>
+						<SECTION>
+							<SECTNO>§ 438.502-438.700 </SECTNO>
+							<SUBJECT>Definitions.</SUBJECT>
+							<STARS/>
+						</SECTION>
+					</SUPLINF>
+				</PRORULE>
+			`),
+			Sections: nil,
+			Ranges:   []string{"438.502-438.700"},
+			PartMap: map[string]string{
+				"438": "42",
+				"440": "42",
+				"457": "42",
+				"460": "42",
+				"41":  "45",
+			},
+			Error: false,
+		},
+		{
+			Name: "test-valid-sections-and-section-range",
+			InputXML: []byte(`
+				<PRORULE>
+					<PREAMB>
+						<SUBAGY>Centers for Medicare &amp; Medicaid Services</SUBAGY>
+						<CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
+						<CFR>45 CFR Parts 41.</CFR>
+						<CFR>47 CFR Parts 123</CFR>
+					</PREAMB>
+					<TEST>Some data</TEST>
+					<SUPLINF>
+					<SECTION>
+							<SECTNO>§ 438.502 </SECTNO>
+							<SUBJECT>Definitions.</SUBJECT>
+							<STARS/>
+						</SECTION>
+						<SECTION>
+							<SECTNO>§ 41.118 </SECTNO>
+							<SUBJECT>abc xyz...</SUBJECT>
+							<STARS/>
+						</SECTION>
+						<SECTION>
+							<SECTNO>§ 438.502-438.700 </SECTNO>
+							<SUBJECT>Definitions.</SUBJECT>
+							<STARS/>
+						</SECTION>
+					</SUPLINF>
+				</PRORULE>
+			`),
+			Sections: []string{"438.502", "41.118"},
+			Ranges:   []string{"438.502-438.700"},
 			PartMap: map[string]string{
 				"438": "42",
 				"440": "42",
@@ -349,6 +423,7 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Sections: nil,
+			Ranges:   nil,
 			PartMap:  nil,
 			Error:    true,
 		},
@@ -372,6 +447,7 @@ func TestFetchSections(t *testing.T) {
 				</PRORULE>
 			`),
 			Sections: nil,
+			Ranges:   nil,
 			PartMap:  nil,
 			Error:    true,
 		},
@@ -398,11 +474,12 @@ func TestFetchSections(t *testing.T) {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
 				t.Errorf("expected error, received sections (%+v), part map (%+v)", sections, partMap)
-			} else if sectionRanges != nil {
-				t.Errorf("expected error, received sections (%+v), part map (%+v)", sections, partMap)
 			} else {
 				if diff := deep.Equal(sections, tc.Sections); diff != nil {
 					t.Errorf("sections not as expected: (%+v)", diff)
+				}
+				if diff := deep.Equal(sectionRanges, tc.Ranges); diff != nil {
+					t.Errorf("section ranges not as expected: (%+v)", diff)
 				}
 				if diff := deep.Equal(partMap, tc.PartMap); diff != nil {
 					t.Errorf("part map not as expected: (%+v)", diff)
