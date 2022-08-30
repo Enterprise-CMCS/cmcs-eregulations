@@ -322,7 +322,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         annotations = {}
         ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
-        category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+        category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").annotate(is_fr_doc_category=ExpressionWrapper(~Q(fr_doc_category_config=None), output_field=BooleanField()))
         query = self.model.objects.filter(id__in=ids).select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),

@@ -48,7 +48,7 @@
                 >
                 </supplemental-content-category>
                 <template
-                    v-if="name === 'FR_Doc'"
+                    v-if="isFrDocCategory"
                 >
                     <related-rule-list
                         v-if="supplemental_content"
@@ -111,6 +111,11 @@ export default {
         sub_categories: {
             type: Array,
             required: false,
+        },
+        isFrDocCategory: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
     },
 
