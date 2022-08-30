@@ -326,7 +326,7 @@ export default {
             return synonyms ? synonyms : []
         },
         async updateFilters(payload) {
-            let newQueryParams = { ...this.queryParams };
+            let newQueryParams = { ...this.queryParams, page: undefined };
             const splitSection = payload.selectedIdentifier.split("-");
 
             //Checks that the part in the query is valid or is a resource category
