@@ -15,4 +15,5 @@ def handler(event, context):
     call_command('loaddata', 'resources.supplementalcontent.json')
     call_command('loaddata', 'resources.federalregisterdocumentgroup.json')
     call_command('loaddata', 'resources.federalregisterdocument.json')
+    call_command('loaddata', 'resources.resourcesconfiguration.json')
     call_command('loaddata', 'search.synonym.json')
