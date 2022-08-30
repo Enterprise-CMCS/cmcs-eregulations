@@ -259,6 +259,7 @@ export default {
                 name: "resources",
                 query: {
                     ...this.queryParams,
+                    page: undefined,
                     q: undefined,
                 },
             });
@@ -269,13 +270,14 @@ export default {
                 name: "resources",
                 query: {
                     ...this.queryParams,
+                    page: undefined,
                     q: `"${this.searchQuery}"`,
                 },
             });
         },
 
         removeChip(payload) {
-            const newQueryParams = { ...this.queryParams };
+            const newQueryParams = { ...this.queryParams, page: undefined };
             const scopeVals = newQueryParams[payload.scope].split(",");
             const newScopeVals = scopeVals.filter(
                 (val) => val !== payload.selectedIdentifier
