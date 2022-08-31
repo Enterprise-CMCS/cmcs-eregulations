@@ -136,8 +136,7 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 			FirstSec: sections[0].Section,
 			LastSec:  sections[1].Section,
 		}
-		fmt.Println("SECTION RANGE!")
-		fmt.Println(s)
+
 		ranges = append(ranges, s)
 	}
 	return ranges
