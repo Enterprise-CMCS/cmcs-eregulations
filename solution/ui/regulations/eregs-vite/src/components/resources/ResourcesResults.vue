@@ -4,17 +4,14 @@
             <hr class="top-rule" />
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
-                <span v-else
-                    >{{ filteredContent.length }} result<span
-                        v-if="filteredContent.length != 1"
-                        >s</span
-                    >
-                    in Resources</span
-                >
+                <span v-else>
+                    <span v-if="count > 0">{{ currentPageResultsRange[0] }} - {{ currentPageResultsRange[1] }} of</span>
+                    {{ count }} result<span v-if="count != 1">s</span> in Resources
+                </span>
                 <div class="sort-control">
                     <span class="sort-control-label">Sort by</span>
                     <FancyDropdown
-                        :buttonTitle="sortMethodTitle"
+                        :button-title="sortMethodTitle"
                         :disabled="sortDisabled"
                     >
                         <v-list class="sort-options-list">
@@ -49,66 +46,83 @@
                         :query="query"
                     />
                 </template>
-                <template v-for="(item, idx) in filteredContent">
-                    <div :key="item.created_at + idx">
-                        <div class="category-labels">
-                            <div class="result-label category-label">
-                                {{
-                                    item.category.parent
-                                        ? item.category.parent.name
-                                        : item.category.name
-                                }}
-                            </div>
-                            <div
-                                v-if="item.category.parent"
-                                class="result-label subcategory-label"
-                            >
-                                {{ item.category.name }}
-                            </div>
-                        </div>
-                        <div class="result-content-wrapper">
-                            <SupplementalContentObject
-                                :name="item.name"
-                                :description="
-                                    item.descriptionHeadline || item.description
-                                "
-                                :date="item.date"
-                                :url="item.url"
-                            />
-                        </div>
-                        <div class="related-sections">
-                            <span class="related-sections-title">
-                                Related Regulation<span
-                                    v-if="item.locations.length > 1"
-                                    >s</span
-                                >:
-                            </span>
-                            <span v-if="item.locations.length > 1">§§ </span>
-                            <span v-else>§ </span>
-                            <template v-for="(location, i) in item.locations">
-                                <span
-                                    :key="location.display_name + i"
-                                    class="related-section-link"
+                <template v-else>
+                    <template v-for="(item, idx) in filteredContent">
+                        <div :key="item.created_at + idx">
+                            <div class="category-labels">
+                                <div class="result-label category-label">
+                                    {{
+                                        item.category.parent
+                                            ? item.category.parent.name
+                                            : item.category.name
+                                    }}
+                                </div>
+                                <div
+                                    v-if="item.category.parent"
+                                    class="result-label subcategory-label"
                                 >
-                                    <a
-                                        :href="
-                                            location
-                                                | locationUrl(
-                                                    partsList,
-                                                    partsLastUpdated,
-                                                    base
-                                                )
-                                        "
-                                    >
-                                        {{ location | locationLabel }}
-                                    </a>
-                                    <span v-if="i + 1 != item.locations.length">
-                                        |
-                                    </span>
+                                    {{ item.category.name }}
+                                </div>
+                            </div>
+                            <div class="result-content-wrapper">
+                                <SupplementalContentObject
+                                    :name="item.name"
+                                    :description="
+                                        item.descriptionHeadline ||
+                                        item.description
+                                    "
+                                    :date="item.date"
+                                    :url="item.url"
+                                />
+                            </div>
+                            <div class="related-sections">
+                                <span class="related-sections-title">
+                                    Related Regulation<span
+                                        v-if="item.locations.length > 1"
+                                        >s</span
+                                    >:
                                 </span>
-                            </template>
+                                <span v-if="item.locations.length > 1"
+                                    >§§
+                                </span>
+                                <span v-else>§ </span>
+                                <template
+                                    v-for="(location, i) in item.locations"
+                                >
+                                    <span
+                                        :key="location.display_name + i"
+                                        class="related-section-link"
+                                    >
+                                        <a
+                                            :href="
+                                                location
+                                                    | locationUrl(
+                                                        partsList,
+                                                        partsLastUpdated,
+                                                        base
+                                                    )
+                                            "
+                                        >
+                                            {{ location | locationLabel }}
+                                        </a>
+                                        <span
+                                            v-if="
+                                                i + 1 != item.locations.length
+                                            "
+                                        >
+                                            |
+                                        </span>
+                                    </span>
+                                </template>
+                            </div>
                         </div>
-                    </div>
+                    </template>
+                    <PaginationController
+                        :count="count"
+                        :page="page"
+                        :page-size="pageSize"
+                        view="resources"
+                    />
                 </template>
             </div>
         </div>
@@ -116,12 +130,10 @@
 </template>
 
 <script>
-import _uniqBy from "lodash/uniqBy";
-import _has from "lodash/has";
-
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
 
 const SORT_METHODS = {
     newest: "Date (Newest)",
@@ -174,6 +186,21 @@ export default {
             default() {
                 return [];
             },
+        },
+        page: {
+            type: Number,
+            required: false,
+            default: 1,
+        },
+        pageSize: {
+            type: Number,
+            required: false,
+            default: 100,
+        },
+        count: {
+            type: Number,
+            required: false,
+            default: 0,
         },
         isLoading: {
             type: Boolean,
@@ -246,6 +273,18 @@ export default {
                 value: key,
                 disabled: this.disabledSortOptions.includes(key),
             }));
+        },
+        currentPageResultsRange() {
+            const maxInRange = this.page * this.pageSize;
+            const minInRange = maxInRange - this.pageSize;
+
+            const firstInRange = minInRange + 1;
+            const lastInRange =
+                maxInRange > this.count
+                    ? (this.count % this.pageSize) + minInRange
+                    : maxInRange;
+
+            return [firstInRange, lastInRange];
         },
     },
 

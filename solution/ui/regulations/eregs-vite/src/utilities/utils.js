@@ -18,7 +18,6 @@ import _map from "lodash/map";
 import _random from "lodash/random";
 import _set from "lodash/set";
 import _transform from "lodash/transform";
-import {getAllParts} from "./api";
 
 //import numeral from "numeral";
 
@@ -456,6 +455,15 @@ function capitalizeFirstLetter(string) {
     return string[0].toUpperCase() + string.slice(1);
 }
 
+/**
+ *
+ * @param length {number} - number of elements in array
+ * @returns {Array<number>} - array containing sequential numbers beginning with 1
+ */
+const createOneIndexedArray = (length) => {
+    return Array.from({length}, (_, i) => i + 1)
+}
+
 
 export {
     mapToArray,
@@ -487,5 +495,6 @@ export {
     getParagraphDepth,
     getDisplayName,
     getCategoryTree,
-    capitalizeFirstLetter
+    capitalizeFirstLetter,
+    createOneIndexedArray,
 };
