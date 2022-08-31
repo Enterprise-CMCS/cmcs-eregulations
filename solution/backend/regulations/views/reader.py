@@ -112,15 +112,15 @@ class ReaderView(CitationContextMixin, TemplateView):
     def get_version_info(self, version, title, part):
         versions = self.get_versions(title, part)
 
-        latestVersion = versions[0]['date']
-        latestVersionString = datetime.strftime(latestVersion, "%Y-%m-%d")
+        latest_version = versions[0]['date']
+        latest_version_string = datetime.strftime(latest_version, "%Y-%m-%d")
 
         return {
             'version': version,
-            'formattedLatestVersion': datetime.strftime(latestVersion, "%b %-d, %Y"),
-            'isLatestVersion': version == latestVersionString,
+            'formatted_latest_version': datetime.strftime(latest_version, "%b %-d, %Y"),
+            'is_latest_version': version == latest_version_string,
             # last updated dates of Jan 1, 2017 are not meaningful
-            'has_meaningful_latest_version_date': latestVersion > date(2017, 1, 1)
+            'has_meaningful_latest_version_date': latest_version > date(2017, 1, 1)
         }
 
 
