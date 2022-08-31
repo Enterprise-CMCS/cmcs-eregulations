@@ -53,7 +53,7 @@ type FRDoc struct {
 	DocketNumbers  []string         `json:"docket_numbers"`
 	DocumentNumber string           `json:"document_number"`
 	Locations      []*Section       `json:"locations"`
-	LocationRanges []*SectionRanges `json:"ranges`
+	LocationRanges []*SectionRanges `json:"section_ranges"`
 }
 
 // SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL
@@ -63,6 +63,7 @@ func SendDocument(ctx context.Context, doc *FRDoc) error {
 		return fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
 	eregsURL.Path = path.Join(eregsURL.Path, DocumentURL)
+
 	code, err := network.SendJSON(ctx, eregsURL, doc, true, postAuth, network.HTTPPut)
 	if err != nil {
 		if code != -1 {
@@ -107,6 +108,7 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 	var ranges []*SectionRanges
 
 	for _, secRange := range s {
+
 		splitSections := strings.Split(secRange, "-")
 		if len(splitSections) != 2 || splitSections[0] == "" || splitSections[1] == "" {
 			log.Warn("[eregs] section range ", secRange, "is invalid")
@@ -134,7 +136,8 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 			FirstSec: sections[0].Section,
 			LastSec:  sections[1].Section,
 		}
-
+		fmt.Println("SECTION RANGE!")
+		fmt.Println(s)
 		ranges = append(ranges, s)
 	}
 	return ranges
