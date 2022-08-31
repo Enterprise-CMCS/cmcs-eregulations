@@ -14,7 +14,7 @@ from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
 
-from datetime import datetime
+from datetime import date, datetime
 
 
 class ReaderView(CitationContextMixin, TemplateView):
@@ -118,7 +118,9 @@ class ReaderView(CitationContextMixin, TemplateView):
         return {
             'version': version,
             'formattedLatestVersion': datetime.strftime(latestVersion, "%b %-d, %Y"),
-            'isLatestVersion': version == latestVersionString
+            'isLatestVersion': version == latestVersionString,
+            # last updated dates of Jan 1, 2017 are not meaningful
+            'has_meaningful_latest_version_date': latestVersion > date(2017, 1, 1)
         }
 
 
