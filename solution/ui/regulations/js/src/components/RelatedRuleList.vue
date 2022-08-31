@@ -165,7 +165,7 @@ export default {
             return rule.title || rule.description;
         },
         type(rule) {
-            return rule.category?.name || rule.type;
+            return rule.doc_type || rule.category?.name || rule.type;
         },
         citation(rule) {
             return rule.citation || rule.name;

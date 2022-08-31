@@ -8,10 +8,10 @@
         >
             <span class="link-heading">
                 <span
-                    v-if="expandedType !== 'Unknown'"
+                    v-if="type !== ''"
                     class="recent-flag indicator"
                     :class="indicatorClasses"
-                >{{expandedType}}</span>
+                >{{type}}</span>
                 <span v-if="publication_date" class="recent-date">{{
                     publication_date | formatPubDate
                 }}</span>
@@ -70,11 +70,10 @@ export default {
     },
 
     computed: {
-        expandedType() {
+         expandedType() {
             if (this.type === "Rule" || this.type === "Final Rules") {
                 return "Final";
             }
-
             if (
                 this.type === "Proposed Rules" ||
                 (this.type === "Proposed Rule" &&
@@ -82,14 +81,12 @@ export default {
             ) {
                 return "NPRM";
             }
-
             if (
                 this.type === "Proposed Rule" &&
                 this.action === "Request for information."
             ) {
                 return "RFI";
             }
-
             return "Unknown";
         },
         ruleClasses() {
@@ -101,7 +98,7 @@ export default {
         indicatorClasses() {
             return {
                 "secondary-indicator":
-                    this.grouped || this.expandedType !== "Final",
+                    this.grouped || this.type !== "Final",
             };
         },
         citationClasses() {

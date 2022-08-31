@@ -1,20 +1,10 @@
 [
 {
   "model": "resources.abstractcategory",
-  "pk": 2,
+  "pk": 26,
   "fields": {
-    "name": "Final Rules",
-    "description": "Final regulatory policy decision by the agency",
-    "order": 0,
-    "show_if_empty": true
-  }
-},
-{
-  "model": "resources.abstractcategory",
-  "pk": 1,
-  "fields": {
-    "name": "Proposed Rules",
-    "description": "Agency proposal to change regulatory policy (NPRM)",
+    "name": "Federal Register Docs",
+    "description": "",
     "order": 0,
     "show_if_empty": true
   }
@@ -91,12 +81,7 @@
 },
 {
   "model": "resources.category",
-  "pk": 2,
-  "fields": {}
-},
-{
-  "model": "resources.category",
-  "pk": 1,
+  "pk": 26,
   "fields": {}
 },
 {
