@@ -47,7 +47,7 @@ type SectionRanges struct {
 type FRDoc struct {
 	Name           string           `json:"name"`
 	Description    string           `json:"description"`
-	Category       string           `json:"category"`
+	DocType        string           `json:"doc_type"`
 	URL            string           `json:"url"`
 	Date           string           `json:"date"`
 	DocketNumbers  []string         `json:"docket_numbers"`

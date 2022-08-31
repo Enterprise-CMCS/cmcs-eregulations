@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.core.exceptions import BadRequest
-from django.db.models import Prefetch, Q, Case, When, F
+from django.db.models import Prefetch, Q, Case, When, F, BooleanField, ExpressionWrapper
 from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
@@ -39,6 +39,11 @@ from .v3serializers import (
     AbstractLocationSerializer,
 )
 from regcore.serializers import StringListSerializer
+
+
+CATEGORY_ANNOTATIONS = {
+    "is_fr_doc_category": ExpressionWrapper(~Q(fr_doc_category_config=None), output_field=BooleanField()),
+}
 
 
 def OpenApiQueryParameter(name, description, type, required):
@@ -87,8 +92,9 @@ class OptionalPaginationMixin:
 )
 class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
-    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent").order_by("order")
     serializer_class = AbstractCategoryPolymorphicSerializer
+    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
+                               .order_by("order").annotate(**CATEGORY_ANNOTATIONS)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -104,8 +110,8 @@ class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
     queryset = Category.objects.all().select_subclasses().prefetch_related(
-        Prefetch("sub_categories", SubCategory.objects.all().order_by("order")),
-    ).order_by("order")
+        Prefetch("sub_categories", SubCategory.objects.all().order_by("order").annotate(**CATEGORY_ANNOTATIONS)),
+    ).order_by("order").annotate(**CATEGORY_ANNOTATIONS)
     serializer_class = CategoryTreeSerializer
 
 
@@ -313,7 +319,8 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         annotations = {}
         ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
-        category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+        category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
+                                            .annotate(**CATEGORY_ANNOTATIONS)
         query = self.model.objects.filter(id__in=ids).select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),
