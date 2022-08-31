@@ -26,6 +26,7 @@
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
                 :isFetching="isFetching"
+                :is-fr-doc-category="category.is_fr_doc_category"
             >
             </supplemental-content-category>
             <simple-spinner v-if="isFetching"></simple-spinner>
