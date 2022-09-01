@@ -3,20 +3,6 @@ import os
 from django.core.management import call_command
 
 
-from resources.models import (
-    Category,
-    SubCategory,
-    Subpart,
-    Section,
-    SupplementalContent,
-    FederalRegisterDocumentGroup,
-    FederalRegisterDocument,
-    ResourcesConfiguration,
-)
-
-from regcore.search.models import Synonym
-
-
 def load_data(fixture, model):
     if not model.objects.count():
         call_command("loaddata", fixture)
@@ -26,6 +12,19 @@ def handler(event, context):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
     import django
     django.setup()
+
+    from resources.models import (
+        Category,
+        SubCategory,
+        Subpart,
+        Section,
+        SupplementalContent,
+        FederalRegisterDocumentGroup,
+        FederalRegisterDocument,
+        ResourcesConfiguration,
+    )
+
+    from regcore.search.models import Synonym
 
     load_data("resources.category.json", Category)
     load_data("resources.subcategory.json", SubCategory)
