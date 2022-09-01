@@ -11,7 +11,9 @@
                 <span> (other regulations)</span>
             </li>
             <li>
-                <a :href="federalRegisterLink" class="external" target="_blank">Federal Register</a>
+                <a :href="federalRegisterLink" class="external" target="_blank"
+                    >Federal Register</a
+                >
                 <span> (documents)</span>
             </li>
         </ul>
@@ -61,17 +63,18 @@ export default {
 
     computed: {
         eregsLink() {
-            return this.query ? `${this.eregs_url}?q=${this.query}` : this.eregs_url;
+            return this.query
+                ? `${this.eregs_url}?q=${this.query}`
+                : this.eregs_url;
         },
         ecfrLink() {
             return `https://www.ecfr.gov/search?search[hierarchy][title]=42&search[query]=${this.query}`;
         },
         federalRegisterLink() {
-            return `https://www.federalregister.gov/documents/search?conditions[agencies][]=centers-for-medicare-medicaid-services&conditions[term]=${this.query}`
-        }
+            return `https://www.federalregister.gov/documents/search?conditions[agencies][]=centers-for-medicare-medicaid-services&conditions[term]=${this.query}`;
+        },
     },
 };
 </script>
 
-<style>
-</style>
+<style></style>

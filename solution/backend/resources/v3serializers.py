@@ -8,10 +8,10 @@ from .models import (
     SubCategory,
     Section,
     Subpart,
-    FederalRegisterCategoryLink,
     SupplementalContent,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
+    ResourcesConfiguration,
 )
 
 
@@ -72,6 +72,13 @@ class CategorySerializer(serializers.Serializer):
     description = serializers.CharField()
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
+    is_fr_doc_category = serializers.SerializerMethodField()
+
+    def get_is_fr_doc_category(self, obj):
+        try:
+            return obj.is_fr_doc_category
+        except Exception:
+            return False
 
 
 class SubCategorySerializer(OptionalFieldDetailsMixin, CategorySerializer):
@@ -158,6 +165,7 @@ class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceF
 class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField()
+    doc_type = serializers.CharField()
 
     name_headline = HeadlineField("federalregisterdocument")
     description_headline = HeadlineField("federalregisterdocument")
@@ -183,7 +191,6 @@ class SectionCreateSerializer(serializers.ModelSerializer):
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
-    category = serializers.CharField()
     locations = SectionCreateSerializer(many=True, allow_null=True)
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
@@ -193,20 +200,26 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     date = serializers.CharField(allow_blank=True, allow_null=True)
     approved = serializers.BooleanField(required=False, default=False)
     id = serializers.CharField(required=False)
+    doc_type = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
-    def validate_category(self, value):
-        try:
-            category_link = FederalRegisterCategoryLink.objects.get(name=value)
-        except FederalRegisterCategoryLink.DoesNotExist:
+    def get_category(self):
+        config = ResourcesConfiguration.objects.first()
+        category = config.fr_doc_category
+        if not category:
             try:
-                category = AbstractCategory.objects.get(name=value)
+                category = AbstractCategory.objects.get(name="Federal Register Docs")
             except AbstractCategory.DoesNotExist:
-                category = Category.objects.create(name=value).abstractcategory_ptr
-            category_link = FederalRegisterCategoryLink.objects.create(
-                name=value,
-                category=category,
-            )
-        return category_link.category.name
+                category = Category.objects.create(name="Federal Register Docs")
+            config.fr_doc_category = category
+            config.save()
+        return category
+
+    def validate_doc_type(self, value):
+        if value == "Rule" or value == "Final Rules":
+            return "Final"
+        if value == "Proposed Rules" or value == "Proposed Rule":
+            return "NPRM"
+        return value
 
     def update(self, instance, validated_data):
         # set basic fields
@@ -217,9 +230,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         instance.document_number = validated_data.get('document_number', instance.document_number)
         instance.date = validated_data.get('date', instance.date)
         instance.approved = validated_data.get('approved', instance.approved)
-        # This will work because it was validated above
-        category = AbstractCategory.objects.get(name=validated_data["category"])
-        instance.category = category
+        instance.doc_type = validated_data.get('doc_type', instance.doc_type)
+        instance.category = self.get_category()
 
         # set the locations on the instance
         locations = []

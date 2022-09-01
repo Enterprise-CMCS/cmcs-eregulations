@@ -8,12 +8,13 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 
+from solo.admin import SingletonModelAdmin
+
 # Register your models here.
 
 from .models import (
     SupplementalContent,
     FederalRegisterDocument,
-    FederalRegisterCategoryLink,
     AbstractCategory,
     Category,
     SubCategory,
@@ -21,6 +22,7 @@ from .models import (
     Section,
     Subpart,
     FederalRegisterDocumentGroup,
+    ResourcesConfiguration,
 )
 
 from .filters import (
@@ -61,6 +63,16 @@ class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
         return my_urls + urls
 
 
+@admin.register(ResourcesConfiguration)
+class ResourcesConfigurationAdmin(SingletonModelAdmin):
+    admin_priority = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "fr_doc_category":
+            kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 @admin.register(Section)
 class SectionAdmin(BaseAdmin):
     admin_priority = 40
@@ -84,23 +96,6 @@ class SubpartAdmin(BaseAdmin):
     list_display = ("title", "part", "subpart_id")
     search_fields = ["title", "part", "subpart_id"]
     ordering = ("title", "part", "subpart_id")
-
-
-@admin.register(FederalRegisterCategoryLink)
-class FederalRegisterCategoryLinkAdmin(BaseAdmin):
-    admin_priority = 100
-
-    foreignkey_lookups = {
-        "category": lambda: AbstractCategory.objects.all().select_subclasses(),
-    }
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related(
-            Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
-        )
-
-    def get_readonly_fields(self, request, obj=None):
-        return self.readonly_fields + (("name",) if obj else ())  # prevent changing name field on existing objects
 
 
 @admin.register(Category)
@@ -146,6 +141,8 @@ class AbstractResourceAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
+    # Overrides the save method in django admin to handle many to many relationships.
+    # Looks at the locations added in bulk uploads and adds them if allowed, sends error message if not.
     def save_related(self, request, form, formsets, change):
         bulk_locations = form.cleaned_data.get("bulk_locations")
         bulk_title = form.cleaned_data.get("bulk_title")
@@ -167,13 +164,16 @@ class AbstractResourceAdmin(BaseAdmin):
                     "The following locations were not added %s" % ((", ").join(bad_locations))
                 )
 
+    # Checks the location for the formats.  Sections will only have a split legnth of 1 or 2 and contain a "."
+    # Subparts will only be a legnth of 3 or 4.  Doesnt have to contain the word subpart based on the code.
     def build_location(self, location, default_title):
         found_location = location.split(" ")
+
         if len(found_location) == 1 or len(found_location) == 2:
-            if default_title != "":
+            if len(found_location) == 1 and default_title != "":
                 title = default_title
                 loc = location
-            else:
+            if len(found_location) == 2:
                 title = found_location[0]
                 loc = found_location[1]
             if "." in loc:
@@ -192,11 +192,11 @@ class AbstractResourceAdmin(BaseAdmin):
                 return None
 
         elif len(found_location) == 3 or len(found_location) == 4:
-            if default_title != "":
+            if len(found_location) == 3 and default_title != "":
                 title = default_title
                 part = found_location[0]
                 subpart = found_location[2]
-            else:
+            if len(found_location) == 4:
                 title = found_location[0]
                 part = found_location[1]
                 subpart = found_location[3]
@@ -208,8 +208,8 @@ class AbstractResourceAdmin(BaseAdmin):
 
         return None
 
+    # Makes sure each value is the correct format for querying the locations
     def check_values(self, title, part, section, subpart):
-
         if not title.isdigit() or not part.isdigit():
             return False
         if section != "" and not section.isdigit():
@@ -263,12 +263,12 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     form = FederalResourceForm
     list_display = ("date", "name", "description", "in_group", "docket_numbers",
-                    "document_number", "category", "updated_at", "approved")
+                    "document_number", "category", "doc_type", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
-                          "document_number", "category", "updated_at")
+                          "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "group", "document_number", "name",
-              "description", "date", "url", "category", "locations", "bulk_title", "bulk_locations", "internal_notes")
+              "description", "date", "url", "category", "doc_type", "locations", "bulk_title", "bulk_locations", "internal_notes")
 
     def in_group(self, obj):
         group = str(obj.group)
@@ -278,6 +278,9 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         return super().get_queryset(request).prefetch_related(
             Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
         )
+
+    def get_readonly_fields(self, request, obj=None):
+        return self.readonly_fields + (("doc_type",) if obj else ())  # prevent changing name field on existing objects
 
 
 class FederalRegisterDocumentGroupForm(forms.ModelForm):

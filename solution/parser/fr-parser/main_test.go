@@ -331,7 +331,7 @@ func TestProcessPart(t *testing.T) {
 					&fedreg.FRDoc{
 						Name:        "a name",
 						Description: "a description",
-						Category:    "a category",
+						Category:    "a doc type",
 						URL:         "https://test.gov/test",
 						Date:        "2021-01-31",
 						DocketNumbers: []string{
@@ -343,7 +343,7 @@ func TestProcessPart(t *testing.T) {
 					&fedreg.FRDoc{
 						Name:           "a name 2",
 						Description:    "a description 2",
-						Category:       "a category 2",
+						Category:       "a doc type 2",
 						URL:            "https://test.gov/test/2",
 						Date:           "2021-02-01",
 						DocketNumbers:  []string{"CMS-0000-F3"},
@@ -377,7 +377,7 @@ func TestProcessPart(t *testing.T) {
 					&fedreg.FRDoc{
 						Name:        "a name",
 						Description: "a description",
-						Category:    "a category",
+						Category:    "a DocType",
 						URL:         "https://test.gov/test",
 						Date:        "2021-01-31",
 						DocketNumbers: []string{
@@ -389,7 +389,7 @@ func TestProcessPart(t *testing.T) {
 					&fedreg.FRDoc{
 						Name:           "a name 2",
 						Description:    "a description 2",
-						Category:       "a category 2",
+						Category:       "a doc type 2",
 						URL:            "https://test.gov/test/2",
 						Date:           "2021-02-01",
 						DocketNumbers:  []string{"CMS-0000-F3"},
@@ -411,7 +411,7 @@ func TestProcessPart(t *testing.T) {
 					&fedreg.FRDoc{
 						Name:        "a name",
 						Description: "a description",
-						Category:    "a category",
+						Category:    "a doc type",
 						URL:         "https://test.gov/test",
 						Date:        "2021-01-31",
 						DocketNumbers: []string{
@@ -423,7 +423,7 @@ func TestProcessPart(t *testing.T) {
 					&fedreg.FRDoc{
 						Name:           "a name 2",
 						Description:    "a description 2",
-						Category:       "a category 2",
+						Category:       "a doc type 2",
 						URL:            "https://test.gov/test/2",
 						Date:           "2021-02-01",
 						DocketNumbers:  []string{"CMS-0000-F3"},
@@ -513,7 +513,7 @@ func TestProcessDocument(t *testing.T) {
 			doc := fedreg.FRDoc{
 				Name:        "a name",
 				Description: "a description",
-				Category:    "a category",
+				Category:    "a doc type",
 				URL:         "https://test.gov/test",
 				Date:        "2021-01-31",
 				DocketNumbers: []string{

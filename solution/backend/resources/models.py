@@ -6,6 +6,7 @@ from django.db import models
 from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from solo.models import SingletonModel
 
 
 # Field mixins
@@ -92,32 +93,6 @@ class SubCategory(AbstractCategory):
     class Meta:
         verbose_name = "Sub-category"
         verbose_name_plural = "Sub-categories"
-
-
-# Federal Register Category Link
-# For FR parser to translate internal names to categories
-
-
-class FederalRegisterCategoryLink(models.Model):
-    name = models.CharField(
-        max_length=512,
-        unique=True,
-        help_text="Name of the category as sent from the Federal Register parser.",
-    )
-
-    category = models.ForeignKey(
-        AbstractCategory,
-        on_delete=models.CASCADE,
-        related_name="federal_register_category_link",
-        help_text="The eRegs category to translate a Federal Register category into.",
-    )
-
-    def __str__(self):
-        return f"FR category \"{self.name}\" ➔ eRegs category \"{self.category}\""
-
-    class Meta:
-        verbose_name = "Federal Register Category Link"
-        verbose_name_plural = "Federal Register Category Links"
 
 
 # Location models
@@ -211,6 +186,11 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
 
+    doc_type = models.CharField(
+        blank=True,
+        max_length=255
+    )
+
     group = models.ForeignKey(
         FederalRegisterDocumentGroup,
         null=True,
@@ -251,3 +231,23 @@ def post_save_fr_doc_group(sender, instance, **kwargs):
 def post_save_fr_doc(sender, instance, **kwargs):
     if instance.group:
         update_related_docs(instance.group)
+
+
+# Singleton model for configuring resources app
+
+class ResourcesConfiguration(SingletonModel):
+    fr_doc_category = models.ForeignKey(
+        AbstractCategory,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="fr_doc_category_config",
+        help_text="The category that contains Federal Register Documents. This affects "
+                  "all newly uploaded Federal Register Documents.",
+    )
+
+    def __str__(self):
+        return "Resources Configuration"
+
+    class Meta:
+        verbose_name = "Resources Configuration"
