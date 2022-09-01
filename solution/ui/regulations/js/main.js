@@ -1,4 +1,4 @@
-import Vue from "vue/dist/vue.esm.browser.min";
+import Vue from "vue/dist/vue.esm.browser.min.js";
 
 import RelatedRules from "../dist/RelatedRules";
 import Collapsible from "../dist/Collapsible";
