@@ -36,6 +36,8 @@ class RegulationLandingView(TemplateView):
             'title': title,
             'version': reg_version,
             'version_string': reg_version_string,
+            # last updated dates of Jan 1, 2017 are not meaningful
+            'has_meaningful_latest_version_date': current.date > date(2017, 1, 1),
             'part': reg_part,
             'part_label': part_label,
             'reg_part': reg_part, 'parts': parts,
