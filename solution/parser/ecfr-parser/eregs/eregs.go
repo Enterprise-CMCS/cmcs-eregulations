@@ -35,8 +35,9 @@ type Part struct {
 	Structure      *ecfr.Structure `json:"structure" xml:"-"`
 	Document       *parsexml.Part  `json:"document"`
 	Depth          int             `json:"depth"`
+	Sections	   []ecfr.Section   `json:"sections"`
+	Subparts       []ecfr.Subpart   `json:"subparts"`
 	Processed      bool
-	UploadContents bool
 }
 
 // ExistingPart is a regulation that has been loaded already
@@ -67,16 +68,6 @@ func PostPart(ctx context.Context, p *Part) (int, error) {
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
 }
 
-// PostSupplementalPart is the function that sends a supplemental part to eRegs server
-func PostSupplementalPart(ctx context.Context, p ecfr.Part) (int, error) {
-	eregsPath, err := url.Parse(BaseURL)
-	if err != nil {
-		return -1, err
-	}
-	eregsPath.Path = path.Join(eregsPath.Path, "/supplemental_content")
-	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
-}
-
 // PostParserResult is the function that sends a parser result to the eRegs server
 func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
 	eregsPath, err := getV3URL()
@@ -87,56 +78,6 @@ func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
 	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/ecfr_parser_result/%d", p.Title))
 	p.End = time.Now().Format(time.RFC3339)
 	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
-}
-
-// GetTitle retrieves a title object from regcore in eRegs
-func GetTitle(ctx context.Context, title int) (*Title, int, error) {
-	emptyTitle := &Title{
-		Name:     fmt.Sprintf("%d", title),
-		Contents: &ecfr.Structure{},
-		Exists:   false,
-		Modified: false,
-	}
-
-	eregsPath, err := getV3URL()
-	if err != nil {
-		return emptyTitle, -1, err
-	}
-	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%d", title))
-
-	log.Trace("[eregs] Retrieving title ", title, " from eRegs")
-
-	body, code, err := network.Fetch(ctx, eregsPath, true)
-	if err != nil {
-		return emptyTitle, code, err
-	}
-
-	var t Title
-	d := json.NewDecoder(body)
-	if err := d.Decode(&t); err != nil {
-		return emptyTitle, code, fmt.Errorf("unable to decode response body while retrieving title object: %+v", err)
-	}
-
-	t.Exists = true
-	t.Modified = false
-
-	return &t, code, nil
-}
-
-// SendTitle sends a title object to regcore in eRegs for table of contents tracking
-func SendTitle(ctx context.Context, t *Title) (int, error) {
-	eregsPath, err := getV3URL()
-	if err != nil {
-		return -1, nil
-	}
-	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/title/%s", t.Name))
-	var method string
-	if t.Exists {
-		method = network.HTTPPut
-	} else {
-		method = network.HTTPPost
-	}
-	return network.SendJSON(ctx, eregsPath, t, true, postAuth, method)
 }
 
 // GetExistingParts gets existing parts already imported

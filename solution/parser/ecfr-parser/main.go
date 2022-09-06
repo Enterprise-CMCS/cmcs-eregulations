@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"net/http"
 	"os"
 	"sort"
 	"strings"
@@ -127,19 +126,6 @@ func parseTitle(title *eregs.TitleConfig) error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
-	log.Debug("[main] Fetching table of contents for title ", title.Title, "...")
-	toc, code, err := eregs.GetTitle(ctx, title.Title)
-	if err != nil {
-		if code != http.StatusNotFound {
-			return fmt.Errorf("failed to retrieve existing table of contents for title %d. Error code is %d, so processing of this title will be skipped. Error: %+v", title.Title, code, err)
-		}
-		log.Info("[main] Received 404 while trying to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one.")
-	}
-	if !config.SkipVersions {
-		toc.Contents = &ecfr.Structure{}
-	}
-	title.Contents = toc
-
 	start := time.Now()
 
 	result := eregs.ParserResult{
@@ -209,16 +195,13 @@ func parseTitle(title *eregs.TitleConfig) error {
 				Date:           date,
 				Structure:      &ecfr.Structure{},
 				Document:       &parsexml.Part{},
+				Sections:       []ecfr.Section{},
+				Subparts:       []ecfr.Subpart{},
 				Processed:      false,
-				UploadContents: false,
 			}
 
 			versionList.PushBack(version)
 			numVersions++
-		}
-
-		if versionList.Len() > 0 {
-			versionList.Back().Value.(*eregs.Part).UploadContents = true
 		}
 
 		partList.PushBack(versionList)
@@ -248,20 +231,15 @@ func parseTitle(title *eregs.TitleConfig) error {
 	close(ch)
 	wg.Wait()
 
+	// Determine how many versions parsed and which failed
 	failed := []string{}
 	processed := 0
-
 	for versionListElement := partList.Front(); versionListElement != nil; versionListElement = versionListElement.Next() {
 		versionList := versionListElement.Value.(*list.List)
 		for versionElement := versionList.Front(); versionElement != nil; versionElement = versionElement.Next() {
 			version := versionElement.Value.(*eregs.Part)
 			if version.Processed {
 				processed++
-				if version.UploadContents {
-					log.Debug("[main] Adding structure of part ", version.Name, " to Title ", title.Title, "'s table of contents")
-					title.Contents.AddPart(version.Structure, version.Name)
-					title.Contents.Modified = true
-				}
 			} else {
 				failed = append(failed, fmt.Sprintf("%s ver. %s", version.Name, version.Date))
 			}
@@ -341,22 +319,19 @@ func handleVersion(ctx context.Context, thread int, version *eregs.Part) error {
 	log.Trace("[worker ", thread, "] Computing section parents for part ", version.Name, " version ", version.Date)
 	ecfr.DetermineParents(version.Structure)
 
-	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
-	if _, err := eregs.PostPart(ctx, version); err != nil {
-		return err
-	}
-
 	if config.UploadSupplemental {
 		log.Debug("[worker ", thread, "] Extracting supplemental content structure for part ", version.Name, " version ", version.Date)
-		supplementalPart, err := ecfr.ExtractStructure(*version.Structure)
+		sections, subparts, err := ecfr.ExtractStructure(*version.Structure, version.Depth)
 		if err != nil {
 			return err
 		}
+		version.Sections = sections
+		version.Subparts = subparts
+	}
 
-		log.Debug("[worker ", thread, "] Posting supplemental content structure for part ", version.Name, " version ", version.Date, " to eRegs")
-		if _, err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
-			return err
-		}
+	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
+	if _, err := eregs.PostPart(ctx, version); err != nil {
+		return err
 	}
 
 	log.Debug("[worker ", thread, "] Successfully processed part ", version.Name, " version ", version.Date, " in ", time.Since(start))
@@ -369,6 +344,5 @@ func contains(s []string, str string) bool {
 			return true
 		}
 	}
-
 	return false
 }
