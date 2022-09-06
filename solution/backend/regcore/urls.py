@@ -14,26 +14,13 @@ from regcore.views import (
 )
 
 from regcore.v3views import (
-    ContentsViewSet,
-    TitlesViewSet,
-    TitleViewSet,
-    TitleContentsViewSet,
-    PartsViewSet,
-    VersionsViewSet,
-    PartContentsViewSet,
-    PartSectionsViewSet,
-    PartSubpartsViewSet,
-    SubpartContentsViewSet,
-    ParserResultViewSet,
-    SynonymViewSet,
-    PartViewSet,
-    SectionViewSet,
-    SubpartViewSet,
+    synonyms_views,
+    parser_views,
+    title_views,
+    part_views,
+    version_contents_views,
+    version_metadata_views,
 )
-
-
-router = DefaultRouter()
-router.register("toc", ContentsViewSet)
 
 
 urlpatterns = [
@@ -53,52 +40,50 @@ urlpatterns = [
     ])),
     path("v3/", include([
         path("resources/", include('resources.v3urls')),
-        path("toc", ContentsViewSet.as_view({
+        path("toc", title_views.ContentsViewSet.as_view({
             "get": "list",
         })),
-        path("titles", TitlesViewSet.as_view({
+        path("titles", title_views.TitlesViewSet.as_view({
             "get": "list",
         })),
-        path("title/<title>", TitleViewSet.as_view({
-            "get": "retrieve",
-            "post": "create",
-            "put": "update",
-        })),
-        path("title/<title>/toc", TitleContentsViewSet.as_view({
+        path("title/<title>", title_views.TitleViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/parts", PartsViewSet.as_view({
+        path("title/<title>/toc", title_views.TitleContentsViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/parts", title_views.PartsViewSet.as_view({
             "get": "list",
         })),
-        path("title/<title>/part/<part>/versions", VersionsViewSet.as_view({
+        path("title/<title>/part/<part>/versions", part_views.VersionsViewSet.as_view({
             "get": "list",
         })),
-        path("title/<title>/part/<part>/version/<version>", PartViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>", version_contents_views.PartViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/toc", PartContentsViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>/toc", version_metadata_views.PartContentsViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/sections", PartSectionsViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>/sections", version_metadata_views.PartSectionsViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/section/<section>", SectionViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>/section/<section>", version_contents_views.SectionViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/subparts", PartSubpartsViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>/subparts", version_metadata_views.PartSubpartsViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", SubpartViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", version_contents_views.SubpartViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", SubpartContentsViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", version_metadata_views.SubpartContentsViewSet.as_view({
             "get": "retrieve",
         })),
-        path("ecfr_parser_result/<title>", ParserResultViewSet.as_view({
+        path("ecfr_parser_result/<title>", parser_views.ParserResultViewSet.as_view({
             "get": "retrieve",
             "post": "create"
         })),
-        path("synonym/<synonym>", SynonymViewSet.as_view({
+        path("synonym/<synonym>", synonyms_views.SynonymViewSet.as_view({
             "get": "list"
         }))
     ])),
