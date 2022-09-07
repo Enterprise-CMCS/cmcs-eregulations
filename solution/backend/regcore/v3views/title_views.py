@@ -12,7 +12,6 @@ from regcore.serializers import (
     TitlesSerializer,
     TitleUploadSerializer,
     TitleRetrieveSerializer,
-    ContentsSerializer,
     PartsSerializer,
 )
 

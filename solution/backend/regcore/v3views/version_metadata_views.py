@@ -1,20 +1,24 @@
 from rest_framework.response import Response
 from django.http import Http404
 from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
 
 from .utils import OpenApiPathParameter
 
 from .mixins import (
-    PartPropertiesViewSet,
-    PartStructureNodesViewSet,
+    PartPropertiesMixin,
+    PartStructureNodesMixin,
 )
 
 from regcore.serializers import ContentsSerializer
 
 
-@extend_schema(description="Retrieve the table of contents for a specific version of a specific Part of a specific Title, "
-                           "with detail down to the Section level.")
-class PartContentsViewSet(PartPropertiesViewSet):
+@extend_schema(
+    description="Retrieve the table of contents for a specific version of a specific Part of a specific Title, "
+                "with detail down to the Section level.",
+    parameters=PartPropertiesMixin.PARAMETERS,
+)
+class PartContentsViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentsSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -22,23 +26,28 @@ class PartContentsViewSet(PartPropertiesViewSet):
         return Response(serializer.data)
 
 
-@extend_schema(description="Retrieve a list of Sections contained within a version of a Part.")
-class PartSectionsViewSet(PartStructureNodesViewSet):
+@extend_schema(
+    description="Retrieve a list of Sections contained within a version of a Part.",
+    parameters=PartStructureNodesMixin.PARAMETERS,
+)
+class PartSectionsViewSet(PartStructureNodesMixin, viewsets.ReadOnlyModelViewSet):
     node_type = "section"
 
 
-
-@extend_schema(description="Retrieve a list of Subparts contained within a version of a Part.")
-class PartSubpartsViewSet(PartStructureNodesViewSet):
+@extend_schema(
+    description="Retrieve a list of Subparts contained within a version of a Part.",
+    parameters=PartStructureNodesMixin.PARAMETERS,
+)
+class PartSubpartsViewSet(PartStructureNodesMixin, viewsets.ReadOnlyModelViewSet):
     node_type = "subpart"
 
 
 @extend_schema(
     description="Retrieve a table of contents for a specific Subpart contained within a Part, "
                 "with detail down to the Section level.",
-    parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.", str)],
+    parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.", str)] + PartPropertiesMixin.PARAMETERS,
 )
-class SubpartContentsViewSet(PartPropertiesViewSet):
+class SubpartContentsViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentsSerializer
 
     def retrieve(self, request, *args, **kwargs):

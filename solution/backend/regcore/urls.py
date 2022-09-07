@@ -1,5 +1,4 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 
 from regcore.views import (
     EffectivePartView,
@@ -60,6 +59,7 @@ urlpatterns = [
         })),
         path("title/<title>/part/<part>/version/<version>", version_contents_views.PartViewSet.as_view({
             "get": "retrieve",
+            "post": "create",
         })),
         path("title/<title>/part/<part>/version/<version>/toc", version_metadata_views.PartContentsViewSet.as_view({
             "get": "retrieve",
@@ -76,15 +76,18 @@ urlpatterns = [
         path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", version_contents_views.SubpartViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", version_metadata_views.SubpartContentsViewSet.as_view({
-            "get": "retrieve",
-        })),
+        path(
+            "title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc",
+            version_metadata_views.SubpartContentsViewSet.as_view({
+                "get": "retrieve",
+            }),
+        ),
         path("ecfr_parser_result/<title>", parser_views.ParserResultViewSet.as_view({
             "get": "retrieve",
-            "post": "create"
+            "post": "create",
         })),
         path("synonym/<synonym>", synonyms_views.SynonymViewSet.as_view({
-            "get": "list"
+            "get": "list",
         }))
     ])),
 ]

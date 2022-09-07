@@ -1,8 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema
 
 from .utils import OpenApiPathParameter
 
@@ -28,15 +26,15 @@ class MultipleFieldLookupMixin(object):
 
 # Inherit from this class to retrieve attributes from a specific version of a part
 # You must specify a serializer_class
-@extend_schema(
-    parameters=[
+# Must also inherit from a Django REST Framework viewset (e.g. "viewsets.ReadOnlyModelViewSet")
+class PartPropertiesMixin(MultipleFieldLookupMixin):
+    PARAMETERS = [
         OpenApiPathParameter("title", "Title where Part is contained, e.g. 42.", int),
         OpenApiPathParameter("part", "Part of interest, e.g. 433.", int),
         OpenApiPathParameter("version", "Version of the Part. Must be in YYYY-MM-DD format (e.g. 2021-01-31), "
                              "or \"latest\" to retrieve the most recent version.", str),
-    ],
-)
-class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+    ]
+
     queryset = Part.objects.all()
     lookup_fields = {
         "title": "title",
@@ -47,7 +45,8 @@ class PartPropertiesViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelView
 
 # Inherit from this class to retrieve a flat list of specific types of nodes within a part's structure
 # You must specify a node_type
-class PartStructureNodesViewSet(PartPropertiesViewSet):
+# Must also inherit from a Django REST Framework viewset (e.g. "viewsets.ReadOnlyModelViewSet")
+class PartStructureNodesMixin(PartPropertiesMixin):
     serializer_class = FlatContentsSerializer
 
     def find_nodes(self, structure):
@@ -69,7 +68,8 @@ class PartStructureNodesViewSet(PartPropertiesViewSet):
 # Must define "label_index" as an integer representing the index in the label to identify the node
 # Must define "parameter" as the URL parameter to use for identifying the node
 # Must define "serializer_class"
-class NodeFinderViewSet(PartPropertiesViewSet):
+# Must also inherit from a Django REST Framework viewset (e.g. "viewsets.ReadOnlyModelViewSet")
+class NodeFinderMixin(PartPropertiesMixin):
     def retrieve(self, request, *args, **kwargs):
         node = kwargs.get(self.parameter, None)
         document = self.get_object().document

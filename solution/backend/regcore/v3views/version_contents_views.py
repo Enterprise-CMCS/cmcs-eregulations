@@ -1,11 +1,12 @@
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
 
 from .utils import OpenApiPathParameter
 
 from .mixins import (
-    PartPropertiesViewSet,
-    NodeFinderViewSet,
+    PartPropertiesMixin,
+    NodeFinderMixin,
 )
 
 from regcore.part_serializers import (
@@ -17,9 +18,10 @@ from regcore.part_serializers import (
 
 @extend_schema(
     description="Retrieve the full textual contents and structure of a regulation Part. "
-                "Note that children of a Part object will vary with object type. "
+                "Note that children of a Part object will vary with object type. ",
+    parameters=PartPropertiesMixin.PARAMETERS,
 )
-class PartViewSet(PartPropertiesViewSet):
+class PartViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = V3PartSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -30,9 +32,9 @@ class PartViewSet(PartPropertiesViewSet):
 @extend_schema(
     description="Retrieve the full textual contents and structure of a section within a regulation's Part. "
                 "Note that children of a Section object will vary with object type. ",
-    parameters=[OpenApiPathParameter("section", "Section number to retrieve.", int)],
+    parameters=[OpenApiPathParameter("section", "Section number to retrieve.", int)] + NodeFinderMixin.PARAMETERS,
 )
-class SectionViewSet(NodeFinderViewSet):
+class SectionViewSet(NodeFinderMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SectionSerializer
     parameter = "section"
     node_type = "SECTION"
@@ -42,9 +44,9 @@ class SectionViewSet(NodeFinderViewSet):
 @extend_schema(
     description="Retrieve the full textual contents and structure of a subpart within a regulation's Part. "
                 "Note that children of a Subpart object will vary with object type. ",
-    parameters=[OpenApiPathParameter("subpart", "Subpart to retrieve, e.g. A.", str)],
+    parameters=[OpenApiPathParameter("subpart", "Subpart to retrieve, e.g. A.", str)] + NodeFinderMixin.PARAMETERS,
 )
-class SubpartViewSet(NodeFinderViewSet):
+class SubpartViewSet(NodeFinderMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SubpartSerializer
     parameter = "subpart"
     node_type = "SUBPART"
