@@ -20,6 +20,7 @@ module.exports = {
         builder: "webpack5",
     },
     staticDirs: [
+        "../msw",
         { from: "../../../static-assets/regulations/images", to: "images" },
         { from: "../../../static-assets/regulations/fonts", to: "fonts" },
     ],
@@ -31,6 +32,7 @@ module.exports = {
                 __dirname,
                 "../../../static-assets/regulations"
             ),
+            mocks: "../msw/mocks"
         };
 
         return config;

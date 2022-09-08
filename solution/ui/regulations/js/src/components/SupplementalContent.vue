@@ -13,7 +13,7 @@
         <h2 v-if="!requested_categories" id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
-        <div class="resource_btn_container" v-if="resource_display">
+        <div v-if="resource_display" class="resource_btn_container">
             <a :href="resourceLink" class=" default-btn action-btn search_resource_btn" >Search These Resources</a>
         </div>
         <div class="supplemental-content-container">
@@ -25,7 +25,7 @@
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
-                :isFetching="isFetching"
+                :is-fetching="isFetching"
                 :is-fr-doc-category="category.is_fr_doc_category"
             >
             </supplemental-content-category>
@@ -90,7 +90,7 @@ export default {
         sections: {
             type: Array,
             required: false,
-            default: [],
+            default: () => [],
         },
         subparts: {
             type: Array,
@@ -146,7 +146,7 @@ export default {
             return `Subpart ${this.subparts[0]}`;
         },
 
-        resourceLink: function () {
+        resourceLink() {
             let qString = `${this.resources_url}\?title=${this.title}&part=${this.part}`
 
             if (this.activePart.includes("Subpart")){
@@ -252,6 +252,7 @@ export default {
         },
         async get_location_string(){
             const sections = await getSubpartTOC(this.api_url, this.title, this.part, this.subparts[0])
+            console.log("sections", sections);
             const flatSections = flattenSubpart({children: sections})
             this.joined_locations = `${flatSections.children.reduce((previousValue, section) =>  `${previousValue}locations=${this.title}.${this.part}.${section.identifier[1]}&`, "") }locations=${this.title}.${this.part}.${this.subparts[0]}`;
         },

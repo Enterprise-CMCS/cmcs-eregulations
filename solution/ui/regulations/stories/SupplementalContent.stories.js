@@ -19,6 +19,7 @@ Basic.args = {
     "title": "42",
     "part": "433",
     "sections": ["100", "200", "300"],
+    "subparts": ["A"],
     "getSupplementalContent": () => Promise.resolve(supplementalContentResponse)
 };
 
