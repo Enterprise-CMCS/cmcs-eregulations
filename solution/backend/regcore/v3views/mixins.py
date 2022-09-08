@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .utils import OpenApiPathParameter
 
 from regcore.models import Part
-from regcore.serializers import FlatContentsSerializer
+from regcore.serializers.toc import FlatTOCSerializer
 
 
 # must define lookup_fields mapping with entries like { "field_name": "url_parameter", ... }
@@ -47,7 +47,7 @@ class PartPropertiesMixin(MultipleFieldLookupMixin):
 # You must specify a node_type
 # Must also inherit from a Django REST Framework viewset (e.g. "viewsets.ReadOnlyModelViewSet")
 class PartStructureNodesMixin(PartPropertiesMixin):
-    serializer_class = FlatContentsSerializer
+    serializer_class = FlatTOCSerializer
 
     def find_nodes(self, structure):
         nodes = []

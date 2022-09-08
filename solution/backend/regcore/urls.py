@@ -59,7 +59,6 @@ urlpatterns = [
         })),
         path("title/<title>/part/<part>/version/<version>", version_contents_views.PartViewSet.as_view({
             "get": "retrieve",
-            "post": "create",
         })),
         path("title/<title>/part/<part>/version/<version>/toc", version_metadata_views.PartContentsViewSet.as_view({
             "get": "retrieve",
@@ -86,8 +85,11 @@ urlpatterns = [
             "get": "retrieve",
             "post": "create",
         })),
+        path("part", parser_views.PartUploadViewSet.as_view({
+            "put": "update",
+        })),
         path("synonym/<synonym>", synonyms_views.SynonymViewSet.as_view({
             "get": "list",
-        }))
+        })),
     ])),
 ]

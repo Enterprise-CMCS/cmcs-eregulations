@@ -9,7 +9,7 @@ from .mixins import (
     NodeFinderMixin,
 )
 
-from regcore.part_serializers import (
+from regcore.serializers.contents import (
     V3PartSerializer,
     SectionSerializer,
     SubpartSerializer,

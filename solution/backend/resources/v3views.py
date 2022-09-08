@@ -37,8 +37,8 @@ from .v3serializers import (
     AbstractResourceSerializer,
     SubCategorySerializer,
     AbstractLocationSerializer,
+    StringListSerializer,
 )
-from regcore.serializers import StringListSerializer
 
 
 CATEGORY_ANNOTATIONS = {

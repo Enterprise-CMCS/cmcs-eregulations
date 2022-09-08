@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 
 from .utils import OpenApiPathParameter
-from regcore.serializers import SynonymsSerializer
+from regcore.serializers.synonyms import SynonymsSerializer
 from regcore.search.models import Synonym
 
 

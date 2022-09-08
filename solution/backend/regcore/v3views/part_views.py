@@ -3,7 +3,7 @@ from drf_spectacular.utils import extend_schema
 
 from .utils import OpenApiPathParameter
 
-from regcore.serializers import StringListSerializer
+from regcore.serializers.metadata import StringListSerializer
 from regcore.models import Part
 
 

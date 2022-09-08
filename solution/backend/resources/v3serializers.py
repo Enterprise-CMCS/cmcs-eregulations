@@ -276,3 +276,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         main.docket_number_prefixes = list(set(prefixes))
         main.save()
         return main
+
+
+class StringListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return instance

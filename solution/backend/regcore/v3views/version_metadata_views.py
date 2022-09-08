@@ -10,7 +10,7 @@ from .mixins import (
     PartStructureNodesMixin,
 )
 
-from regcore.serializers import ContentsSerializer
+from regcore.serializers.toc import TOCSerializer
 
 
 @extend_schema(
@@ -19,7 +19,7 @@ from regcore.serializers import ContentsSerializer
     parameters=PartPropertiesMixin.PARAMETERS,
 )
 class PartContentsViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = ContentsSerializer
+    serializer_class = TOCSerializer
 
     def retrieve(self, request, *args, **kwargs):
         serializer = self.serializer_class(self.get_object().toc)
@@ -48,7 +48,7 @@ class PartSubpartsViewSet(PartStructureNodesMixin, viewsets.ReadOnlyModelViewSet
     parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.", str)] + PartPropertiesMixin.PARAMETERS,
 )
 class SubpartContentsViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = ContentsSerializer
+    serializer_class = TOCSerializer
 
     def retrieve(self, request, *args, **kwargs):
         for node in self.get_object().toc["children"]:

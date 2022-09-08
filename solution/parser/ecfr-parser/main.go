@@ -330,7 +330,7 @@ func handleVersion(ctx context.Context, thread int, version *eregs.Part) error {
 	}
 
 	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
-	if _, err := eregs.PostPart(ctx, version); err != nil {
+	if _, err := eregs.PutPart(ctx, version); err != nil {
 		return err
 	}
 

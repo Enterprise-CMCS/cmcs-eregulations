@@ -59,13 +59,15 @@ type ParserResult struct {
 	Errors          int    `json:"errors,string"`
 }
 
-// PostPart is the function that sends a part to the eRegs server
-func PostPart(ctx context.Context, p *Part) (int, error) {
-	eregsPath, err := url.Parse(BaseURL)
+// PutPart is the function that sends a part to the eRegs server
+func PutPart(ctx context.Context, p *Part) (int, error) {
+	eregsPath, err := getV3URL()
 	if err != nil {
 		return -1, err
 	}
-	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
+
+	eregsPath.Path = path.Join(eregsPath.Path, "/part")
+	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPut)
 }
 
 // PostParserResult is the function that sends a parser result to the eRegs server

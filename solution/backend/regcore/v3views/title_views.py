@@ -7,10 +7,9 @@ from .mixins import MultipleFieldLookupMixin
 from regcore.models import Title, Part
 from regcore.views import SettingsAuthentication
 
-from regcore.serializers import (
-    ContentsSerializer,
+from regcore.serializers.toc import TOCSerializer
+from regcore.serializers.metadata import (
     TitlesSerializer,
-    TitleUploadSerializer,
     TitleRetrieveSerializer,
     PartsSerializer,
 )
@@ -20,7 +19,7 @@ from regcore.serializers import (
                            "Each object in the array is a TOC for a specific Title.")
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all().values_list("toc", flat=True)
-    serializer_class = ContentsSerializer
+    serializer_class = TOCSerializer
 
 
 @extend_schema(description="Retrieve a simple list of all Titles in the system.")
@@ -41,8 +40,9 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
-        if self.request.method == "POST" or self.request.method == "PUT":
-            return TitleUploadSerializer
+        # TODO: REWRITE THIS VIEWSET
+        #if self.request.method == "POST" or self.request.method == "PUT":
+        #    return TitleUploadSerializer
         return TitleRetrieveSerializer
 
 
@@ -52,7 +52,7 @@ class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 )
 class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Title.objects.all().values_list("toc", flat=True)
-    serializer_class = ContentsSerializer
+    serializer_class = TOCSerializer
     lookup_fields = {"name": "title"}
 
 
