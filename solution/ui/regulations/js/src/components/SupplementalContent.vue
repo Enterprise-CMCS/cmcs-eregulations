@@ -229,6 +229,7 @@ export default {
                         );
                 } else {
                     await this.get_location_string()
+                    console.log("this.joined_locations", this.joined_locations);
                     const response = await v3GetSupplementalContent(
                         this.api_url,
                         {locations: location || this.joined_locations }
@@ -252,7 +253,6 @@ export default {
         },
         async get_location_string(){
             const sections = await getSubpartTOC(this.api_url, this.title, this.part, this.subparts[0])
-            console.log("sections", sections);
             const flatSections = flattenSubpart({children: sections})
             this.joined_locations = `${flatSections.children.reduce((previousValue, section) =>  `${previousValue}locations=${this.title}.${this.part}.${section.identifier[1]}&`, "") }locations=${this.title}.${this.part}.${this.subparts[0]}`;
         },
