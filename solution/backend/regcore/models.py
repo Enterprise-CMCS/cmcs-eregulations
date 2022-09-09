@@ -33,6 +33,7 @@ class Part(models.Model):
 
     document = models.JSONField()
     structure = models.JSONField()
+    depth_stack = models.JSONField()
     depth = models.IntegerField()
 
     # TODO: rename to title

@@ -44,6 +44,17 @@ class PartUploadSerializer(serializers.Serializer):
         instance.structure = validated_data.get("structure")
         instance.depth = validated_data.get("depth")
 
+        # create depth stack for front page TOC
+        stack = []
+        current = instance.structure
+        for i in range(instance.depth + 1):
+            structure_copy = current.copy()
+            del structure_copy["children"]
+            stack.append(structure_copy)
+            current = current["children"][0]
+        instance.depth_stack = stack
+
+        # load sections and subparts
         if apps.is_installed("resources"):
             from resources.models import Section, Subpart  # can throw ImportError, this is fine
 

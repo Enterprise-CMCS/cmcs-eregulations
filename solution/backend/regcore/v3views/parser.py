@@ -45,6 +45,7 @@ class PartUploadViewSet(viewsets.ModelViewSet):
         defaults = {
             "document": {},
             "structure": {},
+            "depth_stack": [],
             "depth": -1,
         }
         part, created = Part.objects.get_or_create(title=data["title"], name=data["name"], date=data["date"], defaults=defaults)
