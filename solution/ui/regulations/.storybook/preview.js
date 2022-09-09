@@ -28,20 +28,11 @@ export const parameters = {
         handlers: {
             toc: [
                 rest.get(
-                    "*/v3/title/42/part/433/version/latest/subpart/A/toc",
+                    "*/v3/title/:title/part/:part/version/:version/subpart/:subpart/toc",
                     (req, res, ctx) => {
                         return res(
                             ctx.status(200),
-                            ctx.json(toc["433"])
-                        );
-                    }
-                ),
-                rest.get(
-                    "*/v3/title/42/part/435/version/latest/subpart/A/toc",
-                    (req, res, ctx) => {
-                        return res(
-                            ctx.status(200),
-                            ctx.json(toc["435"])
+                            ctx.json(toc[req.params.part])
                         );
                     }
                 ),
