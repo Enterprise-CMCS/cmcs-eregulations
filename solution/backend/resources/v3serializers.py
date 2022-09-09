@@ -191,7 +191,7 @@ class SectionCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class LocationRangeCreateSerializer(serializers.Serializer):
+class SectionRangeCreateSerializer(serializers.Serializer):
     title = serializers.CharField()
     part = serializers.CharField()
     first_sec = serializers.IntegerField()
@@ -199,8 +199,8 @@ class LocationRangeCreateSerializer(serializers.Serializer):
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
-    locations = SectionCreateSerializer(many=True, allow_null=True)
-    section_ranges = LocationRangeCreateSerializer(many=True, allow_null=True, required=False)
+    sections = SectionCreateSerializer(many=True, allow_null=True)
+    section_ranges = SectionRangeCreateSerializer(many=True, allow_null=True, required=False)
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     name = serializers.CharField(allow_blank=True, allow_null=True)
@@ -244,7 +244,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
         # set the locations on the instance
         locations = []
-        for loc in (validated_data["locations"] or []):
+        for loc in (validated_data["sections"] or []):
             title = loc["title"]
             part = loc["part"]
             section_id = loc["section_id"]

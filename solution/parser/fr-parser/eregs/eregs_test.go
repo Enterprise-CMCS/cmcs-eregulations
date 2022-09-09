@@ -43,7 +43,7 @@ func TestSendDocument(t *testing.T) {
 					"CMS-0001-C1",
 				},
 				DocumentNumber: "2021-12345",
-				Locations: []*Section{
+				Sections: []*Section{
 					&Section{
 						Title:   "42",
 						Part:    "433",

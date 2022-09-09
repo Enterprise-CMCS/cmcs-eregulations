@@ -52,8 +52,8 @@ type FRDoc struct {
 	Date           string           `json:"date"`
 	DocketNumbers  []string         `json:"docket_numbers"`
 	DocumentNumber string           `json:"document_number"`
-	Locations      []*Section       `json:"locations"`
-	LocationRanges []*SectionRanges `json:"section_ranges"`
+	Sections       []*Section       `json:"sections"`
+	SectionRanges  []*SectionRanges `json:"section_ranges"`
 }
 
 // SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL
@@ -127,7 +127,7 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 			continue
 		}
 		if sections[0].Part != sections[1].Part {
-			log.Warn("[eregs] Section identifier ", secRange, " is contains different parts.")
+			log.Warn("[eregs] Section identifier ", secRange, "  contains different parts.")
 			continue
 		}
 		s := &SectionRanges{

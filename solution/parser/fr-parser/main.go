@@ -204,8 +204,8 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 		if err != nil {
 			log.Error("[main] failed to fetch list of sections for FR doc ", sectionRanges, " ", content.DocumentNumber, ": ", err)
 		} else {
-			doc.Locations = eregs.CreateSections(sections, partMap)
-			doc.LocationRanges = eregs.CreateSectionRanges(sectionRanges, partMap)
+			doc.Sections = eregs.CreateSections(sections, partMap)
+			doc.SectionRanges = eregs.CreateSectionRanges(sectionRanges, partMap)
 			if sectionRanges != nil {
 				fmt.Println(doc)
 			}
