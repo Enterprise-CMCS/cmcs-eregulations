@@ -1,8 +1,9 @@
 <template>
     <div class="resource_btn_container">
         <button class="default-btn action-btn search_resource_btn" @click="createCSV">Download
-            Spreadsheet(CSV)</button>
-    </div>
+            Spreadsheet(CSV) <v-icon>mdi-tray-arrow-down</v-icon></button>
+        </div>
+
 </template>
 
 <script>
@@ -13,9 +14,6 @@ import {
 
 } from "../../utilities/api";
 export default {
-    components: {
-        Icon,
-    },
     name: "ResourceExportBtn",
     props: {
         searchQuery: {
