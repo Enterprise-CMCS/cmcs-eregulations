@@ -18,6 +18,7 @@
   "dependencies": {
     "@cmsgov/design-system": "^2.5.0",
     "@fortawesome/fontawesome-free": "^5.15.3",
+    "export-from-json": "^1.6.0",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "react": "16.x",
