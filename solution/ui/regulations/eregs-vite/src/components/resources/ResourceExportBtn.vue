@@ -1,24 +1,14 @@
 <template>
     <div class="resource_btn_container">
-        <button
-            class="default-btn action-btn search_resource_btn"
-            @click="createCSV"
-        >
+        <button class="default-btn action-btn search_resource_btn" @click="createCSV">
             Download Spreadsheet (CSV)&nbsp;&nbsp;
-            <svg
-                width="18"
-                height="17"
-                viewBox="0 0 18 17"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M1.78361 16.5C1.36371 16.5 0.996298 16.35 0.681372 16.05C0.366447 15.75 0.208984 15.4 0.208984 15V11.425H1.78361V15H15.4304V11.425H17.005V15C17.005 15.4 16.8475 15.75 16.5326 16.05C16.2177 16.35 15.8503 16.5 15.4304 16.5H1.78361ZM8.60699 12.675L3.54194 7.85L4.67043 6.775L7.81968 9.775V0.5H9.39431V9.775L12.5436 6.775L13.672 7.85L8.60699 12.675Z"
-                    fill="white"
-                />
+                    fill="white" />
             </svg>
         </button>
-        </div>
+    </div>
 
 </template>
 
@@ -59,20 +49,32 @@ export default {
             let supSort = this.supplementalContent.map(cont => {
                 const content = {}
                 content["category"] = cont.category.name
-                content["parent"] = cont.category.parent ? cont.category.parent.name : "N/A"
                 content["date"] = cont.date
                 content["description"] = cont.description
+                content["document_number"] = cont.document_number
+                content["name"] = cont.name
                 content["url"] = cont.url
+                content["Related Regulations"] = this.formatLocations(cont.locations)
                 return content
             }
             )
-
-
             let fileName = 'Resources'
             let exportType = exportFromJSON.types.csv;
             exportFromJSON({ data: supSort, fileName: fileName, exportType: exportType })
         },
-
+        formatLocations(locations) {
+            let locString = "";
+            for (let location in locations) {
+                console.log(location)
+                if (locations[location].type == "section") {
+                    locString = `${locString} CFR ${locations[location].title} ${locations[location].part}.${locations[location].section_id},`
+                }
+                else {
+                    locString = `${locString} ${locations[location].title} Subpart ${locations[location].subpart_id},`
+                }
+            }
+            return locString
+        },
         async getSupplementalContent() {
             let supNum = 0;
             let page = 1;
