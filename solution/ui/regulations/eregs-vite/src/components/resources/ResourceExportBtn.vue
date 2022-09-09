@@ -27,13 +27,15 @@ export default {
             default: ""
         },
         partDict: {
-            default: {}
+            type: Object,
+            default: () => {}
         },
         categories: {
             type: Array,
-            default: []
+            default:() => []
         },
         supCount: {
+            type: Number,
             default: 0
         }
     },
@@ -44,27 +46,28 @@ export default {
 
     },
     methods: {
-        async createCSV(e) {
+        async createCSV() {
             this.supplementalContent = await this.getSupplementalContent()
-            let supSort = this.supplementalContent.map(cont => {
+            const supSort = this.supplementalContent.map(cont => {
                 const content = {}
-                content["category"] = cont.category.name
-                content["date"] = cont.date
-                content["description"] = cont.description
-                content["document_number"] = cont.document_number
-                content["name"] = cont.name
-                content["url"] = cont.url
-                content["Related Regulations"] = this.formatLocations(cont.locations)
+                content.category= cont.category.name
+                content.date = cont.date
+                content.description = cont.description
+                content.document_number = cont.document_number
+                content.name = cont.name
+                content.url = cont.url
+                content.Related_Regulations = this.formatLocations(cont.locations)
                 return content
             }
             )
-            let fileName = 'Resources'
-            let exportType = exportFromJSON.types.csv;
-            exportFromJSON({ data: supSort, fileName: fileName, exportType: exportType })
+            const fileName = 'Resources'
+            const exportType = exportFromJSON.types.csv;
+            exportFromJSON({ data: supSort, fileName, exportType })
         },
+
         formatLocations(locations) {
             let locString = "";
-            for (let location in locations) {
+            for (const location in locations) {
                 if (locations[location].type == "section") {
                     locString = `${locString} CFR ${locations[location].title} ${locations[location].part}.${locations[location].section_id},`
                 }
@@ -80,15 +83,15 @@ export default {
             let content = []
             let responseContent = []
             while (supNum < this.supCount) {
-                content = await getSupplementalContentV3({
-                    page: page,
+                content = getSupplementalContentV3({
+                    page,
                     partDict: this.partDict,
                     categories: this.categories,
                     q: this.searchQuery
                 });
 
-                page = page + 1
-                supNum = supNum + 100;
+                page += 1
+                supNum += 100;
                 responseContent = responseContent.concat(content.results)
 
             }
