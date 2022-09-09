@@ -36,7 +36,7 @@
                         </v-list>
                     </FancyDropdown>
                     <ResourceExportBtn :partDict="partDict" :categories="categories" :searchQuery="searchQuery"
-                        :supCount="supplementalContentCount" />
+                        :supCount="count" />
                 </div>
             </div>
             <div v-if="!isLoading">
