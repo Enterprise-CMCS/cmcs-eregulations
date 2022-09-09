@@ -65,7 +65,6 @@ export default {
         formatLocations(locations) {
             let locString = "";
             for (let location in locations) {
-                console.log(location)
                 if (locations[location].type == "section") {
                     locString = `${locString} CFR ${locations[location].title} ${locations[location].part}.${locations[location].section_id},`
                 }
@@ -78,7 +77,6 @@ export default {
         async getSupplementalContent() {
             let supNum = 0;
             let page = 1;
-            console.log('hi')
             let content = []
             let responseContent = []
             while (supNum < this.supCount) {
