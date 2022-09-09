@@ -32,22 +32,20 @@ export const parameters = {
                     (req, res, ctx) => {
                         return res(
                             ctx.status(200),
-                            ctx.json(toc)
+                            ctx.json(toc["433"])
+                        );
+                    }
+                ),
+                rest.get(
+                    "*/v3/title/42/part/435/version/latest/subpart/A/toc",
+                    (req, res, ctx) => {
+                        return res(
+                            ctx.status(200),
+                            ctx.json(toc["435"])
                         );
                     }
                 ),
             ],
-            supplementalContent: [
-                rest.get(
-                    "*/v3/resources/?locations=42.433.8&locations=42.433.10&locations=42.433.11&locations=42.433.15&locations=42.433.32&locations=42.433.34&locations=42.433.35&locations=42.433.36&locations=42.433.37&locations=42.433.38&locations=42.433.40&locations=42.433.A&paginate=true&location_details=false",
-                    (req, res, ctx) => {
-                        return res(
-                            ctx.status(200),
-                            ctx.json(locations)
-                        );
-                    }
-                ),
-            ]
         },
     },
 };
