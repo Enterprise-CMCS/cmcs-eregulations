@@ -1,3 +1,10 @@
+const emptyLocations = {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+}
+
 const locations = {
     count: 66,
     next: null,
@@ -3979,4 +3986,7 @@ const locations = {
     ],
 };
 
-export default locations;
+export {
+    locations,
+    emptyLocations
+};

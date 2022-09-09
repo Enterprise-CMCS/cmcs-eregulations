@@ -3,7 +3,7 @@ import { rest } from 'msw'
 import "!style-loader!raw-loader!../../../static-assets/regulations/css/main.css";
 
 import toc from "mocks/toc";
-import locations from "mocks/locations";
+import { locations } from "mocks/locations";
 
 // Initialize MSW
 initialize();
@@ -26,7 +26,7 @@ export const parameters = {
     },
     msw: {
         handlers: {
-            others: [
+            toc: [
                 rest.get(
                     "*/v3/title/42/part/433/version/latest/subpart/A/toc",
                     (req, res, ctx) => {
@@ -36,6 +36,8 @@ export const parameters = {
                         );
                     }
                 ),
+            ],
+            supplementalContent: [
                 rest.get(
                     "*/v3/resources/?locations=42.433.8&locations=42.433.10&locations=42.433.11&locations=42.433.15&locations=42.433.32&locations=42.433.34&locations=42.433.35&locations=42.433.36&locations=42.433.37&locations=42.433.38&locations=42.433.40&locations=42.433.A&paginate=true&location_details=false",
                     (req, res, ctx) => {
@@ -45,7 +47,7 @@ export const parameters = {
                         );
                     }
                 ),
-            ],
+            ]
         },
     },
 };
