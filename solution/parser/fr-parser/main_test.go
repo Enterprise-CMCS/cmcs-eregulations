@@ -487,7 +487,7 @@ func TestProcessDocument(t *testing.T) {
 				return nil, nil, nil, fmt.Errorf("this is expected")
 			},
 			SendDocumentFunc: func(ctx context.Context, doc *eregs.FRDoc) error {
-				if len(doc.Locations) != 0 {
+				if len(doc.Sections) != 0 {
 					return fmt.Errorf("document locations length NOT zero")
 				}
 				return nil
