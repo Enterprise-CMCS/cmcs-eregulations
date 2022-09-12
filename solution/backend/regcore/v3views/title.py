@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema
 
 from .utils import OpenApiPathParameter
 from .mixins import MultipleFieldLookupMixin
-from regcore.models import Title, Part
+from regcore.models import Part
 from regcore.views import SettingsAuthentication
 
 from regcore.serializers.toc import (

@@ -4,15 +4,6 @@ from django.core.validators import MinValueValidator, RegexValidator
 from solo.models import SingletonModel
 
 
-class Title(models.Model):
-    name = models.CharField(max_length=8, unique=True)
-    last_updated = models.DateTimeField(auto_now=True)
-    toc = models.JSONField()
-
-    class Meta:
-        ordering = ("name",)
-
-
 class PartQuerySet(models.QuerySet):
     def effective(self, date):
         return self.filter(date__lte=date).order_by("name", "-date").distinct("name")
@@ -35,10 +26,6 @@ class Part(models.Model):
     structure = models.JSONField()
     depth_stack = models.JSONField()
     depth = models.IntegerField()
-
-    # TODO: rename to title
-    # also, part upload endpoint needs to connect this to title object
-    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")
 
     objects = PartManager()
 
