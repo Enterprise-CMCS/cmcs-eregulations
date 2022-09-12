@@ -90,14 +90,15 @@ type XMLQuery struct {
 
 // FetchSections pulls the full document from the Federal Register and extracts all SECTNO tags
 // Returns a list of sections and a map of parts => titles
-func FetchSections(ctx context.Context, path string, titles map[string]struct{}) ([]string, map[string]string, error) {
+func FetchSections(ctx context.Context, path string, titles map[string]struct{}) ([]string, []string, map[string]string, error) {
 	reader, err := fetch(ctx, path)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 
 	cfrs := make(map[string]string)
 	var sections []string
+	var ranges []string
 
 	d := xml.NewDecoder(reader)
 	for {
@@ -106,14 +107,14 @@ func FetchSections(ctx context.Context, path string, titles map[string]struct{})
 			if err == io.EOF {
 				break
 			}
-			return nil, nil, fmt.Errorf("failed to decode XML: %+v", err)
+			return nil, nil, nil, fmt.Errorf("failed to decode XML: %+v", err)
 		}
 		if se, ok := t.(xml.StartElement); ok {
 			if se.Name.Local == "SECTNO" || se.Name.Local == "CFR" {
 				var l XMLQuery
 				err = d.DecodeElement(&l, &se)
 				if err != nil {
-					return nil, nil, fmt.Errorf("failed to decode element: %+v", err)
+					return nil, nil, nil, fmt.Errorf("failed to decode element: %+v", err)
 				}
 				if se.Name.Local == "CFR" {
 					// extract CFR information and put it in the CFR table
@@ -128,9 +129,11 @@ func FetchSections(ctx context.Context, path string, titles map[string]struct{})
 						}
 					}
 				} else if se.Name.Local == "SECTNO" {
-					section, err := extractSection(l.Loc)
+					section, sectionRanges, err := extractSection(l.Loc)
 					if err != nil {
 						log.Warn("[fedreg] ", err)
+					} else if sectionRanges != "" {
+						ranges = append(ranges, sectionRanges)
 					} else {
 						sections = append(sections, section)
 					}
@@ -139,16 +142,21 @@ func FetchSections(ctx context.Context, path string, titles map[string]struct{})
 		}
 	}
 
-	return sections, cfrs, nil
+	return sections, ranges, cfrs, nil
 }
 
-func extractSection(input string) (string, error) {
+func extractSection(input string) (string, string, error) {
+	rangePat := regexp.MustCompile(`\d+\.\d+-\d+\.\d+`)
 	pat := regexp.MustCompile(`\d+\.\d+`)
+	r := rangePat.FindString(input)
+	if r != "" {
+		return "", r, nil
+	}
 	s := pat.FindString(input)
 	if s == "" {
-		return s, fmt.Errorf("failed to extract section from %s", input)
+		return s, "", fmt.Errorf("failed to extract section from %s", input)
 	}
-	return s, nil
+	return s, "", nil
 }
 
 func extractCFR(input string) (string, []string, error) {

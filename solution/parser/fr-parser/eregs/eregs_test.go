@@ -43,7 +43,7 @@ func TestSendDocument(t *testing.T) {
 					"CMS-0001-C1",
 				},
 				DocumentNumber: "2021-12345",
-				Locations: []*Section{
+				Sections: []*Section{
 					&Section{
 						Title:   "42",
 						Part:    "433",
@@ -133,6 +133,36 @@ func TestCreateSections(t *testing.T) {
 	}
 
 	output := CreateSections(sections, partMap)
+	if diff := deep.Equal(expected, output); diff != nil {
+		t.Errorf("output not as expected: %+v", diff)
+	}
+}
+
+func TestCreateSectionRanges(t *testing.T) {
+	ranges := []string{
+		"443.42-443.50",
+		"445.50-445.70",
+	}
+
+	partMap := map[string]string{
+		"443": "42",
+		"445": "42",
+	}
+	expected := []*SectionRanges{
+		&SectionRanges{
+			Title:    "42",
+			Part:     "443",
+			FirstSec: "42",
+			LastSec:  "50",
+		},
+		&SectionRanges{
+			Title:    "42",
+			Part:     "445",
+			FirstSec: "50",
+			LastSec:  "70",
+		},
+	}
+	output := CreateSectionRanges(ranges, partMap)
 	if diff := deep.Equal(expected, output); diff != nil {
 		t.Errorf("output not as expected: %+v", diff)
 	}
