@@ -45,11 +45,8 @@ urlpatterns = [
         path("titles", title.TitlesViewSet.as_view({
             "get": "list",
         })),
-        path("title/<title>", title.TitleViewSet.as_view({
-            "get": "retrieve",
-        })),
         path("title/<title>/toc", title.TitleContentsViewSet.as_view({
-            "get": "retrieve",
+            "get": "list",
         })),
         path("title/<title>/parts", title.PartsViewSet.as_view({
             "get": "list",

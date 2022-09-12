@@ -7,11 +7,12 @@ from .mixins import MultipleFieldLookupMixin
 from regcore.models import Title, Part
 from regcore.views import SettingsAuthentication
 
-from regcore.serializers.toc import TOCSerializer, FrontPageTOCSerializer
-from regcore.serializers.metadata import (
-    TitleRetrieveSerializer,
-    PartsSerializer,
+from regcore.serializers.toc import (
+    TOCSerializer,
+    FrontPageTOCSerializer,
+    TitleTOCSerializer,
 )
+from regcore.serializers.metadata import PartsSerializer
 
 from regcore.serializers.metadata import StringListSerializer
 
@@ -30,31 +31,15 @@ class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(
-    description="Retrieve, create, or update a specific Title object.",
-    parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.", int)],
-)
-class TitleViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
-    queryset = Title.objects.all()
-    lookup_fields = {"name": "title"}
-
-    authentication_classes = [SettingsAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def get_serializer_class(self):
-        # TODO: REWRITE THIS VIEWSET
-        #if self.request.method == "POST" or self.request.method == "PUT":
-        #    return TitleUploadSerializer
-        return TitleRetrieveSerializer
-
-
-@extend_schema(
     description="Retrieve the table of contents for a specific Title, with detail down to the Part level.",
     parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.", int)],
 )
 class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
-    queryset = Title.objects.all().values_list("toc", flat=True)
-    serializer_class = TOCSerializer
-    lookup_fields = {"name": "title"}
+    serializer_class = TitleTOCSerializer
+    
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        return Part.objects.filter(title=title).order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
 
 
 @extend_schema(

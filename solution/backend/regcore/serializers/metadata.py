@@ -1,14 +1,5 @@
 from rest_framework import serializers
 
-from .toc import TOCSerializer
-
-
-class TitleRetrieveSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    last_updated = serializers.CharField()
-    toc = TOCSerializer()
-
 
 class PartsSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -16,7 +7,6 @@ class PartsSerializer(serializers.Serializer):
     date = serializers.CharField()
     last_updated = serializers.CharField()
     depth = serializers.IntegerField()
-    title_object = serializers.IntegerField()
 
 
 class StringListSerializer(serializers.Serializer):
