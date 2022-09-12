@@ -7,19 +7,21 @@ from .mixins import MultipleFieldLookupMixin
 from regcore.models import Title, Part
 from regcore.views import SettingsAuthentication
 
-from regcore.serializers.toc import TOCSerializer
+from regcore.serializers.toc import TOCSerializer, FrontPageTOCSerializer
 from regcore.serializers.metadata import (
     TitlesSerializer,
     TitleRetrieveSerializer,
     PartsSerializer,
 )
 
+from regcore.serializers.metadata import StringListSerializer
+
 
 @extend_schema(description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "
                            "Each object in the array is a TOC for a specific Title.")
 class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Title.objects.all().values_list("toc", flat=True)
-    serializer_class = TOCSerializer
+    queryset = Part.objects.order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
+    serializer_class = FrontPageTOCSerializer
 
 
 @extend_schema(description="Retrieve a simple list of all Titles in the system.")
