@@ -39,13 +39,13 @@ urlpatterns = [
     ])),
     path("v3/", include([
         path("resources/", include('resources.v3urls')),
-        path("toc", title.ContentsViewSet.as_view({
+        path("toc", title.TOCViewSet.as_view({
             "get": "list",
         })),
         path("titles", title.TitlesViewSet.as_view({
             "get": "list",
         })),
-        path("title/<title>/toc", title.TitleContentsViewSet.as_view({
+        path("title/<title>/toc", title.TitleTOCViewSet.as_view({
             "get": "list",
         })),
         path("title/<title>/parts", title.PartsViewSet.as_view({
@@ -57,7 +57,7 @@ urlpatterns = [
         path("title/<title>/part/<part>/version/<version>", contents.PartViewSet.as_view({
             "get": "retrieve",
         })),
-        path("title/<title>/part/<part>/version/<version>/toc", metadata.PartContentsViewSet.as_view({
+        path("title/<title>/part/<part>/version/<version>/toc", metadata.PartTOCViewSet.as_view({
             "get": "retrieve",
         })),
         path("title/<title>/part/<part>/version/<version>/sections", metadata.PartSectionsViewSet.as_view({
@@ -74,7 +74,7 @@ urlpatterns = [
         })),
         path(
             "title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc",
-            metadata.SubpartContentsViewSet.as_view({
+            metadata.SubpartTOCViewSet.as_view({
                 "get": "retrieve",
             }),
         ),

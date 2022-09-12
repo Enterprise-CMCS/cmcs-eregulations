@@ -18,7 +18,7 @@ from regcore.serializers.toc import TOCSerializer
                 "with detail down to the Section level.",
     parameters=PartPropertiesMixin.PARAMETERS,
 )
-class PartContentsViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
+class PartTOCViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = TOCSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -47,7 +47,7 @@ class PartSubpartsViewSet(PartStructureNodesMixin, viewsets.ReadOnlyModelViewSet
                 "with detail down to the Section level.",
     parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.", str)] + PartPropertiesMixin.PARAMETERS,
 )
-class SubpartContentsViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
+class SubpartTOCViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = TOCSerializer
 
     def retrieve(self, request, *args, **kwargs):

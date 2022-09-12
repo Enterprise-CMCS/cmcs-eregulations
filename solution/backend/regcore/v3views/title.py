@@ -19,7 +19,7 @@ from regcore.serializers.metadata import StringListSerializer
 
 @extend_schema(description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "
                            "Each object in the array is a TOC for a specific Title.")
-class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
+class TOCViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
     serializer_class = FrontPageTOCSerializer
 
@@ -34,7 +34,7 @@ class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
     description="Retrieve the table of contents for a specific Title, with detail down to the Part level.",
     parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.", int)],
 )
-class TitleContentsViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+class TitleTOCViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = TitleTOCSerializer
     
     def get_queryset(self):
