@@ -3,12 +3,6 @@ from rest_framework import serializers
 from .toc import TOCSerializer
 
 
-class TitlesSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    last_updated = serializers.CharField()
-
-
 class TitleRetrieveSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()

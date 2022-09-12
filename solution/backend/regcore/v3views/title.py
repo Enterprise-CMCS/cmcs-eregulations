@@ -9,7 +9,6 @@ from regcore.views import SettingsAuthentication
 
 from regcore.serializers.toc import TOCSerializer, FrontPageTOCSerializer
 from regcore.serializers.metadata import (
-    TitlesSerializer,
     TitleRetrieveSerializer,
     PartsSerializer,
 )
@@ -26,8 +25,8 @@ class ContentsViewSet(viewsets.ReadOnlyModelViewSet):
 
 @extend_schema(description="Retrieve a simple list of all Titles in the system.")
 class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Title.objects.all()
-    serializer_class = TitlesSerializer
+    queryset = Part.objects.order_by("title").distinct("title").values_list("title", flat=True)
+    serializer_class = StringListSerializer
 
 
 @extend_schema(
