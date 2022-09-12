@@ -1,7 +1,7 @@
 <template>
     <div class="resource_btn_container">
-        <button class="default-btn action-btn search_resource_btn" @click="createCSV">
-            Download Spreadsheet (CSV)&nbsp;&nbsp;
+        <button class="default-btn action-btn search_resource_btn desktop-btn-label`" @click="createCSV">
+            <span class="desktop-btn-label">Download Spreadsheet (CSV)</span><span class="mobile-btn-label">CSV</span>&nbsp;&nbsp;
             <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M1.78361 16.5C1.36371 16.5 0.996298 16.35 0.681372 16.05C0.366447 15.75 0.208984 15.4 0.208984 15V11.425H1.78361V15H15.4304V11.425H17.005V15C17.005 15.4 16.8475 15.75 16.5326 16.05C16.2177 16.35 15.8503 16.5 15.4304 16.5H1.78361ZM8.60699 12.675L3.54194 7.85L4.67043 6.775L7.81968 9.775V0.5H9.39431V9.775L12.5436 6.775L13.672 7.85L8.60699 12.675Z"
@@ -28,29 +28,34 @@ export default {
         },
         partDict: {
             type: Object,
-            default: () => {}
+            default: () => { }
         },
         categories: {
             type: Array,
-            default:() => []
+            default: () => []
         },
         supCount: {
             type: Number,
             default: 0
         }
     },
-    data: {
-        supplementalContent: []
+
+    data() {
+        return {
+            supplementalContent: []
+        }
     },
+
     computed: {
 
     },
+    
     methods: {
         async createCSV() {
             this.supplementalContent = await this.getSupplementalContent()
             const supSort = this.supplementalContent.map(cont => {
                 const content = {}
-                content.category= cont.category.name
+                content.category = cont.category.name
                 content.date = cont.date
                 content.description = cont.description
                 content.document_number = cont.document_number
@@ -80,42 +85,54 @@ export default {
         async getSupplementalContent() {
             let supNum = 0;
             let page = 1;
-            let content = []
             let responseContent = []
+            const content = []
             while (supNum < this.supCount) {
-                content = getSupplementalContentV3({
+                content.push(getSupplementalContentV3({
                     page,
                     partDict: this.partDict,
                     categories: this.categories,
                     q: this.searchQuery
-                });
-
+                }));
                 page += 1
                 supNum += 100;
-                responseContent = responseContent.concat(content.results)
+                
 
             }
-            return responseContent
+            responseContent = await Promise.all(content)
+            const ret = responseContent.map(x => x.results).flat()
+            return ret
         },
     },
 }
 </script>
-<style scoped>
-.csv-button {
-    border: 1px;
-    border-color: black;
-    background-color: #046791;
-    color: white;
-    padding-left: 5px;
-    font-size: 14px;
-    height: 36px;
-    width: 246px;
-}
+<style lang="scss" scoped>
 
+.action-btn {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.resource_btn_container{
+    padding-left:5px;
+}
 .export-csv {
     width: 100%;
     display: block;
     padding-top: 6px;
     padding-bottom: 6px;
+}
+
+.desktop-btn-label {
+    @include custom-max($mobile-max / 1px) {
+        // 767px
+        display: none;
+    }
+}
+
+.mobile-btn-label {
+    @include screen-md {
+        // 768px
+        display: none;
+    }
 }
 </style>

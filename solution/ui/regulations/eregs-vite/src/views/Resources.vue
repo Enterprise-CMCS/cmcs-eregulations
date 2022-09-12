@@ -73,6 +73,7 @@
                         :sortMethod="sortMethod"
                         :disabledSortOptions="disabledSortOptions"
                         :sortDisabled="sortDisabled"
+                        :partDict="partDict"
                         @sort="setSortMethod"
                     />
                 </div>

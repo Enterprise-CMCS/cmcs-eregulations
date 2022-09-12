@@ -243,6 +243,11 @@ export default {
                 return [];
             },
         },
+        partDict: {
+            type: Object,
+            required: false,
+            default:() => {}
+        }
     },
 
     data() {
