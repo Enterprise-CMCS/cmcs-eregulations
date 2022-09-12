@@ -200,11 +200,15 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 
 	if content.FullTextURL != "" {
 		log.Trace("[main] retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
-		sections, partMap, err := fetchSectionsFunc(ctx, content.FullTextURL, titles)
+		sections, sectionRanges, partMap, err := fetchSectionsFunc(ctx, content.FullTextURL, titles)
 		if err != nil {
-			log.Error("[main] failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
+			log.Error("[main] failed to fetch list of sections for FR doc ", sectionRanges, " ", content.DocumentNumber, ": ", err)
 		} else {
-			doc.Locations = eregs.CreateSections(sections, partMap)
+			doc.Sections = eregs.CreateSections(sections, partMap)
+			doc.SectionRanges = eregs.CreateSectionRanges(sectionRanges, partMap)
+			if sectionRanges != nil {
+				fmt.Println(doc)
+			}
 		}
 	} else {
 		log.Warn("[main] no list of sections available for FR doc ", content.DocumentNumber)
