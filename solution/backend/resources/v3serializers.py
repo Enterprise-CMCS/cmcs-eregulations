@@ -1,3 +1,4 @@
+
 from django.urls import reverse
 
 from rest_framework import serializers
@@ -190,8 +191,16 @@ class SectionCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class SectionRangeCreateSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    part = serializers.CharField()
+    first_sec = serializers.IntegerField()
+    last_sec = serializers.IntegerField()
+
+
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
-    locations = SectionCreateSerializer(many=True, allow_null=True)
+    sections = SectionCreateSerializer(many=True, allow_null=True)
+    section_ranges = SectionRangeCreateSerializer(many=True, allow_null=True, required=False)
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     name = serializers.CharField(allow_blank=True, allow_null=True)
@@ -235,13 +244,23 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
         # set the locations on the instance
         locations = []
-        for loc in (validated_data["locations"] or []):
+        for loc in (validated_data["sections"] or []):
             title = loc["title"]
             part = loc["part"]
             section_id = loc["section_id"]
             location, _ = Section.objects.get_or_create(title=title, part=part, section_id=section_id)
             location.save()
             locations.append(location)
+
+        for loc_range in (validated_data["section_ranges"] or []):
+            title = loc_range['title']
+            part = loc_range['part']
+            first_section = loc_range['first_sec']
+            last_section = loc_range['last_sec']
+            Section.objects.get_or_create(title=title, part=part, section_id=first_section)
+            Section.objects.get_or_create(title=title, part=part, section_id=last_section)
+            sections = Section.objects.filter(title=title, part=part, section_id__range=(first_section, last_section))
+            locations.extend(list(sections))
         instance.locations.set(locations)
 
         # set the group on the instance
