@@ -140,6 +140,7 @@ class AbstractResourceSerializer(OptionalFieldDetailsMixin, serializers.Serializ
     optional_details = {
         "category": ("category_details", "true", AbstractCategoryPolymorphicSerializer, False),
         "locations": ("location_details", "true", AbstractLocationPolymorphicSerializer, True),
+        "fr_grouping": ("fr_grouping", "true", AbstractLocationPolymorphicSerializer, True),
     }
 
 
@@ -178,6 +179,8 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
 
     def to_representation(self, instance):
         obj = super().to_representation(instance)
+        if(self.context['fr_grouping'] == 'false'):
+            return obj
         docs = [obj] + obj["related_docs"]
         del obj["related_docs"]
         docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
