@@ -5,6 +5,7 @@ from django.http import Http404
 from drf_spectacular.utils import extend_schema
 from django.db import transaction
 from django.http import JsonResponse
+from django.db import transaction
 
 from .utils import OpenApiPathParameter
 from regcore.serializers.parser import (
@@ -31,6 +32,10 @@ class ParserResultViewSet(viewsets.ModelViewSet):
             serializer = self.serializer_class(parserResult)
             return Response(serializer.data)
         raise Http404()
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        super().create(self, request, *args, **kwargs)
 
 
 @extend_schema(description="Upload a regulation Part to eRegs. Typically only used by the eCFR parser.")

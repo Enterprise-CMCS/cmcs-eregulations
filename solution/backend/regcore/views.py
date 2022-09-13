@@ -10,6 +10,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.db import models
 from django.db.models.functions import Cast
+from django.db import transaction
 
 from regcore.models import Part, ParserConfiguration
 
@@ -74,6 +75,7 @@ class PartsView(generics.ListCreateAPIView):
             query = query.filter(name=part).filter(title=title).order_by('-date')
         return query
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         query = Part.objects.filter(
             name=request.data.get("name"),

@@ -5,6 +5,7 @@ from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q, Case, When, F, BooleanField, ExpressionWrapper
 from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema, OpenApiParameter
+from django.db import transaction
 
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 
@@ -416,6 +417,7 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
     def list(self, request, **kwargs):
         return super(FederalRegisterDocsViewSet, self).list(request, **kwargs)
 
+    @transaction.atomic
     @extend_schema(description="Upload a Federal Register Document to the eRegs Resources system. "
                                "If the document already exists, it will be updated.")
     def update(self, request, **kwargs):
