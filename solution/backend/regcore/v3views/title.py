@@ -14,6 +14,7 @@ from regcore.serializers.toc import (
     TOCSerializer,
     FrontPageTOCSerializer,
     TitleTOCSerializer,
+    TitleTOCListSerializer,
 )
 from regcore.serializers.metadata import PartsSerializer, VersionsSerializer
 
@@ -27,7 +28,10 @@ class TOCViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = FrontPageTOCSerializer
 
 
-@extend_schema(description="Retrieve a simple list of all Titles in the system.")
+@extend_schema(
+    description="Retrieve a simple list of all Titles in the system.",
+    responses={(200, "application/json"): {"type": "string"}},
+)
 class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.order_by("title").distinct("title").values_list("title", flat=True)
     serializer_class = StringListSerializer
@@ -43,6 +47,9 @@ class TitleTOCViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         title = self.kwargs.get("title")
         return Part.objects.filter(title=title).order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
+
+    def retrieve(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 @extend_schema(
