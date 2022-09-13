@@ -32,7 +32,9 @@ module.exports = {
                 __dirname,
                 "../../../static-assets/regulations"
             ),
-            mocks: "../msw/mocks"
+            mocks: "../msw/mocks",
+            // handle vue-cli specific @ notation for prototype
+            "@": path.resolve(__dirname, "../../prototype/src"),
         };
 
         return config;

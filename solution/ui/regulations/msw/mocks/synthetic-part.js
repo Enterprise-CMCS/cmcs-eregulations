@@ -1,3 +1,26 @@
+const appendix = {
+    node_type: "APPENDIX",
+    title:
+        "Appendix to Subpart A of Part 499 /Appendix Example/ - Example Public Notice of Cost Sharing Changes",
+    label: ["Appendix", "to", "Subpart", "A", "of", "Part", "499"],
+    children: [
+        {
+            node_type: "Paragraph",
+            text:
+                '<E T="04">Notice:</E> The amount you have to pay for doctor visits is changing. You will now have to pay $4.10 for a doctor visit instead of $4.00. This change will happen on October 1, 2022. /Text of appendix/',
+            label: null,
+            marker: null,
+        },
+        {
+            node_type: "Paragraph",
+            text:
+                "If you would like to comment on this proposed change, please contact the Maryland Department of Medicaid Services at 1 Government Street, Baltimore, MD 21224. You can also email us at mdmedicaid@mdstate.us. For more information or questions, please call 443-555-1000.",
+            label: null,
+            marker: null,
+        },
+    ],
+};
+
 const fullPart = {
     node_type: "PART",
     label: ["499"],
@@ -329,28 +352,7 @@ const fullPart = {
                 },
             ],
         },
-        {
-            node_type: "APPENDIX",
-            title:
-                "Appendix to Subpart A of Part 499 /Appendix Example/ - Example Public Notice of Cost Sharing Changes",
-            label: ["Appendix", "to", "Subpart", "A", "of", "Part", "499"],
-            children: [
-                {
-                    node_type: "Paragraph",
-                    text:
-                        '<E T="04">Notice:</E> The amount you have to pay for doctor visits is changing. You will now have to pay $4.10 for a doctor visit instead of $4.00. This change will happen on October 1, 2022. /Text of appendix/',
-                    label: null,
-                    marker: null,
-                },
-                {
-                    node_type: "Paragraph",
-                    text:
-                        "If you would like to comment on this proposed change, please contact the Maryland Department of Medicaid Services at 1 Government Street, Baltimore, MD 21224. You can also email us at mdmedicaid@mdstate.us. For more information or questions, please call 443-555-1000.",
-                    label: null,
-                    marker: null,
-                },
-            ],
-        },
+        { ...appendix },
         {
             node_type: "SUBPART",
             title: "Subpart B [Reserved /Reserved subpart/]",
@@ -433,3 +435,5 @@ const fullPart = {
         },
     ],
 };
+
+export { appendix, fullPart };
