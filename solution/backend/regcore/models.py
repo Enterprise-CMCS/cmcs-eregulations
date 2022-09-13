@@ -17,8 +17,8 @@ class PartManager(models.Manager.from_queryset(PartQuerySet)):
 
 
 class Part(models.Model):
-    name = models.CharField(max_length=8)
-    title = models.CharField(max_length=8)  # TODO: delete
+    name = models.IntegerField()
+    title = models.IntegerField()
     date = models.DateField()  # TODO: rename to version, more clarity
     last_updated = models.DateTimeField(auto_now=True)
 
