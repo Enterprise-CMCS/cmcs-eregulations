@@ -124,19 +124,11 @@ const fullPart = {
                             ],
                             marker: null,
                         },
+
                         {
-                            node_type: "Paragraph",
-                            text:
-                                "1885(a) Withholding of Payment /Cross-reference to a less commonly cited part of the Social Security Act/",
-                            label: ["499", "3", "a"],
-                            marker: ["a"],
-                        },
-                        {
-                            node_type: "Paragraph",
-                            text:
-                                "1916(a)(1) Use of Enrollment Fees, /This is a cross-reference to the Social Security Act too/",
-                            label: ["499", "3", "a", "1"],
-                            marker: ["1"],
+                            node_type: "Extract",
+                            content:
+                                "\n    <FP-1>1885(a) Withholding of Payment /Cross-reference to a less commonly cited part of the Social Security Act/</FP-1>\n    <FP-1>1916(a)(1) Use of Enrollment Fees, /This is a cross-reference to the Social Security Act too/</FP-1>\n    ",
                         },
                     ],
                 },
