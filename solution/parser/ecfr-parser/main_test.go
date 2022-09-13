@@ -448,7 +448,7 @@ func TestParseTitle(t *testing.T) {
 				w.Write([]byte(`[
 					{
 						"date": "2019-01-01",
-						"partName": [
+						"part_name": [
 							"433"
 						]
 					}

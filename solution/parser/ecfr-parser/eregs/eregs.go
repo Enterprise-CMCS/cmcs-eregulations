@@ -20,7 +20,7 @@ import (
 // BaseURL is the URL of the eRegs service that will accept the post requests
 var BaseURL string
 
-var partURL = "/title/%d/existing"
+var partURL = "/title/%d/versions"
 
 var postAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),
@@ -44,7 +44,7 @@ type Part struct {
 // ExistingPart is a regulation that has been loaded already
 type ExistingPart struct {
 	Date     string   `json:"date"`
-	PartName []string `json:"partName"`
+	PartName []string `json:"part_name"`
 }
 
 // ParserResult is the struct used to send results to the eRegs server
@@ -85,7 +85,7 @@ func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
 
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, int, error) {
-	checkURL, err := url.Parse(BaseURL)
+	checkURL, err := getV3URL()
 	if err != nil {
 		return nil, -1, err
 	}

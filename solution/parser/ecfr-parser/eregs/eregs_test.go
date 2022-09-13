@@ -58,26 +58,26 @@ func TestGetExistingParts(t *testing.T) {
 			w.Write([]byte(`[
 				{
 					"date": "2017-08-04",
-					"partName": [
+					"part_name": [
 						"431",
 						"457"
 					]
 				},
 				{
 					"date": "2021-08-13",
-					"partName": [
+					"part_name": [
 						"455"
 					]
 				},
 				{
 					"date": "2019-08-02",
-					"partName": [
+					"part_name": [
 						"460"
 					]
 				},
 				{
 					"date": "2020-12-31",
-					"partName": [
+					"part_name": [
 						"438",
 						"433",
 						"447",

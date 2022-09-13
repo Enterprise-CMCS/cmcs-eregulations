@@ -8,6 +8,8 @@ from django.contrib.postgres.aggregates import StringAgg
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views import View
+from django.db import models
+from django.db.models.functions import Cast
 
 from regcore.models import Part, ParserConfiguration
 
@@ -140,7 +142,7 @@ class ExistingPartsView(generics.ListAPIView):
     def get_queryset(self):
         title = self.kwargs.get("title")
         return Part.objects.filter(title=title).values('date').annotate(
-            partName=StringAgg('name', delimiter=','),
+            partName=StringAgg(Cast('name', models.CharField()), delimiter=',', output_field=models.CharField()),
         )
 
 

@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema
+from django.contrib.postgres.aggregates import ArrayAgg
+from django.db import models
+from django.db.models.functions import Cast
 
 from .utils import OpenApiPathParameter
 from .mixins import MultipleFieldLookupMixin
@@ -12,7 +15,7 @@ from regcore.serializers.toc import (
     FrontPageTOCSerializer,
     TitleTOCSerializer,
 )
-from regcore.serializers.metadata import PartsSerializer
+from regcore.serializers.metadata import PartsSerializer, VersionsSerializer
 
 from regcore.serializers.metadata import StringListSerializer
 
@@ -34,7 +37,7 @@ class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
     description="Retrieve the table of contents for a specific Title, with detail down to the Part level.",
     parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.", int)],
 )
-class TitleTOCViewSet(MultipleFieldLookupMixin, viewsets.ReadOnlyModelViewSet):
+class TitleTOCViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TitleTOCSerializer
     
     def get_queryset(self):
@@ -52,3 +55,17 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         title = self.kwargs.get("title")
         return Part.objects.filter(title=title).order_by("name", "-date").distinct("name")
+
+
+@extend_schema(
+    description="Retrieve a list of parts associated with each version of the regulations.",
+    parameters=[OpenApiPathParameter("title", "Title to retrieve versions from, e.g. 42.", int)],
+)
+class VersionsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = VersionsSerializer
+
+    def get_queryset(self):
+        title = self.kwargs.get("title")
+        return Part.objects.filter(title=title).values('date').annotate(
+            part_name=ArrayAgg(Cast('name', models.CharField()), delimiter=','),
+        )

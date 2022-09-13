@@ -51,6 +51,9 @@ urlpatterns = [
         path("title/<title>/parts", title.PartsViewSet.as_view({
             "get": "list",
         })),
+        path("title/<title>/versions", title.VersionsViewSet.as_view({
+            "get": "list",
+        })),
         path("title/<title>/part/<part>/versions", part.VersionsViewSet.as_view({
             "get": "list",
         })),
