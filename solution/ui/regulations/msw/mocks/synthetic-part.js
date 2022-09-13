@@ -357,5 +357,79 @@ const fullPart = {
             label: ["B"],
             children: null,
         },
+        {
+            node_type: "SUBPART",
+            title: "Subpart C - Payments: General Provisions",
+            label: ["C"],
+            children: [
+                {
+                    node_type: "SECTION",
+                    title:
+                        "§ 499.54 Cost sharing for services furnished in a hospital emergency department.",
+                    label: ["499", "54"],
+                    children: [
+                        {
+                            node_type: "Paragraph",
+                            text:
+                                "(a) At state option, cost sharing for non-emergency services provided in an emergency department may be imposed at or below the amounts shown in the following table /Another table but with fewer columns/:",
+                            label: ["499", "54", "a"],
+                            marker: ["a"],
+                        },
+                        {
+                            node_type: "Division",
+                            content:
+                                '\n    <DIV class="gpotbl_div">\n      <TABLE border="1" cellpadding="1" cellspacing="1" class="gpotbl_table" frame="void" width="100%">\n        <TR>\n          <TH class="gpotbl_colhed" rowspan="2" scope="col">Services </TH>\n          <TH class="gpotbl_colhed" colspan="2" scope="col">Maximum allowable cost sharing </TH>\n        </TR>\n        <TR>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income &#x2264;150% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income &gt;150% of the FPL </TH>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Non-emergency Use of the Emergency Department</TD>\n          <TD align="left" class="gpotbl_cell">$8</TD>\n          <TD align="left" class="gpotbl_cell">No Limit.</TD>\n        </TR>\n      </TABLE>\n    </DIV>\n  ',
+                        },
+                        {
+                            node_type: "Paragraph",
+                            text:
+                                "(b) For the agency to impose cost sharing for non-emergency use of the emergency department, the hospital providing the care must conduct an appropriate medical screening under § 489.24 subpart G to determine that the individual does not need emergency services.<SU>1</SU>",
+                            label: ["499", "54", "b"],
+                            marker: ["b"],
+                        },
+                        {
+                            node_type: "FootNote",
+                            content:
+                                "\n    <P><SU>1</SU> Editorial Note: /Editorial notes are a special example of a footnote/ Nothing in this section should be construed to limit a hospital’s obligation for screening and stabilizing treatment of an emergency medical condition under section 1867 of the Act, </P>\n  ",
+                        },
+                        {
+                            node_type: "Paragraph",
+                            text:
+                                " (2) Things needed /Sentence after a section that had a footnote - see 432.10 for example/ ",
+                            label: ["499", "54", "b", "2"],
+                            marker: ["2"],
+                        },
+                        {
+                            node_type: "Paragraph",
+                            text:
+                                "(i) Inform the individual of the amount of his or her cost sharing obligation for non-emergency services provided in the emergency department.",
+                            label: ["499", "54", "b", "2", "i"],
+                            marker: ["i"],
+                        },
+                    ],
+                },
+                {
+                    node_type: "SUBJGRP",
+                    title: "Premiums /subject group/",
+                    label: ["ECFR92bbc42ac8acd7z"],
+                    children: [
+                        {
+                            node_type: "SECTION",
+                            title: "§ 499.55 Premiums.",
+                            label: ["499", "55"],
+                            children: [
+                                {
+                                    node_type: "Paragraph",
+                                    text:
+                                        "(a) The agency may impose premiums upon individuals whose income exceeds 150 percent of the FPL /example of acronym not defined in this part/, subject to the exemptions set forth in 499.56 of this part. Prior to submitting to the CMS a state plan amendment (SPA) /example of acronym defined in this part in an incidental way/ to establish or substantially modify existing premiums or cost sharing, the agency must provide the public with advance notice. The agency must submit documentation of public notice with the SPA.",
+                                    label: ["499", "55", "a"],
+                                    marker: ["a"],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
     ],
 };
