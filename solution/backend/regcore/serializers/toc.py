@@ -3,15 +3,15 @@ from django.http import Http404
 
 
 class FlatTOCSerializer(serializers.Serializer):
-    #type = serializers.CharField()
+    type = serializers.CharField()
     label = serializers.CharField()
-    #parent = serializers.ListField(child=serializers.CharField(), allow_null=True, allow_empty=True)
-    #reserved = serializers.BooleanField()
-    #identifier = serializers.ListField(child=serializers.CharField())
-    #label_level = serializers.CharField()
-    #parent_type = serializers.CharField(allow_blank=True)
-    #descendant_range = serializers.ListField(child=serializers.CharField(), allow_null=True, allow_empty=True)
-    #label_description = serializers.CharField()
+    parent = serializers.ListField(child=serializers.CharField(), allow_null=True, allow_empty=True)
+    reserved = serializers.BooleanField()
+    identifier = serializers.ListField(child=serializers.CharField())
+    label_level = serializers.CharField()
+    parent_type = serializers.CharField(allow_blank=True)
+    descendant_range = serializers.ListField(child=serializers.CharField(), allow_null=True, allow_empty=True)
+    label_description = serializers.CharField()
 
 
 class TOCSerializer(FlatTOCSerializer):
@@ -40,7 +40,10 @@ class TOCListSerializer(serializers.ListSerializer):
         for i in tree:
             if "children" in i:
                 i["children"] = self.convert_to_list(i["children"])
-        return tree
+        tree = [TOCSerializer(data=i) for i in tree]
+        for i in tree:
+            i.is_valid(raise_exception=True)
+        return [i.data for i in tree]
 
 
 class TitleTOCListSerializer(TOCListSerializer):
