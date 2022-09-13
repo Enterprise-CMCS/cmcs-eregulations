@@ -33,7 +33,7 @@ var (
 	StartVersionWorkerFunc = startVersionWorker
 	HandleVersionFunc      = handleVersion
 	SleepFunc              = time.Sleep
-	RetrieveConfigFunc = eregs.RetrieveConfig
+	RetrieveConfigFunc     = eregs.RetrieveConfig
 )
 
 var config = &eregs.ParserConfig{}
@@ -191,14 +191,14 @@ func parseTitle(title *eregs.TitleConfig) error {
 			}
 
 			version := &eregs.Part{
-				Title:          title.Title,
-				Name:           part,
-				Date:           date,
-				Structure:      &ecfr.Structure{},
-				Document:       &parsexml.Part{},
-				Sections:       []ecfr.Section{},
-				Subparts:       []ecfr.Subpart{},
-				Processed:      false,
+				Title:     title.Title,
+				Name:      part,
+				Date:      date,
+				Structure: &ecfr.Structure{},
+				Document:  &parsexml.Part{},
+				Sections:  []ecfr.Section{},
+				Subparts:  []ecfr.Subpart{},
+				Processed: false,
 			}
 
 			versionList.PushBack(version)

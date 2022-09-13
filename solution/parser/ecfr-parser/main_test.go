@@ -23,11 +23,11 @@ import (
 
 func Run(t *testing.T, name string, f func(*testing.T)) bool {
 	config = &eregs.ParserConfig{
-		Workers: 3,
-		LogLevel: "trace",
+		Workers:            3,
+		LogLevel:           "trace",
 		UploadSupplemental: true,
-		LogParseErrors: true,
-		SkipVersions: true,
+		LogParseErrors:     true,
+		SkipVersions:       true,
 		Titles: []*eregs.TitleConfig{
 			&eregs.TitleConfig{
 				Title: 42,
@@ -203,10 +203,10 @@ func TestStart(t *testing.T) {
 	eregs.BaseURL = eregsServer.URL
 
 	testTable := []struct {
-		Name           string
-		ParseTitleFunc func(*eregs.TitleConfig) error
+		Name               string
+		ParseTitleFunc     func(*eregs.TitleConfig) error
 		RetrieveConfigFunc func() (*eregs.ParserConfig, int, error)
-		Error          bool
+		Error              bool
 	}{
 		{
 			Name: "test-success",
@@ -770,7 +770,7 @@ func TestHandleVersion(t *testing.T) {
 				w.Write([]byte(`{ "exception": "PUT part - failed to parse JSON: '` + errString + `'" }`))
 				return
 			}
-		} else  {
+		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{ "exception": "Invalid PUT path '` + r.URL.Path + `'" }`))
 		}
@@ -790,11 +790,11 @@ func TestHandleVersion(t *testing.T) {
 		{
 			Name: "test-valid",
 			Input: eregs.Part{
-				Title:     42,
-				Name:      "433",
-				Date:      "2022-01-01",
-				Structure: &ecfr.Structure{},
-				Document:  &parsexml.Part{},
+				Title:           42,
+				Name:            "433",
+				Date:            "2022-01-01",
+				Structure:       &ecfr.Structure{},
+				Document:        &parsexml.Part{},
 				UploadLocations: true,
 			},
 			Expected: eregs.Part{

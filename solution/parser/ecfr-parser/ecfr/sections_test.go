@@ -138,8 +138,8 @@ func TestExtractStructure(t *testing.T) {
 
 	expectedSections := []Section{
 		Section{
-			Title: "42",
-			Part: "432",
+			Title:   "42",
+			Part:    "432",
 			Section: "1",
 		},
 	}
@@ -161,13 +161,13 @@ func TestExtractStructure(t *testing.T) {
 					Section: "4",
 				},
 				Section{
-					Title: "42",
-					Part: "432",
+					Title:   "42",
+					Part:    "432",
 					Section: "200",
 				},
 				Section{
-					Title: "42",
-					Part: "432",
+					Title:   "42",
+					Part:    "432",
 					Section: "201",
 				},
 			},

@@ -29,15 +29,15 @@ var postAuth = &network.PostAuth{
 
 // Part is the struct used to send a part to the eRegs server
 type Part struct {
-	Title          int             `json:"title,string" xml:"-"`
-	Name           string          `json:"name" xml:"-"`
-	Date           string          `json:"date" xml:"-"`
-	Structure      *ecfr.Structure `json:"structure" xml:"-"`
-	Document       *parsexml.Part  `json:"document"`
-	Depth          int             `json:"depth"`
-	Sections	   []ecfr.Section   `json:"sections"`
-	Subparts       []ecfr.Subpart   `json:"subparts"`
-	Processed      bool
+	Title           int             `json:"title,string" xml:"-"`
+	Name            string          `json:"name" xml:"-"`
+	Date            string          `json:"date" xml:"-"`
+	Structure       *ecfr.Structure `json:"structure" xml:"-"`
+	Document        *parsexml.Part  `json:"document"`
+	Depth           int             `json:"depth"`
+	Sections        []ecfr.Section  `json:"sections"`
+	Subparts        []ecfr.Subpart  `json:"subparts"`
+	Processed       bool
 	UploadLocations bool
 }
 

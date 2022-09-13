@@ -37,20 +37,20 @@ func TestPostPart(t *testing.T) {
 		Document:  nil,
 		Sections: []ecfr.Section{
 			ecfr.Section{
-				Title: "42",
-				Part: "433",
+				Title:   "42",
+				Part:    "433",
 				Section: "1",
 			},
 		},
 		Subparts: []ecfr.Subpart{
 			ecfr.Subpart{
-				Title: "42",
-				Part: "433",
+				Title:   "42",
+				Part:    "433",
 				Subpart: "A",
 				Sections: []ecfr.Section{
 					ecfr.Section{
-						Title: "42",
-						Part: "433",
+						Title:   "42",
+						Part:    "433",
 						Section: "2",
 					},
 				},
