@@ -60,7 +60,11 @@ const fullPart = {
                             node_type: "Paragraph",
                             text:
                                 "This paragraph is followed by a list of special text. Implements the following sections of the Act and public law that state requirements and standards for payment to states:",
-                            label: ["499", "3", "e8097e171215490dbe0b3206107a504a"],
+                            label: [
+                                "499",
+                                "3",
+                                "e8097e171215490dbe0b3206107a504a",
+                            ],
                             marker: null,
                         },
                         {
@@ -75,7 +79,7 @@ const fullPart = {
                             text:
                                 "1916(a)(1) Use of Enrollment Fees, /This is a cross-reference to the Social Security Act too/",
                             label: ["499", "3", "a", "1"],
-                            marker: [1"],
+                            marker: ["1"],
                         },
                     ],
                 },
@@ -88,7 +92,11 @@ const fullPart = {
                             node_type: "Paragraph",
                             text:
                                 "If a provider seeks to collect from an individual an amount that exceeds an amount specified under 499.30(a) /example of cross-reference to a paragraph in another section in the same subpart/ -",
-                            label: ["499", "21", "e8097e171215490dbe0b3206107a504b"],
+                            label: [
+                                "499",
+                                "21",
+                                "e8097e171215490dbe0b3206107a504b",
+                            ],
                             marker: null,
                         },
                         {
@@ -119,7 +127,11 @@ const fullPart = {
                             node_type: "Paragraph",
                             text:
                                 "<I>/This is an example of a bolded phrase/.</I> This section implements section 1914 of the Act. /this sentence has a footnote/.<SU>1</SU>",
-                            label: ["499", "30", "e8097e171215490dbe0b3206107a504c"],
+                            label: [
+                                "499",
+                                "30",
+                                "e8097e171215490dbe0b3206107a504c",
+                            ],
                             marker: null,
                         },
                         {
@@ -297,7 +309,12 @@ const fullPart = {
                                     text:
                                         "(a) <I>Maximum Allowable Cost Sharing.</I> (1) At State option, cost sharing imposed for any service, may be established at or below the amounts shown in the following /example of a table with several columns/:",
                                     label: ["499", "52", "a", "1"],
-                                    marker: [1"],
+                                    marker: ["1"],
+                                },
+                                {
+                                    node_type: "Division",
+                                    content:
+                                        '\n    <DIV class="gpotbl_div">\n      <TABLE border="1" cellpadding="1" cellspacing="1" class="gpotbl_table" frame="void" width="100%">\n        <TR>\n          <TH class="gpotbl_colhed" rowspan="2" scope="col">Services </TH>\n          <TH class="gpotbl_colhed" colspan="3" scope="col">Maximum allowable cost sharing </TH>\n        </TR>\n        <TR>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>&#x2264;100% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>101-150% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>&gt;150% of the FPL </TH>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Outpatient Services (<E T="03">physician visit, physical therapy, etc.</E>)</TD>\n          <TD align="right" class="gpotbl_cell">$4</TD>\n          <TD align="left" class="gpotbl_cell">10% of cost the agency pays</TD>\n          <TD align="left" class="gpotbl_cell">20% of cost the agency pays. </TD>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Inpatient Stay</TD>\n          <TD align="right" class="gpotbl_cell">75</TD>\n          <TD align="left" class="gpotbl_cell">10% of total cost the agency pays for the entire stay</TD>\n          <TD align="left" class="gpotbl_cell">20% of total cost the agency pays for the entire stay.</TD>\n        </TR>\n      </TABLE>\n    </DIV>\n  ',
                                 },
                                 {
                                     node_type: "Paragraph",
@@ -311,6 +328,34 @@ const fullPart = {
                     ],
                 },
             ],
+        },
+        {
+            node_type: "APPENDIX",
+            title:
+                "Appendix to Subpart A of Part 499 /Appendix Example/ - Example Public Notice of Cost Sharing Changes",
+            label: ["Appendix", "to", "Subpart", "A", "of", "Part", "499"],
+            children: [
+                {
+                    node_type: "Paragraph",
+                    text:
+                        '<E T="04">Notice:</E> The amount you have to pay for doctor visits is changing. You will now have to pay $4.10 for a doctor visit instead of $4.00. This change will happen on October 1, 2022. /Text of appendix/',
+                    label: null,
+                    marker: null,
+                },
+                {
+                    node_type: "Paragraph",
+                    text:
+                        "If you would like to comment on this proposed change, please contact the Maryland Department of Medicaid Services at 1 Government Street, Baltimore, MD 21224. You can also email us at mdmedicaid@mdstate.us. For more information or questions, please call 443-555-1000.",
+                    label: null,
+                    marker: null,
+                },
+            ],
+        },
+        {
+            node_type: "SUBPART",
+            title: "Subpart B [Reserved /Reserved subpart/]",
+            label: ["B"],
+            children: null,
         },
     ],
 };
