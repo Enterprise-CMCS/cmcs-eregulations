@@ -204,6 +204,10 @@ func parseTitle(title *eregs.TitleConfig) error {
 			numVersions++
 		}
 
+		if versionList.Len() > 0 {
+			versionList.Back().Value.(*eregs.Part).UploadLocations = true
+		}
+
 		partList.PushBack(versionList)
 	}
 
@@ -319,7 +323,7 @@ func handleVersion(ctx context.Context, thread int, version *eregs.Part) error {
 	log.Trace("[worker ", thread, "] Computing section parents for part ", version.Name, " version ", version.Date)
 	ecfr.DetermineParents(version.Structure)
 
-	if config.UploadSupplemental {
+	if config.UploadSupplemental && version.UploadLocations {
 		log.Debug("[worker ", thread, "] Extracting supplemental content structure for part ", version.Name, " version ", version.Date)
 		sections, subparts, err := ecfr.ExtractStructure(*version.Structure, version.Depth)
 		if err != nil {

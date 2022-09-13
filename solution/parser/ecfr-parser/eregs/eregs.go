@@ -38,6 +38,7 @@ type Part struct {
 	Sections	   []ecfr.Section   `json:"sections"`
 	Subparts       []ecfr.Subpart   `json:"subparts"`
 	Processed      bool
+	UploadLocations bool
 }
 
 // ExistingPart is a regulation that has been loaded already
