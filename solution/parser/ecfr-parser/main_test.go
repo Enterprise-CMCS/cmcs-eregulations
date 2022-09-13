@@ -21,6 +21,34 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+func Run(t *testing.T, name string, f func(*testing.T)) bool {
+	config = &eregs.ParserConfig{
+		Workers: 3,
+		LogLevel: "trace",
+		UploadSupplemental: true,
+		LogParseErrors: true,
+		SkipVersions: true,
+		Titles: []*eregs.TitleConfig{
+			&eregs.TitleConfig{
+				Title: 42,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"IV", "C"},
+				},
+				Parts: eregs.PartList{"400", "457", "460"},
+			},
+			&eregs.TitleConfig{
+				Title: 43,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"AB", "C"},
+				},
+				Parts: eregs.PartList{"1", "2", "3"},
+			},
+		},
+	}
+
+	return t.Run(name, f)
+}
+
 func TestInit(t *testing.T) {
 	if eregs.BaseURL != DefaultBaseURL {
 		t.Errorf("eregs.BaseURL: expected (%s), received (%s)", DefaultBaseURL, eregs.BaseURL)
@@ -71,7 +99,7 @@ func TestGetLogLevel(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			out := getLogLevel(tc.Input)
 			if out != tc.Expected {
 				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
@@ -123,7 +151,7 @@ func TestParseConfig(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			parseConfig(&tc.Input)
 			if diff := deep.Equal(tc.Input, tc.Expected); diff != nil {
 				t.Errorf("output not as expected: %+v", diff)
@@ -177,6 +205,7 @@ func TestStart(t *testing.T) {
 	testTable := []struct {
 		Name           string
 		ParseTitleFunc func(*eregs.TitleConfig) error
+		RetrieveConfigFunc func() (*eregs.ParserConfig, int, error)
 		Error          bool
 	}{
 		{
@@ -184,20 +213,37 @@ func TestStart(t *testing.T) {
 			ParseTitleFunc: func(title *eregs.TitleConfig) error {
 				return nil
 			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return eregs.RetrieveConfig()
+			},
 			Error: false,
 		},
 		{
-			Name: "test-failure",
+			Name: "test-parse-title-failure",
 			ParseTitleFunc: func(title *eregs.TitleConfig) error {
 				return fmt.Errorf("something bad happened")
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return eregs.RetrieveConfig()
+			},
+			Error: true,
+		},
+		{
+			Name: "test-config-failure",
+			ParseTitleFunc: func(title *eregs.TitleConfig) error {
+				return nil
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return nil, -1, fmt.Errorf("failed to retrieve configuration")
 			},
 			Error: true,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			ParseTitleFunc = tc.ParseTitleFunc
+			RetrieveConfigFunc = tc.RetrieveConfigFunc
 			err := start()
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
@@ -209,9 +255,6 @@ func TestStart(t *testing.T) {
 }
 
 func TestParseTitle(t *testing.T) {
-	config.SkipVersions = true
-	config.Workers = 3
-
 	SleepFunc = func(t time.Duration) {}
 
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -476,7 +519,7 @@ func TestParseTitle(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			WorkerFunc = tc.WorkerFunc
 			err := parseTitle(&tc.Input)
 			if err != nil && !tc.Error {
@@ -540,7 +583,7 @@ func TestStartVersionWorker(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			HandleVersionFunc = tc.HandleVersionFunc
 
 			parts := list.New()
@@ -578,8 +621,6 @@ func TestStartVersionWorker(t *testing.T) {
 }
 
 func TestHandleVersion(t *testing.T) {
-	config.UploadSupplemental = true
-
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -754,6 +795,7 @@ func TestHandleVersion(t *testing.T) {
 				Date:      "2022-01-01",
 				Structure: &ecfr.Structure{},
 				Document:  &parsexml.Part{},
+				UploadLocations: true,
 			},
 			Expected: eregs.Part{
 				Title: 42,
@@ -876,7 +918,7 @@ func TestHandleVersion(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 			err := handleVersion(ctx, 1, &tc.Input)
@@ -920,7 +962,7 @@ func TestContains(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			out := contains(tc.Array, tc.String)
 			if out != tc.Expected {
 				t.Errorf("expected (%t), received (%t)", tc.Expected, out)

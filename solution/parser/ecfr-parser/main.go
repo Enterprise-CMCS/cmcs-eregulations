@@ -33,6 +33,7 @@ var (
 	StartVersionWorkerFunc = startVersionWorker
 	HandleVersionFunc      = handleVersion
 	SleepFunc              = time.Sleep
+	RetrieveConfigFunc = eregs.RetrieveConfig
 )
 
 var config = &eregs.ParserConfig{}
@@ -93,7 +94,7 @@ func main() {
 func start() error {
 	log.Info("[main] Loading configuration...")
 	var err error
-	config, _, err = eregs.RetrieveConfig()
+	config, _, err = RetrieveConfigFunc()
 	if err != nil {
 		return fmt.Errorf("failed to retrieve configuration: %+v", err)
 	}
@@ -205,6 +206,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 		}
 
 		if versionList.Len() > 0 {
+			//return fmt.Errorf("FAILURE IDK WA FJASDLF ")
 			versionList.Back().Value.(*eregs.Part).UploadLocations = true
 		}
 
