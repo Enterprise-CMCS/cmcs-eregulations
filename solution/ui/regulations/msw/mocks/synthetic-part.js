@@ -77,7 +77,7 @@ const fullPart = {
     children: [
         {
             node_type: "SECTION",
-            title: "§ 499.1 Section with No Subpart.",
+            title: "§ 499.1 /Section with no subpart./",
             label: ["499", "1"],
             children: [
                 {
@@ -91,7 +91,7 @@ const fullPart = {
         },
         {
             node_type: "SECTION",
-            title: "§ 499.2 Second Section with No Subpart.",
+            title: "§ 499.2 /Second Section with no subpart./",
             label: ["499", "2"],
             children: [
                 {
