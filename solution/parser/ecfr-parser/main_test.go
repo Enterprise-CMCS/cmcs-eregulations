@@ -137,14 +137,9 @@ func TestParseConfig(t *testing.T) {
 
 func TestStart(t *testing.T) {
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "POST" || r.Method == "PUT" {
-			if r.URL.Path == "/title/42" || r.URL.Path == "/title/43" {
-				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`OK!`))
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "Something happened!!" }`))
-			}
+		if r.Method != "GET" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Expected GET request!" }`))
 		} else if r.URL.Path == "/parser_config" {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{
@@ -363,101 +358,20 @@ func TestParseTitle(t *testing.T) {
 			return
 		}
 
-		if r.URL.Path == "/title/42" {
+		if r.URL.Path == "/title/42/versions" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
-				"id": 1,
-				"name": "42",
-				"last_updated": "2022-03-21T17:09:10.628069",
-				"toc": {
-				  "type": "title",
-				  "label": "Title 42 - Public Health",
-				  "children": [
-					{
-					  "type": "chapter",
-					  "label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
-					  "children": [
-						{
-						  "type": "subchapter",
-						  "label": "Subchapter A - General Provisions",
-						  "children": [
-							{
-							  "type": "part",
-							  "label": "Part 400 - Introduction; Definitions",
-							  "children": null,
-							  "reserved": false,
-							  "identifier": [
-								"400"
-							  ],
-							  "label_level": "Part 400",
-							  "descendant_range": [
-								"400.200",
-								"400.203"
-							  ],
-							  "label_description": "Introduction; Definitions"
-							}
-						  ],
-						  "reserved": false,
-						  "identifier": [
-							"A"
-						  ],
-						  "label_level": "Subchapter A",
-						  "descendant_range": [
-							"400",
-							"404"
-						  ],
-						  "label_description": "General Provisions"
-						}
-					  ],
-					  "reserved": false,
-					  "identifier": [
-						"IV"
-					  ],
-					  "label_level": " Chapter IV",
-					  "descendant_range": [
-						"400",
-						"699"
-					  ],
-					  "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
-					}
-				  ],
-				  "reserved": false,
-				  "identifier": [
-					"42"
-				  ],
-				  "label_level": "Title 42",
-				  "descendant_range": [
-					"null"
-				  ],
-				  "label_description": "Public Health"
+			w.Write([]byte(`[
+				{
+					"date": "2019-01-01",
+					"part_name": [
+						"433"
+					]
 				}
-			  }`))
-		} else if r.URL.Path == "/title/43" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(`{ "exception": "404 not found!" }`))
+			]`))
 		} else {
-			path := strings.Split(r.URL.Path, "/")
-			if len(path) < 4 {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "Invalid path length '` + r.URL.Path + `'" }`))
-				return
-			}
-
-			if path[2] == "42" {
-				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`[
-					{
-						"date": "2019-01-01",
-						"part_name": [
-							"433"
-						]
-					}
-				]`))
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "Unrecognized title" }`))
-				return
-			}
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Unrecognized path" }`))
+			return
 		}
 	}))
 	defer eregsServer.Close()
@@ -492,9 +406,6 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: false,
 		},
@@ -509,9 +420,6 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -524,9 +432,6 @@ func TestParseTitle(t *testing.T) {
 				Title:       42,
 				Subchapters: eregs.SubchapterList{},
 				Parts:       eregs.PartList{},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -539,9 +444,6 @@ func TestParseTitle(t *testing.T) {
 				Title:       42,
 				Subchapters: eregs.SubchapterList{},
 				Parts:       eregs.PartList{},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -554,9 +456,6 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"433"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -571,9 +470,6 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -592,7 +488,7 @@ func TestParseTitle(t *testing.T) {
 	}
 }
 
-func TestStartHandlePartVersionWorker(t *testing.T) {
+func TestStartVersionWorker(t *testing.T) {
 	SleepFunc = func(t time.Duration) {}
 
 	input := [][]eregs.Part{
@@ -681,7 +577,7 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 	}
 }
 
-func TestHandlePartVersion(t *testing.T) {
+func TestHandleVersion(t *testing.T) {
 	config.UploadSupplemental = true
 
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -813,36 +709,29 @@ func TestHandlePartVersion(t *testing.T) {
 	ecfr.EcfrSite = ecfrServer.URL
 
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
+		if r.Method != "PUT" {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Expected POST method, got ` + r.Method + `" }`))
+			w.Write([]byte(`{ "exception": "Expected PUT method, got ` + r.Method + `" }`))
 			return
 		}
 
 		path := strings.Split(r.URL.Path, "/")
 		if len(path) < 2 {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Invalid POST path '` + r.URL.Path + `'" }`))
-		} else if path[1] == "" {
+			w.Write([]byte(`{ "exception": "Invalid PUT path '` + r.URL.Path + `'" }`))
+		} else if path[1] == "part" {
 			//posting a part
 			d := json.NewDecoder(r.Body)
 			var part struct{}
 			if err := d.Decode(&part); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				errString := fmt.Sprintf("%+v", err)
-				w.Write([]byte(`{ "exception": "POST part - failed to parse JSON: '` + errString + `'" }`))
+				w.Write([]byte(`{ "exception": "PUT part - failed to parse JSON: '` + errString + `'" }`))
 				return
 			}
-		} else if path[1] == "supplemental_content" {
-			//posting supplemental content
-			d := json.NewDecoder(r.Body)
-			var part struct{}
-			if err := d.Decode(&part); err != nil {
-				//failed to decode part
-				errString := fmt.Sprintf("%+v", err)
-				w.Write([]byte(`{ "exception": "POST supplemental parts - failed to parse JSON: '` + errString + `'" }`))
-				return
-			}
+		} else  {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Invalid PUT path '` + r.URL.Path + `'" }`))
 		}
 
 		w.WriteHeader(http.StatusOK)

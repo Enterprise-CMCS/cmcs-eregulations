@@ -15,7 +15,7 @@ import (
 
 func TestPostPart(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/" {
+		if r.URL.Path == "/part" {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte("OK"))
 		} else {
@@ -35,9 +35,30 @@ func TestPostPart(t *testing.T) {
 		Date:      "2022-01-01",
 		Structure: nil,
 		Document:  nil,
+		Sections: []ecfr.Section{
+			ecfr.Section{
+				Title: "42",
+				Part: "433",
+				Section: "1",
+			},
+		},
+		Subparts: []ecfr.Subpart{
+			ecfr.Subpart{
+				Title: "42",
+				Part: "433",
+				Subpart: "A",
+				Sections: []ecfr.Section{
+					ecfr.Section{
+						Title: "42",
+						Part: "433",
+						Section: "2",
+					},
+				},
+			},
+		},
 	}
 
-	code, err := PostPart(ctx, part)
+	code, err := PutPart(ctx, part)
 
 	if err != nil {
 		t.Errorf("received error (%+v)", err)
