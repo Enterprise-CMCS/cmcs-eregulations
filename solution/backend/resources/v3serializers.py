@@ -140,7 +140,6 @@ class AbstractResourceSerializer(OptionalFieldDetailsMixin, serializers.Serializ
     optional_details = {
         "category": ("category_details", "true", AbstractCategoryPolymorphicSerializer, False),
         "locations": ("location_details", "true", AbstractLocationPolymorphicSerializer, True),
-        "fr_grouping": ("fr_grouping", "true", AbstractLocationPolymorphicSerializer, True),
     }
 
 
