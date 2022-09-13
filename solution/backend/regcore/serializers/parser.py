@@ -64,7 +64,7 @@ class PartUploadSerializer(serializers.Serializer):
                     part=section["part"],
                     section_id=section["section"],
                 )
-            
+
             for subpart in validated_data.get("subparts", []):
                 new_subpart, created = Subpart.objects.get_or_create(
                     title=subpart["title"],

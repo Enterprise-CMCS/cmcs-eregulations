@@ -1,20 +1,15 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
 from django.db.models.functions import Cast
 
 from .utils import OpenApiPathParameter
-from .mixins import MultipleFieldLookupMixin
 from regcore.models import Part
-from regcore.views import SettingsAuthentication
 
 from regcore.serializers.toc import (
-    TOCSerializer,
     FrontPageTOCSerializer,
     TitleTOCSerializer,
-    TitleTOCListSerializer,
 )
 from regcore.serializers.metadata import PartsSerializer, VersionsSerializer
 
@@ -43,10 +38,11 @@ class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
 )
 class TitleTOCViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TitleTOCSerializer
-    
+
     def get_queryset(self):
         title = self.kwargs.get("title")
-        return Part.objects.filter(title=title).order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
+        return Part.objects.filter(title=title).order_by("title", "name", "-date")\
+                   .distinct("title", "name").values_list("depth_stack", flat=True)
 
     def retrieve(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)

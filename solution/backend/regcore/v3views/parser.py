@@ -5,7 +5,6 @@ from django.http import Http404
 from drf_spectacular.utils import extend_schema
 from django.db import transaction
 from django.http import JsonResponse
-from django.db import transaction
 
 from .utils import OpenApiPathParameter
 from regcore.serializers.parser import (
@@ -14,7 +13,6 @@ from regcore.serializers.parser import (
 )
 from regcore.views import SettingsAuthentication
 from regcore.models import ECFRParserResult, Part
-from resources.models import Section
 
 
 @extend_schema(
