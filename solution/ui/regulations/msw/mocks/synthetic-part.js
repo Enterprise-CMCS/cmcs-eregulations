@@ -21,6 +21,40 @@ const appendix = {
     ],
 };
 
+const citations = {
+    "499-21": {
+        node_type: "Citation",
+        content: "[55 FR 1433, Jan. 16, 1990] ",
+    },
+    "499-30": {
+        node_type: "Citation",
+        content: "[50 FR 19688, May 10, 1985; 50 FR 23307, June 3, 1985] ",
+    },
+    "499-31": {
+        node_type: "Citation",
+        content:
+            "[50 FR 19689, May 10, 1985, as amended at 61 FR 63749, Dec. 2, 1996] ",
+    },
+    "499-40": {
+        node_type: "Citation",
+        content:
+            "[43 FR 45253, Sept. 29, 1978, as amended at 51 FR 24991, July 3, 1986] ",
+    },
+};
+
+const tables = {
+    "499-52": {
+        node_type: "Division",
+        content:
+            '\n    <DIV class="gpotbl_div">\n      <TABLE border="1" cellpadding="1" cellspacing="1" class="gpotbl_table" frame="void" width="100%">\n        <TR>\n          <TH class="gpotbl_colhed" rowspan="2" scope="col">Services </TH>\n          <TH class="gpotbl_colhed" colspan="3" scope="col">Maximum allowable cost sharing </TH>\n        </TR>\n        <TR>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>&#x2264;100% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>101-150% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>&gt;150% of the FPL </TH>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Outpatient Services (<E T="03">physician visit, physical therapy, etc.</E>)</TD>\n          <TD align="right" class="gpotbl_cell">$4</TD>\n          <TD align="left" class="gpotbl_cell">10% of cost the agency pays</TD>\n          <TD align="left" class="gpotbl_cell">20% of cost the agency pays. </TD>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Inpatient Stay</TD>\n          <TD align="right" class="gpotbl_cell">75</TD>\n          <TD align="left" class="gpotbl_cell">10% of total cost the agency pays for the entire stay</TD>\n          <TD align="left" class="gpotbl_cell">20% of total cost the agency pays for the entire stay.</TD>\n        </TR>\n      </TABLE>\n    </DIV>\n  ',
+    },
+    "499-54": {
+        node_type: "Division",
+        content:
+            '\n    <DIV class="gpotbl_div">\n      <TABLE border="1" cellpadding="1" cellspacing="1" class="gpotbl_table" frame="void" width="100%">\n        <TR>\n          <TH class="gpotbl_colhed" rowspan="2" scope="col">Services </TH>\n          <TH class="gpotbl_colhed" colspan="2" scope="col">Maximum allowable cost sharing </TH>\n        </TR>\n        <TR>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income &#x2264;150% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income &gt;150% of the FPL </TH>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Non-emergency Use of the Emergency Department</TD>\n          <TD align="left" class="gpotbl_cell">$8</TD>\n          <TD align="left" class="gpotbl_cell">No Limit.</TD>\n        </TR>\n      </TABLE>\n    </DIV>\n  ',
+    },
+};
+
 const fullPart = {
     node_type: "PART",
     label: ["499"],
@@ -134,10 +168,7 @@ const fullPart = {
                             content:
                                 "\n    <FP-2>Reduced provider payment = P - (Px3) + Q, where</FP-2>\n    <FP-2>P = payment requested by the provider</FP-2>\n    <FP-2>Q = additional monetary penalty imposed by the state</FP-2>\n  ",
                         },
-                        {
-                            node_type: "Citation",
-                            content: "[55 FR 1433, Jan. 16, 1990] ",
-                        },
+                        { ...citations["499-21"] },
                     ],
                 },
                 {
@@ -157,11 +188,7 @@ const fullPart = {
                             ],
                             marker: null,
                         },
-                        {
-                            node_type: "Citation",
-                            content:
-                                "[50 FR 19688, May 10, 1985; 50 FR 23307, June 3, 1985] ",
-                        },
+                        { ...citations["499.30"] },
                         {
                             node_type: "FootNote",
                             content:
@@ -208,11 +235,7 @@ const fullPart = {
                             label: ["499", "31", "a", "2"],
                             marker: ["2"],
                         },
-                        {
-                            node_type: "Citation",
-                            content:
-                                "[50 FR 19689, May 10, 1985, as amended at 61 FR 63749, Dec. 2, 1996] ",
-                        },
+                        { ...citations["499.31"] },
                     ],
                 },
                 {
@@ -237,14 +260,10 @@ const fullPart = {
                             node_type: "Paragraph",
                             text:
                                 "(1) The State plan provides for such payments and specifies any limitations on the policy.",
-                            label: ["499", "31", "a", "1"],
+                            label: ["499", "40", "a", "1"],
                             marker: ["1"],
                         },
-                        {
-                            node_type: "Citation",
-                            content:
-                                "[43 FR 45253, Sept. 29, 1978, as amended at 51 FR 24991, July 3, 1986] ",
-                        },
+                        { ...citations["499.40"] },
                     ],
                 },
                 {
@@ -334,11 +353,7 @@ const fullPart = {
                                     label: ["499", "52", "a", "1"],
                                     marker: ["1"],
                                 },
-                                {
-                                    node_type: "Division",
-                                    content:
-                                        '\n    <DIV class="gpotbl_div">\n      <TABLE border="1" cellpadding="1" cellspacing="1" class="gpotbl_table" frame="void" width="100%">\n        <TR>\n          <TH class="gpotbl_colhed" rowspan="2" scope="col">Services </TH>\n          <TH class="gpotbl_colhed" colspan="3" scope="col">Maximum allowable cost sharing </TH>\n        </TR>\n        <TR>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>&#x2264;100% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>101-150% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income <br/>&gt;150% of the FPL </TH>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Outpatient Services (<E T="03">physician visit, physical therapy, etc.</E>)</TD>\n          <TD align="right" class="gpotbl_cell">$4</TD>\n          <TD align="left" class="gpotbl_cell">10% of cost the agency pays</TD>\n          <TD align="left" class="gpotbl_cell">20% of cost the agency pays. </TD>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Inpatient Stay</TD>\n          <TD align="right" class="gpotbl_cell">75</TD>\n          <TD align="left" class="gpotbl_cell">10% of total cost the agency pays for the entire stay</TD>\n          <TD align="left" class="gpotbl_cell">20% of total cost the agency pays for the entire stay.</TD>\n        </TR>\n      </TABLE>\n    </DIV>\n  ',
-                                },
+                                { ...tables["499-52"] },
                                 {
                                     node_type: "Paragraph",
                                     text:
@@ -377,11 +392,7 @@ const fullPart = {
                             label: ["499", "54", "a"],
                             marker: ["a"],
                         },
-                        {
-                            node_type: "Division",
-                            content:
-                                '\n    <DIV class="gpotbl_div">\n      <TABLE border="1" cellpadding="1" cellspacing="1" class="gpotbl_table" frame="void" width="100%">\n        <TR>\n          <TH class="gpotbl_colhed" rowspan="2" scope="col">Services </TH>\n          <TH class="gpotbl_colhed" colspan="2" scope="col">Maximum allowable cost sharing </TH>\n        </TR>\n        <TR>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income &#x2264;150% of the FPL </TH>\n          <TH class="gpotbl_colhed" scope="col">Individuals with family income &gt;150% of the FPL </TH>\n        </TR>\n        <TR>\n          <TD align="left" class="gpotbl_cell" scope="row">Non-emergency Use of the Emergency Department</TD>\n          <TD align="left" class="gpotbl_cell">$8</TD>\n          <TD align="left" class="gpotbl_cell">No Limit.</TD>\n        </TR>\n      </TABLE>\n    </DIV>\n  ',
-                        },
+                        { ...tables["499-54"] },
                         {
                             node_type: "Paragraph",
                             text:
@@ -436,4 +447,4 @@ const fullPart = {
     ],
 };
 
-export { appendix, fullPart };
+export { appendix, citations, fullPart, tables };
