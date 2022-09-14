@@ -60,6 +60,14 @@ class ParserConfiguration(SingletonModel):
             message="Number of workers must be at least 1!",
         )],
     )
+    retries = models.IntegerField(
+        default=3,
+        help_text="The number of times to retry parsing a part version before moving on if it fails.",
+        validators=[MinValueValidator(
+            limit_value=0,
+            message="The number of retries must be at least 0!",
+        )],
+    )
     loglevel = models.CharField(
         max_length=5,
         choices=LOGLEVEL_CHOICES,
