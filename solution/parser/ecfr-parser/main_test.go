@@ -206,8 +206,8 @@ func TestStart(t *testing.T) {
 	parseFailures := 0
 
 	testTable := []struct {
-		Name string
-		ParseTitlesFunc func() error
+		Name               string
+		ParseTitlesFunc    func() error
 		RetrieveConfigFunc func() (*eregs.ParserConfig, int, error)
 		Error              bool
 	}{
@@ -219,7 +219,7 @@ func TestStart(t *testing.T) {
 			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
 				return eregs.RetrieveConfig()
 			},
-			Error: false,	
+			Error: false,
 		},
 		{
 			Name: "test-retrieve-config-failure",
@@ -256,7 +256,6 @@ func TestStart(t *testing.T) {
 			Error: false,
 		},
 	}
-
 
 	for _, tc := range testTable {
 		Run(t, tc.Name, func(t *testing.T) {

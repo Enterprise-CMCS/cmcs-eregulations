@@ -29,7 +29,7 @@ var DefaultBaseURL = "http://localhost:8000/v2/"
 
 // Functions for easy testing via patching
 var (
-	ParseTitlesFunc = parseTitles
+	ParseTitlesFunc        = parseTitles
 	ParseTitleFunc         = parseTitle
 	StartVersionWorkerFunc = startVersionWorker
 	HandleVersionFunc      = handleVersion

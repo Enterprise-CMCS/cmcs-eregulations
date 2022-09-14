@@ -80,7 +80,7 @@ type TitleConfig struct {
 // ParserConfig represents configuration for the parser as a whole
 type ParserConfig struct {
 	Workers            int            `json:"workers"`
-	Retries int `json:"retries"`
+	Retries            int            `json:"retries"`
 	LogLevel           string         `json:"loglevel"`
 	UploadSupplemental bool           `json:"upload_supplemental_locations"`
 	LogParseErrors     bool           `json:"log_parse_errors"`

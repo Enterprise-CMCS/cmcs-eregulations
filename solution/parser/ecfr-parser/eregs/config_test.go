@@ -216,7 +216,7 @@ func TestRetrieveConfig(t *testing.T) {
 			})),
 			Output: &ParserConfig{
 				Workers:            3,
-				Retries: 2,
+				Retries:            2,
 				LogLevel:           "info",
 				UploadSupplemental: false,
 				LogParseErrors:     true,
