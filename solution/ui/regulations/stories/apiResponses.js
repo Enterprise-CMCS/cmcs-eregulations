@@ -34,7 +34,7 @@ const groupedFinalRuleResponse = [
                 type: "section",
             },
         ],
-        type: "federal_register_doc",
+        doc_type: "Final",
         related_docs: [
             // new part
             {
@@ -73,7 +73,7 @@ const groupedFinalRuleResponse = [
                         type: "section",
                     },
                 ],
-                type: "federal_register_doc",
+                doc_type: "Final",
             },
         ],
     },
@@ -5630,7 +5630,7 @@ const categoryResponse = [
 
 const relatedRulesResponse = [
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule will advance CMS' efforts to support state flexibility to enter into innovative value-based purchasing arrangements (VBPs) with manufacturers, and to provide manufacturers with regulatory support to enter into VBPs with payers, including Medicaid. To ensure that the regulatory framework is sufficient to support such arrangements and to promote transparency, flexibility, and innovation in drug pricing without undue administrative burden, we are finalizing new regulatory policies and clarifying certain already established policies to assist manufacturers and states in participating in VBPs in a manner that is consistent with the law and maintains the integrity of the Medicaid Drug Rebate Program (MDRP). This final rule also revises regulations regarding: Authorized generic sales when manufacturers calculate average manufacturer price (AMP) for the brand name drug; pharmacy benefit managers (PBM) accumulator programs and their impact on AMP and best price when manufacturer- sponsored assistance is not passed through to the patient; state and manufacturer reporting requirements to the MDRP; new Medicaid Drug Utilization Review (DUR) provisions designed to reduce opioid related fraud, misuse and abuse; the definitions of CMS-authorized supplemental rebate agreement, line extension, new formulation, oral solid dosage form, single source drug, multiple source drug, innovator multiple source drug for purposes of the MDRP; payments for prescription drugs under the Medicaid program; and coordination of benefits (COB) and third party liability (TPL) rules related to the special treatment of certain types of care and payment in Medicaid and Children's Health Insurance Program (CHIP).",
         citation: "85 FR 87000",
@@ -5652,7 +5652,7 @@ const relatedRulesResponse = [
             "Medicaid Program; Establishing Minimum Standards in Medicaid State Drug Utilization Review (DUR) and Supporting Value-Based Purchasing (VBP) for Drugs Covered in Medicaid, Revising Medicaid Drug Rebate and Third Party Liability (TPL) Requirements",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This interim final rule with request for comments (IFC) discusses CMS's implementation of section 3713 of the Coronavirus Aid, Relief, and Economic Security Act (CARES Act), which established Medicare Part B coverage and payment for Coronavirus Disease 2019 (COVID-19) vaccine and its administration. This IFC implements requirements in the CARES Act that providers of COVID-19 diagnostic tests make public their cash prices for those tests and establishes an enforcement scheme to enforce those requirements. This rule also establishes an add-on payment for cases involving the use of new COVID- 19 treatments under the Medicare Inpatient Prospective Payment System (IPPS). This IFC provides for separate payment for new COVID-19 treatments under the Outpatient Prospective Payment System (OPPS) for the remainder of the PHE for COVID-19 when these treatments are provided at the same time as a Comprehensive Ambulatory Payment Classification (C-APC) service. This rule also interprets and implements the requirement to maintain Medicaid beneficiary enrollment in order to receive the temporary increase in Federal funding in the Families First Coronavirus Response Act (FFCRA). This IFC modifies policies of the Comprehensive Care for Joint Replacement (CJR) model and adds technical changes to accommodate these policy changes. Specifically, we are extending Performance Year (PY) 5 by adding 6 months, creating an episode-based extreme and uncontrollable circumstances COVID-19 policy, providing two reconciliation periods for PY 5, and adding DRGs 521 and 522 for hip and knee procedures. This rule also amends regulations regarding coverage of preventive health services to implement section 3203 of the CARES Act, which shortens the timeframe within which non-grandfathered group health plans and health insurance issuers offering non-grandfathered group or individual health insurance coverage must begin to cover without cost sharing qualifying coronavirus preventive services, including recommended COVID-19 immunizations. This IFC also revises regulations to set forth flexibilities in the public notice requirements and post award public participation requirements for State Innovation Waivers under section 1332 of the Patient Protection and Affordable Care Act (PPACA) during the public health emergency for COVID-19.",
         citation: "85 FR 71142",
@@ -5676,7 +5676,7 @@ const relatedRulesResponse = [
             "Additional Policy and Regulatory Revisions in Response to the COVID-19 Public Health Emergency",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This document corrects technical errors that appeared in the final rule published in the May 6, 2016 Federal Register (81 FR 27498 through 27901) entitled, ``Medicaid and Children's Health Insurance Program (CHIP) Programs; Medicaid Managed Care, CHIP Delivered in Managed Care, and Revisions Related to Third Party Liability.'' The effective date for the rule was July 5, 2016.",
         citation: "82 FR 37",
@@ -5696,7 +5696,7 @@ const relatedRulesResponse = [
             "Medicaid and Children's Health Insurance Program (CHIP) Programs; Medicaid Managed Care, CHIP Delivered in Managed Care, and Revisions Related to Third Party Liability; Corrections",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This rule is intended to carry out the President's directives in Executive Order 13563: Improving Regulation and Regulatory Review. The final rule will make Child Support Enforcement program operations and enforcement procedures more flexible, more effective, and more efficient by recognizing the strength of existing State enforcement programs, advancements in technology that can enable improved collection rates, and the move toward electronic communication and document management. This final rule will improve and simplify program operations, and remove outmoded limitations to program innovations to better serve families. In addition, the final rule clarifies and corrects technical provisions in existing regulations. The rule makes significant changes to the regulations on case closure, child support guidelines, and medical support enforcement. It will improve child support collection rates because support orders will reflect the noncustodial parent's ability to pay support, and more noncustodial parents will support their children.",
         citation: "81 FR 93492",
@@ -5737,7 +5737,7 @@ const relatedRulesResponse = [
             "Flexibility, Efficiency, and Modernization in Child Support Enforcement Programs",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule implements provisions of the Affordable Care Act that expand access to health coverage through improvements in Medicaid and coordination between Medicaid, CHIP, and Exchanges. This rule finalizes most of the remaining provisions from the ``Medicaid, Children's Health Insurance Programs, and Exchanges: Essential Health Benefits in Alternative Benefit Plans, Eligibility Notices, Fair Hearing and Appeal Processes for Medicaid and Exchange Eligibility Appeals and Other Provisions Related to Eligibility and Enrollment for Exchanges, Medicaid and CHIP, and Medicaid Premiums and Cost Sharing; Proposed Rule'' that we published in the January 22, 2013, Federal Register. This final rule continues our efforts to assist states in implementing Medicaid and CHIP eligibility, appeals, and enrollment changes required by the Affordable Care Act.",
         citation: "81 FR 86382",
@@ -5767,7 +5767,7 @@ const relatedRulesResponse = [
             "Medicaid and Children's Health Insurance Programs: Eligibility Notices, Fair Hearing and Appeal Processes for Medicaid and Other Provisions Related to Eligibility and Enrollment for Medicaid and CHIP",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule modernizes the Medicaid managed care regulations to reflect changes in the usage of managed care delivery systems. The final rule aligns, where feasible, many of the rules governing Medicaid managed care with those of other major sources of coverage, including coverage through Qualified Health Plans and Medicare Advantage plans; implements statutory provisions; strengthens actuarial soundness payment provisions to promote the accountability of Medicaid managed care program rates; and promotes the quality of care and strengthens efforts to reform delivery systems that serve Medicaid and CHIP beneficiaries. It also ensures appropriate beneficiary protections and enhances policies related to program integrity. This final rule also implements provisions of the Children's Health Insurance Program Reauthorization Act of 2009 (CHIPRA) and addresses third party liability for trauma codes.",
         citation: "81 FR 27497",
@@ -5798,7 +5798,7 @@ const relatedRulesResponse = [
             "Medicaid and Children's Health Insurance Program (CHIP) Programs; Medicaid Managed Care, CHIP Delivered in Managed Care, and Revisions Related to Third Party Liability",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule will extend enhanced funding for Medicaid eligibility systems as part of a state's mechanized claims processing system, and will update conditions and standards for such systems, including adding to and updating current Medicaid Management Information Systems (MMIS) conditions and standards. These changes will allow states to improve customer service and support the dynamic nature of Medicaid eligibility, enrollment, and delivery systems.",
         citation: "80 FR 75817",
@@ -5828,7 +5828,7 @@ const relatedRulesResponse = [
             "Medicaid Program; Mechanized Claims Processing and Information Retrieval Systems (90/10)",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract: null,
         citation: "79 FR 59123",
         correction_of: null,
@@ -5846,7 +5846,7 @@ const relatedRulesResponse = [
             "Medicare and Medicaid Program; Regulatory Provisions To Promote Program Efficiency, Transparency, and Burden Reduction",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract: null,
         citation: "78 FR 66852",
         correction_of: null,
@@ -5863,7 +5863,7 @@ const relatedRulesResponse = [
         title: "State Fiscal Administration",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This document corrects a typographical error that appeared in the final rule published in the April 2, 2013 Federal Register entitled ``Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010.''",
         citation: "78 FR 32991",
@@ -5884,7 +5884,7 @@ const relatedRulesResponse = [
             "Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010; Correction",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule implements the provisions of the Patient Protection and Affordable Care Act of 2010 and the Health Care and Education Reconciliation Act of 2010 (collectively referred to as the Affordable Care Act) relating to the availability of increased Federal Medical Assistance Percentage (FMAP) rates for certain adult populations under states' Medicaid programs. This final rule implements and interprets the increased FMAP rates that will be applicable beginning January 1, 2014 and sets forth conditions for states to claim these increased FMAP rates.",
         citation: "78 FR 19917",
@@ -5905,7 +5905,7 @@ const relatedRulesResponse = [
             "Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule reflects the Centers for Medicare & Medicaid Services' commitment to the general principles of the President's Executive Order 13563 released January 18, 2011, entitled ``Improving Regulation and Regulatory Review.'' This rule will: implement a new reconsideration process for administrative determinations to disallow claims for Federal financial participation (FFP) under title XIX of the Act (Medicaid); lengthen the time States have to credit the Federal government for identified but uncollected Medicaid provider overpayments and provide that interest will be due on amounts not credited within that time period; make conforming changes to the Medicaid and Children's Health Insurance Program (CHIP) disallowance process to allow States the option to retain disputed Federal funds through the new administrative reconsideration process; revise installment repayment standards and schedules for States that owe significant amounts; and provide that interest charges may accrue during the new administrative reconsideration process if a State chooses to retain the funds during that period. This final rule will also make a technical correction to reporting requirements for disproportionate share hospital payments, revise internal delegations of authority to reflect the term ``Administrator or current Designee,'' remove obsolete language, and correct other technical errors.",
         citation: "77 FR 31499",
@@ -5935,7 +5935,7 @@ const relatedRulesResponse = [
             "Medicaid and Children's Health Insurance Programs; Disallowance of Claims for FFP and Technical Corrections",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule will revise Medicaid regulations for Mechanized Claims Processing and Information Retrieval Systems. We are also modifying our regulations so that the enhanced Federal financial participation (FFP) is available for design, development and installation or enhancement of eligibility determination systems until December 31, 2015. This final rule also imposes certain defined standards and conditions in terms of timeliness, accuracy, efficiency, and integrity for mechanized claims processing and information retrieval systems in order to receive enhanced FFP.",
         citation: "76 FR 21949",
@@ -5965,7 +5965,7 @@ const relatedRulesResponse = [
             "Medicaid Program; Federal Funding for Medicaid Eligibility Determination and Enrollment Activities",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule amends Medicaid regulations to conform with the decision by the United States District Court for the District of Columbia on May 23, 2008 in Alameda County Medical Center, et al. v. Michael O. Leavitt, Secretary, U.S. Department of Health and Human Services, et al., 559 F. Supp. 2d (2008) that vacated a final rule with comment period published in the Federal Register in May 29, 2007. This regulatory action takes ministerial steps to remove the vacated provisions from the Code of Federal Regulations and reinstate the prior regulatory language impacted by the May 29, 2007 final rule with comment period.",
         citation: "75 FR 73972",
@@ -5995,7 +5995,7 @@ const relatedRulesResponse = [
             "Medicaid Program; Cost Limit for Providers Operated by Units of Government and Provisions To Ensure the Integrity of Federal-State Financial Partnership",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This rule finalizes our proposal to rescind the December 28, 2007 final rule entitled, ``Elimination of Reimbursement under Medicaid for School Administration Expenditures and Costs Related to Transportation of School-Age Children Between Home and School;'' the November 7, 2008 final rule entitled, ``Clarification of Outpatient Hospital Facility (Including Outpatient Hospital Clinic) Services Definition;'' and certain provisions of the December 4, 2007 interim final rule entitled, ``Optional State Plan Case Management Services.'' These regulations have been the subject of Congressional moratoria and have not yet been implemented (or, with respect to the case management interim final rule, have only been partially implemented) by CMS. In light of concerns raised about the adverse effects that could result from these regulations, in particular, the potential restrictions on services available to beneficiaries and the lack of clear evidence demonstrating that the approaches taken in the regulations are warranted, CMS is rescinding the two final rules in full, and partially rescinding the interim final rule. Rescinding these provisions will permit further opportunity to determine the best approach to further the objectives of the Medicaid program in providing necessary health benefits coverage to needy individuals.",
         citation: "74 FR 31183",
@@ -6016,7 +6016,7 @@ const relatedRulesResponse = [
             "Medicaid Program: Rescission of School-Based Administration/Transportation Final Rule, Outpatient Hospital Services Final Rule, and Partial Rescission of Case Management Interim Final Rule",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This rule finalizes our proposal to delay enforcement of certain clarifications regarding standards for determining hold harmless arrangements in the final rule entitled, ``Medicaid Program; Health Care-Related Taxes'' from the expiration of a Congressional moratorium on enforcement from July 1, 2009 to June 30, 2010.",
         citation: "74 FR 31196",
@@ -6036,7 +6036,7 @@ const relatedRulesResponse = [
         title: "Medicaid Program; Health Care-Related Taxes",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This interim final rule with comment period makes technical changes to the existing methodology and process used to compute and issue each State's preliminary and final allotments available to pay the Medicare Part B premiums for qualifying individuals (QIs). The technical revisions conform the existing regulations to reflect continued funding of this program. Additionally, this rule contains charts providing the States' final QI allotments for the Federal fiscal year (FY) 2008 and preliminary QI allotments for FY 2009, determined in accordance with the methodology set forth in the October 2006 final rule, and reflecting funding for the QI program made available under recent legislation.",
         citation: "73 FR 70886",
@@ -6066,7 +6066,7 @@ const relatedRulesResponse = [
             "Medicaid Program; State Allotments for Payment of Medicare Part B Premiums for Qualifying Individuals: Federal Fiscal Year 2008 and Federal Fiscal Year 2009",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This final rule revises the collection threshold under the regulatory indirect guarantee hold harmless arrangement test to reflect the provisions of the Tax Relief and Health Care Act of 2006. When determining whether there is an indirect guarantee under the 2-prong test for portions of fiscal years beginning on or after January 1, 2008 and before October 1, 2011, the allowable amount that can be collected from a health care-related tax is reduced from 6 to 5.5 percent of net patient revenues received by the taxpayers. This final rule also clarifies the standard for determining the existence of a hold harmless arrangement under the positive correlation test, Medicaid payment test, and the guarantee test (with conforming changes to parallel provisions concerning hold harmless arrangements with respect to provider-related donations); codifies changes to permissible class of health care items or services related to managed care organizations as enacted by the Deficit Reduction Act of 2005; and, removes obsolete transition period regulatory language.",
         citation: "73 FR 9685",
@@ -6094,7 +6094,7 @@ const relatedRulesResponse = [
         title: "Medicaid Program; Health Care-Related Taxes",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "Under the Medicaid program, Federal payment is available for the costs of administrative activities ``as found necessary by the Secretary for the proper and efficient administration of the State plan.'' This final rule eliminates Federal Medicaid payment for the costs of certain school-based administrative and transportation activities because the Secretary has found that these activities are not necessary for the proper and efficient administration of the Medicaid State plan and are not within the definition of the optional transportation benefit. Based on these determinations, under this final rule, Federal Medicaid payments will no longer be available for administrative activities performed by school employees or contractors, or anyone under the control of a public or private educational institution, and for transportation from home to school. In addition, this final rule responds to public comments received on the September 7, 2007 proposed rule.",
         citation: "72 FR 73635",
@@ -6124,7 +6124,7 @@ const relatedRulesResponse = [
             "Medicaid Program; Elimination of Reimbursement Under Medicaid for School Administration Expenditures and Costs Related to Transportation of School-Age Children Between Home and School",
     },
     {
-        type: "Rule",
+        doc_type: "Final",
         abstract:
             "This regulation clarifies that entities involved in the financing of the non-Federal share of Medicaid payments must be a unit of government; clarifies the documentation required to support a Medicaid certified public expenditure; limits Medicaid reimbursement for health care providers that are operated by units of government to an amount that does not exceed the health care provider's cost of providing services to Medicaid individuals; requires all health care providers to receive and retain the full amount of total computable payments for services furnished under the approved Medicaid State plan; and makes conforming changes to provisions governing the State Child Health Insurance Program (SCHIP) to make the same requirements applicable, with the exception of the cost limit on reimbursement. The Medicaid cost limit provision of this regulation does not apply to: Stand-alone SCHIP program payments made to governmentally-operated health care providers; Indian Health Service (IHS) facilities and tribal 638 facilities that are paid at the all-inclusive IHS rate; Medicaid Managed Care Organizations (MCOs), Prepaid Inpatient Health Plans (PIHPs), and Prepaid Ambulatory Health Plans (PAHPs); Federally Qualified Health Centers (FQHCs) and Rural Health Clinics (RHCs). Moreover, disproportionate share hospital (DSH) payments and payments authorized under Section 701(d) and Section 705 of the Benefits Improvement Protection Act of 2000 are not subject to the newly established Medicaid cost limit for governmentally-operated health care providers. Except as noted above, all Medicaid payments and SCHIP payments made under the authority of the State plan and under waiver and demonstration authorities, as well as associated State Medicaid and SCHIP financing arrangements, are subject to all provisions of this regulation. Finally, this regulation solicits comments from the public on issues related to the definition of the Unit of Government.",
         citation: "72 FR 29747",

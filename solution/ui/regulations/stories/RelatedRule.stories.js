@@ -3,7 +3,7 @@ import RelatedRule from "../js/src/components/RelatedRule.vue";
 const commonArgs = {
     title:
         "Medicaid Program; Establishing Minimum Standards in Medicaid State Drug Utilization Review (DUR) and Supporting Value-Based Purchasing (VBP) for Drugs Covered in Medicaid, Revising Medicaid Drug Rebate and Third Party Liability (TPL) Requirements",
-    type: "Rule",
+    type: "Final",
     citation: "85 FR 87000",
     effective_on: "2021-03-01",
     publication_date: "2020-12-31",

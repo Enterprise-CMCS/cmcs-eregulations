@@ -50,6 +50,7 @@ watch-all:
 storybook: ## Run storybook for regulations
 storybook: ui/regulations/.storybook
 	cd ui/regulations; \
+		npm install; \
 		npm run storybook
 
 .PHONY: prototype
