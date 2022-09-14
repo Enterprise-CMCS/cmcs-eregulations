@@ -229,7 +229,6 @@ export default {
                         );
                 } else {
                     await this.get_location_string()
-                    console.log("this.joined_locations", this.joined_locations);
                     const response = await v3GetSupplementalContent(
                         this.api_url,
                         {locations: location || this.joined_locations }
