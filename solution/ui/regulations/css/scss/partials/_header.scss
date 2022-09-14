@@ -308,7 +308,6 @@ header {
         }
 
         .reg-title:after {
-            content: "Search Results";
 
             @include screen-lg {
                 margin-top: 5px;

@@ -1,9 +1,12 @@
 {% load static %}
 
-{% if part %}
+
     <div class="reg-title">
         <div class="flex-container">
             <div class="flex-header">
+
+                {{static}}
+                {% if part %}
                 <a href="{% url 'regulation_landing_view' title reg_part %}">
                     <strong>{{title}} CFR Part {{ part }}</strong>
                     <span class="header-part-name">
@@ -12,10 +15,13 @@
                         {% endif %}
                     </span>
                 </a>
+                {% endif %}
             </div>
-            <div class="view-resources-btn" >
-                <a href="{% url "resources" %}" class="btn inverted">View All Resources</a>
-            </div>
+            {% if not hide_resource_btn %}
+                <div class="view-resources-btn" >
+                    <a href="{% url "resources" %}" class="btn inverted">View All Resources</a>
+                </div>
+            {% endif %}
         </div>
     </div>
-{% endif %}
+
