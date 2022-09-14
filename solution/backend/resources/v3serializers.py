@@ -178,6 +178,8 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
 
     def to_representation(self, instance):
         obj = super().to_representation(instance)
+        if self.context['fr_grouping'] == 'false':
+            return obj
         docs = [obj] + obj["related_docs"]
         del obj["related_docs"]
         docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)

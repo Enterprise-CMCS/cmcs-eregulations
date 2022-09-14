@@ -241,6 +241,8 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                               "\"&categories=X&categories=Y\" for multiple.", int, False),
         OpenApiQueryParameter("sort", "Sort results by this field. Valid values are \"newest\", \"oldest\", and \"relevance\". "
                               "Newest is the default, and relevance requires a search query.", str, False),
+        OpenApiQueryParameter("fr_grouping", "Determines if FR Documents should be grouped or not"
+                              "Default is true", bool, False),
     ] + OptionalPaginationMixin.PARAMETERS + LocationFiltererMixin.PARAMETERS
 
     location_filter_prefix = "locations__"
@@ -258,6 +260,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         context = super().get_serializer_context()
         context["category_details"] = self.request.GET.get("category_details", "true")
         context["location_details"] = self.request.GET.get("location_details", "true")
+        context["fr_grouping"] = self.request.GET.get("fr_grouping", "true")
         return context
 
     def get_search_vectors(self):

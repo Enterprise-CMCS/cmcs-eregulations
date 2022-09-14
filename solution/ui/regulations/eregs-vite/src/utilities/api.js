@@ -717,7 +717,8 @@ const getSupplementalContentV3 = async (
         cat_details = true,
         page_size = 100,
         location_details = true,
-        sortMethod = "newest"
+        sortMethod = "newest",
+        fr_grouping = true,
     }
 ) => {
     const queryString = q ? `&q=${q}` : "";
@@ -755,6 +756,7 @@ const getSupplementalContentV3 = async (
     sString = `${sString}&sort=${sortMethod}`;
 
     sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
+    sString = `${sString}&fr_grouping=${fr_grouping}`
     const response = await httpApiGetV3(`resources/?${sString}`)
     return response;
 
