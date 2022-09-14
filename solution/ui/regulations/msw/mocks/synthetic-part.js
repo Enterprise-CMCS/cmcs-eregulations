@@ -172,13 +172,13 @@ const fullPart = {
                         {
                             node_type: "Paragraph",
                             text:
-                                "<I>/This is an example of a bolded phrase/.</I> This section implements section 1914 of the Act. /this sentence has a footnote/.<SU>1</SU>",
+                                "(a) <I>/This is an example of a bolded phrase/.</I> This section implements section 1914 of the Act. /this sentence has a footnote/.<SU>1</SU>",
                             label: [
                                 "499",
                                 "30",
-                                "e8097e171215490dbe0b3206107a504c",
+                                "a",
                             ],
-                            marker: null,
+                            marker: ["a"],
                         },
                         { ...citations["499.30"] },
                         {
@@ -191,7 +191,7 @@ const fullPart = {
                 {
                     node_type: "SECTION",
                     title:
-                        "§ 499.31 Withholding the Federal share of payments to Medicaid /this is an example of a really long section name/.",
+                        "§ 499.31 Withholding Medicare payments to recover Medicaid overpayments.",
                     label: ["499", "31"],
                     children: [
                         {
@@ -330,7 +330,7 @@ const fullPart = {
                 },
                 {
                     node_type: "SUBJGRP",
-                    title: "Cost Sharing /subject group with footnote/",
+                    title: "Cost Sharing /Subject group/",
                     label: ["ECFR92bbc42ac8acd7a"],
                     children: [
                         {
