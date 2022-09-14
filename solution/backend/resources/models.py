@@ -153,6 +153,7 @@ class FederalRegisterDocumentGroup(models.Model):
     class Meta:
         verbose_name = "Federal Register Doc Group"
         verbose_name_plural = "Federal Register Doc Groups"
+        ordering = ('docket_number_prefixes',)
 
 
 # Resource models
