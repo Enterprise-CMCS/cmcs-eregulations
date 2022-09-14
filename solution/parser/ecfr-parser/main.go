@@ -159,7 +159,11 @@ func parseTitle(title *eregs.TitleConfig) error {
 		Parts:   strings.Join(title.Parts[:], ","),
 		Workers: config.Workers,
 	}
-	defer eregs.PostParserResult(ctx, &result)
+	defer func() {
+		if _, err := eregs.PostParserResult(ctx, &result); err != nil {
+			log.Warn("[main] Failed to post parser results for title ", title.Title, ": ", err)
+		}
+	}()
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
