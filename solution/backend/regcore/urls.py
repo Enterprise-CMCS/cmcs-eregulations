@@ -1,5 +1,4 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
 
 from regcore.views import (
     EffectivePartView,
@@ -14,26 +13,13 @@ from regcore.views import (
 )
 
 from regcore.v3views import (
-    ContentsViewSet,
-    TitlesViewSet,
-    TitleViewSet,
-    TitleContentsViewSet,
-    PartsViewSet,
-    VersionsViewSet,
-    PartContentsViewSet,
-    PartSectionsViewSet,
-    PartSubpartsViewSet,
-    SubpartContentsViewSet,
-    ParserResultViewSet,
-    SynonymViewSet,
-    PartViewSet,
-    SectionViewSet,
-    SubpartViewSet,
+    title,
+    part,
+    contents,
+    metadata,
+    synonyms,
+    parser,
 )
-
-
-router = DefaultRouter()
-router.register("toc", ContentsViewSet)
 
 
 urlpatterns = [
@@ -53,53 +39,57 @@ urlpatterns = [
     ])),
     path("v3/", include([
         path("resources/", include('resources.v3urls')),
-        path("toc", ContentsViewSet.as_view({
+        path("toc", title.TOCViewSet.as_view({
             "get": "list",
         })),
-        path("titles", TitlesViewSet.as_view({
+        path("titles", title.TitlesViewSet.as_view({
             "get": "list",
         })),
-        path("title/<title>", TitleViewSet.as_view({
+        path("title/<title>/toc", title.TitleTOCViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/parts", title.PartsViewSet.as_view({
+            "get": "list",
+        })),
+        path("title/<title>/versions", title.VersionsViewSet.as_view({
+            "get": "list",
+        })),
+        path("title/<title>/part/<part>/versions", part.VersionsViewSet.as_view({
+            "get": "list",
+        })),
+        path("title/<title>/part/<part>/version/<version>", contents.PartViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/part/<part>/version/<version>/toc", metadata.PartTOCViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/part/<part>/version/<version>/sections", metadata.PartSectionsViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/part/<part>/version/<version>/section/<section>", contents.SectionViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/part/<part>/version/<version>/subparts", metadata.PartSubpartsViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", contents.SubpartViewSet.as_view({
+            "get": "retrieve",
+        })),
+        path(
+            "title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc",
+            metadata.SubpartTOCViewSet.as_view({
+                "get": "retrieve",
+            }),
+        ),
+        path("ecfr_parser_result/<title>", parser.ParserResultViewSet.as_view({
             "get": "retrieve",
             "post": "create",
+        })),
+        path("part", parser.PartUploadViewSet.as_view({
             "put": "update",
         })),
-        path("title/<title>/toc", TitleContentsViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("title/<title>/parts", PartsViewSet.as_view({
+        path("synonym/<synonym>", synonyms.SynonymViewSet.as_view({
             "get": "list",
         })),
-        path("title/<title>/part/<part>/versions", VersionsViewSet.as_view({
-            "get": "list",
-        })),
-        path("title/<title>/part/<part>/version/<version>", PartViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("title/<title>/part/<part>/version/<version>/toc", PartContentsViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("title/<title>/part/<part>/version/<version>/sections", PartSectionsViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("title/<title>/part/<part>/version/<version>/section/<section>", SectionViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("title/<title>/part/<part>/version/<version>/subparts", PartSubpartsViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>", SubpartViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("title/<title>/part/<part>/version/<version>/subpart/<subpart>/toc", SubpartContentsViewSet.as_view({
-            "get": "retrieve",
-        })),
-        path("ecfr_parser_result/<title>", ParserResultViewSet.as_view({
-            "get": "retrieve",
-            "post": "create"
-        })),
-        path("synonym/<synonym>", SynonymViewSet.as_view({
-            "get": "list"
-        }))
     ])),
 ]

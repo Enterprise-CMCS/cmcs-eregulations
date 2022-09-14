@@ -3,7 +3,8 @@ import logging
 
 from django.views.generic.base import TemplateView
 
-from regcore.models import Part, Title
+from regcore.models import Part
+from regcore.serializers.toc import FrontPageTOCSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,8 @@ class HomepageView(TemplateView):
         if not parts:
             return context
 
-        full_structure = Title.objects.all().values_list("toc", flat=True)
+        queryset = Part.objects.order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
+        full_structure = FrontPageTOCSerializer(queryset, many=True).data
 
         c = {
             'structure': full_structure,

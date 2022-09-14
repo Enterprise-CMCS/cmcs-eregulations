@@ -21,6 +21,34 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+func Run(t *testing.T, name string, f func(*testing.T)) bool {
+	config = &eregs.ParserConfig{
+		Workers:            3,
+		LogLevel:           "trace",
+		UploadSupplemental: true,
+		LogParseErrors:     true,
+		SkipVersions:       true,
+		Titles: []*eregs.TitleConfig{
+			&eregs.TitleConfig{
+				Title: 42,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"IV", "C"},
+				},
+				Parts: eregs.PartList{"400", "457", "460"},
+			},
+			&eregs.TitleConfig{
+				Title: 43,
+				Subchapters: eregs.SubchapterList{
+					eregs.SubchapterArg{"AB", "C"},
+				},
+				Parts: eregs.PartList{"1", "2", "3"},
+			},
+		},
+	}
+
+	return t.Run(name, f)
+}
+
 func TestInit(t *testing.T) {
 	if eregs.BaseURL != DefaultBaseURL {
 		t.Errorf("eregs.BaseURL: expected (%s), received (%s)", DefaultBaseURL, eregs.BaseURL)
@@ -71,7 +99,7 @@ func TestGetLogLevel(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			out := getLogLevel(tc.Input)
 			if out != tc.Expected {
 				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
@@ -123,7 +151,7 @@ func TestParseConfig(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			parseConfig(&tc.Input)
 			if diff := deep.Equal(tc.Input, tc.Expected); diff != nil {
 				t.Errorf("output not as expected: %+v", diff)
@@ -137,14 +165,9 @@ func TestParseConfig(t *testing.T) {
 
 func TestStart(t *testing.T) {
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "POST" || r.Method == "PUT" {
-			if r.URL.Path == "/title/42" || r.URL.Path == "/title/43" {
-				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`OK!`))
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "Something happened!!" }`))
-			}
+		if r.Method != "GET" {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Expected GET request!" }`))
 		} else if r.URL.Path == "/parser_config" {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{
@@ -180,29 +203,47 @@ func TestStart(t *testing.T) {
 	eregs.BaseURL = eregsServer.URL
 
 	testTable := []struct {
-		Name           string
-		ParseTitleFunc func(*eregs.TitleConfig) error
-		Error          bool
+		Name               string
+		ParseTitleFunc     func(*eregs.TitleConfig) error
+		RetrieveConfigFunc func() (*eregs.ParserConfig, int, error)
+		Error              bool
 	}{
 		{
 			Name: "test-success",
 			ParseTitleFunc: func(title *eregs.TitleConfig) error {
 				return nil
 			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return eregs.RetrieveConfig()
+			},
 			Error: false,
 		},
 		{
-			Name: "test-failure",
+			Name: "test-parse-title-failure",
 			ParseTitleFunc: func(title *eregs.TitleConfig) error {
 				return fmt.Errorf("something bad happened")
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return eregs.RetrieveConfig()
+			},
+			Error: true,
+		},
+		{
+			Name: "test-config-failure",
+			ParseTitleFunc: func(title *eregs.TitleConfig) error {
+				return nil
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return nil, -1, fmt.Errorf("failed to retrieve configuration")
 			},
 			Error: true,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			ParseTitleFunc = tc.ParseTitleFunc
+			RetrieveConfigFunc = tc.RetrieveConfigFunc
 			err := start()
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
@@ -214,9 +255,6 @@ func TestStart(t *testing.T) {
 }
 
 func TestParseTitle(t *testing.T) {
-	config.SkipVersions = true
-	config.Workers = 3
-
 	SleepFunc = func(t time.Duration) {}
 
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -363,101 +401,20 @@ func TestParseTitle(t *testing.T) {
 			return
 		}
 
-		if r.URL.Path == "/title/42" {
+		if r.URL.Path == "/title/42/versions" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`{
-				"id": 1,
-				"name": "42",
-				"last_updated": "2022-03-21T17:09:10.628069",
-				"toc": {
-				  "type": "title",
-				  "label": "Title 42 - Public Health",
-				  "children": [
-					{
-					  "type": "chapter",
-					  "label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
-					  "children": [
-						{
-						  "type": "subchapter",
-						  "label": "Subchapter A - General Provisions",
-						  "children": [
-							{
-							  "type": "part",
-							  "label": "Part 400 - Introduction; Definitions",
-							  "children": null,
-							  "reserved": false,
-							  "identifier": [
-								"400"
-							  ],
-							  "label_level": "Part 400",
-							  "descendant_range": [
-								"400.200",
-								"400.203"
-							  ],
-							  "label_description": "Introduction; Definitions"
-							}
-						  ],
-						  "reserved": false,
-						  "identifier": [
-							"A"
-						  ],
-						  "label_level": "Subchapter A",
-						  "descendant_range": [
-							"400",
-							"404"
-						  ],
-						  "label_description": "General Provisions"
-						}
-					  ],
-					  "reserved": false,
-					  "identifier": [
-						"IV"
-					  ],
-					  "label_level": " Chapter IV",
-					  "descendant_range": [
-						"400",
-						"699"
-					  ],
-					  "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
-					}
-				  ],
-				  "reserved": false,
-				  "identifier": [
-					"42"
-				  ],
-				  "label_level": "Title 42",
-				  "descendant_range": [
-					"null"
-				  ],
-				  "label_description": "Public Health"
+			w.Write([]byte(`[
+				{
+					"date": "2019-01-01",
+					"part_name": [
+						"433"
+					]
 				}
-			  }`))
-		} else if r.URL.Path == "/title/43" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(`{ "exception": "404 not found!" }`))
+			]`))
 		} else {
-			path := strings.Split(r.URL.Path, "/")
-			if len(path) < 4 {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "Invalid path length '` + r.URL.Path + `'" }`))
-				return
-			}
-
-			if path[2] == "42" {
-				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`[
-					{
-						"date": "2019-01-01",
-						"partName": [
-							"433"
-						]
-					}
-				]`))
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "Unrecognized title" }`))
-				return
-			}
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Unrecognized path" }`))
+			return
 		}
 	}))
 	defer eregsServer.Close()
@@ -492,9 +449,6 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: false,
 		},
@@ -509,9 +463,6 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -524,9 +475,6 @@ func TestParseTitle(t *testing.T) {
 				Title:       42,
 				Subchapters: eregs.SubchapterList{},
 				Parts:       eregs.PartList{},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -539,9 +487,6 @@ func TestParseTitle(t *testing.T) {
 				Title:       42,
 				Subchapters: eregs.SubchapterList{},
 				Parts:       eregs.PartList{},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -554,9 +499,6 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"433"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
@@ -571,16 +513,13 @@ func TestParseTitle(t *testing.T) {
 					eregs.SubchapterArg{"IV", "C"},
 				},
 				Parts: eregs.PartList{"1", "2", "3"},
-				Contents: &eregs.Title{
-					Contents: &ecfr.Structure{},
-				},
 			},
 			Error: true,
 		},
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			WorkerFunc = tc.WorkerFunc
 			err := parseTitle(&tc.Input)
 			if err != nil && !tc.Error {
@@ -592,7 +531,7 @@ func TestParseTitle(t *testing.T) {
 	}
 }
 
-func TestStartHandlePartVersionWorker(t *testing.T) {
+func TestStartVersionWorker(t *testing.T) {
 	SleepFunc = func(t time.Duration) {}
 
 	input := [][]eregs.Part{
@@ -644,7 +583,7 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			HandleVersionFunc = tc.HandleVersionFunc
 
 			parts := list.New()
@@ -681,9 +620,7 @@ func TestStartHandlePartVersionWorker(t *testing.T) {
 	}
 }
 
-func TestHandlePartVersion(t *testing.T) {
-	config.UploadSupplemental = true
-
+func TestHandleVersion(t *testing.T) {
 	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -813,36 +750,29 @@ func TestHandlePartVersion(t *testing.T) {
 	ecfr.EcfrSite = ecfrServer.URL
 
 	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
+		if r.Method != "PUT" {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Expected POST method, got ` + r.Method + `" }`))
+			w.Write([]byte(`{ "exception": "Expected PUT method, got ` + r.Method + `" }`))
 			return
 		}
 
 		path := strings.Split(r.URL.Path, "/")
 		if len(path) < 2 {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Invalid POST path '` + r.URL.Path + `'" }`))
-		} else if path[1] == "" {
+			w.Write([]byte(`{ "exception": "Invalid PUT path '` + r.URL.Path + `'" }`))
+		} else if path[1] == "part" {
 			//posting a part
 			d := json.NewDecoder(r.Body)
 			var part struct{}
 			if err := d.Decode(&part); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				errString := fmt.Sprintf("%+v", err)
-				w.Write([]byte(`{ "exception": "POST part - failed to parse JSON: '` + errString + `'" }`))
+				w.Write([]byte(`{ "exception": "PUT part - failed to parse JSON: '` + errString + `'" }`))
 				return
 			}
-		} else if path[1] == "supplemental_content" {
-			//posting supplemental content
-			d := json.NewDecoder(r.Body)
-			var part struct{}
-			if err := d.Decode(&part); err != nil {
-				//failed to decode part
-				errString := fmt.Sprintf("%+v", err)
-				w.Write([]byte(`{ "exception": "POST supplemental parts - failed to parse JSON: '` + errString + `'" }`))
-				return
-			}
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(`{ "exception": "Invalid PUT path '` + r.URL.Path + `'" }`))
 		}
 
 		w.WriteHeader(http.StatusOK)
@@ -860,11 +790,12 @@ func TestHandlePartVersion(t *testing.T) {
 		{
 			Name: "test-valid",
 			Input: eregs.Part{
-				Title:     42,
-				Name:      "433",
-				Date:      "2022-01-01",
-				Structure: &ecfr.Structure{},
-				Document:  &parsexml.Part{},
+				Title:           42,
+				Name:            "433",
+				Date:            "2022-01-01",
+				Structure:       &ecfr.Structure{},
+				Document:        &parsexml.Part{},
+				UploadLocations: true,
 			},
 			Expected: eregs.Part{
 				Title: 42,
@@ -987,7 +918,7 @@ func TestHandlePartVersion(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 			err := handleVersion(ctx, 1, &tc.Input)
@@ -1031,7 +962,7 @@ func TestContains(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		t.Run(tc.Name, func(t *testing.T) {
+		Run(t, tc.Name, func(t *testing.T) {
 			out := contains(tc.Array, tc.String)
 			if out != tc.Expected {
 				t.Errorf("expected (%t), received (%t)", tc.Expected, out)
