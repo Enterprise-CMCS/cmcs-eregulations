@@ -1,7 +1,7 @@
 <template>
     <div>
         <section tabindex="-1" id="kebabLabel" class="reg-section">
-            <h2> {{ node.title }} </h2>
+            <h2 v-html="node.title"></h2>
             {{ node.text }}
         </section>
 

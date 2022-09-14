@@ -267,7 +267,7 @@ const fullPart = {
                 {
                     node_type: "SUBJGRP",
                     title:
-                        "Medicaid /subject group with footnote/ Sharing<SU>1</SU>",
+                        "Medicaid /subject group with footnote/ Sharing <su>1</su>",
                     label: ["ECFR92bbc42ac8acd78"],
                     children: [
                         {
