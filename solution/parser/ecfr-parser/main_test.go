@@ -172,6 +172,7 @@ func TestStart(t *testing.T) {
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(`{
 				"workers": 3,
+				"retries": 3,
 				"loglevel": "trace",
 				"upload_supplemental_locations": true,
 				"log_parse_errors": false,
@@ -202,6 +203,76 @@ func TestStart(t *testing.T) {
 	defer eregsServer.Close()
 	eregs.BaseURL = eregsServer.URL
 
+	parseFailures := 0
+
+	testTable := []struct {
+		Name string
+		ParseTitlesFunc func() error
+		RetrieveConfigFunc func() (*eregs.ParserConfig, int, error)
+		Error              bool
+	}{
+		{
+			Name: "test-success",
+			ParseTitlesFunc: func() error {
+				return nil
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return eregs.RetrieveConfig()
+			},
+			Error: false,	
+		},
+		{
+			Name: "test-retrieve-config-failure",
+			ParseTitlesFunc: func() error {
+				return nil
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return nil, -1, fmt.Errorf("failed to retrieve config")
+			},
+			Error: true,
+		},
+		{
+			Name: "test-parse-titles-failure",
+			ParseTitlesFunc: func() error {
+				return fmt.Errorf("titles failed to parse")
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return eregs.RetrieveConfig()
+			},
+			Error: true,
+		},
+		{
+			Name: "test-parse-titles-retry",
+			ParseTitlesFunc: func() error {
+				if parseFailures > 1 {
+					return nil
+				}
+				parseFailures++
+				return fmt.Errorf("failed to parse titles")
+			},
+			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
+				return eregs.RetrieveConfig()
+			},
+			Error: false,
+		},
+	}
+
+
+	for _, tc := range testTable {
+		Run(t, tc.Name, func(t *testing.T) {
+			ParseTitlesFunc = tc.ParseTitlesFunc
+			RetrieveConfigFunc = tc.RetrieveConfigFunc
+			err := start()
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received none")
+			}
+		})
+	}
+}
+
+func TestParseTitles(t *testing.T) {
 	testTable := []struct {
 		Name               string
 		ParseTitleFunc     func(*eregs.TitleConfig) error
@@ -213,28 +284,12 @@ func TestStart(t *testing.T) {
 			ParseTitleFunc: func(title *eregs.TitleConfig) error {
 				return nil
 			},
-			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
-				return eregs.RetrieveConfig()
-			},
 			Error: false,
 		},
 		{
 			Name: "test-parse-title-failure",
 			ParseTitleFunc: func(title *eregs.TitleConfig) error {
 				return fmt.Errorf("something bad happened")
-			},
-			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
-				return eregs.RetrieveConfig()
-			},
-			Error: true,
-		},
-		{
-			Name: "test-config-failure",
-			ParseTitleFunc: func(title *eregs.TitleConfig) error {
-				return nil
-			},
-			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
-				return nil, -1, fmt.Errorf("failed to retrieve configuration")
 			},
 			Error: true,
 		},
@@ -243,8 +298,7 @@ func TestStart(t *testing.T) {
 	for _, tc := range testTable {
 		Run(t, tc.Name, func(t *testing.T) {
 			ParseTitleFunc = tc.ParseTitleFunc
-			RetrieveConfigFunc = tc.RetrieveConfigFunc
-			err := start()
+			err := parseTitles()
 			if err != nil && !tc.Error {
 				t.Errorf("expected no error, received (%+v)", err)
 			} else if err == nil && tc.Error {
