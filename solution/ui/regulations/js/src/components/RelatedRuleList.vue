@@ -1,5 +1,5 @@
 <template>
-    <div class="related-rule-list" v-if="rules.length">
+    <div v-if="rules.length" class="related-rule-list">
         <template v-for="(rule, i) in limitedRules">
             <related-rule
                 :key="i"
@@ -34,7 +34,7 @@
         >
             <template v-slot:expanded>
                 <show-more-button
-                    buttonText="- Show Less"
+                    button-text="- Show Less"
                     :count="rules.length"
                 ></show-more-button>
             </template>
