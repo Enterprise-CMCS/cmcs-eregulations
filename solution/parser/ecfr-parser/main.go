@@ -206,7 +206,6 @@ func parseTitle(title *eregs.TitleConfig) error {
 		}
 
 		if versionList.Len() > 0 {
-			//return fmt.Errorf("FAILURE IDK WA FJASDLF ")
 			versionList.Back().Value.(*eregs.Part).UploadLocations = true
 		}
 
