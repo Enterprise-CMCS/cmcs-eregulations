@@ -1,11 +1,9 @@
 {% load static %}
 
 
-    <div class="reg-title">
+    <div class="reg-title {% if part %}part{% endif %}">
         <div class="flex-container">
             <div class="flex-header">
-
-                {{static}}
                 {% if part %}
                 <a href="{% url 'regulation_landing_view' title reg_part %}">
                     <strong>{{title}} CFR Part {{ part }}</strong>
