@@ -184,14 +184,18 @@ header {
         font-size: $font-size-lg;
 
         @include screen-lg {
-            font-size: $font-size-md;
-            line-height: 24px;
-            padding-left: $spacer-2;
-            margin-left: $spacer-2;
-            border-left: 1px solid $border_color;
-
-        }
-
+                font-size: $font-size-md;
+                line-height: 24px;
+                padding-left: $spacer-2;
+                margin-left: $spacer-2;
+        
+                &.part {
+                    border-left: 1px solid $border_color;
+                }
+        
+        
+            }
+    
         a {
             max-width: $text-max-width;
             display: inline-block;
@@ -308,7 +312,6 @@ header {
         }
 
         .reg-title:after {
-            content: "Search Results";
 
             @include screen-lg {
                 margin-top: 5px;
