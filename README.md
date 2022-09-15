@@ -30,9 +30,18 @@ Running `make` will provide some information about the available tasks.
 For example:
 
 ```
+cd solution
 make local
 ```
 
+## Create static assets.
+Running this will create all the static assets so that the admin page
+has the proper css files to display properly. 
+
+```
+cd solution
+make local.collectstatic
+```
 Will start a local docker environment and load parts of Title 42 into it.
 
 Proceed to <http://localhost:8000> in your browser to see the results.
@@ -54,7 +63,8 @@ This data is not maintained and should not be relied on for any purpose other th
 
 Before running the tests for the first time, you may need to install cypress dependencies.
 
-1. `cd e2e`
+1. Navigate to project root
+1. `cd solutions/ui/e2e`
 2. `npm install`
 
 #### Running the tests ####
@@ -66,7 +76,7 @@ Running `make test` after `make local` will run the cypress suite of end to end 
 3. `make test`
 
 ## Working with assets ##
-
+Navigate to project root.
 `make watch-all`: scss and js files can be watched an automatically compiled.
 For admin site customizations, please use the icon set at [boxicon](https://boxicons.com).
 
