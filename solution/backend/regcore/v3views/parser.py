@@ -27,13 +27,13 @@ class ParserResultViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, title):
         parserResult = ECFRParserResult.objects.filter(title=title).order_by("-end").first()
         if parserResult:
-            serializer = self.serializer_class(parserResult)
+            serializer = self.get_serializer_class()(parserResult)
             return Response(serializer.data)
         raise Http404()
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        super().create(self, request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
 
 @extend_schema(description="Upload a regulation Part to eRegs. Typically only used by the eCFR parser.")

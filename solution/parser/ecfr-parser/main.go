@@ -29,6 +29,7 @@ var DefaultBaseURL = "http://localhost:8000/v2/"
 
 // Functions for easy testing via patching
 var (
+	ParseTitlesFunc        = parseTitles
 	ParseTitleFunc         = parseTitle
 	StartVersionWorkerFunc = startVersionWorker
 	HandleVersionFunc      = handleVersion
@@ -73,6 +74,11 @@ func parseConfig(c *eregs.ParserConfig) {
 		c.Workers = 1
 	}
 
+	if c.Retries < 0 {
+		log.Warn("[main] ", c.Retries, " is an invalid number of retries, defaulting to 0.")
+		c.Retries = 0
+	}
+
 	log.SetLevel(getLogLevel(c.LogLevel))
 }
 
@@ -100,6 +106,24 @@ func start() error {
 	}
 	parseConfig(config)
 
+	for attempt := 0; attempt != config.Retries+1; attempt++ {
+		if attempt > 0 {
+			config.SkipVersions = true //just retry failed versions
+		}
+		if err := ParseTitlesFunc(); err != nil {
+			if attempt == config.Retries {
+				return fmt.Errorf("parsing failed after %d attempts: %s", attempt+1, err)
+			}
+			log.Warn("[main] Parsing failed. Will retry ", config.Retries-attempt, " more times. Error: ", err)
+		} else {
+			break
+		}
+	}
+
+	return nil
+}
+
+func parseTitles() error {
 	start := time.Now()
 	failed := 0
 	processed := 0
@@ -135,7 +159,11 @@ func parseTitle(title *eregs.TitleConfig) error {
 		Parts:   strings.Join(title.Parts[:], ","),
 		Workers: config.Workers,
 	}
-	defer eregs.PostParserResult(ctx, &result)
+	defer func() {
+		if _, err := eregs.PostParserResult(ctx, &result); err != nil {
+			log.Warn("[main] Failed to post parser results for title ", title.Title, ": ", err)
+		}
+	}()
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
