@@ -281,6 +281,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 
 	log.Info("[main] Successfully processed ", processed, "/", numVersions, " versions of title ", title.Title, " in ", time.Since(start))
 	if len(failed) > 0 {
+		result.Errors = len(failed)
 		return fmt.Errorf("the following versions failed to process: %s", strings.Join(failed, ", "))
 	}
 	return nil
