@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.core.exceptions import BadRequest
-from django.db.models import Prefetch, Q, Case, When, F, BooleanField, ExpressionWrapper
+from django.db.models import Prefetch, Q, Case, When, F
 from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
