@@ -1,6 +1,9 @@
 # base image
 FROM node:16-alpine
 
+# install python
+RUN apk add --no-cache python3 make g++
+
 # set working directory
 WORKDIR /app/solution/ui/prototype
 
