@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db import transaction
 
 from django.db.models import Prefetch, Q, Count
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
@@ -178,6 +179,7 @@ class SupplementalContentSectionsView(generics.CreateAPIView):
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         for section in request.data["sections"]:
             new_orphan_section, created = Section.objects.get_or_create(

@@ -28,7 +28,6 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
         (None, {
             'fields': (
                 'workers',
-                'attempts',
                 'loglevel',
                 'upload_supplemental_locations',
                 'log_parse_errors',
