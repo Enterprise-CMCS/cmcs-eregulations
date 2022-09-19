@@ -27,7 +27,7 @@
             </template>
         </template>
         <collapse-button
-            v-if="showMoreNeeded && rulesCount > 10"
+            v-if="showMoreNeeded && rulesCount > limit"
             :name="innerName"
             state="collapsed"
             class="category-title"
