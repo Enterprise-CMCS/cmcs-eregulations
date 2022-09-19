@@ -89,7 +89,6 @@ func TestLoadConfig(t *testing.T) {
 			RetrieveConfigFunc: func() (*ecfrEregs.ParserConfig, int, error) {
 				return &ecfrEregs.ParserConfig{
 					Workers:  1,
-					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
 						&ecfrEregs.TitleConfig{
@@ -175,7 +174,6 @@ func TestStart(t *testing.T) {
 			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
 				return &ecfrEregs.ParserConfig{
 					Workers:  1,
-					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
 						&ecfrEregs.TitleConfig{
@@ -229,7 +227,6 @@ func TestStart(t *testing.T) {
 			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
 				return &ecfrEregs.ParserConfig{
 					Workers:  1,
-					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
 						&ecfrEregs.TitleConfig{
@@ -267,7 +264,6 @@ func TestStart(t *testing.T) {
 			LoadConfigFunc: func() (*ecfrEregs.ParserConfig, error) {
 				return &ecfrEregs.ParserConfig{
 					Workers:  1,
-					Attempts: 1,
 					LogLevel: "warn",
 					Titles: []*ecfrEregs.TitleConfig{
 						&ecfrEregs.TitleConfig{

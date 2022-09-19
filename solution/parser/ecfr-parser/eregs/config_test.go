@@ -194,7 +194,7 @@ func TestRetrieveConfig(t *testing.T) {
 					w.WriteHeader(http.StatusOK)
 					w.Write([]byte(`{
 						"workers": 3,
-						"attempts": 1,
+						"retries": 2,
 						"loglevel": "info",
 						"upload_supplemental_locations": false,
 						"log_parse_errors": true,
@@ -216,7 +216,7 @@ func TestRetrieveConfig(t *testing.T) {
 			})),
 			Output: &ParserConfig{
 				Workers:            3,
-				Attempts:           1,
+				Retries:            2,
 				LogLevel:           "info",
 				UploadSupplemental: false,
 				LogParseErrors:     true,
@@ -249,7 +249,6 @@ func TestRetrieveConfig(t *testing.T) {
 				w.WriteHeader(http.StatusOK)
 				w.Write([]byte(`{
 					"asdf": 3
-					"attempts": 1,
 					"loglevel": "info",
 					"upload_supplemental_locations": false,
 					"log_parse_errors" true,

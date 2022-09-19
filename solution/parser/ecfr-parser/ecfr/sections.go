@@ -1,12 +1,6 @@
 package ecfr
 
-// Part is the struct that represents a part of a regulation that is ready to be posted to supplemental content
-type Part struct {
-	Name     string    `json:"name"`
-	Title    string    `json:"title"`
-	Sections []Section `json:"sections"`
-	Subparts []Subpart `json:"subparts"`
-}
+import "fmt"
 
 // Section is the struct representing a section of a part
 type Section struct {
@@ -24,14 +18,28 @@ type Subpart struct {
 }
 
 // ExtractStructure is a function to extract the sections and subparts from an eCFR structure
-func ExtractStructure(s Structure) (Part, error) {
+func ExtractStructure(s Structure, depth int) ([]Section, []Subpart, error) {
+	if len(s.Identifier) < 1 {
+		return nil, nil, fmt.Errorf("part identifier not found")
+	}
+
 	title := s.Identifier[0]
-	structurePart := s.Children[0].Children[0].Children
-	partNumber := structurePart[0].Identifier[0]
+
+	structureChildren := s.Children
+	var structurePart *Structure
+	for i := 0; i != depth; i++ {
+		if len(structureChildren) < 1 {
+			return nil, nil, fmt.Errorf("structure does not match depth of %d", depth)
+		}
+		structurePart = structureChildren[0]
+		structureChildren = structurePart.Children
+	}
+
+	partNumber := structurePart.Identifier[0]
 	sections := []Section{}
 	subparts := []Subpart{}
 
-	for _, child := range structurePart[0].Children {
+	for _, child := range structurePart.Children {
 		if child.Type == "section" && !child.Reserved {
 			sec := extractSection(title, child)
 			sections = append(sections, sec)
@@ -41,14 +49,7 @@ func ExtractStructure(s Structure) (Part, error) {
 		}
 	}
 
-	p := Part{
-		Name:     partNumber,
-		Title:    title,
-		Sections: sections,
-		Subparts: subparts,
-	}
-
-	return p, nil
+	return sections, subparts, nil
 }
 
 func extractSubpart(title string, partNumber string, s *Structure) Subpart {
