@@ -47,7 +47,7 @@
             >
             </supplemental-content-object>
             <collapse-button
-                v-if="showMoreNeeded && contentCount > 10"
+                v-if="showMoreNeeded && contentCount > limit"
                 v-bind:class="{ subcategory: subcategory }"
                 :name="innerName"
                 state="collapsed"
