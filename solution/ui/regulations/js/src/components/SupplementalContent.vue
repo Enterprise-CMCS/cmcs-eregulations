@@ -242,6 +242,7 @@ export default {
                         this.resourceCount = subpart_response.length;
                     }
 
+
                     this.categories = formatResourceCategories(response);
                 }
             } catch (error) {
