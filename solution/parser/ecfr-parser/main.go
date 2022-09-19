@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"net/http"
 	"os"
 	"sort"
 	"strings"
@@ -30,10 +29,12 @@ var DefaultBaseURL = "http://localhost:8000/v2/"
 
 // Functions for easy testing via patching
 var (
-	ParseTitleFunc                   = parseTitle
-	StartHandlePartVersionWorkerFunc = startHandlePartVersionWorker
-	HandlePartVersionFunc            = handlePartVersion
-	SleepFunc                        = time.Sleep
+	ParseTitlesFunc        = parseTitles
+	ParseTitleFunc         = parseTitle
+	StartVersionWorkerFunc = startVersionWorker
+	HandleVersionFunc      = handleVersion
+	SleepFunc              = time.Sleep
+	RetrieveConfigFunc     = eregs.RetrieveConfig
 )
 
 var config = &eregs.ParserConfig{}
@@ -73,9 +74,9 @@ func parseConfig(c *eregs.ParserConfig) {
 		c.Workers = 1
 	}
 
-	if c.Attempts < 1 {
-		log.Warn("[main] ", c.Attempts, " is an invalid number of attempts, defaulting to 1.")
-		c.Attempts = 1
+	if c.Retries < 0 {
+		log.Warn("[main] ", c.Retries, " is an invalid number of retries, defaulting to 0.")
+		c.Retries = 0
 	}
 
 	log.SetLevel(getLogLevel(c.LogLevel))
@@ -99,115 +100,75 @@ func main() {
 func start() error {
 	log.Info("[main] Loading configuration...")
 	var err error
-	config, _, err = eregs.RetrieveConfig()
+	config, _, err = RetrieveConfigFunc()
 	if err != nil {
 		return fmt.Errorf("failed to retrieve configuration: %+v", err)
 	}
 	parseConfig(config)
 
-	queue := list.New()
-	for _, title := range config.Titles {
-		log.Debug("[main] Fetching table of contents for title ", title.Title, "...")
-		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-		defer cancel()
-		toc, code, err := eregs.GetTitle(ctx, title.Title)
-		if err != nil {
-			if code != http.StatusNotFound {
-				log.Error("[main] Failed to retrieve existing table of contents for title ", title.Title, ". Error code is ", code, ", so processing of this title will be skipped. Error: ", err)
-				continue
+	for attempt := 0; attempt != config.Retries+1; attempt++ {
+		if attempt > 0 {
+			config.SkipVersions = true //just retry failed versions
+		}
+		if err := ParseTitlesFunc(); err != nil {
+			if attempt == config.Retries {
+				return fmt.Errorf("parsing failed after %d attempts: %s", attempt+1, err)
 			}
-			log.Warn("[main] Failed to retrieve existing table of contents for title ", title.Title, ", defaulting to an empty one: ", err)
+			log.Warn("[main] Parsing failed. Will retry ", config.Retries-attempt, " more times. Error: ", err)
+		} else {
+			break
 		}
-		if !config.SkipVersions {
-			toc.Contents = &ecfr.Structure{}
-		}
-		title.Contents = toc
-		queue.PushBack(title)
 	}
 
+	return nil
+}
+
+func parseTitles() error {
 	start := time.Now()
+	failed := 0
+	processed := 0
+	failedTitles := []string{}
 
-	var failed bool
-	for i := 0; i < config.Attempts; i++ {
-		originalLength := queue.Len()
-		processed := 0
-		failed = false
-		log.Info("[main] Begin parsing ", originalLength, " titles.")
-
-		var next *list.Element
-		for titleElement := queue.Front(); titleElement != nil; titleElement = next {
-			next = titleElement.Next()
-			title := titleElement.Value.(*eregs.TitleConfig)
-
-			log.Info("[main] Parsing title ", title.Title, "...")
-			if retry, err := ParseTitleFunc(title); err == nil {
-				queue.Remove(titleElement)
-				processed++
-			} else if !retry {
-				log.Error("[main] Failed to parse title ", title.Title, ". Will not retry. Error: ", err)
-				queue.Remove(titleElement)
-				failed = true
-			} else if i >= config.Attempts-1 {
-				log.Error("[main] Failed to parse title ", title.Title, " ", config.Attempts, " times. Error: ", err)
-				queue.Remove(titleElement)
-				failed = true
-			} else {
-				log.Error("[main] Failed to parse title ", title.Title, ". Error: ", err)
-				failed = true
-			}
-
-			if title.Contents.Modified {
-				log.Debug("[main] Uploading Title ", title.Title, "'s table of contents to eRegs...")
-				ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-				defer cancel()
-				if _, err := eregs.SendTitle(ctx, title.Contents); err != nil {
-					log.Error("[main] Failed to upload table of contents for Title ", title.Title, ": ", err)
-					queue.PushFront(title)
-					failed = true
-				}
-			}
-		}
-
-		log.Info("[main] Successfully parsed ", processed, "/", originalLength, " titles.")
-
-		if queue.Len() < 1 {
-			break
-		}
-
-		if failed && i < config.Attempts {
-			log.Error("[main] Some titles failed to parse. Will retry ", config.Attempts-i-1, " more times.")
-		} else if !failed {
-			break
+	for _, title := range config.Titles {
+		if err := ParseTitleFunc(title); err != nil {
+			failed++
+			log.Error("[main] Failed to parse title ", title.Title, ": ", err)
+			failedTitles = append(failedTitles, fmt.Sprintf("%d", title.Title))
+		} else {
+			processed++
 		}
 	}
 
-	if failed {
-		return fmt.Errorf("some titles failed to process after %d attempts", config.Attempts)
+	log.Info("[main] Successfully parsed ", processed, "/", len(config.Titles), " titles.")
+	if failed > 0 {
+		return fmt.Errorf("the following titles failed to parse: %s", strings.Join(failedTitles, ", "))
 	}
 	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(start))
 	return nil
 }
 
-func parseTitle(title *eregs.TitleConfig) (bool, error) {
+func parseTitle(title *eregs.TitleConfig) error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
 	start := time.Now()
 
 	result := eregs.ParserResult{
-		Start:    start.Format(time.RFC3339),
-		Title:    title.Title,
-		Parts:    strings.Join(title.Parts[:], ","),
-		Workers:  config.Workers,
-		Attempts: config.Attempts,
+		Start:   start.Format(time.RFC3339),
+		Title:   title.Title,
+		Parts:   strings.Join(title.Parts[:], ","),
+		Workers: config.Workers,
 	}
-
-	defer eregs.PostParserResult(ctx, &result)
+	defer func() {
+		if _, err := eregs.PostParserResult(ctx, &result); err != nil {
+			log.Warn("[main] Failed to post parser results for title ", title.Title, ": ", err)
+		}
+	}()
 
 	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
 	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
 	if err != nil {
-		log.Warn("Failed to retrieve existing versions, processing all versions: ", err)
+		log.Warn("[main] Failed to retrieve existing versions, processing all versions: ", err)
 	}
 
 	log.Info("[main] Fetching parts list for title ", title.Title, "...")
@@ -219,27 +180,26 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		var subchapterParts []string
 		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 		if err != nil {
-			return true, err
+			return err
 		}
 		parts = append(parts, subchapterParts...)
 	}
-
 	parts = append(parts, title.Parts...)
 
 	if len(parts) < 1 {
-		return false, fmt.Errorf("some number of parts must be specified")
+		return fmt.Errorf("some number of parts must be specified")
 	}
 
 	log.Debug("[main] Extracting versions for title ", title.Title, "...")
 	versions, err := ecfr.ExtractVersions(ctx, title.Title)
 	if err != nil {
-		return true, err
+		return err
 	}
 
-	// Create initial list of versions to process
+	// Create list of versions to process
 	partList := list.New()
 	skippedVersions := 0
-	originalLength := 0
+	numVersions := 0
 	for _, part := range parts {
 		versionList := list.New()
 
@@ -259,21 +219,22 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 			}
 
 			version := &eregs.Part{
-				Title:          title.Title,
-				Name:           part,
-				Date:           date,
-				Structure:      &ecfr.Structure{},
-				Document:       &parsexml.Part{},
-				Processed:      false,
-				UploadContents: false,
+				Title:     title.Title,
+				Name:      part,
+				Date:      date,
+				Structure: &ecfr.Structure{},
+				Document:  &parsexml.Part{},
+				Sections:  []ecfr.Section{},
+				Subparts:  []ecfr.Subpart{},
+				Processed: false,
 			}
 
 			versionList.PushBack(version)
-			originalLength++
+			numVersions++
 		}
 
 		if versionList.Len() > 0 {
-			versionList.Back().Value.(*eregs.Part).UploadContents = true
+			versionList.Back().Value.(*eregs.Part).UploadLocations = true
 		}
 
 		partList.PushBack(versionList)
@@ -283,69 +244,50 @@ func parseTitle(title *eregs.TitleConfig) (bool, error) {
 		log.Info("[main] Skipped ", skippedVersions, " versions of title ", title.Title, " because they were parsed previously")
 		result.SkippedVersions = skippedVersions
 	}
+	result.TotalVersions = numVersions
 
-	// Begin processing loop
-	// Spawns `workers` threads that parse versions in the queue
-	// If parsing fails, version kept in queue for next run (if any remain)
+	// Spawn worker threads that parse versions in the queue
+	// Then wait for worker threads to quit
+	log.Info("[main] Fetching and processing ", numVersions, " versions using ", config.Workers, " workers...")
+	ch := make(chan *list.List)
+	var wg sync.WaitGroup
+	for worker := 1; worker < config.Workers+1; worker++ {
+		wg.Add(1)
+		go StartVersionWorkerFunc(ctx, worker, ch, &wg)
+	}
 
-	for i := 0; i < config.Attempts; i++ {
-		log.Info("[main] Fetching and processing ", originalLength, " versions using ", config.Workers, " workers...")
-		result.TotalVersions = originalLength
-		ch := make(chan *list.List)
-		var wg sync.WaitGroup
-		for worker := 1; worker < config.Workers+1; worker++ {
-			wg.Add(1)
-			go StartHandlePartVersionWorkerFunc(ctx, worker, ch, &wg)
-		}
+	for versionList := partList.Front(); versionList != nil; versionList = versionList.Next() {
+		ch <- versionList.Value.(*list.List)
+	}
 
-		for versionList := partList.Front(); versionList != nil; versionList = versionList.Next() {
-			ch <- versionList.Value.(*list.List)
-		}
+	log.Debug("[main] Waiting until all versions are finished processing")
+	close(ch)
+	wg.Wait()
 
-		log.Debug("[main] Waiting until all versions are finished processing")
-		close(ch)
-		wg.Wait()
-
-		log.Trace("[main] Removing successfully processed versions from the queue")
-		currentLength := 0
-		for versionListElement := partList.Front(); versionListElement != nil; versionListElement = versionListElement.Next() {
-			versionList := versionListElement.Value.(*list.List)
-			var next *list.Element
-			for versionElement := versionList.Front(); versionElement != nil; versionElement = next {
-				next = versionElement.Next()
-				version := versionElement.Value.(*eregs.Part)
-				if version.Processed {
-					if version.UploadContents {
-						log.Debug("[main] Adding structure of part ", version.Name, " to Title ", title.Title, "'s table of contents")
-						title.Contents.AddPart(version.Structure, version.Name)
-						title.Contents.Modified = true
-					}
-					versionList.Remove(versionElement)
-				} else {
-					currentLength++
-				}
+	// Determine how many versions parsed and which failed
+	failed := []string{}
+	processed := 0
+	for versionListElement := partList.Front(); versionListElement != nil; versionListElement = versionListElement.Next() {
+		versionList := versionListElement.Value.(*list.List)
+		for versionElement := versionList.Front(); versionElement != nil; versionElement = versionElement.Next() {
+			version := versionElement.Value.(*eregs.Part)
+			if version.Processed {
+				processed++
+			} else {
+				failed = append(failed, fmt.Sprintf("%s ver. %s", version.Name, version.Date))
 			}
-		}
-
-		log.Info("[main] Successfully processed ", originalLength-currentLength, "/", originalLength, " versions")
-		originalLength = currentLength
-
-		if currentLength == 0 {
-			break
-		} else if i >= config.Attempts-1 {
-			result.Errors = currentLength
-			return false, fmt.Errorf("some parts still failed to process after %d attempts", config.Attempts)
-		} else {
-			log.Warn("[main] Some parts failed to process. Retrying ", config.Attempts-i-1, " more times.")
-			SleepFunc(3 * time.Second)
 		}
 	}
 
-	log.Info("[main] All parts of title ", title.Title, " finished processing in ", time.Since(start), "!")
-	return false, nil
+	log.Info("[main] Successfully processed ", processed, "/", numVersions, " versions of title ", title.Title, " in ", time.Since(start))
+	if len(failed) > 0 {
+		result.Errors = len(failed)
+		return fmt.Errorf("the following versions failed to process: %s", strings.Join(failed, ", "))
+	}
+	return nil
 }
 
-func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
+func startVersionWorker(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
 	processingAttempts := 0
 	processedParts := 0
 	processedVersions := 0
@@ -356,7 +298,7 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 			processingAttempts++
 			version := versionElement.Value.(*eregs.Part)
 			log.Debug("[worker ", thread, "] Processing part ", version.Name, " version ", version.Date)
-			err := HandlePartVersionFunc(ctx, thread, version)
+			err := HandleVersionFunc(ctx, thread, version)
 			if err == nil {
 				version.Processed = true
 				processedVersions++
@@ -371,7 +313,7 @@ func startHandlePartVersionWorker(ctx context.Context, thread int, ch chan *list
 	wg.Done()
 }
 
-func handlePartVersion(ctx context.Context, thread int, version *eregs.Part) error {
+func handleVersion(ctx context.Context, thread int, version *eregs.Part) error {
 	start := time.Now()
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", version.Name, " version ", version.Date)
@@ -411,22 +353,19 @@ func handlePartVersion(ctx context.Context, thread int, version *eregs.Part) err
 	log.Trace("[worker ", thread, "] Computing section parents for part ", version.Name, " version ", version.Date)
 	ecfr.DetermineParents(version.Structure)
 
-	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
-	if _, err := eregs.PostPart(ctx, version); err != nil {
-		return err
-	}
-
-	if config.UploadSupplemental {
+	if config.UploadSupplemental && version.UploadLocations {
 		log.Debug("[worker ", thread, "] Extracting supplemental content structure for part ", version.Name, " version ", version.Date)
-		supplementalPart, err := ecfr.ExtractStructure(*version.Structure)
+		sections, subparts, err := ecfr.ExtractStructure(*version.Structure, version.Depth)
 		if err != nil {
 			return err
 		}
+		version.Sections = sections
+		version.Subparts = subparts
+	}
 
-		log.Debug("[worker ", thread, "] Posting supplemental content structure for part ", version.Name, " version ", version.Date, " to eRegs")
-		if _, err := eregs.PostSupplementalPart(ctx, supplementalPart); err != nil {
-			return err
-		}
+	log.Debug("[worker ", thread, "] Posting part ", version.Name, " version ", version.Date, " to eRegs")
+	if _, err := eregs.PutPart(ctx, version); err != nil {
+		return err
 	}
 
 	log.Debug("[worker ", thread, "] Successfully processed part ", version.Name, " version ", version.Date, " in ", time.Since(start))
@@ -439,6 +378,5 @@ func contains(s []string, str string) bool {
 			return true
 		}
 	}
-
 	return false
 }

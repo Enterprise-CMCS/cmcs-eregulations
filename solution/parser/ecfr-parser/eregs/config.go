@@ -75,13 +75,12 @@ type TitleConfig struct {
 	Title       int            `json:"title"`
 	Subchapters SubchapterList `json:"subchapters"`
 	Parts       PartList       `json:"parts"`
-	Contents    *Title
 }
 
 // ParserConfig represents configuration for the parser as a whole
 type ParserConfig struct {
 	Workers            int            `json:"workers"`
-	Attempts           int            `json:"attempts"`
+	Retries            int            `json:"retries"`
 	LogLevel           string         `json:"loglevel"`
 	UploadSupplemental bool           `json:"upload_supplemental_locations"`
 	LogParseErrors     bool           `json:"log_parse_errors"`
