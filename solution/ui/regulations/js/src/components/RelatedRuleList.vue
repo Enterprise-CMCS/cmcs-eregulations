@@ -27,7 +27,7 @@
             </template>
         </template>
         <collapse-button
-            v-if="showMoreNeeded && rulesCount > 10"
+            v-if="showMoreNeeded"
             :name="innerName"
             state="collapsed"
             class="category-title"
@@ -81,7 +81,7 @@
                 </template>
             </template>
             <collapse-button
-                v-if="showMoreNeeded && rulesCount > 0"
+                v-if="showMoreNeeded && rulesCount > 10"
                 :name="innerName"
                 state="collapsed"
                 class="category-title"
