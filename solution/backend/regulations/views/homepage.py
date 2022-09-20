@@ -25,7 +25,7 @@ class HomepageView(TemplateView):
         categories = list(Category.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
         fr_docs_category_name = ""
         for category in categories:
-            if category["is_fr_doc_category"] == True:
+            if category["is_fr_doc_category"]:
                 fr_docs_category_name = category["name"]
                 break
 
