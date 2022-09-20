@@ -1,46 +1,40 @@
 from django.urls import path
 
-from .v3views import (
-    AbstractResourceViewSet,
-    SupplementalContentViewSet,
-    FederalRegisterDocsViewSet,
-    FederalRegisterDocsNumberViewSet,
-    CategoryViewSet,
-    CategoryTreeViewSet,
-    LocationViewSet,
-    SectionViewSet,
-    SubpartViewSet,
+from resources.v3views import (
+    categories,
+    locations,
+    resources,
 )
 
 
 urlpatterns = [
-    path("", AbstractResourceViewSet.as_view({
+    path("", resources.AbstractResourceViewSet.as_view({
         "get": "list",
     })),
-    path("supplemental_content", SupplementalContentViewSet.as_view({
+    path("supplemental_content", resources.SupplementalContentViewSet.as_view({
         "get": "list",
     })),
-    path("federal_register_docs", FederalRegisterDocsViewSet.as_view({
+    path("federal_register_docs", resources.FederalRegisterDocsViewSet.as_view({
         "get": "list",
         "put": "update",
     })),
-    path("federal_register_docs/doc_numbers", FederalRegisterDocsNumberViewSet.as_view({
+    path("federal_register_docs/doc_numbers", resources.FederalRegisterDocsNumberViewSet.as_view({
         "get": "list",
     })),
-    path("categories", CategoryViewSet.as_view({
+    path("categories", categories.CategoryViewSet.as_view({
         "get": "list",
     })),
-    path("categories/tree", CategoryTreeViewSet.as_view({
+    path("categories/tree", categories.CategoryTreeViewSet.as_view({
         "get": "list",
     })),
-    path("locations", LocationViewSet.as_view({
+    path("locations", locations.LocationViewSet.as_view({
         "get": "list",
         # "post": "create", # TODO: add in another v3 ticket
     })),
-    path("locations/sections", SectionViewSet.as_view({
+    path("locations/sections", locations.SectionViewSet.as_view({
         "get": "list",
     })),
-    path("locations/subparts", SubpartViewSet.as_view({
+    path("locations/subparts", locations.SubpartViewSet.as_view({
         "get": "list",
     })),
 ]
