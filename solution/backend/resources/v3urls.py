@@ -29,7 +29,6 @@ urlpatterns = [
     })),
     path("locations", locations.LocationViewSet.as_view({
         "get": "list",
-        # "post": "create", # TODO: add in another v3 ticket
     })),
     path("locations/sections", locations.SectionViewSet.as_view({
         "get": "list",
