@@ -1,7 +1,11 @@
 <template>
     <div class="rules-container">
         <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading" :rules="rules" />
+        <RelatedRuleList
+            v-if="!loading"
+            item-title-line-limit="3"
+            :rules="rules"
+        />
     </div>
 </template>
 

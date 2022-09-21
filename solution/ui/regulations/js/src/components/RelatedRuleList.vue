@@ -10,6 +10,7 @@
                 :document_number="rule.document_number"
                 :html_url="html_url(rule)"
                 :action="rule.action"
+                :item-title-line-limit="itemTitleLineLimit"
             />
             <template v-if="rule.related_docs && rule.related_docs.length > 0">
                 <related-rule
@@ -22,6 +23,7 @@
                     :document_number="related_doc.document_number"
                     :html_url="html_url(related_doc)"
                     :action="related_doc.action"
+                    :item-title-line-limit="itemTitleLineLimit"
                     grouped
                 />
             </template>
@@ -32,15 +34,15 @@
             state="collapsed"
             class="category-title"
         >
-            <template v-slot:expanded>
+            <template #:expanded>
                 <show-more-button
                     button-text="- Show Less"
                     :count="rules.length"
                 ></show-more-button>
             </template>
-            <template v-slot:collapsed>
+            <template #:collapsed>
                 <show-more-button
-                    buttonText="+ Show More"
+                    button-text="+ Show More"
                     :count="rules.length"
                 ></show-more-button>
             </template>
@@ -61,6 +63,7 @@
                     :document_number="rule.document_number"
                     :html_url="html_url(rule)"
                     :action="rule.action"
+                    :item-title-line-limit="itemTitleLineLimit"
                 >
                 </related-rule>
                 <template
@@ -76,6 +79,7 @@
                         :document_number="related_doc.document_number"
                         :html_url="html_url(related_doc)"
                         :action="related_doc.action"
+                        :item-title-line-limit="itemTitleLineLimit"
                         grouped
                     />
                 </template>
@@ -86,15 +90,15 @@
                 state="collapsed"
                 class="category-title"
             >
-                <template v-slot:expanded>
+                <template #:expanded>
                     <show-more-button
-                        buttonText="- Show Less"
+                        button-text="- Show Less"
                         :count="rules.length"
                     ></show-more-button>
                 </template>
-                <template v-slot:collapsed>
+                <template #collapsed>
                     <show-more-button
-                        buttonText="+ Show More"
+                        button-text="+ Show More"
                         :count="rules.length"
                     ></show-more-button>
                 </template>
@@ -113,7 +117,7 @@ import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
 
 export default {
-    name: "related-rule-list",
+    name: "RelatedRuleList",
 
     components: {
         RelatedRule,
@@ -123,14 +127,22 @@ export default {
     },
 
     props: {
-        rules: Array,
+        rules: {
+            type: Array,
+            default: () => [],
+        },
         limit: {
             type: Number,
             default: 5,
         },
         title: {
             type: String,
+            default: "results",
         },
+        itemTitleLineLimit: {
+            type: String,
+            default: "9",
+        }
     },
 
     data() {

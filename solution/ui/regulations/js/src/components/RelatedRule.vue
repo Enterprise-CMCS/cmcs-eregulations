@@ -11,7 +11,8 @@
                     v-if="type !== ''"
                     class="recent-flag indicator"
                     :class="indicatorClasses"
-                >{{type}}</span>
+                    >{{ type }}</span
+                >
                 <span v-if="publication_date" class="recent-date">{{
                     publication_date | formatPubDate
                 }}</span>
@@ -20,7 +21,9 @@
                     citation
                 }}</span>
             </span>
-            <div v-if="!grouped" class="recent-title">{{ title }}</div>
+            <div v-if="!grouped" class="recent-title" :class="recentTitleClass">
+                {{ title }}
+            </div>
         </a>
     </div>
 </template>
@@ -55,7 +58,10 @@ export default {
             type: String,
             required: true,
         },
-        publication_date: String,
+        publication_date: {
+            type: String,
+            default: undefined,
+        },
         document_number: {
             type: String,
             required: true,
@@ -66,6 +72,11 @@ export default {
         },
         action: {
             type: String,
+            default: undefined,
+        },
+        itemTitleLineLimit: {
+            type: String,
+            default: "9",
         },
     },
 
@@ -78,14 +89,16 @@ export default {
         },
         indicatorClasses() {
             return {
-                "secondary-indicator":
-                    this.grouped || this.type !== "Final",
+                "secondary-indicator": this.grouped || this.type !== "Final",
             };
         },
         citationClasses() {
             return {
                 grouped: this.grouped,
             };
+        },
+        recentTitleClass() {
+            return `line-clamp-${this.itemTitleLineLimit}`;
         },
     },
 
