@@ -10,7 +10,6 @@
                 :document_number="rule.document_number"
                 :html_url="html_url(rule)"
                 :action="rule.action"
-                :item-title-line-limit="itemTitleLineLimit"
             />
             <template v-if="rule.related_docs && rule.related_docs.length > 0">
                 <related-rule
@@ -23,7 +22,6 @@
                     :document_number="related_doc.document_number"
                     :html_url="html_url(related_doc)"
                     :action="related_doc.action"
-                    :item-title-line-limit="itemTitleLineLimit"
                     grouped
                 />
             </template>
@@ -63,7 +61,6 @@
                     :document_number="rule.document_number"
                     :html_url="html_url(rule)"
                     :action="rule.action"
-                    :item-title-line-limit="itemTitleLineLimit"
                 >
                 </related-rule>
                 <template
@@ -79,7 +76,6 @@
                         :document_number="related_doc.document_number"
                         :html_url="html_url(related_doc)"
                         :action="related_doc.action"
-                        :item-title-line-limit="itemTitleLineLimit"
                         grouped
                     />
                 </template>
@@ -139,10 +135,6 @@ export default {
             type: String,
             default: "results",
         },
-        itemTitleLineLimit: {
-            type: String,
-            default: "9",
-        }
     },
 
     data() {

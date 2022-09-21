@@ -34,6 +34,10 @@ import { formatDate } from "../../utils";
 export default {
     name: "RelatedRule",
 
+    inject: {
+        itemTitleLineLimit: { default: 9, },
+    },
+
     filters: {
         formatPubDate(value) {
             return formatDate(value);
@@ -73,10 +77,6 @@ export default {
         action: {
             type: String,
             default: undefined,
-        },
-        itemTitleLineLimit: {
-            type: String,
-            default: "9",
         },
     },
 

@@ -1,11 +1,7 @@
 <template>
     <div class="rules-container">
         <SimpleSpinner v-if="loading" />
-        <RelatedRuleList
-            v-if="!loading"
-            item-title-line-limit="3"
-            :rules="rules"
-        />
+        <RelatedRuleList v-if="!loading" :rules="rules" />
     </div>
 </template>
 
@@ -47,16 +43,10 @@ export default {
         };
     },
 
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
+    provide() {
+        return {
+            itemTitleLineLimit: 3,
+        };
     },
 };
 </script>
