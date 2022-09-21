@@ -90,11 +90,11 @@ type ParserConfig struct {
 	Titles             []*TitleConfig `json:"titles"`
 }
 
-// RetrieveConfig fetches parser config from eRegs at /v2/parser_config
+// RetrieveConfig fetches parser config from eRegs at /v3/parser_config
 func RetrieveConfig() (*ParserConfig, int, error) {
 	u, err := url.Parse(BaseURL)
 	if err != nil {
-		return nil, -1, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL environment variable", BaseURL)
+		return nil, -1, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL_V3 environment variable", BaseURL)
 	}
 	u.Path = path.Join(u.Path, configURL)
 

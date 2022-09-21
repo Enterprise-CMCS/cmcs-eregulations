@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
@@ -22,21 +21,15 @@ import (
 const TIMELIMIT = 5000 * time.Second
 
 // DefaultBaseURL is the default eRegs API URL to use if none is specified
-var DefaultBaseURL = "http://localhost:8000/v2/"
+var DefaultBaseURL = "http://localhost:8000/v3/"
 
 func init() {
-	url := os.Getenv("EREGS_API_URL")
+	url := os.Getenv("EREGS_API_URL_V3")
 	if url == "" {
 		url = DefaultBaseURL
 	}
-
-	v3url := url
-	if strings.HasSuffix(v3url, "v2/") {
-		v3url = v3url[0:len(v3url)-3] + "v3/" // very bad!
-	}
-
 	ecfrEregs.BaseURL = url
-	eregs.BaseURL = v3url
+	eregs.BaseURL = url
 }
 
 func lambdaHandler(ctx context.Context) (string, error) {

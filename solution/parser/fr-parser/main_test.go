@@ -16,11 +16,11 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	if eregs.BaseURL != "http://localhost:8000/v3/" {
-		t.Errorf("V3 URL not set correctly!")
+	if eregs.BaseURL != DefaultBaseURL {
+		t.Errorf("Local eRegs package URL not set correctly!")
 	}
 	if ecfrEregs.BaseURL != DefaultBaseURL {
-		t.Errorf("V2 URL not set correctly!")
+		t.Errorf("eCFR eRegs package URL not set correctly!")
 	}
 }
 
