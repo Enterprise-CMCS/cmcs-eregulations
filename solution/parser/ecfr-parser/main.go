@@ -25,7 +25,7 @@ import (
 const TIMELIMIT = 5000 * time.Second
 
 // DefaultBaseURL is the default eRegs API URL to use if none is specified
-var DefaultBaseURL = "http://localhost:8000/v2/"
+var DefaultBaseURL = "http://localhost:8000/v3/"
 
 // Functions for easy testing via patching
 var (
@@ -40,7 +40,7 @@ var (
 var config = &eregs.ParserConfig{}
 
 func init() {
-	eregs.BaseURL = os.Getenv("EREGS_API_URL")
+	eregs.BaseURL = os.Getenv("EREGS_API_URL_V3")
 	if eregs.BaseURL == "" {
 		eregs.BaseURL = DefaultBaseURL
 	}

@@ -71,7 +71,7 @@ func TestPostPart(t *testing.T) {
 
 func TestGetExistingParts(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != fmt.Sprintf(partURL, 42) {
+		if r.URL.Path != fmt.Sprintf(existingPartsURL, 42) {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(`{ "exception": "Bad URL ` + r.URL.Path + `!" }`))
 		} else {

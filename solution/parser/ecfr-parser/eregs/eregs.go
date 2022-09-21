@@ -7,7 +7,6 @@ import (
 	"net/url"
 	"os"
 	"path"
-	"strings"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
@@ -20,7 +19,11 @@ import (
 // BaseURL is the URL of the eRegs service that will accept the post requests
 var BaseURL string
 
-var partURL = "/title/%d/versions"
+var (
+	putPartURL = "/part"
+	parserResultURL = "/ecfr_parser_result/%d"
+	existingPartsURL = "/title/%d/versions"
+)
 
 var postAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),
@@ -62,38 +65,37 @@ type ParserResult struct {
 
 // PutPart is the function that sends a part to the eRegs server
 func PutPart(ctx context.Context, p *Part) (int, error) {
-	eregsPath, err := getV3URL()
+	u, err := url.Parse(BaseURL)
 	if err != nil {
 		return -1, err
 	}
-
-	eregsPath.Path = path.Join(eregsPath.Path, "/part")
-	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPut)
+	u.Path = path.Join(u.Path, putPartURL)
+	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPut)
 }
 
 // PostParserResult is the function that sends a parser result to the eRegs server
 func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
-	eregsPath, err := getV3URL()
+	u, err := url.Parse(BaseURL)
 	if err != nil {
 		return -1, err
 	}
+	u.Path = path.Join(u.Path, fmt.Sprintf(parserResultURL, p.Title))
 
-	eregsPath.Path = path.Join(eregsPath.Path, fmt.Sprintf("/ecfr_parser_result/%d", p.Title))
 	p.End = time.Now().Format(time.RFC3339)
-	return network.SendJSON(ctx, eregsPath, p, true, postAuth, network.HTTPPost)
+	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPost)
 }
 
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, int, error) {
-	checkURL, err := getV3URL()
+	u, err := url.Parse(BaseURL)
 	if err != nil {
 		return nil, -1, err
 	}
-	checkURL.Path = path.Join(checkURL.Path, fmt.Sprintf(partURL, title))
+	u.Path = path.Join(u.Path, fmt.Sprintf(existingPartsURL, title))
 
-	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", checkURL.String())
+	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", u.String())
 
-	body, code, err := network.Fetch(ctx, checkURL, true)
+	body, code, err := network.Fetch(ctx, u, true)
 	if err != nil {
 		return nil, code, err
 	}
@@ -112,16 +114,4 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, int,
 	}
 
 	return result, code, nil
-}
-
-func getV3URL() (*url.URL, error) {
-	eregsPath, err := url.Parse(BaseURL)
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
-	if strings.HasSuffix(eregsPath.Path, "v2/") {
-		eregsPath.Path = eregsPath.Path[0:len(eregsPath.Path)-3] + "v3" // very bad!
-	}
-	return eregsPath, nil
 }

@@ -15,6 +15,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var configURL = "/parser_config"
+
 // SubchapterArg is an array of type string
 type SubchapterArg []string
 
@@ -90,17 +92,17 @@ type ParserConfig struct {
 
 // RetrieveConfig fetches parser config from eRegs at /v2/parser_config
 func RetrieveConfig() (*ParserConfig, int, error) {
-	configURL, err := url.Parse(BaseURL)
+	u, err := url.Parse(BaseURL)
 	if err != nil {
 		return nil, -1, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL environment variable", BaseURL)
 	}
-	configURL.Path = path.Join(configURL.Path, "/parser_config")
+	u.Path = path.Join(u.Path, configURL)
 
-	log.Debug("[config] Retrieving parser configuration from ", configURL.String())
+	log.Debug("[config] Retrieving parser configuration from ", u.String())
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	body, code, err := network.Fetch(ctx, configURL, true)
+	body, code, err := network.Fetch(ctx, u, true)
 	if err != nil {
 		return nil, code, err
 	}
