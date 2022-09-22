@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.apps import apps
 
-from regcore.models import ECFRParserResult, ParserConfiguration
+from regcore.models import ECFRParserResult
 
 
 class TitleConfigurationSerializer(serializers.Serializer):

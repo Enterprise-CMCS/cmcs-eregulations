@@ -25,7 +25,7 @@ class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
         if len(queryset) < 1:
             raise Http404
         return queryset.first()
-    
+
     def retrieve(self, request):
         return JsonResponse(self.get_serializer_class()(self.get_queryset()).data)
 

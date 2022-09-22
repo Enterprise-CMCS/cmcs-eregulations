@@ -20,8 +20,8 @@ import (
 var BaseURL string
 
 var (
-	putPartURL = "/part"
-	parserResultURL = "/ecfr_parser_result/%d"
+	putPartURL       = "/part"
+	parserResultURL  = "/ecfr_parser_result/%d"
 	existingPartsURL = "/title/%d/versions"
 )
 
