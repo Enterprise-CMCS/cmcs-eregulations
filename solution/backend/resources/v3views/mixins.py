@@ -1,49 +1,10 @@
-from django.http import JsonResponse
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django.core.exceptions import BadRequest
-from django.db.models import Prefetch, Q, Case, When, F
 from rest_framework.pagination import PageNumberPagination
-from drf_spectacular.utils import extend_schema, OpenApiParameter
-from django.db import transaction
-
+from django.db.models import Q, F, Prefetch
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
+from django.core.exceptions import BadRequest
 
-from .utils import is_int
-
-from .models import (
-    AbstractResource,
-    SupplementalContent,
-    FederalRegisterDocument,
-    AbstractCategory,
-    Category,
-    SubCategory,
-    AbstractLocation,
-    Subpart,
-    Section,
-)
-
-from regcore.views import SettingsAuthentication
-
-from .v3serializers import (
-    FederalRegisterDocumentCreateSerializer,
-    AbstractCategoryPolymorphicSerializer,
-    AbstractLocationPolymorphicSerializer,
-    AbstractResourcePolymorphicSerializer,
-    SupplementalContentSerializer,
-    FederalRegisterDocumentSerializer,
-    CategoryTreeSerializer,
-    FullSectionSerializer,
-    FullSubpartSerializer,
-    AbstractResourceSerializer,
-    SubCategorySerializer,
-    AbstractLocationSerializer,
-    StringListSerializer,
-)
-
-
-def OpenApiQueryParameter(name, description, type, required):
-    return OpenApiParameter(name=name, description=description, required=required, type=type, location=OpenApiParameter.QUERY)
+from .utils import OpenApiQueryParameter, is_int
+from resources.models import AbstractLocation, AbstractResource, AbstractCategory
 
 
 # For viewsets where pagination is disabled by default
@@ -76,39 +37,6 @@ class OptionalPaginationMixin:
             "true" if self.paginate_by_default else "false"
         ).lower() == "true"
         return ViewSetPagination if paginate else None
-
-
-@extend_schema(
-    description="Retrieve a flat list of all categories. Pagination is disabled by default.",
-    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS + [
-        OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather "
-                              "than just the ID.", bool, False),
-    ],
-    responses=SubCategorySerializer,
-)
-class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
-    paginate_by_default = False
-    serializer_class = AbstractCategoryPolymorphicSerializer
-    queryset = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
-                               .order_by("order").contains_fr_docs()
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context["parent_details"] = self.request.GET.get("parent_details", "true")
-        return context
-
-
-@extend_schema(
-    description="Retrieve a top-down representation of categories, with each category containing zero or more sub-categories. "
-                "Pagination is disabled by default.",
-    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS,
-)
-class CategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
-    paginate_by_default = False
-    queryset = Category.objects.all().select_subclasses().prefetch_related(
-        Prefetch("sub_categories", SubCategory.objects.all().order_by("order").contains_fr_docs()),
-    ).order_by("order").contains_fr_docs()
-    serializer_class = CategoryTreeSerializer
 
 
 # Must define "location_filter_prefix" (e.g. "" for none, or "locations__")
@@ -173,52 +101,6 @@ class LocationExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             query = query.filter(q_obj)
 
         return query.distinct()
-
-
-class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
-    queryset = AbstractLocation.objects.all().select_subclasses()
-
-    authentication_classes = [SettingsAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    @extend_schema(
-        description="Retrieve a list of all resource locations, filterable by title and part. Results are paginated by default.",
-        parameters=LocationExplorerViewSetMixin.PARAMETERS,
-        responses=AbstractLocationSerializer,
-    )
-    def list(self, request, **kwargs):
-        return super(LocationViewSet, self).list(request, **kwargs)
-
-    # TODO: extend_schema for this method
-    def update(self, request, **kwargs):
-        return super(LocationViewSet, self).update(request, **kwargs)  # TODO: implement this!
-
-    def get_serializer_class(self):
-        # if self.request.method == "POST":  # TODO: implement AbstractLocationCreateSerializer
-        #     return AbstractLocationCreateSerializer
-        return AbstractLocationPolymorphicSerializer
-
-
-@extend_schema(
-    description="Retrieve a list of all Section objects, filterable by title and part. Results are paginated by default.",
-    parameters=LocationExplorerViewSetMixin.PARAMETERS,
-)
-class SectionViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = FullSectionSerializer
-    queryset = Section.objects.all().prefetch_related(
-        Prefetch("parent", AbstractLocation.objects.all().select_subclasses()),
-    )
-
-
-@extend_schema(
-    description="Retrieve a list of all Subpart objects, filterable by title and part. Results are paginated by default.",
-    parameters=LocationExplorerViewSetMixin.PARAMETERS,
-)
-class SubpartViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = FullSubpartSerializer
-    queryset = Subpart.objects.all().prefetch_related(
-        Prefetch("children", Section.objects.all()),
-    )
 
 
 # Provides a filterable and searchable viewset for any type of resource
@@ -352,106 +234,3 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             return query.distinct().order_by(F("date_annotated").asc(nulls_last=True))
         else:
             return query.order_by(F("date_annotated").desc(nulls_last=True)).distinct()
-
-
-@extend_schema(
-    description="Retrieve a list of all resources. "
-                "Includes all types e.g. supplemental content, Federal Register Documents, etc. "
-                "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
-                "Results are paginated by default.",
-    parameters=ResourceExplorerViewSetMixin.PARAMETERS,
-    responses=AbstractResourceSerializer,
-)
-class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = AbstractResourcePolymorphicSerializer
-    model = AbstractResource
-
-    def get_annotated_date(self):
-        return Case(
-            When(supplementalcontent__isnull=False, then=F("supplementalcontent__date")),
-            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__date")),
-            default=None,
-        )
-
-    def get_annotated_group(self):
-        return Case(
-            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
-            default=-1*F("pk"),
-        )
-
-    def get_search_fields(self):
-        return {
-            "supplementalcontent": ["name", "description"],
-            "federalregisterdocument": ["name", "description", "document_number"],
-        }
-
-
-@extend_schema(
-    description="Retrieve a list of all supplemental content. "
-                "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
-                "Results are paginated by default.",
-    parameters=ResourceExplorerViewSetMixin.PARAMETERS,
-)
-class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = SupplementalContentSerializer
-    model = SupplementalContent
-
-    def get_search_fields(self):
-        return ["name", "description"]
-
-
-class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelViewSet):
-    model = FederalRegisterDocument
-
-    authentication_classes = [SettingsAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    @extend_schema(
-        description="Retrieve a list of all Federal Register Documents. "
-                    "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
-                    "Results are paginated by default.",
-        parameters=ResourceExplorerViewSetMixin.PARAMETERS,
-    )
-    def list(self, request, **kwargs):
-        return super(FederalRegisterDocsViewSet, self).list(request, **kwargs)
-
-    @transaction.atomic
-    @extend_schema(description="Upload a Federal Register Document to the eRegs Resources system. "
-                               "If the document already exists, it will be updated.")
-    def update(self, request, **kwargs):
-        data = request.data
-        frdoc, created = FederalRegisterDocument.objects.get_or_create(document_number=data["document_number"])
-        data["id"] = frdoc.pk
-        sc = self.get_serializer(frdoc, data=data)
-        try:
-            if sc.is_valid(raise_exception=True):
-                sc.save()
-                response = sc.validated_data
-                return JsonResponse(response)
-        except Exception as e:
-            if created:
-                frdoc.delete()
-            raise e
-
-    def get_serializer_class(self):
-        if self.request.method == "PUT":
-            return FederalRegisterDocumentCreateSerializer
-        return FederalRegisterDocumentSerializer
-
-    def get_search_fields(self):
-        return ["name", "description", "document_number"]
-
-    def get_annotated_group(self):
-        return F("group")
-
-
-@extend_schema(
-    description="Retrieve a list of document numbers from all Federal Register Documents. "
-                "Pagination is disabled by default.",
-    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS,
-    responses={(200, "application/json"): {"type": "string"}},
-)
-class FederalRegisterDocsNumberViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
-    paginate_by_default = False
-    queryset = FederalRegisterDocument.objects.all().values_list("document_number", flat=True).distinct()
-    serializer_class = StringListSerializer

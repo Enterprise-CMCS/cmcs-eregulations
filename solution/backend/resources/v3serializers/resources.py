@@ -1,126 +1,19 @@
-
+from rest_framework import serializers
 from django.urls import reverse
 
-from rest_framework import serializers
-
-from .models import (
-    AbstractCategory,
-    Category,
-    SubCategory,
-    Section,
-    Subpart,
+from resources.models import (
     SupplementalContent,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
     ResourcesConfiguration,
+    Category,
+    AbstractCategory,
+    Section,
 )
 
-
-# Allows details of specified fields to be shown or hidden
-# Must specify "optional_details" as map of strings to 4-tuples:
-#    { "field_name": ("query_param", "default, true or false as a string", serializer class, many=True or False) }
-class OptionalFieldDetailsMixin:
-    def get_fields(self):
-        fields = super().get_fields()
-        for i in self.optional_details.items():
-            fields[i[0]] = (
-                i[1][2](many=i[1][3])
-                if self.context.get(i[1][0], i[1][1]).lower() == "true"
-                else serializers.PrimaryKeyRelatedField(many=i[1][3], read_only=True)
-            )
-        return fields
-
-
-# Retrieves automatically generated search headlines
-class HeadlineField(serializers.Field):
-    def __init__(self, model_name, **kwargs):
-        self.model_name = model_name
-        kwargs["source"] = '*'
-        kwargs["read_only"] = True
-        super().__init__(**kwargs)
-
-    def to_representation(self, obj):
-        return getattr(obj, f"{self.model_name}_{self.field_name}", getattr(obj, self.field_name, None))
-
-
-# Allows subclasses to be serialized independently
-# Must implement get_serializer_map as map of classes to 2-tuples:
-#    { model_class: ("model_name", serializer_class) }
-class PolymorphicSerializer(serializers.Serializer):
-    def get_serializer_map(self):
-        raise NotImplementedError
-
-    def to_representation(self, instance):
-        instance_type = type(instance)
-        if instance_type in self.get_serializer_map():
-            data = self.get_serializer_map()[instance_type][1](instance=instance, context=self.context).data
-            data["type"] = self.get_serializer_map()[instance_type][0]
-            return data
-        return "Serializer not available"
-
-
-class AbstractCategoryPolymorphicSerializer(PolymorphicSerializer):
-    def get_serializer_map(self):
-        return {
-            Category: ("category", CategorySerializer),
-            SubCategory: ("subcategory", SubCategorySerializer),
-        }
-
-
-class CategorySerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    description = serializers.CharField()
-    order = serializers.IntegerField()
-    show_if_empty = serializers.BooleanField()
-    is_fr_doc_category = serializers.SerializerMethodField()
-
-    def get_is_fr_doc_category(self, obj):
-        try:
-            return obj.is_fr_doc_category
-        except Exception:
-            return False
-
-
-class SubCategorySerializer(OptionalFieldDetailsMixin, CategorySerializer):
-    optional_details = {
-        "parent": ("parent_details", "true", CategorySerializer, False),
-    }
-
-
-class CategoryTreeSerializer(CategorySerializer):
-    sub_categories = CategorySerializer(many=True)
-
-
-class AbstractLocationPolymorphicSerializer(PolymorphicSerializer):
-    def get_serializer_map(self):
-        return {
-            Section: ("section", SectionSerializer),
-            Subpart: ("subpart", SubpartSerializer),
-        }
-
-
-class AbstractLocationSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    title = serializers.IntegerField()
-    part = serializers.IntegerField()
-
-
-class SubpartSerializer(AbstractLocationSerializer):
-    subpart_id = serializers.CharField()
-
-
-class SectionSerializer(AbstractLocationSerializer):
-    section_id = serializers.IntegerField()
-    parent = serializers.PrimaryKeyRelatedField(read_only=True)
-
-
-class FullSectionSerializer(SectionSerializer):
-    parent = AbstractLocationPolymorphicSerializer()
-
-
-class FullSubpartSerializer(SubpartSerializer):
-    children = AbstractLocationPolymorphicSerializer(many=True)
+from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer
+from .categories import AbstractCategoryPolymorphicSerializer
+from .mixins import HeadlineField, PolymorphicSerializer, OptionalFieldDetailsMixin
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
@@ -185,19 +78,6 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
         docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
         docs[0]["related_docs"] = docs[1:]
         return docs[0]
-
-
-class SectionCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Section
-        fields = "__all__"
-
-
-class SectionRangeCreateSerializer(serializers.Serializer):
-    title = serializers.CharField()
-    part = serializers.CharField()
-    first_sec = serializers.IntegerField()
-    last_sec = serializers.IntegerField()
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
