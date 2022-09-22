@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+	"github.com/cmsgov/cmcs-eregulations/network"
 	"github.com/go-test/deep"
 )
 

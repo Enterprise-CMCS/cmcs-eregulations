@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+	"github.com/cmsgov/cmcs-eregulations/network"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
 	log "github.com/sirupsen/logrus"

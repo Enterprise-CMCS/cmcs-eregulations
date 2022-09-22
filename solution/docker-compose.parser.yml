@@ -8,7 +8,8 @@ services:
         - EREGS_USERNAME=${EREGS_USERNAME:-}
         - EREGS_PASSWORD=${EREGS_PASSWORD:-}
         - EREGS_API_URL_V3=${EREGS_API_URL_V3:-}
-        working_dir: /app
+        working_dir: /app/ecfr-parser
         command: go run .
         volumes:
-        - ./parser/ecfr-parser:/app
+        - ./parser:/app
+
