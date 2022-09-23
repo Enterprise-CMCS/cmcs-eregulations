@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='parserconfiguration',
             name='upload_supplemental_locations',
-            field=models.BooleanField(default=True, help_text='Should the eCFR parser process and upload section and subpart names for use in supplemental content management?'),
+            field=models.BooleanField(default=True, help_text='Should the eCFR parser process and upload section and subpart names for use in resource management?'),
         ),
         migrations.AlterField(
             model_name='parserconfiguration',

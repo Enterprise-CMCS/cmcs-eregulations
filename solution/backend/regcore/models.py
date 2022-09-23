@@ -76,7 +76,7 @@ class ParserConfiguration(SingletonModel):
     )
     upload_supplemental_locations = models.BooleanField(
         default=True,
-        help_text="Should the eCFR parser process and upload section and subpart names for use in supplemental content management?",
+        help_text="Should the eCFR parser process and upload section and subpart names for use in resource management?",
     )
     log_parse_errors = models.BooleanField(
         default=False,
