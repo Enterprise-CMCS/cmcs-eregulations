@@ -13,7 +13,7 @@ describe("Left sidebar", () => {
 
     })
 
-    it("opens the section when the right nav subsection is clicked", () => {
+    it("opens the section when the left nav subsection is clicked", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);
         cy.get(`h3#nav-Subpart-A`).click({ force: true })
