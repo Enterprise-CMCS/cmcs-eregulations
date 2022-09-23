@@ -16,7 +16,8 @@ class ParserConfigurationSerializer(serializers.Serializer):
     loglevel = serializers.CharField()
     upload_supplemental_locations = serializers.BooleanField()
     log_parse_errors = serializers.BooleanField()
-    skip_versions = serializers.BooleanField()
+    skip_reg_versions = serializers.BooleanField()
+    skip_fr_documents = serializers.BooleanField()
     titles = TitleConfigurationSerializer(many=True)
 
 
