@@ -32,15 +32,15 @@ from .filters import (
     SubpartFilter,
 )
 
-from .mixins import ExportCsvMixin
+from .mixins import ExportJSONMixin
 from . import actions
 
 
-class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
-    change_list_template = "admin/export_all_csv.html"
+class BaseAdmin(admin.ModelAdmin, ExportJSONMixin):
+    change_list_template = "admin/export_all_json.html"
     list_per_page = 200
     admin_priority = 20
-    actions = ["export_as_csv"]
+    actions = ["export_as_json"]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         lookups = getattr(self, "foreignkey_lookups", {})
@@ -57,7 +57,6 @@ class BaseAdmin(admin.ModelAdmin, ExportCsvMixin):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
-            path('export_all_csv/', self.export_all_as_csv),
             path('export_all_json/', self.export_all_as_json),
         ]
         return my_urls + urls
