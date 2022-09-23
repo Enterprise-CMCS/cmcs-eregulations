@@ -175,7 +175,8 @@ class ParserConfigurationSerializer(serializers.ModelSerializer):
             "loglevel",
             "upload_supplemental_locations",
             "log_parse_errors",
-            "skip_versions",
+            "skip_reg_versions",
+            "skip_fr_documents",
             "titles",
         )
 

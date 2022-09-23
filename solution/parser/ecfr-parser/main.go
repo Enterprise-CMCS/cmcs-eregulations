@@ -108,7 +108,7 @@ func start() error {
 
 	for attempt := 0; attempt != config.Retries+1; attempt++ {
 		if attempt > 0 {
-			config.SkipVersions = true //just retry failed versions
+			config.SkipRegVersions = true //just retry failed versions
 		}
 		if err := ParseTitlesFunc(); err != nil {
 			if attempt == config.Retries {
@@ -212,7 +212,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 
 		for _, date := range keys {
 			// If we have this part already, skip it
-			if config.SkipVersions && contains(existingVersions[date], part) {
+			if config.SkipRegVersions && contains(existingVersions[date], part) {
 				log.Trace("[main] Skipping title ", title.Title, " part ", part, " version ", date)
 				skippedVersions++
 				continue
