@@ -199,9 +199,6 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 		} else {
 			doc.Sections = eregs.CreateSections(sections, partMap)
 			doc.SectionRanges = eregs.CreateSectionRanges(sectionRanges, partMap)
-			if sectionRanges != nil {
-				fmt.Println(doc)
-			}
 		}
 	} else {
 		log.Warn("[main] no list of sections available for FR doc ", content.DocumentNumber)
