@@ -12,6 +12,16 @@ describe("Left sidebar", () => {
         });
 
     })
+    it("opens the section when the right nav subsection is clicked", () => {
+        cy.viewport("macbook-15");
+        cy.visit(destination);
+        cy.get(`h3#nav-Subpart-A`).click({ force: true })
+        cy.get(`a#nav-431-10.menu-section`).click({ force: true });
+        cy.get(`h2#subpart-resources-heading`).should(
+            "contain.text",
+            "§ 431.10 Resources"
+        )
+    })
 
     it("collapses and expands on button click", () => {
         cy.viewport("macbook-15");
