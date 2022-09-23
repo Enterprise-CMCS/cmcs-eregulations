@@ -12,6 +12,7 @@ describe("Left sidebar", () => {
         });
 
     })
+
     it("opens the section when the right nav subsection is clicked", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);
