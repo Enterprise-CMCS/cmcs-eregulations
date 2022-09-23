@@ -198,7 +198,7 @@ func TestRetrieveConfig(t *testing.T) {
 						"loglevel": "info",
 						"upload_supplemental_locations": false,
 						"log_parse_errors": true,
-						"skip_versions": false,
+						"skip_reg_versions": false,
 						"titles": [
 							{
 								"title": 4,
@@ -220,7 +220,8 @@ func TestRetrieveConfig(t *testing.T) {
 				LogLevel:           "info",
 				UploadSupplemental: false,
 				LogParseErrors:     true,
-				SkipVersions:       false,
+				SkipRegVersions:    false,
+				SkipFRDocuments:    false,
 				Titles: []*TitleConfig{
 					&TitleConfig{
 						Title: 4,
@@ -252,7 +253,8 @@ func TestRetrieveConfig(t *testing.T) {
 					"loglevel": "info",
 					"upload_supplemental_locations": false,
 					"log_parse_errors" true,
-					"skip_versions": false,
+					"skip_reg_versions": false,
+					"skip_fr_documents": true,
 					"titles": [
 						{
 							"title": 4,

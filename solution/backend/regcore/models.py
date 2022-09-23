@@ -54,7 +54,7 @@ class ParserConfiguration(SingletonModel):
 
     workers = models.IntegerField(
         default=3,
-        help_text="The number of worker threads used to parse regulations.",
+        help_text="The number of worker threads used to parse simultaneously.",
         validators=[MinValueValidator(
             limit_value=1,
             message="Number of workers must be at least 1!",
@@ -62,7 +62,7 @@ class ParserConfiguration(SingletonModel):
     )
     retries = models.IntegerField(
         default=3,
-        help_text="The number of times to retry parsing a part version before moving on if it fails.",
+        help_text="The number of times to retry parsing before moving on if it fails.",
         validators=[MinValueValidator(
             limit_value=0,
             message="The number of retries must be at least 0!",
@@ -76,15 +76,19 @@ class ParserConfiguration(SingletonModel):
     )
     upload_supplemental_locations = models.BooleanField(
         default=True,
-        help_text="Should the parser process and upload section and subpart names for use in supplemental content management?",
+        help_text="Should the eCFR parser process and upload section and subpart names for use in supplemental content management?",
     )
     log_parse_errors = models.BooleanField(
         default=False,
-        help_text="Should the parser log errors encountered while processing the raw XML data from eCFR?",
+        help_text="Should the eCFR parser log errors encountered while processing the raw XML data from eCFR?",
     )
-    skip_versions = models.BooleanField(
+    skip_reg_versions = models.BooleanField(
         default=True,
-        help_text="Should the parser skip processing versions of parts that have been previously processed?",
+        help_text="Should the eCFR parser skip processing versions of regulation parts that have been previously processed?",
+    )
+    skip_fr_documents = models.BooleanField(
+        default=True,
+        help_text="Should the Federal Register parser skip processing documents that have been previously processed?",
     )
 
     def __str__(self):
