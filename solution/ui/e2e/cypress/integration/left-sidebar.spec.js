@@ -17,6 +17,10 @@ describe("Left sidebar", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);
         cy.get(`h3#nav-Subpart-A`).click({ force: true })
+        cy.get(`h2#subpart-resources-heading`).should(
+            "contain.text",
+            "Subpart A Resources"
+        )
         cy.get(`a#nav-431-10.menu-section`).click({ force: true });
         cy.get(`h2#subpart-resources-heading`).should(
             "contain.text",
