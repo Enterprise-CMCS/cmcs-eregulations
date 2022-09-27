@@ -6,6 +6,8 @@ import (
 	"testing"
 
 	"github.com/go-test/deep"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func TestGetLogLevel(t *testing.T) {
@@ -52,8 +54,8 @@ func TestGetLogLevel(t *testing.T) {
 	}
 
 	for _, tc := range testTable {
-		Run(t, tc.Name, func(t *testing.T) {
-			out := getLogLevel(tc.Input)
+		t.Run(tc.Name, func(t *testing.T) {
+			out := GetLogLevel(tc.Input)
 			if out != tc.Expected {
 				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
 			}

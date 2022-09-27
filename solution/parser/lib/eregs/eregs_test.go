@@ -2,15 +2,10 @@ package eregs
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
-
-	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
-
-	"github.com/go-test/deep"
 )
 
 func TestPostParserResult(t *testing.T) {

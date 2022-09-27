@@ -108,16 +108,14 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 			log.Warn("[eregs] section range ", secRange, "is invalid")
 			continue
 		}
-		title, exist := pm[sections[0].Part]
 
-		if !exist {
-			log.Warn("[eregs] Section identifier ", secRange, " has no matching title.")
-			continue
-		}
+		title, _ := pm[sections[0].Part]
+
 		if sections[0].Part != sections[1].Part {
 			log.Warn("[eregs] Section identifier ", secRange, "  contains different parts.")
 			continue
 		}
+		
 		s := &SectionRanges{
 			Title:    title,
 			Part:     sections[0].Part,
