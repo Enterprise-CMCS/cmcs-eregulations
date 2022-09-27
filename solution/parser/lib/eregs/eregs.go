@@ -6,6 +6,7 @@ import (
 	"path"
 	"context"
 	"time"
+	"fmt"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/network"
 )
@@ -24,7 +25,7 @@ var postAuth = &network.PostAuth{
 }
 
 func init() {
-	BaseURL := os.Getenv("EREGS_API_URL_V3")
+	BaseURL = os.Getenv("EREGS_API_URL_V3")
 	if BaseURL == "" {
 		BaseURL = DefaultBaseURL
 	}

@@ -8,6 +8,8 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/lib/parsexml"
 	"github.com/cmsgov/cmcs-eregulations/lib/network"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -37,21 +39,19 @@ type ExistingPart struct {
 
 // PutPart is the function that sends a part to the eRegs server
 func PutPart(ctx context.Context, p *Part) (int, error) {
-	u, err := url.Parse(BaseURL)
+	u, err := parseURL(putPartURL)
 	if err != nil {
 		return -1, err
 	}
-	u.Path = path.Join(u.Path, putPartURL)
 	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPut)
 }
 
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, int, error) {
-	u, err := url.Parse(BaseURL)
+	u, err := parseURL(fmt.Sprintf(existingPartsURL, title))
 	if err != nil {
 		return nil, -1, err
 	}
-	u.Path = path.Join(u.Path, fmt.Sprintf(existingPartsURL, title))
 
 	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", u.String())
 
