@@ -16,6 +16,8 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
+	"github.com/cmsgov/cmcs-eregulations/api"
+
 	"github.com/aws/aws-lambda-go/lambda"
 
 	log "github.com/sirupsen/logrus"
@@ -34,15 +36,15 @@ var (
 	StartVersionWorkerFunc = startVersionWorker
 	HandleVersionFunc      = handleVersion
 	SleepFunc              = time.Sleep
-	RetrieveConfigFunc     = eregs.RetrieveConfig
+	RetrieveConfigFunc     = api.RetrieveConfig
 )
 
-var config = &eregs.ParserConfig{}
+var config = &api.ParserConfig{}
 
 func init() {
-	eregs.BaseURL = os.Getenv("EREGS_API_URL_V3")
-	if eregs.BaseURL == "" {
-		eregs.BaseURL = DefaultBaseURL
+	api.BaseURL = os.Getenv("EREGS_API_URL_V3")
+	if api.BaseURL == "" {
+		api.BaseURL = DefaultBaseURL
 	}
 }
 
@@ -66,7 +68,7 @@ func getLogLevel(l string) log.Level {
 	}
 }
 
-func parseConfig(c *eregs.ParserConfig) {
+func parseConfig(c *api.ParserConfig) {
 	parsexml.LogParseErrors = c.LogParseErrors
 
 	if c.Workers < 1 {
@@ -147,7 +149,7 @@ func parseTitles() error {
 	return nil
 }
 
-func parseTitle(title *eregs.TitleConfig) error {
+func parseTitle(title *api.TitleConfig) error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 

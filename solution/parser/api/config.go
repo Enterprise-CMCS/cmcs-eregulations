@@ -1,16 +1,12 @@
-package eregs
+package api
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"path"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/cmsgov/cmcs-eregulations/network"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -93,17 +89,12 @@ type ParserConfig struct {
 
 // RetrieveConfig fetches parser config from eRegs at /v3/parser_config
 func RetrieveConfig() (*ParserConfig, int, error) {
-	u, err := url.Parse(BaseURL)
-	if err != nil {
-		return nil, -1, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL_V3 environment variable", BaseURL)
-	}
-	u.Path = path.Join(u.Path, configURL)
-
-	log.Debug("[config] Retrieving parser configuration from ", u.String())
+	log.Debug("[config] Retrieving parser configuration from ", configURL)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	body, code, err := network.Fetch(ctx, u, true)
+
+	body, code, err := Get(ctx, configURL)
 	if err != nil {
 		return nil, code, err
 	}
