@@ -1,32 +1,10 @@
 package eregs
 
-import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"net/url"
-	"os"
-	"path"
-	"strings"
-
-	"github.com/cmsgov/cmcs-eregulations/lib/network"
-
-	log "github.com/sirupsen/logrus"
-)
-
-// BaseURL is the URL of the eRegs API
-var BaseURL string
-
 // DocumentURL is the relative path to post FR documents to
 var DocumentURL = "/resources/federal_register_docs"
 
 // DocListURL is the relative path to retrieve a list of FR docs that eRegs already has
 var DocListURL = "/resources/federal_register_docs/doc_numbers"
-
-var postAuth = &network.PostAuth{
-	Username: os.Getenv("EREGS_USERNAME"),
-	Password: os.Getenv("EREGS_PASSWORD"),
-}
 
 // Section represents a section identifier in the eRegs supplemental content system
 type Section struct {

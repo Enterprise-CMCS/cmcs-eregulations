@@ -1,4 +1,4 @@
-module github.com/cmsgov/cmcs-eregulations/network
+module github.com/cmsgov/cmcs-eregulations/lib/network
 
 go 1.16
 

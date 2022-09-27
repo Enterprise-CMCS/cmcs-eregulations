@@ -10,3 +10,9 @@ require (
 )
 
 replace github.com/cmsgov/cmcs-eregulations/lib/network => ../lib/network
+
+replace github.com/cmsgov/cmcs-eregulations/lib/parsexml => ../lib/parsexml
+
+replace github.com/cmsgov/cmcs-eregulations/lib/eregs => ../lib/eregs
+
+replace github.com/cmsgov/cmcs-eregulations/lib/ecfr => ../lib/ecfr

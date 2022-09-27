@@ -4,32 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"os"
-	"path"
-	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"	
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
-
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/lib/parsexml"
 	"github.com/cmsgov/cmcs-eregulations/lib/network"
-
-	log "github.com/sirupsen/logrus"
 )
-
-// BaseURL is the URL of the eRegs service that will accept the post requests
-var BaseURL string
 
 var (
 	putPartURL       = "/part"
-	parserResultURL  = "/ecfr_parser_result/%d"
 	existingPartsURL = "/title/%d/versions"
 )
-
-var postAuth = &network.PostAuth{
-	Username: os.Getenv("EREGS_USERNAME"),
-	Password: os.Getenv("EREGS_PASSWORD"),
-}
 
 // Part is the struct used to send a part to the eRegs server
 type Part struct {
@@ -51,19 +35,6 @@ type ExistingPart struct {
 	PartName []string `json:"part_name"`
 }
 
-// ParserResult is the struct used to send results to the eRegs server
-type ParserResult struct {
-	Title           int    `json:"title,string"`
-	Start           string `json:"start"`
-	End             string `json:"end"`
-	Workers         int    `json:"workers,string"`
-	Parts           string `json:"parts"`
-	Subchapters     string `json:"subchapters"`
-	SkippedVersions int    `json:"skippedVersions,string"`
-	TotalVersions   int    `json:"totalVersions,string"`
-	Errors          int    `json:"errors,string"`
-}
-
 // PutPart is the function that sends a part to the eRegs server
 func PutPart(ctx context.Context, p *Part) (int, error) {
 	u, err := url.Parse(BaseURL)
@@ -72,18 +43,6 @@ func PutPart(ctx context.Context, p *Part) (int, error) {
 	}
 	u.Path = path.Join(u.Path, putPartURL)
 	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPut)
-}
-
-// PostParserResult is the function that sends a parser result to the eRegs server
-func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
-	u, err := url.Parse(BaseURL)
-	if err != nil {
-		return -1, err
-	}
-	u.Path = path.Join(u.Path, fmt.Sprintf(parserResultURL, p.Title))
-
-	p.End = time.Now().Format(time.RFC3339)
-	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPost)
 }
 
 // GetExistingParts gets existing parts already imported
