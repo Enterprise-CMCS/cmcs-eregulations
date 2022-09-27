@@ -24,9 +24,6 @@ import (
 // TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
 
-// DefaultBaseURL is the default eRegs API URL to use if none is specified
-var DefaultBaseURL = "http://localhost:8000/v3/"
-
 // Functions for easy testing via patching
 var (
 	ParseTitlesFunc        = parseTitles
@@ -38,13 +35,6 @@ var (
 )
 
 var config = &eregs.ParserConfig{}
-
-func init() {
-	eregs.BaseURL = os.Getenv("EREGS_API_URL_V3")
-	if eregs.BaseURL == "" {
-		eregs.BaseURL = DefaultBaseURL
-	}
-}
 
 func getLogLevel(l string) log.Level {
 	switch l {

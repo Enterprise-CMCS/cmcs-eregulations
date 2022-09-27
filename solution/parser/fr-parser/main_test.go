@@ -6,10 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/fr-parser/fedreg"
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
+	"github.com/cmsgov/cmcs-eregulations/lib/fedreg"
 
 	"github.com/go-test/deep"
 	log "github.com/sirupsen/logrus"
