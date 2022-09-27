@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/cmsgov/cmcs-eregulations/network"
+	"github.com/cmsgov/cmcs-eregulations/lib/network"
 )
 
 // EcfrSite is the base URL for accessing the eCFR API

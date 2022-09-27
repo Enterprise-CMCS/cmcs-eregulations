@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/cmsgov/cmcs-eregulations/network"
+	"github.com/cmsgov/cmcs-eregulations/lib/network"
 
 	log "github.com/sirupsen/logrus"
 )
