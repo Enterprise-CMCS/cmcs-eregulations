@@ -197,10 +197,7 @@ export default {
             this.fetch_content(this.title, this.part);
         }
         this.fetch_content(this.title, this.part, location)
-        window.addEventListener('hashchange', (event) => {
-          location = this.parseHash(window.location.hash)
-          this.fetch_content(this.title, this.part, location)
-        }, false);
+        window.addEventListener('hashchange', this.handleHashChange)
     },
     mounted() {
         this.$root.$on(EventCodes.SetSection, (args) => {
@@ -209,10 +206,14 @@ export default {
         this.categories = getDefaultCategories();
     },
     destroyed() {
-      window.removeEventListener("hashchange", this.hashchange);
+      window.removeEventListener("hashchange", this.handleHashChange);
     },
 
     methods: {
+        handleHashChange() {
+            const location = this.parseHash(window.location.hash)
+            this.fetch_content(this.title, this.part, location)
+        },
         parseHash(locationHash) {
             let section = locationHash.substring(1).replace("-", ".");
             if (section.includes("-")) {
