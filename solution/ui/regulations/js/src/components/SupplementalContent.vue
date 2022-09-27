@@ -192,32 +192,42 @@ export default {
     created() {
         let location = ""
         if (window.location.hash) {
-            let section = window.location.hash.substring(1).replace("-", ".");
-            if (section.includes("-")) {
-                // eslint-prefer-destructuring, kinda cool
-                [section] = section.split("-");
-            }
-            if (isNaN(section)) {
-                location = `locations=${this.title}.${this.part}.${section}`
-            }
-            else {
-                location = `locations=${this.title}.${section}`
-                this.selectedPart = `§ ${section}`;
-        }
-        } else {
+          location = this.parseHash(window.location.hash)
+         } else {
             this.fetch_content(this.title, this.part);
         }
         this.fetch_content(this.title, this.part, location)
+        window.addEventListener('hashchange', this.handleHashChange)
     },
-
     mounted() {
         this.$root.$on(EventCodes.SetSection, (args) => {
             this.selectedPart = args.section;
         });
         this.categories = getDefaultCategories();
     },
+    destroyed() {
+      window.removeEventListener("hashchange", this.handleHashChange);
+    },
 
     methods: {
+        handleHashChange() {
+            const location = this.parseHash(window.location.hash)
+            this.fetch_content(this.title, this.part, location)
+        },
+        parseHash(locationHash) {
+            let section = locationHash.substring(1).replace("-", ".");
+            if (section.includes("-")) {
+                // eslint-prefer-destructuring, kinda cool
+                [section] = section.split("-");
+            }
+            if (Number.isNaN(section)) {
+                return `locations=${this.title}.${this.part}.${section}`
+            }
+            else {
+              this.selectedPart = `§ ${section}`;
+              return `locations=${this.title}.${section}`
+            }
+        },
         async fetch_content(title, part, location) {
             try {
                 if (this.requested_categories.length > 0) {
