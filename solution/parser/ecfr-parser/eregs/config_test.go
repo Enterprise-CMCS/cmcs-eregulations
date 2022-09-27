@@ -1,4 +1,4 @@
-package api
+package eregs
 
 import (
 	"net/http"

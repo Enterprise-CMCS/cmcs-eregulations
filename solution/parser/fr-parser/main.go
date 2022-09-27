@@ -10,8 +10,7 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/fr-parser/fedreg"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-
-	"github.com/cmsgov/cmcs-eregulations/api"
+	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -20,6 +19,18 @@ import (
 
 // TIMELIMIT is the total amount of time the process has to run before being cancelled
 const TIMELIMIT = 5000 * time.Second
+
+// DefaultBaseURL is the default eRegs API URL to use if none is specified
+var DefaultBaseURL = "http://localhost:8000/v3/"
+
+func init() {
+	url := os.Getenv("EREGS_API_URL_V3")
+	if url == "" {
+		url = DefaultBaseURL
+	}
+	ecfrEregs.BaseURL = url
+	eregs.BaseURL = url
+}
 
 func lambdaHandler(ctx context.Context) (string, error) {
 	err := start()
@@ -35,12 +46,32 @@ func main() {
 	}
 }
 
-var retrieveConfigFunc = api.RetrieveConfig
+func getLogLevel(l string) log.Level {
+	switch l {
+	case "warn":
+		return log.WarnLevel
+	case "fatal":
+		return log.FatalLevel
+	case "error":
+		return log.ErrorLevel
+	case "info":
+		return log.InfoLevel
+	case "debug":
+		return log.DebugLevel
+	case "trace":
+		return log.TraceLevel
+	default:
+		log.Warn("[main] '", l, "' is an invalid log level, defaulting to 'warn'.")
+		return log.WarnLevel
+	}
+}
+
+var retrieveConfigFunc = ecfrEregs.RetrieveConfig
 
 //lint:ignore U1000 This is required for the tests to work, even if it is not used in this file.
-var getLogLevelFunc = api.GetLogLevel
+var getLogLevelFunc = getLogLevel
 
-func loadConfig() (*api.ParserConfig, error) {
+func loadConfig() (*ecfrEregs.ParserConfig, error) {
 	log.Info("[main] Loading configuration...")
 	config, _, err := retrieveConfigFunc()
 	if err != nil {
@@ -48,14 +79,14 @@ func loadConfig() (*api.ParserConfig, error) {
 	}
 
 	// parse config here
-	log.SetLevel(getLogLevelFunc(config.LogLevel))
+	log.SetLevel(getLogLevel(config.LogLevel))
 
 	return config, nil
 }
 
 var extractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
 
-func getPartsList(ctx context.Context, t *api.TitleConfig) []string {
+func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
 	var parts []string
 	for _, subchapter := range t.Subchapters {
 		subchapterParts, err := extractSubchapterPartsFunc(ctx, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})

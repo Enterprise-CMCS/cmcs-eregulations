@@ -16,8 +16,6 @@ import (
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
 
-	"github.com/cmsgov/cmcs-eregulations/api"
-
 	"github.com/aws/aws-lambda-go/lambda"
 
 	log "github.com/sirupsen/logrus"
@@ -26,6 +24,9 @@ import (
 // TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
 
+// DefaultBaseURL is the default eRegs API URL to use if none is specified
+var DefaultBaseURL = "http://localhost:8000/v3/"
+
 // Functions for easy testing via patching
 var (
 	ParseTitlesFunc        = parseTitles
@@ -33,12 +34,39 @@ var (
 	StartVersionWorkerFunc = startVersionWorker
 	HandleVersionFunc      = handleVersion
 	SleepFunc              = time.Sleep
-	RetrieveConfigFunc     = api.RetrieveConfig
+	RetrieveConfigFunc     = eregs.RetrieveConfig
 )
 
-var config = &api.ParserConfig{}
+var config = &eregs.ParserConfig{}
 
-func parseConfig(c *api.ParserConfig) {
+func init() {
+	eregs.BaseURL = os.Getenv("EREGS_API_URL_V3")
+	if eregs.BaseURL == "" {
+		eregs.BaseURL = DefaultBaseURL
+	}
+}
+
+func getLogLevel(l string) log.Level {
+	switch l {
+	case "warn":
+		return log.WarnLevel
+	case "fatal":
+		return log.FatalLevel
+	case "error":
+		return log.ErrorLevel
+	case "info":
+		return log.InfoLevel
+	case "debug":
+		return log.DebugLevel
+	case "trace":
+		return log.TraceLevel
+	default:
+		log.Warn("[main] '", config.LogLevel, "' is an invalid log level, defaulting to 'warn'.")
+		return log.WarnLevel
+	}
+}
+
+func parseConfig(c *eregs.ParserConfig) {
 	parsexml.LogParseErrors = c.LogParseErrors
 
 	if c.Workers < 1 {
@@ -51,7 +79,7 @@ func parseConfig(c *api.ParserConfig) {
 		c.Retries = 0
 	}
 
-	log.SetLevel(api.GetLogLevel(c.LogLevel))
+	log.SetLevel(getLogLevel(c.LogLevel))
 }
 
 // Only runs if parser is in a Lambda
@@ -119,7 +147,7 @@ func parseTitles() error {
 	return nil
 }
 
-func parseTitle(title *api.TitleConfig) error {
+func parseTitle(title *eregs.TitleConfig) error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 

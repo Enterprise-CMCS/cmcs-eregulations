@@ -4,21 +4,31 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"os"
+	"path"
 	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/network"
 	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
-
-	"github.com/cmsgov/cmcs-eregulations/api"
 
 	log "github.com/sirupsen/logrus"
 )
+
+// BaseURL is the URL of the eRegs service that will accept the post requests
+var BaseURL string
 
 var (
 	putPartURL       = "/part"
 	parserResultURL  = "/ecfr_parser_result/%d"
 	existingPartsURL = "/title/%d/versions"
 )
+
+var postAuth = &network.PostAuth{
+	Username: os.Getenv("EREGS_USERNAME"),
+	Password: os.Getenv("EREGS_PASSWORD"),
+}
 
 // Part is the struct used to send a part to the eRegs server
 type Part struct {
@@ -55,20 +65,37 @@ type ParserResult struct {
 
 // PutPart is the function that sends a part to the eRegs server
 func PutPart(ctx context.Context, p *Part) (int, error) {
-	return api.Put(ctx, putPartURL, p)
+	u, err := url.Parse(BaseURL)
+	if err != nil {
+		return -1, err
+	}
+	u.Path = path.Join(u.Path, putPartURL)
+	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPut)
 }
 
 // PostParserResult is the function that sends a parser result to the eRegs server
 func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
+	u, err := url.Parse(BaseURL)
+	if err != nil {
+		return -1, err
+	}
+	u.Path = path.Join(u.Path, fmt.Sprintf(parserResultURL, p.Title))
+
 	p.End = time.Now().Format(time.RFC3339)
-	return api.Post(ctx, fmt.Sprintf(parserResultURL, p.Title), p)
+	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPost)
 }
 
 // GetExistingParts gets existing parts already imported
 func GetExistingParts(ctx context.Context, title int) (map[string][]string, int, error) {
-	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", existingPartsURL)
+	u, err := url.Parse(BaseURL)
+	if err != nil {
+		return nil, -1, err
+	}
+	u.Path = path.Join(u.Path, fmt.Sprintf(existingPartsURL, title))
 
-	body, code, err := api.Get(ctx, fmt.Sprintf(existingPartsURL, title))
+	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", u.String())
+
+	body, code, err := network.Fetch(ctx, u, true)
 	if err != nil {
 		return nil, code, err
 	}
