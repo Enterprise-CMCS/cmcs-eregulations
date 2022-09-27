@@ -36,26 +36,6 @@ var (
 
 var config = &eregs.ParserConfig{}
 
-func getLogLevel(l string) log.Level {
-	switch l {
-	case "warn":
-		return log.WarnLevel
-	case "fatal":
-		return log.FatalLevel
-	case "error":
-		return log.ErrorLevel
-	case "info":
-		return log.InfoLevel
-	case "debug":
-		return log.DebugLevel
-	case "trace":
-		return log.TraceLevel
-	default:
-		log.Warn("[main] '", config.LogLevel, "' is an invalid log level, defaulting to 'warn'.")
-		return log.WarnLevel
-	}
-}
-
 func parseConfig(c *eregs.ParserConfig) {
 	parsexml.LogParseErrors = c.LogParseErrors
 
@@ -69,7 +49,7 @@ func parseConfig(c *eregs.ParserConfig) {
 		c.Retries = 0
 	}
 
-	log.SetLevel(getLogLevel(c.LogLevel))
+	log.SetLevel(eregs.GetLogLevel(c.LogLevel))
 }
 
 // Only runs if parser is in a Lambda

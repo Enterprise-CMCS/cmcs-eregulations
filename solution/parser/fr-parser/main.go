@@ -32,30 +32,10 @@ func main() {
 	}
 }
 
-func getLogLevel(l string) log.Level {
-	switch l {
-	case "warn":
-		return log.WarnLevel
-	case "fatal":
-		return log.FatalLevel
-	case "error":
-		return log.ErrorLevel
-	case "info":
-		return log.InfoLevel
-	case "debug":
-		return log.DebugLevel
-	case "trace":
-		return log.TraceLevel
-	default:
-		log.Warn("[main] '", l, "' is an invalid log level, defaulting to 'warn'.")
-		return log.WarnLevel
-	}
-}
-
 var retrieveConfigFunc = eregs.RetrieveConfig
 
 //lint:ignore U1000 This is required for the tests to work, even if it is not used in this file.
-var getLogLevelFunc = getLogLevel
+var getLogLevelFunc = eregs.GetLogLevel
 
 func loadConfig() (*eregs.ParserConfig, error) {
 	log.Info("[main] Loading configuration...")
@@ -65,7 +45,7 @@ func loadConfig() (*eregs.ParserConfig, error) {
 	}
 
 	// parse config here
-	log.SetLevel(getLogLevel(config.LogLevel))
+	log.SetLevel(getLogLevelFunc(config.LogLevel))
 
 	return config, nil
 }

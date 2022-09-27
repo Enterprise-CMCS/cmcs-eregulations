@@ -116,3 +116,24 @@ func RetrieveConfig() (*ParserConfig, int, error) {
 
 	return &config, code, nil
 }
+
+// GetLogLevel converts a string (e.g. "warn") to a log level (e.g. log.WarnLevel)
+func GetLogLevel(l string) log.Level {
+	switch l {
+	case "warn":
+		return log.WarnLevel
+	case "fatal":
+		return log.FatalLevel
+	case "error":
+		return log.ErrorLevel
+	case "info":
+		return log.InfoLevel
+	case "debug":
+		return log.DebugLevel
+	case "trace":
+		return log.TraceLevel
+	default:
+		log.Warn("[main] '", l, "' is an invalid log level, defaulting to 'warn'.")
+		return log.WarnLevel
+	}
+}
