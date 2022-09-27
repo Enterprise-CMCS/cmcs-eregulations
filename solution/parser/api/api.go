@@ -13,9 +13,19 @@ import (
 // BaseURL is the URL of the eRegs service that will accept the post requests
 var BaseURL string
 
+// DefaultBaseURL is the default eRegs API URL to use if none is specified
+var DefaultBaseURL = "http://localhost:8000/v3/"
+
 var postAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),
 	Password: os.Getenv("EREGS_PASSWORD"),
+}
+
+func init() {
+	BaseURL = os.Getenv("EREGS_API_URL_V3")
+	if BaseURL == "" {
+		BaseURL = DefaultBaseURL
+	}
 }
 
 func Get(ctx context.Context, apiPath string) (io.Reader, int, error) {
