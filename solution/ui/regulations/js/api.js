@@ -397,6 +397,17 @@ const v3GetSupplementalContent = async (apiURL, {locations, locationDetails=fals
 
 }
 
+const v3GetFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
+    // manually adjust to v3 if needed
+    const url = apiURL.replace("/v2/", "/v3/");
+
+    return httpApiGetLegacy(
+        `${url}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
+        {}, // params, default
+        apiURL
+    );
+};
+
 const getSubpartTOC = async (apiURL, title, part, subPart) => {
     const url = apiURL.replace('/v2/', '/v3/')
 
@@ -414,6 +425,7 @@ export {
     getSupplementalContentLegacy,
     getSupplementalContentByCategory,
     v3GetSupplementalContent,
+    v3GetFederalRegisterDocs,
     getSupplementalContentNew,
     getCacheKeys,
     removeCacheItem,

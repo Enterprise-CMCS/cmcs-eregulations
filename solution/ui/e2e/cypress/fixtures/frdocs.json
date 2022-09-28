@@ -1,0 +1,737 @@
+{
+    "count": 265,
+    "next": "http://localhost:8000/v3/resources/federal_register_docs?page=2&page_size=3&paginate=true",
+    "previous": null,
+    "results": [
+        {
+            "id": 2175,
+            "created_at": "2022-05-20 15:50:55.570000",
+            "updated_at": "2022-09-27 15:05:25.185229",
+            "approved": true,
+            "date": "2022-05-16",
+            "name": "87 FR 29675",
+            "description": "Medicaid Program; Reassignment of Medicaid Provider Claims",
+            "url": "https://www.federalregister.gov/documents/2022/05/16/2022-10225/medicaid-program-reassignment-of-medicaid-provider-claims",
+            "internalURL": "/supplemental_content/2175/",
+            "docket_numbers": ["CMS-2444-F"],
+            "document_number": "2022-10225",
+            "doc_type": "Final",
+            "name_headline": null,
+            "description_headline": null,
+            "document_number_headline": null,
+            "category": {
+                "id": 26,
+                "name": "Federal Register Docs",
+                "description": "",
+                "order": 0,
+                "show_if_empty": true,
+                "is_fr_doc_category": true,
+                "type": "category"
+            },
+            "locations": [
+                {
+                    "id": 467,
+                    "title": 42,
+                    "part": 447,
+                    "section_id": 10,
+                    "parent": 1195,
+                    "type": "section"
+                }
+            ],
+            "related_docs": [
+                {
+                    "id": 2178,
+                    "created_at": "2022-05-20 15:51:01.571000",
+                    "updated_at": "2022-09-27 15:05:25.192060",
+                    "approved": true,
+                    "date": "2021-08-03",
+                    "name": "86 FR 41803",
+                    "description": "Medicaid Program; Reassignment of Medicaid Provider Claims",
+                    "url": "https://www.federalregister.gov/documents/2021/08/03/2021-16430/medicaid-program-reassignment-of-medicaid-provider-claims",
+                    "internalURL": "/supplemental_content/2178/",
+                    "docket_numbers": ["CMS-2444-P"],
+                    "document_number": "2021-16430",
+                    "doc_type": "NPRM",
+                    "name_headline": null,
+                    "description_headline": null,
+                    "document_number_headline": null,
+                    "category": {
+                        "id": 26,
+                        "name": "Federal Register Docs",
+                        "description": "",
+                        "order": 0,
+                        "show_if_empty": true,
+                        "is_fr_doc_category": true,
+                        "type": "category"
+                    },
+                    "locations": [
+                        {
+                            "id": 467,
+                            "title": 42,
+                            "part": 447,
+                            "section_id": 10,
+                            "parent": 1195,
+                            "type": "section"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 1963,
+            "created_at": "2022-05-20 15:44:19.519000",
+            "updated_at": "2022-09-27 15:05:25.032190",
+            "approved": true,
+            "date": "2022-04-27",
+            "name": "87 FR 25090",
+            "description": "Medicare Program; Implementing Certain Provisions of the Consolidated Appropriations Act, 2021 and Other Revisions to Medicare Enrollment and Eligibility Rules",
+            "url": "https://www.federalregister.gov/documents/2022/04/27/2022-08903/medicare-program-implementing-certain-provisions-of-the-consolidated-appropriations-act-2021-and",
+            "internalURL": "/supplemental_content/1963/",
+            "docket_numbers": ["CMS-4199-P"],
+            "document_number": "2022-08903",
+            "doc_type": "NPRM",
+            "name_headline": null,
+            "description_headline": null,
+            "document_number_headline": null,
+            "category": {
+                "id": 26,
+                "name": "Federal Register Docs",
+                "description": "",
+                "order": 0,
+                "show_if_empty": true,
+                "is_fr_doc_category": true,
+                "type": "category"
+            },
+            "locations": [
+                {
+                    "id": 1357,
+                    "title": 42,
+                    "part": 400,
+                    "section_id": 200,
+                    "parent": 1356,
+                    "type": "section"
+                },
+                {
+                    "id": 1633,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 7,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1634,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 13,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1635,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 21,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1636,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 22,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1637,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 26,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1638,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 27,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1639,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 33,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1640,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 34,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1641,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 1,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1642,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 11,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1643,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 23,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1644,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 25,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1645,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 40,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1559,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 42,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1646,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 45,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1647,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 47,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1648,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 48,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1649,
+                    "title": 42,
+                    "part": 407,
+                    "subpart_id": "F",
+                    "type": "subpart"
+                },
+                {
+                    "id": 1650,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 57,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1651,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 59,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1652,
+                    "title": 42,
+                    "part": 407,
+                    "section_id": 62,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1653,
+                    "title": 42,
+                    "part": 408,
+                    "section_id": 20,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1654,
+                    "title": 42,
+                    "part": 408,
+                    "section_id": 24,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1655,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 30,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1656,
+                    "title": 42,
+                    "part": 423,
+                    "section_id": 30,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 152,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 625,
+                    "parent": 993,
+                    "type": "section"
+                },
+                {
+                    "id": 241,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 4,
+                    "parent": 1046,
+                    "type": "section"
+                },
+                {
+                    "id": 1657,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 123,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1658,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 124,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1659,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 125,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1660,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 126,
+                    "parent": null,
+                    "type": "section"
+                }
+            ],
+            "related_docs": []
+        },
+        {
+            "id": 1964,
+            "created_at": "2022-05-20 15:44:20.382000",
+            "updated_at": "2022-09-27 15:05:26.084388",
+            "approved": true,
+            "date": "2021-12-10",
+            "name": "86 FR 70412",
+            "description": "Medicare and Medicaid Programs; Patient Protection and Affordable Care Act; Interoperability and Patient Access for Medicare Advantage Organizations and Medicaid Managed Care Plans, State Medicaid Agencies, CHIP Agencies and CHIP Managed Care Entities, Issuers of Qualified Health Plans on the Federally-Facilitated Exchanges, and Health Care Providers",
+            "url": "https://www.federalregister.gov/documents/2021/12/10/2021-26764/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+            "internalURL": "/supplemental_content/1964/",
+            "docket_numbers": ["CMS-9115-N2"],
+            "document_number": "2021-26764",
+            "doc_type": "Final",
+            "name_headline": null,
+            "description_headline": null,
+            "document_number_headline": null,
+            "category": {
+                "id": 26,
+                "name": "Federal Register Docs",
+                "description": "",
+                "order": 0,
+                "show_if_empty": true,
+                "is_fr_doc_category": true,
+                "type": "category"
+            },
+            "locations": [],
+            "related_docs": [
+                {
+                    "id": 1966,
+                    "created_at": "2022-05-20 15:44:21.169000",
+                    "updated_at": "2022-09-27 15:05:26.093435",
+                    "approved": true,
+                    "date": "2020-05-01",
+                    "name": "85 FR 25510",
+                    "description": "Medicare and Medicaid Programs; Patient Protection and Affordable Care Act; Interoperability and Patient Access for Medicare Advantage Organization and Medicaid Managed Care Plans, State Medicaid Agencies, CHIP Agencies and CHIP Managed Care Entities, Issuers of Qualified Health Plans on the Federally-Facilitated Exchanges, and Health Care Providers",
+                    "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+                    "internalURL": "/supplemental_content/1966/",
+                    "docket_numbers": ["CMS-9115-F"],
+                    "document_number": "2020-05050",
+                    "doc_type": "Final",
+                    "name_headline": null,
+                    "description_headline": null,
+                    "document_number_headline": null,
+                    "category": {
+                        "id": 26,
+                        "name": "Federal Register Docs",
+                        "description": "",
+                        "order": 0,
+                        "show_if_empty": true,
+                        "is_fr_doc_category": true,
+                        "type": "category"
+                    },
+                    "locations": [
+                        {
+                            "id": 1637,
+                            "title": 42,
+                            "part": 406,
+                            "section_id": 26,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1645,
+                            "title": 42,
+                            "part": 407,
+                            "section_id": 40,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1670,
+                            "title": 42,
+                            "part": 422,
+                            "section_id": 119,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1671,
+                            "title": 42,
+                            "part": 422,
+                            "section_id": 120,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1672,
+                            "title": 42,
+                            "part": 422,
+                            "subpart_id": "A",
+                            "type": "subpart"
+                        },
+                        {
+                            "id": 1673,
+                            "title": 42,
+                            "part": 423,
+                            "section_id": 910,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 177,
+                            "title": 42,
+                            "part": 431,
+                            "section_id": 60,
+                            "parent": 985,
+                            "type": "section"
+                        },
+                        {
+                            "id": 178,
+                            "title": 42,
+                            "part": 431,
+                            "section_id": 70,
+                            "parent": 985,
+                            "type": "section"
+                        },
+                        {
+                            "id": 679,
+                            "title": 42,
+                            "part": 438,
+                            "section_id": 62,
+                            "parent": 1086,
+                            "type": "section"
+                        },
+                        {
+                            "id": 337,
+                            "title": 42,
+                            "part": 438,
+                            "section_id": 242,
+                            "parent": 1112,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1392,
+                            "title": 42,
+                            "part": 457,
+                            "section_id": 700,
+                            "parent": 1391,
+                            "type": "section"
+                        },
+                        {
+                            "id": 595,
+                            "title": 42,
+                            "part": 457,
+                            "section_id": 730,
+                            "parent": 1391,
+                            "type": "section"
+                        },
+                        {
+                            "id": 596,
+                            "title": 42,
+                            "part": 457,
+                            "section_id": 760,
+                            "parent": 1391,
+                            "type": "section"
+                        },
+                        {
+                            "id": 597,
+                            "title": 42,
+                            "part": 457,
+                            "section_id": 1233,
+                            "parent": 1407,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1674,
+                            "title": 42,
+                            "part": 482,
+                            "section_id": 24,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1675,
+                            "title": 42,
+                            "part": 482,
+                            "subpart_id": "B",
+                            "type": "subpart"
+                        },
+                        {
+                            "id": 1676,
+                            "title": 42,
+                            "part": 485,
+                            "section_id": 638,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 2878,
+                            "title": 45,
+                            "part": 156,
+                            "section_id": 221,
+                            "parent": null,
+                            "type": "section"
+                        }
+                    ]
+                },
+                {
+                    "id": 1969,
+                    "created_at": "2022-05-20 15:44:22.366000",
+                    "updated_at": "2022-09-27 15:05:26.100912",
+                    "approved": true,
+                    "date": "2019-04-23",
+                    "name": "84 FR 16834",
+                    "description": "Medicare and Medicaid Programs; Patient Protection and Affordable Care Act; Interoperability and Patient Access for Medicare Advantage Organization and Medicaid Managed Care Plans, State Medicaid Agencies, CHIP Agencies and CHIP Managed Care Entities, Issuers of Qualified Health Plans in the Federally-facilitated Exchanges and Health Care Providers; Supplement and Extension of Comment Period",
+                    "url": "https://www.federalregister.gov/documents/2019/04/23/2019-08181/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+                    "internalURL": "/supplemental_content/1969/",
+                    "docket_numbers": ["CMS-9115-N"],
+                    "document_number": "2019-08181",
+                    "doc_type": "NPRM",
+                    "name_headline": null,
+                    "description_headline": null,
+                    "document_number_headline": null,
+                    "category": {
+                        "id": 26,
+                        "name": "Federal Register Docs",
+                        "description": "",
+                        "order": 0,
+                        "show_if_empty": true,
+                        "is_fr_doc_category": true,
+                        "type": "category"
+                    },
+                    "locations": []
+                },
+                {
+                    "id": 1970,
+                    "created_at": "2022-05-20 15:44:22.517000",
+                    "updated_at": "2022-09-27 15:05:26.107013",
+                    "approved": true,
+                    "date": "2019-03-04",
+                    "name": "84 FR 7610",
+                    "description": "Medicare and Medicaid Programs; Patient Protection and Affordable Care Act; Interoperability and Patient Access for Medicare Advantage Organization and Medicaid Managed Care Plans, State Medicaid Agencies, CHIP Agencies and CHIP Managed Care Entities, Issuers of Qualified Health Plans in the Federally-Facilitated Exchanges and Health Care Providers",
+                    "url": "https://www.federalregister.gov/documents/2019/03/04/2019-02200/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+                    "internalURL": "/supplemental_content/1970/",
+                    "docket_numbers": ["CMS-9115-P"],
+                    "document_number": "2019-02200",
+                    "doc_type": "NPRM",
+                    "name_headline": null,
+                    "description_headline": null,
+                    "document_number_headline": null,
+                    "category": {
+                        "id": 26,
+                        "name": "Federal Register Docs",
+                        "description": "",
+                        "order": 0,
+                        "show_if_empty": true,
+                        "is_fr_doc_category": true,
+                        "type": "category"
+                    },
+                    "locations": [
+                        {
+                            "id": 1637,
+                            "title": 42,
+                            "part": 406,
+                            "section_id": 26,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1645,
+                            "title": 42,
+                            "part": 407,
+                            "section_id": 40,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1670,
+                            "title": 42,
+                            "part": 422,
+                            "section_id": 119,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1672,
+                            "title": 42,
+                            "part": 422,
+                            "subpart_id": "A",
+                            "type": "subpart"
+                        },
+                        {
+                            "id": 1673,
+                            "title": 42,
+                            "part": 423,
+                            "section_id": 910,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 177,
+                            "title": 42,
+                            "part": 431,
+                            "section_id": 60,
+                            "parent": 985,
+                            "type": "section"
+                        },
+                        {
+                            "id": 679,
+                            "title": 42,
+                            "part": 438,
+                            "section_id": 62,
+                            "parent": 1086,
+                            "type": "section"
+                        },
+                        {
+                            "id": 337,
+                            "title": 42,
+                            "part": 438,
+                            "section_id": 242,
+                            "parent": 1112,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1392,
+                            "title": 42,
+                            "part": 457,
+                            "section_id": 700,
+                            "parent": 1391,
+                            "type": "section"
+                        },
+                        {
+                            "id": 595,
+                            "title": 42,
+                            "part": 457,
+                            "section_id": 730,
+                            "parent": 1391,
+                            "type": "section"
+                        },
+                        {
+                            "id": 597,
+                            "title": 42,
+                            "part": 457,
+                            "section_id": 1233,
+                            "parent": 1407,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1674,
+                            "title": 42,
+                            "part": 482,
+                            "section_id": 24,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 1675,
+                            "title": 42,
+                            "part": 482,
+                            "subpart_id": "B",
+                            "type": "subpart"
+                        },
+                        {
+                            "id": 1676,
+                            "title": 42,
+                            "part": 485,
+                            "section_id": 638,
+                            "parent": null,
+                            "type": "section"
+                        },
+                        {
+                            "id": 2878,
+                            "title": 45,
+                            "part": 156,
+                            "section_id": 221,
+                            "parent": null,
+                            "type": "section"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

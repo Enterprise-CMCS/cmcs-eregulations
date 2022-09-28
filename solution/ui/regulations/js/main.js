@@ -9,6 +9,7 @@ import PrintBtn from "../dist/PrintBtn";
 import TableComponent from "../dist/TableComponent";
 import ViewResourcesLink from "../dist/ViewResourcesLink";
 import SearchEmptyState from "../dist/SearchEmptyState";
+import RecentChangesContainer from "../dist/RecentChangesContainer";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -154,6 +155,7 @@ function main() {
             PrintBtn,
             ViewResourcesLink,
             SearchEmptyState,
+            RecentChangesContainer,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");
