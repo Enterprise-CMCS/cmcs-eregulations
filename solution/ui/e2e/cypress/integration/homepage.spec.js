@@ -5,6 +5,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
+        cy.intercept(
+            "**/v3/resources/federal_register_docs?page=1&page_size=3&paginate=true",
+            { fixture: "frdocs.json" }
+        ).as("frdocs");
     });
 
     it("loads the homepage", () => {
@@ -27,11 +31,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("should have a div id on the page that matches the href of the skip to main content link", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".ds-c-skip-nav").should(
-            "have.attr",
-            "href",
-            mainContentId
-        );
+        cy.get(".ds-c-skip-nav").should("have.attr", "href", mainContentId);
         cy.get(mainContentId).should("exist");
     });
 
@@ -126,5 +126,40 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.contains("Medicaid & CHIP eRegulations").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/");
+    });
+
+    it("has grouped FR docs in the right sidebar", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".related-rule-list").should("exist");
+        cy.get(".recent-rules-descriptive-text").should(
+            "have.text",
+            "Includes 42 CFR 400, 430-460"
+        );
+        cy.get(".related-rule").should("have.length", 7);
+        cy.get(".related-rule.ungrouped").then(($els) => {
+            expect($els).to.have.length(3);
+            cy.wrap($els[0]).find(".recent-title").should("exist");
+            cy.wrap($els[0])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("Final");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(2, 102, 102)");
+                });
+        });
+        cy.get(".related-rule.grouped").then(($els) => {
+            expect($els).to.have.length(4);
+            cy.wrap($els[0]).find(".recent-title").should("not.exist");
+            cy.wrap($els[0])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("NPRM");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(214, 215, 217)");
+                });
+        });
     });
 });

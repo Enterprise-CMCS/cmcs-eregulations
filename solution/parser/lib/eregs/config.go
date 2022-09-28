@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -93,11 +91,10 @@ type ParserConfig struct {
 
 // RetrieveConfig fetches parser config from eRegs at /v3/parser_config
 func RetrieveConfig() (*ParserConfig, int, error) {
-	u, err := url.Parse(BaseURL)
+	u, err := parseURL(configURL)
 	if err != nil {
 		return nil, -1, fmt.Errorf("%s is not a valid URL! Please correctly set the EREGS_API_URL_V3 environment variable", BaseURL)
 	}
-	u.Path = path.Join(u.Path, configURL)
 
 	log.Debug("[config] Retrieving parser configuration from ", u.String())
 
