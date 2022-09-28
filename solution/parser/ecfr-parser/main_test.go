@@ -27,7 +27,8 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 		LogLevel:           "trace",
 		UploadSupplemental: true,
 		LogParseErrors:     true,
-		SkipVersions:       true,
+		SkipRegVersions:    true,
+		SkipFRDocuments:    true,
 		Titles: []*eregs.TitleConfig{
 			&eregs.TitleConfig{
 				Title: 42,
@@ -121,14 +122,16 @@ func TestParseConfig(t *testing.T) {
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
-				SkipVersions:       true,
+				SkipRegVersions:    true,
+				SkipFRDocuments:    true,
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            3,
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
-				SkipVersions:       true,
+				SkipRegVersions:    true,
+				SkipFRDocuments:    true,
 			},
 		},
 		{
@@ -138,14 +141,16 @@ func TestParseConfig(t *testing.T) {
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
-				SkipVersions:       true,
+				SkipRegVersions:    true,
+				SkipFRDocuments:    true,
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            1,
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
-				SkipVersions:       true,
+				SkipRegVersions:    true,
+				SkipFRDocuments:    true,
 			},
 		},
 	}
@@ -176,7 +181,8 @@ func TestStart(t *testing.T) {
 				"loglevel": "trace",
 				"upload_supplemental_locations": true,
 				"log_parse_errors": false,
-				"skip_versions": false,
+				"skip_reg_versions": false,
+				"skip_fr_documents": true,
 				"titles": [
 					{
 						"title": 42,

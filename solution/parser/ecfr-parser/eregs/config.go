@@ -84,7 +84,8 @@ type ParserConfig struct {
 	LogLevel           string         `json:"loglevel"`
 	UploadSupplemental bool           `json:"upload_supplemental_locations"`
 	LogParseErrors     bool           `json:"log_parse_errors"`
-	SkipVersions       bool           `json:"skip_versions"`
+	SkipRegVersions    bool           `json:"skip_reg_versions"`
+	SkipFRDocuments    bool           `json:"skip_fr_documents"`
 	Titles             []*TitleConfig `json:"titles"`
 }
 

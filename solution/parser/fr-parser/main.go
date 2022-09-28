@@ -140,7 +140,7 @@ func start() error {
 		log.Info("[main] retrieving content for title ", title.Title)
 		parts := getPartsListFunc(ctx, title)
 		for _, part := range parts {
-			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipVersions, titles); err != nil {
+			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipFRDocuments, titles); err != nil {
 				log.Error("[main] failed to process title ", title.Title, " part ", part, ": ", err)
 			}
 		}
