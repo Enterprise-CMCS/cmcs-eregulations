@@ -41,7 +41,6 @@ class HomepageView(TemplateView):
             'cfr_title_text': parts[0].structure['label_description'],
             'cfr_title_number': parts[0].structure['identifier'],
             'fr_docs_category_name': fr_docs_category_name,
-            'categories': categories,
         }
 
         return {**context, **c}
