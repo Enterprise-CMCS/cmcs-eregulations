@@ -109,7 +109,7 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 			continue
 		}
 
-		title, _ := pm[sections[0].Part]
+		title := pm[sections[0].Part]
 
 		if sections[0].Part != sections[1].Part {
 			log.Warn("[eregs] Section identifier ", secRange, "  contains different parts.")
