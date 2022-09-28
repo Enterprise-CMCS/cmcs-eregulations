@@ -321,6 +321,12 @@
             margin-bottom: $spacer-2;
         }
 
+        .recent-rules-descriptive-text {
+            font-size: 12px;
+            line-height: 18px;
+            color: $mid_gray;
+        }
+
         .latest-changes-horiz-rule {
             margin: $spacer-3 0;
         }
@@ -341,10 +347,12 @@
             margin-bottom: 20px;
         }
 
-        .view-resources-btn {
+        .link-btn {
             text-decoration: none;
             width: fit-content;
             color: white;
+            padding-top: 8px;
+            padding-bottom: 8px;
 
             &:hover {
                 color: white;
