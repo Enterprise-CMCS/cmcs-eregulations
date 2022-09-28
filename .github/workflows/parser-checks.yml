@@ -1,16 +1,16 @@
-name: Federal Register Parser Checks
+name: Parser Checks
 
 on:
   pull_request:
     types: [ opened, synchronize, reopened ]
     paths:
-      - 'solution/parser/fr-parser/**'
+      - 'solution/parser/**'
   push:
     branches:
       - main
 
 jobs:
-  fr-parser-checks:
+  ecfr-parser-checks:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -36,39 +36,32 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-
-    # Run go fmt on the code
+      # Run go fmt on the code
     - name: Run gofmt
       uses: Jerome1337/gofmt-action@v1.0.4
       with:
-        gofmt-path: './solution/parser/fr-parser'
+        gofmt-path: './solution/parser'
         gofmt-flags: '-l -d'
 
     - uses: dominikh/staticcheck-action@v1.2.0
       with:
         version: "2022.1"
         install-go: false
-        working-directory: "./solution/parser/fr-parser"
+        working-directory: "./solution/parser"
 
     # Run lint on the code
     - name: Run lint
       run: |
         go install golang.org/x/lint/golint@latest
-        pushd solution/parser/fr-parser
+        pushd solution/parser
         golint -set_exit_status ./...
         popd
     
     # Run tests and create coverage report
-    - name: Run tests and create report
+    - name: Run tests
       run: |
-        pushd solution/parser/fr-parser
-        go test -coverprofile=cover.out ./...
-        go tool cover -html=cover.out -o coverage.html
-        popd
-
-    # Upload coverage report
-    - name: Upload report
-      uses: actions/upload-artifact@v2
-      with:
-        name: fr-parser-coverage
-        path: solution/parser/fr-parser/coverage.html
+        for i in ecfr-parser fr-parser; do
+          pushd solution/$i
+          go test -cover $(( go list -f '{{ join .Deps "\n" }}' ./... ; go list . ; ) | cat | grep "github.com/cmsgov")
+          popd
+        done

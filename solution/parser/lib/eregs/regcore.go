@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
-	"github.com/cmsgov/cmcs-eregulations/lib/parsexml"
 	"github.com/cmsgov/cmcs-eregulations/lib/network"
+	"github.com/cmsgov/cmcs-eregulations/lib/parsexml"
 
 	log "github.com/sirupsen/logrus"
 )

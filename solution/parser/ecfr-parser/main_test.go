@@ -59,7 +59,7 @@ func TestParseConfig(t *testing.T) {
 			Name: "test-valid-config",
 			Input: eregs.ParserConfig{
 				Workers:            3,
-				Retries: 3,
+				Retries:            3,
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -68,7 +68,7 @@ func TestParseConfig(t *testing.T) {
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            3,
-				Retries: 3,
+				Retries:            3,
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -80,7 +80,7 @@ func TestParseConfig(t *testing.T) {
 			Name: "test-bad-config",
 			Input: eregs.ParserConfig{
 				Workers:            -1,
-				Retries: -1,
+				Retries:            -1,
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -89,7 +89,7 @@ func TestParseConfig(t *testing.T) {
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            1,
-				Retries: 0,
+				Retries:            0,
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,

@@ -1,12 +1,12 @@
 package eregs
 
 import (
-	"os"
-	"net/url"
-	"path"
 	"context"
-	"time"
 	"fmt"
+	"net/url"
+	"os"
+	"path"
+	"time"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/network"
 )

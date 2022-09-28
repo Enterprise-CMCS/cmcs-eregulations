@@ -2,9 +2,9 @@ package eregs
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
-	"encoding/json"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/network"
 
@@ -115,7 +115,7 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 			log.Warn("[eregs] Section identifier ", secRange, "  contains different parts.")
 			continue
 		}
-		
+
 		s := &SectionRanges{
 			Title:    title,
 			Part:     sections[0].Part,

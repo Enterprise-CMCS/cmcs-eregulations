@@ -26,7 +26,7 @@ func TestLoadConfig(t *testing.T) {
 			RetrieveConfigFunc: func() (*eregs.ParserConfig, int, error) {
 				return &eregs.ParserConfig{
 					Workers:  1,
-					Retries: 1,
+					Retries:  1,
 					LogLevel: "warn",
 					Titles: []*eregs.TitleConfig{
 						&eregs.TitleConfig{
