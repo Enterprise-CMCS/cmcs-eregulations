@@ -13,12 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
+	"github.com/cmsgov/cmcs-eregulations/lib/parsexml"
 
 	"github.com/go-test/deep"
-	log "github.com/sirupsen/logrus"
 )
 
 func Run(t *testing.T, name string, f func(*testing.T)) bool {
@@ -50,65 +49,6 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 	return t.Run(name, f)
 }
 
-func TestInit(t *testing.T) {
-	if eregs.BaseURL != DefaultBaseURL {
-		t.Errorf("eregs.BaseURL: expected (%s), received (%s)", DefaultBaseURL, eregs.BaseURL)
-	}
-}
-
-func TestGetLogLevel(t *testing.T) {
-	testTable := []struct {
-		Name     string
-		Input    string
-		Expected log.Level
-	}{
-		{
-			Name:     "test-warn",
-			Input:    "warn",
-			Expected: log.WarnLevel,
-		},
-		{
-			Name:     "test-fatal",
-			Input:    "fatal",
-			Expected: log.FatalLevel,
-		},
-		{
-			Name:     "test-error",
-			Input:    "error",
-			Expected: log.ErrorLevel,
-		},
-		{
-			Name:     "test-info",
-			Input:    "info",
-			Expected: log.InfoLevel,
-		},
-		{
-			Name:     "test-debug",
-			Input:    "debug",
-			Expected: log.DebugLevel,
-		},
-		{
-			Name:     "test-trace",
-			Input:    "trace",
-			Expected: log.TraceLevel,
-		},
-		{
-			Name:     "test-default",
-			Input:    "not a valid level",
-			Expected: log.WarnLevel,
-		},
-	}
-
-	for _, tc := range testTable {
-		Run(t, tc.Name, func(t *testing.T) {
-			out := getLogLevel(tc.Input)
-			if out != tc.Expected {
-				t.Errorf("expected (%+v), received (%+v)", tc.Expected, out)
-			}
-		})
-	}
-}
-
 func TestParseConfig(t *testing.T) {
 	testTable := []struct {
 		Name     string
@@ -119,6 +59,7 @@ func TestParseConfig(t *testing.T) {
 			Name: "test-valid-config",
 			Input: eregs.ParserConfig{
 				Workers:            3,
+				Retries:            3,
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -127,6 +68,7 @@ func TestParseConfig(t *testing.T) {
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            3,
+				Retries:            3,
 				LogLevel:           "info",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -138,6 +80,7 @@ func TestParseConfig(t *testing.T) {
 			Name: "test-bad-config",
 			Input: eregs.ParserConfig{
 				Workers:            -1,
+				Retries:            -1,
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,
@@ -146,6 +89,7 @@ func TestParseConfig(t *testing.T) {
 			},
 			Expected: eregs.ParserConfig{
 				Workers:            1,
+				Retries:            0,
 				LogLevel:           "warn",
 				UploadSupplemental: true,
 				LogParseErrors:     false,

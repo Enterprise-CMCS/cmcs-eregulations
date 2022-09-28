@@ -87,27 +87,27 @@ tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**
 	cd tools/ecfr-parser; go build -o build/ecfr-parser .
 
 %.prod: ## Load a Part of Title 42. e.g. make data.prod.435 will load Part 435 into prod
-%.prod: CORE_URL = https://3iok6sq3ui.execute-api.us-east-1.amazonaws.com/prod/v2/
+%.prod: CORE_URL = https://3iok6sq3ui.execute-api.us-east-1.amazonaws.com/prod/v3/
 
 %.val: ## Load a Part of Title 42. e.g. make data.val.435 will load Part 435 into val
-%.val: CORE_URL = https://qavc1ytrff.execute-api.us-east-1.amazonaws.com/val/v2/
+%.val: CORE_URL = https://qavc1ytrff.execute-api.us-east-1.amazonaws.com/val/v3/
 
 %.dev: ## Load a Part of Title 42. e.g. make dev.data.435 will load Part 435 into dev
-%.dev: CORE_URL = https://hittwbzqah.execute-api.us-east-1.amazonaws.com/dev/v2/
+%.dev: CORE_URL = https://hittwbzqah.execute-api.us-east-1.amazonaws.com/dev/v3/
 
 %.experimental: ## Load a Part of Title 42. e.g. make data.experimental URL=[experimental lambda URL] into dev-experimental
-%.experimental: CORE_URL = $(URL)/v2/
+%.experimental: CORE_URL = $(URL)/v3/
 
 %.local: ## Load a Part of Title 42. e.g. make data.local.435 will load Part 435
-%.local: CORE_URL = http://localhost:8000/v2/
+%.local: CORE_URL = http://localhost:8000/v3/
 %.local: export EREGS_USERNAME=RpSS01rhbx
 %.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%:
-	EREGS_API_URL=$(CORE_URL) docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
+	EREGS_API_URL_V3=$(CORE_URL) docker-compose -f docker-compose.yml -f docker-compose.parser.yml up parser
 
 frdocs.%:
-	EREGS_API_URL=$(CORE_URL) docker-compose -f docker-compose.yml -f docker-compose.fr-parser.yml up fr-parser
+	EREGS_API_URL_V3=$(CORE_URL) docker-compose -f docker-compose.yml -f docker-compose.fr-parser.yml up fr-parser
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker-compose stop

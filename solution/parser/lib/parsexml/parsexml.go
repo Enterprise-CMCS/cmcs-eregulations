@@ -8,7 +8,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
 
 	log "github.com/sirupsen/logrus"
 )

@@ -10,9 +10,24 @@ from .utils import OpenApiPathParameter
 from regcore.serializers.parser import (
     ParserResultSerializer,
     PartUploadSerializer,
+    ParserConfigurationSerializer,
 )
 from regcore.views import SettingsAuthentication
-from regcore.models import ECFRParserResult, Part
+from regcore.models import ECFRParserResult, Part, ParserConfiguration
+
+
+@extend_schema(description="Retrieve configuration for the eCFR and Federal Register parsers.")
+class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ParserConfigurationSerializer
+
+    def get_queryset(self):
+        queryset = ParserConfiguration.objects.all()
+        if len(queryset) < 1:
+            raise Http404
+        return queryset.first()
+
+    def retrieve(self, request):
+        return JsonResponse(self.get_serializer_class()(self.get_queryset()).data)
 
 
 @extend_schema(

@@ -12,12 +12,12 @@ provider:
     PARSER_ON_LAMBDA: true
     EREGS_USERNAME: ${ssm:/eregulations/http/user}
     EREGS_PASSWORD: ${ssm:/eregulations/http/password}
-    EREGS_API_URL: ${self:custom.settings.eregs_url}
+    EREGS_API_URL_V3: ${self:custom.settings.eregs_url}
 
 custom:
   stage: ${opt:stage, self:provider.stage}
   settings:
-    eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v2/
+    eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v3/
   go:
     baseDir: ecfr-parser/
 

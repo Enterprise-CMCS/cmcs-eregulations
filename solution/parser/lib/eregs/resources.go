@@ -4,29 +4,18 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"os"
-	"path"
 	"strings"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/network"
+	"github.com/cmsgov/cmcs-eregulations/lib/network"
 
 	log "github.com/sirupsen/logrus"
 )
-
-// BaseURL is the URL of the eRegs API
-var BaseURL string
 
 // DocumentURL is the relative path to post FR documents to
 var DocumentURL = "/resources/federal_register_docs"
 
 // DocListURL is the relative path to retrieve a list of FR docs that eRegs already has
 var DocListURL = "/resources/federal_register_docs/doc_numbers"
-
-var postAuth = &network.PostAuth{
-	Username: os.Getenv("EREGS_USERNAME"),
-	Password: os.Getenv("EREGS_PASSWORD"),
-}
 
 // Section represents a section identifier in the eRegs supplemental content system
 type Section struct {
@@ -58,13 +47,12 @@ type FRDoc struct {
 
 // SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL
 func SendDocument(ctx context.Context, doc *FRDoc) error {
-	eregsURL, err := url.Parse(BaseURL)
+	u, err := parseURL(DocumentURL)
 	if err != nil {
 		return fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
-	eregsURL.Path = path.Join(eregsURL.Path, DocumentURL)
 
-	code, err := network.SendJSON(ctx, eregsURL, doc, true, postAuth, network.HTTPPut)
+	code, err := network.SendJSON(ctx, u, doc, true, postAuth, network.HTTPPut)
 	if err != nil {
 		if code != -1 {
 			return fmt.Errorf("send failed with code %d: %+v", code, err)
@@ -120,16 +108,14 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 			log.Warn("[eregs] section range ", secRange, "is invalid")
 			continue
 		}
-		title, exist := pm[sections[0].Part]
 
-		if !exist {
-			log.Warn("[eregs] Section identifier ", secRange, " has no matching title.")
-			continue
-		}
+		title := pm[sections[0].Part]
+
 		if sections[0].Part != sections[1].Part {
 			log.Warn("[eregs] Section identifier ", secRange, "  contains different parts.")
 			continue
 		}
+
 		s := &SectionRanges{
 			Title:    title,
 			Part:     sections[0].Part,
@@ -144,13 +130,12 @@ func CreateSectionRanges(s []string, pm map[string]string) []*SectionRanges {
 
 // FetchDocumentList retrieves a list of URLs for each FR document already stored in Regs
 func FetchDocumentList(ctx context.Context) ([]string, error) {
-	eregsURL, err := url.Parse(BaseURL)
+	u, err := parseURL(DocListURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
-	eregsURL.Path = path.Join(eregsURL.Path, DocListURL)
 
-	reader, code, err := network.Fetch(ctx, eregsURL, true)
+	reader, code, err := network.Fetch(ctx, u, true)
 	if err != nil {
 		if code != -1 {
 			return nil, fmt.Errorf("fetch failed with code %d: %+v", code, err)

@@ -142,6 +142,9 @@ func TestCreateSectionRanges(t *testing.T) {
 	ranges := []string{
 		"443.42-443.50",
 		"445.50-445.70",
+		"asdf",
+		"10.10-10.50",
+		"443.10-445.50",
 	}
 
 	partMap := map[string]string{
