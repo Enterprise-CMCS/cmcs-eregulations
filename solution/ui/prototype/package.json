@@ -41,7 +41,7 @@
     "eslint-plugin-vuetify": "^1.1.0",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
-    "serverless-cloudfront-invalidate": "^1.11.0",
+    "serverless-cloudfront-invalidate": "^1.12.2",
     "serverless-s3-sync": "^1.17.3",
     "vue-cli-plugin-vuetify": "~2.4.5",
     "vue-template-compiler": "^2.7.0",
