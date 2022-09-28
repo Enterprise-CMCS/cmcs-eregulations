@@ -91,5 +91,8 @@ urlpatterns = [
         path("synonym/<synonym>", synonyms.SynonymViewSet.as_view({
             "get": "list",
         })),
+        path("parser_config", parser.ParserConfigurationViewSet.as_view({
+            "get": "retrieve",
+        })),
     ])),
 ]

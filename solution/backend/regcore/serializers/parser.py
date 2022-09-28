@@ -4,6 +4,23 @@ from django.apps import apps
 from regcore.models import ECFRParserResult
 
 
+class TitleConfigurationSerializer(serializers.Serializer):
+    title = serializers.IntegerField()
+    subchapters = serializers.CharField()
+    parts = serializers.CharField()
+
+
+class ParserConfigurationSerializer(serializers.Serializer):
+    workers = serializers.IntegerField()
+    retries = serializers.IntegerField()
+    loglevel = serializers.CharField()
+    upload_supplemental_locations = serializers.BooleanField()
+    log_parse_errors = serializers.BooleanField()
+    skip_reg_versions = serializers.BooleanField()
+    skip_fr_documents = serializers.BooleanField()
+    titles = TitleConfigurationSerializer(many=True)
+
+
 class ParserResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECFRParserResult

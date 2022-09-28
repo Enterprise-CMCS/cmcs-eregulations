@@ -12,9 +12,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/parsexml"
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
+	"github.com/cmsgov/cmcs-eregulations/lib/parsexml"
 
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -23,9 +23,6 @@ import (
 
 // TIMELIMIT is the total amount of time the process has to run before being cancelled and marked as a failure
 const TIMELIMIT = 5000 * time.Second
-
-// DefaultBaseURL is the default eRegs API URL to use if none is specified
-var DefaultBaseURL = "http://localhost:8000/v2/"
 
 // Functions for easy testing via patching
 var (
@@ -38,33 +35,6 @@ var (
 )
 
 var config = &eregs.ParserConfig{}
-
-func init() {
-	eregs.BaseURL = os.Getenv("EREGS_API_URL")
-	if eregs.BaseURL == "" {
-		eregs.BaseURL = DefaultBaseURL
-	}
-}
-
-func getLogLevel(l string) log.Level {
-	switch l {
-	case "warn":
-		return log.WarnLevel
-	case "fatal":
-		return log.FatalLevel
-	case "error":
-		return log.ErrorLevel
-	case "info":
-		return log.InfoLevel
-	case "debug":
-		return log.DebugLevel
-	case "trace":
-		return log.TraceLevel
-	default:
-		log.Warn("[main] '", config.LogLevel, "' is an invalid log level, defaulting to 'warn'.")
-		return log.WarnLevel
-	}
-}
 
 func parseConfig(c *eregs.ParserConfig) {
 	parsexml.LogParseErrors = c.LogParseErrors
@@ -79,7 +49,7 @@ func parseConfig(c *eregs.ParserConfig) {
 		c.Retries = 0
 	}
 
-	log.SetLevel(getLogLevel(c.LogLevel))
+	log.SetLevel(eregs.GetLogLevel(c.LogLevel))
 }
 
 // Only runs if parser is in a Lambda
