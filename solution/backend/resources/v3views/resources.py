@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, PolymorphicProxySerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db import transaction
 from django.db.models import Case, When, F
@@ -31,7 +31,11 @@ from regcore.views import SettingsAuthentication
                 "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
                 "Results are paginated by default.",
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,
-    responses=AbstractResourceSerializer,
+    responses=PolymorphicProxySerializer(
+        component_name="AbstractResourcePolymorphicSerializer",
+        serializers=[SupplementalContentSerializer, FederalRegisterDocumentSerializer],
+        resource_type_field_name="type",
+    ),
 )
 class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = AbstractResourcePolymorphicSerializer

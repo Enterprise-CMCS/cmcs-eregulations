@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, PolymorphicProxySerializer
 from django.db.models import Prefetch
 
 from .mixins import LocationExplorerViewSetMixin
@@ -16,25 +16,28 @@ from resources.v3serializers.locations import (
     AbstractLocationPolymorphicSerializer,
     FullSectionSerializer,
     FullSubpartSerializer,
+    SectionSerializer,
+    SubpartSerializer,
 )
 
 from regcore.views import SettingsAuthentication
 
 
+@extend_schema(
+    description="Retrieve a list of all resource locations, filterable by title and part. Results are paginated by default.",
+    parameters=LocationExplorerViewSetMixin.PARAMETERS,
+    responses=PolymorphicProxySerializer(
+        component_name="AbstractLocationPolymorphicSerializer",
+        serializers=[SectionSerializer, SubpartSerializer],
+        resource_type_field_name="type",
+    ),
+)
 class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
     queryset = AbstractLocation.objects.all().select_subclasses()
     serializer_class = AbstractLocationPolymorphicSerializer
 
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
-
-    @extend_schema(
-        description="Retrieve a list of all resource locations, filterable by title and part. Results are paginated by default.",
-        parameters=LocationExplorerViewSetMixin.PARAMETERS,
-        responses=AbstractLocationSerializer,
-    )
-    def list(self, request, **kwargs):
-        return super(LocationViewSet, self).list(request, **kwargs)
 
 
 @extend_schema(

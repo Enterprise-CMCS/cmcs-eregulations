@@ -26,6 +26,9 @@ class SectionSerializer(AbstractLocationSerializer):
     section_id = serializers.IntegerField()
     parent = serializers.PrimaryKeyRelatedField(read_only=True)
 
+    class Meta:
+        model = Section
+
 
 class FullSectionSerializer(SectionSerializer):
     parent = AbstractLocationPolymorphicSerializer()

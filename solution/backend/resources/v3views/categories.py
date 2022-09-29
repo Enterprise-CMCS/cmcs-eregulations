@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, PolymorphicProxySerializer
 from django.db.models import Prefetch
 
 from .mixins import OptionalPaginationMixin, OpenApiQueryParameter, PAGINATION_PARAMS
@@ -11,6 +11,7 @@ from resources.models import (
 )
 
 from resources.v3serializers.categories import (
+    CategorySerializer,
     SubCategorySerializer,
     AbstractCategoryPolymorphicSerializer,
     CategoryTreeSerializer,
@@ -23,7 +24,11 @@ from resources.v3serializers.categories import (
         OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather "
                               "than just the ID.", bool, False),
     ],
-    responses=SubCategorySerializer,
+    responses=PolymorphicProxySerializer(
+        component_name="AbstractCategoryPolymorphicSerializer",
+        serializers=[CategorySerializer, SubCategorySerializer],
+        resource_type_field_name=None,
+    ),
 )
 class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
