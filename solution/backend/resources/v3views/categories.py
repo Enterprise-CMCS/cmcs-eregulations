@@ -25,7 +25,7 @@ from resources.v3serializers.categories import (
                               "than just the ID.", bool, False),
     ],
     responses=PolymorphicProxySerializer(
-        component_name="MetaCategorySerializer",
+        component_name="AbstractCategoryPolymorphicSerializer",
         serializers=[CategorySerializer, SubCategorySerializer],
         resource_type_field_name=None,
     ),

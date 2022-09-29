@@ -27,7 +27,7 @@ from regcore.views import SettingsAuthentication
     description="Retrieve a list of all resource locations, filterable by title and part. Results are paginated by default.",
     parameters=LocationExplorerViewSetMixin.PARAMETERS,
     responses=PolymorphicProxySerializer(
-        component_name="MetaLocationSerializer",
+        component_name="AbstractLocationPolymorphicSerializer",
         serializers=[SectionSerializer, SubpartSerializer],
         resource_type_field_name="type",
     ),
@@ -43,6 +43,7 @@ class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
 @extend_schema(
     description="Retrieve a list of all Section objects, filterable by title and part. Results are paginated by default.",
     parameters=LocationExplorerViewSetMixin.PARAMETERS,
+    responses=FullSectionSerializer,
 )
 class SectionViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = FullSectionSerializer
