@@ -32,7 +32,7 @@ from regcore.views import SettingsAuthentication
                 "Results are paginated by default.",
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,
     responses=PolymorphicProxySerializer(
-        component_name="AbstractResourcePolymorphicSerializer",
+        component_name="MetaResourceSerializer",
         serializers=[SupplementalContentSerializer, FederalRegisterDocumentSerializer],
         resource_type_field_name="type",
     ),
