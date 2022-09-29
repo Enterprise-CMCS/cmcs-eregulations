@@ -19,7 +19,6 @@ from resources.v3serializers.resources import (
     FederalRegisterDocumentCreateSerializer,
     FederalRegisterDocumentSerializer,
     StringListSerializer,
-    AbstractResourceSerializer,
 )
 
 from regcore.views import SettingsAuthentication

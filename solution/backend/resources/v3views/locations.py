@@ -12,7 +12,6 @@ from resources.models import (
 )
 
 from resources.v3serializers.locations import (
-    AbstractLocationSerializer,
     AbstractLocationPolymorphicSerializer,
     FullSectionSerializer,
     FullSubpartSerializer,
