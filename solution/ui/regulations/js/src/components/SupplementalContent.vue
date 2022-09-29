@@ -215,18 +215,21 @@ export default {
             this.fetch_content(this.title, this.part, location)
         },
         parseHash(locationHash) {
+            if (window.location.hash === "#main-content") return "";
+
             let section = locationHash.substring(1).replace("-", ".");
+
             if (section.includes("-")) {
                 // eslint-prefer-destructuring, kinda cool
                 [section] = section.split("-");
             }
+
             if (Number.isNaN(section)) {
-                return `locations=${this.title}.${this.part}.${section}`
+                return `locations=${this.title}.${this.part}.${section}`;
             }
-            else {
-              this.selectedPart = `§ ${section}`;
-              return `locations=${this.title}.${section}`
-            }
+
+            this.selectedPart = `§ ${section}`;
+            return `locations=${this.title}.${section}`;
         },
         async fetch_content(title, part, location) {
             try {
