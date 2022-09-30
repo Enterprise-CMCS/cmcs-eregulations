@@ -51,7 +51,7 @@ describe("Resources page", () => {
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
             cy.wait("@resources").then((interception) => {
-                count = interception.response.body.count;
+                const count = interception.response.body.count;
                 cy.get(".results-count > span").contains(
                     `1 - 100 of ${count} results in Resources`
                 );
