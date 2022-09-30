@@ -514,6 +514,7 @@ export default {
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
+                    fr_grouping:false,
                     sortMethod,
                 });
 
@@ -535,6 +536,7 @@ export default {
                         partDict: "all", // titles
                         categories: this.categories, // subcategories
                         q: searchQuery,
+                        fr_grouping:false,
                         sortMethod,
                     });
 
@@ -555,6 +557,7 @@ export default {
                     categories: this.categories,
                     q: searchQuery,
                     start: 0, // start
+                    fr_grouping:false,
                     max_results: 100, // max_results
                     sortMethod,
                 });

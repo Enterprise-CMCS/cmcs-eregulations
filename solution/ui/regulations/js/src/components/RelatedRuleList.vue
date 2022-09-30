@@ -1,5 +1,5 @@
 <template>
-    <div class="related-rule-list" v-if="rules.length">
+    <div v-if="rules.length" class="related-rule-list">
         <template v-for="(rule, i) in limitedRules">
             <related-rule
                 :key="i"
@@ -27,20 +27,20 @@
             </template>
         </template>
         <collapse-button
-            v-if="showMoreNeeded && rulesCount > 10"
+            v-if="showMoreNeeded"
             :name="innerName"
             state="collapsed"
             class="category-title"
         >
-            <template v-slot:expanded>
+            <template #:expanded>
                 <show-more-button
-                    buttonText="- Show Less"
+                    button-text="- Show Less"
                     :count="rules.length"
                 ></show-more-button>
             </template>
-            <template v-slot:collapsed>
+            <template #:collapsed>
                 <show-more-button
-                    buttonText="+ Show More"
+                    button-text="+ Show More"
                     :count="rules.length"
                 ></show-more-button>
             </template>
@@ -81,20 +81,20 @@
                 </template>
             </template>
             <collapse-button
-                v-if="showMoreNeeded && rulesCount > 0"
+                v-if="showMoreNeeded && rulesCount > 10"
                 :name="innerName"
                 state="collapsed"
                 class="category-title"
             >
-                <template v-slot:expanded>
+                <template #:expanded>
                     <show-more-button
-                        buttonText="- Show Less"
+                        button-text="- Show Less"
                         :count="rules.length"
                     ></show-more-button>
                 </template>
-                <template v-slot:collapsed>
+                <template #collapsed>
                     <show-more-button
-                        buttonText="+ Show More"
+                        button-text="+ Show More"
                         :count="rules.length"
                     ></show-more-button>
                 </template>
@@ -113,7 +113,7 @@ import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
 
 export default {
-    name: "related-rule-list",
+    name: "RelatedRuleList",
 
     components: {
         RelatedRule,
@@ -123,13 +123,17 @@ export default {
     },
 
     props: {
-        rules: Array,
+        rules: {
+            type: Array,
+            default: () => [],
+        },
         limit: {
             type: Number,
             default: 5,
         },
         title: {
             type: String,
+            default: "results",
         },
     },
 

@@ -4,14 +4,11 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/fr-parser/eregs"
-	"github.com/cmsgov/cmcs-eregulations/fr-parser/fedreg"
-
-	"github.com/cmsgov/cmcs-eregulations/ecfr-parser/ecfr"
-	ecfrEregs "github.com/cmsgov/cmcs-eregulations/ecfr-parser/eregs"
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
+	"github.com/cmsgov/cmcs-eregulations/lib/fedreg"
 
 	"github.com/aws/aws-lambda-go/lambda"
 
@@ -20,24 +17,6 @@ import (
 
 // TIMELIMIT is the total amount of time the process has to run before being cancelled
 const TIMELIMIT = 5000 * time.Second
-
-// DefaultBaseURL is the default eRegs API URL to use if none is specified
-var DefaultBaseURL = "http://localhost:8000/v2/"
-
-func init() {
-	url := os.Getenv("EREGS_API_URL")
-	if url == "" {
-		url = DefaultBaseURL
-	}
-
-	v3url := url
-	if strings.HasSuffix(v3url, "v2/") {
-		v3url = v3url[0:len(v3url)-3] + "v3/" // very bad!
-	}
-
-	ecfrEregs.BaseURL = url
-	eregs.BaseURL = v3url
-}
 
 func lambdaHandler(ctx context.Context) (string, error) {
 	err := start()
@@ -53,32 +32,12 @@ func main() {
 	}
 }
 
-func getLogLevel(l string) log.Level {
-	switch l {
-	case "warn":
-		return log.WarnLevel
-	case "fatal":
-		return log.FatalLevel
-	case "error":
-		return log.ErrorLevel
-	case "info":
-		return log.InfoLevel
-	case "debug":
-		return log.DebugLevel
-	case "trace":
-		return log.TraceLevel
-	default:
-		log.Warn("[main] '", l, "' is an invalid log level, defaulting to 'warn'.")
-		return log.WarnLevel
-	}
-}
-
-var retrieveConfigFunc = ecfrEregs.RetrieveConfig
+var retrieveConfigFunc = eregs.RetrieveConfig
 
 //lint:ignore U1000 This is required for the tests to work, even if it is not used in this file.
-var getLogLevelFunc = getLogLevel
+var getLogLevelFunc = eregs.GetLogLevel
 
-func loadConfig() (*ecfrEregs.ParserConfig, error) {
+func loadConfig() (*eregs.ParserConfig, error) {
 	log.Info("[main] Loading configuration...")
 	config, _, err := retrieveConfigFunc()
 	if err != nil {
@@ -86,14 +45,14 @@ func loadConfig() (*ecfrEregs.ParserConfig, error) {
 	}
 
 	// parse config here
-	log.SetLevel(getLogLevel(config.LogLevel))
+	log.SetLevel(getLogLevelFunc(config.LogLevel))
 
 	return config, nil
 }
 
 var extractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
 
-func getPartsList(ctx context.Context, t *ecfrEregs.TitleConfig) []string {
+func getPartsList(ctx context.Context, t *eregs.TitleConfig) []string {
 	var parts []string
 	for _, subchapter := range t.Subchapters {
 		subchapterParts, err := extractSubchapterPartsFunc(ctx, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
@@ -140,7 +99,7 @@ func start() error {
 		log.Info("[main] retrieving content for title ", title.Title)
 		parts := getPartsListFunc(ctx, title)
 		for _, part := range parts {
-			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipVersions, titles); err != nil {
+			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipFRDocuments, titles); err != nil {
 				log.Error("[main] failed to process title ", title.Title, " part ", part, ": ", err)
 			}
 		}
@@ -200,11 +159,12 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 
 	if content.FullTextURL != "" {
 		log.Trace("[main] retrieving list of associated sections for title ", title, " part ", part, " doc ID ", content.DocumentNumber)
-		sections, partMap, err := fetchSectionsFunc(ctx, content.FullTextURL, titles)
+		sections, sectionRanges, partMap, err := fetchSectionsFunc(ctx, content.FullTextURL, titles)
 		if err != nil {
-			log.Error("[main] failed to fetch list of sections for FR doc ", content.DocumentNumber, ": ", err)
+			log.Error("[main] failed to fetch list of sections for FR doc ", sectionRanges, " ", content.DocumentNumber, ": ", err)
 		} else {
-			doc.Locations = eregs.CreateSections(sections, partMap)
+			doc.Sections = eregs.CreateSections(sections, partMap)
+			doc.SectionRanges = eregs.CreateSectionRanges(sectionRanges, partMap)
 		}
 	} else {
 		log.Warn("[main] no list of sections available for FR doc ", content.DocumentNumber)

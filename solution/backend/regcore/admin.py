@@ -28,16 +28,22 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
         (None, {
             'fields': (
                 'workers',
-                'attempts',
                 'loglevel',
                 'upload_supplemental_locations',
                 'log_parse_errors',
-                'skip_versions',
+                'skip_reg_versions',
+                'skip_fr_documents',
             ),
             'description': "<b>Please note:</b> Changes to the parser configuration "
                            "will not take effect until the next scheduled parser run!",
         }),
     )
+
+    # TODO: Remove this method when FR parser work is complete (EREGCSC-1390)
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["skip_fr_documents"].disabled = True
+        return form
 
 
 @admin.register(Synonym)

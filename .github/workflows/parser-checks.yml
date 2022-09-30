@@ -1,0 +1,70 @@
+name: Parser Checks
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    paths:
+      - 'solution/parser/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  parser-checks:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: ["ecfr-parser", "fr-parser", "lib/ecfr", "lib/eregs", "lib/fedreg", "lib/network", "lib/parsexml"]
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Setup Go
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '^1.16' # The Go version to download (if necessary) and use.
+  
+    # set up build cache
+    - name: Set up build cache
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/go/pkg/mod
+          ~/go/bin
+          ~/.cache/go-build
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+      # Run go fmt on the code
+    - name: Run gofmt
+      uses: Jerome1337/gofmt-action@v1.0.4
+      with:
+        gofmt-path: './solution/parser/${{ matrix.dir }}'
+        gofmt-flags: '-l -d'
+
+    - uses: dominikh/staticcheck-action@v1.2.0
+      with:
+        version: "2022.1"
+        install-go: false
+        working-directory: "./solution/parser/${{ matrix.dir }}"
+
+    # Run lint on the code
+    - name: Run lint
+      run: |
+        go install golang.org/x/lint/golint@latest
+        pushd solution/parser/${{ matrix.dir }}
+        golint -set_exit_status ./...
+        popd
+    
+    # Run tests and create coverage report
+    - name: Run tests
+      run: |
+        pushd solution/parser/${{ matrix.dir }}
+        go test -cover ./...
+        popd

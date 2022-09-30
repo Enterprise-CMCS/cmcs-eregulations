@@ -4,15 +4,6 @@ from django.core.validators import MinValueValidator, RegexValidator
 from solo.models import SingletonModel
 
 
-class Title(models.Model):
-    name = models.CharField(max_length=8, unique=True)
-    last_updated = models.DateTimeField(auto_now=True)
-    toc = models.JSONField()
-
-    class Meta:
-        ordering = ("name",)
-
-
 class PartQuerySet(models.QuerySet):
     def effective(self, date):
         return self.filter(date__lte=date).order_by("name", "-date").distinct("name")
@@ -26,18 +17,15 @@ class PartManager(models.Manager.from_queryset(PartQuerySet)):
 
 
 class Part(models.Model):
-    name = models.CharField(max_length=8)
-    title = models.CharField(max_length=8)  # TODO: delete
+    name = models.IntegerField()
+    title = models.IntegerField()
     date = models.DateField()  # TODO: rename to version, more clarity
     last_updated = models.DateTimeField(auto_now=True)
 
     document = models.JSONField()
     structure = models.JSONField()
+    depth_stack = models.JSONField()
     depth = models.IntegerField()
-
-    # TODO: rename to title
-    # also, part upload endpoint needs to connect this to title object
-    title_object = models.ForeignKey(Title, null=True, on_delete=models.CASCADE, related_name="parts")
 
     objects = PartManager()
 
@@ -66,18 +54,18 @@ class ParserConfiguration(SingletonModel):
 
     workers = models.IntegerField(
         default=3,
-        help_text="The number of worker threads used to parse regulations.",
+        help_text="The number of worker threads used to parse simultaneously.",
         validators=[MinValueValidator(
             limit_value=1,
             message="Number of workers must be at least 1!",
         )],
     )
-    attempts = models.IntegerField(
+    retries = models.IntegerField(
         default=3,
-        help_text="Number of times to retry parsing if it fails to complete.",
+        help_text="The number of times to retry parsing before moving on if it fails.",
         validators=[MinValueValidator(
-            limit_value=1,
-            message="Number of attempts must be at least 1!"
+            limit_value=0,
+            message="The number of retries must be at least 0!",
         )],
     )
     loglevel = models.CharField(
@@ -88,15 +76,19 @@ class ParserConfiguration(SingletonModel):
     )
     upload_supplemental_locations = models.BooleanField(
         default=True,
-        help_text="Should the parser process and upload section and subpart names for use in supplemental content management?",
+        help_text="Should the eCFR parser process and upload section and subpart names for use in resource management?",
     )
     log_parse_errors = models.BooleanField(
         default=False,
-        help_text="Should the parser log errors encountered while processing the raw XML data from eCFR?",
+        help_text="Should the eCFR parser log errors encountered while processing the raw XML data from eCFR?",
     )
-    skip_versions = models.BooleanField(
+    skip_reg_versions = models.BooleanField(
         default=True,
-        help_text="Should the parser skip processing versions of parts that have been previously processed?",
+        help_text="Should the eCFR parser skip processing versions of regulation parts that have been previously processed?",
+    )
+    skip_fr_documents = models.BooleanField(
+        default=True,
+        help_text="Should the Federal Register parser skip processing documents that have been previously processed?",
     )
 
     def __str__(self):
@@ -143,7 +135,6 @@ class AbstractParserResult(models.Model):
     subchapters = models.TextField(blank=True)
     parts = models.TextField(blank=True)
     workers = models.IntegerField()
-    attempts = models.IntegerField()
 
 
 class ECFRParserResult(AbstractParserResult):

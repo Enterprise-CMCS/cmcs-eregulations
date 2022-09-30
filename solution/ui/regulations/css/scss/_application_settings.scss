@@ -315,6 +315,25 @@ a {
 }
 
 // -------------------------
+// Line clamps
+// -------------------------
+
+@mixin line-clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    @content;
+}
+
+@for $i from 1 through 10 {
+    .line-clamp-#{$i} {
+        @include line-clamp {
+            -webkit-line-clamp: #{$i};
+        }
+    }
+}
+
+// -------------------------
 // General Settings
 // -------------------------
 

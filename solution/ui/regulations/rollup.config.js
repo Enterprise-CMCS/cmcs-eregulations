@@ -88,6 +88,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/RecentChangesContainer.vue",
+        output: {
+            format: "esm",
+            file: "dist/RecentChangesContainer.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",

@@ -1,5 +1,5 @@
 import datetime
-from model_utils.managers import InheritanceManager
+from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -64,6 +64,15 @@ class DisplayNameFieldMixin:
 # Category types
 # Current choice is one model per level due to constraint of exactly 2 levels.
 
+class AbstractCategoryQuerySet(InheritanceQuerySet):
+    def contains_fr_docs(self):
+        return self.annotate(
+            is_fr_doc_category=models.ExpressionWrapper(
+                ~models.Q(fr_doc_category_config=None),
+                output_field=models.BooleanField()
+            )
+        )
+
 
 class AbstractCategory(models.Model, DisplayNameFieldMixin):
     name = models.CharField(max_length=512, unique=True)
@@ -71,7 +80,7 @@ class AbstractCategory(models.Model, DisplayNameFieldMixin):
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
 
-    objects = InheritanceManager()
+    objects = AbstractCategoryQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.name} ({self._meta.verbose_name})"
@@ -153,6 +162,7 @@ class FederalRegisterDocumentGroup(models.Model):
     class Meta:
         verbose_name = "Federal Register Doc Group"
         verbose_name_plural = "Federal Register Doc Groups"
+        ordering = ('docket_number_prefixes',)
 
 
 # Resource models

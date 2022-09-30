@@ -13,7 +13,7 @@
         <h2 v-if="!requested_categories" id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
-        <div class="resource_btn_container" v-if="resource_display">
+        <div v-if="resource_display" class="resource_btn_container">
             <a :href="resourceLink" class=" default-btn action-btn search_resource_btn" >Search These Resources</a>
         </div>
         <div class="supplemental-content-container">
@@ -25,7 +25,7 @@
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
-                :isFetching="isFetching"
+                :is-fetching="isFetching"
                 :is-fr-doc-category="category.is_fr_doc_category"
             >
             </supplemental-content-category>
@@ -90,7 +90,7 @@ export default {
         sections: {
             type: Array,
             required: false,
-            default: [],
+            default: () => [],
         },
         subparts: {
             type: Array,
@@ -146,7 +146,7 @@ export default {
             return `Subpart ${this.subparts[0]}`;
         },
 
-        resourceLink: function () {
+        resourceLink() {
             let qString = `${this.resources_url}\?title=${this.title}&part=${this.part}`
 
             if (this.activePart.includes("Subpart")){
@@ -192,32 +192,42 @@ export default {
     created() {
         let location = ""
         if (window.location.hash) {
-            let section = window.location.hash.substring(1).replace("-", ".");
-            if (section.includes("-")) {
-                // eslint-prefer-destructuring, kinda cool
-                [section] = section.split("-");
-            }
-            if (isNaN(section)) {
-                location = `locations=${this.title}.${this.part}.${section}`
-            }
-            else {
-                location = `locations=${this.title}.${section}`
-                this.selectedPart = `§ ${section}`;
-        }
-        } else {
+          location = this.parseHash(window.location.hash)
+         } else {
             this.fetch_content(this.title, this.part);
         }
         this.fetch_content(this.title, this.part, location)
+        window.addEventListener('hashchange', this.handleHashChange)
     },
-
     mounted() {
         this.$root.$on(EventCodes.SetSection, (args) => {
             this.selectedPart = args.section;
         });
         this.categories = getDefaultCategories();
     },
+    destroyed() {
+      window.removeEventListener("hashchange", this.handleHashChange);
+    },
 
     methods: {
+        handleHashChange() {
+            const location = this.parseHash(window.location.hash)
+            this.fetch_content(this.title, this.part, location)
+        },
+        parseHash(locationHash) {
+            let section = locationHash.substring(1).replace("-", ".");
+            if (section.includes("-")) {
+                // eslint-prefer-destructuring, kinda cool
+                [section] = section.split("-");
+            }
+            if (Number.isNaN(section)) {
+                return `locations=${this.title}.${this.part}.${section}`
+            }
+            else {
+              this.selectedPart = `§ ${section}`;
+              return `locations=${this.title}.${section}`
+            }
+        },
         async fetch_content(title, part, location) {
             try {
                 if (this.requested_categories.length > 0) {
@@ -241,6 +251,7 @@ export default {
                     if (!this.resourceCount) {
                         this.resourceCount = subpart_response.length;
                     }
+
 
                     this.categories = formatResourceCategories(response);
                 }
