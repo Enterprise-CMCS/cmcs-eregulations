@@ -1,17 +1,28 @@
 describe("Resources page", () => {
     describe("Empty State", () => {
         it("renders correctly", () => {
-            cy.clearIndexedDB()
+            cy.intercept("**/resources/**", {
+                fixture: "no-resources-results.json",
+                delayMs: 1000,
+            }).as("resources");
+            cy.clearIndexedDB();
             cy.visit("/resources");
+            cy.get(".results-count > span").should(
+                "contain.text",
+                "Loading..."
+            );
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
-            cy.get(".results-count > span").contains("0 results in Resources");
+            cy.get(".results-count > span").should(
+                "contain.text",
+                "0 results in Resources"
+            );
         });
     });
 
     describe("Mock Results", () => {
         beforeEach(() => {
-            cy.clearIndexedDB()
+            cy.clearIndexedDB();
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
@@ -37,7 +48,9 @@ describe("Resources page", () => {
             cy.visit("/resources");
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
-            cy.get(".results-count > span").contains("1 - 100 of 2101 results in Resources");
+            cy.get(".results-count > span").contains(
+                "1 - 100 of 2101 results in Resources"
+            );
         });
 
         it.skip("Selects parts correctly", () => {
@@ -59,10 +72,14 @@ describe("Resources page", () => {
                 `/resources?title=42&part=433&subpart=433-B&section=${sectionString}`
             );
             sectionString.split(",").forEach((ss) => {
-                cy.get(".v-chip__content").contains(`§ ${ss.replace("-", ".")}`);
+                cy.get(".v-chip__content").contains(
+                    `§ ${ss.replace("-", ".")}`
+                );
             });
             // Select an additional section
-            cy.visit("/resources?title=42&part=433&subpart=433-B&section=433-11");
+            cy.visit(
+                "/resources?title=42&part=433&subpart=433-B&section=433-11"
+            );
             cy.url().should("include", "433-11");
             cy.get(".v-chip__content").contains("§ 433.11");
             cy.go("back");
@@ -75,7 +92,9 @@ describe("Resources page", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.get("#select-resource-categories > .v-btn__content").click();
-            cy.get('[data-value="State Medicaid Director Letter (SMDL)"]').click();
+            cy.get(
+                '[data-value="State Medicaid Director Letter (SMDL)"]'
+            ).click();
             cy.url().should(
                 "include",
                 "State%20Medicaid%20Director%20Letter%20%28SMDL%29"
