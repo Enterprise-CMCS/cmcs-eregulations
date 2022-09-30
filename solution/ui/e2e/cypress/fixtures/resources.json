@@ -1,1946 +1,1932 @@
 {
-  "count": 2097,
-  "next": null,
-  "previous": null,
-  "results": [
-    {
-      "id": 2576,
-      "created_at": "2022-07-07 16:51:20.996000",
-      "updated_at": "2022-07-07 16:51:20.996000",
-      "approved": true,
-      "date": "2022-07-06",
-      "name": null,
-      "description": "Medicaid and CHIP Managed Care Monitoring and Oversight Tools",
-      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib07062022.pdf",
-      "internalURL": "/supplemental_content/2576/",
-      "name_headline": null,
-      "description_headline": null,
-      "category": {
-        "id": 9,
-        "name": "CMCS Informational Bulletin (CIB)",
-        "description": "",
-        "order": 300,
-        "show_if_empty": false,
-        "parent": {
-          "id": 5,
-          "name": "Subregulatory Guidance",
-          "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
-          "order": 400,
-          "show_if_empty": true
-        },
-        "type": "subcategory"
-      },
-      "locations": [
+    "count": 2101,
+    "next": "https://regulations-pilot.cms.gov/v3/resources/?category_details=true&fr_grouping=false&location_details=true&locations=42&max_results=100&page=2&page_size=10&paginate=true&sort=newest&start=0",
+    "previous": null,
+    "results": [
         {
-          "id": 360,
-          "title": 42,
-          "part": 438,
-          "section_id": 7,
-          "parent": 1071,
-          "type": "section"
-        },
-        {
-          "id": 349,
-          "title": 42,
-          "part": 438,
-          "section_id": 14,
-          "parent": 1071,
-          "type": "section"
+            "id": 2615,
+            "created_at": "2022-09-26 15:27:01.412540",
+            "updated_at": "2022-09-26 15:44:20.173351",
+            "approved": true,
+            "date": "2022-09-21",
+            "name": "SMD# 22-005",
+            "description": "RE: Guidance on Nursing Facility State Plan Payment and Upper Payment Limit Approaches in \r\nMedicaid Relying on the Medicare Patient-Driven Payment Model",
+            "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd22005.pdf",
+            "internalURL": "/supplemental_content/2615/",
+            "name_headline": null,
+            "description_headline": null,
+            "category": {
+                "id": 7,
+                "name": "State Medicaid Director Letter (SMDL)",
+                "description": "",
+                "order": 100,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false
+                },
+                "type": "subcategory"
+            },
+            "locations": [
+                {
+                    "id": 481,
+                    "title": 42,
+                    "part": 447,
+                    "section_id": 272,
+                    "parent": 1200,
+                    "type": "section"
+                }
+            ],
+            "type": "supplemental_content"
         },
         {
-          "id": 334,
-          "title": 42,
-          "part": 438,
-          "section_id": 66,
-          "parent": 1086,
-          "type": "section"
+            "id": 2614,
+            "created_at": "2022-09-12 14:51:19.729990",
+            "updated_at": "2022-09-12 14:51:19.730012",
+            "approved": true,
+            "date": "2022-09-12",
+            "name": null,
+            "description": "Opportunities to Support Unwinding Efforts for States with Integrated Eligibility Systems and/or Workforces",
+            "url": "https://www.medicaid.gov/resources-for-states/downloads/opp-unwind-eff-st-integ-elig-sys-workfor.pdf",
+            "internalURL": "/supplemental_content/2614/",
+            "name_headline": null,
+            "description_headline": null,
+            "category": {
+                "id": 13,
+                "name": "Technical Assistance for States",
+                "description": "",
+                "order": 200,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "parent": {
+                    "id": 11,
+                    "name": "Implementation Resources",
+                    "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
+                    "order": 500,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false
+                },
+                "type": "subcategory"
+            },
+            "locations": [
+                {
+                    "id": 6,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 10,
+                    "parent": 851,
+                    "type": "section"
+                },
+                {
+                    "id": 79,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 112,
+                    "parent": 849,
+                    "type": "section"
+                },
+                {
+                    "id": 75,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 116,
+                    "parent": 849,
+                    "type": "section"
+                },
+                {
+                    "id": 110,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 603,
+                    "parent": 1506,
+                    "type": "section"
+                },
+                {
+                    "id": 111,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 907,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 112,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 911,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 96,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 916,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 99,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 917,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 102,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 945,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 103,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 948,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 106,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 956,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 555,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 315,
+                    "parent": 1376,
+                    "type": "section"
+                },
+                {
+                    "id": 168,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 330,
+                    "parent": 1376,
+                    "type": "section"
+                },
+                {
+                    "id": 169,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 340,
+                    "parent": 1376,
+                    "type": "section"
+                },
+                {
+                    "id": 577,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 343,
+                    "parent": 1376,
+                    "type": "section"
+                },
+                {
+                    "id": 171,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 380,
+                    "parent": 1376,
+                    "type": "section"
+                }
+            ],
+            "type": "supplemental_content"
         },
         {
-          "id": 362,
-          "title": 42,
-          "part": 438,
-          "section_id": 68,
-          "parent": 1086,
-          "type": "section"
+            "id": 2613,
+            "created_at": "2022-09-07 22:00:37.965656",
+            "updated_at": "2022-09-13 14:27:20.120406",
+            "approved": true,
+            "date": "2022-09-07",
+            "name": "87 FR 54760",
+            "description": "Streamlining the Medicaid, Children's Health Insurance Program, and Basic Health Program Application, Eligibility Determination, Enrollment, and Renewal Processes",
+            "url": "https://www.federalregister.gov/documents/2022/09/07/2022-18875/streamlining-the-medicaid-childrens-health-insurance-program-and-basic-health-program-application",
+            "internalURL": "/supplemental_content/2613/",
+            "docket_numbers": ["CMS-2421-P"],
+            "document_number": "2022-18875",
+            "doc_type": "NPRM",
+            "name_headline": null,
+            "description_headline": null,
+            "document_number_headline": null,
+            "related_docs": [],
+            "category": {
+                "id": 67,
+                "name": "Proposed and Final Rules",
+                "description": "Federal Register documents with agency policy proposals and decisions",
+                "order": 250,
+                "show_if_empty": false,
+                "is_fr_doc_category": true,
+                "type": "category"
+            },
+            "locations": [
+                {
+                    "id": 1635,
+                    "title": 42,
+                    "part": 406,
+                    "section_id": 21,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 6,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 10,
+                    "parent": 851,
+                    "type": "section"
+                },
+                {
+                    "id": 19,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 17,
+                    "parent": 851,
+                    "type": "section"
+                },
+                {
+                    "id": 49,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 213,
+                    "parent": 853,
+                    "type": "section"
+                },
+                {
+                    "id": 241,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 4,
+                    "parent": 1046,
+                    "type": "section"
+                },
+                {
+                    "id": 258,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 222,
+                    "parent": 875,
+                    "type": "section"
+                },
+                {
+                    "id": 1562,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 223,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 245,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 407,
+                    "parent": 1499,
+                    "type": "section"
+                },
+                {
+                    "id": 108,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 601,
+                    "parent": 1506,
+                    "type": "section"
+                },
+                {
+                    "id": 680,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 608,
+                    "parent": 1506,
+                    "type": "section"
+                },
+                {
+                    "id": 683,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 831,
+                    "parent": 1511,
+                    "type": "section"
+                },
+                {
+                    "id": 111,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 907,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 690,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 909,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 112,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 911,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 98,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 912,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 260,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 914,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 96,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 916,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 1566,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 919,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 101,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 940,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 105,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 952,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 106,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 956,
+                    "parent": 888,
+                    "type": "section"
+                },
+                {
+                    "id": 97,
+                    "title": 42,
+                    "part": 435,
+                    "section_id": 1200,
+                    "parent": 1526,
+                    "type": "section"
+                },
+                {
+                    "id": 165,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 65,
+                    "parent": 1361,
+                    "type": "section"
+                },
+                {
+                    "id": 169,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 340,
+                    "parent": 1376,
+                    "type": "section"
+                },
+                {
+                    "id": 3102,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 344,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 561,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 348,
+                    "parent": 1376,
+                    "type": "section"
+                },
+                {
+                    "id": 170,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 350,
+                    "parent": 1376,
+                    "type": "section"
+                },
+                {
+                    "id": 592,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 480,
+                    "parent": 1377,
+                    "type": "section"
+                },
+                {
+                    "id": 579,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 570,
+                    "parent": 1384,
+                    "type": "section"
+                },
+                {
+                    "id": 582,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 805,
+                    "parent": 1393,
+                    "type": "section"
+                },
+                {
+                    "id": 571,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 810,
+                    "parent": 1393,
+                    "type": "section"
+                },
+                {
+                    "id": 1403,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 960,
+                    "parent": 1395,
+                    "type": "section"
+                },
+                {
+                    "id": 1404,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 965,
+                    "parent": 1395,
+                    "type": "section"
+                },
+                {
+                    "id": 586,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 1140,
+                    "parent": 954,
+                    "type": "section"
+                },
+                {
+                    "id": 589,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 1170,
+                    "parent": 954,
+                    "type": "section"
+                },
+                {
+                    "id": 590,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 1180,
+                    "parent": 954,
+                    "type": "section"
+                },
+                {
+                    "id": 3078,
+                    "title": 42,
+                    "part": 600,
+                    "section_id": 330,
+                    "parent": 3106,
+                    "type": "section"
+                },
+                {
+                    "id": 3094,
+                    "title": 42,
+                    "part": 600,
+                    "section_id": 525,
+                    "parent": 3108,
+                    "type": "section"
+                }
+            ],
+            "type": "federal_register_doc"
         },
         {
-          "id": 658,
-          "title": 42,
-          "part": 438,
-          "section_id": 74,
-          "parent": 1086,
-          "type": "section"
+            "id": 2589,
+            "created_at": "2022-08-20 22:00:37.519246",
+            "updated_at": "2022-08-31 10:58:52.822042",
+            "approved": true,
+            "date": "2022-08-22",
+            "name": "87 FR 51303",
+            "description": "Medicaid Program and CHIP; Mandatory Medicaid and Children's Health Insurance Program (CHIP) Core Set Reporting",
+            "url": "https://www.federalregister.gov/documents/2022/08/22/2022-17810/medicaid-program-and-chip-mandatory-medicaid-and-childrens-health-insurance-program-chip-core-set",
+            "internalURL": "/supplemental_content/2589/",
+            "docket_numbers": ["CMS-2440-P"],
+            "document_number": "2022-17810",
+            "doc_type": "NPRM",
+            "name_headline": null,
+            "description_headline": null,
+            "document_number_headline": null,
+            "related_docs": [],
+            "category": {
+                "id": 67,
+                "name": "Proposed and Final Rules",
+                "description": "Federal Register documents with agency policy proposals and decisions",
+                "order": 250,
+                "show_if_empty": false,
+                "is_fr_doc_category": true,
+                "type": "category"
+            },
+            "locations": [
+                {
+                    "id": 79,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 112,
+                    "parent": 849,
+                    "type": "section"
+                },
+                {
+                    "id": 3048,
+                    "title": 42,
+                    "part": 437,
+                    "section_id": 1,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3049,
+                    "title": 42,
+                    "part": 437,
+                    "section_id": 5,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3050,
+                    "title": 42,
+                    "part": 437,
+                    "section_id": 10,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3051,
+                    "title": 42,
+                    "part": 437,
+                    "section_id": 15,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3052,
+                    "title": 42,
+                    "part": 437,
+                    "section_id": 20,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1392,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 700,
+                    "parent": 1391,
+                    "type": "section"
+                },
+                {
+                    "id": 3053,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 770,
+                    "parent": null,
+                    "type": "section"
+                }
+            ],
+            "type": "federal_register_doc"
         },
         {
-          "id": 365,
-          "title": 42,
-          "part": 438,
-          "section_id": 207,
-          "parent": 1112,
-          "type": "section"
+            "id": 2596,
+            "created_at": "2022-08-23 13:57:08.963482",
+            "updated_at": "2022-08-23 13:57:08.963503",
+            "approved": true,
+            "date": "2022-08-22",
+            "name": null,
+            "description": "Medicaid nursing facility payment approaches to advance health equity and improve health outcomes",
+            "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib08222022.pdf",
+            "internalURL": "/supplemental_content/2596/",
+            "name_headline": null,
+            "description_headline": null,
+            "category": {
+                "id": 9,
+                "name": "CMCS Informational Bulletin (CIB)",
+                "description": "",
+                "order": 300,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false
+                },
+                "type": "subcategory"
+            },
+            "locations": [
+                {
+                    "id": 36,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 40,
+                    "parent": 1124,
+                    "type": "section"
+                },
+                {
+                    "id": 775,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 155,
+                    "parent": 1124,
+                    "type": "section"
+                }
+            ],
+            "type": "supplemental_content"
         },
         {
-          "id": 719,
-          "title": 42,
-          "part": 438,
-          "section_id": 602,
-          "parent": 858,
-          "type": "section"
+            "id": 2590,
+            "created_at": "2022-08-21 21:20:06.084483",
+            "updated_at": "2022-08-21 21:20:06.084502",
+            "approved": true,
+            "date": "2022-08-18",
+            "name": null,
+            "description": "Information on School-Based Services in Medicaid: Funding, Documentation and Expanding Services",
+            "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/sbscib081820222.pdf",
+            "internalURL": "/supplemental_content/2590/",
+            "name_headline": null,
+            "description_headline": null,
+            "category": {
+                "id": 9,
+                "name": "CMCS Informational Bulletin (CIB)",
+                "description": "",
+                "order": 300,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false
+                },
+                "type": "subcategory"
+            },
+            "locations": [
+                {
+                    "id": 160,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 107,
+                    "parent": 986,
+                    "type": "section"
+                },
+                {
+                    "id": 202,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 137,
+                    "parent": 901,
+                    "type": "section"
+                },
+                {
+                    "id": 77,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 138,
+                    "parent": 901,
+                    "type": "section"
+                },
+                {
+                    "id": 214,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 139,
+                    "parent": 901,
+                    "type": "section"
+                },
+                {
+                    "id": 36,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 40,
+                    "parent": 1124,
+                    "type": "section"
+                },
+                {
+                    "id": 50,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 110,
+                    "parent": 1124,
+                    "type": "section"
+                },
+                {
+                    "id": 55,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 230,
+                    "parent": 1125,
+                    "type": "section"
+                },
+                {
+                    "id": 405,
+                    "title": 42,
+                    "part": 441,
+                    "section_id": 56,
+                    "parent": 889,
+                    "type": "section"
+                },
+                {
+                    "id": 449,
+                    "title": 42,
+                    "part": 441,
+                    "section_id": 57,
+                    "parent": 889,
+                    "type": "section"
+                },
+                {
+                    "id": 889,
+                    "title": 42,
+                    "part": 441,
+                    "subpart_id": "B",
+                    "type": "subpart"
+                },
+                {
+                    "id": 728,
+                    "title": 42,
+                    "part": 447,
+                    "section_id": 200,
+                    "parent": 1198,
+                    "type": "section"
+                },
+                {
+                    "id": 660,
+                    "title": 42,
+                    "part": 447,
+                    "section_id": 201,
+                    "parent": 1198,
+                    "type": "section"
+                },
+                {
+                    "id": 1199,
+                    "title": 42,
+                    "part": 447,
+                    "section_id": 202,
+                    "parent": 1198,
+                    "type": "section"
+                }
+            ],
+            "type": "supplemental_content"
         },
         {
-          "id": 784,
-          "title": 42,
-          "part": 457,
-          "subpart_id": "I",
-          "type": "subpart"
+            "id": 2583,
+            "created_at": "2022-08-17 16:24:06.552482",
+            "updated_at": "2022-08-17 16:24:06.552501",
+            "approved": true,
+            "date": "2022-08-17",
+            "name": null,
+            "description": "Applicable Federal Cost Principles for Ground Emergency Medical Transportation (GEMT)",
+            "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib08172022.pdf",
+            "internalURL": "/supplemental_content/2583/",
+            "name_headline": null,
+            "description_headline": null,
+            "category": {
+                "id": 9,
+                "name": "CMCS Informational Bulletin (CIB)",
+                "description": "",
+                "order": 300,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false
+                },
+                "type": "subcategory"
+            },
+            "locations": [
+                {
+                    "id": 850,
+                    "title": 42,
+                    "part": 430,
+                    "section_id": 10,
+                    "parent": 960,
+                    "type": "section"
+                },
+                {
+                    "id": 28,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 53,
+                    "parent": 985,
+                    "type": "section"
+                },
+                {
+                    "id": 160,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 107,
+                    "parent": 986,
+                    "type": "section"
+                },
+                {
+                    "id": 48,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 170,
+                    "parent": 1124,
+                    "type": "section"
+                },
+                {
+                    "id": 660,
+                    "title": 42,
+                    "part": 447,
+                    "section_id": 201,
+                    "parent": 1198,
+                    "type": "section"
+                },
+                {
+                    "id": 839,
+                    "title": 42,
+                    "part": 455,
+                    "section_id": 300,
+                    "parent": 1223,
+                    "type": "section"
+                },
+                {
+                    "id": 2973,
+                    "title": 45,
+                    "part": 75,
+                    "section_id": 2,
+                    "parent": null,
+                    "type": "section"
+                }
+            ],
+            "type": "supplemental_content"
+        },
+        {
+            "id": 2581,
+            "created_at": "2022-08-04 22:00:41.980242",
+            "updated_at": "2022-08-31 10:58:52.834985",
+            "approved": true,
+            "date": "2022-08-04",
+            "name": "87 FR 47824",
+            "description": "Nondiscrimination in Health Programs and Activities",
+            "url": "https://www.federalregister.gov/documents/2022/08/04/2022-16217/nondiscrimination-in-health-programs-and-activities",
+            "internalURL": "/supplemental_content/2581/",
+            "docket_numbers": ["HHS-OS-2022-0012"],
+            "document_number": "2022-16217",
+            "doc_type": "NPRM",
+            "name_headline": null,
+            "description_headline": null,
+            "document_number_headline": null,
+            "related_docs": [],
+            "category": {
+                "id": 67,
+                "name": "Proposed and Final Rules",
+                "description": "Federal Register documents with agency policy proposals and decisions",
+                "order": 250,
+                "show_if_empty": false,
+                "is_fr_doc_category": true,
+                "type": "category"
+            },
+            "locations": [
+                {
+                    "id": 3016,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 1,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3017,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 2,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3018,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 3,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3019,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 4,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3020,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 5,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3021,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 6,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3022,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 7,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3023,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 8,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3024,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 9,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3025,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 10,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3026,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 11,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3027,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 101,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3028,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 201,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3029,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 202,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3030,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 203,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3031,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 204,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3032,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 205,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3033,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 206,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3034,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 207,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3035,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 208,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3036,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 209,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3037,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 210,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3038,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 211,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3039,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 301,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3040,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 302,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3041,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 303,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3042,
+                    "title": 42,
+                    "part": 92,
+                    "section_id": 304,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3043,
+                    "title": 42,
+                    "part": 147,
+                    "section_id": 104,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3044,
+                    "title": 42,
+                    "part": 155,
+                    "section_id": 120,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3045,
+                    "title": 42,
+                    "part": 155,
+                    "section_id": 220,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3046,
+                    "title": 42,
+                    "part": 156,
+                    "section_id": 200,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3047,
+                    "title": 42,
+                    "part": 156,
+                    "section_id": 1230,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 332,
+                    "title": 42,
+                    "part": 438,
+                    "section_id": 3,
+                    "parent": 1071,
+                    "type": "section"
+                },
+                {
+                    "id": 364,
+                    "title": 42,
+                    "part": 438,
+                    "section_id": 206,
+                    "parent": 1112,
+                    "type": "section"
+                },
+                {
+                    "id": 763,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 262,
+                    "parent": 1125,
+                    "type": "section"
+                },
+                {
+                    "id": 575,
+                    "title": 42,
+                    "part": 457,
+                    "section_id": 495,
+                    "parent": 1377,
+                    "type": "section"
+                },
+                {
+                    "id": 1450,
+                    "title": 42,
+                    "part": 460,
+                    "section_id": 98,
+                    "parent": 1446,
+                    "type": "section"
+                },
+                {
+                    "id": 1457,
+                    "title": 42,
+                    "part": 460,
+                    "section_id": 112,
+                    "parent": 1455,
+                    "type": "section"
+                }
+            ],
+            "type": "federal_register_doc"
+        },
+        {
+            "id": 2612,
+            "created_at": "2022-08-29 13:33:00.042932",
+            "updated_at": "2022-08-29 13:33:00.042952",
+            "approved": true,
+            "date": "2022-08-01",
+            "name": "SMD # 22-004",
+            "description": "Health Homes for Children with Medically Complex Conditions",
+            "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd22004.pdf",
+            "internalURL": "/supplemental_content/2612/",
+            "name_headline": null,
+            "description_headline": null,
+            "category": {
+                "id": 7,
+                "name": "State Medicaid Director Letter (SMDL)",
+                "description": "",
+                "order": 100,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false
+                },
+                "type": "subcategory"
+            },
+            "locations": [
+                {
+                    "id": 23,
+                    "title": 42,
+                    "part": 431,
+                    "section_id": 52,
+                    "parent": 985,
+                    "type": "section"
+                },
+                {
+                    "id": 200,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 10,
+                    "parent": 1026,
+                    "type": "section"
+                },
+                {
+                    "id": 221,
+                    "title": 42,
+                    "part": 433,
+                    "section_id": 32,
+                    "parent": 1026,
+                    "type": "section"
+                },
+                {
+                    "id": 42,
+                    "title": 42,
+                    "part": 440,
+                    "section_id": 168,
+                    "parent": 1124,
+                    "type": "section"
+                },
+                {
+                    "id": 442,
+                    "title": 42,
+                    "part": 441,
+                    "section_id": 725,
+                    "parent": 1177,
+                    "type": "section"
+                },
+                {
+                    "id": 472,
+                    "title": 42,
+                    "part": 447,
+                    "section_id": 205,
+                    "parent": 1198,
+                    "type": "section"
+                }
+            ],
+            "type": "supplemental_content"
+        },
+        {
+            "id": 2580,
+            "created_at": "2022-07-29 10:02:16.977484",
+            "updated_at": "2022-08-31 10:58:52.842284",
+            "approved": true,
+            "date": "2022-07-29",
+            "name": "87 FR 45860",
+            "description": "Medicare and Medicaid Programs; CY 2023 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment Policies; Medicare Shared Savings Program Requirements; Medicare and Medicaid Provider Enrollment Policies, Including for Skilled Nursing Facilities; Conditions of Payment for Suppliers of Durable Medicaid Equipment, Prosthetics, Orthotics, and Supplies (DMEPOS); and Implementing Requirements for Manufacturers of Certain Single-Dose Container or Single-Use Package Drugs To Provide Refunds With Respect to Discarded Amounts",
+            "url": "https://www.federalregister.gov/documents/2022/07/29/2022-14562/medicare-and-medicaid-programs-cy-2023-payment-policies-under-the-physician-fee-schedule-and-other",
+            "internalURL": "/supplemental_content/2580/",
+            "docket_numbers": ["CMS-1770-P"],
+            "document_number": "2022-14562",
+            "doc_type": "NPRM",
+            "name_headline": null,
+            "description_headline": null,
+            "document_number_headline": null,
+            "related_docs": [],
+            "category": {
+                "id": 67,
+                "name": "Proposed and Final Rules",
+                "description": "Federal Register documents with agency policy proposals and decisions",
+                "order": 250,
+                "show_if_empty": false,
+                "is_fr_doc_category": true,
+                "type": "category"
+            },
+            "locations": [
+                {
+                    "id": 2982,
+                    "title": 42,
+                    "part": 405,
+                    "section_id": 2463,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2983,
+                    "title": 42,
+                    "part": 405,
+                    "section_id": 2469,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2985,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 3,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2984,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 10,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2797,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 26,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2986,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 37,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2087,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 40,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1830,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 57,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2987,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 63,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2056,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 67,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2057,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 78,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1831,
+                    "title": 42,
+                    "part": 410,
+                    "section_id": 152,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1833,
+                    "title": 42,
+                    "part": 411,
+                    "section_id": 15,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2438,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 502,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2439,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 504,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2440,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 507,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2988,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 523,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2989,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 626,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1835,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 707,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2990,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 902,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1837,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 904,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2991,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 940,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2441,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1305,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2992,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1318,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2993,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1340,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2994,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1365,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2089,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1380,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2064,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1400,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2995,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1405,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2996,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1415,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2997,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1420,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2998,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1430,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2999,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1440,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2451,
+                    "title": 42,
+                    "part": 414,
+                    "section_id": 1450,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3000,
+                    "title": 42,
+                    "part": 415,
+                    "section_id": 140,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2453,
+                    "title": 42,
+                    "part": 423,
+                    "section_id": 160,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1976,
+                    "title": 42,
+                    "part": 424,
+                    "section_id": 57,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1977,
+                    "title": 42,
+                    "part": 424,
+                    "section_id": 502,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1980,
+                    "title": 42,
+                    "part": 424,
+                    "section_id": 518,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1982,
+                    "title": 42,
+                    "part": 424,
+                    "section_id": 530,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 1797,
+                    "title": 42,
+                    "part": 424,
+                    "section_id": 535,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3001,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 20,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2455,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 100,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2457,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 204,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2458,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 224,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2459,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 302,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3002,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 308,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3003,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 310,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3004,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 312,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2460,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 316,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2070,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 400,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2811,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 402,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2464,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 512,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2071,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 600,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2465,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 601,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2469,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 605,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2471,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 610,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2072,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 611,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2814,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 612,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3005,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 614,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3006,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 630,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3007,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 631,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3008,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 650,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3009,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 652,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3010,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 654,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3011,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 656,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3012,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 658,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3013,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 660,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3014,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 702,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 3015,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 704,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 2472,
+                    "title": 42,
+                    "part": 425,
+                    "section_id": 800,
+                    "parent": null,
+                    "type": "section"
+                },
+                {
+                    "id": 520,
+                    "title": 42,
+                    "part": 455,
+                    "section_id": 107,
+                    "parent": 1216,
+                    "type": "section"
+                }
+            ],
+            "type": "federal_register_doc"
         }
-      ],
-      "type": "supplemental_content"
-    },
-    {
-      "id": 2377,
-      "created_at": "2022-06-08 15:56:56.825000",
-      "updated_at": "2022-06-08 15:56:56.825000",
-      "approved": true,
-      "date": "2022-06-03",
-      "name": "SMD# 22-002",
-      "description": "RE: Updated Reporting Requirements and Extension of Deadline to Fully Expend State Funds Under American Rescue Plan Act of 2021 Section 9817",
-      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd22002.pdf",
-      "internalURL": "/supplemental_content/2377/",
-      "name_headline": null,
-      "description_headline": null,
-      "category": {
-        "id": 7,
-        "name": "State Medicaid Director Letter (SMDL)",
-        "description": "",
-        "order": 100,
-        "show_if_empty": false,
-        "parent": {
-          "id": 5,
-          "name": "Subregulatory Guidance",
-          "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
-          "order": 400,
-          "show_if_empty": true
-        },
-        "type": "subcategory"
-      },
-      "locations": [
-        {
-          "id": 3,
-          "title": 42,
-          "part": 430,
-          "section_id": 30,
-          "parent": 857,
-          "type": "section"
-        },
-        {
-          "id": 16,
-          "title": 42,
-          "part": 431,
-          "section_id": 16,
-          "parent": 851,
-          "type": "section"
-        },
-        {
-          "id": 380,
-          "title": 42,
-          "part": 438,
-          "section_id": 4,
-          "parent": 1071,
-          "type": "section"
-        },
-        {
-          "id": 368,
-          "title": 42,
-          "part": 438,
-          "section_id": 5,
-          "parent": 1071,
-          "type": "section"
-        },
-        {
-          "id": 359,
-          "title": 42,
-          "part": 438,
-          "section_id": 6,
-          "parent": 1071,
-          "type": "section"
-        },
-        {
-          "id": 57,
-          "title": 42,
-          "part": 440,
-          "section_id": 70,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 15,
-          "title": 42,
-          "part": 440,
-          "section_id": 80,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 51,
-          "title": 42,
-          "part": 440,
-          "section_id": 130,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 1,
-          "title": 42,
-          "part": 440,
-          "subpart_id": "A",
-          "type": "subpart"
-        },
-        {
-          "id": 73,
-          "title": 42,
-          "part": 440,
-          "section_id": 180,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 17,
-          "title": 42,
-          "part": 440,
-          "section_id": 181,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 18,
-          "title": 42,
-          "part": 440,
-          "section_id": 182,
-          "parent": 1124,
-          "type": "section"
-        }
-      ],
-      "type": "supplemental_content"
-    },
-    {
-      "id": 2378,
-      "created_at": "2022-06-08 15:59:52.072000",
-      "updated_at": "2022-06-08 15:59:52.072000",
-      "approved": true,
-      "date": "2022-06-02",
-      "name": null,
-      "description": "Top 10 Fundamental Actions to Prepare for Unwinding and Resources to Support \r\nState Efforts",
-      "url": "https://www.medicaid.gov/resources-for-states/downloads/top-10-fundamental-actions-to-prepare-for-unwinding-and-resources-to-support-state-efforts.pdf",
-      "internalURL": "/supplemental_content/2378/",
-      "name_headline": null,
-      "description_headline": null,
-      "category": {
-        "id": 13,
-        "name": "Technical Assistance for States",
-        "description": "",
-        "order": 200,
-        "show_if_empty": false,
-        "parent": {
-          "id": 11,
-          "name": "Implementation Resources",
-          "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
-          "order": 500,
-          "show_if_empty": true
-        },
-        "type": "subcategory"
-      },
-      "locations": [
-        {
-          "id": 40,
-          "title": 42,
-          "part": 431,
-          "section_id": 206,
-          "parent": 853,
-          "type": "section"
-        },
-        {
-          "id": 125,
-          "title": 42,
-          "part": 431,
-          "section_id": 220,
-          "parent": 853,
-          "type": "section"
-        },
-        {
-          "id": 706,
-          "title": 42,
-          "part": 432,
-          "section_id": 30,
-          "parent": 1020,
-          "type": "section"
-        },
-        {
-          "id": 79,
-          "title": 42,
-          "part": 433,
-          "section_id": 112,
-          "parent": 849,
-          "type": "section"
-        },
-        {
-          "id": 75,
-          "title": 42,
-          "part": 433,
-          "section_id": 116,
-          "parent": 849,
-          "type": "section"
-        },
-        {
-          "id": 271,
-          "title": 42,
-          "part": 435,
-          "section_id": 904,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 95,
-          "title": 42,
-          "part": 435,
-          "section_id": 905,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 120,
-          "title": 42,
-          "part": 435,
-          "section_id": 908,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 98,
-          "title": 42,
-          "part": 435,
-          "section_id": 912,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 96,
-          "title": 42,
-          "part": 435,
-          "section_id": 916,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 99,
-          "title": 42,
-          "part": 435,
-          "section_id": 917,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 102,
-          "title": 42,
-          "part": 435,
-          "section_id": 945,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 103,
-          "title": 42,
-          "part": 435,
-          "section_id": 948,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 105,
-          "title": 42,
-          "part": 435,
-          "section_id": 952,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 106,
-          "title": 42,
-          "part": 435,
-          "section_id": 956,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 97,
-          "title": 42,
-          "part": 435,
-          "section_id": 1200,
-          "parent": 1526,
-          "type": "section"
-        },
-        {
-          "id": 547,
-          "title": 42,
-          "part": 457,
-          "section_id": 90,
-          "parent": 1361,
-          "type": "section"
-        },
-        {
-          "id": 169,
-          "title": 42,
-          "part": 457,
-          "section_id": 340,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 577,
-          "title": 42,
-          "part": 457,
-          "section_id": 343,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 170,
-          "title": 42,
-          "part": 457,
-          "section_id": 350,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 171,
-          "title": 42,
-          "part": 457,
-          "section_id": 380,
-          "parent": 1376,
-          "type": "section"
-        }
-      ],
-      "type": "supplemental_content"
-    },
-    {
-      "id": 2379,
-      "created_at": "2022-06-08 16:01:13.308000",
-      "updated_at": "2022-06-08 16:01:13.308000",
-      "approved": true,
-      "date": "2022-06-02",
-      "name": null,
-      "description": "Updated 2022 SSI and Spousal Impoverishment Standards",
-      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib06022022.pdf",
-      "internalURL": "/supplemental_content/2379/",
-      "name_headline": null,
-      "description_headline": null,
-      "category": {
-        "id": 9,
-        "name": "CMCS Informational Bulletin (CIB)",
-        "description": "",
-        "order": 300,
-        "show_if_empty": false,
-        "parent": {
-          "id": 5,
-          "name": "Subregulatory Guidance",
-          "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
-          "order": 400,
-          "show_if_empty": true
-        },
-        "type": "subcategory"
-      },
-      "locations": [
-        {
-          "id": 259,
-          "title": 42,
-          "part": 435,
-          "section_id": 120,
-          "parent": 876,
-          "type": "section"
-        },
-        {
-          "id": 114,
-          "title": 42,
-          "part": 435,
-          "section_id": 217,
-          "parent": 875,
-          "type": "section"
-        },
-        {
-          "id": 109,
-          "title": 42,
-          "part": 435,
-          "section_id": 602,
-          "parent": 1506,
-          "type": "section"
-        },
-        {
-          "id": 115,
-          "title": 42,
-          "part": 435,
-          "section_id": 700,
-          "parent": 1510,
-          "type": "section"
-        },
-        {
-          "id": 116,
-          "title": 42,
-          "part": 435,
-          "section_id": 726,
-          "parent": 1510,
-          "type": "section"
-        },
-        {
-          "id": 117,
-          "title": 42,
-          "part": 435,
-          "section_id": 735,
-          "parent": 1510,
-          "type": "section"
-        },
-        {
-          "id": 774,
-          "title": 42,
-          "part": 435,
-          "section_id": 811,
-          "parent": 1511,
-          "type": "section"
-        },
-        {
-          "id": 683,
-          "title": 42,
-          "part": 435,
-          "section_id": 831,
-          "parent": 1511,
-          "type": "section"
-        },
-        {
-          "id": 180,
-          "title": 42,
-          "part": 435,
-          "section_id": 832,
-          "parent": 1511,
-          "type": "section"
-        }
-      ],
-      "type": "supplemental_content"
-    },
-    {
-      "id": 2573,
-      "created_at": "2022-06-27 10:13:28.224000",
-      "updated_at": "2022-06-27 10:13:28.224000",
-      "approved": true,
-      "date": "2022-06",
-      "name": null,
-      "description": "Preparedness and Response Toolkit for State Medicaid and CHIP Agencies in the Event of a Public Health Emergency or Disaster",
-      "url": "https://www.medicaid.gov/state-resource-center/downloads/mac-learning-collaboratives/medicaid-chip-disastertoolkit.pdf",
-      "internalURL": "/supplemental_content/2573/",
-      "name_headline": null,
-      "description_headline": null,
-      "category": {
-        "id": 15,
-        "name": "Toolkits",
-        "description": "",
-        "order": 500,
-        "show_if_empty": false,
-        "parent": {
-          "id": 11,
-          "name": "Implementation Resources",
-          "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
-          "order": 500,
-          "show_if_empty": true
-        },
-        "type": "subcategory"
-      },
-      "locations": [
-        {
-          "id": 850,
-          "title": 42,
-          "part": 430,
-          "section_id": 10,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 675,
-          "title": 42,
-          "part": 430,
-          "section_id": 12,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 122,
-          "title": 42,
-          "part": 430,
-          "section_id": 20,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 671,
-          "title": 42,
-          "part": 430,
-          "section_id": 25,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 6,
-          "title": 42,
-          "part": 431,
-          "section_id": 10,
-          "parent": 851,
-          "type": "section"
-        },
-        {
-          "id": 853,
-          "title": 42,
-          "part": 431,
-          "subpart_id": "E",
-          "type": "subpart"
-        },
-        {
-          "id": 23,
-          "title": 42,
-          "part": 431,
-          "section_id": 52,
-          "parent": 985,
-          "type": "section"
-        },
-        {
-          "id": 47,
-          "title": 42,
-          "part": 431,
-          "section_id": 211,
-          "parent": 853,
-          "type": "section"
-        },
-        {
-          "id": 130,
-          "title": 42,
-          "part": 431,
-          "section_id": 231,
-          "parent": 853,
-          "type": "section"
-        },
-        {
-          "id": 137,
-          "title": 42,
-          "part": 431,
-          "subpart_id": "H-L",
-          "type": "subpart"
-        },
-        {
-          "id": 849,
-          "title": 42,
-          "part": 433,
-          "subpart_id": "C",
-          "type": "subpart"
-        },
-        {
-          "id": 79,
-          "title": 42,
-          "part": 433,
-          "section_id": 112,
-          "parent": 849,
-          "type": "section"
-        },
-        {
-          "id": 238,
-          "title": 42,
-          "part": 435,
-          "section_id": 119,
-          "parent": 876,
-          "type": "section"
-        },
-        {
-          "id": 243,
-          "title": 42,
-          "part": 435,
-          "section_id": 218,
-          "parent": 875,
-          "type": "section"
-        },
-        {
-          "id": 1525,
-          "title": 42,
-          "part": 435,
-          "subpart_id": "L",
-          "type": "subpart"
-        },
-        {
-          "id": 236,
-          "title": 42,
-          "part": 435,
-          "section_id": 403,
-          "parent": 1499,
-          "type": "section"
-        },
-        {
-          "id": 108,
-          "title": 42,
-          "part": 435,
-          "section_id": 601,
-          "parent": 1506,
-          "type": "section"
-        },
-        {
-          "id": 111,
-          "title": 42,
-          "part": 435,
-          "section_id": 907,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 98,
-          "title": 42,
-          "part": 435,
-          "section_id": 912,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 100,
-          "title": 42,
-          "part": 435,
-          "section_id": 926,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 102,
-          "title": 42,
-          "part": 435,
-          "section_id": 945,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 103,
-          "title": 42,
-          "part": 435,
-          "section_id": 948,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 105,
-          "title": 42,
-          "part": 435,
-          "section_id": 952,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 106,
-          "title": 42,
-          "part": 435,
-          "section_id": 956,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 255,
-          "title": 42,
-          "part": 435,
-          "section_id": 1110,
-          "parent": 1525,
-          "type": "section"
-        },
-        {
-          "id": 97,
-          "title": 42,
-          "part": 435,
-          "section_id": 1200,
-          "parent": 1526,
-          "type": "section"
-        },
-        {
-          "id": 359,
-          "title": 42,
-          "part": 438,
-          "section_id": 6,
-          "parent": 1071,
-          "type": "section"
-        },
-        {
-          "id": 756,
-          "title": 42,
-          "part": 438,
-          "section_id": 60,
-          "parent": 1086,
-          "type": "section"
-        },
-        {
-          "id": 364,
-          "title": 42,
-          "part": 438,
-          "section_id": 206,
-          "parent": 1112,
-          "type": "section"
-        },
-        {
-          "id": 370,
-          "title": 42,
-          "part": 438,
-          "section_id": 210,
-          "parent": 1112,
-          "type": "section"
-        },
-        {
-          "id": 339,
-          "title": 42,
-          "part": 438,
-          "section_id": 402,
-          "parent": 1117,
-          "type": "section"
-        },
-        {
-          "id": 342,
-          "title": 42,
-          "part": 438,
-          "section_id": 408,
-          "parent": 1117,
-          "type": "section"
-        },
-        {
-          "id": 57,
-          "title": 42,
-          "part": 440,
-          "section_id": 70,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 2,
-          "title": 42,
-          "part": 440,
-          "subpart_id": "A",
-          "type": "subpart"
-        },
-        {
-          "id": 55,
-          "title": 42,
-          "part": 440,
-          "section_id": 230,
-          "parent": 1125,
-          "type": "section"
-        },
-        {
-          "id": 56,
-          "title": 42,
-          "part": 440,
-          "section_id": 240,
-          "parent": 1125,
-          "type": "section"
-        },
-        {
-          "id": 10,
-          "title": 42,
-          "part": 440,
-          "subpart_id": "B",
-          "type": "subpart"
-        },
-        {
-          "id": 69,
-          "title": 42,
-          "part": 440,
-          "section_id": 386,
-          "parent": 1128,
-          "type": "section"
-        },
-        {
-          "id": 392,
-          "title": 42,
-          "part": 441,
-          "section_id": 301,
-          "parent": 1149,
-          "type": "section"
-        },
-        {
-          "id": 428,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "L",
-          "type": "subpart"
-        },
-        {
-          "id": 433,
-          "title": 42,
-          "part": 441,
-          "section_id": 510,
-          "parent": 1174,
-          "type": "section"
-        },
-        {
-          "id": 437,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "A",
-          "type": "subpart"
-        },
-        {
-          "id": 440,
-          "title": 42,
-          "part": 441,
-          "section_id": 555,
-          "parent": 1174,
-          "type": "section"
-        },
-        {
-          "id": 398,
-          "title": 42,
-          "part": 441,
-          "section_id": 715,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 441,
-          "title": 42,
-          "part": 441,
-          "section_id": 720,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 442,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "B",
-          "type": "subpart"
-        },
-        {
-          "id": 445,
-          "title": 42,
-          "part": 441,
-          "section_id": 730,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 662,
-          "title": 42,
-          "part": 447,
-          "subpart_id": "B",
-          "type": "subpart"
-        },
-        {
-          "id": 491,
-          "title": 42,
-          "part": 447,
-          "section_id": 45,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 469,
-          "title": 42,
-          "part": 447,
-          "section_id": 52,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 495,
-          "title": 42,
-          "part": 447,
-          "section_id": 53,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 496,
-          "title": 42,
-          "part": 447,
-          "section_id": 54,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 488,
-          "title": 42,
-          "part": 447,
-          "section_id": 55,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 497,
-          "title": 42,
-          "part": 447,
-          "section_id": 57,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 472,
-          "title": 42,
-          "part": 447,
-          "section_id": 205,
-          "parent": 1198,
-          "type": "section"
-        },
-        {
-          "id": 859,
-          "title": 42,
-          "part": 455,
-          "subpart_id": "E",
-          "type": "subpart"
-        },
-        {
-          "id": 461,
-          "title": 42,
-          "part": 455,
-          "section_id": 410,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 522,
-          "title": 42,
-          "part": 455,
-          "section_id": 412,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 462,
-          "title": 42,
-          "part": 455,
-          "section_id": 414,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 531,
-          "title": 42,
-          "part": 455,
-          "section_id": 432,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 523,
-          "title": 42,
-          "part": 455,
-          "section_id": 434,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 464,
-          "title": 42,
-          "part": 455,
-          "section_id": 450,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 532,
-          "title": 42,
-          "part": 455,
-          "section_id": 460,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 551,
-          "title": 42,
-          "part": 457,
-          "subpart_id": "C",
-          "type": "subpart"
-        },
-        {
-          "id": 572,
-          "title": 42,
-          "part": 457,
-          "section_id": 60,
-          "parent": 1361,
-          "type": "section"
-        },
-        {
-          "id": 169,
-          "title": 42,
-          "part": 457,
-          "section_id": 340,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 556,
-          "title": 42,
-          "part": 457,
-          "section_id": 342,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 557,
-          "title": 42,
-          "part": 457,
-          "section_id": 355,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 171,
-          "title": 42,
-          "part": 457,
-          "section_id": 380,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 602,
-          "title": 42,
-          "part": 457,
-          "section_id": 510,
-          "parent": 1384,
-          "type": "section"
-        },
-        {
-          "id": 954,
-          "title": 42,
-          "part": 457,
-          "subpart_id": "K",
-          "type": "subpart"
-        },
-        {
-          "id": 682,
-          "title": 42,
-          "part": 457,
-          "section_id": 515,
-          "parent": 1384,
-          "type": "section"
-        },
-        {
-          "id": 588,
-          "title": 42,
-          "part": 457,
-          "section_id": 1160,
-          "parent": 954,
-          "type": "section"
-        },
-        {
-          "id": 589,
-          "title": 42,
-          "part": 457,
-          "section_id": 1170,
-          "parent": 954,
-          "type": "section"
-        },
-        {
-          "id": 576,
-          "title": 42,
-          "part": 457,
-          "section_id": 1230,
-          "parent": 1407,
-          "type": "section"
-        },
-        {
-          "id": 653,
-          "title": 42,
-          "part": 457,
-          "section_id": 1260,
-          "parent": 1407,
-          "type": "section"
-        }
-      ],
-      "type": "supplemental_content"
-    },
-    {
-      "id": 2574,
-      "created_at": "2022-06-29 17:23:15.143000",
-      "updated_at": "2022-06-29 17:23:15.143000",
-      "approved": true,
-      "date": "2022-06",
-      "name": "Medicaid and CHIP Coverage Learning Collaborative",
-      "description": "Inventory of Medicaid and CHIP Flexibilities and Authorities in the Event of a Public Health Emergency or Disaster",
-      "url": "https://www.medicaid.gov/state-resource-center/downloads/mac-learning-collaboratives/medicaid-chip-inventory.pdf",
-      "internalURL": "/supplemental_content/2574/",
-      "name_headline": null,
-      "description_headline": null,
-      "category": {
-        "id": 13,
-        "name": "Technical Assistance for States",
-        "description": "",
-        "order": 200,
-        "show_if_empty": false,
-        "parent": {
-          "id": 11,
-          "name": "Implementation Resources",
-          "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
-          "order": 500,
-          "show_if_empty": true
-        },
-        "type": "subcategory"
-      },
-      "locations": [
-        {
-          "id": 850,
-          "title": 42,
-          "part": 430,
-          "section_id": 10,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 675,
-          "title": 42,
-          "part": 430,
-          "section_id": 12,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 122,
-          "title": 42,
-          "part": 430,
-          "section_id": 20,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 6,
-          "title": 42,
-          "part": 431,
-          "section_id": 10,
-          "parent": 851,
-          "type": "section"
-        },
-        {
-          "id": 853,
-          "title": 42,
-          "part": 431,
-          "subpart_id": "E",
-          "type": "subpart"
-        },
-        {
-          "id": 23,
-          "title": 42,
-          "part": 431,
-          "section_id": 52,
-          "parent": 985,
-          "type": "section"
-        },
-        {
-          "id": 47,
-          "title": 42,
-          "part": 431,
-          "section_id": 211,
-          "parent": 853,
-          "type": "section"
-        },
-        {
-          "id": 126,
-          "title": 42,
-          "part": 431,
-          "section_id": 221,
-          "parent": 853,
-          "type": "section"
-        },
-        {
-          "id": 130,
-          "title": 42,
-          "part": 431,
-          "section_id": 231,
-          "parent": 853,
-          "type": "section"
-        },
-        {
-          "id": 137,
-          "title": 42,
-          "part": 431,
-          "subpart_id": "H-L",
-          "type": "subpart"
-        },
-        {
-          "id": 156,
-          "title": 42,
-          "part": 431,
-          "section_id": 416,
-          "parent": 991,
-          "type": "section"
-        },
-        {
-          "id": 849,
-          "title": 42,
-          "part": 433,
-          "subpart_id": "C",
-          "type": "subpart"
-        },
-        {
-          "id": 79,
-          "title": 42,
-          "part": 433,
-          "section_id": 112,
-          "parent": 849,
-          "type": "section"
-        },
-        {
-          "id": 243,
-          "title": 42,
-          "part": 435,
-          "section_id": 218,
-          "parent": 875,
-          "type": "section"
-        },
-        {
-          "id": 1525,
-          "title": 42,
-          "part": 435,
-          "subpart_id": "L",
-          "type": "subpart"
-        },
-        {
-          "id": 236,
-          "title": 42,
-          "part": 435,
-          "section_id": 403,
-          "parent": 1499,
-          "type": "section"
-        },
-        {
-          "id": 111,
-          "title": 42,
-          "part": 435,
-          "section_id": 907,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 98,
-          "title": 42,
-          "part": 435,
-          "section_id": 912,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 96,
-          "title": 42,
-          "part": 435,
-          "section_id": 916,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 100,
-          "title": 42,
-          "part": 435,
-          "section_id": 926,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 102,
-          "title": 42,
-          "part": 435,
-          "section_id": 945,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 103,
-          "title": 42,
-          "part": 435,
-          "section_id": 948,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 105,
-          "title": 42,
-          "part": 435,
-          "section_id": 952,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 106,
-          "title": 42,
-          "part": 435,
-          "section_id": 956,
-          "parent": 888,
-          "type": "section"
-        },
-        {
-          "id": 255,
-          "title": 42,
-          "part": 435,
-          "section_id": 1110,
-          "parent": 1525,
-          "type": "section"
-        },
-        {
-          "id": 97,
-          "title": 42,
-          "part": 435,
-          "section_id": 1200,
-          "parent": 1526,
-          "type": "section"
-        },
-        {
-          "id": 359,
-          "title": 42,
-          "part": 438,
-          "section_id": 6,
-          "parent": 1071,
-          "type": "section"
-        },
-        {
-          "id": 364,
-          "title": 42,
-          "part": 438,
-          "section_id": 206,
-          "parent": 1112,
-          "type": "section"
-        },
-        {
-          "id": 370,
-          "title": 42,
-          "part": 438,
-          "section_id": 210,
-          "parent": 1112,
-          "type": "section"
-        },
-        {
-          "id": 342,
-          "title": 42,
-          "part": 438,
-          "section_id": 408,
-          "parent": 1117,
-          "type": "section"
-        },
-        {
-          "id": 57,
-          "title": 42,
-          "part": 440,
-          "section_id": 70,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 2,
-          "title": 42,
-          "part": 440,
-          "subpart_id": "A",
-          "type": "subpart"
-        },
-        {
-          "id": 55,
-          "title": 42,
-          "part": 440,
-          "section_id": 230,
-          "parent": 1125,
-          "type": "section"
-        },
-        {
-          "id": 69,
-          "title": 42,
-          "part": 440,
-          "section_id": 386,
-          "parent": 1128,
-          "type": "section"
-        },
-        {
-          "id": 392,
-          "title": 42,
-          "part": 441,
-          "section_id": 301,
-          "parent": 1149,
-          "type": "section"
-        },
-        {
-          "id": 425,
-          "title": 42,
-          "part": 441,
-          "section_id": 302,
-          "parent": 1149,
-          "type": "section"
-        },
-        {
-          "id": 433,
-          "title": 42,
-          "part": 441,
-          "section_id": 510,
-          "parent": 1174,
-          "type": "section"
-        },
-        {
-          "id": 437,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "A",
-          "type": "subpart"
-        },
-        {
-          "id": 440,
-          "title": 42,
-          "part": 441,
-          "section_id": 555,
-          "parent": 1174,
-          "type": "section"
-        },
-        {
-          "id": 441,
-          "title": 42,
-          "part": 441,
-          "section_id": 720,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 442,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "B",
-          "type": "subpart"
-        },
-        {
-          "id": 445,
-          "title": 42,
-          "part": 441,
-          "section_id": 730,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 662,
-          "title": 42,
-          "part": 447,
-          "subpart_id": "B",
-          "type": "subpart"
-        },
-        {
-          "id": 491,
-          "title": 42,
-          "part": 447,
-          "section_id": 45,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 469,
-          "title": 42,
-          "part": 447,
-          "section_id": 52,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 495,
-          "title": 42,
-          "part": 447,
-          "section_id": 53,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 496,
-          "title": 42,
-          "part": 447,
-          "section_id": 54,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 488,
-          "title": 42,
-          "part": 447,
-          "section_id": 55,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 497,
-          "title": 42,
-          "part": 447,
-          "section_id": 57,
-          "parent": 1195,
-          "type": "section"
-        },
-        {
-          "id": 472,
-          "title": 42,
-          "part": 447,
-          "section_id": 205,
-          "parent": 1198,
-          "type": "section"
-        },
-        {
-          "id": 859,
-          "title": 42,
-          "part": 455,
-          "subpart_id": "E",
-          "type": "subpart"
-        },
-        {
-          "id": 522,
-          "title": 42,
-          "part": 455,
-          "section_id": 412,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 462,
-          "title": 42,
-          "part": 455,
-          "section_id": 414,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 531,
-          "title": 42,
-          "part": 455,
-          "section_id": 432,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 523,
-          "title": 42,
-          "part": 455,
-          "section_id": 434,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 464,
-          "title": 42,
-          "part": 455,
-          "section_id": 450,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 532,
-          "title": 42,
-          "part": 455,
-          "section_id": 460,
-          "parent": 859,
-          "type": "section"
-        },
-        {
-          "id": 551,
-          "title": 42,
-          "part": 457,
-          "subpart_id": "C",
-          "type": "subpart"
-        },
-        {
-          "id": 572,
-          "title": 42,
-          "part": 457,
-          "section_id": 60,
-          "parent": 1361,
-          "type": "section"
-        },
-        {
-          "id": 168,
-          "title": 42,
-          "part": 457,
-          "section_id": 330,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 169,
-          "title": 42,
-          "part": 457,
-          "section_id": 340,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 556,
-          "title": 42,
-          "part": 457,
-          "section_id": 342,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 606,
-          "title": 42,
-          "part": 457,
-          "subpart_id": "I",
-          "type": "subpart"
-        },
-        {
-          "id": 557,
-          "title": 42,
-          "part": 457,
-          "section_id": 355,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 171,
-          "title": 42,
-          "part": 457,
-          "section_id": 380,
-          "parent": 1376,
-          "type": "section"
-        },
-        {
-          "id": 602,
-          "title": 42,
-          "part": 457,
-          "section_id": 510,
-          "parent": 1384,
-          "type": "section"
-        },
-        {
-          "id": 954,
-          "title": 42,
-          "part": 457,
-          "subpart_id": "K",
-          "type": "subpart"
-        },
-        {
-          "id": 588,
-          "title": 42,
-          "part": 457,
-          "section_id": 1160,
-          "parent": 954,
-          "type": "section"
-        },
-        {
-          "id": 589,
-          "title": 42,
-          "part": 457,
-          "section_id": 1170,
-          "parent": 954,
-          "type": "section"
-        },
-        {
-          "id": 576,
-          "title": 42,
-          "part": 457,
-          "section_id": 1230,
-          "parent": 1407,
-          "type": "section"
-        },
-        {
-          "id": 653,
-          "title": 42,
-          "part": 457,
-          "section_id": 1260,
-          "parent": 1407,
-          "type": "section"
-        }
-      ],
-      "type": "supplemental_content"
-    },
-    {
-      "id": 2349,
-      "created_at": "2022-05-25 10:25:58.687000",
-      "updated_at": "2022-05-25 10:25:58.687000",
-      "approved": true,
-      "date": "2022-05-24",
-      "name": null,
-      "description": "HCBS Settings Rule Implementation–Moving Forward Toward March 2023 & Beyond",
-      "url": "https://www.medicaid.gov/medicaid/home-community-based-services/downloads/hcbs-settings-rule-imp.pdf",
-      "internalURL": "/supplemental_content/2349/",
-      "name_headline": null,
-      "description_headline": null,
-      "category": {
-        "id": 13,
-        "name": "Technical Assistance for States",
-        "description": "",
-        "order": 200,
-        "show_if_empty": false,
-        "parent": {
-          "id": 11,
-          "name": "Implementation Resources",
-          "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
-          "order": 500,
-          "show_if_empty": true
-        },
-        "type": "subcategory"
-      },
-      "locations": [
-        {
-          "id": 671,
-          "title": 42,
-          "part": 430,
-          "section_id": 25,
-          "parent": 960,
-          "type": "section"
-        },
-        {
-          "id": 789,
-          "title": 42,
-          "part": 431,
-          "section_id": 54,
-          "parent": 985,
-          "type": "section"
-        },
-        {
-          "id": 685,
-          "title": 42,
-          "part": 435,
-          "section_id": 219,
-          "parent": 875,
-          "type": "section"
-        },
-        {
-          "id": 694,
-          "title": 42,
-          "part": 436,
-          "section_id": 219,
-          "parent": 1060,
-          "type": "section"
-        },
-        {
-          "id": 713,
-          "title": 42,
-          "part": 440,
-          "section_id": 1,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 73,
-          "title": 42,
-          "part": 440,
-          "section_id": 180,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 18,
-          "title": 42,
-          "part": 440,
-          "section_id": 182,
-          "parent": 1124,
-          "type": "section"
-        },
-        {
-          "id": 392,
-          "title": 42,
-          "part": 441,
-          "section_id": 301,
-          "parent": 1149,
-          "type": "section"
-        },
-        {
-          "id": 425,
-          "title": 42,
-          "part": 441,
-          "section_id": 302,
-          "parent": 1149,
-          "type": "section"
-        },
-        {
-          "id": 674,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "C",
-          "type": "subpart"
-        },
-        {
-          "id": 435,
-          "title": 42,
-          "part": 441,
-          "section_id": 530,
-          "parent": 1174,
-          "type": "section"
-        },
-        {
-          "id": 711,
-          "title": 42,
-          "part": 441,
-          "section_id": 700,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 454,
-          "title": 42,
-          "part": 441,
-          "section_id": 705,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 397,
-          "title": 42,
-          "part": 441,
-          "section_id": 710,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 398,
-          "title": 42,
-          "part": 441,
-          "section_id": 715,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 441,
-          "title": 42,
-          "part": 441,
-          "section_id": 720,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 442,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "B",
-          "type": "subpart"
-        },
-        {
-          "id": 445,
-          "title": 42,
-          "part": 441,
-          "section_id": 730,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 791,
-          "title": 42,
-          "part": 441,
-          "section_id": 735,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 455,
-          "title": 42,
-          "part": 441,
-          "subpart_id": "C",
-          "type": "subpart"
-        },
-        {
-          "id": 456,
-          "title": 42,
-          "part": 441,
-          "section_id": 745,
-          "parent": 1177,
-          "type": "section"
-        },
-        {
-          "id": 467,
-          "title": 42,
-          "part": 447,
-          "section_id": 10,
-          "parent": 1195,
-          "type": "section"
-        }
-      ],
-      "type": "supplemental_content"
-    }
-  ]
+    ]
 }
