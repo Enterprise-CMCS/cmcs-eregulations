@@ -1,11 +1,18 @@
 describe("Resources page", () => {
-    describe("Empty State", () => {
-        it("renders correctly", () => {
-            cy.intercept("**/resources/**", {
+    describe("Loading and Empty States", () => {
+        beforeEach(() => {
+            cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+            });
+        });
+
+        it("render correctly", () => {
+            cy.intercept("**/resources/?**", {
                 fixture: "no-resources-results.json",
                 delayMs: 1000,
             }).as("resources");
-            cy.clearIndexedDB();
+            cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.get(".results-count > span").should(
                 "contain.text",
@@ -17,50 +24,49 @@ describe("Resources page", () => {
                 "contain.text",
                 "0 results in Resources"
             );
+            cy.get(".empty-state-container").should("exist");
         });
     });
 
     describe("Mock Results", () => {
         beforeEach(() => {
             cy.clearIndexedDB();
-            cy.intercept("/**", (req) => {
-                req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-            });
-            cy.intercept("**/resources/?locations=42**", {
+            //cy.intercept("/**", (req) => {
+            //req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+            //});
+            cy.intercept("**/resources/?locations=42**"/*, {
                 fixture: "resources.json",
-            }).as("resources");
-            cy.intercept("*v2/title/42/existing", {
-                fixture: "42-existing.json",
-            }).as("existing");
-            cy.intercept("*v3/toc", { fixture: "toc.json" }).as("toc");
+            }*/).as("resources");
+            //cy.intercept("*v2/title/42/existing", {
+            //fixture: "42-existing.json",
+            //}).as("existing");
+            //cy.intercept("*v3/toc", { fixture: "toc.json" }).as("toc");
         });
 
         it("renders correctly", () => {
             // THis is to prove the concept of fetching the resources not from our API, but from a cypress fixture
-            cy.intercept("**/resources/?locations=42**", {
-                fixture: "resources.json",
-            }).as("resources");
-            cy.intercept("*v2/title/42/existing", {
-                fixture: "42-existing.json",
-            }).as("existing");
-            cy.intercept("*v3/toc", { fixture: "toc.json" }).as("toc");
+            //cy.intercept("*v3/toc", { fixture: "toc.json" }).as("toc");
             cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
-            cy.get(".results-count > span").contains(
-                "1 - 100 of 2101 results in Resources"
-            );
+            cy.wait("@resources").then((interception) => {
+                count = interception.response.body.count;
+                cy.get(".results-count > span").contains(
+                    `1 - 100 of ${count} results in Resources`
+                );
+                cy.get(".empty-state-container").should("not.exist");
+            });
         });
 
-        it.skip("Selects parts correctly", () => {
-            cy.clearLocalStorage();
+        it("Selects parts correctly", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
-            // Select Title 42 part 433
-            cy.get("#select-parts > .v-btn__content").click();
-            cy.get('[data-value="433"]').click();
-            cy.url().should("include", "part=433");
+            // Select Title 42 part 400
+            cy.get("button#select-parts").should("not.have.attr", "disabled");
+            cy.get("button#select-parts").click({ force: true });
+            cy.get('[data-value="400"]').click();
+            cy.url().should("include", "part=400");
             cy.url().should("include", "title=42");
         });
 
