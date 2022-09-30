@@ -33,7 +33,8 @@ from regcore.views import SettingsAuthentication
     responses=PolymorphicProxySerializer(
         component_name="AbstractResourcePolymorphicSerializer",
         serializers=[SupplementalContentSerializer, FederalRegisterDocumentSerializer],
-        resource_type_field_name="type",
+        resource_type_field_name=None,
+        many=True,
     ),
 )
 class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):

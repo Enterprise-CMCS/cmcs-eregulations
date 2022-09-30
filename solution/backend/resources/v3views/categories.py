@@ -28,6 +28,7 @@ from resources.v3serializers.categories import (
         component_name="AbstractCategoryPolymorphicSerializer",
         serializers=[CategorySerializer, SubCategorySerializer],
         resource_type_field_name=None,
+        many=True,
     ),
 )
 class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):

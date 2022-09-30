@@ -28,7 +28,8 @@ from regcore.views import SettingsAuthentication
     responses=PolymorphicProxySerializer(
         component_name="AbstractLocationPolymorphicSerializer",
         serializers=[SectionSerializer, SubpartSerializer],
-        resource_type_field_name="type",
+        resource_type_field_name=None,
+        many=True,
     ),
 )
 class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
