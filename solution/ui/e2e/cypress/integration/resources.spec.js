@@ -1,6 +1,7 @@
 describe("Resources page", () => {
     describe("Empty State", () => {
         it("renders correctly", () => {
+            cy.clearIndexedDB()
             cy.visit("/resources");
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
