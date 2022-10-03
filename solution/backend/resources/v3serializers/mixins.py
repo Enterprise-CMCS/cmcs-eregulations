@@ -2,21 +2,6 @@ from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 
 
-# Allows details of specified fields to be shown or hidden
-# Must specify "optional_details" as map of strings to 4-tuples:
-#    { "field_name": ("query_param", "default, true or false as a string", serializer class, many=True or False) }
-class OptionalFieldDetailsMixin:
-    def get_fields(self):
-        fields = super().get_fields()
-        for i in self.optional_details.items():
-            fields[i[0]] = (
-                i[1][2](many=i[1][3])
-                if self.context.get(i[1][0], i[1][1]).lower() == "true"
-                else serializers.PrimaryKeyRelatedField(many=i[1][3], read_only=True)
-            )
-        return fields
-
-
 # Retrieves automatically generated search headlines
 @extend_schema_field(OpenApiTypes.STR)
 class HeadlineField(serializers.Field):

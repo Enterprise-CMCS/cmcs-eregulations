@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.urls import reverse
+from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerializer
 
 from resources.models import (
     SupplementalContent,
@@ -11,9 +12,9 @@ from resources.models import (
     Section,
 )
 
-from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer
-from .categories import AbstractCategoryPolymorphicSerializer
-from .mixins import HeadlineField, PolymorphicSerializer, OptionalFieldDetailsMixin
+from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer, ManyMetaLocationSerializer
+from .categories import AbstractCategoryPolymorphicSerializer, CategorySerializer, SubCategorySerializer, MetaCategorySerializer
+from .mixins import HeadlineField, PolymorphicSerializer
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
@@ -24,16 +25,26 @@ class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
         }
 
 
-class AbstractResourceSerializer(OptionalFieldDetailsMixin, serializers.Serializer):
+class AbstractResourceSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
 
-    optional_details = {
-        "category": ("category_details", "true", AbstractCategoryPolymorphicSerializer, False),
-        "locations": ("location_details", "true", AbstractLocationPolymorphicSerializer, True),
-    }
+    category = serializers.SerializerMethodField()
+    locations = serializers.SerializerMethodField()
+
+    @extend_schema_field(MetaCategorySerializer)
+    def get_category(self, obj):
+        if self.context.get("category_details", "true").lower() == "true":
+            return AbstractCategoryPolymorphicSerializer(obj.category).data
+        return serializers.PrimaryKeyRelatedField(read_only=True)
+
+    @extend_schema_field(ManyMetaLocationSerializer)
+    def get_locations(self, obj):
+        if self.context.get("location_details", "true").lower() == "true":
+            return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
+        return serializers.PrimaryKeyRelatedField(read_only=True)
 
 
 class DateFieldSerializer(serializers.Serializer):

@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from drf_spectacular.utils import extend_schema_field, OpenApiTypes
+from drf_spectacular.utils import extend_schema_field, OpenApiTypes, PolymorphicProxySerializer
 
 from resources.models import Category, SubCategory
-from .mixins import PolymorphicSerializer, OptionalFieldDetailsMixin
+from .mixins import PolymorphicSerializer
 
 
 class AbstractCategoryPolymorphicSerializer(PolymorphicSerializer):
@@ -29,10 +29,21 @@ class CategorySerializer(serializers.Serializer):
             return False
 
 
-class SubCategorySerializer(OptionalFieldDetailsMixin, CategorySerializer):
-    optional_details = {
-        "parent": ("parent_details", "true", CategorySerializer, False),
-    }
+class SubCategorySerializer(CategorySerializer):
+    parent = serializers.SerializerMethodField()
+
+    @extend_schema_field(CategorySerializer)
+    def get_parent(self, obj):
+        if self.context.get("parent_details", "true").lower() == "true":
+            return CategorySerializer(obj.category).data
+        return serializers.PrimaryKeyRelatedField(read_only=True)
+
+
+MetaCategorySerializer = PolymorphicProxySerializer(
+    component_name="MetaCategorySerializer",
+    serializers=[CategorySerializer, SubCategorySerializer],
+    resource_type_field_name="type",
+)
 
 
 class CategoryTreeSerializer(CategorySerializer):

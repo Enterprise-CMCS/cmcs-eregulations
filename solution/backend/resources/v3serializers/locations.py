@@ -31,15 +31,18 @@ class SectionSerializer(AbstractLocationSerializer):
         model = Section
 
 
+MetaLocationSerializer, ManyMetaLocationSerializer = [PolymorphicProxySerializer(
+    component_name="MetaLocationSerializer",
+    serializers=[SubpartSerializer, SectionSerializer],
+    resource_type_field_name="type",
+    many=i,
+) for i in [False, True]]
+
+
 class FullSectionSerializer(SectionSerializer):
     parent = serializers.SerializerMethodField()
 
-    @extend_schema_field(PolymorphicProxySerializer(
-        component_name="MetaSectionParentSerializer",
-        serializers=[SubpartSerializer, SectionSerializer],
-        resource_type_field_name="type",
-        many=False,
-    ))
+    @extend_schema_field(MetaLocationSerializer)
     def get_parent(self, obj):
         return AbstractLocationPolymorphicSerializer(obj.parent).data
 
@@ -47,12 +50,7 @@ class FullSectionSerializer(SectionSerializer):
 class FullSubpartSerializer(SubpartSerializer):
     children = serializers.SerializerMethodField()
 
-    @extend_schema_field(PolymorphicProxySerializer(
-        component_name="MetaSubpartChildrenSerializer",
-        serializers=[SectionSerializer, SubpartSerializer],
-        resource_type_field_name="type",
-        many=True,
-    ))
+    @extend_schema_field(ManyMetaLocationSerializer)
     def get_children(self, obj):
         return AbstractLocationPolymorphicSerializer(obj.children, many=True).data
 
