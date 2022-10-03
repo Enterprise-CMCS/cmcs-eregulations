@@ -4,13 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-configure_aws_github: &configure_aws_github
-  - name: Configure AWS credentials for GitHub Actions
-    uses: aws-actions/configure-aws-credentials@v1
-    with:
-      role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-      aws-region: ${{ env.AWS_DEFAULT_REGION }}
-
 permissions:
   id-token: write
   contents: read
@@ -69,7 +62,11 @@ jobs:
         env:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
-        <<: *configure_aws_github
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/static-assets
           npm install serverless -g
@@ -114,7 +111,11 @@ jobs:
         env:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
-        <<: *configure_aws_github
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/backend
           npm install serverless -g
@@ -160,7 +161,11 @@ jobs:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
           VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-        <<: *configure_aws_github
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/ui/prototype
           npm ci
@@ -174,7 +179,11 @@ jobs:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
           VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-        <<: *configure_aws_github
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/ui/regulations
           npm ci
@@ -190,7 +199,11 @@ jobs:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
           VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-        <<: *configure_aws_github
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/ui/prototype
           npm install serverless -g
@@ -243,7 +256,11 @@ jobs:
         env:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME}}
           PR: ${{ steps.findPr.outputs.pr }}
-        <<: *configure_aws_github
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/static-assets
           npm install serverless -g
@@ -294,7 +311,11 @@ jobs:
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
-        <<: *configure_aws_github
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/parser
           npm install serverless -g
