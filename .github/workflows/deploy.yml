@@ -6,6 +6,17 @@ on:
     branches:
       - main
 
+aws: &configure_aws_github
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+    aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   deploy:
     strategy:
@@ -46,8 +57,9 @@ jobs:
           popd
       - name: deploy static assets
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd solution/static-assets
           npm install serverless -g
@@ -57,8 +69,9 @@ jobs:
       - name: deploy regulations site server
         id: deploy-regulations-site-server
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd solution/backend
           npm install serverless -g
@@ -80,9 +93,10 @@ jobs:
       - name: build-vue-assets
         id: build-vue-assets
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           VITE_ENV: ${{ matrix.environment }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd solution
           make regulations
@@ -96,8 +110,9 @@ jobs:
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd solution/parser
           npm install serverless -g
@@ -108,8 +123,9 @@ jobs:
       - name: deploy and run FR parser
         id: deploy-run-fr-parser
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd solution/parser
           npm install serverless -g
@@ -121,9 +137,10 @@ jobs:
       - name: build static assets and deploy prototype
         id: build-static-assets-and-deploy-prototype
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           VUE_APP_API_URL: ${{ steps.deploy-regulations-site-server.outputs.url }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd solution/ui/prototype
           npm ci

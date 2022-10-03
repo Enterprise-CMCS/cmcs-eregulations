@@ -3,6 +3,17 @@ name: LoadRegulations
 on:
   workflow_dispatch:
 
+configure_aws_github: &configure_aws_github
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+    aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   load:
     strategy:
@@ -23,8 +34,9 @@ jobs:
       - name: Run eCFR parser
         id: run-ecfr-parser
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd serverless
           npm install serverless -g

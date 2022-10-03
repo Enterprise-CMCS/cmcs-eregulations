@@ -5,6 +5,17 @@ on:
   pull_request:
     types: [ closed ]
 
+configure_aws_github: &configure_aws_github
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+    aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   remove:
     environment:
@@ -27,9 +38,10 @@ jobs:
       # remove the prototype site
       - name: remove experimental regulations site server
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ github.event.number }}
+      - name: Configure AWS credentials for GitHub Actions
+        <<: *configure_aws_github
         run: |
           pushd solution/ui/prototype
           npm install serverless -g
