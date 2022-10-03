@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerializer
 
 from resources.models import Section, Subpart
 from .mixins import PolymorphicSerializer
@@ -31,11 +32,29 @@ class SectionSerializer(AbstractLocationSerializer):
 
 
 class FullSectionSerializer(SectionSerializer):
-    parent = AbstractLocationPolymorphicSerializer()
+    parent = serializers.SerializerMethodField()
+
+    @extend_schema_field(PolymorphicProxySerializer(
+        component_name="MetaSectionParentSerializer",
+        serializers=[SubpartSerializer, SectionSerializer],
+        resource_type_field_name="type",
+        many=False,
+    ))
+    def get_parent(self, obj):
+        return AbstractLocationPolymorphicSerializer(obj.parent).data
 
 
 class FullSubpartSerializer(SubpartSerializer):
-    children = AbstractLocationPolymorphicSerializer(many=True)
+    children = serializers.SerializerMethodField()
+
+    @extend_schema_field(PolymorphicProxySerializer(
+        component_name="MetaSubpartChildrenSerializer",
+        serializers=[SectionSerializer, SubpartSerializer],
+        resource_type_field_name="type",
+        many=True,
+    ))
+    def get_children(self, obj):
+        return AbstractLocationPolymorphicSerializer(obj.children, many=True).data
 
 
 class SectionCreateSerializer(serializers.ModelSerializer):

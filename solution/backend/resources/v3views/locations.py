@@ -26,7 +26,7 @@ from regcore.views import SettingsAuthentication
     description="Retrieve a list of all resource locations, filterable by title and part. Results are paginated by default.",
     parameters=LocationExplorerViewSetMixin.PARAMETERS,
     responses=PolymorphicProxySerializer(
-        component_name="AbstractLocationPolymorphicSerializer",
+        component_name="MetaLocationSerializer",
         serializers=[SectionSerializer, SubpartSerializer],
         resource_type_field_name=None,
         many=True,
