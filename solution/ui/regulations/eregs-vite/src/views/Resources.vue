@@ -73,6 +73,7 @@
                         :sortMethod="sortMethod"
                         :disabledSortOptions="disabledSortOptions"
                         :sortDisabled="sortDisabled"
+                        :partDict="partDict"
                         @sort="setSortMethod"
                     />
                 </div>
@@ -100,7 +101,7 @@ import {
     getPartTOC,
     getSectionsForPart,
     getSubpartTOC,
-    getSynonyms
+    getSynonyms,
 } from "../utilities/api";
 
 export default {
@@ -320,7 +321,7 @@ export default {
             });
         },
         async retrieveSynonyms(query){
-            if(query.charAt(0) == '"' && query.charAt(query.length-1) == '"'){
+            if(query && query.charAt(0) == '"' && query.charAt(query.length-1) == '"'){
                 query = query.slice(1,-1)
             }
             let synonyms = await getSynonyms(query)
