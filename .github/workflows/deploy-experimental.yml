@@ -5,10 +5,11 @@ on:
     types: [opened, synchronize, reopened]
 
 configure_aws_github: &configure_aws_github
-  uses: aws-actions/configure-aws-credentials@v1
-  with:
-    role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-    aws-region: ${{ env.AWS_DEFAULT_REGION }}
+  - name: Configure AWS credentials for GitHub Actions
+    uses: aws-actions/configure-aws-credentials@v1
+    with:
+      role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+      aws-region: ${{ env.AWS_DEFAULT_REGION }}
 
 permissions:
   id-token: write
@@ -68,7 +69,6 @@ jobs:
         env:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
-      - name: Configure AWS credentials for GitHub Actions
         <<: *configure_aws_github
         run: |
           pushd solution/static-assets
@@ -114,7 +114,6 @@ jobs:
         env:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
-      - name: Configure AWS credentials for GitHub Actions
         <<: *configure_aws_github
         run: |
           pushd solution/backend
@@ -161,7 +160,6 @@ jobs:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
           VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-      - name: Configure AWS credentials for GitHub Actions
         <<: *configure_aws_github
         run: |
           pushd solution/ui/prototype
@@ -176,7 +174,6 @@ jobs:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
           VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-      - name: Configure AWS credentials for GitHub Actions
         <<: *configure_aws_github
         run: |
           pushd solution/ui/regulations
@@ -193,7 +190,6 @@ jobs:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
           VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-      - name: Configure AWS credentials for GitHub Actions
         <<: *configure_aws_github
         run: |
           pushd solution/ui/prototype
@@ -247,7 +243,6 @@ jobs:
         env:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME}}
           PR: ${{ steps.findPr.outputs.pr }}
-      - name: Configure AWS credentials for GitHub Actions
         <<: *configure_aws_github
         run: |
           pushd solution/static-assets
@@ -299,7 +294,6 @@ jobs:
         env:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ steps.findPr.outputs.pr }}
-      - name: Configure AWS credentials for GitHub Actions
         <<: *configure_aws_github
         run: |
           pushd solution/parser
