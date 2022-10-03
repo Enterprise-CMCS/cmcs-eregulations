@@ -14,6 +14,7 @@ describe("Resources page", () => {
             }).as("resources");
             cy.viewport("macbook-15");
             cy.visit("/resources");
+            cy.injectAxe();
             cy.get(".results-count > span").should(
                 "contain.text",
                 "Loading..."
@@ -25,6 +26,7 @@ describe("Resources page", () => {
                 "0 results in Resources"
             );
             cy.get(".empty-state-container").should("exist");
+            cy.checkAccessibility();
         });
     });
 
@@ -48,6 +50,7 @@ describe("Resources page", () => {
             //cy.intercept("*v3/toc", { fixture: "toc.json" }).as("toc");
             cy.viewport("macbook-15");
             cy.visit("/resources");
+            cy.injectAxe();
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
             cy.wait("@resources").then((interception) => {
@@ -56,6 +59,7 @@ describe("Resources page", () => {
                     `1 - 100 of ${count} results in Resources`
                 );
                 cy.get(".empty-state-container").should("not.exist");
+                cy.checkAccessibility();
             });
         });
 
