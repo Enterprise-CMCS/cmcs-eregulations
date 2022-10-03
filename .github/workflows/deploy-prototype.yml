@@ -2,12 +2,6 @@ name: "Deploy Prototype"
 
 on: [fork]
 
-configure_aws_github: &configure_aws_github
-  uses: aws-actions/configure-aws-credentials@v1
-  with:
-    role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-    aws-region: ${{ env.AWS_DEFAULT_REGION }}
-
 permissions:
   id-token: write
   contents: read
@@ -45,7 +39,10 @@ jobs:
           AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ steps.findPr.outputs.pr }}
       - name: Configure AWS credentials for GitHub Actions
-        <<: *configure_aws_github
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/ui/prototype
           npm ci
