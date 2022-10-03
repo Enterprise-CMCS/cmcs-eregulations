@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 
 
 # Allows details of specified fields to be shown or hidden
@@ -17,6 +18,7 @@ class OptionalFieldDetailsMixin:
 
 
 # Retrieves automatically generated search headlines
+@extend_schema_field(OpenApiTypes.STR)
 class HeadlineField(serializers.Field):
     def __init__(self, model_name, **kwargs):
         self.model_name = model_name

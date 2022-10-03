@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 
 from resources.models import Category, SubCategory
 from .mixins import PolymorphicSerializer, OptionalFieldDetailsMixin
@@ -20,6 +21,7 @@ class CategorySerializer(serializers.Serializer):
     show_if_empty = serializers.BooleanField()
     is_fr_doc_category = serializers.SerializerMethodField()
 
+    @extend_schema_field(OpenApiTypes.BOOL)
     def get_is_fr_doc_category(self, obj):
         try:
             return obj.is_fr_doc_category
