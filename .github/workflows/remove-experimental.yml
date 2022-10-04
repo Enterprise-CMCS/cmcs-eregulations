@@ -37,8 +37,8 @@ jobs:
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secret.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ secret.AWS_DEFAULT_REGION }}
       # Remove parsers
       - name: remove parsers
         env:
@@ -53,13 +53,7 @@ jobs:
       # remove the regulations site
       - name: remove experimental regulations site server
         env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ github.event.number }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/backend
           npm install serverless -g
@@ -70,13 +64,7 @@ jobs:
       # Remove the static assets
       - name: remove static assets
         env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           PR: ${{ github.event.number }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/static-assets
           npm install serverless -g

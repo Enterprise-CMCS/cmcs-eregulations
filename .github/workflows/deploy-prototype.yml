@@ -35,8 +35,8 @@ jobs:
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+          role-to-assume: ${{ secret.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ secret.AWS_DEFAULT_REGION }}
       # build the static assets for the website
       - name: build static assets and deploy
         id: build-static-assets-and-deploy
