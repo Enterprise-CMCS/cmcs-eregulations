@@ -2,11 +2,6 @@ name: "Deploy Prototype"
 
 on: [fork]
 
-permissions:
-  id-token: write
-  contents: read
-  actions: read
-
 jobs:
   deploy:
     environment:
