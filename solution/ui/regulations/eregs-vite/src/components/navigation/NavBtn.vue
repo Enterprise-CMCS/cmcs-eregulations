@@ -1,10 +1,10 @@
 <template>
-    <button class="direction-btn" :class="directionClass" :disabled="isDisabled">
+    <div class="direction-btn" :class="directionClass" :disabled="isDisabled">
         <span class="label">{{ label }}</span>
         <span class="icon">
             <i class="fa" :class="chevronClass"></i>
         </span>
-    </button>
+    </div>
 </template>
 
 <script>
