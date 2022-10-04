@@ -89,14 +89,12 @@ describe("Resources page", () => {
             cy.visit(
                 "/resources?title=42&part=433&subpart=433-B&section=433-11"
             );
-            cy.injectAxe();
             cy.url().should("include", "433-11");
             cy.get(".v-chip__content").contains("§ 433.11");
             cy.go("back");
             cy.get(".v-chip__content").contains("§ 433.11").should("not.exist");
             // Just check on a random chip again
             cy.get(".v-chip__content").contains("§ 433.53");
-            cy.checkAccessibility();
         });
 
         it.skip("Selects categories correctly", () => {
