@@ -4,6 +4,11 @@ on: [fork]
 
 jobs:
   deploy:
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+
     environment:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
