@@ -59,7 +59,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-region: 'aws-region: us-east-1'
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
@@ -107,7 +107,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-region: 'aws-region: us-east-1'
       # Deploy the regulation site to AWS
       - name: deploy regulations site server
         id: deploy-regulations-site-server
@@ -156,7 +156,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-region: 'aws-region: us-east-1'
       # build the static assets for the website
       - name: build vue assets
         id: build-vue-assets
@@ -241,7 +241,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-region: 'aws-region: us-east-1'
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
@@ -283,7 +283,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-region: 'aws-region: us-east-1'
       # deploy and run eCFR parser
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
