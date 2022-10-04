@@ -1,21 +1,20 @@
 <template>
-    <li class="page-number-li">
+    <li
+        v-if="currentPage != number"
+        class="page-number-li"
+        :class="numberClasses"
+    >
         <router-link
-            v-if="currentPage != number"
             :to="{
                 name: view,
                 query: { ...$route.query, page: number },
             }"
         >
-            <span class="page-number" :class="numberClasses">
-                {{ number }}
-            </span>
+            {{ number }}
         </router-link>
-        <span v-else class="current-page">
-            <span class="page-number" :class="numberClasses">
-                {{ number }}
-            </span>
-        </span>
+    </li>
+    <li v-else class="page-number-li current-page" :class="numberClasses">
+        {{ number }}
     </li>
 </template>
 
@@ -89,12 +88,10 @@ li.page-number-li {
         }
     }
 
-    .page-number {
-        min-width: 44px;
+    min-width: 44px;
 
-        &.selected {
-            font-weight: bold;
-        }
+    &.selected {
+        font-weight: bold;
     }
 }
 </style>
