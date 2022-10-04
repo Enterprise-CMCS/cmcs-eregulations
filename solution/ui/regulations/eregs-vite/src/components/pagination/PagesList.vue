@@ -105,12 +105,6 @@ export default {
             return this.allMiddlePages;
         },
     },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
 };
 </script>
 

@@ -30,36 +30,10 @@
 export default {
     name: "ResourcesNav",
 
-    components: {},
-
     props: {
         aboutUrl: {
             type: String,
             default: "/about/"
-        },
-    },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    computed: {},
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
         },
     },
 };

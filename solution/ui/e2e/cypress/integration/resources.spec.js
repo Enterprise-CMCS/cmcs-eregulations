@@ -39,15 +39,9 @@ describe("Resources page", () => {
             cy.intercept("**/resources/?locations=42**", /*{
                 fixture: "resources.json",
             }*/).as("resources");
-            //cy.intercept("*v2/title/42/existing", {
-            //fixture: "42-existing.json",
-            //}).as("existing");
-            //cy.intercept("*v3/toc", { fixture: "toc.json" }).as("toc");
         });
 
         it("renders correctly", () => {
-            // THis is to prove the concept of fetching the resources not from our API, but from a cypress fixture
-            //cy.intercept("*v3/toc", { fixture: "toc.json" }).as("toc");
             cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.injectAxe();
@@ -66,36 +60,43 @@ describe("Resources page", () => {
         it("Selects parts correctly", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
+            cy.injectAxe();
+            cy.get("h1").contains("Resources");
             // Select Title 42 part 400
             cy.get("button#select-parts").should("not.have.attr", "disabled");
             cy.get("button#select-parts").click({ force: true });
+            cy.checkAccessibility();
             cy.get('[data-value="400"]').click();
             cy.url().should("include", "part=400");
             cy.url().should("include", "title=42");
         });
 
-        it.skip("Chips follow the URL values correctly", () => {
+        it("Chips follow the URL values correctly", () => {
             const sectionString =
                 "433-50,433-51,433-52,433-53,433-54,433-55,433-56,433-57,433-58-433,433-66,433-67,433-68,433-70,433-72,433-74";
             cy.viewport("macbook-15");
             cy.visit(
                 `/resources?title=42&part=433&subpart=433-B&section=${sectionString}`
             );
+            cy.injectAxe();
             sectionString.split(",").forEach((ss) => {
                 cy.get(".v-chip__content").contains(
                     `§ ${ss.replace("-", ".")}`
                 );
             });
+            cy.checkAccessibility();
             // Select an additional section
             cy.visit(
                 "/resources?title=42&part=433&subpart=433-B&section=433-11"
             );
+            cy.injectAxe();
             cy.url().should("include", "433-11");
             cy.get(".v-chip__content").contains("§ 433.11");
             cy.go("back");
             cy.get(".v-chip__content").contains("§ 433.11").should("not.exist");
             // Just check on a random chip again
             cy.get(".v-chip__content").contains("§ 433.53");
+            cy.checkAccessibility();
         });
 
         it.skip("Selects categories correctly", () => {
