@@ -114,7 +114,6 @@ jobs:
         if: success() && steps.findPr.outputs.number
         env:
           PR: ${{ steps.findPr.outputs.pr }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/backend
           npm install serverless -g
