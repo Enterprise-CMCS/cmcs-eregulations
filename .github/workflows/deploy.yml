@@ -49,14 +49,14 @@ jobs:
           python manage.py collectstatic --noinput
           cd ..
           popd
-      - name: deploy static assets
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - name: deploy static assets
+        env:
+          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
         run: |
           pushd solution/static-assets
           npm install serverless -g
