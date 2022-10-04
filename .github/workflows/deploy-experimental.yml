@@ -59,7 +59,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: 'us-east-1'
+          aws-region: us-east-1
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
@@ -107,7 +107,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: 'us-east-1'
+          aws-region: us-east-1
       # Deploy the regulation site to AWS
       - name: deploy regulations site server
         id: deploy-regulations-site-server
@@ -156,7 +156,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: 'us-east-1'
+          aws-region: us-east-1
       # build the static assets for the website
       - name: build vue assets
         id: build-vue-assets
@@ -241,7 +241,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: 'us-east-1'
+          aws-region: us-east-1
       # deploy static assets to AWS
       - name: deploy static assets
         if: success() && steps.findPr.outputs.number
@@ -283,7 +283,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: 'us-east-1'
+          aws-region: us-east-1
       # deploy and run eCFR parser
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
@@ -309,7 +309,6 @@ jobs:
           serverless deploy --stage dev${PR} --config ./serverless-fr.yml
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev${PR} --config ./serverless-fr.yml
           popd
-
   notify:
     runs-on: ubuntu-latest
     needs: [deploy-go, deploy-django, deploy-prototype]
@@ -337,7 +336,6 @@ jobs:
             [2]: ${{ env.prototype_url }}
             [3]: ${{ env.prototype_url }}/storybook/index.html
           reactions: '+1'
-
   test-cypress:
     needs: [deploy-go, deploy-django, build-and-deploy-vue]
     runs-on: ubuntu-latest
