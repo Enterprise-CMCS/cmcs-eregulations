@@ -22,14 +22,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: false
-      - name: add supplemental content to database
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - name: add supplemental content to database
         run: |
           pushd serverless
           npm install serverless -g

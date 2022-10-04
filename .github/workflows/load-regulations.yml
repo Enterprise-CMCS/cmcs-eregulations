@@ -25,15 +25,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '15.11.0'
-      - name: Run eCFR parser
-        id: run-ecfr-parser
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - name: Run eCFR parser
+        id: run-ecfr-parser
         run: |
           pushd serverless
           npm install serverless -g

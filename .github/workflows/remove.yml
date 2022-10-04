@@ -21,14 +21,12 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
-      - name: remove regualtions site server
-        env:
-         AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
+      - name: remove regualtions site server
         run: |
           pushd serverless/regulations
           npm install serverless -g
@@ -36,13 +34,6 @@ jobs:
           serverless remove
           popd
       - name: remove static assets
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd serverless/static-assets/serverless
           npm install serverless -g
@@ -50,13 +41,6 @@ jobs:
           serverless remove
           popd
       - name: remove eCFR parser
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd serverless
           npm install serverless -g
