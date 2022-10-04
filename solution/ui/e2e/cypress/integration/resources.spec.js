@@ -33,12 +33,12 @@ describe("Resources page", () => {
     describe("Mock Results", () => {
         beforeEach(() => {
             cy.clearIndexedDB();
-            //cy.intercept("/**", (req) => {
-            //req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-            //});
-            cy.intercept("**/resources/?locations=42**", {
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+            });
+            cy.intercept("**/resources/?locations=42**", /*{
                 fixture: "resources.json",
-            }).as("resources");
+            }*/).as("resources");
             //cy.intercept("*v2/title/42/existing", {
             //fixture: "42-existing.json",
             //}).as("existing");
