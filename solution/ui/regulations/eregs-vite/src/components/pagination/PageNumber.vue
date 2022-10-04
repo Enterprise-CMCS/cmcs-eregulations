@@ -64,19 +64,11 @@ export default {
             return this.currentPage == this.number ? "selected" : "unselected";
         },
     },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
 };
 </script>
 
 <style lang="scss" scoped>
 li.page-number-li {
-    display: inline-block;
-    list-style: none;
     width: 44px;
     text-align: center;
 

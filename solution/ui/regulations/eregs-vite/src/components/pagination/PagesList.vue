@@ -6,26 +6,26 @@
                 :current-page="currentPage"
                 :number="firstPage"
             />
-            <span
+            <li
                 v-if="pagesArray.length > 7 && currentPage > 4"
                 class="ellipses"
             >
                 …
-            </span>
+            </li>
             <PageNumber
                 v-for="pageNum in iterablePages"
                 :key="pageNum"
                 :current-page="currentPage"
                 :number="pageNum"
             />
-            <span
+            <li
                 v-if="
                     pagesArray.length > 7 && pagesArray.length > currentPage + 3
                 "
                 class="ellipses"
             >
                 …
-            </span>
+            </li>
             <PageNumber
                 v-if="pagesArray.length > 1"
                 :current-page="currentPage"
@@ -115,6 +115,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+li {
+    list-style: none;
+    display: inline-block;
+
+    &.ellipses {
+        width: 20px;
+        text-align: center;
+    }
+}
+
 .list-container ul.pages {
     padding-left: 0;
 }
