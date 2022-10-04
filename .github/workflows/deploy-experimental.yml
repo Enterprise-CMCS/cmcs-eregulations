@@ -4,6 +4,11 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   deploy-static:
     environment:
@@ -305,6 +310,7 @@ jobs:
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev${PR} --config ./serverless-fr.yml
           popd
   notify:
+    permissions: write-all
     runs-on: ubuntu-latest
     needs: [deploy-go, deploy-django, deploy-prototype]
     steps:
