@@ -55,8 +55,6 @@ jobs:
           role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_DEFAULT_REGION }}
       - name: deploy static assets
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
         run: |
           pushd solution/static-assets
           npm install serverless -g
@@ -65,13 +63,6 @@ jobs:
           popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution/backend
           npm install serverless -g
@@ -94,12 +85,6 @@ jobs:
         id: build-vue-assets
         env:
           VITE_ENV: ${{ matrix.environment }}
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
         run: |
           pushd solution
           make regulations
@@ -112,14 +97,6 @@ jobs:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
-
         run: |
           pushd solution/parser
           npm install serverless -g
@@ -129,14 +106,6 @@ jobs:
           popd
       - name: deploy and run FR parser
         id: deploy-run-fr-parser
-        env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
-
         run: |
           pushd solution/parser
           npm install serverless -g
@@ -148,14 +117,7 @@ jobs:
       - name: build static assets and deploy prototype
         id: build-static-assets-and-deploy-prototype
         env:
-          AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           VUE_APP_API_URL: ${{ steps.deploy-regulations-site-server.outputs.url }}
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_DEFAULT_REGION }}
-
         run: |
           pushd solution/ui/prototype
           npm ci
