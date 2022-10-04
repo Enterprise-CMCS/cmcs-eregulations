@@ -4,11 +4,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-permissions:
-  id-token: write
-  contents: read
-  actions: read
-
 jobs:
   deploy-static:
     environment:

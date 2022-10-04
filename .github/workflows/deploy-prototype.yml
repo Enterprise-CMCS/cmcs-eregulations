@@ -2,13 +2,13 @@ name: "Deploy Prototype"
 
 on: [fork]
 
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   deploy:
-    permissions:
-      id-token: write
-      contents: read
-      actions: read
-
     environment:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
