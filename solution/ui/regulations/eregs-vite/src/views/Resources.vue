@@ -1,7 +1,7 @@
 <template>
     <body class="ds-base">
-        <div id="app" class="resources-view">
-            <ResourcesNav :aboutUrl="aboutUrl">
+        <div id="resourcesApp" class="resources-view">
+            <ResourcesNav :about-url="aboutUrl">
                 <form
                     class="search-resources-form"
                     @submit.prevent="executeSearch"
@@ -786,7 +786,7 @@ export default {
 </script>
 
 <style lang="scss">
-#app.resources-view {
+#resourcesApp.resources-view {
     display: flex;
     flex-direction: column;
     .resources-content-container {
