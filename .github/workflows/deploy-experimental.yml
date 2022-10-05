@@ -311,9 +311,7 @@ jobs:
           popd
   notify:
     permissions:
-      metadata: read
-      contents: none
-      actions: none
+      pull-requests: write
     runs-on: ubuntu-latest
     needs: [deploy-go, deploy-django, deploy-prototype]
     steps:
