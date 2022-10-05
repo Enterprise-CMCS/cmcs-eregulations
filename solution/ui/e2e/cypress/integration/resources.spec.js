@@ -103,11 +103,12 @@ describe("Resources page", () => {
         it("Goes to the second page of results when clicking the Next button", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
-            cy.injectAxe();
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
             cy.wait("@resources");
             cy.get(".current-page.selected").contains("1");
+            cy.get(".pagination-control.left-control > .back-btn")
+                .should("have.class", "disabled");
             cy.get(".pagination-control.right-control")
                 .contains("Next")
                 .click({ force: true });
