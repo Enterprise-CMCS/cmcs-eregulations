@@ -36,9 +36,12 @@ describe("Resources page", () => {
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
-            cy.intercept("**/resources/?locations=42**", {
+            cy.intercept("**/resources/?locations=42**page=1**", {
                 fixture: "resources.json",
             }).as("resources");
+            cy.intercept("**/resources/?locations=42**page=2**", {
+                fixture: "resources-page-2.json",
+            }).as("resources2");
         });
 
         it("renders correctly", () => {
@@ -96,6 +99,29 @@ describe("Resources page", () => {
             // Just check on a random chip again
             cy.get(".v-chip__content").contains("§ 433.53");
         });
+
+        it("Goes to the second page of results when clicking the Next button", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.injectAxe();
+            cy.get("h1").contains("Resources");
+            cy.get("h3").contains("Filter Resources");
+            cy.wait("@resources");
+            cy.get(".current-page.selected").contains("1");
+            cy.get(".pagination-control.right-control")
+                .contains("Next")
+                .click({ force: true });
+            cy.wait("@resources2").then((interception) => {
+                const count = interception.response.body.count;
+                cy.url().should("include", "page=2");
+                cy.get(".results-count > span").contains(
+                    `101 - 200 of ${count} results in Resources`
+                );
+                cy.get(".current-page.selected").contains("2");
+            });
+        });
+        // it("Goes to the second page of results when clicking on page 2")
+        // it("Goes to the second page of results on load when page=2 in the URL")
 
         it.skip("Selects categories correctly", () => {
             cy.viewport("macbook-15");
