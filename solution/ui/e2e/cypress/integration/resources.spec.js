@@ -107,8 +107,10 @@ describe("Resources page", () => {
             cy.get("h3").contains("Filter Resources");
             cy.wait("@resources");
             cy.get(".current-page.selected").contains("1");
-            cy.get(".pagination-control.left-control > .back-btn")
-                .should("have.class", "disabled");
+            cy.get(".pagination-control.left-control > .back-btn").should(
+                "have.class",
+                "disabled"
+            );
             cy.get(".pagination-control.right-control")
                 .contains("Next")
                 .click({ force: true });
@@ -121,8 +123,40 @@ describe("Resources page", () => {
                 cy.get(".current-page.selected").contains("2");
             });
         });
-        // it("Goes to the second page of results when clicking on page 2")
-        // it("Goes to the second page of results on load when page=2 in the URL")
+
+        it("Goes to the second page of results when clicking on page 2", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.get("h1").contains("Resources");
+            cy.get("h3").contains("Filter Resources");
+            cy.wait("@resources");
+            cy.get(".current-page.selected").contains("1");
+            cy.get(".page-number-li.unselected")
+                .contains("2")
+                .click({ force: true });
+            cy.wait("@resources2").then((interception) => {
+                const count = interception.response.body.count;
+                cy.url().should("include", "page=2");
+                cy.get(".results-count > span").contains(
+                    `101 - 200 of ${count} results in Resources`
+                );
+                cy.get(".current-page.selected").contains("2");
+            });
+        });
+
+        it("Goes to the second page of results on load when page=2 in the URL", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources/?page=2");
+            cy.get("h1").contains("Resources");
+            cy.get("h3").contains("Filter Resources");
+            cy.wait("@resources2").then((interception) => {
+                const count = interception.response.body.count;
+                cy.get(".results-count > span").contains(
+                    `101 - 200 of ${count} results in Resources`
+                );
+                cy.get(".current-page.selected").contains("2");
+            });
+        });
 
         it.skip("Selects categories correctly", () => {
             cy.viewport("macbook-15");

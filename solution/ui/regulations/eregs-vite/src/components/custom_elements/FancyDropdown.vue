@@ -1,6 +1,6 @@
 <template>
     <div class="fancy-container" :class="containerClass">
-        <v-menu offset-y max-width="240" max-height="460">
+        <v-menu offset-y max-width="240" max-height="460" :aria-labelledby="listId">
             <template #activator="{ on, attrs }">
                 <label v-if="label" :id="listId" :for="buttonId">{{
                     label
