@@ -311,7 +311,7 @@ jobs:
           popd
   notify:
     permissions:
-      id-token: none
+      metadata: read
       contents: none
       actions: none
     runs-on: ubuntu-latest
