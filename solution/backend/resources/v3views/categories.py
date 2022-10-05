@@ -15,6 +15,7 @@ from resources.v3serializers.categories import (
     SubCategorySerializer,
     AbstractCategoryPolymorphicSerializer,
     CategoryTreeSerializer,
+    MetaCategorySerializer,
 )
 
 
@@ -24,12 +25,7 @@ from resources.v3serializers.categories import (
         OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather "
                               "than just the ID.", bool, False),
     ],
-    responses=PolymorphicProxySerializer(
-        component_name="MetaCategorySerializer",
-        serializers=[CategorySerializer, SubCategorySerializer],
-        resource_type_field_name=None,
-        many=True,
-    ),
+    responses=MetaCategorySerializer.many(True),
 )
 class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False

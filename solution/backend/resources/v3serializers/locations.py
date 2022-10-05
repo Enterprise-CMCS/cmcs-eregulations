@@ -3,6 +3,7 @@ from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerialize
 
 from resources.models import Section, Subpart
 from .mixins import PolymorphicSerializer
+from .utils import ProxySerializerWrapper
 
 
 class AbstractLocationPolymorphicSerializer(PolymorphicSerializer):
@@ -31,18 +32,17 @@ class SectionSerializer(AbstractLocationSerializer):
         model = Section
 
 
-MetaLocationSerializer, ManyMetaLocationSerializer = [PolymorphicProxySerializer(
+MetaLocationSerializer = ProxySerializerWrapper(
     component_name="MetaLocationSerializer",
     serializers=[SubpartSerializer, SectionSerializer],
     resource_type_field_name="type",
-    many=i,
-) for i in [False, True]]
+)
 
 
 class FullSectionSerializer(SectionSerializer):
     parent = serializers.SerializerMethodField()
 
-    @extend_schema_field(MetaLocationSerializer)
+    @extend_schema_field(MetaLocationSerializer.many(False))
     def get_parent(self, obj):
         return AbstractLocationPolymorphicSerializer(obj.parent).data
 
@@ -50,7 +50,7 @@ class FullSectionSerializer(SectionSerializer):
 class FullSubpartSerializer(SubpartSerializer):
     children = serializers.SerializerMethodField()
 
-    @extend_schema_field(ManyMetaLocationSerializer)
+    @extend_schema_field(MetaLocationSerializer.many(True))
     def get_children(self, obj):
         return AbstractLocationPolymorphicSerializer(obj.children, many=True).data
 

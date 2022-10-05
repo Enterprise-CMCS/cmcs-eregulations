@@ -12,7 +12,7 @@ from resources.models import (
     Section,
 )
 
-from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer, ManyMetaLocationSerializer
+from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer, MetaLocationSerializer
 from .categories import AbstractCategoryPolymorphicSerializer, CategorySerializer, SubCategorySerializer, MetaCategorySerializer
 from .mixins import HeadlineField, PolymorphicSerializer
 
@@ -34,13 +34,13 @@ class AbstractResourceSerializer(serializers.Serializer):
     category = serializers.SerializerMethodField()
     locations = serializers.SerializerMethodField()
 
-    @extend_schema_field(MetaCategorySerializer)
+    @extend_schema_field(MetaCategorySerializer.many(False))
     def get_category(self, obj):
         if self.context.get("category_details", "true").lower() == "true":
             return AbstractCategoryPolymorphicSerializer(obj.category).data
         return serializers.PrimaryKeyRelatedField(read_only=True)
 
-    @extend_schema_field(ManyMetaLocationSerializer)
+    @extend_schema_field(MetaLocationSerializer.many(True))
     def get_locations(self, obj):
         if self.context.get("location_details", "true").lower() == "true":
             return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data

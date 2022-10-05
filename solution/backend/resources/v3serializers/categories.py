@@ -3,6 +3,7 @@ from drf_spectacular.utils import extend_schema_field, OpenApiTypes, Polymorphic
 
 from resources.models import Category, SubCategory
 from .mixins import PolymorphicSerializer
+from .utils import ProxySerializerWrapper
 
 
 class AbstractCategoryPolymorphicSerializer(PolymorphicSerializer):
@@ -39,7 +40,7 @@ class SubCategorySerializer(CategorySerializer):
         return serializers.PrimaryKeyRelatedField(read_only=True)
 
 
-MetaCategorySerializer = PolymorphicProxySerializer(
+MetaCategorySerializer = ProxySerializerWrapper(
     component_name="MetaCategorySerializer",
     serializers=[CategorySerializer, SubCategorySerializer],
     resource_type_field_name="type",
