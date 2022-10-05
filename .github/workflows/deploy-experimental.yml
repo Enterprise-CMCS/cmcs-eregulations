@@ -310,7 +310,8 @@ jobs:
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev${PR} --config ./serverless-fr.yml
           popd
   notify:
-    permissions: write-all
+    permissions:
+      actions: write
     runs-on: ubuntu-latest
     needs: [deploy-go, deploy-django, deploy-prototype]
     steps:
