@@ -68,10 +68,24 @@ describe("Resources page", () => {
             // Select Title 42 part 400
             cy.get("button#select-parts").should("not.have.attr", "disabled");
             cy.get("button#select-parts").click({ force: true });
-            cy.checkAccessibility();
-            cy.get('[data-value="400"]').click();
+            cy.get('[data-value="400"]').click({ force: true });
             cy.url().should("include", "part=400");
             cy.url().should("include", "title=42");
+            cy.get("button#select-parts").click({ force: true });
+            cy.checkAccessibility();
+        });
+
+        it("Sorts results correctly", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.injectAxe();
+            cy.get("h1").contains("Resources");
+            cy.get("button#sortButton").should("not.have.attr", "disabled");
+            cy.get("button#sortButton").click({ force: true });
+            cy.get('[data-value="newest"]').click({ force: true });
+            cy.url().should("include", "sort=newest");
+            cy.get("button#sortButton").click({ force: true });
+            cy.checkAccessibility();
         });
 
         it("Selects categories correctly", () => {
@@ -82,7 +96,6 @@ describe("Resources page", () => {
             cy.get("#select-resource-categories").click({
                 force: true,
             });
-            cy.checkAccessibility();
             cy.get(
                 '[data-value="State Medicaid Director Letter (SMDL)"]'
             ).click({ force: true });
@@ -93,6 +106,10 @@ describe("Resources page", () => {
             cy.get(".v-chip__content").contains(
                 "State Medicaid Director Letter (SMDL)"
             );
+            cy.get("#select-resource-categories").click({
+                force: true,
+            });
+            cy.checkAccessibility();
         });
 
         it("Chips follow the URL values correctly", () => {
@@ -102,13 +119,11 @@ describe("Resources page", () => {
             cy.visit(
                 `/resources?title=42&part=433&subpart=433-B&section=${sectionString}`
             );
-            cy.injectAxe();
             sectionString.split(",").forEach((ss) => {
                 cy.get(".v-chip__content").contains(
                     `§ ${ss.replace("-", ".")}`
                 );
             });
-            cy.checkAccessibility();
             // Select an additional section
             cy.visit(
                 "/resources?title=42&part=433&subpart=433-B&section=433-11"
@@ -116,9 +131,11 @@ describe("Resources page", () => {
             cy.url().should("include", "433-11");
             cy.get(".v-chip__content").contains("§ 433.11");
             cy.go("back");
+            cy.injectAxe();
             cy.get(".v-chip__content").contains("§ 433.11").should("not.exist");
             // Just check on a random chip again
             cy.get(".v-chip__content").contains("§ 433.53");
+            cy.checkAccessibility();
         });
 
         it("Goes to the second page of results when clicking the Next button", () => {

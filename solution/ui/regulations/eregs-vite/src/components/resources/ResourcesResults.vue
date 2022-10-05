@@ -19,6 +19,7 @@
                     <FancyDropdown
                         :button-title="sortMethodTitle"
                         :disabled="sortDisabled"
+                        button-id="sortButton"
                         list-id="resultsSortLabel"
                     >
                         <v-list class="sort-options-list">
