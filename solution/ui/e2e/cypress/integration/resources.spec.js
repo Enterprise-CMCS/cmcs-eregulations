@@ -74,6 +74,27 @@ describe("Resources page", () => {
             cy.url().should("include", "title=42");
         });
 
+        it("Selects categories correctly", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.injectAxe();
+            cy.get("button#select-resource-categories").should("not.have.attr", "disabled");
+            cy.get("#select-resource-categories").click({
+                force: true,
+            });
+            cy.checkAccessibility();
+            cy.get(
+                '[data-value="State Medicaid Director Letter (SMDL)"]'
+            ).click({ force: true });
+            cy.url().should(
+                "include",
+                "State%20Medicaid%20Director%20Letter%20%28SMDL%29"
+            );
+            cy.get(".v-chip__content").contains(
+                "State Medicaid Director Letter (SMDL)"
+            );
+        });
+
         it("Chips follow the URL values correctly", () => {
             const sectionString =
                 "433-50,433-51,433-52,433-53,433-54,433-55,433-56,433-57,433-58-433,433-66,433-67,433-68,433-70,433-72,433-74";
@@ -156,22 +177,6 @@ describe("Resources page", () => {
                 );
                 cy.get(".current-page.selected").contains("2");
             });
-        });
-
-        it.skip("Selects categories correctly", () => {
-            cy.viewport("macbook-15");
-            cy.visit("/resources");
-            cy.get("#select-resource-categories > .v-btn__content").click();
-            cy.get(
-                '[data-value="State Medicaid Director Letter (SMDL)"]'
-            ).click();
-            cy.url().should(
-                "include",
-                "State%20Medicaid%20Director%20Letter%20%28SMDL%29"
-            );
-            cy.get(".v-chip__content").contains(
-                "State Medicaid Director Letter (SMDL)"
-            );
         });
     });
 });
