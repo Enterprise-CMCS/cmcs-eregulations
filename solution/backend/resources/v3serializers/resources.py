@@ -20,6 +20,7 @@ from .locations import (
 )
 from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
 from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
+from .utils import ProxySerializerWrapper
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
@@ -97,6 +98,13 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
         docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
         docs[0]["related_docs"] = docs[1:]
         return docs[0]
+
+
+MetaResourceSerializer = ProxySerializerWrapper(
+    component_name="MetaResourceSerializer",
+    serializers=[SupplementalContentSerializer, FederalRegisterDocumentSerializer],
+    resource_type_field_name=None,
+)
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
