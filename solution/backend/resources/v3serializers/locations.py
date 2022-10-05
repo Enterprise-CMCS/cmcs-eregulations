@@ -2,7 +2,7 @@ from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerializer
 
 from resources.models import Section, Subpart
-from .mixins import PolymorphicSerializer
+from .mixins import PolymorphicSerializer, PolymorphicTypeField
 from .utils import ProxySerializerWrapper
 
 
@@ -18,6 +18,7 @@ class AbstractLocationSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.IntegerField()
     part = serializers.IntegerField()
+    type = PolymorphicTypeField()
 
 
 class SubpartSerializer(AbstractLocationSerializer):

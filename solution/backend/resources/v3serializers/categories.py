@@ -2,7 +2,7 @@ from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field, OpenApiTypes, PolymorphicProxySerializer
 
 from resources.models import Category, SubCategory
-from .mixins import PolymorphicSerializer
+from .mixins import PolymorphicSerializer, PolymorphicTypeField
 from .utils import ProxySerializerWrapper
 
 
@@ -21,6 +21,7 @@ class CategorySerializer(serializers.Serializer):
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
     is_fr_doc_category = serializers.SerializerMethodField()
+    type = PolymorphicTypeField()
 
     @extend_schema_field(OpenApiTypes.BOOL)
     def get_is_fr_doc_category(self, obj):

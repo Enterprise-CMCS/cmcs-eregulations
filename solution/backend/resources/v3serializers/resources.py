@@ -14,7 +14,7 @@ from resources.models import (
 
 from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer, MetaLocationSerializer
 from .categories import AbstractCategoryPolymorphicSerializer, CategorySerializer, SubCategorySerializer, MetaCategorySerializer
-from .mixins import HeadlineField, PolymorphicSerializer
+from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
@@ -33,6 +33,8 @@ class AbstractResourceSerializer(serializers.Serializer):
 
     category = serializers.SerializerMethodField()
     locations = serializers.SerializerMethodField()
+
+    type = PolymorphicTypeField()
 
     @extend_schema_field(MetaCategorySerializer.many(False))
     def get_category(self, obj):
