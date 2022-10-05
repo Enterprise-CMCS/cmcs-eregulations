@@ -37,7 +37,7 @@ class SubCategorySerializer(CategorySerializer):
     @extend_schema_field(CategorySerializer)
     def get_parent(self, obj):
         if self.context.get("parent_details", "true").lower() == "true":
-            return CategorySerializer(obj.category).data
+            return CategorySerializer(obj.parent).data
         return serializers.PrimaryKeyRelatedField(read_only=True)
 
 
