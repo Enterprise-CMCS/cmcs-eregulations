@@ -1,5 +1,6 @@
 from drf_spectacular.utils import PolymorphicProxySerializer
 
+
 class ProxySerializerWrapper:
     def __init__(self, component_name, serializers, resource_type_field_name):
         self.many_true, self.many_false = [PolymorphicProxySerializer(

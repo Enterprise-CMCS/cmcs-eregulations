@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerializer
+from drf_spectacular.utils import extend_schema_field
 
 from resources.models import Section, Subpart
 from .mixins import PolymorphicSerializer, PolymorphicTypeField

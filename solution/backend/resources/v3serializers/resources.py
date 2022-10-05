@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.urls import reverse
-from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerializer, OpenApiTypes
+from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 
 from resources.models import (
     SupplementalContent,
@@ -12,8 +12,13 @@ from resources.models import (
     Section,
 )
 
-from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer, MetaLocationSerializer
-from .categories import AbstractCategoryPolymorphicSerializer, CategorySerializer, SubCategorySerializer, MetaCategorySerializer
+from .locations import (
+    SectionCreateSerializer,
+    SectionRangeCreateSerializer,
+    AbstractLocationPolymorphicSerializer,
+    MetaLocationSerializer,
+)
+from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
 from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
 
 

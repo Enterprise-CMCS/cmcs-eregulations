@@ -15,8 +15,6 @@ from resources.v3serializers.locations import (
     AbstractLocationPolymorphicSerializer,
     FullSectionSerializer,
     FullSubpartSerializer,
-    SectionSerializer,
-    SubpartSerializer,
     MetaLocationSerializer,
 )
 
