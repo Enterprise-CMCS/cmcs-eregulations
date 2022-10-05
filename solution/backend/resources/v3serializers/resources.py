@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.urls import reverse
-from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerializer
+from drf_spectacular.utils import extend_schema_field, PolymorphicProxySerializer, OpenApiTypes
 
 from resources.models import (
     SupplementalContent,
@@ -60,6 +60,7 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     url = serializers.CharField()
     internalURL = serializers.SerializerMethodField()
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_internalURL(self, obj):
         return reverse('supplemental_content', kwargs={'id': obj.pk})
 
