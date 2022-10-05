@@ -38,6 +38,8 @@
                             </template>
                         </v-list>
                     </FancyDropdown>
+                    <ResourceExportBtn :partDict="partDict" :categories="categories" :searchQuery="searchQuery"
+                        :supCount="count" />
                 </div>
             </div>
             <div v-if="!isLoading">
@@ -137,6 +139,7 @@ import SupplementalContentObject from "legacy/js/src/components/SupplementalCont
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
+import ResourceExportBtn from "@/components/resources/ResourceExportBtn.vue";
 
 const SORT_METHODS = {
     newest: "Date (Newest)",
@@ -151,6 +154,7 @@ export default {
         FancyDropdown,
         SearchEmptyState,
         SupplementalContentObject,
+        ResourceExportBtn,
     },
 
     filters: {
@@ -242,6 +246,11 @@ export default {
                 return [];
             },
         },
+        partDict: {
+            type: Object,
+            required: false,
+            default:() => {}
+        }
     },
 
     data() {

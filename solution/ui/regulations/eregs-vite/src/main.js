@@ -4,7 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 
 const mountEl = document.querySelector("#vite-app");
-
+Vue.config.devtools = true;
 new Vue({
     vuetify,
     router,
