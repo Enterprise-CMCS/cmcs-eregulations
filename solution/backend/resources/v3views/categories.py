@@ -33,7 +33,7 @@ class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context["parent_details"] = self.request.GET.get("parent_details", "true")
+        context["parent_details"] = self.request.GET.get("parent_details", "true").lower() == "true"
         return context
 
 

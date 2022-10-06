@@ -44,15 +44,15 @@ class AbstractResourceSerializer(serializers.Serializer):
 
     @extend_schema_field(MetaCategorySerializer.many(False))
     def get_category(self, obj):
-        if self.context.get("category_details", "true").lower() == "true":
+        if self.context.get("category_details", True):
             return AbstractCategoryPolymorphicSerializer(obj.category).data
-        return serializers.PrimaryKeyRelatedField(read_only=True)
+        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj.category)
 
     @extend_schema_field(MetaLocationSerializer.many(True))
     def get_locations(self, obj):
-        if self.context.get("location_details", "true").lower() == "true":
+        if self.context.get("location_details", True):
             return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
-        return serializers.PrimaryKeyRelatedField(read_only=True)
+        return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
 
 class DateFieldSerializer(serializers.Serializer):
