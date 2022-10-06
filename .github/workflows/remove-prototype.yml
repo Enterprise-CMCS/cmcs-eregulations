@@ -5,6 +5,11 @@ on:
   pull_request:
     types: [ closed ]
 
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   remove:
     environment:
@@ -24,11 +29,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14.x'
+      # Configure AWS credentials for GitHub Actions
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
       # remove the prototype site
       - name: remove experimental regulations site server
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           PR: ${{ github.event.number }}
         run: |
           pushd solution/ui/prototype
