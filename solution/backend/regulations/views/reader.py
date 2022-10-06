@@ -167,6 +167,8 @@ class SectionReaderView(View):
             "version": kwargs.get("version"),
         }
 
+        query_string = request.GET.get("q", None)
+
         if url_kwargs['version'] is None:
             versions = Part.objects.versions(kwargs.get("title"), url_kwargs['part'])
             if versions is None:
@@ -183,4 +185,7 @@ class SectionReaderView(View):
             pass
 
         url = reverse("reader_view", kwargs=url_kwargs)
-        return HttpResponseRedirect(url)
+
+        redirect_url = url + "?highlight=" + query_string if query_string else url
+
+        return HttpResponseRedirect(redirect_url)

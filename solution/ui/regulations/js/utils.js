@@ -139,11 +139,34 @@ const formatDate = (value) => {
     return formattedDate;
 };
 
+const getQueryParam = (location, key) => {
+    const queryParams = new URL(location).searchParams;
+    return queryParams.get(key);
+};
+
+const highlightText = (hash, highlightText) => {
+    if (hash && highlightText) {
+        const elementId = hash.replace(/^#/, "");
+        const targetedSection = document.getElementById(elementId);
+        if (targetedSection) {
+            const regex = new RegExp(highlightText, "gi");
+            let sectionText = targetedSection.innerHTML;
+            const newText = sectionText.replace(
+                regex,
+                "<mark class='highlight'>$&</mark>"
+            );
+            targetedSection.innerHTML = newText;
+        }
+    }
+};
+
 export {
     delay,
-    parseError,
-    formatDate,
-    formatResourceCategories,
     EventCodes,
     flattenSubpart,
+    formatDate,
+    formatResourceCategories,
+    getQueryParam,
+    highlightText,
+    parseError,
 };

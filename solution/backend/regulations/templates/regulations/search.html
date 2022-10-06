@@ -58,7 +58,7 @@
                                     <!--{{ result.rank }}-->
                                     <div class="results-part">{{ result.part.document.title | title}}</div>
                                     <div class="results-section">
-                                        <a href="{% url 'reader_view' result.part.title result.label.0 result.label.1 result.part.date %}#{{ result.label | join:'-' }}">
+                                        <a href="{% url 'reader_view' result.part.title result.label.0 result.label.1 result.part.date %}?q={{ query }}#{{ result.label | join:'-' }}">
                                             {{ result.parentHeadline | stripSurroundingQuotes | safe }}
                                         </a>
                                     </div>
