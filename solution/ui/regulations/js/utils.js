@@ -144,12 +144,13 @@ const getQueryParam = (location, key) => {
     return queryParams.get(key);
 };
 
-const highlightText = (hash, highlightText) => {
-    if (hash && highlightText) {
-        const elementId = hash.replace(/^#/, "");
+const highlightText = (location, paramKey) => {
+    const textToHighlight = getQueryParam(location, paramKey);
+    if (location.hash && textToHighlight) {
+        const elementId = location.hash.replace(/^#/, "");
         const targetedSection = document.getElementById(elementId);
         if (targetedSection) {
-            const regex = new RegExp(highlightText, "gi");
+            const regex = new RegExp(textToHighlight, "gi");
             let sectionText = targetedSection.innerHTML;
             const newText = sectionText.replace(
                 regex,

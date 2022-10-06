@@ -13,7 +13,7 @@ import RecentChangesContainer from "../dist/RecentChangesContainer";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
-import { getQueryParam, highlightText } from "./utils";
+import { highlightText } from "./utils";
 
 Vue.config.devtools = true;
 
@@ -172,8 +172,7 @@ function main() {
     window.addEventListener("hashchange", activateTOCLink);
     activateTOCLink();
 
-    const textToHighlight = getQueryParam(window.location, "highlight");
-    highlightText(window.location?.hash, textToHighlight);
+    highlightText(window.location, "highlight");
 
     const resetButton = document.getElementById("search-reset");
     if (resetButton) {
