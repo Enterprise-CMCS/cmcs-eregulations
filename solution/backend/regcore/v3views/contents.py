@@ -11,8 +11,8 @@ from .mixins import (
 
 from regcore.serializers.contents import (
     V3PartSerializer,
-    SectionSerializer,
-    SubpartSerializer,
+    SectionContentsSerializer,
+    SubpartContentsSerializer,
 )
 
 
@@ -35,7 +35,7 @@ class PartViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
     parameters=[OpenApiPathParameter("section", "Section number to retrieve.", int)] + NodeFinderMixin.PARAMETERS,
 )
 class SectionViewSet(NodeFinderMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = SectionSerializer
+    serializer_class = SectionContentsSerializer
     parameter = "section"
     node_type = "SECTION"
     label_index = 1
@@ -47,7 +47,7 @@ class SectionViewSet(NodeFinderMixin, viewsets.ReadOnlyModelViewSet):
     parameters=[OpenApiPathParameter("subpart", "Subpart to retrieve, e.g. A.", str)] + NodeFinderMixin.PARAMETERS,
 )
 class SubpartViewSet(NodeFinderMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = SubpartSerializer
+    serializer_class = SubpartContentsSerializer
     parameter = "subpart"
     node_type = "SUBPART"
     label_index = 0

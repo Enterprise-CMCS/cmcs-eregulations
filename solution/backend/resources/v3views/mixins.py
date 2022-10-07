@@ -136,9 +136,9 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context["category_details"] = self.request.GET.get("category_details", "true")
-        context["location_details"] = self.request.GET.get("location_details", "true")
-        context["fr_grouping"] = self.request.GET.get("fr_grouping", "true")
+        context["category_details"] = self.request.GET.get("category_details", "true").lower() == "true"
+        context["location_details"] = self.request.GET.get("location_details", "true").lower() == "true"
+        context["fr_grouping"] = self.request.GET.get("fr_grouping", "true").lower() == "true"
         return context
 
     def get_search_vectors(self):

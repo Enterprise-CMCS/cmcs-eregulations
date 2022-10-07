@@ -119,7 +119,7 @@ class SectionChildrenField(NodeChildrenField):
         }
 
 
-class SectionSerializer(PartNodeSerializer):
+class SectionContentsSerializer(PartNodeSerializer):
     title = serializers.CharField()
     label = serializers.ListField(child=serializers.CharField())
     children = serializers.ListField(child=SectionChildrenField())
@@ -149,14 +149,14 @@ class AppendixSerializer(PartNodeSerializer):
 @extend_schema_field(
     PolymorphicProxySerializer(
         component_name="SubjectGroupChildrenField",
-        serializers=[SectionSerializer, FootNoteSerializer],
+        serializers=[SectionContentsSerializer, FootNoteSerializer],
         resource_type_field_name="node_type",
     )
 )
 class SubjectGroupChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
-            "SECTION": SectionSerializer,
+            "SECTION": SectionContentsSerializer,
             "FootNote": FootNoteSerializer,
         }
 
@@ -171,7 +171,7 @@ class SubjectGroupSerializer(PartNodeSerializer):
     PolymorphicProxySerializer(
         component_name="SubpartChildrenField",
         serializers=[
-            SectionSerializer,
+            SectionContentsSerializer,
             SubjectGroupSerializer,
             AppendixSerializer,
             SourceSerializer,
@@ -182,14 +182,14 @@ class SubjectGroupSerializer(PartNodeSerializer):
 class SubpartChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
-            "SECTION": SectionSerializer,
+            "SECTION": SectionContentsSerializer,
             "SUBJGRP": SubjectGroupSerializer,
             "APPENDIX": AppendixSerializer,
             "Source": SourceSerializer,
         }
 
 
-class SubpartSerializer(PartNodeSerializer):
+class SubpartContentsSerializer(PartNodeSerializer):
     title = serializers.CharField()
     label = serializers.ListField(child=serializers.CharField())
     children = serializers.ListField(child=SubpartChildrenField())
@@ -201,15 +201,15 @@ class SubpartSerializer(PartNodeSerializer):
 @extend_schema_field(
     PolymorphicProxySerializer(
         component_name="PartChildrenField",
-        serializers=[SubpartSerializer, SectionSerializer],
+        serializers=[SubpartContentsSerializer, SectionContentsSerializer],
         resource_type_field_name="node_type",
     )
 )
 class PartChildrenField(NodeChildrenField):
     def get_serializer_map(self):
         return {
-            "SUBPART": SubpartSerializer,
-            "SECTION": SectionSerializer,
+            "SUBPART": SubpartContentsSerializer,
+            "SECTION": SectionContentsSerializer,
         }
 
 
