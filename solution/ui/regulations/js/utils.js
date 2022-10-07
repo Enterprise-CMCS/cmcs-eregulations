@@ -146,17 +146,21 @@ const getQueryParam = (location, key) => {
 
 const highlightText = (location, paramKey) => {
     const textToHighlight = getQueryParam(location, paramKey);
+    console.log("text to highlight", textToHighlight);
     if (location.hash && textToHighlight) {
         const elementId = location.hash.replace(/^#/, "");
         const targetedSection = document.getElementById(elementId);
         if (targetedSection) {
-            const regex = new RegExp(textToHighlight, "gi");
-            let sectionText = targetedSection.innerHTML;
-            const newText = sectionText.replace(
-                regex,
-                "<mark class='highlight'>$&</mark>"
-            );
-            targetedSection.innerHTML = newText;
+            const textArr = textToHighlight.split(",");
+            textArr.forEach((text) => {
+                const regex = new RegExp(text, "gi");
+                let sectionText = targetedSection.innerHTML;
+                const newText = sectionText.replace(
+                    regex,
+                    "<mark class='highlight'>$&</mark>"
+                );
+                targetedSection.innerHTML = newText;
+            });
         }
     }
 };
