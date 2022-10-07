@@ -6,6 +6,11 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   deploy:
     strategy:
@@ -44,10 +49,12 @@ jobs:
           python manage.py collectstatic --noinput
           cd ..
           popd
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
       - name: deploy static assets
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           pushd solution/static-assets
           npm install serverless -g
@@ -56,9 +63,6 @@ jobs:
           popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           pushd solution/backend
           npm install serverless -g
@@ -80,8 +84,6 @@ jobs:
       - name: build-vue-assets
         id: build-vue-assets
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           VITE_ENV: ${{ matrix.environment }}
         run: |
           pushd solution
@@ -95,9 +97,6 @@ jobs:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           pushd solution/parser
           npm install serverless -g
@@ -107,9 +106,6 @@ jobs:
           popd
       - name: deploy and run FR parser
         id: deploy-run-fr-parser
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           pushd solution/parser
           npm install serverless -g
@@ -121,8 +117,6 @@ jobs:
       - name: build static assets and deploy prototype
         id: build-static-assets-and-deploy-prototype
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           VUE_APP_API_URL: ${{ steps.deploy-regulations-site-server.outputs.url }}
         run: |
           pushd solution/ui/prototype
