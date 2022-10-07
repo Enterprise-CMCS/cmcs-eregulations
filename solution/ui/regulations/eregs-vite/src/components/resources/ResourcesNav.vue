@@ -1,5 +1,5 @@
 <template>
-    <div id="main-content" class="nav-container" role="main">
+    <div class="nav-container" role="main">
         <div class="content">
             <h1>Resources</h1>
             <p>

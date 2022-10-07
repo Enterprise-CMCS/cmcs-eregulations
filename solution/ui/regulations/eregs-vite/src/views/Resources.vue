@@ -7,6 +7,7 @@
                     @submit.prevent="executeSearch"
                 >
                     <v-text-field
+                        id="main-content"
                         v-model="searchInputValue"
                         outlined
                         flat
