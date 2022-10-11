@@ -73,11 +73,12 @@ export default {
         formatLocations(locations) {
             let locString = "";
             for (const location in locations) {
+                locString = `${locString} ${locations[location].title} CFR ${locations[location].part}`;
                 if (locations[location].type == "section") {
-                    locString = `${locString} CFR ${locations[location].title} ${locations[location].part}.${locations[location].section_id},`
+                    locString = `${locString}.${locations[location].section_id},`
                 }
                 else {
-                    locString = `${locString} ${locations[location].title} Subpart ${locations[location].subpart_id},`
+                    locString = `${locString} Subpart ${locations[location].subpart_id},`
                 }
             }
             return locString
