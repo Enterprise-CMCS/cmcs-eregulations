@@ -26,7 +26,9 @@
                 v-if="showClearAll"
                 class="clear-all-chip"
                 outlined
+                tabindex="0"
                 @click="handleCloseAll"
+                @keydown.enter.space.prevent="handleCloseAll"
                 >Clear All</v-chip
             >
         </div>

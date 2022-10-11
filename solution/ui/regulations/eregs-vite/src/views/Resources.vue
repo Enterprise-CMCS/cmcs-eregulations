@@ -1,18 +1,20 @@
 <template>
     <body class="ds-base">
-        <div id="app" class="resources-view">
-            <ResourcesNav :aboutUrl="aboutUrl">
+        <div id="resourcesApp" class="resources-view">
+            <ResourcesNav :about-url="aboutUrl">
                 <form
                     class="search-resources-form"
                     @submit.prevent="executeSearch"
                 >
                     <v-text-field
+                        id="main-content"
                         v-model="searchInputValue"
                         outlined
                         flat
                         solo
                         clearable
                         label="Search resources using keywords or citations."
+                        aria-label="Search resources using keywords or citations."
                         type="text"
                         class="search-field"
                         append-icon="mdi-magnify"
@@ -24,12 +26,20 @@
                     <div v-if="synonyms.length > 0 || multiWordQuery" class="search-suggestion">
                         <div v-if="multiWordQuery">
                             Didn't find what you were looking for? Try searching for
-                            <a @click="doQuoteSearch">"{{this.searchQuery}}"</a>
+                            <a
+                                tabindex="0"
+                                @click="doQuoteSearch"
+                                @keydown.enter.space.prevent="doQuoteSearch"
+                            >"{{ searchQuery }}"</a>
                         </div>
-                        <div class="synonyms" v-if="synonyms.length > 0"> 
+                        <div v-if="synonyms.length > 0" class="synonyms">
                             <span v-if="multiWordQuery">Or s</span><span v-else>S</span>earch for similar terms:
-                            <span v-bind:key=a v-for="a in synonyms">
-                                <a @click="synonymLinks(a)">{{a}}</a>
+                            <span v-for="a in synonyms" :key=a>
+                                <a
+                                    tabindex=0
+                                    @click="synonymLinks(a)"
+                                    @keydown.enter.space.prevent="synonymLinks(a)"
+                                >{{ a }}</a>
                                 <span v-if="synonyms[synonyms.length-1] != a">, </span>
                             </span>
                         </div>
@@ -787,7 +797,7 @@ export default {
 </script>
 
 <style lang="scss">
-#app.resources-view {
+#resourcesApp.resources-view {
     display: flex;
     flex-direction: column;
     .resources-content-container {

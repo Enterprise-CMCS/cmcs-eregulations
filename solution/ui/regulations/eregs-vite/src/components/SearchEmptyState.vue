@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="empty-state-container">
         Expand your search:
         <ul>
             <li>

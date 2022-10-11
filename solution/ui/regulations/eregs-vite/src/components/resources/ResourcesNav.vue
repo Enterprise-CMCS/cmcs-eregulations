@@ -1,5 +1,5 @@
 <template>
-    <div class="nav-container">
+    <div class="nav-container" role="main">
         <div class="content">
             <h1>Resources</h1>
             <p>
@@ -9,17 +9,22 @@
                     href="https://www.federalregister.gov/agencies/centers-for-medicare-medicaid-services"
                     target="_blank"
                     class="external"
-                >in the Federal Register</a>
+                    >in the Federal Register</a
+                >
                 and subregulatory guidance and implementation resources
                 published
                 <a
                     href="https://www.medicaid.gov/federal-policy-guidance/index.html"
                     target="_blank"
                     class="external"
-                >by CMS</a>.
+                    >by CMS</a
+                >.
             </p>
             <p>
-                <a :href="aboutUrl">How these links are added and connected to regulation sections.</a>
+                <a :href="aboutUrl"
+                    >How these links are added and connected to regulation
+                    sections.</a
+                >
             </p>
             <slot></slot>
         </div>
@@ -30,36 +35,10 @@
 export default {
     name: "ResourcesNav",
 
-    components: {},
-
     props: {
         aboutUrl: {
             type: String,
-            default: "/about/"
-        },
-    },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    computed: {},
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
+            default: "/about/",
         },
     },
 };
