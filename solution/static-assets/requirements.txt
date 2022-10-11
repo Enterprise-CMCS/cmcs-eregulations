@@ -13,3 +13,4 @@ django-cors-headers
 drf-spectacular
 django-model-utils
 django-jsonform
+django-csp
