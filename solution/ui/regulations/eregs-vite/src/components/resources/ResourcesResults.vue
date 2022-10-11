@@ -38,7 +38,7 @@
                             </template>
                         </v-list>
                     </FancyDropdown>
-                    <ResourceExportBtn :partDict="partDict" :categories="categories" :searchQuery="searchQuery"
+                    <ResourceExportBtn :partDict="partDict" :categories="categories" :query="query"
                         :supCount="count" />
                 </div>
             </div>
