@@ -27,17 +27,17 @@ class ParserResultSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class SectionCreateSerializer(serializers.Serializer):
+class PartSectionCreateSerializer(serializers.Serializer):
     title = serializers.CharField()
     part = serializers.CharField()
     section = serializers.CharField()
 
 
-class SubpartCreateSerializer(serializers.Serializer):
+class PartSubpartCreateSerializer(serializers.Serializer):
     title = serializers.CharField()
     part = serializers.CharField()
     subpart = serializers.CharField()
-    sections = SectionCreateSerializer(many=True)
+    sections = PartSectionCreateSerializer(many=True)
 
 
 class PartUploadSerializer(serializers.Serializer):
@@ -50,8 +50,8 @@ class PartUploadSerializer(serializers.Serializer):
     depth = serializers.IntegerField()
 
     # location fields
-    sections = SectionCreateSerializer(many=True)
-    subparts = SubpartCreateSerializer(many=True)
+    sections = PartSectionCreateSerializer(many=True)
+    subparts = PartSubpartCreateSerializer(many=True)
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name")

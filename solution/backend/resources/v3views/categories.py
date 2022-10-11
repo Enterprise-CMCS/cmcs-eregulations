@@ -11,9 +11,9 @@ from resources.models import (
 )
 
 from resources.v3serializers.categories import (
-    SubCategorySerializer,
     AbstractCategoryPolymorphicSerializer,
     CategoryTreeSerializer,
+    MetaCategorySerializer,
 )
 
 
@@ -23,7 +23,7 @@ from resources.v3serializers.categories import (
         OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather "
                               "than just the ID.", bool, False),
     ],
-    responses=SubCategorySerializer,
+    responses=MetaCategorySerializer.many(True),
 )
 class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
@@ -33,7 +33,7 @@ class CategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context["parent_details"] = self.request.GET.get("parent_details", "true")
+        context["parent_details"] = self.request.GET.get("parent_details", "true").lower() == "true"
         return context
 
 

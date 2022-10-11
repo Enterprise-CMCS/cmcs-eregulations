@@ -7,6 +7,7 @@ const SYNONYM = "synonym";
 
 const API_ENDPOINTS_V3 = [
     `/v3/ecfr_parser_result/${TITLE}`,
+    `/v3/parser_config`,
     `/v3/resources/`,
     `/v3/resources/categories`,
     `/v3/resources/categories/tree`,

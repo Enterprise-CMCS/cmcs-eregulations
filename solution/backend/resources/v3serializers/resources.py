@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.urls import reverse
+from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 
 from resources.models import (
     SupplementalContent,
@@ -11,9 +12,15 @@ from resources.models import (
     Section,
 )
 
-from .locations import SectionCreateSerializer, SectionRangeCreateSerializer, AbstractLocationPolymorphicSerializer
-from .categories import AbstractCategoryPolymorphicSerializer
-from .mixins import HeadlineField, PolymorphicSerializer, OptionalFieldDetailsMixin
+from .locations import (
+    SectionCreateSerializer,
+    SectionRangeCreateSerializer,
+    AbstractLocationPolymorphicSerializer,
+    MetaLocationSerializer,
+)
+from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
+from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
+from .utils import ProxySerializerWrapper
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
@@ -24,16 +31,28 @@ class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
         }
 
 
-class AbstractResourceSerializer(OptionalFieldDetailsMixin, serializers.Serializer):
+class AbstractResourceSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
 
-    optional_details = {
-        "category": ("category_details", "true", AbstractCategoryPolymorphicSerializer, False),
-        "locations": ("location_details", "true", AbstractLocationPolymorphicSerializer, True),
-    }
+    category = serializers.SerializerMethodField()
+    locations = serializers.SerializerMethodField()
+
+    type = PolymorphicTypeField()
+
+    @extend_schema_field(MetaCategorySerializer.many(False))
+    def get_category(self, obj):
+        if self.context.get("category_details", True):
+            return AbstractCategoryPolymorphicSerializer(obj.category).data
+        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj.category)
+
+    @extend_schema_field(MetaLocationSerializer.many(True))
+    def get_locations(self, obj):
+        if self.context.get("location_details", True):
+            return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
+        return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
 
 class DateFieldSerializer(serializers.Serializer):
@@ -47,6 +66,7 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     url = serializers.CharField()
     internalURL = serializers.SerializerMethodField()
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_internalURL(self, obj):
         return reverse('supplemental_content', kwargs={'id': obj.pk})
 
@@ -78,6 +98,13 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
         docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
         docs[0]["related_docs"] = docs[1:]
         return docs[0]
+
+
+MetaResourceSerializer = ProxySerializerWrapper(
+    component_name="MetaResourceSerializer",
+    serializers=[SupplementalContentSerializer, FederalRegisterDocumentSerializer],
+    resource_type_field_name=None,
+)
 
 
 class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
