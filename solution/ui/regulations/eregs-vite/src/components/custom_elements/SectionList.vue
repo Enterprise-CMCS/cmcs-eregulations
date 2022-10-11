@@ -1,17 +1,15 @@
 <template>
     <v-list class="section-list">
-        <v-list-item-group class="section-list-item-group">
-            <v-list-item
-                v-for="item in listItems"
-                :key="item.identifier"
-                @click="clickMethod"
-                :data-value="item.part + '-' + item.identifier"
-                class="section-list-item"
-            >
-                <span class="section-number">{{ item.label }} </span>
-                <span class="section-text">{{ item.description }}</span>
-            </v-list-item>
-        </v-list-item-group>
+        <v-list-item
+            v-for="item in listItems"
+            :key="item.identifier"
+            :data-value="item.part + '-' + item.identifier"
+            class="section-list-item"
+            @click="clickMethod"
+        >
+            <span class="section-number">{{ item.label }} </span>
+            <span class="section-text">{{ item.description }}</span>
+        </v-list-item>
     </v-list>
 </template>
 
@@ -28,18 +26,21 @@ export default {
             type: Array,
             required: true,
         },
+        listId: {
+            type: String,
+            default: "",
+        },
     },
 
     methods: {
         clickMethod(e) {
             this.filterEmitter({
                 scope: "section",
-                selectedIdentifier: e.currentTarget.dataset.value
+                selectedIdentifier: e.currentTarget.dataset.value,
             });
         },
     },
-
-}
+};
 </script>
 
 <style lang="scss">
@@ -59,4 +60,3 @@ export default {
     }
 }
 </style>
-
