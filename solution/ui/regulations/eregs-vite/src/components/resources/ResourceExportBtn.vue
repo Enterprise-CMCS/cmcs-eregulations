@@ -22,7 +22,7 @@ import {
 export default {
     name: "ResourceExportBtn",
     props: {
-        searchQuery: {
+        query: {
             type: String,
             default: ""
         },
@@ -93,7 +93,7 @@ export default {
                     page,
                     partDict: this.partDict,
                     categories: this.categories,
-                    q: this.searchQuery
+                    q: this.query
                 }));
                 page += 1
                 supNum += 100;
