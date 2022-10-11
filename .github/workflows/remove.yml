@@ -8,6 +8,8 @@ permissions:
   contents: read
   actions: read
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   remove:
     runs-on: ubuntu-latest

@@ -9,6 +9,8 @@ on:
     branches:
       - main
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   lint:
     runs-on: ubuntu-latest
