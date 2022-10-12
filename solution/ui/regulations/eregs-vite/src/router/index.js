@@ -22,10 +22,10 @@ const routes = [
 const router = new VueRouter({
     mode: "history",
     routes,
-    base:
-        import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-            ? import.meta.env.VITE_ENV
-            : "/",
+    base: "./",
+        //import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
+            //? import.meta.env.VITE_ENV
+            //: "./",
     scrollBehavior(to) {
         if (to.hash) {
             return {
