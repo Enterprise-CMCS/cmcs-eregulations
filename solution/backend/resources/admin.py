@@ -77,8 +77,8 @@ class LocationAdmin(BaseAdmin):
     readonly_fields = ("linked_resources",)
 
     def linked_resources(self, obj):
-        display_text = ", ".join([
-                                 "<a href={}>{}</a>".format(
+        display_text = ",".join([
+                                 "<a href={}>{}</a><br>".format(
                                   reverse('admin:{}_{}_change'.format("resources", type(child).__name__.lower()),
                                           args=(child.id,)), str(child))
                                  for child in obj.resources.all()])
