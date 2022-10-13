@@ -19,7 +19,7 @@ from resources.v3serializers.resources import (
     FederalRegisterDocumentCreateSerializer,
     FederalRegisterDocumentSerializer,
     StringListSerializer,
-    AbstractResourceSerializer,
+    MetaResourceSerializer,
 )
 
 from regcore.views import SettingsAuthentication
@@ -31,7 +31,7 @@ from regcore.views import SettingsAuthentication
                 "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
                 "Results are paginated by default.",
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,
-    responses=AbstractResourceSerializer,
+    responses=MetaResourceSerializer.many(True),
 )
 class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = AbstractResourcePolymorphicSerializer

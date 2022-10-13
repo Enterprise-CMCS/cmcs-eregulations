@@ -1,10 +1,10 @@
 <template>
-    <button class="direction-btn" :class="directionClass" :disabled="isDisabled">
+    <div class="direction-btn" :class="directionClass">
         <span class="label">{{ label }}</span>
         <span class="icon">
             <i class="fa" :class="chevronClass"></i>
         </span>
-    </button>
+    </div>
 </template>
 
 <script>
@@ -38,7 +38,10 @@ export default {
                 : "fa-chevron-left";
         },
         directionClass() {
-            return `${this.direction}-btn`;
+            return {
+                [`${this.direction}-btn`]: true,
+                disabled: this.isDisabled,
+            };
         },
     },
 };
@@ -64,7 +67,7 @@ export default {
         margin: 0 10px -2px;
     }
 
-    &:disabled {
+    &.disabled {
         color: $mid_gray_3;
         cursor: default;
     }

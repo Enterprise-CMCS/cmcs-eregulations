@@ -1,30 +1,24 @@
 <template>
     <v-list class="category-list">
-        <v-list-item-group class="category-list-item-group">
-            <template v-for="item in listItems">
-                <v-list-item
-                    :key="item.id"
-                    @click="clickMethod"
-                    :data-value="item.name"
-                    class="category-list-item"
-                >
-                    <span :class="item.type">{{
-                        item.name
-                    }}</span>
-                </v-list-item>
-                <v-list-item
-                    v-for="subItem in item.subcategories"
-                    :key="subItem.id"
-                    @click="clickMethod"
-                    :data-value="subItem.name"
-                    class="category-list-item"
-                >
-                    <span :class="subItem.type">{{
-                        subItem.name
-                    }}</span>
-                </v-list-item>
-            </template>
-        </v-list-item-group>
+        <template v-for="item in listItems">
+            <v-list-item
+                :key="item.id"
+                :data-value="item.name"
+                class="category-list-item"
+                @click="clickMethod"
+            >
+                <span :class="item.type">{{ item.name }}</span>
+            </v-list-item>
+            <v-list-item
+                v-for="subItem in item.subcategories"
+                :key="subItem.id"
+                :data-value="subItem.name"
+                class="category-list-item"
+                @click="clickMethod"
+            >
+                <span :class="subItem.type">{{ subItem.name }}</span>
+            </v-list-item>
+        </template>
     </v-list>
 </template>
 
@@ -40,6 +34,10 @@ export default {
         listItems: {
             type: Array,
             required: true,
+        },
+        listId: {
+            type: String,
+            default: "",
         },
     },
 

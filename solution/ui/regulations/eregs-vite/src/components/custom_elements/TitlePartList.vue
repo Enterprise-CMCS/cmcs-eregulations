@@ -1,17 +1,15 @@
 <template>
-    <v-list class="title-part-list">
-        <v-list-item-group class="title-part-list-item-group">
-            <v-list-item
-                v-for="item in listItems"
-                :key="item.name"
-                @click="clickMethod"
-                :data-value="item.name"
-                class="title-part-list-item"
-            >
-                <span class="part-number">Part {{ item.name }} -</span>
-                <span class="part-text">{{ item.label | descriptionOnly }}</span>
-            </v-list-item>
-        </v-list-item-group>
+    <v-list class="title-part-list" role="group">
+        <v-list-item
+            v-for="item in listItems"
+            :key="item.name"
+            :data-value="item.name"
+            class="title-part-list-item"
+            @click="clickMethod"
+        >
+            <span class="part-number">Part {{ item.name }} -</span>
+            <span class="part-text">{{ item.label | descriptionOnly }}</span>
+        </v-list-item>
     </v-list>
 </template>
 
@@ -27,6 +25,10 @@ export default {
         listItems: {
             type: Array,
             required: true,
+        },
+        listId: {
+            type: String,
+            default: "",
         },
     },
 

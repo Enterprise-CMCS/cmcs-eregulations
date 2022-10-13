@@ -5,17 +5,19 @@
             <div class="filters">
                 <template v-for="(value, name) in filters">
                     <FancyDropdown
-                        :label="value.label"
-                        :buttonTitle="value.buttonTitle"
-                        :buttonId="value.buttonId"
                         :key="name"
+                        :label="value.label"
+                        :list-id="formatListId(value.label)"
+                        :button-title="value.buttonTitle"
+                        :button-id="value.buttonId"
                         :disabled="value.disabled || value.listItems.length === 0"
                     >
                         <component
                             :is="value.listType"
                             :key="value.buttonId"
-                            :filterEmitter="filterEmitter"
-                            :listItems=value.listItems
+                            :filter-emitter="filterEmitter"
+                            :list-items=value.listItems
+                            :list-id="formatListId(value.label)"
                         ></component>
                     </FancyDropdown>
                 </template>
@@ -25,6 +27,8 @@
 </template>
 
 <script>
+import _camelCase from "lodash/camelCase";
+
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
 import TitlePartList from "@/components/custom_elements/TitlePartList.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
@@ -46,31 +50,13 @@ export default {
         resourcesDisplay: {
             type: String,
             required: false,
+            default: "",
         },
         filters: {
             type: Object,
             required: true,
         },
     },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    /*data() {},*/
-
     computed: {
         resourcesClass() {
             return `content-with-${this.resourcesDisplay}`;
@@ -80,6 +66,9 @@ export default {
     methods: {
         filterEmitter(payload) {
             this.$emit("select-filter", payload);
+        },
+        formatListId(label) {
+            return _camelCase(`${label}List`)
         },
     },
 };

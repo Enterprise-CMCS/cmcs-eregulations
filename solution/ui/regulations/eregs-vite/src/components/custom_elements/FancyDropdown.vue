@@ -1,8 +1,10 @@
 <template>
     <div class="fancy-container" :class="containerClass">
-        <v-menu offset-y max-width="240" max-height="460">
-            <template v-slot:activator="{ on, attrs }">
-                <label v-if="label" :for="buttonId">{{ label }}</label>
+        <v-menu offset-y max-width="240" max-height="460" :aria-labelledby="listId">
+            <template #activator="{ on, attrs }">
+                <label v-if="label" :id="listId" :for="buttonId">{{
+                    label
+                }}</label>
                 <v-btn
                     :id="buttonId"
                     :disabled="disabled"
@@ -32,6 +34,10 @@ export default {
             type: String,
             default: "",
         },
+        listId: {
+            type: String,
+            default: "",
+        },
         buttonTitle: {
             type: String,
             default: "Select",
@@ -47,13 +53,15 @@ export default {
         type: {
             type: String,
             required: false,
-            default: ""
+            default: "",
         },
     },
 
     computed: {
         btnTypeClass() {
-            return this.type === "splitTab" ? "split-tab-btn" : "select-btn ds-c-field";
+            return this.type === "splitTab"
+                ? "split-tab-btn"
+                : "select-btn ds-c-field";
         },
         containerClass() {
             return this.type === "splitTab" ? "split-tab-container" : "";
@@ -126,7 +134,7 @@ export default {
 
             .v-btn__content {
                 height: 60%;
-                border-left: 1px solid #9D9D9D;
+                border-left: 1px solid #9d9d9d;
             }
         }
     }

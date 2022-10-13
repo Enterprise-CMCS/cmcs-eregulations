@@ -134,6 +134,9 @@ test.local: ## run cypress tests locally without docker
 		npm install; \
 		npm run cypress:run;
 
+python.unittest:
+	docker-compose exec regulations python manage.py test
+
 local.seed:
 	docker-compose exec regulations python manage.py loaddata resources.category.json
 	docker-compose exec regulations python manage.py loaddata resources.subcategory.json
