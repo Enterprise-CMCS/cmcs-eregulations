@@ -213,12 +213,21 @@ LOGIN_URL = "/admin"
 
 # Settings for CSP headers
 CSP_IMG_SRC = ["'self'", STATIC_URL]
-CSP_STYLE_SRC = ["'self'", STATIC_URL]
-CSP_FONT_SRC = ["'self'", STATIC_URL]
+CSP_STYLE_SRC = [
+    "'self'",
+    "'unsafe-inline'",
+    STATIC_URL,
+    "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+]
+CSP_FONT_SRC = [
+    "'self'",
+    STATIC_URL,
+    "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+]
 CSP_SCRIPT_SRC = [
     "'self'",
-    #"'unsafe-inline'",
-    #"'unsafe-eval'",
+    "'unsafe-inline'",
+    "'unsafe-eval'",
     STATIC_URL,
     "https://www.googletagmanager.com",
 ]
