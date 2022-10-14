@@ -93,7 +93,9 @@ export default {
                     page,
                     partDict: this.partDict,
                     categories: this.categories,
-                    q: this.query
+                    q: this.query,
+                    partDict:"all",
+                    fr_grouping: false
                 }));
                 page += 1
                 supNum += 100;
