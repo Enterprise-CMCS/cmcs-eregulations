@@ -91,10 +91,9 @@ export default {
             while (supNum < this.supCount) {
                 content.push(getSupplementalContentV3({
                     page,
-                    partDict: this.partDict,
+                    partDict: Object.keys(this.partDict).length > 0 ? this.partDict : "all",
                     categories: this.categories,
                     q: this.query,
-                    partDict:"all",
                     fr_grouping: false
                 }));
                 page += 1
