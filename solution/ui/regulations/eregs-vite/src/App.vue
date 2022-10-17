@@ -12,6 +12,10 @@ export default {
         aboutUrl: {
             type: String,
             default: "/about/"
+        },
+        baseUrl: {
+            type: String,
+            default: "",
         }
     }
 };
@@ -19,7 +23,7 @@ export default {
 
 <template>
     <v-app>
-        <router-view :api-url="apiUrl" :about-url="aboutUrl"/>
+        <router-view :api-url="apiUrl" :about-url="aboutUrl" :base-url="baseUrl"/>
     </v-app>
 </template>
 

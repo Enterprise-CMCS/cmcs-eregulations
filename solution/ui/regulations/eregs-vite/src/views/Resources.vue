@@ -129,6 +129,10 @@ export default {
             type: String,
             default: "/about/",
         },
+        baseUrl: {
+            type: String,
+            default: "",
+        }
     },
 
     data() {
