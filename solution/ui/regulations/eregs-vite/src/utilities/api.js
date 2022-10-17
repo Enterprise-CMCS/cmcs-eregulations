@@ -14,7 +14,11 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-const apiPath = `${import.meta.env.VITE_ENV === "prod" ? "https://regulations-pilot.cms.gov": import.meta.env.VITE_API_URL || "http://localhost:8000"}`;
+const apiPath = `${
+    import.meta.env.VITE_ENV === "prod"
+        ? "https://regulations-pilot.cms.gov"
+        : import.meta.env.VITE_API_URL || "http://localhost:8000"
+}`;
 const apiPathV2 = `${apiPath}/v2`;
 const apiPathV3 = `${apiPath}/v3`;
 
@@ -234,7 +238,6 @@ async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
 }
 
 function httpApiPost(urlPath, { data = {}, params } = {}) {
-    console.log(data);
     return fetchJson(`${config.apiPath}/${urlPath}`, {
         method: "POST",
         headers: authHeader(token),
@@ -821,7 +824,8 @@ const getSupByPart = async (title, part, subparts, sections) => {
 }
 const getCategories = async () =>  httpApiGetV3("resources/categories");
 
-const getTOC = async (title) =>  httpApiGetV3(title? `title/${title}/toc`:`toc`);
+const getTOC = async (title) =>
+    httpApiGetV3(title ? `title/${title}/toc` : `toc`);
 
 const getPartTOC = async (title, part) =>  httpApiGetV3(`title/${title}/part/${part}/version/latest/toc`);
 
