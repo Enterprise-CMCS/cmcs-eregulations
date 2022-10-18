@@ -196,6 +196,8 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
 
+    location_history = models.JSONField(default=list)
+
     doc_type = models.CharField(
         blank=True,
         max_length=255
