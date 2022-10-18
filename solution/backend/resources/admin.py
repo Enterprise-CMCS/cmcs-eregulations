@@ -7,12 +7,13 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib import messages
 from django.utils.safestring import mark_safe
-
+from django.urls import reverse
 from solo.admin import SingletonModelAdmin
 
 # Register your models here.
 
 from .models import (
+    AbstractResource,
     SupplementalContent,
     FederalRegisterDocument,
     AbstractCategory,
@@ -72,13 +73,32 @@ class ResourcesConfigurationAdmin(SingletonModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class LocationAdmin(BaseAdmin):
+    readonly_fields = ("linked_resources",)
+
+    def linked_resources(self, obj):
+        display_text = "".join([
+                                 "<a href={}>{}</a><br>".format(
+                                  reverse('admin:{}_{}_change'.format("resources", type(child).__name__.lower()),
+                                          args=(child.id,)), str(child))
+                                 for child in obj.resources.all()])
+        if display_text:
+            return mark_safe(display_text)
+        return "-"
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            Prefetch("resources", AbstractResource.objects.all().select_subclasses()),
+        )
+
+
 @admin.register(Section)
-class SectionAdmin(BaseAdmin):
+class SectionAdmin(LocationAdmin):
     admin_priority = 40
     list_display = ("title", "part", "section_id", "parent")
     search_fields = ["title", "part", "section_id"]
     ordering = ("title", "part", "section_id", "parent")
-
+    fields = ("title", "part", "section_id", "parent", "linked_resources")
     foreignkey_lookups = {
         "parent": lambda: Subpart.objects.all(),
     }
@@ -90,11 +110,12 @@ class SectionAdmin(BaseAdmin):
 
 
 @admin.register(Subpart)
-class SubpartAdmin(BaseAdmin):
+class SubpartAdmin(LocationAdmin):
     admin_priority = 50
     list_display = ("title", "part", "subpart_id")
     search_fields = ["title", "part", "subpart_id"]
     ordering = ("title", "part", "subpart_id")
+    fields = ("title", "part", "subpart_id", "linked_resources")
 
 
 @admin.register(Category)
