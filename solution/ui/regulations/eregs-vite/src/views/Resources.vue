@@ -1,5 +1,7 @@
 <template>
     <body class="ds-base">
+        <h2>{{ baseUrl }}</h2>
+        <h2>{{ host }}</h2>
         <div id="resourcesApp" class="resources-view">
             <ResourcesNav :about-url="aboutUrl">
                 <form
@@ -130,6 +132,10 @@ export default {
             default: "/about/",
         },
         baseUrl: {
+            type: String,
+            default: "",
+        },
+        host: {
             type: String,
             default: "",
         }

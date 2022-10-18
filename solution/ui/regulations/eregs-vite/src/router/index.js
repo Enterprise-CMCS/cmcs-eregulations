@@ -19,14 +19,15 @@ const routes = [
     },
 ];
 
-const router = (baseUrl) =>
+const router = ({ baseUrl = "", host = "" }) =>
     new VueRouter({
         mode: "history",
         routes,
         base:
-            import.meta.env.VITE_ENV && !baseUrl.includes("cms.gov")
-                ? import.meta.env.VITE_ENV
-                : "/",
+            !import.meta.env.VITE_ENV ||
+            (import.meta.env.VITE_ENV === "prod" && host === baseUrl)
+                ? "/"
+                : import.meta.env.VITE_ENV,
         scrollBehavior(to) {
             if (to.hash) {
                 return {

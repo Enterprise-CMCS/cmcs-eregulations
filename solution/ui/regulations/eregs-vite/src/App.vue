@@ -7,23 +7,32 @@ export default {
     props: {
         apiUrl: {
             type: String,
-            default: "/v2/"
+            default: "/v2/",
         },
         aboutUrl: {
             type: String,
-            default: "/about/"
+            default: "/about/",
         },
         baseUrl: {
             type: String,
             default: "",
-        }
-    }
+        },
+        host: {
+            type: String,
+            default: "",
+        },
+    },
 };
 </script>
 
 <template>
     <v-app>
-        <router-view :api-url="apiUrl" :about-url="aboutUrl" :base-url="baseUrl"/>
+        <router-view
+            :api-url="apiUrl"
+            :about-url="aboutUrl"
+            :base-url="baseUrl"
+            :host="host"
+        />
     </v-app>
 </template>
 
