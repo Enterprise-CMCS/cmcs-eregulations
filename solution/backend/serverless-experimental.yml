@@ -14,6 +14,7 @@ provider:
     DB_PASSWORD: ${ssm:/eregulations/db/password}
     DB_HOST: ${ssm:/eregulations/db/host}
     DB_PORT: ${ssm:/eregulations/db/port}
+    BASE_URL: ${self:custom.settings.BASE_URL}
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
     DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user}
@@ -45,6 +46,7 @@ custom:
     app: handler.application
     packRequirements: false
   settings:
+    BASE_URL: ${cf:cmcs-eregs-site-${self:custom.stage}.BASE_URL}
     static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
     DB_NAME: ${self:custom.stage}
     USERNAME: eregsuser
