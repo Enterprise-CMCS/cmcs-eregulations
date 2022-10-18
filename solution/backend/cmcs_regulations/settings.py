@@ -60,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
     'regulations.middleware.JsonErrors',
     'regulations.middleware.NoIndex',
     'regcore.middleware.HtmlApi',
@@ -209,6 +210,27 @@ SPECTACULAR_SETTINGS = {
 }
 
 LOGIN_URL = "/admin"
+
+# Settings for CSP headers
+CSP_IMG_SRC = ["'self'", STATIC_URL]
+CSP_STYLE_SRC = [
+    "'self'",
+    "'unsafe-inline'",
+    STATIC_URL,
+    "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+]
+CSP_FONT_SRC = [
+    "'self'",
+    STATIC_URL,
+    "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+]
+CSP_SCRIPT_SRC = [
+    "'self'",
+    "'unsafe-inline'",
+    "'unsafe-eval'",
+    STATIC_URL,
+    "https://www.googletagmanager.com",
+]
 
 if DEBUG:
     import os  # only if you haven't already imported this
