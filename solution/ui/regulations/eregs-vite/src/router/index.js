@@ -25,7 +25,7 @@ const router = ({ baseUrl = "", host = "" }) =>
         routes,
         base:
             !import.meta.env.VITE_ENV ||
-            (import.meta.env.VITE_ENV === "prod" && host === baseUrl)
+            (import.meta.env.VITE_ENV === "dev578" && host === baseUrl) // VITE_ENV should be "prod"; changing to "dev578" for testing purposes
                 ? "/"
                 : import.meta.env.VITE_ENV,
         scrollBehavior(to) {
