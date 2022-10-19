@@ -11,6 +11,8 @@ permissions:
   contents: read
   actions: read
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   deploy:
     strategy:

@@ -5,37 +5,40 @@
             <div class="results-count">
                 <span v-if="isLoading">Loading...</span>
                 <span v-else>
-                    <span v-if="count > 0">{{ currentPageResultsRange[0] }} - {{ currentPageResultsRange[1] }} of</span>
-                    {{ count }} result<span v-if="count != 1">s</span> in Resources
+                    <span v-if="count > 0">
+                        {{ currentPageResultsRange[0] }} -
+                        {{ currentPageResultsRange[1] }} of
+                    </span>
+                    {{ count }} result<span v-if="count != 1">s</span> in
+                    Resources
                 </span>
                 <div class="sort-control">
-                    <span class="sort-control-label">Sort by</span>
+                    <span id="resultsSortLabel" class="sort-control-label">
+                        Sort by
+                    </span>
                     <FancyDropdown
                         :button-title="sortMethodTitle"
                         :disabled="sortDisabled"
+                        button-id="sortButton"
+                        list-id="resultsSortLabel"
                     >
                         <v-list class="sort-options-list">
-                            <v-list-item-group
-                                v-model="sortOptions"
-                                class="sort-options-list-item-group"
+                            <template
+                                v-for="(sortOption, index) in sortOptions"
                             >
-                                <template
-                                    v-for="(sortOption, index) in sortOptions"
+                                <v-list-item
+                                    :key="sortOption.value + index"
+                                    :data-value="sortOption.value"
+                                    :disabled="sortOption.disabled"
+                                    :inactive="sortOption.disabled"
+                                    @click="clickMethod"
                                 >
-                                    <v-list-item
-                                        :key="sortOption.value + index"
-                                        :data-value="sortOption.value"
-                                        :disabled="sortOption.disabled"
-                                        :inactive="sortOption.disabled"
-                                        @click="clickMethod"
-                                    >
-                                        <span>{{ sortOption.label }}</span>
-                                    </v-list-item>
-                                </template>
-                            </v-list-item-group>
+                                    <span>{{ sortOption.label }}</span>
+                                </v-list-item>
+                            </template>
                         </v-list>
                     </FancyDropdown>
-                    <ResourceExportBtn :partDict="partDict" :categories="categories" :searchQuery="searchQuery"
+                    <ResourceExportBtn :partDict="partDict" :categories="categories" :query="query"
                         :supCount="count" />
                 </div>
             </div>
