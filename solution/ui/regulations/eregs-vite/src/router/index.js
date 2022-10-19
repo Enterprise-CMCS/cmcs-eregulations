@@ -24,10 +24,9 @@ const router = ({ baseUrl = "", host = "" }) =>
         mode: "history",
         routes,
         base:
-            !import.meta.env.VITE_ENV ||
-            (import.meta.env.VITE_ENV === "prod" && host === baseUrl)
+            import.meta.env.VITE_ENV === "prod" && host === baseUrl
                 ? "/"
-                : import.meta.env.VITE_ENV,
+                : import.meta.env.VITE_ENV || "/",
         scrollBehavior(to) {
             if (to.hash) {
                 return {
