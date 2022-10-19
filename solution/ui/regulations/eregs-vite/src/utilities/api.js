@@ -14,9 +14,11 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
+console.log("Import.meta.env", import.meta.env);
+console.log("window.location.host);", window.location.host);
 const apiPath = `${
     import.meta.env.VITE_ENV === "prod"
-        ? "https://regulations-pilot.cms.gov"
+        ? window.location.host
         : import.meta.env.VITE_API_URL || "http://localhost:8000"
 }`;
 const apiPathV2 = `${apiPath}/v2`;
