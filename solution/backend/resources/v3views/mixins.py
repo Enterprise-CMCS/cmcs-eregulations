@@ -195,7 +195,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             id_query = id_query.filter(category__id__in=categories)
 
         if not search_query:
-            id_query = id_query.order_by("group_annotated").distinct("group_annotated")
+            id_query = id_query.order_by("group_annotated")
 
         annotations = {}
         ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
