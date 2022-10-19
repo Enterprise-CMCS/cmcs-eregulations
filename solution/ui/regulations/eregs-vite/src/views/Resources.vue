@@ -1,7 +1,5 @@
 <template>
     <body class="ds-base">
-        <h2>BASE_URL in Vue: {{ baseUrl }}</h2>
-        <h2>HOST in Vue: {{ host }}</h2>
         <div id="resourcesApp" class="resources-view">
             <ResourcesNav :about-url="aboutUrl">
                 <form
