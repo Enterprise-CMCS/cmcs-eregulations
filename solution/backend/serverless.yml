@@ -22,6 +22,7 @@ provider:
     ALLOWED_HOST: '.amazonaws.com'
     STATIC_URL: ${self:custom.settings.static_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url}
+    SERVICE_ENDPOINT: ${self:custom.settings.service_endpoint}
   vpc:
     securityGroupIds:
       - !Ref ServerlessSecurityGroup
@@ -42,6 +43,7 @@ custom:
     packRequirements: false
   settings:
     static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}
+    service_endpoint: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}
     DB_NAME: eregs
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
