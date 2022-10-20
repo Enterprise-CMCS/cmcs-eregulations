@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
 
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', '.cms.gov']
+ALLOWED_HOSTS = [os.environ.get("EREGS_URL"), os.environ.get("CUSTOM_URL"), "localhost"]
 
 # Application definition
 
@@ -110,6 +110,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.custom_url",
+                "cmcs_regulations.context_processors.eregs_url",
                 "cmcs_regulations.context_processors.automated_testing",
                 'regulations.context_processors.site_config',
                 'regcore.context_processors.regcore_config',
@@ -187,6 +188,8 @@ HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 GA_ID = os.environ.get("GA_ID")
 
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
+
+EREGS_URL = os.environ.get("EREGS_URL")
 
 
 OPENSEARCH_DSL = {
