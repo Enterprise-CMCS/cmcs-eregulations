@@ -13,7 +13,7 @@ export default {
             type: String,
             default: "/about/",
         },
-        baseUrl: {
+        customUrl: {
             type: String,
             default: "",
         },
@@ -30,7 +30,7 @@ export default {
         <router-view
             :api-url="apiUrl"
             :about-url="aboutUrl"
-            :base-url="baseUrl"
+            :custom-url="customUrl"
             :host="host"
         />
     </v-app>

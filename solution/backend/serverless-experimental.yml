@@ -20,7 +20,8 @@ provider:
     DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password}
     ALLOWED_HOST: '.amazonaws.com'
     STATIC_URL: ${self:custom.settings.static_url}
-    BASE_URL: ${ssm:/eregulations/base_url}
+    CUSTOM_URL: ${ssm:/eregulations/custom_url}
+    EREGS_URL: ${self:custom.settings.eregs_url}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
@@ -46,6 +47,7 @@ custom:
     packRequirements: false
   settings:
     static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
+    eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}
     DB_NAME: ${self:custom.stage}
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'

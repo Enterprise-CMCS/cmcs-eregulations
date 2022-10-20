@@ -7,9 +7,9 @@ def google_analytics(request):
     }
 
 
-def base_url(request):
+def custom_url(request):
     return {
-        "BASE_URL": settings.BASE_URL
+        "CUSTOM_URL": settings.CUSTOM_URL
     }
 
 

@@ -16,11 +16,13 @@
 {% endblock %}
 
 {% block body %}
+<h1>CUSTOM_URL {{ CUSTOM_URL }}</h1>
+<h2>HOST {{ host }}</h2>
 <div
     id="vite-app"
     data-api-url="{% url 'regcore' %}"
     data-about-url="{% url 'about' %}"
-    data-base-url="{{ BASE_URL }}"
+    data-custom-url="{{ CUSTOM_URL }}"
     data-host="{{ host }}"
 ></div>
 {% endblock %}

@@ -19,12 +19,12 @@ const routes = [
     },
 ];
 
-const router = ({ baseUrl = "", host = "" }) =>
+const router = ({ customUrl = "", host = "" }) =>
     new VueRouter({
         mode: "history",
         routes,
         base:
-            import.meta.env.VITE_ENV === "prod" && host === baseUrl
+            import.meta.env.VITE_ENV === "prod" && host === customUrl
                 ? "/"
                 : import.meta.env.VITE_ENV || "/",
         scrollBehavior(to) {

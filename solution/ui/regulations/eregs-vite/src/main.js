@@ -5,9 +5,9 @@ import router from "./router";
 
 const mountEl = document.querySelector("#vite-app");
 Vue.config.devtools = true;
-const { baseUrl, host } = mountEl.dataset;
+const { customUrl, host } = mountEl.dataset;
 new Vue({
     vuetify,
-    router: router({ baseUrl, host }),
+    router: router({ customUrl, host }),
     render: (h) => h(App, { props: { ...mountEl.dataset } }),
 }).$mount("#vite-app");

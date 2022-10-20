@@ -109,7 +109,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
                 "cmcs_regulations.context_processors.google_analytics",
-                "cmcs_regulations.context_processors.base_url",
+                "cmcs_regulations.context_processors.custom_url",
                 "cmcs_regulations.context_processors.automated_testing",
                 'regulations.context_processors.site_config',
                 'regcore.context_processors.regcore_config',
@@ -186,7 +186,7 @@ HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 
 GA_ID = os.environ.get("GA_ID")
 
-BASE_URL = os.environ.get("BASE_URL")
+CUSTOM_URL = os.environ.get("CUSTOM_URL")
 
 
 OPENSEARCH_DSL = {
