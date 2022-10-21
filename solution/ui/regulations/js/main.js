@@ -145,6 +145,9 @@ function viewButtonClose() {
 }
 
 function main() {
+    // Must be first, mutates DOM
+    highlightText(window.location, "highlight");
+
     new Vue({
         components: {
             RelatedRules,
@@ -171,8 +174,6 @@ function main() {
 
     window.addEventListener("hashchange", activateTOCLink);
     activateTOCLink();
-
-    highlightText(window.location, "highlight");
 
     const resetButton = document.getElementById("search-reset");
     if (resetButton) {

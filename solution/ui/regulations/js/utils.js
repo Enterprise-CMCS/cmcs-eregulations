@@ -144,6 +144,35 @@ const getQueryParam = (location, key) => {
     return queryParams.get(key);
 };
 
+function addMarks(node, string) {
+    const regex = new RegExp(string, "gi");
+    if (node.nodeType === document.TEXT_NODE) {
+        var text = node.nodeValue;
+        if (text.indexOf(string) !== -1) {
+            // nodeValue gives inner text without Vue component tag (copy btn);
+            // innerHTML gives text with Vue Component tag (copy btn);
+            // Keep Vue Component tag unaltered so when Vue mounts to DOM
+            // it does what is expected.
+            const innerHtmlOfParentNode = node.parentNode.innerHTML;
+            const indexOfText = innerHtmlOfParentNode.indexOf(text);
+            const textToKeep = innerHtmlOfParentNode.slice(0, indexOfText);
+            const textToAlter = innerHtmlOfParentNode.slice(indexOfText);
+            const newText = textToAlter.replace(
+                regex,
+                "<mark class='highlight'>$&</mark>"
+            );
+            node.parentNode.innerHTML = textToKeep + newText;
+            return true;
+        }
+    } else if (node.nodeType === document.ELEMENT_NODE) {
+        for (var i = 0; i < node.childNodes.length; i++) {
+            if (node.childNodes[i].nodeName !== "MARK") {
+                addMarks(node.childNodes[i], string);
+            }
+        }
+    }
+}
+
 const highlightText = (location, paramKey) => {
     const textToHighlight = getQueryParam(location, paramKey);
     console.log("text to highlight", textToHighlight);
@@ -153,13 +182,7 @@ const highlightText = (location, paramKey) => {
         if (targetedSection) {
             const textArr = textToHighlight.split(",");
             textArr.forEach((text) => {
-                const regex = new RegExp(text, "gi");
-                let sectionText = targetedSection.innerHTML;
-                const newText = sectionText.replace(
-                    regex,
-                    "<mark class='highlight'>$&</mark>"
-                );
-                targetedSection.innerHTML = newText;
+                addMarks(targetedSection, text);
             });
         }
     }
