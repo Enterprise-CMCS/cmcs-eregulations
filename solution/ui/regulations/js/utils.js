@@ -160,7 +160,7 @@ function addMarks(element, highlightString) {
         // innerHTML gives text with Vue Component markup tags;
         // Currently there is only the <copy-btn> tag at beginning
         var text = element.nodeValue;
-        if (text.indexOf(highlightString) !== -1) {
+        if (text.toUpperCase().indexOf(highlightString.toUpperCase()) !== -1) {
             const innerHtmlOfParentNode = element.parentNode.innerHTML;
             const indexOfText = innerHtmlOfParentNode.indexOf(text);
             const textToKeep = innerHtmlOfParentNode.slice(0, indexOfText);
