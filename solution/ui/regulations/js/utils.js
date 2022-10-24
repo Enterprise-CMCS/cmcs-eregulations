@@ -151,7 +151,6 @@ const getQueryParam = (location, key) => {
  * @param {HTMLElement} element - element to mutate
  * @param {string} highlightString - string to match
  */
-
 function addMarks(element, highlightString) {
     const regex = new RegExp(highlightString, "gi");
     if (element.nodeType === document.TEXT_NODE) {
@@ -181,9 +180,15 @@ function addMarks(element, highlightString) {
     }
 }
 
+/**
+ * Retrieve comma-separated list of strings from query param in URL
+ * and highlight those strings on the page using <mark> tags
+ *
+ * @param {Location} location - Location object with information about current location of document
+ * @param {string} paramKey - name of query parameter containing strings to match and highlight
+ */
 const highlightText = (location, paramKey) => {
     const textToHighlight = getQueryParam(location, paramKey);
-    console.log("text to highlight", textToHighlight);
     if (location.hash && textToHighlight) {
         const elementId = location.hash.replace(/^#/, "");
         const targetedSection = document.getElementById(elementId);
