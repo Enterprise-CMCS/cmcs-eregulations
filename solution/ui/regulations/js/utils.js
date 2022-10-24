@@ -144,16 +144,24 @@ const getQueryParam = (location, key) => {
     return queryParams.get(key);
 };
 
-function addMarks(node, string) {
-    const regex = new RegExp(string, "gi");
-    if (node.nodeType === document.TEXT_NODE) {
-        var text = node.nodeValue;
-        if (text.indexOf(string) !== -1) {
-            // nodeValue gives inner text without Vue component tag (copy btn);
-            // innerHTML gives text with Vue Component tag (copy btn);
-            // Keep Vue Component tag unaltered so when Vue mounts to DOM
-            // it does what is expected.
-            const innerHtmlOfParentNode = node.parentNode.innerHTML;
+/**
+ * Recursively search through DOM Element and its children and
+ * surround strings that match `highlightString` with <mark> tags
+ *
+ * @param {HTMLElement} element - element to mutate
+ * @param {string} highlightString - string to match
+ */
+
+function addMarks(element, highlightString) {
+    const regex = new RegExp(highlightString, "gi");
+    if (element.nodeType === document.TEXT_NODE) {
+        // note `nodeValue` vs `innerHTML`
+        // nodeValue gives inner text without Vue component markup tags;
+        // innerHTML gives text with Vue Component markup tags;
+        // Currently there is only the <copy-btn> tag at beginning
+        var text = element.nodeValue;
+        if (text.indexOf(highlightString) !== -1) {
+            const innerHtmlOfParentNode = element.parentNode.innerHTML;
             const indexOfText = innerHtmlOfParentNode.indexOf(text);
             const textToKeep = innerHtmlOfParentNode.slice(0, indexOfText);
             const textToAlter = innerHtmlOfParentNode.slice(indexOfText);
@@ -161,13 +169,13 @@ function addMarks(node, string) {
                 regex,
                 "<mark class='highlight'>$&</mark>"
             );
-            node.parentNode.innerHTML = textToKeep + newText;
+            element.parentNode.innerHTML = textToKeep + newText;
             return true;
         }
-    } else if (node.nodeType === document.ELEMENT_NODE) {
-        for (var i = 0; i < node.childNodes.length; i++) {
-            if (node.childNodes[i].nodeName !== "MARK") {
-                addMarks(node.childNodes[i], string);
+    } else if (element.nodeType === document.ELEMENT_NODE) {
+        for (var i = 0; i < element.childNodes.length; i++) {
+            if (element.childNodes[i].nodeName !== "MARK") {
+                addMarks(element.childNodes[i], highlightString);
             }
         }
     }
