@@ -1,6 +1,5 @@
 <template>
     <div
-        :id="boxProperties"
         class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
     >
         <span
@@ -27,10 +26,6 @@ export default {
             type: Boolean,
             default: false,
         },
-        spinnerType: {
-            type: String,
-            default: ""
-        },
     },
 
     computed: {
@@ -43,27 +38,10 @@ export default {
         },
 
         spinnerStyles() {
-            let pxSize = "8px"
-            if (this.spinnerType === "button"){
-                pxSize="4px";
-            }
-            else if(this.size === "small"){
-                pxSize= "4px"
-            }
-
             return {
-                margin: this.size === pxSize
+                margin: this.size === "small" ? "4px" : "8px",
             };
         },
-
-        boxProperties() {
-            return this.spinnerType === "button" ? "fill-center" : ""
-        }
     },
 };
 </script>
-<style >
-#fill-center{
-    width:100%;
-}
-</style>
