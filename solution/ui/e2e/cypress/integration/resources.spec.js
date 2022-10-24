@@ -36,10 +36,10 @@ describe("Resources page", () => {
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
-            cy.intercept("**/resources/?locations=42**page=1**", {
+            cy.intercept("**/resources/?**page=1**", {
                 fixture: "resources.json",
             }).as("resources");
-            cy.intercept("**/resources/?locations=42**page=2**", {
+            cy.intercept("**/resources/?**page=2**", {
                 fixture: "resources-page-2.json",
             }).as("resources2");
         });
