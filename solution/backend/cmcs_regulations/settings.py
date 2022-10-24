@@ -212,7 +212,12 @@ SPECTACULAR_SETTINGS = {
 LOGIN_URL = "/admin"
 
 # Settings for CSP headers
-CSP_IMG_SRC = ["'self'", STATIC_URL]
+CSP_IMG_SRC = [
+    "'self'",
+    STATIC_URL,
+    "https://www.googletagmanager.com",
+    "https://www.google-analytics.com",
+]
 CSP_STYLE_SRC = [
     "'self'",
     "'unsafe-inline'",
@@ -231,6 +236,8 @@ CSP_SCRIPT_SRC = [
     STATIC_URL,
     "https://www.googletagmanager.com",
 ]
+CSP_INCLUDE_NONCE_IN = ["script-src"]
+
 
 if DEBUG:
     import os  # only if you haven't already imported this
