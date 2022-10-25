@@ -139,11 +139,75 @@ const formatDate = (value) => {
     return formattedDate;
 };
 
+const getQueryParam = (location, key) => {
+    const queryParams = new URL(location).searchParams;
+    return queryParams.get(key);
+};
+
+/**
+ * Recursively search through DOM Element and its children and
+ * surround strings that match `highlightString` with <mark> tags
+ *
+ * @param {HTMLElement} element - element to mutate
+ * @param {string} highlightString - string to match
+ */
+function addMarks(element, highlightString) {
+    const regex = new RegExp(highlightString, "gi");
+    if (element.nodeType === document.TEXT_NODE) {
+        // note `nodeValue` vs `innerHTML`
+        // nodeValue gives inner text without Vue component markup tags;
+        // innerHTML gives text with Vue Component markup tags;
+        // Currently there is only the <copy-btn> tag at beginning
+        var text = element.nodeValue;
+        if (text.toUpperCase().indexOf(highlightString.toUpperCase()) !== -1) {
+            const innerHtmlOfParentNode = element.parentNode.innerHTML;
+            const indexOfText = innerHtmlOfParentNode.indexOf(text);
+            const textToKeep = innerHtmlOfParentNode.slice(0, indexOfText);
+            const textToAlter = innerHtmlOfParentNode.slice(indexOfText);
+            const newText = textToAlter.replace(
+                regex,
+                "<mark class='highlight'>$&</mark>"
+            );
+            element.parentNode.innerHTML = textToKeep + newText;
+            return true;
+        }
+    } else if (element.nodeType === document.ELEMENT_NODE) {
+        for (var i = 0; i < element.childNodes.length; i++) {
+            if (element.childNodes[i].nodeName !== "MARK") {
+                addMarks(element.childNodes[i], highlightString);
+            }
+        }
+    }
+}
+
+/**
+ * Retrieve comma-separated list of strings from query param in URL
+ * and highlight those strings on the page using <mark> tags
+ *
+ * @param {Location} location - Location object with information about current location of document
+ * @param {string} paramKey - name of query parameter containing strings to match and highlight
+ */
+const highlightText = (location, paramKey) => {
+    const textToHighlight = getQueryParam(location, paramKey);
+    if (location.hash && textToHighlight) {
+        const elementId = location.hash.replace(/^#/, "");
+        const targetedSection = document.getElementById(elementId);
+        if (targetedSection) {
+            const textArr = textToHighlight.split(",");
+            textArr.forEach((text) => {
+                addMarks(targetedSection, text);
+            });
+        }
+    }
+};
+
 export {
     delay,
-    parseError,
-    formatDate,
-    formatResourceCategories,
     EventCodes,
     flattenSubpart,
+    formatDate,
+    formatResourceCategories,
+    getQueryParam,
+    highlightText,
+    parseError,
 };
