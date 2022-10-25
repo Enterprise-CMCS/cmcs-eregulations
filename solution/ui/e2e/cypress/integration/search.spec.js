@@ -1,3 +1,5 @@
+const SEARCH_TERM = "telemedicine";
+
 describe("Search flow", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
@@ -10,10 +12,10 @@ describe("Search flow", () => {
         cy.visit("/");
         cy.get(".search-header > form > input")
             .should("be.visible")
-            .type("telemedicine");
+            .type(`${SEARCH_TERM}`);
         cy.get(".search-header > form").submit();
 
-        cy.url().should("include", "/search/?q=telemedicine");
+        cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
     });
 
     it("shows when mobile search open icon is clicked", () => {
@@ -24,16 +26,16 @@ describe("Search flow", () => {
             .click({ force: true });
         cy.get("form.search-borderless > input")
             .should("be.visible")
-            .type("telemedicine");
+            .type(`${SEARCH_TERM}`);
 
         cy.get("form.search-borderless").submit();
 
-        cy.url().should("include", "/search/?q=telemedicine");
+        cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
     });
 
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
-        cy.visit("/search/?q=telemedicine", { timeout: 60000 });
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.findByText(/\d+ results in Medicaid & CHIP Regulations/).should(
             "be.visible"
         );
@@ -47,13 +49,13 @@ describe("Search flow", () => {
         }).click({ force: true });
         cy.url().should(
             "include",
-            "42/441/Subpart-K/2021-11-05/?highlight=telemedicine#441-535"
+            `42/441/Subpart-K/2021-11-05/?highlight=${SEARCH_TERM}#441-535`
         );
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "441-535");
             cy.get($el).within(($focusedEl) => {
                 cy.get("mark.highlight")
-                    .contains("telemedicine")
+                    .contains(`${SEARCH_TERM}`)
                     .should("have.css", "background-color", "rgb(252, 229, 175)");
             });
         });
@@ -68,7 +70,7 @@ describe("Search flow", () => {
 
     it("should have a working searchbox", () => {
         cy.viewport("macbook-15");
-        cy.visit("/search/?q=telemedicine", { timeout: 60000 });
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.scrollTo("top");
         cy.get(".search-reset").click({ force: true });
         cy.findByRole("textbox")
@@ -80,7 +82,7 @@ describe("Search flow", () => {
 
     it("should be able to clear the searchbox", () => {
         cy.viewport("macbook-15");
-        cy.visit("/search/?q=telemedicine", { timeout: 60000 });
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.scrollTo("top");
 
         cy.get(".search-reset").click({ force: true });
