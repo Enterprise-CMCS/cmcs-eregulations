@@ -279,6 +279,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     fields = ("approved", "name", "description", "date", "url", "category",
               "locations", "bulk_title", "bulk_locations", "internal_notes")
 
+from .v3serializers.locations import AbstractLocationPolymorphicSerializer
 
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
@@ -289,7 +290,8 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
                           "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "group", "document_number", "name",
-              "description", "date", "url", "category", "doc_type", "locations", "bulk_title", "bulk_locations", "internal_notes")
+              "description", "date", "url", "category", "doc_type", "locations",
+              "bulk_title", "bulk_locations", "internal_notes", "location_history")
 
     def in_group(self, obj):
         group = str(obj.group)
@@ -306,14 +308,15 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     def save_model(self, request, obj, form, change):
         selection = form.cleaned_data["locations"]
         saved_locations = list(obj.locations.all().select_subclasses()) if obj.id else []
-        # create change object
-        change = {
-            "author": str(request.user),
-            "date": str(timezone.now()),
-            "additions": [x.id for x in selection if x not in saved_locations],
-            "removals": [x.id for x in saved_locations if x not in selection],
-        }
-        raise Exception(change)
+        additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_locations]
+        removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_locations if x not in selection]
+        if len(additions) > 0 or len(removals) > 0:  # create and append change object
+            obj.location_history.append({
+                "author": str(request.user),
+                "date": str(timezone.now()),
+                "additions": additions,
+                "removals": removals,
+            })
         super().save_model(request, obj, form, change)
 
 
