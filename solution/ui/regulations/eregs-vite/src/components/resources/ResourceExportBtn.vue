@@ -6,8 +6,8 @@
             @click="createCSV"
         >
             <template v-if="!downloadingCSV">
-                <span class="desktop-btn-label">Download Spreadsheet (CSV)</span
-                ><span class="mobile-btn-label">CSV</span>
+                <span class="label desktop-btn-label">Download Spreadsheet (CSV)</span
+                ><span class="label mobile-btn-label">CSV</span>
                 <svg
                     width="18"
                     height="17"
@@ -23,8 +23,7 @@
             </template>
             <template v-else>
                 <simple-spinner
-                    spinner-type="button"
-                    size="small"
+                    size="xs"
                 ></simple-spinner>
             </template>
         </button>
@@ -133,32 +132,38 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .resource-btn-container {
     padding-left: 5px;
 
     #exportCSV {
         padding-top: 8px;
         padding-bottom: 8px;
+        width: 50px;
         min-height: 18px;
         align-items: center;
-        justify-content: space-around;
+        justify-content: center;
 
         @include screen-md {
-            min-width: 225px;
+            width: 220px;
         }
 
-        .desktop-btn-label {
-            @include custom-max($mobile-max / 1px) {
-                display: none;
+        .label {
+            margin-right: 7px;
+
+            &.desktop-btn-label {
+                @include custom-max($mobile-max / 1px) {
+                    display: none;
+                }
+            }
+
+            &.mobile-btn-label {
+                @include screen-md {
+                    display: none;
+                }
             }
         }
 
-        .mobile-btn-label {
-            @include screen-md {
-                display: none;
-            }
-        }
     }
 }
 </style>

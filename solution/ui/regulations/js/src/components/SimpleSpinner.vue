@@ -1,6 +1,5 @@
 <template>
     <div
-        :id="boxProperties"
         class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
     >
         <span
@@ -15,21 +14,19 @@
 </template>
 
 <script>
+const SPINNER_SIZES = ["xs", "small", "medium", "large"];
+
 export default {
     name: "SimpleSpinner",
 
     props: {
         size: {
-            type: String,
+            validator: (value) => SPINNER_SIZES.includes(value),
             default: "medium",
         },
         filled: {
             type: Boolean,
             default: false,
-        },
-        spinnerType: {
-            type: String,
-            default: ""
         },
     },
 
@@ -37,33 +34,22 @@ export default {
         spinnerClasses() {
             return {
                 "ds-c-spinner--filled": this.filled,
-                "ds-c-spinner--small": this.size === "small",
+                "ds-c-spinner--small":
+                    this.size === "xs" || this.size === "small",
                 "ds-c-spinner--big": this.size === "large",
             };
         },
 
         spinnerStyles() {
-            let pxSize = "8px"
-            if (this.spinnerType === "button"){
-                pxSize="4px";
+            switch (this.size) {
+                case "xs":
+                    return "0px";
+                case "small":
+                    return "4px";
+                default:
+                    return "8px";
             }
-            else if(this.size === "small"){
-                pxSize= "4px"
-            }
-
-            return {
-                margin: this.size === pxSize
-            };
         },
-
-        boxProperties() {
-            return this.spinnerType === "button" ? "fill-center" : ""
-        }
     },
 };
 </script>
-<style >
-#fill-center{
-    width:100%;
-}
-</style>
