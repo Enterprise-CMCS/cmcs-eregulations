@@ -212,7 +212,11 @@ SPECTACULAR_SETTINGS = {
 LOGIN_URL = "/admin"
 
 # Settings for CSP headers
-CSP_IMG_SRC = ["'self'", STATIC_URL]
+CSP_IMG_SRC = [
+    "'self'",
+    STATIC_URL,
+    "https://images.federalregister.gov/",
+]
 CSP_STYLE_SRC = [
     "'self'",
     "'unsafe-inline'",
@@ -223,6 +227,10 @@ CSP_FONT_SRC = [
     "'self'",
     STATIC_URL,
     "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+]
+CSP_MANIFEST_SRC = [
+    "'self'",
+    STATIC_URL,
 ]
 CSP_SCRIPT_SRC = [
     "'self'",
