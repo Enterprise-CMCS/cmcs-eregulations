@@ -32,13 +32,13 @@
             state="collapsed"
             class="category-title"
         >
-            <template #:expanded>
+            <template #expanded>
                 <show-more-button
                     button-text="- Show Less"
                     :count="rules.length"
                 ></show-more-button>
             </template>
-            <template #:collapsed>
+            <template #collapsed>
                 <show-more-button
                     button-text="+ Show More"
                     :count="rules.length"
@@ -86,7 +86,7 @@
                 state="collapsed"
                 class="category-title"
             >
-                <template #:expanded>
+                <template #expanded>
                     <show-more-button
                         button-text="- Show Less"
                         :count="rules.length"
