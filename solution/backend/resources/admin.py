@@ -12,9 +12,8 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse
 from solo.admin import SingletonModelAdmin
 from django.utils import timezone
-from django.db.models import JSONField 
+from django.db.models import JSONField
 from django.forms.widgets import Textarea
-from rest_framework import serializers
 
 # Register your models here.
 
@@ -307,7 +306,7 @@ class LocationHistoryWidget(Textarea):
                 removals = self.locations_to_strings(row["removals"])
                 output.append(f"{i+1}: On {row['date']}, {row['user']} added {additions} and removed {removals}.")
             return "\n".join(output)
-        except Exception as e:
+        except Exception:
             return super().format_value(value)
 
 
