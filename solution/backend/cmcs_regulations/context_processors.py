@@ -13,12 +13,6 @@ def custom_url(request):
     }
 
 
-def eregs_url(request):
-    return {
-        "EREGS_URL": settings.EREGS_URL
-    }
-
-
 def automated_testing(request):
     return {
         "AUTOMATED_TEST": request.META.get("HTTP_X_AUTOMATED_TEST") == "true"

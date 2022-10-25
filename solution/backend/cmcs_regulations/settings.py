@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
 
 
-ALLOWED_HOSTS = [os.environ.get("EREGS_URL"), os.environ.get("CUSTOM_URL"), "localhost"]
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'regulations-pilot.cms.gov']
 
 # Application definition
 
@@ -188,8 +188,6 @@ HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 GA_ID = os.environ.get("GA_ID")
 
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
-
-EREGS_URL = os.environ.get("EREGS_URL")
 
 
 OPENSEARCH_DSL = {
