@@ -217,6 +217,7 @@ CSP_IMG_SRC = [
     STATIC_URL,
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
+    "https://images.federalregister.gov/",
 ]
 CSP_STYLE_SRC = [
     "'self'",
@@ -228,6 +229,10 @@ CSP_FONT_SRC = [
     "'self'",
     STATIC_URL,
     "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+]
+CSP_MANIFEST_SRC = [
+    "'self'",
+    STATIC_URL,
 ]
 CSP_SCRIPT_SRC = [
     "'self'",
