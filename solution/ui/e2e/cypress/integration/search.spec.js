@@ -1,15 +1,16 @@
 describe("Search flow", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] =
-                Cypress.env("DEPLOYING");
+            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
-    })
+    });
 
     it("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".search-header > form > input").should("be.visible").type("telemedicine");
+        cy.get(".search-header > form > input")
+            .should("be.visible")
+            .type("telemedicine");
         cy.get(".search-header > form").submit();
 
         cy.url().should("include", "/search/?q=telemedicine");
@@ -30,21 +31,32 @@ describe("Search flow", () => {
         cy.url().should("include", "/search/?q=telemedicine");
     });
 
-    it("displays results of the search", () => {
+    it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit("/search/?q=telemedicine", { timeout: 60000 });
         cy.findByText(/\d+ results in Medicaid & CHIP Regulations/).should(
             "be.visible"
         );
         cy.findByRole("link", {
-            name: "§ 447.203 Documentation of access to care and service payment rates.",
+            name: "§ 441.535 Assessment of functional need.",
         })
             .should("be.visible")
             .and("have.attr", "href");
         cy.findByRole("link", {
-            name: "§ 447.203 Documentation of access to care and service payment rates.",
+            name: "§ 441.535 Assessment of functional need.",
         }).click({ force: true });
-        cy.url().should("include", "/447/Subpart-B/2022-07-01/?highlight=telemedicine#447-203");
+        cy.url().should(
+            "include",
+            "42/441/Subpart-K/2021-11-05/?highlight=telemedicine#441-535"
+        );
+        cy.focused().then(($el) => {
+            cy.get($el).should("have.id", "441-535");
+            cy.get($el).within(($focusedEl) => {
+                cy.get("mark.highlight")
+                    .contains("telemedicine")
+                    .should("have.css", "background-color", "rgb(252, 229, 175)");
+            });
+        });
     });
 
     it("checks a11y for search page", () => {
