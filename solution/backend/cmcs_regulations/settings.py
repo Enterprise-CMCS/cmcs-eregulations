@@ -216,7 +216,10 @@ CSP_IMG_SRC = [
     "'self'",
     STATIC_URL,
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/favicon-32x32.png",
-    'data:'
+    'data:',
+    "https://www.googletagmanager.com",
+    "https://www.google-analytics.com",
+    "https://images.federalregister.gov/",
 ]
 CSP_STYLE_SRC = [
     "'self'",
@@ -230,6 +233,10 @@ CSP_FONT_SRC = [
     STATIC_URL,
     "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
 ]
+CSP_MANIFEST_SRC = [
+    "'self'",
+    STATIC_URL,
+]
 CSP_SCRIPT_SRC = [
     "'self'",
     "'unsafe-inline'",
@@ -239,6 +246,8 @@ CSP_SCRIPT_SRC = [
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-bundle.js",
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js"
 ]
+CSP_INCLUDE_NONCE_IN = ["script-src"]
+
 
 if DEBUG:
     import os  # only if you haven't already imported this
