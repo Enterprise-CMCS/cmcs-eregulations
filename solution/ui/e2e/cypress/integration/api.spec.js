@@ -42,5 +42,15 @@ describe("API testing", () => {
                 expect(response.status).to.eq(200);
             });
         });
+        it(`returns results for GET request to a title with no locations`, () => {
+            let endpoint = "v3/resources/?&category_details=true&location_details=true&start=undefined&max_results=1000&q=\"Identifying%20Medicaid%20and%20CHIP%20Beneficiaries\"&sort=newest&paginate=true&page_size=100&page=1&fr_grouping=false"
+            cy.request(endpoint).as("request");
+            cy.get("@request").then((response) => {
+                cy.log(`${endpoint} - ${response.status}`);
+                cy.log(`${response}`)
+                expect(response.body.count).to.greaterThan(0)
+                expect(response.status).to.eq(200);
+            });
+        });
     });
 });
