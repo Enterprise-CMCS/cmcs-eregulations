@@ -32,7 +32,8 @@ $white: #fff;
 $green: #2a7a3b;
 
 $title_color: #000;
-$reg_text_highlight_color: #eefafe;
+$section_highlight_color: #eefafe;
+$mark_highlight: #fce5af;
 
 //// Usage ////
 //// Call This Section in Your CSS, Not the Color Names ////
@@ -121,10 +122,11 @@ $copy_button_success: $green;
 //--------------------------
 
 @font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 700;
-  src: url('#{$additional-font-path}/OpenSans-BoldItalic.ttf') format('truetype');
+    font-family: "Open Sans";
+    font-style: italic;
+    font-weight: 700;
+    src: url("#{$additional-font-path}/OpenSans-BoldItalic.ttf")
+        format("truetype");
 }
 
 $primary_site_font: $font-sans; // Open Sans

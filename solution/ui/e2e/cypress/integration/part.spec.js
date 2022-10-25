@@ -48,6 +48,7 @@ describe("Part View", () => {
 
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "433-51");
+            cy.get($el).should("have.css", "background-color", "rgb(238, 250, 254)");
         });
     });
 
