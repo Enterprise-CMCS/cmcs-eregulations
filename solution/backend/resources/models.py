@@ -177,7 +177,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources"
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
-    location_history = models.JSONField(default=list)
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     objects = InheritanceManager()
@@ -196,6 +195,7 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
+    location_history = models.JSONField(default=list)
 
     doc_type = models.CharField(
         blank=True,
