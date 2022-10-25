@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
@@ -10,6 +12,9 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse
 from solo.admin import SingletonModelAdmin
 from django.utils import timezone
+from django.db.models import JSONField 
+from django.forms.widgets import Textarea
+from rest_framework import serializers
 
 # Register your models here.
 
@@ -34,6 +39,7 @@ from .filters import (
     SubpartFilter,
 )
 
+from .v3serializers.locations import AbstractLocationPolymorphicSerializer
 from .mixins import ExportJSONMixin
 from . import actions
 
@@ -279,7 +285,31 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     fields = ("approved", "name", "description", "date", "url", "category",
               "locations", "bulk_title", "bulk_locations", "internal_notes")
 
-from .v3serializers.locations import AbstractLocationPolymorphicSerializer
+
+class LocationHistoryWidget(Textarea):
+    def locations_to_strings(self, locations):
+        strings = []
+        for i in locations:
+            key = ([x for x in i.keys() if "_id" in x] or [None])[0]
+            if key:
+                strings.append(f"{i['title']} CFR {i['part']}.{i[key]}")
+        return strings
+
+    def format_value(self, value):
+        try:
+            self.attrs['rows'] = 10
+            self.attrs['cols'] = 120
+            data = json.loads(value)
+            output = []
+            for i in range(len(data)):
+                row = data[i]
+                additions = self.locations_to_strings(row["additions"])
+                removals = self.locations_to_strings(row["removals"])
+                output.append(f"{i+1}: On {row['date']}, {row['user']} added {additions} and removed {removals}.")
+            return "\n".join(output)
+        except Exception as e:
+            return super().format_value(value)
+
 
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
@@ -292,6 +322,16 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     fields = ("approved", "docket_numbers", "group", "document_number", "name",
               "description", "date", "url", "category", "doc_type", "locations",
               "bulk_title", "bulk_locations", "internal_notes", "location_history")
+
+    formfield_overrides = {
+        JSONField: {'widget': LocationHistoryWidget}
+    }
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["location_history"].disabled = True
+        form.base_fields["location_history"].required = False
+        return form
 
     def in_group(self, obj):
         group = str(obj.group)
@@ -312,7 +352,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_locations if x not in selection]
         if len(additions) > 0 or len(removals) > 0:  # create and append change object
             obj.location_history.append({
-                "author": str(request.user),
+                "user": str(request.user),
                 "date": str(timezone.now()),
                 "additions": additions,
                 "removals": removals,
