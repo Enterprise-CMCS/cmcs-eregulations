@@ -9,8 +9,8 @@ CSS/Javascript etc., should inherit from this template.
 <html class="no-js" lang="en">
     <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA_ID }}"></script>
-    <script>
+    <script nonce="{{ request.csp_nonce }}" async src="https://www.googletagmanager.com/gtag/js?id={{ GA_ID }}"></script>
+    <script nonce="{{ request.csp_nonce }}">
         window["ga-disable-{{ GA_ID }}"] = {{ AUTOMATED_TEST | yesno:"true,false" }};
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}

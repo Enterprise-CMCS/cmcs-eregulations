@@ -215,6 +215,8 @@ LOGIN_URL = "/admin"
 CSP_IMG_SRC = [
     "'self'",
     STATIC_URL,
+    "https://www.googletagmanager.com",
+    "https://www.google-analytics.com",
     "https://images.federalregister.gov/",
 ]
 CSP_STYLE_SRC = [
@@ -239,6 +241,8 @@ CSP_SCRIPT_SRC = [
     STATIC_URL,
     "https://www.googletagmanager.com",
 ]
+CSP_INCLUDE_NONCE_IN = ["script-src"]
+
 
 if DEBUG:
     import os  # only if you haven't already imported this
