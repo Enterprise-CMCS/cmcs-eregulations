@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from solo.admin import SingletonModelAdmin
+from django.utils import timezone
 
 # Register your models here.
 
@@ -301,6 +302,19 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return self.readonly_fields + (("doc_type",) if obj else ())  # prevent changing name field on existing objects
+
+    def save_model(self, request, obj, form, change):
+        selection = form.cleaned_data["locations"]
+        saved_locations = list(obj.locations.all().select_subclasses()) if obj.id else []
+        # create change object
+        change = {
+            "author": str(request.user),
+            "date": str(timezone.now()),
+            "additions": [x.id for x in selection if x not in saved_locations],
+            "removals": [x.id for x in saved_locations if x not in selection],
+        }
+        raise Exception(change)
+        super().save_model(request, obj, form, change)
 
 
 class FederalRegisterDocumentGroupForm(forms.ModelForm):
