@@ -1,5 +1,6 @@
 describe("Part View", () => {
     beforeEach(() => {
+        cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         }).as("headers");
@@ -107,7 +108,6 @@ describe("Part View", () => {
     });
 
     it("renders FR Doc category correctly in sidebar", () => {
-        cy.clearIndexedDB();
         cy.intercept("**v3/resources/?locations=42.433.10**", {
             fixture: "42.433.10.resources.json",
         }).as("resources43310");
