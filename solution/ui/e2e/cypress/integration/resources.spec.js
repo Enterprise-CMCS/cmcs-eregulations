@@ -52,7 +52,6 @@ describe("Resources page", () => {
             });
         });
 
-
         it("renders correctly", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
