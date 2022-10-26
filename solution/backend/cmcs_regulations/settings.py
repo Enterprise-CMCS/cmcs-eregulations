@@ -250,6 +250,8 @@ CSP_SCRIPT_SRC = [
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js"
 ]
 CSP_CONNECT_SRC = [
+    "'self'",
+    STATIC_URL,
     "https://*.googletagmanager.com",
     "https://*.google-analytics.com",
     "http://*.analytics.google.com",
