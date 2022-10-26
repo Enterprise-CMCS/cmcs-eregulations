@@ -215,6 +215,8 @@ LOGIN_URL = "/admin"
 CSP_IMG_SRC = [
     "'self'",
     STATIC_URL,
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/favicon-32x32.png",
+    'data:',
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
     "https://images.federalregister.gov/",
@@ -224,6 +226,7 @@ CSP_STYLE_SRC = [
     "'unsafe-inline'",
     STATIC_URL,
     "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui.css"
 ]
 CSP_FONT_SRC = [
     "'self'",
@@ -240,6 +243,8 @@ CSP_SCRIPT_SRC = [
     "'unsafe-eval'",
     STATIC_URL,
     "https://www.googletagmanager.com",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-bundle.js",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js"
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 
