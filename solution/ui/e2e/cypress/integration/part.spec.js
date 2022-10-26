@@ -110,11 +110,11 @@ describe("Part View", () => {
         cy.clearIndexedDB();
         cy.intercept("**v3/resources/?locations=42.433.10**", {
             fixture: "42.433.10.resources.json",
-        }).as("resources");
+        }).as("resources43310");
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
         cy.contains("433.10").click({ force: true });
-        cy.wait("@resources").then((interception) => {
+        cy.wait("@resources43310").then(() => {
             cy.get(".is-fr-doc-btn").click({ force: true });
             cy.get(".show-more-button")
                 .contains("+ Show More (9)")
