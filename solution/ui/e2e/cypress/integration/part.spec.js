@@ -114,6 +114,7 @@ describe("Part View", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
         cy.contains("433.10").click({ force: true });
+        cy.url().should("include", "#433-10");
         cy.wait("@resources43310").then(() => {
             cy.get(".is-fr-doc-btn").click({ force: true });
             cy.get(".show-more-button")
