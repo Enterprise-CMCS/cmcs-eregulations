@@ -30,6 +30,19 @@ describe("Resources page", () => {
         });
     });
 
+    describe("test search", () => {
+        it("does not filter any locations when it makes the request", () => {
+            cy.clearIndexedDB();
+            cy.intercept('**v3/resources/?&**page=1**').as("resourceUrl")
+            cy.log('before intercept')
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.wait("@resourceUrl").then( (interception) => {
+              expect(interception.request.url).to.not.contain( 'location=')
+            });
+        })
+    });
+
     describe("Mock Results", () => {
         beforeEach(() => {
             cy.clearIndexedDB();
@@ -42,14 +55,6 @@ describe("Resources page", () => {
             cy.intercept("**v3/resources/?&**page=2**", {
                 fixture: "resources-page-2.json",
             }).as("resources2");
-        });
-
-        it("does not filter any locations when it makes the request", () => {
-            cy.viewport("macbook-15");
-            cy.visit("/resources");
-            cy.wait("@resources").then( (interception) => {
-                expect(interception.request.url).to.not.contain( "location=")
-            });
         });
 
         it("renders correctly", () => {
