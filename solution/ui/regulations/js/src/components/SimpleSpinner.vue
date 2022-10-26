@@ -14,12 +14,14 @@
 </template>
 
 <script>
+const SPINNER_SIZES = ["xs", "small", "medium", "large"];
+
 export default {
     name: "SimpleSpinner",
 
     props: {
         size: {
-            type: String,
+            validator: (value) => SPINNER_SIZES.includes(value),
             default: "medium",
         },
         filled: {
@@ -32,15 +34,21 @@ export default {
         spinnerClasses() {
             return {
                 "ds-c-spinner--filled": this.filled,
-                "ds-c-spinner--small": this.size === "small",
+                "ds-c-spinner--small":
+                    this.size === "xs" || this.size === "small",
                 "ds-c-spinner--big": this.size === "large",
             };
         },
 
         spinnerStyles() {
-            return {
-                margin: this.size === "small" ? "4px" : "8px",
-            };
+            switch (this.size) {
+                case "xs":
+                    return "0px";
+                case "small":
+                    return "4px";
+                default:
+                    return "8px";
+            }
         },
     },
 };
