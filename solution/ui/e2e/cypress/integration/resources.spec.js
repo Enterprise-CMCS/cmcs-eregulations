@@ -44,6 +44,15 @@ describe("Resources page", () => {
             }).as("resources2");
         });
 
+        it("does not filter any locations when it makes the request", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.wait("@resources").then( (interception) => {
+                expect(interception.request.url).to.not.contain( 'location=')
+            });
+        });
+
+
         it("renders correctly", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
