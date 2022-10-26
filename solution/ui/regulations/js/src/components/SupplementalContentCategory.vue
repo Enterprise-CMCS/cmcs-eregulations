@@ -3,16 +3,16 @@
         <div class="category">
             <collapse-button
                 v-if="has_children"
-                v-bind:class="{ subcategory: subcategory }"
+                :class="collapseButtonClasses"
                 :name="name"
                 state="collapsed"
                 class="category-title"
             >
-                <template v-slot:expanded
+                <template #expanded
                     >{{ name }}
                     <i v-if="has_children" class="fa fa-chevron-up"></i
                 ></template>
-                <template v-slot:collapsed
+                <template #collapsed
                     >{{ name }}
                     <i v-if="has_children" class="fa fa-chevron-down"></i
                 ></template>
@@ -130,6 +130,12 @@ export default {
             return (
                 this.sub_categories?.length || this.supplemental_content?.length
             );
+        },
+        collapseButtonClasses() {
+            return {
+                subcategory: this.subcategory,
+                "is-fr-doc-btn": this.isFrDocCategory,
+            };
         },
     },
 };
