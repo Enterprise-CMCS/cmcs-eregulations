@@ -30,7 +30,6 @@ describe("Resources page", () => {
         });
     });
 
-
     describe("Mock Results", () => {
         beforeEach(() => {
             cy.clearIndexedDB();
@@ -44,6 +43,14 @@ describe("Resources page", () => {
                 fixture: "resources-page-2.json",
             }).as("resources2");
         });
+
+        it("does not filter locations on the search", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.wait("@resources").then( (interception) => {
+              expect(interception.request.url).to.not.contain( 'location=')
+            });
+        })
 
         it("renders correctly", () => {
             cy.viewport("macbook-15");
