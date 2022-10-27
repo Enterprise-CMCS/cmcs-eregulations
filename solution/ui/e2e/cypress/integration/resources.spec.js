@@ -30,9 +30,12 @@ describe("Resources page", () => {
         });
     });
 
-    describe("test search", () => {
+    describe("search filters", () => {
         it("does not filter any locations when it makes the request", () => {
             cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+            });
             cy.intercept('**v3/resources/?&**page=1**').as("resourceUrl")
             cy.log('before intercept')
             cy.viewport("macbook-15");
