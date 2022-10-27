@@ -110,7 +110,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.custom_url",
-                "cmcs_regulations.context_processors.eregs_url",
                 "cmcs_regulations.context_processors.automated_testing",
                 'regulations.context_processors.site_config',
                 'regcore.context_processors.regcore_config',
