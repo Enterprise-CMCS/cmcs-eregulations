@@ -30,17 +30,17 @@ describe("Resources page", () => {
         });
     });
 
- 
+
     describe("Mock Results", () => {
         beforeEach(() => {
             cy.clearIndexedDB();
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
-            cy.intercept("**v3/resources/?&**page=1**", {
+            cy.intercept("**/resources/?&**page=1**", {
                 fixture: "resources.json",
             }).as("resources");
-            cy.intercept("**v3/resources/?&**page=2**", {
+            cy.intercept("**/resources/?&**page=2**", {
                 fixture: "resources-page-2.json",
             }).as("resources2");
         });
