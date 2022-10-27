@@ -75,6 +75,7 @@
                         :isLoading="isLoading"
                         :page="page"
                         :page-size="pageSize"
+                        :categories="categories"
                         :content="supplementalContent"
                         :count="supplementalContentCount"
                         :partsList="filters.part.listItems"
