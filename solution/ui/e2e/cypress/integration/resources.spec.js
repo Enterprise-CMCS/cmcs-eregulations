@@ -30,22 +30,7 @@ describe("Resources page", () => {
         });
     });
 
-    describe("search filters", () => {
-        it("does not filter any locations when it makes the request", () => {
-            cy.clearIndexedDB();
-            cy.intercept("/**", (req) => {
-                req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-            });
-            cy.intercept('**v3/resources/?&**page=1**').as("resourceUrl")
-            cy.log('before intercept')
-            cy.viewport("macbook-15");
-            cy.visit("/resources");
-            cy.wait("@resourceUrl").then( (interception) => {
-              expect(interception.request.url).to.not.contain( 'location=')
-            });
-        })
-    });
-
+ 
     describe("Mock Results", () => {
         beforeEach(() => {
             cy.clearIndexedDB();
