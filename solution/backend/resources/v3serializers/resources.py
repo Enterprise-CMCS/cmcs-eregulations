@@ -80,7 +80,8 @@ class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, Typica
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField()
     doc_type = serializers.CharField()
-
+    correction = serializers.BooleanField()
+    withdrawal = serializers.BooleanField()
     name_headline = HeadlineField("federalregisterdocument")
     description_headline = HeadlineField("federalregisterdocument")
     document_number_headline = HeadlineField("federalregisterdocument")
