@@ -288,7 +288,8 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
                           "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "group", "document_number", "name",
-              "description", "date", "url", "category", "doc_type", "locations", "bulk_title", "bulk_locations", "internal_notes")
+              "description", "date", "url", "category", "doc_type", "correction", "withdrawal",
+              "locations", "bulk_title", "bulk_locations", "internal_notes")
 
     def in_group(self, obj):
         group = str(obj.group)
