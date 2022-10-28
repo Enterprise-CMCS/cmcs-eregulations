@@ -195,6 +195,8 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
+    correction = models.BooleanField(default=False)
+    withdrawal = models.BooleanField(default=False)
 
     doc_type = models.CharField(
         blank=True,
