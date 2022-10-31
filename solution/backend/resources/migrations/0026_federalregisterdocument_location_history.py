@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0024_alter_federalregisterdocumentgroup_options'),
+        ('resources', '0025_auto_20221027_0816'),
     ]
 
     operations = [
