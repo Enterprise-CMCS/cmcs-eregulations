@@ -292,22 +292,30 @@ class LocationHistoryWidget(Textarea):
             key = ([x for x in i.keys() if "_id" in x] or [None])[0]
             if key:
                 strings.append(f"{i['title']} CFR {i['part']}.{i[key]}")
-        return strings
+        if not strings:
+            return None
+        if len(strings) == 1:
+            return strings[0]
+        return ", ".join(strings[0:-1]) + ("," if len(strings) > 2 else "") + f" and {strings[-1]}"
 
     def format_value(self, value):
         try:
             self.attrs['rows'] = 10
             self.attrs['cols'] = 120
-            data = json.loads(value)
             output = []
+            data = json.loads(value)
             for i in range(len(data)):
                 row = data[i]
                 additions = self.locations_to_strings(row["additions"])
                 removals = self.locations_to_strings(row["removals"])
-                output.append(f"{i+1}: On {row['date']}, {row['user']} added {additions} and removed {removals}.")
+                output.append(f"{i+1}: On {row['date']}, {row['user']} %s%s%s." % (
+                    f"added {additions}" if additions else "",
+                    " and " if additions and removals else "",
+                    f"removed {removals}" if removals else "",
+                ))
             return "\n".join(output)
-        except Exception:
-            return super().format_value(value)
+        except Exception as e:
+            return "Error rendering location history."
 
 
 @admin.register(FederalRegisterDocument)
@@ -349,7 +357,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         saved_locations = list(obj.locations.all().select_subclasses()) if obj.id else []
         additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_locations]
         removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_locations if x not in selection]
-        if len(additions) > 0 or len(removals) > 0:  # create and append change object
+        if additions or removals:  # create and append change object
             obj.location_history.append({
                 "user": str(request.user),
                 "date": str(timezone.now()),
