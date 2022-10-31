@@ -13,6 +13,7 @@ import RecentChangesContainer from "../dist/RecentChangesContainer";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
+import { highlightText } from "./utils";
 
 Vue.config.devtools = true;
 
@@ -144,6 +145,9 @@ function viewButtonClose() {
 }
 
 function main() {
+    // Must be first, mutates DOM
+    highlightText(window.location, "highlight");
+
     new Vue({
         components: {
             RelatedRules,

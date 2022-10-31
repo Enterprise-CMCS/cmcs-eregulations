@@ -326,8 +326,8 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
                           "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
-    fields = ("approved", "docket_numbers", "group", "document_number", "name",
-              "description", "date", "url", "category", "doc_type", "locations",
+    fields = ("approved", "docket_numbers", "group", "document_number", "name", "correction",
+              "withdrawal", "description", "date", "url", "category", "doc_type", "locations",
               "bulk_title", "bulk_locations", "internal_notes", "location_history")
 
     formfield_overrides = {

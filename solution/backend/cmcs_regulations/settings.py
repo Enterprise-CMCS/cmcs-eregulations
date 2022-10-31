@@ -212,25 +212,49 @@ SPECTACULAR_SETTINGS = {
 LOGIN_URL = "/admin"
 
 # Settings for CSP headers
-CSP_IMG_SRC = ["'self'", STATIC_URL]
+CSP_IMG_SRC = [
+    "'self'",
+    STATIC_URL,
+    "https://*.googletagmanager.com",
+    "https://*.google-analytics.com",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/favicon-32x32.png",
+    'data:',
+    "https://images.federalregister.gov/",
+]
 CSP_STYLE_SRC = [
     "'self'",
     "'unsafe-inline'",
     STATIC_URL,
     "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui.css"
 ]
 CSP_FONT_SRC = [
     "'self'",
     STATIC_URL,
     "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/",
 ]
+CSP_MANIFEST_SRC = [
+    "'self'",
+    STATIC_URL,
+]
 CSP_SCRIPT_SRC = [
     "'self'",
     "'unsafe-inline'",
     "'unsafe-eval'",
     STATIC_URL,
-    "https://www.googletagmanager.com",
+    "https://*.googletagmanager.com",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-bundle.js",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js"
 ]
+CSP_CONNECT_SRC = [
+    "'self'",
+    STATIC_URL,
+    "https://*.googletagmanager.com",
+    "https://*.google-analytics.com",
+    "http://*.analytics.google.com",
+]
+CSP_INCLUDE_NONCE_IN = ["script-src"]
+
 
 if DEBUG:
     import os  # only if you haven't already imported this
