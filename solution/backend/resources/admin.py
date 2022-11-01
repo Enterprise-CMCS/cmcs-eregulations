@@ -13,7 +13,6 @@ from django.urls import reverse
 from solo.admin import SingletonModelAdmin
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from django.db.models import JSONField
 from django.forms.widgets import Textarea
 
 # Register your models here.
@@ -310,7 +309,10 @@ class ResourceForm(forms.ModelForm):
                                             "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
                                             "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
                                             "target='blank'>Click here for detailed documentation.</a>"))
-    location_history = forms.JSONField(widget=LocationHistoryWidget(attrs={"rows": 10, "cols": 120}), required=False, disabled=True)
+    location_history = forms.JSONField(
+                        widget=LocationHistoryWidget(attrs={"rows": 10, "cols": 120}),
+                        required=False,
+                        disabled=True)
 
 
 class SupContentForm(ResourceForm):
