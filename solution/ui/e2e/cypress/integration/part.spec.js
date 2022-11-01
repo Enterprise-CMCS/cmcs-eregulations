@@ -1,5 +1,6 @@
 describe("Part View", () => {
     beforeEach(() => {
+        cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         }).as("headers");
@@ -48,7 +49,11 @@ describe("Part View", () => {
 
         cy.focused().then(($el) => {
             cy.get($el).should("have.id", "433-51");
-            cy.get($el).should("have.css", "background-color", "rgb(238, 250, 254)");
+            cy.get($el).should(
+                "have.css",
+                "background-color",
+                "rgb(238, 250, 254)"
+            );
         });
     });
 
@@ -100,5 +105,22 @@ describe("Part View", () => {
         cy.get("#close-link").click({ force: true });
         cy.get(".view-and-compare").should("not.be.visible");
         cy.get(".latest-version").should("exist");
+    });
+
+    it("renders FR Doc category correctly in sidebar", () => {
+        cy.intercept("**/v3/resources/?locations=42.433.10**", {
+            fixture: "42.433.10.resources.json",
+        }).as("resources43310");
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/");
+        cy.contains("433.10").click({ force: true });
+        cy.url().should("include", "#433-10");
+        cy.wait("@resources43310").then(() => {
+            cy.get(".is-fr-doc-btn").click({ force: true });
+            cy.get(".show-more-button")
+                .contains("+ Show More (9)")
+                .click({ force: true })
+                .contains("- Show Less (9)");
+        });
     });
 });
