@@ -7,7 +7,7 @@ describe("Resources page", () => {
             });
         });
 
-        it("render correctly", () => {
+        it("load properly", () => {
             cy.intercept("**/resources/?**", {
                 fixture: "no-resources-results.json",
                 delayMs: 1000,
@@ -36,13 +36,21 @@ describe("Resources page", () => {
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
-            cy.intercept("**/resources/?locations=42**page=1**", {
+            cy.intercept("**/v3/resources/?&**page=1**", {
                 fixture: "resources.json",
             }).as("resources");
-            cy.intercept("**/resources/?locations=42**page=2**", {
+            cy.intercept("**/v3/resources/?&**page=2**", {
                 fixture: "resources-page-2.json",
             }).as("resources2");
         });
+
+        it("does not filter locations on the search", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.wait("@resources").then( (interception) => {
+              expect(interception.request.url).to.not.contain( 'location=')
+            });
+        })
 
         it("renders correctly", () => {
             cy.viewport("macbook-15");
