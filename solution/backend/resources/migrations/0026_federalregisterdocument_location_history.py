@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='federalregisterdocument',
+            model_name='abstractresource',
             name='location_history',
             field=models.JSONField(default=list),
         ),
