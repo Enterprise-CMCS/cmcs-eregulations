@@ -725,7 +725,7 @@ const getSupplementalContentV3 = async (
     let sString = "";
 
     if (partDict === "all") {
-        sString = `locations=42`
+        sString = ""
     }
 
     else {
