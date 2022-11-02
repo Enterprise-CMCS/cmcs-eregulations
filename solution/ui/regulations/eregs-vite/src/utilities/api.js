@@ -19,7 +19,7 @@ console.log("vite api url", import.meta.env.VITE_API_URL);
 const apiPath = `${
     import.meta.env.VITE_ENV === "dev578" // &&
     // window.location.host.includes("cms.gov")
-        ? `https://${window.location.host}`
+        ? `https://${window.location.host}/${import.meta.env.VITE_ENV}`
         : import.meta.env.VITE_API_URL || "http://localhost:8000"
 }`;
 const apiPathV2 = `${apiPath}/v2`;
