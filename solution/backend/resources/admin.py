@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import admin
 from django.contrib.admin.sites import site
 from django.apps import apps
@@ -9,6 +11,9 @@ from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.urls import reverse
 from solo.admin import SingletonModelAdmin
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
+from django.forms.widgets import Textarea
 
 # Register your models here.
 
@@ -33,6 +38,7 @@ from .filters import (
     SubpartFilter,
 )
 
+from .v3serializers.locations import AbstractLocationPolymorphicSerializer
 from .mixins import ExportJSONMixin
 from . import actions
 
@@ -164,9 +170,16 @@ class AbstractResourceAdmin(BaseAdmin):
     # Overrides the save method in django admin to handle many to many relationships.
     # Looks at the locations added in bulk uploads and adds them if allowed, sends error message if not.
     def save_related(self, request, form, formsets, change):
+        # Compute diff of selected and saved locations for the changelog
+        selection = form.cleaned_data["locations"]
+        saved_locations = list(form.instance.locations.all().select_subclasses())
+        additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_locations]
+        removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_locations if x not in selection]
+
         bulk_locations = form.cleaned_data.get("bulk_locations")
         bulk_title = form.cleaned_data.get("bulk_title")
         bad_locations = []
+        bulk_adds = []
 
         super().save_related(request, form, formsets, change)
         if bulk_locations:
@@ -174,7 +187,8 @@ class AbstractResourceAdmin(BaseAdmin):
             for location in split_locations:
                 a = self.build_location(location.strip(), bulk_title)
                 if a:
-                    form.instance.locations.add(a)
+                    form.instance.locations.add(a.abstractlocation_ptr)
+                    bulk_adds.append(AbstractLocationPolymorphicSerializer(a).data)
                 else:
                     bad_locations.append(location)
             if bad_locations:
@@ -183,6 +197,17 @@ class AbstractResourceAdmin(BaseAdmin):
                     messages.ERROR,
                     "The following locations were not added %s" % ((", ").join(bad_locations))
                 )
+
+        # Create and append changelog object, if any location changes occured
+        if additions or removals or bulk_adds:
+            form.instance.location_history.append({
+                "user": str(request.user),
+                "date": str(timezone.now()),
+                "additions": additions,
+                "removals": removals,
+                "bulk_adds": bulk_adds,
+            })
+            form.instance.save()
 
     # Checks the location for the formats.  Sections will only have a split legnth of 1 or 2 and contain a "."
     # Subparts will only be a legnth of 3 or 4.  Doesnt have to contain the word subpart based on the code.
@@ -205,7 +230,7 @@ class AbstractResourceAdmin(BaseAdmin):
                             title=title,
                             part=part,
                             section_id=section
-                        ).abstractlocation_ptr
+                        )
                     except Section.DoesNotExist:
                         return None
             else:
@@ -222,7 +247,7 @@ class AbstractResourceAdmin(BaseAdmin):
                 subpart = found_location[3]
             if self.check_values(title, part, "", subpart):
                 try:
-                    return Subpart.objects.get(title=title, part=part, subpart_id=subpart).abstractlocation_ptr
+                    return Subpart.objects.get(title=title, part=part, subpart_id=subpart)
                 except Subpart.DoesNotExist:
                     return None
 
@@ -239,6 +264,43 @@ class AbstractResourceAdmin(BaseAdmin):
         return True
 
 
+class LocationHistoryWidget(Textarea):
+    def locations_to_strings(self, locations):
+        strings = []
+        for i in locations:
+            key = ([x for x in i.keys() if "_id" in x] or [None])[0]
+            if key:
+                strings.append(f"{i['title']} CFR {i['part']}.{i[key]}")
+        if not strings:
+            return None
+        if len(strings) == 1:
+            return strings[0]
+        return ", ".join(strings[0:-1]) + ("," if len(strings) > 2 else "") + f" and {strings[-1]}"
+
+    def format_value(self, value):
+        try:
+            output = []
+            data = json.loads(value)
+            if not data:
+                return ""
+            for i in range(len(data)):
+                row = data[i]
+                additions = self.locations_to_strings(row["additions"])
+                removals = self.locations_to_strings(row["removals"])
+                bulk_adds = self.locations_to_strings(row["bulk_adds"])
+                date = parse_datetime(row["date"]).strftime("%Y-%m-%d at %I:%M %p")
+                output.append(f"{i+1}: On {date}, {row['user']} %s%s%s%s%s." % (
+                    f"added {additions}" if additions else "",
+                    " and " if additions and removals else "",
+                    f"removed {removals}" if removals else "",
+                    " and " if (additions or removals) and bulk_adds else "",
+                    f"bulk added {bulk_adds}" if bulk_adds else "",
+                ))
+            return "\n".join(output)
+        except Exception:
+            return "Can't render location history."
+
+
 class ResourceForm(forms.ModelForm):
     bulk_title = forms.CharField(required=False, help_text="If bulk locations is missing a title, add it here.")
     bulk_locations = forms.CharField(
@@ -249,6 +311,10 @@ class ResourceForm(forms.ModelForm):
                                             "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
                                             "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
                                             "target='blank'>Click here for detailed documentation.</a>"))
+    location_history = forms.JSONField(
+                        widget=LocationHistoryWidget(attrs={"rows": 10, "cols": 120}),
+                        required=False,
+                        disabled=True)
 
 
 class SupContentForm(ResourceForm):
@@ -276,7 +342,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
     fields = ("approved", "name", "description", "date", "url", "category",
-              "locations", "bulk_title", "bulk_locations", "internal_notes")
+              "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history")
 
 
 @admin.register(FederalRegisterDocument)
@@ -287,9 +353,9 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
                           "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
-    fields = ("approved", "docket_numbers", "group", "document_number", "name",
-              "description", "date", "url", "category", "doc_type", "correction", "withdrawal",
-              "locations", "bulk_title", "bulk_locations", "internal_notes")
+    fields = ("approved", "docket_numbers", "group", "document_number", "name", "correction",
+              "withdrawal", "description", "date", "url", "category", "doc_type", "locations",
+              "bulk_title", "bulk_locations", "internal_notes", "location_history")
 
     def in_group(self, obj):
         group = str(obj.group)
