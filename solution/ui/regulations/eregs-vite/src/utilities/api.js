@@ -15,9 +15,9 @@ import localforage from "localforage";
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
 const apiPath = `${
-    import.meta.env.VITE_ENV === "prod" &&
-    window.location.host.includes("cms.gov")
-        ? window.location.host
+    import.meta.env.VITE_ENV === "dev578" // &&
+    // window.location.host.includes("cms.gov")
+        ? `https://${window.location.host}`
         : import.meta.env.VITE_API_URL || "http://localhost:8000"
 }`;
 const apiPathV2 = `${apiPath}/v2`;
