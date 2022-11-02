@@ -42,7 +42,7 @@ custom:
     app: handler.application
     packRequirements: false
   settings:
-    static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}
+    static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
     DB_NAME: eregs
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
