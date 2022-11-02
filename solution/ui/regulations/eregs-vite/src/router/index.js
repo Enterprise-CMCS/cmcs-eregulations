@@ -24,7 +24,7 @@ const router = ({ customUrl = "", host = "" }) =>
         mode: "history",
         routes,
         base:
-            import.meta.env.VITE_ENV === "prod" && host === customUrl
+            import.meta.env.VITE_ENV === "dev578" && host === customUrl
                 ? "/"
                 : import.meta.env.VITE_ENV || "/",
         scrollBehavior(to) {
