@@ -1,6 +1,5 @@
 <template>
     <body class="ds-base">
-        <h1>customUrl: {{ customUrl }}</h1>
         <div id="resourcesApp" class="resources-view">
             <ResourcesNav :about-url="aboutUrl">
                 <form
