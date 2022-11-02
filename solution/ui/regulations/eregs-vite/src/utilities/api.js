@@ -14,12 +14,10 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-console.log("host", window.location.host);
-console.log("vite api url", import.meta.env.VITE_API_URL);
 const apiPath = `${
-    import.meta.env.VITE_ENV === "dev578" // &&
-    // window.location.host.includes("cms.gov")
-        ? `https://${window.location.host}/${import.meta.env.VITE_ENV}`
+    import.meta.env.VITE_ENV === "prod" &&
+    window.location.host.includes("cms.gov")
+        ? `https://${window.location.host}`
         : import.meta.env.VITE_API_URL || "http://localhost:8000"
 }`;
 const apiPathV2 = `${apiPath}/v2`;
