@@ -170,6 +170,7 @@ class AbstractResourceAdmin(BaseAdmin):
     # Overrides the save method in django admin to handle many to many relationships.
     # Looks at the locations added in bulk uploads and adds them if allowed, sends error message if not.
     def save_related(self, request, form, formsets, change):
+        # Compute diff of selected and saved locations for the changelog
         selection = form.cleaned_data["locations"]
         saved_locations = list(form.instance.locations.all().select_subclasses())
         additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_locations]
@@ -197,6 +198,7 @@ class AbstractResourceAdmin(BaseAdmin):
                     "The following locations were not added %s" % ((", ").join(bad_locations))
                 )
 
+        # Create and append changelog object, if any location changes occured
         if additions or removals or bulk_adds:
             form.instance.location_history.append({
                 "user": str(request.user),
@@ -285,7 +287,7 @@ class LocationHistoryWidget(Textarea):
                 row = data[i]
                 additions = self.locations_to_strings(row["additions"])
                 removals = self.locations_to_strings(row["removals"])
-                bulk_adds = self.locations_to_strings(row["bulk_adds"] if "bulk_adds" in row else [])
+                bulk_adds = self.locations_to_strings(row["bulk_adds"])
                 date = parse_datetime(row["date"]).strftime("%Y-%m-%d at %I:%M %p")
                 output.append(f"{i+1}: On {date}, {row['user']} %s%s%s%s%s." % (
                     f"added {additions}" if additions else "",
