@@ -196,12 +196,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
                 all_removals.remove(i) if i in all_removals else all_additions.append(i)
             for i in removals:
                 all_additions.remove(i) if i in all_additions else all_removals.append(i)
-        all_additions = self.get_location_objects(all_additions)
-        all_removals = self.get_location_objects(all_removals)
-        for i in all_removals:
-            instance.locations.remove(i)
-        for i in all_additions:
-            instance.locations.add(i)
+        [instance.locations.remove(i) for i in self.get_location_objects(all_removals)]
+        [instance.locations.add(i) for i in self.get_location_objects(all_additions)]
 
     def set_locations(self, instance, raw_sections, raw_ranges):
         locations = []
