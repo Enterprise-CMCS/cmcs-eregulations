@@ -93,7 +93,7 @@ class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelVie
         data = request.data
         frdoc, created = FederalRegisterDocument.objects.get_or_create(document_number=data["document_number"])
         data["id"] = frdoc.pk
-        sc = self.get_serializer(frdoc, data=data)
+        sc = self.get_serializer(frdoc, data=data, context={**self.get_serializer_context(), **{"created": created}})
         try:
             if sc.is_valid(raise_exception=True):
                 sc.save()

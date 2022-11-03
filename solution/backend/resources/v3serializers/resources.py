@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema_field, OpenApiTypes
+from django.db.models import Q
 
 from resources.models import (
     SupplementalContent,
@@ -10,6 +11,7 @@ from resources.models import (
     Category,
     AbstractCategory,
     Section,
+    AbstractLocation,
 )
 
 from .locations import (
@@ -141,20 +143,69 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         return value
 
     def update(self, instance, validated_data):
-        # set basic fields
-        instance.url = validated_data.get('url', instance.url)
-        instance.description = validated_data.get('description', instance.description)
-        instance.name = validated_data.get('name', instance.name)
-        instance.docket_numbers = validated_data.get('docket_numbers', instance.docket_numbers)
-        instance.document_number = validated_data.get('document_number', instance.document_number)
-        instance.date = validated_data.get('date', instance.date)
-        instance.approved = validated_data.get('approved', instance.approved)
-        instance.doc_type = validated_data.get('doc_type', instance.doc_type)
-        instance.category = self.get_category()
+        created = self.context.get("created", False)
+
+        # set basic fields if instance is new
+        if created:
+            instance.url = validated_data.get('url', instance.url)
+            instance.description = validated_data.get('description', instance.description)
+            instance.name = validated_data.get('name', instance.name)
+            instance.docket_numbers = validated_data.get('docket_numbers', instance.docket_numbers)
+            instance.document_number = validated_data.get('document_number', instance.document_number)
+            instance.date = validated_data.get('date', instance.date)
+            instance.approved = validated_data.get('approved', instance.approved)
+            instance.doc_type = validated_data.get('doc_type', instance.doc_type)
+            instance.category = self.get_category()
 
         # set the locations on the instance
+        self.set_locations(instance, validated_data["sections"], validated_data["section_ranges"])
+
+        # reapply changelog if instance is not new
+        if not created:
+            self.apply_changelog(instance)
+
+        # set the group on the instance if instance is new
+        if created:
+            self.set_group(instance)
+
+        # save and return
+        instance.save()
+        return instance
+        
+    def get_location_objects(self, locations):
+        queries = []
+        for i in locations:
+            t = i["type"]
+            queries.append(Q(title=i["title"]) & Q(part=i["part"]) & Q(**{f"{t}__{t}_id": i[f"{t}_id"]}))
+        if not queries:
+            return []
+        q = queries[0]
+        for i in queries[1:]:
+            q |= i
+        return AbstractLocation.objects.filter(q).select_subclasses()
+
+    def apply_changelog(self, instance):
+        all_additions = []
+        all_removals = []
+        for change in instance.location_history:
+            additions = [i.copy() for i in change["additions"] + change["bulk_adds"]]
+            removals = [i.copy() for i in change["removals"]]
+            for i in additions + removals:
+                del i["id"]
+            for i in additions:
+                all_removals.remove(i) if i in all_removals else all_additions.append(i)
+            for i in removals:
+                all_additions.remove(i) if i in all_additions else all_removals.append(i)
+        all_additions = self.get_location_objects(all_additions)
+        all_removals = self.get_location_objects(all_removals)
+        for i in all_removals:
+            instance.locations.remove(i)
+        for i in all_additions:
+            instance.locations.add(i)
+
+    def set_locations(self, instance, raw_sections, raw_ranges):
         locations = []
-        for loc in (validated_data["sections"] or []):
+        for loc in (raw_sections or []):
             title = loc["title"]
             part = loc["part"]
             section_id = loc["section_id"]
@@ -162,7 +213,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             location.save()
             locations.append(location)
 
-        for loc_range in (validated_data["section_ranges"] or []):
+        for loc_range in (raw_ranges or []):
             title = loc_range['title']
             part = loc_range['part']
             first_section = loc_range['first_sec']
@@ -173,7 +224,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             locations.extend(list(sections))
         instance.locations.set(locations)
 
-        # set the group on the instance
+    def set_group(self, instance):
         prefixes = []
         for i in instance.docket_numbers:
             d = i.split("-")
@@ -188,10 +239,6 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             group.docket_number_prefixes = list(set(group.docket_number_prefixes + prefixes))
             group.save()
             instance.group = group
-
-        # save and return
-        instance.save()
-        return instance
 
     def combine_groups(self, groups):
         main = groups[0]
