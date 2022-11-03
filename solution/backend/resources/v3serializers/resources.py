@@ -171,7 +171,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         # save and return
         instance.save()
         return instance
-        
+
     def get_location_objects(self, locations):
         queries = []
         for i in locations:
