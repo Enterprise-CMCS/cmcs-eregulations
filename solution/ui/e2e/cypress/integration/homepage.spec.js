@@ -162,4 +162,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 });
         });
     });
+
+    it("loads the last updated date in the footer from the API endpoint", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".last-updated-date").each((el) => {
+            expect(el.text()).to.match(/^\w{3} (\d{1}|\d{2}), \d{4}$/)
+        });
+    });
 });
