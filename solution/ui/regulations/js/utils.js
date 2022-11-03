@@ -1,6 +1,9 @@
 /* eslint-disable */
 import _delay from "lodash/delay";
 import _get from "lodash/get";
+import _isEmpty from "lodash/isEmpty";
+import _isNil from "lodash/isNil";
+import _isString from "lodash/isString";
 
 // a promise friendly delay function
 function delay(seconds) {
@@ -201,13 +204,25 @@ const highlightText = (location, paramKey) => {
     }
 };
 
+// YYYY-MM-DD to MMM DD, YYYY
+const niceDate = (kebabDate) => {
+    if (_isNil(kebabDate)) return "N/A";
+    if (_isString(kebabDate) && _isEmpty(kebabDate)) return "N/A";
+    const date = new Date(`${kebabDate}T12:00:00.000-05:00`);
+    const month = date.toLocaleString("default", { month: "short" });
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month} ${day}, ${year}`;
+};
+
 export {
     delay,
     EventCodes,
+    highlightText,
     flattenSubpart,
     formatDate,
     formatResourceCategories,
     getQueryParam,
-    highlightText,
+    niceDate,
     parseError,
 };

@@ -10,7 +10,7 @@ import _keys from "lodash/keys";
 import _map from "lodash/map";
 import localforage from "localforage";
 
-import { delay, parseError } from "./utils";
+import { delay, niceDate, parseError } from "./utils";
 
 const config = {
     fetchMode: "cors",
@@ -226,6 +226,17 @@ const getLastUpdatedDates = async (apiUrl, title = "42") => {
     return result.reduce(reducer, {});
 };
 
+const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
+    // manually adjust to v3 if needed
+    const url = apiURL.replace("/v2/", "/v3/");
+    console.log("url", url);
+
+    const result = await httpApiGetLegacy(`${url}ecfr_parser_result/${title}`);
+    console.log("result", result);
+    return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
+};
+
+
 /**
  * Returns the result from the all_parts endpoint
  *
@@ -420,6 +431,7 @@ export {
     getAllParts,
     getCategories,
     getLastUpdatedDates,
+    getLastParserSuccessDate,
     getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentLegacy,
