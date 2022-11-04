@@ -167,7 +167,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".related-rule.ungrouped").then(($els) => {
-            expect($els).to.have.length(3);
             cy.wrap($els[0]).find(".recent-title").should("exist");
             cy.wrap($els[0])
                 .find(".recent-flag")
@@ -184,7 +183,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
        cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".related-rule.grouped").then(($els) => {
-            expect($els).to.have.length(4);
             cy.wrap($els[0]).find(".recent-title").should("not.exist");
             cy.wrap($els[0])
                 .find(".recent-flag")
