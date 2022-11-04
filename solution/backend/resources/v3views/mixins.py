@@ -182,6 +182,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
         sort_method = self.request.GET.get("sort")
+        fr_grouping = self.request.GET.get("fr_grouping", "true").lower() == "true"
 
         id_query = self.model.objects\
                        .filter(approved=True)\
@@ -194,7 +195,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         if categories:
             id_query = id_query.filter(category__id__in=categories)
 
-        if not search_query:
+        if fr_grouping:
             id_query = id_query.order_by("group_annotated").distinct("group_annotated")
 
         annotations = {}

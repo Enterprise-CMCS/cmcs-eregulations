@@ -383,6 +383,7 @@ export default {
                   partDict:this.partDict,
                   categories: this.categories,
                   q: searchQuery,
+                  fr_grouping: true,
                 });
 
                 try {
