@@ -1,18 +1,21 @@
 <template>
     <span>
         <template v-if="lastParserSuccess">{{ lastParserSuccess }}</template>
+        <span v-else class="spinner-span">
+            <SimpleSpinner size="xs" />
+        </span>
     </span>
 </template>
 
 <script>
 import { getLastParserSuccessDate } from "../../api";
-/*import InlineLoader from "@/components//InlineLoader.vue";*/
+import SimpleSpinner from "./SimpleSpinner.vue";
 
 export default {
     name: "LastParserSuccessDate",
 
     components: {
-        /*InlineLoader,*/
+        SimpleSpinner,
     },
 
     props: {
@@ -22,15 +25,16 @@ export default {
         },
     },
 
-    async created() {
-        try {
-            this.lastParserSuccess = await getLastParserSuccessDate(
-                this.apiUrl,
-                { title: 42 }
-            );
-        } catch (error) {
-            console.error(error);
-        }
+    created() {
+        getLastParserSuccessDate(this.apiUrl, { title: 42 })
+            .then(
+                (response) => {
+                    this.lastParserSuccess = response;
+                }
+            )
+            .catch(() => {
+                    this.lastParserSuccess = "N/A";
+            });
     },
 
     data() {
@@ -38,13 +42,12 @@ export default {
             lastParserSuccess: "",
         };
     },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
 };
 </script>
 
-<style></style>
+<style>
+.spinner-span {
+    display: inline-block;
+    padding: 0 5px;
+}
+</style>
