@@ -226,13 +226,20 @@ const getLastUpdatedDates = async (apiUrl, title = "42") => {
     return result.reduce(reducer, {});
 };
 
+/**
+ * Get formatted date of most recent successful run of the ECFR parser
+ *
+ * @param {string} apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params - parameters needed for API call
+ * @param {string} [params.title=42] - CFR title number.
+ *
+ * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
+ */
 const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
     // manually adjust to v3 if needed
     const url = apiURL.replace("/v2/", "/v3/");
-    console.log("url", url);
 
     const result = await httpApiGetLegacy(`${url}ecfr_parser_result/${title}`);
-    console.log("result", result);
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
 

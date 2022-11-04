@@ -204,7 +204,13 @@ const highlightText = (location, paramKey) => {
     }
 };
 
-// YYYY-MM-DD to MMM DD, YYYY
+/**
+ * Converts date from YYYY-MM-DD to MMM DD, YYYY
+ *
+ * @param {string} kebabDate - date in `YYYY-MM-DD` format
+ *
+ * @returns {string} - date in `MMM DD, YYYY` format
+ */
 const niceDate = (kebabDate) => {
     if (_isNil(kebabDate)) return "N/A";
     if (_isString(kebabDate) && _isEmpty(kebabDate)) return "N/A";
