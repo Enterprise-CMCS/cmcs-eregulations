@@ -155,11 +155,77 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             cy.wrap($els[0])
                 .find(".recent-flag")
                 .then(($flag) => {
-                    expect($flag).to.have.text("NPRM");
+                    expect($flag).to.have.text("WD");
                     expect($flag)
                         .to.have.css("background-color")
                         .and.eq("rgb(214, 215, 217)");
                 });
         });
     });
+
+    it("Sets the label as Final, when correction and withdraw are both set to false", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".related-rule.ungrouped").then(($els) => {
+            expect($els).to.have.length(3);
+            cy.wrap($els[0]).find(".recent-title").should("exist");
+            cy.wrap($els[0])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("Final");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(2, 102, 102)");
+                });
+        });
+    })
+
+    it("Sets the label as WD when Correction is false and Withdrawal is true", () => {
+       cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".related-rule.grouped").then(($els) => {
+            expect($els).to.have.length(4);
+            cy.wrap($els[0]).find(".recent-title").should("not.exist");
+            cy.wrap($els[0])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("WD");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(214, 215, 217)");
+                });
+        });
+    })
+
+    it("Sets the label as WD when Correction is true and Withdrawal is true", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".related-rule.grouped").then(($els) => {
+            cy.wrap($els[3]).find(".recent-title").should("not.exist");
+            cy.wrap($els[3])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("WD");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(214, 215, 217)");
+               });
+      });
+    })
+
+    it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".related-rule.grouped").then(($els) => {
+            cy.wrap($els[1]).find(".recent-title").should("not.exist");
+            cy.wrap($els[1])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("CORR")
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(214, 215, 217)");
+               });
+      });
+    })
 });
