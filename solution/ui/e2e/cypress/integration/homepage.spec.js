@@ -164,7 +164,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("loads the last updated date in the footer from the API endpoint", () => {
+    it("loads the last parser success date from the API endpoint and displays it in footer", () => {
         cy.intercept(
             "**/v3/ecfr_parser_result/**"
         ).as("parserResult");
