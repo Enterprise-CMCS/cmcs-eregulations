@@ -3,6 +3,7 @@ describe("Print Styles", () => {
     const previousVersion = "/42/433/Subpart-A/2020-12-31/";
 
     beforeEach(() => {
+        cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         }).as("headers");
@@ -22,6 +23,9 @@ describe("Print Styles", () => {
     });
 
     it("has proper print styles for latest version", () => {
+        cy.intercept(
+            "**/v3/ecfr_parser_result/**"
+        ).as("parserResult");
         cy.viewport("macbook-15");
         cy.visit(destination);
 
@@ -48,6 +52,11 @@ describe("Print Styles", () => {
         cy.get("header").should("have.css", "height", "48px");
         cy.get("header").should("have.css", "border-top-color", "rgb(2, 102, 102)");
         cy.get("header").should("have.css", "border-bottom-color", "rgb(2, 102, 102)");
+
+        cy.wait("@parserResult");
+        cy.get(".last-updated-date-print")
+            .invoke('text')
+            .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/);
     })
 
     it("has proper print styles for a previous version", () => {

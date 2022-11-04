@@ -2,6 +2,7 @@ const mainContentId = "#main-content";
 
 describe("Homepage", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
+        cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
@@ -164,10 +165,14 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     });
 
     it("loads the last updated date in the footer from the API endpoint", () => {
+        cy.intercept(
+            "**/v3/ecfr_parser_result/**"
+        ).as("parserResult");
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".last-updated-date").each((el) => {
-            expect(el.text()).to.match(/^\w{3} (\d{1}|\d{2}), \d{4}$/)
-        });
+        cy.wait("@parserResult");
+        cy.get(".last-updated-date")
+            .invoke('text')
+            .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/)
     });
 });
