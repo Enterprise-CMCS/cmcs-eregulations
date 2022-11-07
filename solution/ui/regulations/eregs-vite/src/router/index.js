@@ -19,22 +19,23 @@ const routes = [
     },
 ];
 
-const router = new VueRouter({
-    mode: "history",
-    routes,
-    base:
-        import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-            ? import.meta.env.VITE_ENV
-            : "/",
-    scrollBehavior(to) {
-        if (to.hash) {
-            return {
-                selector: to.hash,
-                offset: { x: 0, y: 80 },
-            };
-        }
-        return { x: 0, y: 0 };
-    },
-});
+const router = ({ customUrl = "", host = "" }) =>
+    new VueRouter({
+        mode: "history",
+        routes,
+        base:
+            import.meta.env.VITE_ENV === "prod" && host === customUrl
+                ? "/"
+                : import.meta.env.VITE_ENV || "/",
+        scrollBehavior(to) {
+            if (to.hash) {
+                return {
+                    selector: to.hash,
+                    offset: { x: 0, y: 80 },
+                };
+            }
+            return { x: 0, y: 0 };
+        },
+    });
 
 export default router;
