@@ -129,6 +129,14 @@ export default {
             type: String,
             default: "/about/",
         },
+        customUrl: {
+            type: String,
+            default: "",
+        },
+        host: {
+            type: String,
+            default: "",
+        }
     },
 
     data() {

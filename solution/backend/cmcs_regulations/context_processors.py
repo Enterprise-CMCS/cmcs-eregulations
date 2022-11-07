@@ -3,7 +3,13 @@ from django.conf import settings
 
 def google_analytics(request):
     return {
-        "GA_ID": settings.GA_ID,
+        "GA_ID": settings.GA_ID
+    }
+
+
+def custom_url(request):
+    return {
+        "CUSTOM_URL": settings.CUSTOM_URL
     }
 
 
