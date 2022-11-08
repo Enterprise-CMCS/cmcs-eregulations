@@ -220,6 +220,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .to.have.css("background-color")
                         .and.eq("rgb(255, 255, 255)");
                     expect($flag)
+                        .to.have.css("color")
+                        .and.eq("rgb(91, 97, 107)");
+                    expect($flag)
                         .to.have.css("border-color")
                         .and.eq("rgb(91, 97, 107)");
                     expect($flag)
