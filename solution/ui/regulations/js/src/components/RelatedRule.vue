@@ -88,6 +88,11 @@ export default {
             };
         },
         indicatorClasses() {
+            if( this.type === "WD") {
+                return {
+                    "tertiary-indicator": this.type === "WD",
+                };
+            }
             return {
                 "secondary-indicator": this.grouped || this.type !== "Final",
             };

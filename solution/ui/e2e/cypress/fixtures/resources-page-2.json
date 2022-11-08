@@ -2071,6 +2071,8 @@
             "docket_numbers": ["CMS-2441-P"],
             "document_number": "2022-11047",
             "doc_type": "NPRM",
+            "withdrawal": false,
+            "correction": false,
             "name_headline": null,
             "description_headline": null,
             "document_number_headline": null,

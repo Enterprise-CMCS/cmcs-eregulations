@@ -169,6 +169,12 @@ export default {
             return rule.title || rule.description;
         },
         type(rule) {
+            if (rule.withdrawal) {
+                return "WD"
+            }
+            if (rule.correction) {
+                return "CORR"
+            }
             return rule.doc_type || rule.category?.name || rule.type;
         },
         citation(rule) {
