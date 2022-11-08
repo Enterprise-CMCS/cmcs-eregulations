@@ -96,6 +96,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/LastParserSuccessDate.vue",
+        output: {
+            format: "esm",
+            file: "dist/LastParserSuccessDate.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",

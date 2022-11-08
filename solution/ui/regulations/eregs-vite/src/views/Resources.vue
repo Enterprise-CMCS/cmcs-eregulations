@@ -75,6 +75,7 @@
                         :isLoading="isLoading"
                         :page="page"
                         :page-size="pageSize"
+                        :categories="categories"
                         :content="supplementalContent"
                         :count="supplementalContentCount"
                         :partsList="filters.part.listItems"
@@ -129,6 +130,14 @@ export default {
             type: String,
             default: "/about/",
         },
+        customUrl: {
+            type: String,
+            default: "",
+        },
+        host: {
+            type: String,
+            default: "",
+        }
     },
 
     data() {

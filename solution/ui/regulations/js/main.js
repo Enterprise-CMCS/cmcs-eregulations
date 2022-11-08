@@ -10,6 +10,7 @@ import TableComponent from "../dist/TableComponent";
 import ViewResourcesLink from "../dist/ViewResourcesLink";
 import SearchEmptyState from "../dist/SearchEmptyState";
 import RecentChangesContainer from "../dist/RecentChangesContainer";
+import LastParserSuccessDate from "../dist/LastParserSuccessDate";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -160,6 +161,7 @@ function main() {
             ViewResourcesLink,
             SearchEmptyState,
             RecentChangesContainer,
+            LastParserSuccessDate,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");

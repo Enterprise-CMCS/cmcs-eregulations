@@ -7,10 +7,10 @@ export default {
         eregs_url: {
             name: "eRegs URL",
             description: "URL for link to eRegs Search Page",
-            defaultValue: "https://regulations-pilot.cms.gov/resources/",
+            defaultValue: "/resources/",
             options: [
-                "https://regulations-pilot.cms.gov/resources/",
-                "https://regulations-pilot.cms.gov/search/",
+                "/resources/",
+                "/search/",
             ],
             control: {
                 type: "radio",

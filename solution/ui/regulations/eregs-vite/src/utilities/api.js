@@ -14,7 +14,12 @@ import localforage from "localforage";
 
 import { delay, getKebabDate, niceDate, parseError } from "./utils";
 
-const apiPath = `${import.meta.env.VITE_ENV === "prod" ? "https://regulations-pilot.cms.gov": import.meta.env.VITE_API_URL || "http://localhost:8000"}`;
+const apiPath = `${
+    import.meta.env.VITE_ENV === "prod" &&
+    window.location.host.includes("cms.gov")
+        ? `https://${window.location.host}`
+        : import.meta.env.VITE_API_URL || "http://localhost:8000"
+}`;
 const apiPathV2 = `${apiPath}/v2`;
 const apiPathV3 = `${apiPath}/v3`;
 
@@ -217,8 +222,8 @@ function httpApiGetV3(urlPath, { params } = {}) {
 }
 
 async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
-    let results = []
-    let url = `${config.apiPathV3}/${urlPath}`
+    let results = [];
+    let url = `${config.apiPathV3}/${urlPath}`;
     while (url) {
         /* eslint-disable no-await-in-loop */
         const response = await fetchJson(url, {
@@ -230,11 +235,10 @@ async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
         url = response.next;
         /* eslint-enable no-await-in-loop */
     }
-    return results
+    return results;
 }
 
 function httpApiPost(urlPath, { data = {}, params } = {}) {
-    console.log(data);
     return fetchJson(`${config.apiPath}/${urlPath}`, {
         method: "POST",
         headers: authHeader(token),
@@ -266,12 +270,9 @@ function httpApiDelete(urlPath, { data, params } = {}) {
 
 const getCacheKeys = async () => localforage.keys();
 
-
 const removeCacheItem = async (key) => localforage.removeItem(key);
 
-
 const getCacheItem = async (key) => localforage.getItem(key);
-
 
 const setCacheItem = async (key, data) => {
     data.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
@@ -329,7 +330,6 @@ const getPartNames = async (title = "42") => {
 
 const getAllParts = async () => httpApiGet("all_parts");
 
-
 /**
  *
  * Fetches the data and formats it for the home page
@@ -338,7 +338,7 @@ const getAllParts = async () => httpApiGet("all_parts");
  */
 const getHomepageStructure = async () => {
     const reducer = (accumulator, currentValue) => {
-        const {title} = currentValue;
+        const { title } = currentValue;
 
         const chapter = _get(
             currentValue,
@@ -633,7 +633,6 @@ const getSectionObjects = async (part, subPart) => {
             (p) => p.type === "subpart" && p.identifier[0] === subPart
         );
         return parent.children.map((c) => {
-
             return {
                 identifier: c.identifier[1],
                 label: c.label_level,
@@ -821,7 +820,8 @@ const getSupByPart = async (title, part, subparts, sections) => {
 }
 const getCategories = async () =>  httpApiGetV3("resources/categories");
 
-const getTOC = async (title) =>  httpApiGetV3(title? `title/${title}/toc`:`toc`);
+const getTOC = async (title) =>
+    httpApiGetV3(title ? `title/${title}/toc` : `toc`);
 
 const getPartTOC = async (title, part) =>  httpApiGetV3(`title/${title}/part/${part}/version/latest/toc`);
 
@@ -864,6 +864,7 @@ export {
     forgetIdToken,
     config,
     getLastUpdatedDate,
+    getLastUpdatedDates,
     getHomepageStructure,
     getPartNames,
     getAllParts,
@@ -888,11 +889,10 @@ export {
     getAllSections,
     getSupplementalContentV3,
     getSupplementalContentSearchResults,
-    getLastUpdatedDates,
     getTOC,
     getPartTOC,
     getSectionsForPart,
     getSubpartTOC,
-    getSynonyms
+    getSynonyms,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
