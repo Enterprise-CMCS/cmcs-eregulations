@@ -43,11 +43,11 @@ export default {
         spinnerStyles() {
             switch (this.size) {
                 case "xs":
-                    return "0px";
+                    return "margin: 0px";
                 case "small":
-                    return "4px";
+                    return "margin: 4px";
                 default:
-                    return "8px";
+                    return "margin: 8px";
             }
         },
     },

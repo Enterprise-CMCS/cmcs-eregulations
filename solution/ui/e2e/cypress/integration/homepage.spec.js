@@ -2,6 +2,7 @@ const mainContentId = "#main-content";
 
 describe("Homepage", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
+        cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
@@ -161,5 +162,17 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .and.eq("rgb(214, 215, 217)");
                 });
         });
+    });
+
+    it("loads the last parser success date from the API endpoint and displays it in footer", () => {
+        cy.intercept(
+            "**/v3/ecfr_parser_result/**"
+        ).as("parserResult");
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.wait("@parserResult");
+        cy.get(".last-updated-date")
+            .invoke('text')
+            .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/)
     });
 });

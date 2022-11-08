@@ -10,7 +10,7 @@ import _keys from "lodash/keys";
 import _map from "lodash/map";
 import localforage from "localforage";
 
-import { delay, parseError } from "./utils";
+import { delay, niceDate, parseError } from "./utils";
 
 const config = {
     fetchMode: "cors",
@@ -227,6 +227,24 @@ const getLastUpdatedDates = async (apiUrl, title = "42") => {
 };
 
 /**
+ * Get formatted date of most recent successful run of the ECFR parser
+ *
+ * @param {string} apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params - parameters needed for API call
+ * @param {string} [params.title=42] - CFR title number.
+ *
+ * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
+ */
+const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
+    // manually adjust to v3 if needed
+    const url = apiURL.replace("/v2/", "/v3/");
+
+    const result = await httpApiGetLegacy(`${url}ecfr_parser_result/${title}`);
+    return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
+};
+
+
+/**
  * Returns the result from the all_parts endpoint
  *
  * @returns {Array} - a list of objects that represent a part of title 42
@@ -420,6 +438,7 @@ export {
     getAllParts,
     getCategories,
     getLastUpdatedDates,
+    getLastParserSuccessDate,
     getSectionObjects,
     getSubPartsForPart,
     getSupplementalContentLegacy,
