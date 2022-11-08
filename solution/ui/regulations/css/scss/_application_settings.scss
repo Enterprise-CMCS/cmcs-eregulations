@@ -265,13 +265,7 @@ $width-3xl: 1920px; // The largest the site container will get
     color: $secondary_indicator_text;
 }
 
-.correction-indicator {
-    background: $tertiary-indicator_background;
-    color: $teal;
-    border: 1px solid $teal;
-}
-
-.withdrawal-indicator {
+.tertiary-indicator {
     background: $tertiary-indicator_background;
     color: $mid-gray;
     border: 1px solid $mid-gray;

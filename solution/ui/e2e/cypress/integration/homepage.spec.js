@@ -199,7 +199,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .and.eq("rgb(91, 97, 107)");
                     expect($flag)
                         .to.have.css("border-width")
-                        .and.eq("1");
+                        .and.eq("1px");
                     expect($flag)
                         .to.have.css("border-style")
                         .and.eq("solid");
@@ -224,7 +224,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .and.eq("rgb(91, 97, 107)");
                     expect($flag)
                         .to.have.css("border-width")
-                        .and.eq("1");
+                        .and.eq("1px");
                     expect($flag)
                         .to.have.css("border-style")
                         .and.eq("solid");
@@ -243,13 +243,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     expect($flag).to.have.text("CORR")
                     expect($flag)
                         .to.have.css("background-color")
-                        .and.eq("rgb(255, 255, 255)");
-                    expect($flag)
-                        .to.have.css("border-width")
-                        .and.eq("1");
-                    expect($flag)
-                        .to.have.css("border-style")
-                        .and.eq("solid");
+                        .and.eq("rgb(214, 215, 217)");
                });
         });
     })

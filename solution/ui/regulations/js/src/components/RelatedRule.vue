@@ -90,12 +90,7 @@ export default {
         indicatorClasses() {
             if( this.type === "WD") {
               return {
-                "withdrawal-indicator": this.type === "WD",
-              };
-            }
-            if( this.type === "CORR") {
-              return {
-                "correction-indicator": this.type === "CORR",
+                "tertiary-indicator": this.type === "WD",
               };
             }
             return {
