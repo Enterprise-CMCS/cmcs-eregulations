@@ -102,7 +102,7 @@ $primary_indicator_text: $white;
 $secondary_indicator_background: $light_gray;
 $secondary_indicator_text: $title_color;
 
-$tertiary-indicator_background: $white;
+$tertiary_indicator_background: $white;
 
 // Formulae
 
@@ -266,9 +266,11 @@ $width-3xl: 1920px; // The largest the site container will get
 }
 
 .tertiary-indicator {
-    background: $tertiary-indicator_background;
-    color: $mid-gray;
-    border: 1px solid $mid-gray;
+    background: $tertiary_indicator_background;
+    color: $mid_gray;
+    border: 1px solid $mid_gray;
+    box-sizing: border-box;
+    padding: 1px 0;
 }
 
 // -------------------------
