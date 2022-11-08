@@ -102,6 +102,8 @@ $primary_indicator_text: $white;
 $secondary_indicator_background: $light_gray;
 $secondary_indicator_text: $title_color;
 
+$tertiary_indicator_background: $white;
+
 // Formulae
 
 @mixin formula-special-border {
@@ -261,6 +263,14 @@ $width-3xl: 1920px; // The largest the site container will get
 .secondary-indicator {
     background: $secondary_indicator_background;
     color: $secondary_indicator_text;
+}
+
+.tertiary-indicator {
+    background: $tertiary_indicator_background;
+    color: $mid_gray;
+    border: 1px solid $mid_gray;
+    box-sizing: border-box;
+    padding: 1px 0;
 }
 
 // -------------------------
