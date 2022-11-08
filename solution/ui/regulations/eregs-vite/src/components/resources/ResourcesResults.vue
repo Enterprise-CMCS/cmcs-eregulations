@@ -250,7 +250,14 @@ export default {
             type: Object,
             required: false,
             default:() => {}
-        }
+        },
+        categories:{
+            type: Array,
+            required: false,
+            default() {
+                return [];
+            }
+        },
     },
 
     data() {
