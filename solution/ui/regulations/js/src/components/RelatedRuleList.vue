@@ -170,10 +170,10 @@ export default {
         },
         type(rule) {
             if (rule.withdrawal) {
-              return "WD"
+                return "WD"
             }
             if (rule.correction) {
-              return "CORR"
+                return "CORR"
             }
             return rule.doc_type || rule.category?.name || rule.type;
         },

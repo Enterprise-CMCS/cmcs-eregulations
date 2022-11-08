@@ -181,7 +181,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     });
 
     it("Sets the label as WD when Correction is false and Withdrawal is true", () => {
-       cy.viewport("macbook-15");
+        cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".related-rule.grouped").then(($els) => {
             cy.wrap($els[0]).find(".recent-title").should("not.exist");
