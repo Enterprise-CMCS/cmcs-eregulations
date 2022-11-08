@@ -175,13 +175,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     expect($flag)
                         .to.have.css("background-color")
                         .and.eq("rgb(2, 102, 102)");
-                    expect($flag)
-                        .to.have.css("background-color")
-                        .and.eq("rgb(2, 102, 102)");
-                });
                 });
         });
-    })
+    });
 
     it("Sets the label as WD when Correction is false and Withdrawal is true", () => {
        cy.viewport("macbook-15");
@@ -233,7 +229,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .to.have.css("border-style")
                         .and.eq("solid");
                });
-      });
+        });
     })
 
     it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
