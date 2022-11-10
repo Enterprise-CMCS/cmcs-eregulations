@@ -92,6 +92,12 @@ STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
+DEBUG_TOOLBAR= os.environ.get("DEBUG_TOOLBAR", "False")
+if DEBUG_TOOLBAR == 'False':
+    li = [app for app in INSTALLED_APPS if not app == "debug_toolbar"]
+    INSTALLED_APPS = tuple(li)
+    li = [app for app in MIDDLEWARE if not app == "debug_toolbar.middleware.DebugToolbarMiddleware"]
+    MIDDLEWARE = tuple(li)
 
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
