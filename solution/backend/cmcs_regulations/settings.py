@@ -92,7 +92,7 @@ STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
-DEBUG_TOOLBAR= os.environ.get("DEBUG_TOOLBAR", "False")
+DEBUG_TOOLBAR = os.environ.get("DEBUG_TOOLBAR", "False")
 if DEBUG_TOOLBAR == 'False':
     li = [app for app in INSTALLED_APPS if not app == "debug_toolbar"]
     INSTALLED_APPS = tuple(li)
