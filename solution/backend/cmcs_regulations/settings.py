@@ -92,12 +92,6 @@ STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
-DEBUG_TOOLBAR = os.environ.get("DEBUG_TOOLBAR", "False")
-if DEBUG_TOOLBAR == 'False':
-    li = [app for app in INSTALLED_APPS if not app == "debug_toolbar"]
-    INSTALLED_APPS = tuple(li)
-    li = [app for app in MIDDLEWARE if not app == "debug_toolbar.middleware.DebugToolbarMiddleware"]
-    MIDDLEWARE = tuple(li)
 
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
@@ -189,6 +183,10 @@ GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 
 HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
 HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_COLLAPSED': True
+}
 
 GA_ID = os.environ.get("GA_ID")
 

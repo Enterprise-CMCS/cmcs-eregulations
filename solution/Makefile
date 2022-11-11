@@ -128,7 +128,7 @@ local.opensearch: ## Run a local opensearch environment
 	docker-compose -f docker-compose.opensearch.yml up -d
 
 test: ## run the cypress e2e suite
-	DEBUG_TOOLBAR="False" docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
+	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
 test.local: ## run cypress tests locally without docker
 	cd ui/e2e; \
 		npm install; \

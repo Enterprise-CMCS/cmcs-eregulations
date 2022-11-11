@@ -1,11 +1,15 @@
 // NOTE: Our variables use _ between words. CMS Design System variables use - between words. Sass will treat this the same, but it will help at a glance to know where the variable is coming from.
+// Django toolbar changes.  Needed for cypress testing
+
+#djDebug #djShowToolBarButton {
+    opacity: 1 !important;
+}
 
 //--------------------------
 // Colors
 //--------------------------
 
 // Base Colors
-
 $teal: #026666;
 $teal_blue: #245c68;
 $darkest_blue: #102e43;
