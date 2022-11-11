@@ -10,6 +10,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             "**/v3/resources/federal_register_docs?page=1&page_size=3&paginate=true",
             { fixture: "frdocs.json" }
         ).as("frdocs");
+        cy.intercept(
+            "**/v3/ecfr_parser_result/**"
+        ).as("parserResult");
     });
 
     it("loads the homepage", () => {
@@ -253,9 +256,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     })
 
     it("loads the last parser success date from the API endpoint and displays it in footer", () => {
-        cy.intercept(
-            "**/v3/ecfr_parser_result/**"
-        ).as("parserResult");
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.wait("@parserResult");
