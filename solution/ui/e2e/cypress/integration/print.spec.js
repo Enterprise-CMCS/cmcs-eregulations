@@ -7,6 +7,7 @@ describe("Print Styles", () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         }).as("headers");
+        cy.intercept("**/v3/ecfr_parser_result/**").as("parserResult");
 
         cy.setCssMedia("screen");
     });
@@ -23,11 +24,9 @@ describe("Print Styles", () => {
     });
 
     it("has proper print styles for latest version", () => {
-        cy.intercept(
-            "**/v3/ecfr_parser_result/**"
-        ).as("parserResult");
         cy.viewport("macbook-15");
         cy.visit(destination);
+        cy.wait("@parserResult");
 
         cy.get(".right-sidebar").should("be.visible");
         cy.get(".view-resources-link").should(($link) => {
@@ -53,7 +52,6 @@ describe("Print Styles", () => {
         cy.get("header").should("have.css", "border-top-color", "rgb(2, 102, 102)");
         cy.get("header").should("have.css", "border-bottom-color", "rgb(2, 102, 102)");
 
-        cy.wait("@parserResult");
         cy.get(".last-updated-date-print")
             .invoke('text')
             .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/);
