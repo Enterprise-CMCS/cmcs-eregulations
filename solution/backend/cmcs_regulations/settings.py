@@ -184,6 +184,10 @@ GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
 HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_COLLAPSED': True
+}
+
 GA_ID = os.environ.get("GA_ID")
 
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
