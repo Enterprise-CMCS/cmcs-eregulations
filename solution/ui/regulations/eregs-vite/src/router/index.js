@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import CacheExplorer from "../views/CacheExplorer.vue";
 import Resources from "../views/Resources.vue";
+import Search from "../views/Search.vue";
 
 Vue.use(VueRouter);
 
@@ -11,11 +12,15 @@ const routes = [
         name: "cache",
         component: CacheExplorer,
     },
-
     {
         path: "/resources",
         name: "resources",
         component: Resources,
+    },
+    {
+        path: "/search",
+        name: "search",
+        component: Search,
     },
 ];
 
