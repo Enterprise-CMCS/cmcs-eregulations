@@ -1,5 +1,7 @@
 <template>
-    <h2>In Vite</h2>
+    <div class="content">
+        <h2>In Vite</h2>
+    </div>
 </template>
 
 <script>
