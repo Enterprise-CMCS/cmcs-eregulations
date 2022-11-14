@@ -1,4 +1,5 @@
 import json
+import re
 
 from django.contrib import admin
 from django.contrib.admin.sites import site
@@ -209,48 +210,38 @@ class AbstractResourceAdmin(BaseAdmin):
             })
             form.instance.save()
 
-    # Checks the location for the formats.  Sections will only have a split legnth of 1 or 2 and contain a "."
-    # Subparts will only be a legnth of 3 or 4.  Doesnt have to contain the word subpart based on the code.
+    # Checks the location for the formats.
+    # Valid sections: 42 433.1, 42 CFR 433.1, 42 433 1: (?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:[\s]+|[.])([0-9]+)
+    # Valid subparts: 42 433.A, 42 CFR 433 Subpart A, 42 CFR 433.A, 42 433 A: (?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:\.|\s+(?:Subpart\s+)?)([A-Z]+)(?![a-z]+)
+    # All inputs can have no title (i.e. 433.1 instead of 42 CFR 433.1, etc.)
     def build_location(self, location, default_title):
-        found_location = location.split(" ")
+        section_regex = re.search(r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:[\s]+|[.])([0-9]+)$", location)
+        subpart_regex = re.search(r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:\.|\s+(?:Subpart\s+)?)([A-Z]+)(?![a-z]+)$", location)
 
-        if len(found_location) == 1 or len(found_location) == 2:
-            if len(found_location) == 1 and default_title != "":
-                title = default_title
-                loc = location
-            if len(found_location) == 2:
-                title = found_location[0]
-                loc = found_location[1]
-            if "." in loc:
-                part = loc.split(".")[0]
-                section = loc.split(".")[1]
-                if self.check_values(title, part, section, ""):
-                    try:
-                        return Section.objects.get(
-                            title=title,
-                            part=part,
-                            section_id=section
-                        )
-                    except Section.DoesNotExist:
-                        return None
-            else:
-                return None
-
-        elif len(found_location) == 3 or len(found_location) == 4:
-            if len(found_location) == 3 and default_title != "":
-                title = default_title
-                part = found_location[0]
-                subpart = found_location[2]
-            if len(found_location) == 4:
-                title = found_location[0]
-                part = found_location[1]
-                subpart = found_location[3]
+        if section_regex:
+            title, part, section = section_regex.groups()
+            title = default_title if not title else title
+            if self.check_values(title, part, section, ""):
+                try:
+                    return Section.objects.get(
+                        title=title,
+                        part=part,
+                        section_id=section,
+                    )
+                except Section.DoesNotExist:
+                    return None
+        elif subpart_regex:
+            title, part, subpart = subpart_regex.groups()
+            title = default_title if not title else title
             if self.check_values(title, part, "", subpart):
                 try:
-                    return Subpart.objects.get(title=title, part=part, subpart_id=subpart)
+                    return Subpart.objects.get(
+                        title=title,
+                        part=part,
+                        subpart_id=subpart,
+                    )
                 except Subpart.DoesNotExist:
                     return None
-
         return None
 
     # Makes sure each value is the correct format for querying the locations
