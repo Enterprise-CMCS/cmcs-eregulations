@@ -211,15 +211,17 @@ class AbstractResourceAdmin(BaseAdmin):
             form.instance.save()
 
     # Checks the location for the formats.
-    # Valid sections: 42 433.1, 42 CFR 433.1, 42 433 1: (?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:[\s]+|[.])([0-9]+)
-    # Valid subparts: 42 433.A, 42 CFR 433 Subpart A, 42 CFR 433.A, 42 433 A: (?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:\.|\s+(?:Subpart\s+)?)([A-Z]+)(?![a-z]+)
+    # Valid sections: 42 433.1, 42 CFR 433.1, 42 433 1
+    # Valid subparts: 42 433.A, 42 CFR 433 Subpart A, 42 CFR 433.A, 42 433 A
     # All inputs can have no title (i.e. 433.1 instead of 42 CFR 433.1, etc.)
     def build_location(self, location, default_title):
-        section_regex = re.search(r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:[\s]+|[.])([0-9]+)$", location)
-        subpart_regex = re.search(r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:\.|\s+(?:Subpart\s+)?)([A-Z]+)(?![a-z]+)$", location)
+        section_regex = r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:[\s]+|[.])([0-9]+)$"
+        subpart_regex = r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:\.|\s+(?:Subpart\s+)?)([A-Z]+)(?![a-z]+)$"
+        section_search = re.search(section_regex, location)
+        subpart_search = re.search(subpart_regex, location)
 
-        if section_regex:
-            title, part, section = section_regex.groups()
+        if section_search:
+            title, part, section = section_search.groups()
             title = default_title if not title else title
             if self.check_values(title, part, section, ""):
                 try:
@@ -230,8 +232,8 @@ class AbstractResourceAdmin(BaseAdmin):
                     )
                 except Section.DoesNotExist:
                     return None
-        elif subpart_regex:
-            title, part, subpart = subpart_regex.groups()
+        elif subpart_search:
+            title, part, subpart = subpart_search.groups()
             title = default_title if not title else title
             if self.check_values(title, part, "", subpart):
                 try:
