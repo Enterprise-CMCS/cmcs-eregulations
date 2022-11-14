@@ -144,8 +144,10 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         created = self.context.get("created", False)
+        sections = validated_data.get("sections", [])
+        section_ranges = validated_data.get("section_ranges", [])
 
-        # set basic fields if instance is new
+        # set basic fields and group if instance is new
         if created:
             instance.url = validated_data.get('url', instance.url)
             instance.description = validated_data.get('description', instance.description)
@@ -156,17 +158,14 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             instance.approved = validated_data.get('approved', instance.approved)
             instance.doc_type = validated_data.get('doc_type', instance.doc_type)
             instance.category = self.get_category()
+            self.set_group(instance)
 
         # set the locations on the instance
-        self.set_locations(instance, validated_data["sections"], validated_data["section_ranges"])
+        self.set_locations(instance, sections, section_ranges)
 
         # reapply changelog if instance is not new
         if not created:
             self.apply_changelog(instance)
-
-        # set the group on the instance if instance is new
-        if created:
-            self.set_group(instance)
 
         # save and return
         instance.save()
@@ -201,7 +200,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
     def set_locations(self, instance, raw_sections, raw_ranges):
         locations = []
-        for loc in (raw_sections or []):
+        for loc in raw_sections:
             title = loc["title"]
             part = loc["part"]
             section_id = loc["section_id"]
@@ -209,7 +208,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             location.save()
             locations.append(location)
 
-        for loc_range in (raw_ranges or []):
+        for loc_range in raw_ranges:
             title = loc_range['title']
             part = loc_range['part']
             first_section = loc_range['first_sec']
