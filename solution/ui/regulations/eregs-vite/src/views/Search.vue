@@ -4,11 +4,10 @@
             <Banner title="Search Results">
                 <template #description>
                     <p>This site searches Title 42, Parts 400 and 430-460</p>
+                    <p>{{ q }}</p>
                 </template>
                 <template #input>
-                    <form
-                        class="search-form"
-                    >
+                    <form class="search-form">
                         <v-text-field
                             id="main-content"
                             outlined
@@ -34,16 +33,17 @@
 import Banner from "@/components/Banner.vue";
 
 export default {
-    name: "Search",
+    name: "SearchView",
 
     components: {
         Banner,
     },
 
     props: {
-        propName: {
+        q: {
             type: String,
-            required: true,
+            required: false,
+            default: "",
         },
     },
 
@@ -63,11 +63,7 @@ export default {
 
     destroyed() {},
 
-    data() {
-        return {
-            dataProp: "value",
-        }
-    },
+    data() {},
 
     computed: {
         computedProp() {
@@ -75,13 +71,8 @@ export default {
         },
     },
 
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
-
-}
+    methods: {},
+};
 </script>
 
 <style lang="scss">
@@ -100,4 +91,3 @@ export default {
     }
 }
 </style>
-

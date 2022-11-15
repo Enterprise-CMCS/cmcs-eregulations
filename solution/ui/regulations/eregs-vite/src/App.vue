@@ -21,6 +21,10 @@ export default {
             type: String,
             default: "",
         },
+        q: {
+            type: String,
+            default: "",
+        }
     },
 };
 </script>
@@ -32,6 +36,7 @@ export default {
             :about-url="aboutUrl"
             :custom-url="customUrl"
             :host="host"
+            :q="q"
         />
     </v-app>
 </template>
