@@ -114,6 +114,10 @@ class AbstractLocation(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ["title", "part", "section__section_id", "subpart__subpart_id"]
 
@@ -126,7 +130,8 @@ class Subpart(AbstractLocation):
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if self.__class__.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).exists():
+        query = Subpart.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).values_list("id", flat=True)
+        if query and self.id not in query:
             raise ValidationError({NON_FIELD_ERRORS: [f"Subpart {str(self)} already exists."]})
 
     class Meta:
@@ -144,7 +149,8 @@ class Section(AbstractLocation):
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if self.__class__.objects.filter(title=self.title, part=self.part, section_id=self.section_id).exists():
+        query = Section.objects.filter(title=self.title, part=self.part, section_id=self.section_id).values_list("id", flat=True)
+        if query and self.id not in query:
             raise ValidationError({NON_FIELD_ERRORS: [f"Section {str(self)} already exists."]})
 
     class Meta:
