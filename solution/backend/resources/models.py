@@ -1,7 +1,7 @@
 import datetime
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.db import models
 from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
@@ -124,6 +124,11 @@ class Subpart(AbstractLocation):
     def __str__(self):
         return f'{self.title} CFR {self.part} Subpart {self.subpart_id}'
 
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if self.__class__.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).exists():
+            raise ValidationError({NON_FIELD_ERRORS: [f"Subpart {str(self)} already exists."]})
+
     class Meta:
         verbose_name = "Subpart"
         verbose_name_plural = "Subparts"
@@ -136,6 +141,11 @@ class Section(AbstractLocation):
 
     def __str__(self):
         return f'{self.title} CFR {self.part}.{self.section_id}'
+
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if self.__class__.objects.filter(title=self.title, part=self.part, section_id=self.section_id).exists():
+            raise ValidationError({NON_FIELD_ERRORS: [f"Section {str(self)} already exists."]})
 
     class Meta:
         verbose_name = "Section"
