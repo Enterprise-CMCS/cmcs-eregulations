@@ -215,10 +215,10 @@ class AbstractResourceAdmin(BaseAdmin):
     # Valid subparts: 42 433.A, 42 CFR 433 Subpart A, 42 CFR 433.A, 42 433 A
     # All inputs can have no title (i.e. 433.1 instead of 42 CFR 433.1, etc.)
     def build_location(self, location, default_title):
-        section_regex = r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:[\s]+|[.])([0-9]+)$"
-        subpart_regex = r"^(?:([0-9]+)\s+(?:CFR)?(?:\s+)?)?([0-9]+)(?:\.|\s+(?:Subpart\s+)?)([A-Z]+)(?![a-z]+)$"
-        section_search = re.search(section_regex, location)
-        subpart_search = re.search(subpart_regex, location)
+        section_regex = r"^(?:([0-9]+)\s+(?:cfr)?(?:\s+)?)?([0-9]+)(?:[\s]+|[.])([0-9]+)$"
+        subpart_regex = r"^(?:([0-9]+)\s+(?:cfr)?(?:\s+)?)?([0-9]+)(?:\.|\s+(?:subpart\s+)?)((?!subpart)[a-z]+)$"
+        section_search = re.search(section_regex, location.lower())
+        subpart_search = re.search(subpart_regex, location.lower())
 
         if section_search:
             title, part, section = section_search.groups()
@@ -235,6 +235,7 @@ class AbstractResourceAdmin(BaseAdmin):
         elif subpart_search:
             title, part, subpart = subpart_search.groups()
             title = default_title if not title else title
+            subpart = subpart.upper()
             if self.check_values(title, part, "", subpart):
                 try:
                     return Subpart.objects.get(
