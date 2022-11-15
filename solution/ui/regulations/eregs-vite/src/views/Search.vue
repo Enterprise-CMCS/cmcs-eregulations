@@ -4,8 +4,7 @@
             <Banner title="Search Results">
                 <template #description>
                     <p>This site searches Title 42, Parts 400 and 430-460</p>
-                    <p>{{ q }}</p>
-                    <p>{{ results }}</p>
+                    <p>{{ query }}</p>
                 </template>
                 <template #input>
                     <form class="search-form">
@@ -26,6 +25,10 @@
                     </form>
                 </template>
             </Banner>
+            <template v-for="result in results">
+                <h3>Test</h3>
+                <p>{{ result.parentHeadline }}</p>
+            </template>
         </div>
     </body>
 </template>
@@ -40,17 +43,7 @@ export default {
         Banner,
     },
 
-    props: {
-        q: {
-            type: String,
-            required: false,
-            default: "",
-        },
-        results: {
-            type: Object,
-            default: () => {},
-        }
-    },
+    props: {},
 
     beforeCreate() {},
 
@@ -58,7 +51,10 @@ export default {
 
     beforeMount() {},
 
-    mounted() {},
+    mounted() {
+        this.results = this.getResults();
+        this.query = this.getQuery();
+    },
 
     beforeUpdate() {},
 
@@ -68,21 +64,36 @@ export default {
 
     destroyed() {},
 
-    data() {},
+    data() {
+        return {
+            query: "",
+            results: [],
+        };
+    },
 
     computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
+        parsedResults() {
+            return JSON.parse(this.results);
         },
     },
 
     methods: {
+        getQuery() {
+            if (!document.getElementById("query")) return "";
+
+            const rawQuery = JSON.parse(
+                document.getElementById("query").textContent
+            );
+
+            console.log("query", rawQuery);
+
+            return rawQuery;
+        },
         getResults() {
-            console.log("in method");
-            if (!document.getElementById("search_results")) return "";
+            if (!document.getElementById("results_list")) return "";
 
             const rawResults = JSON.parse(
-                document.getElementById("search_results").textContent
+                document.getElementById("results_list").textContent
             );
 
             console.log("rawResults", rawResults);

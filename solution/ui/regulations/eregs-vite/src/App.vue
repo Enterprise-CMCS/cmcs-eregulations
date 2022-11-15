@@ -21,14 +21,6 @@ export default {
             type: String,
             default: "",
         },
-        q: {
-            type: String,
-            default: "",
-        },
-        results: {
-            type: Object,
-            default: () => {},
-        }
     },
 };
 </script>
@@ -40,8 +32,6 @@ export default {
             :about-url="aboutUrl"
             :custom-url="customUrl"
             :host="host"
-            :q="q"
-            :results="results"
         />
     </v-app>
 </template>

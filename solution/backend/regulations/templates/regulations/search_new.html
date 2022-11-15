@@ -16,6 +16,9 @@
 {% endblock %}
 
 {% block body %}
+{{ results_list|json_script:"results_list" }}
+{{ q|json_script:"query" }}
+
 <div
     id="vite-app"
     data-api-url="{% url 'regcore' %}"
