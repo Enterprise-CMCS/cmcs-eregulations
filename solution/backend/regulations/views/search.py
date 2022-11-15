@@ -17,6 +17,7 @@ class SearchView(TemplateView):
         context = super().get_context_data(**kwargs)
         today = date.today()
         results = SearchIndex.objects.effective(today).search(query)
+        results_list = [entry for entry in results.values()]
         parts = Part.objects.effective(today)
         if not parts:
             raise Http404
@@ -28,6 +29,7 @@ class SearchView(TemplateView):
             'parts': parts,
             'toc': structure,
             'results': results,
+            'results_list': results_list,
             'synonym': synonym,
             'unquoted_search': query and not query.startswith('"') and not query.endswith('"') and len(query.split(" ")) > 1,
             'query': query,

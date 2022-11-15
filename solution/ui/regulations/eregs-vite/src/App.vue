@@ -24,6 +24,10 @@ export default {
         q: {
             type: String,
             default: "",
+        },
+        results: {
+            type: Object,
+            default: () => {},
         }
     },
 };
@@ -37,6 +41,7 @@ export default {
             :custom-url="customUrl"
             :host="host"
             :q="q"
+            :results="results"
         />
     </v-app>
 </template>

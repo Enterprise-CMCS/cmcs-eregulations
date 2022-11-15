@@ -5,6 +5,7 @@
                 <template #description>
                     <p>This site searches Title 42, Parts 400 and 430-460</p>
                     <p>{{ q }}</p>
+                    <p>{{ results }}</p>
                 </template>
                 <template #input>
                     <form class="search-form">
@@ -45,6 +46,10 @@ export default {
             required: false,
             default: "",
         },
+        results: {
+            type: Object,
+            default: () => {},
+        }
     },
 
     beforeCreate() {},
@@ -71,7 +76,20 @@ export default {
         },
     },
 
-    methods: {},
+    methods: {
+        getResults() {
+            console.log("in method");
+            if (!document.getElementById("search_results")) return "";
+
+            const rawResults = JSON.parse(
+                document.getElementById("search_results").textContent
+            );
+
+            console.log("rawResults", rawResults);
+
+            return rawResults;
+        },
+    },
 };
 </script>
 
