@@ -17,7 +17,7 @@ class SearchView(TemplateView):
         context = super().get_context_data(**kwargs)
         today = date.today()
         results = SearchIndex.objects.effective(today).search(query)
-        results_list = [entry for entry in results.values()]
+        results_list = []
         parts = Part.objects.effective(today)
         if not parts:
             raise Http404
@@ -25,6 +25,19 @@ class SearchView(TemplateView):
         synonym = None
         if query:
             synonym = Synonym.objects.filter(isActive=True, baseWord__iexact=query.strip('\"')).first()
+
+        for result in results:
+            result_part_document = result.part.document
+            object_to_append = {}
+            object_to_append['label'] = result.label
+            object_to_append['rank'] = result.rank
+            object_to_append['part_title'] = result.part.title
+            object_to_append['part_document_title'] = result_part_document['title']
+            object_to_append['date'] = result.part.date
+            object_to_append['parentHeadline'] = result.parentHeadline
+            object_to_append['headline'] = result.headline
+            results_list.append(object_to_append)
+
         c = {
             'parts': parts,
             'toc': structure,
