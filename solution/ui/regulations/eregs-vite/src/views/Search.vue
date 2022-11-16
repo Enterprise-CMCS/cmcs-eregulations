@@ -1,10 +1,9 @@
 <template>
-    <body class="ds-base">
+    <body class="ds-base search-page">
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
                 <template #description>
                     <p>This site searches Title 42, Parts 400 and 430-460</p>
-                    <p>{{ query }}</p>
                 </template>
                 <template #input>
                     <form class="search-form">
@@ -25,11 +24,31 @@
                     </form>
                 </template>
             </Banner>
-            <template v-for="(result, i) in results">
-                <div :key="i">
-                    <p v-html="stripQuotes(result.parentHeadline)" />
+            <div class="results-container">
+                <div class="results-content">
+                    <div class="search-results-count">
+                        {{ results.length }} results in Medicaid & CHIP
+                        Regulations
+                    </div>
+                    <template v-for="(result, i) in results">
+                        <div :key="i" class="result">
+                            <div class="results-part">
+                                {{ result.part_document_title }}
+                            </div>
+                            <div class="results-section">
+                                <a
+                                    :href="createResultLink(result)"
+                                    v-html="stripQuotes(result.parentHeadline)"
+                                />
+                            </div>
+                            <div
+                                class="results-preview"
+                                v-html="result.headline"
+                            />
+                        </div>
+                    </template>
                 </div>
-            </template>
+            </div>
         </div>
     </body>
 </template>
@@ -102,7 +121,10 @@ export default {
             return rawResults;
         },
         stripQuotes(string) {
-            return  string.replace(/(^")|("$)/g, '');
+            return string.replace(/(^")|("$)/g, "");
+        },
+        createResultLink(props) {
+            return `/${props.part_title}/${props.label[0]}/${props.label[1]}/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
         },
     },
 };
@@ -119,6 +141,21 @@ export default {
             margin-bottom: 50px;
             .v-input__icon.v-input__icon--append button {
                 color: $mid_blue;
+            }
+        }
+    }
+
+    .results-container {
+        overflow: auto;
+        width: 100%;
+        margin-bottom: 30px;
+
+        .results-content {
+            max-width: $text-max-width;
+            margin: 0 auto;
+
+            .result {
+                margin-top: 0px;
             }
         }
     }

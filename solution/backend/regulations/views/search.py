@@ -5,7 +5,7 @@ from django.http import Http404
 
 from regcore.models import Part
 from regcore.search.models import SearchIndex, Synonym
-from .utils import get_structure
+from .utils import get_structure, get_tag_contents
 
 
 class SearchView(TemplateView):
@@ -27,8 +27,8 @@ class SearchView(TemplateView):
             synonym = Synonym.objects.filter(isActive=True, baseWord__iexact=query.strip('\"')).first()
 
         for result in results:
-            result_part_document = result.part.document
             object_to_append = {}
+            result_part_document = result.part.document
             object_to_append['label'] = result.label
             object_to_append['rank'] = result.rank
             object_to_append['part_title'] = result.part.title
@@ -36,6 +36,7 @@ class SearchView(TemplateView):
             object_to_append['date'] = result.part.date
             object_to_append['parentHeadline'] = result.parentHeadline
             object_to_append['headline'] = result.headline
+            object_to_append['q_list'] = get_tag_contents(result.headline, 'span', 'search-highlight')
             results_list.append(object_to_append)
 
         c = {
