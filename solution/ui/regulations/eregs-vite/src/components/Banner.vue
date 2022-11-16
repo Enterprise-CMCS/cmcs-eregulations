@@ -4,6 +4,7 @@
             <h1>{{ title }}</h1>
             <slot name="description"></slot>
             <slot name="input"></slot>
+            <slot name="inputSubtext"></slot>
             <slot name="filters"></slot>
         </div>
     </div>

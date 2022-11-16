@@ -23,8 +23,12 @@ class SearchView(TemplateView):
             raise Http404
         structure = get_structure(parts)
         synonym = None
+        synonym_list = []
         if query:
             synonym = Synonym.objects.filter(isActive=True, baseWord__iexact=query.strip('\"')).first()
+            if synonym:
+                for syn in synonym.filtered_synonyms:
+                    synonym_list.append(str(syn))
 
         for result in results:
             object_to_append = {}
@@ -45,6 +49,7 @@ class SearchView(TemplateView):
             'results': results,
             'results_list': results_list,
             'synonym': synonym,
+            'synonym_list': synonym_list,
             'unquoted_search': query and not query.startswith('"') and not query.endswith('"') and len(query.split(" ")) > 1,
             'query': query,
         }

@@ -27,6 +27,28 @@
                         />
                     </form>
                 </template>
+                <template #inputSubtext>
+                    <template v-if="unquotedSearch">
+                        <div class="search-suggestion">
+                            Didn't find what you were looking for? Try searching for
+                            <a :href="createSynonymQuotedLink(query)">"{{ query }}"</a>
+                        </div>
+                    </template>
+                    <template v-if="synonyms.length > 0">
+                        <div class="search-suggestion">
+                            <span v-if="unquotedSearch">
+                                Or search
+                            </span>
+                            <span v-else>
+                                Search
+                            </span>
+                            for similar terms:
+                            <template v-for="(syn, i) in synonyms">
+                                <a :key="i" :href="createSynonymQuotedLink(syn)">{{ syn }}</a><span v-if="synonyms.length > 1 && i <= synonyms.length" :key="i">, </span>
+                            </template>
+                        </div>
+                    </template>
+                </template>
             </Banner>
             <div class="results-container">
                 <div class="results-content">
@@ -88,6 +110,8 @@ export default {
     beforeMount() {},
 
     mounted() {
+        this.synonyms = this.getSynonyms();
+        this.unquotedSearch = this.getUnquotedSearch();
         this.results = this.getResults();
         this.query = this.getQuery();
         this.searchInputValue = this.getQuery();
@@ -105,6 +129,8 @@ export default {
         return {
             query: "",
             results: [],
+            synonyms: [],
+            unquotedSearch: false,
             searchInputValue: null,
         };
     },
@@ -134,6 +160,28 @@ export default {
 
             return rawResults;
         },
+        getSynonyms() {
+            if (!document.getElementById("synonym_list")) return "";
+
+            const rawSynonyms = JSON.parse(
+                document.getElementById("synonym_list").textContent
+            );
+
+            console.log("rawSynonyms", rawSynonyms);
+
+            return rawSynonyms;
+        },
+        getUnquotedSearch() {
+            if (!document.getElementById("unquoted_search")) return "";
+
+            const rawUnquotedBool = JSON.parse(
+                document.getElementById("unquoted_search").textContent
+            );
+
+            console.log("rawUnquotedBool", rawUnquotedBool);
+
+            return rawUnquotedBool;
+        },
         stripQuotes(string) {
             return string.replace(/(^")|("$)/g, "");
         },
@@ -141,6 +189,9 @@ export default {
             return `/${props.part_title}/${props.label[0]}/${props.label[1]}/${
                 props.date
             }/?q=${props.q_list}#${props.label.join("-")}`;
+        },
+        createSynonymQuotedLink(val) {
+            return `/search/?q=%22${val}%22`;
         },
         updateSearchValue(value) {
             this.searchInputValue = value;
