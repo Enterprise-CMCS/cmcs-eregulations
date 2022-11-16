@@ -25,9 +25,10 @@
                     </form>
                 </template>
             </Banner>
-            <template v-for="result in results">
-                <h3>Test</h3>
-                <p>{{ result.parentHeadline }}</p>
+            <template v-for="(result, i) in results">
+                <div :key="i">
+                    <p v-html="stripQuotes(result.parentHeadline)" />
+                </div>
             </template>
         </div>
     </body>
@@ -99,6 +100,9 @@ export default {
             console.log("rawResults", rawResults);
 
             return rawResults;
+        },
+        stripQuotes(string) {
+            return  string.replace(/(^")|("$)/g, '');
         },
     },
 };
