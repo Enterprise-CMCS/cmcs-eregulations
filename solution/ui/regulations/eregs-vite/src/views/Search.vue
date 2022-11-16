@@ -6,9 +6,10 @@
                     <p>This site searches Title 42, Parts 400 and 430-460</p>
                 </template>
                 <template #input>
-                    <form class="search-form">
+                    <form class="search-form" @submit.prevent="executeSearch">
                         <v-text-field
                             id="main-content"
+                            :value="query"
                             outlined
                             flat
                             solo
@@ -20,6 +21,8 @@
                             append-icon="mdi-magnify"
                             hide-details
                             dense
+                            @input="updateSearchValue"
+                            @click:append="executeSearch"
                         />
                     </form>
                 </template>
@@ -88,14 +91,11 @@ export default {
         return {
             query: "",
             results: [],
+            searchInputValue: undefined,
         };
     },
 
-    computed: {
-        parsedResults() {
-            return JSON.parse(this.results);
-        },
-    },
+    computed: {},
 
     methods: {
         getQuery() {
@@ -124,7 +124,15 @@ export default {
             return string.replace(/(^")|("$)/g, "");
         },
         createResultLink(props) {
-            return `/${props.part_title}/${props.label[0]}/${props.label[1]}/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
+            return `/${props.part_title}/${props.label[0]}/${props.label[1]}/${
+                props.date
+            }/?q=${props.q_list}#${props.label.join("-")}`;
+        },
+        updateSearchValue(value) {
+            this.searchInputValue = value;
+        },
+        executeSearch() {
+            window.location.href = `/search/?q=${this.searchInputValue}`
         },
     },
 };
