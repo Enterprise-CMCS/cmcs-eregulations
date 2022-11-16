@@ -35,7 +35,12 @@
                         Regulations
                     </div>
                     <template v-if="results.length == 0">
-                        <h4>No results</h4>
+                        <SearchEmptyState
+                            eregs_url="/resources"
+                            eregs_url_label="eRegulations resource links"
+                            eregs_sublabel="subregulatory guidance and implementation resources"
+                            :query="query"
+                        />
                     </template>
                     <template v-for="(result, i) in results" v-else>
                         <div :key="i" class="result">
@@ -62,13 +67,16 @@
 
 <script>
 import _isNull from "lodash/isNull";
+
 import Banner from "@/components/Banner.vue";
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
 
 export default {
     name: "SearchView",
 
     components: {
         Banner,
+        SearchEmptyState,
     },
 
     props: {},
