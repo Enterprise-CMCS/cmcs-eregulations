@@ -9,7 +9,7 @@
                     <form class="search-form" @submit.prevent="executeSearch">
                         <v-text-field
                             id="main-content"
-                            :value="query"
+                            :value="searchInputValue"
                             outlined
                             flat
                             solo
@@ -23,6 +23,7 @@
                             dense
                             @input="updateSearchValue"
                             @click:append="executeSearch"
+                            @click:clear="clearSearchQuery"
                         />
                     </form>
                 </template>
@@ -33,7 +34,10 @@
                         {{ results.length }} results in Medicaid & CHIP
                         Regulations
                     </div>
-                    <template v-for="(result, i) in results">
+                    <template v-if="results.length == 0">
+                        <h4>No results</h4>
+                    </template>
+                    <template v-for="(result, i) in results" v-else>
                         <div :key="i" class="result">
                             <div class="results-part">
                                 {{ result.part_document_title }}
@@ -57,6 +61,7 @@
 </template>
 
 <script>
+import _isNull from "lodash/isNull";
 import Banner from "@/components/Banner.vue";
 
 export default {
@@ -77,6 +82,7 @@ export default {
     mounted() {
         this.results = this.getResults();
         this.query = this.getQuery();
+        this.searchInputValue = this.getQuery();
     },
 
     beforeUpdate() {},
@@ -91,7 +97,7 @@ export default {
         return {
             query: "",
             results: [],
-            searchInputValue: undefined,
+            searchInputValue: null,
         };
     },
 
@@ -132,7 +138,12 @@ export default {
             this.searchInputValue = value;
         },
         executeSearch() {
-            window.location.href = `/search/?q=${this.searchInputValue}`
+            if (!_isNull(this.searchInputValue)) {
+                window.location.href = `/search/?q=${this.searchInputValue}`
+            }
+        },
+        clearSearchQuery() {
+            this.searchInputValue = "";
         },
     },
 };
