@@ -207,7 +207,7 @@ export default {
         },
         executeSearch() {
             if (!_isNull(this.searchInputValue)) {
-                window.location.href = `/search/?q=${this.searchInputValue}`;
+                window.location.href = `${this.base}/search/?q=${this.searchInputValue}`;
             }
         },
         clearSearchQuery() {
