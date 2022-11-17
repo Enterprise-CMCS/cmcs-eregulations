@@ -246,6 +246,10 @@ export default {
         .results-content {
             max-width: $text-max-width;
             margin: 0 auto;
+            padding: 0 $spacer-5;
+            @include screen-xl {
+                padding: 0 $spacer-4;
+            }
 
             .result {
                 margin-top: 0px;
