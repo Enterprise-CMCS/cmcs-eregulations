@@ -30,7 +30,7 @@
                                 <div class="search-suggestion">
                                     Didn't find what you were looking for? Try
                                     searching for
-                                    <a :href="createSynonymQuotedLink(query)"
+                                    <a :href="createSynonymQuotedLink(query, base)"
                                         >"{{ query }}"</a
                                     >
                                 </div>
@@ -45,7 +45,7 @@
                                     <template v-for="(syn, i) in synonyms">
                                         <a
                                             :key="i"
-                                            :href="createSynonymQuotedLink(syn)"
+                                            :href="createSynonymQuotedLink(syn, base)"
                                             >{{ syn }}</a
                                         ><span
                                             v-if="
@@ -70,7 +70,7 @@
                     </div>
                     <template v-if="results.length == 0">
                         <SearchEmptyState
-                            eregs_url="/resources"
+                            :eregs_url="createRegulationsSearchUrl(base)"
                             eregs_url_label="eRegulations resource links"
                             eregs_sublabel="subregulatory guidance and implementation resources"
                             :query="query"
@@ -83,7 +83,7 @@
                             </div>
                             <div class="results-section">
                                 <a
-                                    :href="createResultLink(result)"
+                                    :href="createResultLink(result, base)"
                                     v-html="stripQuotes(result.parentHeadline)"
                                 />
                             </div>
@@ -139,6 +139,10 @@ export default {
 
     data() {
         return {
+            base:
+                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
+                    ? `/${import.meta.env.VITE_ENV}`
+                    : "",
             query: "",
             results: [],
             synonyms: [],
@@ -197,13 +201,16 @@ export default {
         stripQuotes(string) {
             return string.replace(/(^")|("$)/g, "");
         },
-        createResultLink(props) {
-            return `/${props.part_title}/${props.label[0]}/${props.label[1]}/${
+        createResultLink(props, base) {
+            return `${base}/${props.part_title}/${props.label[0]}/${props.label[1]}/${
                 props.date
             }/?q=${props.q_list}#${props.label.join("-")}`;
         },
-        createSynonymQuotedLink(val) {
-            return `/search/?q=%22${val}%22`;
+        createSynonymQuotedLink(val, base) {
+            return `${base}/search/?q=%22${val}%22`;
+        },
+        createRegulationsSearchUrl(base) {
+            return `${base}/search/`;
         },
         updateSearchValue(value) {
             this.searchInputValue = value;
