@@ -50,7 +50,7 @@
                                         ><span
                                             v-if="
                                                 synonyms.length > 1 &&
-                                                i <= synonyms.length
+                                                i + 1 < synonyms.length
                                             "
                                             :key="i"
                                             >,
