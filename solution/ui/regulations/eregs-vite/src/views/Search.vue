@@ -30,7 +30,10 @@
                                 <div class="search-suggestion">
                                     Didn't find what you were looking for? Try
                                     searching for
-                                    <a :href="createSynonymQuotedLink(query, base)"
+                                    <a
+                                        :href="
+                                            createSynonymQuotedLink(query, base)
+                                        "
                                         >"{{ query }}"</a
                                     >
                                 </div>
@@ -45,7 +48,12 @@
                                     <template v-for="(syn, i) in synonyms">
                                         <a
                                             :key="i"
-                                            :href="createSynonymQuotedLink(syn, base)"
+                                            :href="
+                                                createSynonymQuotedLink(
+                                                    syn,
+                                                    base
+                                                )
+                                            "
                                             >{{ syn }}</a
                                         ><span
                                             v-if="
@@ -147,7 +155,7 @@ export default {
             results: [],
             synonyms: [],
             unquotedSearch: false,
-            searchInputValue: null,
+            searchInputValue: "",
         };
     },
 
@@ -157,54 +165,36 @@ export default {
         getQuery() {
             if (!document.getElementById("query")) return "";
 
-            const rawQuery = JSON.parse(
-                document.getElementById("query").textContent
-            );
-
-            console.log("query", rawQuery);
-
-            return rawQuery;
+            return JSON.parse(document.getElementById("query").textContent);
         },
         getResults() {
-            if (!document.getElementById("results_list")) return "";
+            if (!document.getElementById("results_list")) return [];
 
-            const rawResults = JSON.parse(
+            return JSON.parse(
                 document.getElementById("results_list").textContent
             );
-
-            console.log("rawResults", rawResults);
-
-            return rawResults;
         },
         getSynonyms() {
-            if (!document.getElementById("synonym_list")) return "";
+            if (!document.getElementById("synonym_list")) return [];
 
-            const rawSynonyms = JSON.parse(
+            return JSON.parse(
                 document.getElementById("synonym_list").textContent
             );
-
-            console.log("rawSynonyms", rawSynonyms);
-
-            return rawSynonyms;
         },
         getUnquotedSearch() {
-            if (!document.getElementById("unquoted_search")) return "";
+            if (!document.getElementById("unquoted_search")) return false;
 
-            const rawUnquotedBool = JSON.parse(
+            return JSON.parse(
                 document.getElementById("unquoted_search").textContent
             );
-
-            console.log("rawUnquotedBool", rawUnquotedBool);
-
-            return rawUnquotedBool;
         },
         stripQuotes(string) {
             return string.replace(/(^")|("$)/g, "");
         },
         createResultLink(props, base) {
-            return `${base}/${props.part_title}/${props.label[0]}/${props.label[1]}/${
-                props.date
-            }/?q=${props.q_list}#${props.label.join("-")}`;
+            return `${base}/${props.part_title}/${props.label[0]}/${
+                props.label[1]
+            }/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
         },
         createSynonymQuotedLink(val, base) {
             return `${base}/search/?q=%22${val}%22`;
