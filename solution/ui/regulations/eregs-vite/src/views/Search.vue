@@ -25,29 +25,41 @@
                             @click:append="executeSearch"
                             @click:clear="clearSearchQuery"
                         />
-                    </form>
-                </template>
-                <template #inputSubtext>
-                    <template v-if="unquotedSearch">
-                        <div class="search-suggestion">
-                            Didn't find what you were looking for? Try searching for
-                            <a :href="createSynonymQuotedLink(query)">"{{ query }}"</a>
-                        </div>
-                    </template>
-                    <template v-if="synonyms.length > 0">
-                        <div class="search-suggestion">
-                            <span v-if="unquotedSearch">
-                                Or search
-                            </span>
-                            <span v-else>
-                                Search
-                            </span>
-                            for similar terms:
-                            <template v-for="(syn, i) in synonyms">
-                                <a :key="i" :href="createSynonymQuotedLink(syn)">{{ syn }}</a><span v-if="synonyms.length > 1 && i <= synonyms.length" :key="i">, </span>
+                        <div class="form-helper-text">
+                            <template v-if="unquotedSearch">
+                                <div class="search-suggestion">
+                                    Didn't find what you were looking for? Try
+                                    searching for
+                                    <a :href="createSynonymQuotedLink(query)"
+                                        >"{{ query }}"</a
+                                    >
+                                </div>
+                            </template>
+                            <template v-if="synonyms.length > 0">
+                                <div class="search-suggestion">
+                                    <span v-if="unquotedSearch">
+                                        Or search
+                                    </span>
+                                    <span v-else> Search </span>
+                                    for similar terms:
+                                    <template v-for="(syn, i) in synonyms">
+                                        <a
+                                            :key="i"
+                                            :href="createSynonymQuotedLink(syn)"
+                                            >{{ syn }}</a
+                                        ><span
+                                            v-if="
+                                                synonyms.length > 1 &&
+                                                i <= synonyms.length
+                                            "
+                                            :key="i"
+                                            >,
+                                        </span>
+                                    </template>
+                                </div>
                             </template>
                         </div>
-                    </template>
+                    </form>
                 </template>
             </Banner>
             <div class="results-container">
@@ -198,7 +210,7 @@ export default {
         },
         executeSearch() {
             if (!_isNull(this.searchInputValue)) {
-                window.location.href = `/search/?q=${this.searchInputValue}`
+                window.location.href = `/search/?q=${this.searchInputValue}`;
             }
         },
         clearSearchQuery() {
@@ -214,12 +226,18 @@ export default {
     flex-direction: column;
 
     .search-form {
+        margin-bottom: 30px;
+
         .search-field {
             height: 40px;
-            margin-bottom: 50px;
+
             .v-input__icon.v-input__icon--append button {
                 color: $mid_blue;
             }
+        }
+
+        .form-helper-text {
+            margin-top: 10px;
         }
     }
 
