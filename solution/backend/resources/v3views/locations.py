@@ -1,5 +1,4 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_spectacular.utils import extend_schema
 from django.db.models import Prefetch
 
@@ -18,20 +17,15 @@ from resources.v3serializers.locations import (
     MetaLocationSerializer,
 )
 
-from regcore.views import SettingsAuthentication
-
 
 @extend_schema(
     description="Retrieve a list of all resource locations, filterable by title and part. Results are paginated by default.",
     parameters=LocationExplorerViewSetMixin.PARAMETERS,
     responses=MetaLocationSerializer.many(True),
 )
-class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ModelViewSet):
+class LocationViewSet(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     queryset = AbstractLocation.objects.all().select_subclasses()
     serializer_class = AbstractLocationPolymorphicSerializer
-
-    authentication_classes = [SettingsAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 @extend_schema(
