@@ -144,7 +144,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         created = self.context.get("created", False)
-        sections = validated_data.get("sections", [])
+        sections = validated_data.get("sections", []) or []
         section_ranges = validated_data.get("section_ranges", []) or []
 
         # set basic fields and group if instance is new
