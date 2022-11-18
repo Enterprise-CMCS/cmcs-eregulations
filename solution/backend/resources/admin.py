@@ -262,9 +262,8 @@ class LocationHistoryWidget(Textarea):
     def locations_to_strings(self, locations):
         strings = []
         for i in locations:
-            key = ([x for x in i.keys() if "_id" in x] or [None])[0]
-            if key:
-                strings.append(f"{i['title']} CFR {i['part']}.{i[key]}")
+            key = f"{i['type']}_id"
+            strings.append(f"{i['title']} CFR {i['part']}.{i[key]}")
         if not strings:
             return None
         if len(strings) == 1:
