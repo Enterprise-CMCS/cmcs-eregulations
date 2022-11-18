@@ -39,12 +39,6 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
         }),
     )
 
-    # TODO: Remove this method when FR parser work is complete (EREGCSC-1390)
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.base_fields["skip_fr_documents"].disabled = True
-        return form
-
 
 @admin.register(Synonym)
 class SynonymAdmin(BaseAdmin):
