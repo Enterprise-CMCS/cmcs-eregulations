@@ -55,6 +55,7 @@
             margin: $spacer-6 0 $spacer-2;
         }
     }
+
     .search-suggestion{
         margin: 0px;
         font-size: $font-size-sm;
@@ -161,12 +162,15 @@
 
 // Search Text Box
 
+main .search-box {
+    margin-bottom: 16px;
+}
+
 .search-header,
 .search-box {
     width: 100%;
     position: relative;
     display: flex;
-    margin-bottom: 16px;
 
     input {
         width: 100%;
