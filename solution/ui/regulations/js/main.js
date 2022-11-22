@@ -14,7 +14,7 @@ import LastParserSuccessDate from "../dist/LastParserSuccessDate";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
-import { highlightText, getQueryParam, scrollToElement} from "./utils";
+import { highlightText, getQueryParam, scrollToElement } from "./utils";
 
 Vue.config.devtools = true;
 

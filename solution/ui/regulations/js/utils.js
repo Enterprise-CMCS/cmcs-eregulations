@@ -213,10 +213,7 @@ const highlightText = (location, paramKey) => {
  */
 const scrollToElement = (element, offsetPx = 0) => {
     const position = element.getBoundingClientRect();
-    window.scrollTo(
-        position.x,
-        element.offsetTop - offsetPx
-    );
+    window.scrollTo(position.x, element.offsetTop - offsetPx);
 };
 
 /**
