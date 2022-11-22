@@ -57,22 +57,20 @@ function onPageShow() {
             : 0;
 
         const headerHeight =
-            window.innerWidth >= 1024
-                ? HEADER_HEIGHT
-                : HEADER_HEIGHT_MOBILE;
+            window.innerWidth >= 1024 ? HEADER_HEIGHT : HEADER_HEIGHT_MOBILE;
 
-        const heights = { headerHeight, versionSelectHeight };
+        const offsetPx = headerHeight - versionSelectHeight;
 
         if (isHighlighted) {
             const highlightedEls = document.getElementsByClassName("highlight");
             const highlightedEl = highlightedEls[0];
             if (highlightedEl) {
-                scrollToElement(highlightedEl, heights)
+                scrollToElement(highlightedEl, offsetPx);
             }
         } else if (hasHash) {
             const el = document.getElementById(elId.substr(1));
             if (el) {
-                scrollToElement(el, heights)
+                scrollToElement(el, offsetPx);
             }
         }
     }

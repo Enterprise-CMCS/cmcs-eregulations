@@ -209,16 +209,13 @@ const highlightText = (location, paramKey) => {
  * heights of other elements into consideration
  *
  * @param {HTMLElement} element - scroll to this element
- * @param {Object} heights - additional heights to consider
- * @param {number} heights.headerHeight - height of header
- * @param {number} heights.versionSelectHeight - height of Version Select control
+ * @param {number} [offsetPx=0] - pixels to offset scroll from top of screen
  */
-const scrollToElement = (element, heights) => {
+const scrollToElement = (element, offsetPx = 0) => {
     const position = element.getBoundingClientRect();
-    const { headerHeight, versionSelectHeight } = heights;
     window.scrollTo(
         position.x,
-        element.offsetTop - headerHeight - versionSelectHeight
+        element.offsetTop - offsetPx
     );
 };
 
