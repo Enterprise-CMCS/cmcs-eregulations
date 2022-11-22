@@ -205,6 +205,24 @@ const highlightText = (location, paramKey) => {
 };
 
 /**
+ * Scroll to top of HTML element while taking
+ * heights of other elements into consideration
+ *
+ * @param {HTMLElement} element - scroll to this element
+ * @param {Object} heights - additional heights to consider
+ * @param {number} heights.headerHeight - height of header
+ * @param {number} heights.versionSelectHeight - height of Version Select control
+ */
+const scrollToElement = (element, heights) => {
+    const position = element.getBoundingClientRect();
+    const { headerHeight, versionSelectHeight } = heights;
+    window.scrollTo(
+        position.x,
+        element.offsetTop - headerHeight - versionSelectHeight
+    );
+};
+
+/**
  * Converts date from YYYY-MM-DD to MMM DD, YYYY
  *
  * @param {string} kebabDate - date in `YYYY-MM-DD` format
@@ -231,4 +249,5 @@ export {
     getQueryParam,
     niceDate,
     parseError,
+    scrollToElement,
 };
