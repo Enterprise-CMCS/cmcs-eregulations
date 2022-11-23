@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, re_path, include
 
 from regcore.views import (
     EffectivePartView,
@@ -89,6 +89,9 @@ urlpatterns = [
             "put": "update",
         })),
         path("synonym/<synonym>", synonyms.SynonymViewSet.as_view({
+            "get": "list",
+        })),
+        re_path(r"synonym/(?P<synonym>\w+)", synonyms.SynonymViewSet.as_view({
             "get": "list",
         })),
         path("parser_config", parser.ParserConfigurationViewSet.as_view({
