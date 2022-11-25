@@ -39,6 +39,7 @@ urlpatterns = [
     ])),
     path("v3/", include([
         path("resources/", include('resources.v3urls')),
+        path("", include('regcore.search.v3urls')),
         path("toc", title.TOCViewSet.as_view({
             "get": "list",
         })),
