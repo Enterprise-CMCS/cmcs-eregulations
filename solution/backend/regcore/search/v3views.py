@@ -10,8 +10,8 @@ from .serializers import SearchResultSerializer
 
 
 @extend_schema(
-    description="Search the regulation text. This endpoint is incomplete and may change.",
-    parameters=[OpenApiQueryParameter("q", "The word or phrase to search for.", str, True)],
+    description="Search the regulation text. This endpoint is incomplete and may change. Results are paginated by default.",
+    parameters=[OpenApiQueryParameter("q", "The word or phrase to search for.", str, True)] + OptionalPaginationMixin.PARAMETERS,
 )
 class V3SearchView(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SearchResultSerializer
