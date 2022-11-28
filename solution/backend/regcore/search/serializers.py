@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 class SearchResultSerializer(serializers.Serializer):
     type = serializers.CharField()
     label = serializers.ListField(child=serializers.CharField())

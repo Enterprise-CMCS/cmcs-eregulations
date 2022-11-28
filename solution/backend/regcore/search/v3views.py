@@ -4,7 +4,10 @@ from rest_framework import viewsets
 from .models import SearchIndex
 from .serializers import SearchResultSerializer
 
-class V3SearchView(viewsets.ReadOnlyModelViewSet):
+from common.mixins import OptionalPaginationMixin
+
+
+class V3SearchView(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = SearchResultSerializer
 
     def get_queryset(self):
