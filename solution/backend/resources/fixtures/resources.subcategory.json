@@ -120,6 +120,26 @@
   }
 },
 {
+  "model": "resources.abstractcategory",
+  "pk": 69,
+  "fields": {
+    "name": "Other Reports",
+    "description": "",
+    "order": 900,
+    "show_if_empty": false
+  }
+},
+{
+  "model": "resources.abstractcategory",
+  "pk": 68,
+  "fields": {
+    "name": "Other Resources",
+    "description": "",
+    "order": 900,
+    "show_if_empty": false
+  }
+},
+{
   "model": "resources.subcategory",
   "pk": 25,
   "fields": {
@@ -201,6 +221,20 @@
   "pk": 24,
   "fields": {
     "parent": 23
+  }
+},
+{
+  "model": "resources.subcategory",
+  "pk": 69,
+  "fields": {
+    "parent": 23
+  }
+},
+{
+  "model": "resources.subcategory",
+  "pk": 68,
+  "fields": {
+    "parent": 11
   }
 }
 ]
