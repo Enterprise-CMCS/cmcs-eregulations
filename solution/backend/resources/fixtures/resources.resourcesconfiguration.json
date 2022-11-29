@@ -1,1 +1,9 @@
-[{"model": "resources.resourcesconfiguration", "pk": 1, "fields": {"fr_doc_category": 26}}]
+[
+{
+    "model": "resources.resourcesconfiguration",
+    "pk": 1,
+    "fields": {
+        "fr_doc_category": 67
+    }
+}
+]
