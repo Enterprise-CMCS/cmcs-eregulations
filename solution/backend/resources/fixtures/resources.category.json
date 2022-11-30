@@ -1,21 +1,21 @@
 [
 {
   "model": "resources.abstractcategory",
-  "pk": 26,
+  "pk": 3,
   "fields": {
-    "name": "Federal Register Docs",
-    "description": "",
-    "order": 0,
-    "show_if_empty": true
+    "name": "Related Statutes",
+    "description": "Statutes that relate to the subject matter of the subpart or section",
+    "order": 200,
+    "show_if_empty": false
   }
 },
 {
   "model": "resources.abstractcategory",
-  "pk": 3,
+  "pk": 67,
   "fields": {
-    "name": "Related Statutes",
-    "description": "Statutes that relate to the subject matter of the Subpart",
-    "order": 200,
+    "name": "Proposed and Final Rules",
+    "description": "Federal Register documents with agency policy proposals and decisions",
+    "order": 250,
     "show_if_empty": false
   }
 },
@@ -81,12 +81,12 @@
 },
 {
   "model": "resources.category",
-  "pk": 26,
+  "pk": 3,
   "fields": {}
 },
 {
   "model": "resources.category",
-  "pk": 3,
+  "pk": 67,
   "fields": {}
 },
 {

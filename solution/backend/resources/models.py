@@ -1,7 +1,7 @@
 import datetime
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.db import models
 from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
@@ -114,6 +114,10 @@ class AbstractLocation(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ["title", "part", "section__section_id", "subpart__subpart_id"]
 
@@ -123,6 +127,12 @@ class Subpart(AbstractLocation):
 
     def __str__(self):
         return f'{self.title} CFR {self.part} Subpart {self.subpart_id}'
+
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        query = Subpart.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).values_list("id", flat=True)
+        if query and self.id not in query:
+            raise ValidationError({NON_FIELD_ERRORS: [f"Subpart {str(self)} already exists."]})
 
     class Meta:
         verbose_name = "Subpart"
@@ -136,6 +146,12 @@ class Section(AbstractLocation):
 
     def __str__(self):
         return f'{self.title} CFR {self.part}.{self.section_id}'
+
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        query = Section.objects.filter(title=self.title, part=self.part, section_id=self.section_id).values_list("id", flat=True)
+        if query and self.id not in query:
+            raise ValidationError({NON_FIELD_ERRORS: [f"Section {str(self)} already exists."]})
 
     class Meta:
         verbose_name = "Section"
