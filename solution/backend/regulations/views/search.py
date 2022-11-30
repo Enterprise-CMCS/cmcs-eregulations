@@ -10,7 +10,7 @@ from .utils import get_structure, get_tag_contents
 
 class SearchView(TemplateView):
 
-    template_name = 'regulations/search_new.html'
+    template_name = 'regulations/search.html'
 
     def get_context_data(self, **kwargs):
         query = self.request.GET.get("q")
