@@ -16,7 +16,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.injectAxe();
-        cy.contains("Medicaid & CHIP eRegulations");
+        cy.contains("Medicaid & CHIP2 eRegulations");
         cy.checkAccessibility();
     });
 
