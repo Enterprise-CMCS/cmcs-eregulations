@@ -834,8 +834,8 @@ export default {
             }
         }
         .search-suggestion{
-            margin-top: -50px;
-            margin-bottom: 50px;
+            margin-top: -34px;
+            margin-bottom: 34px;
             font-size: 14px;
         }
     }
