@@ -14,7 +14,7 @@ jobs:
     environment:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       # Checkout the code
       - name: Checkout
