@@ -1,52 +1,93 @@
 <template>
     <body class="ds-base">
         <div id="resourcesApp" class="resources-view">
-            <ResourcesNav :about-url="aboutUrl">
-                <form
-                    class="search-resources-form"
-                    @submit.prevent="executeSearch"
-                >
-                    <v-text-field
-                        id="main-content"
-                        v-model="searchInputValue"
-                        outlined
-                        flat
-                        solo
-                        clearable
-                        label="Search resources using keywords or citations."
-                        aria-label="Search resources using keywords or citations."
-                        type="text"
-                        class="search-field"
-                        append-icon="mdi-magnify"
-                        hide-details
-                        dense
-                        @click:append="executeSearch"
-                        @click:clear="clearSearchQuery"
-                    />
-                    <div v-if="synonyms.length > 0 || multiWordQuery" class="search-suggestion">
-                        <div v-if="multiWordQuery">
-                            Didn't find what you were looking for? Try searching for
-                            <a
-                                tabindex="0"
-                                @click="doQuoteSearch"
-                                @keydown.enter.space.prevent="doQuoteSearch"
-                            >"{{ searchQuery }}"</a>
-                        </div>
-                        <div v-if="synonyms.length > 0" class="synonyms">
-                            <span v-if="multiWordQuery">Or s</span><span v-else>S</span>earch for similar terms:
-                            <span v-for="a in synonyms" :key=a>
+            <Banner title="Resources">
+                <template #description>
+                    <p>
+                        Find public documents related to policy research,
+                        including proposed and final rules published
+                        <a
+                            href="https://www.federalregister.gov/agencies/centers-for-medicare-medicaid-services"
+                            target="_blank"
+                            class="external"
+                            >in the Federal Register</a
+                        >
+                        and subregulatory guidance and implementation resources
+                        published
+                        <a
+                            href="https://www.medicaid.gov/federal-policy-guidance/index.html"
+                            target="_blank"
+                            class="external"
+                            >by CMS</a
+                        >.
+                    </p>
+                    <p>
+                        <a :href="aboutUrl"
+                            >How these links are added and connected to
+                            regulation sections.</a
+                        >
+                    </p>
+                </template>
+                <template #input>
+                    <form
+                        class="search-resources-form"
+                        @submit.prevent="executeSearch"
+                    >
+                        <v-text-field
+                            id="main-content"
+                            v-model="searchInputValue"
+                            outlined
+                            flat
+                            solo
+                            clearable
+                            label="Search resources using keywords or citations."
+                            aria-label="Search resources using keywords or citations."
+                            type="text"
+                            class="search-field"
+                            append-icon="mdi-magnify"
+                            hide-details
+                            dense
+                            @click:append="executeSearch"
+                            @click:clear="clearSearchQuery"
+                        />
+                        <div
+                            v-if="synonyms.length > 0 || multiWordQuery"
+                            class="search-suggestion"
+                        >
+                            <div v-if="multiWordQuery">
+                                Didn't find what you were looking for? Try
+                                searching for
                                 <a
-                                    tabindex=0
-                                    @click="synonymLinks(a)"
-                                    @keydown.enter.space.prevent="synonymLinks(a)"
-                                >{{ a }}</a>
-                                <span v-if="synonyms[synonyms.length-1] != a">, </span>
-                            </span>
+                                    tabindex="0"
+                                    @click="doQuoteSearch"
+                                    @keydown.enter.space.prevent="doQuoteSearch"
+                                    >"{{ searchQuery }}"</a
+                                >
+                            </div>
+                            <div v-if="synonyms.length > 0" class="synonyms">
+                                <span v-if="multiWordQuery">Or s</span
+                                ><span v-else>S</span>earch for similar terms:
+                                <span v-for="a in synonyms" :key="a">
+                                    <a
+                                        tabindex="0"
+                                        @click="synonymLinks(a)"
+                                        @keydown.enter.space.prevent="
+                                            synonymLinks(a)
+                                        "
+                                        >{{ a }}</a
+                                    >
+                                    <span
+                                        v-if="
+                                            synonyms[synonyms.length - 1] != a
+                                        "
+                                        >,
+                                    </span>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </form>
-
-            </ResourcesNav>
+                    </form>
+                </template>
+            </Banner>
             <div
                 class="resources-content-container"
                 :class="contentContainerResourcesClass"
@@ -98,7 +139,7 @@ import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 import _uniq from "lodash/uniq";
 
-import ResourcesNav from "@/components/resources/ResourcesNav.vue";
+import Banner from "@/components/Banner.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
@@ -119,7 +160,7 @@ export default {
     name: "ResourcesView",
 
     components: {
-        ResourcesNav,
+        Banner,
         ResourcesFilters,
         ResourcesSelections,
         ResourcesResults,
@@ -137,7 +178,7 @@ export default {
         host: {
             type: String,
             default: "",
-        }
+        },
     },
 
     data() {
@@ -147,7 +188,7 @@ export default {
             partsLastUpdated: {},
             partDict: {},
             categories: [],
-            synonyms:[],
+            synonyms: [],
             resourcesDisplay:
                 this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
@@ -184,7 +225,7 @@ export default {
             supplementalContentCount: 0,
             searchInputValue: undefined,
             sortDisabled: false,
-            pageSize: "100"
+            pageSize: "100",
         };
     },
 
@@ -215,9 +256,9 @@ export default {
             if (this.searchQuery === undefined) return false;
 
             return (
-                this.searchQuery.split(" ").length > 1
-                    && (this.searchQuery[0] !== '"'
-                    && this.searchQuery[this.searchQuery.length-1] !== '"' )
+                this.searchQuery.split(" ").length > 1 &&
+                this.searchQuery[0] !== '"' &&
+                this.searchQuery[this.searchQuery.length - 1] !== '"'
             );
         },
         filterParams() {
@@ -257,7 +298,7 @@ export default {
                     },
                 });
             }
-            this.synonyms = await this.retrieveSynonyms(this.searchInputValue)
+            this.synonyms = await this.retrieveSynonyms(this.searchInputValue);
         },
         clearSelections() {
             this.partDict = {};
@@ -265,16 +306,16 @@ export default {
                 name: "resources",
                 query: {
                     q: this.searchQuery,
-                    sort: this.sortMethod
+                    sort: this.sortMethod,
                 },
             });
         },
-        async synonymLinks(synonym){
-            this.searchInputValue = `"${synonym}"`
-            await this.executeSearch()
+        async synonymLinks(synonym) {
+            this.searchInputValue = `"${synonym}"`;
+            await this.executeSearch();
         },
         clearSearchQuery() {
-            this.synonyms = []
+            this.synonyms = [];
             this.$router.push({
                 name: "resources",
                 query: {
@@ -284,8 +325,8 @@ export default {
                 },
             });
         },
-        doQuoteSearch(){
-            this.searchInputValue = `"${this.searchInputValue}"`
+        doQuoteSearch() {
+            this.searchInputValue = `"${this.searchInputValue}"`;
             this.$router.push({
                 name: "resources",
                 query: {
@@ -339,21 +380,31 @@ export default {
                 query: newQueryParams,
             });
         },
-        async retrieveSynonyms(query){
-            if(query && query.charAt(0) == '"' && query.charAt(query.length-1) == '"'){
-                query = query.slice(1,-1)
+        async retrieveSynonyms(query) {
+            if (
+                query &&
+                query.charAt(0) == '"' &&
+                query.charAt(query.length - 1) == '"'
+            ) {
+                query = query.slice(1, -1);
             }
-            let synonyms = await getSynonyms(query)
-            synonyms = synonyms.map(word => word.synonyms.filter(word=>word.isActive==true).map(word => word.baseWord))[0]
-            return synonyms ? synonyms : []
+            let synonyms = await getSynonyms(query);
+            synonyms = synonyms.map((word) =>
+                word.synonyms
+                    .filter((word) => word.isActive == true)
+                    .map((word) => word.baseWord)
+            )[0];
+            return synonyms ? synonyms : [];
         },
         async updateFilters(payload) {
             let newQueryParams = { ...this.queryParams, page: undefined };
             const splitSection = payload.selectedIdentifier.split("-");
 
             //Checks that the part in the query is valid or is a resource category
-            if ((await this.checkPart(splitSection, payload.scope)) || payload.scope == "resourceCategory") {
-
+            if (
+                (await this.checkPart(splitSection, payload.scope)) ||
+                payload.scope == "resourceCategory"
+            ) {
                 if (newQueryParams[payload.scope]) {
                     if (payload.searchSection) {
                         if (!newQueryParams.part.includes(splitSection[0])) {
@@ -362,9 +413,11 @@ export default {
                         }
                     }
                     const scopeVals = newQueryParams[payload.scope].split(",");
-                    if (payload.scope === "resourceCategory"){
-                        const cats = await this.getSubCategories(payload.selectedIdentifier)
-                        cats.forEach(cat => scopeVals.push(cat))
+                    if (payload.scope === "resourceCategory") {
+                        const cats = await this.getSubCategories(
+                            payload.selectedIdentifier
+                        );
+                        cats.forEach((cat) => scopeVals.push(cat));
                     } else {
                         scopeVals.push(payload.selectedIdentifier);
                     }
@@ -377,19 +430,26 @@ export default {
                     newQueryParams.title = "42"; // hard coding for now
                     if (payload.scope === "section") {
                         if (newQueryParams.part) {
-                            if (!newQueryParams.part.includes(splitSection[0])) {
-                                newQueryParams.part = newQueryParams.part + "," + splitSection[0];
+                            if (
+                                !newQueryParams.part.includes(splitSection[0])
+                            ) {
+                                newQueryParams.part =
+                                    newQueryParams.part + "," + splitSection[0];
                             }
                         } else {
                             newQueryParams.part = splitSection[0];
                         }
                     }
-                    if (payload.scope === "resourceCategory"){
-                        newQueryParams[payload.scope] = (await this.getSubCategories(payload.selectedIdentifier)).join(",");
+                    if (payload.scope === "resourceCategory") {
+                        newQueryParams[payload.scope] = (
+                            await this.getSubCategories(
+                                payload.selectedIdentifier
+                            )
+                        ).join(",");
                     } else {
-                        newQueryParams[payload.scope] = payload.selectedIdentifier;
+                        newQueryParams[payload.scope] =
+                            payload.selectedIdentifier;
                     }
-
                 }
 
                 if (payload.scope === "subpart") {
@@ -404,7 +464,7 @@ export default {
                     this.searchInputValue = undefined;
                 }
                 if (newQueryParams.part) {
-                  this.getPartDict(newQueryParams);
+                    this.getPartDict(newQueryParams);
                 }
                 this.$router.push({
                     name: "resources",
@@ -414,11 +474,15 @@ export default {
         },
 
         async checkPart(payload, scope) {
-            const partExist = this.filters.part.listItems.find((part) => part.name == payload[0]);
+            const partExist = this.filters.part.listItems.find(
+                (part) => part.name == payload[0]
+            );
 
             if (partExist && scope === "section") {
                 const sectionList = await getSectionsForPart(42, payload[0]);
-                return (sectionList.find((section) => section.identifier[1] == payload[1]));
+                return sectionList.find(
+                    (section) => section.identifier[1] == payload[1]
+                );
             }
             return partExist;
         },
@@ -447,8 +511,11 @@ export default {
             // subject groups are a bit lower down the tree, need to look there too.
             const subjectGroupSections = allSections
                 .filter((sec) => sec.type === "subject_group")
-                .map(subjgrp => subjgrp.children
-                .map( sec => `${sec.identifier[0]}-${sec.identifier[1]}`))
+                .map((subjgrp) =>
+                    subjgrp.children.map(
+                        (sec) => `${sec.identifier[0]}-${sec.identifier[1]}`
+                    )
+                )
                 .flat(1);
             return sectionList.concat(subjectGroupSections).sort();
         },
@@ -488,7 +555,10 @@ export default {
             if (dataQueryParams.section) {
                 const sections = dataQueryParams.section
                     .split(",")
-                    .filter((section) => section.match(/^\d+/) && section.match(/\d+$/))
+                    .filter(
+                        (section) =>
+                            section.match(/^\d+/) && section.match(/\d+$/)
+                    )
                     .map((section) => ({
                         part: section.match(/^\d+/)[0],
                         section: section.match(/\d+$/)[0],
@@ -502,7 +572,10 @@ export default {
             if (dataQueryParams.subpart) {
                 const subparts = dataQueryParams.subpart
                     .split(",")
-                    .filter((section) => section.match(/^\d+/) && section.match(/\w+$/))
+                    .filter(
+                        (section) =>
+                            section.match(/^\d+/) && section.match(/\w+$/)
+                    )
                     .map((section) => ({
                         part: section.match(/^\d+/)[0],
                         subparts: section.match(/\w+$/)[0],
@@ -533,7 +606,7 @@ export default {
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
-                    fr_grouping:false,
+                    fr_grouping: false,
                     sortMethod,
                 });
 
@@ -555,7 +628,7 @@ export default {
                         partDict: "all", // titles
                         categories: this.categories, // subcategories
                         q: searchQuery,
-                        fr_grouping:false,
+                        fr_grouping: false,
                         sortMethod,
                     });
 
@@ -576,13 +649,13 @@ export default {
                     categories: this.categories,
                     q: searchQuery,
                     start: 0, // start
-                    fr_grouping:false,
+                    fr_grouping: false,
                     max_results: 100, // max_results
                     sortMethod,
                 });
                 this.supplementalContent = allResults.results;
                 this.supplementalContentCount = allResults.count;
-            this.isLoading = false;
+                this.isLoading = false;
             }
         },
         async getFormattedPartsList() {
@@ -676,8 +749,7 @@ export default {
             });
             this.filters.resourceCategory.listItems = categories;
         },
-        async getSubCategories(selectedCategory){
-
+        async getSubCategories(selectedCategory) {
             const rawCats = await getCategories();
             const reducedCats = rawCats
                 .filter((item) => item.type === "category")
@@ -687,8 +759,8 @@ export default {
                     return acc;
                 }, {});
             // Not a top level category, no need to continue
-            if (!reducedCats[selectedCategory]){
-              return [selectedCategory]
+            if (!reducedCats[selectedCategory]) {
+                return [selectedCategory];
             }
             rawCats.forEach((item) => {
                 if (item.type === "subcategory") {
@@ -696,19 +768,20 @@ export default {
                 }
             });
 
-            return reducedCats[selectedCategory].subcategories
+            return reducedCats[selectedCategory].subcategories;
         },
         setSortMethod(payload) {
             this.$router.push({
                 name: "resources",
                 query: {
                     ...this.filterParams,
-                    q: this.searchInputValue === null // getting set to null somewhere...
-                        ? undefined
-                        : this.searchInputValue,
+                    q:
+                        this.searchInputValue === null // getting set to null somewhere...
+                            ? undefined
+                            : this.searchInputValue,
                     sort: payload,
-                }
-            })
+                },
+            });
         },
     },
 
@@ -748,7 +821,11 @@ export default {
                 }
 
                 // always get content otherwise
-                this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
+                this.getSupplementalContent(
+                    this.queryParams,
+                    this.searchQuery,
+                    this.sortMethod
+                );
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
@@ -777,7 +854,7 @@ export default {
 
         if (this.queryParams.q) {
             this.searchQuery = this.queryParams.q;
-            this.synonyms = await this.retrieveSynonyms(this.queryParams.q)
+            this.synonyms = await this.retrieveSynonyms(this.queryParams.q);
         }
 
         if (this.queryParams.part) {
@@ -788,7 +865,11 @@ export default {
             );
         }
 
-        this.getSupplementalContent(this.queryParams, this.searchQuery, this.sortMethod);
+        this.getSupplementalContent(
+            this.queryParams,
+            this.searchQuery,
+            this.sortMethod
+        );
     },
 
     beforeMount() {},
@@ -833,19 +914,11 @@ export default {
                 color: $mid_blue;
             }
         }
-        .search-suggestion{
+        .search-suggestion {
             margin-top: -34px;
             margin-bottom: 34px;
             font-size: 14px;
         }
     }
-
 }
 </style>
-
-
-
-
-
-
-
