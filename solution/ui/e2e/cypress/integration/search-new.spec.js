@@ -70,22 +70,19 @@ describe.skip("Search flow", () => {
 
     it("should have a working searchbox", () => {
         cy.viewport("macbook-15");
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.scrollTo("top");
-        cy.get(".search-reset").click({ force: true });
+        cy.visit(`/search`, { timeout: 60000 });
         cy.findByRole("textbox")
             .should("be.visible")
             .type("test", { force: true });
-        cy.get("main .search-box").submit();
+        cy.get(".search-field .v-input__icon--append button").click({ force: true });
         cy.url().should("include", "/search/?q=test");
     });
 
     it("should be able to clear the searchbox", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.scrollTo("top");
 
-        cy.get(".search-reset").click({ force: true });
+        cy.get(".search-field .v-input__icon--clear button").click({ force: true });
 
         cy.findByRole("textbox")
             .should("be.visible")
@@ -95,7 +92,7 @@ describe.skip("Search flow", () => {
             .should("be.visible")
             .should("have.value", "test");
 
-        cy.get(".search-reset").click({ force: true });
+        cy.get(".search-field .v-input__icon--clear button").click({ force: true });
 
         cy.findByRole("textbox").should("have.value", "");
     });

@@ -1,6 +1,7 @@
 import logging
 
 from regulations.views.errors import NotInSubpart
+from bs4 import BeautifulSoup
 
 
 logger = logging.getLogger(__name__)
@@ -41,3 +42,10 @@ def get_structure(parts):
     for part in parts[1:]:
         merge_children(structure, part.structure)
     return structure
+
+
+def get_tag_contents(html, html_tag, class_name):
+    soup = BeautifulSoup(html, 'html.parser')
+    tag_list = soup.find_all(html_tag, attrs={'class': class_name})
+    tag_contents = map(lambda tag: tag.get_text().strip(), tag_list)
+    return ','.join(list(set(tag_contents)))
