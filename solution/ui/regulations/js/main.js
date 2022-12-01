@@ -14,7 +14,7 @@ import LastParserSuccessDate from "../dist/LastParserSuccessDate";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
-import { highlightText } from "./utils";
+import { highlightText, getQueryParam, scrollToElement } from "./utils";
 
 Vue.config.devtools = true;
 
@@ -42,29 +42,36 @@ function onPageShow() {
     const HEADER_HEIGHT = 102;
     const HEADER_HEIGHT_MOBILE = 81;
 
-    // if version select is open, get its height
-    // and adjust scrollTo position
-    const versionSelectBar = document.getElementsByClassName(
-        "view-and-compare"
-    );
-    const versionSelectHeight = versionSelectBar.length
-        ? versionSelectBar[0].offsetHeight
-        : 0;
-
     const elId = window.location.hash;
+    const hasHash = elId.length > 1;
+    const isHighlighted = Boolean(getQueryParam(window.location, "highlight"));
 
-    if (elId.length > 1) {
-        const el = document.getElementById(elId.substr(1));
-        if (el) {
-            const position = el.getBoundingClientRect();
-            const headerHeight =
-                window.innerWidth >= 1024
-                    ? HEADER_HEIGHT
-                    : HEADER_HEIGHT_MOBILE;
-            window.scrollTo(
-                position.x,
-                el.offsetTop - headerHeight - versionSelectHeight
-            );
+    if (hasHash || isHighlighted) {
+        // if version select is open, get its height
+        // and adjust scrollTo position
+        const versionSelectBar = document.getElementsByClassName(
+            "view-and-compare"
+        );
+        const versionSelectHeight = versionSelectBar.length
+            ? versionSelectBar[0].offsetHeight
+            : 0;
+
+        const headerHeight =
+            window.innerWidth >= 1024 ? HEADER_HEIGHT : HEADER_HEIGHT_MOBILE;
+
+        const offsetPx = headerHeight - versionSelectHeight;
+
+        if (isHighlighted) {
+            const highlightedEls = document.getElementsByClassName("highlight");
+            const highlightedEl = highlightedEls[0];
+            if (highlightedEl) {
+                scrollToElement(highlightedEl, offsetPx);
+            }
+        } else if (hasHash) {
+            const el = document.getElementById(elId.substr(1));
+            if (el) {
+                scrollToElement(el, offsetPx);
+            }
         }
     }
 }

@@ -205,6 +205,18 @@ const highlightText = (location, paramKey) => {
 };
 
 /**
+ * Scroll to top of HTML element while taking
+ * heights of other elements into consideration
+ *
+ * @param {HTMLElement} element - scroll to this element
+ * @param {number} [offsetPx=0] - pixels to offset scroll from top of screen
+ */
+const scrollToElement = (element, offsetPx = 0) => {
+    const position = element.getBoundingClientRect();
+    window.scrollTo(position.x, element.offsetTop - offsetPx);
+};
+
+/**
  * Converts date from YYYY-MM-DD to MMM DD, YYYY
  *
  * @param {string} kebabDate - date in `YYYY-MM-DD` format
@@ -231,4 +243,5 @@ export {
     getQueryParam,
     niceDate,
     parseError,
+    scrollToElement,
 };
