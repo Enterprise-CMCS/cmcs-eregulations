@@ -2,7 +2,8 @@ from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 from django.db.models import Prefetch
 
-from .mixins import OptionalPaginationMixin, OpenApiQueryParameter, PAGINATION_PARAMS
+from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
+from common.api import OpenApiQueryParameter
 
 from resources.models import (
     AbstractCategory,
