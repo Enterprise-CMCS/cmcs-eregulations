@@ -4,6 +4,7 @@ const PART = 430;
 const SECTION = 10;
 const VERSION = "latest";
 const SYNONYM = "synonym";
+const SEARCH_TERM = "a+search+term";
 
 const API_ENDPOINTS_V3 = [
     `/v3/ecfr_parser_result/${TITLE}`,
@@ -31,6 +32,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/title/${TITLE}/toc`,
     `/v3/titles`,
     `/v3/toc`,
+    `/v3/search?q=${SEARCH_TERM}`,
 ];
 
 describe("API testing", () => {

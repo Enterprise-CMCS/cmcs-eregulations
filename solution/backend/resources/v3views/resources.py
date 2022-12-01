@@ -5,7 +5,8 @@ from django.db import transaction
 from django.db.models import Case, When, F
 from django.http import JsonResponse
 
-from .mixins import ResourceExplorerViewSetMixin, OptionalPaginationMixin, PAGINATION_PARAMS
+from .mixins import ResourceExplorerViewSetMixin
+from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
 
 from resources.models import (
     AbstractResource,
