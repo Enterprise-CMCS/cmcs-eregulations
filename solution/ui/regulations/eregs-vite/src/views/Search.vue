@@ -34,7 +34,7 @@
                                         :href="
                                             createSynonymQuotedLink(query, base)
                                         "
-                                        >"{{ query }}"</a
+                                        >"{{ searchQuery }}"</a
                                     >
                                 </div>
                             </template>
@@ -81,7 +81,7 @@
                             :eregs_url="createRegulationsSearchUrl(base)"
                             eregs_url_label="eRegulations resource links"
                             eregs_sublabel="subregulatory guidance and implementation resources"
-                            :query="query"
+                            :query="searchQuery"
                         />
                     </template>
                     <template v-for="(result, i) in results" v-else>
@@ -147,15 +147,25 @@ export default {
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
-            query: "",
+            isLoading: true,
+            queryParams: this.$route.query,
             results: [],
             synonyms: [],
             unquotedSearch: false,
-            searchInputValue: "",
+            searchInputValue: undefined,
         };
     },
 
-    computed: {},
+    computed: {
+        searchQuery: {
+            get() {
+                return this.queryParams.q || undefined;
+            },
+            set(value) {
+                this.searchInputValue = value;
+            },
+        },
+    },
 
     methods: {
         getQuery() {
@@ -202,12 +212,25 @@ export default {
             this.searchInputValue = value;
         },
         executeSearch() {
-            if (!_isNull(this.searchInputValue)) {
-                window.location.href = `${this.base}/search/?q=${this.searchInputValue}`;
-            }
+            console.log(
+                "typeof searchInputValue",
+                typeof this.searchInputValue
+            );
+            console.log("searchInputValue", this.searchInputValue);
+            this.$router.push({
+                name: "search",
+                query: {
+                    q: this.searchInputValue,
+                },
+            });
         },
         clearSearchQuery() {
-            this.searchInputValue = "";
+            this.$router.push({
+                name: "search",
+                query: {
+                    q: undefined,
+                },
+            });
         },
     },
 };
