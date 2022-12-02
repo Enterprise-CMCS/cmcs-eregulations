@@ -48,17 +48,16 @@
                                     <template v-for="(syn, i) in synonyms">
                                         <a
                                             :key="i"
-                                            :href="
-                                                createSynonymQuotedLink(
-                                                    syn,
-                                                    base
-                                                )
+                                            tabindex="0"
+                                            @click="synonymQuotedLink(syn)"
+                                            @keydown.enter.space.prevent="
+                                                synonymQuotedLink(syn)
                                             "
                                             >{{ syn }}</a
                                         ><span
                                             v-if="
-                                                synonyms.length > 1 &&
-                                                i + 1 < synonyms.length
+                                                synonyms[synonyms.length - 1] !=
+                                                syn
                                             "
                                             :key="i"
                                             >,
@@ -109,9 +108,12 @@
 
 <script>
 import _isNull from "lodash/isNull";
+import _isEmpty from "lodash/isEmpty";
 
 import Banner from "@/components/Banner.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
+
+import { getSynonyms } from "../utilities/api";
 
 export default {
     name: "SearchView",
@@ -127,6 +129,9 @@ export default {
 
     async created() {
         // async calls here
+        if (this.queryParams.q) {
+            this.synonyms = await this.retrieveSynonyms(this.queryParams.q);
+        }
     },
 
     beforeMount() {},
@@ -168,32 +173,46 @@ export default {
     },
 
     methods: {
-        getQuery() {
-            if (!document.getElementById("query")) return "";
+        async getResults(searchQuery) {
+            this.isLoading = true;
 
-            return JSON.parse(document.getElementById("query").textContent);
-        },
-        getResults() {
-            if (!document.getElementById("results_list")) return [];
+            /*try {*/
+            /*const searchResults = await getSupplementalContentV3({*/
+            /*page: this.page,*/
+            /*page_size: this.pageSize,*/
+            /*partDict: "all", // titles*/
+            /*categories: this.categories, // subcategories*/
+            /*q: searchQuery,*/
+            /*fr_grouping: false,*/
+            /*sortMethod,*/
+            /*});*/
 
-            return JSON.parse(
-                document.getElementById("results_list").textContent
-            );
+            /*this.supplementalContent = searchResults.results;*/
+            /*this.supplementalContentCount = searchResults.count;*/
+            /*} catch (error) {*/
+            /*console.error(error);*/
+            /*this.supplementalContent = [];*/
+            /*this.supplementalContentCount = 0;*/
+            /*} finally {*/
+            /*this.isLoading = false;*/
+            /*}*/
         },
-        getSynonyms() {
-            if (!document.getElementById("synonym_list")) return [];
+        async retrieveSynonyms(query) {
+            if (!query) {
+                return [];
+            }
 
-            return JSON.parse(
-                document.getElementById("synonym_list").textContent
-            );
-        },
-        getUnquotedSearch() {
-            if (!document.getElementById("unquoted_search")) return false;
+            const synonyms = await getSynonyms(this.stripQuotes(query));
 
-            return JSON.parse(
-                document.getElementById("unquoted_search").textContent
-            );
+            const activeSynonyms = synonyms.map((word) =>
+                word.synonyms
+                    .filter((synonym) => synonym.isActive === true)
+                    .map((synonym) => synonym.baseWord)
+            )[0];
+
+            return activeSynonyms ?? [];
         },
+        getUnquotedSearch() {},
         stripQuotes(string) {
             return string.replace(/(^")|("$)/g, "");
         },
@@ -202,8 +221,16 @@ export default {
                 props.label[1]
             }/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
         },
-        createSynonymQuotedLink(val, base) {
-            return `${base}/search/?q=%22${val}%22`;
+        synonymQuotedLink(synonym) {
+            this.searchInputValue = `"${synonym}"`;
+            this.$router.push({
+                name: "search",
+                query: {
+                    ...this.queryParams,
+                    page: undefined,
+                    q: `"${synonym}"`,
+                },
+            });
         },
         createRegulationsSearchUrl(base) {
             return `${base}/search/`;
@@ -212,11 +239,6 @@ export default {
             this.searchInputValue = value;
         },
         executeSearch() {
-            console.log(
-                "typeof searchInputValue",
-                typeof this.searchInputValue
-            );
-            console.log("searchInputValue", this.searchInputValue);
             this.$router.push({
                 name: "search",
                 query: {
@@ -225,12 +247,33 @@ export default {
             });
         },
         clearSearchQuery() {
+            this.synonyms = [];
             this.$router.push({
                 name: "search",
                 query: {
                     q: undefined,
                 },
             });
+        },
+    },
+
+    watch: {
+        "$route.query": {
+            async handler(toQueries) {
+                this.queryParams = toQueries;
+            },
+        },
+        queryParams: {
+            // beware, some yucky code ahead...
+            async handler(newParams) {
+                if (_isEmpty(newParams.q)) {
+                    this.results = [];
+                    return;
+                }
+
+                this.getResults(newParams.q);
+                this.synonyms = await this.retrieveSynonyms(newParams.q);
+            },
         },
     },
 };
