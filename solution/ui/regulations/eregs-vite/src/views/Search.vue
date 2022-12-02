@@ -125,17 +125,13 @@ export default {
 
     beforeCreate() {},
 
-    created() {},
+    async created() {
+        // async calls here
+    },
 
     beforeMount() {},
 
-    mounted() {
-        this.synonyms = this.getSynonyms();
-        this.unquotedSearch = this.getUnquotedSearch();
-        this.results = this.getResults();
-        this.query = this.getQuery();
-        this.searchInputValue = this.getQuery();
-    },
+    mounted() {},
 
     beforeUpdate() {},
 
