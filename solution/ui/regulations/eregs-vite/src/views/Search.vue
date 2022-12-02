@@ -26,13 +26,16 @@
                             @click:clear="clearSearchQuery"
                         />
                         <div class="form-helper-text">
-                            <template v-if="unquotedSearch">
+                            <template v-if="multiWordQuery">
                                 <div class="search-suggestion">
                                     Didn't find what you were looking for? Try
                                     searching for
                                     <a
-                                        :href="
-                                            createSynonymQuotedLink(query, base)
+                                        :key="i"
+                                        tabindex="0"
+                                        @click="synonymQuotedLink(query)"
+                                        @keydown.enter.space.prevent="
+                                            synonymQuotedLink(query)
                                         "
                                         >"{{ searchQuery }}"</a
                                     >
@@ -40,7 +43,7 @@
                             </template>
                             <template v-if="synonyms.length > 0">
                                 <div class="search-suggestion">
-                                    <span v-if="unquotedSearch">
+                                    <span v-if="multiWordQuery">
                                         Or search
                                     </span>
                                     <span v-else> Search </span>
@@ -169,6 +172,15 @@ export default {
             set(value) {
                 this.searchInputValue = value;
             },
+        },
+        multiWordQuery() {
+            if (this.searchQuery === undefined) return false;
+
+            return (
+                this.searchQuery.split(" ").length > 1 &&
+                this.searchQuery[0] !== '"' &&
+                this.searchQuery[this.searchQuery.length - 1] !== '"'
+            );
         },
     },
 
