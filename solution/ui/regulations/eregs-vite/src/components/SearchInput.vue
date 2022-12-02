@@ -88,7 +88,9 @@ export default {
 
     beforeCreate() {},
 
-    created() {},
+    created() {
+        this.searchInputValue = this.searchQuery;
+    },
 
     beforeMount() {},
 
@@ -139,6 +141,14 @@ export default {
                     q: `"${synonym}"`,
                 },
             });
+        },
+    },
+
+    watch: {
+        searchQuery: {
+            async handler(newQuery) {
+                this.searchInputValue = newQuery;
+            },
         },
     },
 };
