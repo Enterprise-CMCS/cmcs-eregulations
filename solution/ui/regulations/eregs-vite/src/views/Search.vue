@@ -6,70 +6,15 @@
                     <p>This site searches Title 42, Parts 400 and 430-460</p>
                 </template>
                 <template #input>
-                    <form class="search-form" @submit.prevent="executeSearch">
-                        <v-text-field
-                            id="main-content"
-                            :value="searchInputValue"
-                            outlined
-                            flat
-                            solo
-                            clearable
-                            label="Search Regulations"
-                            aria-label="Search Regulations"
-                            type="text"
-                            class="search-field shrink"
-                            append-icon="mdi-magnify"
-                            hide-details
-                            dense
-                            @input="updateSearchValue"
-                            @click:append="executeSearch"
-                            @click:clear="clearSearchQuery"
-                        />
-                        <div class="form-helper-text">
-                            <template v-if="multiWordQuery">
-                                <div class="search-suggestion">
-                                    Didn't find what you were looking for? Try
-                                    searching for
-                                    <a
-                                        :key="i"
-                                        tabindex="0"
-                                        @click="synonymQuotedLink(query)"
-                                        @keydown.enter.space.prevent="
-                                            synonymQuotedLink(query)
-                                        "
-                                        >"{{ searchQuery }}"</a
-                                    >
-                                </div>
-                            </template>
-                            <template v-if="synonyms.length > 0">
-                                <div class="search-suggestion">
-                                    <span v-if="multiWordQuery">
-                                        Or search
-                                    </span>
-                                    <span v-else> Search </span>
-                                    for similar terms:
-                                    <template v-for="(syn, i) in synonyms">
-                                        <a
-                                            :key="i"
-                                            tabindex="0"
-                                            @click="synonymQuotedLink(syn)"
-                                            @keydown.enter.space.prevent="
-                                                synonymQuotedLink(syn)
-                                            "
-                                            >{{ syn }}</a
-                                        ><span
-                                            v-if="
-                                                synonyms[synonyms.length - 1] !=
-                                                syn
-                                            "
-                                            :key="i"
-                                            >,
-                                        </span>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-                    </form>
+                    <SearchInput
+                        form-class="search-form"
+                        label="Search Regulations"
+                        page="search"
+                        :search-query="searchQuery"
+                        :synonyms="synonyms"
+                        @execute-search="executeSearch"
+                        @clear-form="clearSearchQuery"
+                    />
                 </template>
             </Banner>
             <div class="results-container">
@@ -115,8 +60,9 @@ import _isEmpty from "lodash/isEmpty";
 
 import Banner from "@/components/Banner.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import SearchInput from "@/components/SearchInput.vue";
 
-import { getSynonyms } from "../utilities/api";
+import { getSynonyms } from "@/utilities/api";
 
 export default {
     name: "SearchView",
@@ -124,6 +70,7 @@ export default {
     components: {
         Banner,
         SearchEmptyState,
+        SearchInput,
     },
 
     props: {},
@@ -187,27 +134,6 @@ export default {
     methods: {
         async getResults(searchQuery) {
             this.isLoading = true;
-
-            /*try {*/
-            /*const searchResults = await getSupplementalContentV3({*/
-            /*page: this.page,*/
-            /*page_size: this.pageSize,*/
-            /*partDict: "all", // titles*/
-            /*categories: this.categories, // subcategories*/
-            /*q: searchQuery,*/
-            /*fr_grouping: false,*/
-            /*sortMethod,*/
-            /*});*/
-
-            /*this.supplementalContent = searchResults.results;*/
-            /*this.supplementalContentCount = searchResults.count;*/
-            /*} catch (error) {*/
-            /*console.error(error);*/
-            /*this.supplementalContent = [];*/
-            /*this.supplementalContentCount = 0;*/
-            /*} finally {*/
-            /*this.isLoading = false;*/
-            /*}*/
         },
         async retrieveSynonyms(query) {
             if (!query) {
@@ -224,7 +150,6 @@ export default {
 
             return activeSynonyms ?? [];
         },
-        getUnquotedSearch() {},
         stripQuotes(string) {
             return string.replace(/(^")|("$)/g, "");
         },
@@ -233,28 +158,17 @@ export default {
                 props.label[1]
             }/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
         },
-        synonymQuotedLink(synonym) {
-            this.searchInputValue = `"${synonym}"`;
-            this.$router.push({
-                name: "search",
-                query: {
-                    ...this.queryParams,
-                    page: undefined,
-                    q: `"${synonym}"`,
-                },
-            });
-        },
         createRegulationsSearchUrl(base) {
             return `${base}/search/`;
         },
         updateSearchValue(value) {
             this.searchInputValue = value;
         },
-        executeSearch() {
+        executeSearch(payload) {
             this.$router.push({
                 name: "search",
                 query: {
-                    q: this.searchInputValue,
+                    q: payload.query,
                 },
             });
         },
