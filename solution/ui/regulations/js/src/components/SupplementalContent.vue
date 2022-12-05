@@ -215,7 +215,7 @@ export default {
             this.fetch_content(this.title, this.part, location)
         },
         parseHash(locationHash) {
-            if (window.location.hash === "#main-content") return "";
+            if (window.location.hash === "#main-content" || locationHash.toLowerCase().includes("appendix")) return "";
 
             let section = locationHash.substring(1).replace("-", ".");
 
