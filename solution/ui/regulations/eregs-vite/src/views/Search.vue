@@ -159,7 +159,7 @@ export default {
             }/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
         },
         createRegulationsSearchUrl(base) {
-            return `${base}/search/`;
+            return `${base}/resources/`;
         },
         updateSearchValue(value) {
             this.searchInputValue = value;
