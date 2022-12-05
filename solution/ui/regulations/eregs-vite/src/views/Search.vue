@@ -20,34 +20,39 @@
             <div class="results-container">
                 <div class="results-content">
                     <div class="search-results-count">
-                        {{ results.length }} results in Medicaid & CHIP
-                        Regulations
+                        <span v-if="isLoading">Loading...</span>
+                        <span v-else
+                            >{{ results.length }} results in Medicaid & CHIP
+                            Regulations</span
+                        >
                     </div>
-                    <template v-if="results.length == 0">
-                        <SearchEmptyState
-                            :eregs_url="createRegulationsSearchUrl(base)"
-                            eregs_url_label="eRegulations resource links"
-                            eregs_sublabel="subregulatory guidance and implementation resources"
-                            :query="searchQuery"
-                        />
-                    </template>
-                    <template v-for="(result, i) in results" v-else>
-                        <div :key="i" class="result">
-                            <div class="results-part">
-                                {{ result.part_document_title }}
-                            </div>
-                            <div class="results-section">
-                                <a
-                                    :href="createResultLink(result, base)"
-                                    v-html="stripQuotes(result.parentHeadline)"
+                    <div v-if="!isLoading">
+                        <template v-if="results.length == 0">
+                            <SearchEmptyState
+                                :eregs_url="createRegulationsSearchUrl(base)"
+                                eregs_url_label="eRegulations resource links"
+                                eregs_sublabel="subregulatory guidance and implementation resources"
+                                :query="searchQuery"
+                            />
+                        </template>
+                        <template v-for="(result, i) in results" v-else>
+                            <div :key="i" class="result">
+                                <div class="results-part">
+                                    {{ result.part_document_title }}
+                                </div>
+                                <div class="results-section">
+                                    <a
+                                        :href="createResultLink(result, base)"
+                                        v-html="stripQuotes(result.parentHeadline)"
+                                    />
+                                </div>
+                                <div
+                                    class="results-preview"
+                                    v-html="result.headline"
                                 />
                             </div>
-                            <div
-                                class="results-preview"
-                                v-html="result.headline"
-                            />
-                        </div>
-                    </template>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -80,7 +85,7 @@ export default {
     async created() {
         // async calls here
         if (this.queryParams.q) {
-            this.synonyms = await this.retrieveSynonyms(this.queryParams.q);
+            this.retrieveSynonyms(this.queryParams.q);
         }
     },
 
@@ -137,36 +142,38 @@ export default {
 
             if (!query) {
                 this.isLoading = false;
-                return [];
+                this.results = [];
             }
 
             try {
-                console.log("trying...");
                 const response = await getRegSearchResults(query);
-
-                console.log("response.results", response.results);
-                return response?.results ?? [];
+                this.results = response?.results ?? [];
             } catch (error) {
-                console.log("catching...");
-                console.log("Error retrieving regulations results:", error);
-
-                return [];
+                console.error("Error retrieving regulation search results");
+                this.results = [];
+            } finally {
+                this.isLoading = false;
             }
         },
         async retrieveSynonyms(query) {
             if (!query) {
-                return [];
+                this.synonyms = [];
             }
 
-            const synonyms = await getSynonyms(this.stripQuotes(query));
+            try {
+                const synonyms = await getSynonyms(this.stripQuotes(query));
 
-            const activeSynonyms = synonyms.map((word) =>
-                word.synonyms
-                    .filter((synonym) => synonym.isActive === true)
-                    .map((synonym) => synonym.baseWord)
-            )[0];
+                const activeSynonyms = synonyms.map((word) =>
+                    word.synonyms
+                        .filter((synonym) => synonym.isActive === true)
+                        .map((synonym) => synonym.baseWord)
+                )[0];
 
-            return activeSynonyms ?? [];
+                this.synonyms = activeSynonyms ?? [];
+            } catch (error) {
+                console.error("Error retrieving synonyms");
+                this.synonyms = [];
+            }
         },
         stripQuotes(string) {
             return string.replace(/(^")|("$)/g, "");
@@ -219,8 +226,8 @@ export default {
                         return;
                     }
 
-                    this.results = await this.retrieveRegResults(newParams.q);
-                    this.synonyms = await this.retrieveSynonyms(newParams.q);
+                    this.retrieveRegResults(newParams.q);
+                    this.retrieveSynonyms(newParams.q);
                 }
             },
         },
