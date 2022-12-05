@@ -4,7 +4,7 @@ from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVe
 from django.core.exceptions import BadRequest
 
 from .utils import OpenApiQueryParameter, is_int
-from resources.models import FederalRegisterDocument, AbstractLocation, AbstractResource, AbstractCategory, FederalRegisterDocumentGroup
+from resources.models import AbstractLocation, AbstractResource, AbstractCategory
 
 
 # For viewsets where pagination is disabled by default
