@@ -703,6 +703,14 @@ const getSupplementalContent = async (
     return result;
 };
 
+/**
+ *
+ */
+const getRegSearchResults = async (q = "") => {
+    const response = await httpApiGetV3(`search?q=${q}`);
+    return response;
+};
+
 // todo: make these JS style camel case
 const getSupplementalContentV3 = async (
     {
@@ -862,5 +870,6 @@ export {
     getSectionsForPart,
     getSubpartTOC,
     getSynonyms,
+    getRegSearchResults,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

@@ -62,7 +62,7 @@ import Banner from "@/components/Banner.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
-import { getSynonyms } from "@/utilities/api";
+import { getRegSearchResults, getSynonyms } from "@/utilities/api";
 
 export default {
     name: "SearchView",
@@ -132,8 +132,26 @@ export default {
     },
 
     methods: {
-        async getResults(searchQuery) {
+        async retrieveRegResults(query) {
             this.isLoading = true;
+
+            if (!query) {
+                this.isLoading = false;
+                return [];
+            }
+
+            try {
+                console.log("trying...");
+                const response = await getRegSearchResults(query);
+
+                console.log("response.results", response.results);
+                return response?.results ?? [];
+            } catch (error) {
+                console.log("catching...");
+                console.log("Error retrieving regulations results:", error);
+
+                return [];
+            }
         },
         async retrieveSynonyms(query) {
             if (!query) {
@@ -191,14 +209,19 @@ export default {
         },
         queryParams: {
             // beware, some yucky code ahead...
-            async handler(newParams) {
-                if (_isEmpty(newParams.q)) {
-                    this.results = [];
-                    return;
-                }
+            async handler(newParams, oldParams) {
+                console.log("oldParams", oldParams);
+                console.log("newParams", newParams);
+                console.log("new q === old q", newParams.q === oldParams.q);
+                if (newParams.q !== oldParams.q) {
+                    if (_isEmpty(newParams.q)) {
+                        this.results = [];
+                        return;
+                    }
 
-                this.getResults(newParams.q);
-                this.synonyms = await this.retrieveSynonyms(newParams.q);
+                    this.results = await this.retrieveRegResults(newParams.q);
+                    this.synonyms = await this.retrieveSynonyms(newParams.q);
+                }
             },
         },
     },
