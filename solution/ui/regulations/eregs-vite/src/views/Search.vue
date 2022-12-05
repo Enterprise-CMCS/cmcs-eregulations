@@ -43,7 +43,7 @@
                                 <div class="results-section">
                                     <a
                                         :href="createResultLink(result, base)"
-                                        v-html="stripQuotes(result.parentHeadline)"
+                                        v-html="removeQuotes(result.parentHeadline)"
                                     />
                                 </div>
                                 <div
@@ -60,14 +60,14 @@
 </template>
 
 <script>
-import _isNull from "lodash/isNull";
 import _isEmpty from "lodash/isEmpty";
+
+import { stripQuotes } from "@/utilities/utils";
+import { getRegSearchResults, getSynonyms } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
-
-import { getRegSearchResults, getSynonyms } from "@/utilities/api";
 
 export default {
     name: "SearchView",
@@ -138,6 +138,9 @@ export default {
     },
 
     methods: {
+        removeQuotes(string) {
+            return stripQuotes(string);
+        },
         async retrieveRegResults(query) {
             this.isLoading = true;
 
@@ -162,7 +165,7 @@ export default {
             }
 
             try {
-                const synonyms = await getSynonyms(this.stripQuotes(query));
+                const synonyms = await getSynonyms(this.removeQuotes(query));
 
                 const activeSynonyms = synonyms.map((word) =>
                     word.synonyms
@@ -175,9 +178,6 @@ export default {
                 console.error("Error retrieving synonyms");
                 this.synonyms = [];
             }
-        },
-        stripQuotes(string) {
-            return string.replace(/(^")|("$)/g, "");
         },
         createResultLink(props, base) {
             return `${base}/${props.part_title}/${props.label[0]}/${

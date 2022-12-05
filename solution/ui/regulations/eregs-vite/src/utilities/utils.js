@@ -464,6 +464,14 @@ const createOneIndexedArray = (length) => {
     return Array.from({length}, (_, i) => i + 1)
 }
 
+/**
+ * @param string {string} - string with surrounding quotes
+ * @returns {string} - string with surrounding quotes removed
+ */
+const stripQuotes = (string) => {
+    return string.replace(/(^")|("$)/g, "");
+}
+
 
 export {
     mapToArray,
@@ -497,4 +505,5 @@ export {
     getCategoryTree,
     capitalizeFirstLetter,
     createOneIndexedArray,
+    stripQuotes,
 };
