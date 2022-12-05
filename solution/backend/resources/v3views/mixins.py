@@ -4,7 +4,7 @@ from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVe
 from django.core.exceptions import BadRequest
 
 from .utils import OpenApiQueryParameter, is_int
-from resources.models import AbstractLocation, AbstractResource, AbstractCategory
+from resources.models import FederalRegisterDocument, AbstractLocation, AbstractResource, AbstractCategory, FederalRegisterDocumentGroup
 
 
 # For viewsets where pagination is disabled by default
@@ -194,12 +194,18 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
         if categories:
             id_query = id_query.filter(category__id__in=categories)
-
+        ids = []
         if fr_grouping:
-            id_query = id_query.order_by("group_annotated").distinct("group_annotated")
+            goodGroup = []
+            group_check = []
+            for i in id_query:
+                if i.group_annotated not in goodGroup:
+                    ids.append(i.id)
+                    goodGroup.append(i.group_annotated)
+        else:
+            ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
 
         annotations = {}
-        ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
                                             .contains_fr_docs()
