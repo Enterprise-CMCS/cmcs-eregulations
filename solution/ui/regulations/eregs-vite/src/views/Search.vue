@@ -84,8 +84,9 @@ export default {
 
     async created() {
         // async calls here
-        if (this.queryParams.q) {
-            this.retrieveSynonyms(this.queryParams.q);
+        if (this.searchQuery) {
+            this.retrieveSynonyms(this.searchQuery);
+            this.retrieveRegResults(this.searchQuery);
         }
     },
 
@@ -107,7 +108,7 @@ export default {
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
-            isLoading: true,
+            isLoading: false,
             queryParams: this.$route.query,
             results: [],
             synonyms: [],
@@ -217,17 +218,14 @@ export default {
         queryParams: {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                console.log("oldParams", oldParams);
-                console.log("newParams", newParams);
-                console.log("new q === old q", newParams.q === oldParams.q);
                 if (newParams.q !== oldParams.q) {
-                    if (_isEmpty(newParams.q)) {
+                    if (_isEmpty(this.searchQuery)) {
                         this.results = [];
                         return;
                     }
 
-                    this.retrieveRegResults(newParams.q);
-                    this.retrieveSynonyms(newParams.q);
+                    this.retrieveRegResults(this.searchQuery);
+                    this.retrieveSynonyms(this.searchQuery);
                 }
             },
         },
