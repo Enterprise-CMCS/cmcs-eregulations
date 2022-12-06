@@ -26,23 +26,13 @@
                             Regulations</span
                         >
                     </div>
-                    <div v-if="!isLoading">
-                        <template v-if="results.length == 0">
-                            <SearchEmptyState
-                                :eregs_url="createRegulationsSearchUrl(base)"
-                                eregs_url_label="eRegulations resource links"
-                                eregs_sublabel="subregulatory guidance and implementation resources"
-                                :query="searchQuery"
-                            />
-                        </template>
-                        <template v-for="(result, i) in results" v-else>
-                            <RegResultsItem
-                                :key="i"
-                                :base="base"
-                                :result="result"
-                            />
-                        </template>
-                    </div>
+                    <template v-if="!isLoading">
+                        <RegResults
+                            :base="base"
+                            :results="results"
+                            :search-query="searchQuery"
+                        />
+                    </template>
                 </div>
             </div>
         </div>
@@ -56,8 +46,7 @@ import { stripQuotes } from "@/utilities/utils";
 import { getRegSearchResults, getSynonyms } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
-import RegResultsItem from "@/components/reg_search/RegResultsItem.vue";
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import RegResults from "@/components/reg_search/RegResults.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
 export default {
@@ -65,8 +54,7 @@ export default {
 
     components: {
         Banner,
-        RegResultsItem,
-        SearchEmptyState,
+        RegResults,
         SearchInput,
     },
 
@@ -171,17 +159,6 @@ export default {
                 this.synonyms = [];
             }
         },
-        createResultLink(props, base) {
-            return `${base}/${props.part_title}/${props.label[0]}/${
-                props.label[1]
-            }/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
-        },
-        createRegulationsSearchUrl(base) {
-            return `${base}/resources/`;
-        },
-        updateSearchValue(value) {
-            this.searchInputValue = value;
-        },
         executeSearch(payload) {
             this.$router.push({
                 name: "search",
@@ -232,18 +209,6 @@ export default {
 
     .search-form {
         margin-bottom: 30px;
-
-        .search-field {
-            height: 40px;
-
-            .v-input__icon.v-input__icon--append button {
-                color: $mid_blue;
-            }
-        }
-
-        .form-helper-text {
-            margin-top: 10px;
-        }
     }
 
     .results-container {

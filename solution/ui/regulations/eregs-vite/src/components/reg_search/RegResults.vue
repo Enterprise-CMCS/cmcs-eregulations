@@ -1,18 +1,41 @@
 <template>
-
+    <div class="reg-results-container">
+        <template v-if="results.length == 0">
+            <SearchEmptyState
+                :eregs_url="createRegulationsSearchUrl(base)"
+                eregs_url_label="eRegulations resource links"
+                eregs_sublabel="subregulatory guidance and implementation resources"
+                :query="searchQuery"
+            />
+        </template>
+        <template v-for="(result, i) in results" v-else>
+            <RegResultsItem :key="i" :base="base" :result="result" />
+        </template>
+    </div>
 </template>
 
 <script>
+import RegResultsItem from "@/components/reg_search/RegResultsItem.vue";
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
+
 export default {
     name: "RegResults",
 
-    components: {},
+    components: {
+        RegResultsItem,
+        SearchEmptyState,
+    },
 
     props: {
-        propName: {
+        base: {
             type: String,
             required: true,
         },
+        results: {
+            type: Array,
+            default: () => [],
+        },
+        searchQuery: String,
     },
 
     beforeCreate() {},
@@ -34,7 +57,7 @@ export default {
     data() {
         return {
             dataProp: "value",
-        }
+        };
     },
 
     computed: {
@@ -44,15 +67,11 @@ export default {
     },
 
     methods: {
-        methodName() {
-            console.log("method has been invoked");
+        createRegulationsSearchUrl(base) {
+            return `${base}/resources/`;
         },
     },
-
-}
+};
 </script>
 
-<style>
-
-</style>
-
+<style></style>

@@ -154,4 +154,16 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.search-field {
+    height: 40px;
+
+    .v-input__icon.v-input__icon--append button {
+        color: $mid_blue;
+    }
+}
+
+.form-helper-text {
+    margin-top: 10px;
+}
+</style>
