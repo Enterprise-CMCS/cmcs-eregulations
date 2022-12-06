@@ -36,21 +36,11 @@
                             />
                         </template>
                         <template v-for="(result, i) in results" v-else>
-                            <div :key="i" class="result">
-                                <div class="results-part">
-                                    {{ result.part_document_title }}
-                                </div>
-                                <div class="results-section">
-                                    <a
-                                        :href="createResultLink(result, base)"
-                                        v-html="removeQuotes(result.parentHeadline)"
-                                    />
-                                </div>
-                                <div
-                                    class="results-preview"
-                                    v-html="result.headline"
-                                />
-                            </div>
+                            <RegResultsItem
+                                :key="i"
+                                :base="base"
+                                :result="result"
+                            />
                         </template>
                     </div>
                 </div>
@@ -66,6 +56,7 @@ import { stripQuotes } from "@/utilities/utils";
 import { getRegSearchResults, getSynonyms } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
+import RegResultsItem from "@/components/reg_search/RegResultsItem.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
@@ -74,6 +65,7 @@ export default {
 
     components: {
         Banner,
+        RegResultsItem,
         SearchEmptyState,
         SearchInput,
     },
