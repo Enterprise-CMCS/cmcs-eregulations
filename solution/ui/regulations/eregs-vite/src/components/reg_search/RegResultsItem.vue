@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { stripQuotes } from "@/utilities/utils";
+import { getTagContent, stripQuotes } from "@/utilities/utils";
 
 export default {
     name: "RegResultsItem",
@@ -64,10 +64,18 @@ export default {
         removeQuotes(string) {
             return stripQuotes(string);
         },
-        createResultLink(props, base) {
-            return `${base}/${props.part_title}/${props.label[0]}/${
-                props.label[1]
-            }/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
+        createResultLink(result, base) {
+            // get highlight content from result.headline
+            const highlightedTerms = getTagContent(
+                result.headline,
+                "search-highlight"
+            );
+            const highlightParams = highlightedTerms
+                ? `?q=${highlightedTerms}`
+                : "";
+            return `${base}/${result.part_title}/${result.label[0]}/${
+                result.label[1]
+            }/${result.date}/${highlightParams}#${result.label.join("-")}`;
         },
     },
 };
