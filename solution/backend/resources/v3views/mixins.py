@@ -1,10 +1,16 @@
 from rest_framework.pagination import PageNumberPagination
-from django.db.models import Q, F, Prefetch
+from django.db.models import Q, F, Prefetch, OuterRef, Subquery
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 from django.core.exceptions import BadRequest
 
 from .utils import OpenApiQueryParameter, is_int
-from resources.models import AbstractLocation, AbstractResource, AbstractCategory
+from resources.models import (
+    AbstractLocation,
+    AbstractResource,
+    AbstractCategory,
+    FederalRegisterDocument,
+    FederalRegisterDocumentGroup
+)
 
 
 # For viewsets where pagination is disabled by default
@@ -109,6 +115,7 @@ class LocationExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 # May override get_annotated_date() for complex date lookups
 # May override get_annotated_group() to limit particular model types to one result per group
 #     (By default, -1*pk is used so that no resource gets removed)
+# TO DO:  REMOVE fr_grouping from supplemental content
 class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
     PARAMETERS = [
         OpenApiQueryParameter("category_details", "Specify whether to show details of a category, or just the ID.", bool, False),
@@ -177,6 +184,32 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                     annotations[f"{model}_{field}_headline"] = self.make_headline(f"{model}__{field}", search_query, search_type)
         return annotations
 
+    #  In order for the order of fed reg documents to be in the correct order, the latest document needs to be extracted.
+    #  IF a search is done by location and fr_grouping is there results could appear out of order if the most recent document
+    #  is not associated to the location it makes the results look weird.  This fixes it.
+    def get_ids_by_fr_groups(self, id_query):
+        fr_groups = []
+        ids = []
+
+        for i in id_query:
+            if i.group_annotated not in fr_groups:
+                fr_groups.append(i.group_annotated)
+            # Supplemental content either is none or negative on group annotated. Those must be on the list if requested for
+            # abstract resource
+            if i.group_annotated is None or i.group_annotated < 0:
+                ids.append(i.id)
+
+        #  This uses a subquery  to get the latest fr_document ID for the fr groups and uses that in place of the original
+        #  ID found.
+        if fr_groups:
+            newest = FederalRegisterDocument.objects.filter(group_id=OuterRef('pk')).order_by('-date')
+            groups = FederalRegisterDocumentGroup.objects\
+                .annotate(newest_doc=Subquery(newest.values('id')[:1]))\
+                .filter(id__in=fr_groups)\
+                .values_list('newest_doc', flat=True)
+            ids = list(groups) + ids
+        return ids
+
     def get_queryset(self):
         locations = self.request.GET.getlist("locations")
         categories = self.request.GET.getlist("categories")
@@ -194,14 +227,9 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
         if categories:
             id_query = id_query.filter(category__id__in=categories)
-        ids = []
+
         if fr_grouping:
-            goodGroup = []
-            group_check = []
-            for i in id_query:
-                if i.group_annotated not in goodGroup:
-                    ids.append(i.id)
-                    goodGroup.append(i.group_annotated)
+            ids = self.get_ids_by_fr_groups(id_query)
         else:
             ids = [i[0] for i in id_query.values_list("id", "group_annotated")]
 
