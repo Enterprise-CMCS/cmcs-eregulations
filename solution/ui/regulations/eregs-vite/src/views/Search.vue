@@ -2,9 +2,6 @@
     <body class="ds-base search-page">
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
-                <template #description>
-                    <p>This site searches Title 42, Parts 400 and 430-460</p>
-                </template>
                 <template #input>
                     <SearchInput
                         form-class="search-form"
@@ -22,14 +19,14 @@
                     <div class="search-results-count">
                         <span v-if="isLoading">Loading...</span>
                         <span v-else
-                            >{{ results.length }} results in Medicaid & CHIP
+                            >{{ regResults.length }} results in Medicaid & CHIP
                             Regulations</span
                         >
                     </div>
                     <template v-if="!isLoading">
                         <RegResults
                             :base="base"
-                            :results="results"
+                            :results="regResults"
                             :search-query="searchQuery"
                         />
                     </template>
@@ -43,7 +40,11 @@
 import _isEmpty from "lodash/isEmpty";
 
 import { stripQuotes } from "@/utilities/utils";
-import { getRegSearchResults, getSynonyms } from "@/utilities/api";
+import {
+    getRegSearchResults,
+    getSupplementalContentV3,
+    getSynonyms,
+} from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
@@ -66,6 +67,7 @@ export default {
         // async calls here
         if (this.searchQuery) {
             this.retrieveSynonyms(this.searchQuery);
+            this.retrieveResourcesResults(this.searchQuery);
             this.retrieveRegResults(this.searchQuery);
         }
     },
@@ -90,7 +92,8 @@ export default {
                     : "",
             isLoading: false,
             queryParams: this.$route.query,
-            results: [],
+            regResults: [],
+            resourcesResults: [],
             synonyms: [],
             unquotedSearch: false,
             searchInputValue: undefined,
@@ -126,15 +129,44 @@ export default {
 
             if (!query) {
                 this.isLoading = false;
-                this.results = [];
+                this.regResults = [];
             }
 
             try {
                 const response = await getRegSearchResults(query);
-                this.results = response?.results ?? [];
+                this.regResults = response?.results ?? [];
             } catch (error) {
-                console.error("Error retrieving regulation search results");
-                this.results = [];
+                console.error(
+                    "Error retrieving regulation search results: ",
+                    error
+                );
+                this.regResults = [];
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        async retrieveResourcesResults(query) {
+            console.log("retrieving resources results");
+            this.isLoading = true;
+
+            if (!query) {
+                this.isLoading = false;
+                this.resourcesResults = [];
+            }
+
+            try {
+                const response = await getSupplementalContentV3({
+                    partDict: "all",
+                    q: query,
+                });
+                console.log("response.results", response.results);
+                this.resourcesResults = response?.results ?? [];
+            } catch (error) {
+                console.error(
+                    "Error retrieving regulation search results: ",
+                    error
+                );
+                this.resourcesResults = [];
             } finally {
                 this.isLoading = false;
             }
@@ -189,11 +221,12 @@ export default {
             async handler(newParams, oldParams) {
                 if (newParams.q !== oldParams.q) {
                     if (_isEmpty(this.searchQuery)) {
-                        this.results = [];
+                        this.regResults = [];
                         return;
                     }
 
                     this.retrieveRegResults(this.searchQuery);
+                    this.retrieveResourcesResults(this.searchQuery);
                     this.retrieveSynonyms(this.searchQuery);
                 }
             },
