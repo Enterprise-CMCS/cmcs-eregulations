@@ -194,4 +194,47 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.category-labels {
+    margin-bottom: 5px;
+
+    .result-label {
+        font-size: 11px;
+        display: inline;
+        margin-right: 5px;
+        background: #e3eef9;
+        border-radius: 3px;
+        padding: 2px 5px 3px;
+        &.category-label {
+            font-weight: 600;
+        }
+    }
+}
+
+.result-content-wrapper {
+    margin-bottom: 20px;
+
+    .supplemental-content a.supplemental-content-link {
+        .supplemental-content-date,
+        .supplemental-content-title,
+        .supplemental-content-description {
+            font-size: 18px;
+        }
+    }
+}
+
+.related-sections {
+    margin-bottom: 40px;
+    font-size: 12px;
+    color: $mid_gray;
+
+    .related-sections-title {
+        font-weight: 600;
+        color: $dark_gray;
+    }
+
+    a {
+        text-decoration: none;
+    }
+}
+</style>
