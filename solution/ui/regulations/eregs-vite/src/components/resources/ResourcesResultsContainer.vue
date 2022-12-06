@@ -50,12 +50,13 @@
                 <ResourcesResults
                     :base="base"
                     :count="count"
-                    :filtered-content="filteredContent"
+                    :results="filteredContent"
                     :page="page"
                     :page-size="pageSize"
                     :parts-last-updated="partsLastUpdated"
                     :parts-list="partsList"
                     :query="query"
+                    view="resources"
                 />
             </template>
         </div>

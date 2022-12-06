@@ -1,6 +1,6 @@
 <template>
     <div class="resources-results">
-        <template v-if="filteredContent && filteredContent.length == 0">
+        <template v-if="results && results.length == 0">
             <SearchEmptyState
                 :eregs_url="regulationsSearchUrl"
                 eregs_url_label="eRegulations regulation text"
@@ -9,7 +9,7 @@
             />
         </template>
         <template v-else>
-            <template v-for="(item, idx) in filteredContent">
+            <template v-for="(item, idx) in results">
                 <div :key="item.created_at + idx">
                     <div class="category-labels">
                         <div class="result-label category-label">
@@ -74,7 +74,7 @@
                 :count="count"
                 :page="page"
                 :page-size="pageSize"
-                view="resources"
+                :view="view"
             />
         </template>
     </div>
@@ -104,10 +104,6 @@ export default {
             required: false,
             default: 0,
         },
-        filteredContent: {
-            type: Array,
-            default: () => [],
-        },
         page: {
             type: Number,
             required: false,
@@ -127,6 +123,14 @@ export default {
             required: true,
         },
         query: String,
+        results: {
+            type: Array,
+            default: () => [],
+        },
+        view: {
+            type: String,
+            required: true,
+        }
     },
 
     beforeCreate() {},

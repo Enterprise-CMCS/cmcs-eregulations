@@ -14,8 +14,8 @@
                     />
                 </template>
             </Banner>
-            <div class="results-container">
-                <div class="results-content">
+            <div class="combined-results-container">
+                <div class="reg-results-content">
                     <div class="search-results-count">
                         <span v-if="isLoading">Loading...</span>
                         <span v-else
@@ -31,6 +31,19 @@
                         />
                     </template>
                 </div>
+                <div class="resources-results-content">
+                    <template v-if="!isLoading">
+                        <ResourcesResults
+                            :base="base"
+                            :count="resourcesResults.length"
+                            :parts-last-updated="partsLastUpdated"
+                            :parts-list="partsList"
+                            :results="resourcesResults"
+                            :search-query="searchQuery"
+                            view="search"
+                        />
+                    </template>
+                </div>
             </div>
         </div>
     </body>
@@ -41,13 +54,17 @@ import _isEmpty from "lodash/isEmpty";
 
 import { stripQuotes } from "@/utilities/utils";
 import {
+    getLastUpdatedDates,
+    getPartTOC,
     getRegSearchResults,
     getSupplementalContentV3,
     getSynonyms,
+    getTOC,
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
+import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
 export default {
@@ -56,6 +73,7 @@ export default {
     components: {
         Banner,
         RegResults,
+        ResourcesResults,
         SearchInput,
     },
 
@@ -64,9 +82,13 @@ export default {
     beforeCreate() {},
 
     async created() {
-        // async calls here
+        await this.getPartLastUpdatedDates();
+        await this.getFormattedPartsList();
+
         if (this.searchQuery) {
             this.retrieveSynonyms(this.searchQuery);
+
+            // we need to Promise.all() these
             this.retrieveResourcesResults(this.searchQuery);
             this.retrieveRegResults(this.searchQuery);
         }
@@ -91,12 +113,14 @@ export default {
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
             isLoading: false,
+            partsLastUpdated: {},
+            partsList: [],
             queryParams: this.$route.query,
             regResults: [],
             resourcesResults: [],
+            searchInputValue: undefined,
             synonyms: [],
             unquotedSearch: false,
-            searchInputValue: undefined,
         };
     },
 
@@ -147,10 +171,8 @@ export default {
         },
         async retrieveResourcesResults(query) {
             console.log("retrieving resources results");
-            this.isLoading = true;
 
             if (!query) {
-                this.isLoading = false;
                 this.resourcesResults = [];
             }
 
@@ -168,7 +190,7 @@ export default {
                 );
                 this.resourcesResults = [];
             } finally {
-                this.isLoading = false;
+                console.log("Resources request finished");
             }
         },
         async retrieveSynonyms(query) {
@@ -190,6 +212,41 @@ export default {
                 console.error("Error retrieving synonyms");
                 this.synonyms = [];
             }
+        },
+        async getPartLastUpdatedDates() {
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
+        },
+        async getFormattedPartsList() {
+            const TOC = await getTOC();
+            const partsList = TOC[0].children[0].children
+                .map((subChapter) =>
+                    subChapter.children.map((part) => ({
+                        label: part.label,
+                        name: part.identifier[0],
+                    }))
+                )
+                .flat(1);
+
+            this.partsList = await Promise.all(
+                partsList.map(async (part) => {
+                    const newPart = JSON.parse(JSON.stringify(part));
+                    const PartToc = await getPartTOC(42, part.name);
+                    const sections = {};
+                    PartToc.children
+                        .filter((TOCpart) => TOCpart.type === "subpart")
+                        .forEach((subpart) => {
+                            subpart.children
+                                .filter((section) => section.type === "section")
+                                .forEach((c) => {
+                                    sections[
+                                        c.identifier[c.identifier.length - 1]
+                                    ] = c.parent[0];
+                                });
+                        });
+                    newPart.sections = sections;
+                    return newPart;
+                })
+            );
         },
         executeSearch(payload) {
             this.$router.push({
@@ -222,6 +279,7 @@ export default {
                 if (newParams.q !== oldParams.q) {
                     if (_isEmpty(this.searchQuery)) {
                         this.regResults = [];
+                        this.resourcesResults = [];
                         return;
                     }
 
@@ -244,22 +302,34 @@ export default {
         margin-bottom: 30px;
     }
 
-    .results-container {
+    .combined-results-container {
         overflow: auto;
         width: 100%;
         margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
 
-        .results-content {
-            max-width: $text-max-width;
+        @mixin common-results-styles {
+            flex: 1;
             margin: 0 auto;
             padding: 0 $spacer-5;
             @include screen-xl {
                 padding: 0 $spacer-4;
             }
+            @content;
 
-            .result {
-                margin-top: 0px;
+        }
+
+        .reg-results-content {
+            @include common-results-styles {
+                .result {
+                    margin-top: 0px;
+                }
             }
+        }
+
+        .resources-results-content {
+            @include common-results-styles {}
         }
     }
 }
