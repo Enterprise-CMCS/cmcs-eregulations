@@ -112,7 +112,7 @@
                         @chip-filter="removeChip"
                         @clear-selections="clearSelections"
                     />
-                    <ResourcesResults
+                    <ResourcesResultsContainer
                         :isLoading="isLoading"
                         :page="page"
                         :page-size="pageSize"
@@ -142,7 +142,7 @@ import _uniq from "lodash/uniq";
 import Banner from "@/components/Banner.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
-import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+import ResourcesResultsContainer from "@/components/resources/ResourcesResultsContainer.vue";
 
 import {
     getCategories,
@@ -163,7 +163,7 @@ export default {
         Banner,
         ResourcesFilters,
         ResourcesSelections,
-        ResourcesResults,
+        ResourcesResultsContainer,
     },
 
     props: {
