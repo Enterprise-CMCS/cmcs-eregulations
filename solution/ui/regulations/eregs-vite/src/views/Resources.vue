@@ -815,8 +815,8 @@ export default {
 
     async created() {
         this.getPartLastUpdatedDates();
-        getFormattedPartsList();
         this.getCategoryList();
+        this.filters.part.listItems = await getFormattedPartsList();
 
         if (this.queryParams.q) {
             this.searchQuery = this.queryParams.q;

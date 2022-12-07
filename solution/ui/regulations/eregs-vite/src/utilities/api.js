@@ -495,8 +495,6 @@ const getFormattedPartsList = async () => {
         })
     );
 
-    console.log("formattedPartsList", formattedPartsList);
-
     return formattedPartsList;
 }
 
