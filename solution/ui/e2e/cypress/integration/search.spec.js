@@ -1,6 +1,6 @@
 const SEARCH_TERM = "telemedicine";
 
-describe.skip("Search flow", () => {
+describe("Search flow", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
