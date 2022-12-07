@@ -37,6 +37,6 @@ class SearchView(TemplateView):
             'synonym_list': synonym_list,
             'unquoted_search': query and not query.startswith('"') and not query.endswith('"') and len(query.split(" ")) > 1,
             'query': query,
-u       }
+         }
 
         return {**context, **c, **self.request.GET.dict()}
