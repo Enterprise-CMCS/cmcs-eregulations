@@ -16,7 +16,7 @@ jobs:
     environment:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       # Checkout the code
       - name: Checkout
@@ -79,7 +79,7 @@ jobs:
       name: "dev"
     outputs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: deploy-static
     steps:
       # Checkout the code
@@ -131,7 +131,7 @@ jobs:
   deploy-prototype:
     environment:
       name: "dev"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: deploy-django
     outputs:
       url: ${{ steps.deploy-prototype.outputs.url }}
@@ -201,7 +201,7 @@ jobs:
   build-and-deploy-vue:
     environment:
       name: "dev"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: deploy-django
     steps:
       # Checkout the code
@@ -259,7 +259,7 @@ jobs:
   deploy-go:
     environment:
       name: "dev"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: deploy-django
     steps:
       # Checkout the code
@@ -315,7 +315,7 @@ jobs:
   notify:
     permissions:
       pull-requests: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: [deploy-go, deploy-django, deploy-prototype]
     steps:
       - name: Find PR number
@@ -343,7 +343,7 @@ jobs:
           reactions: '+1'
   test-cypress:
     needs: [deploy-go, deploy-django, build-and-deploy-vue]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       # Checkout the code
       - name: Checkout
