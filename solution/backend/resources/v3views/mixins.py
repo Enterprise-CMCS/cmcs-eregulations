@@ -1,9 +1,8 @@
-from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q, F, Prefetch, OuterRef, Subquery
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 from django.core.exceptions import BadRequest
 
-from .utils import OpenApiQueryParameter, is_int
+from .utils import OpenApiQueryParameter
 from resources.models import (
     AbstractLocation,
     AbstractResource,
@@ -12,7 +11,6 @@ from resources.models import (
     FederalRegisterDocumentGroup
 )
 
-from common.api import OpenApiQueryParameter
 from common.mixins import OptionalPaginationMixin
 
 
