@@ -18,7 +18,10 @@
                 <div class="reg-results-content">
                     <div class="search-results-count">
                         <span v-if="isLoading">Loading...</span>
-                        <span v-else>{{ regResults.length }} results</span>
+                        <template v-else>
+                            <h2>Regulations</h2>
+                            <span>{{ regResults.length }} results</span>
+                        </template>
                     </div>
                     <template v-if="!isLoading">
                         <RegResults
@@ -30,7 +33,10 @@
                 </div>
                 <div class="resources-results-content">
                     <div class="search-results-count">
-                        <span v-if="!isLoading">{{ resourcesResults.length }} results</span>
+                        <template v-if="!isLoading">
+                            <h2>Resources</h2>
+                            <span>{{ resourcesResults.length }} results</span>
+                        </template>
                     </div>
                     <template v-if="!isLoading">
                         <ResourcesResults
@@ -298,6 +304,12 @@ export default {
 
         .resources-results-content {
             @include common-results-styles;
+        }
+
+        .search-results-count {
+            h2 {
+                border-bottom: 2px solid $mid_blue;
+            }
         }
     }
 }
