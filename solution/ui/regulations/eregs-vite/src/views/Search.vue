@@ -48,7 +48,7 @@
                             :parts-last-updated="partsLastUpdated"
                             :parts-list="partsList"
                             :results="resourcesResults"
-                            :search-query="searchQuery"
+                            :query="searchQuery"
                             view="search"
                         />
                     </template>

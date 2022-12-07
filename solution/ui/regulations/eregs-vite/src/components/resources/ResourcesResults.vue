@@ -101,7 +101,10 @@ export default {
             type: Array,
             required: true,
         },
-        query: String,
+        query: {
+            type: String,
+            default: undefined,
+        },
         results: {
             type: Array,
             default: () => [],
