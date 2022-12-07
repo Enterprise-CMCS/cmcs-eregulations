@@ -81,16 +81,14 @@ export default {
     beforeCreate() {},
 
     async created() {
-        // promise.all these
-        await this.getPartLastUpdatedDates();
-        await getFormattedPartsList();
+        await Promise.allSettled([
+            this.getPartLastUpdatedDates(),
+            getFormattedPartsList(),
+        ]);
 
         if (this.searchQuery) {
             this.retrieveSynonyms(this.searchQuery);
-
-            // we need to Promise.all() these
-            this.retrieveResourcesResults(this.searchQuery);
-            this.retrieveRegResults(this.searchQuery);
+            this.retrieveAllResults(this.searchQuery);
         }
     },
 
@@ -112,7 +110,7 @@ export default {
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
-            isLoading: false,
+            isLoading: true,
             partsLastUpdated: {},
             partsList: [],
             queryParams: this.$route.query,
@@ -149,13 +147,6 @@ export default {
             return stripQuotes(string);
         },
         async retrieveRegResults(query) {
-            this.isLoading = true;
-
-            if (!query) {
-                this.isLoading = false;
-                this.regResults = [];
-            }
-
             try {
                 const response = await getRegSearchResults(query);
                 this.regResults = response?.results ?? [];
@@ -165,17 +156,9 @@ export default {
                     error
                 );
                 this.regResults = [];
-            } finally {
-                this.isLoading = false;
             }
         },
         async retrieveResourcesResults(query) {
-            console.log("retrieving resources results");
-
-            if (!query) {
-                this.resourcesResults = [];
-            }
-
             try {
                 const response = await getSupplementalContentV3({
                     partDict: "all",
@@ -189,9 +172,24 @@ export default {
                     error
                 );
                 this.resourcesResults = [];
-            } finally {
-                console.log("Resources request finished");
             }
+        },
+        async retrieveAllResults(query) {
+            if (!query) {
+                this.regResults = [];
+                this.resourcesResults = [];
+
+                return;
+            }
+
+            this.isLoading = true;
+
+            Promise.allSettled([
+                this.retrieveResourcesResults(query),
+                this.retrieveRegResults(query)
+            ]).then(() => {
+                this.isLoading = false;
+            })
         },
         async retrieveSynonyms(query) {
             if (!query) {
@@ -251,9 +249,8 @@ export default {
                         return;
                     }
 
-                    this.retrieveRegResults(this.searchQuery);
-                    this.retrieveResourcesResults(this.searchQuery);
                     this.retrieveSynonyms(this.searchQuery);
+                    this.retrieveAllResults(this.searchQuery);
                 }
             },
         },
