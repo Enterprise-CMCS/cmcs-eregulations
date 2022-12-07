@@ -146,11 +146,10 @@ import ResourcesResultsContainer from "@/components/resources/ResourcesResultsCo
 
 import {
     getCategories,
+    getFormattedPartsList,
     getSubPartsForPart,
     getSupplementalContentV3,
     getLastUpdatedDates,
-    getTOC,
-    getPartTOC,
     getSectionsForPart,
     getSubpartTOC,
     getSynonyms,
@@ -658,39 +657,6 @@ export default {
                 this.isLoading = false;
             }
         },
-        async getFormattedPartsList() {
-            const TOC = await getTOC();
-            const partsList = TOC[0].children[0].children
-                .map((subChapter) =>
-                    subChapter.children.map((part) => ({
-                        label: part.label,
-                        name: part.identifier[0],
-                    }))
-                )
-                .flat(1);
-
-            this.filters.part.listItems = await Promise.all(
-                partsList.map(async (part) => {
-                    const newPart = JSON.parse(JSON.stringify(part));
-                    const PartToc = await getPartTOC(42, part.name);
-                    const sections = {};
-                    PartToc.children
-                        .filter((TOCpart) => TOCpart.type === "subpart")
-                        .forEach((subpart) => {
-                            subpart.children
-                                .filter((section) => section.type === "section")
-                                .forEach((c) => {
-                                    sections[
-                                        c.identifier[c.identifier.length - 1]
-                                    ] = c.parent[0];
-                                });
-                        });
-                    newPart.sections = sections;
-                    return newPart;
-                })
-            );
-        },
-
         async getFormattedSubpartsList(parts) {
             this.filters.subpart.listItems = await getSubPartsForPart(parts);
         },
@@ -849,7 +815,7 @@ export default {
 
     async created() {
         this.getPartLastUpdatedDates();
-        this.getFormattedPartsList();
+        getFormattedPartsList();
         this.getCategoryList();
 
         if (this.queryParams.q) {

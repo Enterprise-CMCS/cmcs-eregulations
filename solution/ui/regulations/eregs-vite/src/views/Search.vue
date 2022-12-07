@@ -54,12 +54,11 @@ import _isEmpty from "lodash/isEmpty";
 
 import { stripQuotes } from "@/utilities/utils";
 import {
+    getFormattedPartsList,
     getLastUpdatedDates,
-    getPartTOC,
     getRegSearchResults,
     getSupplementalContentV3,
     getSynonyms,
-    getTOC,
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
@@ -82,8 +81,9 @@ export default {
     beforeCreate() {},
 
     async created() {
+        // promise.all these
         await this.getPartLastUpdatedDates();
-        await this.getFormattedPartsList();
+        await getFormattedPartsList();
 
         if (this.searchQuery) {
             this.retrieveSynonyms(this.searchQuery);
@@ -216,38 +216,6 @@ export default {
         async getPartLastUpdatedDates() {
             this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
         },
-        async getFormattedPartsList() {
-            const TOC = await getTOC();
-            const partsList = TOC[0].children[0].children
-                .map((subChapter) =>
-                    subChapter.children.map((part) => ({
-                        label: part.label,
-                        name: part.identifier[0],
-                    }))
-                )
-                .flat(1);
-
-            this.partsList = await Promise.all(
-                partsList.map(async (part) => {
-                    const newPart = JSON.parse(JSON.stringify(part));
-                    const PartToc = await getPartTOC(42, part.name);
-                    const sections = {};
-                    PartToc.children
-                        .filter((TOCpart) => TOCpart.type === "subpart")
-                        .forEach((subpart) => {
-                            subpart.children
-                                .filter((section) => section.type === "section")
-                                .forEach((c) => {
-                                    sections[
-                                        c.identifier[c.identifier.length - 1]
-                                    ] = c.parent[0];
-                                });
-                        });
-                    newPart.sections = sections;
-                    return newPart;
-                })
-            );
-        },
         executeSearch(payload) {
             this.$router.push({
                 name: "search",
@@ -317,7 +285,6 @@ export default {
                 padding: 0 $spacer-4;
             }
             @content;
-
         }
 
         .reg-results-content {
@@ -329,7 +296,7 @@ export default {
         }
 
         .resources-results-content {
-            @include common-results-styles {}
+            @include common-results-styles;
         }
     }
 }

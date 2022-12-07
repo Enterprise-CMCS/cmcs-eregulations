@@ -448,11 +448,56 @@ const getHomepageStructure = async () => {
  *
  * Fetches all_parts and returns a list of those parts by name
  *
- * @returns {Array[string]} - a list pf parts for title 42
+ * @returns {Array<string>} - a list pf parts for title 42
  */
 const getPartsList = async () => {
     const allParts = await getAllParts()
     return allParts.map(d => d.name)
+}
+
+/**
+ *
+ * Fetches and formats list of parts to be used as dictionary
+ * to create links to reg text in "related sections" part of
+ * resources result item
+ *
+ * @returns {Array<{label: string, identifier: string, section: <Object>}>}
+ */
+const getFormattedPartsList = async () => {
+    const TOC = await getTOC();
+    const partsList = TOC[0].children[0].children
+        .map((subChapter) =>
+            subChapter.children.map((part) => ({
+                label: part.label,
+                name: part.identifier[0],
+            }))
+        )
+        .flat(1);
+
+    const formattedPartsList = await Promise.all(
+        partsList.map(async (part) => {
+            const newPart = JSON.parse(JSON.stringify(part));
+            const PartToc = await getPartTOC(42, part.name);
+            const sections = {};
+            PartToc.children
+                .filter((TOCpart) => TOCpart.type === "subpart")
+                .forEach((subpart) => {
+                    subpart.children
+                        .filter((section) => section.type === "section")
+                        .forEach((c) => {
+                            sections[
+                                c.identifier[c.identifier.length - 1]
+                            ] = c.parent[0];
+                        });
+                });
+            newPart.sections = sections;
+            return newPart;
+        })
+    );
+
+    console.log("formattedPartsList", formattedPartsList);
+
+    return formattedPartsList;
 }
 
 const getPartsDetails = async () => {
@@ -853,6 +898,7 @@ export {
     setCacheItem,
     getSupplementalContent,
     getPartsList,
+    getFormattedPartsList,
     getSectionsForSubPart,
     getSectionObjects,
     getSupplementalContentCountForPart,
