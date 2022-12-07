@@ -236,6 +236,7 @@ export default {
             this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
         },
         executeSearch(payload) {
+            this.synonyms = [];
             this.$router.push({
                 name: "search",
                 query: {
