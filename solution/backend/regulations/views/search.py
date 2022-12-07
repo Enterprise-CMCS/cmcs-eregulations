@@ -5,7 +5,7 @@ from django.http import Http404
 
 from regcore.models import Part
 from regcore.search.models import SearchIndex, Synonym
-from .utils import get_structure, get_tag_contents
+from .utils import get_structure
 
 
 class SearchView(TemplateView):
@@ -17,7 +17,6 @@ class SearchView(TemplateView):
         context = super().get_context_data(**kwargs)
         today = date.today()
         results = SearchIndex.objects.effective(today).search(query)
-        results_list = []
         parts = Part.objects.effective(today)
         if not parts:
             raise Http404
@@ -38,6 +37,6 @@ class SearchView(TemplateView):
             'synonym_list': synonym_list,
             'unquoted_search': query and not query.startswith('"') and not query.endswith('"') and len(query.split(" ")) > 1,
             'query': query,
-        }
+u       }
 
         return {**context, **c, **self.request.GET.dict()}
