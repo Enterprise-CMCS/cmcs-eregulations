@@ -18,10 +18,7 @@
                 <div class="reg-results-content">
                     <div class="search-results-count">
                         <span v-if="isLoading">Loading...</span>
-                        <span v-else
-                            >{{ regResults.length }} results in Medicaid & CHIP
-                            Regulations</span
-                        >
+                        <span v-else>{{ regResults.length }} results</span>
                     </div>
                     <template v-if="!isLoading">
                         <RegResults
@@ -32,6 +29,9 @@
                     </template>
                 </div>
                 <div class="resources-results-content">
+                    <div class="search-results-count">
+                        <span v-if="!isLoading">{{ resourcesResults.length }} results</span>
+                    </div>
                     <template v-if="!isLoading">
                         <ResourcesResults
                             :base="base"
@@ -88,7 +88,7 @@ export default {
             // eslint-disable-next-line
             console.log("data1", data[1]);
             this.partsList = data[1].value;
-        })
+        });
 
         if (this.searchQuery) {
             this.retrieveSynonyms(this.searchQuery);
@@ -190,10 +190,10 @@ export default {
 
             Promise.allSettled([
                 this.retrieveResourcesResults(query),
-                this.retrieveRegResults(query)
+                this.retrieveRegResults(query),
             ]).then(() => {
                 this.isLoading = false;
-            })
+            });
         },
         async retrieveSynonyms(query) {
             if (!query) {
