@@ -6,6 +6,7 @@
                 eregs_url_label="eRegulations resource links"
                 eregs_sublabel="subregulatory guidance and implementation resources"
                 :query="searchQuery"
+                :show-internal-link="false"
             />
         </template>
         <template v-for="(result, i) in results" v-else>

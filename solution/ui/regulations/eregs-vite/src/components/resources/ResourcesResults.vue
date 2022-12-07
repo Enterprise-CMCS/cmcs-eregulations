@@ -6,6 +6,7 @@
                 eregs_url_label="eRegulations regulation text"
                 eregs_sublabel="Medicaid & CHIP regulations"
                 :query="query"
+                :show-internal-link="view === 'resources'"
             />
         </template>
         <template v-else>

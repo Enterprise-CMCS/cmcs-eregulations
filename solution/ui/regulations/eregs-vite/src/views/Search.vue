@@ -92,7 +92,6 @@ export default {
             getFormattedPartsList(),
         ]).then((data) => {
             // eslint-disable-next-line
-            console.log("data1", data[1]);
             this.partsList = data[1].value;
         });
 
@@ -174,7 +173,6 @@ export default {
                     partDict: "all",
                     q: query,
                 });
-                console.log("response.results", response.results);
                 this.resourcesResults = response?.results ?? [];
             } catch (error) {
                 console.error(

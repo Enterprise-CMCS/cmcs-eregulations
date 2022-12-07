@@ -2,7 +2,7 @@
     <div class="empty-state-container">
         Expand your search:
         <ul>
-            <li>
+            <li v-if="showInternalLink">
                 <a :href="eregsLink">{{ eregs_url_label }}</a>
                 <span> ({{ eregs_sublabel }})</span>
             </li>
@@ -42,6 +42,10 @@ export default {
         query: {
             type: String,
             required: false,
+        },
+        showInternalLink: {
+            type: Boolean,
+            default: true,
         },
     },
 
