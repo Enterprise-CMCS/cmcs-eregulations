@@ -90,17 +90,19 @@ export default {
     beforeCreate() {},
 
     async created() {
-        await Promise.allSettled([
-            this.getPartLastUpdatedDates(),
-            getFormattedPartsList(),
-        ]).then((data) => {
-            // eslint-disable-next-line
-            this.partsList = data[1].value;
-        });
-
         if (this.searchQuery) {
+            await Promise.allSettled([
+                this.getPartLastUpdatedDates(),
+                getFormattedPartsList(),
+            ]).then((data) => {
+                // eslint-disable-next-line
+                this.partsList = data[1].value;
+            });
+
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults(this.searchQuery);
+        } else {
+            this.isLoading = false;
         }
     },
 
