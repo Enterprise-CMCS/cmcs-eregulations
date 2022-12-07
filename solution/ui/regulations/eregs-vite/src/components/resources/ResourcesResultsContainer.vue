@@ -49,15 +49,21 @@
             <template v-if="!isLoading">
                 <ResourcesResults
                     :base="base"
-                    :count="count"
                     :results="filteredContent"
-                    :page="page"
-                    :page-size="pageSize"
                     :parts-last-updated="partsLastUpdated"
                     :parts-list="partsList"
                     :query="query"
                     view="resources"
-                />
+                >
+                    <template #pagination>
+                        <PaginationController
+                            :count="count"
+                            :page="page"
+                            :page-size="pageSize"
+                            view="resources"
+                        />
+                    </template>
+                </ResourcesResults>
             </template>
         </div>
     </div>
@@ -65,6 +71,7 @@
 
 <script>
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
 import ResourceExportBtn from "@/components/resources/ResourceExportBtn.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
@@ -79,6 +86,7 @@ export default {
 
     components: {
         FancyDropdown,
+        PaginationController,
         ResourceExportBtn,
         ResourcesResults,
     },

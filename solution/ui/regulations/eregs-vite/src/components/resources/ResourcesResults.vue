@@ -70,18 +70,12 @@
                     </div>
                 </div>
             </template>
-            <PaginationController
-                :count="count"
-                :page="page"
-                :page-size="pageSize"
-                :view="view"
-            />
+            <slot name="pagination"></slot>
         </template>
     </div>
 </template>
 
 <script>
-import PaginationController from "@/components/pagination/PaginationController.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 
@@ -89,7 +83,6 @@ export default {
     name: "ResourcesResults",
 
     components: {
-        PaginationController,
         SearchEmptyState,
         SupplementalContentObject,
     },
@@ -98,21 +91,6 @@ export default {
         base: {
             type: String,
             required: true,
-        },
-        count: {
-            type: Number,
-            required: false,
-            default: 0,
-        },
-        page: {
-            type: Number,
-            required: false,
-            default: 1,
-        },
-        pageSize: {
-            type: Number,
-            required: false,
-            default: 100,
         },
         partsLastUpdated: {
             type: Object,
