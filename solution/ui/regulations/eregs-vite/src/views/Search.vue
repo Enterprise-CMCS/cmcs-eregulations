@@ -19,8 +19,11 @@
                     <div class="search-results-count">
                         <span v-if="isLoading">Loading...</span>
                         <template v-else>
-                            <h2>Regulations</h2>
-                            <span>{{ regResults.length }} results</span>
+                            <h2 v-if="totalResultsCount > 0">Regulations</h2>
+                            <span
+                                >{{ regResults.length }}
+                                {{ regCountLabel }}</span
+                            >
                         </template>
                     </div>
                     <template v-if="!isLoading">
@@ -31,7 +34,7 @@
                         />
                     </template>
                 </div>
-                <div class="resources-results-content">
+                <div v-if="totalResultsCount > 0" class="resources-results-content">
                     <div class="search-results-count">
                         <template v-if="!isLoading">
                             <h2>Resources</h2>
@@ -148,6 +151,14 @@ export default {
                 this.searchQuery[0] !== '"' &&
                 this.searchQuery[this.searchQuery.length - 1] !== '"'
             );
+        },
+        totalResultsCount() {
+            return this.regResults.length + this.resourcesResults.length;
+        },
+        regCountLabel() {
+            return this.totalResultsCount > 0
+                ? "results"
+                : "results in Regulations or Resources";
         },
     },
 
