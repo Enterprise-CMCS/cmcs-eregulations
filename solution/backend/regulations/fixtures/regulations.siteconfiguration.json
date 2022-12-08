@@ -1,0 +1,9 @@
+[
+{
+    "model": "regulations.siteconfiguration",
+    "pk": 1,
+    "fields": {
+        "allow_indexing": false
+    }
+}
+]
