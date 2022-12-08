@@ -7,6 +7,13 @@ def handler(event, context):
     import django
     django.setup()
 
+    print(f"{os.environ.get('STAGE')}")
+    print(f"{os.environ.get('DB_USER')}")
+    print(f"{os.environ.get('DB_NAME')}")
+    from cmcs_regulations import settings
+    print(f"{settings.DATABASES}")
+
+
     from django.db import connection, ProgrammingError
     connection.ensure_connection()
     if not connection.is_usable():
