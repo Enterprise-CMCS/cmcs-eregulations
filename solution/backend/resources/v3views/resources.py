@@ -5,7 +5,7 @@ from django.db import transaction
 from django.db.models import Case, When, F
 from django.http import JsonResponse
 
-from .mixins import ResourceExplorerViewSetMixin
+from .mixins import ResourceExplorerViewSetMixin, FRDocGroupingMixin
 from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
 
 from resources.models import (
@@ -34,7 +34,7 @@ from regcore.views import SettingsAuthentication
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,
     responses=MetaResourceSerializer.many(True),
 )
-class AbstractResourceViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
+class AbstractResourceViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = AbstractResourcePolymorphicSerializer
     model = AbstractResource
 
@@ -72,7 +72,7 @@ class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnly
         return ["name", "description"]
 
 
-class FederalRegisterDocsViewSet(ResourceExplorerViewSetMixin, viewsets.ModelViewSet):
+class FederalRegisterDocsViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, viewsets.ModelViewSet):
     model = FederalRegisterDocument
 
     authentication_classes = [SettingsAuthentication]

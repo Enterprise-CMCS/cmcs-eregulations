@@ -95,6 +95,7 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
     def to_representation(self, instance):
         obj = super().to_representation(instance)
         if not self.context['fr_grouping']:
+            del obj["related_docs"]
             return obj
         docs = [obj] + obj["related_docs"]
         del obj["related_docs"]
