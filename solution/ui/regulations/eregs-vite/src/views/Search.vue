@@ -213,8 +213,10 @@ export default {
             });
         },
         async retrieveSynonyms(query) {
+            this.synonyms = [];
+
             if (!query) {
-                this.synonyms = [];
+                return;
             }
 
             try {
