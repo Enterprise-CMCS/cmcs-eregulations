@@ -25,8 +25,8 @@
                     <a
                         :key="i"
                         tabindex="0"
-                        @click="synonymQuotedLink(query)"
-                        @keydown.enter.space.prevent="synonymQuotedLink(query)"
+                        @click="quotedLink"
+                        @keydown.enter.space.prevent="quotedLink"
                         >"{{ searchQuery }}"</a
                     >
                 </div>
@@ -40,9 +40,9 @@
                         <a
                             :key="i"
                             tabindex="0"
-                            @click="synonymQuotedLink(syn)"
+                            @click="synonymLink(syn)"
                             @keydown.enter.space.prevent="
-                                synonymQuotedLink(syn)
+                                synonymLink(syn)
                             "
                             >{{ syn }}</a
                         ><span
@@ -132,13 +132,23 @@ export default {
         updateSearchValue(value) {
             this.searchInputValue = value;
         },
-        synonymQuotedLink(synonym) {
+        synonymLink(synonym) {
             this.$router.push({
                 name: this.page,
                 query: {
                     ...this.queryParams,
                     page: undefined,
                     q: `"${synonym}"`,
+                },
+            });
+        },
+        quotedLink() {
+            this.$router.push({
+                name: this.page,
+                query: {
+                    ...this.queryParams,
+                    page: undefined,
+                    q: `"${this.searchQuery}"`,
                 },
             });
         },
