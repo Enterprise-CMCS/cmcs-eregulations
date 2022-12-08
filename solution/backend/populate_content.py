@@ -26,6 +26,8 @@ def handler(event, context):
 
     from regcore.search.models import Synonym
 
+    call_command("flush")  # Reset the database before loading any fixtures
+
     load_data("resources.category.json", Category)
     load_data("resources.subcategory.json", SubCategory)
     load_data("resources.subpart.json", Subpart)
