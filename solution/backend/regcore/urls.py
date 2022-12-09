@@ -89,7 +89,7 @@ urlpatterns = [
         path("part", parser.PartUploadViewSet.as_view({
             "put": "update",
         })),
-        path("synonym/<synonym>", synonyms.SynonymViewSet.as_view({
+        path("synonym/<path:synonym>", synonyms.SynonymViewSet.as_view({
             "get": "list",
         })),
         path("parser_config", parser.ParserConfigurationViewSet.as_view({
