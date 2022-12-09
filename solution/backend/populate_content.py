@@ -18,7 +18,7 @@ def handler(event, context):
         FederalRegisterDocument,
         ResourcesConfiguration,
     )
-    from regcore.search import Synonym
+    from regcore.search.models import Synonym
 
     fixtures = [
         ("resources.category.json", Category),
