@@ -8,21 +8,34 @@ def handler(event, context):
     import django
     django.setup()
 
+    from resources.models import (
+        Category,
+        SubCategory,
+        Subpart,
+        Section,
+        SupplementalContent,
+        FederalRegisterDocumentGroup,
+        FederalRegisterDocument,
+        ResourcesConfiguration,
+    )
+    from regcore.search import Synonym
+
     fixtures = [
-        "regulations.siteconfiguration.json",
-        "regcore.parserconfiguration.json",
-        "regcore.titleconfiguration.json",
-        "resources.category.json",
-        "resources.subcategory.json",
-        "resources.subpart.json",
-        "resources.section.json",
-        "resources.supplementalcontent.json",
-        "resources.federalregisterdocumentgroup.json",
-        "resources.federalregisterdocument.json",
-        "resources.resourcesconfiguration.json",
-        "search.synonym.json",
+        ("resources.category.json", Category),
+        ("resources.subcategory.json", SubCategory),
+        ("resources.subpart.json", Subpart),
+        ("resources.section.json", Section),
+        ("resources.supplementalcontent.json", SupplementalContent),
+        ("resources.federalregisterdocumentgroup.json", FederalRegisterDocumentGroup),
+        ("resources.federalregisterdocument.json", FederalRegisterDocument),
+        ("resources.resourcesconfiguration.json", ResourcesConfiguration),
+        ("search.synonym.json", Synonym),
     ]
 
-    call_command("flush", interactive=False)  # Reset the database before loading any fixtures
+    # First delete all instances of models that we're populating
     for fixture in fixtures:
-        call_command("loaddata", fixture)
+        fixture[1].objects.all().delete()
+
+    # Now load the fixtures
+    for fixture in fixtures:
+        call_command("loaddata", fixture[0])
