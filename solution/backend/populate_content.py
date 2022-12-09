@@ -11,6 +11,7 @@ def handler(event, context):
     fixtures = [
         "regulations.siteconfiguration.json",
         "regcore.parserconfiguration.json",
+        "regcore.titleconfiguration.json",
         "resources.category.json",
         "resources.subcategory.json",
         "resources.subpart.json",
