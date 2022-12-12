@@ -47,7 +47,7 @@
                             :count="resourcesResults.length"
                             :parts-last-updated="partsLastUpdated"
                             :parts-list="partsList"
-                            :results="resourcesResults"
+                            :results="filteredContent"
                             :query="searchQuery"
                             view="search"
                         />
@@ -137,6 +137,15 @@ export default {
     },
 
     computed: {
+        filteredContent() {
+            return this.resourcesResults.map((item) => {
+                const copiedItem = JSON.parse(JSON.stringify(item));
+                copiedItem.locations = item.locations.filter(
+                    (location) => this.partsLastUpdated[location.part]
+                );
+                return copiedItem;
+            });
+        },
         searchQuery: {
             get() {
                 return this.queryParams.q || undefined;
@@ -185,6 +194,7 @@ export default {
                 const response = await getSupplementalContentV3({
                     partDict: "all",
                     q: query,
+                    fr_grouping: false,
                 });
                 this.resourcesResults = response?.results ?? [];
             } catch (error) {
