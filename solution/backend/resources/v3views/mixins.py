@@ -91,8 +91,19 @@ class LocationExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 # is not associated to the location it makes the results look weird.  This fixes it.
 # TODO: Make this mixin handle everything about the "fr_grouping" parameter too, not passed in as a method parameter.
 class FRDocGroupingMixin:
-    def get_final_ids(self, id_query, group_fr_docs):
-        if group_fr_docs:
+    PARAMETERS = [
+        OpenApiQueryParameter("fr_grouping", "Determines if FR Documents should be grouped or not"
+                              "Default is true", bool, False),
+    ]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["fr_grouping"] = self.request.GET.get("fr_grouping", "true").lower() == "true"
+        return context
+
+    def get_final_ids(self, id_query):
+        fr_grouping = self.request.GET.get("fr_grouping", "true").lower() == "true"
+        if fr_grouping:
             fr_groups = []
             ids = []
 
@@ -114,7 +125,7 @@ class FRDocGroupingMixin:
                     .values_list('newest_doc', flat=True)
                 ids = list(groups) + ids
         else:
-            ids = super().get_final_ids(id_query, group_fr_docs)
+            ids = super().get_final_ids(id_query)
         return ids
 
 
@@ -134,8 +145,6 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                               "\"&categories=X&categories=Y\" for multiple.", int, False),
         OpenApiQueryParameter("sort", "Sort results by this field. Valid values are \"newest\", \"oldest\", and \"relevance\". "
                               "Newest is the default, and relevance requires a search query.", str, False),
-        OpenApiQueryParameter("fr_grouping", "Determines if FR Documents should be grouped or not"
-                              "Default is true", bool, False),
     ] + OptionalPaginationMixin.PARAMETERS + LocationFiltererMixin.PARAMETERS
 
     location_filter_prefix = "locations__"
@@ -153,7 +162,6 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         context = super().get_serializer_context()
         context["category_details"] = self.request.GET.get("category_details", "true").lower() == "true"
         context["location_details"] = self.request.GET.get("location_details", "true").lower() == "true"
-        context["fr_grouping"] = self.request.GET.get("fr_grouping", "true").lower() == "true"
         return context
 
     def get_search_vectors(self):
@@ -192,7 +200,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                     annotations[f"{model}_{field}_headline"] = self.make_headline(f"{model}__{field}", search_query, search_type)
         return annotations
 
-    def get_final_ids(self, id_query, group_fr_docs):
+    def get_final_ids(self, id_query):
         return [i[0] for i in id_query.values_list("id", "group_annotated")]
 
     def get_queryset(self):
@@ -200,7 +208,6 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
         sort_method = self.request.GET.get("sort")
-        fr_grouping = self.request.GET.get("fr_grouping", "true").lower() == "true"
 
         id_query = self.model.objects\
                        .filter(approved=True)\
@@ -213,7 +220,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         if categories:
             id_query = id_query.filter(category__id__in=categories)
 
-        ids = self.get_final_ids(id_query, fr_grouping)
+        ids = self.get_final_ids(id_query)
 
         annotations = {}
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
