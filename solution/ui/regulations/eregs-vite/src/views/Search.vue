@@ -17,16 +17,11 @@
             <div class="combined-results-container">
                 <div class="reg-results-content">
                     <div class="search-results-count">
-                        <span v-if="isLoading">Loading...</span>
-                        <template v-else>
-                            <h2 v-if="totalResultsCount > 0">Regulations</h2>
-                            <span
-                                >{{ regResults.length }}
-                                {{ regCountLabel }}</span
-                            >
-                        </template>
+                        <h2>Regulations</h2>
+                        <span v-if="regsLoading">Loading...</span>
+                        <span v-else>{{ regResults.length }} results</span>
                     </div>
-                    <template v-if="!isLoading">
+                    <template v-if="!regsLoading">
                         <RegResults
                             :base="base"
                             :results="regResults"
@@ -34,14 +29,13 @@
                         />
                     </template>
                 </div>
-                <div v-if="totalResultsCount > 0" class="resources-results-content">
+                <div class="resources-results-content">
                     <div class="search-results-count">
-                        <template v-if="!isLoading">
-                            <h2>Resources</h2>
-                            <span>{{ resourcesResults.length }} results</span>
-                        </template>
+                        <h2>Resources</h2>
+                        <span v-if="resourcesLoading">Loading...</span>
+                        <span v-else>{{ resourcesResults.length }} results</span>
                     </div>
-                    <template v-if="!isLoading">
+                    <template v-if="!resourcesLoading">
                         <ResourcesResults
                             :base="base"
                             :count="resourcesResults.length"
@@ -102,7 +96,8 @@ export default {
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults(this.searchQuery);
         } else {
-            this.isLoading = false;
+            this.regsLoading = false;
+            this.resourcesLoading = false;
         }
     },
 
@@ -124,7 +119,8 @@ export default {
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
-            isLoading: true,
+            regsLoading: true,
+            resourcesLoading: true,
             partsLastUpdated: {},
             partsList: [],
             queryParams: this.$route.query,
@@ -137,6 +133,7 @@ export default {
     },
 
     computed: {
+        isLoading: !this.regsLoading && !this.resourcesLoading,
         filteredContent() {
             return this.resourcesResults.map((item) => {
                 const copiedItem = JSON.parse(JSON.stringify(item));
@@ -213,13 +210,15 @@ export default {
                 return;
             }
 
-            this.isLoading = true;
+            this.regsLoading = true;
+            this.resourcesLoading = true;
 
-            Promise.allSettled([
-                this.retrieveResourcesResults(query),
-                this.retrieveRegResults(query),
-            ]).then(() => {
-                this.isLoading = false;
+            this.retrieveResourcesResults(query).then(() => {
+                this.resourcesLoading = false;
+            });
+
+            this.retrieveRegResults(query).then(() => {
+                this.regsLoading = false;
             });
         },
         async retrieveSynonyms(query) {
