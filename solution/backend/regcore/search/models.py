@@ -24,7 +24,7 @@ class SearchIndexQuerySet(models.QuerySet):
         search_type = "websearch"
         cover_density = False
         search_density = SearchConfigruration.objects.get(config="SearchDensity")
-        
+
         if search_density:
             cover_density = search_density.value.lower() == "true"
 
