@@ -52,16 +52,28 @@
                     :results="filteredContent"
                     :parts-last-updated="partsLastUpdated"
                     :parts-list="partsList"
-                    :query="query"
                     view="resources"
                 >
+                    <template #empty-state>
+                        <template v-if="filteredContent && filteredContent.length == 0">
+                            <SearchEmptyState
+                                :eregs_url="regulationsSearchUrl"
+                                eregs_url_label="eRegulations regulation text"
+                                eregs_sublabel="Medicaid & CHIP regulations"
+                                :query="query"
+                                :show-internal-link="true"
+                            />
+                        </template>
+                    </template>
                     <template #pagination>
-                        <PaginationController
-                            :count="count"
-                            :page="page"
-                            :page-size="pageSize"
-                            view="resources"
-                        />
+                        <template v-if="filteredContent && filteredContent.length > 0">
+                            <PaginationController
+                                :count="count"
+                                :page="page"
+                                :page-size="pageSize"
+                                view="resources"
+                            />
+                        </template>
                     </template>
                 </ResourcesResults>
             </template>
@@ -206,6 +218,9 @@ export default {
                     : maxInRange;
 
             return [firstInRange, lastInRange];
+        },
+        regulationsSearchUrl() {
+            return `${this.base}/search/`;
         },
     },
 

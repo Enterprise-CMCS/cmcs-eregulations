@@ -66,14 +66,12 @@
 </template>
 
 <script>
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
 
 export default {
     name: "ResourcesResults",
 
     components: {
-        SearchEmptyState,
         SupplementalContentObject,
     },
 
@@ -90,17 +88,9 @@ export default {
             type: Array,
             required: true,
         },
-        query: {
-            type: String,
-            default: undefined,
-        },
         results: {
             type: Array,
             default: () => [],
-        },
-        view: {
-            type: String,
-            required: true,
         },
     },
 
@@ -124,18 +114,6 @@ export default {
         return {
             dataProp: "value",
         };
-    },
-
-    computed: {
-        regulationsSearchUrl() {
-            return `${this.base}/search/`;
-        },
-    },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
     },
 
     filters: {
