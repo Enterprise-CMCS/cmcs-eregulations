@@ -1,7 +1,7 @@
 <template>
     <div class="result">
         <div class="results-part">
-            {{ result.part_document_title }}
+            {{ result.part_document_title | partDocumentTitleLabel }}
         </div>
         <div class="results-section">
             <a
@@ -78,7 +78,17 @@ export default {
             }/${result.date}/${highlightParams}#${result.label.join("-")}`;
         },
     },
+
+    filters: {
+        partDocumentTitleLabel(string) {
+            return string.toLowerCase();
+        }
+    },
 };
 </script>
 
-<style></style>
+<style>
+.results-part {
+    text-transform: capitalize;
+}
+</style>
