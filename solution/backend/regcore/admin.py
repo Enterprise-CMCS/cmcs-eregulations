@@ -6,7 +6,7 @@ from solo.admin import SingletonModelAdmin
 
 from resources.admin import BaseAdmin
 from .models import ParserConfiguration, TitleConfiguration
-from .search.models import Synonym, SearchConfigruration
+from .search.models import Synonym, SearchConfiguration
 
 
 class TitleConfigurationInline(admin.TabularInline):
@@ -47,10 +47,10 @@ class SynonymAdmin(BaseAdmin):
     ordering = ('baseWord',)
 
 
-@admin.register(SearchConfigruration)
+@admin.register(SearchConfiguration)
 class SearchAdmin(BaseAdmin):
     admin_priority = 78
-    model = SearchConfigruration
+    model = SearchConfiguration
     readonly_fields = ("config",)
     list_display = ("config", "value")
     fields = ("config", "value")

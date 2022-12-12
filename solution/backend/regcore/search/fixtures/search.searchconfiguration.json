@@ -1,6 +1,6 @@
 [
 {
-  "model": "search.searchconfigruration",
+  "model": "search.SearchConfiguration",
   "pk": 1,
   "fields": {
     "config": "SearchDensity",
