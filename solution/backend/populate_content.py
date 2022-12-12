@@ -24,7 +24,7 @@ def handler(event, context):
         ResourcesConfiguration,
     )
 
-    from regcore.search.models import Synonym
+    from regcore.search.models import Synonym, SearchConfigruration
 
     load_data("resources.category.json", Category)
     load_data("resources.subcategory.json", SubCategory)
@@ -35,3 +35,4 @@ def handler(event, context):
     load_data("resources.federalregisterdocument.json", FederalRegisterDocument)
     load_data("resources.resourcesconfiguration.json", ResourcesConfiguration)
     load_data("search.synonym.json", Synonym)
+    load_data("search.searchconfiguration.json", SearchConfigruration)

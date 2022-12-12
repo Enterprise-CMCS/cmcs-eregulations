@@ -1,0 +1,10 @@
+[
+{
+  "model": "search.searchconfigruration",
+  "pk": 1,
+  "fields": {
+    "config": "SearchDensity",
+    "value": "false"
+  }
+}
+]

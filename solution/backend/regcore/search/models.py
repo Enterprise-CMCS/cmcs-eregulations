@@ -11,16 +11,22 @@ from django.contrib.postgres.search import (
 from regcore.models import Part
 
 
+class SearchConfigruration(models.Model):
+    config = models.CharField(max_length=128)
+    value = models.CharField(max_length=128)
+
+
 class SearchIndexQuerySet(models.QuerySet):
     def effective(self, date):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
     def search(self, query):
-        search_type = "plain"
+        search_type = "websearch"
         cover_density = False
-        if query and query.startswith('"') and query.endswith('"'):
-            search_type = "phrase"
-            cover_density = True
+        search_density = SearchConfigruration.objects.get(config="SearchDensity")
+        
+        if search_density:
+            cover_density = search_density.value.lower() == "true"
 
         return self\
             .annotate(rank=SearchRank(
