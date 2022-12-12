@@ -1,15 +1,7 @@
 <template>
     <div class="reg-results-container">
-        <template v-if="results.length == 0">
-            <SearchEmptyState
-                :eregs_url="createRegulationsSearchUrl(base)"
-                eregs_url_label="eRegulations resource links"
-                eregs_sublabel="subregulatory guidance and implementation resources"
-                :query="searchQuery"
-                :show-internal-link="false"
-            />
-        </template>
-        <template v-for="(result, i) in results" v-else>
+        <slot name="empty-state"></slot>
+        <template v-for="(result, i) in results">
             <RegResultsItem :key="i" :base="base" :result="result" />
         </template>
     </div>
@@ -17,14 +9,12 @@
 
 <script>
 import RegResultsItem from "@/components/reg_search/RegResultsItem.vue";
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
 
 export default {
     name: "RegResults",
 
     components: {
         RegResultsItem,
-        SearchEmptyState,
     },
 
     props: {
@@ -36,7 +26,6 @@ export default {
             type: Array,
             default: () => [],
         },
-        searchQuery: String,
     },
 
     beforeCreate() {},
@@ -67,11 +56,7 @@ export default {
         },
     },
 
-    methods: {
-        createRegulationsSearchUrl(base) {
-            return `${base}/resources/`;
-        },
-    },
+    methods: {},
 };
 </script>
 

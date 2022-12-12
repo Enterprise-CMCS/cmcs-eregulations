@@ -29,15 +29,15 @@ export default {
     props: {
         eregs_url: {
             type: String,
-            required: true,
+            default: "",
         },
         eregs_url_label: {
             type: String,
-            required: true,
+            default: "",
         },
         eregs_sublabel: {
             type: String,
-            required: true,
+            default: "",
         },
         query: {
             type: String,

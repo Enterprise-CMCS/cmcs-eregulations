@@ -1,78 +1,67 @@
 <template>
     <div class="resources-results">
-        <template v-if="results && results.length == 0">
-            <SearchEmptyState
-                :eregs_url="regulationsSearchUrl"
-                eregs_url_label="eRegulations regulation text"
-                eregs_sublabel="Medicaid & CHIP regulations"
-                :query="query"
-                :show-internal-link="view === 'resources'"
-            />
-        </template>
-        <template v-else>
-            <template v-for="(item, idx) in results">
-                <div :key="item.created_at + idx">
-                    <div class="category-labels">
-                        <div class="result-label category-label">
-                            {{
-                                item.category.parent
-                                    ? item.category.parent.name
-                                    : item.category.name
-                            }}
-                        </div>
-                        <div
-                            v-if="item.category.parent"
-                            class="result-label subcategory-label"
-                        >
-                            {{ item.category.name }}
-                        </div>
+        <slot name="empty-state"></slot>
+        <template v-for="(item, idx) in results">
+            <div :key="item.created_at + idx">
+                <div class="category-labels">
+                    <div class="result-label category-label">
+                        {{
+                            item.category.parent
+                                ? item.category.parent.name
+                                : item.category.name
+                        }}
                     </div>
-                    <div class="result-content-wrapper">
-                        <SupplementalContentObject
-                            :name="item.name"
-                            :description="
-                                item.descriptionHeadline || item.description
-                            "
-                            :date="item.date"
-                            :url="item.url"
-                        />
-                    </div>
-                    <div class="related-sections">
-                        <span class="related-sections-title">
-                            Related Regulation<span
-                                v-if="item.locations.length > 1"
-                                >s</span
-                            >:
-                        </span>
-                        <span v-if="item.locations.length > 1">§§ </span>
-                        <span v-else>§ </span>
-                        <template v-for="(location, i) in item.locations">
-                            <span
-                                :key="location.display_name + i"
-                                class="related-section-link"
-                            >
-                                <a
-                                    :href="
-                                        location
-                                            | locationUrl(
-                                                partsList,
-                                                partsLastUpdated,
-                                                base
-                                            )
-                                    "
-                                >
-                                    {{ location | locationLabel }}
-                                </a>
-                                <span v-if="i + 1 != item.locations.length">
-                                    |
-                                </span>
-                            </span>
-                        </template>
+                    <div
+                        v-if="item.category.parent"
+                        class="result-label subcategory-label"
+                    >
+                        {{ item.category.name }}
                     </div>
                 </div>
-            </template>
-            <slot name="pagination"></slot>
+                <div class="result-content-wrapper">
+                    <SupplementalContentObject
+                        :name="item.name"
+                        :description="
+                            item.descriptionHeadline || item.description
+                        "
+                        :date="item.date"
+                        :url="item.url"
+                    />
+                </div>
+                <div class="related-sections">
+                    <span class="related-sections-title">
+                        Related Regulation<span v-if="item.locations.length > 1"
+                            >s</span
+                        >:
+                    </span>
+                    <span v-if="item.locations.length > 1">§§ </span>
+                    <span v-else>§ </span>
+                    <template v-for="(location, i) in item.locations">
+                        <span
+                            :key="location.display_name + i"
+                            class="related-section-link"
+                        >
+                            <a
+                                :href="
+                                    location
+                                        | locationUrl(
+                                            partsList,
+                                            partsLastUpdated,
+                                            base
+                                        )
+                                "
+                            >
+                                {{ location | locationLabel }}
+                            </a>
+                            <span v-if="i + 1 != item.locations.length">
+                                |
+                            </span>
+                        </span>
+                    </template>
+                </div>
+            </div>
         </template>
+        <slot name="pagination"></slot>
     </div>
 </template>
 
@@ -112,7 +101,7 @@ export default {
         view: {
             type: String,
             required: true,
-        }
+        },
     },
 
     beforeCreate() {},

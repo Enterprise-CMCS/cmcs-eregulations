@@ -22,18 +22,31 @@
                         <span v-else>{{ regResults.length }} results</span>
                     </div>
                     <template v-if="!regsLoading">
-                        <RegResults
-                            :base="base"
-                            :results="regResults"
-                            :search-query="searchQuery"
-                        />
+                        <RegResults :base="base" :results="regResults">
+                            <template #empty-state>
+                                <template
+                                    v-if="
+                                        regResults.length == 0 &&
+                                        totalResultsCount > 0 &&
+                                        !isLoading
+                                    "
+                                >
+                                    <SearchEmptyState
+                                        :query="searchQuery"
+                                        :show-internal-link="false"
+                                    />
+                                </template>
+                            </template>
+                        </RegResults>
                     </template>
                 </div>
                 <div class="resources-results-content">
                     <div class="search-results-count">
                         <h2>Resources</h2>
                         <span v-if="resourcesLoading">Loading...</span>
-                        <span v-else>{{ resourcesResults.length }} results</span>
+                        <span v-else
+                            >{{ resourcesResults.length }} results</span
+                        >
                     </div>
                     <template v-if="!resourcesLoading">
                         <ResourcesResults
@@ -44,7 +57,36 @@
                             :results="filteredContent"
                             :query="searchQuery"
                             view="search"
-                        />
+                        >
+                            <template #empty-state>
+                                <template
+                                    v-if="
+                                        resourcesResults.length == 0 &&
+                                        totalResultsCount > 0 &&
+                                        !isLoading
+                                    "
+                                >
+                                    <SearchEmptyState
+                                        :query="query"
+                                        :show-internal-link="false"
+                                    />
+                                </template>
+                            </template>
+                        </ResourcesResults>
+                    </template>
+                </div>
+            </div>
+            <div v-if="!isLoading" class="pagination-expand-row">
+                <div class="pagination-expand-container">
+                    <template
+                        v-if="
+                            (regResults.length > 0 &&
+                                resourcesResults.length > 0) ||
+                            (regResults.length == 0 &&
+                                resourcesResults.length == 0)
+                        "
+                    >
+                        <SearchEmptyState :show-internal-link="false" />
                     </template>
                 </div>
             </div>
@@ -67,6 +109,7 @@ import {
 import Banner from "@/components/Banner.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
 export default {
@@ -76,6 +119,7 @@ export default {
         Banner,
         RegResults,
         ResourcesResults,
+        SearchEmptyState,
         SearchInput,
     },
 
@@ -133,7 +177,9 @@ export default {
     },
 
     computed: {
-        isLoading: !this.regsLoading && !this.resourcesLoading,
+        isLoading() {
+            return this.regsLoading || this.resourcesLoading;
+        },
         filteredContent() {
             return this.resourcesResults.map((item) => {
                 const copiedItem = JSON.parse(JSON.stringify(item));
@@ -333,6 +379,16 @@ export default {
             h2 {
                 border-bottom: 2px solid $mid_blue;
             }
+        }
+    }
+
+    .pagination-expand-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        .pagination-expand-container {
+            width: 521px;
         }
     }
 }
