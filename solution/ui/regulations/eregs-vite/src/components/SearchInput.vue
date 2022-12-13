@@ -41,9 +41,7 @@
                             :key="i"
                             tabindex="0"
                             @click="synonymLink(syn)"
-                            @keydown.enter.space.prevent="
-                                synonymLink(syn)
-                            "
+                            @keydown.enter.space.prevent="synonymLink(syn)"
                             >{{ syn }}</a
                         ><span
                             v-if="synonyms[synonyms.length - 1] != syn"
@@ -167,9 +165,25 @@ export default {
 <style lang="scss">
 .search-field {
     height: 40px;
+    border-radius: 3px;
 
-    .v-input__icon.v-input__icon--append button {
+    .v-input__icon.v-input__icon--append button,
+    .v-input__icon.v-input__icon--clear button {
         color: $mid_blue;
+    }
+
+    .v-input__icon.v-input__icon--clear button {
+        padding-right: 2px;
+        border-right: 1px solid $light_gray;
+    }
+
+    fieldset {
+        border-radius: 3px;
+        border: 1px solid $light_gray;
+    }
+
+    .v-input__control .v-input__slot {
+        max-width: calc(100% - 24px);
     }
 }
 
