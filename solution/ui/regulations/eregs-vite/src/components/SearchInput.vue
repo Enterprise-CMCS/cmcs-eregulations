@@ -84,24 +84,9 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
     created() {
         this.searchInputValue = this.searchQuery;
     },
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
     data() {
         return {
             searchInputValue: undefined,

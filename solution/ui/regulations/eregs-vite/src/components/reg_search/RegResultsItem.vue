@@ -32,34 +32,6 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
-
     methods: {
         removeQuotes(string) {
             return stripQuotes(string);

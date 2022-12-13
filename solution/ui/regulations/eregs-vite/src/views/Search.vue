@@ -144,19 +144,6 @@ export default {
             this.resourcesLoading = false;
         }
     },
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
     data() {
         return {
             base:
