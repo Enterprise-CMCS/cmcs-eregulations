@@ -30,7 +30,7 @@
                 </div>
                 <div class="related-sections">
                     <span class="related-sections-title">
-                        Related Regulation<span v-if="item.locations.length > 1"
+                        Related Section<span v-if="item.locations.length > 1"
                             >s</span
                         >:
                     </span>
@@ -171,14 +171,14 @@ export default {
         .supplemental-content-date,
         .supplemental-content-title,
         .supplemental-content-description {
-            font-size: 18px;
+            font-size: $font-size-lg;
         }
     }
 }
 
 .related-sections {
     margin-bottom: 40px;
-    font-size: 12px;
+    font-size: $font-size-xs;
     color: $mid_gray;
 
     .related-sections-title {

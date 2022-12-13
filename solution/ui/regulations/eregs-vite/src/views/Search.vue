@@ -374,6 +374,44 @@ export default {
 
         .resources-results-content {
             @include common-results-styles;
+
+            .result-content-wrapper {
+                margin-bottom: 0px;
+
+                .supplemental-content {
+                    margin-bottom: 5px;
+
+                    a.supplemental-content-link {
+                        .supplemental-content-date,
+                        .supplemental-content-title,
+                        .supplemental-content-description {
+                            font-size: $font-size-md;
+                            font-weight: 400;
+                            line-height: 22px;
+                        }
+                    }
+                }
+            }
+
+            .related-sections {
+                margin-bottom: 25px;
+                font-size: $font-size-xs;
+                color: $mid_gray;
+
+                .related-sections-title {
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    color: $dark_gray;
+                }
+
+                .related-section-link {
+                    font-size: $font-size-sm;
+                }
+
+                a {
+                    text-decoration: none;
+                }
+            }
         }
 
         .search-results-count {
