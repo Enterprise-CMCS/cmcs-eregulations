@@ -342,24 +342,25 @@ export default {
     display: flex;
     flex-direction: column;
 
+    > .nav-container {
+        padding: 0 45px;
+    }
+
     .search-form {
         margin-bottom: 30px;
     }
 
     .combined-results-container {
         overflow: auto;
-        width: 100%;
         margin-bottom: 30px;
+        padding: 0 45px;
         display: flex;
         justify-content: space-between;
 
         @mixin common-results-styles {
             flex: 1;
             margin: 0 auto;
-            padding: 0 $spacer-5;
-            @include screen-xl {
-                padding: 0 $spacer-4;
-            }
+            padding: 0 45px;
             @content;
         }
 
