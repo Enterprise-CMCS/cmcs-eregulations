@@ -67,7 +67,7 @@
                                     "
                                 >
                                     <SearchEmptyState
-                                        :query="query"
+                                        :query="searchQuery"
                                         :show-internal-link="false"
                                     />
                                 </template>
@@ -86,7 +86,10 @@
                                 resourcesResults.length == 0)
                         "
                     >
-                        <SearchEmptyState :show-internal-link="false" />
+                        <SearchEmptyState
+                            :query="searchQuery"
+                            :show-internal-link="false"
+                        />
                     </template>
                 </div>
             </div>
