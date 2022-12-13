@@ -425,10 +425,6 @@ export default {
         display: flex;
         flex-direction: row;
         justify-content: center;
-
-        .pagination-expand-container {
-            width: 521px;
-        }
     }
 }
 </style>
