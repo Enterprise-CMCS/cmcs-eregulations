@@ -111,14 +111,14 @@
 
     .result {
         margin: $spacer-3 0;
+        line-height: $font-size-2xl;
 
         .results-part {
-            font-size: $font-size-sm;
+            font-size: $font-size-xs;
         }
 
         .results-section {
-            font-size: $font-size-lg;
-            margin-bottom: $spacer-1;
+            font-size: $font-size-md;
 
             a {
                 text-decoration: none;

@@ -343,7 +343,7 @@ export default {
     flex-direction: column;
 
     > .nav-container {
-        padding: 0 45px;
+        padding: 0 90px;
     }
 
     .search-form {
