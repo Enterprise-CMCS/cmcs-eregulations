@@ -152,12 +152,14 @@ export default {
     margin-bottom: 5px;
 
     .result-label {
+        display: inline-block;
         font-size: 11px;
-        display: inline;
+        width: fit-content;
         margin-right: 5px;
         background: #e3eef9;
         border-radius: 3px;
         padding: 2px 5px 3px;
+
         &.category-label {
             font-weight: 600;
         }
