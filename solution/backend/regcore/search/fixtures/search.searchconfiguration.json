@@ -1,10 +1,19 @@
 [
-{
-  "model": "search.SearchConfiguration",
-  "pk": 1,
-  "fields": {
-    "config": "SearchDensity",
-    "value": "false"
+  {
+    "model": "search.searchconfiguration",
+    "pk": 1,
+    "fields": {
+      "config": "CoverDensity",
+      "value": "true"
+    }
+  },
+  {
+    "model": "search.searchconfiguration",
+    "pk": 2,
+    "fields": {
+      "config": "EnableWebsearch",
+      "value": "true"
+    }
   }
-}
-]
+  ]
+  

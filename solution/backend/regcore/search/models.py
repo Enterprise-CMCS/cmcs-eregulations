@@ -21,12 +21,23 @@ class SearchIndexQuerySet(models.QuerySet):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
     def search(self, query):
-        search_type = "websearch"
-        cover_density = False
-        search_density = SearchConfiguration.objects.get(config="SearchDensity")
+        try:
+            enable_websearch = SearchConfiguration.objects.get(config="EnableWebsearch").value.lower() == "true"
+        except SearchConfiguration.DoesNotExist:
+            enable_websearch = False
 
-        if search_density:
-            cover_density = search_density.value.lower() == "true"
+        try:
+            cover_density = SearchConfiguration.objects.get(config="CoverDensity").value.lower() == "true"
+        except SearchConfiguration.DoesNotExist:
+            cover_density = False
+
+        if enable_websearch:
+            search_type = "websearch"
+        elif query and query.startswith('"') and query.endswith('"'):
+            search_type = "phrase"
+            cover_density = True
+        else:
+            search_type = "plain"
 
         return self\
             .annotate(rank=SearchRank(

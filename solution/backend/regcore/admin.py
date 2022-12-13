@@ -51,6 +51,5 @@ class SynonymAdmin(BaseAdmin):
 class SearchAdmin(BaseAdmin):
     admin_priority = 78
     model = SearchConfiguration
-    readonly_fields = ("config",)
     list_display = ("config", "value")
     fields = ("config", "value")
