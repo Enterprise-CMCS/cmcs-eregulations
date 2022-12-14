@@ -376,7 +376,6 @@ export default {
                         .supplemental-content-title,
                         .supplemental-content-description {
                             font-size: $font-size-md;
-                            font-weight: 400;
                             line-height: 22px;
                         }
                     }
