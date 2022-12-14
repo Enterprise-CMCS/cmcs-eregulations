@@ -210,6 +210,10 @@ export default {
         removeQuotes(string) {
             return stripQuotes(string);
         },
+        setTitle(query) {
+            const querySubString = query ? `for ${query} ` : "";
+            document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
+        },
         async retrieveRegResults(query) {
             try {
                 const response = await getRegSearchResults(query);
@@ -312,6 +316,8 @@ export default {
             // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
                 if (newParams.q !== oldParams.q) {
+                    this.setTitle(this.searchQuery);
+
                     if (_isEmpty(this.searchQuery)) {
                         this.regResults = [];
                         this.resourcesResults = [];
