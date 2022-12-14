@@ -3,11 +3,6 @@ import os
 from django.core.management import call_command
 
 
-def load_data(fixture, model):
-    if not model.objects.count():
-        call_command("loaddata", fixture)
-
-
 def handler(event, context):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
     import django
@@ -23,15 +18,24 @@ def handler(event, context):
         FederalRegisterDocument,
         ResourcesConfiguration,
     )
-
     from regcore.search.models import Synonym
 
-    load_data("resources.category.json", Category)
-    load_data("resources.subcategory.json", SubCategory)
-    load_data("resources.subpart.json", Subpart)
-    load_data("resources.section.json", Section)
-    load_data("resources.supplementalcontent.json", SupplementalContent)
-    load_data("resources.federalregisterdocumentgroup.json", FederalRegisterDocumentGroup)
-    load_data("resources.federalregisterdocument.json", FederalRegisterDocument)
-    load_data("resources.resourcesconfiguration.json", ResourcesConfiguration)
-    load_data("search.synonym.json", Synonym)
+    fixtures = [
+        ("resources.category.json", Category),
+        ("resources.subcategory.json", SubCategory),
+        ("resources.subpart.json", Subpart),
+        ("resources.section.json", Section),
+        ("resources.supplementalcontent.json", SupplementalContent),
+        ("resources.federalregisterdocumentgroup.json", FederalRegisterDocumentGroup),
+        ("resources.federalregisterdocument.json", FederalRegisterDocument),
+        ("resources.resourcesconfiguration.json", ResourcesConfiguration),
+        ("search.synonym.json", Synonym),
+    ]
+
+    # First delete all instances of models that we're populating
+    for fixture in fixtures:
+        fixture[1].objects.all().delete()
+
+    # Now load the fixtures
+    for fixture in fixtures:
+        call_command("loaddata", fixture[0])
