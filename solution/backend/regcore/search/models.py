@@ -16,11 +16,11 @@ class SearchIndexQuerySet(models.QuerySet):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
     def search(self, query):
-        search_type = "plain"
+        search_type = "websearch"
         cover_density = False
-        if query and query.startswith('"') and query.endswith('"'):
-            search_type = "phrase"
-            cover_density = True
+        # if query and query.startswith('"') and query.endswith('"'):
+        #     search_type = "phrase"
+        #     cover_density = True
 
         return self\
             .annotate(rank=SearchRank(
