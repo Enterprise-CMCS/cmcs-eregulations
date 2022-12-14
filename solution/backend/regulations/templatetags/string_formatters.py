@@ -2,7 +2,6 @@ from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.html import strip_tags
 from datetime import datetime
-from bs4 import BeautifulSoup
 
 register = template.Library()
 
@@ -74,20 +73,3 @@ def parser_success_date_formatter(success_date):
     else:
         new_date = datetime.strptime(success_date, "%Y-%m-%d %H:%M:%S")
         return new_date.strftime('%b %-d, %Y')
-
-
-@register.filter
-def stripSurroundingQuotes(quotedString):
-    if quotedString.startswith('"') and quotedString.endswith('"'):
-        return quotedString[1:-1]
-    else:
-        return quotedString
-
-
-@register.simple_tag
-@stringfilter
-def get_tag_contents(html, html_tag, class_name):
-    soup = BeautifulSoup(html, 'html.parser')
-    tag_list = soup.find_all(html_tag, attrs={'class': class_name})
-    tag_contents = map(lambda tag: tag.get_text().strip(), tag_list)
-    return ','.join(list(set(tag_contents)))
