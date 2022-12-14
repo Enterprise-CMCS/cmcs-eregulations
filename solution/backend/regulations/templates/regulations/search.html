@@ -4,84 +4,27 @@
 
 {% block title %}Search for {{ q }} | Medicaid & CHIP eRegulations{% endblock %}
 
-{% block body_class %}search-page{% endblock %}
+{% block spa_styles %}
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/vite/index.css' %}" />
+{% endblock %}
+
+{% block flash_banner %}{% endblock %}
+
+{% block pre_header %}
+    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+{% endblock %}
 
 {% block body %}
-    <div class="content">
-        <div class="flexbox search-page">
-
-            <aside tabindex="-1" class="left-sidebar match-sides" data-state="collapsed" data-state-name="left-sidebar">
-                {% include "regulations/partials/sidebar_left/title.html" %}
-            </aside>
-
-            <main class="match-middle">
-                <div class="container">
-                    <div class="search-context">This site searches Title 42, Parts 400 and 430-460</div>
-
-                    <form class="search-box" action="{% url 'search' %}">
-                        <input id="search-field" type="text" name="q" placeholder="Search Regulations" value="{{ q }}"></input>
-                        <button type="button" class="search-reset" id="search-reset" aria-label="Reset search query">
-                            <i class="fa fa-times"></i>
-                        </button>
-                        <button type="submit" class="search-submit" aria-label="Submit a search">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
-
-                    {% if unquoted_search %}
-                        <div class="search-suggestion">
-                            Didn't find what you were looking for? Try searching for
-                            <a href="{% url 'search' %}?q=%22{{ query }}%22">"{{ query }}"</a>
-                        </div>
-                    {% endif %}
-
-                    {% if synonym.filtered_synonyms.count %}
-                        <div class="search-suggestion">
-                            {% if unquoted_search %}
-                                Or search
-                            {% else %}
-                                Search
-                            {% endif %}
-                            for similar terms:
-                            {% for syn in synonym.filtered_synonyms %}
-                                <a href="{% url 'search' %}?q=%22{{ syn }}%22">{{ syn }}</a>{% if not forloop.last %},{% endif %}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                    <div class="search-results-count">{{ results | length }} results in Medicaid & CHIP Regulations</div>
-
-                    <div class="search-results">
-                        {% if results|length > 0 %}
-                            {% for result in results %}
-                                {% if result.label|length > 1 %}
-                                <div class="result">
-                                    <!--{{ result.rank }}-->
-                                    {% get_tag_contents result.headline 'span' 'search-highlight' as q_list %}
-                                    <div class="results-part">{{ result.part.document.title | title}}</div>
-                                    <div class="results-section">
-                                        <a href="{% url 'reader_view' result.part.title result.label.0 result.label.1 result.part.date %}?q={{ q_list }}#{{ result.label | join:'-' }}">
-                                            {{ result.parentHeadline | stripSurroundingQuotes | safe }}
-                                        </a>
-                                    </div>
-                                    <div class="results-preview">{{ result.headline | safe }}</div>
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                        <search-empty-state
-                            eregs_url="{% url 'resources' %}"
-                            eregs_url_label="eRegulations resource links"
-                            eregs_sublabel="subregulatory guidance and implementation resources"
-                            query="{{ query|default_if_none:'' }}"
-                        ></search-empty-state>
-                        {% endif %}
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
+<div
+    id="vite-app"
+    data-api-url="{% url 'regcore' %}"
+    data-about-url="{% url 'about' %}"
+    data-custom-url="{{ CUSTOM_URL }}"
+    data-host="{{ host }}"
+></div>
 {% endblock %}
 
 {% block post_footer %}
-    <script src="{% static '/js/main.build.js' %}"></script>
+    <script src="{% static '/vite/index.js' %}"></script>
 {% endblock %}
