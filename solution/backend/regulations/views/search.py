@@ -11,22 +11,16 @@ from .utils import get_structure, get_tag_contents
 class SearchView(TemplateView):
 
     template_name = 'regulations/search.html'
+
     def get_configs(self, config):
         config = SearchConfiguration.objects.get(config=config)
         return config
+
     def get_context_data(self, **kwargs):
-        try:
-            enable_websearch = self.get_configs("EnableWebsearch").value.lower() == "true"
-        except SearchConfiguration.DoesNotExist:
-            enable_websearch = False
-        try:
-            cover_density = self.get_configs("CoverDensity").value.lower() == "true"
-        except SearchConfiguration.DoesNotExist:
-            cover_density = False
         query = self.request.GET.get("q")
         context = super().get_context_data(**kwargs)
         today = date.today()
-        results = SearchIndex.objects.effective(today).search(query,enable_websearch, cover_density)
+        results = SearchIndex.objects.effective(today).search(query)
         results_list = []
         parts = Part.objects.effective(today)
         if not parts:

@@ -21,9 +21,6 @@ class SearchIndexQuerySet(models.QuerySet):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
     def search(self, query, enable_websearch, cover_density):
-
-
-
         search_type = "websearch"
         cover_density = True
         return self\
