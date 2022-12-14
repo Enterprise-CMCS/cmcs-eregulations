@@ -24,17 +24,8 @@ class SearchIndexQuerySet(models.QuerySet):
         config = SearchConfiguration.objects.get(config=config)
         return config
 
-    def search(self, query):
-        search_type = "plain"
-        cover_density = False
-        try:
-            enable_websearch = self.get_configs("EnableWebsearch").value.lower() == "true"
-        except SearchConfiguration.DoesNotExist:
-            enable_websearch = False
-        try:
-            cover_density = self.get_configs("CoverDensity").value.lower() == "true"
-        except SearchConfiguration.DoesNotExist:
-            cover_density = False
+    def search(self, query, enable_websearch, cover_density):
+
 
         if enable_websearch:
             search_type = "websearch"
