@@ -19,7 +19,7 @@ class V3SearchView(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
-        return SearchIndex.objects.effective(date.today()).search(query,enable_websearch, cover_density).annotate(
+        return SearchIndex.objects.effective(date.today()).search(query).annotate(
             part_title=F("part__title"),
             part_document_title=F("part__document__title"),
             date=F("part__date"),

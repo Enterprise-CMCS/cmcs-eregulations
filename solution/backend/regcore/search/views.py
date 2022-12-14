@@ -5,7 +5,7 @@ from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVe
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 from regcore.models import Part
-from .models import SearchIndex, SearchConfiguration
+from .models import SearchIndex
 
 from resources.models import AbstractResource
 from resources.serializers import FlatSupplementalContentSerializer
@@ -28,34 +28,23 @@ class SearchViewSerializer(serializers.ModelSerializer):
     )
 class SearchView(generics.ListAPIView):
     serializer_class = SearchViewSerializer
-    def get_configs(self, config):
-        config = SearchConfiguration.objects.get(config=config)
-        return config
-    def get_queryset(self):
-        try:
-            enable_websearch = self.get_configs("EnableWebsearch").value.lower() == "true"
-        except SearchConfiguration.DoesNotExist:
-            enable_websearch = False
-        try:
-            cover_density = self.get_configs("CoverDensity").value.lower() == "true"
-        except SearchConfiguration.DoesNotExist:
-            cover_density = False
 
+    def get_queryset(self):
         q = self.request.query_params.get("q")
         return SearchIndex.objects\
             .filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))\
-            .filter(search_vector=SearchQuery(q,enable_websearch, cover_density))\
-            .annotate(rank=SearchRank("search_vector", SearchQuery(q,enable_websearch, cover_density)))\
+            .filter(search_vector=SearchQuery(q))\
+            .annotate(rank=SearchRank("search_vector", SearchQuery(q)))\
             .annotate(
                 headline=SearchHeadline(
                     "content",
-                    SearchQuery(q,enable_websearch, cover_density),
+                    SearchQuery(q),
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
                 ),
                 parentHeadline=SearchHeadline(
                     "parent__title",
-                    SearchQuery(q,enable_websearch, cover_density),
+                    SearchQuery(q),
                     start_sel="<span class='search-highlight'>",
                     stop_sel='</span>',
                 ),

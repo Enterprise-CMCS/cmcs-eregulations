@@ -20,21 +20,12 @@ class SearchIndexQuerySet(models.QuerySet):
     def effective(self, date):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
-    def get_configs(self, config):
-        config = SearchConfiguration.objects.get(config=config)
-        return config
-
     def search(self, query, enable_websearch, cover_density):
 
 
-        if enable_websearch:
-            search_type = "websearch"
-        elif query and query.startswith('"') and query.endswith('"'):
-            search_type = "phrase"
-            cover_density = True
-        else:
-            search_type = "plain"
 
+        search_type = "websearch"
+        cover_density = True
         return self\
             .annotate(rank=SearchRank(
                 SearchVector('label', weight='A', config='english')
