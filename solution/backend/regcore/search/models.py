@@ -20,15 +20,19 @@ class SearchIndexQuerySet(models.QuerySet):
     def effective(self, date):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
+    def get_configs(self, config):
+        config = SearchConfiguration.objects.get(config=config)
+        return config
+
     def search(self, query):
         search_type = "plain"
         cover_density = False
         try:
-            enable_websearch = SearchConfiguration.objects.get(config="EnableWebsearch").value.lower() == "true"
+            enable_websearch = self.get_configs("EnableWebsearch").value.lower() == "true"
         except SearchConfiguration.DoesNotExist:
             enable_websearch = False
         try:
-            cover_density = SearchConfiguration.objects.get(config="CoverDensity").value.lower() == "true"
+            cover_density = self.get_configs("CoverDensity").value.lower() == "true"
         except SearchConfiguration.DoesNotExist:
             cover_density = False
 
