@@ -23,22 +23,22 @@ class SearchIndexQuerySet(models.QuerySet):
     def search(self, query):
         search_type = "plain"
         cover_density = False
-        # try:
-        #     enable_websearch = SearchConfiguration.objects.get(config="EnableWebsearch").value.lower() == "true"
-        # except SearchConfiguration.DoesNotExist:
-        #     enable_websearch = False
-        # try:
-        #     cover_density = SearchConfiguration.objects.get(config="CoverDensity").value.lower() == "true"
-        # except SearchConfiguration.DoesNotExist:
-        #     cover_density = False
+        try:
+            enable_websearch = SearchConfiguration.objects.get(config="EnableWebsearch").value.lower() == "true"
+        except SearchConfiguration.DoesNotExist:
+            enable_websearch = False
+        try:
+            cover_density = SearchConfiguration.objects.get(config="CoverDensity").value.lower() == "true"
+        except SearchConfiguration.DoesNotExist:
+            cover_density = False
 
-        # if enable_websearch:
-        #     search_type = "websearch"
-        # elif query and query.startswith('"') and query.endswith('"'):
-        #     search_type = "phrase"
-        #     cover_density = True
-        # else:
-        #     search_type = "plain"
+        if enable_websearch:
+            search_type = "websearch"
+        elif query and query.startswith('"') and query.endswith('"'):
+            search_type = "phrase"
+            cover_density = True
+        else:
+            search_type = "plain"
 
         return self\
             .annotate(rank=SearchRank(
