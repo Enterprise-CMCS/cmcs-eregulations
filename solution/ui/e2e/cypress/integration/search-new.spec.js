@@ -1,6 +1,6 @@
-const SEARCH_TERM = "telemedicine";
+const SEARCH_TERM = "FMAP";
 
-describe.skip("Search flow", () => {
+describe("Search flow", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
@@ -36,27 +36,42 @@ describe.skip("Search flow", () => {
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.findByText(/\d+ results in Medicaid & CHIP Regulations/).should(
-            "be.visible"
+        cy.get(".reg-results-content .search-results-count > h2").should(
+            "have.text",
+            "Regulations"
         );
+        cy.get(
+            ".reg-results-content .search-results-count > span"
+        ).should("be.visible");
+        cy.get(".resources-results-content .search-results-count > h2").should(
+            "have.text",
+            "Resources"
+        );
+        cy.get(
+            ".resources-results-content .search-results-count > span"
+        ).should("be.visible");
         cy.findByRole("link", {
-            name: "§ 441.535 Assessment of functional need.",
+            name: "§ 433.400 Continued enrollment for temporary FMAP increase.",
         })
             .should("be.visible")
             .and("have.attr", "href");
         cy.findByRole("link", {
-            name: "§ 441.535 Assessment of functional need.",
+            name: "§ 433.400 Continued enrollment for temporary FMAP increase.",
         }).click({ force: true });
         cy.url().should(
             "include",
-            `42/441/Subpart-K/2021-11-05/?highlight=${SEARCH_TERM}#441-535`
+            `42/433/Subpart-G/2021-03-01/?highlight=${SEARCH_TERM}#433-400`
         );
         cy.focused().then(($el) => {
-            cy.get($el).should("have.id", "441-535");
+            cy.get($el).should("have.id", "433-400");
             cy.get($el).within(($focusedEl) => {
                 cy.get("mark.highlight")
                     .contains(`${SEARCH_TERM}`)
-                    .should("have.css", "background-color", "rgb(252, 229, 175)");
+                    .should(
+                        "have.css",
+                        "background-color",
+                        "rgb(252, 229, 175)"
+                    );
             });
         });
     });
@@ -74,15 +89,19 @@ describe.skip("Search flow", () => {
         cy.findByRole("textbox")
             .should("be.visible")
             .type("test", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({ force: true });
-        cy.url().should("include", "/search/?q=test");
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.url().should("include", "/search?q=test");
     });
 
     it("should be able to clear the searchbox", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
 
-        cy.get(".search-field .v-input__icon--clear button").click({ force: true });
+        cy.get(".search-field .v-input__icon--clear button").click({
+            force: true,
+        });
 
         cy.findByRole("textbox")
             .should("be.visible")
@@ -92,7 +111,9 @@ describe.skip("Search flow", () => {
             .should("be.visible")
             .should("have.value", "test");
 
-        cy.get(".search-field .v-input__icon--clear button").click({ force: true });
+        cy.get(".search-field .v-input__icon--clear button").click({
+            force: true,
+        });
 
         cy.findByRole("textbox").should("have.value", "");
     });

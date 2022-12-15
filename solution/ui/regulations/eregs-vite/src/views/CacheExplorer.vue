@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="cache-explorer">
         CACHE EXPLORER
         <ul>
             <li v-for="key in cacheKeys" :key="key">
@@ -111,14 +111,16 @@ export default {
 };
 </script>
 
-<style>
-.button {
-    margin: 7px;
+<style lang="scss">
+.cache-explorer {
+    .button {
+        margin: 7px;
+    }
+    .v-divider {
+        margin: 10px;
+    }
+     .v-input__slot {
+        max-width: 90%;
+     }
 }
-.v-divider {
-    margin: 10px;
-}
- .v-input__slot {
-    max-width: 90%;
- }
 </style>
