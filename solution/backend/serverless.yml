@@ -133,6 +133,8 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
+                         - blockPublicAccess: true
+
 
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup

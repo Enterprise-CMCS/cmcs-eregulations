@@ -152,6 +152,8 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
+                         - blockPublicAccess: true
+
 
 plugins:
   - serverless-wsgi
