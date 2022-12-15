@@ -7,7 +7,7 @@ describe("Search flow", () => {
         });
     });
 
-    it("shows up on the homepage on desktop", () => {
+    it.skip("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".search-header > form > input")
@@ -18,7 +18,7 @@ describe("Search flow", () => {
         cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
     });
 
-    it("shows when mobile search open icon is clicked", () => {
+    it.skip("shows when mobile search open icon is clicked", () => {
         cy.viewport("iphone-x");
         cy.visit("/42/430/");
         cy.get("button#mobile-search-open")
@@ -33,7 +33,7 @@ describe("Search flow", () => {
         cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
     });
 
-    it("displays results of the search and highlights search term in regulation text", () => {
+    it.skip("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.findByText(/\d+ results in Medicaid & CHIP Regulations/).should(
@@ -61,14 +61,14 @@ describe("Search flow", () => {
         });
     });
 
-    it("checks a11y for search page", () => {
+    it.skip("checks a11y for search page", () => {
         cy.viewport("macbook-15");
         cy.visit("/search/?q=FMAP", { timeout: 60000 });
         cy.injectAxe();
         cy.checkAccessibility();
     });
 
-    it("should have a working searchbox", () => {
+    it.skip("should have a working searchbox", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.scrollTo("top");
@@ -80,7 +80,7 @@ describe("Search flow", () => {
         cy.url().should("include", "/search/?q=test");
     });
 
-    it("should be able to clear the searchbox", () => {
+    it.skip("should be able to clear the searchbox", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.scrollTo("top");
