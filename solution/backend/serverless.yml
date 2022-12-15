@@ -62,6 +62,7 @@ functions:
     events:
       - http: ANY /
       - http: ANY {proxy+}
+    timeout: 10
   reg_core_migrate:
     handler: migrate.handler
     layers:
