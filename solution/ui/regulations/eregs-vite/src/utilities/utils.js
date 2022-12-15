@@ -138,38 +138,37 @@ function removeQueryParams(location, keys) {
 }
 
 function getCategoryTree(categories) {
-    let catOptions = []
-    let categoryDict = {}
+    let catOptions = [];
+    let categoryDict = {};
     for (let category in categories) {
         let cat = categories[category];
         if (cat.object_type === "subcategory") {
             if (cat.parent.name in categoryDict) {
-                categoryDict[cat.parent.name].children.push(
-                    { id: cat.name, label: cat.name }
-                );
+                categoryDict[cat.parent.name].children.push({
+                    id: cat.name,
+                    label: cat.name,
+                });
             } else {
                 categoryDict[cat.parent.name] = {
                     id: cat.parent.name,
                     label: cat.parent.name,
-                    children: [{ id: cat.name, label: cat.name }]
-                }
-
+                    children: [{ id: cat.name, label: cat.name }],
+                };
             }
         } else if (!(cat.name in categoryDict)) {
             categoryDict[cat.name] = {
                 id: cat.name,
                 label: cat.name,
-                children: []
-            }
+                children: [],
+            };
         }
-
     }
 
     for (let category in categoryDict) {
         if (categoryDict[category].children.length === 0) {
-            delete categoryDict[category].children
+            delete categoryDict[category].children;
         }
-        catOptions.push(categoryDict[category])
+        catOptions.push(categoryDict[category]);
     }
 
     return catOptions;
@@ -422,16 +421,16 @@ const getKebabDate = (date = new Date()) => {
 const getKebabLabel = (label) => {
     if (!label) return "na-label";
     return `${label.join("-")}`;
-}
+};
 
 const getKebabTitle = (label) => {
     return `${getKebabLabel(label)}-title`;
-}
+};
 
-const getDisplayName = (label, title= 42) =>{
-        if (!label) return "na-label";
+const getDisplayName = (label, title = 42) => {
+    if (!label) return "na-label";
     return `${title} ${label.join(".")}`;
-}
+};
 
 // lifted straight from django pdepth templatetag
 const getParagraphDepth = (value) => {
@@ -449,7 +448,7 @@ const getParagraphDepth = (value) => {
     if (depth < 1) return 1;
 
     return depth;
-}
+};
 
 function capitalizeFirstLetter(string) {
     return string[0].toUpperCase() + string.slice(1);
@@ -461,9 +460,32 @@ function capitalizeFirstLetter(string) {
  * @returns {Array<number>} - array containing sequential numbers beginning with 1
  */
 const createOneIndexedArray = (length) => {
-    return Array.from({length}, (_, i) => i + 1)
-}
+    return Array.from({ length }, (_, i) => i + 1);
+};
 
+/**
+ * @param string {string} - string with surrounding quotes
+ * @returns {string} - string with surrounding quotes removed
+ */
+const stripQuotes = (string) => {
+    return string.replace(/(^")|("$)/g, "");
+};
+
+/**
+ * @param htmlString {string} - string of HTML markup
+ * @param tagClass {string} - class to identify target HTML tag
+ * @returns {string} - comma-separated string of unique highlight terms
+ */
+const getTagContent = (htmlString, tagClass) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, "text/html");
+    const highlightCollection = doc.getElementsByClassName(tagClass);
+    const highlightTermsArray = [...highlightCollection].map((highlightEl) => {
+        return highlightEl.innerHTML;
+    });
+    const uniqTermsArray = Array.from(new Set(highlightTermsArray));
+    return uniqTermsArray.join(",");
+};
 
 export {
     mapToArray,
@@ -497,4 +519,6 @@ export {
     getCategoryTree,
     capitalizeFirstLetter,
     createOneIndexedArray,
+    stripQuotes,
+    getTagContent,
 };

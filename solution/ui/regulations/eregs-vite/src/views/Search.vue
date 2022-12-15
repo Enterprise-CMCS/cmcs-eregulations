@@ -2,104 +2,94 @@
     <body class="ds-base search-page">
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
-                <template #description>
-                    <p>This site searches Title 42, Parts 400 and 430-460</p>
-                </template>
                 <template #input>
-                    <form class="search-form" @submit.prevent="executeSearch">
-                        <v-text-field
-                            id="main-content"
-                            :value="searchInputValue"
-                            outlined
-                            flat
-                            solo
-                            clearable
-                            label="Search Regulations"
-                            aria-label="Search Regulations"
-                            type="text"
-                            class="search-field shrink"
-                            append-icon="mdi-magnify"
-                            hide-details
-                            dense
-                            @input="updateSearchValue"
-                            @click:append="executeSearch"
-                            @click:clear="clearSearchQuery"
-                        />
-                        <div class="form-helper-text">
-                            <template v-if="unquotedSearch">
-                                <div class="search-suggestion">
-                                    Didn't find what you were looking for? Try
-                                    searching for
-                                    <a
-                                        :href="
-                                            createSynonymQuotedLink(query, base)
-                                        "
-                                        >"{{ query }}"</a
-                                    >
-                                </div>
-                            </template>
-                            <template v-if="synonyms.length > 0">
-                                <div class="search-suggestion">
-                                    <span v-if="unquotedSearch">
-                                        Or search
-                                    </span>
-                                    <span v-else> Search </span>
-                                    for similar terms:
-                                    <template v-for="(syn, i) in synonyms">
-                                        <a
-                                            :key="i"
-                                            :href="
-                                                createSynonymQuotedLink(
-                                                    syn,
-                                                    base
-                                                )
-                                            "
-                                            >{{ syn }}</a
-                                        ><span
-                                            v-if="
-                                                synonyms.length > 1 &&
-                                                i + 1 < synonyms.length
-                                            "
-                                            :key="i"
-                                            >,
-                                        </span>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-                    </form>
+                    <SearchInput
+                        form-class="search-form"
+                        label="Search Regulations"
+                        page="search"
+                        :search-query="searchQuery"
+                        :synonyms="synonyms"
+                        @execute-search="executeSearch"
+                        @clear-form="clearSearchQuery"
+                    />
                 </template>
             </Banner>
-            <div class="results-container">
-                <div class="results-content">
+            <div class="combined-results-container">
+                <div class="reg-results-content">
                     <div class="search-results-count">
-                        {{ results.length }} results in Medicaid & CHIP
-                        Regulations
+                        <h2>Regulations</h2>
+                        <span v-if="regsLoading">Loading...</span>
+                        <span v-else>{{ regResults.length }} results</span>
                     </div>
-                    <template v-if="results.length == 0">
-                        <SearchEmptyState
-                            :eregs_url="createRegulationsSearchUrl(base)"
-                            eregs_url_label="eRegulations resource links"
-                            eregs_sublabel="subregulatory guidance and implementation resources"
-                            :query="query"
-                        />
+                    <template v-if="!regsLoading">
+                        <RegResults :base="base" :results="regResults">
+                            <template #empty-state>
+                                <template
+                                    v-if="
+                                        regResults.length == 0 &&
+                                        totalResultsCount > 0 &&
+                                        !isLoading
+                                    "
+                                >
+                                    <SearchEmptyState
+                                        :query="searchQuery"
+                                        :show-internal-link="false"
+                                    />
+                                </template>
+                            </template>
+                        </RegResults>
                     </template>
-                    <template v-for="(result, i) in results" v-else>
-                        <div :key="i" class="result">
-                            <div class="results-part">
-                                {{ result.part_document_title }}
-                            </div>
-                            <div class="results-section">
-                                <a
-                                    :href="createResultLink(result, base)"
-                                    v-html="stripQuotes(result.parentHeadline)"
-                                />
-                            </div>
-                            <div
-                                class="results-preview"
-                                v-html="result.headline"
-                            />
-                        </div>
+                </div>
+                <div class="resources-results-content">
+                    <div class="search-results-count">
+                        <h2>Resources</h2>
+                        <span v-if="resourcesLoading">Loading...</span>
+                        <span v-else
+                            >{{ resourcesResults.length }} results</span
+                        >
+                    </div>
+                    <template v-if="!resourcesLoading">
+                        <ResourcesResults
+                            :base="base"
+                            :count="resourcesResults.length"
+                            :parts-last-updated="partsLastUpdated"
+                            :parts-list="partsList"
+                            :results="filteredContent"
+                            :query="searchQuery"
+                            view="search"
+                        >
+                            <template #empty-state>
+                                <template
+                                    v-if="
+                                        resourcesResults.length == 0 &&
+                                        totalResultsCount > 0 &&
+                                        !isLoading
+                                    "
+                                >
+                                    <SearchEmptyState
+                                        :query="searchQuery"
+                                        :show-internal-link="false"
+                                    />
+                                </template>
+                            </template>
+                        </ResourcesResults>
+                    </template>
+                </div>
+            </div>
+            <div v-if="!isLoading" class="pagination-expand-row">
+                <div class="pagination-expand-container">
+                    <template
+                        v-if="
+                            (regResults.length > 0 &&
+                                resourcesResults.length > 0) ||
+                            (regResults.length == 0 &&
+                                resourcesResults.length == 0)
+                        "
+                    >
+                        <SearchEmptyState
+                            :query="searchQuery"
+                            :show-internal-link="false"
+                        />
                     </template>
                 </div>
             </div>
@@ -108,110 +98,236 @@
 </template>
 
 <script>
-import _isNull from "lodash/isNull";
+import _isEmpty from "lodash/isEmpty";
+
+import { stripQuotes } from "@/utilities/utils";
+import {
+    getFormattedPartsList,
+    getLastUpdatedDates,
+    getRegSearchResults,
+    getSupplementalContentV3,
+    getSynonyms,
+} from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
+import RegResults from "@/components/reg_search/RegResults.vue";
+import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import SearchInput from "@/components/SearchInput.vue";
 
 export default {
     name: "SearchView",
 
     components: {
         Banner,
+        RegResults,
+        ResourcesResults,
         SearchEmptyState,
+        SearchInput,
     },
 
     props: {},
 
     beforeCreate() {},
 
-    created() {},
+    async created() {
+        if (this.searchQuery) {
+            await Promise.allSettled([
+                this.getPartLastUpdatedDates(),
+                getFormattedPartsList(),
+            ]).then((data) => {
+                // eslint-disable-next-line
+                this.partsList = data[1].value;
+            });
 
-    beforeMount() {},
-
-    mounted() {
-        this.synonyms = this.getSynonyms();
-        this.unquotedSearch = this.getUnquotedSearch();
-        this.results = this.getResults();
-        this.query = this.getQuery();
-        this.searchInputValue = this.getQuery();
+            this.retrieveSynonyms(this.searchQuery);
+            this.retrieveAllResults(this.searchQuery);
+        } else {
+            this.regsLoading = false;
+            this.resourcesLoading = false;
+        }
     },
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
     data() {
         return {
             base:
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
-            query: "",
-            results: [],
+            regsLoading: true,
+            resourcesLoading: true,
+            partsLastUpdated: {},
+            partsList: [],
+            queryParams: this.$route.query,
+            regResults: [],
+            resourcesResults: [],
+            searchInputValue: undefined,
             synonyms: [],
             unquotedSearch: false,
-            searchInputValue: "",
         };
     },
 
-    computed: {},
+    computed: {
+        isLoading() {
+            return this.regsLoading || this.resourcesLoading;
+        },
+        filteredContent() {
+            return this.resourcesResults.map((item) => {
+                const copiedItem = JSON.parse(JSON.stringify(item));
+                copiedItem.locations = item.locations.filter(
+                    (location) => this.partsLastUpdated[location.part]
+                );
+                return copiedItem;
+            });
+        },
+        searchQuery: {
+            get() {
+                return this.queryParams.q || undefined;
+            },
+            set(value) {
+                this.searchInputValue = value;
+            },
+        },
+        multiWordQuery() {
+            if (this.searchQuery === undefined) return false;
+
+            return (
+                this.searchQuery.split(" ").length > 1 &&
+                this.searchQuery[0] !== '"' &&
+                this.searchQuery[this.searchQuery.length - 1] !== '"'
+            );
+        },
+        totalResultsCount() {
+            return this.regResults.length + this.resourcesResults.length;
+        },
+        regCountLabel() {
+            return this.totalResultsCount > 0
+                ? "results"
+                : "results in Regulations or Resources";
+        },
+    },
 
     methods: {
-        getQuery() {
-            if (!document.getElementById("query")) return "";
-
-            return JSON.parse(document.getElementById("query").textContent);
+        removeQuotes(string) {
+            return stripQuotes(string);
         },
-        getResults() {
-            if (!document.getElementById("results_list")) return [];
-
-            return JSON.parse(
-                document.getElementById("results_list").textContent
-            );
+        setTitle(query) {
+            const querySubString = query ? `for ${query} ` : "";
+            document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
         },
-        getSynonyms() {
-            if (!document.getElementById("synonym_list")) return [];
-
-            return JSON.parse(
-                document.getElementById("synonym_list").textContent
-            );
-        },
-        getUnquotedSearch() {
-            if (!document.getElementById("unquoted_search")) return false;
-
-            return JSON.parse(
-                document.getElementById("unquoted_search").textContent
-            );
-        },
-        stripQuotes(string) {
-            return string.replace(/(^")|("$)/g, "");
-        },
-        createResultLink(props, base) {
-            return `${base}/${props.part_title}/${props.label[0]}/${
-                props.label[1]
-            }/${props.date}/?q=${props.q_list}#${props.label.join("-")}`;
-        },
-        createSynonymQuotedLink(val, base) {
-            return `${base}/search/?q=%22${val}%22`;
-        },
-        createRegulationsSearchUrl(base) {
-            return `${base}/search/`;
-        },
-        updateSearchValue(value) {
-            this.searchInputValue = value;
-        },
-        executeSearch() {
-            if (!_isNull(this.searchInputValue)) {
-                window.location.href = `${this.base}/search/?q=${this.searchInputValue}`;
+        async retrieveRegResults(query) {
+            try {
+                const response = await getRegSearchResults(query);
+                this.regResults = response?.results ?? [];
+            } catch (error) {
+                console.error(
+                    "Error retrieving regulation search results: ",
+                    error
+                );
+                this.regResults = [];
             }
         },
+        async retrieveResourcesResults(query) {
+            try {
+                const response = await getSupplementalContentV3({
+                    partDict: "all",
+                    q: query,
+                    fr_grouping: false,
+                });
+                this.resourcesResults = response?.results ?? [];
+            } catch (error) {
+                console.error(
+                    "Error retrieving regulation search results: ",
+                    error
+                );
+                this.resourcesResults = [];
+            }
+        },
+        async retrieveAllResults(query) {
+            if (!query) {
+                this.regResults = [];
+                this.resourcesResults = [];
+
+                return;
+            }
+
+            this.regsLoading = true;
+            this.resourcesLoading = true;
+
+            this.retrieveResourcesResults(query).then(() => {
+                this.resourcesLoading = false;
+            });
+
+            this.retrieveRegResults(query).then(() => {
+                this.regsLoading = false;
+            });
+        },
+        async retrieveSynonyms(query) {
+            this.synonyms = [];
+
+            if (!query) {
+                return;
+            }
+
+            try {
+                const synonyms = await getSynonyms(this.removeQuotes(query));
+
+                const activeSynonyms = synonyms.map((word) =>
+                    word.synonyms
+                        .filter((synonym) => synonym.isActive === true)
+                        .map((synonym) => synonym.baseWord)
+                )[0];
+
+                this.synonyms = activeSynonyms ?? [];
+            } catch (error) {
+                console.error("Error retrieving synonyms");
+                this.synonyms = [];
+            }
+        },
+        async getPartLastUpdatedDates() {
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
+        },
+        executeSearch(payload) {
+            this.synonyms = [];
+            this.$router.push({
+                name: "search",
+                query: {
+                    q: payload.query,
+                },
+            });
+        },
         clearSearchQuery() {
-            this.searchInputValue = "";
+            this.synonyms = [];
+            this.$router.push({
+                name: "search",
+                query: {
+                    q: undefined,
+                },
+            });
+        },
+    },
+
+    watch: {
+        "$route.query": {
+            async handler(toQueries) {
+                this.queryParams = toQueries;
+            },
+        },
+        queryParams: {
+            // beware, some yucky code ahead...
+            async handler(newParams, oldParams) {
+                if (newParams.q !== oldParams.q) {
+                    this.setTitle(this.searchQuery);
+
+                    if (_isEmpty(this.searchQuery)) {
+                        this.regResults = [];
+                        this.resourcesResults = [];
+                        return;
+                    }
+
+                    this.retrieveSynonyms(this.searchQuery);
+                    this.retrieveAllResults(this.searchQuery);
+                }
+            },
         },
     },
 };
@@ -222,39 +338,89 @@ export default {
     display: flex;
     flex-direction: column;
 
+    > .nav-container {
+        padding: 0 90px;
+    }
+
     .search-form {
         margin-bottom: 30px;
+    }
 
-        .search-field {
-            height: 40px;
+    .combined-results-container {
+        overflow: auto;
+        margin-bottom: 30px;
+        padding: 0 45px;
+        display: flex;
+        justify-content: space-between;
 
-            .v-input__icon.v-input__icon--append button {
-                color: $mid_blue;
+        @mixin common-results-styles {
+            flex: 1;
+            margin: 0 auto;
+            padding: 0 45px;
+            @content;
+        }
+
+        .reg-results-content {
+            @include common-results-styles {
+                .result {
+                    margin-top: 0px;
+                }
             }
         }
 
-        .form-helper-text {
-            margin-top: 10px;
+        .resources-results-content {
+            @include common-results-styles;
+
+            .result-content-wrapper {
+                margin-bottom: 0px;
+
+                .supplemental-content {
+                    margin-bottom: 5px;
+
+                    a.supplemental-content-link {
+                        .supplemental-content-date,
+                        .supplemental-content-title,
+                        .supplemental-content-description {
+                            font-size: $font-size-md;
+                            line-height: 22px;
+                        }
+                    }
+                }
+            }
+
+            .related-sections {
+                margin-bottom: 25px;
+                font-size: $font-size-xs;
+                color: $mid_gray;
+
+                .related-sections-title {
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    color: $dark_gray;
+                }
+
+                .related-section-link {
+                    font-size: $font-size-sm;
+                }
+
+                a {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        .search-results-count {
+            h2 {
+                border-bottom: 2px solid $mid_blue;
+            }
         }
     }
 
-    .results-container {
-        overflow: auto;
-        width: 100%;
-        margin-bottom: 30px;
-
-        .results-content {
-            max-width: $text-max-width;
-            margin: 0 auto;
-            padding: 0 $spacer-5;
-            @include screen-xl {
-                padding: 0 $spacer-4;
-            }
-
-            .result {
-                margin-top: 0px;
-            }
-        }
+    .pagination-expand-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 100px;
     }
 }
 </style>
