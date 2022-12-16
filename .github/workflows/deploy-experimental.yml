@@ -263,8 +263,6 @@ jobs:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
             :sparkles: See the Django Site [in action][1] :sparkles:
-            :sparkles: See this Prototype Site [in action][2] :sparkles:
-            :sparkles: See Storybook [in action][3] :sparkles:
             
             [1]: ${{ env.django_url }}
           reactions: '+1'
