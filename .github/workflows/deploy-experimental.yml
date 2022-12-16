@@ -128,76 +128,6 @@ jobs:
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
           popd
 
-  deploy-prototype:
-    environment:
-      name: "dev"
-    runs-on: ubuntu-20.04
-    needs: deploy-django
-    outputs:
-      url: ${{ steps.deploy-prototype.outputs.url }}
-    steps:
-      # Checkout the code
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # should build first and save the artifact
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.x'
-      # Setup AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-      # build the static assets for the website
-      - name: build vue assets
-        id: build-vue-assets
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-          VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-        run: |
-          pushd solution/ui/prototype
-          npm ci
-          npm install serverless -g
-          npm run build
-          popd
-      # build storybook
-      - name: build storybook
-        id: build-storybook
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-          VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-        run: |
-          pushd solution/ui/regulations
-          npm ci
-          npm run css-deploy
-          npm run build-storybook
-          mkdir ../prototype/dist/storybook/
-          cp -r storybook-static/* ../prototype/dist/storybook/
-          popd
-      # deploy assets to S3
-      - name: deploy prototype
-        id: deploy-prototype
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-          VUE_APP_API_URL: ${{ needs.deploy-django.outputs.url }}
-        run: |
-          pushd solution/ui/prototype
-          npm install serverless -g
-          serverless deploy --stage dev${PR}
-          echo "::set-output name=url::$(serverless info --stage dev${PR} --verbose | grep StaticURL | cut -c 14-)"
-          popd
-
   build-and-deploy-vue:
     environment:
       name: "dev"
@@ -316,7 +246,7 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-20.04
-    needs: [deploy-go, deploy-django, deploy-prototype]
+    needs: [deploy-go, deploy-django]
     steps:
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -329,7 +259,6 @@ jobs:
         uses: peter-evans/create-or-update-comment@v1
         env:
           django_url: ${{ needs.deploy-django.outputs.url }}
-          prototype_url: ${{ needs.deploy-prototype.outputs.url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
@@ -338,8 +267,6 @@ jobs:
             :sparkles: See Storybook [in action][3] :sparkles:
             
             [1]: ${{ env.django_url }}
-            [2]: ${{ env.prototype_url }}
-            [3]: ${{ env.prototype_url }}/storybook/index.html
           reactions: '+1'
   test-cypress:
     needs: [deploy-go, deploy-django, build-and-deploy-vue]
