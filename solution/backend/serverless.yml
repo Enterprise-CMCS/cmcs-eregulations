@@ -29,7 +29,8 @@ provider:
     subnetIds:
       - ${ssm:/account_vars/vpc/subnets/private/a/id}
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
-
+  deploymentBucket:
+    blockPublicAccess: true
 package:
   individually: false
   exclude:
@@ -62,6 +63,7 @@ functions:
     events:
       - http: ANY /
       - http: ANY {proxy+}
+    timeout: 10
   reg_core_migrate:
     handler: migrate.handler
     layers:

@@ -13,5 +13,4 @@ django-cors-headers
 drf-spectacular==0.24.2
 django-model-utils
 django-jsonform
-beautifulsoup4
 django-csp

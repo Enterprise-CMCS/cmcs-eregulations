@@ -448,11 +448,54 @@ const getHomepageStructure = async () => {
  *
  * Fetches all_parts and returns a list of those parts by name
  *
- * @returns {Array[string]} - a list pf parts for title 42
+ * @returns {Array<string>} - a list pf parts for title 42
  */
 const getPartsList = async () => {
     const allParts = await getAllParts()
     return allParts.map(d => d.name)
+}
+
+/**
+ *
+ * Fetches and formats list of parts to be used as dictionary
+ * to create links to reg text in "related sections" part of
+ * resources result item
+ *
+ * @returns {Array<{label: string, identifier: string, section: <Object>}>}
+ */
+const getFormattedPartsList = async () => {
+    const TOC = await getTOC();
+    const partsList = TOC[0].children[0].children
+        .map((subChapter) =>
+            subChapter.children.map((part) => ({
+                label: part.label,
+                name: part.identifier[0],
+            }))
+        )
+        .flat(1);
+
+    const formattedPartsList = await Promise.all(
+        partsList.map(async (part) => {
+            const newPart = JSON.parse(JSON.stringify(part));
+            const PartToc = await getPartTOC(42, part.name);
+            const sections = {};
+            PartToc.children
+                .filter((TOCpart) => TOCpart.type === "subpart")
+                .forEach((subpart) => {
+                    subpart.children
+                        .filter((section) => section.type === "section")
+                        .forEach((c) => {
+                            sections[
+                                c.identifier[c.identifier.length - 1]
+                            ] = c.parent[0];
+                        });
+                });
+            newPart.sections = sections;
+            return newPart;
+        })
+    );
+
+    return formattedPartsList;
 }
 
 const getPartsDetails = async () => {
@@ -703,6 +746,14 @@ const getSupplementalContent = async (
     return result;
 };
 
+/**
+ *
+ */
+const getRegSearchResults = async (q = "") => {
+    const response = await httpApiGetV3(`search?q=${q}`);
+    return response;
+};
+
 // todo: make these JS style camel case
 const getSupplementalContentV3 = async (
     {
@@ -760,37 +811,6 @@ const getSupplementalContentV3 = async (
     return response;
 
 }
-/**
- *
- * @param title {string} - The requested title, defaults to 42
- * @param part {string} - The part of the title
- * @param sections {Array[string]} - a list of the sections desired ([1,2,3...)
- * @param subparts {Array[string]} - a list of the subparts desired (subpart=A&subpart=B...)
- * @param q {string} - a word or phrase on which to search ("therapy")
- * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
- */
-const getSupplementalContentNew = async (
-    title,
-    part,
-    sections = [],
-    subparts = [],
-    start = 0,
-    max_results = 10000,
-    q = "",
-) => {
-    const queryString = q ? `&q=${q}` : "";
-    let sString = "";
-    sections.forEach(s => {
-        sString = `${sString  }&sections=${  sections[s]}`;
-    })
-    subparts.forEach(sp => {
-        sString = `${sString  }&subparts=${  subparts[sp]}`;
-    })
-    sString = `${sString  }&start=${  start  }&max_results=${max_results}${queryString}`;
-    return httpApiGet(
-        `title/${title}/part/${part}/supplemental_content?${sString}`
-    );
-};
 
 const getSupIDByLocations = async () => {
     const result = await httpApiGet('locations');
@@ -875,8 +895,8 @@ export {
     getCacheItem,
     setCacheItem,
     getSupplementalContent,
-    getSupplementalContentNew,
     getPartsList,
+    getFormattedPartsList,
     getSectionsForSubPart,
     getSectionObjects,
     getSupplementalContentCountForPart,
@@ -894,5 +914,6 @@ export {
     getSectionsForPart,
     getSubpartTOC,
     getSynonyms,
+    getRegSearchResults,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
