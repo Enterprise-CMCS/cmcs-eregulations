@@ -216,7 +216,7 @@ resources:
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
-        EngineVersion: "9.6.16"
+        EngineVersion: "13.5"
         DatabaseName: ${self:custom.settings.DB_NAME}
         BackupRetentionPeriod: 3
         DBClusterParameterGroupName:
@@ -229,7 +229,7 @@ resources:
       Properties:
         DBInstanceClass: db.r4.large
         Engine: aurora-postgresql
-        EngineVersion: "9.6.16"
+        EngineVersion: "13.5"
         PubliclyAccessible: false
         DBParameterGroupName:
           Ref: AuroraRDSInstanceParameter
