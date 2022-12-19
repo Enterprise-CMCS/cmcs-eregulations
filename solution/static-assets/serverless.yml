@@ -13,6 +13,8 @@ custom:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
       deleteRemoved: false
+      deploymentBucket:
+        blockPublicAccess: true
   pythonRequirements:
     layer:
       name: python-django
