@@ -13,6 +13,8 @@ provider:
     EREGS_USERNAME: ${ssm:/eregulations/http/user}
     EREGS_PASSWORD: ${ssm:/eregulations/http/password}
     EREGS_API_URL_V3: ${self:custom.settings.eregs_url}
+  deploymentBucket:
+    blockPublicAccess: true
 
 custom:
   stage: ${opt:stage, self:provider.stage}
