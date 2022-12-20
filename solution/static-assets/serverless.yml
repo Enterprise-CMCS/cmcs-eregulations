@@ -4,17 +4,17 @@ provider:
   name: aws
   runtime: python3.8
   region: us-east-1
-  deploymentBucket:
-    blockPublicAccess: true
+#  deploymentBucket:
+#    blockPublicAccess: true
 
 custom:
   stage: ${opt:stage, self:provider.stage}
-  deploymentBucket:
-    blockPublicAccess: true
   s3Sync:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
       deleteRemoved: false
+#  deploymentBucket:
+#    blockPublicAccess: true
   pythonRequirements:
     layer:
       name: python-django
@@ -44,6 +44,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-site-assets
+        AccessControl: Private
         CorsConfiguration:
           CorsRules:
             -
