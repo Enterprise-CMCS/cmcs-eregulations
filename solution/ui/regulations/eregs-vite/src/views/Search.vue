@@ -19,7 +19,16 @@
                     <div class="search-results-count">
                         <h2>Regulations</h2>
                         <span v-if="regsLoading">Loading...</span>
-                        <span v-else>{{ totalRegResultsCount }} results</span>
+                        <span v-else>
+                            <span v-if="totalRegResultsCount > 0">
+                                {{ currentPageRegResultsRange[0] }} -
+                                {{ currentPageRegResultsRange[1] }} of
+                            </span>
+                            {{ totalRegResultsCount }} result<span
+                                v-if="totalRegResultsCount != 1"
+                                >s</span
+                            >
+                        </span>
                     </div>
                     <template v-if="!regsLoading">
                         <RegResults :base="base" :results="regResults">
@@ -44,9 +53,16 @@
                     <div class="search-results-count">
                         <h2>Resources</h2>
                         <span v-if="resourcesLoading">Loading...</span>
-                        <span v-else
-                            >{{ totalResourcesResultsCount }} results</span
-                        >
+                        <span v-else>
+                            <span v-if="totalResourcesResultsCount > 0">
+                                {{ currentPageResourcesResultsRange[0] }} -
+                                {{ currentPageResourcesResultsRange[1] }} of
+                            </span>
+                            {{ totalResourcesResultsCount }} result<span
+                                v-if="totalResourcesResultsCount != 1"
+                                >s</span
+                            >
+                        </span>
                     </div>
                     <template v-if="!resourcesLoading">
                         <ResourcesResults
@@ -107,7 +123,7 @@
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
-import { stripQuotes } from "@/utilities/utils";
+import { getCurrentPageResultsRange, stripQuotes } from "@/utilities/utils";
 import {
     getFormattedPartsList,
     getLastUpdatedDates,
@@ -228,6 +244,20 @@ export default {
         },
         totalCount() {
             return this.totalRegResultsCount + this.totalResourcesResultsCount;
+        },
+        currentPageRegResultsRange() {
+            return getCurrentPageResultsRange({
+                count: this.totalRegResultsCount,
+                page: this.page,
+                pageSize: this.pageSize,
+            });
+        },
+        currentPageResourcesResultsRange() {
+            return getCurrentPageResultsRange({
+                count: this.totalResourcesResultsCount,
+                page: this.page,
+                pageSize: this.pageSize,
+            });
         },
     },
 
