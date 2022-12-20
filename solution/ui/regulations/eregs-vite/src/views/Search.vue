@@ -101,18 +101,19 @@
                         :page-size="pageSize"
                         view="search"
                     />
-                    <template
+                    <div
                         v-if="
                             (regResults.length > 0 &&
                                 resourcesResults.length > 0) ||
                             totalCount == 0
                         "
+                        class="pagination-expand-cta"
                     >
                         <SearchEmptyState
                             :query="searchQuery"
                             :show-internal-link="false"
                         />
-                    </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -425,7 +426,7 @@ export default {
 
     .combined-results-container {
         overflow: auto;
-        margin-bottom: 30px;
+        margin-bottom: 16px;
         padding: 0 45px;
         display: flex;
         justify-content: space-between;
@@ -503,6 +504,10 @@ export default {
             width: 100%;
             max-width: 521px;
             margin: 0 45px;
+
+            .pagination-expand-cta {
+                margin-top: 14px;
+            }
         }
     }
 }
