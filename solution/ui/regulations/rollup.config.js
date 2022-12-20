@@ -81,14 +81,6 @@ export default [
         plugins,
     },
     {
-        input: "eregs-vite/src/components/SearchEmptyState.vue",
-        output: {
-            format: "esm",
-            file: "dist/SearchEmptyState.js",
-        },
-        plugins,
-    },
-    {
         input: "js/src/components/RecentChangesContainer.vue",
         output: {
             format: "esm",
