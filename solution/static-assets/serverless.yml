@@ -4,8 +4,8 @@ provider:
   name: aws
   runtime: python3.8
   region: us-east-1
-#  deploymentBucket:
-#    blockPublicAccess: true
+  deploymentBucket:
+    blockPublicAccess: true
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -13,8 +13,6 @@ custom:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
       deleteRemoved: false
-#  deploymentBucket:
-#    blockPublicAccess: true
   pythonRequirements:
     layer:
       name: python-django
