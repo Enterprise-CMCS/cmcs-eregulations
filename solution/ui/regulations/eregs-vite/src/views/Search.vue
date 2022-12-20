@@ -79,6 +79,7 @@
             <div v-if="!isLoading" class="pagination-expand-row">
                 <div class="pagination-expand-container">
                     <PaginationController
+                        v-if="totalCount > 0"
                         :count="paginationCount"
                         :page="page"
                         :page-size="pageSize"
@@ -88,8 +89,7 @@
                         v-if="
                             (regResults.length > 0 &&
                                 resourcesResults.length > 0) ||
-                            (regResults.length == 0 &&
-                                resourcesResults.length == 0)
+                            totalCount == 0
                         "
                     >
                         <SearchEmptyState
@@ -221,7 +221,13 @@ export default {
             return this.regResults.length + this.resourcesResults.length;
         },
         paginationCount() {
-            return Math.max(this.totalRegResultsCount, this.totalResourcesResultsCount);
+            return Math.max(
+                this.totalRegResultsCount,
+                this.totalResourcesResultsCount
+            );
+        },
+        totalCount() {
+            return this.totalRegResultsCount + this.totalResourcesResultsCount;
         },
     },
 
@@ -326,6 +332,8 @@ export default {
         },
         clearSearchQuery() {
             this.synonyms = [];
+            this.totalRegResultsCount = 0;
+            this.totalResourcesResultsCount = 0;
             this.$router.push({
                 name: "search",
                 query: {
@@ -357,6 +365,9 @@ export default {
                     }
 
                     this.retrieveSynonyms(this.searchQuery);
+                }
+
+                if (queryChanged || pageChanged) {
                     this.retrieveAllResults({
                         query: this.searchQuery,
                         page: this.page,
@@ -457,6 +468,12 @@ export default {
         flex-direction: row;
         justify-content: center;
         margin-bottom: 100px;
+
+        .pagination-expand-container {
+            width: 100%;
+            max-width: 521px;
+            margin: 0 45px;
+        }
     }
 }
 </style>
