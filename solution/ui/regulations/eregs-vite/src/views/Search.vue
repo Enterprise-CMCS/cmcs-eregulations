@@ -79,7 +79,7 @@
             <div v-if="!isLoading" class="pagination-expand-row">
                 <div class="pagination-expand-container">
                     <PaginationController
-                        :count="combinedCount"
+                        :count="paginationCount"
                         :page="page"
                         :page-size="pageSize"
                         view="search"
@@ -105,6 +105,7 @@
 
 <script>
 import _isEmpty from "lodash/isEmpty";
+import _isUndefined from "lodash/isUndefined";
 
 import { stripQuotes } from "@/utilities/utils";
 import {
@@ -149,7 +150,11 @@ export default {
             });
 
             this.retrieveSynonyms(this.searchQuery);
-            this.retrieveAllResults(this.searchQuery, this.pageSize);
+            this.retrieveAllResults({
+                query: this.searchQuery,
+                page: this.page,
+                pageSize: this.pageSize,
+            });
         } else {
             this.regsLoading = false;
             this.resourcesLoading = false;
@@ -190,6 +195,11 @@ export default {
                 return copiedItem;
             });
         },
+        page() {
+            return _isUndefined(this.queryParams.page)
+                ? this.queryParams.page
+                : parseInt(this.queryParams.page, 10);
+        },
         searchQuery: {
             get() {
                 return this.queryParams.q || undefined;
@@ -210,8 +220,8 @@ export default {
         combinedPageCount() {
             return this.regResults.length + this.resourcesResults.length;
         },
-        combinedCount() {
-            return this.totalRegResultsCount + this.totalResourcesResultsCount;
+        paginationCount() {
+            return Math.max(this.totalRegResultsCount, this.totalResourcesResultsCount);
         },
     },
 
@@ -223,10 +233,11 @@ export default {
             const querySubString = query ? `for ${query} ` : "";
             document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
         },
-        async retrieveRegResults(query, pageSize) {
+        async retrieveRegResults({ query, page, pageSize }) {
             try {
                 const response = await getRegSearchResults({
                     q: query,
+                    page,
                     page_size: pageSize,
                 });
                 this.regResults = response?.results ?? [];
@@ -239,13 +250,14 @@ export default {
                 this.regResults = [];
             }
         },
-        async retrieveResourcesResults(query, pageSize) {
+        async retrieveResourcesResults({ query, page, pageSize }) {
             try {
                 const response = await getSupplementalContentV3({
                     partDict: "all",
                     q: query,
-                    fr_grouping: false,
+                    page,
                     page_size: pageSize,
+                    fr_grouping: false,
                 });
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
@@ -257,7 +269,7 @@ export default {
                 this.resourcesResults = [];
             }
         },
-        async retrieveAllResults(query, pageSize) {
+        async retrieveAllResults({ query, page, pageSize }) {
             if (!query) {
                 this.regResults = [];
                 this.resourcesResults = [];
@@ -268,11 +280,13 @@ export default {
             this.regsLoading = true;
             this.resourcesLoading = true;
 
-            this.retrieveResourcesResults(query, pageSize).then(() => {
-                this.resourcesLoading = false;
-            });
+            this.retrieveResourcesResults({ query, page, pageSize }).then(
+                () => {
+                    this.resourcesLoading = false;
+                }
+            );
 
-            this.retrieveRegResults(query, pageSize).then(() => {
+            this.retrieveRegResults({ query, page, pageSize }).then(() => {
                 this.regsLoading = false;
             });
         },
@@ -315,6 +329,7 @@ export default {
             this.$router.push({
                 name: "search",
                 query: {
+                    page: undefined,
                     q: undefined,
                 },
             });
@@ -328,9 +343,11 @@ export default {
             },
         },
         queryParams: {
-            // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                if (newParams.q !== oldParams.q) {
+                const queryChanged = newParams.q !== oldParams.q;
+                const pageChanged = newParams.page !== oldParams.page;
+
+                if (queryChanged) {
                     this.setTitle(this.searchQuery);
 
                     if (_isEmpty(this.searchQuery)) {
@@ -340,7 +357,11 @@ export default {
                     }
 
                     this.retrieveSynonyms(this.searchQuery);
-                    this.retrieveAllResults(this.searchQuery, this.pageSize);
+                    this.retrieveAllResults({
+                        query: this.searchQuery,
+                        page: this.page,
+                        pageSize: this.pageSize,
+                    });
                 }
             },
         },
