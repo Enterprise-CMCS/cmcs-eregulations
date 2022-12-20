@@ -44,7 +44,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-site-assets
-        AccessControl: Private
+        BlockPublicAcls: true
         CorsConfiguration:
           CorsRules:
             -
