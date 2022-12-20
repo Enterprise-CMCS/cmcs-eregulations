@@ -19,7 +19,7 @@
                     <div class="search-results-count">
                         <h2>Regulations</h2>
                         <span v-if="regsLoading">Loading...</span>
-                        <span v-else>{{ regResults.length }} results</span>
+                        <span v-else>{{ totalRegResultsCount }} results</span>
                     </div>
                     <template v-if="!regsLoading">
                         <RegResults :base="base" :results="regResults">
@@ -27,7 +27,7 @@
                                 <template
                                     v-if="
                                         regResults.length == 0 &&
-                                        totalResultsCount > 0 &&
+                                        combinedPageCount > 0 &&
                                         !isLoading
                                     "
                                 >
@@ -45,7 +45,7 @@
                         <h2>Resources</h2>
                         <span v-if="resourcesLoading">Loading...</span>
                         <span v-else
-                            >{{ resourcesResults.length }} results</span
+                            >{{ totalResourcesResultsCount }} results</span
                         >
                     </div>
                     <template v-if="!resourcesLoading">
@@ -62,7 +62,7 @@
                                 <template
                                     v-if="
                                         resourcesResults.length == 0 &&
-                                        totalResultsCount > 0 &&
+                                        combinedPageCount > 0 &&
                                         !isLoading
                                     "
                                 >
@@ -78,6 +78,12 @@
             </div>
             <div v-if="!isLoading" class="pagination-expand-row">
                 <div class="pagination-expand-container">
+                    <PaginationController
+                        :count="combinedCount"
+                        :page="page"
+                        :page-size="pageSize"
+                        view="search"
+                    />
                     <template
                         v-if="
                             (regResults.length > 0 &&
@@ -110,6 +116,7 @@ import {
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
@@ -120,6 +127,7 @@ export default {
 
     components: {
         Banner,
+        PaginationController,
         RegResults,
         ResourcesResults,
         SearchEmptyState,
@@ -141,7 +149,7 @@ export default {
             });
 
             this.retrieveSynonyms(this.searchQuery);
-            this.retrieveAllResults(this.searchQuery);
+            this.retrieveAllResults(this.searchQuery, this.pageSize);
         } else {
             this.regsLoading = false;
             this.resourcesLoading = false;
@@ -153,13 +161,16 @@ export default {
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
+            pageSize: 3,
             regsLoading: true,
             resourcesLoading: true,
             partsLastUpdated: {},
             partsList: [],
             queryParams: this.$route.query,
             regResults: [],
+            totalRegResultsCount: 0,
             resourcesResults: [],
+            totalResourcesResultsCount: 0,
             searchInputValue: undefined,
             synonyms: [],
             unquotedSearch: false,
@@ -196,13 +207,11 @@ export default {
                 this.searchQuery[this.searchQuery.length - 1] !== '"'
             );
         },
-        totalResultsCount() {
+        combinedPageCount() {
             return this.regResults.length + this.resourcesResults.length;
         },
-        regCountLabel() {
-            return this.totalResultsCount > 0
-                ? "results"
-                : "results in Regulations or Resources";
+        combinedCount() {
+            return this.totalRegResultsCount + this.totalResourcesResultsCount;
         },
     },
 
@@ -214,10 +223,14 @@ export default {
             const querySubString = query ? `for ${query} ` : "";
             document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
         },
-        async retrieveRegResults(query) {
+        async retrieveRegResults(query, pageSize) {
             try {
-                const response = await getRegSearchResults(query);
+                const response = await getRegSearchResults({
+                    q: query,
+                    page_size: pageSize,
+                });
                 this.regResults = response?.results ?? [];
+                this.totalRegResultsCount = response?.count ?? 0;
             } catch (error) {
                 console.error(
                     "Error retrieving regulation search results: ",
@@ -226,14 +239,16 @@ export default {
                 this.regResults = [];
             }
         },
-        async retrieveResourcesResults(query) {
+        async retrieveResourcesResults(query, pageSize) {
             try {
                 const response = await getSupplementalContentV3({
                     partDict: "all",
                     q: query,
                     fr_grouping: false,
+                    page_size: pageSize,
                 });
                 this.resourcesResults = response?.results ?? [];
+                this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {
                 console.error(
                     "Error retrieving regulation search results: ",
@@ -242,7 +257,7 @@ export default {
                 this.resourcesResults = [];
             }
         },
-        async retrieveAllResults(query) {
+        async retrieveAllResults(query, pageSize) {
             if (!query) {
                 this.regResults = [];
                 this.resourcesResults = [];
@@ -253,11 +268,11 @@ export default {
             this.regsLoading = true;
             this.resourcesLoading = true;
 
-            this.retrieveResourcesResults(query).then(() => {
+            this.retrieveResourcesResults(query, pageSize).then(() => {
                 this.resourcesLoading = false;
             });
 
-            this.retrieveRegResults(query).then(() => {
+            this.retrieveRegResults(query, pageSize).then(() => {
                 this.regsLoading = false;
             });
         },
@@ -325,7 +340,7 @@ export default {
                     }
 
                     this.retrieveSynonyms(this.searchQuery);
-                    this.retrieveAllResults(this.searchQuery);
+                    this.retrieveAllResults(this.searchQuery, this.pageSize);
                 }
             },
         },
