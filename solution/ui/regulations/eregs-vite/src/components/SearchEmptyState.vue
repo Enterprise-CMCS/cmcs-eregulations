@@ -1,6 +1,6 @@
 <template>
     <div class="empty-state-container">
-        <div class="empty-state-container-title">Expand your search:</div>
+        <div class="empty-state-container-title">Expand your search</div>
         <div class="options-list">
             <div class="query-prompt">
                 See results for
