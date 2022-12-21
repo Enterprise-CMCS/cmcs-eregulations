@@ -183,7 +183,7 @@ export default {
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
-            pageSize: 3,
+            pageSize: 50,
             regsLoading: true,
             resourcesLoading: true,
             partsLastUpdated: {},
@@ -300,7 +300,6 @@ export default {
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {
-                console.log("in the error");
                 console.error(
                     "Error retrieving regulation search results: ",
                     error
