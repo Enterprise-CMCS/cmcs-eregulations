@@ -285,6 +285,7 @@ export default {
                     error
                 );
                 this.regResults = [];
+                this.totalRegResultsCount = 0;
             }
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
@@ -299,11 +300,13 @@ export default {
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {
+                console.log("in the error");
                 console.error(
                     "Error retrieving regulation search results: ",
                     error
                 );
                 this.resourcesResults = [];
+                this.totalResourcesResultsCount = 0;
             }
         },
         async retrieveAllResults({ query, page, pageSize }) {
