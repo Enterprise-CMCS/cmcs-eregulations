@@ -4,6 +4,8 @@ provider:
   name: aws
   runtime: python3.8
   region: us-east-1
+  deploymentBucket:
+    blockPublicAccess: true
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -40,6 +42,11 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-site-assets
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
         CorsConfiguration:
           CorsRules:
             -
