@@ -18,8 +18,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.sitemaps.views import sitemap
+from django.contrib.syndication.views import Feed
 
+
+from regulations.rss_feed import PartFeed, SupplementalContentFeed
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
+
+feeds = {
+    "Parts": PartFeed,
+    "SupplementalContent": SupplementalContentFeed,
+}
 
 sitemaps = {
     "Parts": PartSitemap,
@@ -27,11 +35,14 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path("", include('regcore.urls')),
-    path("", include('regulations.urls')),
+    path('', include('regcore.urls')),
+    path('', include('regulations.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
     path('admin/', admin.site.urls, name="admin"),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('__debug__/', include('debug_toolbar.urls')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    #path('latest/feeds', Feed, {'feeds': feeds}, name='django.contrib.syndication.views')
+    path('latest/feed/', PartFeed()),
+
 ]
