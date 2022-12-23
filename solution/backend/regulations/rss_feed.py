@@ -1,5 +1,3 @@
-from typing import List, Dict, Any
-
 from django.contrib.syndication.views import Feed
 from django.urls import reverse
 from datetime import datetime
@@ -16,7 +14,6 @@ class PartFeed(Feed):
     link = '/latest/feed'
     description = 'Displays the latest federal register documents'
 
-
     def processChildren(self, children, title, part, last_updated):
         results = []
         for child in children:
@@ -25,7 +22,7 @@ class PartFeed(Feed):
                     'title': title,
                     'part': part,
                     'subpart': child['identifier'][0],
-                    'last_updated': last_updated
+                    'last_updated': last_updated,
                 })
             # This just ends up forwarding to the subchapter page so removing for now, but we can add back if needed
             # if child.get('type', '') == 'section':
@@ -54,20 +51,20 @@ class PartFeed(Feed):
 
         return results
 
-    def item_title(self,item):
+    def item_title(self, item):
         if 'document_label' in item:
             return item['document_label']
         else:
             return '{} {} Subpart {}'.format(item['title'], item['part'], item['subpart'])
 
-    def item_description(self,item):
+    def item_description(self, item):
         if 'document_title' in item:
             return item['document_title']
         else:
             return '{} {} Subpart {}'.format(item['title'], item['part'], item['subpart'])
 
     def item_link(self, item):
-         return '/{}/{}'.format(item['title'], item['part'])
+        return '/{}/{}'.format(item['title'], item['part'])
 
 
 class SupplementalContentFeed(Feed):
@@ -78,11 +75,11 @@ class SupplementalContentFeed(Feed):
     def items(self):
         return AbstractResource.objects.filter(approved=True)
 
-    #def item_title(self, item):
-        #return item.title
+    # def item_title(self, item):
+        # return item.title
 
-    #def item_description(self, item):
-        #return item.description
+    # def item_description(self, item):
+        # return item.description
 
     def item_link(self, item):
         return reverse('supplemental_content', kwargs={'id': item.id})
