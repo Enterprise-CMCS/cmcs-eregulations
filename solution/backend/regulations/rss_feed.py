@@ -7,9 +7,6 @@ from resources.models import AbstractResource
 
 
 class PartFeed(Feed):
-    changefreq = 'daily'
-    priority = 0.5
-
     title = 'Federal Register documents RSS Feed'
     link = '/latest/feed'
     description = 'Displays the latest federal register documents'
