@@ -6,6 +6,7 @@ class SearchView(TemplateView):
     template_name = 'regulations/search.html'
 
     def get_configs(self, config):
+        print('hello')
         config = SearchConfiguration.objects.get(config=config)
         return config
 
