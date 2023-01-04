@@ -36,23 +36,6 @@ class SearchIndexQuerySet(models.QuerySet):
                 SearchQuery(query, search_type=search_type, config='english'), cover_density=cover_density)
             )\
             .filter(rank__gte=0.2)\
-            .annotate(
-                headline=SearchHeadline(
-                    "content",
-                    SearchQuery(query, search_type=search_type, config='english'),
-                    start_sel='<span class="search-highlight">',
-                    stop_sel='</span>',
-                    config='english'
-                ),
-                parentHeadline=SearchHeadline(
-                    "parent__title",
-                    SearchQuery(query, search_type=search_type, config='english'),
-                    start_sel="<span class='search-highlight'>",
-                    stop_sel="</span>",
-                    config='english',
-                    highlight_all=True
-                ),
-            )\
             .order_by('-rank')\
             .prefetch_related('part')
 
