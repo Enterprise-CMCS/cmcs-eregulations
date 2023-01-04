@@ -5,7 +5,7 @@
                 <template #input>
                     <SearchInput
                         form-class="search-form"
-                        label="Search Regulations"
+                        label="Search Regulatdfdaions"
                         page="search"
                         :search-query="searchQuery"
                         :synonyms="synonyms"
