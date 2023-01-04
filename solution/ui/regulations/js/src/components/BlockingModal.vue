@@ -1,6 +1,11 @@
 <template>
-    <div class="blocking-modal">
-        <slot></slot>
+    <div class="blocking-modal-container" style="display: inline">
+        <a tabindex="0" @click="openModal" @keydown.enter.prevent="openModal">
+            <span class="trigger-label">{{ triggerLabel }}</span>
+        </a>
+        <div class="blocking-modal" :class="activeClass">
+            <slot></slot>
+        </div>
     </div>
 </template>
 
@@ -11,7 +16,7 @@ export default {
     components: {},
 
     props: {
-        propName: {
+        triggerLabel: {
             type: String,
             required: true,
         },
@@ -35,26 +40,24 @@ export default {
 
     data() {
         return {
-            dataProp: "value",
-        }
+            active: false,
+        };
     },
 
     computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
+        activeClass() {
+            return {
+                active: this.active,
+            };
         },
     },
 
     methods: {
-        methodName() {
-            console.log("method has been invoked");
+        openModal() {
+            this.active = true;
         },
     },
-
-}
+};
 </script>
 
-<style>
-
-</style>
-
+<style></style>

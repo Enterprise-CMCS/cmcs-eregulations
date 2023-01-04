@@ -11,7 +11,11 @@
     font-size: $font-size-xs;
     padding: 2px;
     position: relative;
-    line-height: 1;
+    line-height: 1.5;
+
+    p {
+        margin: 4px 0;
+    }
 
     a {
         text-decoration: none;

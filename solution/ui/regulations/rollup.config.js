@@ -104,6 +104,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/BlockingModal.vue",
+        output: {
+            format: "esm",
+            file: "dist/BlockingModal.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",
