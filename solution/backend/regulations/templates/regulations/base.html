@@ -35,6 +35,10 @@ CSS/Javascript etc., should inherit from this template.
     </head>
     <body class="ds-base {% block body_class %}{% endblock %}">
         <div id="vue-app">
+            <div class="blocking-modal">
+                <div class="blocking-iframe"></div>
+            </div>
+
             {% block pre_header %}{% endblock %}
 
             {% include "../browser_not_supported.html" %}
