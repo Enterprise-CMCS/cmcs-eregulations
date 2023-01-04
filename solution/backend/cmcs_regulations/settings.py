@@ -228,6 +228,11 @@ CSP_IMG_SRC = [
     'data:',
     "https://images.federalregister.gov/",
 ]
+CSP_FRAME_SRC= [
+    "'self'",
+    STATIC_URL,
+    "https://docs.google.com",
+]
 CSP_STYLE_SRC = [
     "'self'",
     "'unsafe-inline'",

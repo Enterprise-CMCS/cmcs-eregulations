@@ -17,10 +17,19 @@
         justify-content: center;
     }
 
-    .blocking-iframe {
-        height: 1500px;
-        width: 400px;
-        overflow-y: scroll;
-    }
+    .blocking-modal-content {
+        margin-top: 120px;
+        width: 100%;
+        min-width: 300px;
+        max-width: 600px;
 
+        .control-row {
+            display: flex;
+            justify-content: end;
+        }
+
+        iframe {
+            padding-bottom: 120px;
+        }
+    }
 }
