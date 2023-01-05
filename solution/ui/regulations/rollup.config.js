@@ -112,6 +112,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/BlockingModalTrigger.vue",
+        output: {
+            format: "esm",
+            file: "dist/BlockingModalTrigger.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",

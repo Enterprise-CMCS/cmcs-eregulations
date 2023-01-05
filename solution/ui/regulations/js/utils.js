@@ -38,6 +38,7 @@ function parseError(err) {
 
 const EventCodes = {
     SetSection: "SetSection",
+    OpenBlockingModal: "OpenBlockingModal",
 };
 
 const formatResourceCategories = (resources) => {
