@@ -26,6 +26,23 @@
         .control-row {
             display: flex;
             justify-content: end;
+
+            button.close-modal {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                height: 20px;
+                background: transparent;
+                border: none;
+                font-size: $font-size-md;
+                color: white;
+                padding: 0;
+                margin-bottom: 10px;
+
+                svg {
+                    margin-left: 10px;
+                }
+            }
         }
 
         iframe {
