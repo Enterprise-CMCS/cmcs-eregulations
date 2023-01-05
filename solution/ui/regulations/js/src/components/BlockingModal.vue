@@ -1,5 +1,6 @@
 <template>
     <div
+        ref="modalElement"
         class="blocking-modal"
         :class="activeClass"
         role="dialog"
@@ -8,7 +9,7 @@
     >
         <div class="blocking-modal-content">
             <div class="control-row">
-                <button class="close-modal" @click="closeModal">
+                <button ref="closeBtn" class="close-modal" @click="closeModal">
                     <span class="close-btn-label">Close</span>
                     <svg
                         width="19"
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import { EventCodes } from "../../utils";
+import { EventCodes, trapFocus } from "../../utils";
 
 export default {
     name: "BlockingModal",
@@ -100,11 +101,16 @@ export default {
 
             // must remove ariaHidden attribute b/c aria-hidden = "false" can cause issues
             // https://dequeuniversity.com/rules/axe/4.3/aria-hidden-body
-            const vueAppEl = document.getElementById("app-container");
+            const appContainerEl = document.getElementById("app-container");
             if (this.active) {
-                vueAppEl.setAttribute("aria-hidden", "true");
+                appContainerEl.setAttribute("aria-hidden", "true");
+                setTimeout(() => {
+                    this.$refs.closeBtn.focus();
+                }, 10);
+                trapFocus(this.$refs.modalElement);
             } else {
-                vueAppEl.removeAttribute("aria-hidden");
+                appContainerEl.removeAttribute("aria-hidden");
+                // tear down trapFocus event listener
             }
         },
     },
