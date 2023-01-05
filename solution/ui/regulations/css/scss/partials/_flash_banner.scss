@@ -6,16 +6,16 @@
 @import "../application_settings";
 
 .flash-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: $teritary_background_color;
     text-align: center;
     font-size: $font-size-xs;
     padding: 2px;
     position: relative;
     line-height: 1.5;
-
-    p {
-        margin: 4px 0;
-    }
+    height: 30px;
 
     a {
         text-decoration: none;

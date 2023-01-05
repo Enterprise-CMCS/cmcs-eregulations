@@ -35,29 +35,31 @@ CSS/Javascript etc., should inherit from this template.
     </head>
     <body class="ds-base {% block body_class %}{% endblock %}">
         <div id="vue-app">
-            {% block pre_header %}{% endblock %}
+            <div id="app-container">
+                {% block pre_header %}{% endblock %}
 
-            {% include "../browser_not_supported.html" %}
+                {% include "../browser_not_supported.html" %}
 
-            {% block flash_banner %}
-                {% include "regulations/partials/flash_banner.html" %}
-            {% endblock %}
+                {% block flash_banner %}
+                    {% include "regulations/partials/flash_banner.html" %}
+                {% endblock %}
 
-            {% block header %}
-                <header id="header" class="sticky">
-                    {% include "regulations/partials/header.html" %}
-                </header>
-            {% endblock %}
+                {% block header %}
+                    <header id="header" class="sticky">
+                        {% include "regulations/partials/header.html" %}
+                    </header>
+                {% endblock %}
 
-            {% block body %}{% endblock %}
+                {% block body %}{% endblock %}
 
-            {% block footer %}
-                <footer>
-                    {% include "regulations/partials/footer.html" %}
-                </footer>
-            {% endblock %}
+                {% block footer %}
+                    <footer>
+                        {% include "regulations/partials/footer.html" %}
+                    </footer>
+                {% endblock %}
 
-            {% block post_footer %}{% endblock %}
+                {% block post_footer %}{% endblock %}
+            </div>
         </div>
     </body>
 </html>

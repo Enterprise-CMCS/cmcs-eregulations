@@ -3,7 +3,7 @@
         <a tabindex="0" @click="openModal" @keydown.enter.prevent="openModal">
             <span class="trigger-label">{{ triggerLabel }}</span>
         </a>
-        <div class="blocking-modal" :class="activeClass">
+        <div class="blocking-modal" :class="activeClass" role="dialog">
             <div class="blocking-modal-content">
                 <div class="control-row">
                     <button class="close-modal" @click="closeModal">
@@ -87,6 +87,19 @@ export default {
         },
         closeModal() {
             this.active = false;
+        },
+    },
+
+    watch: {
+        active() {
+            document.body.style.overflow = this.active ? "hidden" : "";
+
+            // must remove ariaHidden attribute b/c aria-hidden = "false" can cause issues
+            // https://dequeuniversity.com/rules/axe/4.3/aria-hidden-body
+            const vueAppEl = document.getElementById("app-container");
+            this.active
+                ? vueAppEl.setAttribute("aria-hidden", "true")
+                : vueAppEl.removeAttribute("aria-hidden");
         },
     },
 };
