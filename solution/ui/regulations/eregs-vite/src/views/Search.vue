@@ -1,5 +1,6 @@
 <template>
     <body class="ds-base search-page">
+        <FlashBanner />
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
                 <template #input>
@@ -110,6 +111,7 @@ import {
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
+import FlashBanner from "@/components/FlashBanner.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
@@ -120,6 +122,7 @@ export default {
 
     components: {
         Banner,
+        FlashBanner,
         RegResults,
         ResourcesResults,
         SearchEmptyState,
