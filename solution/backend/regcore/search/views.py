@@ -58,11 +58,11 @@ class SupplementalContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         query = self.request.query_params.get('q')
-        search_type = 'plain'
-        cover_density = False
-        if (query.startswith('"')) and query.endswith('"'):
-            search_type = 'phrase'
-            cover_density = True
+        search_type = 'websearch'
+        cover_density = True
+        # if (query.startswith('"')) and query.endswith('"'):
+        #     search_type = 'phrase'
+        #     cover_density = True
 
         return AbstractResource.objects.filter(approved=True).annotate(rank=SearchRank(
                 SearchVector('supplementalcontent__name', weight='A', config='english')
