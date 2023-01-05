@@ -1,14 +1,22 @@
 <template>
     <div class="flash-banner" role="banner">
-        <p>This is a CMCS project with draft content for CMCS staff.</p>
+        We welcome questions and suggestions --
+        <BlockingModalTrigger
+            trigger-label="give us feedback."
+            modal-title="Feedback survey"
+        ></BlockingModalTrigger
     </div>
 </template>
 
 <script>
+import BlockingModalTrigger from "legacy/js/src/components/BlockingModalTrigger.vue";
+
 export default {
     name: "FlashBanner",
 
-    components: {},
+    components: {
+        BlockingModalTrigger,
+    },
 
     props: {
         propName: {

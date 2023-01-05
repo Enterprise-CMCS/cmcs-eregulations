@@ -43,12 +43,23 @@
 <script>
 import { EventCodes, trapFocus } from "../../utils";
 
+const POSSIBLE_LOCATIONS = {
+    django: "legacy django template",
+    vite: "vite single page app",
+};
+
 export default {
     name: "BlockingModal",
 
     components: {},
 
-    props: {},
+    props: {
+        whereUsed: {
+            validator: (value) => Object.keys(POSSIBLE_LOCATIONS).includes(value),
+            type: String,
+            default: "django",
+        }
+    },
 
     beforeCreate() {},
 
@@ -57,6 +68,11 @@ export default {
     beforeMount() {},
 
     mounted() {
+        if (this.whereUsed === "vite") {
+            const templateTopContainer = document.getElementById("vue-app");
+            templateTopContainer.insertBefore(this.$el, templateTopContainer.firstChild);
+        }
+
         this.$root.$on(EventCodes.OpenBlockingModal, (payload) => {
             this.active = true;
             this.modalTitle = payload.title;

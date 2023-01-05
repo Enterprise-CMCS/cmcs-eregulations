@@ -1,5 +1,6 @@
 <template>
     <body class="ds-base search-page">
+        <BlockingModal where-used="vite" />
         <FlashBanner />
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
@@ -111,6 +112,7 @@ import {
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
+import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
 import FlashBanner from "@/components/FlashBanner.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
@@ -122,6 +124,7 @@ export default {
 
     components: {
         Banner,
+        BlockingModal,
         FlashBanner,
         RegResults,
         ResourcesResults,

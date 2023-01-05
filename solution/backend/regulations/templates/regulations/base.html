@@ -35,7 +35,10 @@ CSS/Javascript etc., should inherit from this template.
     </head>
     <body class="ds-base {% block body_class %}{% endblock %}">
         <div id="vue-app">
-            <blocking-modal></blocking-modal>
+            {% block blocking_modal %}
+                <blocking-modal></blocking-modal>
+            {% endblock %}
+
             <div id="app-container">
                 {% block pre_header %}{% endblock %}
 
