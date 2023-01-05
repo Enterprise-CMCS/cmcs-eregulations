@@ -13,6 +13,7 @@ import RecentChangesContainer from "../dist/RecentChangesContainer";
 import LastParserSuccessDate from "../dist/LastParserSuccessDate";
 import BlockingModal from "../dist/BlockingModal";
 import BlockingModalTrigger from "../dist/BlockingModalTrigger";
+import FlashBanner from "../dist/FlashBanner";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -173,6 +174,7 @@ function main() {
             LastParserSuccessDate,
             BlockingModal,
             BlockingModalTrigger,
+            FlashBanner,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");

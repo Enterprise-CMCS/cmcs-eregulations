@@ -9,7 +9,12 @@
 </template>
 
 <script>
-import BlockingModalTrigger from "legacy/js/src/components/BlockingModalTrigger.vue";
+import BlockingModalTrigger from "./BlockingModalTrigger.vue";
+
+const POSSIBLE_LOCATIONS = {
+    django: "legacy django template",
+    vite: "vite single page app",
+};
 
 export default {
     name: "FlashBanner",
@@ -19,9 +24,11 @@ export default {
     },
 
     props: {
-        propName: {
+        whereUsed: {
+            validator: (value) =>
+                Object.keys(POSSIBLE_LOCATIONS).includes(value),
             type: String,
-            required: true,
+            default: "django",
         },
     },
 
@@ -32,8 +39,10 @@ export default {
     beforeMount() {},
 
     mounted() {
-        const container = document.getElementById("app-container");
-        container.insertBefore(this.$el, container.firstChild);
+        if (this.whereUsed === "vite") {
+            const container = document.getElementById("app-container");
+            container.insertBefore(this.$el, container.firstChild);
+        }
     },
 
     beforeUpdate() {},
@@ -44,23 +53,11 @@ export default {
 
     destroyed() {},
 
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
+    data() {},
 
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
+    computed: {},
 
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
-    },
+    methods: {},
 };
 </script>
 

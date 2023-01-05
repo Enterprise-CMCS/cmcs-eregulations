@@ -55,10 +55,11 @@ export default {
 
     props: {
         whereUsed: {
-            validator: (value) => Object.keys(POSSIBLE_LOCATIONS).includes(value),
+            validator: (value) =>
+                Object.keys(POSSIBLE_LOCATIONS).includes(value),
             type: String,
             default: "django",
-        }
+        },
     },
 
     beforeCreate() {},
@@ -70,7 +71,10 @@ export default {
     mounted() {
         if (this.whereUsed === "vite") {
             const templateTopContainer = document.getElementById("vue-app");
-            templateTopContainer.insertBefore(this.$el, templateTopContainer.firstChild);
+            templateTopContainer.insertBefore(
+                this.$el,
+                templateTopContainer.firstChild
+            );
         }
 
         this.$root.$on(EventCodes.OpenBlockingModal, (payload) => {

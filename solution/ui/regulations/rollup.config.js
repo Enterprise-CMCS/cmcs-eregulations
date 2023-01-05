@@ -120,6 +120,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/FlashBanner.vue",
+        output: {
+            format: "esm",
+            file: "dist/FlashBanner.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",

@@ -1,7 +1,7 @@
 <template>
     <body class="ds-base search-page">
         <BlockingModal where-used="vite" />
-        <FlashBanner />
+        <FlashBanner where-used="vite" />
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
                 <template #input>
@@ -113,7 +113,7 @@ import {
 
 import Banner from "@/components/Banner.vue";
 import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
-import FlashBanner from "@/components/FlashBanner.vue";
+import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
