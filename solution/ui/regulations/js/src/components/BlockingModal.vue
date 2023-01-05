@@ -4,6 +4,7 @@
         :class="activeClass"
         role="dialog"
         aria-modal="true"
+        :aria-label="modalTitle"
     >
         <div class="blocking-modal-content">
             <div class="control-row">
@@ -55,8 +56,9 @@ export default {
     beforeMount() {},
 
     mounted() {
-        this.$root.$on(EventCodes.OpenBlockingModal, () => {
+        this.$root.$on(EventCodes.OpenBlockingModal, (payload) => {
             this.active = true;
+            this.modalTitle = payload.title;
         });
     },
 
@@ -71,6 +73,7 @@ export default {
     data() {
         return {
             active: false,
+            modalTitle: "Modal dialog",
         };
     },
 

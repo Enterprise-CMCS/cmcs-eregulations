@@ -17,6 +17,10 @@ export default {
             type: String,
             required: true,
         },
+        modalTitle: {
+            type: String,
+            default: "Modal dialog",
+        },
     },
 
     beforeCreate() {},
@@ -37,7 +41,9 @@ export default {
 
     methods: {
         openModal() {
-            this.$root.$emit(EventCodes.OpenBlockingModal);
+            this.$root.$emit(EventCodes.OpenBlockingModal, {
+                title: this.modalTitle,
+            });
         },
     },
 
