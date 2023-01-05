@@ -1,10 +1,10 @@
 <template>
     <div class="flash-banner" role="banner">
-        We welcome questions and suggestions --
+        We welcome questions and suggestions --&nbsp;
         <BlockingModalTrigger
             trigger-label="give us feedback."
             modal-title="Feedback survey"
-        ></BlockingModalTrigger
+        ></BlockingModalTrigger>
     </div>
 </template>
 
