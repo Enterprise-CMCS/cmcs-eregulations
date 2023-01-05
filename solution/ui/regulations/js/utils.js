@@ -235,8 +235,8 @@ const niceDate = (kebabDate) => {
 };
 
 /**
- * Trap focus in an element
- * from: https://hidde.blog/using-javascript-to-trap-focus-in-an-element/
+ * Trap focus in an element (higher-order function)
+ * adapted from: https://hidde.blog/using-javascript-to-trap-focus-in-an-element/
  *
  * @param {HTMLElement} element - element in which to trap focus
  *
