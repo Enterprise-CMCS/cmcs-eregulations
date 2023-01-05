@@ -75,6 +75,7 @@ export default {
         return {
             active: false,
             modalTitle: "Modal dialog",
+            removeFocusTrap: undefined,
         };
     },
 
@@ -102,15 +103,17 @@ export default {
             // must remove ariaHidden attribute b/c aria-hidden = "false" can cause issues
             // https://dequeuniversity.com/rules/axe/4.3/aria-hidden-body
             const appContainerEl = document.getElementById("app-container");
+
             if (this.active) {
                 appContainerEl.setAttribute("aria-hidden", "true");
                 setTimeout(() => {
                     this.$refs.closeBtn.focus();
                 }, 10);
-                trapFocus(this.$refs.modalElement);
+                this.removeFocusTrap = trapFocus(this.$refs.modalElement);
             } else {
                 appContainerEl.removeAttribute("aria-hidden");
-                // tear down trapFocus event listener
+                this.removeFocusTrap();
+                this.removeFocusTrap = undefined;
             }
         },
     },

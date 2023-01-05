@@ -239,9 +239,10 @@ const niceDate = (kebabDate) => {
  * from: https://hidde.blog/using-javascript-to-trap-focus-in-an-element/
  *
  * @param {HTMLElement} element - element in which to trap focus
+ *
+ * @returns {() => void} - function to remove event listener when invoked
  */
 function trapFocus(element) {
-    console.log("element", element);
     const focusableEls = element.querySelectorAll(
         'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])'
     );
@@ -249,8 +250,7 @@ function trapFocus(element) {
     const lastFocusableEl = focusableEls[focusableEls.length - 1];
     const KEYCODE_TAB = 9;
 
-    element.addEventListener("keydown", function (e) {
-        console.log("listening", e);
+    const callbackFunc = (e) => {
         const isTabPressed = e.key === "Tab" || e.keyCode === KEYCODE_TAB;
 
         if (!isTabPressed) {
@@ -268,7 +268,13 @@ function trapFocus(element) {
                 e.preventDefault();
             }
         }
-    });
+    };
+
+    element.addEventListener("keydown", callbackFunc);
+
+    return function () {
+        element.removeEventListener("keydown", callbackFunc);
+    };
 }
 
 export {
