@@ -6,7 +6,34 @@ from solo.admin import SingletonModelAdmin
 
 from resources.admin import BaseAdmin
 from .models import ParserConfiguration, TitleConfiguration
-from .search.models import Synonym
+from .search.models import Synonym, SearchConfiguration
+from django.contrib.admin.models import LogEntry
+
+
+@admin.register(LogEntry)
+class LogEntryAdmin(admin.ModelAdmin):
+    # to have a date-based drilldown navigation in the admin page
+    date_hierarchy = 'action_time'
+
+    # to filter the resultes by users, content types and action flags
+    list_filter = [
+        'user',
+        'content_type',
+        'action_flag'
+    ]
+
+    # when searching the user will be able to search in both object_repr and change_message
+    search_fields = [
+        'object_repr',
+        'change_message'
+    ]
+
+    list_display = [
+        'action_time',
+        'user',
+        'content_type',
+        'action_flag',
+    ]
 
 
 class TitleConfigurationInline(admin.TabularInline):
@@ -45,3 +72,10 @@ class SynonymAdmin(BaseAdmin):
     change_list_template = "admin/synonyms.html"
     admin_priority = 20
     ordering = ('baseWord',)
+
+
+@admin.register(SearchConfiguration)
+class SearchAdmin(BaseAdmin):
+    admin_priority = 78
+    list_display = ("config", "value")
+    fields = ("config", "value")
