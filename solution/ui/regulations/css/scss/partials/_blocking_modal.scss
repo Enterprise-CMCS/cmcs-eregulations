@@ -53,5 +53,13 @@
                 }
             }
         }
+
+        .bottom-spacer {
+            height: 30px;
+
+            @include screen-md {
+                height: 120px;
+            }
+        }
     }
 }

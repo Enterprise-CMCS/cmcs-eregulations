@@ -30,6 +30,7 @@
                 </button>
             </div>
             <slot></slot>
+            <div class="bottom-spacer" tabindex="0"></div>
         </div>
     </div>
 </template>
