@@ -36,7 +36,13 @@ CSS/Javascript etc., should inherit from this template.
     <body class="ds-base {% block body_class %}{% endblock %}">
         <div id="vue-app">
             {% block blocking_modal %}
-                <blocking-modal></blocking-modal>
+                <blocking-modal
+                    where-used="django"
+                >
+                    <i-frame-container
+                        src="https://forms.gle/LapMy4qASDEkNc8q6"
+                    ></i-frame-container>
+                </blocking-modal>
             {% endblock %}
 
             <div id="app-container">

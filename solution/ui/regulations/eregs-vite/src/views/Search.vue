@@ -1,6 +1,8 @@
 <template>
     <body class="ds-base search-page">
-        <BlockingModal where-used="vite" />
+        <BlockingModal where-used="vite">
+            <IFrameContainer src="https://forms.gle/LapMy4qASDEkNc8q6" />
+        </BlockingModal>
         <FlashBanner where-used="vite" />
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
@@ -114,6 +116,7 @@ import {
 import Banner from "@/components/Banner.vue";
 import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
 import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
+import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
@@ -126,6 +129,7 @@ export default {
         Banner,
         BlockingModal,
         FlashBanner,
+        IFrameContainer,
         RegResults,
         ResourcesResults,
         SearchEmptyState,

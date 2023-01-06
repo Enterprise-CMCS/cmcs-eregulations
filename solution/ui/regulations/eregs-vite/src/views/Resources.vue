@@ -1,6 +1,8 @@
 <template>
     <body class="ds-base">
-        <BlockingModal where-used="vite" />
+        <BlockingModal where-used="vite">
+            <IFrameContainer src="https://forms.gle/LapMy4qASDEkNc8q6" />
+        </BlockingModal>
         <FlashBanner where-used="vite" />
         <div id="resourcesApp" class="resources-view">
             <Banner title="Resources">
@@ -143,6 +145,7 @@ import _uniq from "lodash/uniq";
 
 import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
 import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
+import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
 import Banner from "@/components/Banner.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
@@ -166,6 +169,7 @@ export default {
         Banner,
         BlockingModal,
         FlashBanner,
+        IFrameContainer,
         ResourcesFilters,
         ResourcesSelections,
         ResourcesResultsContainer,

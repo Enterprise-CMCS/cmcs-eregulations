@@ -18,10 +18,12 @@
     }
 
     .blocking-modal-content {
-        margin-top: 120px;
         width: 100%;
-        min-width: 300px;
-        max-width: 600px;
+        max-width: 768px;
+
+        @include screen-md {
+            margin-top: 120px;
+        }
 
         .control-row {
             display: flex;
@@ -37,16 +39,19 @@
                 font-size: $font-size-md;
                 color: white;
                 padding: 0;
+                padding-right: 10px;
+                margin-top: 10px;
                 margin-bottom: 10px;
+
+                @include screen-md {
+                    margin-top: 0;
+                    padding-right: 0;
+                }
 
                 svg {
                     margin-left: 10px;
                 }
             }
-        }
-
-        iframe {
-            padding-bottom: 120px;
         }
     }
 }

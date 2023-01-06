@@ -232,6 +232,7 @@ CSP_FRAME_SRC = [
     "'self'",
     STATIC_URL,
     "https://docs.google.com",
+    "https://forms.gle"
 ]
 CSP_STYLE_SRC = [
     "'self'",

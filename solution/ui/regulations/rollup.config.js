@@ -128,6 +128,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/IFrameContainer.vue",
+        output: {
+            format: "esm",
+            file: "dist/IFrameContainer.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",

@@ -4,7 +4,7 @@
         <BlockingModalTrigger
             trigger-label="give us feedback."
             modal-title="Feedback survey"
-        ></BlockingModalTrigger>
+        />
     </div>
 </template>
 

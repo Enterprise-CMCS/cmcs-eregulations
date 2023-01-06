@@ -29,13 +29,7 @@
                     </svg>
                 </button>
             </div>
-            <iframe
-                width="100%"
-                height="100%"
-                src="https://www.cms.gov"
-                frameborder="0"
-            >
-            </iframe>
+            <slot></slot>
         </div>
     </div>
 </template>
