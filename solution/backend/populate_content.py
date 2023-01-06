@@ -18,7 +18,7 @@ def handler(event, context):
         FederalRegisterDocument,
         ResourcesConfiguration,
     )
-    from regcore.search.models import Synonym
+    from regcore.search.models import Synonym, SearchConfiguration
 
     fixtures = [
         ("resources.category.json", Category),
@@ -30,6 +30,7 @@ def handler(event, context):
         ("resources.federalregisterdocument.json", FederalRegisterDocument),
         ("resources.resourcesconfiguration.json", ResourcesConfiguration),
         ("search.synonym.json", Synonym),
+        ("search.searchconfiguration.json", SearchConfiguration),
     ]
 
     # First delete all instances of models that we're populating
