@@ -1,0 +1,18 @@
+[
+{
+  "model": "search.searchconfiguration",
+  "pk": 1,
+  "fields": {
+    "config": "websearch",
+    "value": "true"
+  }
+},
+{
+  "model": "search.searchconfiguration",
+  "pk": 2,
+  "fields": {
+    "config": "coverDensity",
+    "value": "true"
+  }
+}
+]
