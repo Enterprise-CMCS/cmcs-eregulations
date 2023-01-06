@@ -4,6 +4,7 @@
         width="100%"
         :src="src"
         frameborder="0"
+        tabindex="0"
         @load="onLoad"
     >
     </iframe>
@@ -41,7 +42,6 @@ export default {
     data() {
         return {
             isLoading: true,
-            iframeHeight: 0,
         };
     },
 
@@ -52,11 +52,7 @@ export default {
     },
 
     methods: {
-        onLoad(e) {
-            console.log("onload event argument", e);
-            const iframeEl = document.getElementById("iframeEl");
-            console.log("iframeEl stuff", iframeEl.contentWindow.top.document.documentElement);
-            /*this.iframeHeight = iframeEl.contentWindow.top.document.documentElement.scrollHeight;*/
+        onLoad() {
             this.isLoading = false;
         },
     },
