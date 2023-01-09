@@ -176,7 +176,7 @@ function addMarks(element, highlightString) {
             return true;
         }
     } else if (element.nodeType === document.ELEMENT_NODE) {
-        for (const i = 0; i < element.childNodes.length; i++) {
+        for (let i = 0; i < element.childNodes.length; i++) {
             if (element.childNodes[i].nodeName !== "MARK") {
                 addMarks(element.childNodes[i], highlightString);
             }
