@@ -48,10 +48,16 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("has a flash banner at the top indicating draft content", () => {
+    it("has a flash banner at the top with a link to a feedback survey", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("div.flash-banner").should("be.visible");
+        cy.get("div.flash-banner")
+            .should("be.visible")
+            .should(
+                "have.text",
+                "We welcome questions and suggestions -- give us feedback."
+            );
+        cy.get("div.flash-banner a").should("have.text", "give us feedback.");
     });
 
     it("hides the flash banner when scrolling down", () => {
@@ -198,15 +204,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     expect($flag)
                         .to.have.css("border-color")
                         .and.eq("rgb(91, 97, 107)");
-                    expect($flag)
-                        .to.have.css("border-width")
-                        .and.eq("1px");
-                    expect($flag)
-                        .to.have.css("border-style")
-                        .and.eq("solid");
+                    expect($flag).to.have.css("border-width").and.eq("1px");
+                    expect($flag).to.have.css("border-style").and.eq("solid");
                 });
         });
-    })
+    });
 
     it("Sets the label as WD when Correction is true and Withdrawal is true", () => {
         cy.viewport("macbook-15");
@@ -226,15 +228,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     expect($flag)
                         .to.have.css("border-color")
                         .and.eq("rgb(91, 97, 107)");
-                    expect($flag)
-                        .to.have.css("border-width")
-                        .and.eq("1px");
-                    expect($flag)
-                        .to.have.css("border-style")
-                        .and.eq("solid");
-               });
+                    expect($flag).to.have.css("border-width").and.eq("1px");
+                    expect($flag).to.have.css("border-style").and.eq("solid");
+                });
         });
-    })
+    });
 
     it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
         cy.viewport("macbook-15");
@@ -244,13 +242,13 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             cy.wrap($els[1])
                 .find(".recent-flag")
                 .then(($flag) => {
-                    expect($flag).to.have.text("CORR")
+                    expect($flag).to.have.text("CORR");
                     expect($flag)
                         .to.have.css("background-color")
                         .and.eq("rgb(214, 215, 217)");
-               });
+                });
         });
-    })
+    });
 
     it("loads the last parser success date from the API endpoint and displays it in footer", () => {
         cy.intercept("**/v3/ecfr_parser_result/**").as("parserResult");
