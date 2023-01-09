@@ -52,6 +52,13 @@
                     margin-left: 10px;
                 }
             }
+
+            // target firefox focus style, which is currently misbehaving
+            @supports (-moz-appearance: none) {
+                button.close-modal:focus {
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+            }
         }
 
         .bottom-spacer {
