@@ -2,7 +2,7 @@
     <body class="ds-base">
         <BlockingModal where-used="vite">
             <IFrameContainer
-                src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform"
+                src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
                 title="Google Forms iframe"
             />
         </BlockingModal>

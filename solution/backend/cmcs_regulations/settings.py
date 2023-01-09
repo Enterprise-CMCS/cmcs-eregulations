@@ -234,6 +234,7 @@ CSP_FRAME_SRC = [
     "https://docs.google.com",
     "https://forms.gle"
 ]
+
 CSP_STYLE_SRC = [
     "'self'",
     "'unsafe-inline'",
