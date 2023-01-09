@@ -90,7 +90,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             "background-color",
             "rgba(0, 0, 0, 0.8)"
         );
-
+        // a11y
+        cy.injectAxe();
+        cy.checkAccessibility();
         // query iframe source to make sure it's google forms
         cy.get(".blocking-modal-content iframe#iframeEl")
             .should("have.attr", "src")
