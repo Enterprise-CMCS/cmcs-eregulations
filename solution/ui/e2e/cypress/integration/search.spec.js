@@ -111,9 +111,7 @@ describe("Search flow", () => {
             .should("be.visible")
             .should("have.value", "test");
 
-        cy.get(".search-field .v-input__icon--clear button").click({
-            force: true,
-        });
+        cy.findByRole("textbox").clear();
 
         cy.findByRole("textbox").should("have.value", "");
     });
