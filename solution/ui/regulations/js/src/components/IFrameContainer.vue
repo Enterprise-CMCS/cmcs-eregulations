@@ -1,6 +1,7 @@
 <template>
     <iframe
         id="iframeEl"
+        style="background-color: #DDEAFC"
         :title="title"
         width="100%"
         :src="src"
