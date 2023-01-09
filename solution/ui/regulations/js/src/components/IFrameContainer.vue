@@ -1,6 +1,7 @@
 <template>
     <iframe
         id="iframeEl"
+        :title="title"
         width="100%"
         :src="src"
         frameborder="0"
@@ -17,6 +18,10 @@ export default {
     components: {},
 
     props: {
+        title: {
+            type: String,
+            default: "Iframe content",
+        },
         src: {
             type: String,
             required: true,

@@ -1,7 +1,10 @@
 <template>
     <body class="ds-base search-page">
         <BlockingModal where-used="vite">
-            <IFrameContainer src="https://forms.gle/LapMy4qASDEkNc8q6" />
+            <IFrameContainer
+                src="https://forms.gle/LapMy4qASDEkNc8q6"
+                title="Google Forms iframe"
+            />
         </BlockingModal>
         <FlashBanner where-used="vite" />
         <div id="searchApp" class="search-view">
