@@ -72,6 +72,39 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
+    it("shows feedback form in modal when clicking feedback link in flash banner", () => {
+        // feedback link is in banner
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        // modal doesn't exist
+        cy.get("div.blocking-modal-content").should("not.be.visible");
+        // click link
+        cy.get("div.flash-banner a")
+            .should("have.text", "give us feedback.")
+            .click({ force: true });
+        // modal exists
+        cy.get("div.blocking-modal-content").should("be.visible");
+        // make sure background is right color etc
+        cy.get("div.blocking-modal").should(
+            "have.css",
+            "background-color",
+            "rgba(0, 0, 0, 0.8)"
+        );
+
+        // query iframe source to make sure it's google forms
+        cy.get(".blocking-modal-content iframe#iframeEl")
+            .should("have.attr", "src")
+            .then((src) => {
+                expect(src.includes("docs.google.com/forms")).to.be.true;
+            });
+        // click close
+        cy.get("button.close-modal")
+            .should("be.visible")
+            .click({ force: true });
+        // modal doesn't exist again
+        cy.get("div.blocking-modal-content").should("not.be.visible");
+    });
+
     it("has the correct title and copy text", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
