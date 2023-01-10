@@ -55,7 +55,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .should("be.visible")
             .should(
                 "have.text",
-                "We welcome questions and suggestions -- give us feedback."
+                "We welcome questions and suggestions — give us feedback."
             );
         cy.get("div.flash-banner a").should("have.text", "give us feedback.");
     });
