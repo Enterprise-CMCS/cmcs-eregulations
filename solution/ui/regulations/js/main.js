@@ -8,7 +8,6 @@ import CopyBtn from "../dist/CopyBtn";
 import PrintBtn from "../dist/PrintBtn";
 import TableComponent from "../dist/TableComponent";
 import ViewResourcesLink from "../dist/ViewResourcesLink";
-import SearchEmptyState from "../dist/SearchEmptyState";
 import RecentChangesContainer from "../dist/RecentChangesContainer";
 import LastParserSuccessDate from "../dist/LastParserSuccessDate";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
@@ -166,7 +165,6 @@ function main() {
             TableComponent,
             PrintBtn,
             ViewResourcesLink,
-            SearchEmptyState,
             RecentChangesContainer,
             LastParserSuccessDate,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
