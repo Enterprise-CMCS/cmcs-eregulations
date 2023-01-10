@@ -12,6 +12,7 @@
                 <button ref="closeBtn" class="close-modal" @click="closeModal">
                     <span class="close-btn-label">Close</span>
                     <svg
+                        aria-hidden="true"
                         width="19"
                         height="19"
                         viewBox="0 0 19 19"
