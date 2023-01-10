@@ -8,7 +8,6 @@ import CopyBtn from "../dist/CopyBtn";
 import PrintBtn from "../dist/PrintBtn";
 import TableComponent from "../dist/TableComponent";
 import ViewResourcesLink from "../dist/ViewResourcesLink";
-import SearchEmptyState from "../dist/SearchEmptyState";
 import RecentChangesContainer from "../dist/RecentChangesContainer";
 import LastParserSuccessDate from "../dist/LastParserSuccessDate";
 import BlockingModal from "../dist/BlockingModal";
@@ -170,7 +169,6 @@ function main() {
             TableComponent,
             PrintBtn,
             ViewResourcesLink,
-            SearchEmptyState,
             RecentChangesContainer,
             LastParserSuccessDate,
             BlockingModal,
