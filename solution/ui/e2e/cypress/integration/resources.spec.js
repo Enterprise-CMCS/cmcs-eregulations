@@ -5,13 +5,13 @@ describe("Resources page", () => {
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
-        });
-
-        it("load properly", () => {
-            cy.intercept("**/resources/?**", {
+            cy.intercept("**/v3/resources/?&**page=1**", {
                 fixture: "no-resources-results.json",
                 delayMs: 1000,
             }).as("resources");
+        });
+
+        it("load properly", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.injectAxe();
@@ -21,6 +21,7 @@ describe("Resources page", () => {
             );
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
+            cy.wait("@resources");
             cy.get(".results-count > span").should(
                 "contain.text",
                 "0 results in Resources"
