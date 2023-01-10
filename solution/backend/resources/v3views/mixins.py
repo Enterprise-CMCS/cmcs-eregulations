@@ -1,6 +1,7 @@
 from django.db.models import Q, F, Prefetch, OuterRef, Subquery
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 from django.core.exceptions import BadRequest
+from rest_framework.exceptions import ValidationError
 
 from common.api import OpenApiQueryParameter
 from resources.models import (
@@ -236,6 +237,9 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         )
 
         if search_query:
+            details = self.pagination_details(query, search_query)
+            if not details['valid']:
+                raise ValidationError(detail=details)
             (search_type, cover_density) = (
                 ("phrase", True)
                 if search_query.startswith('"') and search_query.endswith('"')

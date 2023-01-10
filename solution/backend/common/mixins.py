@@ -1,5 +1,5 @@
 from rest_framework.pagination import PageNumberPagination
-
+from django.core.paginator import Paginator
 from .api import OpenApiQueryParameter
 
 
@@ -25,6 +25,22 @@ class OptionalPaginationMixin:
     ]
 
     paginate_by_default = True
+
+    def pagination_details(self, results, query):
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 100)
+
+        paginator = Paginator(results, page_size)
+        last_page = int(paginator.num_pages)
+        valid_url = self.request.build_absolute_uri(f"/v3/search?page={last_page}&page_size={page_size}&q={query}")
+        valid = last_page >= int(page)
+        context = {
+            "valid": valid,
+            "count": int(paginator.count),
+            "detail": "Valid page." if valid else "Invalid page.",
+            "last_available_page": int(paginator.num_pages),
+            "last_page_url": valid_url}
+        return context
 
     @property
     def pagination_class(self):
