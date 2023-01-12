@@ -6,9 +6,10 @@ from regcore.models import Part
 from resources.models import AbstractResource
 
 class PartFeed(Feed):
+
     def get_feed(self, obj, request):
         feedgen = super().get_feed(obj, request)
-        feedgen.content_type = 'application/xml; charset=utf-8'  # New standard
+        feedgen.content_type = 'application/xml+rss'  # New standard
         return feedgen
     title = 'Federal Register documents RSS Feed'
     link = '/latest/feed'
