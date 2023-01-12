@@ -4,13 +4,12 @@ from datetime import datetime
 
 from regcore.models import Part
 from resources.models import AbstractResource
-from django.utils.feedgenerator import Rss201rev2Feed
-
-class CorrectMimeTypeFeed(Rss201rev2Feed):
-    mime_type = 'application/xml'
 
 class PartFeed(Feed):
-    feed_type = CorrectMimeTypeFeed
+    def get_feed(self, obj, request):
+        feedgen = super().get_feed(obj, request)
+        feedgen.content_type = 'application/xml; charset=utf-8'  # New standard
+        return feedgen
     title = 'Federal Register documents RSS Feed'
     link = '/latest/feed'
     description = 'Displays the latest federal register documents'
