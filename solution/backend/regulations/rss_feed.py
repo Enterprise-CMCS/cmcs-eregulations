@@ -1,12 +1,11 @@
 from django.contrib.syndication.views import Feed
 from django.urls import reverse
 from datetime import datetime
-
 from regcore.models import Part
 from resources.models import AbstractResource
 
-class PartFeed(Feed):
 
+class PartFeed(Feed):
     def get_feed(self, obj, request):
         feedgen = super().get_feed(obj, request)
         feedgen.content_type = 'application/xml'  # New standard
