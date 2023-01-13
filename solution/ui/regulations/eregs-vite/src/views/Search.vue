@@ -1,5 +1,12 @@
 <template>
     <body class="ds-base search-page">
+        <BlockingModal where-used="vite">
+            <IFrameContainer
+                src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
+                title="Google Forms iframe"
+            />
+        </BlockingModal>
+        <FlashBanner where-used="vite" />
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
                 <template #input>
@@ -134,6 +141,9 @@ import {
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
+import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
+import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
+import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
@@ -145,6 +155,9 @@ export default {
 
     components: {
         Banner,
+        BlockingModal,
+        FlashBanner,
+        IFrameContainer,
         PaginationController,
         RegResults,
         ResourcesResults,

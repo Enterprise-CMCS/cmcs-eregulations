@@ -23,6 +23,7 @@ provider:
     STATIC_URL: ${self:custom.settings.static_url}
     BASE_URL: ${ssm:/eregulations/base_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url}
+    SURVEY_URL: ${ssm:/eregulations/survey_url}
   vpc:
     securityGroupIds:
       - !Ref ServerlessSecurityGroup

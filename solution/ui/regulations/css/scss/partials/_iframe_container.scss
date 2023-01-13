@@ -1,0 +1,9 @@
+@import "../application_settings";
+
+#iframeEl {
+    height: calc(100vh - 80px);
+
+    @include screen-md {
+        height: 1200px;
+    }
+}

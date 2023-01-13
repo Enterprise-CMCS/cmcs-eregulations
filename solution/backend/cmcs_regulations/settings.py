@@ -110,6 +110,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.custom_url",
+                "cmcs_regulations.context_processors.survey_url",
                 "cmcs_regulations.context_processors.automated_testing",
                 'regulations.context_processors.site_config',
                 'regcore.context_processors.regcore_config',
@@ -191,6 +192,10 @@ DEBUG_TOOLBAR_CONFIG = {
 GA_ID = os.environ.get("GA_ID")
 
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
+SURVEY_URL = os.environ.get(
+    "SURVEY_URL",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
+)
 
 
 OPENSEARCH_DSL = {
@@ -228,6 +233,13 @@ CSP_IMG_SRC = [
     'data:',
     "https://images.federalregister.gov/",
 ]
+CSP_FRAME_SRC = [
+    "'self'",
+    STATIC_URL,
+    "https://docs.google.com",
+    "https://forms.gle"
+]
+
 CSP_STYLE_SRC = [
     "'self'",
     "'unsafe-inline'",

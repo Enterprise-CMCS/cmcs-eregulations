@@ -13,6 +13,12 @@ def custom_url(request):
     }
 
 
+def survey_url(request):
+    return {
+        "SURVEY_URL": settings.SURVEY_URL
+    }
+
+
 def automated_testing(request):
     return {
         "AUTOMATED_TEST": request.META.get("HTTP_X_AUTOMATED_TEST") == "true"
