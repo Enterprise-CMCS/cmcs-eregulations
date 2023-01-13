@@ -48,10 +48,16 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("has a flash banner at the top indicating draft content", () => {
+    it("has a flash banner at the top with a link to a feedback survey", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("div.flash-banner").should("be.visible");
+        cy.get("div.flash-banner")
+            .should("be.visible")
+            .should(
+                "have.text",
+                "We welcome questions and suggestions — give us feedback."
+            );
+        cy.get("div.flash-banner a").should("have.text", "give us feedback.");
     });
 
     it("hides the flash banner when scrolling down", () => {
@@ -64,6 +70,41 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             const rect = $el[0].getBoundingClientRect();
             expect(rect.bottom).to.be.lessThan(1);
         });
+    });
+
+    it("shows feedback form in modal when clicking feedback link in flash banner", () => {
+        // feedback link is in banner
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        // modal doesn't exist
+        cy.get("div.blocking-modal-content").should("not.be.visible");
+        // click link
+        cy.get("div.flash-banner a")
+            .should("have.text", "give us feedback.")
+            .click({ force: true });
+        // modal exists
+        cy.get("div.blocking-modal-content").should("be.visible");
+        // make sure background is right color etc
+        cy.get("div.blocking-modal").should(
+            "have.css",
+            "background-color",
+            "rgba(0, 0, 0, 0.8)"
+        );
+        // a11y
+        cy.injectAxe();
+        cy.checkAccessibility();
+        // query iframe source to make sure it's google forms
+        cy.get(".blocking-modal-content iframe#iframeEl")
+            .should("have.attr", "src")
+            .then((src) => {
+                expect(src.includes("docs.google.com/forms")).to.be.true;
+            });
+        // click close
+        cy.get("button.close-modal")
+            .should("be.visible")
+            .click({ force: true });
+        // modal doesn't exist again
+        cy.get("div.blocking-modal-content").should("not.be.visible");
     });
 
     it("has the correct title and copy text", () => {
@@ -198,15 +239,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     expect($flag)
                         .to.have.css("border-color")
                         .and.eq("rgb(91, 97, 107)");
-                    expect($flag)
-                        .to.have.css("border-width")
-                        .and.eq("1px");
-                    expect($flag)
-                        .to.have.css("border-style")
-                        .and.eq("solid");
+                    expect($flag).to.have.css("border-width").and.eq("1px");
+                    expect($flag).to.have.css("border-style").and.eq("solid");
                 });
         });
-    })
+    });
 
     it("Sets the label as WD when Correction is true and Withdrawal is true", () => {
         cy.viewport("macbook-15");
@@ -226,15 +263,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     expect($flag)
                         .to.have.css("border-color")
                         .and.eq("rgb(91, 97, 107)");
-                    expect($flag)
-                        .to.have.css("border-width")
-                        .and.eq("1px");
-                    expect($flag)
-                        .to.have.css("border-style")
-                        .and.eq("solid");
-               });
+                    expect($flag).to.have.css("border-width").and.eq("1px");
+                    expect($flag).to.have.css("border-style").and.eq("solid");
+                });
         });
-    })
+    });
 
     it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
         cy.viewport("macbook-15");
@@ -244,13 +277,13 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             cy.wrap($els[1])
                 .find(".recent-flag")
                 .then(($flag) => {
-                    expect($flag).to.have.text("CORR")
+                    expect($flag).to.have.text("CORR");
                     expect($flag)
                         .to.have.css("background-color")
                         .and.eq("rgb(214, 215, 217)");
-               });
+                });
         });
-    })
+    });
 
     it("loads the last parser success date from the API endpoint and displays it in footer", () => {
         cy.intercept("**/v3/ecfr_parser_result/**").as("parserResult");
