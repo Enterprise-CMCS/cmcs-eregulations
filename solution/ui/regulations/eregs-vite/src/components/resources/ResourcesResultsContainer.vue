@@ -87,6 +87,8 @@ import PaginationController from "@/components/pagination/PaginationController.v
 import ResourceExportBtn from "@/components/resources/ResourceExportBtn.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
+import { getCurrentPageResultsRange } from "@/utilities/utils";
+
 const SORT_METHODS = {
     newest: "Date (Newest)",
     oldest: "Date (Oldest)",
@@ -208,16 +210,11 @@ export default {
             }));
         },
         currentPageResultsRange() {
-            const maxInRange = this.page * this.pageSize;
-            const minInRange = maxInRange - this.pageSize;
-
-            const firstInRange = minInRange + 1;
-            const lastInRange =
-                maxInRange > this.count
-                    ? (this.count % this.pageSize) + minInRange
-                    : maxInRange;
-
-            return [firstInRange, lastInRange];
+            return getCurrentPageResultsRange({
+                count: this.count,
+                page: this.page,
+                pageSize: this.pageSize
+            });
         },
         regulationsSearchUrl() {
             return `${this.base}/search/`;
