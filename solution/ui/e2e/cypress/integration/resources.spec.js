@@ -21,7 +21,6 @@ describe("Resources page", () => {
             );
             cy.get("h1").contains("Resources");
             cy.get("h3").contains("Filter Resources");
-            cy.wait("@resources");
             cy.get(".results-count > span").should(
                 "contain.text",
                 "0 results in Resources"
