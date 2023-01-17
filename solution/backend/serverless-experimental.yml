@@ -21,6 +21,7 @@ provider:
     ALLOWED_HOST: '.amazonaws.com'
     STATIC_URL: ${self:custom.settings.static_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url, ''}
+    SURVEY_URL: ${ssm:/eregulations/survey_url}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}

@@ -96,6 +96,38 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/BlockingModal.vue",
+        output: {
+            format: "esm",
+            file: "dist/BlockingModal.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/BlockingModalTrigger.vue",
+        output: {
+            format: "esm",
+            file: "dist/BlockingModalTrigger.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/FlashBanner.vue",
+        output: {
+            format: "esm",
+            file: "dist/FlashBanner.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/IFrameContainer.vue",
+        output: {
+            format: "esm",
+            file: "dist/IFrameContainer.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",

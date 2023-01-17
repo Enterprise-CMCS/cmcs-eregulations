@@ -10,6 +10,10 @@ import TableComponent from "../dist/TableComponent";
 import ViewResourcesLink from "../dist/ViewResourcesLink";
 import RecentChangesContainer from "../dist/RecentChangesContainer";
 import LastParserSuccessDate from "../dist/LastParserSuccessDate";
+import BlockingModal from "../dist/BlockingModal";
+import BlockingModalTrigger from "../dist/BlockingModalTrigger";
+import FlashBanner from "../dist/FlashBanner";
+import IFrameContainer from "../dist/IFrameContainer";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -167,6 +171,10 @@ function main() {
             ViewResourcesLink,
             RecentChangesContainer,
             LastParserSuccessDate,
+            BlockingModal,
+            BlockingModalTrigger,
+            FlashBanner,
+            IFrameContainer,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");
