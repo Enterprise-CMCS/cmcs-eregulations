@@ -19,8 +19,7 @@ from django.conf import settings
 from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.sitemaps.views import sitemap
 
-from regulations.rss_feed import PartFeed
-from regulations.sitemap import PartSitemap, SupplementalContentSitemap
+from regulations.feeds import PartSitemap, SupplementalContentSitemap, PartFeed
 
 sitemaps = {
     "Parts": PartSitemap,
