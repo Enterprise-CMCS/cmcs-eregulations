@@ -6,6 +6,7 @@ from regcore.models import Part
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
 
+
 class FeedData():
     def processChildren(self, children, title, part, last_updated):
         results = []
@@ -22,6 +23,8 @@ class FeedData():
                 if childResults:
                     results = results + childResults
         return results
+
+
 class PartFeed(Feed,FeedData):
     title = 'Federal Register documents RSS Feed'
     link = '/latest/feed'
@@ -83,6 +86,7 @@ class SupplementalContentFeed(Feed):
     def item_link(self, item):
         return reverse('supplemental_content', kwargs={'id': item.id})
 
+
 class PartSitemap(Sitemap, FeedData):
 
     changefreq = "daily"
@@ -114,6 +118,7 @@ class PartSitemap(Sitemap, FeedData):
             if item.get(key):
                 kwargs[key] = item[key]
         return reverse("reader_view", kwargs=kwargs)
+
 
 class SupplementalContentSitemap(Sitemap):
 
