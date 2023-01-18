@@ -7,7 +7,7 @@ from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
 
 
-class FeedData():
+class FeedData:
     def processChildren(self, children, title, part, last_updated):
         results = []
         for child in children:
@@ -25,7 +25,7 @@ class FeedData():
         return results
 
 
-class PartFeed(Feed,FeedData):
+class PartFeed(Feed, FeedData):
     title = 'Federal Register documents RSS Feed'
     link = '/latest/feed'
     description = 'Displays the latest federal register documents'
@@ -77,12 +77,6 @@ class SupplementalContentFeed(Feed):
     def items(self):
         return AbstractResource.objects.filter(approved=True)
 
-    # def item_title(self, item):
-        # return item.title
-
-    # def item_description(self, item):
-        # return item.description
-
     def item_link(self, item):
         return reverse('supplemental_content', kwargs={'id': item.id})
 
@@ -91,7 +85,6 @@ class PartSitemap(Sitemap, FeedData):
 
     changefreq = "daily"
     priority = 0.5
-
 
     def items(self):
         date = datetime.now()
