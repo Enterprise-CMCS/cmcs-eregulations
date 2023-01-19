@@ -12,8 +12,8 @@ provider:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}
     DB_PASSWORD: ${ssm:/eregulations/db/password}
-    DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
-    DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+    DB_HOST: ${ssm:/eregulations/db/host}
+    DB_PORT: ${ssm:/eregulations/db/port}
     GA_ID: ${ssm:/eregulations/http/google_analytics}
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
@@ -26,7 +26,7 @@ provider:
     SURVEY_URL: ${ssm:/eregulations/survey_url}
   vpc:
     securityGroupIds:
-      - !Ref ServerlessSecurityGroup
+      - ${ssm:/eregulations/aws/securitygroupid}
     subnetIds:
       - ${ssm:/account_vars/vpc/subnets/private/a/id}
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
@@ -136,106 +136,6 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-
-    ServerlessSecurityGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: SecurityGroup for Serverless Functions
-        VpcId: ${ssm:/account_vars/vpc/id}
-        Tags:
-          - Key: "Name"
-            Value: "ServerlessSecurityGroup"
-
-    DBSecurityGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: SecurityGroup for Database
-        VpcId: ${ssm:/account_vars/vpc/id}
-        Tags:
-          - Key: "Name"
-            Value: "DBSecurityGroup"
-
-    DBSecurityGroupIngress:
-      Type: AWS::EC2::SecurityGroupIngress
-      Properties:
-        GroupId: !Ref 'DBSecurityGroup'
-        IpProtocol: tcp
-        FromPort: !GetAtt [RDSResource, Endpoint.Port]
-        ToPort: !GetAtt [RDSResource, Endpoint.Port]
-        SourceSecurityGroupId: !Ref 'ServerlessSecurityGroup'
-
-    DBSubnetGroup:
-      Type: AWS::RDS::DBSubnetGroup
-      Properties:
-        DBSubnetGroupDescription: "RDS Subnet Group"
-        SubnetIds:
-          - ${ssm:/account_vars/vpc/subnets/private/a/id}
-          - ${ssm:/account_vars/vpc/subnets/private/b/id}
-        Tags:
-          - Key: "Name"
-            Value: "DBSubnetGroup"
-    # =============================================================================================
-    # Aurora DB
-    # =============================================================================================
-
-    AuroraRDSClusterParameter:
-      Type: AWS::RDS::DBClusterParameterGroup
-      Properties:
-        Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql12
-        Parameters:
-          rds.force_ssl: 1
-
-    AuroraRDSInstanceParameter:
-      Type: AWS::RDS::DBParameterGroup
-      Properties:
-        Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql12
-        Parameters:
-          shared_preload_libraries: auto_explain,pg_stat_statements,pg_hint_plan,pgaudit
-          log_statement: "ddl"
-          log_connections: 1
-          log_disconnections: 1
-          log_lock_waits: 1
-          log_min_duration_statement: 5000
-          auto_explain.log_min_duration: 5000
-          auto_explain.log_verbose: 1
-          log_rotation_age: 1440
-          log_rotation_size: 102400
-          rds.log_retention_period: 10080
-          random_page_cost: 1
-          track_activity_query_size: 16384
-          idle_in_transaction_session_timeout: 7200000
-          statement_timeout: 7200000
-          search_path: '"$user",public'
-
-    RDSResource:
-      Type: AWS::RDS::DBCluster
-      Properties:
-        MasterUsername: ${self:custom.settings.USERNAME}
-        MasterUserPassword: ${ssm:/eregulations/db/password}
-        DBSubnetGroupName:
-          Ref: DBSubnetGroup
-        Engine: aurora-postgresql
-        EngineVersion: "12.8"
-        DatabaseName: ${self:custom.settings.DB_NAME}
-        BackupRetentionPeriod: 3
-        DBClusterParameterGroupName:
-          Ref: AuroraRDSClusterParameter
-        VpcSecurityGroupIds:
-          - !Ref 'DBSecurityGroup'
-
-    AuroraRDSInstance:
-      Type: AWS::RDS::DBInstance
-      Properties:
-        DBInstanceClass: db.r5.large
-        Engine: aurora-postgresql
-        EngineVersion: "12.8"
-        PubliclyAccessible: false
-        DBParameterGroupName:
-          Ref: AuroraRDSInstanceParameter
-        DBClusterIdentifier:
-          Ref: RDSResource
 
 plugins:
   - serverless-python-requirements
