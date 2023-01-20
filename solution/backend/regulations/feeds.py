@@ -5,7 +5,7 @@ from django.urls import reverse
 from regcore.models import Part
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
-
+import os
 
 class FeedData:
     def processChildren(self, children, title, part, last_updated):
@@ -27,7 +27,7 @@ class FeedData:
 
 class PartFeed(Feed, FeedData):
     title = 'Federal Register documents RSS Feed'
-    link = '/latest/feed'
+    link = "%s/latest/feed" % (os.environ.get("BASE_URL"))
     description = 'Displays the latest federal register documents'
 
     def get_feed(self, obj, request):
