@@ -7,6 +7,7 @@ from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
 import os
 
+
 class FeedData:
     def processChildren(self, children, title, part, last_updated):
         results = []
