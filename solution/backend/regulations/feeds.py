@@ -28,7 +28,11 @@ class FeedData:
 
 class PartFeed(Feed, FeedData):
     title = 'Federal Register documents RSS Feed'
-    link = "%s/latest/feed" % (os.environ.get("BASE_URL"))
+    db_name = "" if os.environ.get("DB_NAME") is None else os.environ.get("DB_Name")
+    if db_name == "eregs":
+        link = "latest/feed"
+    else:
+        link = db_name + "/latest/feed"
     description = 'Displays the latest federal register documents'
 
     def get_feed(self, obj, request):
@@ -70,8 +74,12 @@ class PartFeed(Feed, FeedData):
             return '{} {} Subpart {}'.format(item['title'], item['part'], item['subpart'])
 
     def item_link(self, item):
-        return '/{}/{}'.format(item['title'], item['part'])
+        db_name = "" if os.environ.get("DB_NAME") is None else os.environ.get("DB_Name")
+        if db_name == 'eregs':
+            return "{}/{}".format(item['title'], item['part'])
 
+        else:
+            return "{}/{}/{}".format(db_name, item['title'], item['part'])
 
 class SupplementalContentFeed(Feed):
     title = 'supplemental content feed'
