@@ -192,8 +192,6 @@ DEBUG_TOOLBAR_CONFIG = {
 
 GA_ID = os.environ.get("GA_ID")
 
-BASE_URL = os.environ.get("BASE_URL")
-
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
 SURVEY_URL = os.environ.get(
     "SURVEY_URL",
