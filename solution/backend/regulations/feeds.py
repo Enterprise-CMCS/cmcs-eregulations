@@ -28,11 +28,7 @@ class FeedData:
 
 class PartFeed(Feed, FeedData):
     title = 'Federal Register documents RSS Feed'
-    db_name = "" if os.environ.get("DB_NAME") is None else os.environ.get("DB_Name")
-    if db_name == "eregs":
-        link = "latest/feed"
-    else:
-        link = db_name + "/latest/feed"
+    link = "latest/feed"
     description = 'Displays the latest federal register documents'
 
     def get_feed(self, obj, request):
