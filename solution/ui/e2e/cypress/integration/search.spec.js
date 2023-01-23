@@ -51,10 +51,13 @@ describe("Search flow", () => {
             ".resources-results-content .search-results-count > span"
         ).should("be.visible");
         cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section"
+        )
+            .should("be.visible");    
+        cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
         )
-            .should("be.visible")
-            .and("have.attr", "href");
+            .should("have.attr", "href");
         cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
         ).click({ force: true });
