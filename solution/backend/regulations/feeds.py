@@ -81,6 +81,7 @@ class PartFeed(Feed, FeedData):
         else:
             return "{}/{}/{}".format(db_name, item['title'], item['part'])
 
+
 class SupplementalContentFeed(Feed):
     title = 'supplemental content feed'
     link = '/supplemental_content/'
