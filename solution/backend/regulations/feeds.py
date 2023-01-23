@@ -60,6 +60,9 @@ class PartFeed(Feed, FeedData):
         else:
             return '{} {} Subpart {}'.format(item['title'], item['part'], item['subpart'])
 
+    def item_pubdate(self, item):
+        return item['last_updated']
+
     def item_description(self, item):
         if 'document_title' in item:
             return item['document_title']
