@@ -81,8 +81,9 @@ describe("Search flow", () => {
     it("should have a valid link to medicaid.gov", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get("external-resource-links li:nth-child(3) a")
-        .should("have.attr", "href");
+        cy.get(".options-list li:nth-child(3) a")
+        .should("have.attr", "href")
+        .and('include', "search-gsc");
     })
 
     it("checks a11y for search page", () => {
