@@ -14,11 +14,15 @@ GOVINFO_LINK = "https://www.govinfo.gov/link/cfr/{}/{}?sectionnum={}&year={}&lin
 
 async def check_year(section, year, client):
     data = await client.head(GOVINFO_LINK.format(section["title"], section["part"], section["section"], year))
-    if data.status_code != 302:
+    if data.status_code == 400:
         return None
+    elif data.status_code == 302:
+        link = data.headers["location"]
+    else:
+        link = None
     return {
         "year": str(year),
-        "link": data.headers["location"],
+        "link": link,
     }
 
 
@@ -34,6 +38,7 @@ def year_generator(title, part, section):
     max_year = datetime.date.today().year + 1
     for future in asyncio.as_completed([check_year(section_data, year, client) for year in range(GOVINFO_YEAR_MIN, max_year)]):
         yield loop.run_until_complete(future)
+    client.aclose()
 
 
 class SectionHistoryViewSet(viewsets.ViewSet):
