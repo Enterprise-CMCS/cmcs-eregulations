@@ -113,3 +113,12 @@ class RegcoreSerializerTestCase(APITestCase):
         response = self.client.get("/v3/title/42/part/400/versions")
         data = response.data
         self.assertEqual(data, [date(2020, 6, 30)])
+
+    def test_get_historical_sections(self):
+        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        if not data:
+            raise AssertionError("no years present for known-good section")
+        if "year" not in data[0] or "link" not in data[0]:
+            raise AssertionError("missing one of 'year' or 'link' in response")
+        if data[0]["year"] != "1996":
+            raise AssertionError("known-good section doesn't contain 1996")
