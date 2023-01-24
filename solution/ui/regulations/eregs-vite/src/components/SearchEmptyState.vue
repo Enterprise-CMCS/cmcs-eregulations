@@ -6,7 +6,7 @@
                 See results for
                 <span class="query-emphasis">{{ query }}</span> on:
             </div>
-            <ul>
+            <ul class="external-resource-links">
                 <li v-if="showInternalLink">
                     <a :href="eregsLink">{{ eregs_url_label }}</a>
                 </li>

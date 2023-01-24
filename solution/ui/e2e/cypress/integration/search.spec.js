@@ -78,6 +78,12 @@ describe("Search flow", () => {
             });
         });
     });
+    it("should have a valid link to medicaid.gov", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get("external-resource-links external-resource-links li a")
+        .should("have.attr", "href");
+    })
 
     it("checks a11y for search page", () => {
         cy.viewport("macbook-15");
@@ -118,4 +124,10 @@ describe("Search flow", () => {
 
         cy.findByRole("textbox").should("have.value", "");
     });
+
+    it("should have a valid link to medicaid.gov", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get("external-resource-links external-resource-links li a")
+    })
 });
