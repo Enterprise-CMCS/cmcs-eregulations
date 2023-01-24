@@ -78,6 +78,7 @@ describe("Search flow", () => {
             });
         });
     });
+
     it("should have a valid link to medicaid.gov", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
