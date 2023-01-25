@@ -13,8 +13,12 @@ GOVINFO_YEAR_MIN = 1996
 GOVINFO_LINK = "https://www.govinfo.gov/link/cfr/{}/{}?sectionnum={}&year={}&link-type=pdf"
 
 
+async def get_year_data(section, year, client):
+    return await client.head(GOVINFO_LINK.format(section["title"], section["part"], section["section"], year))
+
+
 async def check_year(section, year, client):
-    data = await client.head(GOVINFO_LINK.format(section["title"], section["part"], section["section"], year))
+    data = await get_year_data(section, year, client)
     if data.status_code == 400:
         return None
     elif data.status_code == 302:
@@ -27,9 +31,7 @@ async def check_year(section, year, client):
     }
 
 
-def year_generator(title, part, section):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
+async def get_years(title, part, section):
     client = httpx.AsyncClient()
     section_data = {
         "title": title,
@@ -37,9 +39,9 @@ def year_generator(title, part, section):
         "section": section,
     }
     max_year = datetime.date.today().year + 1
-    for future in asyncio.as_completed([check_year(section_data, year, client) for year in range(GOVINFO_YEAR_MIN, max_year)]):
-        yield loop.run_until_complete(future)
-    client.aclose()
+    years = await asyncio.gather(*[check_year(section_data, year, client) for year in range(GOVINFO_YEAR_MIN, max_year)])
+    await client.aclose()
+    return sorted([year for year in years if year is not None], key=lambda year: year["year"])
 
 
 @extend_schema(
@@ -55,5 +57,5 @@ class SectionHistoryViewSet(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
         title, part, section = [self.kwargs.get(i) for i in ["title", "part", "section"]]
-        years = sorted([year for year in year_generator(title, part, section) if year is not None], key=lambda year: year["year"])
+        years = asyncio.run(get_years(title, part, section))
         return Response(self.serializer_class(instance=years, many=True).data)
