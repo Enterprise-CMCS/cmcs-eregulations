@@ -1,12 +1,9 @@
 from django.contrib.sitemaps import Sitemap
 from datetime import datetime
 from django.urls import reverse
-from django.views.generic.base import TemplateView
-
 from regcore.models import Part
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
-import os
 
 
 class FeedData:
@@ -61,7 +58,7 @@ class PartFeed(Feed, FeedData):
         if 'document_label' in item:
             return item['document_label']
         else:
-            return '{} {} Subpart {}'.format(item['title'], item['part'], item['subpart'])
+            return f"{item['title']} {item['part']} Subpart {item['subpart']}"
 
     def item_pubdate(self, item):
         return item['last_updated']
@@ -70,16 +67,10 @@ class PartFeed(Feed, FeedData):
         if 'document_title' in item:
             return item['document_title']
         else:
-            return '{} {} Subpart {}'.format(item['title'], item['part'], item['subpart'])
-
+            return f"{item['title']} {item['part']} Subpart {item['subpart']}"
     def item_link(self, item):
         protocol = "https" if self.is_secure else "http"
-        db_name = "" if os.environ.get("DB_NAME") is None else os.environ.get("DB_Name")
-        if db_name == 'eregs':
-            return "{}/{}".format(item['title'], item['part'])
-
-        else:
-            return f"{protocol}://{self.host}/{item['title']}/{item['part']}"
+        return f"{protocol}://{self.host}/{item['title']}/{item['part']}"
 
 class SupplementalContentFeed(Feed):
     title = 'supplemental content feed'
