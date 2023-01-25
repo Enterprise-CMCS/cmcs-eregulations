@@ -4,8 +4,17 @@ from regcore.search.models import Synonym
 from rest_framework import status
 from collections import OrderedDict
 from rest_framework.test import APITestCase
-
-
+from unittest.mock import Mock, patch
+async def mock_gov_info_400(section,year,client):
+    mock_response = Mock()
+    if year ==2020:
+        mock_response.headers = {"location": "govinfo.gov"}
+        mock_response.status_code = 302
+    elif year == 2022:
+        mock_response.status_code = 200
+    else:
+        mock_response.status_code = 400
+    return mock_response
 class RegcoreSerializerTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
@@ -113,12 +122,17 @@ class RegcoreSerializerTestCase(APITestCase):
         response = self.client.get("/v3/title/42/part/400/versions")
         data = response.data
         self.assertEqual(data, [date(2020, 6, 30)])
-
+    @patch("regcore.v3views.history.get_history_data", mock_gov_info_400)
     def test_get_historical_sections(self):
         data = self.client.get("/v3/title/42/part/433/history/section/50").data
-        if not data:
-            raise AssertionError("no years present for known-good section")
-        if "year" not in data[0] or "link" not in data[0]:
-            raise AssertionError("missing one of 'year' or 'link' in response")
-        if data[0]["year"] != "1996":
-            raise AssertionError("known-good section doesn't contain 1996")
+
+        self.assertEqual(data[0]['link'], "govinfo.gov")
+        self.assertEqual(data[0]['year'], "2020")
+        self.assertEqual(data[1]['year'], '2022')
+        self.assertIsNone(data[1]['link'])
+        # if not data:
+        #     raise AssertionError("no years present for known-good section")
+        # if "year" not in data[0] or "link" not in data[0]:
+        #     raise AssertionError("missing one of 'year' or 'link' in response")
+        # if data[0]["year"] != "1996":
+        #     raise AssertionError("known-good section doesn't contain 1996")
