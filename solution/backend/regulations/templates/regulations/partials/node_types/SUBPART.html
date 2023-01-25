@@ -7,7 +7,7 @@
 <article>
     <h1 tabindex="-1" id="{{node.label | join:'-'}}">
         {% subpart_formatter cfr_title citation node.label as formatted_citation %}
-        <copy-btn btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}"></copy-btn>
+        <tooltip-container btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}"></tooltip-container>
         {{node.title}}
     </h1>
     {{node.text | safe}}

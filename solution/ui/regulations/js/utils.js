@@ -161,7 +161,7 @@ function addMarks(element, highlightString) {
         // note `nodeValue` vs `innerHTML`
         // nodeValue gives inner text without Vue component markup tags;
         // innerHTML gives text with Vue Component markup tags;
-        // Currently there is only the <copy-btn> tag at beginning
+        // Currently there is only the tooltip <trigger-btn> tag at beginning
         const text = element.nodeValue;
         if (text.toUpperCase().indexOf(highlightString.toUpperCase()) !== -1) {
             const innerHtmlOfParentNode = element.parentNode.innerHTML;

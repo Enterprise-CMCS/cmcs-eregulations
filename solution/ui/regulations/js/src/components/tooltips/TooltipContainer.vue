@@ -1,7 +1,7 @@
 <template>
-    <div class="copy-btn-container">
+    <div class="trigger-btn-container">
         <button
-            class="copy-btn text-btn"
+            class="trigger-btn text-btn"
             :class="buttonClasses"
             :aria-label="ariaLabel"
             @focus="handleEnter"
@@ -15,7 +15,7 @@
         </button>
         <div
             v-show="entered && btn_type === 'icon'"
-            class="copy-tooltip hovered"
+            class="tooltip hovered"
             :class="tooltipClasses"
             :style="tooltipStyles"
         >
@@ -24,7 +24,7 @@
         <div
             v-if="clicked"
             v-clickaway="handleCloseClick"
-            class="copy-tooltip clicked"
+            class="tooltip clicked"
             :class="tooltipClasses"
             :style="tooltipStyles"
         >
@@ -88,7 +88,7 @@ const appendPxSuffix = (int) => `${int}px`;
 const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
 export default {
-    name: "CopyBtn",
+    name: "TooltipContainer",
 
     components: {
         ActionBtn,
@@ -167,7 +167,7 @@ export default {
         },
         buttonClasses() {
             return {
-                "copy-btn-labeled": this.btn_type === "labeled-icon",
+                "trigger-btn-labeled": this.btn_type === "labeled-icon",
             };
         },
         tooltipClasses() {

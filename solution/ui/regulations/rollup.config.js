@@ -49,10 +49,10 @@ export default [
         plugins,
     },
     {
-        input: "js/src/components/tooltips/CopyBtn.vue",
+        input: "js/src/components/tooltips/TooltipContainer.vue",
         output: {
             format: "esm",
-            file: "dist/CopyBtn.js",
+            file: "dist/TooltipContainer.js",
         },
         plugins,
     },

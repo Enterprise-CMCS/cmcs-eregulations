@@ -4,7 +4,7 @@ import RelatedRules from "../dist/RelatedRules";
 import Collapsible from "../dist/Collapsible";
 import CollapseButton from "../dist/CollapseButton";
 import SupplementalContent from "../dist/SupplementalContent";
-import CopyBtn from "../dist/CopyBtn";
+import TooltipContainer from "../dist/TooltipContainer";
 import PrintBtn from "../dist/PrintBtn";
 import TableComponent from "../dist/TableComponent";
 import ViewResourcesLink from "../dist/ViewResourcesLink";
@@ -165,7 +165,7 @@ function main() {
             Collapsible,
             CollapseButton,
             SupplementalContent,
-            CopyBtn,
+            TooltipContainer,
             TableComponent,
             PrintBtn,
             ViewResourcesLink,

@@ -8,7 +8,7 @@
 
         {% if node.label and node.label|length > 0 %}
             {% appendix_formatter cfr_title node.label as formatted_citation %}
-            <copy-btn btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}"></copy-btn>
+            <tooltip-container btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}"></tooltip-container>
         {% endif %}
         {{node.title}}
     </h2>
