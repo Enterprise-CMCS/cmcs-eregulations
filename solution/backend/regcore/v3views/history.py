@@ -32,16 +32,15 @@ async def check_year(section, year, client):
 
 
 async def get_years(title, part, section):
-    client = httpx.AsyncClient()
+    max_year = datetime.date.today().year + 1
     section_data = {
         "title": title,
         "part": part,
         "section": section,
     }
-    max_year = datetime.date.today().year + 1
-    years = await asyncio.gather(*[check_year(section_data, year, client) for year in range(GOVINFO_YEAR_MIN, max_year)])
-    await client.aclose()
-    return sorted([year for year in years if year is not None], key=lambda year: year["year"])
+    async with httpx.AsyncClient() as client:
+        years = await asyncio.gather(*[check_year(section_data, year, client) for year in range(GOVINFO_YEAR_MIN, max_year)])
+    return [year for year in years if year is not None]
 
 
 @extend_schema(
