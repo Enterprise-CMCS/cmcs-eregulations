@@ -73,7 +73,7 @@ class PartFeed(Feed, FeedData):
             return f"{item['title']} {item['part']} Subpart {item['subpart']}"
 
     def item_link(self, item):
-        return f"{self.path}/{item['title']}/{item['part']}".replace('latest/feed', '')
+        return f"{self.path}{item['title']}/{item['part']}".replace('/latest/feed', '')
 
 
 class SupplementalContentFeed(Feed):
