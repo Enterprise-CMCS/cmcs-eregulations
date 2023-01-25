@@ -10,11 +10,11 @@
             @mouseleave="handleExit"
             @click="handleClick"
         >
-            <slot name="button-icon"></slot>
-            <span v-if="btn_type === 'labeled-icon'">{{ label }}</span>
+            <i class="fa" :class="faIconType"></i>
+            <span v-if="btnType === 'labeled-icon'">{{ label }}</span>
         </button>
         <div
-            v-show="entered && btn_type === 'icon'"
+            v-show="entered && btnType === 'icon'"
             class="tooltip hovered"
             :class="tooltipClasses"
             :style="tooltipStyles"
@@ -30,7 +30,7 @@
         >
             <button
                 class="close-btn text-btn"
-                aria-label="close copy link or citation dialog"
+                :aria-label="closeAriaLabel"
                 @click="handleCloseClick"
             >
                 <svg
@@ -47,28 +47,13 @@
                     />
                 </svg>
             </button>
-            <slot name="tooltip-title"></slot>
-            <div class="action-btns">
-                <ActionBtn
-                    :selected-action="selectedAction"
-                    :status="copyStatus"
-                    action-type="link"
-                    @action-btn-click="handleActionClick"
-                ></ActionBtn>
-                <ActionBtn
-                    :selected-action="selectedAction"
-                    :status="copyStatus"
-                    action-type="citation"
-                    @action-btn-click="handleActionClick"
-                ></ActionBtn>
-            </div>
+            <p class="tooltip-title">{{ tooltipTitle }}</p>
+            <slot name="tooltip-content"></slot>
         </div>
     </div>
 </template>
 
 <script>
-import ActionBtn from "./ActionBtn.vue";
-
 const getAnchorY = (el, elType) => {
     if (!el) return 0;
 
@@ -90,9 +75,7 @@ const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 export default {
     name: "TooltipContainer",
 
-    components: {
-        ActionBtn,
-    },
+    components: {},
 
     // https://www.vuesnippets.com/posts/click-away/
     // https://dev.to/jamus/clicking-outside-the-box-making-your-vue-app-aware-of-events-outside-its-world-53nh
@@ -128,9 +111,13 @@ export default {
     },
 
     props: {
-        btn_type: {
+        btnType: {
             type: String,
             required: true,
+        },
+        buttonIcon: {
+            type: String,
+            default: "link",
         },
         label: {
             type: String,
@@ -140,11 +127,7 @@ export default {
             type: String,
             required: true,
         },
-        hash: {
-            type: String,
-            required: true,
-        },
-        formatted_citation: {
+        tooltipTitle: {
             type: String,
             required: true,
         },
@@ -157,20 +140,21 @@ export default {
             leftSafe: true,
             anchorY: 0,
             anchorX: 0,
-            selectedAction: null,
-            copyStatus: "idle",
         };
     },
 
     computed: {
         ariaLabel() {
-            return this.btn_type === "icon"
+            return this.btnType === "icon"
                 ? `${this.label} for ${this.title}`
                 : false;
         },
+        closeAriaLabel() {
+            return `close ${this.label} dialog`;
+        },
         buttonClasses() {
             return {
-                "trigger-btn-labeled": this.btn_type === "labeled-icon",
+                "trigger-btn-labeled": this.btnType === "labeled-icon",
             };
         },
         tooltipClasses() {
@@ -186,23 +170,8 @@ export default {
                 transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
             };
         },
-    },
-
-    watch: {
-        async copyStatus (newStatus, oldStatus) {
-            if (
-                newStatus === "pending" &&
-                (oldStatus === "idle" || oldStatus === "success")
-            ) {
-                try {
-                    // async write to clipboard
-                    await navigator.clipboard.writeText(this.getCopyText());
-                    this.copyStatus = "success";
-                } catch (err) {
-                    console.log("Error copying to clipboard", err);
-                    this.copyStatus = "idle";
-                }
-            }
+        faIconType() {
+            return `fa-${this.buttonIcon}`;
         },
     },
 
@@ -211,9 +180,9 @@ export default {
             this.entered = !this.entered && !this.clicked;
             this.leftSafe = !leftWarning(e.currentTarget);
             this.anchorY = appendPxSuffix(
-                getAnchorY(e.currentTarget, this.btn_type)
+                getAnchorY(e.currentTarget, this.btnType)
             );
-            this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
+            this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btnType));
         },
         handleExit() {
             if (!this.clicked) {
@@ -230,10 +199,10 @@ export default {
                     this.leftSafe = false;
                 }
                 this.anchorY = appendPxSuffix(
-                    getAnchorY(e.currentTarget, this.btn_type)
+                    getAnchorY(e.currentTarget, this.btnType)
                 );
                 this.anchorX = appendPxSuffix(
-                    getAnchorX(this.$el, this.btn_type)
+                    getAnchorX(this.$el, this.btnType)
                 );
             }
         },
@@ -245,17 +214,6 @@ export default {
                 this.leftSafe = true;
                 this.selectedAction = null;
             }
-        },
-        handleActionClick(payload) {
-            this.selectedAction = payload.actionType;
-            this.copyStatus = "pending";
-        },
-        getCopyText() {
-            return this.selectedAction === "citation"
-                ? this.formatted_citation
-                : `${new URL(window.location.href.split("#")[0]).toString()}#${
-                      this.hash
-                  }`;
         },
     },
 };

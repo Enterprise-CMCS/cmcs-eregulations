@@ -7,9 +7,19 @@
 <section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="reg-section">
     <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
         {% section_formatter cfr_title node.label as formatted_citation %}
-        <tooltip-container btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}" label="Copy Link or Citation">
-            <i slot="button-icon" class="fa fa-link"></i>
-            <p slot="tooltip-title" class="tooltip-title">{{formatted_citation}}</p>
+        <tooltip-container
+            btn-type="icon"
+            title="{{node.label | join:'.'}}"
+            hash="{{node.label | join:'-'}}"
+            label="Copy Link or Citation"
+            button-icon="link"
+            tooltip-title="{{formatted_citation}}"
+        >
+            <copy-citation
+                slot="tooltip-content"
+                hash="{{node.label | join:'-'}}"
+                formatted-citation="{{formatted_citation}}"
+            ></copy-citation>
         </tooltip-container>
         {{node.title}}
     </h2>

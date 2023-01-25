@@ -14,6 +14,7 @@ import BlockingModal from "../dist/BlockingModal";
 import BlockingModalTrigger from "../dist/BlockingModalTrigger";
 import FlashBanner from "../dist/FlashBanner";
 import IFrameContainer from "../dist/IFrameContainer";
+import CopyCitation from "../dist/CopyCitation";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -175,6 +176,7 @@ function main() {
             BlockingModalTrigger,
             FlashBanner,
             IFrameContainer,
+            CopyCitation,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");

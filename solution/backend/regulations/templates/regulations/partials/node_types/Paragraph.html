@@ -4,9 +4,19 @@
 <p tabindex="-1" {% if node.label and node.label|length > 0 %}id="{{node.label | join:'-'}}"{% endif %} class="reg-section depth-{{node|pdepth}}">
     {% if node.label and node.label|length > 0 %}
         {% paragraph_formatter cfr_title node.label as formatted_citation %}
-        <tooltip-container btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}" label="Copy Link or Citation">
-                <i slot="button-icon" class="fa fa-link"></i>
-                <p slot="tooltip-title" class="tooltip-title">{{formatted_citation}}</p>
+        <tooltip-container
+            btn-type="icon"
+            title="{{node.label | join:'.'}}"
+            hash="{{node.label | join:'-'}}"
+            label="Copy Link or Citation"
+            button-icon="link"
+            tooltip-title="{{formatted_citation}}"
+        >
+            <copy-citation
+                slot="tooltip-content"
+                hash="{{node.label | join:'-'}}"
+                formatted-citation="{{formatted_citation}}"
+            ></copy-citation>
         </tooltip-container>
     {% endif %}
     {{node.text | safe}}
