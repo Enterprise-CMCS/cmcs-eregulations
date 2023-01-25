@@ -26,16 +26,14 @@ class FeedData:
 
 class PartFeed(Feed, FeedData):
     title = 'Federal Register documents RSS Feed'
-    link = "latest/feed"
+    link = "/latest/feed"
     description = 'Displays the latest federal register documents'
 
     def __init__(self):
-        self.is_secure = None
-        self.host = None
+        self.path = None
 
     def get_feed(self, obj, request):
-        self.is_secure = request.is_secure()
-        self.host = request.path
+        self.path = request.path
 
         feedgen = super().get_feed(obj, request)
         feedgen.content_type = 'application/xml'  # New standard
@@ -75,8 +73,7 @@ class PartFeed(Feed, FeedData):
             return f"{item['title']} {item['part']} Subpart {item['subpart']}"
 
     def item_link(self, item):
-        protocol = "https" if self.is_secure else "http"
-        return f"{self.host}/{item['title']}/{item['part']}"
+        return f"{self.path}/{item['title']}/{item['part']}".replace('latest/feed', '')
 
 
 class SupplementalContentFeed(Feed):
