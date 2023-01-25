@@ -83,10 +83,8 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get(".options-list li:nth-child(3) a")
-    cy.get(".options-list li:nth-child(3) a")
-        .should("have.attr", "href")
-        .and('include', "search-gsc");
-        .and('include', "search-gsc");
+            .should("have.attr", "href")
+            .and('include', "search-gsc");
     })
 
     it("checks a11y for search page", () => {
