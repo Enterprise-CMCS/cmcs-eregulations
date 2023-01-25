@@ -10,7 +10,7 @@
             @mouseleave="handleExit"
             @click="handleClick"
         >
-            <i class="fa fa-link"></i>
+            <slot name="button-icon"></slot>
             <span v-if="btn_type === 'labeled-icon'">{{ label }}</span>
         </button>
         <div
@@ -47,7 +47,7 @@
                     />
                 </svg>
             </button>
-            <p class="citation-title">{{ formatted_citation }}</p>
+            <slot name="tooltip-title"></slot>
             <div class="action-btns">
                 <ActionBtn
                     :selected-action="selectedAction"
@@ -132,6 +132,10 @@ export default {
             type: String,
             required: true,
         },
+        label: {
+            type: String,
+            required: true,
+        },
         title: {
             type: String,
             required: true,
@@ -153,7 +157,6 @@ export default {
             leftSafe: true,
             anchorY: 0,
             anchorX: 0,
-            label: "Copy Link or Citation",
             selectedAction: null,
             copyStatus: "idle",
         };
