@@ -10,23 +10,6 @@ from regcore.models import Part
 from regcore.search.models import Synonym
 
 
-async def get_year_data_400(section, year, client):
-    return httpx.Response(status_code=400)
-
-
-async def get_year_data_302(section, year, client):
-    return httpx.Response(
-        status_code=302,
-        headers={
-            "location": "http://a.govinfo.pdf.link/xyz.pdf",
-        }
-    )
-
-
-async def get_year_data_404(section, year, client):
-    return httpx.Response(status_code=404)
-
-
 class RegcoreSerializerTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
