@@ -1,6 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from datetime import datetime
 from django.urls import reverse
+from django.views.generic.base import TemplateView
 
 from regcore.models import Part
 from resources.models import AbstractResource
@@ -32,6 +33,8 @@ class PartFeed(Feed, FeedData):
     description = 'Displays the latest federal register documents'
 
     def get_feed(self, obj, request):
+        self.is_secure = request.is_secure()
+        self.host = request.get_host()
         feedgen = super().get_feed(obj, request)
         feedgen.content_type = 'application/xml'  # New standard
         return feedgen
@@ -70,13 +73,13 @@ class PartFeed(Feed, FeedData):
             return '{} {} Subpart {}'.format(item['title'], item['part'], item['subpart'])
 
     def item_link(self, item):
+        protocol = "https" if self.is_secure else "http"
         db_name = "" if os.environ.get("DB_NAME") is None else os.environ.get("DB_Name")
         if db_name == 'eregs':
             return "{}/{}".format(item['title'], item['part'])
 
         else:
-            return "{}/{}/{}".format(db_name, item['title'], item['part'])
-
+            return f"{protocol}://{self.host}/{item['title']}/{item['part']}"
 
 class SupplementalContentFeed(Feed):
     title = 'supplemental content feed'
