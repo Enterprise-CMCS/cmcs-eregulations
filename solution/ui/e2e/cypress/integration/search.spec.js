@@ -12,6 +12,7 @@ describe("Search flow", () => {
         cy.visit("/");
         cy.get(".search-header > form > input")
             .should("be.visible")
+            .should("have.attr", "placeholder", "Search")
             .type(`${SEARCH_TERM}`);
         cy.get(".search-header > form").submit();
 
