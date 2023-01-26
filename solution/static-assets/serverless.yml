@@ -35,7 +35,9 @@ package:
 
 plugins:
   - serverless-s3-sync
-  - serverless-python-requirements
+  - serverless-python-requirements	
+  - serverless-deployment-bucket
+
 
 resources:
   Resources:
@@ -132,5 +134,4 @@ resources:
             - Fn::GetAtt:
               - CloudFrontDistribution
               - DomainName
-plugins:
-  - serverless-deployment-bucket
+
