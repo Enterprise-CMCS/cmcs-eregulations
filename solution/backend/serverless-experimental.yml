@@ -159,3 +159,4 @@ resources:
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
+  - serverless-deployment-bucket
