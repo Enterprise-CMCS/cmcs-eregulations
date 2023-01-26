@@ -4,6 +4,9 @@ provider:
   name: aws
   runtime: python3.8
   region: us-east-1
+  deploymentBucket:
+    blockPublicAccess: true
+    BucketName: cmcs-eregs-${self:custom.stage}-static-assets
 
 custom:
   stage: ${opt:stage, self:provider.stage}
