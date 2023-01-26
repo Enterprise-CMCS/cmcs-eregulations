@@ -52,10 +52,13 @@ describe("Search flow", () => {
             ".resources-results-content .search-results-count > span"
         ).should("be.visible");
         cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section"
+        )
+            .should("be.visible");    
+        cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
         )
-            .should("be.visible")
-            .and("have.attr", "href");
+            .should("have.attr", "href");
         cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
         ).click({ force: true });
@@ -76,6 +79,14 @@ describe("Search flow", () => {
             });
         });
     });
+
+    it("should have a valid link to medicaid.gov", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".options-list li:nth-child(3) a")
+            .should("have.attr", "href")
+            .and('include', "search-gsc");
+    })
 
     it("checks a11y for search page", () => {
         cy.viewport("macbook-15");
@@ -116,4 +127,5 @@ describe("Search flow", () => {
 
         cy.findByRole("textbox").should("have.value", "");
     });
+
 });
