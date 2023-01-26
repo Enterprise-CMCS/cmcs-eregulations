@@ -167,32 +167,49 @@
 
 .reg-text {
     .trigger-btn-container {
-        height: 1.2em;
-        margin-left: -1.5em;
-        position: absolute;
+        &.copy-btn-container {
+            height: 1.2em;
+            margin-left: -1.5em;
+            position: absolute;
+        }
 
         .trigger-btn {
             display: flex;
             align-items: end;
-            opacity: 0;
 
-            &:focus {
-                opacity: 1;
+            &.trigger-btn-link {
+                display: inline-block;
+                text-decoration: underline;
+            }
+
+            &.reg-history-link {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            &.copy-btn {
+                opacity: 0;
+
+                &:focus {
+                    opacity: 1;
+                }
             }
         }
     }
 
     h1 > .trigger-btn-container,
     h2 > .trigger-btn-container {
-        margin-left: -1.2em;
+        &.copy-btn-container {
+            margin-left: -1.2em;
 
-        @include screen-xxl {
-            margin-left: -1.4em;
+            @include screen-xxl {
+                margin-left: -1.4em;
+            }
         }
     }
 
     :hover {
-        > .trigger-btn-container .trigger-btn {
+        > .trigger-btn-container.copy-btn-container .trigger-btn {
             opacity: 1;
         }
     }
@@ -209,7 +226,8 @@ aside.right-sidebar {
     .print-btn-container {
         position: relative;
 
-        .trigger-btn-labeled, .print-btn-labeled {
+        .trigger-btn-labeled,
+        .print-btn-labeled {
             display: flex;
             align-items: center;
             height: 30px;

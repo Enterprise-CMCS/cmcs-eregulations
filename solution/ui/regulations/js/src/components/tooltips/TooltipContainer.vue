@@ -1,5 +1,5 @@
 <template>
-    <div class="trigger-btn-container">
+    <div class="trigger-btn-container" :class="buttonContainerClasses">
         <button
             class="trigger-btn text-btn"
             :class="buttonClasses"
@@ -10,8 +10,13 @@
             @mouseleave="handleExit"
             @click="handleClick"
         >
-            <i class="fa" :class="faIconType"></i>
-            <span v-if="btnType === 'labeled-icon'">{{ label }}</span>
+            <template v-if="btnType === 'link'">
+                {{ title }}
+            </template>
+            <template v-else>
+                <i class="fa" :class="faIconType"></i>
+                <span v-if="btnType === 'labeled-icon'">{{ label }}</span>
+            </template>
         </button>
         <div
             v-show="entered && btnType === 'icon'"
@@ -112,8 +117,14 @@ export default {
 
     props: {
         btnType: {
+            validator: (value) => {
+                ["link", "btn", "labeled-btn"].includes(value);
+            },
+            default: "normal",
+        },
+        btnClass: {
             type: String,
-            required: true,
+            default: "copy-btn",
         },
         buttonIcon: {
             type: String,
@@ -155,6 +166,13 @@ export default {
         buttonClasses() {
             return {
                 "trigger-btn-labeled": this.btnType === "labeled-icon",
+                "trigger-btn-link": this.btnType === "link",
+                [this.btnClass]: true,
+            };
+        },
+        buttonContainerClasses() {
+            return {
+                [`${this.btnClass}-container`]: true,
             };
         },
         tooltipClasses() {
