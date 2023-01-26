@@ -1,13 +1,4 @@
 service: cmcs-eregs-static-assets
-
-provider:
-  name: aws
-  runtime: python3.8
-  region: us-east-1
-  deploymentBucket:
-    blockPublicAccess: true
-    name: cmcs-eregs-${self:custom.stage}-static-assets
-
 custom:
   stage: ${opt:stage, self:provider.stage}
   s3Sync:
@@ -20,6 +11,14 @@ custom:
       description: "Layer which contains django requirements"
       compatibleRuntimes:
         - python3.8
+provider:
+  name: aws
+  runtime: python3.8
+  region: us-east-1
+  deploymentBucket:
+    blockPublicAccess: true
+    name: cmcs-eregs-${self:custom.stage}-static-assets
+
 
 
 package:
