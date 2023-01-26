@@ -14,3 +14,4 @@ drf-spectacular==0.24.2
 django-model-utils
 django-jsonform
 django-csp
+httpx
