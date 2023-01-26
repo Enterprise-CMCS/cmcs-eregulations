@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   deploymentBucket:
     blockPublicAccess: true
+    name: 'cmcs-egs-static-assets-${self:custom.stage}-serverlessdeploymentbucket'
+
 
 custom:
   stage: ${opt:stage, self:provider.stage}

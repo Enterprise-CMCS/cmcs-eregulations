@@ -14,6 +14,7 @@ provider:
     EREGS_PASSWORD: ${ssm:/eregulations/http/password}
     EREGS_API_URL_V3: ${self:custom.settings.eregs_url}
   deploymentBucket:
+    name: 'cmcs-egs-static-assets-${self:custom.stage}-serverlessdeploymentbucket'
     blockPublicAccess: true
 
 custom:

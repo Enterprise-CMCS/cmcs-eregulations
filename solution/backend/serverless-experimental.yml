@@ -30,6 +30,7 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
   deploymentBucket:
       blockPublicAccess: true
+      name: 'cmcs-egs-static-assets-${self:custom.stage}-serverlessdeploymentbucket'
 package:
   #patterns:
   #  - '!node_modules/**'
