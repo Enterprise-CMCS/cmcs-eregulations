@@ -30,6 +30,7 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
   deploymentBucket:
       blockPublicAccess: true
+      name: cmcs-eregs-${self:custom.stage}-static-assets
 package:
   #patterns:
   #  - '!node_modules/**'
