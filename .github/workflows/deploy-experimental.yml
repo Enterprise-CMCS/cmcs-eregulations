@@ -70,6 +70,7 @@ jobs:
         run: |
           pushd solution/static-assets
           npm install serverless -g
+          npm install serverless-deployment-bucket --save-dev
           npm install
           serverless deploy --stage dev${PR}
           popd
