@@ -133,5 +133,4 @@ resources:
               - CloudFrontDistribution
               - DomainName
 plugins:
-	
   - serverless-deployment-bucket
