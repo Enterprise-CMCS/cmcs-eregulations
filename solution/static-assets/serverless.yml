@@ -132,3 +132,8 @@ resources:
             - Fn::GetAtt:
               - CloudFrontDistribution
               - DomainName
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+  - serverless-go-plugin
+  - serverless-cloudfront-invalidate
