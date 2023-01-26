@@ -6,6 +6,7 @@ provider:
   region: us-east-1
   deploymentBucket:
     blockPublicAccess: true
+    name: cmcs-eregs-${self:custom.stage}-static-assets
 
 custom:
   stage: ${opt:stage, self:provider.stage}
