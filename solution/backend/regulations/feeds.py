@@ -4,7 +4,9 @@ from django.urls import reverse
 from regcore.models import Part
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
-
+from django.http.request import HttpRequest
+from regcore.v3views.metadata import PartSectionsViewSet
+import json
 
 class FeedData:
     def processChildren(self, children, title, part, last_updated):
@@ -26,7 +28,7 @@ class FeedData:
 
 class PartFeed(Feed, FeedData):
     title = 'Federal Register documents RSS Feed'
-    link = "/latest/feed"
+    link = "/latest/feed/"
     description = 'Displays the latest federal register documents'
 
     def __init__(self):
@@ -42,20 +44,30 @@ class PartFeed(Feed, FeedData):
     def items(self):
         date = datetime.now()
         title = 42
-        query = Part.objects.filter(title=title).filter(date__lte=date).order_by('name', '-date').distinct('name')
-        results = []
-        for p in query:
-            results.append({
-                'title': p.title,
-                'part': p.name,
-                'last_updated': p.last_updated,
-                'document_title': p.document['title'],
-                'document_label': 'Part {}'.format(p.document['label'][0]),
-            })
-            children = p.structure['children']
-            results = results + self.processChildren(children, p.title, p.name, p.last_updated)
+        request = HttpRequest()
+        request.method = "GET"
+        view = PartSectionsViewSet.as_view({"get": "retrieve"})
+        # Replace 42 and 433 below with your title and part variables from the Part model query above
+        parts = Part.objects.all().order_by("name", "date").distinct("name")
+        for part in parts:
+            data = view(request=request, title=part.title, part=part.name, version="latest").data
+            data = json.loads(json.dumps(data))
+            results = []
+            for p in data:
+                results.append({
+                    'title': part.title,
+                    'date': part.date,
+                    'part': p['identifier'][0],
+                    'subpart': p['identifier'][1],
+                    'last_updated': date,
+                    'description': p['label_description'],
+                    'subpart_name': p['parent'][0]
+                })
 
         return results
+
+    def get_title(self, item):
+        return f"{item['title']} {item['part']} Subpart {item['subpart']}"
 
     def item_title(self, item):
         if 'document_label' in item:
@@ -67,13 +79,13 @@ class PartFeed(Feed, FeedData):
         return item['last_updated']
 
     def item_description(self, item):
-        if 'document_title' in item:
-            return item['document_title']
+        if 'description' in item:
+            return item['description']
         else:
             return f"{item['title']} {item['part']} Subpart {item['subpart']}"
 
     def item_link(self, item):
-        return f"{self.path}{item['title']}/{item['part']}".replace('/latest/feed', '')
+        return f"{self.path}{item['title']}/{item['part']}/Subpart-{item['subpart_name']}/#{item['part']}-{item['subpart']}".replace('/latest/feed', '')
 
 
 class SupplementalContentFeed(Feed):
