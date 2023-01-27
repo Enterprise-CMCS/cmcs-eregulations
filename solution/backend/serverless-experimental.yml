@@ -91,7 +91,7 @@ functions:
   drop_database:
     environment:
       STAGE: ${self:custom.stage}
-      DB_NAME: main
+      DB_NAME: eregs
     handler: dropdb.handler
     timeout: 300
     layers:
