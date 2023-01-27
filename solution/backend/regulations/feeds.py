@@ -89,18 +89,6 @@ class PartFeed(Feed, FeedData):
             return f"{self.path}{item['title']}/{item['part']}/"
 
 
-class SupplementalContentFeed(Feed):
-    title = 'supplemental content feed'
-    link = '/supplemental_content/'
-    description = 'Updates on changes and additions to supplemental content.'
-
-    def items(self):
-        return AbstractResource.objects.filter(approved=True)
-
-    def item_link(self, item):
-        return reverse('supplemental_content', kwargs={'id': item.id})
-
-
 class PartSitemap(Sitemap, FeedData):
 
     changefreq = "daily"
