@@ -2,7 +2,6 @@
     <div
         v-if="isLink()"
         class="view-resources-link"
-        style="padding-left: 5px; font-size: 12px; margin-top: -10px"
     >
         <a v-if="count !== '0'" @click="clickHandler">
             <span class="bold">View {{ section }} resources</span> ({{
@@ -16,7 +15,7 @@
     <div
         v-else
         class="view-resources-link"
-        style="padding-left: 5px; font-size: 12px"
+        style="padding-left: 5px;"
     >
         <button v-if="count !== '0'" class="btn" @click="clickHandler">
             <span class="bold">View {{ section }} resources</span> ({{

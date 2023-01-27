@@ -19,7 +19,7 @@
             </template>
         </button>
         <div
-            v-show="entered && btnType === 'icon'"
+            v-if="hover && entered"
             class="tooltip hovered"
             :class="tooltipClasses"
             :style="tooltipStyles"
@@ -27,7 +27,7 @@
             <p class="hover-msg">{{ label }}</p>
         </div>
         <div
-            v-if="clicked"
+            v-if="click && clicked"
             v-clickaway="handleCloseClick"
             class="tooltip clicked"
             :class="tooltipClasses"
@@ -116,12 +116,6 @@ export default {
     },
 
     props: {
-        btnType: {
-            validator: (value) => {
-                ["link", "btn", "labeled-btn"].includes(value);
-            },
-            default: "normal",
-        },
         btnClass: {
             type: String,
             default: "copy-btn",
@@ -129,6 +123,20 @@ export default {
         buttonIcon: {
             type: String,
             default: "link",
+        },
+        btnType: {
+            validator: (value) => {
+                ["link", "btn", "labeled-btn"].includes(value);
+            },
+            default: "normal",
+        },
+        click: {
+            type: Boolean,
+            default: false,
+        },
+        hover: {
+            type: Boolean,
+            default: false,
         },
         label: {
             type: String,

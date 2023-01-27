@@ -66,6 +66,19 @@
         color: $primary_color;
     }
 
+    .section-info-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: -10px;
+        padding-left: 5px;
+        line-height: 20px;
+        gap: 0 30px;
+
+        > div {
+            display: inline;
+        }
+    }
+
     .part-title {
         max-width: $text-max-width;
         margin: $spacer-5 0 $spacer-3;

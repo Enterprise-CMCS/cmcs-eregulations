@@ -6,11 +6,13 @@
         {% paragraph_formatter cfr_title node.label as formatted_citation %}
         <tooltip-container
             btn-type="icon"
+            btn-class="copy-btn"
             title="{{node.label | join:'.'}}"
-            hash="{{node.label | join:'-'}}"
             label="Copy Link or Citation"
             button-icon="link"
             tooltip-title="{{formatted_citation}}"
+            hover
+            click
         >
             <copy-citation
                 slot="tooltip-content"
