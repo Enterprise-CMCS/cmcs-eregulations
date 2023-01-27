@@ -8,6 +8,7 @@ from django.http.request import HttpRequest
 from regcore.v3views.metadata import PartSectionsViewSet
 import json
 
+
 class FeedData:
     def processChildren(self, children, title, part, last_updated):
         results = []
@@ -43,11 +44,9 @@ class PartFeed(Feed, FeedData):
 
     def items(self):
         date = datetime.now()
-        title = 42
         request = HttpRequest()
         request.method = "GET"
         view = PartSectionsViewSet.as_view({"get": "retrieve"})
-        # Replace 42 and 433 below with your title and part variables from the Part model query above
         parts = Part.objects.all().order_by("name", "date").distinct("name")
         for part in parts:
             data = view(request=request, title=part.title, part=part.name, version="latest").data
