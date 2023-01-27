@@ -71,10 +71,7 @@ class PartFeed(Feed, FeedData):
         return f"{item['title']} {item['part']} Section {item['section']}"
 
     def item_title(self, item):
-        if 'document_label' in item:
-            return item['document_label']
-        else:
-            return f"{item['title']} CFR {item['part']}.{item['section']}"
+        return f"{item['title']} CFR {item['part']}.{item['section']}"
 
     def item_pubdate(self, item):
         return item['last_updated']
@@ -83,7 +80,7 @@ class PartFeed(Feed, FeedData):
         if 'description' in item:
             return item['description']
         else:
-            return f"{item['title']} {item['part']} Section {item['section']}"
+            return f"{item['title']} CFR {item['part']}.{item['section']}"
 
     def item_link(self, item):
         if item['parent_type'] == 'subpart':
