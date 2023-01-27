@@ -83,7 +83,8 @@ class PartFeed(Feed, FeedData):
 
     def item_link(self, item):
         if item['parent_type'] == 'subpart':
-            return f"{self.path}{item['title']}/{item['part']}/Subpart-{item['parent_name']}/#{item['part']}-{item['section']}".replace('/latest/feed', '')
+            return f"{self.path}{item['title']}/{item['part']}/Subpart-{item['parent_name']}/#{item['part']}-{item['section']}".\
+                replace('/latest/feed', '')
         else:
             return f"{self.path}{item['title']}/{item['part']}/"
 
