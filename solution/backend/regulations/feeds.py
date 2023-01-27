@@ -58,22 +58,23 @@ class PartFeed(Feed, FeedData):
                     'title': part.title,
                     'date': part.date,
                     'part': p['identifier'][0],
-                    'subpart': p['identifier'][1],
+                    'section': p['identifier'][1],
                     'last_updated': date,
                     'description': p['label_description'],
-                    'subpart_name': p['parent'][0]
+                    'parent_name': p['parent'][0],
+                    'parent_type': p['parent_type'],
                 })
 
         return results
 
     def get_title(self, item):
-        return f"{item['title']} {item['part']} Subpart {item['subpart']}"
+        return f"{item['title']} {item['part']} Section {item['section']}"
 
     def item_title(self, item):
         if 'document_label' in item:
             return item['document_label']
         else:
-            return f"{item['title']} {item['part']} Subpart {item['subpart']}"
+            return f"{item['title']} CFR {item['part']}.{item['section']}"
 
     def item_pubdate(self, item):
         return item['last_updated']
@@ -82,10 +83,13 @@ class PartFeed(Feed, FeedData):
         if 'description' in item:
             return item['description']
         else:
-            return f"{item['title']} {item['part']} Subpart {item['subpart']}"
+            return f"{item['title']} {item['part']} Section {item['section']}"
 
     def item_link(self, item):
-        return f"{self.path}{item['title']}/{item['part']}/Subpart-{item['subpart_name']}/#{item['part']}-{item['subpart']}".replace('/latest/feed', '')
+        if item['parent_type'] == 'subpart':
+            return f"{self.path}{item['title']}/{item['part']}/Subpart-{item['parent_name']}/#{item['part']}-{item['section']}".replace('/latest/feed', '')
+        else:
+            return f"{self.path}{item['title']}/{item['part']}/"
 
 
 class SupplementalContentFeed(Feed):
