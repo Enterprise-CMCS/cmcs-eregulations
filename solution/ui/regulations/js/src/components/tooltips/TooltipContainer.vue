@@ -203,10 +203,25 @@ export default {
         tooltipStyles() {
             if (this.position === "over") {
                 return {
-                      left: this.anchorX,
-                      transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
-                      bottom: this.anchorY,
-                  };
+                    left: this.anchorX,
+                    transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
+                    bottom: this.anchorY,
+                };
+            }
+
+            if (this.position === "under") {
+                const spacing = {
+                    "margin-top": "10px",
+                };
+
+                if (this.leftSafe) {
+                    return {
+                        transform: `translate(-${this.anchorX}, 0)`,
+                        ...spacing,
+                    };
+                }
+
+                return spacing;
             }
 
             return {};
