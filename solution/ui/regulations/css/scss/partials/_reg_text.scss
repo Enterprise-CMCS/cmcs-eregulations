@@ -47,10 +47,6 @@
         font-size: $font-size-sm;
     }
 
-    section.reg-section {
-        container: reg-section / inline-size;
-    }
-
     h1 > .reference,
     h2 > .reference {
         margin-left: -1.2em;
@@ -71,6 +67,11 @@
     }
 
     .section-info-row {
+        container: section-info-row / inline-size;
+        display: flex;
+    }
+
+    .info-links {
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -83,8 +84,8 @@
         }
     }
 
-    @container reg-section (min-width: 500px) {
-        .section-info-row {
+    @container section-info-row (min-width: 500px) {
+        .info-links {
             flex-direction: row;
 
             > div:first-child {

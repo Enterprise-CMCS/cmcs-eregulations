@@ -28,17 +28,19 @@
 
     {% simple_section_formatter cfr_title node.label as simple_citation %}
     <div class="section-info-row">
-        <view-resources-link type="link" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
-        <tooltip-container
-            btn-type="link"
-            btn-class="reg-history-link"
-            title="View § {{node.label | join:'.'}} Regulation History"
-            label="Copy Link or Citation"
-            button-icon="link"
-            tooltip-title="View § {{node.label | join:'.'}} Effective In"
-            click
-        >
-        </tooltip-container>
+        <div class="info-links">
+            <view-resources-link type="link" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+            <tooltip-container
+                btn-type="link"
+                btn-class="reg-history-link"
+                title="View § {{node.label | join:'.'}} Regulation History"
+                label="Copy Link or Citation"
+                button-icon="link"
+                tooltip-title="View § {{node.label | join:'.'}} Effective In"
+                click
+            >
+            </tooltip-container>
+        </div>
     </div>
 
     <div class="paragraphs">
