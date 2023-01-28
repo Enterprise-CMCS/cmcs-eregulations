@@ -151,6 +151,7 @@
         position: absolute;
         z-index: -1;
         content: "";
+        top: 100%;
         left: 50%;
         height: 0;
         width: 0;
@@ -159,25 +160,33 @@
 
 .tooltip-caret {
     @extend .default-tooltip-caret;
+}
+
+.tooltip-caret-left {
+    @extend .default-tooltip-caret;
     &::after {
-        top: 100%;
+        left: 20%;
     }
 }
 
 .tooltip-caret-top {
     @extend .default-tooltip-caret;
     &::after {
+        top: unset;
         bottom: 100%;
-        border-bottom: solid 5px #eefafe;
         border-top: unset;
+        border-bottom: solid 5px #eefafe;
     }
 }
 
-.tooltip-caret-left {
+.tooltip-caret-top-left {
     @extend .default-tooltip-caret;
     &::after {
-        top: 100%;
+        top: unset;
+        bottom: 100%;
         left: 20%;
+        border-top: unset;
+        border-bottom: solid 5px #eefafe;
     }
 }
 

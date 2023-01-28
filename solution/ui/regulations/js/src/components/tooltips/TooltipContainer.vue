@@ -62,9 +62,6 @@
 const getAnchorX = (el, elType) => {
     if (!el) return 0;
 
-    console.log("el.offsetWidth", el.offsetWidth);
-    console.log("el.offsetLeft", el.offsetLeft);
-
     return elType === "labeled-icon" || elType === "link"
         ? el.offsetWidth / 2
         : el.offsetWidth * 0.7;
@@ -195,9 +192,10 @@ export default {
         tooltipClasses() {
             return {
                 "tooltip-caret": this.leftSafe && this.position === "over",
-                "tooltip-caret-top": this.position === "under",
+                "tooltip-caret-top": this.leftSafe && this.position === "under",
                 "tooltip-caret-left":
                     !this.leftSafe && this.position === "over",
+                "tooltip-caret-top-left": !this.leftSafe && this.position === "under",
             };
         },
         tooltipStyles() {
