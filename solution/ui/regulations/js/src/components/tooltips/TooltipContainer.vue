@@ -59,18 +59,23 @@
 </template>
 
 <script>
-const getAnchorY = (el, elType) => {
+const getAnchorX = (el, elType) => {
     if (!el) return 0;
 
-    return elType === "labeled-icon"
+    console.log("el.offsetWidth", el.offsetWidth);
+    console.log("el.offsetLeft", el.offsetLeft);
+
+    return elType === "labeled-icon" || elType === "link"
         ? el.offsetWidth / 2
         : el.offsetWidth * 0.7;
 };
 
-const getAnchorX = (el, elType) => {
+const getAnchorY = (el, elType, position) => {
     if (!el) return 0;
 
-    return parseInt(window.getComputedStyle(el).fontSize, 10) + 20;
+    const spacer = position === "over" ? 20 : 10;
+
+    return parseInt(window.getComputedStyle(el).fontSize, 10) + spacer;
 };
 
 const appendPxSuffix = (int) => `${int}px`;
@@ -142,6 +147,10 @@ export default {
             type: String,
             required: true,
         },
+        position: {
+            type: String,
+            default: "over",
+        },
         title: {
             type: String,
             required: true,
@@ -157,8 +166,8 @@ export default {
             entered: false,
             clicked: false,
             leftSafe: true,
-            anchorY: 0,
             anchorX: 0,
+            anchorY: 0,
         };
     },
 
@@ -185,16 +194,22 @@ export default {
         },
         tooltipClasses() {
             return {
-                "tooltip-caret": this.leftSafe,
-                "tooltip-caret-left": !this.leftSafe,
+                "tooltip-caret": this.leftSafe && this.position === "over",
+                "tooltip-caret-top": this.position === "under",
+                "tooltip-caret-left":
+                    !this.leftSafe && this.position === "over",
             };
         },
         tooltipStyles() {
-            return {
-                left: this.anchorY,
-                bottom: this.anchorX,
-                transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
-            };
+            if (this.position === "over") {
+                return {
+                      left: this.anchorX,
+                      transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
+                      bottom: this.anchorY,
+                  };
+            }
+
+            return {};
         },
         faIconType() {
             return `fa-${this.buttonIcon}`;
@@ -205,15 +220,17 @@ export default {
         handleEnter(e) {
             this.entered = !this.entered && !this.clicked;
             this.leftSafe = !leftWarning(e.currentTarget);
-            this.anchorY = appendPxSuffix(
-                getAnchorY(e.currentTarget, this.btnType)
+            this.anchorX = appendPxSuffix(
+                getAnchorX(e.currentTarget, this.btnType)
             );
-            this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btnType));
+            this.anchorY = appendPxSuffix(
+                getAnchorY(this.$el, this.btnType, this.position)
+            );
         },
         handleExit() {
             if (!this.clicked) {
                 this.entered = false;
-                this.anchorY = undefined;
+                this.anchorX = undefined;
                 this.leftSafe = true;
             }
         },
@@ -224,11 +241,11 @@ export default {
                 if (leftWarning(e.currentTarget)) {
                     this.leftSafe = false;
                 }
-                this.anchorY = appendPxSuffix(
-                    getAnchorY(e.currentTarget, this.btnType)
-                );
                 this.anchorX = appendPxSuffix(
-                    getAnchorX(this.$el, this.btnType)
+                    getAnchorX(e.currentTarget, this.btnType)
+                );
+                this.anchorY = appendPxSuffix(
+                    getAnchorY(this.$el, this.btnType)
                 );
             }
         },
@@ -236,7 +253,7 @@ export default {
             if (this.clicked) {
                 this.clicked = false;
                 this.entered = false;
-                this.anchorY = undefined;
+                this.anchorX = undefined;
                 this.leftSafe = true;
                 this.selectedAction = null;
             }
