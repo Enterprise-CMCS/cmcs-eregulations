@@ -29,7 +29,7 @@ class FeedData:
 
 class PartFeed(Feed, FeedData):
     title = 'Federal Register documents RSS Feed'
-    link = "/latest/feed/"
+    link = '/latest/feed/'
     description = 'Displays the latest federal register documents'
 
     def __init__(self):
@@ -45,13 +45,13 @@ class PartFeed(Feed, FeedData):
     def items(self):
         date = datetime.now()
         request = HttpRequest()
-        request.method = "GET"
-        view = PartSectionsViewSet.as_view({"get": "retrieve"})
-        parts = Part.objects.all().order_by("name", "date").distinct("name")
+        request.method = 'GET'
+        view = PartSectionsViewSet.as_view({'get': 'retrieve'})
+        parts = Part.objects.all().order_by('name', 'date').distinct('name')
+        results = []
         for part in parts:
-            data = view(request=request, title=part.title, part=part.name, version="latest").data
+            data = view(request=request, title=part.title, part=part.name, version='latest').data
             data = json.loads(json.dumps(data))
-            results = []
             for p in data:
                 results.append({
                     'title': part.title,
@@ -63,7 +63,6 @@ class PartFeed(Feed, FeedData):
                     'parent_name': p['parent'][0],
                     'parent_type': p['parent_type'],
                 })
-
         return results
 
     def get_title(self, item):
@@ -90,14 +89,13 @@ class PartFeed(Feed, FeedData):
 
 
 class PartSitemap(Sitemap, FeedData):
-
-    changefreq = "daily"
+    changefreq = 'daily'
     priority = 0.5
 
     def items(self):
         date = datetime.now()
         title = 42
-        query = Part.objects.filter(title=title).filter(date__lte=date).order_by("name", "-date").distinct("name")
+        query = Part.objects.filter(title=title).filter(date__lte=date).order_by('name', '-date').distinct('name')
         results = []
         for p in query:
             results.append({
@@ -118,12 +116,11 @@ class PartSitemap(Sitemap, FeedData):
         for key in ['title', 'part', 'subpart']:
             if item.get(key):
                 kwargs[key] = item[key]
-        return reverse("reader_view", kwargs=kwargs)
+        return reverse('reader_view', kwargs=kwargs)
 
 
 class SupplementalContentSitemap(Sitemap):
-
-    changefreq = "daily"
+    changefreq = 'daily'
     priority = 0.5
 
     def items(self):
@@ -133,4 +130,4 @@ class SupplementalContentSitemap(Sitemap):
         return item.updated_at
 
     def location(self, item):
-        return reverse("supplemental_content", kwargs={"id": item.id})
+        return reverse('supplemental_content', kwargs={'id': item.id})
