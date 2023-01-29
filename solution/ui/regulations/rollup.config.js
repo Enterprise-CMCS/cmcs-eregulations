@@ -136,6 +136,14 @@ export default [
         },
         plugins,
     },
+    {
+        input: "js/src/components/tooltips/GovInfoLinks.vue",
+        output: {
+            format: "esm",
+            file: "dist/GovInfoLinks.js",
+        },
+        plugins,
+    },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
     {
         input: "js/main.js",
