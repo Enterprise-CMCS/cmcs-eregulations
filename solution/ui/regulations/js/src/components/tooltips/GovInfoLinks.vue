@@ -2,6 +2,9 @@
     <div class="gov-info-links-container">
         <div class="gov-info-links">
             <SimpleSpinner v-if="loading" size="medium" />
+            <div v-else-if="govInfoLinks.length === 0" class="no-results">
+                No results found.
+            </div>
             <div v-else class="links-container">
                 <a
                     v-for="(yearObj, index) in govInfoLinks"
@@ -56,8 +59,9 @@ export default {
             section: this.section,
         })
             .then((response) => {
-                const reversedResponse = response.reverse();
-                this.govInfoLinks = reversedResponse;
+                this.govInfoLinks = response.sort(function (a, b) {
+                    return b.year - a.year;
+                });
             })
             .catch((error) => {
                 console.error("Error", error);
