@@ -1,5 +1,8 @@
 <template>
-    <div class="gov-info-links">
+    <div class="gov-info-links-container">
+        <div class="gov-info-links">
+            <SimpleSpinner size="medium" />
+        </div>
         <div class="gov-info-source">
             Section text is revised as of October 1st of each listed year. Link
             sources: <a href="https://www.govinfo.gov">GovInfo.gov</a>.
@@ -8,10 +11,14 @@
 </template>
 
 <script>
+import SimpleSpinner from "../SimpleSpinner.vue";
+
 export default {
     name: "GovInfoLinks",
 
-    components: {},
+    components: {
+        SimpleSpinner,
+    },
 
     props: {
         title: {
@@ -50,7 +57,7 @@ export default {
 
     data() {
         return {
-            dataProp: "value",
+            govInfoLinks: [],
         };
     },
 
