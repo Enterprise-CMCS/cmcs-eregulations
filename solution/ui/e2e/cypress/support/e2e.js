@@ -25,6 +25,8 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import "@testing-library/cypress/add-commands";
 
+import "cypress-axe";
+import "cypress-plugin-tab";
 // Print cypress-axe violations to the terminal
 function printA11yViolations(violations) {
     cy.task(
