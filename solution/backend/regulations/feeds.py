@@ -62,6 +62,7 @@ class PartFeed(Feed, FeedData):
                     'description': p['label_description'],
                     'parent_name': p['parent'][0],
                     'parent_type': p['parent_type'],
+                    'label': p['label'],
                 })
         return results
 
@@ -69,7 +70,7 @@ class PartFeed(Feed, FeedData):
         return f"{item['title']} {item['part']} Section {item['section']}"
 
     def item_title(self, item):
-        return f"{item['title']} CFR {item['part']}.{item['section']}"
+        return item['label']
 
     def item_pubdate(self, item):
         return item['last_updated']
