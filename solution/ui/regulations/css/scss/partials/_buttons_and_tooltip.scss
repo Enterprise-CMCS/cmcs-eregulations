@@ -286,15 +286,6 @@
             opacity: 1;
         }
     }
-
-    .view-resources-link,
-    .reg-history-link {
-        font-size: 12px;
-
-        @include custom-max($mobile-max / 1px) {
-            display: none;
-        }
-    }
 }
 
 aside.right-sidebar {

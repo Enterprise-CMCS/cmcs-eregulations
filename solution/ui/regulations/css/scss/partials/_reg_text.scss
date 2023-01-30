@@ -71,6 +71,7 @@
     }
 
     .info-links {
+        font-size: 12px;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -80,6 +81,12 @@
 
         > div {
             display: inline;
+        }
+
+        @include custom-max($mobile-max / 1px) {
+            > div:first-child {
+                display: none;
+            }
         }
 
         @include screen-lg {
