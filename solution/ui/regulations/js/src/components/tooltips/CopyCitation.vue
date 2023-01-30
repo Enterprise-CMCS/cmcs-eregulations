@@ -36,33 +36,11 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
     data() {
         return {
             selectedAction: null,
             copyStatus: "idle",
         };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
     },
 
     watch: {

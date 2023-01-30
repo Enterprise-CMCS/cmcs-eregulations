@@ -50,8 +50,6 @@ export default {
         },
     },
 
-    beforeCreate() {},
-
     created() {
         getGovInfoLinks({
             title: this.title,
@@ -72,39 +70,11 @@ export default {
             });
     },
 
-    beforeMount() {},
-
-    mounted() {
-        console.log("this.title", this.title);
-        console.log("this.part", this.part);
-        console.log("this.section", this.section);
-    },
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
     data() {
         return {
             govInfoLinks: [],
             loading: true,
         };
-    },
-
-    computed: {
-        computedProp() {
-            return this.dataProp.toUpperCase();
-        },
-    },
-
-    methods: {
-        methodName() {
-            console.log("method has been invoked");
-        },
     },
 };
 </script>
