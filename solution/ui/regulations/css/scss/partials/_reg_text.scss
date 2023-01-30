@@ -90,6 +90,16 @@
                 margin-right: 15px;
             }
         }
+
+        @include screen-xl {
+            flex-direction: row;
+
+            > div:first-child {
+                padding-right: 15px;
+                margin-right: 15px;
+                border-right: 1px solid $light_gray;
+            }
+        }
     }
 
     .part-title {
