@@ -116,8 +116,8 @@
             position: absolute;
             top: 0;
             right: 0;
-            height: 30px;
-            width: 30px;
+            height: 40px;
+            width: 40px;
 
             path {
                 stroke: $mid_blue;
@@ -211,6 +211,10 @@
 
                 .gov-info-links {
                     .no-results {
+                        padding-bottom: 20px;
+                    }
+
+                    .loading-spinner {
                         padding-bottom: 20px;
                     }
 
