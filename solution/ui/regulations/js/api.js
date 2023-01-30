@@ -246,6 +246,7 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
 /**
  * Get array of objects containing valid GovInfo docs years with links to the PDF files.
  *
+ * @param {string} apiURL - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
  * @param {Object} params - parameters needed for API call
  * @param {string} params.title - CFR title number.
  * @param {string} params.part - CFR part numer within title.
@@ -254,9 +255,12 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
  *
  * @returns {Array<{year: string, link: string}>}
  */
-const getGovInfoLinks = async (params) => {
+const getGovInfoLinks = async (apiURL, params) => {
+    // manually adjust to v3 if needed
+    const url = apiURL.replace("/v2/", "/v3/");
+
     const result = await httpApiGetLegacy(
-        `/v3/title/${params.title}/part/${params.part}/history/${Object.keys(params)[2]}/${
+        `${url}title/${params.title}/part/${params.part}/history/${Object.keys(params)[2]}/${
             Object.values(params)[2]
         }`
     );
