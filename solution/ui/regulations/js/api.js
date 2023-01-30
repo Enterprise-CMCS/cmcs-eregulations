@@ -246,7 +246,7 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
 /**
  * Get array of objects containing valid GovInfo docs years with links to the PDF files.
  *
- * @param {string} apiURL - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {string} apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
  * @param {Object} params - parameters needed for API call
  * @param {string} params.title - CFR title number.
  * @param {string} params.part - CFR part numer within title.
