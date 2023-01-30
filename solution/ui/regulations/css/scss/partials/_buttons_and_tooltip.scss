@@ -203,6 +203,23 @@
                 width: calc(100% - $spacer-2 - $spacer-2);
                 max-width: 435px;
 
+                .gov-info-links {
+                    .links-container {
+                        height: 200px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        flex-direction: column;
+
+                        a {
+                            width: 75px;
+                            font-size: 14px;
+                            font-weight: 600;
+                            padding-bottom: 20px;
+                        }
+
+                    }
+                }
+
                 .gov-info-source {
                     padding-top: 20px;
                     font-size: $font_size_sm;

@@ -1,7 +1,18 @@
 <template>
     <div class="gov-info-links-container">
         <div class="gov-info-links">
-            <SimpleSpinner size="medium" />
+            <SimpleSpinner v-if="loading" size="medium" />
+            <div v-else class="links-container">
+                <a
+                    v-for="(yearObj, index) in govInfoLinks"
+                    :key="index"
+                    :href="yearObj.link"
+                    class="external"
+                    target="_blank"
+                >
+                    {{ yearObj.year }}
+                </a>
+            </div>
         </div>
         <div class="gov-info-source">
             Section text is revised as of October 1st of each listed year. Link
@@ -11,6 +22,7 @@
 </template>
 
 <script>
+import { getGovInfoLinks } from "../../../api";
 import SimpleSpinner from "../SimpleSpinner.vue";
 
 export default {
@@ -37,7 +49,24 @@ export default {
 
     beforeCreate() {},
 
-    created() {},
+    created() {
+        getGovInfoLinks({
+            title: this.title,
+            part: this.part,
+            section: this.section,
+        })
+            .then((response) => {
+                const reversedResponse = response.reverse();
+                this.govInfoLinks = reversedResponse;
+            })
+            .catch((error) => {
+                console.error("Error", error);
+                this.govInfoLinks = [];
+            })
+            .finally(() => {
+                this.loading = false;
+            });
+    },
 
     beforeMount() {},
 
@@ -58,6 +87,7 @@ export default {
     data() {
         return {
             govInfoLinks: [],
+            loading: true,
         };
     },
 
