@@ -233,7 +233,6 @@
                         display: flex;
                         flex-wrap: wrap;
                         flex-direction: column;
-                        align-content: flex-start;
                         padding: 10px 10px 0;
 
                         @include screen-sm {
