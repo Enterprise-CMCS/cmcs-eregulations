@@ -250,8 +250,7 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
  * @param {Object} params - parameters needed for API call
  * @param {string} params.title - CFR title number.
  * @param {string} params.part - CFR part numer within title.
- * @param {Object} params.nodeType - node for which to retrieve data
- * @param {string} params.nodeType.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for section: "10"
+ * @param {string} params.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
  *
  * @returns {Array<{year: string, link: string}>}
  */
@@ -260,9 +259,9 @@ const getGovInfoLinks = async (apiURL, params) => {
     const url = apiURL.replace("/v2/", "/v3/");
 
     const result = await httpApiGetLegacy(
-        `${url}title/${params.title}/part/${params.part}/history/${Object.keys(params)[2]}/${
-            Object.values(params)[2]
-        }`
+        `${url}title/${params.title}/part/${params.part}/history/${
+            Object.keys(params)[2]
+        }/${Object.values(params)[2]}`
     );
 
     return result;
