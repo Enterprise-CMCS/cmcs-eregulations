@@ -209,7 +209,7 @@ resources:
           statement_timeout: 7200000
           search_path: '"$user",public'
           pgaudit.role: "rds_pgaudit"
-          pgaudit.log: "none"
+          pgaudit.log: "ALL"
 
     RDSResource:
       Type: AWS::RDS::DBCluster
