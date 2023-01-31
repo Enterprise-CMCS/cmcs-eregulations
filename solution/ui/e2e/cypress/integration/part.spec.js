@@ -123,4 +123,15 @@ describe("Part View", () => {
                 .contains("- Show Less (9)");
         });
     });
+
+    it("loads copy tooltip correctly", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/");
+        cy.contains("Subpart A").click({ force: true });
+        cy.get("#433-8-title .copy-btn-container button").click({ force: true });
+        cy.get("#433-8-title .copy-btn-container .tooltip.clicked").should("be.visible");
+        cy.get("#433-8-title .copy-btn-container .tooltip.clicked .tooltip-title").contains("42 CFR § 433.8");
+        cy.get("#433-8-title .copy-btn-container .tooltip.clicked button.close-btn").click({ force: true });
+        cy.get("#433-8-title .copy-btn-container .tooltip.clicked").should("not.exist");
+    })
 });
