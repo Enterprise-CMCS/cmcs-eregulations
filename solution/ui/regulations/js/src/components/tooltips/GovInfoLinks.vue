@@ -18,8 +18,10 @@
             </div>
         </div>
         <div class="gov-info-source">
-            Section text is revised as of October 1st of each listed year. Link
-            sources: <a href="https://www.govinfo.gov">GovInfo.gov</a>.
+            Source:
+            <a href="https://www.govinfo.gov/app/collection/cfr"
+                >GovInfo Code of Federal Regulations (Annual Edition)</a
+            >
         </div>
     </div>
 </template>
