@@ -21,7 +21,7 @@
             Source:
             <a href="https://www.govinfo.gov/app/collection/cfr"
                 >GovInfo Code of Federal Regulations (Annual Edition)</a
-            >
+            >, revised as of Oct 1 of each year.
         </div>
     </div>
 </template>
