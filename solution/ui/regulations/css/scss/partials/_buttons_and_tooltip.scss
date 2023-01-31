@@ -233,6 +233,7 @@
                         display: flex;
                         flex-wrap: wrap;
                         flex-direction: column;
+                        align-content: flex-start;
                         padding: 10px 10px 0;
 
                         @include screen-sm {
@@ -243,6 +244,11 @@
                             font-size: 14px;
                             font-weight: 600;
                             padding-bottom: 20px;
+                            width: 50px;
+
+                            @include custom-min(420) {
+                                width: 60px;
+                            }
                         }
                     }
                 }
