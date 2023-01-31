@@ -4,7 +4,7 @@
         class="view-resources-link"
     >
         <a v-if="count !== '0'" @click="clickHandler">
-            <span class="bold">View {{ section }} resources</span> ({{
+            <span class="bold">View {{ section }} Resources</span> ({{
                 count
             }})
         </a>
