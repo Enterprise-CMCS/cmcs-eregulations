@@ -1,8 +1,8 @@
 <template>
     <div v-if="isLink()" class="view-resources-link">
-        <a v-if="count !== '0'" @click="clickHandler">
+        <button v-if="count !== '0'" class="link-btn" @click="clickHandler">
             <span class="bold">View {{ section }} Resources</span> ({{ count }})
-        </a>
+        </button>
         <div v-else class="bold disabled">No resources for {{ section }}.</div>
     </div>
     <div v-else class="view-resources-link" style="padding-left: 5px">

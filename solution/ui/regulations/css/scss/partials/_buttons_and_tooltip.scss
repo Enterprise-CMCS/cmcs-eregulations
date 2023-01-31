@@ -10,6 +10,14 @@
     padding: 0;
 }
 
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .action-btn {
     font-family: $primary_site_font;
     font-size: $font-size-sm;
@@ -61,7 +69,8 @@
 }
 
 .trigger-btn,
-.print-btn {
+.print-btn,
+.link-btn {
     color: $mid_blue;
     cursor: pointer;
     line-height: 1.2;
