@@ -1,29 +1,19 @@
 <template>
-    <div
-        v-if="isLink()"
-        class="view-resources-link"
-    >
+    <div v-if="isLink()" class="view-resources-link">
         <a v-if="count !== '0'" @click="clickHandler">
-            <span class="bold">View {{ section }} Resources</span> ({{
-                count
-            }})
+            <span class="bold">View {{ section }} Resources</span> ({{ count }})
         </a>
-        <div v-else class="bold disabled">
-            No resources for {{ section }}.
-        </div>
+        <div v-else class="bold disabled">No resources for {{ section }}.</div>
     </div>
-    <div
-        v-else
-        class="view-resources-link"
-        style="padding-left: 5px;"
-    >
+    <div v-else class="view-resources-link" style="padding-left: 5px">
         <button v-if="count !== '0'" class="btn" @click="clickHandler">
-            <span class="bold">View {{ section }} resources</span> ({{
-                count
-            }})
+            <span class="bold">View {{ section }} resources</span>
+            <span class="count">({{ count }})</span>
         </button>
         <button v-else class="btn disabled">
-            <span class="bold">{{ section }} Resources</span> (0)
+            <span class="bold">{{ section }} Resources</span>
+            <span class="count">(0)</span>
+
         </button>
     </div>
 </template>
