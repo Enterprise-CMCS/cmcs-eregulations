@@ -19,7 +19,10 @@
         </div>
         <div class="gov-info-source">
             Source:
-            <a href="https://www.govinfo.gov/app/collection/cfr"
+            <a
+                href="https://www.govinfo.gov/app/collection/cfr"
+                class="external"
+                target="_blank"
                 >GovInfo Code of Federal Regulations (Annual Edition)</a
             >, revised as of Oct 1 of each year.
         </div>
