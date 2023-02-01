@@ -1,5 +1,4 @@
 from django.contrib.sitemaps import Sitemap
-from datetime import datetime, timezone
 from django.urls import reverse
 from regcore.models import Part
 from resources.models import AbstractResource
@@ -65,6 +64,7 @@ class PartFeed(Feed, FeedData):
             return url
         else:
             return 'https://www.google.com'
+
 
 class PartSitemap(Sitemap, FeedData):
     changefreq = 'daily'
