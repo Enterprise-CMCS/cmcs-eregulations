@@ -1,12 +1,9 @@
 from django.contrib.sitemaps import Sitemap
-from datetime import datetime
+from datetime import datetime, timezone
 from django.urls import reverse
 from regcore.models import Part
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
-from django.http.request import HttpRequest
-from regcore.v3views.metadata import PartSectionsViewSet
-import json
 
 
 class FeedData:
@@ -43,51 +40,31 @@ class PartFeed(Feed, FeedData):
         return feedgen
 
     def items(self):
-        date = datetime.now()
-        request = HttpRequest()
-        request.method = 'GET'
-        view = PartSectionsViewSet.as_view({'get': 'retrieve'})
-        parts = Part.objects.all().order_by('name', 'date').distinct('name')
         results = []
-        for part in parts:
-            data = view(request=request, title=part.title, part=part.name, version='latest').data
-            data = json.loads(json.dumps(data))
-            for p in data:
-                results.append({
-                    'title': part.title,
-                    'date': part.date,
-                    'part': p['identifier'][0],
-                    'section': p['identifier'][1],
-                    'last_updated': date,
-                    'description': p['label_description'],
-                    'parent_name': p['parent'][0],
-                    'parent_type': p['parent_type'],
-                    'label': p['label'],
-                })
+        resources = AbstractResource.objects.filter(approved=True).select_subclasses()
+        for resource in resources:
+            results.append({
+                'date': resource.updated_at,
+                'description': resource.description.replace('\x02', ''),
+                'url': resource.url,
+            })
         return results
 
-    def get_title(self, item):
-        return f"{item['title']} {item['part']} Section {item['section']}"
-
     def item_title(self, item):
-        return item['label']
+        return item['date'].strftime("%b %d, %Y")
 
     def item_pubdate(self, item):
-        return item['last_updated']
+        return item['date']
 
     def item_description(self, item):
-        if 'description' in item:
-            return item['description']
-        else:
-            return f"{item['title']} CFR {item['part']}.{item['section']}"
+        return item['description']
 
     def item_link(self, item):
-        if item['parent_type'] == 'subpart':
-            return f"{self.path}{item['title']}/{item['part']}/Subpart-{item['parent_name']}/#{item['part']}-{item['section']}".\
-                replace('/latest/feed', '')
+        url = item['url']
+        if url:
+            return url
         else:
-            return f"{self.path}{item['title']}/{item['part']}/"
-
+            return 'https://www.google.com'
 
 class PartSitemap(Sitemap, FeedData):
     changefreq = 'daily'
