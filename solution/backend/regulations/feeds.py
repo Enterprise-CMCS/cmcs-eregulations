@@ -3,7 +3,8 @@ from django.urls import reverse
 from regcore.models import Part
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
-
+from datetime import datetime
+import re
 
 class FeedData:
     def processChildren(self, children, title, part, last_updated):
@@ -42,15 +43,19 @@ class PartFeed(Feed, FeedData):
         results = []
         resources = AbstractResource.objects.filter(approved=True).select_subclasses()
         for resource in resources:
-            results.append({
-                'date': resource.updated_at,
-                'description': resource.description.replace('\x02', ''),
-                'url': resource.url,
-            })
+            if resource.date and re.match("[0-9]{4}-[0-9]{2}-[0-9]{2}", resource.date):
+                results.append({
+                    'date': datetime.strptime(resource.date, "%Y-%m-%d"),
+                    'description': resource.description.replace('\x02', ''),
+                    'url': resource.url,
+                    'name': resource.name,
+                })
         return results
 
     def item_title(self, item):
-        return item['date'].strftime("%b %d, %Y")
+        date = datetime.strftime(item['date'], "%b %d, %Y")
+        title = f"{date} | {item['name']}" if item['name'] else date
+        return title
 
     def item_pubdate(self, item):
         return item['date']
