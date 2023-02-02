@@ -30,12 +30,7 @@ class PartFeed(Feed, FeedData):
     link = '/latest/feed/'
     description = 'Displays the latest federal register documents'
 
-    def __init__(self):
-        self.path = None
-
     def get_feed(self, obj, request):
-        self.path = request.path
-
         feedgen = super().get_feed(obj, request)
         feedgen.content_type = 'application/xml'  # New standard
         return feedgen
@@ -47,6 +42,7 @@ class PartFeed(Feed, FeedData):
     def items(self):
         results = []
         resources = AbstractResource.objects.filter(approved=True).select_subclasses()
+        # if there is no date value then we will use this placeholder date for the datepublished.
         place_holder_pubdate = '1970-01-01'
         for resource in resources:
             results.append({
@@ -72,11 +68,7 @@ class PartFeed(Feed, FeedData):
         return item['description']
 
     def item_link(self, item):
-        url = item['url']
-        if url:
-            return url
-        else:
-            return 'https://www.google.com'
+        return item['url'] if item['url'] else '/'
 
 
 class PartSitemap(Sitemap, FeedData):
