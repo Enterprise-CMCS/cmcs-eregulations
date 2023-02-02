@@ -4,6 +4,7 @@ from regcore.models import Part
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
 from datetime import datetime
+from dateutil import parser
 import re
 
 class FeedData:
@@ -39,26 +40,33 @@ class PartFeed(Feed, FeedData):
         feedgen.content_type = 'application/xml'  # New standard
         return feedgen
 
+    def get_date(self, date_time):
+        date = parser.parse(date_time) if date_time else ''
+        return date
+
     def items(self):
         results = []
         resources = AbstractResource.objects.filter(approved=True).select_subclasses()
+        place_holder_pubdate = '1970-01-01'
         for resource in resources:
-            if resource.date and re.match("[0-9]{4}-[0-9]{2}-[0-9]{2}", resource.date):
-                results.append({
-                    'date': datetime.strptime(resource.date, "%Y-%m-%d"),
-                    'description': resource.description.replace('\x02', ''),
-                    'url': resource.url,
-                    'name': resource.name,
-                })
+            results.append({
+                'date': self.get_date(resource.date),
+                'date_published': resource.date if resource.date else place_holder_pubdate,
+                'description': resource.description.replace('\x02', ''),
+                'url': resource.url,
+                'name': resource.name,
+            })
         return results
 
     def item_title(self, item):
-        date = datetime.strftime(item['date'], "%b %d, %Y")
-        title = f"{date} | {item['name']}" if item['name'] else date
-        return title
+        date = item['date'].strftime("%b %d, %Y") if item['date'] else ''
+        if date and item['name']:
+            return f"{date} | {item['name']}"
+        else:
+            return date if date else item['name']
 
     def item_pubdate(self, item):
-        return item['date']
+        return self.get_date(item['date_published'])
 
     def item_description(self, item):
         return item['description']
