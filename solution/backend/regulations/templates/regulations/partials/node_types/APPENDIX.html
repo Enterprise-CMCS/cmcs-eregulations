@@ -8,7 +8,22 @@
 
         {% if node.label and node.label|length > 0 %}
             {% appendix_formatter cfr_title node.label as formatted_citation %}
-            <copy-btn btn_type="icon" title="{{node.label | join:'.'}}" hash="{{node.label | join:'-'}}" formatted_citation="{{formatted_citation}}"></copy-btn>
+            <tooltip-container
+                btn-type="icon"
+                btn-class="copy-btn"
+                title="{{node.label | join:'.'}}"
+                label="Copy Link or Citation"
+                button-icon="link"
+                tooltip-title="{{formatted_citation}}"
+                hover
+                click
+            >
+                <copy-citation
+                    slot="tooltip-content"
+                    hash="{{node.label | join:'-'}}"
+                    formatted-citation="{{formatted_citation}}"
+                ></copy-citation>
+            </tooltip-container>
         {% endif %}
         {{node.title}}
     </h2>
