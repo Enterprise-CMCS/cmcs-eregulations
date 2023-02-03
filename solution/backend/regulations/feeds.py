@@ -5,7 +5,7 @@ from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
 from datetime import datetime
 from dateutil import parser
-import re
+
 
 class FeedData:
     def processChildren(self, children, title, part, last_updated):
