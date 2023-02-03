@@ -31,6 +31,7 @@
                                     :data-value="sortOption.value"
                                     :disabled="sortOption.disabled"
                                     :inactive="sortOption.disabled"
+                                    role="menuitem"
                                     @click="clickMethod"
                                 >
                                     <span>{{ sortOption.label }}</span>

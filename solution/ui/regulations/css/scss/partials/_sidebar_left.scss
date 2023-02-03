@@ -21,7 +21,7 @@ aside.left-sidebar {
 
     &[data-state="expanded"] {
         @include custom-max($tablet-max / 1px) {
-            + .reg-text .copy-tooltip {
+            + .reg-text .tooltip {
                 z-index: 0;
             }
         }

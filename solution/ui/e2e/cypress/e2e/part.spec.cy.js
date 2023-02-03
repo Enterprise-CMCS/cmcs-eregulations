@@ -67,6 +67,10 @@ describe("Part View", () => {
         cy.get(".view-resources-link").should(($link) => {
             expect($link.first()).to.not.be.visible;
         });
+
+        cy.get(".reg-history-link").should(($link) => {
+            expect($link.first()).to.be.visible;
+        });
     });
 
     it("loads a part view", () => {
@@ -122,5 +126,55 @@ describe("Part View", () => {
                 .click({ force: true })
                 .contains("- Show Less (9)");
         });
+    });
+
+    it("loads copy tooltip correctly", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/");
+        cy.contains("Subpart A").click({ force: true });
+        cy.get("#433-8-title .copy-btn-container button.trigger-btn").click({
+            force: true,
+        });
+        cy.get("#433-8-title .copy-btn-container .tooltip.clicked").should(
+            "be.visible"
+        );
+        cy.get(
+            "#433-8-title .copy-btn-container .tooltip.clicked .tooltip-title"
+        ).contains("42 CFR § 433.8");
+        cy.get(
+            "#433-8-title .copy-btn-container .tooltip.clicked button.close-btn"
+        ).click({ force: true });
+        cy.get("#433-8-title .copy-btn-container .tooltip.clicked").should(
+            "not.exist"
+        );
+    });
+
+    it("loads reg history tooltip correctly", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/");
+        cy.contains("Subpart A").click({ force: true });
+        cy.get("#433-8 .reg-history-link-container button.trigger-btn").click({
+            force: true,
+        });
+        cy.get("#433-8 .reg-history-link-container .tooltip.clicked").should(
+            "be.visible"
+        );
+        cy.get(
+            "#433-8 .reg-history-link-container .tooltip.clicked .tooltip-title"
+        ).contains("View § 433.8 Effective In");
+        cy.get(
+            "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
+        ).contains("2021");
+        cy.get(
+            "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
+        )
+            .should("have.attr", "href")
+            .and("include", "govinfo.gov");
+        cy.get(
+            "#433-8 .reg-history-link-container .tooltip.clicked button.close-btn"
+        ).click({ force: true });
+        cy.get("#433-8 .reg-history-link-container .tooltip.clicked").should(
+            "not.exist"
+        );
     });
 });

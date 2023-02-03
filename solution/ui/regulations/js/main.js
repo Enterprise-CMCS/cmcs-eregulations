@@ -4,7 +4,7 @@ import RelatedRules from "../dist/RelatedRules";
 import Collapsible from "../dist/Collapsible";
 import CollapseButton from "../dist/CollapseButton";
 import SupplementalContent from "../dist/SupplementalContent";
-import CopyBtn from "../dist/CopyBtn";
+import TooltipContainer from "../dist/TooltipContainer";
 import PrintBtn from "../dist/PrintBtn";
 import TableComponent from "../dist/TableComponent";
 import ViewResourcesLink from "../dist/ViewResourcesLink";
@@ -14,6 +14,8 @@ import BlockingModal from "../dist/BlockingModal";
 import BlockingModalTrigger from "../dist/BlockingModalTrigger";
 import FlashBanner from "../dist/FlashBanner";
 import IFrameContainer from "../dist/IFrameContainer";
+import CopyCitation from "../dist/CopyCitation";
+import GovInfoLinks from "../dist/GovInfoLinks";
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -165,7 +167,7 @@ function main() {
             Collapsible,
             CollapseButton,
             SupplementalContent,
-            CopyBtn,
+            TooltipContainer,
             TableComponent,
             PrintBtn,
             ViewResourcesLink,
@@ -175,6 +177,8 @@ function main() {
             BlockingModalTrigger,
             FlashBanner,
             IFrameContainer,
+            CopyCitation,
+            GovInfoLinks,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");
