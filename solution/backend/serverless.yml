@@ -160,7 +160,7 @@ resources:
       Properties:
         GroupId: !Ref 'DBSecurityGroup'
         IpProtocol: tcp
-        FromPort:  ${ssm:/eregulations/db/port}
+        FromPort: ${ssm:/eregulations/db/port}
         ToPort: ${ssm:/eregulations/db/port}
         SourceSecurityGroupId: !Ref 'ServerlessSecurityGroup'
 
