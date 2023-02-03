@@ -8,3 +8,4 @@ User-agent: bingbot
 Allow: /
 {% endif %}
 Sitemap: https://{{request.META.HTTP_HOST}}/sitemap.xml
+
