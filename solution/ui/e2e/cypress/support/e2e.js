@@ -45,6 +45,7 @@ Cypress.Commands.add(
         prevSubject: "optional",
     },
     (subject, { skipFailures = false } = {}) => {
+        cy.injectAxe()
         cy.checkA11y(
             subject,
             { includedImpacts: ["critical", "serious"] },
