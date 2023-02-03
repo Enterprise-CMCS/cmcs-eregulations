@@ -70,4 +70,3 @@ class SupplementalContentSitemap(Sitemap):
 
     def location(self, item):
         return reverse("supplemental_content", kwargs={"id": item.id})
-
