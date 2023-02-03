@@ -23,7 +23,7 @@
                 href="https://www.govinfo.gov/app/collection/cfr"
                 class="external"
                 target="_blank"
-            > GovInfo</a> (1996 - Present)
+            > GovInfo</a> (1996–Present)
         </div>
     </div>
 </template>
