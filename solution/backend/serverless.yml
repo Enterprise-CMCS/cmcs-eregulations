@@ -208,6 +208,8 @@ resources:
           idle_in_transaction_session_timeout: 7200000
           statement_timeout: 7200000
           search_path: '"$user",public'
+          pgaudit.role: "rds_pgaudit"
+          pgaudit.log: "ALL"
 
     RDSResource:
       Type: AWS::RDS::DBCluster
