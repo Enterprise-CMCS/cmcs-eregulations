@@ -20,7 +20,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -32,7 +32,7 @@ jobs:
           state: open
       # should build first and save the artifact
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '15.x'
       # setup python
@@ -84,7 +84,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -96,7 +96,7 @@ jobs:
           state: open
       # should build first and save the artifact
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '15.x'
       # setup python
@@ -136,7 +136,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existing action
@@ -148,7 +148,7 @@ jobs:
           state: open
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '15.x'
       - name: Make envfile
@@ -194,7 +194,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
