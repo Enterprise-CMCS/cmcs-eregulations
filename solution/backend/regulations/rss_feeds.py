@@ -4,9 +4,9 @@ from dateutil import parser
 
 
 class ResourceFeed(Feed):
-    title = 'Federal Register documents RSS Feed'
+    title = 'Resources RSS Feed'
     link = '/latest/feed/'
-    description = 'Displays the latest federal register documents'
+    description = 'Displays the latest resource RSS feed'
 
     def get_feed(self, obj, request):
         feedgen = super().get_feed(obj, request)
