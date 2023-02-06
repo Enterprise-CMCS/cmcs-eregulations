@@ -6,7 +6,7 @@ from dateutil import parser
 class ResourceFeed(Feed):
     title = 'Resources RSS Feed'
     link = '/latest/feed/'
-    description = 'Displays the latest resource RSS feed'
+    description = 'Displays the latest Resources RSS feed'
 
     def get_feed(self, obj, request):
         feedgen = super().get_feed(obj, request)
