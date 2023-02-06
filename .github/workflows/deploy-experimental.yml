@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
       # setup python
       - uses: actions/setup-python@v2
         if: success() && steps.findPr.outputs.number
@@ -98,7 +98,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
       # setup python
       - uses: actions/setup-python@v2
         if: success() && steps.findPr.outputs.number
@@ -150,7 +150,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
