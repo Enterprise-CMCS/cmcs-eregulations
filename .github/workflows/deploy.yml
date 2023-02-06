@@ -30,7 +30,7 @@ jobs:
       # should build first and save the artifact
       - uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
+          node-version: '15.x'
       - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
