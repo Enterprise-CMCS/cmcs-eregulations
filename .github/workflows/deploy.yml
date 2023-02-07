@@ -130,6 +130,6 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           working-directory: solution/ui/e2e
-          config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
+          config: baseUrl=${{ needs.deploy.outputs.url }}
         env:
           CYPRESS_DEPLOYING: true
