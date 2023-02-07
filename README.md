@@ -12,7 +12,7 @@ We have public documentation about our product, design, and research processes i
 - Docker Compose
 - go version 1.16
 - git
-- node >= v15 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
+- node >= v18 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
 
 # Getting setup
 
