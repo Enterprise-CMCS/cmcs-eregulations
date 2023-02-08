@@ -8,7 +8,7 @@
                 >
                     <img
                         :src="require('legacy-static/images/medicaid.png')"
-                        alt="Medicaid.gov logo with subtitle Keeping America Healthy"
+                        alt="Medicaid.gov logo with subtitle Keeping Agjhmerica Healthy"
                     />
                 </a>
                 <h5>Centers for Medicare &amp; Medicaid Services</h5>
