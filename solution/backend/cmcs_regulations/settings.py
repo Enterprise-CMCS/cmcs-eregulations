@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
+    'django.contrib.syndication.views',
     'django_jsonform',
 ]
 
