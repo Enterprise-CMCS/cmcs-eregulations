@@ -1,7 +1,7 @@
 <template>
-    <div class="copy-btn-container">
+    <div class="trigger-btn-container" :class="buttonContainerClasses">
         <button
-            class="copy-btn text-btn"
+            class="trigger-btn text-btn"
             :class="buttonClasses"
             :aria-label="ariaLabel"
             @focus="handleEnter"
@@ -10,27 +10,32 @@
             @mouseleave="handleExit"
             @click="handleClick"
         >
-            <i class="fa fa-link"></i>
-            <span v-if="btn_type === 'labeled-icon'">{{ label }}</span>
+            <template v-if="btnType === 'link'">
+                {{ title }}
+            </template>
+            <template v-else>
+                <i class="fa" :class="faIconType"></i>
+                <span v-if="btnType === 'labeled-icon'">{{ label }}</span>
+            </template>
         </button>
         <div
-            v-show="entered && btn_type === 'icon'"
-            class="copy-tooltip hovered"
+            v-if="hover && entered"
+            class="tooltip hovered"
             :class="tooltipClasses"
             :style="tooltipStyles"
         >
             <p class="hover-msg">{{ label }}</p>
         </div>
         <div
-            v-if="clicked"
+            v-if="click && clicked"
             v-clickaway="handleCloseClick"
-            class="copy-tooltip clicked"
+            class="tooltip clicked"
             :class="tooltipClasses"
             :style="tooltipStyles"
         >
             <button
                 class="close-btn text-btn"
-                aria-label="close copy link or citation dialog"
+                :aria-label="closeAriaLabel"
                 @click="handleCloseClick"
             >
                 <svg
@@ -47,40 +52,27 @@
                     />
                 </svg>
             </button>
-            <p class="citation-title">{{ formatted_citation }}</p>
-            <div class="action-btns">
-                <ActionBtn
-                    :selected-action="selectedAction"
-                    :status="copyStatus"
-                    action-type="link"
-                    @action-btn-click="handleActionClick"
-                ></ActionBtn>
-                <ActionBtn
-                    :selected-action="selectedAction"
-                    :status="copyStatus"
-                    action-type="citation"
-                    @action-btn-click="handleActionClick"
-                ></ActionBtn>
-            </div>
+            <p class="tooltip-title">{{ tooltipTitle }}</p>
+            <slot name="tooltip-content"></slot>
         </div>
     </div>
 </template>
 
 <script>
-import ActionBtn from "./ActionBtn.vue";
-
-const getAnchorY = (el, elType) => {
+const getAnchorX = (el, elType) => {
     if (!el) return 0;
 
-    return elType === "labeled-icon"
+    return elType === "labeled-icon" || elType === "link"
         ? el.offsetWidth / 2
         : el.offsetWidth * 0.7;
 };
 
-const getAnchorX = (el, elType) => {
+const getAnchorY = (el, elType, position) => {
     if (!el) return 0;
 
-    return parseInt(window.getComputedStyle(el).fontSize, 10) + 20;
+    const spacer = position === "over" ? 20 : 10;
+
+    return parseInt(window.getComputedStyle(el).fontSize, 10) + spacer;
 };
 
 const appendPxSuffix = (int) => `${int}px`;
@@ -88,11 +80,9 @@ const appendPxSuffix = (int) => `${int}px`;
 const leftWarning = (el) => el.getBoundingClientRect().left < 130;
 
 export default {
-    name: "CopyBtn",
+    name: "TooltipContainer",
 
-    components: {
-        ActionBtn,
-    },
+    components: {},
 
     // https://www.vuesnippets.com/posts/click-away/
     // https://dev.to/jamus/clicking-outside-the-box-making-your-vue-app-aware-of-events-outside-its-world-53nh
@@ -128,19 +118,41 @@ export default {
     },
 
     props: {
-        btn_type: {
+        btnClass: {
+            type: String,
+            default: "copy-btn",
+        },
+        buttonIcon: {
+            type: String,
+            default: "link",
+        },
+        btnType: {
+            validator: (value) => {
+                ["link", "btn", "labeled-btn"].includes(value);
+            },
+            default: "normal",
+        },
+        click: {
+            type: Boolean,
+            default: false,
+        },
+        hover: {
+            type: Boolean,
+            default: false,
+        },
+        label: {
             type: String,
             required: true,
+        },
+        position: {
+            type: String,
+            default: "over",
         },
         title: {
             type: String,
             required: true,
         },
-        hash: {
-            type: String,
-            required: true,
-        },
-        formatted_citation: {
+        tooltipTitle: {
             type: String,
             required: true,
         },
@@ -151,55 +163,69 @@ export default {
             entered: false,
             clicked: false,
             leftSafe: true,
-            anchorY: 0,
             anchorX: 0,
-            label: "Copy Link or Citation",
-            selectedAction: null,
-            copyStatus: "idle",
+            anchorY: 0,
         };
     },
 
     computed: {
         ariaLabel() {
-            return this.btn_type === "icon"
+            return this.btnType === "icon"
                 ? `${this.label} for ${this.title}`
                 : false;
         },
+        closeAriaLabel() {
+            return `close ${this.label} dialog`;
+        },
         buttonClasses() {
             return {
-                "copy-btn-labeled": this.btn_type === "labeled-icon",
+                "trigger-btn-labeled": this.btnType === "labeled-icon",
+                "trigger-btn-link": this.btnType === "link",
+                [this.btnClass]: true,
+            };
+        },
+        buttonContainerClasses() {
+            return {
+                [`${this.btnClass}-container`]: true,
             };
         },
         tooltipClasses() {
             return {
-                "tooltip-caret": this.leftSafe,
-                "tooltip-caret-left": !this.leftSafe,
+                "tooltip-caret": this.leftSafe && this.position === "over",
+                "tooltip-caret-top": this.leftSafe && this.position === "under",
+                "tooltip-caret-left":
+                    !this.leftSafe && this.position === "over",
+                "tooltip-caret-top-left": !this.leftSafe && this.position === "under",
             };
         },
         tooltipStyles() {
-            return {
-                left: this.anchorY,
-                bottom: this.anchorX,
-                transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
-            };
-        },
-    },
-
-    watch: {
-        async copyStatus (newStatus, oldStatus) {
-            if (
-                newStatus === "pending" &&
-                (oldStatus === "idle" || oldStatus === "success")
-            ) {
-                try {
-                    // async write to clipboard
-                    await navigator.clipboard.writeText(this.getCopyText());
-                    this.copyStatus = "success";
-                } catch (err) {
-                    console.log("Error copying to clipboard", err);
-                    this.copyStatus = "idle";
-                }
+            if (this.position === "over") {
+                return {
+                    left: this.anchorX,
+                    transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
+                    bottom: this.anchorY,
+                };
             }
+
+            if (this.position === "under") {
+                const spacing = {
+                    "margin-top": "10px",
+                };
+
+                if (this.leftSafe) {
+                    return {
+                        transform: `translate(-${this.anchorX}, 0)`,
+                        ...spacing,
+                    };
+                }
+
+                return spacing;
+            }
+
+            return {};
+        },
+        faIconType() {
+            return `fa-${this.buttonIcon}`;
         },
     },
 
@@ -207,15 +233,17 @@ export default {
         handleEnter(e) {
             this.entered = !this.entered && !this.clicked;
             this.leftSafe = !leftWarning(e.currentTarget);
-            this.anchorY = appendPxSuffix(
-                getAnchorY(e.currentTarget, this.btn_type)
+            this.anchorX = appendPxSuffix(
+                getAnchorX(e.currentTarget, this.btnType)
             );
-            this.anchorX = appendPxSuffix(getAnchorX(this.$el, this.btn_type));
+            this.anchorY = appendPxSuffix(
+                getAnchorY(this.$el, this.btnType, this.position)
+            );
         },
         handleExit() {
             if (!this.clicked) {
                 this.entered = false;
-                this.anchorY = undefined;
+                this.anchorX = undefined;
                 this.leftSafe = true;
             }
         },
@@ -226,11 +254,11 @@ export default {
                 if (leftWarning(e.currentTarget)) {
                     this.leftSafe = false;
                 }
-                this.anchorY = appendPxSuffix(
-                    getAnchorY(e.currentTarget, this.btn_type)
-                );
                 this.anchorX = appendPxSuffix(
-                    getAnchorX(this.$el, this.btn_type)
+                    getAnchorX(e.currentTarget, this.btnType)
+                );
+                this.anchorY = appendPxSuffix(
+                    getAnchorY(this.$el, this.btnType)
                 );
             }
         },
@@ -238,21 +266,10 @@ export default {
             if (this.clicked) {
                 this.clicked = false;
                 this.entered = false;
-                this.anchorY = undefined;
+                this.anchorX = undefined;
                 this.leftSafe = true;
                 this.selectedAction = null;
             }
-        },
-        handleActionClick(payload) {
-            this.selectedAction = payload.actionType;
-            this.copyStatus = "pending";
-        },
-        getCopyText() {
-            return this.selectedAction === "citation"
-                ? this.formatted_citation
-                : `${new URL(window.location.href.split("#")[0]).toString()}#${
-                      this.hash
-                  }`;
         },
     },
 };

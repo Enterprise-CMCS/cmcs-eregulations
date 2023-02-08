@@ -20,7 +20,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -32,9 +32,9 @@ jobs:
           state: open
       # should build first and save the artifact
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18.14
       # setup python
       - uses: actions/setup-python@v2
         if: success() && steps.findPr.outputs.number
@@ -84,7 +84,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -96,9 +96,9 @@ jobs:
           state: open
       # should build first and save the artifact
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18.14
       # setup python
       - uses: actions/setup-python@v2
         if: success() && steps.findPr.outputs.number
@@ -136,7 +136,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existing action
@@ -148,9 +148,9 @@ jobs:
           state: open
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18.14
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -194,7 +194,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -272,12 +272,17 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
+      # Setup node environment
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
       # Run the cypress tests
       - name: end-to-end tests
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v5
         with:
           working-directory: solution/ui/e2e
           config: baseUrl=${{ needs.deploy-django.outputs.url }}
