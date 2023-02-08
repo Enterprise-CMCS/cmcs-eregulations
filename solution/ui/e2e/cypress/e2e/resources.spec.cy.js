@@ -1,4 +1,4 @@
-describe.skip("Resources page", () => {
+describe("Resources page", () => {
     describe("Loading and Empty States", () => {
         beforeEach(() => {
             cy.clearIndexedDB();

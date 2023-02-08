@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import "@testing-library/cypress/add-commands";
+import "cypress-axe";
+import "cypress-plugin-tab";
 
 // Print cypress-axe violations to the terminal
 function printA11yViolations(violations) {
@@ -43,6 +45,7 @@ Cypress.Commands.add(
         prevSubject: "optional",
     },
     (subject, { skipFailures = false } = {}) => {
+        cy.injectAxe()
         cy.checkA11y(
             subject,
             { includedImpacts: ["critical", "serious"] },

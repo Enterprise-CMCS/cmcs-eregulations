@@ -1,6 +1,6 @@
 <template>
     <div
-        class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center"
+        class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center loading-spinner"
     >
         <span
             class="ds-c-spinner"
