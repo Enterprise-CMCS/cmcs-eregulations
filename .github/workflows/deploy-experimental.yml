@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18.14
       # setup python
       - uses: actions/setup-python@v2
         if: success() && steps.findPr.outputs.number
@@ -98,7 +98,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18.14
       # setup python
       - uses: actions/setup-python@v2
         if: success() && steps.findPr.outputs.number
@@ -150,7 +150,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18.14
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -275,6 +275,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: true
+      # Setup node environment
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
       # Run the cypress tests
       - name: end-to-end tests
         uses: cypress-io/github-action@v5
