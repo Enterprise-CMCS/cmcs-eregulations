@@ -11,6 +11,7 @@ provider:
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}
+    Test_config: 'test'
     DB_PASSWORD: ${ssm:/eregulations/db/password}
     DB_HOST: ${ssm:/eregulations/db/host}
     DB_PORT: ${ssm:/eregulations/db/port}
@@ -211,38 +212,9 @@ resources:
           pgaudit.role: "rds_pgaudit"
           pgaudit.log: "ALL"
 
-    RDSResource:
-      Type: AWS::RDS::DBCluster
-      DeletionPolicy: Retain
-      Properties:
-        MasterUsername: ${self:custom.settings.USERNAME}
-        MasterUserPassword: ${ssm:/eregulations/db/password}
-        DBSubnetGroupName:
-          Ref: DBSubnetGroup
-        Engine: aurora-postgresql
-        EngineVersion: "12.8"
-        DatabaseName: ${self:custom.settings.DB_NAME}
-        BackupRetentionPeriod: 3
-        DBClusterParameterGroupName:
-          Ref: AuroraRDSClusterParameter
-        VpcSecurityGroupIds:
-          - !Ref 'DBSecurityGroup'
-
-    AuroraRDSInstance:
-      Type: AWS::RDS::DBInstance
-      DeletionPolicy: Retain
-      Properties:
-        DBInstanceClass: db.r6g.large
-        Engine: aurora-postgresql
-        EngineVersion: "12.8"
-        PubliclyAccessible: false
-        DBParameterGroupName:
-          Ref: AuroraRDSInstanceParameter
-        DBClusterIdentifier:
-          Ref: RDSResource
-
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
   - serverless-go-plugin
   - serverless-cloudfront-invalidate
+  - serverless-cloudformation-changesets
