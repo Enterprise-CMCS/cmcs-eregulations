@@ -4,6 +4,7 @@
   "description": "Serverless config for eRegs core",
   "private": true,
   "devDependencies": {
+    "serverless-cloudformation-changesets": "^0.0.2",
     "serverless-go-plugin": "^2.0.1",
     "serverless-python-requirements": "^5.1.1",
     "serverless-wsgi": "^1.7.8"
