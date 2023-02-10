@@ -70,8 +70,9 @@ jobs:
         run: |
           pushd solution/static-assets
           npm install serverless -g
+          npm install serverless-cloudformation-changesets-v3 -g
           npm install
-          serverless deploy --stage dev${PR}
+          serverless deploy --stage dev${PR} --param="changeset"
           popd
 
   deploy-django:
