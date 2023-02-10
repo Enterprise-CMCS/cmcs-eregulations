@@ -42,10 +42,6 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-site-assets
-        BucketEncryption:
-          ServerSideEncryptionConfiguration:
-            - ServerSideEncryptionByDefault:
-                SSEAlgorithm: AES256
         PublicAccessBlockConfiguration:
           BlockPublicAcls: true
           BlockPublicPolicy: true
