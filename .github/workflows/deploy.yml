@@ -68,8 +68,9 @@ jobs:
         run: |
           pushd solution/backend
           npm install serverless -g
+          npm install serverless-cloudformation-changesets-v3 -g
           npm install
-          serverless deploy --stage ${{ matrix.environment }} | tee output.log
+          serverless deploy --stage ${{ matrix.environment }} | tee output.log --param="changeset"
           serverless invoke --function reg_core_migrate --stage ${{ matrix.environment }}
           serverless invoke --function create_su --stage ${{ matrix.environment }}
           echo "::set-output name=url::$(cat output.log | grep -m1 'ANY -' | cut -c 9-)"
