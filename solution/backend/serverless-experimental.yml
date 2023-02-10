@@ -158,4 +158,4 @@ resources:
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
-  - serverless-cloudformation-changesets
+  - serverless-cloudformation-changesets-v3

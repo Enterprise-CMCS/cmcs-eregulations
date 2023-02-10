@@ -217,4 +217,4 @@ plugins:
   - serverless-wsgi
   - serverless-go-plugin
   - serverless-cloudfront-invalidate
-  - serverless-cloudformation-changesets
+  - serverless-cloudformation-changesets-v3
