@@ -16,6 +16,7 @@ import FlashBanner from "../dist/FlashBanner";
 import IFrameContainer from "../dist/IFrameContainer";
 import CopyCitation from "../dist/CopyCitation";
 import GovInfoLinks from "../dist/GovInfoLinks";
+import { TestComponent } from "../eregs-component-lib/dist/eregs-components.es.js"
 // #### HYGEN IMPORT INSERTION POINT DO NOT REMOVE ####
 
 import { goToVersion } from "./go-to-version";
@@ -161,6 +162,8 @@ function main() {
     // Must be first, mutates DOM
     highlightText(window.location, "highlight");
 
+    // import components that are created with Vite's Library Mode
+    // as a component library
     new Vue({
         components: {
             RelatedRules,
@@ -179,6 +182,7 @@ function main() {
             IFrameContainer,
             CopyCitation,
             GovInfoLinks,
+            TestComponent,
             // #### HYGEN COMPONENT INSERTION POINT DO NOT REMOVE ####
         },
     }).$mount("#vue-app");

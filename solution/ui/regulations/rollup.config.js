@@ -15,6 +15,9 @@ const plugins = [
 ];
 
 export default [
+    // All esm components will be created using a new Vite workflow --
+    // Library mode to create a component library.
+    // New directory using supervised vite setup, tweak to include Vue2 and Vuetify
     {
         // ...
         input: "js/src/components/RelatedRules.vue",
@@ -145,6 +148,7 @@ export default [
         plugins,
     },
     // #### HYGEN INSERTION POINT DO NOT REMOVE ####
+    // Keep the IIFE here but don't use Rollup for any of the components above
     {
         input: "js/main.js",
         output: {
