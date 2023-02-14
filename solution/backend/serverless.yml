@@ -215,7 +215,7 @@ resources:
       Type: AWS::RDS::DBCluster
       DeletionPolicy: Retain
       Properties:
-        MasterUsername: eregstest1
+        MasterUsername: ${self:custom.settings.USERNAME}
         StorageEncrypted: true
         MasterUserPassword: ${ssm:/eregulations/db/password}
         DBSubnetGroupName:
