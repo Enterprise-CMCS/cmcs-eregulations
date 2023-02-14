@@ -211,6 +211,37 @@ resources:
           search_path: '"$user",public'
           pgaudit.role: "rds_pgaudit"
           pgaudit.log: "ALL"
+    RDSResource:
+      Type: AWS::RDS::DBCluster
+      DeletionPolicy: Retain
+      Properties:
+        MasterUsername: eregstest1
+        StorageEncrypted: true
+        MasterUserPassword: ${ssm:/eregulations/db/password}
+        DBSubnetGroupName:
+          Ref: DBSubnetGroup
+        Engine: aurora-postgresql
+        EngineVersion: "12.8"
+        DatabaseName: 'eregs'
+        BackupRetentionPeriod: 3
+        DBClusterParameterGroupName:
+          Ref: AuroraRDSClusterParameter
+        VpcSecurityGroupIds:
+          - !Ref 'DBSecurityGroup'
+    
+    AuroraRDSInstance:
+      Type: AWS::RDS::DBInstance
+      DeletionPolicy: Retain
+      Properties:
+        DBInstanceClass: db.r6g.large
+        StorageEncrypted: true
+        Engine: aurora-postgresql
+        EngineVersion: "12.8"
+        PubliclyAccessible: false
+        DBParameterGroupName:
+          Ref: AuroraRDSInstanceParameter
+        DBClusterIdentifier:
+          Ref: RDSResource
 
 plugins:
   - serverless-python-requirements
