@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "vite-plugin-css-injected-by-js": "^3.0.0",
     "vue": "^2.7.10"
   },
   "devDependencies": {

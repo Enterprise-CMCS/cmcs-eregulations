@@ -1,6 +1,6 @@
 <template>
     <div>
-        TESTING VITE LIBRARY MODE
+        <span class="test-class">TESTING VITE LIBRARY MODE</span>
         <div
             class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center loading-spinner"
         >
@@ -56,3 +56,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+    .test-class {
+        color: red;
+    }
+</style>
