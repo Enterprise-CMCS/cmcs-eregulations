@@ -154,7 +154,7 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-#stage comment
+
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
