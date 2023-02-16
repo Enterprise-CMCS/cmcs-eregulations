@@ -53,10 +53,10 @@ export default defineConfig({
         },
     },
     plugins: [
+        vue(),
         Components({
             resolvers: [VuetifyResolver()],
         }),
-        vue(),
         cssInjectedByJsPlugin(),
     ],
 });
