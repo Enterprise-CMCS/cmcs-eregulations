@@ -1,19 +1,15 @@
 <template>
-    <div>
-        <span class="test-class">TESTING VITE LIBRARY MODE</span>
-        <v-btn depressed> Normal </v-btn>
-        <div
-            class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center loading-spinner"
+    <div
+        class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center loading-spinner"
+    >
+        <span
+            class="ds-c-spinner"
+            :class="spinnerClasses"
+            :style="spinnerStyles"
+            role="status"
         >
-            <span
-                class="ds-c-spinner"
-                :class="spinnerClasses"
-                :style="spinnerStyles"
-                role="status"
-            >
-                <span class="ds-u-visibility--screen-reader">Loading</span>
-            </span>
-        </div>
+            <span class="ds-u-visibility--screen-reader">Loading</span>
+        </span>
     </div>
 </template>
 
@@ -21,7 +17,7 @@
 const SPINNER_SIZES = ["xs", "small", "medium", "large"];
 
 export default {
-    name: "TestComponent",
+    name: "SimpleSpinner",
 
     props: {
         size: {
@@ -57,9 +53,3 @@ export default {
     },
 };
 </script>
-
-<style>
-.test-class {
-    color: red;
-}
-</style>

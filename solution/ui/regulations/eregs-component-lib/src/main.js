@@ -1,6 +1,36 @@
 import Vue from "vue";
 
-import { TestComponent } from "../dist/eregs-components.es"
+import {
+    ActionBtn,
+    BlockingModal,
+    BlockingModalTrigger,
+    CollapseButton,
+    Collapsible,
+    CopyCitation,
+    Dropdown,
+    DropdownContent,
+    DropdownHeader,
+    DropdownItem,
+    FlashBanner,
+    GovInfoLinks,
+    IFrameContainer,
+    LastParserSuccessDate,
+    PartButton,
+    PrintBtn,
+    RecentChangesContainer,
+    RelatedRule,
+    RelatedRuleList,
+    RelatedRules,
+    ShowMoreButton,
+    SimpleSpinner,
+    SupplementalContent,
+    SupplementalContentCategory,
+    SupplementalContentList,
+    SupplementalContentObject,
+    TableComponent,
+    TooltipContainer,
+    ViewResourcesLink,
+} from "../dist/eregs-components.es";
 
 import { goToVersion } from "./go-to-version";
 import { highlightText, getQueryParam, scrollToElement } from "./utils";
@@ -147,7 +177,35 @@ function main() {
 
     new Vue({
         components: {
-            TestComponent,
+            ActionBtn,
+            BlockingModal,
+            BlockingModalTrigger,
+            CollapseButton,
+            Collapsible,
+            CopyCitation,
+            Dropdown,
+            DropdownContent,
+            DropdownHeader,
+            DropdownItem,
+            FlashBanner,
+            GovInfoLinks,
+            IFrameContainer,
+            LastParserSuccessDate,
+            PartButton,
+            PrintBtn,
+            RecentChangesContainer,
+            RelatedRule,
+            RelatedRuleList,
+            RelatedRules,
+            ShowMoreButton,
+            SimpleSpinner,
+            SupplementalContent,
+            SupplementalContentCategory,
+            SupplementalContentList,
+            SupplementalContentObject,
+            TableComponent,
+            TooltipContainer,
+            ViewResourcesLink,
         },
     }).$mount("#vue-app");
 
