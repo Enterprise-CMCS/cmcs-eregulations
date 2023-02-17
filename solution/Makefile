@@ -3,7 +3,7 @@ help: ## Show this help.
 	@egrep '^[a-zA-Z_\.%-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 regulations: ## Build regulations assets
-regulations: ui/regulations/node_modules static-assets/regulations/css/main.css ui/regulations/eregs-component-lib/node_modules static-assets/regulations/js/eregs-main.iife.js ui/regulations/eregs-vite/node_modules build-vite
+regulations: ui/regulations/node_modules static-assets/regulations/css/main.css ui/regulations/eregs-component-lib/node_modules static-assets/regulations/js/eregs-main.iife.js ui/regulations/eregs-vite/node_modules build-spa
 
 ui/regulations/node_modules: ui/regulations/package.json
 	cd ui/regulations; \
@@ -27,21 +27,21 @@ static-assets/regulations/js/eregs-main.iife.js: ui/regulations/eregs-component-
 	cd ui/regulations/eregs-component-lib; \
 		npm run build;
 
-.PHONY: build-vite
-build-vite: ## Build vite assets
-build-vite:
+.PHONY: build-spa
+build-spa: ## Build vite assets
+build-spa:
 	cd ui/regulations/eregs-vite; \
 		npm run build;
 
-.PHONY: watch
+.PHONY: watch-css
 watch-css: ## Watch regulations static assets and rebuild when they're changed
 watch-css:
 	cd ui/regulations; \
 		(trap 'kill 0' SIGINT; npm run watch-css);
 
-.PHONY: watch-vite
-watch-vite: ## Watch vite components
-watch-vite:
+.PHONY: watch-spa
+watch-spa: ## Watch vite components
+watch-spa:
 	cd ui/regulations/eregs-vite; \
 		(trap 'kill 0' SIGINT; npm run watch-build);
 
@@ -57,10 +57,15 @@ watch-eregs-main:
 	cd ui/regulations/eregs-component-lib; \
 		(trap 'kill 0' SIGINT; node watch-dist.js);
 
-.PHONY: watch-all
-watch-all: ## watch rollup and vite for changes
+.PHONY: watch
+watch-all: ## watch non-SPA pages for changes
 watch-all:
-	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-vite
+	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main
+
+.PHONY: watch-all
+watch-all: ## watch everything for changes
+watch-all:
+	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations
