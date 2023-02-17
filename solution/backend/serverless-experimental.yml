@@ -3,13 +3,13 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  logs:
-    restApi:
-      role: LambdaFunctionRole
   runtime: python3.8
   region: us-east-1
   iam:
     role: LambdaFunctionRole
+  logs:
+    restApi:
+      role: LambdaFunctionRole
   lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
