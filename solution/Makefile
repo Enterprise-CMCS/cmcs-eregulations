@@ -55,12 +55,12 @@ watch-component-lib:
 watch-eregs-main: ## Watch eregs main.js
 watch-eregs-main:
 	cd ui/regulations/eregs-component-lib; \
-		(trap 'kill 0' SIGINT; npm run watch-build:main);
+		(trap 'kill 0' SIGINT; node watch-dist.js);
 
 .PHONY: watch-all
 watch-all: ## watch rollup and vite for changes
 watch-all:
-	${MAKE} -j2 watch-component-lib watch-eregs-main
+	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-vite
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations
