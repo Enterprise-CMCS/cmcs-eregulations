@@ -1,6 +1,6 @@
 service: cmcs-eregs-site
 variablesResolutionMode: 20210326
-
+#start for pr, will be removed
 provider:
   name: aws
   runtime: python3.8
@@ -105,7 +105,13 @@ functions:
 resources:
 
   Resources:
-
+    ApiGatewayRestApi:
+      Type: 'AWS::ApiGateway::RestApi'
+      Properties:
+        EndpointConfiguration:
+          Types:
+            - EDGE
+        Policy: ''
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
