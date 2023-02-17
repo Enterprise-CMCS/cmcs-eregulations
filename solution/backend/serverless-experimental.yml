@@ -9,7 +9,7 @@ provider:
     role: LambdaFunctionRole
   logs:
     restApi:
-      role: LambdaFunctionRole
+      role: ApiGatewayRole
   lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
@@ -108,6 +108,28 @@ functions:
 resources:
 
   Resources:
+
+    ApiGatewayRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: ${ssm:/account_vars/iam/path}
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - apigateway.amazonaws.com
+              Action: sts:AssumeRole
+        PermissionsBoundary:
+          Fn::Join:
+            - ''
+            - - 'arn:aws:iam::'
+              - Ref: AWS::AccountId
+              - ':policy'
+              - ${ssm:/account_vars/iam/permissions_boundary_policy}
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
     LambdaFunctionRole:
       Type: AWS::IAM::Role
