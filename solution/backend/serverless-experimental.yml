@@ -7,9 +7,9 @@ provider:
   region: us-east-1
   iam:
     role: LambdaFunctionRole
-  logs:
-    restApi:
-      role: !GetAtt ApiGatewayRole.Arn
+  # logs:
+  #   restApi:
+  #     role: !GetAtt ApiGatewayRole.Arn
   lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
@@ -121,7 +121,13 @@ resources:
                 Service:
                   - apigateway.amazonaws.com
               Action: sts:AssumeRole
-
+        PermissionsBoundary:
+          Fn::Join:
+            - ''
+            - - 'arn:aws:iam::'
+              - Ref: AWS::AccountId
+              - ':policy'
+              - ${ssm:/account_vars/iam/permissions_boundary_policy}
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
