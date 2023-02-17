@@ -3,6 +3,8 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
+  logs:
+    restApi: true
   runtime: python3.8
   region: us-east-1
   iam:
