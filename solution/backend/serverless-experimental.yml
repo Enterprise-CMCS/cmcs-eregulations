@@ -9,7 +9,7 @@ provider:
     role: LambdaFunctionRole
   logs:
     restApi:
-      role: !GetAtt ApiGatewayRole.arn
+      role: !GetAtt ApiGatewayRole.Arn
   lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
