@@ -87,6 +87,22 @@ resources:
                   Fn::GetAtt:
                   - CloudFrontOriginAccessIdentity
                   - S3CanonicalUserId
+            - Effect: Deny
+              Action: 's3:*'
+              Resource:
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref AssetsBucket
+                    - /*
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref AssetsBucket
+              Principal: '*'
+              Condition:
+                Bool:
+                  aws:SecureTransport: false
         Bucket: !Ref AssetsBucket
 
     CloudFrontDistribution:
