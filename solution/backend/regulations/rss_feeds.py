@@ -33,13 +33,7 @@ class ResourceFeed(Feed):
         return results
 
     def item_title(self, item):
-        date = item['date'].strftime("%b %d, %Y") if item['date'] else ''
-        if date and item['name']:
-            return f"{date} | {item['name']}"
-        elif date:
-            return date
-        else:
-            return item['name']
+        return item['name'] if item['name'] else "-"
 
     def item_pubdate(self, item):
         return self.get_date(item['date_published'])
