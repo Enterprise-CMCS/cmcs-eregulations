@@ -121,13 +121,7 @@ resources:
                 Service:
                   - apigateway.amazonaws.com
               Action: sts:AssumeRole
-        PermissionsBoundary:
-          Fn::Join:
-            - ''
-            - - 'arn:aws:iam::'
-              - Ref: AWS::AccountId
-              - ':policy'
-              - ${ssm:/account_vars/iam/permissions_boundary_policy}
+
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
