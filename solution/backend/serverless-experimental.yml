@@ -4,7 +4,8 @@ variablesResolutionMode: 20210326
 provider:
   name: aws
   logs:
-    restApi: true
+    restApi:
+      role: LambdaFunctionRole
   runtime: python3.8
   region: us-east-1
   iam:
@@ -148,6 +149,13 @@ resources:
                         - Ref: 'AWS::Region'
                         - Ref: 'AWS::AccountId'
                         - 'log-group:/aws/lambda/*:*:*'
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/api-gateway/*:*:*'
                 -  Effect: "Allow"
                    Action:
                      - "s3:PutObject"
