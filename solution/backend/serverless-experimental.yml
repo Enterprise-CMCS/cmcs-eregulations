@@ -1,6 +1,6 @@
 service: cmcs-eregs-site
 variablesResolutionMode: 20210326
-
+#start for pr, will be removed
 provider:
   name: aws
   runtime: python3.8
