@@ -3,7 +3,7 @@ help: ## Show this help.
 	@egrep '^[a-zA-Z_\.%-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 regulations: ## Build regulations assets
-regulations: ui/regulations/node_modules static-assets/regulations/css/main.css static-assets/regulations/js/main.build.js ui/regulations/eregs-vite/node_modules build-vite
+regulations: ui/regulations/node_modules static-assets/regulations/css/main.css ui/regulations/eregs-component-lib/node_modules static-assets/regulations/js/eregs-main.iife.js ui/regulations/eregs-vite/node_modules build-vite
 
 ui/regulations/node_modules: ui/regulations/package.json
 	cd ui/regulations; \
@@ -13,15 +13,19 @@ ui/regulations/eregs-vite/node_modules: ui/regulations/eregs-vite/package.json
 	cd ui/regulations/eregs-vite; \
 		npm install;
 
+ui/regulations/eregs-component-lib/node_modules: ui/regulations/eregs-component-lib/package.json
+	cd ui/regulations/eregs-component-lib; \
+		npm install;
+
 static-assets/regulations/css/main.css: ui/regulations/css/**/*.scss
 	cd ui/regulations; \
 		npm run css;\
 		mkdir ../../static-assets/regulations/css/admin/;\
 		cp css/admin/*.css ../../static-assets/regulations/css/admin/;
 
-static-assets/regulations/js/main.build.js: ui/regulations/js/main.js ui/regulations/js/src/components/*.vue
-	cd ui/regulations; \
-		npm run js;
+static-assets/regulations/js/eregs-main.iife.js: ui/regulations/eregs-component-lib/src/main.js ui/regulations/eregs-component-lib/src/components/*.vue
+	cd ui/regulations/eregs-component-lib; \
+		npm run build;
 
 .PHONY: build-vite
 build-vite: ## Build vite assets
@@ -30,10 +34,10 @@ build-vite:
 		npm run build;
 
 .PHONY: watch
-watch: ## Watch regulations static assets and rebuild when they're changed
-watch:
+watch-css: ## Watch regulations static assets and rebuild when they're changed
+watch-css:
 	cd ui/regulations; \
-		(trap 'kill 0' SIGINT; npm run watch-js & npm run watch-css);
+		(trap 'kill 0' SIGINT; npm run watch-css);
 
 .PHONY: watch-vite
 watch-vite: ## Watch vite components
@@ -41,10 +45,22 @@ watch-vite:
 	cd ui/regulations/eregs-vite; \
 		(trap 'kill 0' SIGINT; npm run watch-build);
 
+.PHONY: watch-eregs-component-lib
+watch-component-lib: ## Watch eregs component library components
+watch-component-lib:
+	cd ui/regulations/eregs-component-lib; \
+		(trap 'kill 0' SIGINT; npm run watch-build:components);
+
+.PHONY: watch-eregs-main
+watch-eregs-main: ## Watch eregs main.js
+watch-eregs-main:
+	cd ui/regulations/eregs-component-lib; \
+		(trap 'kill 0' SIGINT; npm run watch-build:main);
+
 .PHONY: watch-all
 watch-all: ## watch rollup and vite for changes
 watch-all:
-	${MAKE} -j2 watch watch-vite
+	${MAKE} -j2 watch-component-lib watch-eregs-main
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations

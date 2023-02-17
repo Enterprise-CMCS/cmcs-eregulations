@@ -1,4 +1,5 @@
 import path from "path";
+import fg from "fast-glob";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue2";
 import { VuetifyResolver } from "unplugin-vue-components/resolvers";
@@ -58,5 +59,16 @@ export default defineConfig({
             resolvers: [VuetifyResolver()],
         }),
         cssInjectedByJsPlugin(),
+        {
+            name: "watch-external", // https://stackoverflow.com/questions/63373804/rollup-watch-include-directory/63548394#63548394
+            async buildStart() {
+                if (process.env.LIB_NAME === "main") {
+                    const files = await fg(["dist/**/*"]);
+                    files.forEach((file) => {
+                        this.addWatchFile(file);
+                    });
+                }
+            },
+        },
     ],
 });
