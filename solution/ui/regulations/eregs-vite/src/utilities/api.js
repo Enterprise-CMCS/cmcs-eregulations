@@ -774,7 +774,7 @@ const getSupplementalContentSearchGov = async ({
     finalRes.web.results.forEach((item) => {
        search.results.push({
            date: item.publication_date,
-           description: item.snippet,
+           description: item.snippet.replaceAll('','<strong>').replaceAll('','</strong>'),
            url: item.url,
            name:  item.title === '-' ? "" : item.title
 
