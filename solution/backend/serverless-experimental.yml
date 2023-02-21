@@ -9,7 +9,7 @@ provider:
     role: LambdaFunctionRole
   logs:
     restApi:
-      role: arn:aws:iam::910670052382:role/delegatedadmin/developer/cmcs-eregs-site-dev714-ApiGatewayRole-IYZCJNJA82CC
+      role: arn:aws:iam::910670052382:role/delegatedadmin/developer/cmcs-eregs-site-dev713-ApiGatewayRole-1XXN8ULBTGPC6
   lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
