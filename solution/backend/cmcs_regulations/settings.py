@@ -264,7 +264,8 @@ CSP_SCRIPT_SRC = [
     STATIC_URL,
     "https://*.googletagmanager.com",
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-bundle.js",
-    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js"
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js",
+    "https://search.usa.gov/api/v2/search/",
 ]
 CSP_CONNECT_SRC = [
     "'self'",
@@ -272,6 +273,7 @@ CSP_CONNECT_SRC = [
     "https://*.googletagmanager.com",
     "https://*.google-analytics.com",
     "http://*.analytics.google.com",
+    "https://search.usa.gov/api/v2/search/",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 

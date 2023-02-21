@@ -760,6 +760,31 @@ const getRegSearchResults = async ({
     return response;
 };
 
+// search supplemental content with search.gov
+const getSupplementalContentSearchGov = async ({
+    q = "",
+    key = 'M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4=',
+}) => {
+    const response = await fetch(`https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key=${key}&query=${q}`)
+    console.log("The RESPONSE IS --->", response)
+    const finalRes = await response.json();
+    console.log("final results are",finalRes.web)
+    const search = { results: []
+    }
+    finalRes.web.results.forEach((item) => {
+       search.results.push({
+           date: item.publication_date,
+           description: item.snippet,
+           url: item.url,
+           name:  item.title === '-' ? "" : item.title
+
+       })
+    })
+    search.total = finalRes.web.total
+    console.log('--> response results are', search)
+    return search;
+};
+
 // todo: make these JS style camel case
 const getSupplementalContentV3 = async (
     {
@@ -921,5 +946,6 @@ export {
     getSubpartTOC,
     getSynonyms,
     getRegSearchResults,
+    getSupplementalContentSearchGov,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

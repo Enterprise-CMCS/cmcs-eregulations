@@ -72,7 +72,7 @@
                         </span>
                     </div>
                     <template v-if="!resourcesLoading">
-                        <ResourcesResults
+                        <ResourcesSearchGovResults
                             :base="base"
                             :count="resourcesResults.length"
                             :parts-last-updated="partsLastUpdated"
@@ -95,7 +95,7 @@
                                     />
                                 </template>
                             </template>
-                        </ResourcesResults>
+                        </ResourcesSearchGovResults>
                     </template>
                 </div>
             </div>
@@ -136,7 +136,7 @@ import {
     getFormattedPartsList,
     getLastUpdatedDates,
     getRegSearchResults,
-    getSupplementalContentV3,
+    getSupplementalContentSearchGov,
     getSynonyms,
 } from "@/utilities/api";
 
@@ -147,6 +147,7 @@ import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+import ResourcesSearchGovResults from "@/components/resources/ResourcesSearchGovResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
@@ -161,6 +162,7 @@ export default {
         PaginationController,
         RegResults,
         ResourcesResults,
+        ResourcesSearchGovResults,
         SearchEmptyState,
         SearchInput,
     },
@@ -185,6 +187,7 @@ export default {
                 page: this.page,
                 pageSize: this.pageSize,
             });
+
         } else {
             this.regsLoading = false;
             this.resourcesLoading = false;
@@ -217,13 +220,14 @@ export default {
             return this.regsLoading || this.resourcesLoading;
         },
         filteredContent() {
-            return this.resourcesResults.map((item) => {
+            /*return this.resourcesResults.map((item) => {
                 const copiedItem = JSON.parse(JSON.stringify(item));
                 copiedItem.locations = item.locations.filter(
                     (location) => this.partsLastUpdated[location.part]
                 );
                 return copiedItem;
-            });
+            });*/
+            return this.resourcesResults
         },
         page() {
             return _isUndefined(this.queryParams.page)
@@ -303,15 +307,12 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             try {
-                const response = await getSupplementalContentV3({
-                    partDict: "all",
-                    q: query,
-                    page,
-                    page_size: pageSize,
-                    fr_grouping: false,
+                const response = await getSupplementalContentSearchGov({
+                  q: query,
                 });
+
                 this.resourcesResults = response?.results ?? [];
-                this.totalResourcesResultsCount = response?.count ?? 0;
+                this.totalResourcesResultsCount = response?.total?? 0;
             } catch (error) {
                 console.error(
                     "Error retrieving regulation search results: ",
@@ -328,7 +329,6 @@ export default {
 
                 return;
             }
-
             this.regsLoading = true;
             this.resourcesLoading = true;
 
