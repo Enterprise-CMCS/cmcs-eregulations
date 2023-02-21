@@ -58,8 +58,8 @@ watch-eregs-main:
 		(trap 'kill 0' SIGINT; node watch-dist.js);
 
 .PHONY: watch
-watch-all: ## watch non-SPA pages for changes
-watch-all:
+watch: ## watch non-SPA pages for changes
+watch:
 	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main
 
 .PHONY: watch-all
