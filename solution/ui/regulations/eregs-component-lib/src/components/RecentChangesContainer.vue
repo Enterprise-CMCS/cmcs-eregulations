@@ -1,6 +1,5 @@
 <template>
     <div class="rules-container">
-        <span class="test-class">RED TEXT</span>
         <SimpleSpinner v-if="loading" />
         <RelatedRuleList v-if="!loading" :rules="rules" />
     </div>
@@ -53,9 +52,6 @@ export default {
 </script>
 
 <style lang="scss">
-.test-class {
-    color: red;
-}
 .rules-container {
     margin: 12px 0;
 
