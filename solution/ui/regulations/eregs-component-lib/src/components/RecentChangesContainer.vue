@@ -1,5 +1,6 @@
 <template>
     <div class="rules-container">
+        <v-btn>Hello</v-btn>
         <SimpleSpinner v-if="loading" />
         <RelatedRuleList v-if="!loading" :rules="rules" />
     </div>
