@@ -1,8 +1,58 @@
 // NOTE: Our variables use _ between words. CMS Design System variables use - between words. Sass will treat this the same, but it will help at a glance to know where the variable is coming from.
+
 // Django toolbar changes.  Needed for cypress testing
 
 #djDebug #djShowToolBarButton {
     opacity: 1 !important;
+}
+
+// Vuetify overrides
+// various !importants will be here and throughout our style sheets to combat Vuetify's aggressive styles
+// Discussion about Vuetify's "styling eccentricities": https://stackoverflow.com/questions/52310060/how-to-override-vuetify-styles
+
+*,
+::before,
+::after {
+    //box-sizing: unset !important;
+}
+
+input,
+select {
+    box-sizing: border-box !important;
+}
+
+h2,
+h3,
+h5,
+h6,
+p,
+ul {
+    margin-block-start: 1em !important;
+    margin-block-end: 1em !important;
+}
+
+h2 {
+    margin: 0.83em 0 0.83em 0 !important;
+}
+
+h3 {
+    margin: 1em 0 1em 0 !important;
+}
+
+h5 {
+    margin: 1.67em 0 1.67em 0 !important;
+}
+
+ul {
+    padding-inline-start: 40px !important;
+}
+
+.v-application {
+    font-family: Open Sans, Helvetica, sans-serif;
+
+    .v-application--wrap {
+        min-height: unset;
+    }
 }
 
 //--------------------------

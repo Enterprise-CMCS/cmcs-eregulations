@@ -106,15 +106,19 @@
         h1 {
             font-family: $primary_site_font;
             font-size: $font_size_hero_h1;
-            margin-bottom: 20px;
+
+            margin-block-start: 1em !important;
+            margin-block-end: 1em !important;
+            margin: 0.67em 0 0.67em 0 !important;
+            margin-bottom: 20px !important;
         }
 
         p.hero-text {
-            margin: 0;
+            margin: 0 !important;
             font-size: $font-size-sm;
 
             @include custom-max($hero-tablet-max / 1px) {
-                margin-top: 20px;
+                margin-top: 20px !important;
             }
         }
     }
@@ -227,7 +231,8 @@
     }
 
     h1 {
-        margin-bottom: 0;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
         font-size: $base-font-size * 1.8;
 
         @include custom-max(1024) {
@@ -245,15 +250,19 @@
 
     h4 {
         font-family: $secondary_site_font;
+
+        margin-block-start: 1em !important;
+        margin-block-end: 1em !important;
+        margin: 1.33em 0 1.33em 0 !important;
     }
 
     h4 + .toc-external-ref {
-        margin: $spacer-2 0 0;
+        margin: $spacer-2 0 0 !important;
     }
 
     .toc-external-ref {
         font-style: italic;
-        margin: $spacer-5 0;
+        margin: $spacer-5 0 !important;
     }
 
     .subchapter {
