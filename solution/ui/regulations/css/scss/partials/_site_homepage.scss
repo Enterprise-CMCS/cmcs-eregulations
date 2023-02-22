@@ -327,7 +327,11 @@
         h3 {
             font-family: $secondary_site_font;
             font-size: $font-size-md;
-            margin-bottom: $spacer-2;
+
+            margin: 1em 0 1em 0 !important;
+            margin-bottom: $spacer-2 !important;
+            margin-block-start: 1em !important;
+            margin-block-end: 1em !important;
         }
 
         .recent-rules-descriptive-text {

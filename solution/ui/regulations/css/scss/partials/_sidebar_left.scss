@@ -77,7 +77,7 @@ aside.left-sidebar {
         margin: 0 $spacer-2;
 
         h3 {
-            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
+            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2 !important;
         }
     }
 
@@ -116,6 +116,7 @@ aside.left-sidebar {
 
     button.subpart-toggle {
         width: $toc_toggles_width;
+        box-sizing: border-box;
 
         &:hover,
         &:focus {
@@ -138,7 +139,10 @@ aside.left-sidebar {
     // Ridiculous Nested Lists and Links
 
     ul {
-        padding: 0 0 $spacer-2 0;
+        padding: 0 0 $spacer-2 0 !important;
+
+        margin-block-start: 1em !important;
+        margin-block-end: 1em !important;
 
         li {
             list-style: none;
@@ -162,6 +166,10 @@ aside.left-sidebar {
                     margin-left: $spacer-2;
                     padding-left: $spacer-2;
                 }
+            }
+
+            ul.toggle-toc-menu-sections {
+                margin: 0 !important;
             }
         }
     }

@@ -19,7 +19,7 @@
         color: $primary_text_color;
         font-size: $base-font-size * 1.5;
         line-height: 1.4;
-        margin-bottom: $spacer-4;
+        margin-bottom: $spacer-4 !important;
 
         @include screen-xxl {
             font-size: $base-font-size * 1.9;
@@ -32,7 +32,7 @@
     }
 
     .last-updated {
-        margin-bottom: $spacer-4;
+        margin-bottom: $spacer-4 !important;
         font-style: italic;
         font-weight: 600;
     }
