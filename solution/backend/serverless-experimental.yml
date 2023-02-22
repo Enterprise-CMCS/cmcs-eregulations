@@ -7,9 +7,9 @@ provider:
   region: us-east-1
   iam:
     role: LambdaFunctionRole
-#  logs:
-#    restApi:
-#      role: ApiGatewayRole
+  logs:
+    restApi:
+      role: !GetAtt ApiGatewayLoggingRole.Arn
   lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
@@ -109,7 +109,7 @@ resources:
 
   Resources:
 
-    ApiGatewayRole:
+    ApiGatewayLoggingRole:
       Type: AWS::IAM::Role
       Properties:
         Path: ${ssm:/account_vars/iam/path}
