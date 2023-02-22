@@ -13,7 +13,7 @@
   "license": "CC",
   "private": true,
   "engines": {
-    "node": "15"
+    "node": ">=16.0.0"
   },
   "dependencies": {
     "@cmsgov/design-system": "^2.5.0",
