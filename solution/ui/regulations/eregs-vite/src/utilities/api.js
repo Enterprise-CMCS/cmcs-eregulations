@@ -881,8 +881,6 @@ const getSupplementalContentSearchResults = async (query) => {
     return result;
 };
 
-// API Functions Insertion Point (do not change this text, it is being used by hygen cli)
-
 export {
     configure,
     setIdToken,
@@ -921,5 +919,4 @@ export {
     getSubpartTOC,
     getSynonyms,
     getRegSearchResults,
-    // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

@@ -97,33 +97,3 @@ To better support Rapid Prototyping, a VueJS Single Page Application (SPA) has b
 3. edit files in `/regulations/static/prototype` to make changes
 4. changes should be reflected in running prototype via hot reloading
 5. `make prototype:clean` to tear down Docker container
-
-## Hygen Templates
-
-In order to enhance development speed and quality this project has introduced [hygen templates](http://www.hygen.io/).
-The website lists a few ways to install hygen. Once you have installed hygen you will be able to execute templates to create code.
-Hygen templates are located in solution/\_templates. Inside the \_templates directory the files are organized like this:
-
-    .
-    ├── solution
-    │   ├── _templates
-    │       ├──generator
-    │       │  └──foo
-    │       │     ├──myFile.js.ejs.t
-    │       │     ├──otherFile.js.ejs.t
-    │       │     └-─folder
-    │       │        ├──template.html.ejs.t
-    │       │        └──package.json.ejs.t
-    │       └── generator2
-    │           └── ...
-    └── ...
-
-In this example generator has a single command called foo so to run this template you would need to run
-
-```bash
-$ hygen generator foo
-```
-
-This would then be expected to create or alter myFile.js and otherFile.js in the root directory. In addition it
-would be expected to create or alter folder/template.html and folder/package.json.  
-For more in depth explanations on how hygen works their website has comprehensive documentation.
