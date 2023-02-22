@@ -6,7 +6,7 @@
     "css-deploy": "npx sass -I node_modules css/scss/main-deploy.scss ../../static-assets/regulations/css/main.css",
     "watch-css": "npx sass --watch -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
+    "build-storybook": "build-storybook"
   },
   "license": "CC",
   "private": true,
