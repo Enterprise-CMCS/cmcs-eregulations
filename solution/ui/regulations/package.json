@@ -7,8 +7,6 @@
     "watch-css": "npx sass --watch -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "watch-js": "npx rollup -c --watch --sourcemap",
-    "js": "npx rollup -c --sourcemap"
   },
   "license": "CC",
   "private": true,
@@ -23,8 +21,6 @@
     "lodash": "^4.17.21",
     "react": "16.x",
     "react-dom": "16.x",
-    "rollup": "^2.48.0",
-    "rollup-plugin-vue": "^5.1.9",
     "sass": "^1.32.8",
     "vue": "^2.7.10",
     "vue-clickaway": "^2.2.2",
@@ -33,9 +29,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
-    "@rollup/plugin-alias": "^3.1.8",
-    "@rollup/plugin-commonjs": "^21.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.5",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",
     "@storybook/addon-links": "^6.5.12",
