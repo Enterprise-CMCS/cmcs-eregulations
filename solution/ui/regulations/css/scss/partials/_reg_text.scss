@@ -264,8 +264,9 @@
     }
 
     .up-to-date {
+        box-sizing: unset;
         max-width: $text-max-width;
-        margin: $spacer-5 auto 10px;
+        margin: $spacer-5 auto 10px !important;
         font-size: $font-size-sm;
         color: $mid_gray;
 
@@ -296,6 +297,7 @@
 }
 
 article {
+    box-sizing: unset;
     max-width: $text-max-width;
     margin-top: $spacer-5;
     margin-bottom: $spacer-4;

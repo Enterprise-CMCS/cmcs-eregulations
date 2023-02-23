@@ -5,6 +5,7 @@
 @import "../application_settings";
 
 aside.right-sidebar {
+    box-sizing: content-box;
     padding-top: $spacer-5;
     padding-bottom: $spacer-5;
     max-width: 400px;
@@ -31,10 +32,11 @@ aside.right-sidebar {
     }
 
     #subpart-resources-heading {
-        margin-bottom: 0px;
+        margin-bottom: 0px !important;
     }
 
     #view-button {
+        box-sizing: border-box;
         font-size: $base-font-size;
         color: $primary_link_color;
         border: 1px solid $primary_link_color;
@@ -153,6 +155,7 @@ button.collapsible-title {
     text-align: left;
     width: 100%;
     justify-content: space-between;
+    line-height: 1.3 !important;
 
     &.subcategory {
         font-size: $font-size-sm;
