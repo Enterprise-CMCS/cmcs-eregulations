@@ -505,6 +505,7 @@ export default {
         .search-results-count {
             h2 {
                 border-bottom: 2px solid $mid_blue;
+                margin-block-end: 1em !important;
             }
         }
     }
