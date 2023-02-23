@@ -361,20 +361,6 @@ const getSectionObjects = async (apiUrl, part, subPart) => {
     }
 };
 
-const getSupplementalContentLegacy = async (
-    api_url,
-    title = "42",
-    part,
-    joined_locations
-) => {
-    const result = await httpApiGetLegacy(
-        `${api_url}title/${title}/part/${part}/supplemental_content?${joined_locations}`,
-        {}, // params, default
-        api_url
-    );
-    return result;
-};
-
 const getSupplementalContentByCategory = async (
     api_url,
     categories = [1, 2]
@@ -431,7 +417,6 @@ export {
     getLastParserSuccessDate,
     getSectionObjects,
     getSubPartsForPart,
-    getSupplementalContentLegacy,
     getSupplementalContentByCategory,
     v3GetSupplementalContent,
     v3GetFederalRegisterDocs,
