@@ -280,16 +280,6 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
-const getLastUpdatedDate = async (title = "42") => {
-    const reducer = (accumulator, currentValue) => currentValue.date > accumulator.date
-            ? currentValue
-            : accumulator;
-
-    const result = await httpApiGet(`title/${title}/existing`);
-
-    return niceDate(_get(result.reduce(reducer), "date"));
-};
-
 const getLastUpdatedDates = async (apiUrl, title = "42") => {
     const reducer = (accumulator, currentValue) => {
         // key by partname, value by latest date
@@ -309,17 +299,6 @@ const getLastUpdatedDates = async (apiUrl, title = "42") => {
     const result = await httpApiGet(`title/${title}/existing`);
 
     return result.reduce(reducer, {});
-};
-/**
- *
- * Fetches a list of the part names for the desired title
- * @param title {string} - The title requested defaults to 42
- * @returns {Array} - A sorted list of the parts in this title
- */
-const getPartNames = async (title = "42") => {
-    const result = await httpApiGet(`title/${title}/existing`);
-
-    return _sortedUniq(result.flatMap((part) => part.partName).sort());
 };
 
 /**
@@ -699,41 +678,6 @@ const getSectionObjects = async (part, subPart) => {
     }
 };
 
-/**
- *
- * Fetches all_parts and returns a list of sections for the part and subpart specified
- * @param part - a part in title 42
- * @param subPart - a subpart in title 42 ("A", "B", etc)
- * @returns {Array[Object>TOC>, Object<orphansAndSubparts>]} - a tuple with a Table of contents and a list of
- * top level elements for the requested part
- */
-
-const getPart = async (title, part) => {
-    const result = await httpApiGet(
-        `${getKebabDate()}/title/${title}/part/${part}`
-    );
-
-    // mixing lodash get and optional chaining.  Both provide safeguards and do the same this
-    const toc = result?.toc;
-
-    const orphansAndSubParts = _get(result, "document.children");
-    return [toc, orphansAndSubParts];
-};
-
-/**
- *
- * @param title {string} - The requested title, defaults to 42
- * @param part {string} - The part pf the title
- * @param scope {string} - a formatted string of the sections desired ( section=1&section=2&section=3...)
- * @param identifier {string} - a formatted string of the subparts desired (subpart=A&subpart=B...)
- * @returns {Array[Object]} - a structured list of categories, subcategories and associated supplemental content
- */
-
-const getAllSupplementalContentByPieces = async (start, max_results = 100) => {
-    const result = await (httpApiGet(`all_sup?&start=${start}&max_results=${max_results}`))
-    return result;
-}
-
 const getSupplementalContent = async (
     title = "42",
     part,
@@ -818,32 +762,6 @@ const getSupplementalContentV3 = async (
 
 }
 
-const getSupIDByLocations = async () => {
-    const result = await httpApiGet('locations');
-    return result;
-}
-
-const getSupByPart = async (title, part, subparts, sections) => {
-    const locations = await httpApiGet('locations');
-    const allIndex = sections.concat(subparts)
-
-    const supplemental = await httpApiGet(`sup_by_id/title/${title}/part/${part}`)
-
-    const supList = allIndex.length === 0
-        ? Object.keys(locations[title][part]).reduce((acc, x) => {
-            return acc.concat(locations[title][part][x])
-        }, [])
-        : allIndex.reduce((acc, sec) => {
-            return acc.concat(locations[title][part][sec])
-        }, [])
-
-    return [...new Set(supList)].map(supId => {
-        const item = JSON.parse(JSON.stringify(supplemental[supId]))
-        item.category = item.category.name
-        return item
-    })
-
-}
 const getCategories = async () =>  httpApiGetV3("resources/categories");
 
 const getTOC = async (title) =>
@@ -856,30 +774,6 @@ const getSectionsForPart = async (title, part) => httpApiGetV3(`title/${title}/p
 const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
 
 const getSynonyms = async(query) => httpApiGetV3(`synonym/${query}`);
-/**
- *
- * @param part {string} - a regulation part
- * @returns {Object<string:number>} - an object where the keys represent the display name for each part and
- * the value is the count of how many pieces of supplemental content exist for that part.
- */
-const getSupplementalContentCountForPart = async (part) => {
-    const result = await httpApiGet(
-        `supplemental_content_count_by_part?part=${part}`
-    );
-    return result;
-};
-
-/**
- *
- * @param query {string} - a query string to search supplemental content
- * @returns {Object<string:number>} - a list containing unstructured supplemental content search results
- */
-const getSupplementalContentSearchResults = async (query) => {
-    const result = await httpApiGet(
-        `supplemental_content/search?q=${query}`
-    );
-    return result;
-};
 
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
@@ -889,13 +783,10 @@ export {
     getDecodedIdToken,
     forgetIdToken,
     config,
-    getLastUpdatedDate,
     getLastUpdatedDates,
     getHomepageStructure,
-    getPartNames,
     getAllParts,
     getSubPartsForPart,
-    getPart,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,
@@ -905,16 +796,11 @@ export {
     getFormattedPartsList,
     getSectionsForSubPart,
     getSectionObjects,
-    getSupplementalContentCountForPart,
     getCategories,
     getPartsDetails,
     getSubPartsandSections,
-    getAllSupplementalContentByPieces,
-    getSupIDByLocations,
-    getSupByPart,
     getAllSections,
     getSupplementalContentV3,
-    getSupplementalContentSearchResults,
     getTOC,
     getPartTOC,
     getSectionsForPart,
