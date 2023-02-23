@@ -107,9 +107,10 @@ resources:
     CloudFrontWebACL:
       Type: AWS::WAFv2::WebACL
       Properties:
+        Name: eregs-${self:custom.stage}-cloudfront-ACL
         DefaultAction: 
           Allow: {}
-        Scope: us-east-1
+        Scope: REGIONAL
         VisibilityConfig:
           SampledRequestsEnabled: true
           CloudWatchMetricsEnabled: true
