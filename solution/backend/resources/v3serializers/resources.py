@@ -38,7 +38,6 @@ class AbstractResourceSerializer(serializers.Serializer):
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
-
     category = serializers.SerializerMethodField()
     locations = serializers.SerializerMethodField()
 

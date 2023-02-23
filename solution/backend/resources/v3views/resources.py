@@ -50,7 +50,12 @@ class AbstractResourceViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, 
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
             default=-1*F("pk"),
         )
-
+    def get_annotated_url(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__url")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__url")),
+            default=None,
+        )
     def get_search_fields(self):
         return {
             "supplementalcontent": ["name", "description"],

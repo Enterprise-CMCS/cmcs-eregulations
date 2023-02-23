@@ -1,7 +1,9 @@
-from django.db.models import Q, F, Prefetch, OuterRef, Subquery
+from django.db.models import Q, F, Prefetch, OuterRef, Subquery,Case, When
+
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
 from django.core.exceptions import BadRequest
-
+import requests
+import json
 from common.api import OpenApiQueryParameter
 from resources.models import (
     AbstractLocation,
@@ -154,7 +156,8 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
     def get_annotated_date(self):
         return F("date")
-
+    def get_annotated_url(self):
+        return F("url")
     def get_annotated_group(self):
         return -1*F("pk")
 
@@ -208,10 +211,31 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
         sort_method = self.request.GET.get("sort")
+        key = 'M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4='
+        q = self.request.query_params.get('q')
+        offset=0
+        limit=50
+        rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}&query={q}&limit={limit}&offset={offset}'
+        urls=[]
+        results = []
+        gov_result = json.loads(requests.get(rstring).text)
+
+        if gov_result:
+            while True:
+                results= results + gov_result['web']['results']
+                urls= urls + [i['url'] for i in results]
+                if gov_result['web']['next_offset'] is not None:
+                    offset= offset + limit
+                    rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}&query={q}&limit={limit}&offset={offset}'
+                    gov_result = json.loads(requests.get(rstring).text)
+                else:
+                    break
 
         id_query = self.model.objects\
                        .filter(approved=True)\
-                       .annotate(group_annotated=self.get_annotated_group())
+                       .annotate(group_annotated=self.get_annotated_group())\
+                       .annotate(url_annotated=self.get_annotated_url())
+        id_query = id_query.filter(url_annotated__in=urls)
 
         q_obj = self.get_location_filter(locations)
         if q_obj:
@@ -219,7 +243,6 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
 
         if categories:
             id_query = id_query.filter(category__id__in=categories)
-
         ids = self.get_final_ids(id_query)
 
         annotations = {}
@@ -235,26 +258,36 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             )),
         )
 
-        if search_query:
-            (search_type, cover_density) = (
-                ("phrase", True)
-                if search_query.startswith('"') and search_query.endswith('"')
-                else ("plain", False)
-            )
-            annotations["rank"] = SearchRank(
-                self.get_search_vectors(),
-                SearchQuery(search_query, search_type=search_type, config="english"),
-                cover_density=cover_density,
-            )
-            annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
+        # if search_query:
+        #     (search_type, cover_density) = (
+        #         ("phrase", True)
+        #         if search_query.startswith('"') and search_query.endswith('"')
+        #         else ("plain", False)
+        #     )
+        #     annotations["rank"] = SearchRank(
+        #         self.get_search_vectors(),
+        #         SearchQuery(search_query, search_type=search_type, config="english"),
+        #         cover_density=cover_density,
+        #     )
+        #     annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
+        # fake = query
+        # for q in fake:
+        #     q.description = snippet = [r['snippet'] for r in results if r['url'] == q.url][0]
+        #     q.save()
+        # query = fake
 
+        print(query.first().__dict__)
         annotations["date_annotated"] = self.get_annotated_date()
         query = query.annotate(**annotations)
-        query = query.filter(rank__gte=0.2) if search_query else query
 
-        if search_query and sort_method == "relevance":
-            return query.distinct().order_by("-rank")
-        elif sort_method == "oldest":
+
+
+        # query = query.filter(rank__gte=0.2) if search_query else query
+
+        # if search_query and sort_method == "relevance":
+        #     return query.distinct().order_by("-rank")
+        
+        if sort_method == "oldest":
             return query.distinct().order_by(F("date_annotated").asc(nulls_last=True))
         else:
             return query.order_by(F("date_annotated").desc(nulls_last=True)).distinct()

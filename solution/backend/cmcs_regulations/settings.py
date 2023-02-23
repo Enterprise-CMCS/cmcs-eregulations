@@ -233,6 +233,7 @@ CSP_IMG_SRC = [
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/favicon-32x32.png",
     'data:',
     "https://images.federalregister.gov/",
+    "https://search.usa.gov/api/v2/search/",
 ]
 CSP_FRAME_SRC = [
     "'self'",
@@ -272,6 +273,7 @@ CSP_CONNECT_SRC = [
     "https://*.googletagmanager.com",
     "https://*.google-analytics.com",
     "http://*.analytics.google.com",
+    "https://search.usa.gov/api/v2/search/",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 
