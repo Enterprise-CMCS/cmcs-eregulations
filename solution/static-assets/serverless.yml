@@ -120,7 +120,7 @@ resources:
       Properties:
         DistributionConfig:
           Comment: CloudFront Distro for the static website hosted in S3
-          WebACLId: !Ref CloudFrontWebACL
+          WebACLId: !GetAtt CloudFrontWebACL.arn
           Aliases:
             - Ref: AWS::NoValue
           Origins:
