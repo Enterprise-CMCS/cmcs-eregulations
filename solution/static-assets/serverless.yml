@@ -110,7 +110,7 @@ resources:
         Name: eregs-${self:custom.stage}-cloudfront-ACL
         DefaultAction: 
           Allow: {}
-        Scope: REGIONAL
+        Scope: GLOBAL
         VisibilityConfig:
           SampledRequestsEnabled: true
           CloudWatchMetricsEnabled: true
