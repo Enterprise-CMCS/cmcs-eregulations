@@ -249,6 +249,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
                                             .contains_fr_docs()
+
         query = self.model.objects.filter(id__in=ids).select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),
@@ -271,12 +272,13 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         #     )
         #     annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
         # fake = query
-        # for q in fake:
-        #     q.description = snippet = [r['snippet'] for r in results if r['url'] == q.url][0]
-        #     q.save()
-        # query = fake
+        query = list(query)
+        for q in query:
+            q.description = snippet = [r['snippet'] for r in results if r['url'] == q.url][0]
+        return query
+        # print(q)
 
-        print(query.first().__dict__)
+     
         annotations["date_annotated"] = self.get_annotated_date()
         query = query.annotate(**annotations)
 
