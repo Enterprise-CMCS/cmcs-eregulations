@@ -106,14 +106,14 @@ resources:
         Bucket: !Ref AssetsBucket
     CloudFrontWebACL:
       Type: AWS::WAFv2::WebACL
+      Properties:
         DefaultAction: 
           Allow: {}
-      Properties:
-        Scope: REGIONAL
+        Scope: us-east-1
         VisibilityConfig:
           SampledRequestsEnabled: true
           CloudWatchMetricsEnabled: true
-          MetricName: eregs-${self:custom.stage}-metric
+          MetricName: eregs-${self:custom.stage}-cloudfront-metric
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
