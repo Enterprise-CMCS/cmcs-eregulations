@@ -66,11 +66,15 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("div.flash-banner").should("be.visible");
-        cy.scrollTo(0, 400);
-        cy.wait(500);
-        cy.get("div.flash-banner").then(($el) => {
-            const rect = $el[0].getBoundingClientRect();
-            expect(rect.bottom).to.be.lessThan(1);
+        cy.get("body").tab();
+        cy.focused().should("have.attr", "class", "ds-c-skip-nav");
+        cy.focused().then(() => {
+            cy.get(".ds-c-skip-nav").click({ force: true });
+            cy.wait(500);
+            cy.get("div.flash-banner").then(($el) => {
+                const rect = $el[0].getBoundingClientRect();
+                expect(rect.bottom).to.be.lessThan(1);
+            });
         });
     });
 
