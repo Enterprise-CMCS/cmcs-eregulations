@@ -113,30 +113,24 @@ resources:
           Types:
             - Edge
         Policy: ''
-        MethodSettings:
-          - LoggingLevel: INFO
-            MetricsEnabled: True
-            ResourcePath: '/*' # allows for logging on any resource
-            HttpMethod: '*' # allows for logging on any method
-        Auth:
-          ApiKeyRequired: true # sets for all methods
-    ApiCWLRoleArn:
-      Type: AWS::ApiGateway::Account
-      Properties: 
-        CloudWatchRoleArn: !GetAtt CloudWatchRole.Arn
-    CloudWatchRole:
-      Type: AWS::IAM::Role
+    ApiGatewayStage:
+      Type: AWS::ApiGateway::Stage
       Properties:
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            Action: 'sts:AssumeRole'
-            Effect: Allow
-            Principal:
-              Service: apigateway.amazonaws.com
-        Path: /
-        ManagedPolicyArns:
-          - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs'
+        RestApiId: !Ref ApiGateway.Arn
+        MethodSettings:
+          - ResourcePath: "/*"
+            HttpMethod: "*"
+            LoggingLevel: INFO
+        AccessLogSetting:
+          DestinationArn: !GetAtt MyLogGroup.Arn
+          Format: $context.extendedRequestId $context.identity.sourceIp $context.identity.caller $context.identity.user [$context.requestTime] "$context.httpMethod $context.resourcePath $context.protocol" $context.status $context.responseLength $context.requestId
+    MyLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        LogGroupName: !Join
+          - '-'
+          - - !Ref ApiGateway
+            - access-logs
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
