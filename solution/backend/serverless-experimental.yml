@@ -105,7 +105,38 @@ functions:
 resources:
 
   Resources:
-
+    ApiGateway:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:custom.stage}-cmcs-eregs-site
+        EndpointConfiguration:
+          Types:
+            - Edge
+        Policy: ''
+        MethodSettings:
+          - LoggingLevel: INFO
+            MetricsEnabled: True
+            ResourcePath: '/*' # allows for logging on any resource
+            HttpMethod: '*' # allows for logging on any method
+        Auth:
+          ApiKeyRequired: true # sets for all methods
+    ApiCWLRoleArn:
+      Type: AWS::ApiGateway::Account
+      Properties: 
+        CloudWatchRoleArn: !GetAtt CloudWatchRole.Arn
+    CloudWatchRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            Action: 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Path: /
+        ManagedPolicyArns:
+          - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs'
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
