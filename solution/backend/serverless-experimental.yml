@@ -125,7 +125,7 @@ resources:
         Deployment
         MethodSettings:
           - ResourcePath: /*
-            HttpMethod: "*"
+            HttpMethod: *
             LoggingLevel: INFO
         AccessLogSetting:
           DestinationArn: !GetAtt MyLogGroup.Arn
