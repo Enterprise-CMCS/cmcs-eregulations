@@ -27,7 +27,7 @@ from regcore.views import SettingsAuthentication
 
 
 @extend_schema(
-    description="Retrieve a list ofs all resources. "
+    description="Retrieve a list of all resources. "
                 "Includes all types e.g. supplemental content, Federal Register Documents, etc. "
                 "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
                 "Results are paginated by default.",
