@@ -132,7 +132,7 @@
             margin: 15px 0 25px;
 
             p {
-                margin: 0;
+                margin: 0 !important;
             }
 
             p:first-child {
@@ -140,7 +140,8 @@
                 line-height: 1.5;
                 font-weight: 700;
                 font-family: $secondary_site_font;
-                margin-bottom: 5px;
+                margin-top: 0 !important;
+                margin-bottom: 5px !important;
             }
         }
 

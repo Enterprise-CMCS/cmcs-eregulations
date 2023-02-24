@@ -96,10 +96,12 @@ aside.left-sidebar {
         padding-left: 0;
     }
 
-    .toc-subgroup-name {
+    h3.toc-subgroup-name {
         margin-left: $spacer-4;
         margin-right: $spacer-2;
         font-size: $font-size-md;
+        margin-block-start: 1em !important;
+        margin-block-end: 1em !important;
     }
 
     .toc-section-number {
