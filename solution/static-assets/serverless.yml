@@ -104,12 +104,23 @@ resources:
                 Bool:
                   aws:SecureTransport: false
         Bucket: !Ref AssetsBucket
-
+    CloudFrontWebACL:
+      Type: AWS::WAFv2::WebACL
+      Properties:
+        Name: eregs-${self:custom.stage}-cloudfront-ACL
+        DefaultAction: 
+          Allow: {}
+        Scope: CLOUDFRONT
+        VisibilityConfig:
+          SampledRequestsEnabled: true
+          CloudWatchMetricsEnabled: true
+          MetricName: eregs-${self:custom.stage}-cloudfront-metric
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
           Comment: CloudFront Distro for the static website hosted in S3
+          WebACLId: !GetAtt CloudFrontWebACL.Arn
           Aliases:
             - Ref: AWS::NoValue
           Origins:
