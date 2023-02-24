@@ -260,19 +260,6 @@ const getAllParts = async (apiUrl) =>
     );
 
 /**
- * Returns the result from the categories endpoint
- *
- * @returns {Array} - a list of objects that represent possible supp content categories and subcategories
- */
-
-const getCategories = async (apiUrl) =>
-    httpApiGetLegacy(
-        `${apiUrl}categories`,
-        {}, // params, default
-        apiUrl
-    );
-
-/**
  *
  * Fetches all_parts and returns a list of objects for the subparts in that part
  * Each object has a label and an identifier
@@ -391,7 +378,6 @@ const getSubpartTOC = async (apiURL, title, part, subPart) => {
 
 export {
     getAllParts,
-    getCategories,
     getLastParserSuccessDate,
     getSectionObjects,
     getSubPartsForPart,
