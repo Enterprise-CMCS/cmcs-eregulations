@@ -193,7 +193,7 @@
             color: $secondary_text_color;
             font-size: $font-size-md;
             line-height: 1.4;
-            margin-top: 25px;
+            margin-top: 25px !important;
 
             @include screen-xl {
                 font-size: $font-size-lg;
