@@ -347,7 +347,7 @@ a {
 }
 
 .smooth-scroll {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth !important;
 }
 
 // -------------------------
@@ -411,8 +411,8 @@ a {
     }
 }
 
-html {
-    scroll-behavior: smooth;
+html, body {
+    scroll-behavior: smooth !important;
 }
 
 select {
