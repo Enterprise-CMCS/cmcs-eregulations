@@ -11,9 +11,10 @@ provider:
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}
+    Test_config: 'test'
     DB_PASSWORD: ${ssm:/eregulations/db/password}
-    DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
-    DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+    DB_HOST: ${ssm:/eregulations/db/host}
+    DB_PORT: ${ssm:/eregulations/db/port}
     GA_ID: ${ssm:/eregulations/http/google_analytics}
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
@@ -23,6 +24,7 @@ provider:
     STATIC_URL: ${self:custom.settings.static_url}
     BASE_URL: ${ssm:/eregulations/base_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url}
+    SURVEY_URL: ${ssm:/eregulations/survey_url}
   vpc:
     securityGroupIds:
       - !Ref ServerlessSecurityGroup
@@ -159,8 +161,8 @@ resources:
       Properties:
         GroupId: !Ref 'DBSecurityGroup'
         IpProtocol: tcp
-        FromPort: !GetAtt [RDSResource, Endpoint.Port]
-        ToPort: !GetAtt [RDSResource, Endpoint.Port]
+        FromPort: ${ssm:/eregulations/db/port}
+        ToPort: ${ssm:/eregulations/db/port}
         SourceSecurityGroupId: !Ref 'ServerlessSecurityGroup'
 
     DBSubnetGroup:
@@ -181,7 +183,7 @@ resources:
       Type: AWS::RDS::DBClusterParameterGroup
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql9.6
+        Family: aurora-postgresql12
         Parameters:
           rds.force_ssl: 1
 
@@ -189,7 +191,7 @@ resources:
       Type: AWS::RDS::DBParameterGroup
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql9.6
+        Family: aurora-postgresql12
         Parameters:
           shared_preload_libraries: auto_explain,pg_stat_statements,pg_hint_plan,pgaudit
           log_statement: "ddl"
@@ -207,29 +209,34 @@ resources:
           idle_in_transaction_session_timeout: 7200000
           statement_timeout: 7200000
           search_path: '"$user",public'
-
+          pgaudit.role: "rds_pgaudit"
+          pgaudit.log: "ALL"
     RDSResource:
       Type: AWS::RDS::DBCluster
+      DeletionPolicy: Retain
       Properties:
         MasterUsername: ${self:custom.settings.USERNAME}
+        StorageEncrypted: true
         MasterUserPassword: ${ssm:/eregulations/db/password}
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
-        EngineVersion: "9.6.16"
-        DatabaseName: ${self:custom.settings.DB_NAME}
+        EngineVersion: "12.8"
+        DatabaseName: 'eregs'
         BackupRetentionPeriod: 3
         DBClusterParameterGroupName:
           Ref: AuroraRDSClusterParameter
         VpcSecurityGroupIds:
           - !Ref 'DBSecurityGroup'
-
+    
     AuroraRDSInstance:
       Type: AWS::RDS::DBInstance
+      DeletionPolicy: Retain
       Properties:
-        DBInstanceClass: db.r4.large
+        DBInstanceClass: db.r6g.large
+        StorageEncrypted: true
         Engine: aurora-postgresql
-        EngineVersion: "9.6.16"
+        EngineVersion: "12.8"
         PubliclyAccessible: false
         DBParameterGroupName:
           Ref: AuroraRDSInstanceParameter

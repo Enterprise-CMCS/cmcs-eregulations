@@ -1,9 +1,13 @@
 from datetime import date
+from collections import OrderedDict
+from unittest.mock import patch
+
+import httpx
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from regcore.models import Part
 from regcore.search.models import Synonym
-from rest_framework import status
-from collections import OrderedDict
-from rest_framework.test import APITestCase
 
 
 class RegcoreSerializerTestCase(APITestCase):
@@ -113,3 +117,24 @@ class RegcoreSerializerTestCase(APITestCase):
         response = self.client.get("/v3/title/42/part/400/versions")
         data = response.data
         self.assertEqual(data, [date(2020, 6, 30)])
+
+    @patch("regcore.v3views.history.get_year_data")
+    def test_get_historical_sections(self, get_year_data):
+        get_year_data.return_value = httpx.Response(status_code=400)
+        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        self.assertEqual(data, [])
+
+        get_year_data.return_value = httpx.Response(
+            status_code=302,
+            headers={
+                "location": "http://a.link.to.govinfo.gov/xyz.pdf",
+            }
+        )
+        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        self.assertEqual(len(data), date.today().year - 1996 + 1)
+        self.assertEqual(data[0], OrderedDict([("year", "1996"), ("link", "http://a.link.to.govinfo.gov/xyz.pdf")]))
+
+        get_year_data.return_value = httpx.Response(status_code=404)
+        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        self.assertEqual(len(data), date.today().year - 1996 + 1)
+        self.assertEqual(data[0], OrderedDict([("year", "1996"), ("link", None)]))

@@ -1,5 +1,12 @@
 <template>
     <body class="ds-base">
+        <BlockingModal where-used="vite">
+            <IFrameContainer
+                src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
+                title="Google Forms iframe"
+            />
+        </BlockingModal>
+        <FlashBanner where-used="vite" />
         <div id="resourcesApp" class="resources-view">
             <Banner title="Resources">
                 <template #description>
@@ -139,6 +146,9 @@ import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 import _uniq from "lodash/uniq";
 
+import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
+import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
+import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
 import Banner from "@/components/Banner.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
@@ -160,6 +170,9 @@ export default {
 
     components: {
         Banner,
+        BlockingModal,
+        FlashBanner,
+        IFrameContainer,
         ResourcesFilters,
         ResourcesSelections,
         ResourcesResultsContainer,

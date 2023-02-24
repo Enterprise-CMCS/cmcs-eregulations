@@ -21,6 +21,7 @@ provider:
     ALLOWED_HOST: '.amazonaws.com'
     STATIC_URL: ${self:custom.settings.static_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url, ''}
+    SURVEY_URL: ${ssm:/eregulations/survey_url}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
@@ -90,7 +91,7 @@ functions:
   drop_database:
     environment:
       STAGE: ${self:custom.stage}
-      DB_NAME: main
+      DB_NAME: eregs
     handler: dropdb.handler
     timeout: 300
     layers:

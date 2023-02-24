@@ -749,8 +749,14 @@ const getSupplementalContent = async (
 /**
  *
  */
-const getRegSearchResults = async (q = "") => {
-    const response = await httpApiGetV3(`search?q=${q}`);
+const getRegSearchResults = async ({
+    q = "",
+    paginate = true,
+    page = 1,
+    page_size = 100,
+}) => {
+    const response = await httpApiGetV3(`search?q=${q}&paginate=${paginate}&page_size=${page_size}&page=${page}`);
+
     return response;
 };
 

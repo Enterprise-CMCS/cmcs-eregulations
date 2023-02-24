@@ -38,6 +38,7 @@ function parseError(err) {
 
 const EventCodes = {
     SetSection: "SetSection",
+    OpenBlockingModal: "OpenBlockingModal",
 };
 
 const formatResourceCategories = (resources) => {
@@ -160,8 +161,8 @@ function addMarks(element, highlightString) {
         // note `nodeValue` vs `innerHTML`
         // nodeValue gives inner text without Vue component markup tags;
         // innerHTML gives text with Vue Component markup tags;
-        // Currently there is only the <copy-btn> tag at beginning
-        var text = element.nodeValue;
+        // Currently there is only the tooltip <trigger-btn> tag at beginning
+        const text = element.nodeValue;
         if (text.toUpperCase().indexOf(highlightString.toUpperCase()) !== -1) {
             const innerHtmlOfParentNode = element.parentNode.innerHTML;
             const indexOfText = innerHtmlOfParentNode.indexOf(text);
@@ -175,7 +176,7 @@ function addMarks(element, highlightString) {
             return true;
         }
     } else if (element.nodeType === document.ELEMENT_NODE) {
-        for (var i = 0; i < element.childNodes.length; i++) {
+        for (let i = 0; i < element.childNodes.length; i++) {
             if (element.childNodes[i].nodeName !== "MARK") {
                 addMarks(element.childNodes[i], highlightString);
             }
@@ -233,6 +234,50 @@ const niceDate = (kebabDate) => {
     return `${month} ${day}, ${year}`;
 };
 
+/**
+ * Trap focus in an element (higher-order function)
+ * adapted from: https://hidde.blog/using-javascript-to-trap-focus-in-an-element/
+ *
+ * @param {HTMLElement} element - element in which to trap focus
+ *
+ * @returns {() => void} - function to remove event listener when invoked
+ */
+function trapFocus(element) {
+    const focusableEls = element.querySelectorAll(
+        'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled]), div:not([disabled]), iframe'
+    );
+
+    const firstFocusableEl = focusableEls[0];
+    const lastFocusableEl = focusableEls[focusableEls.length - 1];
+    const KEYCODE_TAB = 9;
+
+    const callbackFunc = (e) => {
+        const isTabPressed = e.key === "Tab" || e.keyCode === KEYCODE_TAB;
+
+        if (!isTabPressed) {
+            return;
+        }
+
+        if (e.shiftKey) {
+            /* shift + tab */ if (document.activeElement === firstFocusableEl) {
+                lastFocusableEl.focus();
+                e.preventDefault();
+            }
+        } /* tab */ else {
+            if (document.activeElement === lastFocusableEl) {
+                firstFocusableEl.focus();
+                e.preventDefault();
+            }
+        }
+    };
+
+    element.addEventListener("keydown", callbackFunc);
+
+    return function () {
+        element.removeEventListener("keydown", callbackFunc);
+    };
+}
+
 export {
     delay,
     EventCodes,
@@ -244,4 +289,5 @@ export {
     niceDate,
     parseError,
     scrollToElement,
+    trapFocus,
 };

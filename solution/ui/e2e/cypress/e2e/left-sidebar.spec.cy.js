@@ -80,6 +80,7 @@ describe("Left sidebar", () => {
 
     it("expands to full width for viewports < 768px width", () => {
         cy.viewport(tabletMin - 1, 768);
+        cy.visit(destination);
         cy.document()
             .then((doc) => {
                 return doc.documentElement.getBoundingClientRect();

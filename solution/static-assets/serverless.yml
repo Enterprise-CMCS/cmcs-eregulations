@@ -42,6 +42,10 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-site-assets
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
         PublicAccessBlockConfiguration:
           BlockPublicAcls: true
           BlockPublicPolicy: true
@@ -83,6 +87,22 @@ resources:
                   Fn::GetAtt:
                   - CloudFrontOriginAccessIdentity
                   - S3CanonicalUserId
+            - Effect: Deny
+              Action: 's3:*'
+              Resource:
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref AssetsBucket
+                    - /*
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref AssetsBucket
+              Principal: '*'
+              Condition:
+                Bool:
+                  aws:SecureTransport: false
         Bucket: !Ref AssetsBucket
 
     CloudFrontDistribution:

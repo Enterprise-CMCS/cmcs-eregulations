@@ -487,6 +487,25 @@ const getTagContent = (htmlString, tagClass) => {
     return uniqTermsArray.join(",");
 };
 
+/**
+ * @param count {number} - total number of results
+ * @param page {number} - current page number
+ * @param pageSize {number} - number of results per page
+ * @returns  {Array<number>} - an array containing two entries: firstInRange at index 0 and lastInRange at index 1
+ */
+const getCurrentPageResultsRange = ({ count, page = 1, pageSize }) => {
+    const maxInRange = page * pageSize;
+    const minInRange = maxInRange - pageSize;
+
+    const firstInRange = minInRange + 1;
+    const lastInRange =
+        maxInRange > count
+            ? (count % pageSize) + minInRange
+            : maxInRange;
+
+    return [firstInRange, lastInRange];
+};
+
 export {
     mapToArray,
     parseError,
@@ -521,4 +540,5 @@ export {
     createOneIndexedArray,
     stripQuotes,
     getTagContent,
+    getCurrentPageResultsRange,
 };

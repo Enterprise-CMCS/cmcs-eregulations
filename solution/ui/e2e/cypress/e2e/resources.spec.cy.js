@@ -5,13 +5,13 @@ describe("Resources page", () => {
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
-        });
-
-        it("load properly", () => {
-            cy.intercept("**/resources/?**", {
+            cy.intercept("**/v3/resources/?&**page=1**", {
                 fixture: "no-resources-results.json",
                 delayMs: 1000,
             }).as("resources");
+        });
+
+        it("load properly", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.injectAxe();

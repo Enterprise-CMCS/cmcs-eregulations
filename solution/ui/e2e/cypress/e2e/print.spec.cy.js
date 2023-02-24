@@ -44,6 +44,10 @@ describe("Print Styles", () => {
             expect($link.first()).to.not.be.visible;
         });
 
+        cy.get(".reg-history-link").should(($link) => {
+            expect($link.first()).to.not.be.visible;
+        });
+
         cy.get("footer .print-footer").should("have.css", "display", "block");
 
         cy.get("header").should("have.css", "height", "48px");

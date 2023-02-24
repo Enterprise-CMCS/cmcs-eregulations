@@ -12,6 +12,7 @@ describe("Search flow", () => {
         cy.visit("/");
         cy.get(".search-header > form > input")
             .should("be.visible")
+            .should("have.attr", "placeholder", "Search")
             .type(`${SEARCH_TERM}`);
         cy.get(".search-header > form").submit();
 
@@ -40,9 +41,9 @@ describe("Search flow", () => {
             "have.text",
             "Regulations"
         );
-        cy.get(
-            ".reg-results-content .search-results-count > span"
-        ).should("be.visible");
+        cy.get(".reg-results-content .search-results-count > span").should(
+            "be.visible"
+        );
         cy.get(".resources-results-content .search-results-count > h2").should(
             "have.text",
             "Resources"
@@ -50,14 +51,17 @@ describe("Search flow", () => {
         cy.get(
             ".resources-results-content .search-results-count > span"
         ).should("be.visible");
-        cy.findByRole("link", {
-            name: "§ 433.400 Continued enrollment for temporary FMAP increase.",
-        })
-            .should("be.visible")
-            .and("have.attr", "href");
-        cy.findByRole("link", {
-            name: "§ 433.400 Continued enrollment for temporary FMAP increase.",
-        }).click({ force: true });
+        cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section"
+        )
+            .should("be.visible");    
+        cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
+        )
+            .should("have.attr", "href");
+        cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
+        ).click({ force: true });
         cy.url().should(
             "include",
             `42/433/Subpart-G/2021-03-01/?highlight=${SEARCH_TERM}#433-400`
@@ -75,6 +79,14 @@ describe("Search flow", () => {
             });
         });
     });
+
+    it("should have a valid link to medicaid.gov", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".options-list li:nth-child(3) a")
+            .should("have.attr", "href")
+            .and('include', "search-gsc");
+    })
 
     it("checks a11y for search page", () => {
         cy.viewport("macbook-15");
@@ -111,10 +123,9 @@ describe("Search flow", () => {
             .should("be.visible")
             .should("have.value", "test");
 
-        cy.get(".search-field .v-input__icon--clear button").click({
-            force: true,
-        });
+        cy.findByRole("textbox").clear();
 
         cy.findByRole("textbox").should("have.value", "");
     });
+
 });

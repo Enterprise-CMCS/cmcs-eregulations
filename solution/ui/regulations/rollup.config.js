@@ -49,10 +49,10 @@ export default [
         plugins,
     },
     {
-        input: "js/src/components/tooltips/CopyBtn.vue",
+        input: "js/src/components/tooltips/TooltipContainer.vue",
         output: {
             format: "esm",
-            file: "dist/CopyBtn.js",
+            file: "dist/TooltipContainer.js",
         },
         plugins,
     },
@@ -81,14 +81,6 @@ export default [
         plugins,
     },
     {
-        input: "eregs-vite/src/components/SearchEmptyState.vue",
-        output: {
-            format: "esm",
-            file: "dist/SearchEmptyState.js",
-        },
-        plugins,
-    },
-    {
         input: "js/src/components/RecentChangesContainer.vue",
         output: {
             format: "esm",
@@ -101,6 +93,54 @@ export default [
         output: {
             format: "esm",
             file: "dist/LastParserSuccessDate.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/BlockingModal.vue",
+        output: {
+            format: "esm",
+            file: "dist/BlockingModal.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/BlockingModalTrigger.vue",
+        output: {
+            format: "esm",
+            file: "dist/BlockingModalTrigger.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/FlashBanner.vue",
+        output: {
+            format: "esm",
+            file: "dist/FlashBanner.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/IFrameContainer.vue",
+        output: {
+            format: "esm",
+            file: "dist/IFrameContainer.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/tooltips/CopyCitation.vue",
+        output: {
+            format: "esm",
+            file: "dist/CopyCitation.js",
+        },
+        plugins,
+    },
+    {
+        input: "js/src/components/tooltips/GovInfoLinks.vue",
+        output: {
+            format: "esm",
+            file: "dist/GovInfoLinks.js",
         },
         plugins,
     },

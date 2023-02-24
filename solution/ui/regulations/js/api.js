@@ -191,17 +191,17 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
 }
 
 async function httpApiGetWithPagination(urlPath, { params } = {}, apiPath) {
-    let results = []
-    let url = urlPath
+    let results = [];
+    let url = urlPath;
     while (url) {
         /* eslint-disable no-await-in-loop */
-        const response = await httpApiGetLegacy(url, { params }, apiPath)
+        const response = await httpApiGetLegacy(url, { params }, apiPath);
         results = results.concat(response.results ?? []);
         url = response.next;
         /* eslint-enable no-await-in-loop */
     }
 
-    return results
+    return results;
 }
 
 // ---------- api calls ---------------
@@ -243,6 +243,29 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
 
+/**
+ * Get array of objects containing valid GovInfo docs years with links to the PDF files.
+ *
+ * @param {string} apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params - parameters needed for API call
+ * @param {string} params.title - CFR title number.
+ * @param {string} params.part - CFR part numer within title.
+ * @param {string} params.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
+ *
+ * @returns {Array<{year: string, link: string}>}
+ */
+const getGovInfoLinks = async (apiURL, params) => {
+    // manually adjust to v3 if needed
+    const url = apiURL.replace("/v2/", "/v3/");
+
+    const result = await httpApiGetLegacy(
+        `${url}title/${params.title}/part/${params.part}/history/${
+            Object.keys(params)[2]
+        }/${Object.values(params)[2]}`
+    );
+
+    return result;
+};
 
 /**
  * Returns the result from the all_parts endpoint
@@ -352,27 +375,33 @@ const getSupplementalContentLegacy = async (
     return result;
 };
 
-
-const getSupplementalContentByCategory = async (api_url, categories=[1,2]) =>{
+const getSupplementalContentByCategory = async (
+    api_url,
+    categories = [1, 2]
+) => {
     const result = await httpApiGetLegacy(
-        `${api_url}all_sup?category=${categories.join("&category=")}&max_results=100`,
+        `${api_url}all_sup?category=${categories.join(
+            "&category="
+        )}&max_results=100`,
         {}, // params, default
         api_url
     );
-    return result.filter(r => r.supplemental_content.length);
-}
+    return result.filter((r) => r.supplemental_content.length);
+};
 
-const v3GetSupplementalContent = async (apiURL, {locations, locationDetails=false}) =>{
+const v3GetSupplementalContent = async (
+    apiURL,
+    { locations, locationDetails = false }
+) => {
     // manually adjust to v3 if needed
-    const url = apiURL.replace('/v2/', '/v3/')
+    const url = apiURL.replace("/v2/", "/v3/");
 
     return httpApiGetWithPagination(
         `${url}resources/?${locations}&paginate=true&location_details=${locationDetails}`,
         {}, // params, default
         apiURL
     );
-
-}
+};
 
 const v3GetFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
     // manually adjust to v3 if needed
@@ -386,10 +415,12 @@ const v3GetFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
 };
 
 const getSubpartTOC = async (apiURL, title, part, subPart) => {
-    const url = apiURL.replace('/v2/', '/v3/')
+    const url = apiURL.replace("/v2/", "/v3/");
 
-    return httpApiGetLegacy(`${url}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
-}
+    return httpApiGetLegacy(
+        `${url}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
+    );
+};
 
 // API Functions Insertion Point (do not change this text, it is being used by hygen cli)
 
@@ -408,6 +439,7 @@ export {
     removeCacheItem,
     getCacheItem,
     setCacheItem,
-    getSubpartTOC
+    getSubpartTOC,
+    getGovInfoLinks,
     // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

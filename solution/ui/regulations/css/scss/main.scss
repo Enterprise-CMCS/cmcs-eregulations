@@ -40,4 +40,6 @@ $eregs-image-path: "../images" !default;
 @import "partials/buttons_and_tooltip";
 @import "partials/jump_to";
 @import "partials/supplemental_content";
+@import "partials/blocking_modal";
+@import "partials/iframe_container";
 @import 'print';

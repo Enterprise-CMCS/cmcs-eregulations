@@ -20,6 +20,7 @@ from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.sitemaps.views import sitemap
 
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
+from regulations.rss_feeds import ResourceFeed
 
 sitemaps = {
     "Parts": PartSitemap,
@@ -27,11 +28,12 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path("", include('regcore.urls')),
-    path("", include('regulations.urls')),
+    path('', include('regcore.urls')),
+    path('', include('regulations.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
     path('admin/', admin.site.urls, name="admin"),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('__debug__/', include('debug_toolbar.urls')),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('latest/feed/', ResourceFeed()),
 ]

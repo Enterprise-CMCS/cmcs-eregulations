@@ -1,5 +1,12 @@
 <template>
     <body class="ds-base search-page">
+        <BlockingModal where-used="vite">
+            <IFrameContainer
+                src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
+                title="Google Forms iframe"
+            />
+        </BlockingModal>
+        <FlashBanner where-used="vite" />
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
                 <template #input>
@@ -19,7 +26,16 @@
                     <div class="search-results-count">
                         <h2>Regulations</h2>
                         <span v-if="regsLoading">Loading...</span>
-                        <span v-else>{{ regResults.length }} results</span>
+                        <span v-else>
+                            <span v-if="totalRegResultsCount > 0">
+                                {{ currentPageRegResultsRange[0] }} -
+                                {{ currentPageRegResultsRange[1] }} of
+                            </span>
+                            {{ totalRegResultsCount }} result<span
+                                v-if="totalRegResultsCount != 1"
+                                >s</span
+                            >
+                        </span>
                     </div>
                     <template v-if="!regsLoading">
                         <RegResults :base="base" :results="regResults">
@@ -27,7 +43,7 @@
                                 <template
                                     v-if="
                                         regResults.length == 0 &&
-                                        totalResultsCount > 0 &&
+                                        combinedPageCount > 0 &&
                                         !isLoading
                                     "
                                 >
@@ -44,9 +60,16 @@
                     <div class="search-results-count">
                         <h2>Resources</h2>
                         <span v-if="resourcesLoading">Loading...</span>
-                        <span v-else
-                            >{{ resourcesResults.length }} results</span
-                        >
+                        <span v-else>
+                            <span v-if="totalResourcesResultsCount > 0">
+                                {{ currentPageResourcesResultsRange[0] }} -
+                                {{ currentPageResourcesResultsRange[1] }} of
+                            </span>
+                            {{ totalResourcesResultsCount }} result<span
+                                v-if="totalResourcesResultsCount != 1"
+                                >s</span
+                            >
+                        </span>
                     </div>
                     <template v-if="!resourcesLoading">
                         <ResourcesResults
@@ -62,7 +85,7 @@
                                 <template
                                     v-if="
                                         resourcesResults.length == 0 &&
-                                        totalResultsCount > 0 &&
+                                        combinedPageCount > 0 &&
                                         !isLoading
                                     "
                                 >
@@ -78,19 +101,26 @@
             </div>
             <div v-if="!isLoading" class="pagination-expand-row">
                 <div class="pagination-expand-container">
-                    <template
+                    <PaginationController
+                        v-if="totalCount > 0"
+                        :count="paginationCount"
+                        :page="page"
+                        :page-size="pageSize"
+                        view="search"
+                    />
+                    <div
                         v-if="
                             (regResults.length > 0 &&
                                 resourcesResults.length > 0) ||
-                            (regResults.length == 0 &&
-                                resourcesResults.length == 0)
+                            totalCount == 0
                         "
+                        class="pagination-expand-cta"
                     >
                         <SearchEmptyState
                             :query="searchQuery"
                             :show-internal-link="false"
                         />
-                    </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,8 +129,9 @@
 
 <script>
 import _isEmpty from "lodash/isEmpty";
+import _isUndefined from "lodash/isUndefined";
 
-import { stripQuotes } from "@/utilities/utils";
+import { getCurrentPageResultsRange, stripQuotes } from "@/utilities/utils";
 import {
     getFormattedPartsList,
     getLastUpdatedDates,
@@ -110,6 +141,10 @@ import {
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
+import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
+import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
+import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
@@ -120,6 +155,10 @@ export default {
 
     components: {
         Banner,
+        BlockingModal,
+        FlashBanner,
+        IFrameContainer,
+        PaginationController,
         RegResults,
         ResourcesResults,
         SearchEmptyState,
@@ -141,7 +180,11 @@ export default {
             });
 
             this.retrieveSynonyms(this.searchQuery);
-            this.retrieveAllResults(this.searchQuery);
+            this.retrieveAllResults({
+                query: this.searchQuery,
+                page: this.page,
+                pageSize: this.pageSize,
+            });
         } else {
             this.regsLoading = false;
             this.resourcesLoading = false;
@@ -153,13 +196,16 @@ export default {
                 import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
                     ? `/${import.meta.env.VITE_ENV}`
                     : "",
+            pageSize: 50,
             regsLoading: true,
             resourcesLoading: true,
             partsLastUpdated: {},
             partsList: [],
             queryParams: this.$route.query,
             regResults: [],
+            totalRegResultsCount: 0,
             resourcesResults: [],
+            totalResourcesResultsCount: 0,
             searchInputValue: undefined,
             synonyms: [],
             unquotedSearch: false,
@@ -179,6 +225,11 @@ export default {
                 return copiedItem;
             });
         },
+        page() {
+            return _isUndefined(this.queryParams.page)
+                ? this.queryParams.page
+                : parseInt(this.queryParams.page, 10);
+        },
         searchQuery: {
             get() {
                 return this.queryParams.q || undefined;
@@ -196,13 +247,31 @@ export default {
                 this.searchQuery[this.searchQuery.length - 1] !== '"'
             );
         },
-        totalResultsCount() {
+        combinedPageCount() {
             return this.regResults.length + this.resourcesResults.length;
         },
-        regCountLabel() {
-            return this.totalResultsCount > 0
-                ? "results"
-                : "results in Regulations or Resources";
+        paginationCount() {
+            return Math.max(
+                this.totalRegResultsCount,
+                this.totalResourcesResultsCount
+            );
+        },
+        totalCount() {
+            return this.totalRegResultsCount + this.totalResourcesResultsCount;
+        },
+        currentPageRegResultsRange() {
+            return getCurrentPageResultsRange({
+                count: this.totalRegResultsCount,
+                page: this.page,
+                pageSize: this.pageSize,
+            });
+        },
+        currentPageResourcesResultsRange() {
+            return getCurrentPageResultsRange({
+                count: this.totalResourcesResultsCount,
+                page: this.page,
+                pageSize: this.pageSize,
+            });
         },
     },
 
@@ -214,35 +283,45 @@ export default {
             const querySubString = query ? `for ${query} ` : "";
             document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
         },
-        async retrieveRegResults(query) {
+        async retrieveRegResults({ query, page, pageSize }) {
             try {
-                const response = await getRegSearchResults(query);
+                const response = await getRegSearchResults({
+                    q: query,
+                    page,
+                    page_size: pageSize,
+                });
                 this.regResults = response?.results ?? [];
+                this.totalRegResultsCount = response?.count ?? 0;
             } catch (error) {
                 console.error(
                     "Error retrieving regulation search results: ",
                     error
                 );
                 this.regResults = [];
+                this.totalRegResultsCount = 0;
             }
         },
-        async retrieveResourcesResults(query) {
+        async retrieveResourcesResults({ query, page, pageSize }) {
             try {
                 const response = await getSupplementalContentV3({
                     partDict: "all",
                     q: query,
+                    page,
+                    page_size: pageSize,
                     fr_grouping: false,
                 });
                 this.resourcesResults = response?.results ?? [];
+                this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {
                 console.error(
                     "Error retrieving regulation search results: ",
                     error
                 );
                 this.resourcesResults = [];
+                this.totalResourcesResultsCount = 0;
             }
         },
-        async retrieveAllResults(query) {
+        async retrieveAllResults({ query, page, pageSize }) {
             if (!query) {
                 this.regResults = [];
                 this.resourcesResults = [];
@@ -253,11 +332,13 @@ export default {
             this.regsLoading = true;
             this.resourcesLoading = true;
 
-            this.retrieveResourcesResults(query).then(() => {
-                this.resourcesLoading = false;
-            });
+            this.retrieveResourcesResults({ query, page, pageSize }).then(
+                () => {
+                    this.resourcesLoading = false;
+                }
+            );
 
-            this.retrieveRegResults(query).then(() => {
+            this.retrieveRegResults({ query, page, pageSize }).then(() => {
                 this.regsLoading = false;
             });
         },
@@ -297,9 +378,12 @@ export default {
         },
         clearSearchQuery() {
             this.synonyms = [];
+            this.totalRegResultsCount = 0;
+            this.totalResourcesResultsCount = 0;
             this.$router.push({
                 name: "search",
                 query: {
+                    page: undefined,
                     q: undefined,
                 },
             });
@@ -313,9 +397,11 @@ export default {
             },
         },
         queryParams: {
-            // beware, some yucky code ahead...
             async handler(newParams, oldParams) {
-                if (newParams.q !== oldParams.q) {
+                const queryChanged = newParams.q !== oldParams.q;
+                const pageChanged = newParams.page !== oldParams.page;
+
+                if (queryChanged) {
                     this.setTitle(this.searchQuery);
 
                     if (_isEmpty(this.searchQuery)) {
@@ -325,7 +411,14 @@ export default {
                     }
 
                     this.retrieveSynonyms(this.searchQuery);
-                    this.retrieveAllResults(this.searchQuery);
+                }
+
+                if (queryChanged || pageChanged) {
+                    this.retrieveAllResults({
+                        query: this.searchQuery,
+                        page: this.page,
+                        pageSize: this.pageSize,
+                    });
                 }
             },
         },
@@ -348,7 +441,7 @@ export default {
 
     .combined-results-container {
         overflow: auto;
-        margin-bottom: 30px;
+        margin-bottom: 16px;
         padding: 0 45px;
         display: flex;
         justify-content: space-between;
@@ -421,6 +514,16 @@ export default {
         flex-direction: row;
         justify-content: center;
         margin-bottom: 100px;
+
+        .pagination-expand-container {
+            width: 100%;
+            max-width: 521px;
+            margin: 0 45px;
+
+            .pagination-expand-cta {
+                margin-top: 14px;
+            }
+        }
     }
 }
 </style>

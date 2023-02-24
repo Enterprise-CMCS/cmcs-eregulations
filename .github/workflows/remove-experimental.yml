@@ -52,6 +52,11 @@ jobs:
           popd
       # remove the regulations site
       - name: remove experimental regulations site server
+      # If previous step fails the database will not be removed and you cannot rerun it
+      # In this instance we want to just remove the database so that we dont have 
+      # to go into the database and do it manually.
+      # If process is manually stopped it will not run this step.
+        if: success() || failure()
         env:
           PR: ${{ github.event.number }}
         run: |

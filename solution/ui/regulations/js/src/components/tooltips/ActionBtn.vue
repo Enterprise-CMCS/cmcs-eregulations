@@ -2,11 +2,11 @@
     <button
         class="action-btn"
         :class="buttonClasses"
+        :disabled="selected && status === 'success'"
         @click="handleClick"
-        :disabled="selected && this.status === 'success'"
     >
         <svg
-            v-if="selected && this.status === 'success'"
+            v-if="selected && status === 'success'"
             width="17"
             height="17"
             viewBox="0 0 17 17"
@@ -38,7 +38,7 @@
 
 <script>
 export default {
-    name: "action-button",
+    name: "ActionButton",
 
     props: {
         actionType: {
