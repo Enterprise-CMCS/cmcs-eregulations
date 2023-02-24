@@ -140,12 +140,14 @@ aside.right-sidebar {
 
 button.collapsible-title {
     cursor: pointer;
+    box-sizing: border-box;
+    line-height: 1.2 !important;
 }
 
 .collapsible-title {
     font-size: $font-size-md;
     font-weight: bold;
-    padding-left: 0;
+    padding: 1px 6px 1px 0;
     background: none;
     border: none;
     color: $primary_link_color;
