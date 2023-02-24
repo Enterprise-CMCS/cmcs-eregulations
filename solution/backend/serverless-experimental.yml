@@ -111,7 +111,7 @@ resources:
         Name: ${self:custom.stage}-cmcs-eregs-site
         EndpointConfiguration:
           Types:
-            - Edge
+            - EDGE
         Policy: ''
     ApiGatewayStage:
       Type: AWS::ApiGateway::Stage
