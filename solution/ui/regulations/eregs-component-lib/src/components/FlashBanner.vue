@@ -1,6 +1,6 @@
 <template>
     <div class="flash-banner" role="banner">
-        <span class="greeting">We welcome questions and suggestions &mdash;</span>
+        <span class="greeting">We welcome questions and suggestions &mdash;&nbsp;</span>
         <BlockingModalTrigger
             trigger-label="give us feedback."
             modal-title="Feedback survey"

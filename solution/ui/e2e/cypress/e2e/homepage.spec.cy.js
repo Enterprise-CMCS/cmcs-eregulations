@@ -51,12 +51,14 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("has a flash banner at the top with a link to a feedback survey", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("div.flash-banner")
-            .should("be.visible")
-            .should(
-                "have.text",
-                "We welcome questions and suggestions — give us feedback."
-            );
+        cy.get("div.flash-banner").should("be.visible");
+
+        cy.get("div.flash-banner .greeting")
+            .invoke("text")
+            // remove the space char
+            .invoke("replace", /\u00a0/g, " ")
+            .should("eq", "We welcome questions and suggestions — ");
+
         cy.get("div.flash-banner a").should("have.text", "give us feedback.");
     });
 

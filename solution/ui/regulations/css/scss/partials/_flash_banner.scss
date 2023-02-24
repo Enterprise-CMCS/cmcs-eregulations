@@ -17,10 +17,7 @@
     position: relative;
     line-height: 1.5;
     height: 30px;
-
-    .greeting {
-        margin-right: 3px;
-    }
+    flex-wrap: wrap;
 
     a {
         font-weight: bold;

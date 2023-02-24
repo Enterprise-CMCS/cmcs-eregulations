@@ -4,17 +4,12 @@
 
 #djDebug #djShowToolBarButton {
     opacity: 1 !important;
+    display: none;
 }
 
 // Vuetify overrides
 // various !importants will be here and throughout our style sheets to combat Vuetify's aggressive styles
 // Discussion about Vuetify's "styling eccentricities": https://stackoverflow.com/questions/52310060/how-to-override-vuetify-styles
-
-*,
-::before,
-::after {
-    //box-sizing: unset !important;
-}
 
 input,
 select {
