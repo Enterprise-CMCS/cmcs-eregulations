@@ -113,10 +113,16 @@ resources:
           Types:
             - EDGE
         Policy: ''
+    ApiGatewayDeployment:
+      Type: 'AWS::ApiGateway::Deployment'
+      Properties:
+        RestApiId: !Ref ApiGateway
+        StageName: ${self:custom.stage}
     ApiGatewayStage:
       Type: AWS::ApiGateway::Stage
       Properties:
         RestApiId: !Ref ApiGateway
+        Deployment
         MethodSettings:
           - ResourcePath: "/*"
             HttpMethod: "*"
