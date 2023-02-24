@@ -124,7 +124,7 @@ resources:
         RestApiId: !Ref ApiGateway
         Deployment
         MethodSettings:
-          - ResourcePath: "/*"
+          - ResourcePath: /*
             HttpMethod: "*"
             LoggingLevel: INFO
         AccessLogSetting:
