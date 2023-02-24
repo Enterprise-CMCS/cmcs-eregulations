@@ -205,27 +205,6 @@ async function httpApiGetWithPagination(urlPath, { params } = {}, apiPath) {
 }
 
 // ---------- api calls ---------------
-const getLastUpdatedDates = async (apiUrl, title = "42") => {
-    const reducer = (accumulator, currentValue) => {
-        // key by partname, value by latest date
-        // if partname is not in accumulator, add it
-        // if partname is in accumulator, compare the dates and update the accumulator
-        currentValue.partName.forEach((partName) => {
-            if (!accumulator[partName]) {
-                accumulator[partName] = currentValue.date;
-            } else if (currentValue.date > accumulator[partName]) {
-                accumulator[partName] = currentValue.date;
-            }
-        });
-
-        return accumulator;
-    };
-
-    const result = await httpApiGetLegacy(`${apiUrl}title/${title}/existing`);
-
-    return result.reduce(reducer, {});
-};
-
 /**
  * Get formatted date of most recent successful run of the ECFR parser
  *
@@ -413,7 +392,6 @@ const getSubpartTOC = async (apiURL, title, part, subPart) => {
 export {
     getAllParts,
     getCategories,
-    getLastUpdatedDates,
     getLastParserSuccessDate,
     getSectionObjects,
     getSubPartsForPart,

@@ -281,24 +281,8 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 const getLastUpdatedDates = async (apiUrl, title = "42") => {
-    const reducer = (accumulator, currentValue) => {
-        // key by partname, value by latest date
-        // if partname is not in accumulator, add it
-        // if partname is in accumulator, compare the dates and update the accumulator
-        currentValue.partName.forEach((partName) => {
-            if (!accumulator[partName]) {
-                accumulator[partName] = currentValue.date;
-            } else if (currentValue.date > accumulator[partName]) {
-                accumulator[partName] = currentValue.date;
-            }
-        });
-
-        return accumulator;
-    };
-
-    const result = await httpApiGet(`title/${title}/existing`);
-
-    return result.reduce(reducer, {});
+    const result = await httpApiGetV3(`title/${title}/parts`);
+    return Object.fromEntries(new Map(result.map((obj) => [obj.name, obj.date])));
 };
 
 /**
