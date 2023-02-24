@@ -116,7 +116,7 @@ resources:
     ApiGatewayStage:
       Type: AWS::ApiGateway::Stage
       Properties:
-        RestApiId: !Ref ApiGateway.Arn
+        RestApiId: !GetAtt ApiGateway.Arn
         MethodSettings:
           - ResourcePath: "/*"
             HttpMethod: "*"
