@@ -70,7 +70,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.focused().should("have.attr", "class", "ds-c-skip-nav");
         cy.focused().then(() => {
             cy.get(".ds-c-skip-nav").click({ force: true });
-            cy.wait(500);
+            cy.wait(1000);
             cy.get("div.flash-banner").then(($el) => {
                 const rect = $el[0].getBoundingClientRect();
                 expect(rect.bottom).to.be.lessThan(1);
