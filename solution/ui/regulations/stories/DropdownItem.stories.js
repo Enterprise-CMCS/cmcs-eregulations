@@ -1,4 +1,4 @@
-import DropdownItem from '../js/src/components/DropdownItem.vue';
+import DropdownItem from '../eregs-component-lib/src/components/DropdownItem.vue';
 
 export default {
   title: 'Components/Dropdown/Dropdown Item',

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import TableComponent from "legacy/js/src/components/TableComponent.vue";
+import TableComponent from "legacy/eregs-component-lib/src/components/TableComponent.vue";
 
 export default {
     name: "Division",

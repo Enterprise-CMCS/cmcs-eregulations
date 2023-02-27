@@ -26,7 +26,7 @@
 
 <script>
 import Node from "@/components/node_types/Node.vue";
-import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import SimpleSpinner from "legacy/eregs-component-lib/src/components/SimpleSpinner.vue";
 
 export default {
     name: "PartContent",
