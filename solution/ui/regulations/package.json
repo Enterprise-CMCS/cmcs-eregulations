@@ -5,13 +5,13 @@
     "css": "npx sass -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
     "css-deploy": "npx sass -I node_modules css/scss/main-deploy.scss ../../static-assets/regulations/css/main.css",
     "watch-css": "npx sass --watch -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook"
   },
   "license": "CC",
   "private": true,
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@cmsgov/design-system": "^2.5.0",
