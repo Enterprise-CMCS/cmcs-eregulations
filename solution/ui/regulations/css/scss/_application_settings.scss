@@ -4,7 +4,7 @@
 
 #djDebug #djShowToolBarButton {
     opacity: 1 !important;
-    display: none;
+    //display: none; // use when toolbar tab is causing issues with local cypress tests
 }
 
 // Vuetify overrides
