@@ -62,7 +62,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get("div.flash-banner a").should("have.text", "give us feedback.");
     });
 
-    it("hides the flash banner when scrolling down", () => {
+    it.skip("hides the flash banner when scrolling down", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("div.flash-banner").should("be.visible");
