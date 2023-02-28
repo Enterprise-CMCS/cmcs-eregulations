@@ -55,6 +55,9 @@ custom:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:
         - "/*"
+  associateWaf:
+    name: ${self:resources.Resources.WAFRegionalWebACL.Properties.Name}
+    version: V2 #(optional) Regional | V2
 
 functions:
   reg_site:
@@ -103,9 +106,8 @@ functions:
     timeout: 300
 
 resources:
-
   Resources:
-
+    WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -158,3 +160,4 @@ resources:
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
+  - serverless-associate-waf

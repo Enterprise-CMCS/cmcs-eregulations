@@ -3,9 +3,9 @@
 WAFRegionalWebACL:
   Type: "AWS::WAFv2::WebACL"
   Properties:
-    Name: ApiGateway-HTTP-Flood-Prevent-Auto-${self:custom.stage}
+    Name: ${self:custom.stage}-cmcs-eregs-site
     Scope: REGIONAL
-    Description: WAF Regional Web ACL to Prevent HTTP Flood DDos Attack
+    Description: WAF Regional Web ACL
     DefaultAction:
       Allow: {}
     VisibilityConfig:
