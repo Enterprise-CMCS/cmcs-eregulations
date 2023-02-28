@@ -42,6 +42,10 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-site-assets
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
         PublicAccessBlockConfiguration:
           BlockPublicAcls: true
           BlockPublicPolicy: true
@@ -83,13 +87,40 @@ resources:
                   Fn::GetAtt:
                   - CloudFrontOriginAccessIdentity
                   - S3CanonicalUserId
+            - Effect: Deny
+              Action: 's3:*'
+              Resource:
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref AssetsBucket
+                    - /*
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref AssetsBucket
+              Principal: '*'
+              Condition:
+                Bool:
+                  aws:SecureTransport: false
         Bucket: !Ref AssetsBucket
-
+    CloudFrontWebACL:
+      Type: AWS::WAFv2::WebACL
+      Properties:
+        Name: eregs-${self:custom.stage}-cloudfront-ACL
+        DefaultAction: 
+          Allow: {}
+        Scope: CLOUDFRONT
+        VisibilityConfig:
+          SampledRequestsEnabled: true
+          CloudWatchMetricsEnabled: true
+          MetricName: eregs-${self:custom.stage}-cloudfront-metric
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
           Comment: CloudFront Distro for the static website hosted in S3
+          WebACLId: !GetAtt CloudFrontWebACL.Arn
           Aliases:
             - Ref: AWS::NoValue
           Origins:
