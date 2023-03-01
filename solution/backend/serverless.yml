@@ -54,8 +54,8 @@ custom:
       items:
         - "/*"
   associateWaf:
-    name: ${self:resources.Resources.WAFRegionalWebACL.Properties.Name}
-    version: V2 #(optional) Regional | V2
+    name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
+    version: V2
 
 functions:
   reg_site:
