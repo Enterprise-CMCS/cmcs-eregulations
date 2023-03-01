@@ -26,9 +26,9 @@ WAFRegionalWebACL:
         VisibilityConfig:
           SampledRequestsEnabled: true
           CloudWatchMetricsEnabled: true
-          MetricName: HTTP-Flood-Prevent-Rule-Metric
+          MetricName: "WafWebAcl"
     VisibilityConfig:
       SampledRequestsEnabled: true
       CloudWatchMetricsEnabled: true
-      MetricName: "WafWebAcl"
+      MetricName: "eregs-allow-usa-plus-territories"
 
