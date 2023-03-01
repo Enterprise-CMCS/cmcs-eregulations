@@ -132,8 +132,6 @@ resources:
               SampledRequestsEnabled: true
               CloudWatchMetricsEnabled: true
               MetricName: eregs-allow-usa-plus-territories-metric-CLOUDFRONT
-        Action:
-          Allow: {}
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
