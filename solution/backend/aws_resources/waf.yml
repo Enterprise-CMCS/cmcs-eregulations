@@ -12,7 +12,7 @@ WAFRegionalWebACL:
       MetricName: ApiGateway-eregs-allow-usa-plus-territories
 
     Rules:
-        Name: eregs-allow-usa-plus-territories-rule
+      - Name: eregs-allow-usa-plus-territories-rule
         Priority: 0
         Statement:
           GeoMatchStatement:
