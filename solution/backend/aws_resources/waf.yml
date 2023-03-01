@@ -3,11 +3,32 @@
 WAFRegionalWebACL:
   Type: "AWS::WAFv2::WebACL"
   Properties:
-    Name: ${self:custom.stage}-cmcs-eregs-waf
+    Name: ${self:custom.stage}-cmcs-eregs-ApiGwWebACL
     Scope: REGIONAL
     Description: WAF Regional Web ACL
     DefaultAction:
-      Allow: {}
+      Block: {}
+    Rules:
+        Name: bf-test-admin-allow-usa-plus-territories
+        Priority: 0
+        Statement:
+          GeoMatchStatement:
+            CountryCodes:
+              - GU
+              - PR
+              - US
+              - UM
+              - VI
+              - MP
+              - AS
+        Action:
+          Allow: {}
+        VisibilityConfig:
+          SampledRequestsEnabled: true
+          CloudWatchMetricsEnabled: true
+          MetricName: HTTP-Flood-Prevent-Rule-Metric
     VisibilityConfig:
       SampledRequestsEnabled: true
       CloudWatchMetricsEnabled: true
+      MetricName: "WafWebAcl"
+
