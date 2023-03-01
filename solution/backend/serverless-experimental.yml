@@ -56,8 +56,8 @@ custom:
       items:
         - "/*"
   associateWaf:
-    name: ${self:resources.Resources.WAFRegionalWebACL.Properties.Name}
-    version: V2 #(optional) Regional | V2
+    name: ${self:custom.stage}-cmcs-eregs-waf
+    version: Regional
 
 functions:
   reg_site:

@@ -3,7 +3,7 @@
 WAFRegionalWebACL:
   Type: "AWS::WAFv2::WebACL"
   Properties:
-    Name: ${self:custom.stage}-cmcs-eregs-site
+    Name: ${self:custom.stage}-cmcs-eregs-waf
     Scope: REGIONAL
     Description: WAF Regional Web ACL
     DefaultAction:
