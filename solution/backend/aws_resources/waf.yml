@@ -9,7 +9,7 @@ WAFRegionalWebACL:
     DefaultAction:
       Block: {}
     Rules:
-        Name: bf-test-admin-allow-usa-plus-territories
+        Name: eregs-allow-usa-plus-territories
         Priority: 0
         Statement:
           GeoMatchStatement:
