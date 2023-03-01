@@ -115,6 +115,29 @@ resources:
           SampledRequestsEnabled: true
           CloudWatchMetricsEnabled: true
           MetricName: eregs-${self:custom.stage}-cloudfront-metric
+        Rules:
+          - Name: eregs-allow-usa-plus-territories-rule
+            Priority: 0
+            Statement:
+              GeoMatchStatement:
+                CountryCodes:
+                  - GU
+                  - PR
+                  - US
+                  - UM
+                  - VI
+                  - MP
+                  - AS
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: eregs-allow-usa-plus-territories-metric-CLOUDFRONT
+        Action:
+          Allow: {}
+        VisibilityConfig:
+          SampledRequestsEnabled: true
+          CloudWatchMetricsEnabled: true
+          MetricName: eregs-allow-usa-plus-territories-metric
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
