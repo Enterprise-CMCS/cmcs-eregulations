@@ -132,7 +132,7 @@
             margin: 15px 0 25px;
 
             p {
-                margin: 0;
+                margin: 0 !important;
             }
 
             p:first-child {
@@ -140,7 +140,8 @@
                 line-height: 1.5;
                 font-weight: 700;
                 font-family: $secondary_site_font;
-                margin-bottom: 5px;
+                margin-top: 0 !important;
+                margin-bottom: 5px !important;
             }
         }
 
@@ -193,7 +194,7 @@
             color: $secondary_text_color;
             font-size: $font-size-md;
             line-height: 1.4;
-            margin-top: 25px;
+            margin-top: 25px !important;
 
             @include screen-xl {
                 font-size: $font-size-lg;
@@ -264,8 +265,9 @@
     }
 
     .up-to-date {
+        box-sizing: unset;
         max-width: $text-max-width;
-        margin: $spacer-5 auto 10px;
+        margin: $spacer-5 auto 10px !important;
         font-size: $font-size-sm;
         color: $mid_gray;
 
@@ -296,6 +298,7 @@
 }
 
 article {
+    box-sizing: unset;
     max-width: $text-max-width;
     margin-top: $spacer-5;
     margin-bottom: $spacer-4;

@@ -1,8 +1,8 @@
-import Dropdown from '../js/src/components/Dropdown.vue';
-import DropdownContent from '../js/src/components/DropdownContent.vue';
-import DropdownHeader from '../js/src/components/DropdownHeader.vue';
-import DropdownItem from '../js/src/components/DropdownItem.vue';
-import PartButton from '../js/src/components/PartButton.vue';
+import Dropdown from '../eregs-component-lib/src/components/Dropdown.vue';
+import DropdownContent from '../eregs-component-lib/src/components/DropdownContent.vue';
+import DropdownHeader from '../eregs-component-lib/src/components/DropdownHeader.vue';
+import DropdownItem from '../eregs-component-lib/src/components/DropdownItem.vue';
+import PartButton from '../eregs-component-lib/src/components/PartButton.vue';
 
 export default {
   title: 'Components/Dropdown/Dropdown',

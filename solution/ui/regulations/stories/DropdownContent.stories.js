@@ -1,6 +1,6 @@
-import DropdownContent from '../js/src/components/DropdownContent.vue';
-import DropdownHeader from '../js/src/components/DropdownHeader.vue';
-import DropdownItem from '../js/src/components/DropdownItem.vue'
+import DropdownContent from '../eregs-component-lib/src/components/DropdownContent.vue';
+import DropdownHeader from '../eregs-component-lib/src/components/DropdownHeader.vue';
+import DropdownItem from '../eregs-component-lib/src/components/DropdownItem.vue'
 
 export default {
   title: 'Components/Dropdown/Dropdown Content',

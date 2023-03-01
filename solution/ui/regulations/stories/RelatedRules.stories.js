@@ -1,4 +1,4 @@
-import RelatedRules from '../js/src/components/RelatedRules.vue';
+import RelatedRules from '../eregs-component-lib/src/components/RelatedRules.vue';
 
 export default {
   title: 'Supplemental Resources/Related Rules',

@@ -1,4 +1,4 @@
-import RelatedRule from "../js/src/components/RelatedRule.vue";
+import RelatedRule from "../eregs-component-lib/src/components/RelatedRule.vue";
 
 const commonArgs = {
     title:

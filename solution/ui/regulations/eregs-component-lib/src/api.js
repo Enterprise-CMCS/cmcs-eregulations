@@ -290,8 +290,6 @@ const getSubpartTOC = async (apiURL, title, part, subPart) => {
     );
 };
 
-// API Functions Insertion Point (do not change this text, it is being used by hygen cli)
-
 export {
     getLastParserSuccessDate,
     getSupplementalContentByCategory,
@@ -303,5 +301,4 @@ export {
     setCacheItem,
     getSubpartTOC,
     getGovInfoLinks,
-    // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

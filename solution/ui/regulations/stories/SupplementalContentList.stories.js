@@ -1,4 +1,4 @@
-import SupplementalContentList from '../js/src/components/SupplementalContentList.vue';
+import SupplementalContentList from '../eregs-component-lib/src/components/SupplementalContentList.vue';
 
 export default {
   title: 'Supplemental Resources/Supplemental Content List',

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
+import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
 
 export default {
     name: "ResourcesResults",

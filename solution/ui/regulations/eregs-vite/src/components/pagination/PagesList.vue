@@ -45,7 +45,9 @@ import PageNumber from "@/components/pagination/PageNumber.vue";
 export default {
     name: "PagesList",
 
-    components: {},
+    components: {
+        PageNumber,
+    },
 
     props: {
         currentPage: {

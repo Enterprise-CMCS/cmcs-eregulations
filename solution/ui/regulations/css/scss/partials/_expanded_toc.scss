@@ -9,6 +9,16 @@ ul.table-of-contents {
     padding-left: 0;
     max-width: $text-max-width;
 
+    margin-block-start: 1em !important;
+    margin-block-end: 1em !important;
+
+    h3 {
+        margin: 1em 0 1em 0 !important;
+        margin-bottom: $spacer-2 !important;
+        margin-block-start: 1em !important;
+        margin-block-end: 1em !important;
+    }
+
     li {
         list-style: none;
         color: $secondary_text_color;

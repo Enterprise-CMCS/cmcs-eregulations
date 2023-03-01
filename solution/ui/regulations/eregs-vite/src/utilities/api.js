@@ -434,8 +434,6 @@ const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${titl
 
 const getSynonyms = async(query) => httpApiGetV3(`synonym/${query}`);
 
-// API Functions Insertion Point (do not change this text, it is being used by hygen cli)
-
 export {
     configure,
     setIdToken,
@@ -457,5 +455,4 @@ export {
     getSubpartTOC,
     getSynonyms,
     getRegSearchResults,
-    // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };
