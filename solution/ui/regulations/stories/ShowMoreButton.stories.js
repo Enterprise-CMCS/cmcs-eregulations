@@ -1,4 +1,4 @@
-import ShowMoreButton from '../js/src/components/ShowMoreButton.vue'
+import ShowMoreButton from '../eregs-component-lib/src/components/ShowMoreButton.vue'
 
 export default {
   title: 'Components/Button/Show More Button',

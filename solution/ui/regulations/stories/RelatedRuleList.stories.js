@@ -1,4 +1,4 @@
-import RelatedRuleList from "../js/src/components/RelatedRuleList.vue";
+import RelatedRuleList from "../eregs-component-lib/src/components/RelatedRuleList.vue";
 import { groupedFinalRuleResponse, relatedRulesResponse } from "./apiResponses";
 
 export default {

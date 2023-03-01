@@ -1,4 +1,4 @@
-import SupplementalContentCategory from '../js/src/components/SupplementalContentCategory.vue';
+import SupplementalContentCategory from '../eregs-component-lib/src/components/SupplementalContentCategory.vue';
 
 export default {
   title: 'Supplemental Resources/Supplemental Content Category',

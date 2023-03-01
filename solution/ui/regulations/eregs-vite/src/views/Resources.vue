@@ -146,9 +146,9 @@ import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 import _uniq from "lodash/uniq";
 
-import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
-import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
-import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
+import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
+import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
+import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 import Banner from "@/components/Banner.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
@@ -163,7 +163,7 @@ import {
     getSectionsForPart,
     getSubpartTOC,
     getSynonyms,
-} from "../utilities/api";
+} from "@/utilities/api";
 
 export default {
     name: "ResourcesView",

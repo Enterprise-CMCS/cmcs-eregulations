@@ -1,4 +1,4 @@
-import SupplementalContentObject from '../js/src/components/SupplementalContentObject.vue';
+import SupplementalContentObject from '../eregs-component-lib/src/components/SupplementalContentObject.vue';
 
 export default {
   title: 'Supplemental Resources/Supplemental Content Object',

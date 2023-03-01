@@ -8,9 +8,10 @@ footer {
     padding: $spacer-4 0;
     border-top: 1px solid $border_color;
     background: $teritary_background_color;
+    box-sizing: unset !important;
 
     p {
-        margin: 0;
+        margin: 0 !important;
         font-size: $font-size-xs;
         color: $secondary_text_color;
     }
@@ -18,14 +19,14 @@ footer {
     h4 {
         font-family: $secondary_site_font;
         color: $secondary_text_color;
-        margin-top: 0;
-        margin-bottom: $spacer-2;
+        margin-top: 0 !important;
+        margin-bottom: $spacer-2 !important;
     }
 
     h5 {
         font-family: $secondary_site_font;
         color: $secondary_text_color;
-        margin: 0;
+        margin: 0 !important;
         font-size: $font-size-sm;
     }
 

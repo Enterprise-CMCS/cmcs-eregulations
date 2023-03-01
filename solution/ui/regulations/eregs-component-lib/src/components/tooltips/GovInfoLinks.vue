@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getGovInfoLinks } from "../../../api";
+import { getGovInfoLinks } from "../../api";
 import SimpleSpinner from "../SimpleSpinner.vue";
 
 export default {

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { EventCodes } from "../../utils";
+import { EventCodes } from "../utils";
 
 export default {
     name: "BlockingModalTrigger",

@@ -1,10 +1,9 @@
 import { rest } from "msw";
 
 import categories from "mocks/categories";
-import toc from "mocks/toc";
 import { locations, emptyLocations } from "mocks/locations";
 
-import SupplementalContent from "../js/src/components/SupplementalContent.vue";
+import SupplementalContent from "../eregs-component-lib/src/components/SupplementalContent.vue";
 import {
     emptySupplementalContentResponse,
     supplementalContentResponse,

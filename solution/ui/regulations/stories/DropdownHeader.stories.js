@@ -1,4 +1,4 @@
-import DropdownHeader from '../js/src/components/DropdownHeader.vue';
+import DropdownHeader from '../eregs-component-lib/src/components/DropdownHeader.vue';
 
 export default {
   title: 'Components/Dropdown/Dropdown Header',

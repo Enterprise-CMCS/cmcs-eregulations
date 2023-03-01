@@ -32,7 +32,7 @@
 
 <script>
 import exportFromJSON from "export-from-json";
-import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 import { getSupplementalContentV3 } from "@/utilities/api";
 
 export default {
