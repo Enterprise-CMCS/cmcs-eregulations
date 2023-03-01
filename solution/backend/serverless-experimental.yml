@@ -57,7 +57,7 @@ custom:
         - "/*"
   associateWaf:
     name: ${self:custom.stage}-cmcs-eregs-waf
-    version: Regional
+    version: V2
 
 functions:
   reg_site:
