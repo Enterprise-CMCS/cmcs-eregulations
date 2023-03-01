@@ -116,7 +116,7 @@ resources:
           CloudWatchMetricsEnabled: true
           MetricName: eregs-${self:custom.stage}-cloudfront-metric
         Rules:
-          - Name: eregs-allow-usa-plus-territories-rule
+          - Name: eregs-allow-usa-plus-territories-rule-cf
             Priority: 0
             Statement:
               GeoMatchStatement:
@@ -128,6 +128,8 @@ resources:
                   - VI
                   - MP
                   - AS
+            Action:
+              Allow: {}
             VisibilityConfig:
               SampledRequestsEnabled: true
               CloudWatchMetricsEnabled: true
