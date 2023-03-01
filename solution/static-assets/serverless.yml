@@ -128,10 +128,10 @@ resources:
                   - VI
                   - MP
                   - AS
-          VisibilityConfig:
-            SampledRequestsEnabled: true
-            CloudWatchMetricsEnabled: true
-            MetricName: eregs-allow-usa-plus-territories-metric-CLOUDFRONT
+            VisibilityConfig:
+              SampledRequestsEnabled: true
+              CloudWatchMetricsEnabled: true
+              MetricName: eregs-allow-usa-plus-territories-metric-CLOUDFRONT
         Action:
           Allow: {}
         VisibilityConfig:
