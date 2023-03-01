@@ -1,6 +1,7 @@
 service: cmcs-eregs-site
 variablesResolutionMode: 20210326
-
+#there are some slight differences to this file.  We are creating the VPC and subnets and not executing any of the lambdas.  This will be handled when we finish the project.
+#change the db password and teh username/name to whatever you would like.  You can change other fields if you would like as well but be wary it might not work with your changes.
 provider:
   name: aws
   runtime: python3.8
@@ -11,16 +12,10 @@ provider:
   environment:
     DB_NAME: eregstest 
     DB_USER: eregstest1 
-    DB_PASSWORD: ${ssm:/eregulations/db/password}
+    DB_PASSWORD: yourpasswordofchoice1
     DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
     DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
-    #SURVEY_URL: ${ssm:/eregulations/survey_url}
-  vpc:
-    securityGroupIds:
-      - !Ref ServerlessSecurityGroup
-    subnetIds:
-      - subnet-021d6d373ec2d8c86
-      - subnet-0121c25b7306fe803
+
   deploymentBucket:
     blockPublicAccess: true
 package:
@@ -30,55 +25,66 @@ package:
     - nginx/**
 
 custom:
-#  stage: ${opt:stage, self:provider.stage}
   wsgi:
     app: handler.application
     packRequirements: false
   settings:
-    # static_url: ${cf:cmcs-eregs-static-assets-dev.StaticURL}/
     DB_NAME: eregs
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
   cloudfrontInvalidate:
-#    - distributionId: ${cf:cmcs-eregs-static-assets-dev.CloudFrontDistributionId}
       items:
         - "/*"
 
 functions:
   reg_site:
     environment:
-      # STATIC_URL: ${self:custom.settings.static_url}
       WORKING_DIR: /var/task
     handler: wsgi_handler.handler
-#    layers:
-#      - ${cf:cmcs-eregs-static-assets-dev.PythonRequirementsLambdaLayerQualifiedArn}
     events:
       - http: ANY /
       - http: ANY {proxy+}
     timeout: 10
   reg_core_migrate:
     handler: migrate.handler
-#    layers:
-#      - ${cf:cmcs-eregs-static-assets-dev.PythonRequirementsLambdaLayerQualifiedArn}
     timeout: 300
   create_su:
     handler: createsu.handler
-#    layers:
-#      - ${cf:cmcs-eregs-static-assets-dev.PythonRequirementsLambdaLayerQualifiedArn}
     timeout: 300
-#  populate_content:
-#   environment:
-#      SUPPLEMENTAL_CONTENT_PATH: /var/task/guidance
-#    handler: populate_content.handler
-#    layers:
-#      - ${cf:cmcs-eregs-static-assets-dev.PythonRequirementsLambdaLayerQualifiedArn}
-#    timeout: 300
 
 
 resources:
 
   Resources:
-
+    myVPC:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: 10.147.73.192/26
+        EnableDnsSupport: 'true'
+        EnableDnsHostnames: 'true'
+        Tags:
+        - Key: stack
+          Value: production
+    mySubnet:
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: myVPC
+        CidrBlock: 10.147.73.192/28
+        AvailabilityZone: "us-east-1a"
+        Tags:
+        - Key: stack
+          Value: production
+    mySubnet2:
+      Type: AWS::EC2::Subnet
+      Properties:
+        CidrBlock: 10.147.73.208/28
+        VpcId:
+          Ref: myVPC
+        AvailabilityZone: "us-east-1b"
+        Tags:
+        - Key: stack
+          Value: production
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -91,48 +97,12 @@ resources:
                 Service:
                   - lambda.amazonaws.com
               Action: sts:AssumeRole
-        # note that these rights are needed if you want your function to be able to communicate with resources within your vpc
-        #PermissionsBoundary:
-          #Fn::Join:
-            #- ''
-            #- - 'arn:aws:iam::'
-              #- Ref: AWS::AccountId
-              #- ':policy'
-              #- '/cms-cloud-admin/developer-boundary-policy'
-        #ManagedPolicyArns:
-          #- arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        #Policies:
-        #  - PolicyName: LambdaPolicy
-        #    PolicyDocument:
-        #      Version: '2012-10-17'
-        #      Statement:
-        #        - Effect: Allow # note that these rights are given in the default policy and are required if you want logs out of your lambda(s)
-        #          Action:
-        #            - logs:CreateLogGroup
-        #            - logs:CreateLogStream
-        #            - logs:PutLogEvents
-        #          Resource:
-        #            - 'Fn::Join':
-        #              - ':'
-        #              -
-        #                - 'arn:aws:logs'
-        #                - Ref: 'AWS::Region'
-        #                - Ref: 'AWS::AccountId'
-        #                - 'log-group:/aws/lambda/*:*:*'
-        #        -  Effect: "Allow"
-        #           Action:
-        #             - "s3:PutObject"
-        #           Resource:
-        #             Fn::Join:
-        #               - ""
-        #               - - "arn:aws:s3:::"
-        #                 - "Ref" : "ServerlessDeploymentBucket"
-
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
-        VpcId: 'vpc-079fb0427309a063e'
+        VpcId:
+          Ref: myVPC
         Tags:
           - Key: "Name"
             Value: "ServerlessSecurityGroup"
@@ -141,7 +111,8 @@ resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Database
-        VpcId: 'vpc-079fb0427309a063e'
+        VpcId:
+          Ref: myVPC
         Tags:
           - Key: "Name"
             Value: "DBSecurityGroup"
@@ -160,8 +131,8 @@ resources:
       Properties:
         DBSubnetGroupDescription: "RDS Subnet Group"
         SubnetIds:
-          - subnet-021d6d373ec2d8c86 
-          - subnet-0121c25b7306fe803 
+          - !Ref 'mySubnet'
+          - !Ref 'mySubnet2'
         Tags:
           - Key: "Name"
             Value: "DBSubnetGroup"
