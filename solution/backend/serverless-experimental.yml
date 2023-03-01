@@ -56,7 +56,7 @@ custom:
       items:
         - "/*"
   associateWaf:
-    name: ${self:custom.stage}-cmcs-eregs-waf
+    name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
 
 functions:
