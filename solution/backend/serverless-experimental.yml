@@ -59,6 +59,9 @@ custom:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:
         - "/*"
+  associateWaf:
+    name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
+    version: V2
 
 functions:
   reg_site:
@@ -107,9 +110,8 @@ functions:
     timeout: 300
 
 resources:
-
   Resources:
-
+    WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -162,3 +164,4 @@ resources:
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
+  - serverless-associate-waf
