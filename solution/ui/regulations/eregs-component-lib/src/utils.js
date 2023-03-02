@@ -199,7 +199,9 @@ const highlightText = (location, paramKey) => {
         if (targetedSection) {
             const textArr = textToHighlight.split(",");
             textArr.forEach((text) => {
-                addMarks(targetedSection, text);
+                if (text.length > 2) {
+                    addMarks(targetedSection, text);
+                }
             });
         }
     }
