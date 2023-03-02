@@ -19,6 +19,11 @@
 }
 
 .hero-content {
+    .form {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
     .jump-to {
         .jump-to-label {
             font-family: $primary_site_font;
@@ -36,7 +41,7 @@
             }
         }
 
-        form {
+        .form {
             .jump-to-input {
                 margin-right: $spacer-2;
             }
@@ -53,7 +58,7 @@
 }
 
 .jump-to {
-    form {
+    .form {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -72,6 +77,8 @@
     .dot {
         font-size: $font-size-2xl;
         line-height: 1;
+        padding-left:4px;
+        padding-right: 4px;;
     }
 
     input {
