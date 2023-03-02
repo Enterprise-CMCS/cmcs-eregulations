@@ -177,7 +177,7 @@ resources:
       Type: AWS::RDS::DBCluster
       Properties:
         MasterUsername: ${self:custom.settings.USERNAME}
-        MasterUserPassword: ${ssm:/eregulations/db/password}
+        MasterUserPassword: ${self:custom.settings.DB_PASSWORD}
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
@@ -205,4 +205,3 @@ plugins:
   - serverless-python-requirements
   - serverless-wsgi
   - serverless-go-plugin
-  - serverless-cloudfront-invalidate
