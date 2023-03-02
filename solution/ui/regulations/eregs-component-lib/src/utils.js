@@ -156,7 +156,10 @@ const getQueryParam = (location, key) => {
  * @param {string} highlightString - string to match
  */
 function addMarks(element, highlightString) {
-    const regex = new RegExp(highlightString, "gi");
+    function escapeRegex(string) {
+        return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+    const regex = new RegExp(escapeRegex(highlightString));
     if (element.nodeType === document.TEXT_NODE) {
         // note `nodeValue` vs `innerHTML`
         // nodeValue gives inner text without Vue component markup tags;

@@ -38,7 +38,11 @@
                         </span>
                     </div>
                     <template v-if="!regsLoading">
-                        <RegResults :base="base" :results="regResults">
+                        <RegResults
+                            :base="base"
+                            :results="regResults"
+                            :query="searchQuery"
+                        >
                             <template #empty-state>
                                 <template
                                     v-if="
