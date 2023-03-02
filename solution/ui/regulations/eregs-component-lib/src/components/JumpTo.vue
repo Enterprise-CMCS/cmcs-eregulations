@@ -94,7 +94,7 @@ export default {
 
     async created() {
         this.titles = await getTitles(this.apiurl);
-        if(this.titles.length === 2){
+        if(this.titles.length === 1){
             this.selectedTitle = this.titles[0];
             this.defaultTitle = this.selectedTitle;
             this.hideTitle= true;
