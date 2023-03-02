@@ -89,6 +89,10 @@ export default {
             isActive: false,
             parts:[],
             link: "",
+            base:
+                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
+                    ? `/${import.meta.env.VITE_ENV}`
+                    : "",
         };
     },
 
@@ -137,7 +141,7 @@ export default {
         },
         getLink(){
             if(this.isActive){
-                const link = `/${this.selectedTitle}/${this.selectedPart}/${this.selectedSection}`
+                const link = `${this.base}/${this.selectedTitle}/${this.selectedPart}/${this.selectedSection}`
                 window.location.href = link
             }
         }
