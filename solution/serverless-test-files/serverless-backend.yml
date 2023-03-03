@@ -1,40 +1,20 @@
 service: cmcs-eregs-site
 variablesResolutionMode: 20210326
-
+#there are some slight differences to this file.  We are creating the VPC and subnets and not executing any of the lambdas.  This will be handled when we finish the project.
+#change the db password and teh username/name to whatever you would like.  You can change other fields if you would like as well but be wary it might not work with your changes.
 provider:
   name: aws
   runtime: python3.8
   region: us-east-1
   iam:
     role: LambdaFunctionRole
-  logs:
-    restApi:
-      level: INFO
-      roleManagedExternally: true
   lambdaHashingVersion: '20201221'
   environment:
-    DB_NAME: ${self:custom.settings.DB_NAME}
-    DB_USER: ${self:custom.settings.USERNAME}
-    Test_config: 'test'
-    DB_PASSWORD: ${ssm:/eregulations/db/password}
-    DB_HOST: ${ssm:/eregulations/db/host}
-    DB_PORT: ${ssm:/eregulations/db/port}
-    GA_ID: ${ssm:/eregulations/http/google_analytics}
-    HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
-    HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
-    DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user}
-    DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password}
-    ALLOWED_HOST: '.amazonaws.com'
-    STATIC_URL: ${self:custom.settings.static_url}
-    BASE_URL: ${ssm:/eregulations/base_url}
-    CUSTOM_URL: ${ssm:/eregulations/custom_url}
-    SURVEY_URL: ${ssm:/eregulations/survey_url}
-  vpc:
-    securityGroupIds:
-      - !Ref ServerlessSecurityGroup
-    subnetIds:
-      - ${ssm:/account_vars/vpc/subnets/private/a/id}
-      - ${ssm:/account_vars/vpc/subnets/private/b/id}
+    DB_NAME: eregstest 
+    DB_USER: eregstest1 
+    DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
+    DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
+
   deploymentBucket:
     blockPublicAccess: true
 package:
@@ -44,61 +24,71 @@ package:
     - nginx/**
 
 custom:
-  stage: ${opt:stage, self:provider.stage}
   wsgi:
     app: handler.application
     packRequirements: false
   settings:
-    static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
     DB_NAME: eregs
     USERNAME: eregsuser
+    DB_PASSWORD: yourpasswordofchoice1
     ALLOWED_HOST: '.amazonaws.com'
   cloudfrontInvalidate:
-    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:
         - "/*"
-  associateWaf:
-    name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
-    version: V2
 
 functions:
   reg_site:
     environment:
-      STATIC_URL: ${self:custom.settings.static_url}
       WORKING_DIR: /var/task
     handler: wsgi_handler.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
     events:
       - http: ANY /
       - http: ANY {proxy+}
     timeout: 10
   reg_core_migrate:
     handler: migrate.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
     timeout: 300
   create_su:
     handler: createsu.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-    timeout: 300
-  populate_content:
-    environment:
-      SUPPLEMENTAL_CONTENT_PATH: /var/task/guidance
-    handler: populate_content.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
     timeout: 300
 
 
 resources:
+
   Resources:
-    WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
+    myVPC:
+      Type: AWS::EC2::VPC
+      Properties:
+        CidrBlock: 10.147.73.192/26
+        EnableDnsSupport: 'true'
+        EnableDnsHostnames: 'true'
+        Tags:
+        - Key: stack
+          Value: production
+    mySubnet:
+      Type: AWS::EC2::Subnet
+      Properties:
+        VpcId:
+          Ref: myVPC
+        CidrBlock: 10.147.73.192/28
+        AvailabilityZone: "us-east-1a"
+        Tags:
+        - Key: stack
+          Value: production
+    mySubnet2:
+      Type: AWS::EC2::Subnet
+      Properties:
+        CidrBlock: 10.147.73.208/28
+        VpcId:
+          Ref: myVPC
+        AvailabilityZone: "us-east-1b"
+        Tags:
+        - Key: stack
+          Value: production
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
-        Path: ${ssm:/account_vars/iam/path}
+        Path: "/delegatedadmin/developer/"
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -107,48 +97,12 @@ resources:
                 Service:
                   - lambda.amazonaws.com
               Action: sts:AssumeRole
-        # note that these rights are needed if you want your function to be able to communicate with resources within your vpc
-        PermissionsBoundary:
-          Fn::Join:
-            - ''
-            - - 'arn:aws:iam::'
-              - Ref: AWS::AccountId
-              - ':policy'
-              - ${ssm:/account_vars/iam/permissions_boundary_policy}
-        ManagedPolicyArns:
-          - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
-        Policies:
-          - PolicyName: LambdaPolicy
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: Allow # note that these rights are given in the default policy and are required if you want logs out of your lambda(s)
-                  Action:
-                    - logs:CreateLogGroup
-                    - logs:CreateLogStream
-                    - logs:PutLogEvents
-                  Resource:
-                    - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
-                -  Effect: "Allow"
-                   Action:
-                     - "s3:PutObject"
-                   Resource:
-                     Fn::Join:
-                       - ""
-                       - - "arn:aws:s3:::"
-                         - "Ref" : "ServerlessDeploymentBucket"
-
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
-        VpcId: ${ssm:/account_vars/vpc/id}
+        VpcId:
+          Ref: myVPC
         Tags:
           - Key: "Name"
             Value: "ServerlessSecurityGroup"
@@ -157,7 +111,8 @@ resources:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: SecurityGroup for Database
-        VpcId: ${ssm:/account_vars/vpc/id}
+        VpcId:
+          Ref: myVPC
         Tags:
           - Key: "Name"
             Value: "DBSecurityGroup"
@@ -167,8 +122,8 @@ resources:
       Properties:
         GroupId: !Ref 'DBSecurityGroup'
         IpProtocol: tcp
-        FromPort: ${ssm:/eregulations/db/port}
-        ToPort: ${ssm:/eregulations/db/port}
+        FromPort: !GetAtt [RDSResource, Endpoint.Port]
+        ToPort: !GetAtt [RDSResource, Endpoint.Port]
         SourceSecurityGroupId: !Ref 'ServerlessSecurityGroup'
 
     DBSubnetGroup:
@@ -176,8 +131,8 @@ resources:
       Properties:
         DBSubnetGroupDescription: "RDS Subnet Group"
         SubnetIds:
-          - ${ssm:/account_vars/vpc/subnets/private/a/id}
-          - ${ssm:/account_vars/vpc/subnets/private/b/id}
+          - !Ref 'mySubnet'
+          - !Ref 'mySubnet2'
         Tags:
           - Key: "Name"
             Value: "DBSubnetGroup"
@@ -217,30 +172,27 @@ resources:
           search_path: '"$user",public'
           pgaudit.role: "rds_pgaudit"
           pgaudit.log: "ALL"
+
     RDSResource:
       Type: AWS::RDS::DBCluster
-      DeletionPolicy: Retain
       Properties:
         MasterUsername: ${self:custom.settings.USERNAME}
-        StorageEncrypted: true
-        MasterUserPassword: ${ssm:/eregulations/db/password}
+        MasterUserPassword: ${self:custom.settings.DB_PASSWORD}
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
         EngineVersion: "12.8"
-        DatabaseName: 'eregs'
+        DatabaseName: ${self:custom.settings.DB_NAME}
         BackupRetentionPeriod: 3
         DBClusterParameterGroupName:
           Ref: AuroraRDSClusterParameter
         VpcSecurityGroupIds:
           - !Ref 'DBSecurityGroup'
-    
+
     AuroraRDSInstance:
       Type: AWS::RDS::DBInstance
-      DeletionPolicy: Retain
       Properties:
         DBInstanceClass: db.r6g.large
-        StorageEncrypted: true
         Engine: aurora-postgresql
         EngineVersion: "12.8"
         PubliclyAccessible: false
@@ -253,5 +205,3 @@ plugins:
   - serverless-python-requirements
   - serverless-wsgi
   - serverless-go-plugin
-  - serverless-cloudfront-invalidate
-  - serverless-associate-waf
