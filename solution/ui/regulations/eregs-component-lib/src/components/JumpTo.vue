@@ -5,6 +5,7 @@
             <div class="jump-to-input">
                 <select
                     v-if="defaultTitle === ''"
+                    id="jumpto_title"
                     v-model="selectedTitle"
                     name="title"
                     aria-label="Regulation title number"
@@ -18,6 +19,7 @@
                 </select>
                 §
                 <select
+                    id="jumpto_part"
                     v-model="selectedPart"
                     name="part"
                     class="ds-c-field"
@@ -36,6 +38,7 @@
                 </select>
                 <span class="dot">.</span>
                 <input
+                    id="jumpto_section"
                     v-model="selectedSection"
                     class="number-box ds-c-field"
                     name="section"
