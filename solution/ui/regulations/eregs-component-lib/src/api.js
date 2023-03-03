@@ -259,15 +259,15 @@ const getSupplementalContentByCategory = async (
     return result.filter((r) => r.supplemental_content.length);
 };
 
-const getTitles = async (apiUrl)=>{
-    const url = apiUrl.replace("/v2/", "/v3/")
-    return httpApiGetLegacy(`${url}titles`)
-}
+const getTitles = async (apiUrl) => {
+    const url = apiUrl.replace("/v2/", "/v3/");
+    return httpApiGetLegacy(`${url}titles`);
+};
 
-const getParts = async (apiURL, title)=>{
-    const url = apiURL.replace("/v2/", "/v3/")
-    return httpApiGetLegacy(`${url}title/${title}/parts`)
-}
+const getParts = async (apiURL, title) => {
+    const url = apiURL.replace("/v2/", "/v3/");
+    return httpApiGetLegacy(`${url}title/${title}/parts`);
+};
 
 const v3GetSupplementalContent = async (
     apiURL,
