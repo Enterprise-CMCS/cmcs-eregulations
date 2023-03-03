@@ -141,7 +141,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".jump-to-input select").select("433");
-        cy.get(".jump-to > form").submit();
+        cy.get("#jump_btn").click({ force: true });
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
@@ -151,7 +151,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".jump-to-input select").should("be.visible").select("433");
         cy.get(".jump-to-input input.number-box").type("40");
-        cy.get(".jump-to > form").submit();
+        cy.get("#jump_btn").click({ force: true });
 
         cy.url().should(
             "eq",
