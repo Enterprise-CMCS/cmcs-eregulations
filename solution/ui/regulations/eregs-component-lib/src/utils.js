@@ -157,9 +157,11 @@ const getQueryParam = (location, key) => {
  */
 function addMarks(element, highlightString) {
     function escapeRegex(string) {
-        return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, '\\$&');
+        return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, "\\$&");
     }
+
     const regex = new RegExp(escapeRegex(highlightString));
+
     if (element.nodeType === document.TEXT_NODE) {
         // note `nodeValue` vs `innerHTML`
         // nodeValue gives inner text without Vue component markup tags;
@@ -167,6 +169,10 @@ function addMarks(element, highlightString) {
         // Currently there is only the tooltip <trigger-btn> tag at beginning
         const text = element.nodeValue;
         if (text.toUpperCase().indexOf(highlightString.toUpperCase()) !== -1) {
+            if (element?.parentNode?.className === "citation-node") {
+                return false;
+            }
+
             const innerHtmlOfParentNode = element.parentNode.innerHTML;
             const indexOfText = innerHtmlOfParentNode.indexOf(text);
             const textToKeep = innerHtmlOfParentNode.slice(0, indexOfText);
