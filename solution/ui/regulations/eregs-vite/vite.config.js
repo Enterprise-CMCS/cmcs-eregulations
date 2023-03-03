@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { createVuePlugin } from "vite-plugin-vue2";
+import vue from "@vitejs/plugin-vue2";
 import { VuetifyResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
 
@@ -8,7 +8,7 @@ const path = require("path");
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        createVuePlugin(),
+        vue(),
         Components({
             resolvers: [VuetifyResolver()],
         }),
@@ -23,6 +23,10 @@ export default defineConfig({
     resolve: {
         alias: {
             legacy: path.resolve(__dirname, "../../regulations"),
+            eregsComponentLib: path.resolve(
+                __dirname,
+                "../../regulations/eregs-component-lib"
+            ),
             "@": path.resolve(__dirname, "src"),
         },
     },

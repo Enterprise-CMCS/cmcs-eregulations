@@ -141,9 +141,9 @@ import {
 } from "@/utilities/api";
 
 import Banner from "@/components/Banner.vue";
-import BlockingModal from "legacy/js/src/components/BlockingModal.vue";
-import FlashBanner from "legacy/js/src/components/FlashBanner.vue";
-import IFrameContainer from "legacy/js/src/components/IFrameContainer.vue";
+import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
+import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
+import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
@@ -505,6 +505,7 @@ export default {
         .search-results-count {
             h2 {
                 border-bottom: 2px solid $mid_blue;
+                margin-block-end: 1em !important;
             }
         }
     }

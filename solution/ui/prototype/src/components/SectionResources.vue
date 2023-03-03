@@ -129,7 +129,7 @@
 <script>
 import { getSupplementalContent } from "@/utilities/api";
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
-import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import SimpleSpinner from "legacy/eregs-component-lib/src/components/SimpleSpinner.vue";
 import SupplementalContentCard from "@/components/SupplementalContentCard";
 import SupplementalContentList from "@/components/SupplementalContentList";
 

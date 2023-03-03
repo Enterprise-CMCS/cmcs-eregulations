@@ -44,7 +44,7 @@ export default {
         }
 
         p:last-of-type {
-            margin-bottom: 30px;
+            margin-bottom: 30px !important;
         }
     }
 }

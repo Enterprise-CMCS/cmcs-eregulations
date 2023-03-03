@@ -205,27 +205,6 @@ async function httpApiGetWithPagination(urlPath, { params } = {}, apiPath) {
 }
 
 // ---------- api calls ---------------
-const getLastUpdatedDates = async (apiUrl, title = "42") => {
-    const reducer = (accumulator, currentValue) => {
-        // key by partname, value by latest date
-        // if partname is not in accumulator, add it
-        // if partname is in accumulator, compare the dates and update the accumulator
-        currentValue.partName.forEach((partName) => {
-            if (!accumulator[partName]) {
-                accumulator[partName] = currentValue.date;
-            } else if (currentValue.date > accumulator[partName]) {
-                accumulator[partName] = currentValue.date;
-            }
-        });
-
-        return accumulator;
-    };
-
-    const result = await httpApiGetLegacy(`${apiUrl}title/${title}/existing`);
-
-    return result.reduce(reducer, {});
-};
-
 /**
  * Get formatted date of most recent successful run of the ECFR parser
  *
@@ -255,8 +234,7 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
  * @returns {Array<{year: string, link: string}>}
  */
 const getGovInfoLinks = async (apiURL, params) => {
-    // manually adjust to v3 if needed
-    const url = apiURL.replace("/v2/", "/v3/");
+    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
 
     const result = await httpApiGetLegacy(
         `${url}title/${params.title}/part/${params.part}/history/${
@@ -264,114 +242,6 @@ const getGovInfoLinks = async (apiURL, params) => {
         }/${Object.values(params)[2]}`
     );
 
-    return result;
-};
-
-/**
- * Returns the result from the all_parts endpoint
- *
- * @returns {Array} - a list of objects that represent a part of title 42
- */
-
-const getAllParts = async (apiUrl) =>
-    httpApiGetLegacy(
-        `${apiUrl}all_parts`,
-        {}, // params, default
-        apiUrl
-    );
-
-/**
- * Returns the result from the categories endpoint
- *
- * @returns {Array} - a list of objects that represent possible supp content categories and subcategories
- */
-
-const getCategories = async (apiUrl) =>
-    httpApiGetLegacy(
-        `${apiUrl}categories`,
-        {}, // params, default
-        apiUrl
-    );
-
-/**
- *
- * Fetches all_parts and returns a list of objects for the subparts in that part
- * Each object has a label and an identifier
- * @param {string} apiUrl - api url from django environment
- * @param {string} part - the name of a part in title 42
- * @returns {Object<{label:string, identifier:string}>}
- */
-const getSubPartsForPart = async (apiUrl, part) => {
-    // if part is string of multiple parts, use final part
-    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
-    const all_parts = await getAllParts(apiUrl);
-    const parts = all_parts.map((d) => d.name);
-    const potentialSubParts =
-        all_parts[parts.indexOf(part)].structure.children[0].children[0]
-            .children[0].children;
-    const subParts = potentialSubParts.filter((p) => p.type === "subpart");
-    return subParts.map((s) => {
-        return {
-            label: s.label,
-            identifier: s.identifier[0],
-            range: s.descendant_range,
-        };
-    });
-};
-
-/**
- *
- * Fetches all_parts and returns formatted section objects for the part (and subpart if specified)
- * @param {string} apiUrl - api url from django environment
- * @param {string} part - a part in title 42
- * @param {?string} subPart - a subpart in title 42 ("A", "B", etc) - undefined returns all sections for part
- * @returns {Array[Object]} - an array of formatted objects for the section or subpart
- */
-const getSectionObjects = async (apiUrl, part, subPart) => {
-    // if part is string of multiple parts, use final part
-    part = part.indexOf(",") > 0 ? part.split(",").pop() : part;
-    const all_parts = await getAllParts(apiUrl);
-    const parts = all_parts.map((d) => d.name);
-    const potentialSubParts =
-        all_parts[parts.indexOf(part)].structure.children[0].children[0]
-            .children[0].children;
-    if (subPart) {
-        const parent = potentialSubParts.find(
-            (p) => p.type === "subpart" && p.identifier[0] === subPart
-        );
-        return parent.children.map((c) => {
-            return {
-                identifier: c.identifier[1],
-                label: c.label_level,
-                description: c.label_description,
-            };
-        });
-    } else {
-        return potentialSubParts
-            .filter((p) => p.type === "subpart")
-            .flatMap((p) =>
-                p.children.map((c) => {
-                    return {
-                        identifier: c.identifier[1],
-                        label: c.label_level,
-                        description: c.label_description,
-                    };
-                })
-            );
-    }
-};
-
-const getSupplementalContentLegacy = async (
-    api_url,
-    title = "42",
-    part,
-    joined_locations
-) => {
-    const result = await httpApiGetLegacy(
-        `${api_url}title/${title}/part/${part}/supplemental_content?${joined_locations}`,
-        {}, // params, default
-        api_url
-    );
     return result;
 };
 
@@ -393,8 +263,7 @@ const v3GetSupplementalContent = async (
     apiURL,
     { locations, locationDetails = false }
 ) => {
-    // manually adjust to v3 if needed
-    const url = apiURL.replace("/v2/", "/v3/");
+    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
 
     return httpApiGetWithPagination(
         `${url}resources/?${locations}&paginate=true&location_details=${locationDetails}`,
@@ -404,8 +273,7 @@ const v3GetSupplementalContent = async (
 };
 
 const v3GetFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
-    // manually adjust to v3 if needed
-    const url = apiURL.replace("/v2/", "/v3/");
+    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
 
     return httpApiGetLegacy(
         `${url}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
@@ -415,23 +283,15 @@ const v3GetFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
 };
 
 const getSubpartTOC = async (apiURL, title, part, subPart) => {
-    const url = apiURL.replace("/v2/", "/v3/");
+    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
 
     return httpApiGetLegacy(
         `${url}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 };
 
-// API Functions Insertion Point (do not change this text, it is being used by hygen cli)
-
 export {
-    getAllParts,
-    getCategories,
-    getLastUpdatedDates,
     getLastParserSuccessDate,
-    getSectionObjects,
-    getSubPartsForPart,
-    getSupplementalContentLegacy,
     getSupplementalContentByCategory,
     v3GetSupplementalContent,
     v3GetFederalRegisterDocs,
@@ -441,5 +301,4 @@ export {
     setCacheItem,
     getSubpartTOC,
     getGovInfoLinks,
-    // API Export Insertion Point (do not change this text, it is being used by hygen cli)
 };

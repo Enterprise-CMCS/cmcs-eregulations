@@ -1,4 +1,4 @@
-import PartButton from '../js/src/components/PartButton.vue'
+import PartButton from '../eregs-component-lib/src/components/PartButton.vue'
 
 export default {
   title: 'Components/Button/Part Button',

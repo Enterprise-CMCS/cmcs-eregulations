@@ -39,7 +39,7 @@ import Footer from "@/components/Footer.vue";
 import Header from "@/components/Header.vue";
 import Hero from "@/components/homepage/Hero.vue";
 import RecentChanges from "@/components/RecentChanges.vue";
-import SimpleSpinner from "legacy/js/src/components/SimpleSpinner.vue";
+import SimpleSpinner from "legacy/eregs-component-lib/src/components/SimpleSpinner.vue";
 import TOC from "@/components/homepage/Toc.vue";
 
 import { getHomepageStructure } from "@/utilities/api";

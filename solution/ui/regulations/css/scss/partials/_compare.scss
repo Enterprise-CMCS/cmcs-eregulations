@@ -3,7 +3,7 @@
 .view-and-compare {
     display: flex;
     justify-content: center;
-    height: $view_compare_height;
+    min-height: $view_compare_height;
     padding: $spacer-2 $spacer-4;
     background-color: $secondary_color;
     color: $reverse_text_color;

@@ -26,6 +26,16 @@ main.about {
         color: $primary_color;
     }
 
+    h3 {
+        margin: 1em 0 1em 0 !important;
+        margin-block-start: 1em !important;
+        margin-block-end: 1em !important;
+    }
+
+    ul {
+        padding-left: 40px;
+    }
+
     .ecfr-graphic {
         border: 1px solid $border_color;
     }

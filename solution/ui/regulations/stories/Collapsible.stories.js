@@ -1,5 +1,5 @@
-import CollapseButton from '../js/src/components/CollapseButton.vue';
-import Collapsible from '../js/src/components/Collapsible.vue';
+import CollapseButton from "../eregs-component-lib/src/components/CollapseButton.vue";
+import Collapsible from "../eregs-component-lib/src/components/Collapsible.vue";
 
 export default {
   title: 'Components/Collapsible',

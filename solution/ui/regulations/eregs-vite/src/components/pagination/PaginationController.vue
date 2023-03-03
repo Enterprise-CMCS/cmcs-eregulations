@@ -45,6 +45,7 @@ export default {
 
     components: {
         NavBtn,
+        PagesList,
     },
 
     props: {

@@ -42,8 +42,8 @@ import {
     getSupplementalContentByCategory,
     v3GetSupplementalContent,
     getSubpartTOC
-} from "../../api";
-import {EventCodes, flattenSubpart, formatResourceCategories} from "../../utils";
+} from "../api";
+import {EventCodes, flattenSubpart, formatResourceCategories} from "../utils";
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];

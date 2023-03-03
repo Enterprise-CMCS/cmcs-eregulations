@@ -9,7 +9,7 @@
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 
-import { v3GetFederalRegisterDocs } from "../../api";
+import { v3GetFederalRegisterDocs } from "../api";
 
 export default {
     name: "DefaultName",

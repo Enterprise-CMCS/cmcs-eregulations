@@ -37,6 +37,13 @@ module.exports = {
             "@": path.resolve(__dirname, "../../prototype/src"),
         };
 
+        config.module.rules.push({
+            test: /\.m?js/,
+            resolve: {
+                fullySpecified: false,
+            },
+        });
+
         return config;
     },
 };

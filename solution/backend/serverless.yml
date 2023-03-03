@@ -7,6 +7,10 @@ provider:
   region: us-east-1
   iam:
     role: LambdaFunctionRole
+  logs:
+    restApi:
+      level: INFO
+      roleManagedExternally: true
   lambdaHashingVersion: '20201221'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
@@ -53,6 +57,9 @@ custom:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:
         - "/*"
+  associateWaf:
+    name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
+    version: V2
 
 functions:
   reg_site:
@@ -86,9 +93,8 @@ functions:
 
 
 resources:
-
   Resources:
-
+    WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -248,3 +254,4 @@ plugins:
   - serverless-wsgi
   - serverless-go-plugin
   - serverless-cloudfront-invalidate
+  - serverless-associate-waf

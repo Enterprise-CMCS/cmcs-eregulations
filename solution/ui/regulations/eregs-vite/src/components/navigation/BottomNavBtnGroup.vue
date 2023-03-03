@@ -5,14 +5,11 @@
 </template>
 
 <script>
-import NavBtn from "./NavBtn.vue";
 
 export default {
     name: "BottomNavBtnGroup",
 
-    components: {
-        NavBtn,
-    },
+    components: {},
 
     props: {},
 

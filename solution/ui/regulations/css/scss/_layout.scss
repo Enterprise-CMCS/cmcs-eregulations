@@ -26,6 +26,7 @@ body {
 }
 
 .site-container {
+    box-sizing: unset;
     display: block;
     margin: 0 auto;
     position: relative;

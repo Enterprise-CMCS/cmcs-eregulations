@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { EventCodes, trapFocus } from "../../utils";
+import { EventCodes, trapFocus } from "../utils";
 
 const POSSIBLE_LOCATIONS = {
     django: "legacy django template",

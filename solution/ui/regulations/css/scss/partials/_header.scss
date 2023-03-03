@@ -5,6 +5,8 @@
 @import "../application_settings";
 
 header {
+    box-sizing: unset;
+
     // Sticky Header and Content Adjustments
 
     &.sticky {
