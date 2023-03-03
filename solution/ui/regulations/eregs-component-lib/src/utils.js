@@ -169,8 +169,16 @@ function addMarks(element, highlightString) {
         // Currently there is only the tooltip <trigger-btn> tag at beginning
         const text = element.nodeValue;
         if (text.toUpperCase().indexOf(highlightString.toUpperCase()) !== -1) {
+            // ignore citation node at bottom of section
             if (element?.parentNode?.className === "citation-node") {
-                return false;
+                return;
+            }
+
+            if (element?.parentNode?.nodeName === "A") {
+                const closestParagraph = element.parentNode.closest("p");
+                if (closestParagraph.className === "citation-node") {
+                    return;
+                }
             }
 
             const innerHtmlOfParentNode = element.parentNode.innerHTML;
@@ -182,7 +190,7 @@ function addMarks(element, highlightString) {
                 "<mark class='highlight'>$&</mark>"
             );
             element.parentNode.innerHTML = textToKeep + newText;
-            return true;
+            return;
         }
     } else if (element.nodeType === document.ELEMENT_NODE) {
         for (let i = 0; i < element.childNodes.length; i++) {
