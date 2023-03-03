@@ -12,7 +12,6 @@ provider:
   environment:
     DB_NAME: eregstest 
     DB_USER: eregstest1 
-    DB_PASSWORD: yourpasswordofchoice1
     DB_HOST: !GetAtt [RDSResource, Endpoint.Address]
     DB_PORT: !GetAtt [RDSResource, Endpoint.Port]
 
@@ -31,6 +30,7 @@ custom:
   settings:
     DB_NAME: eregs
     USERNAME: eregsuser
+    DB_PASSWORD: yourpasswordofchoice1
     ALLOWED_HOST: '.amazonaws.com'
   cloudfrontInvalidate:
       items:
