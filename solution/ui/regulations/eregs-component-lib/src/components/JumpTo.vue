@@ -7,6 +7,7 @@
                 v-if="defaultTitle === ''"
                 v-model="selectedTitle"
                 name="title"
+                aria-label="Regulation title number"
                 class="ds-c-field"
                 required
             >
@@ -49,7 +50,7 @@
                 aria-label="Regulation section number, i.e. 111"
             />
         </div>
-        <input class="submit" :class="{active: isActive}" type="submit" value="Go" @click="getLink" /></div>
+        <input id="jump_btn" class="submit" :class="{active: isActive}" type="submit" value="Go" @click="getLink" /></div>
 
 </div>
 </template>
@@ -78,7 +79,6 @@ export default {
     },
     data() {
         return {
-            partNames: null,
             titles: [],
             selectedPart: "",
             defaultTitle:'',
@@ -97,7 +97,10 @@ export default {
     },
 
     async created() {
-        this.titles = await getTitles(this.apiurl);
+        // When title 45 or another title is added uncomment line below, and remove the hardcoded
+        // this.titles = await getTitles(this.apiurl);
+        this.titles = ['42']
+
         if(this.titles.length === 1){
             this.selectedTitle = this.titles[0];
             this.defaultTitle = this.selectedTitle;
@@ -140,10 +143,14 @@ export default {
             this.filteredParts = partsList.map((part) => part.name);
         },
         getLink(){
-            if(this.isActive){
-                const link = `${this.base}/${this.selectedTitle}/${this.selectedPart}/${this.selectedSection}`
+                
+                let link = `${this.base}/goto/?title=${this.selectedTitle}&part=${this.selectedPart}`
+                if(this.selectedSection !== ""){
+                    link += `&section=${this.selectedSection}&${this.selectedpart}-version='latest'`
+                }
+
                 window.location.href = link
-            }
+
         }
     }    
 };
