@@ -12,8 +12,8 @@
                     required
                 >
                     <option value="" disabled selected>Title</option>
-                    <option v-for="title in titles" :key="title" :value="title">
-                        {{ title }} CFR
+                    <option v-for="t in titles" :key="t" :value="t">
+                        {{ t }} CFR
                     </option>
                 </select>
                 §
@@ -27,11 +27,11 @@
                 >
                     <option value="" disable selected>Part</option>
                     <option
-                        v-for="part in filteredParts"
-                        :key="part"
-                        :value="part"
+                        v-for="p in filteredParts"
+                        :key="p"
+                        :value="p"
                     >
-                        {{ part }}
+                        {{ p }}
                     </option>
                 </select>
                 <span class="dot">.</span>
