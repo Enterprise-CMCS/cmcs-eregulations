@@ -140,7 +140,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".jump-to-input select").select("433");
+        cy.get("#jumpto_part").select("433");
         cy.get("#jump_btn").click({ force: true });
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
@@ -149,8 +149,8 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".jump-to-input select").should("be.visible").select("433");
-        cy.get(".jump-to-input input.number-box").type("40");
+        cy.get("#jumpto_part").should("be.visible").select("433");
+        cy.get("#jumpto_section").type("40");
         cy.get("#jump_btn").click({ force: true });
 
         cy.url().should(
