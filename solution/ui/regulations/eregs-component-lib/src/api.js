@@ -245,20 +245,6 @@ const getGovInfoLinks = async (apiURL, params) => {
     return result;
 };
 
-const getSupplementalContentByCategory = async (
-    api_url,
-    categories = [1, 2]
-) => {
-    const result = await httpApiGetLegacy(
-        `${api_url}all_sup?category=${categories.join(
-            "&category="
-        )}&max_results=100`,
-        {}, // params, default
-        api_url
-    );
-    return result.filter((r) => r.supplemental_content.length);
-};
-
 const getTitles = async (apiUrl) => {
     const url = apiUrl.replace("/v2/", "/v3/");
     return httpApiGetLegacy(`${url}titles`);
@@ -302,7 +288,6 @@ const getSubpartTOC = async (apiURL, title, part, subPart) => {
 
 export {
     getLastParserSuccessDate,
-    getSupplementalContentByCategory,
     v3GetSupplementalContent,
     v3GetFederalRegisterDocs,
     getCacheKeys,
