@@ -273,6 +273,8 @@ CSP_SCRIPT_SRC_ELEM = [
     STATIC_URL,
     "https://*.googletagmanager.com",
     "https://cdn.jsdelivr.net/npm/vue@2.7.14",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-bundle.js",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js",
 ]
 CSP_CONNECT_SRC = [
     "'self'",
