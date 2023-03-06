@@ -19,11 +19,6 @@
 }
 
 .hero-content {
-    .form {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-    }
     .jump-to {
         .jump-to-label {
             font-family: $primary_site_font;
@@ -41,7 +36,7 @@
             }
         }
 
-        .form {
+        form {
             .jump-to-input {
                 margin-right: $spacer-2;
             }
@@ -49,7 +44,6 @@
             select,
             input,
             input .submit {
-                margin: 0;
                 height: 36px;
                 font-size: $font-size-sm;
             }
@@ -58,7 +52,7 @@
 }
 
 .jump-to {
-    .form {
+    form {
         display: flex;
         align-items: center;
         flex-wrap: wrap;

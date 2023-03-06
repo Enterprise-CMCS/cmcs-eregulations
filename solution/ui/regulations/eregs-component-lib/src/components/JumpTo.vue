@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="jump-to-label">Jump to Regulation Section</div>
-        <div class="form">
+        <form @submit.prevent="getLink">
             <div class="jump-to-input">
                 <select
                     v-if="defaultTitle === ''"
-                    id="jumpto_title"
+                    id="jumpToTitle"
                     v-model="selectedTitle"
                     name="title"
                     aria-label="Regulation title number"
@@ -13,13 +13,17 @@
                     required
                 >
                     <option value="" disabled selected>Title</option>
-                    <option v-for="t in titles" :key="t" :value="t">
-                        {{ t }} CFR
+                    <option
+                        v-for="listedTitle in titles"
+                        :key="listedTitle"
+                        :value="listedTitle"
+                    >
+                        {{ listedTitle }} CFR
                     </option>
                 </select>
                 §
                 <select
-                    id="jumpto_part"
+                    id="jumpToPart"
                     v-model="selectedPart"
                     name="part"
                     class="ds-c-field"
@@ -29,16 +33,16 @@
                 >
                     <option value="" disable selected>Part</option>
                     <option
-                        v-for="p in filteredParts"
-                        :key="p"
-                        :value="p"
+                        v-for="listedPart in filteredParts"
+                        :key="listedPart"
+                        :value="listedPart"
                     >
-                        {{ p }}
+                        {{ listedPart }}
                     </option>
                 </select>
                 <span class="dot">.</span>
                 <input
-                    id="jumpto_section"
+                    id="jumpToSection"
                     v-model="selectedSection"
                     class="number-box ds-c-field"
                     name="section"
@@ -48,16 +52,15 @@
                     title="Regulation section number, i.e. 111"
                     aria-label="Regulation section number, i.e. 111"
                 />
+                <input
+                    id="jumpBtn"
+                    class="submit"
+                    :class="{ active: isActive }"
+                    type="submit"
+                    value="Go"
+                />
             </div>
-            <input
-                id="jump_btn"
-                class="submit"
-                :class="{ active: isActive }"
-                type="submit"
-                value="Go"
-                @click="getLink"
-            />
-        </div>
+        </form>
     </div>
 </template>
 <script>
@@ -145,10 +148,10 @@ export default {
             const partsList = await getParts(this.apiurl, title);
             this.filteredParts = partsList.map((part) => part.name);
         },
-        getLink() {
+        getLink(e) {
             let link = `${this.base}/goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
             if (this.selectedSection !== "") {
-                link += `&section=${this.selectedSection}&${this.selectedpart}-version='latest'`;
+                link += `&section=${this.selectedSection}&-version='latest'`;
             }
 
             window.location.href = link;
