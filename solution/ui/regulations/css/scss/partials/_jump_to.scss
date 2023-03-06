@@ -109,3 +109,12 @@
         font-size: $font-size-lg;
     }
 }
+select#jumpToPart,
+input#jumpToSection,
+input#jumpBtn{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+input#jumpToSection{
+    margin-right: 12px
+}
