@@ -31,17 +31,17 @@ jobs:
       with:
         go-version: '^1.16' # The Go version to download (if necessary) and use.
   
-    # set up build cache
-    - name: Set up build cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/go/pkg/mod
-          ~/go/bin
-          ~/.cache/go-build
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
+    # # set up build cache
+    # - name: Set up build cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       ~/go/pkg/mod
+    #       ~/go/bin
+    #       ~/.cache/go-build
+    #     key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-go-
 
       # Run go fmt on the code
     - name: Run gofmt
