@@ -156,7 +156,12 @@ const getQueryParam = (location, key) => {
  * @param {string} highlightString - string to match
  */
 function addMarks(element, highlightString) {
-    const regex = new RegExp(highlightString, "gi");
+    function escapeRegex(string) {
+        return string.replace(/[/\-\\^$*+?.()|[\]{}]/g, "\\$&");
+    }
+
+    const regex = new RegExp(escapeRegex(highlightString));
+
     if (element.nodeType === document.TEXT_NODE) {
         // note `nodeValue` vs `innerHTML`
         // nodeValue gives inner text without Vue component markup tags;
@@ -164,6 +169,18 @@ function addMarks(element, highlightString) {
         // Currently there is only the tooltip <trigger-btn> tag at beginning
         const text = element.nodeValue;
         if (text.toUpperCase().indexOf(highlightString.toUpperCase()) !== -1) {
+            // ignore citation node at bottom of section
+            if (element?.parentNode?.className === "citation-node") {
+                return;
+            }
+
+            if (element?.parentNode?.nodeName === "A") {
+                const closestParagraph = element.parentNode.closest("p");
+                if (closestParagraph.className === "citation-node") {
+                    return;
+                }
+            }
+
             const innerHtmlOfParentNode = element.parentNode.innerHTML;
             const indexOfText = innerHtmlOfParentNode.indexOf(text);
             const textToKeep = innerHtmlOfParentNode.slice(0, indexOfText);
@@ -173,7 +190,7 @@ function addMarks(element, highlightString) {
                 "<mark class='highlight'>$&</mark>"
             );
             element.parentNode.innerHTML = textToKeep + newText;
-            return true;
+            return;
         }
     } else if (element.nodeType === document.ELEMENT_NODE) {
         for (let i = 0; i < element.childNodes.length; i++) {
@@ -199,7 +216,9 @@ const highlightText = (location, paramKey) => {
         if (targetedSection) {
             const textArr = textToHighlight.split(",");
             textArr.forEach((text) => {
-                addMarks(targetedSection, text);
+                if (text.length > 1) {
+                    addMarks(targetedSection, text);
+                }
             });
         }
     }

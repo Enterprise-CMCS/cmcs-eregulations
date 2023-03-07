@@ -2,7 +2,12 @@
     <div class="reg-results-container">
         <slot name="empty-state"></slot>
         <template v-for="(result, i) in results">
-            <RegResultsItem :key="i" :base="base" :result="result" />
+            <RegResultsItem
+                :key="i"
+                :base="base"
+                :result="result"
+                :query="query"
+            />
         </template>
     </div>
 </template>
@@ -25,6 +30,10 @@ export default {
         results: {
             type: Array,
             default: () => [],
+        },
+        query: {
+            type: String,
+            default: "",
         },
     },
 };
