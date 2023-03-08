@@ -14,7 +14,7 @@ from resources.models import (
     FederalRegisterDocument,
 )
 
-from resources.v3serializers.resources import (
+from resources.serializers.resources import (
     AbstractResourcePolymorphicSerializer,
     SupplementalContentSerializer,
     FederalRegisterDocumentCreateSerializer,
@@ -23,7 +23,7 @@ from resources.v3serializers.resources import (
     MetaResourceSerializer,
 )
 
-from regcore.views import SettingsAuthentication
+from common.auth import SettingsAuthentication
 
 
 @extend_schema(
