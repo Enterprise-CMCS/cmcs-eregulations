@@ -7,10 +7,10 @@ from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from solo.models import SingletonModel
+import re
 
 
 # Field mixins
-
 class InternalNotesFieldMixin(models.Model):
     internal_notes = models.TextField(null=True, blank=True)
 
@@ -72,6 +72,36 @@ class AbstractCategoryQuerySet(InheritanceQuerySet):
                 output_field=models.BooleanField()
             )
         )
+
+
+class NaturalSortField(models.CharField):
+    def __init__(self, for_field, **kwargs):
+        self.for_field = for_field
+        kwargs.setdefault('db_index', True)
+        kwargs.setdefault('editable', False)
+        kwargs.setdefault('max_length', 255)
+        super(NaturalSortField, self).__init__(**kwargs)
+        self.max_length = kwargs['max_length']
+
+    def deconstruct(self):
+        name, path, args, kwargs = super(NaturalSortField, self).deconstruct()
+        args.append(self.for_field)
+        return name, path, args, kwargs
+
+    def pre_save(self, model_instance, add):
+        return self.naturalize(getattr(model_instance, self.for_field))
+
+    def naturalize(self, string):
+        def naturalize_int_match(match):
+            return '%08d' % (int(match.group(0)),)
+        if string:
+            string = string.lower()
+            string = string.strip()
+            string = re.sub(r'^the\s+', '', string)
+            string = re.sub(r'\d+', naturalize_int_match, string)
+            string = string[:self.max_length]
+
+        return string
 
 
 class AbstractCategory(models.Model, DisplayNameFieldMixin):
@@ -200,6 +230,9 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
 
 class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
+    name_sort = NaturalSortField('name', null=True)
+    description_sort = NaturalSortField('description', null=True)
+
     def __str__(self):
         return f"{self.date} {self.name} {self.description[:50]}"
 
@@ -214,7 +247,9 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     document_number = models.CharField(max_length=255, blank=True, null=True)
     correction = models.BooleanField(default=False)
     withdrawal = models.BooleanField(default=False)
+    name_sort = NaturalSortField('name', null=True)
 
+    description_sort = NaturalSortField('description', null=True)
     doc_type = models.CharField(
         blank=True,
         max_length=255
