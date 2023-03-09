@@ -231,8 +231,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
 
 class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
-    name_sort = NaturalSortField('name', null=True)
-    description_sort = NaturalSortField('description', null=True)
 
     def __str__(self):
         return f"{self.date} {self.name} {self.description[:50]}"

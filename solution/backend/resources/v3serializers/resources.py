@@ -118,7 +118,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     name = serializers.CharField(allow_blank=True, allow_null=True)
-    name_sort = serializers.CharField(allow_blank=True, allow_null=True,required=False)
+    name_sort = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     description_sort = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField(allow_blank=True, allow_null=True)
