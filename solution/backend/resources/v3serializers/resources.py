@@ -1,3 +1,4 @@
+import re
 from rest_framework import serializers
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema_field, OpenApiTypes
@@ -11,7 +12,6 @@ from resources.models import (
     Category,
     AbstractCategory,
     Section,
-    NaturalSortField,
     AbstractLocation,
 )
 
@@ -118,8 +118,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     name = serializers.CharField(allow_blank=True, allow_null=True)
-    name_sort = serializers.CharField(allow_blank=True, allow_null=True)
-    description_sort = serializers.CharField(allow_blank=True, allow_null=True)
+    name_sort = serializers.CharField(allow_blank=True, allow_null=True,required=False)
+    description_sort = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField(allow_blank=True, allow_null=True)
     date = serializers.CharField(allow_blank=True, allow_null=True)
@@ -150,11 +150,11 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         created = self.context.get("created", False)
         sections = validated_data.get("sections", []) or []
         section_ranges = validated_data.get("section_ranges", []) or []
+        name = validated_data.get('name', instance.name)
+        description = validated_data.get('description', instance.description)
 
         # set basic fields and group if instance is new
         if created:
-            name = validated_data.get('name', instance.name)
-            description = validated_data.get('description', instance.description)
 
             instance.url = validated_data.get('url', instance.url)
             instance.description = description
@@ -185,9 +185,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             return '%08d' % (int(match.group(0)),)
 
         if string:
-            string = string.lower()
-            string = string.strip()
-            string = re.sub(r'\d+', naturalize_int_match, string)
+            string = re.sub(r'\d+', naturalize_int_match, string.lower().strip())
 
         return string
 

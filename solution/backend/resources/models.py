@@ -46,34 +46,6 @@ class DateFieldMixin(models.Model):
         abstract = True
 
 
-class TypicalResourceFieldsMixin(DateFieldMixin, InternalNotesFieldMixin):
-    name = models.CharField(max_length=512, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    url = models.URLField(max_length=512, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-
-class DisplayNameFieldMixin:
-    @property
-    def display_name(self):
-        return str(self)
-
-
-# Category types
-# Current choice is one model per level due to constraint of exactly 2 levels.
-
-class AbstractCategoryQuerySet(InheritanceQuerySet):
-    def contains_fr_docs(self):
-        return self.annotate(
-            is_fr_doc_category=models.ExpressionWrapper(
-                ~models.Q(fr_doc_category_config=None),
-                output_field=models.BooleanField()
-            )
-        )
-
-
 class NaturalSortField(models.CharField):
     def __init__(self, for_field, **kwargs):
         self.for_field = for_field
@@ -101,6 +73,36 @@ class NaturalSortField(models.CharField):
             string = string[:self.max_length]
 
         return string
+
+
+class TypicalResourceFieldsMixin(DateFieldMixin, InternalNotesFieldMixin):
+    name = models.CharField(max_length=512, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    url = models.URLField(max_length=512, null=True, blank=True)
+    name_sort = NaturalSortField('name', null=True)
+    description_sort = NaturalSortField('description', null=True)
+
+    class Meta:
+        abstract = True
+
+
+class DisplayNameFieldMixin:
+    @property
+    def display_name(self):
+        return str(self)
+
+
+# Category types
+# Current choice is one model per level due to constraint of exactly 2 levels.
+
+class AbstractCategoryQuerySet(InheritanceQuerySet):
+    def contains_fr_docs(self):
+        return self.annotate(
+            is_fr_doc_category=models.ExpressionWrapper(
+                ~models.Q(fr_doc_category_config=None),
+                output_field=models.BooleanField()
+            )
+        )
 
 
 class AbstractCategory(models.Model, DisplayNameFieldMixin):
@@ -246,9 +248,7 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     document_number = models.CharField(max_length=255, blank=True, null=True)
     correction = models.BooleanField(default=False)
     withdrawal = models.BooleanField(default=False)
-    name_sort = NaturalSortField('name', null=True)
 
-    description_sort = NaturalSortField('description', null=True)
     doc_type = models.CharField(
         blank=True,
         max_length=255
