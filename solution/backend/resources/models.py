@@ -97,7 +97,6 @@ class NaturalSortField(models.CharField):
         if string:
             string = string.lower()
             string = string.strip()
-            string = re.sub(r'^the\s+', '', string)
             string = re.sub(r'\d+', naturalize_int_match, string)
             string = string[:self.max_length]
 

@@ -11,6 +11,7 @@ from resources.models import (
     Category,
     AbstractCategory,
     Section,
+    NaturalSortField,
     AbstractLocation,
 )
 
@@ -117,6 +118,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     url = serializers.URLField(allow_blank=True, allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
     name = serializers.CharField(allow_blank=True, allow_null=True)
+    name_sort = serializers.CharField(allow_blank=True, allow_null=True)
+    description_sort = serializers.CharField(allow_blank=True, allow_null=True)
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField(allow_blank=True, allow_null=True)
     date = serializers.CharField(allow_blank=True, allow_null=True)
@@ -150,9 +153,14 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
         # set basic fields and group if instance is new
         if created:
+            name = validated_data.get('name', instance.name)
+            description = validated_data.get('description', instance.description)
+
             instance.url = validated_data.get('url', instance.url)
-            instance.description = validated_data.get('description', instance.description)
-            instance.name = validated_data.get('name', instance.name)
+            instance.description = description
+            instance.description_sort = self.naturalize(description)
+            instance.name = name
+            instance.name_sort = self.naturalize(name)
             instance.docket_numbers = validated_data.get('docket_numbers', instance.docket_numbers)
             instance.document_number = validated_data.get('document_number', instance.document_number)
             instance.date = validated_data.get('date', instance.date)
@@ -171,6 +179,17 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         # save and return
         instance.save()
         return instance
+
+    def naturalize(self, string):
+        def naturalize_int_match(match):
+            return '%08d' % (int(match.group(0)),)
+
+        if string:
+            string = string.lower()
+            string = string.strip()
+            string = re.sub(r'\d+', naturalize_int_match, string)
+
+        return string
 
     def get_location_objects(self, locations):
         queries = []
