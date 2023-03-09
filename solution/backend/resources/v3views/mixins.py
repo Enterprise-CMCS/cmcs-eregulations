@@ -264,7 +264,9 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         if search_query and sort_method == "relevance":
             return query.distinct().order_by("-rank")
         elif sort_method == "oldest":
-            return query.distinct().order_by(F("date_annotated").asc(nulls_last=True))
+            return query.distinct().order_by(F("date_annotated").asc(nulls_last=True),
+                                             F("annotated_name_sort").asc(nulls_last=True),
+                                             F("annotated_description_sort").asc(nulls_last=True))
         else:
             return query.order_by(F("date_annotated").desc(nulls_last=True),
                                   F("annotated_name_sort").asc(nulls_last=True),
