@@ -155,7 +155,6 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
         # set basic fields and group if instance is new
         if created:
-
             instance.url = validated_data.get('url', instance.url)
             instance.description = description
             instance.description_sort = self.naturalize(description)

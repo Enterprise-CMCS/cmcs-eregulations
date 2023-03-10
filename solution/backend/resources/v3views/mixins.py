@@ -271,4 +271,3 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             return query.order_by(F("date_annotated").desc(nulls_last=True),
                                   F("annotated_name_sort").asc(nulls_last=True),
                                   F("annotated_description_sort").asc(nulls_last=True)).distinct()
-        return query.order_by(F("date_annotated").desc(nulls_last=True)).distinct()
