@@ -29,6 +29,8 @@ provider:
     BASE_URL: ${ssm:/eregulations/base_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url}
     SURVEY_URL: ${ssm:/eregulations/survey_url}
+  tracing:
+    apiGateway: true
   vpc:
     securityGroupIds:
       - !Ref ServerlessSecurityGroup
