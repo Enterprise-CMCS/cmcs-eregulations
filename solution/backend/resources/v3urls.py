@@ -8,6 +8,9 @@ from resources.v3views import (
 
 
 urlpatterns = [
+    path("search", resources.ResourceSearchViewSet.as_view({
+      "get": "list",
+    })),
     path("", resources.AbstractResourceViewSet.as_view({
         "get": "list",
     })),

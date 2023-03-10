@@ -1,9 +1,15 @@
+import json
+import requests
+import logging
+
 from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db import transaction
-from django.db.models import Case, When, F
+from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 
 from .mixins import ResourceExplorerViewSetMixin, FRDocGroupingMixin
 from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
@@ -12,6 +18,8 @@ from resources.models import (
     AbstractResource,
     SupplementalContent,
     FederalRegisterDocument,
+    AbstractLocation,
+    AbstractCategory,
 )
 
 from resources.v3serializers.resources import (
@@ -21,6 +29,7 @@ from resources.v3serializers.resources import (
     FederalRegisterDocumentSerializer,
     StringListSerializer,
     MetaResourceSerializer,
+    ResourceSearchSerializer,
 )
 
 from regcore.views import SettingsAuthentication
@@ -34,6 +43,85 @@ from regcore.views import SettingsAuthentication
     parameters=ResourceExplorerViewSetMixin.PARAMETERS,
     responses=MetaResourceSerializer.many(True),
 )
+class ResourceSearchViewSet(viewsets.ModelViewSet):
+    serializer_class = ResourceSearchSerializer
+    limit = 50
+
+    def get_annotated_url(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__url")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__url")),
+            default=None,
+        )
+
+    def get_gov_results(self, query, page):
+        key = 'M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4='
+        offset = (page - 1) * self.limit
+        results = []
+        rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}&query={query}&limit={self.limit}&offset={offset}'
+        gov_results = json.loads(requests.get(rstring).text)
+
+        if "errors" in gov_results or (gov_results["web"]["total"] == 0 and not gov_results["web"]["results"]):
+            raise NotFound("Invalid page")
+
+        for gov_result in gov_results['web']['results']:
+            result = {
+                'name': gov_result['title'],
+                'snippet': gov_result['snippet'],
+                'url': gov_result['url']
+            }
+            results.append(result)
+        
+        return {
+            "total": gov_results["web"]["total"],
+            "results": results,
+        }
+
+    def get_queryset(self):
+        urls = [i['url'] for i in self.gov_results["results"]]
+
+        locations_prefetch = AbstractLocation.objects.all().select_subclasses()
+        category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+
+        return AbstractResource.objects \
+            .filter(approved=True) \
+            .annotate(url_annotated=self.get_annotated_url()) \
+            .filter(url_annotated__in=urls) \
+            .select_subclasses().prefetch_related(
+                Prefetch("locations", queryset=locations_prefetch),
+                Prefetch("category", queryset=category_prefetch),
+                Prefetch("related_resources", AbstractResource.objects.all().select_subclasses().prefetch_related(
+                    Prefetch("locations", queryset=locations_prefetch),
+                    Prefetch("category", queryset=category_prefetch),
+                )),
+            )
+
+    def generate_page_url(self, url, page):
+        pass
+
+    def list(self, request, *args, **kwargs):
+        q = self.request.query_params.get("q")
+        page = int(self.request.query_params.get("page", 1))
+
+        self.gov_results = self.get_gov_results(q, page)
+        queryset = self.get_queryset()
+
+        #print("----> self gov results are  {} ",self.gov_results["results"])
+        for q in queryset:
+            q.description = snippet = [r['snippet'] for r in self.gov_results["results"] if r['url'] == q.url][0]
+        #next = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
+        #previous = page - 1 if page > 1 else None
+
+        obj = {
+            "count": self.gov_results["total"],
+            "next": "next page",
+            "previous": "previous page",
+            "results": queryset,
+        }
+
+        return Response(ResourceSearchSerializer(instance=obj).data)
+
+
 class AbstractResourceViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = AbstractResourcePolymorphicSerializer
     model = AbstractResource
@@ -48,7 +136,7 @@ class AbstractResourceViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, 
     def get_annotated_group(self):
         return Case(
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
-            default=-1*F("pk"),
+            default=-1 * F("pk"),
         )
 
     def get_search_fields(self):

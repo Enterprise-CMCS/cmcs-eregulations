@@ -416,7 +416,7 @@ const getSupplementalContentV3 = async (
 
     sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     sString = `${sString}&fr_grouping=${fr_grouping}`
-    const response = await httpApiGetV3(`resources/?${sString}`)
+    const response = await httpApiGetV3(`resources/search?${sString}`)
     return response;
 
 }
