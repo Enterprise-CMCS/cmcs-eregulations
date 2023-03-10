@@ -95,7 +95,7 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
 
     def to_representation(self, instance):
         obj = super().to_representation(instance)
-        if not self.context['fr_grouping']:
+        if not self.context.get("fr_grouping", False):
             del obj["related_docs"]
             return obj
         docs = [obj] + obj["related_docs"]
@@ -103,6 +103,13 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
         docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
         docs[0]["related_docs"] = docs[1:]
         return docs[0]
+
+
+class ResourceSearchSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    next = serializers.CharField()
+    previous = serializers.CharField()
+    results = AbstractResourcePolymorphicSerializer(many=True)
 
 
 MetaResourceSerializer = ProxySerializerWrapper(

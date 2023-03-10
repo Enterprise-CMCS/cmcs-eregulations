@@ -404,9 +404,8 @@ const getSupplementalContent = async (
 
     sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     sString = `${sString}&fr_grouping=${fr_grouping}`
-    const response = await httpApiGet(`resources/?${sString}`)
+    const response = await httpApiGet(`resources/search?${sString}`)
     return response;
-
 }
 
 const getCategories = async () =>  httpApiGet("resources/categories");
