@@ -10,7 +10,7 @@
             >
             ({{ resourceCount }})
         </a>
-        <h2 v-if="!requested_categories" id="subpart-resources-heading">
+        <h2 id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
         <div v-if="resource_display" class="resource_btn_container">
@@ -39,7 +39,6 @@ import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
 import {
-    getSupplementalContentByCategory,
     v3GetSupplementalContent,
     getSubpartTOC
 } from "../api";
@@ -104,20 +103,10 @@ export default {
             required: false,
             default: v3GetSupplementalContent,
         },
-        getSupplementalContentByCategory: {
-            type: Function,
-            required: false,
-            default: getSupplementalContentByCategory,
-        },
         resource_display:{
             type: Boolean,
             required: false,
             default: false
-        },
-        requested_categories: {
-            type: String,
-            required: false,
-            default: "",
         },
     },
 
@@ -237,31 +226,21 @@ export default {
         },
         async fetch_content(title, part, location) {
             try {
-                if (this.requested_categories.length > 0) {
-                    // todo convert this to V3 API
-                    this.categories =
-                        await this.getSupplementalContentByCategory(
-                            this.api_url,
-                            this.requested_categories.split(",")
-                        );
-                } else {
-                    await this.get_location_string()
-                    const response = await v3GetSupplementalContent(
-                        this.api_url,
-                        {locations: location || this.joined_locations }
-                    );
+                await this.get_location_string()
+                const response = await v3GetSupplementalContent(
+                    this.api_url,
+                    {locations: location || this.joined_locations }
+                );
 
-                    const subpart_response = await v3GetSupplementalContent(
-                        this.api_url,
-                        {locations: this.joined_locations}
-                    )
-                    if (!this.resourceCount) {
-                        this.resourceCount = subpart_response.length;
-                    }
-
-
-                    this.categories = formatResourceCategories(response);
+                const subpart_response = await v3GetSupplementalContent(
+                    this.api_url,
+                    {locations: this.joined_locations}
+                )
+                if (!this.resourceCount) {
+                    this.resourceCount = subpart_response.length;
                 }
+
+                this.categories = formatResourceCategories(response);
             } catch (error) {
                 console.error(error);
             } finally {

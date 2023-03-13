@@ -5,7 +5,7 @@
         </div>
         <div class="results-section">
             <a
-                :href="createResultLink(result, base)"
+                :href="createResultLink(result, base, query)"
                 v-html="removeQuotes(result.parentHeadline)"
             />
         </div>
@@ -30,21 +30,32 @@ export default {
             type: Object,
             required: true,
         },
+        query: {
+            type: String,
+            default: "",
+        },
     },
 
     methods: {
         removeQuotes(string) {
             return stripQuotes(string);
         },
-        createResultLink(result, base) {
+        createResultLink(result, base, query) {
             // get highlight content from result.headline
-            const highlightedTerms = getTagContent(
+            const highlightedTermsArray = getTagContent(
                 result.headline,
                 "search-highlight"
             );
-            const highlightParams = highlightedTerms
-                ? `?q=${highlightedTerms}`
-                : "";
+
+            const uniqTermsArray = Array.from(
+                new Set([query, ...highlightedTermsArray])
+            );
+
+            const highlightParams =
+                uniqTermsArray.length > 0
+                    ? `?q=${uniqTermsArray.join(",")}`
+                    : "";
+
             return `${base}/${result.part_title}/${result.label[0]}/${
                 result.label[1]
             }/${result.date}/${highlightParams}#${result.label.join("-")}`;
@@ -54,7 +65,7 @@ export default {
     filters: {
         partDocumentTitleLabel(string) {
             return string.toLowerCase();
-        }
+        },
     },
 };
 </script>
