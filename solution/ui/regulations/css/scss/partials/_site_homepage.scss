@@ -219,7 +219,6 @@
 }
 
 .homepage-toc {
-    margin-top: $spacer-2;
 
     @include custom-max(1024) {
         max-width: 100%;
@@ -231,7 +230,7 @@
     }
 
     h1 {
-        margin-top: 0 !important;
+        margin-top: $spacer-2;
         margin-bottom: 0 !important;
         font-size: $base-font-size * 1.8;
 
