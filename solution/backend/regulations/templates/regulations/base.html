@@ -56,9 +56,7 @@ CSS/Javascript etc., should inherit from this template.
                 {% endblock %}
 
                 {% block header %}
-                    <header id="header" class="sticky">
-                        {% include "regulations/partials/header.html" %}
-                    </header>
+                    <header-component></header-component>
                 {% endblock %}
 
                 {% block body %}{% endblock %}
