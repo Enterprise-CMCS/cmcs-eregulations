@@ -7,7 +7,9 @@
             />
         </BlockingModal>
         <FlashBanner />
-        <HeaderComponent></HeaderComponent>
+        <header id="header" class="sticky">
+            <HeaderComponent></HeaderComponent>
+        </header>
         <div id="resourcesApp" class="resources-view">
             <Banner title="Resources">
                 <template #description>

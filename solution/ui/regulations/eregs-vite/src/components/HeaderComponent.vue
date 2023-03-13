@@ -13,11 +13,9 @@ onMounted(() => {});
 </script>
 
 <template>
-    <header id="header" class="sticky">
-        <div class="header--brand">
-            <a href="/">Medicaid &amp; CHIP eRegulations</a>
-        </div>
-    </header>
+    <div class="header--brand">
+        <a href="/">Medicaid &amp; CHIP eRegulations</a>
+    </div>
 </template>
 
 <style></style>

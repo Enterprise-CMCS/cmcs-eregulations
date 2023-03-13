@@ -390,9 +390,8 @@ a {
 
 // For margins and padding: From the CMS Design System, default to $spacer-* where * is a number between 1–7 (i.e. $spacer-2)
 
-$header_height: 80px; // Update if header height changes
-$header_height_tablet: 71px;
-$header_height_mobile: 61px;
+$header_height: 60px; // Update if header height changes
+$header_height_mobile: 120px;
 
 $view_compare_height: 54px;
 

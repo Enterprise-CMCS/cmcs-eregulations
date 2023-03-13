@@ -200,11 +200,7 @@
 :target {
     scroll-margin-top: $header_height_mobile;
 
-    @include screen-md {
-        scroll-margin-top: $header_height_tablet;
-    }
-
-    @include screen-lg {
+    @include custom-min(781) {
         scroll-margin-top: $header_height;
     }
 }

@@ -5,6 +5,7 @@
 @import "../application_settings";
 
 header {
+    min-height: 60px;
     box-sizing: unset;
 
     display: flex;
@@ -28,11 +29,7 @@ header {
             aside {
                 top: $header_height_mobile;
 
-                @include screen-md {
-                    top: $header_height_tablet;
-                }
-
-                @include screen-lg {
+                @include custom-min(781) {
                     top: $header_height;
                 }
             }

@@ -7,7 +7,9 @@
             />
         </BlockingModal>
         <FlashBanner />
-        <HeaderComponent></HeaderComponent>
+        <header id="header" class="sticky">
+            <HeaderComponent></HeaderComponent>
+        </header>
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
                 <template #input>
