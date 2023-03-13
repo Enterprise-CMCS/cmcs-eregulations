@@ -52,7 +52,9 @@ CSS/Javascript etc., should inherit from this template.
                 {% include "../browser_not_supported.html" %}
 
                 {% block flash_banner %}
-                    <flash-banner></flash-banner>
+                    <div class="banner--container">
+                        <flash-banner></flash-banner>
+                    </div>
                 {% endblock %}
 
                 {% block header %}

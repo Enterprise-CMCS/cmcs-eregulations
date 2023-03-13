@@ -183,14 +183,20 @@ $font_size_hero_h1_tablet: 20px;
 // Breakpoints
 //--------------------------
 
+// eRegs Design System (eds)
+
+$eds-width-xs: 320px;
+$eds-width-sm: 780px;
+$eds-width-md: 1024px;
+$eds-width-lg: 1440px;
+
+// Uses CMS Design System + a larger screen size
+
 // Custom maxes
 $tablet-max: $width-lg - 1; // 1023px
 $mobile-max: $width-md - 1; // 767px
 $iphoneSE-max: $width-xs - 1; // 374px
-
 $hero-tablet-max: 1080px;
-
-// Uses CMS Design System + a larger screen size
 
 $width-xxs: 320px;
 $width-xs: 375px;

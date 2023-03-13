@@ -11,8 +11,12 @@ header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 60px;
+    height: $header_height_mobile;
     padding: 0 20px;
+
+    @include custom-min($eds-width-sm / 1px) {
+        height: $header_height;
+    }
 
     // Sticky Header and Content Adjustments
 
@@ -29,7 +33,7 @@ header {
             aside {
                 top: $header_height_mobile;
 
-                @include custom-min(781) {
+                @include custom-min($eds-width-sm / 1px) {
                     top: $header_height;
                 }
             }
@@ -42,7 +46,7 @@ header {
         &::placeholder {
             color: $secondary_text_color;
             font-weight: 600;
-                height: 45px;
+            height: 45px;
         }
     }
 
@@ -60,7 +64,7 @@ header {
         font-size: $font-size-lg;
         line-height: 36px;
 
-        @include custom-max(780) {
+        @include custom-max(($eds-width-md - 1) / 1px) {
             font-size: $font-size-sm;
             line-height: 18px;
         }

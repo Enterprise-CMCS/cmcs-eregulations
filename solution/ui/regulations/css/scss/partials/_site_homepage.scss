@@ -200,7 +200,7 @@
 :target {
     scroll-margin-top: $header_height_mobile;
 
-    @include custom-min(781) {
+    @include custom-min($eds-width-sm / 1px) {
         scroll-margin-top: $header_height;
     }
 }
