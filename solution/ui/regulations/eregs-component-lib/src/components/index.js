@@ -33,4 +33,5 @@ export { default as CopyCitation } from "./tooltips/CopyCitation.vue";
 export { default as GovInfoLinks } from "./tooltips/GovInfoLinks.vue";
 export { default as TooltipContainer } from "./tooltips/TooltipContainer.vue";
 
-// Other components you plan to publish go here
+// from Single Page App
+export { default as HeaderComponent } from "../../../eregs-vite/src/components/HeaderComponent.vue";

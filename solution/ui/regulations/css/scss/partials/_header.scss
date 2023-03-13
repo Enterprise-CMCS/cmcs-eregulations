@@ -7,6 +7,12 @@
 header {
     box-sizing: unset;
 
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+
     // Sticky Header and Content Adjustments
 
     &.sticky {
@@ -33,292 +39,48 @@ header {
         }
     }
 
-    display: flex;
-    flex-direction: row;
+    .search-header input {
+        height: 40px;
 
-    .search-header input::placeholder {
-        color: $secondary_text_color;
-        font-weight: 600;
-    }
-
-    @include screen-lg {
-        height: 80px;
-        padding: 0 25px;
-
-        .search-header input {
-            height: 45px;
+        &::placeholder {
+            color: $secondary_text_color;
+            font-weight: 600;
+                height: 45px;
         }
     }
 
-    @include custom-max($tablet-max / 1px) {
-        height: 70px;
-        padding: 0 25px;
-
-        .search-header input {
-            height: 40px;
-
-            &::placeholder {
-                font-size: $font_size_sm;
-            }
-        }
-    }
-
-    @include custom-max($mobile-max / 1px) {
-        align-items: center;
-        height: 60px;
-        padding: 0 7px 0 20px;
-
-        .search-header input {
-            height: 40px;
-
-            &::placeholder {
-                font-size: $font_size_sm;
-            }
-        }
-    }
-
-    a {
+    @mixin header__anchor {
         text-decoration: none;
         color: $secondary_link_color;
-
-        &:visited {
-            color: $secondary_link_color;
-        }
-
-        &:hover {
-            color: $secondary_link_hover;
-        }
     }
 
-    .flexbox {
-        align-items: center;
-        display: flex;
-        position: relative;
-        flex-direction: row;
-
-        &.header-mobile {
-            height: 48px;
-
-            @include screen-md {
-                display: none;
-            }
-
-            button {
-                flex: 0 0 48px;
-                height: 48px;
-                cursor: pointer;
-                border: none;
-                background: none;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: $mid_blue;
-
-                @include custom-max($iphoneSE-max / 1px) {
-                    flex: 0 0 36px;
-                }
-
-                &#mobile-search-open {
-                    &[data-state="collapsed"] {
-                        display: none;
-                    }
-
-                    &[data-state="expanded"] {
-                        ~ #mobile-search-close,
-                        ~ .search-borderless {
-                            display: none;
-                        }
-                    }
-                }
-            }
-        }
-
-        &.header-large {
-            @include custom-max($mobile-max / 1px) {
-                display: none;
-            }
-        }
+    @mixin header__anchor--bold {
+        @include header__anchor;
+        font-weight: 700;
     }
 
-    .mobile-titles {
-        flex: 1;
-
-        &[data-state="collapsed"] {
-            display: none;
-        }
-    }
-
-    .title-container {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        align-items: flex-start;
-
-        @include screen-lg {
-            align-items: center;
-            flex-direction: row;
-        }
-    }
-
-    .site-title {
-        font-size: $font_size_sm;
-        font-weight: normal;
-
-        @include screen-lg {
-            font-size: $font-size-xl;
-            font-weight: 700;
-            line-height: 36px;
-            display: inline-block;
-        }
-
-        &.homepage-site-title {
-            @include custom-max($tablet-max / 1px) {
-                font-size: $font-size-md;
-                font-weight: 700;
-            }
-        }
-    }
-
-    .reg-title {
-        display: block;
-        flex: 2;
-        padding-right: $spacer-2;
+    @mixin header--brand-type {
         font-size: $font-size-lg;
+        line-height: 36px;
 
-        @include screen-lg {
-                font-size: $font-size-md;
-                line-height: 24px;
-                padding-left: $spacer-2;
-                margin-left: $spacer-2;
-        
-                &.part {
-                    border-left: 1px solid $border_color;
-                }
-        
-        
-            }
-    
-        a {
-            max-width: $text-max-width;
-            display: inline-block;
-        }
-        .flex-container {
-            display:flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            width: 100%;
-            align-items:center;
-            justify-content: space-between;
-            .flex-header{
-                flex: 1 0;
-            }
-
-            .view-resources-btn {
-                flex: 0 1 auto;
-                @include custom-max($tablet-max / 1px) {
-                    display: none;
-                }
-            }
+        @include custom-max(780) {
+            font-size: $font-size-sm;
+            line-height: 18px;
         }
     }
 
-    .header-part-name {
-        @include custom-max(1290) {
-            display: none;
-        }
-    }
+    .header--brand {
+        @include header--brand-type;
 
-    .search-borderless {
-        flex: 1;
-        height: 100%;
         display: flex;
+        align-items: center;
+        padding-right: 20px;
+        height: 100%;
 
-        input {
-            padding: 0 $spacer-1;
-            border: 0;
-            width: 100%;
-        }
-    }
-}
+        border-right: 1px solid $light_gray;
 
-.search-header {
-    flex: 0 0 48px;
-    height: 48px;
-
-    .search-submit {
-        position: absolute;
-        right: 0;
-        border-left: none;
-        height: 40px;
-        width: 40px;
-        box-sizing: border-box;
-
-        .fa {
-            font-size: 16px;
-        }
-    }
-
-    @include screen-md {
-        flex: 0 0 230px;
-        height: auto;
-
-        svg {
-            display: none;
-        }
-    }
-
-    .search-box {
-        display: none;
-        input{
-            width: calc(100% - 32px);
-        }
-        @include screen-md {
-            width: 230px;
-            display: inline-block;
-        }
-
-        @include screen-lg {
-            width: 250px;
-            display: inline-block;
-
-            .search-submit {
-                height: 45px;
-                width: 48px;
-                line-height: 16px;
-            }
-        }
-
-        @include screen-xl {
-            width: 310px;
-        }
-
-        @include screen-xxl {
-            width: 330px;
-        }
-
-        input {
-            border: 1px solid $border_color;
-            border-right: none;
-        }
-    }
-}
-
-// Search Results Page
-
-.search-page {
-    header {
-        &.sticky + .content aside {
-            @include screen-lg {
-                top: calc(#{$header_height} - 5px);
-            }
-        }
-
-        .reg-title:after {
-
-            @include screen-lg {
-                margin-top: 5px;
-                display: inline-block;
-            }
+        a {
+            @include header__anchor--bold;
         }
     }
 }
