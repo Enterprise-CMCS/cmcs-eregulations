@@ -158,7 +158,7 @@ import {
     getCategories,
     getFormattedPartsList,
     getSubPartsForPart,
-    getSupplementalContentV3,
+    getSupplementalContent,
     getLastUpdatedDates,
     getSectionsForPart,
     getSubpartTOC,
@@ -612,7 +612,7 @@ export default {
 
             if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
-                const responseContent = await getSupplementalContentV3({
+                const responseContent = await getSupplementalContent({
                     page: this.page,
                     page_size: this.pageSize,
                     partDict: this.partDict,
@@ -634,7 +634,7 @@ export default {
                 }
             } else if (searchQuery) {
                 try {
-                    const searchResults = await getSupplementalContentV3({
+                    const searchResults = await getSupplementalContent({
                         page: this.page,
                         page_size: this.pageSize,
                         partDict: "all", // titles
@@ -654,7 +654,7 @@ export default {
                     this.isLoading = false;
                 }
             } else {
-                const allResults = await getSupplementalContentV3({
+                const allResults = await getSupplementalContent({
                     page: this.page,
                     page_size: this.pageSize,
                     partDict: "all", // titles
