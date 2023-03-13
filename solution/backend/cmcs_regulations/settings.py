@@ -83,6 +83,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'django.core.context_processors.request',
     'regulations.context_processors.site_config',
+    'cmcs_regulations.context_processors.api_base',
     'regcore.context_processors.regcore_config',
 )
 
@@ -113,6 +114,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.custom_url",
                 "cmcs_regulations.context_processors.survey_url",
                 "cmcs_regulations.context_processors.automated_testing",
+                'cmcs_regulations.context_processors.api_base',
                 'regulations.context_processors.site_config',
                 'regcore.context_processors.regcore_config',
             ),
@@ -179,7 +181,7 @@ USE_TZ = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-API_BASE = os.environ.get('EREGS_API_BASE', '')
+API_BASE = "/v3/"
 
 GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 

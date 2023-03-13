@@ -23,3 +23,9 @@ def automated_testing(request):
     return {
         "AUTOMATED_TEST": request.META.get("HTTP_X_AUTOMATED_TEST") == "true"
     }
+
+
+def api_base(request):
+    return {
+        "API_BASE": settings.API_BASE,
+    }

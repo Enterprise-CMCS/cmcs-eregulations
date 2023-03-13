@@ -22,7 +22,6 @@ services:
       HTTP_AUTH_USER: RpSS01rhbx
       HTTP_AUTH_PASSWORD: UkOAsfkItN
       PYTHONPATH: /var/lib/eregs
-      EREGS_API_BASE: http://regulations:8000/
       STATIC_URL: http://localhost:8888/
       STATIC_ROOT: /app/static-assets/regulations
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
