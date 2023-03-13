@@ -76,8 +76,19 @@ header {
 
             border-right: 1px solid $light_gray;
 
+            @include custom-max(($eds-width-md - 1) / 1px) {
+                padding-right: 0;
+                flex: 0 0 140px;
+            }
+
             a {
                 @include header__anchor--bold;
+
+                br {
+                    @include custom-min($eds-width-md / 1px) {
+                        display: none;
+                    }
+                }
             }
         }
 

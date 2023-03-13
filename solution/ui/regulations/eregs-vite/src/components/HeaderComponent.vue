@@ -15,7 +15,7 @@ onMounted(() => {});
 <template>
     <div class="header--content-container">
         <div class="header--brand">
-            <a href="/">Medicaid &amp; CHIP eRegulations</a>
+            <a href="/">Medicaid &amp; <br/>CHIP eRegulations</a>
         </div>
         <div class="header--jump-to">
         </div>
