@@ -34,6 +34,8 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
   deploymentBucket:
       blockPublicAccess: true
+  tracing:
+    apiGateway: true
 package:
   #patterns:
   #  - '!node_modules/**'
