@@ -38,7 +38,7 @@ class AbstractResourceSerializer(serializers.Serializer):
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
-
+    snippet = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     locations = serializers.SerializerMethodField()
 
@@ -55,6 +55,13 @@ class AbstractResourceSerializer(serializers.Serializer):
         if self.context.get("location_details", True):
             return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
         return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
+
+    def get_snippet(self, obj):
+        if 'gov_results' in self.context and hasattr(obj, 'url'):
+            snippet = [r['snippet'] for r in self.context['gov_results'] if r['url'] == obj.url]
+            return snippet[0] if snippet else None
+        else:
+            return None
 
 
 class DateFieldSerializer(serializers.Serializer):
