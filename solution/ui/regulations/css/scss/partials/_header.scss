@@ -40,48 +40,97 @@ header {
         }
     }
 
-    .search-header input {
-        height: 40px;
-
-        &::placeholder {
-            color: $secondary_text_color;
-            font-weight: 600;
-            height: 45px;
-        }
-    }
-
-    @mixin header__anchor {
-        text-decoration: none;
-        color: $secondary_link_color;
-    }
-
-    @mixin header__anchor--bold {
-        @include header__anchor;
-        font-weight: 700;
-    }
-
-    @mixin header--brand-type {
-        font-size: $font-size-lg;
-        line-height: 36px;
-
-        @include custom-max(($eds-width-md - 1) / 1px) {
-            font-size: $font-size-sm;
-            line-height: 18px;
-        }
-    }
-
-    .header--brand {
-        @include header--brand-type;
-
+    .header--content-container {
         display: flex;
-        align-items: center;
-        padding-right: 20px;
         height: 100%;
+        width: 100%;
 
-        border-right: 1px solid $light_gray;
+        @mixin header__anchor {
+            text-decoration: none;
+            color: $secondary_link_color;
+        }
 
-        a {
-            @include header__anchor--bold;
+        @mixin header__anchor--bold {
+            @include header__anchor;
+            font-weight: 700;
+        }
+
+        @mixin header--brand-type {
+            font-size: $font-size-lg;
+            line-height: 36px;
+
+            @include custom-max(($eds-width-md - 1) / 1px) {
+                font-size: $font-size-sm;
+                line-height: 18px;
+            }
+        }
+
+        .header--brand {
+            @include header--brand-type;
+
+            display: flex;
+            align-items: center;
+            flex: 0 0 270px;
+            padding-right: 20px;
+            height: 100%;
+
+            border-right: 1px solid $light_gray;
+
+            a {
+                @include header__anchor--bold;
+            }
+        }
+
+        .header--jump-to {
+            flex: 1 0;
+        }
+
+        .header--links-search {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex: 0 0 340px;
+
+            .header--links {
+            }
+
+            .header--search {
+                .search__form {
+                    input {
+                        height: 40px;
+                        padding: $spacer-1 $spacer-2;
+                        border: 1px solid $light_gray;
+                        border-right: none;
+                        border-radius: 3px 0 0 3px;
+                        outline: none;
+
+                        &::placeholder {
+                            color: $secondary_text_color;
+                            font-weight: 600;
+                            height: 40px;
+                        }
+                    }
+                    .search__button--submit {
+                        height: 40px;
+                        width: 40px;
+                        box-sizing: border-box;
+                        border: 1px solid $light_gray;
+                        border-left: none;
+                        border-radius: 0 3px 3px 0;
+
+                        &:hover {
+                            .fa {
+                                color: $primary_link_hover;
+                            }
+                        }
+
+                        .fa {
+                            font-size: 16px;
+                            color: $primary_link_color;
+                        }
+                    }
+                }
+            }
         }
     }
 }
