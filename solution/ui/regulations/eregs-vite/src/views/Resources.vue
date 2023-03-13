@@ -6,7 +6,8 @@
                 title="Google Forms iframe"
             />
         </BlockingModal>
-        <FlashBanner where-used="vite" />
+        <FlashBanner />
+        <HeaderComponent></HeaderComponent>
         <div id="resourcesApp" class="resources-view">
             <Banner title="Resources">
                 <template #description>
@@ -149,7 +150,9 @@ import _uniq from "lodash/uniq";
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
+
 import Banner from "@/components/Banner.vue";
+import HeaderComponent from "@/components/HeaderComponent.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResultsContainer from "@/components/resources/ResourcesResultsContainer.vue";
@@ -172,6 +175,7 @@ export default {
         Banner,
         BlockingModal,
         FlashBanner,
+        HeaderComponent,
         IFrameContainer,
         ResourcesFilters,
         ResourcesSelections,
