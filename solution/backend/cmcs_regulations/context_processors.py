@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.urls import reverse
 
 
 def google_analytics(request):
@@ -27,5 +28,5 @@ def automated_testing(request):
 
 def api_base(request):
     return {
-        "API_BASE": settings.API_BASE,
+        "API_BASE": reverse("homepage")[0:-1] + settings.API_BASE,
     }
