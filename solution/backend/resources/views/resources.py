@@ -107,8 +107,9 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
 
         #print("----> self gov results are  {} ",self.gov_results["results"])
-        for q in queryset:
-            q.description = snippet = [r['snippet'] for r in self.gov_results["results"] if r['url'] == q.url][0]
+        records = list(queryset)
+        for record in records:
+            setattr(record, "snippet", [r['snippet'] for r in self.gov_results["results"] if r['url'] == record.url][0])
         #next = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
         #previous = page - 1 if page > 1 else None
 
@@ -116,10 +117,13 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             "count": self.gov_results["total"],
             "next": "next page",
             "previous": "previous page",
-            "results": queryset,
+            "results": records,
         }
 
-        return Response(ResourceSearchSerializer(instance=obj).data)
+        context = self.get_serializer_context()
+        context["gov_results"] = self.gov_results["results"]
+
+        return Response(ResourceSearchSerializer(instance=obj, context=context).data)
 
 
 class AbstractResourceViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
