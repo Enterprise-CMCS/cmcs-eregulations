@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onBeforeMount, onMounted, onUnmounted, onUpdated } from "vue";
 
+import JumpTo from "./JumpTo.vue";
+
 defineProps({
     defaultProp: {
         type: String,
@@ -18,7 +20,7 @@ onMounted(() => {});
             <a href="/">Medicaid &amp; <br/>CHIP eRegulations</a>
         </div>
         <div class="header--jump-to">
-            Jump To Goes Here
+            <JumpTo />
         </div>
         <div class="header--links-search">
             <div class="header--links">

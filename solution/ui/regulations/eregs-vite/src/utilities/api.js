@@ -213,6 +213,20 @@ function httpApiGet(urlPath, { params } = {}) {
     });
 }
 
+
+// use when components used directly in Django templates
+function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
+    return fetchJson(
+        `${urlPath}`,
+        {
+            method: "GET",
+            params,
+        },
+        0, // retryCount, default
+        apiPath
+    );
+}
+
 function httpApiGetV3(urlPath, { params } = {}) {
     return fetchJson(`${config.apiPathV3}/${urlPath}`, {
         method: "GET",
@@ -434,6 +448,34 @@ const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${titl
 
 const getSynonyms = async(query) => httpApiGetV3(`synonym/${query}`);
 
+/**
+ * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ *
+ * @returns Promise? maybe
+ */
+const getTitles = async (apiUrl) => {
+    if (apiUrl) {
+        const url = apiUrl.replace("/v2/", "/v3/");
+        return httpApiGetLegacy(`${url}titles`);
+    }
+
+    return httpApiGetV3("titles");
+};
+
+/**
+ * @param {string} title - Title number.  Ex: `42` or `45`
+ * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ *
+ * @returns Promise? maybe
+ */
+const getParts = async (title, apiUrl) => {
+    if (apiUrl) {
+        const url = apiUrl.replace("/v2/", "/v3/");
+        return httpApiGetLegacy(`${url}title/${title}/parts`);
+    }
+    return httpApiGetV3(`title/${title}/parts`);
+};
+
 export {
     configure,
     setIdToken,
@@ -455,4 +497,6 @@ export {
     getSubpartTOC,
     getSynonyms,
     getRegSearchResults,
+    getTitles,
+    getParts,
 };
