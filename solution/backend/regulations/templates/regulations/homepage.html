@@ -42,7 +42,7 @@
                             <h1> {{title.label}} </h1>
 
                             {% for child in title.children %}
-                                {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title.identifier.0 %}
+                                {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child API_BASE=API_BASE title=title.identifier.0 %}
                             {% endfor %}
 
                         {% endfor %}

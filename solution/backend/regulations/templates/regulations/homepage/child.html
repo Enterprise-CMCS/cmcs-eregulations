@@ -5,5 +5,5 @@
 
 
 {% for child in children %}
-    {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title%}
+    {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child API_BASE=API_BASE title=title%}
 {% endfor %}
