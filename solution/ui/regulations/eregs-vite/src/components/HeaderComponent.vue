@@ -20,7 +20,7 @@ onMounted(() => {});
             <a href="/">Medicaid &amp; <br/>CHIP eRegulations</a>
         </div>
         <div class="header--jump-to">
-            <JumpTo />
+            <slot name="jump-to"></slot>
         </div>
         <div class="header--links-search">
             <div class="header--links">

@@ -144,7 +144,7 @@ export default {
 
     methods: {
         async getParts(title) {
-            const partsList = await getParts(title, this.apiUrl);
+            const partsList = await getParts(title, this.apiurl);
             this.filteredParts = partsList.map((part) => part.name);
         },
         getLink(e) {
