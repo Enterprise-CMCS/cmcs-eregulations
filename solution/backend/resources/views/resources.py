@@ -45,6 +45,20 @@ class AbstractResourceViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, 
             default=None,
         )
 
+    def get_annotated_name_sort(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__name_sort")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__name_sort")),
+            default=None,
+        )
+
+    def get_annotated_description_sort(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__description_sort")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__description_sort")),
+            default=None,
+        )
+
     def get_annotated_group(self):
         return Case(
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
