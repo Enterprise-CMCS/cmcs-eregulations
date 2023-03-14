@@ -8,7 +8,14 @@
         </BlockingModal>
         <FlashBanner />
         <header id="header" class="sticky">
-            <HeaderComponent></HeaderComponent>
+            <HeaderComponent>
+                <template #jump-to>
+                    <JumpTo />
+                </template>
+                <template #search>
+                    <HeaderSearch />
+                </template>
+            </HeaderComponent>
         </header>
         <div id="resourcesApp" class="resources-view">
             <Banner title="Resources">
@@ -155,6 +162,8 @@ import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vu
 
 import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/HeaderComponent.vue";
+import HeaderSearch from "@/components/HeaderSearch.vue";
+import JumpTo from "@/components/JumpTo.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResultsContainer from "@/components/resources/ResourcesResultsContainer.vue";
@@ -178,7 +187,9 @@ export default {
         BlockingModal,
         FlashBanner,
         HeaderComponent,
+        HeaderSearch,
         IFrameContainer,
+        JumpTo,
         ResourcesFilters,
         ResourcesSelections,
         ResourcesResultsContainer,
