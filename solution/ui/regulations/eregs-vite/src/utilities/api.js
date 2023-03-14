@@ -451,7 +451,7 @@ const getSynonyms = async(query) => httpApiGetV3(`synonym/${query}`);
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
  *
- * @returns Promise? maybe
+ * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
  */
 const getTitles = async (apiUrl) => {
     if (apiUrl) {
@@ -466,7 +466,7 @@ const getTitles = async (apiUrl) => {
  * @param {string} title - Title number.  Ex: `42` or `45`
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
  *
- * @returns Promise? maybe
+ * @returns {Promise <Array<{date: string, depth: number, id: number, last_updated: string, name: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
 const getParts = async (title, apiUrl) => {
     if (apiUrl) {
