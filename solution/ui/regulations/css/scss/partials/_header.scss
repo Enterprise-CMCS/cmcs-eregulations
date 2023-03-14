@@ -45,6 +45,10 @@ header {
         height: 100%;
         width: 100%;
 
+        @include custom-max(($eds-width-sm - 1) / 1px) {
+            flex-wrap: wrap;
+        }
+
         @mixin header__anchor {
             text-decoration: none;
             color: $secondary_link_color;
@@ -70,7 +74,8 @@ header {
 
             display: flex;
             align-items: center;
-            flex: 0 0 270px;
+            width: 270px;
+            order: 1;
             padding-right: 20px;
             height: 100%;
 
@@ -78,8 +83,13 @@ header {
 
             @include custom-max(($eds-width-md - 1) / 1px) {
                 padding-right: 0;
-                flex: 0 0 140px;
+                width: 140px;
             }
+            @include custom-max(($eds-width-sm - 1) / 1px) {
+                width: 49%;
+                height: 50%;
+            }
+
 
             a {
                 @include header__anchor--bold;
@@ -93,14 +103,28 @@ header {
         }
 
         .header--jump-to {
-            flex: 1 0;
+            order: 2;
+            flex: 1;
+
+            @include custom-max(($eds-width-sm - 1) / 1px) {
+                flex: unset;
+                width: 100%;
+                order: 3;
+            }
         }
 
         .header--links-search {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            flex: 0 0 340px;
+            width: 340px;
+            order: 3;
+
+            @include custom-max(($eds-width-sm - 1) / 1px) {
+                width: 49%;
+                height: 50%;
+                order: 2;
+            }
 
             .header--links {
             }
