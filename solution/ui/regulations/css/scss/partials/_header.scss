@@ -88,6 +88,7 @@ header {
             @include custom-max(($eds-width-sm - 1) / 1px) {
                 width: 49%;
                 height: 50%;
+                border-right: none;
             }
 
 
@@ -103,6 +104,8 @@ header {
         }
 
         .header--jump-to {
+            display: flex;
+            align-items: center;
             order: 2;
             flex: 1;
 

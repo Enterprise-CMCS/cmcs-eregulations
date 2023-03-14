@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div class="jump-to-label">Jump to Regulation Section</div>
         <form @submit.prevent="getLink">
             <div class="jump-to-input">
                 <select
@@ -21,7 +20,7 @@
                         {{ listedTitle }} CFR
                     </option>
                 </select>
-                §
+                <span class="section-symbol">§</span>
                 <select
                     id="jumpToPart"
                     v-model="selectedPart"
