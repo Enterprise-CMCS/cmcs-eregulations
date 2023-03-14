@@ -155,6 +155,12 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
     def get_annotated_date(self):
         return F("date")
 
+    def get_annotated_name_sort(self):
+        return F("name_sort")
+
+    def get_annotated_description_sort(self):
+        return F("description_sort")
+
     def get_annotated_group(self):
         return -1*F("pk")
 
@@ -249,12 +255,19 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
             annotations = {**annotations, **self.get_search_headlines(search_query, search_type)}
 
         annotations["date_annotated"] = self.get_annotated_date()
+        annotations["annotated_name_sort"] = self.get_annotated_name_sort()
+        annotations["annotated_description_sort"] = self.get_annotated_description_sort()
+
         query = query.annotate(**annotations)
         query = query.filter(rank__gte=0.2) if search_query else query
 
         if search_query and sort_method == "relevance":
             return query.distinct().order_by("-rank")
         elif sort_method == "oldest":
-            return query.distinct().order_by(F("date_annotated").asc(nulls_last=True))
+            return query.distinct().order_by(F("date_annotated").asc(nulls_last=True),
+                                             F("annotated_name_sort").asc(nulls_last=True),
+                                             F("annotated_description_sort").asc(nulls_last=True))
         else:
-            return query.order_by(F("date_annotated").desc(nulls_last=True)).distinct()
+            return query.order_by(F("date_annotated").desc(nulls_last=True),
+                                  F("annotated_name_sort").asc(nulls_last=True),
+                                  F("annotated_description_sort").asc(nulls_last=True)).distinct()
