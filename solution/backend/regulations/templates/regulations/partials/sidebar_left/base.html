@@ -13,8 +13,8 @@
 {% endblock %}
 
 <div class="toc-header">
-    <p>{{ subchapter }}</p>
-    {{ title }} CFR  {{ part }} - {{ part_label }}
+    <div class="toc-subchapter">{{ subchapter }}</div>
+    <div class="toc-part"> {{ title }} CFR  {{ part }} - <span class="description">{{ part_label }}</span></div> 
 </div>
 
 <nav role="navigation">
