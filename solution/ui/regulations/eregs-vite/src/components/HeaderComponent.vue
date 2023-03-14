@@ -1,8 +1,6 @@
 <script setup>
 import { ref, onBeforeMount, onMounted, onUnmounted, onUpdated } from "vue";
 
-import JumpTo from "./JumpTo.vue";
-
 defineProps({
     defaultProp: {
         type: String,
@@ -24,14 +22,10 @@ onMounted(() => {});
         </div>
         <div class="header--links-search">
             <div class="header--links">
+                <slot name="links"></slot>
             </div>
             <div class="header--search">
-                <form class="search__form" action="">
-                    <input type="search" name="q" placeholder="Search" />
-                    <button type="submit" class="search__button--submit" aria-label="Search">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </form>
+                <slot name="search"></slot>
             </div>
         </div>
     </div>

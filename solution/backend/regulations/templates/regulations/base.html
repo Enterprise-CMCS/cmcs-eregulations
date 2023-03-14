@@ -64,6 +64,10 @@ CSS/Javascript etc., should inherit from this template.
                                 slot="jump-to"
                                 apiurl="{% url 'regcore' %}"
                             ></jump-to>
+                            <header-search
+                                slot="search"
+                                apiurl="{% url 'regcore' %}"
+                            ></header-search>
                         </header-component>
                     </header>
                 {% endblock %}
