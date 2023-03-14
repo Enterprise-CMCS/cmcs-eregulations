@@ -331,7 +331,7 @@ class FederalResourceForm(ResourceForm):
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):
     form = SupContentForm
-    list_display = ("date", "name", "description", "category", "updated_at", "approved")
+    list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
     fields = ("approved", "name", "description", "date", "url", "category",
