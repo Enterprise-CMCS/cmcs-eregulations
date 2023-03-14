@@ -129,7 +129,7 @@ aside.left-sidebar {
 
         background: none;
         border: none;
-        color: $reverse_link_color;
+        color: #CCF2FF;;
         cursor: pointer;
         display: flex;
         justify-content: center;
@@ -177,7 +177,7 @@ aside.left-sidebar {
     }
 
     a {
-        color: $reverse_link_color;
+        color: #CCF2FF;
 
         &:hover,
         &:focus {
@@ -231,7 +231,14 @@ aside.left-sidebar {
         background: $reverse_background_lighter;
     }
 }
+.toc-header {
+    box-sizing: border-box;
+    border-bottom: 1px solid $secondary_border_color;
 
+    p {
+        padding: $spacer-2;
+    }
+}
 // Controls (i.e. Collapse)
 
 .toc-controls {
@@ -240,7 +247,7 @@ aside.left-sidebar {
 
     button {
         outline: none;
-        color: $reverse_link_color;
+        color: #CCF2FF;;
         border: none;
         background: none;
         cursor: pointer;

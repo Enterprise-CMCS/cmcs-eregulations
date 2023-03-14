@@ -12,9 +12,10 @@
     </div>
 {% endblock %}
 
-{% block jump-to %}
-    {% include "regulations/partials/jump_to.html" %}
-{% endblock %}
+<div class="toc-header">
+    <p>{{ subchapter }}</p>
+    {{ title }} CFR  {{ part }} - {{ part_label }}
+</div>
 
 <nav role="navigation">
     {% block navigation %}{% endblock %}
