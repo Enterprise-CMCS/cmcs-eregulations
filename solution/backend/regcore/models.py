@@ -41,6 +41,13 @@ class Part(models.Model):
             structure = structure["children"][0]
         return structure
 
+    @property
+    def subchapter(self):
+        structure = self.structure
+        for _ in range(self.depth-1):
+            structure = structure["children"][0]
+        return structure["label"]
+
 
 class ParserConfiguration(SingletonModel):
     LOGLEVEL_CHOICES = [
