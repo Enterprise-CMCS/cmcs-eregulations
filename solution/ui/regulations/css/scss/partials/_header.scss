@@ -12,7 +12,6 @@ header {
     flex-direction: row;
     align-items: center;
     height: $header_height_mobile;
-    padding: 0 20px;
 
     @include custom-min($eds-width-sm / 1px) {
         height: $header_height;
@@ -76,7 +75,7 @@ header {
             align-items: center;
             width: 270px;
             order: 1;
-            padding-right: 20px;
+            padding: 0 20px;
             height: 100%;
 
             border-right: 1px solid $light_gray;
@@ -86,7 +85,7 @@ header {
                 width: 140px;
             }
             @include custom-max(($eds-width-sm - 1) / 1px) {
-                width: 49%;
+                width: calc(50% - 20px);
                 height: 50%;
                 border-right: none;
             }
@@ -110,8 +109,11 @@ header {
 
             @include custom-max(($eds-width-sm - 1) / 1px) {
                 flex: unset;
-                width: 100%;
                 order: 3;
+                padding-left: 20px;
+                width: calc(100% - 20px);
+                height: 60px;
+                border-top: 1px solid $light_gray;
             }
         }
 
@@ -121,9 +123,14 @@ header {
             align-items: center;
             width: 340px;
             order: 3;
+            padding-right: 20px;
+
+            @include custom-max(($eds-width-md - 1) / 1px) {
+                padding-right: 10px;
+            }
 
             @include custom-max(($eds-width-sm - 1) / 1px) {
-                width: 49%;
+                width: calc(50% - 10px);
                 height: 50%;
                 order: 2;
             }
