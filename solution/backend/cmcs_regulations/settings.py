@@ -181,7 +181,7 @@ USE_TZ = False
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-API_BASE = "/v3/"
+API_BASE = "v3/"  # Note: never include leading forward-slash
 
 GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 
