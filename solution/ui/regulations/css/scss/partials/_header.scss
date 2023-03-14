@@ -91,7 +91,6 @@ header {
                 border-right: none;
             }
 
-
             a {
                 @include header__anchor--bold;
 
@@ -135,26 +134,35 @@ header {
             .header--search {
                 .search__form {
                     input {
-                        height: 40px;
+                        height: 36px;
+                        width: 160px;
                         padding: $spacer-1 $spacer-2;
                         border: 1px solid $light_gray;
                         border-right: none;
                         border-radius: 3px 0 0 3px;
                         outline: none;
 
+                        @include custom-max(($eds-width-md - 1) / 1px) {
+                            width: 115px;
+                        }
+
+                        @include custom-max(($eds-width-sm - 1) / 1px) {
+                        }
+
                         &::placeholder {
                             color: $secondary_text_color;
-                            font-weight: 600;
-                            height: 40px;
+                            font-weight: 400;
+                            height: 36px;
                         }
                     }
                     .search__button--submit {
-                        height: 40px;
+                        height: 36px;
                         width: 40px;
                         box-sizing: border-box;
                         border: 1px solid $light_gray;
                         border-left: none;
                         border-radius: 0 3px 3px 0;
+                        background: none;
 
                         &:hover {
                             .fa {
