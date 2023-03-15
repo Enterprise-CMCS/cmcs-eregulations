@@ -9,7 +9,7 @@ from django.views import View
 
 from solo.admin import SingletonModelAdmin
 
-from resources.admin import BaseAdmin
+from common.admin import NewBaseAdmin
 from .models import ParserConfiguration, TitleConfiguration
 from .search.models import Synonym
 
@@ -93,7 +93,7 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
 
 
 @admin.register(Synonym)
-class SynonymAdmin(BaseAdmin):
+class SynonymAdmin(NewBaseAdmin):
     change_list_template = "admin/synonyms.html"
     admin_priority = 20
     ordering = ('baseWord',)
