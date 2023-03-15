@@ -11,7 +11,7 @@
     {% if node_list %}
 
     <supplemental-content
-        api_url="{% url 'regcore' %}"
+        api_url="{{ API_BASE }}"
         title="{{ title }}"
         part="{{ reg_part }}"
         resources_url="{% url 'resources' %}"

@@ -12,7 +12,7 @@ from regcore.serializers.parser import (
     PartUploadSerializer,
     ParserConfigurationSerializer,
 )
-from regcore.views import SettingsAuthentication
+from common.auth import SettingsAuthentication
 from regcore.models import ECFRParserResult, Part, ParserConfiguration
 
 

@@ -140,7 +140,7 @@ import {
     getFormattedPartsList,
     getLastUpdatedDates,
     getRegSearchResults,
-    getSupplementalContentV3,
+    getSupplementalContent,
     getSynonyms,
 } from "@/utilities/api";
 
@@ -307,7 +307,7 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             try {
-                const response = await getSupplementalContentV3({
+                const response = await getSupplementalContent({
                     partDict: "all",
                     q: query,
                     page,

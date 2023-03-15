@@ -20,9 +20,9 @@
 <ul class="table-of-contents">
     {% for item in toc.children %}
       {% if item.type == "section" %}
-        {% render_nested "regulations/partials/expanded_toc/orphan_section.html" context=item title=title version=version %}
+        {% render_nested "regulations/partials/expanded_toc/orphan_section.html" context=item API_BASE=API_BASE title=title version=version %}
       {% else %}
-        {% render_nested "regulations/partials/expanded_toc/"|add:item.type|add:".html" context=item title=title part=reg_part version=version%}
+        {% render_nested "regulations/partials/expanded_toc/"|add:item.type|add:".html" context=item API_BASE=API_BASE title=title part=reg_part version=version%}
       {% endif %}
     {% endfor %}
 </ul>

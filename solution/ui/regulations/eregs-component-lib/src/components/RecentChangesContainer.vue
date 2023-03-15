@@ -9,7 +9,7 @@
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 
-import { v3GetFederalRegisterDocs } from "../api";
+import { getFederalRegisterDocs } from "../api";
 
 export default {
     name: "DefaultName",
@@ -27,7 +27,7 @@ export default {
     },
 
     async created() {
-        const rulesResponse = await v3GetFederalRegisterDocs(this.apiUrl, {
+        const rulesResponse = await getFederalRegisterDocs(this.apiUrl, {
             page: 1,
             pageSize: 3,
         });

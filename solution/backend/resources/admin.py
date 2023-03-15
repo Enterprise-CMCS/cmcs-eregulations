@@ -39,7 +39,7 @@ from .filters import (
     SubpartFilter,
 )
 
-from .v3serializers.locations import AbstractLocationPolymorphicSerializer
+from .serializers.locations import AbstractLocationPolymorphicSerializer
 from .mixins import ExportJSONMixin
 from . import actions
 

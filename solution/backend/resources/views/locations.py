@@ -10,7 +10,7 @@ from resources.models import (
     Subpart,
 )
 
-from resources.v3serializers.locations import (
+from resources.serializers.locations import (
     AbstractLocationPolymorphicSerializer,
     FullSectionSerializer,
     FullSubpartSerializer,

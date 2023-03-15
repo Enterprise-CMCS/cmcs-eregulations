@@ -25,7 +25,7 @@
 
         <div class="hero-banner">
             <div class="site-container hero-content">
-                <jump-to class="jump-to" apiurl="{% url 'regcore' %}"></jump-to>
+                <jump-to class="jump-to" apiurl="{{ API_BASE }}"></jump-to>
                 <p class="hero-text">Explore this site as a supplement to existing policy tools. <a href="{% url 'about' %}#automated-updates">How this tool is updated.</a></p>
             </div>
         </div>
@@ -42,7 +42,7 @@
                                 <h1> {{title.label}} </h1>
 
                                 {% for child in title.children %}
-                                    {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title.identifier.0 %}
+                                    {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child API_BASE=API_BASE title=title.identifier.0 %}
                                 {% endfor %}
                             </div>
                         {% endfor %}

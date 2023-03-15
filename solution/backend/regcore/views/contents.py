@@ -10,7 +10,7 @@ from .mixins import (
 )
 
 from regcore.serializers.contents import (
-    V3PartSerializer,
+    PartSerializer,
     SectionContentsSerializer,
     SubpartContentsSerializer,
 )
@@ -22,7 +22,7 @@ from regcore.serializers.contents import (
     parameters=PartPropertiesMixin.PARAMETERS,
 )
 class PartViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = V3PartSerializer
+    serializer_class = PartSerializer
 
     def retrieve(self, request, *args, **kwargs):
         serializer = self.serializer_class(self.get_object().document)
