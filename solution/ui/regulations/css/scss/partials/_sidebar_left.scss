@@ -231,24 +231,25 @@ aside.left-sidebar {
         background: $reverse_background_lighter;
     }
 }
+
 .toc-header {
     border-bottom: 1px solid $secondary_border_color;
-    margin: 20px 40px 20px 32px;
-    padding-bottom:20px;
+    margin: 25px 40px 16px 32px;
+    padding-bottom: 16px;
     color: white;
 
     .toc-subchapter {
         font-size: 14px;
         line-height: 18px;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
     }
 
     .toc-part {
         font-weight: 700;
         font-size: 18px;
         line-height: 25px;
-        
-        .description{
+
+        .description {
             font-weight: normal;
         }
     }
