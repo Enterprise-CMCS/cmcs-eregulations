@@ -12,6 +12,9 @@
                 <template #jump-to>
                     <JumpTo />
                 </template>
+                <template #links>
+                    <HeaderLinks />
+                </template>
                 <template #search>
                     <HeaderSearch />
                 </template>
@@ -150,8 +153,9 @@ import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 
 import Banner from "@/components/Banner.vue";
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import HeaderSearch from "@/components/HeaderSearch.vue";
+import HeaderComponent from "@/components/header/HeaderComponent.vue";
+import HeaderLinks from "@/components/header/HeaderLinks.vue";
+import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
@@ -177,6 +181,7 @@ export default {
         BlockingModal,
         FlashBanner,
         HeaderComponent,
+        HeaderLinks,
         HeaderSearch,
         IFrameContainer,
         JumpTo,

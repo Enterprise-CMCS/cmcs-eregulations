@@ -34,5 +34,6 @@ export { default as TooltipContainer } from "./tooltips/TooltipContainer.vue";
 
 // from Single Page App
 export { default as HeaderComponent } from "../../../eregs-vite/src/components/header/HeaderComponent.vue";
-export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
+export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
+export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
