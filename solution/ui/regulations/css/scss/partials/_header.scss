@@ -121,9 +121,13 @@ header {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            width: 340px;
+            width: 440px;
             order: 3;
             padding-right: 20px;
+
+            @include custom-max(($eds-width-lg - 1) / 1px) {
+                width: 340px;
+            }
 
             @include custom-max(($eds-width-md - 1) / 1px) {
                 padding-right: 10px;
@@ -136,6 +140,56 @@ header {
             }
 
             .header--links {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                margin-right: 15px;
+                border-right: 1px solid $light_gray;
+
+                .links--container {
+                    @include custom-max(($eds-width-lg - 1) / 1px) {
+                        padding: 0 8px;
+                    }
+
+                    .links__list--trigger-btn {
+                        @include header__anchor--bold;
+
+                        padding: 0 12px;
+
+                        @include custom-min($eds-width-lg / 1px) {
+                            display: none;
+                        }
+                    }
+
+                    ul.links__list {
+                        &.links__list--wide {
+                            padding: 0 12px;
+                            list-style: none;
+
+                            @include custom-max(($eds-width-lg - 1) / 1px) {
+                                display: none;
+                            }
+
+                            li {
+                                display: inline-block;
+
+                                .header--links__anchor {
+                                    @include header__anchor--bold;
+
+                                    line-height: 24px;
+                                    padding: 0 12px;
+
+                                    &.active {
+                                        color: $dark_gray;
+                                        border-bottom: 2px solid $dark_gray;
+                                        padding: 0;
+                                        margin: 0 12px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             .header--search {
