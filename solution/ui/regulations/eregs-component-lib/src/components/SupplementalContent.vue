@@ -39,7 +39,7 @@ import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
 import {
-    v3GetSupplementalContent,
+    getSupplementalContent,
     getSubpartTOC
 } from "../api";
 import {EventCodes, flattenSubpart, formatResourceCategories} from "../utils";
@@ -101,7 +101,7 @@ export default {
         getSupplementalContent: {
             type: Function,
             required: false,
-            default: v3GetSupplementalContent,
+            default: getSupplementalContent,
         },
         resource_display:{
             type: Boolean,
@@ -227,12 +227,12 @@ export default {
         async fetch_content(title, part, location) {
             try {
                 await this.get_location_string()
-                const response = await v3GetSupplementalContent(
+                const response = await getSupplementalContent(
                     this.api_url,
                     {locations: location || this.joined_locations }
                 );
 
-                const subpart_response = await v3GetSupplementalContent(
+                const subpart_response = await getSupplementalContent(
                     this.api_url,
                     {locations: this.joined_locations}
                 )

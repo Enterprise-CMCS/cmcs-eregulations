@@ -4,5 +4,5 @@
 </li>
 
 {% for item in children %}
-  {% render_nested "regulations/partials/expanded_toc/"|add:item.type|add:".html" context=item subpart=subpart title=title version=version %}
+  {% render_nested "regulations/partials/expanded_toc/"|add:item.type|add:".html" context=item API_BASE=API_BASE subpart=subpart title=title version=version %}
 {% endfor %}

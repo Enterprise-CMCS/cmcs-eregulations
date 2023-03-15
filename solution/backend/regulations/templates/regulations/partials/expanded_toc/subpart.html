@@ -5,7 +5,7 @@
     </a>
     <ul>
         {% for item in children %}
-          {% render_nested "regulations/partials/expanded_toc/"|add:item.type|add:".html" context=item subpart=identifier.0 title=title version=version part=part %}
+          {% render_nested "regulations/partials/expanded_toc/"|add:item.type|add:".html" context=item API_BASE=API_BASE subpart=identifier.0 title=title version=version part=part %}
         {% endfor %}
     </ul>
 </li>
