@@ -17,6 +17,10 @@ export default {
             type: String,
             default: "",
         },
+        homepageUrl: {
+            type: String,
+            default: "",
+        },
         host: {
             type: String,
             default: "",
@@ -31,6 +35,7 @@ export default {
             :api-url="apiUrl"
             :about-url="aboutUrl"
             :custom-url="customUrl"
+            :homepage-url="homepageUrl"
             :host="host"
         />
     </v-app>

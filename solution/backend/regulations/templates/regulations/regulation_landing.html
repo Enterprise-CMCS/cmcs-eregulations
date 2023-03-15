@@ -7,7 +7,9 @@
 
 {% block header %}
     <header id="header" class="sticky">
-        <header-component>
+        <header-component
+            home-url="{% url 'homepage' %}"
+        >
             <jump-to
                 slot="jump-to"
                 part="{{ part }}"

@@ -8,7 +8,9 @@
         </BlockingModal>
         <FlashBanner />
         <header id="header" class="sticky">
-            <HeaderComponent>
+            <HeaderComponent
+                :home-url="homeUrl"
+            >
                 <template #jump-to>
                     <JumpTo />
                 </template>
@@ -208,6 +210,10 @@ export default {
         customUrl: {
             type: String,
             default: "",
+        },
+        homeUrl: {
+            type: String,
+            default: "/",
         },
         host: {
             type: String,

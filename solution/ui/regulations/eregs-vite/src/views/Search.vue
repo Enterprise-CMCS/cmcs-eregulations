@@ -8,7 +8,9 @@
         </BlockingModal>
         <FlashBanner />
         <header id="header" class="sticky">
-            <HeaderComponent>
+            <HeaderComponent
+                :home-url="homeUrl"
+            >
                 <template #jump-to>
                     <JumpTo />
                 </template>
@@ -192,7 +194,12 @@ export default {
         SearchInput,
     },
 
-    props: {},
+    props: {
+        homeUrl: {
+            type: String,
+            default: "/",
+        },
+    },
 
     beforeCreate() {},
 

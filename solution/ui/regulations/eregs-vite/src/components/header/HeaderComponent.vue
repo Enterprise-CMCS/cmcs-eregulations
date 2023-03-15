@@ -2,10 +2,9 @@
 import { ref, onBeforeMount, onMounted, onUnmounted, onUpdated } from "vue";
 
 defineProps({
-    defaultProp: {
+    homeUrl: {
         type: String,
-        required: false,
-        default: "Default string",
+        required: true,
     },
 });
 
@@ -15,7 +14,7 @@ onMounted(() => {});
 <template>
     <div class="header--content-container">
         <div class="header--brand">
-            <a href="/">Medicaid &amp; <br/>CHIP eRegulations</a>
+            <a :href="homeUrl">Medicaid &amp; <br/>CHIP eRegulations</a>
         </div>
         <div class="header--jump-to">
             <slot name="jump-to"></slot>
