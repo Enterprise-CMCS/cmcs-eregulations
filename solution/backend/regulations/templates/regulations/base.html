@@ -58,18 +58,6 @@ CSS/Javascript etc., should inherit from this template.
                 {% endblock %}
 
                 {% block header %}
-                    <header id="header" class="sticky">
-                        <header-component>
-                            <jump-to
-                                slot="jump-to"
-                                apiurl="{% url 'regcore' %}"
-                            ></jump-to>
-                            <header-search
-                                slot="search"
-                                apiurl="{% url 'regcore' %}"
-                            ></header-search>
-                        </header-component>
-                    </header>
                 {% endblock %}
 
                 {% block body %}{% endblock %}
