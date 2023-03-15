@@ -8,14 +8,15 @@
         </BlockingModal>
         <FlashBanner />
         <header id="header" class="sticky">
-            <HeaderComponent
-                :home-url="homeUrl"
-            >
+            <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
                     <JumpTo />
                 </template>
                 <template #links>
-                    <HeaderLinks />
+                    <HeaderLinks
+                        :about-url="aboutUrl"
+                        :resources-url="resourcesUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch />
@@ -174,7 +175,6 @@ import {
     getSynonyms,
 } from "@/utilities/api";
 
-
 export default {
     name: "SearchView",
 
@@ -195,9 +195,17 @@ export default {
     },
 
     props: {
+        aboutUrl: {
+            type: String,
+            default: "/about/",
+        },
         homeUrl: {
             type: String,
             default: "/",
+        },
+        resourcesUrl: {
+            type: String,
+            default: "/resources/",
         },
     },
 

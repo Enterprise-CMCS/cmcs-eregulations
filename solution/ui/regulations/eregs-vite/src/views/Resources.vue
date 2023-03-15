@@ -8,14 +8,15 @@
         </BlockingModal>
         <FlashBanner />
         <header id="header" class="sticky">
-            <HeaderComponent
-                :home-url="homeUrl"
-            >
+            <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
                     <JumpTo />
                 </template>
                 <template #links>
-                    <HeaderLinks />
+                    <HeaderLinks
+                        :about-url="aboutUrl"
+                        :resources-url="resourcesUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch />
@@ -214,6 +215,10 @@ export default {
         homeUrl: {
             type: String,
             default: "/",
+        },
+        resourcesUrl: {
+            type: String,
+            default: "/resources/",
         },
         host: {
             type: String,

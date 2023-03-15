@@ -58,6 +58,12 @@ header {
             font-weight: 700;
         }
 
+        @mixin header__anchor--active-bold {
+            @include header__anchor--bold;
+            color: $dark_gray;
+            border-bottom: 2px solid $dark_gray;
+        }
+
         @mixin header--brand-type {
             font-size: $font-size-lg;
             line-height: 36px;
@@ -178,10 +184,12 @@ header {
 
                                     line-height: 24px;
                                     padding: 0 12px;
+                                    text-decoration: none;
 
+                                    &:hover,
+                                    &:focus,
                                     &.active {
-                                        color: $dark_gray;
-                                        border-bottom: 2px solid $dark_gray;
+                                        @include header__anchor--active-bold;
                                         padding: 0;
                                         margin: 0 12px;
                                     }

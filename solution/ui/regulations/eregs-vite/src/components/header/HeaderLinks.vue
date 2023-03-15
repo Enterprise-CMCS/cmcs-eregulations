@@ -1,22 +1,31 @@
 <script setup>
 import { ref, onBeforeMount, onMounted, onUnmounted, onUpdated } from "vue";
 
-const defaultLinks = [
+const props = defineProps({
+    aboutUrl: {
+        type: String,
+        required: true,
+    },
+    resourcesUrl: {
+        type: String,
+        required: true,
+    },
+});
+
+const links = ref([
     {
         name: "resources",
         label: "Resources",
-        active: true,
-        link: "link/to/page",
+        active: false,
+        href: props.resourcesUrl,
     },
     {
         name: "about",
         label: "About",
         active: false,
-        link: "link/to/page",
+        href: props.aboutUrl,
     },
-];
-
-const links = ref(defaultLinks);
+]);
 
 onMounted(() => {});
 </script>
@@ -25,14 +34,15 @@ onMounted(() => {});
     <div class="links--container">
         <ul class="links__list links__list--wide">
             <li v-for="(link, index) in links" :key="index">
-                <span
+                <a
                     class="header--links__anchor"
                     :class="{ active: link.active }"
-                >{{ link.label }}</span>
+                    :href="link.href"
+                >
+                    <span class="anchor__span">{{ link.label }}</span>
+                </a>
             </li>
         </ul>
-        <div class="links__list--trigger-btn">
-            More
-        </div>
+        <div class="links__list--trigger-btn">More</div>
     </div>
 </template>
