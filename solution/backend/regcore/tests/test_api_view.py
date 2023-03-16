@@ -118,7 +118,7 @@ class RegcoreSerializerTestCase(APITestCase):
         data = response.data
         self.assertEqual(data, [date(2020, 6, 30)])
 
-    @patch("regcore.v3views.history.get_year_data")
+    @patch("regcore.views.history.get_year_data")
     def test_get_historical_sections(self, get_year_data):
         get_year_data.return_value = httpx.Response(status_code=400)
         data = self.client.get("/v3/title/42/part/433/history/section/50").data

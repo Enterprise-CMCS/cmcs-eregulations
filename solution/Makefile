@@ -158,6 +158,9 @@ test.local: ## run cypress tests locally without docker
 python.unittest:
 	docker-compose exec regulations python manage.py test
 
+python.shell:
+	docker-compose exec regulations python manage.py shell
+	
 local.seed:
 	docker-compose exec regulations python manage.py loaddata resources.category.json
 	docker-compose exec regulations python manage.py loaddata resources.subcategory.json
