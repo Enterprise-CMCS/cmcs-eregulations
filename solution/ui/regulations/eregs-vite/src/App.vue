@@ -25,6 +25,10 @@ export default {
             type: String,
             default: "",
         },
+        searchUrl: {
+            type: String,
+            default: "",
+        },
         host: {
             type: String,
             default: "",
@@ -41,6 +45,7 @@ export default {
             :custom-url="customUrl"
             :homepage-url="homepageUrl"
             :resources-url="resourcesUrl"
+            :search-url="searchUrl"
             :host="host"
         />
     </v-app>

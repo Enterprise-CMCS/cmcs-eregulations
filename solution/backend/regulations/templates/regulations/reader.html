@@ -17,7 +17,7 @@
                 slot="jump-to"
                 part="{{ part }}"
                 title="{{ title }}"
-                apiurl="{{ API_BASE}}"
+                apiurl="{{ API_BASE }}"
             ></jump-to>
             <header-links
                 slot="links"
@@ -26,7 +26,7 @@
             ></header-links>
             <header-search
                 slot="search"
-                apiurl="{{ API_BASE}}"
+                search-url="{% url 'search' %}"
             ></header-search>
         </header-component>
     </header>

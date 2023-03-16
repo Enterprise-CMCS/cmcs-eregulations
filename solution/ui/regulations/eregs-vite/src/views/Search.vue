@@ -19,7 +19,9 @@
                     />
                 </template>
                 <template #search>
-                    <HeaderSearch />
+                    <HeaderSearch
+                        :search-url="searchUrl"
+                    />
                 </template>
             </HeaderComponent>
         </header>
@@ -207,6 +209,10 @@ export default {
             type: String,
             default: "/resources/",
         },
+        searchUrl: {
+            type: String,
+            default: "/search/",
+        }
     },
 
     beforeCreate() {},

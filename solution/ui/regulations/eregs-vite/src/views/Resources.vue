@@ -19,7 +19,9 @@
                     />
                 </template>
                 <template #search>
-                    <HeaderSearch />
+                    <HeaderSearch
+                        :search-url="searchUrl"
+                    />
                 </template>
             </HeaderComponent>
         </header>
@@ -219,6 +221,10 @@ export default {
         resourcesUrl: {
             type: String,
             default: "/resources/",
+        },
+        searchUrl: {
+            type: String,
+            default: "/search/",
         },
         host: {
             type: String,

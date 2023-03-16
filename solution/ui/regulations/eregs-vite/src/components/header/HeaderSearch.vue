@@ -1,7 +1,14 @@
-<script setup></script>
+<script setup>
+defineProps({
+    searchUrl: {
+        type: String,
+        required: true,
+    },
+});
+</script>
 
 <template>
-    <form class="search__form" action="">
+    <form class="search__form" :action="searchUrl">
         <input type="search" name="q" placeholder="Search" />
         <button
             type="submit"
