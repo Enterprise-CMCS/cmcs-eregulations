@@ -16,13 +16,13 @@ const links = ref([
     {
         name: "resources",
         label: "Resources",
-        active: false,
+        active: window.location.pathname.includes("resources"),
         href: props.resourcesUrl,
     },
     {
         name: "about",
         label: "About",
-        active: false,
+        active: window.location.pathname.includes("about"),
         href: props.aboutUrl,
     },
 ]);
