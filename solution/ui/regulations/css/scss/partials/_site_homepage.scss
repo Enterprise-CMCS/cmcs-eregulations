@@ -57,7 +57,7 @@
                 background-size: 55%;
                 background-position: bottom 50% right 25px;
 
-                > * {
+                >* {
                     width: 40%;
                 }
             }
@@ -67,7 +67,7 @@
                 background-size: auto 45%;
                 background-position: bottom 0px right 50%;
 
-                > * {
+                >* {
                     width: 100%;
                 }
             }
@@ -79,7 +79,7 @@
                 background-size: auto;
                 background-position: bottom 0px right 50%;
 
-                > * {
+                >* {
                     width: 100%;
                 }
             }
@@ -206,6 +206,8 @@
 }
 
 .homepage-main-content {
+    padding-bottom: 16px;
+
     .ds-l-row {
         @include custom-max(1024) {
             display: block;
@@ -215,7 +217,6 @@
 }
 
 .homepage-toc {
-    margin-top: $spacer-2;
 
     @include custom-max(1024) {
         max-width: 100%;
@@ -226,8 +227,12 @@
         max-width: $text-max-width;
     }
 
+    .toc-title-container {
+        padding-bottom: 16px;
+    }
+
     h1 {
-        margin-top: 0 !important;
+        margin-top: $spacer-2;
         margin-bottom: 0 !important;
         font-size: $base-font-size * 1.8;
 
@@ -252,7 +257,7 @@
         margin: 1.33em 0 1.33em 0 !important;
     }
 
-    h4 + .toc-external-ref {
+    h4+.toc-external-ref {
         margin: $spacer-2 0 0 !important;
     }
 

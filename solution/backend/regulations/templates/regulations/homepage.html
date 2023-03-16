@@ -41,7 +41,7 @@
 
         <div class="hero-banner">
             <div class="site-container hero-content">
-                <jump-to class="jump-to" apiurl="{% url 'regcore' %}"></jump-to>
+                <jump-to class="jump-to" apiurl="{{ API_BASE }}"></jump-to>
                 <p class="hero-text">Explore this site as a supplement to existing policy tools. <a href="{% url 'about' %}#automated-updates">How this tool is updated.</a></p>
             </div>
         </div>
@@ -54,16 +54,14 @@
                     <div class="toc-container">
 
                         {% for title in structure %}
+                            <div class="toc-title-container">
+                                <h1> {{title.label}} </h1>
 
-                            <h1> {{title.label}} </h1>
-
-                            {% for child in title.children %}
-                                {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child title=title.identifier.0 %}
-                            {% endfor %}
-
+                                {% for child in title.children %}
+                                    {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child API_BASE=API_BASE title=title.identifier.0 %}
+                                {% endfor %}
+                            </div>
                         {% endfor %}
-
-                        <p class="toc-external-ref">For subsequent subchapters (F-I), see <a href="https://www.ecfr.gov/current/title-42/chapter-IV" target="_blank" class="external" aria-label="link to Federal Register Title 42 Chapter 4">Title 42 Chapter IV in eCFR</a></p>
 
                     </div>    
 

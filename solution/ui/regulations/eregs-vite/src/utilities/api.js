@@ -19,14 +19,10 @@ const apiPath = `${
     window.location.host.includes("cms.gov")
         ? `https://${window.location.host}`
         : import.meta.env.VITE_API_URL || "http://localhost:8000"
-}`;
-const apiPathV2 = `${apiPath}/v2`;
-const apiPathV3 = `${apiPath}/v3`;
+}/v3`;
 
 const config = {
     apiPath,
-    apiPathV2,
-    apiPathV3,
     fetchMode: "cors",
     maxRetryCount: 2,
 };
@@ -206,13 +202,12 @@ function httpApiMock(verb, urlPath, { data, params, response } = {}) {
 }
 
 function httpApiGet(urlPath, { params } = {}) {
-    return fetchJson(`${config.apiPathV2}/${urlPath}`, {
+    return fetchJson(`${config.apiPath}/${urlPath}`, {
         method: "GET",
         headers: authHeader(token),
         params,
     });
 }
-
 
 // use when components used directly in Django templates
 function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
@@ -227,17 +222,9 @@ function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
     );
 }
 
-function httpApiGetV3(urlPath, { params } = {}) {
-    return fetchJson(`${config.apiPathV3}/${urlPath}`, {
-        method: "GET",
-        headers: authHeader(token),
-        params,
-    });
-}
-
-async function httpApiGetV3WithPagination(urlPath, { params } = {}) {
+async function httpApiGetWithPagination(urlPath, { params } = {}) {
     let results = [];
-    let url = `${config.apiPathV3}/${urlPath}`;
+    let url = `${config.apiPath}/${urlPath}`;
     while (url) {
         /* eslint-disable no-await-in-loop */
         const response = await fetchJson(url, {
@@ -295,7 +282,7 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 const getLastUpdatedDates = async (apiUrl, title = "42") => {
-    const result = await httpApiGetV3(`title/${title}/parts`);
+    const result = await httpApiGet(`title/${title}/parts`);
     return Object.fromEntries(new Map(result.map((obj) => [obj.name, obj.date])));
 };
 
@@ -372,13 +359,13 @@ const getRegSearchResults = async ({
     page = 1,
     page_size = 100,
 }) => {
-    const response = await httpApiGetV3(`search?q=${q}&paginate=${paginate}&page_size=${page_size}&page=${page}`);
+    const response = await httpApiGet(`search?q=${q}&paginate=${paginate}&page_size=${page_size}&page=${page}`);
 
     return response;
 };
 
 // todo: make these JS style camel case
-const getSupplementalContentV3 = async (
+const getSupplementalContent = async (
     {
         partDict,
         categories,
@@ -430,23 +417,23 @@ const getSupplementalContentV3 = async (
 
     sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     sString = `${sString}&fr_grouping=${fr_grouping}`
-    const response = await httpApiGetV3(`resources/?${sString}`)
+    const response = await httpApiGet(`resources/?${sString}`)
     return response;
 
 }
 
-const getCategories = async () =>  httpApiGetV3("resources/categories");
+const getCategories = async () =>  httpApiGet("resources/categories");
 
 const getTOC = async (title) =>
-    httpApiGetV3(title ? `title/${title}/toc` : `toc`);
+    httpApiGet(title ? `title/${title}/toc` : `toc`);
 
-const getPartTOC = async (title, part) =>  httpApiGetV3(`title/${title}/part/${part}/version/latest/toc`);
+const getPartTOC = async (title, part) =>  httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
 
-const getSectionsForPart = async (title, part) => httpApiGetV3(`title/${title}/part/${part}/version/latest/sections`)
+const getSectionsForPart = async (title, part) => httpApiGet(`title/${title}/part/${part}/version/latest/sections`)
 
-const getSubpartTOC = async (title, part, subPart) => httpApiGetV3(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
+const getSubpartTOC = async (title, part, subPart) => httpApiGet(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
 
-const getSynonyms = async(query) => httpApiGetV3(`synonym/${query}`);
+const getSynonyms = async(query) => httpApiGet(`synonym/${query}`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
@@ -455,11 +442,10 @@ const getSynonyms = async(query) => httpApiGetV3(`synonym/${query}`);
  */
 const getTitles = async (apiUrl) => {
     if (apiUrl) {
-        const url = apiUrl.replace("/v2/", "/v3/");
-        return httpApiGetLegacy(`${url}titles`);
+        return httpApiGetLegacy(`${apiUrl}titles`);
     }
 
-    return httpApiGetV3("titles");
+    return httpApiGet("titles");
 };
 
 /**
@@ -470,10 +456,9 @@ const getTitles = async (apiUrl) => {
  */
 const getParts = async (title, apiUrl) => {
     if (apiUrl) {
-        const url = apiUrl.replace("/v2/", "/v3/");
-        return httpApiGetLegacy(`${url}title/${title}/parts`);
+        return httpApiGetLegacy(`${apiUrl}title/${title}/parts`);
     }
-    return httpApiGetV3(`title/${title}/parts`);
+    return httpApiGet(`title/${title}/parts`);
 };
 
 export {
@@ -490,7 +475,7 @@ export {
     setCacheItem,
     getFormattedPartsList,
     getCategories,
-    getSupplementalContentV3,
+    getSupplementalContent,
     getTOC,
     getPartTOC,
     getSectionsForPart,

@@ -20,7 +20,7 @@
 {% block body %}
 <div
     id="vite-app"
-    data-api-url="{% url 'regcore' %}"
+    data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"
     data-custom-url="{{ CUSTOM_URL }}"
     data-homepage-url="{% url 'homepage' %}"

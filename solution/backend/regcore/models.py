@@ -31,8 +31,7 @@ class Part(models.Model):
 
     class Meta:
         unique_together = ['name', 'title', 'date']
-        # TODO: add once /v2/title/X/existing is removed, the following line breaks it for some reason
-        # ordering = ("title", "name", "-date")
+        ordering = ("title", "name", "-date")
 
     @property
     def toc(self):

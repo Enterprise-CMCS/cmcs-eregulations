@@ -215,10 +215,7 @@ async function httpApiGetWithPagination(urlPath, { params } = {}, apiPath) {
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
 const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
-    // manually adjust to v3 if needed
-    const url = apiURL.replace("/v2/", "/v3/");
-
-    const result = await httpApiGetLegacy(`${url}ecfr_parser_result/${title}`);
+    const result = await httpApiGetLegacy(`${apiURL}ecfr_parser_result/${title}`);
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
 
@@ -234,10 +231,8 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
  * @returns {Array<{year: string, link: string}>}
  */
 const getGovInfoLinks = async (apiURL, params) => {
-    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
-
     const result = await httpApiGetLegacy(
-        `${url}title/${params.title}/part/${params.part}/history/${
+        `${apiURL}title/${params.title}/part/${params.part}/history/${
             Object.keys(params)[2]
         }/${Object.values(params)[2]}`
     );
@@ -245,66 +240,39 @@ const getGovInfoLinks = async (apiURL, params) => {
     return result;
 };
 
-const getSupplementalContentByCategory = async (
-    api_url,
-    categories = [1, 2]
-) => {
-    const result = await httpApiGetLegacy(
-        `${api_url}all_sup?category=${categories.join(
-            "&category="
-        )}&max_results=100`,
-        {}, // params, default
-        api_url
-    );
-    return result.filter((r) => r.supplemental_content.length);
-};
+const getTitles = async (apiUrl) => httpApiGetLegacy(`${apiUrl}titles`);
 
-const getTitles = async (apiUrl) => {
-    const url = apiUrl.replace("/v2/", "/v3/");
-    return httpApiGetLegacy(`${url}titles`);
-};
+const getParts = async (apiURL, title) => httpApiGetLegacy(`${apiURL}title/${title}/parts`);
 
-const getParts = async (apiURL, title) => {
-    const url = apiURL.replace("/v2/", "/v3/");
-    return httpApiGetLegacy(`${url}title/${title}/parts`);
-};
-
-const v3GetSupplementalContent = async (
+const getSupplementalContent = async (
     apiURL,
     { locations, locationDetails = false }
 ) => {
-    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
-
     return httpApiGetWithPagination(
-        `${url}resources/?${locations}&paginate=true&location_details=${locationDetails}`,
+        `${apiURL}resources/?${locations}&paginate=true&location_details=${locationDetails}`,
         {}, // params, default
         apiURL
     );
 };
 
-const v3GetFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
-    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
-
+const getFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
     return httpApiGetLegacy(
-        `${url}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
+        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
         {}, // params, default
         apiURL
     );
 };
 
 const getSubpartTOC = async (apiURL, title, part, subPart) => {
-    const url = apiURL.replace("/v2/", "/v3/"); // TODO remove this
-
     return httpApiGetLegacy(
-        `${url}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
+        `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 };
 
 export {
     getLastParserSuccessDate,
-    getSupplementalContentByCategory,
-    v3GetSupplementalContent,
-    v3GetFederalRegisterDocs,
+    getSupplementalContent,
+    getFederalRegisterDocs,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,
