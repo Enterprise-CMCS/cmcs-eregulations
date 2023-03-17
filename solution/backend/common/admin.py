@@ -15,6 +15,8 @@ from solo.admin import SingletonModelAdmin
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.forms.widgets import Textarea
+from django.db import IntegrityError
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 
 from django.http import HttpResponse
 from django.core import serializers
@@ -52,6 +54,13 @@ class NewBaseAdmin(admin.ModelAdmin, ExportJSONMixin):
     list_per_page = 200
     admin_priority = 20
     actions = ["export_as_json"]
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        form = super().get_form(request, *args, **kwargs)
+        if "type" in form.base_fields:
+            form.base_fields["type"].initial = getattr(self.model, "TYPE", 0)
+            form.base_fields["type"].disabled = True
+        return form
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         lookups = getattr(self, "foreignkey_lookups", {})

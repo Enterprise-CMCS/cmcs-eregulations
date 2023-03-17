@@ -48,8 +48,8 @@ class Location(models.Model):
 
     class Meta:
         unique_together = [
-            ["title", "part", "section"],
-            ["title", "part", "subpart"]
+            ["type", "title", "part", "section"],
+            ["type", "title", "part", "subpart"],
         ]
 
 
@@ -95,7 +95,10 @@ class NewCategory(models.Model):
         return f"{self.name} ({self.CATEGORY_TYPES[self.type][1]})"
 
     class Meta:
-        unique_together = ["name", "description", "parent"]
+        unique_together = [
+            ["type", "name", "description", "order"],
+            ["type", "name", "description", "order", "parent"],
+        ]
 
 
 class NewCategoryCategory(NewCategory):
@@ -172,7 +175,7 @@ class ResourceGroup(models.Model):
         ][self.type]
 
     class Meta:
-        unique_together = ["docket_number_prefixes"]
+        unique_together = ["type", "docket_number_prefixes"]
 
 
 class NewFederalRegisterDocumentGroup(ResourceGroup):

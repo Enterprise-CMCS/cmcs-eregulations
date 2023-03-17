@@ -60,6 +60,19 @@ from .new_models import (
 )
 
 
+class HiddenTypeFieldMixin:
+    def get_fieldsets(self, request, obj=None):
+        return [
+            [None, {
+                'classes': ['empty-form',],
+                'fields': ['type',],
+            }],
+            [None, {
+                'fields': self.shown_fields,
+            }],
+        ]
+
+
 class NewLocationAdmin(NewBaseAdmin):
     readonly_fields = ("linked_resources",)
 
@@ -80,12 +93,12 @@ class NewLocationAdmin(NewBaseAdmin):
 
 
 @admin.register(SectionLocation)
-class SectionLocationAdmin(NewLocationAdmin):
+class SectionLocationAdmin(HiddenTypeFieldMixin, NewLocationAdmin):
     admin_priority = 40
     list_display = ("title", "part", "section", "parent")
     search_fields = ("title", "part", "section")
     ordering = ("title", "part", "section", "parent")
-    fields = ("title", "part", "section", "parent", "linked_resources")
+    shown_fields = ("title", "part", "section", "parent", "linked_resources")
     foreignkey_lookups = {
         "parent": lambda: SubpartLocation.objects.all(),
     }
@@ -97,27 +110,30 @@ class SectionLocationAdmin(NewLocationAdmin):
 
 
 @admin.register(SubpartLocation)
-class SubpartLocationAdmin(NewLocationAdmin):
+class SubpartLocationAdmin(HiddenTypeFieldMixin, NewLocationAdmin):
     admin_priority = 50
     list_display = ("title", "part", "subpart")
     search_fields = ("title", "part", "subpart")
     ordering = ("title", "part", "subpart")
-    fields = ("title", "part", "subpart", "linked_resources")
+    shown_fields = ("title", "part", "subpart", "linked_resources")
 
 
 @admin.register(NewCategoryCategory)
-class NewCategoryAdmin(NewBaseAdmin):
+class NewCategoryAdmin(HiddenTypeFieldMixin, NewBaseAdmin):
     admin_priority = 10
     list_display = ("name", "description", "order", "show_if_empty")
     search_fields = ("name", "description")
-    fields = ("name", "description", "order", "show_if_empty")
+    shown_fields = ("name", "description", "order", "show_if_empty")
 
 
 @admin.register(NewCategorySubCategory)
-class NewCategorySubCategoryAdmin(NewBaseAdmin):
+class NewCategorySubCategoryAdmin(HiddenTypeFieldMixin, NewBaseAdmin):
     admin_priority = 20
     list_display = ("name", "description", "order", "show_if_empty", "parent")
-    fields = ("name", "description", "order", "show_if_empty", "parent")
+    shown_fields = ("name", "description", "order", "show_if_empty", "parent")
+    foreignkey_lookups = {
+        "parent": lambda: NewCategoryCategory.objects.all(),
+    }
 
 
 class NewFederalRegisterDocumentGroupForm(forms.ModelForm):
@@ -144,7 +160,10 @@ class NewFederalRegisterDocumentGroupForm(forms.ModelForm):
 
     class Meta:
         model = NewFederalRegisterDocumentGroup
-        fields = ("docket_number_prefixes", "resources")
+        fields = ("type", "docket_number_prefixes", "resources")
+        widgets = {
+            "type": forms.HiddenInput(),
+        }
 
 
 @admin.register(NewFederalRegisterDocumentGroup)
