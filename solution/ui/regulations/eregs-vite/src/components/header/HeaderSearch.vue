@@ -21,6 +21,8 @@ const expandStateClasses = computed(() => ({
     hidden: !mobileSearchExpanded.value,
     visible: mobileSearchExpanded.value,
 }));
+
+const expandButtonAriaLabel = computed(() => `${ mobileSearchExpanded.value ? "Hide" : "Show" } search bar`);
 </script>
 
 <template>
@@ -28,7 +30,7 @@ const expandStateClasses = computed(() => ({
         <button
             type="button"
             class="form__button--toggle-mobile-search"
-            aria-label="Toggle Search Bar"
+            :aria-label="expandButtonAriaLabel"
             @click="expandSearchClick"
         >
             <template v-if="mobileSearchExpanded">
