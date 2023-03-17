@@ -27,8 +27,8 @@ const expandStateClasses = computed(() => ({
     <form class="search__form" :action="searchUrl">
         <button
             type="button"
-            class="form__button--close-mobile-search"
-            aria-label="Close Search Bar"
+            class="form__button--toggle-mobile-search"
+            aria-label="Toggle Search Bar"
             @click="expandSearchClick"
         >
             <template v-if="mobileSearchExpanded">

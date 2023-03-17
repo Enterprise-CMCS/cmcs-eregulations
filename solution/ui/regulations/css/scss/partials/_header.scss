@@ -281,11 +281,12 @@ header {
                         justify-content: flex-end;
                     }
 
-                    .form__button--close-mobile-search {
+                    .form__button--toggle-mobile-search {
                         @include header__button;
 
                         width: 40px;
                         height: $header_input_height_narrow;
+                        padding-right: 7px;
 
                         @include custom-min($eds-width-sm / 1px) {
                             display: none;
@@ -302,7 +303,9 @@ header {
                         outline: none;
 
                         &.hidden {
-                            display: none;
+                            @include custom-max(($eds-width-sm - 1) / 1px) {
+                                display: none;
+                            }
                         }
 
                         @include custom-max(($eds-width-md - 1) / 1px) {
@@ -332,7 +335,9 @@ header {
                         border-radius: 0 3px 3px 0;
 
                         &.hidden {
-                            display: none;
+                            @include custom-max(($eds-width-sm - 1) / 1px) {
+                                display: none;
+                            }
                         }
 
                         @include custom-max(($eds-width-sm - 1) / 1px) {
