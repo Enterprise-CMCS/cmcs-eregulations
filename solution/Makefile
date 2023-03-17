@@ -159,13 +159,10 @@ python.unittest:
 	docker-compose exec regulations python manage.py test
 
 local.seed:
-	docker-compose exec regulations python manage.py loaddata resources.category.json
-	docker-compose exec regulations python manage.py loaddata resources.subcategory.json
-	docker-compose exec regulations python manage.py loaddata resources.subpart.json
-	docker-compose exec regulations python manage.py loaddata resources.section.json
-	docker-compose exec regulations python manage.py loaddata resources.supplementalcontent.json
-	docker-compose exec regulations python manage.py loaddata resources.federalregisterdocumentgroup.json
-	docker-compose exec regulations python manage.py loaddata resources.federalregisterdocument.json
+	docker-compose exec regulations python manage.py loaddata resources.basecategory.json
+	docker-compose exec regulations python manage.py loaddata resources.location.json
+	docker-compose exec regulations python manage.py loaddata resources.resourcegroup.json
+	docker-compose exec regulations python manage.py loaddata resources.resource.json
 	docker-compose exec regulations python manage.py loaddata resources.resourcesconfiguration.json
 	docker-compose exec regulations python manage.py loaddata search.synonym.json
 

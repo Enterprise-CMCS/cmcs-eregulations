@@ -1,0 +1,2082 @@
+[
+{
+    "model": "resources.resourcegroup",
+    "pk": 1,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"1978-rw-TEST\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 2,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"4110-35-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 3,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"automatic\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 4,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-106-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 5,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-182-\", \"BPP-182-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 6,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-260\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 7,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-266-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 8,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-275-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 9,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-297-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 10,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-304-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 11,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-321-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 12,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-348-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 13,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-360-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 14,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-369-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 15,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-382-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 16,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-433-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 17,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-440-\", \"BPD-440-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 18,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-444-\", \"MB-016-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 19,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-451-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 20,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-506-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 21,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-507-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 22,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-513-\", \"BPP-513-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 23,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BERC-514-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 24,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-396-\", \"BERC-396-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 25,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-482-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 26,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-484-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 27,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-485-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 28,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-661-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 29,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-662-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 30,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-704-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 31,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-713-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 32,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-718-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 33,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-736-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 34,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-798-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 35,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-827-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 36,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-840-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 37,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-878-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 38,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPD-884-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 39,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-020-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 40,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-052-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 41,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-061-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 42,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-10-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 43,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-11-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 44,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-118-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 45,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-16-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 46,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-25-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 47,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-41-\", \"BPO-041-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 48,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPO-500-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 49,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-106-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 50,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-113-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 51,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-133-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 52,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-148-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 53,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-149-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 54,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-152-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 55,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-179\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 56,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-237-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 57,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-504-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 58,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-507-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 59,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-509-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 60,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-512-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 61,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BPP-82-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 62,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BQC-045-\", \"BPO-045-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 63,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BQC-064-\", \"BPO-064-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 64,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BQC-071-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 65,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BQC-15-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 66,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BQC-5-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 67,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BQC-59-\", \"BQC-059-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 68,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"BQC-68-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 69,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1201-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 70,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1351-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 71,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1358-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 72,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1428-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 73,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1450-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 74,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1469-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 75,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1498-\", \"CMS-1406-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 76,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1654-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 77,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-1762-\", \"CMS-1752-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 78,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2001-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 79,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2015-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 80,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2100-\", \"HCFA-2100-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 81,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2104-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 82,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2127-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 83,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2128-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 84,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2132-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 85,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2134-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 86,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2175-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 87,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2188-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 88,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2198-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 89,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2210-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 90,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2229-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 91,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2231-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 92,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2234-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 93,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2237-\", \"CMS-2287-\", \"CMS-2213-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 94,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2238-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 95,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2244-\", \"CMS-2232-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 96,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2249-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 97,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2257-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 98,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2258-\", \"CMS-2361-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 99,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2261-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 100,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2264-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 101,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2271-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 102,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2275-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 103,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2279-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 104,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2290-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 105,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2291-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 106,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2292-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 107,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2296-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 108,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2315-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 109,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2325-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 110,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2327-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 111,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2328-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 112,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2333-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 113,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2334-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 114,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2337-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 115,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2343-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 116,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2345-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 117,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2346-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 118,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2348-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 119,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2349-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 120,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2367-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 121,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2370-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 122,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2380-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 123,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2390-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 124,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2391-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 125,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2392-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 126,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2393-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 127,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2394-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 128,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2396-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 129,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2399-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 130,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2400-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 131,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2402-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 132,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2404-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 133,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2406-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 134,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2407-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 135,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2408-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 136,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2413-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 137,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2418-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 138,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2421-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 139,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2432-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 140,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2438-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 141,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2440-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 142,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2441-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 143,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2444-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 144,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-2482-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 145,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3047-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 146,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3063-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 147,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3064-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 148,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3145-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 149,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3178-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 150,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3260-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 151,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3267-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 152,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3277-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 153,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3310-\", \"CMS-3311-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 154,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3346-\", \"CMS-3295-\", \"CMS-3334-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 155,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3401-\", \"CMS-5531-\", \"CMS-1734-\", \"CMS-1744-\", \"CMS-1770-\", \"CMS-1751-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 156,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3415-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 157,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3818-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 158,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-3819-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 159,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-4068-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 160,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-4168-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 161,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-4182-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 162,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-4185-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 163,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-4190-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 164,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-4199-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 165,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6010-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 166,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6026-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 167,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6028-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 168,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6030-\", \"HCFA-7020-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 169,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6034-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 170,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6058-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 171,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6059-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 172,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6068-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 173,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6073-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 174,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6076-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 175,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-6150-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 176,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-9070-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 177,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-9115-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 178,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-9123-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 179,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"CMS-9912-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 180,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"cost\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 181,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"data processing\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 182,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"equipment\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 183,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-1030-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 184,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-1152-\", \"HCFA-1152-1-\", \"HCFA-1152-2-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 185,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-1719-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 186,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-1809-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 187,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-1884-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 188,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-1903-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 189,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-1909-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 190,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2001-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 191,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2004-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 192,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2006-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 193,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2010-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 194,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2015-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 195,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2054-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 196,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2065-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 197,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2071-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 198,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2082-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 199,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2086-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 200,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-2114-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 201,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HCFA-6135-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 202,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HHS-OCR-2019-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 203,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HHS-OS-2020-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 204,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HHS-OS-2022-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 205,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HHS-OS-2022-0012-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 206,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-096-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 207,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-105-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 208,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-108-\", \"HEQ-108-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 209,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-127-\", \"HSQ-189-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 210,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-139-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 211,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-156-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 212,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-16-\", \"BPP-519-\", \"BERC-519-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 213,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-176-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 214,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"HSQ-183-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 215,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"limitations\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 216,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"LRR-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 217,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"LRR-5-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 218,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"M8-35-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 219,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-001-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 220,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-008-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 221,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-012-\", \"BERC-417-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 222,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-014-\", \"BERC-439-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 223,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-019-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 224,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-020-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 225,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-044-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 226,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-046-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 227,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-050-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 228,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-062-\", \"MB-113-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 229,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-068-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 230,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-071-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 231,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-085-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 232,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-092-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 233,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-099-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 234,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-102-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 235,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-105-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 236,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-112-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 237,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-13-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 238,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-15-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 239,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-30-\", \"MBT-30-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 240,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-39-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 241,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-41-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 242,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-42-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 243,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-47-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 244,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-48-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 245,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-52-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 246,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-57-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 247,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MB-60-\", \"HCFA-2060-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 248,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MMB-233-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 249,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MMB-234-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 250,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MMB-236-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 251,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MMB-261-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 252,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"MSA-159-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 253,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"OBA-15-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 254,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"OFH-017-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 255,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"OFH-018-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 256,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"OIG-406-\", \"HHSIG-2016-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 257,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"OMB-2014-0006-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 258,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"OMC-010-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 259,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"PCO-181-\"]"
+    }
+},
+{
+    "model": "resources.resourcegroup",
+    "pk": 260,
+    "fields": {
+        "type": 0,
+        "docket_number_prefixes": "[\"reimbursement\"]"
+    }
+}
+]
