@@ -30,7 +30,7 @@
                 {% if '/search/' in request.path or '/resources/' in request.path %}
                     {{ parser_last_success|parser_success_date_formatter }}
                 {% else %}
-                    <last-parser-success-date api-url={% url "regcore" %} ></last-parser-success-date>
+                    <last-parser-success-date api-url={{ API_BASE }} ></last-parser-success-date>
                 {% endif %}
             </span>.
         </h4>
@@ -42,7 +42,7 @@
 <div class="print-footer">
     <em>
         Regulations up to date from <a href="https://www.ecfr.gov" target="_blank" class="external">eCFR</a> as of <span class="last-updated-date-print">
-            <last-parser-success-date api-url={% url "regcore" %} ></last-parser-success-date>
+            <last-parser-success-date api-url={{ API_BASE }} ></last-parser-success-date>
         </span>.
     </em>
 </div>

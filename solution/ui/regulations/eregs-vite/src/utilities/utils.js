@@ -474,7 +474,7 @@ const stripQuotes = (string) => {
 /**
  * @param htmlString {string} - string of HTML markup
  * @param tagClass {string} - class to identify target HTML tag
- * @returns {string} - comma-separated string of unique highlight terms
+ * @returns {Array<string>} - array of of highlight terms as strings
  */
 const getTagContent = (htmlString, tagClass) => {
     const parser = new DOMParser();
@@ -483,8 +483,7 @@ const getTagContent = (htmlString, tagClass) => {
     const highlightTermsArray = [...highlightCollection].map((highlightEl) => {
         return highlightEl.innerHTML;
     });
-    const uniqTermsArray = Array.from(new Set(highlightTermsArray));
-    return uniqTermsArray.join(",");
+    return highlightTermsArray;
 };
 
 /**

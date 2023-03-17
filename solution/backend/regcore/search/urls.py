@@ -1,13 +1,9 @@
 from django.urls import path
 
-from .views import (
-    SearchView,
-    SupplementalContentSearchViewSet,
-)
+from .views import SearchView
 
 urlpatterns = [
-    path("search", SearchView.as_view()),
-    path("supplemental_content/search", SupplementalContentSearchViewSet.as_view({
+    path("", SearchView.as_view({
         "get": "list",
     })),
 ]

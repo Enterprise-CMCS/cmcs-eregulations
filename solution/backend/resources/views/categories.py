@@ -11,7 +11,7 @@ from resources.models import (
     SubCategory,
 )
 
-from resources.v3serializers.categories import (
+from resources.serializers.categories import (
     AbstractCategoryPolymorphicSerializer,
     CategoryTreeSerializer,
     MetaCategorySerializer,

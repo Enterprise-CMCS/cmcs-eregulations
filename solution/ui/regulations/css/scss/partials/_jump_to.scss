@@ -44,7 +44,6 @@
             select,
             input,
             input .submit {
-                margin: 0;
                 height: 36px;
                 font-size: $font-size-sm;
             }
@@ -72,6 +71,8 @@
     .dot {
         font-size: $font-size-2xl;
         line-height: 1;
+        padding-left:4px;
+        padding-right: 4px;;
     }
 
     input {
@@ -107,4 +108,13 @@
         font-weight: 600;
         font-size: $font-size-lg;
     }
+}
+select#jumpToPart,
+input#jumpToSection,
+input#jumpBtn{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+input#jumpToSection{
+    margin-right: 12px
 }

@@ -39,7 +39,7 @@ from .filters import (
     SubpartFilter,
 )
 
-from .v3serializers.locations import AbstractLocationPolymorphicSerializer
+from .serializers.locations import AbstractLocationPolymorphicSerializer
 from .mixins import ExportJSONMixin
 from . import actions
 
@@ -299,7 +299,7 @@ class ResourceForm(forms.ModelForm):
     bulk_locations = forms.CharField(
                         widget=forms.Textarea,
                         required=False,
-                        help_text=mark_safe("Add a list of locations seperated by a comma.  " +
+                        help_text=mark_safe("Add a list of locations separated by a comma.  " +
                                             "ex. 42 430.10, 42 430 Subpart B, 45 18.150 " +
                                             "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
                                             "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
@@ -331,7 +331,7 @@ class FederalResourceForm(ResourceForm):
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):
     form = SupContentForm
-    list_display = ("date", "name", "description", "category", "updated_at", "approved")
+    list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
     fields = ("approved", "name", "description", "date", "url", "category",

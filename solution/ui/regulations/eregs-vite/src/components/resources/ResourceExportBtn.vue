@@ -33,7 +33,7 @@
 <script>
 import exportFromJSON from "export-from-json";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
-import { getSupplementalContentV3 } from "@/utilities/api";
+import { getSupplementalContent } from "@/utilities/api";
 
 export default {
     name: "ResourceExportBtn",
@@ -111,7 +111,7 @@ export default {
             const content = [];
             while (supNum < this.supCount) {
                 content.push(
-                    getSupplementalContentV3({
+                    getSupplementalContent({
                         page,
                         partDict:
                             Object.keys(this.partDict).length > 0

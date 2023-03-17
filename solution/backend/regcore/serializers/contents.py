@@ -213,8 +213,7 @@ class PartChildrenField(NodeChildrenField):
         }
 
 
-# TODO: Remove V3 in front of serializer name (currently causes Swagger conflict with V2)
-class V3PartSerializer(PartNodeSerializer):
+class PartSerializer(PartNodeSerializer):
     label = serializers.ListField(child=serializers.CharField())
     title = serializers.CharField()
     authority = AuthoritySerializer()
