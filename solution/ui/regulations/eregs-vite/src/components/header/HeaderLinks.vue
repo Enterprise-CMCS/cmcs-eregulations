@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount, onMounted, onUnmounted, onUpdated } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -29,7 +29,9 @@ const links = [
 
 const moreMenuExpanded = ref(false);
 
-const moreClick = () => (moreMenuExpanded.value = !moreMenuExpanded.value);
+const moreClick = () => {
+    moreMenuExpanded.value = !moreMenuExpanded.value;
+};
 </script>
 
 <template>
