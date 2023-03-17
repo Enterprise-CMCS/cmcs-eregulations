@@ -10,7 +10,7 @@ from django.views import View
 from solo.admin import SingletonModelAdmin
 
 from resources.admin import BaseAdmin
-from .models import ParserConfiguration, TitleConfiguration
+from .models import ParserConfiguration, PartConfiguration
 from .search.models import Synonym
 
 
@@ -61,7 +61,8 @@ class BulkSynonymView(PermissionRequiredMixin, View):
         return redirect("search/synonym/")
 
 
-class TitleConfigurationInline(admin.TabularInline):
+class PartConfigurationInline(admin.TabularInline):
+    ordering = ("title", "value")
     formfield_overrides = {
         models.TextField: {
             'widget': TextInput(attrs={
@@ -69,13 +70,13 @@ class TitleConfigurationInline(admin.TabularInline):
             })
         }
     }
-    model = TitleConfiguration
-    extra = 1
+    model = PartConfiguration
+    extra = 0
 
 
 @admin.register(ParserConfiguration)
 class ParserConfigurationAdmin(SingletonModelAdmin):
-    inlines = (TitleConfigurationInline,)
+    inlines = (PartConfigurationInline,)
     fieldsets = (
         (None, {
             'fields': (
