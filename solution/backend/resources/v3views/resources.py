@@ -98,11 +98,11 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
     def generate_page_url(self, url, page, page_type):
         parse_url = urlparse.urlparse(url)
-        queries = parse_url.query.split("&")
-        query_list = list(map(lambda x: re.sub("page=\d", f"page={page}", x), queries))
-        query = "&".join(query_list)
-        parse = parse_url._replace(query=query)
-        return urlparse.urlunparse(parse)
+        url_parts = parse_url.query.split("&")
+        new_url_parts = list(map(lambda x: re.sub("page=\d", f"page={page}", x), url_parts))
+        query = "&".join(new_url_parts)
+        parsed_url = parse_url._replace(query=query)
+        return urlparse.urlunparse(parsed_url)
 
     def list(self, request, *args, **kwargs):
         print('within list')
