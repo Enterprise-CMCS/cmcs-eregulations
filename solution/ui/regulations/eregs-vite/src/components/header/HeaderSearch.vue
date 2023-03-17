@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 
 import HeaderSearchIcon from "../svgs/header-search-icon.vue";
-import HeaderLeftChevron from "../svgs/header-left-chevron.vue";
+import HeaderChevronLeft from "../svgs/header-chevron-left.vue";
 
 defineProps({
     searchUrl: {
@@ -32,7 +32,7 @@ const expandStateClasses = computed(() => ({
             @click="expandSearchClick"
         >
             <template v-if="mobileSearchExpanded">
-                <HeaderLeftChevron />
+                <HeaderChevronLeft />
             </template>
             <template v-else>
                 <HeaderSearchIcon />
