@@ -39,6 +39,8 @@ import {
 import { goToVersion } from "./go-to-version";
 import { highlightText, getQueryParam, scrollToElement } from "./utils";
 
+import Clickaway from "../../eregs-vite/src/directives/clickaway";
+
 Vue.config.devtools = true;
 
 function isElementInViewport(el) {
@@ -178,6 +180,8 @@ function viewButtonClose() {
 function main() {
     // Must be first, mutates DOM
     highlightText(window.location, "highlight");
+
+    Vue.directive("clickaway", Clickaway);
 
     new Vue({
         components: {
