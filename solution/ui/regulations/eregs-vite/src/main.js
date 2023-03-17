@@ -9,8 +9,6 @@ const mountEl = document.querySelector("#vite-app");
 Vue.config.devtools = true;
 const { customUrl, host } = mountEl.dataset;
 
-// https://www.vuesnippets.com/posts/click-away/
-// https://dev.to/jamus/clicking-outside-the-box-making-your-vue-app-aware-of-events-outside-its-world-53nh
 Vue.directive("clickaway", Clickaway);
 
 new Vue({

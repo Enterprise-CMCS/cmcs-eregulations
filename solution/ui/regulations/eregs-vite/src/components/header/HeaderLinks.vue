@@ -35,6 +35,10 @@ const moreMenuExpanded = ref(false);
 const moreClick = () => {
     moreMenuExpanded.value = !moreMenuExpanded.value;
 };
+
+const closeClick = () => {
+    moreMenuExpanded.value = false;
+};
 </script>
 
 <template>
@@ -59,7 +63,11 @@ const moreClick = () => {
             </template>
             <span>More</span>
         </button>
-        <div v-show="moreMenuExpanded" class="more--dropdown-menu">
+        <div
+            v-show="moreMenuExpanded"
+            class="more--dropdown-menu"
+            v-clickaway="closeClick"
+        >
             <ul class="links__list links__list--dropdown">
                 <li v-for="(link, index) in links" :key="index">
                     <a
