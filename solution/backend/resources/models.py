@@ -10,40 +10,145 @@ from solo.models import SingletonModel
 import re
 
 
-# Field mixins
-class InternalNotesFieldMixin(models.Model):
-    internal_notes = models.TextField(null=True, blank=True)
+class ProxyManager(models.Manager):
+    def __init__(self, type, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.type = type
+
+    def get_queryset(self):
+        return super().get_queryset().filter(type=self.type)
+    
+    def create(self, *args, **kwargs):
+        return super().create(type=self.type, *args, **kwargs)
+
+
+class DisplayNameFieldMixin:
+    @property
+    def display_name(self):
+        return str(self)
+
+
+# Location models
+
+
+class Location(models.Model, DisplayNameFieldMixin):
+    SECTION = 0
+    SUBPART = 1
+    LOCATION_TYPES = [
+        (SECTION, "Section"),
+        (SUBPART, "Subpart"),
+    ]
+
+    type = models.IntegerField(choices=LOCATION_TYPES, default=SECTION)
+    title = models.IntegerField()
+    part = models.IntegerField()
+    subpart = models.CharField(max_length=12, null=True, blank=True)
+    section = models.IntegerField(null=True)
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
+
+    def __str__(self):
+        return [
+            f"{self.title} CFR {self.part}.{self.section}",
+            f"{self.title} CFR {self.part} Subpart {self.subpart}",
+        ][self.type]
 
     class Meta:
-        abstract = True
+        unique_together = [
+            ["type", "title", "part", "section"],
+            ["type", "title", "part", "subpart"],
+        ]
 
 
-class DateFieldMixin(models.Model):
-    date = models.CharField(
-        max_length=10,
-        null=True,
-        blank=True,
-        help_text="Leave blank or enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
-        validators=[RegexValidator(
-            regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
-            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"! "
-                    "For example: 2021, 2021-01, or 2021-01-31.",
-        )],
-    )
-
-    def clean(self):
-        # If a day is entered into the date field, validate for months with less than 31 days.
-        if self.date is not None:
-            date_fields = self.date.split("-")
-            if len(date_fields) == 3:
-                (year, month, day) = date_fields
-                try:
-                    _ = datetime.date(int(year), int(month), int(day))
-                except ValueError:
-                    raise ValidationError(f'{day} is not a valid day for the month of {month}!')
+class Section(Location):
+    TYPE = Location.SECTION
+    objects = ProxyManager(TYPE)
 
     class Meta:
-        abstract = True
+        verbose_name = "Section"
+        verbose_name_plural = "Sections"
+        proxy = True
+
+
+class Subpart(Location):
+    TYPE = Location.SUBPART
+    objects = ProxyManager(TYPE)
+
+    class Meta:
+        verbose_name = "Subpart"
+        verbose_name_plural = "Subparts"
+        proxy = True
+
+
+# Category models
+
+
+class CategoryManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            is_fr_doc_category=models.ExpressionWrapper(
+                ~models.Q(fr_doc_category_config=None),
+                output_field=models.BooleanField()
+            )
+        )
+
+
+class BaseCategory(models.Model, DisplayNameFieldMixin):
+    CATEGORY = 0
+    SUB_CATEGORY = 1
+    CATEGORY_TYPES = [
+        (CATEGORY, "Category"),
+        (SUB_CATEGORY, "Sub-category")
+    ]
+
+    type = models.IntegerField(choices=CATEGORY_TYPES, default=CATEGORY)
+    name = models.CharField(max_length=512)
+    description = models.TextField(null=True, blank=True)
+    order = models.IntegerField(default=0, blank=True)
+    show_if_empty = models.BooleanField(default=False)
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE, related_name="children")
+    objects = CategoryManager()
+
+    def __str__(self):
+        return f"{self.name} ({self.CATEGORY_TYPES[self.type][1]})"
+
+    class Meta:
+        unique_together = [
+            ["type", "name", "description", "order"],
+            ["type", "name", "description", "order", "parent"],
+        ]
+
+
+class CategoryProxyManager(ProxyManager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            is_fr_doc_category=models.ExpressionWrapper(
+                ~models.Q(fr_doc_category_config=None),
+                output_field=models.BooleanField()
+            )
+        )
+
+
+class Category(BaseCategory):
+    TYPE = BaseCategory.CATEGORY
+    objects = CategoryProxyManager(TYPE)
+
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+        proxy = True
+
+
+class SubCategory(BaseCategory):
+    TYPE = BaseCategory.SUB_CATEGORY
+    objects = CategoryProxyManager(TYPE)
+
+    class Meta:
+        verbose_name = "Sub-category"
+        verbose_name_plural = "Sub-categories"
+        proxy = True
+
+
+# Resource models
 
 
 class NaturalSortField(models.CharField):
@@ -71,129 +176,18 @@ class NaturalSortField(models.CharField):
             string = string.strip()
             string = re.sub(r'\d+', naturalize_int_match, string)
             string = string[:self.max_length]
-
         return string
 
 
-class TypicalResourceFieldsMixin(DateFieldMixin, InternalNotesFieldMixin):
-    name = models.CharField(max_length=512, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    url = models.URLField(max_length=512, null=True, blank=True)
-    name_sort = NaturalSortField('name', null=True)
-    description_sort = NaturalSortField('description', null=True)
+class ResourceGroup(models.Model, DisplayNameFieldMixin):
+    FEDERAL_REGISTER_DOCUMENT_GROUP = 0
+    RESOURCEGROUP_TYPES = [
+        (FEDERAL_REGISTER_DOCUMENT_GROUP, "Federal Register Document Group"),
+    ]
 
-    class Meta:
-        abstract = True
+    type = models.IntegerField(choices=RESOURCEGROUP_TYPES, default=FEDERAL_REGISTER_DOCUMENT_GROUP)
 
-
-class DisplayNameFieldMixin:
-    @property
-    def display_name(self):
-        return str(self)
-
-
-# Category types
-# Current choice is one model per level due to constraint of exactly 2 levels.
-
-class AbstractCategoryQuerySet(InheritanceQuerySet):
-    def contains_fr_docs(self):
-        return self.annotate(
-            is_fr_doc_category=models.ExpressionWrapper(
-                ~models.Q(fr_doc_category_config=None),
-                output_field=models.BooleanField()
-            )
-        )
-
-
-class AbstractCategory(models.Model, DisplayNameFieldMixin):
-    name = models.CharField(max_length=512, unique=True)
-    description = models.TextField(null=True, blank=True)
-    order = models.IntegerField(default=0, blank=True)
-    show_if_empty = models.BooleanField(default=False)
-
-    objects = AbstractCategoryQuerySet.as_manager()
-
-    def __str__(self):
-        return f"{self.name} ({self._meta.verbose_name})"
-
-    class Meta:
-        ordering = ["order", "name"]
-
-
-class Category(AbstractCategory):
-
-    class Meta:
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
-
-
-class SubCategory(AbstractCategory):
-    parent = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
-
-    class Meta:
-        verbose_name = "Sub-category"
-        verbose_name_plural = "Sub-categories"
-
-
-# Location models
-# Defines where supplemental content is located. All locations must inherit from AbstractLocation.
-
-
-class AbstractLocation(models.Model, DisplayNameFieldMixin):
-    title = models.IntegerField()
-    part = models.IntegerField()
-
-    objects = InheritanceManager()
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ["title", "part", "section__section_id", "subpart__subpart_id"]
-
-
-class Subpart(AbstractLocation):
-    subpart_id = models.CharField(max_length=12)
-
-    def __str__(self):
-        return f'{self.title} CFR {self.part} Subpart {self.subpart_id}'
-
-    def validate_unique(self, exclude=None):
-        super().validate_unique(exclude=exclude)
-        query = Subpart.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).values_list("id", flat=True)
-        if query and self.id not in query:
-            raise ValidationError({NON_FIELD_ERRORS: [f"Subpart {str(self)} already exists."]})
-
-    class Meta:
-        verbose_name = "Subpart"
-        verbose_name_plural = "Subparts"
-        ordering = ["title", "part", "subpart_id"]
-
-
-class Section(AbstractLocation):
-    section_id = models.IntegerField()
-    parent = models.ForeignKey(AbstractLocation, null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
-
-    def __str__(self):
-        return f'{self.title} CFR {self.part}.{self.section_id}'
-
-    def validate_unique(self, exclude=None):
-        super().validate_unique(exclude=exclude)
-        query = Section.objects.filter(title=self.title, part=self.part, section_id=self.section_id).values_list("id", flat=True)
-        if query and self.id not in query:
-            raise ValidationError({NON_FIELD_ERRORS: [f"Section {str(self)} already exists."]})
-
-    class Meta:
-        verbose_name = "Section"
-        verbose_name_plural = "Sections"
-        ordering = ["title", "part", "section_id"]
-
-
-# Resource grouping models
-
-
-class FederalRegisterDocumentGroup(models.Model):
+    # Federal Register Documents
     docket_number_prefixes = ArrayField(
         models.CharField(max_length=255, blank=True, null=True),
         default=list,
@@ -203,102 +197,136 @@ class FederalRegisterDocumentGroup(models.Model):
     )
 
     def __str__(self):
-        prefixes = ", ".join(self.docket_number_prefixes)
-        return f"\"{prefixes}\" group"
+        return [
+            f"\"{', '.join(self.docket_number_prefixes)}\" group"
+        ][self.type]
+
+    class Meta:
+        unique_together = ["type", "docket_number_prefixes"]
+
+
+class FederalRegisterDocumentGroup(ResourceGroup):
+    TYPE = ResourceGroup.FEDERAL_REGISTER_DOCUMENT_GROUP
+    objects = ProxyManager(TYPE)
 
     class Meta:
         verbose_name = "Federal Register Doc Group"
         verbose_name_plural = "Federal Register Doc Groups"
-        ordering = ('docket_number_prefixes',)
+        proxy = True
 
 
-# Resource models
-# All types of resources must inherit from AbstractResource.
+class Resource(models.Model, DisplayNameFieldMixin):
+    SUPPLEMENTAL_CONTENT = 0
+    FEDERAL_REGISTER_DOCUMENT = 1
+    RESOURCE_TYPES = [
+        (SUPPLEMENTAL_CONTENT, "Supplemental Content"),
+        (FEDERAL_REGISTER_DOCUMENT, "Federal Register Document"),
+    ]
 
-
-class AbstractResource(models.Model, DisplayNameFieldMixin):
+    # Common fields
+    type = models.IntegerField(choices=RESOURCE_TYPES, default=SUPPLEMENTAL_CONTENT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(default=True)
-    category = models.ForeignKey(
-        AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources"
-    )
-    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
+    category = models.ForeignKey(BaseCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources")
+    locations = models.ManyToManyField(Location, blank=True, related_name="resources")
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
+    group = models.ForeignKey(ResourceGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="resources")
     location_history = models.JSONField(default=list)
 
-    objects = InheritanceManager()
+    # Supplemental Content and Federal Register Document fields
+    name = models.CharField(max_length=512, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    url = models.URLField(max_length=512, null=True, blank=True)
+    internal_notes = models.TextField(null=True, blank=True)
+    date = models.CharField(
+        max_length=10,
+        null=True,
+        blank=True,
+        help_text="Leave blank or enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
+        validators=[RegexValidator(
+            regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
+            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"! "
+                    "For example: 2021, 2021-01, or 2021-01-31.",
+        )],
+    )
 
-
-class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
-
-    def __str__(self):
-        return f"{self.date} {self.name} {self.description[:50]}"
-
-    class Meta:
-        ordering = ["-date", "name", "description"]
-        verbose_name = "Supplemental Content"
-        verbose_name_plural = "Supplemental Content"
-
-
-class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
+    # Federal Register Document fields
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
     correction = models.BooleanField(default=False)
     withdrawal = models.BooleanField(default=False)
+    doc_type = models.CharField(blank=True, max_length=255)
 
-    doc_type = models.CharField(
-        blank=True,
-        max_length=255
-    )
-
-    group = models.ForeignKey(
-        FederalRegisterDocumentGroup,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="documents",
-    )
+    # Sort fields
+    name_sort = NaturalSortField("name", null=True)
+    description_sort = NaturalSortField("description", null=True)
 
     def __str__(self):
-        return f"{self.date} {self.document_number}: {self.name}"
+        return [
+            f"{self.date} {self.name} {self.description[:50]}",
+            f"{self.date} {self.document_number}: {self.name}",
+        ][self.type]
+
+    def clean(self):
+        # If a day is entered into the date field, validate for months with less than 31 days.
+        if self.date is not None:
+            date_fields = self.date.split("-")
+            if len(date_fields) == 3:
+                (year, month, day) = date_fields
+                try:
+                    _ = datetime.date(int(year), int(month), int(day))
+                except ValueError:
+                    raise ValidationError(f'{day} is not a valid day for the month of {month}!')
+
+
+class SupplementalContent(Resource):
+    TYPE = Resource.SUPPLEMENTAL_CONTENT
+    objects = ProxyManager(TYPE)
 
     class Meta:
-        ordering = ["-date", "document_number", "name", "description"]
+        verbose_name = "Supplemental Content"
+        verbose_name_plural = "Supplemental Content"
+        proxy = True
+
+
+class FederalRegisterDocument(Resource):
+    TYPE = Resource.FEDERAL_REGISTER_DOCUMENT
+    objects = ProxyManager(TYPE)
+
+    class Meta:
         verbose_name = "Federal Register Document"
         verbose_name_plural = "Federal Register Documents"
+        proxy = True
 
 
-# Receiver hooks for updating resource groupings on save
+def update_related_resources(group_id):
+    post_save.disconnect(post_save_resource, sender=Resource)
+    post_save.disconnect(post_save_resource_group, sender=ResourceGroup)
+    for resource in Resource.objects.filter(group=group_id):
+        resource.related_resources.set(resource.group.resources.exclude(id=resource.id).order_by("-date"))
+        resource.save()
+    post_save.connect(post_save_resource, sender=Resource)
+    post_save.connect(post_save_resource_group, sender=ResourceGroup)
 
 
-def update_related_docs(group_id):
-    post_save.disconnect(post_save_fr_doc, sender=FederalRegisterDocument)
-    post_save.disconnect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
-    docs = FederalRegisterDocument.objects.filter(group=group_id)
-    for doc in docs:
-        doc.related_resources.set(doc.group.documents.exclude(id=doc.id).order_by("-date"))
-        doc.save()
-    post_save.connect(post_save_fr_doc, sender=FederalRegisterDocument)
-    post_save.connect(post_save_fr_doc_group, sender=FederalRegisterDocumentGroup)
+@receiver(post_save, sender=ResourceGroup)
+def post_save_resource_group(sender, instance, **kwargs):
+    update_related_resources(instance.id)
 
 
-@receiver(post_save, sender=FederalRegisterDocumentGroup)
-def post_save_fr_doc_group(sender, instance, **kwargs):
-    update_related_docs(instance.id)
-
-
-@receiver(post_save, sender=FederalRegisterDocument)
-def post_save_fr_doc(sender, instance, **kwargs):
+@receiver(post_save, sender=Resource)
+def post_save_resource(sender, instance, **kwargs):
     if instance.group:
-        update_related_docs(instance.group)
+        update_related_resources(instance.group)
 
 
 # Singleton model for configuring resources app
 
+
 class ResourcesConfiguration(SingletonModel):
     fr_doc_category = models.ForeignKey(
-        AbstractCategory,
+        BaseCategory,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

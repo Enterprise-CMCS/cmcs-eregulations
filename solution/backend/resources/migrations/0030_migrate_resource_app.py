@@ -242,6 +242,30 @@ def resolve_related_resources(apps, schema_editor):
             doc.save()
 
 
+def migrate_resources_config(apps, schema_editor):
+    ResourcesConfiguration = apps.get_model("resources", "ResourcesConfiguration")
+    NewResourcesConfiguration = apps.get_model("resources", "NewResourcesConfiguration")
+    NewCategory = apps.get_model("resources", "NewCategory")
+
+    old_config = ResourcesConfiguration.objects.first()
+
+    if old_config.fr_doc_category:
+        # find category
+        try:
+            category = NewCategory.objects.get(
+                name=old_config.fr_doc_category.name,
+                description=old_config.fr_doc_category.description,
+                order=old_config.fr_doc_category.order,
+                show_if_empty=old_config.fr_doc_category.show_if_empty,
+            )
+        except NewCategory.DoesNotExist:
+            category = None
+    else:
+        category = None
+
+    NewResourcesConfiguration.objects.create(fr_doc_category=category)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -255,4 +279,5 @@ class Migration(migrations.Migration):
         migrations.RunPython(migrate_supplemental_content),
         migrations.RunPython(migrate_federal_register_documents),
         migrations.RunPython(resolve_related_resources),
+        migrations.RunPython(migrate_resources_config),
     ]

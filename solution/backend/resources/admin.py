@@ -18,19 +18,6 @@ from django.forms.widgets import Textarea
 
 # Register your models here.
 
-from .models import (
-    AbstractResource,
-    SupplementalContent,
-    FederalRegisterDocument,
-    AbstractCategory,
-    Category,
-    SubCategory,
-    AbstractLocation,
-    Section,
-    Subpart,
-    FederalRegisterDocumentGroup,
-    ResourcesConfiguration,
-)
 
 from .filters import (
     TitleFilter,
@@ -39,24 +26,24 @@ from .filters import (
     SubpartFilter,
 )
 
-from .serializers.locations import AbstractLocationPolymorphicSerializer
+#from .serializers.locations import AbstractLocationPolymorphicSerializer
 from . import actions
 
 from common.admin import NewBaseAdmin
 
 
-from .new_models import (
+from .models import (
     Location,
-    SectionLocation,
-    SubpartLocation,
-    NewCategory,
-    NewCategoryCategory,
-    NewCategorySubCategory,
+    Section,
+    Subpart,
+    BaseCategory,
+    Category,
+    SubCategory,
     ResourceGroup,
-    NewFederalRegisterDocumentGroup,
+    FederalRegisterDocumentGroup,
     Resource,
-    NewSupplementalContent,
-    NewFederalRegisterDocument,
+    SupplementalContent,
+    FederalRegisterDocument,
 )
 
 
@@ -92,25 +79,25 @@ class NewLocationAdmin(NewBaseAdmin):
         )
 
 
-@admin.register(SectionLocation)
-class SectionLocationAdmin(HiddenTypeFieldMixin, NewLocationAdmin):
+@admin.register(Section)
+class SectionAdmin(HiddenTypeFieldMixin, NewLocationAdmin):
     admin_priority = 40
     list_display = ("title", "part", "section", "parent")
     search_fields = ("title", "part", "section")
     ordering = ("title", "part", "section", "parent")
     shown_fields = ("title", "part", "section", "parent", "linked_resources")
     foreignkey_lookups = {
-        "parent": lambda: SubpartLocation.objects.all(),
+        "parent": lambda: Subpart.objects.all(),
     }
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related(
-            Prefetch("parent", SubpartLocation.objects.all()),
+            Prefetch("parent", Subpart.objects.all()),
         )
 
 
-@admin.register(SubpartLocation)
-class SubpartLocationAdmin(HiddenTypeFieldMixin, NewLocationAdmin):
+@admin.register(Subpart)
+class SubpartAdmin(HiddenTypeFieldMixin, NewLocationAdmin):
     admin_priority = 50
     list_display = ("title", "part", "subpart")
     search_fields = ("title", "part", "subpart")
@@ -118,27 +105,27 @@ class SubpartLocationAdmin(HiddenTypeFieldMixin, NewLocationAdmin):
     shown_fields = ("title", "part", "subpart", "linked_resources")
 
 
-@admin.register(NewCategoryCategory)
-class NewCategoryAdmin(HiddenTypeFieldMixin, NewBaseAdmin):
+@admin.register(Category)
+class CategoryAdmin(HiddenTypeFieldMixin, NewBaseAdmin):
     admin_priority = 10
     list_display = ("name", "description", "order", "show_if_empty")
     search_fields = ("name", "description")
     shown_fields = ("name", "description", "order", "show_if_empty")
 
 
-@admin.register(NewCategorySubCategory)
-class NewCategorySubCategoryAdmin(HiddenTypeFieldMixin, NewBaseAdmin):
+@admin.register(SubCategory)
+class SubCategoryAdmin(HiddenTypeFieldMixin, NewBaseAdmin):
     admin_priority = 20
     list_display = ("name", "description", "order", "show_if_empty", "parent")
     shown_fields = ("name", "description", "order", "show_if_empty", "parent")
     foreignkey_lookups = {
-        "parent": lambda: NewCategoryCategory.objects.all(),
+        "parent": lambda: Category.objects.all(),
     }
 
 
-class NewFederalRegisterDocumentGroupForm(forms.ModelForm):
+class FederalRegisterDocumentGroupForm(forms.ModelForm):
     resources = forms.ModelMultipleChoiceField(
-        queryset=NewFederalRegisterDocument.objects.all(),
+        queryset=FederalRegisterDocument.objects.all(),
         required=False,
         widget=FilteredSelectMultiple(
             verbose_name="Documents",
@@ -159,16 +146,16 @@ class NewFederalRegisterDocumentGroupForm(forms.ModelForm):
         return group
 
     class Meta:
-        model = NewFederalRegisterDocumentGroup
+        model = FederalRegisterDocumentGroup
         fields = ("type", "docket_number_prefixes", "resources")
         widgets = {
             "type": forms.HiddenInput(),
         }
 
 
-@admin.register(NewFederalRegisterDocumentGroup)
-class NewFederalRegisterDocumentGroupAdmin(NewBaseAdmin):
-    form = NewFederalRegisterDocumentGroupForm
+@admin.register(FederalRegisterDocumentGroup)
+class FederalRegisterDocumentGroupAdmin(NewBaseAdmin):
+    form = FederalRegisterDocumentGroupForm
     admin_priority = 250
     list_display = ("docket_number_prefixes", "number_of_documents")
     list_display_links = ("docket_number_prefixes", "number_of_documents")
@@ -181,14 +168,14 @@ class NewFederalRegisterDocumentGroupAdmin(NewBaseAdmin):
         return obj.number_of_documents
 
 
-@admin.register(ResourcesConfiguration)
-class ResourcesConfigurationAdmin(SingletonModelAdmin):
-    admin_priority = 0
+# @admin.register(ResourcesConfiguration)
+# class ResourcesConfigurationAdmin(SingletonModelAdmin):
+#     admin_priority = 0
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "fr_doc_category":
-            kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+#     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+#         if db_field.name == "fr_doc_category":
+#             kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
+#         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ResourceAdmin(NewBaseAdmin):
@@ -207,7 +194,7 @@ class ResourceAdmin(NewBaseAdmin):
     ]
 
     foreignkey_lookups = {
-        "category": lambda: NewCategory.objects.all(),
+        "category": lambda: BaseCategory.objects.all(),
     }
 
     manytomany_lookups = {
@@ -216,7 +203,7 @@ class ResourceAdmin(NewBaseAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related(
-            Prefetch("category", NewCategory.objects.all()),
+            Prefetch("category", BaseCategory.objects.all()),
         )
 
     # Overrides the save method in django admin to handle many to many relationships.
@@ -361,7 +348,7 @@ class ResourceForm(forms.ModelForm):
                         disabled=True)
 
 
-@admin.register(NewSupplementalContent)
+@admin.register(SupplementalContent)
 class SupplementalContentAdmin(ResourceAdmin):
     form = ResourceForm
     list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
@@ -371,7 +358,7 @@ class SupplementalContentAdmin(ResourceAdmin):
               "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history")
 
 
-@admin.register(NewFederalRegisterDocument)
+@admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(ResourceAdmin):
     form = ResourceForm
     list_display = ("date", "name", "description", "in_group", "docket_numbers",

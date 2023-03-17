@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from regcore.models import Part
-from resources.models import Category, SubCategory, AbstractLocation
+from resources.models import Category, SubCategory, Location
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
@@ -43,10 +43,10 @@ class ReaderView(CitationContextMixin, TemplateView):
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
-        categories = list(Category.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
-        sub_categories = list(SubCategory.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
+        categories = list(Category.objects.filter(show_if_empty=True).order_by('order').values())
+        sub_categories = list(SubCategory.objects.filter(show_if_empty=True).order_by('order').values())
 
-        locations = AbstractLocation.objects.filter(part=reg_part).select_subclasses().annotate(
+        locations = Location.objects.filter(title=reg_title, part=reg_part).annotate(
             num_locations=Count(
                 'resources', filter=Q(resources__approved="t")
             )).filter(
