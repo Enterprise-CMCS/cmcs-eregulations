@@ -1,7 +1,7 @@
 import json
 import requests
-import logging
-
+import urllib.parse as urlparse
+import re
 from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -10,7 +10,7 @@ from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-
+from urllib.parse import urlencode
 from .mixins import ResourceExplorerViewSetMixin, FRDocGroupingMixin
 from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
 
@@ -60,7 +60,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         results = []
         rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}&query={query}&limit={self.limit}&offset={offset}'
         gov_results = json.loads(requests.get(rstring).text)
-
+        print("rstring is ------------>>>>>>", rstring)
         if "errors" in gov_results or (gov_results["web"]["total"] == 0 and not gov_results["web"]["results"]):
             raise NotFound("Invalid page")
 
@@ -96,27 +96,33 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 )),
             )
 
-    def generate_page_url(self, url, page):
-        pass
+    def generate_page_url(self, url, page, page_type):
+        parse_url = urlparse.urlparse(url)
+        queries = parse_url.query.split("&")
+        query_list = list(map(lambda x: re.sub("page=\d", f"page={page}", x), queries))
+        query = "&".join(query_list)
+        parse = parse_url._replace(query=query)
+        return urlparse.urlunparse(parse)
 
     def list(self, request, *args, **kwargs):
+        print('within list')
         q = self.request.query_params.get("q")
         page = int(self.request.query_params.get("page", 1))
-
+        url = request.get_full_path()
+        print("getting gov results ------> ")
         self.gov_results = self.get_gov_results(q, page)
         queryset = self.get_queryset()
-
         #print("----> self gov results are  {} ",self.gov_results["results"])
         records = list(queryset)
         for record in records:
             setattr(record, "snippet", [r['snippet'] for r in self.gov_results["results"] if r['url'] == record.url][0])
-        #next = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
-        #previous = page - 1 if page > 1 else None
+        next_page = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
+        previous_page = page - 1 if page > 1 else None
 
         obj = {
             "count": self.gov_results["total"],
-            "next": "next page",
-            "previous": "previous page",
+            "next": self.generate_page_url(url, next_page, "next"),
+            "previous": self.generate_page_url(url, previous_page, 'previous'),
             "results": records,
         }
 
