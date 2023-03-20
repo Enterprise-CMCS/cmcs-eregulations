@@ -21,24 +21,25 @@ class SearchIndexQuerySet(models.QuerySet):
         if query and query.startswith('"') and query.endswith('"'):
             search_type = "phrase"
             cover_density = True
+        search_query=SearchQuery(query, search_type=search_type, config='english')
 
         return self.annotate(vector_column=RawSQL("vector_column", [], output_field=SearchVectorField()))\
             .annotate(rank=SearchRank(
                 "vector_column",
-                SearchQuery(query, search_type=search_type, config='english'), cover_density=cover_density)
+                search_query, cover_density=cover_density)
             )\
             .filter(rank__gte=0.04)\
             .annotate(
                 headline=SearchHeadline(
                     "content",
-                    SearchQuery(query, search_type=search_type, config='english'),
+                    search_query,
                     start_sel='<span class="search-highlight">',
                     stop_sel='</span>',
                     config='english'
                 ),
                 parentHeadline=SearchHeadline(
                     "title",
-                    SearchQuery(query, search_type=search_type, config='english'),
+                    search_query,
                     start_sel="<span class='search-highlight'>",
                     stop_sel="</span>",
                     config='english',
