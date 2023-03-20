@@ -17,7 +17,7 @@ export default {
             type: String,
             default: "",
         },
-        homepageUrl: {
+        homeUrl: {
             type: String,
             default: "",
         },
@@ -43,7 +43,7 @@ export default {
             :api-url="apiUrl"
             :about-url="aboutUrl"
             :custom-url="customUrl"
-            :homepage-url="homepageUrl"
+            :home-url="homeUrl"
             :resources-url="resourcesUrl"
             :search-url="searchUrl"
             :host="host"
