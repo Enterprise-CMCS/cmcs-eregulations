@@ -10,7 +10,6 @@ from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
-from urllib.parse import urlencode
 from .mixins import ResourceExplorerViewSetMixin, FRDocGroupingMixin
 from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
 
@@ -58,9 +57,9 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         key = 'M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4='
         offset = (page - 1) * self.limit
         results = []
-        rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}&query={query}&limit={self.limit}&offset={offset}'
+        rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
+                  f'&query={query}&limit={self.limit}&offset={offset}'
         gov_results = json.loads(requests.get(rstring).text)
-        print("rstring is ------------>>>>>>", rstring)
         if "errors" in gov_results or (gov_results["web"]["total"] == 0 and not gov_results["web"]["results"]):
             raise NotFound("Invalid page")
 
@@ -71,7 +70,6 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 'url': gov_result['url']
             }
             results.append(result)
-        
         return {
             "total": gov_results["web"]["total"],
             "results": results,
@@ -96,7 +94,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 )),
             )
 
-    def generate_page_url(self, url, page, page_type):
+    def generate_page_url(self, url, page):
         parse_url = urlparse.urlparse(url)
         url_parts = parse_url.query.split("&")
         new_url_parts = list(map(lambda x: re.sub("page=\d", f"page={page}", x), url_parts))
@@ -105,14 +103,11 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         return urlparse.urlunparse(parsed_url)
 
     def list(self, request, *args, **kwargs):
-        print('within list')
         q = self.request.query_params.get("q")
         page = int(self.request.query_params.get("page", 1))
         url = request.get_full_path()
-        print("getting gov results ------> ")
         self.gov_results = self.get_gov_results(q, page)
         queryset = self.get_queryset()
-        #print("----> self gov results are  {} ",self.gov_results["results"])
         records = list(queryset)
         for record in records:
             setattr(record, "snippet", [r['snippet'] for r in self.gov_results["results"] if r['url'] == record.url][0])
@@ -121,8 +116,8 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
         obj = {
             "count": self.gov_results["total"],
-            "next": self.generate_page_url(url, next_page, "next"),
-            "previous": self.generate_page_url(url, previous_page, 'previous'),
+            "next": self.generate_page_url(url, next_page),
+            "previous": self.generate_page_url(url, previous_page),
             "results": records,
         }
 
