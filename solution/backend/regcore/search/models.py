@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models.expressions import RawSQL
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.search import (
-    SearchVector,
     SearchQuery,
     SearchRank,
     SearchHeadline,
@@ -10,6 +9,7 @@ from django.contrib.postgres.search import (
 )
 
 from regcore.models import Part
+
 
 class SearchIndexQuerySet(models.QuerySet):
     def effective(self, date):
@@ -21,7 +21,7 @@ class SearchIndexQuerySet(models.QuerySet):
         if query and query.startswith('"') and query.endswith('"'):
             search_type = "phrase"
             cover_density = True
-        
+
         return self.annotate(vector_column=RawSQL("vector_column", [], output_field=SearchVectorField()))\
             .annotate(rank=SearchRank(
                 "vector_column",
@@ -52,6 +52,7 @@ class SearchIndexQuerySet(models.QuerySet):
 class SearchIndexManager(models.Manager.from_queryset(SearchIndexQuerySet)):
     pass
 
+
 class SearchIndexV2(models.Model):
     part_number = models.CharField(max_length=32)
     section_number = models.CharField(max_length=32)
@@ -60,13 +61,14 @@ class SearchIndexV2(models.Model):
     title = models.TextField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     objects = SearchIndexManager()
+
+
 class SearchIndex(models.Model):
     type = models.CharField(max_length=32)
     label = ArrayField(base_field=models.CharField(max_length=32))
     content = models.TextField()
     parent = models.JSONField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
-
 
     class Meta:
         unique_together = ['label', 'part']

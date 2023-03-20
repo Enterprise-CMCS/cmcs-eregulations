@@ -16,6 +16,7 @@ class Migration(migrations.Migration):
                 setweight(to_tsvector('english', coalesce(title,'')), 'A') ||
                 setweight(to_tsvector('english', coalesce(content,'')), 'B')
               ) STORED;
+              CREATE INDEX search_index ON search_searchindexv2 USING GIN (vector_column);
             ''',
 
             reverse_sql = '''
