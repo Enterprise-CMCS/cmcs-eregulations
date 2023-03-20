@@ -92,10 +92,10 @@ form .jump-to-input {
         font-size: $font-size-lg;
     }
 
-    select#jumpToTitle,
-    select#jumpToPart,
-    input#jumpToSection,
-    input#jumpBtn {
+    select.jump-to-title,
+    select.jump-to-part,
+    input.jump-to-section,
+    input.jump-btn {
         font-size: $font-size_md;
         line-height: 24px;
         font-weight: 700;
@@ -104,7 +104,7 @@ form .jump-to-input {
         padding: 5px 8px;
     }
 
-    select#jumpToTitle {
+    select.jump-to-title {
         width: 85px;
 
         @include custom-max(($eds-width-md - 1) / 1px) {
@@ -112,7 +112,7 @@ form .jump-to-input {
         }
     }
 
-    select#jumpToPart {
+    select.jump-to-part {
         width: 80px;
 
         @include custom-max(($eds-width-md - 1) / 1px) {
@@ -120,7 +120,7 @@ form .jump-to-input {
         }
     }
 
-    input#jumpToSection {
+    input.jump-to-section {
         margin-right: 10px;
         width: 80px;
 
@@ -133,7 +133,7 @@ form .jump-to-input {
         }
     }
 
-    input#jumpBtn {
+    input.jump-btn {
         width: 50px;
 
         @include custom-max(($eds-width-md - 1) / 1px) {

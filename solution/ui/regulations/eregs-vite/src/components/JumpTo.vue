@@ -4,11 +4,10 @@
             <div class="jump-to-input">
                 <select
                     v-if="defaultTitle === ''"
-                    id="jumpToTitle"
                     v-model="selectedTitle"
                     name="title"
                     aria-label="Regulation title number"
-                    class="ds-c-field"
+                    class="jump-to-title ds-c-field"
                     required
                 >
                     <option value="" disabled selected>Title</option>
@@ -22,10 +21,9 @@
                 </select>
                 <span class="section-symbol">§</span>
                 <select
-                    id="jumpToPart"
                     v-model="selectedPart"
                     name="part"
-                    class="ds-c-field"
+                    class="jump-to-part ds-c-field"
                     aria-label="Regulation part number"
                     required
                     :disabled="!selectedTitle"
@@ -41,9 +39,8 @@
                 </select>
                 <span class="dot">.</span>
                 <input
-                    id="jumpToSection"
                     v-model="selectedSection"
-                    class="number-box ds-c-field"
+                    class="jump-to-section number-box ds-c-field"
                     name="section"
                     placeholder=""
                     type="text"
@@ -52,8 +49,7 @@
                     aria-label="Regulation section number, i.e. 111"
                 />
                 <input
-                    id="jumpBtn"
-                    class="submit"
+                    class="jump-btn submit"
                     :class="{ active: isActive }"
                     type="submit"
                     value="Go"
