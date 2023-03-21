@@ -97,7 +97,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
     def generate_page_url(self, url, page):
         parse_url = urlparse.urlparse(url)
         url_parts = parse_url.query.split("&")
-        new_url_parts = list(map(lambda x: re.sub("page=\d", f"page={page}", x), url_parts))
+        new_url_parts = list(map(lambda x: re.sub(r"page=\d", f"page={page}", x), url_parts))
         query = "&".join(new_url_parts)
         parsed_url = parse_url._replace(query=query)
         return urlparse.urlunparse(parsed_url)
