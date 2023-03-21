@@ -296,7 +296,7 @@ header {
                     input {
                         height: $header_input_height_wide;
                         width: 160px;
-                        padding: $spacer-1 $spacer-2;
+                        padding: $spacer-1 0 $spacer-1 $spacer-2;
                         border: 1px solid $light_gray;
                         border-right: none;
                         border-radius: 3px 0 0 3px;
@@ -306,6 +306,11 @@ header {
                             @include custom-max(($eds-width-sm - 1) / 1px) {
                                 display: none;
                             }
+                        }
+
+                        &[type="search"]::-webkit-search-cancel-button {
+                            cursor: pointer;
+                            margin-left: 6px;
                         }
 
                         @include custom-max(($eds-width-md - 1) / 1px) {
