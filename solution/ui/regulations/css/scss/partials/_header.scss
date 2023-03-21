@@ -182,6 +182,7 @@ header {
                         @include header__anchor--bold;
                         @include header__button;
 
+                        color: $mid_blue;
                         display: flex;
                         align-items: center;
                         padding: 0 12px;

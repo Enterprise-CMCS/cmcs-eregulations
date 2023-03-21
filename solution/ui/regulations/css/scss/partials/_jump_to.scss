@@ -72,7 +72,7 @@ form .jump-to-input {
             border: 1px solid $jump_to_submit_disabled;
             color: $jump_to_submit_disabled;
             border-radius: $border-radius;
-            cursor: pointer;
+            cursor: not-allowed;
 
             &:hover,
             &:focus {
@@ -80,6 +80,7 @@ form .jump-to-input {
             }
 
             &.active {
+                cursor: pointer;
                 color: #fff;
                 background-color: $jump_to_submit_active;
                 border: 1px solid $jump_to_submit_active;
