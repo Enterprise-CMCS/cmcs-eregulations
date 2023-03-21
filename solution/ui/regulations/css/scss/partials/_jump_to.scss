@@ -83,6 +83,12 @@ form .jump-to-input {
                 color: #fff;
                 background-color: $jump_to_submit_active;
                 border: 1px solid $jump_to_submit_active;
+
+                &:hover,
+                &:focus {
+                    background-color: $jump_to_submit_active_focus;
+                    border: 1px solid $jump_to_submit_active_focus;
+                }
             }
         }
     }
