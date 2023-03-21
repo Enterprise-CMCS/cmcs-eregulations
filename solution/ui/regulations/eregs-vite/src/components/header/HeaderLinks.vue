@@ -55,18 +55,14 @@ const closeClick = () => {
             </li>
         </ul>
         <button class="more__button" @click="moreClick">
-            <template v-if="moreMenuExpanded">
-                <HeaderChevronUp />
-            </template>
-            <template v-else>
-                <HeaderChevronDown />
-            </template>
+            <HeaderChevronUp v-show="moreMenuExpanded" />
+            <HeaderChevronDown v-show="!moreMenuExpanded" />
             <span>More</span>
         </button>
         <div
             v-show="moreMenuExpanded"
-            class="more--dropdown-menu"
             v-clickaway="closeClick"
+            class="more--dropdown-menu"
         >
             <ul class="links__list links__list--dropdown">
                 <li v-for="(link, index) in links" :key="index">
