@@ -20,7 +20,5 @@ class SearchView(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         query = self.request.GET.get("q")
         return SearchIndexV2.objects.effective(date.today()).search(query).annotate(
-            part_title=F("part__title"),
-            part_document_title=F("part__document__title"),
             date=F("part__date"),
         )

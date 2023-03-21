@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
             sql='''
               ALTER TABLE search_searchindexv2 ADD COLUMN vector_column tsvector GENERATED ALWAYS AS (
                 setweight(to_tsvector('english', coalesce(section_string, '')), 'A') ||
-                setweight(to_tsvector('english', coalesce(title,'')), 'A') ||
+                setweight(to_tsvector('english', coalesce(section_title,'')), 'A') ||
+                setweight(to_tsvector('english', coalesce(part_title,'')), 'A') ||
                 setweight(to_tsvector('english', coalesce(content,'')), 'B')
               ) STORED;
               CREATE INDEX search_index ON search_searchindexv2 USING GIN (vector_column);

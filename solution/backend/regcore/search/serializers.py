@@ -7,6 +7,6 @@ class SearchResultSerializer(serializers.Serializer):
     rank = serializers.FloatField()
     headline = serializers.CharField()
     parentHeadline = serializers.CharField()
-    part_title = serializers.IntegerField()
-    part_document_title = serializers.CharField()
+    part_title = serializers.CharField()
+    section_title = serializers.CharField()
     date = serializers.CharField()

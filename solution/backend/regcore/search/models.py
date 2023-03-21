@@ -38,7 +38,7 @@ class SearchIndexQuerySet(models.QuerySet):
                     config='english'
                 ),
                 parentHeadline=SearchHeadline(
-                    "title",
+                    "section_title",
                     search_query,
                     start_sel="<span class='search-highlight'>",
                     stop_sel="</span>",
@@ -59,7 +59,8 @@ class SearchIndexV2(models.Model):
     section_number = models.CharField(max_length=32)
     content = models.TextField()
     section_string = models.CharField(max_length=32)
-    title = models.TextField(null=True)
+    section_title = models.TextField(null=True)
+    part_title= models.TextField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     objects = SearchIndexManager()
 
@@ -93,7 +94,8 @@ def create_search(part, piece, memo, parent=None, ):
         si = SearchIndexV2(
             part_number=piece["label"][0],
             section_number=piece["label"][1],
-            title=piece["title"],
+            section_title=piece["title"],
+            part_title=part.document['title'],
             part=part,
             section_string=piece["label"][0] + "." + piece["label"][1],
             content=piece.get("title", piece.get("text", "")),

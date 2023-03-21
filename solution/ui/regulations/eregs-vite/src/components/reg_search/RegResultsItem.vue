@@ -1,7 +1,7 @@
 <template>
     <div class="result">
         <div class="results-part">
-            {{ result.part_document_title | partDocumentTitleLabel }}
+            {{ result.part_title | partDocumentTitleLabel }}
         </div>
         <div class="results-section">
             <a
