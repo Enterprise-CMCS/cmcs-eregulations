@@ -116,9 +116,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("has the correct title and copy text", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".jump-to-label").should(
+        cy.get(".call-to-action").should(
             "have.text",
-            "Jump to Regulation Section"
+            "Look up policy with context."
         );
         cy.get(".hero-text").should(
             "have.text",
@@ -140,8 +140,8 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".jump-to-part").first().select("433");
-        cy.get(".jump-btn").first().click({ force: true });
+        cy.get("#jumpToPart").select("433");
+        cy.get("#jumpBtn").click({ force: true });
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
@@ -149,9 +149,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".jump-to-part").first().should("be.visible").select("433");
-        cy.get(".jump-to-section").first().type("40");
-        cy.get(".jump-btn").first().click({ force: true });
+        cy.get("#jumpToPart").should("be.visible").select("433");
+        cy.get("#jumpToSection").type("40");
+        cy.get("#jumpBtn").click({ force: true });
 
         cy.url().should(
             "eq",
