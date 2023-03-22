@@ -21,7 +21,7 @@ class SearchIndexQuerySet(models.QuerySet):
         if query and query.startswith('"') and query.endswith('"'):
             search_type = "phrase"
             cover_density = True
-        search_query=SearchQuery(query, search_type=search_type, config='english')
+        search_query = SearchQuery(query, search_type=search_type, config='english')
 
         return self.annotate(vector_column=RawSQL("vector_column", [], output_field=SearchVectorField()))\
             .annotate(rank=SearchRank(
@@ -60,7 +60,7 @@ class SearchIndexV2(models.Model):
     content = models.TextField()
     section_string = models.CharField(max_length=32)
     section_title = models.TextField(null=True)
-    part_title= models.TextField(null=True)
+    part_title = models.TextField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     objects = SearchIndexManager()
 
