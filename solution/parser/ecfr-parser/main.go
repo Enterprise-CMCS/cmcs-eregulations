@@ -32,6 +32,11 @@ var (
 	HandleVersionFunc      = handleVersion
 	SleepFunc              = time.Sleep
 	RetrieveConfigFunc     = eregs.RetrieveConfig
+	ProcessPartsListFunc = processPartsList
+	ExtractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
+	GetExistingPartsFunc = eregs.GetExistingParts
+	ExtractVersionsFunc = ecfr.ExtractVersions
+	PostParserResultFunc = eregs.PostParserResult
 )
 
 var config = &eregs.ParserConfig{}
@@ -130,7 +135,7 @@ func processPartsList(ctx context.Context, title int, rawParts []*eregs.PartConf
 		} else if part.Type == "subchapter" {
 			log.Debug("[main] Fetching parts list for title ", title, " subchapter", part.Value)
 			subchapter := strings.Split(part.Value, "-")
-			subchapterParts, err := ecfr.ExtractSubchapterParts(ctx, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+			subchapterParts, err := ExtractSubchapterPartsFunc(ctx, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
 			if err != nil {
 				return nil, err
 			}
@@ -165,25 +170,25 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 		Workers: config.Workers,
 	}
 	defer func() {
-		if _, err := eregs.PostParserResult(ctx, &result); err != nil {
+		if _, err := PostParserResultFunc(ctx, &result); err != nil {
 			log.Warn("[main] Failed to post parser results for title ", title, ": ", err)
 		}
 	}()
 
 	log.Info("[main] Fetching list of existing versions for title ", title, "...")
-	existingVersions, _, err := eregs.GetExistingParts(ctx, title)
+	existingVersions, _, err := GetExistingPartsFunc(ctx, title)
 	if err != nil {
 		log.Warn("[main] Failed to retrieve existing versions, processing all versions: ", err)
 	}
 
 	log.Info("[main] Computing parts list for title ", title, "...")
-	parts, err := processPartsList(ctx, title, rawParts)
+	parts, err := ProcessPartsListFunc(ctx, title, rawParts)
 	if err != nil {
 		return err
 	}
 
 	log.Debug("[main] Extracting versions for title ", title, "...")
-	versions, err := ecfr.ExtractVersions(ctx, title)
+	versions, err := ExtractVersionsFunc(ctx, title)
 	if err != nil {
 		return err
 	}
