@@ -4,36 +4,6 @@
 
 @import "../application_settings";
 
-.hero-content {
-    .jump-to-label {
-        font-family: $primary_site_font;
-        font-size: $font_size_hero_h1;
-        line-height: 1;
-        margin-bottom: 15px;
-        font-weight: 700;
-
-        @include custom-max($hero-tablet-max / 1px) {
-            font-size: $font_size_hero_h1_tablet;
-        }
-
-        @include custom-max($iphoneSE-max / 1px) {
-            font-size: $font-size-lg;
-        }
-    }
-
-    .jump-to-container {
-        flex: 1;
-
-        @include custom-max($hero-tablet-max / 1px) {
-            flex: 0;
-        }
-
-        .jump-to-input {
-            padding-left: 0px;
-        }
-    }
-}
-
 form .jump-to-input {
     display: flex;
     align-items: center;
