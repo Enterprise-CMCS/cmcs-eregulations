@@ -27,6 +27,7 @@ type Part struct {
 	Depth           int             `json:"depth"`
 	Sections        []ecfr.Section  `json:"sections"`
 	Subparts        []ecfr.Subpart  `json:"subparts"`
+	UploadRegText   bool `json:"upload_reg_text"`
 	Processed       bool
 	UploadLocations bool
 }

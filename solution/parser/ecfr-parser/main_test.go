@@ -28,20 +28,62 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 		LogParseErrors:     true,
 		SkipRegVersions:    true,
 		SkipFRDocuments:    true,
-		Titles: []*eregs.TitleConfig{
-			&eregs.TitleConfig{
+		Parts: []*eregs.PartConfig{
+			&eregs.PartConfig{
 				Title: 42,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"IV", "C"},
-				},
-				Parts: eregs.PartList{"400", "457", "460"},
+				Type: "subchapter",
+				Value: "IV-C",
+				UploadRegText: true,
+				UploadLocations: true,
 			},
-			&eregs.TitleConfig{
+			&eregs.PartConfig{
+				Title: 42,
+				Type: "part",
+				Value: "400",
+				UploadRegText: true,
+				UploadLocations: true,
+			},
+			&eregs.PartConfig{
+				Title: 42,
+				Type: "part",
+				Value: "457",
+				UploadRegText: true,
+				UploadLocations: true,
+			},
+			&eregs.PartConfig{
+				Title: 42,
+				Type: "part",
+				Value: "460",
+				UploadRegText: true,
+				UploadLocations: true,
+			},
+			&eregs.PartConfig{
 				Title: 43,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"AB", "C"},
-				},
-				Parts: eregs.PartList{"1", "2", "3"},
+				Type: "subchapter",
+				Value: "AB-C",
+				UploadRegText: true,
+				UploadLocations: true,
+			},
+			&eregs.PartConfig{
+				Title: 43,
+				Type: "part",
+				Value: "1",
+				UploadRegText: true,
+				UploadLocations: true,
+			},
+			&eregs.PartConfig{
+				Title: 43,
+				Type: "part",
+				Value: "2",
+				UploadRegText: true,
+				UploadLocations: true,
+			},
+			&eregs.PartConfig{
+				Title: 43,
+				Type: "part",
+				Value: "3",
+				UploadRegText: true,
+				UploadLocations: true,
 			},
 		},
 	}
