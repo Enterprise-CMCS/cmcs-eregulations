@@ -1,14 +1,10 @@
 <script setup>
-import { ref, onBeforeMount, onMounted, onUnmounted, onUpdated } from "vue";
-
 defineProps({
     homeUrl: {
         type: String,
         required: true,
     },
 });
-
-onMounted(() => {});
 </script>
 
 <template>
