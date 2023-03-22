@@ -205,7 +205,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
         sort_method = self.request.GET.get("sort")
-        fr_grouping = self.request.GET.get("fr_grouping", "true").lower() == "true"
+        fr_grouping = self.request.GET.get("fr_grouping", "false").lower() == "true"
 
         query = self.model.objects\
                     .filter(approved=True)\
