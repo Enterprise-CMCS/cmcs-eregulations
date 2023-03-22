@@ -26,17 +26,17 @@ const TIMELIMIT = 5000 * time.Second
 
 // Functions for easy testing via patching
 var (
-	ParseTitlesFunc        = parseTitles
-	ParseTitleFunc         = parseTitle
-	StartVersionWorkerFunc = startVersionWorker
-	HandleVersionFunc      = handleVersion
-	SleepFunc              = time.Sleep
-	RetrieveConfigFunc     = eregs.RetrieveConfig
-	ProcessPartsListFunc = processPartsList
+	ParseTitlesFunc            = parseTitles
+	ParseTitleFunc             = parseTitle
+	StartVersionWorkerFunc     = startVersionWorker
+	HandleVersionFunc          = handleVersion
+	SleepFunc                  = time.Sleep
+	RetrieveConfigFunc         = eregs.RetrieveConfig
+	ProcessPartsListFunc       = processPartsList
 	ExtractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
-	GetExistingPartsFunc = eregs.GetExistingParts
-	ExtractVersionsFunc = ecfr.ExtractVersions
-	PostParserResultFunc = eregs.PostParserResult
+	GetExistingPartsFunc       = eregs.GetExistingParts
+	ExtractVersionsFunc        = ecfr.ExtractVersions
+	PostParserResultFunc       = eregs.PostParserResult
 )
 
 var config = &eregs.ParserConfig{}
@@ -141,10 +141,10 @@ func processPartsList(ctx context.Context, title int, rawParts []*eregs.PartConf
 			}
 			for _, subchapterPart := range subchapterParts {
 				parts = append(parts, &eregs.PartConfig{
-					Type: "part",
-					Value: subchapterPart,
+					Type:            "part",
+					Value:           subchapterPart,
 					UploadLocations: part.UploadLocations,
-					UploadRegText: part.UploadRegText,
+					UploadRegText:   part.UploadRegText,
 				})
 			}
 		} else {
@@ -218,15 +218,15 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 			}
 
 			version := &eregs.Part{
-				Title:     title,
-				Name:      part.Value,
-				Date:      date,
-				Structure: &ecfr.Structure{},
-				Document:  &parsexml.Part{},
-				Sections:  []ecfr.Section{},
-				Subparts:  []ecfr.Subpart{},
-				Processed: false,
-				UploadRegText: part.UploadRegText,
+				Title:           title,
+				Name:            part.Value,
+				Date:            date,
+				Structure:       &ecfr.Structure{},
+				Document:        &parsexml.Part{},
+				Sections:        []ecfr.Section{},
+				Subparts:        []ecfr.Subpart{},
+				Processed:       false,
+				UploadRegText:   part.UploadRegText,
 				UploadLocations: part.UploadLocations,
 			}
 

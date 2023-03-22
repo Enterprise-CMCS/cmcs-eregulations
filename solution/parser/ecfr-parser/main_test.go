@@ -30,59 +30,59 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 		SkipFRDocuments:    true,
 		Parts: []*eregs.PartConfig{
 			&eregs.PartConfig{
-				Title: 42,
-				Type: "subchapter",
-				Value: "IV-C",
-				UploadRegText: true,
+				Title:           42,
+				Type:            "subchapter",
+				Value:           "IV-C",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 			&eregs.PartConfig{
-				Title: 42,
-				Type: "part",
-				Value: "400",
-				UploadRegText: true,
+				Title:           42,
+				Type:            "part",
+				Value:           "400",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 			&eregs.PartConfig{
-				Title: 42,
-				Type: "part",
-				Value: "457",
-				UploadRegText: true,
+				Title:           42,
+				Type:            "part",
+				Value:           "457",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 			&eregs.PartConfig{
-				Title: 42,
-				Type: "part",
-				Value: "460",
-				UploadRegText: true,
+				Title:           42,
+				Type:            "part",
+				Value:           "460",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 			&eregs.PartConfig{
-				Title: 43,
-				Type: "subchapter",
-				Value: "AB-C",
-				UploadRegText: true,
+				Title:           43,
+				Type:            "subchapter",
+				Value:           "AB-C",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 			&eregs.PartConfig{
-				Title: 43,
-				Type: "part",
-				Value: "1",
-				UploadRegText: true,
+				Title:           43,
+				Type:            "part",
+				Value:           "1",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 			&eregs.PartConfig{
-				Title: 43,
-				Type: "part",
-				Value: "2",
-				UploadRegText: true,
+				Title:           43,
+				Type:            "part",
+				Value:           "2",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 			&eregs.PartConfig{
-				Title: 43,
-				Type: "part",
-				Value: "3",
-				UploadRegText: true,
+				Title:           43,
+				Type:            "part",
+				Value:           "3",
+				UploadRegText:   true,
 				UploadLocations: true,
 			},
 		},
@@ -300,23 +300,23 @@ func TestParseTitles(t *testing.T) {
 }
 
 func TestProcessPartsList(t *testing.T) {
-	testTable := []struct{
-		Name string
-		Title int
-		RawParts []*eregs.PartConfig
+	testTable := []struct {
+		Name                       string
+		Title                      int
+		RawParts                   []*eregs.PartConfig
 		ExtractSubchapterPartsFunc func(context.Context, int, *ecfr.SubchapterOption) ([]string, error)
-		Output []*eregs.PartConfig
-		Error bool
+		Output                     []*eregs.PartConfig
+		Error                      bool
 	}{
 		{
-			Name: "test-part",
+			Name:  "test-part",
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
@@ -324,29 +324,29 @@ func TestProcessPartsList(t *testing.T) {
 			},
 			Output: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-subchapter",
+			Name:  "test-subchapter",
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "399",
+					Type:            "part",
+					Value:           "399",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 				&eregs.PartConfig{
-					Type: "subchapter",
-					Value: "IV-C",
+					Type:            "subchapter",
+					Value:           "IV-C",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
@@ -358,87 +358,87 @@ func TestProcessPartsList(t *testing.T) {
 			},
 			Output: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "399",
+					Type:            "part",
+					Value:           "399",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "401",
+					Type:            "part",
+					Value:           "401",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "402",
+					Type:            "part",
+					Value:           "402",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			Error: false,
 		},
 		{
-			Name: "test-extract-subchapter-parts-fail",
+			Name:  "test-extract-subchapter-parts-fail",
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "399",
+					Type:            "part",
+					Value:           "399",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 				&eregs.PartConfig{
-					Type: "subchapter",
-					Value: "IV-C",
+					Type:            "subchapter",
+					Value:           "IV-C",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
 				return nil, fmt.Errorf("oops")
 			},
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 		{
-			Name: "test-invalid-type",
+			Name:  "test-invalid-type",
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "399",
+					Type:            "part",
+					Value:           "399",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 				&eregs.PartConfig{
-					Type: "something_else",
-					Value: "IV-C",
+					Type:            "something_else",
+					Value:           "IV-C",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
 				return []string{}, nil
 			},
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 		{
-			Name: "test-no-parts",
-			Title: 42,
+			Name:     "test-no-parts",
+			Title:    42,
 			RawParts: []*eregs.PartConfig{},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
 				return []string{}, nil
 			},
 			Output: nil,
-			Error: true,
+			Error:  true,
 		},
 	}
 
@@ -476,14 +476,14 @@ func TestParseTitle(t *testing.T) {
 	}
 
 	testTable := []struct {
-		Name string
-		WorkerFunc func(*eregs.Part)
-		Title int
-		RawParts []*eregs.PartConfig
+		Name                 string
+		WorkerFunc           func(*eregs.Part)
+		Title                int
+		RawParts             []*eregs.PartConfig
 		GetExistingPartsFunc func(context.Context, int) (map[string][]string, int, error)
 		ProcessPartsListFunc func(context.Context, int, []*eregs.PartConfig) ([]*eregs.PartConfig, error)
-		ExtractVersionsFunc func(context.Context, int) (map[string]map[string]struct{}, error)
-		Error bool
+		ExtractVersionsFunc  func(context.Context, int) (map[string]map[string]struct{}, error)
+		Error                bool
 	}{
 		{
 			Name: "test-valid",
@@ -495,10 +495,10 @@ func TestParseTitle(t *testing.T) {
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -524,10 +524,10 @@ func TestParseTitle(t *testing.T) {
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -555,10 +555,10 @@ func TestParseTitle(t *testing.T) {
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -586,10 +586,10 @@ func TestParseTitle(t *testing.T) {
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -617,10 +617,10 @@ func TestParseTitle(t *testing.T) {
 			Title: 42,
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
-					Type: "part",
-					Value: "400",
+					Type:            "part",
+					Value:           "400",
 					UploadLocations: true,
-					UploadRegText: true,
+					UploadRegText:   true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -917,7 +917,7 @@ func TestHandleVersion(t *testing.T) {
 				Structure:       &ecfr.Structure{},
 				Document:        &parsexml.Part{},
 				UploadLocations: true,
-				UploadRegText: true,
+				UploadRegText:   true,
 			},
 			Expected: eregs.Part{
 				Title: 42,
