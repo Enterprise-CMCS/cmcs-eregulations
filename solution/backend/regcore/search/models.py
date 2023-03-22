@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models.expressions import RawSQL
-from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.search import (
     SearchQuery,
     SearchRank,
@@ -63,17 +62,6 @@ class SearchIndexV2(models.Model):
     part_title = models.TextField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     objects = SearchIndexManager()
-
-
-class SearchIndex(models.Model):
-    type = models.CharField(max_length=32)
-    label = ArrayField(base_field=models.CharField(max_length=32))
-    content = models.TextField()
-    parent = models.JSONField(null=True)
-    part = models.ForeignKey(Part, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ['label', 'part']
 
 
 class Synonym(models.Model):
