@@ -45,6 +45,7 @@ from common.auth import SettingsAuthentication
 class ResourceSearchViewSet(viewsets.ModelViewSet):
     serializer_class = ResourceSearchSerializer
     limit = 50
+    gov_results = {}
 
     def get_annotated_url(self):
         return Case(
@@ -70,7 +71,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 'url': gov_result['url']
             }
             results.append(result)
-        return {
+        self.gov_results = {
             "total": gov_results["web"]["total"],
             "results": results,
         }
@@ -94,6 +95,16 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 )),
             )
 
+    def gen_query_dict(self, queryset, urls):
+        queryDict = {}
+        for q in queryset:
+            queryDict[q.url] = q
+        # add the snipppet for each has if it exists.  Can fail on dev environments due to out of sync data
+        for url in urls:
+            if url['url'] in queryDict.keys():
+                queryDict[url['url']].snippet = url['snippet']
+        return queryDict.values()
+
     def generate_page_url(self, url, page):
         parse_url = urlparse.urlparse(url)
         url_parts = parse_url.query.split("&")
@@ -106,11 +117,11 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         q = self.request.query_params.get("q")
         page = int(self.request.query_params.get("page", 1))
         url = request.get_full_path()
-        self.gov_results = self.get_gov_results(q, page)
+        self.get_gov_results(q, page)
         queryset = self.get_queryset()
-        records = list(queryset)
-        for record in records:
-            setattr(record, "snippet", [r['snippet'] for r in self.gov_results["results"] if r['url'] == record.url][0])
+        resources = list(queryset)
+        urls = [{"url": i['url'], "snippet": i["snippet"]} for i in self.gov_results["results"]]
+        records = self.gen_query_dict(resources, urls)
         next_page = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
         previous_page = page - 1 if page > 1 else None
 
