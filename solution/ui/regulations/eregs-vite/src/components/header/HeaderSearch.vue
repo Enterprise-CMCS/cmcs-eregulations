@@ -33,12 +33,8 @@ const expandButtonAriaLabel = computed(() => `${ mobileSearchExpanded.value ? "H
             :aria-label="expandButtonAriaLabel"
             @click="expandSearchClick"
         >
-            <template v-if="mobileSearchExpanded">
-                <HeaderChevronLeft />
-            </template>
-            <template v-else>
-                <HeaderSearchIcon />
-            </template>
+            <HeaderChevronLeft v-show="mobileSearchExpanded"/>
+            <HeaderSearchIcon v-show="!mobileSearchExpanded"/>
         </button>
         <input
             :class="expandStateClasses"
