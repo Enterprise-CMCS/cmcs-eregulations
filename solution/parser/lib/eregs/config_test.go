@@ -97,14 +97,16 @@ func TestRetrieveConfig(t *testing.T) {
 								"type": "subchapter",
 								"value": "IV-C",
 								"upload_reg_text": true,
-								"upload_locations": true
+								"upload_locations": true,
+								"upload_fr_docs": true
 							},
 							{
 								"title": 5,
 								"type": "part",
 								"value": "400",
 								"upload_reg_text": true,
-								"upload_locations": false
+								"upload_locations": false,
+								"upload_fr_docs": true
 							}
 						]
 					}`))
