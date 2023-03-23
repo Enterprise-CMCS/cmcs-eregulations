@@ -26,6 +26,7 @@ class RegulationLandingView(TemplateView):
         reg_version = current.date.isoformat()
         reg_version_string = datetime.strftime(current.date, "%b %-d, %Y")
         toc = current.toc
+        subchapter = current.subchapter
         part_label = toc['label_description']
         authority = current.document['authority']
         source = current.document['source']
@@ -36,6 +37,7 @@ class RegulationLandingView(TemplateView):
             'title': title,
             'version': reg_version,
             'version_string': reg_version_string,
+            'subchapter': subchapter,
             # last updated dates of Jan 1, 2017 are not meaningful
             'has_meaningful_latest_version_date': current.date > date(2017, 1, 1),
             'part': reg_part,
