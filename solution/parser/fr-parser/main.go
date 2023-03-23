@@ -6,7 +6,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
 	"github.com/cmsgov/cmcs-eregulations/lib/fedreg"
 
