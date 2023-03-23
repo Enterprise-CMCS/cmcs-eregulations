@@ -40,6 +40,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         parts = Part.objects.filter(title=reg_title).effective(reg_version)
         document = query.document
         toc = query.toc
+        subchapter = query.subchapter
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
@@ -61,6 +62,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'reg_part':     reg_part,
             'part_label':   part_label,
             'toc':          toc,
+            'subchapter':   subchapter,
             'parts':        parts,
             'versions':     versions,
             'node_list':    node_list,
