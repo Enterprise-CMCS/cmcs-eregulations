@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"time"
 	"strings"
+	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/lib/network"
 	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
+	"github.com/cmsgov/cmcs-eregulations/lib/network"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -22,6 +22,7 @@ type PartConfig struct {
 	Value           string `json:"value"`
 	UploadRegText   bool   `json:"upload_reg_text"`
 	UploadLocations bool   `json:"upload_locations"`
+	UploadFRDocs    bool   `json:"upload_fr_docs"`
 }
 
 // ParserConfig represents configuration for the parser as a whole
@@ -100,9 +101,11 @@ func ProcessPartsList(ctx context.Context, title int, rawParts []*PartConfig) ([
 			for _, subchapterPart := range subchapterParts {
 				parts = append(parts, &PartConfig{
 					Type:            "part",
+					Title:           part.Title,
 					Value:           subchapterPart,
 					UploadLocations: part.UploadLocations,
 					UploadRegText:   part.UploadRegText,
+					UploadFRDocs:    part.UploadFRDocs,
 				})
 			}
 		} else {

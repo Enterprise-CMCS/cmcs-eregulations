@@ -115,11 +115,15 @@ class PartConfiguration(models.Model):
     )
     upload_reg_text = models.BooleanField(
         default=True,
-        help_text="Should the parser upload regulation text to eRegs?",
+        help_text="Should the eCFR parser upload regulation text to eRegs?",
     )
     upload_locations = models.BooleanField(
         default=True,
         help_text="Should the parser process and upload section and subpart names for use in resource management?",
+    )
+    upload_fr_docs = models.BooleanField(
+        default=True,
+        help_text="Should the FR parser upload Federal Register Documents to eRegs?",
     )
 
     parser_config = models.ForeignKey(ParserConfiguration, on_delete=models.CASCADE, related_name="parts")

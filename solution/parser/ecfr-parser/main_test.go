@@ -335,6 +335,7 @@ func TestParseTitle(t *testing.T) {
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -364,6 +365,7 @@ func TestParseTitle(t *testing.T) {
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -395,6 +397,7 @@ func TestParseTitle(t *testing.T) {
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -426,6 +429,7 @@ func TestParseTitle(t *testing.T) {
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -457,6 +461,7 @@ func TestParseTitle(t *testing.T) {
 			RawParts: []*eregs.PartConfig{
 				&eregs.PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,

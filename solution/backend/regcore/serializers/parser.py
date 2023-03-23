@@ -10,6 +10,7 @@ class PartConfigurationSerializer(serializers.Serializer):
     value = serializers.CharField()
     upload_reg_text = serializers.BooleanField()
     upload_locations = serializers.BooleanField()
+    upload_fr_docs = serializers.BooleanField()
 
 
 class ParserConfigurationSerializer(serializers.Serializer):

@@ -29,6 +29,7 @@ func TestLoadConfig(t *testing.T) {
 					Parts: []*eregs.PartConfig{
 						&eregs.PartConfig{
 							Type:            "part",
+							Title:           42,
 							Value:           "400",
 							UploadLocations: true,
 							UploadRegText:   true,

@@ -1,11 +1,11 @@
 package eregs
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"context"
-	"fmt"
 	"time"
 
 	"github.com/go-test/deep"
@@ -216,6 +216,7 @@ func TestProcessPartsList(t *testing.T) {
 			RawParts: []*PartConfig{
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -227,6 +228,7 @@ func TestProcessPartsList(t *testing.T) {
 			Output: []*PartConfig{
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -240,12 +242,14 @@ func TestProcessPartsList(t *testing.T) {
 			RawParts: []*PartConfig{
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
 				},
 				&PartConfig{
 					Type:            "subchapter",
+					Title:           42,
 					Value:           "IV-C",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -261,24 +265,28 @@ func TestProcessPartsList(t *testing.T) {
 			Output: []*PartConfig{
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
 				},
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
 				},
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "401",
 					UploadLocations: true,
 					UploadRegText:   true,
 				},
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "402",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -292,12 +300,14 @@ func TestProcessPartsList(t *testing.T) {
 			RawParts: []*PartConfig{
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
 				},
 				&PartConfig{
 					Type:            "subchapter",
+					Title:           42,
 					Value:           "IV-C",
 					UploadLocations: true,
 					UploadRegText:   true,
@@ -315,12 +325,14 @@ func TestProcessPartsList(t *testing.T) {
 			RawParts: []*PartConfig{
 				&PartConfig{
 					Type:            "part",
+					Title:           42,
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
 				},
 				&PartConfig{
 					Type:            "something_else",
+					Title:           42,
 					Value:           "IV-C",
 					UploadLocations: true,
 					UploadRegText:   true,
