@@ -56,9 +56,9 @@ export default {
                     ? `?q=${uniqTermsArray.join(",")}`
                     : "";
 
-            return `${base}/${result.part_title}/${result.part}/${
-                result.section
-            }/${result.date}/${highlightParams}#${result.part}-{${result.section}}`;
+            return `${base}/${result.title}/${result.part_number}/${
+                result.section_number
+            }/${result.date}/${highlightParams}#${result.part_number}-${result.section_number}`;
         },
     },
 
