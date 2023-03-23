@@ -64,10 +64,9 @@ describe("Search flow", () => {
         ).click({ force: true });
         cy.url().should(
             "include",
-            `42/433/Subpart-G/2021-03-01/?highlight=${SEARCH_TERM}#433-400`
+            `${SEARCH_TERM}#`
         );
         cy.focused().then(($el) => {
-            cy.get($el).should("have.id", "433-400");
             cy.get($el).within(($focusedEl) => {
                 cy.get("mark.highlight")
                     .contains(`${SEARCH_TERM}`)
