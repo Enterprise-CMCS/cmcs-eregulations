@@ -10,3 +10,4 @@ class SearchResultSerializer(serializers.Serializer):
     part_title = serializers.CharField()
     section_title = serializers.CharField()
     date = serializers.CharField()
+    title = serializers.CharField()
