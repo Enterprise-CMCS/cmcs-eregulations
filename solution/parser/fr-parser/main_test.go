@@ -97,9 +97,8 @@ func TestStart(t *testing.T) {
 			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
 				if title == 42 {
 					return parts, nil
-				} else {
-					return nil, fmt.Errorf("bad title")
 				}
+				return nil, fmt.Errorf("bad title")
 			},
 			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return nil
