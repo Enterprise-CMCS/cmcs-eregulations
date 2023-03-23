@@ -35,7 +35,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "IV-C",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 			&eregs.PartConfig{
 				Title:           42,
@@ -43,7 +43,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "400",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 			&eregs.PartConfig{
 				Title:           42,
@@ -51,7 +51,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "457",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 			&eregs.PartConfig{
 				Title:           42,
@@ -59,7 +59,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "460",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 			&eregs.PartConfig{
 				Title:           43,
@@ -67,7 +67,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "AB-C",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 			&eregs.PartConfig{
 				Title:           43,
@@ -75,7 +75,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "1",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 			&eregs.PartConfig{
 				Title:           43,
@@ -83,7 +83,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "2",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 			&eregs.PartConfig{
 				Title:           43,
@@ -91,7 +91,7 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 				Value:           "3",
 				UploadRegText:   true,
 				UploadLocations: true,
-				UploadFRDocs: true,
+				UploadFRDocs:    true,
 			},
 		},
 	}
@@ -347,7 +347,7 @@ func TestParseTitle(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -378,7 +378,7 @@ func TestParseTitle(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -411,7 +411,7 @@ func TestParseTitle(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -444,7 +444,7 @@ func TestParseTitle(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
@@ -477,7 +477,7 @@ func TestParseTitle(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {

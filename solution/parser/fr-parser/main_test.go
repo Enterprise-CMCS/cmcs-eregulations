@@ -33,7 +33,7 @@ func TestLoadConfig(t *testing.T) {
 							Value:           "400",
 							UploadLocations: true,
 							UploadRegText:   true,
-							UploadFRDocs: true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, 200, nil
@@ -89,7 +89,7 @@ func TestStart(t *testing.T) {
 							Value:           "400",
 							UploadLocations: true,
 							UploadRegText:   true,
-							UploadFRDocs: true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, nil
@@ -138,7 +138,7 @@ func TestStart(t *testing.T) {
 							Value:           "400",
 							UploadLocations: true,
 							UploadRegText:   true,
-							UploadFRDocs: true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, nil
@@ -167,7 +167,7 @@ func TestStart(t *testing.T) {
 							Value:           "400",
 							UploadLocations: true,
 							UploadRegText:   true,
-							UploadFRDocs: true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, nil

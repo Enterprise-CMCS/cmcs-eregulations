@@ -125,7 +125,7 @@ func TestRetrieveConfig(t *testing.T) {
 						Value:           "IV-C",
 						UploadRegText:   true,
 						UploadLocations: true,
-						UploadFRDocs: true,
+						UploadFRDocs:    true,
 					},
 					&PartConfig{
 						Title:           5,
@@ -133,7 +133,7 @@ func TestRetrieveConfig(t *testing.T) {
 						Value:           "400",
 						UploadRegText:   true,
 						UploadLocations: false,
-						UploadFRDocs: true,
+						UploadFRDocs:    true,
 					},
 				},
 			},
@@ -222,7 +222,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
@@ -235,7 +235,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			Error: false,
@@ -250,7 +250,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 				&PartConfig{
 					Type:            "subchapter",
@@ -258,7 +258,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "IV-C",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
@@ -275,7 +275,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 				&PartConfig{
 					Type:            "part",
@@ -283,7 +283,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "400",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 				&PartConfig{
 					Type:            "part",
@@ -291,7 +291,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "401",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 				&PartConfig{
 					Type:            "part",
@@ -299,7 +299,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "402",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			Error: false,
@@ -314,7 +314,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 				&PartConfig{
 					Type:            "subchapter",
@@ -322,7 +322,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "IV-C",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
@@ -341,7 +341,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "399",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 				&PartConfig{
 					Type:            "something_else",
@@ -349,7 +349,7 @@ func TestProcessPartsList(t *testing.T) {
 					Value:           "IV-C",
 					UploadLocations: true,
 					UploadRegText:   true,
-					UploadFRDocs: true,
+					UploadFRDocs:    true,
 				},
 			},
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
