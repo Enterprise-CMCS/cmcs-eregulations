@@ -15,6 +15,13 @@
     },
     "plugins": ["vue"],
     "rules": {
-        "vue/order-in-components": "off"
+        "vue/order-in-components": "off",
+        "vue/no-unsupported-features": [
+            "error",
+            {
+                "version": "^2.7.0",
+                "ignores": []
+            }
+        ]
     }
 }

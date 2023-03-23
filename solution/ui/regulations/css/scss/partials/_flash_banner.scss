@@ -5,6 +5,10 @@
 
 @import "../application_settings";
 
+.banner--container {
+    min-height: 34px;
+}
+
 .flash-banner {
     box-sizing: unset;
     display: flex;

@@ -11,11 +11,6 @@
 <script>
 import BlockingModalTrigger from "./BlockingModalTrigger.vue";
 
-const POSSIBLE_LOCATIONS = {
-    django: "legacy django template",
-    vite: "vite single page app",
-};
-
 export default {
     name: "FlashBanner",
 
@@ -23,14 +18,7 @@ export default {
         BlockingModalTrigger,
     },
 
-    props: {
-        whereUsed: {
-            validator: (value) =>
-                Object.keys(POSSIBLE_LOCATIONS).includes(value),
-            type: String,
-            default: "django",
-        },
-    },
+    props: {},
 
     beforeCreate() {},
 
@@ -38,12 +26,7 @@ export default {
 
     beforeMount() {},
 
-    mounted() {
-        if (this.whereUsed === "vite") {
-            const container = document.getElementById("app-container");
-            container.insertBefore(this.$el, container.firstChild);
-        }
-    },
+    mounted() {},
 
     beforeUpdate() {},
 
