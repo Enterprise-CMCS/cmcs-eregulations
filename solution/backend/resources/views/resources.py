@@ -95,15 +95,10 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 )),
             )
 
-    def gen_query_dict(self, queryset, urls):
-        queryDict = {}
+    def append_snippet(self, queryset, urls):
         for q in queryset:
-            queryDict[q.url] = q
-        # add the snipppet for each has if it exists.  Can fail on dev environments due to out of sync data
-        for url in urls:
-            if url['url'] in queryDict.keys():
-                queryDict[url['url']].snippet = url['snippet']
-        return queryDict.values()
+            q.snippet = urls[q.url]
+        return queryset
 
     def generate_page_url(self, url, page):
         parse_url = urlparse.urlparse(url)
@@ -120,8 +115,8 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         self.get_gov_results(q, page)
         queryset = self.get_queryset()
         resources = list(queryset)
-        urls = [{"url": i['url'], "snippet": i["snippet"]} for i in self.gov_results["results"]]
-        records = self.gen_query_dict(resources, urls)
+        urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
+        records = self.append_snippet(resources, urls)
         next_page = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
         previous_page = page - 1 if page > 1 else None
 
