@@ -17,6 +17,18 @@ export default {
             type: String,
             default: "",
         },
+        homeUrl: {
+            type: String,
+            default: "",
+        },
+        resourcesUrl: {
+            type: String,
+            default: "",
+        },
+        searchUrl: {
+            type: String,
+            default: "",
+        },
         host: {
             type: String,
             default: "",
@@ -31,6 +43,9 @@ export default {
             :api-url="apiUrl"
             :about-url="aboutUrl"
             :custom-url="customUrl"
+            :home-url="homeUrl"
+            :resources-url="resourcesUrl"
+            :search-url="searchUrl"
             :host="host"
         />
     </v-app>

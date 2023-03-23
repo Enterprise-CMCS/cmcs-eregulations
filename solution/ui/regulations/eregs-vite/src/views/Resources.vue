@@ -6,7 +6,25 @@
                 title="Google Forms iframe"
             />
         </BlockingModal>
-        <FlashBanner where-used="vite" />
+        <FlashBanner />
+        <header id="header" class="sticky">
+            <HeaderComponent :home-url="homeUrl">
+                <template #jump-to>
+                    <JumpTo />
+                </template>
+                <template #links>
+                    <HeaderLinks
+                        :about-url="aboutUrl"
+                        :resources-url="resourcesUrl"
+                    />
+                </template>
+                <template #search>
+                    <HeaderSearch
+                        :search-url="searchUrl"
+                    />
+                </template>
+            </HeaderComponent>
+        </header>
         <div id="resourcesApp" class="resources-view">
             <Banner title="Resources">
                 <template #description>
@@ -149,7 +167,12 @@ import _uniq from "lodash/uniq";
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
+
 import Banner from "@/components/Banner.vue";
+import HeaderComponent from "@/components/header/HeaderComponent.vue";
+import HeaderLinks from "@/components/header/HeaderLinks.vue";
+import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import JumpTo from "@/components/JumpTo.vue";
 import ResourcesFilters from "@/components/resources/ResourcesFilters.vue";
 import ResourcesSelections from "@/components/resources/ResourcesSelections.vue";
 import ResourcesResultsContainer from "@/components/resources/ResourcesResultsContainer.vue";
@@ -172,7 +195,11 @@ export default {
         Banner,
         BlockingModal,
         FlashBanner,
+        HeaderComponent,
+        HeaderLinks,
+        HeaderSearch,
         IFrameContainer,
+        JumpTo,
         ResourcesFilters,
         ResourcesSelections,
         ResourcesResultsContainer,
@@ -186,6 +213,18 @@ export default {
         customUrl: {
             type: String,
             default: "",
+        },
+        homeUrl: {
+            type: String,
+            default: "/",
+        },
+        resourcesUrl: {
+            type: String,
+            default: "/resources/",
+        },
+        searchUrl: {
+            type: String,
+            default: "/search/",
         },
         host: {
             type: String,

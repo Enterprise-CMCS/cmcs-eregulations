@@ -25,8 +25,7 @@ $left-right-padding: 40px;
     footer.toc-footer,
     aside.left-sidebar,
     aside.right-sidebar,
-    .flash-banner,
-    .search-header,
+    .banner--container,
     .trigger-btn-container,
     .reg-text .section-info-row,
     .view-resources-link {
@@ -35,6 +34,7 @@ $left-right-padding: 40px;
 
     header {
         height: 48px;
+        min-height: 48px;
         padding: 0 $left-right-padding;
         border-top: 1px solid $secondary_color;
         border-bottom: 1px solid $secondary_color;
@@ -58,38 +58,52 @@ $left-right-padding: 40px;
             }
         }
 
-        .title-container {
-            display: flex;
-            flex-direction: row;
-            flex: 1;
-            align-items: center;
-        }
+        .header--content-container {
+            .title-container {
+                display: flex;
+                flex-direction: row;
+                flex: 1;
+                align-items: center;
+            }
 
-        .site-title {
-            font-size: 14px;
-            font-weight: 700;
-            line-height: 18px;
-            display: inline-block;
-        }
-
-        .reg-title {
-            display: block;
-            flex: 2;
-            padding-right: $spacer-2;
-            font-size: 12px;
-            line-height: 16px;
-            padding-left: $spacer-2;
-            margin-left: $spacer-2;
-            border-left: 1px solid $border_color;
-
-            a {
-                max-width: $text-max-width;
+            .site-title {
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 18px;
                 display: inline-block;
             }
-        }
 
-        .header-part-name {
-            display: inline;
+            .reg-title {
+                display: block;
+                flex: 2;
+                padding-right: $spacer-2;
+                font-size: 12px;
+                line-height: 16px;
+                padding-left: $spacer-2;
+                margin-left: $spacer-2;
+                border-left: 1px solid $border_color;
+
+                a {
+                    max-width: $text-max-width;
+                    display: inline-block;
+                }
+            }
+
+            .header-part-name {
+                display: inline;
+            }
+
+            .header--brand {
+                width: 140px;
+                height: 100%;
+                border-right: 1px solid $light_gray;
+                padding-left: 0px;
+            }
+
+            .header--jump-to,
+            .header--links-search {
+                display: none;
+            }
         }
     }
 
