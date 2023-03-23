@@ -50,7 +50,6 @@ func loadConfig() (*eregs.ParserConfig, error) {
 	return config, nil
 }
 
-var extractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
 var loadConfigFunc = loadConfig
 var processPartFunc = processPart
 var fetchDocumentListFunc = eregs.FetchDocumentList

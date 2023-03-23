@@ -264,9 +264,8 @@ func TestProcessPartsList(t *testing.T) {
 			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
 				if subc.Chapter == "IV" && subc.Subchapter == "C" && title == 42 {
 					return []string{"400", "401", "402"}, nil
-				} else {
-					return nil, fmt.Errorf("invalid title or subchapter")
 				}
+				return nil, fmt.Errorf("invalid title or subchapter")
 			},
 			Output: []*PartConfig{
 				&PartConfig{
