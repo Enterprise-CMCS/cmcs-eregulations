@@ -76,8 +76,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             "results": results,
         }
 
-    def get_queryset(self):
-        urls = [i['url'] for i in self.gov_results["results"]]
+    def get_queryset(self, urls):
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
@@ -113,7 +112,8 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         page = int(self.request.query_params.get("page", 1))
         url = request.get_full_path()
         self.get_gov_results(q, page)
-        queryset = self.get_queryset()
+        urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
+        queryset = self.get_queryset(urls.keys())
         resources = list(queryset)
         urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
         records = self.append_snippet(resources, urls)
