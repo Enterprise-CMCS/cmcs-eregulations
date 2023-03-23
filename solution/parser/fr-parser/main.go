@@ -78,8 +78,10 @@ func start() error {
 	titles := make(map[string]struct{})
 	titleConfig := make(map[int][]*eregs.PartConfig)
 	for _, part := range config.Parts {
-		titles[fmt.Sprintf("%d", part.Title)] = struct{}{}
-		titleConfig[part.Title] = append(titleConfig[part.Title], part)
+		if part.UploadFRDocs {
+			titles[fmt.Sprintf("%d", part.Title)] = struct{}{}
+			titleConfig[part.Title] = append(titleConfig[part.Title], part)
+		}
 	}
 
 	for title, rawParts := range titleConfig {
