@@ -51,25 +51,10 @@ func loadConfig() (*eregs.ParserConfig, error) {
 }
 
 var extractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
-
-func getPartsList(ctx context.Context, t *eregs.TitleConfig) []string {
-	var parts []string
-	for _, subchapter := range t.Subchapters {
-		subchapterParts, err := extractSubchapterPartsFunc(ctx, t.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
-		if err != nil {
-			log.Error("[main] failed to retrieve parts for title ", t.Title, " subchapter ", subchapter, ". Skipping.")
-			continue
-		}
-		parts = append(parts, subchapterParts...)
-	}
-	parts = append(parts, t.Parts...)
-	return parts
-}
-
 var loadConfigFunc = loadConfig
-var getPartsListFunc = getPartsList
 var processPartFunc = processPart
 var fetchDocumentListFunc = eregs.FetchDocumentList
+var processPartsListFunc = eregs.ProcessPartsList
 
 func start() error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
@@ -91,16 +76,21 @@ func start() error {
 	}
 
 	titles := make(map[string]struct{})
-	for _, title := range config.Titles {
-		titles[fmt.Sprintf("%d", title.Title)] = struct{}{}
+	titleConfig := make(map[int][]*eregs.PartConfig)
+	for _, part := range config.Parts {
+		titles[fmt.Sprintf("%d", part.Title)] = struct{}{}
+		titleConfig[part.Title] = append(titleConfig[part.Title], part)
 	}
 
-	for _, title := range config.Titles {
-		log.Info("[main] retrieving content for title ", title.Title)
-		parts := getPartsListFunc(ctx, title)
+	for title, rawParts := range titleConfig {
+		log.Info("[main] retrieving content for title ", title)
+		parts, err := processPartsListFunc(ctx, title, rawParts)
+		if err != nil {
+			return fmt.Errorf("failed to process parts list: %+v", err)
+		}
 		for _, part := range parts {
-			if err := processPartFunc(ctx, title.Title, part, existingDocs, config.SkipFRDocuments, titles); err != nil {
-				log.Error("[main] failed to process title ", title.Title, " part ", part, ": ", err)
+			if err := processPartFunc(ctx, title, part.Value, existingDocs, config.SkipFRDocuments, titles); err != nil {
+				log.Error("[main] failed to process title ", title, " part ", part.Value, ": ", err)
 			}
 		}
 	}

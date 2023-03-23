@@ -32,7 +32,7 @@ var (
 	HandleVersionFunc          = handleVersion
 	SleepFunc                  = time.Sleep
 	RetrieveConfigFunc         = eregs.RetrieveConfig
-	ProcessPartsListFunc       = processPartsList
+	ProcessPartsListFunc       = eregs.ProcessPartsList
 	ExtractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
 	GetExistingPartsFunc       = eregs.GetExistingParts
 	ExtractVersionsFunc        = ecfr.ExtractVersions
@@ -125,38 +125,6 @@ func parseTitles() error {
 	}
 	log.Debug("[main] Finished parsing ", len(titles), " titles in ", time.Since(start))
 	return nil
-}
-
-func processPartsList(ctx context.Context, title int, rawParts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
-	var parts []*eregs.PartConfig
-	for _, part := range rawParts {
-		if part.Type == "part" {
-			parts = append(parts, part)
-		} else if part.Type == "subchapter" {
-			log.Debug("[main] Fetching parts list for title ", title, " subchapter", part.Value)
-			subchapter := strings.Split(part.Value, "-")
-			subchapterParts, err := ExtractSubchapterPartsFunc(ctx, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
-			if err != nil {
-				return nil, err
-			}
-			for _, subchapterPart := range subchapterParts {
-				parts = append(parts, &eregs.PartConfig{
-					Type:            "part",
-					Value:           subchapterPart,
-					UploadLocations: part.UploadLocations,
-					UploadRegText:   part.UploadRegText,
-				})
-			}
-		} else {
-			return nil, fmt.Errorf("%s is not a valid type for %s", part.Type, part.Value)
-		}
-	}
-
-	if len(parts) < 1 {
-		return nil, fmt.Errorf("some number of parts must be specified")
-	}
-
-	return parts, nil
 }
 
 func parseTitle(title int, rawParts []*eregs.PartConfig) error {

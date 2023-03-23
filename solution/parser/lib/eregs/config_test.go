@@ -4,8 +4,13 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"context"
+	"fmt"
+	"time"
 
 	"github.com/go-test/deep"
+
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -191,6 +196,167 @@ func TestRetrieveConfig(t *testing.T) {
 
 			if code != tc.ExpectedCode {
 				t.Errorf("expected code (%d), got (%d)", tc.ExpectedCode, code)
+			}
+		})
+	}
+}
+
+func TestProcessPartsList(t *testing.T) {
+	testTable := []struct {
+		Name                       string
+		Title                      int
+		RawParts                   []*PartConfig
+		ExtractSubchapterPartsFunc func(context.Context, int, *ecfr.SubchapterOption) ([]string, error)
+		Output                     []*PartConfig
+		Error                      bool
+	}{
+		{
+			Name:  "test-part",
+			Title: 42,
+			RawParts: []*PartConfig{
+				&PartConfig{
+					Type:            "part",
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+			},
+			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
+				return []string{}, nil
+			},
+			Output: []*PartConfig{
+				&PartConfig{
+					Type:            "part",
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+			},
+			Error: false,
+		},
+		{
+			Name:  "test-subchapter",
+			Title: 42,
+			RawParts: []*PartConfig{
+				&PartConfig{
+					Type:            "part",
+					Value:           "399",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+				&PartConfig{
+					Type:            "subchapter",
+					Value:           "IV-C",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+			},
+			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
+				if subc.Chapter == "IV" && subc.Subchapter == "C" && title == 42 {
+					return []string{"400", "401", "402"}, nil
+				} else {
+					return nil, fmt.Errorf("invalid title or subchapter")
+				}
+			},
+			Output: []*PartConfig{
+				&PartConfig{
+					Type:            "part",
+					Value:           "399",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+				&PartConfig{
+					Type:            "part",
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+				&PartConfig{
+					Type:            "part",
+					Value:           "401",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+				&PartConfig{
+					Type:            "part",
+					Value:           "402",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+			},
+			Error: false,
+		},
+		{
+			Name:  "test-extract-subchapter-parts-fail",
+			Title: 42,
+			RawParts: []*PartConfig{
+				&PartConfig{
+					Type:            "part",
+					Value:           "399",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+				&PartConfig{
+					Type:            "subchapter",
+					Value:           "IV-C",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+			},
+			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
+				return nil, fmt.Errorf("oops")
+			},
+			Output: nil,
+			Error:  true,
+		},
+		{
+			Name:  "test-invalid-type",
+			Title: 42,
+			RawParts: []*PartConfig{
+				&PartConfig{
+					Type:            "part",
+					Value:           "399",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+				&PartConfig{
+					Type:            "something_else",
+					Value:           "IV-C",
+					UploadLocations: true,
+					UploadRegText:   true,
+				},
+			},
+			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
+				return []string{}, nil
+			},
+			Output: nil,
+			Error:  true,
+		},
+		{
+			Name:     "test-no-parts",
+			Title:    42,
+			RawParts: []*PartConfig{},
+			ExtractSubchapterPartsFunc: func(ctx context.Context, title int, subc *ecfr.SubchapterOption) ([]string, error) {
+				return []string{}, nil
+			},
+			Output: nil,
+			Error:  true,
+		},
+	}
+
+	for _, tc := range testTable {
+		t.Run(tc.Name, func(t *testing.T) {
+			extractSubchapterPartsFunc = tc.ExtractSubchapterPartsFunc
+			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+			defer cancel()
+			output, err := ProcessPartsList(ctx, tc.Title, tc.RawParts)
+			diff := deep.Equal(tc.Output, output)
+			if err != nil && !tc.Error {
+				t.Errorf("expected no error, received (%+v)", err)
+			} else if err == nil && tc.Error {
+				t.Errorf("expected error, received (%+v)", output)
+			} else if err == nil && diff != nil {
+				t.Errorf("output not as expected: %+v", diff)
 			}
 		})
 	}
