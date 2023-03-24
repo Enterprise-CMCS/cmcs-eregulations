@@ -18,7 +18,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/resources/locations/sections`,
     `/v3/resources/locations/subparts`,
     `/v3/resources/supplemental_content`,
-    `/v3/synonym/${SYNONYM}`,
+    `/v3/synonyms?q=${SYNONYM}`,
     `/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/section/${SECTION}`,
