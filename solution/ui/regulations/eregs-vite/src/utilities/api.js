@@ -433,7 +433,7 @@ const getSectionsForPart = async (title, part) => httpApiGet(`title/${title}/par
 
 const getSubpartTOC = async (title, part, subPart) => httpApiGet(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
 
-const getSynonyms = async(query) => httpApiGet(`synonym/${query}`);
+const getSynonyms = async(query) => httpApiGet(`synonyms?q=${query}`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
