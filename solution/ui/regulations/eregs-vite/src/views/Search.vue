@@ -57,7 +57,7 @@
                     </div>
                     <template v-if="!regsLoading">
                         <RegResults
-                            :base="base"
+                            :base="homeUrl"
                             :results="regResults"
                             :query="searchQuery"
                         >
@@ -95,7 +95,7 @@
                     </div>
                     <template v-if="!resourcesLoading">
                         <ResourcesResults
-                            :base="base"
+                            :base="homeUrl"
                             :count="resourcesResults.length"
                             :parts-last-updated="partsLastUpdated"
                             :parts-list="partsList"
@@ -222,8 +222,6 @@ export default {
     beforeCreate() {},
 
     async created() {
-        console.log("this.apiUrl", this.apiUrl);
-        console.log("this.homeUrl", this.homeUrl);
         if (this.searchQuery) {
             await Promise.allSettled([
                 this.getPartLastUpdatedDates(),
@@ -246,10 +244,6 @@ export default {
     },
     data() {
         return {
-            base:
-                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-                    ? `/${import.meta.env.VITE_ENV}`
-                    : "",
             pageSize: 50,
             regsLoading: true,
             resourcesLoading: true,
