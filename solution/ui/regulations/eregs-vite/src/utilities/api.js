@@ -416,7 +416,7 @@ const getSupplementalContent = async (
     sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     sString = `${sString}&fr_grouping=${fr_grouping}`
 
-    const urlpath = (window.location.href.match(‘searchgov’)) ? `resources/search?${sString}` : `resources/?${sString}`
+    const urlpath = (window.location.href.match('searchgov')) ? `resources/search?${sString}` : `resources/?${sString}`
     const response =  await httpApiGet(urlpath)
     return response
 }
