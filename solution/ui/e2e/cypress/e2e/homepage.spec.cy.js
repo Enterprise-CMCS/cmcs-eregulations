@@ -116,9 +116,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("has the correct title and copy text", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".jump-to-label").should(
+        cy.get(".call-to-action").should(
             "have.text",
-            "Jump to Regulation Section"
+            "Look up policy with context."
         );
         cy.get(".hero-text").should(
             "have.text",

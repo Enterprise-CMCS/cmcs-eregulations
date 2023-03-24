@@ -10,7 +10,6 @@ export { default as DropdownHeader } from "./DropdownHeader.vue";
 export { default as DropdownItem } from "./DropdownItem.vue";
 export { default as FlashBanner } from "./FlashBanner.vue";
 export { default as IFrameContainer } from "./IFrameContainer.vue";
-export { default as JumpTo } from "./JumpTo.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
 export { default as PartButton } from "./PartButton.vue";
 export { default as PrintBtn } from "./PrintBtn.vue";
@@ -33,4 +32,8 @@ export { default as CopyCitation } from "./tooltips/CopyCitation.vue";
 export { default as GovInfoLinks } from "./tooltips/GovInfoLinks.vue";
 export { default as TooltipContainer } from "./tooltips/TooltipContainer.vue";
 
-// Other components you plan to publish go here
+// from Single Page App
+export { default as HeaderComponent } from "../../../eregs-vite/src/components/header/HeaderComponent.vue";
+export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
+export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
+export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";

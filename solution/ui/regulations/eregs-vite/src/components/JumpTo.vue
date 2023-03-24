@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div class="jump-to-label">Jump to Regulation Section</div>
         <form @submit.prevent="getLink">
             <div class="jump-to-input">
                 <select
@@ -21,7 +20,7 @@
                         {{ listedTitle }} CFR
                     </option>
                 </select>
-                §
+                <span class="section-symbol">§</span>
                 <select
                     id="jumpToPart"
                     v-model="selectedPart"
@@ -64,7 +63,7 @@
     </div>
 </template>
 <script>
-import { getTitles, getParts } from "../api";
+import { getTitles, getParts } from "../utilities/api.js";
 
 export default {
     name: "JumpTo",
@@ -145,7 +144,7 @@ export default {
 
     methods: {
         async getParts(title) {
-            const partsList = await getParts(this.apiurl, title);
+            const partsList = await getParts(title, this.apiurl);
             this.filteredParts = partsList.map((part) => part.name);
         },
         getLink(e) {

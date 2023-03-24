@@ -32,14 +32,10 @@
 
         background: $hero_background_color;
 
-        @include custom-max($mobile-max / 1px) {
-            height: 312px;
-        }
-
         .hero-content {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             text-shadow: 3px 1px 5px $secondary_color;
             padding-top: 50px;
             padding-bottom: 50px;
@@ -49,25 +45,24 @@
             background-repeat: no-repeat;
             background-position: bottom 0px right 25px;
 
-            @include custom-max($hero-tablet-max / 1px) {
-                padding-top: 30px;
-                padding-bottom: 30px;
-                justify-content: flex-start;
+            > * {
+                width: 40%;
+            }
 
+            @include custom-max($hero-tablet-max / 1px) {
+                justify-content: flex-start;
                 background-size: 55%;
                 background-position: bottom 50% right 25px;
-
-                >* {
-                    width: 40%;
-                }
             }
 
             @include custom-max($mobile-max / 1px) {
+                padding-top: 30px;
+                padding-bottom: 30px;
                 background-image: url("#{$eregs-image-path}/hero-graphic-updated-mobile.svg");
                 background-size: auto 45%;
                 background-position: bottom 0px right 50%;
 
-                >* {
+                > * {
                     width: 100%;
                 }
             }
@@ -79,8 +74,24 @@
                 background-size: auto;
                 background-position: bottom 0px right 50%;
 
-                >* {
+                > * {
                     width: 100%;
+                }
+            }
+
+            .call-to-action {
+                font-family: $primary_site_font;
+                font-size: $font_size_hero_h1;
+                line-height: 1;
+                margin-bottom: 15px;
+                font-weight: 700;
+
+                @include custom-max($hero-tablet-max / 1px) {
+                    font-size: $font_size_hero_h1_tablet;
+                }
+
+                @include custom-max($iphoneSE-max / 1px) {
+                    font-size: $font-size-lg;
                 }
             }
 
@@ -116,10 +127,6 @@
         p.hero-text {
             margin: 0 !important;
             font-size: $font-size-sm;
-
-            @include custom-max($hero-tablet-max / 1px) {
-                margin-top: 20px !important;
-            }
         }
     }
 
@@ -200,11 +207,7 @@
 :target {
     scroll-margin-top: $header_height_mobile;
 
-    @include screen-md {
-        scroll-margin-top: $header_height_tablet;
-    }
-
-    @include screen-lg {
+    @include custom-min($eds-width-sm / 1px) {
         scroll-margin-top: $header_height;
     }
 }
@@ -221,7 +224,6 @@
 }
 
 .homepage-toc {
-
     @include custom-max(1024) {
         max-width: 100%;
         padding: 0;
@@ -261,7 +263,7 @@
         margin: 1.33em 0 1.33em 0 !important;
     }
 
-    h4+.toc-external-ref {
+    h4 + .toc-external-ref {
         margin: $spacer-2 0 0 !important;
     }
 
