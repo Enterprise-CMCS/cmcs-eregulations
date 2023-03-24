@@ -4,103 +4,63 @@
 
 @import "../application_settings";
 
-.left-sidebar {
-    .jump-to {
-        margin: 0 $spacer-4;
-        padding: $spacer-2 0 $spacer-4;
-        border-bottom: 1px solid $secondary_border_color;
+form .jump-to-input {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-left: 20px;
 
-        .jump-to-label {
-            margin: $spacer-2 0 $spacer-1 0;
-            font-size: $font-size-lg;
-            font-weight: 600;
-        }
-    }
-}
-
-.hero-content {
-    .jump-to {
-        .jump-to-label {
-            font-family: $primary_site_font;
-            font-size: $font_size_hero_h1;
-            line-height: 1;
-            margin-bottom: 15px;
-            font-weight: 700;
-
-            @include custom-max($hero-tablet-max / 1px) {
-                font-size: $font_size_hero_h1_tablet;
-            }
-
-            @include custom-max($iphoneSE-max / 1px) {
-                font-size: $font-size-lg;
-            }
-        }
-
-        form {
-            .jump-to-input {
-                margin-right: $spacer-2;
-            }
-
-            select,
-            input,
-            input .submit {
-                height: 36px;
-                font-size: $font-size-sm;
-            }
-        }
-    }
-}
-
-.jump-to {
-    form {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
+    @include custom-max(($eds-width-sm - 1) / 1px) {
+        padding-left: 0;
     }
 
-    .jump-to-input {
-        display: inline-block;
-
-        select {
-            display: inline-block;
-            width: 70px;
-            border: none;
-        }
+    .section-symbol {
+        margin-right: 5px;
+        font-size: 15px;
+        font-weight: 600;
     }
 
     .dot {
         font-size: $font-size-2xl;
         line-height: 1;
-        padding-left:4px;
-        padding-right: 4px;;
+        padding: 0 2px;
+    }
+
+    input,
+    select {
+        border: 1px solid $light_gray;
     }
 
     input {
-        background-color: #FFF;
+        background-color: #fff;
         color: #000;
 
         &.submit {
             display: inline-block;
             line-height: 1.3;
             padding: $spacer-1 $spacer-2;
-            margin: 4px 0 4px 4px;
-            background: $reverse_link_color;
-            border: none;
+            border: 1px solid $jump_to_submit_disabled;
+            color: $jump_to_submit_disabled;
             border-radius: $border-radius;
-            cursor: pointer;
+            cursor: not-allowed;
 
             &:hover,
             &:focus {
-                background: $reverse_link_hover;
                 @include transition;
             }
-        }
 
-        &.number-box {
-            width: 60px;
-            border: 0;
-            display: inline-block;
-            margin-right: $spacer-1;
+            &.active {
+                cursor: pointer;
+                color: #fff;
+                background-color: $jump_to_submit_active;
+                border: 1px solid $jump_to_submit_active;
+
+                &:hover,
+                &:focus {
+                    background-color: $jump_to_submit_active_focus;
+                    border: 1px solid $jump_to_submit_active_focus;
+                }
+            }
         }
     }
 
@@ -108,13 +68,54 @@
         font-weight: 600;
         font-size: $font-size-lg;
     }
-}
-select#jumpToPart,
-input#jumpToSection,
-input#jumpBtn{
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-input#jumpToSection{
-    margin-right: 12px
+
+    select#jumpToTitle,
+    select#jumpToPart,
+    input#jumpToSection,
+    input#jumpBtn {
+        font-size: $font-size_md;
+        line-height: 24px;
+        font-weight: 700;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 5px 8px;
+    }
+
+    select#jumpToTitle {
+        width: 85px;
+        margin-right: 5px;
+
+        @include custom-max(($eds-width-md - 1) / 1px) {
+            width: 70px;
+        }
+    }
+
+    select#jumpToPart {
+        width: 80px;
+
+        @include custom-max(($eds-width-md - 1) / 1px) {
+            width: 70px;
+        }
+    }
+
+    input#jumpToSection {
+        margin-right: 10px;
+        width: 80px;
+
+        @include custom-max(($eds-width-md - 1) / 1px) {
+            width: 70px;
+        }
+
+        @include custom-max(($eds-width-sm - 1) / 1px) {
+            width: 60px;
+        }
+    }
+
+    input#jumpBtn {
+        width: 50px;
+
+        @include custom-max(($eds-width-md - 1) / 1px) {
+            width: 40px;
+        }
+    }
 }

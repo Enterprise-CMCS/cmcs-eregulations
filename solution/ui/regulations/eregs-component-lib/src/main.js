@@ -13,6 +13,9 @@ import {
     DropdownItem,
     FlashBanner,
     GovInfoLinks,
+    HeaderComponent,
+    HeaderLinks,
+    HeaderSearch,
     IFrameContainer,
     JumpTo,
     LastParserSuccessDate,
@@ -35,6 +38,8 @@ import {
 
 import { goToVersion } from "./go-to-version";
 import { highlightText, getQueryParam, scrollToElement } from "./utils";
+
+import Clickaway from "../../eregs-vite/src/directives/clickaway";
 
 Vue.config.devtools = true;
 
@@ -176,6 +181,8 @@ function main() {
     // Must be first, mutates DOM
     highlightText(window.location, "highlight");
 
+    Vue.directive("clickaway", Clickaway);
+
     new Vue({
         components: {
             ActionBtn,
@@ -190,6 +197,9 @@ function main() {
             DropdownItem,
             FlashBanner,
             GovInfoLinks,
+            HeaderComponent,
+            HeaderLinks,
+            HeaderSearch,
             IFrameContainer,
             JumpTo,
             LastParserSuccessDate,

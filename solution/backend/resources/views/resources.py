@@ -45,6 +45,7 @@ from common.auth import SettingsAuthentication
 class ResourceSearchViewSet(viewsets.ModelViewSet):
     serializer_class = ResourceSearchSerializer
     limit = 50
+    gov_results = {}
 
     def get_annotated_url(self):
         return Case(
@@ -70,13 +71,12 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 'url': gov_result['url']
             }
             results.append(result)
-        return {
+        self.gov_results = {
             "total": gov_results["web"]["total"],
             "results": results,
         }
 
-    def get_queryset(self):
-        urls = [i['url'] for i in self.gov_results["results"]]
+    def get_queryset(self, urls):
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
@@ -94,6 +94,11 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                 )),
             )
 
+    def append_snippet(self, queryset, urls):
+        for q in queryset:
+            q.snippet = urls[q.url]
+        return queryset
+
     def generate_page_url(self, url, page):
         parse_url = urlparse.urlparse(url)
         url_parts = parse_url.query.split("&")
@@ -106,11 +111,12 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         q = self.request.query_params.get("q")
         page = int(self.request.query_params.get("page", 1))
         url = request.get_full_path()
-        self.gov_results = self.get_gov_results(q, page)
-        queryset = self.get_queryset()
-        records = list(queryset)
-        for record in records:
-            setattr(record, "snippet", [r['snippet'] for r in self.gov_results["results"] if r['url'] == record.url][0])
+        self.get_gov_results(q, page)
+        urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
+        queryset = self.get_queryset(urls.keys())
+        resources = list(queryset)
+        urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
+        records = self.append_snippet(resources, urls)
         next_page = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
         previous_page = page - 1 if page > 1 else None
 
