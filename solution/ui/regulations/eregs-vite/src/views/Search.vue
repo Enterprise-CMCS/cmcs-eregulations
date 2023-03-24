@@ -201,6 +201,10 @@ export default {
             type: String,
             default: "/about/",
         },
+        apiUrl: {
+            type: String,
+            default: "/v3/",
+        },
         homeUrl: {
             type: String,
             default: "/",
@@ -218,6 +222,8 @@ export default {
     beforeCreate() {},
 
     async created() {
+        console.log("this.apiUrl", this.apiUrl);
+        console.log("this.homeUrl", this.homeUrl);
         if (this.searchQuery) {
             await Promise.allSettled([
                 this.getPartLastUpdatedDates(),
