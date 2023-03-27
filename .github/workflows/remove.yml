@@ -17,7 +17,7 @@ jobs:
           submodules: true
       - uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: 18.14
       - uses: actions/setup-python@v4
         with:
           python-version: '3.8'
