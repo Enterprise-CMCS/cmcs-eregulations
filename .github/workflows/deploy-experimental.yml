@@ -256,7 +256,7 @@ jobs:
           state: open
       # Notify github that this is deployed and ready to look at
       - name: Create deployment comment
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         env:
           django_url: ${{ needs.deploy-django.outputs.url }}
         with:
