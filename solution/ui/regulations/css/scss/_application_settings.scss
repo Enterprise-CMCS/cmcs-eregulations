@@ -119,6 +119,10 @@ $hero_background_color: $teal;
 $hero_link_color: $white;
 $hero_link_hover: $light_blue;
 
+$jump_to_submit_disabled: $mid_gray_3;
+$jump_to_submit_active: $mid_blue;
+$jump_to_submit_active_focus: $dark_blue;
+
 // Borders
 
 $border_color: $light_gray;
@@ -183,14 +187,20 @@ $font_size_hero_h1_tablet: 20px;
 // Breakpoints
 //--------------------------
 
+// eRegs Design System (eds)
+
+$eds-width-xs: 320px;
+$eds-width-sm: 780px;
+$eds-width-md: 1024px;
+$eds-width-lg: 1200px;
+
+// Uses CMS Design System + a larger screen size
+
 // Custom maxes
 $tablet-max: $width-lg - 1; // 1023px
 $mobile-max: $width-md - 1; // 767px
 $iphoneSE-max: $width-xs - 1; // 374px
-
 $hero-tablet-max: 1080px;
-
-// Uses CMS Design System + a larger screen size
 
 $width-xxs: 320px;
 $width-xs: 375px;
@@ -390,9 +400,8 @@ a {
 
 // For margins and padding: From the CMS Design System, default to $spacer-* where * is a number between 1–7 (i.e. $spacer-2)
 
-$header_height: 80px; // Update if header height changes
-$header_height_tablet: 71px;
-$header_height_mobile: 61px;
+$header_height: 60px; // Update if header height changes
+$header_height_mobile: 120px;
 
 $view_compare_height: 54px;
 

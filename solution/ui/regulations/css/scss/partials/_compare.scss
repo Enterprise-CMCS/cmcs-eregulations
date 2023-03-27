@@ -12,11 +12,7 @@
 
     top: $header_height_mobile;
 
-    @include screen-md {
-        top: $header_height_tablet;
-    }
-
-    @include screen-lg {
+    @include custom-min($eds-width-sm / 1px) {
         top: $header_height;
     }
 

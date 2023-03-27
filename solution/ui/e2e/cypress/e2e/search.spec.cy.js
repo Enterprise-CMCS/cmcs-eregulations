@@ -10,11 +10,11 @@ describe("Search flow", () => {
     it("shows up on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".search-header > form > input")
+        cy.get(".header--search > form > input")
             .should("be.visible")
             .should("have.attr", "placeholder", "Search")
             .type(`${SEARCH_TERM}`);
-        cy.get(".search-header > form").submit();
+        cy.get(".header--search > form").submit();
 
         cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
     });
@@ -22,14 +22,14 @@ describe("Search flow", () => {
     it("shows when mobile search open icon is clicked", () => {
         cy.viewport("iphone-x");
         cy.visit("/42/430/");
-        cy.get("button#mobile-search-open")
+        cy.get("button.form__button--toggle-mobile-search")
             .should("be.visible")
             .click({ force: true });
-        cy.get("form.search-borderless > input")
+        cy.get(".header--search > form > input")
             .should("be.visible")
             .type(`${SEARCH_TERM}`);
 
-        cy.get("form.search-borderless").submit();
+        cy.get(".header--search > form").submit();
 
         cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
     });
@@ -53,12 +53,10 @@ describe("Search flow", () => {
         ).should("be.visible");
         cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .results-section"
-        )
-            .should("be.visible");    
+        ).should("be.visible");
         cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
-        )
-            .should("have.attr", "href");
+        ).should("have.attr", "href");
         cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
         ).click({ force: true });
@@ -84,8 +82,8 @@ describe("Search flow", () => {
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get(".options-list li:nth-child(3) a")
             .should("have.attr", "href")
-            .and('include', "search-gsc");
-    })
+            .and("include", "search-gsc");
+    });
 
     it("checks a11y for search page", () => {
         cy.viewport("macbook-15");
@@ -97,7 +95,7 @@ describe("Search flow", () => {
     it("should have a working searchbox", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search`, { timeout: 60000 });
-        cy.findByRole("textbox")
+        cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
         cy.get(".search-field .v-input__icon--append button").click({
@@ -114,7 +112,7 @@ describe("Search flow", () => {
             force: true,
         });
 
-        cy.findByRole("textbox")
+        cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
 
@@ -122,9 +120,8 @@ describe("Search flow", () => {
             .should("be.visible")
             .should("have.value", "test");
 
-        cy.findByRole("textbox").clear();
+        cy.get("input#main-content").clear();
 
-        cy.findByRole("textbox").should("have.value", "");
+        cy.get("input#main-content").should("have.value", "");
     });
-
 });

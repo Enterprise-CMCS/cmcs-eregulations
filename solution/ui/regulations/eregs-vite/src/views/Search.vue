@@ -1,12 +1,30 @@
 <template>
     <body class="ds-base search-page">
-        <BlockingModal where-used="vite">
+        <BlockingModal>
             <IFrameContainer
                 src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
                 title="Google Forms iframe"
             />
         </BlockingModal>
-        <FlashBanner where-used="vite" />
+        <FlashBanner />
+        <header id="header" class="sticky">
+            <HeaderComponent :home-url="homeUrl">
+                <template #jump-to>
+                    <JumpTo />
+                </template>
+                <template #links>
+                    <HeaderLinks
+                        :about-url="aboutUrl"
+                        :resources-url="resourcesUrl"
+                    />
+                </template>
+                <template #search>
+                    <HeaderSearch
+                        :search-url="searchUrl"
+                    />
+                </template>
+            </HeaderComponent>
+        </header>
         <div id="searchApp" class="search-view">
             <Banner title="Search Results">
                 <template #input>
@@ -135,6 +153,21 @@
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
+import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
+import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
+import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
+
+import Banner from "@/components/Banner.vue";
+import HeaderComponent from "@/components/header/HeaderComponent.vue";
+import HeaderLinks from "@/components/header/HeaderLinks.vue";
+import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import JumpTo from "@/components/JumpTo.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
+import RegResults from "@/components/reg_search/RegResults.vue";
+import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import SearchInput from "@/components/SearchInput.vue";
+
 import { getCurrentPageResultsRange, stripQuotes } from "@/utilities/utils";
 import {
     getFormattedPartsList,
@@ -144,16 +177,6 @@ import {
     getSynonyms,
 } from "@/utilities/api";
 
-import Banner from "@/components/Banner.vue";
-import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
-import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
-import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
-import PaginationController from "@/components/pagination/PaginationController.vue";
-import RegResults from "@/components/reg_search/RegResults.vue";
-import ResourcesResults from "@/components/resources/ResourcesResults.vue";
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
-import SearchInput from "@/components/SearchInput.vue";
-
 export default {
     name: "SearchView",
 
@@ -161,7 +184,11 @@ export default {
         Banner,
         BlockingModal,
         FlashBanner,
+        HeaderComponent,
+        HeaderLinks,
+        HeaderSearch,
         IFrameContainer,
+        JumpTo,
         PaginationController,
         RegResults,
         ResourcesResults,
@@ -169,7 +196,24 @@ export default {
         SearchInput,
     },
 
-    props: {},
+    props: {
+        aboutUrl: {
+            type: String,
+            default: "/about/",
+        },
+        homeUrl: {
+            type: String,
+            default: "/",
+        },
+        resourcesUrl: {
+            type: String,
+            default: "/resources/",
+        },
+        searchUrl: {
+            type: String,
+            default: "/search/",
+        }
+    },
 
     beforeCreate() {},
 
