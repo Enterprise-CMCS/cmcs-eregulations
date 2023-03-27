@@ -102,30 +102,24 @@ class FRDocGroupingMixin:
         return context
 
     def get_final_ids(self, id_query):
-        fr_grouping = self.request.GET.get("fr_grouping", "true").lower() == "true"
-        if fr_grouping:
-            fr_groups = []
-            ids = []
+        fr_groups = []
+        ids = []
 
-            for i in id_query:
-                if i.group_annotated not in fr_groups:
-                    fr_groups.append(i.group_annotated)
-                # Supplemental content either is none or negative on group annotated. Those must be on the list if requested for
-                # abstract resource
-                if i.group_annotated is None or i.group_annotated < 0:
-                    ids.append(i.id)
+        for i in id_query:
+            if i.group_annotated is None or i.group_annotated < 0:
+                ids.append(i.id)
+            elif i.group_annotated not in fr_groups:
+                fr_groups.append(i.group_annotated)
 
-            #  This uses a subquery  to get the latest fr_document ID for the fr groups and uses that in place of the original
-            #  ID found.
-            if fr_groups:
-                newest = FederalRegisterDocument.objects.filter(group_id=OuterRef('pk')).order_by('-date')
-                groups = FederalRegisterDocumentGroup.objects\
-                    .annotate(newest_doc=Subquery(newest.values('id')[:1]))\
-                    .filter(id__in=fr_groups)\
-                    .values_list('newest_doc', flat=True)
-                ids = list(groups) + ids
-        else:
-            ids = super().get_final_ids(id_query)
+        #  This uses a subquery  to get the latest fr_document ID for the fr groups and uses that in place of the original
+        #  ID found.
+        if fr_groups:
+            newest = FederalRegisterDocument.objects.filter(group_id=OuterRef('pk')).order_by('-date')
+            groups = FederalRegisterDocumentGroup.objects\
+                .annotate(newest_doc=Subquery(newest.values('id')[:1]))\
+                .filter(id__in=fr_groups)\
+                .values_list('newest_doc', flat=True)
+            ids = list(groups) + ids
         return ids
 
 
@@ -206,33 +200,34 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
                     annotations[f"{model}_{field}_headline"] = self.make_headline(f"{model}__{field}", search_query, search_type)
         return annotations
 
-    def get_final_ids(self, id_query):
-        return [i[0] for i in id_query.values_list("id", "group_annotated")]
-
     def get_queryset(self):
         locations = self.request.GET.getlist("locations")
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
         sort_method = self.request.GET.get("sort")
+        fr_grouping = self.request.GET.get("fr_grouping", "false").lower() == "true"
 
-        id_query = self.model.objects\
-                       .filter(approved=True)\
-                       .annotate(group_annotated=self.get_annotated_group())
+        query = self.model.objects\
+                    .filter(approved=True)\
+                    .annotate(group_annotated=self.get_annotated_group())
 
         q_obj = self.get_location_filter(locations)
+
         if q_obj:
-            id_query = id_query.filter(q_obj)
+            query = query.filter(q_obj)
 
         if categories:
-            id_query = id_query.filter(category__id__in=categories)
+            query = query.filter(category__id__in=categories)
 
-        ids = self.get_final_ids(id_query)
+        if fr_grouping:
+            ids = self.get_final_ids(query)
+            query = self.model.objects.filter(id__in=ids)
 
         annotations = {}
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
                                             .contains_fr_docs()
-        query = self.model.objects.filter(id__in=ids).select_subclasses().prefetch_related(
+        query = query.select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),
             Prefetch("related_resources", AbstractResource.objects.all().select_subclasses().prefetch_related(
