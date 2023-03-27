@@ -133,15 +133,15 @@ export default {
 
             // early return if related regulation is a subpart and not a section
             if (type.toLowerCase() === "subpart") {
-                return `${base}/${title}/${part}/Subpart-${subpart_id}/${partDate}`;
+                return `${base}${title}/${part}/Subpart-${subpart_id}/${partDate}`;
             }
             const partObj = partsList.find((parts) => parts.name == part);
             const subpart = partObj?.sections?.[section_id];
 
             // todo: Figure out which no subpart sections are invalid and which are orphans
             return subpart
-                ? `${base}/${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
-                : `${base}/${title}/${part}/${partDate}#${part}-${section_id}`;
+                ? `${base}${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
+                : `${base}${title}/${part}/${partDate}#${part}-${section_id}`;
         },
     },
 };

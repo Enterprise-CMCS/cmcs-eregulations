@@ -10,7 +10,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo />
+                    <JumpTo :home-url="homeUrl"/>
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -57,7 +57,7 @@
                     </div>
                     <template v-if="!regsLoading">
                         <RegResults
-                            :base="base"
+                            :base="homeUrl"
                             :results="regResults"
                             :query="searchQuery"
                         >
@@ -95,7 +95,7 @@
                     </div>
                     <template v-if="!resourcesLoading">
                         <ResourcesResults
-                            :base="base"
+                            :base="homeUrl"
                             :count="resourcesResults.length"
                             :parts-last-updated="partsLastUpdated"
                             :parts-list="partsList"
@@ -201,6 +201,10 @@ export default {
             type: String,
             default: "/about/",
         },
+        apiUrl: {
+            type: String,
+            default: "/v3/",
+        },
         homeUrl: {
             type: String,
             default: "/",
@@ -240,10 +244,6 @@ export default {
     },
     data() {
         return {
-            base:
-                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-                    ? `/${import.meta.env.VITE_ENV}`
-                    : "",
             pageSize: 50,
             regsLoading: true,
             resourcesLoading: true,
