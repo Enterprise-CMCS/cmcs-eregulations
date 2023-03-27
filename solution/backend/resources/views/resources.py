@@ -115,7 +115,6 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
         queryset = self.get_queryset(urls.keys())
         resources = list(queryset)
-        urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
         records = self.append_snippet(resources, urls)
         next_page = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
         previous_page = page - 1 if page > 1 else None
