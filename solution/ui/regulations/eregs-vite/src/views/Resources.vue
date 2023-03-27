@@ -10,7 +10,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo />
+                    <JumpTo :home-url="homeUrl"/>
                 </template>
                 <template #links>
                     <HeaderLinks
