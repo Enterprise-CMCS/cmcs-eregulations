@@ -115,7 +115,7 @@ resources:
   Resources:
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
-      Type: AWS::IAM::Role
+      Type: AWS::IAM::Roleer
       Properties:
         Path: ${ssm:/account_vars/iam/path}
         AssumeRolePolicyDocument:
