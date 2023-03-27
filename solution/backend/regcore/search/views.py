@@ -6,7 +6,7 @@ from django.db.models import F
 from common.mixins import OptionalPaginationMixin
 from common.api import OpenApiQueryParameter
 
-from .models import SearchIndex
+from .models import SearchIndexV2
 from .serializers import SearchResultSerializer
 
 
@@ -19,8 +19,7 @@ class SearchView(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
-        return SearchIndex.objects.effective(date.today()).search(query).annotate(
-            part_title=F("part__title"),
-            part_document_title=F("part__document__title"),
+        return SearchIndexV2.objects.effective(date.today()).search(query).annotate(
+            title=F("part__title"),
             date=F("part__date"),
         )
