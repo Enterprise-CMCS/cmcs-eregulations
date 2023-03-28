@@ -139,6 +139,7 @@
                     />
                     <ResourcesResultsContainer
                         :isLoading="isLoading"
+                        :base="homeUrl"
                         :page="page"
                         :page-size="pageSize"
                         :categories="categories"
