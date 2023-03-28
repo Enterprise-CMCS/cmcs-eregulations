@@ -6,11 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
 	"github.com/cmsgov/cmcs-eregulations/lib/fedreg"
 
-	"github.com/go-test/deep"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -28,14 +26,14 @@ func TestLoadConfig(t *testing.T) {
 					Workers:  1,
 					Retries:  1,
 					LogLevel: "warn",
-					Titles: []*eregs.TitleConfig{
-						&eregs.TitleConfig{
-							Title: 42,
-							Subchapters: eregs.SubchapterList{
-								eregs.SubchapterArg{"IV", "C"},
-								eregs.SubchapterArg{"IV", "D"},
-							},
-							Parts: eregs.PartList{"1", "2", "3"},
+					Parts: []*eregs.PartConfig{
+						&eregs.PartConfig{
+							Type:            "part",
+							Title:           42,
+							Value:           "400",
+							UploadLocations: true,
+							UploadRegText:   true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, 200, nil
@@ -69,40 +67,11 @@ func TestLoadConfig(t *testing.T) {
 	}
 }
 
-func TestGetPartsList(t *testing.T) {
-	input := &eregs.TitleConfig{
-		Title: 42,
-		Subchapters: eregs.SubchapterList{
-			eregs.SubchapterArg{"IV", "C"},
-			eregs.SubchapterArg{"IV", "D"},
-		},
-		Parts: eregs.PartList{"1", "2", "3"},
-	}
-
-	extractSubchapterPartsFunc = func(ctx context.Context, title int, sub *ecfr.SubchapterOption) ([]string, error) {
-		if sub.Chapter == "IV" && sub.Subchapter == "C" {
-			return []string{"4", "5", "6"}, nil
-		}
-		return nil, fmt.Errorf("this is expected")
-	}
-
-	expected := []string{"4", "5", "6", "1", "2", "3"}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-	defer cancel()
-
-	output := getPartsList(ctx, input)
-
-	if diff := deep.Equal(expected, output); diff != nil {
-		t.Errorf("output not as expected: %+v", diff)
-	}
-}
-
 func TestStart(t *testing.T) {
 	testTable := []struct {
 		Name                  string
 		LoadConfigFunc        func() (*eregs.ParserConfig, error)
-		GetPartsListFunc      func(context.Context, *eregs.TitleConfig) []string
+		ProcessPartsListFunc  func(context.Context, int, []*eregs.PartConfig) ([]*eregs.PartConfig, error)
 		ProcessPartFunc       func(context.Context, int, string, map[string]bool, bool, map[string]struct{}) error
 		FetchDocumentListFunc func(context.Context) ([]string, error)
 		Error                 bool
@@ -113,28 +82,23 @@ func TestStart(t *testing.T) {
 				return &eregs.ParserConfig{
 					Workers:  1,
 					LogLevel: "warn",
-					Titles: []*eregs.TitleConfig{
-						&eregs.TitleConfig{
-							Title: 42,
-							Subchapters: eregs.SubchapterList{
-								eregs.SubchapterArg{"IV", "C"},
-								eregs.SubchapterArg{"IV", "D"},
-							},
-							Parts: eregs.PartList{"1", "2", "3"},
-						},
-						&eregs.TitleConfig{
-							Title: 45,
-							Subchapters: eregs.SubchapterList{
-								eregs.SubchapterArg{"AB", "C"},
-								eregs.SubchapterArg{"XY", "Z"},
-							},
-							Parts: eregs.PartList{"123", "456", "789"},
+					Parts: []*eregs.PartConfig{
+						&eregs.PartConfig{
+							Type:            "part",
+							Title:           42,
+							Value:           "400",
+							UploadLocations: true,
+							UploadRegText:   true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, nil
 			},
-			GetPartsListFunc: func(ctx context.Context, title *eregs.TitleConfig) []string {
-				return []string{"1", "2", "3", "4", "5"}
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				if title == 42 {
+					return parts, nil
+				}
+				return nil, fmt.Errorf("bad title")
 			},
 			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return nil
@@ -149,8 +113,8 @@ func TestStart(t *testing.T) {
 			LoadConfigFunc: func() (*eregs.ParserConfig, error) {
 				return nil, fmt.Errorf("this is expected")
 			},
-			GetPartsListFunc: func(ctx context.Context, title *eregs.TitleConfig) []string {
-				return []string{}
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return []*eregs.PartConfig{}, nil
 			},
 			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return nil
@@ -166,28 +130,20 @@ func TestStart(t *testing.T) {
 				return &eregs.ParserConfig{
 					Workers:  1,
 					LogLevel: "warn",
-					Titles: []*eregs.TitleConfig{
-						&eregs.TitleConfig{
-							Title: 42,
-							Subchapters: eregs.SubchapterList{
-								eregs.SubchapterArg{"IV", "C"},
-								eregs.SubchapterArg{"IV", "D"},
-							},
-							Parts: eregs.PartList{"1", "2", "3"},
-						},
-						&eregs.TitleConfig{
-							Title: 45,
-							Subchapters: eregs.SubchapterList{
-								eregs.SubchapterArg{"AB", "C"},
-								eregs.SubchapterArg{"XY", "Z"},
-							},
-							Parts: eregs.PartList{"123", "456", "789"},
+					Parts: []*eregs.PartConfig{
+						&eregs.PartConfig{
+							Type:            "part",
+							Title:           42,
+							Value:           "400",
+							UploadLocations: true,
+							UploadRegText:   true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, nil
 			},
-			GetPartsListFunc: func(ctx context.Context, title *eregs.TitleConfig) []string {
-				return []string{"1", "2", "3", "4", "5"}
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return parts, nil
 			},
 			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return fmt.Errorf("this is expected")
@@ -203,28 +159,20 @@ func TestStart(t *testing.T) {
 				return &eregs.ParserConfig{
 					Workers:  1,
 					LogLevel: "warn",
-					Titles: []*eregs.TitleConfig{
-						&eregs.TitleConfig{
-							Title: 42,
-							Subchapters: eregs.SubchapterList{
-								eregs.SubchapterArg{"IV", "C"},
-								eregs.SubchapterArg{"IV", "D"},
-							},
-							Parts: eregs.PartList{"1", "2", "3"},
-						},
-						&eregs.TitleConfig{
-							Title: 45,
-							Subchapters: eregs.SubchapterList{
-								eregs.SubchapterArg{"AB", "C"},
-								eregs.SubchapterArg{"XY", "Z"},
-							},
-							Parts: eregs.PartList{"123", "456", "789"},
+					Parts: []*eregs.PartConfig{
+						&eregs.PartConfig{
+							Type:            "part",
+							Title:           42,
+							Value:           "400",
+							UploadLocations: true,
+							UploadRegText:   true,
+							UploadFRDocs:    true,
 						},
 					},
 				}, nil
 			},
-			GetPartsListFunc: func(ctx context.Context, title *eregs.TitleConfig) []string {
-				return []string{"1", "2", "3", "4", "5"}
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return parts, nil
 			},
 			ProcessPartFunc: func(ctx context.Context, title int, part string, existingDocs map[string]bool, skip bool, titles map[string]struct{}) error {
 				return fmt.Errorf("this is expected")
@@ -239,7 +187,7 @@ func TestStart(t *testing.T) {
 	for _, tc := range testTable {
 		t.Run(tc.Name, func(t *testing.T) {
 			loadConfigFunc = tc.LoadConfigFunc
-			getPartsListFunc = tc.GetPartsListFunc
+			processPartsListFunc = tc.ProcessPartsListFunc
 			processPartFunc = tc.ProcessPartFunc
 			fetchDocumentListFunc = tc.FetchDocumentListFunc
 

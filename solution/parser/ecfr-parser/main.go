@@ -26,12 +26,17 @@ const TIMELIMIT = 5000 * time.Second
 
 // Functions for easy testing via patching
 var (
-	ParseTitlesFunc        = parseTitles
-	ParseTitleFunc         = parseTitle
-	StartVersionWorkerFunc = startVersionWorker
-	HandleVersionFunc      = handleVersion
-	SleepFunc              = time.Sleep
-	RetrieveConfigFunc     = eregs.RetrieveConfig
+	ParseTitlesFunc            = parseTitles
+	ParseTitleFunc             = parseTitle
+	StartVersionWorkerFunc     = startVersionWorker
+	HandleVersionFunc          = handleVersion
+	SleepFunc                  = time.Sleep
+	RetrieveConfigFunc         = eregs.RetrieveConfig
+	ProcessPartsListFunc       = eregs.ProcessPartsList
+	ExtractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
+	GetExistingPartsFunc       = eregs.GetExistingParts
+	ExtractVersionsFunc        = ecfr.ExtractVersions
+	PostParserResultFunc       = eregs.PostParserResult
 )
 
 var config = &eregs.ParserConfig{}
@@ -99,69 +104,72 @@ func parseTitles() error {
 	processed := 0
 	failedTitles := []string{}
 
-	for _, title := range config.Titles {
-		if err := ParseTitleFunc(title); err != nil {
+	titles := make(map[int][]*eregs.PartConfig)
+	for _, part := range config.Parts {
+		titles[part.Title] = append(titles[part.Title], part)
+	}
+
+	for title, parts := range titles {
+		if err := ParseTitleFunc(title, parts); err != nil {
 			failed++
-			log.Error("[main] Failed to parse title ", title.Title, ": ", err)
-			failedTitles = append(failedTitles, fmt.Sprintf("%d", title.Title))
+			log.Error("[main] Failed to parse title ", title, ": ", err)
+			failedTitles = append(failedTitles, fmt.Sprintf("%d", title))
 		} else {
 			processed++
 		}
 	}
 
-	log.Info("[main] Successfully parsed ", processed, "/", len(config.Titles), " titles.")
+	log.Info("[main] Successfully parsed ", processed, "/", len(titles), " titles.")
 	if failed > 0 {
 		return fmt.Errorf("the following titles failed to parse: %s", strings.Join(failedTitles, ", "))
 	}
-	log.Debug("[main] Finished parsing ", len(config.Titles), " titles in ", time.Since(start))
+	log.Debug("[main] Finished parsing ", len(titles), " titles in ", time.Since(start))
 	return nil
 }
 
-func parseTitle(title *eregs.TitleConfig) error {
+func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
 	start := time.Now()
-
 	result := eregs.ParserResult{
 		Start:   start.Format(time.RFC3339),
-		Title:   title.Title,
-		Parts:   strings.Join(title.Parts[:], ","),
+		Title:   title,
 		Workers: config.Workers,
 	}
 	defer func() {
-		if _, err := eregs.PostParserResult(ctx, &result); err != nil {
-			log.Warn("[main] Failed to post parser results for title ", title.Title, ": ", err)
+		result.End = time.Now().Format(time.RFC3339)
+		if _, err := PostParserResultFunc(ctx, &result); err != nil {
+			log.Warn("[main] Failed to post parser results for title ", title, ": ", err)
 		}
 	}()
 
-	log.Info("[main] Fetching list of existing versions for title ", title.Title, "...")
-	existingVersions, _, err := eregs.GetExistingParts(ctx, title.Title)
+	log.Info("[main] Fetching list of existing versions for title ", title, "...")
+	existingVersions, _, err := GetExistingPartsFunc(ctx, title)
 	if err != nil {
 		log.Warn("[main] Failed to retrieve existing versions, processing all versions: ", err)
 	}
 
-	log.Info("[main] Fetching parts list for title ", title.Title, "...")
-	var parts []string
-	for _, subchapter := range title.Subchapters {
-		log.Debug("[main] Fetching title ", title.Title, " subchapter ", subchapter, " parts list...")
-		result.Subchapters = result.Subchapters + subchapter.String()
-		var err error
-		var subchapterParts []string
-		subchapterParts, err = ecfr.ExtractSubchapterParts(ctx, title.Title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
-		if err != nil {
-			return err
+	var partsList []string
+	var subchapterList []string
+	for _, i := range rawParts {
+		if i.Type == "part" {
+			partsList = append(partsList, i.Value)
+		} else if i.Type == "subchapter" {
+			subchapterList = append(subchapterList, i.Value)
 		}
-		parts = append(parts, subchapterParts...)
 	}
-	parts = append(parts, title.Parts...)
+	result.Parts = strings.Join(partsList, ", ")
+	result.Subchapters = strings.Join(subchapterList, ", ")
 
-	if len(parts) < 1 {
-		return fmt.Errorf("some number of parts must be specified")
+	log.Info("[main] Computing parts list for title ", title, "...")
+	parts, err := ProcessPartsListFunc(ctx, title, rawParts)
+	if err != nil {
+		return err
 	}
 
-	log.Debug("[main] Extracting versions for title ", title.Title, "...")
-	versions, err := ecfr.ExtractVersions(ctx, title.Title)
+	log.Debug("[main] Extracting versions for title ", title, "...")
+	versions, err := ExtractVersionsFunc(ctx, title)
 	if err != nil {
 		return err
 	}
@@ -174,36 +182,38 @@ func parseTitle(title *eregs.TitleConfig) error {
 		versionList := list.New()
 
 		// sort versions ascending
-		keys := make([]string, 0, len(versions[part]))
-		for k := range versions[part] {
+		keys := make([]string, 0, len(versions[part.Value]))
+		for k := range versions[part.Value] {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
 
 		for _, date := range keys {
 			// If we have this part already, skip it
-			if config.SkipRegVersions && contains(existingVersions[date], part) {
-				log.Trace("[main] Skipping title ", title.Title, " part ", part, " version ", date)
+			if config.SkipRegVersions && contains(existingVersions[date], part.Value) {
+				log.Trace("[main] Skipping title ", title, " part ", part.Value, " version ", date)
 				skippedVersions++
 				continue
 			}
 
 			version := &eregs.Part{
-				Title:     title.Title,
-				Name:      part,
-				Date:      date,
-				Structure: &ecfr.Structure{},
-				Document:  &parsexml.Part{},
-				Sections:  []ecfr.Section{},
-				Subparts:  []ecfr.Subpart{},
-				Processed: false,
+				Title:           title,
+				Name:            part.Value,
+				Date:            date,
+				Structure:       &ecfr.Structure{},
+				Document:        &parsexml.Part{},
+				Sections:        []ecfr.Section{},
+				Subparts:        []ecfr.Subpart{},
+				Processed:       false,
+				UploadRegText:   part.UploadRegText,
+				UploadLocations: part.UploadLocations,
 			}
 
 			versionList.PushBack(version)
 			numVersions++
 		}
 
-		if versionList.Len() > 0 {
+		if versionList.Len() > 0 && part.UploadLocations {
 			versionList.Back().Value.(*eregs.Part).UploadLocations = true
 		}
 
@@ -211,7 +221,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 	}
 
 	if skippedVersions > 0 {
-		log.Info("[main] Skipped ", skippedVersions, " versions of title ", title.Title, " because they were parsed previously")
+		log.Info("[main] Skipped ", skippedVersions, " versions of title ", title, " because they were parsed previously")
 		result.SkippedVersions = skippedVersions
 	}
 	result.TotalVersions = numVersions
@@ -249,7 +259,7 @@ func parseTitle(title *eregs.TitleConfig) error {
 		}
 	}
 
-	log.Info("[main] Successfully processed ", processed, "/", numVersions, " versions of title ", title.Title, " in ", time.Since(start))
+	log.Info("[main] Successfully processed ", processed, "/", numVersions, " versions of title ", title, " in ", time.Since(start))
 	if len(failed) > 0 {
 		result.Errors = len(failed)
 		return fmt.Errorf("the following versions failed to process: %s", strings.Join(failed, ", "))
@@ -288,7 +298,6 @@ func handleVersion(ctx context.Context, thread int, version *eregs.Part) error {
 
 	log.Debug("[worker ", thread, "] Fetching structure for part ", version.Name, " version ", version.Date)
 	sbody, _, err := ecfr.FetchStructure(ctx, version.Title, &ecfr.PartOption{version.Name})
-
 	if err != nil {
 		return err
 	}
@@ -299,20 +308,22 @@ func handleVersion(ctx context.Context, thread int, version *eregs.Part) error {
 		return err
 	}
 
-	log.Debug("[worker ", thread, "] Fetching full document for part ", version.Name, " version ", version.Date)
-	body, _, err := ecfr.FetchFull(ctx, version.Date, version.Title, &ecfr.PartOption{version.Name})
-	if err != nil {
-		return err
-	}
+	if version.UploadRegText {
+		log.Debug("[worker ", thread, "] Fetching full document for part ", version.Name, " version ", version.Date)
+		body, _, err := ecfr.FetchFull(ctx, version.Date, version.Title, &ecfr.PartOption{version.Name})
+		if err != nil {
+			return err
+		}
 
-	log.Trace("[worker ", thread, "] Decoding full structure for part ", version.Name, " version ", version.Date)
-	d := xml.NewDecoder(body)
-	if err := d.Decode(version.Document); err != nil {
-		return err
-	}
+		log.Trace("[worker ", thread, "] Decoding full structure for part ", version.Name, " version ", version.Date)
+		d := xml.NewDecoder(body)
+		if err := d.Decode(version.Document); err != nil {
+			return err
+		}
 
-	log.Debug("[worker ", thread, "] Running post process on structure for part ", version.Name, " version ", version.Date)
-	version.Document.PostProcess()
+		log.Debug("[worker ", thread, "] Running post process on structure for part ", version.Name, " version ", version.Date)
+		version.Document.PostProcess()
+	}
 
 	log.Trace("[worker ", thread, "] Determining depth of part ", version.Name, " version ", version.Date)
 	version.Depth = ecfr.DeterminePartDepth(version.Structure, version.Name)
