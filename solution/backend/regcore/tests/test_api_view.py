@@ -99,11 +99,11 @@ class RegcoreSerializerTestCase(APITestCase):
         self.assertEqual(x['id'], parts[0]['id'])
 
     def test_get_synonyms(self):
-        response = self.client.get("/v3/synonym/S2")
+        response = self.client.get("/v3/synonyms?q=S2")
         data = dict(response.data[0])
         synonyms = dict(data)
         self.assertEqual(synonyms['synonyms'], [{'baseWord': "Syn1", "isActive": True}])
-        response = self.client.get("/v3/synonym/Syn1")
+        response = self.client.get("/v3/synonyms?q=Syn1")
         data = dict(response.data[0])
         synonyms = dict(data)
         self.assertEqual(synonyms['synonyms'], [{'baseWord': "S2", "isActive": True}])
@@ -118,7 +118,7 @@ class RegcoreSerializerTestCase(APITestCase):
         data = response.data
         self.assertEqual(data, [date(2020, 6, 30)])
 
-    @patch("regcore.v3views.history.get_year_data")
+    @patch("regcore.views.history.get_year_data")
     def test_get_historical_sections(self, get_year_data):
         get_year_data.return_value = httpx.Response(status_code=400)
         data = self.client.get("/v3/title/42/part/433/history/section/50").data
