@@ -42,7 +42,7 @@ const API_ENDPOINTS_V3 = [
 describe("API testing", () => {
     API_ENDPOINTS_V3.forEach(endpoint => {
         it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request(encodeURIComponent(endpoint)).as("request");
+            cy.request(endpoint).as("request");
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
                 expect(response.status).to.eq(200);
@@ -53,7 +53,7 @@ describe("API testing", () => {
 
 describe("Synonyms endpoint special character testing", () => {
     SPECIAL_CHARACTERS.forEach(character => {
-        const endpoint = `${SYNONYMS_ENDPOINT}${character}`;
+        const endpoint = SYNONYMS_ENDPOINT + encodeURIComponent(character);
         it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
             cy.request(endpoint).as("request");
             cy.get("@request").then((response) => {
