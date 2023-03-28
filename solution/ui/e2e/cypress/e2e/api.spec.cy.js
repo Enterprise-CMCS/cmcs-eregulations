@@ -7,7 +7,7 @@ const SYNONYM = "synonym";
 const SEARCH_TERM = "a+search+term";
 
 const SYNONYMS_ENDPOINT = "/v3/synonyms?q=";
-const SPECIAL_CHARACTERS = ["\%", "138\% FPL", "138 \% FPL", "\"", "\"\"", "#", ".", "..", "?"]
+const SPECIAL_CHARACTERS = ["%", "138% FPL", "138 % FPL", "\"", "\"\"", "#", ".", "..", "?"]
 
 const API_ENDPOINTS_V3 = [
     `/v3/ecfr_parser_result/${TITLE}`,
@@ -42,7 +42,7 @@ const API_ENDPOINTS_V3 = [
 describe("API testing", () => {
     API_ENDPOINTS_V3.forEach(endpoint => {
         it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request(endpoint).as("request");
+            cy.request(encodeURIComponent(endpoint)).as("request");
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
                 expect(response.status).to.eq(200);
