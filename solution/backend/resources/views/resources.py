@@ -81,7 +81,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
 
-        return AbstractResource.objects \
+        query = AbstractResource.objects \
             .filter(approved=True) \
             .annotate(url_annotated=self.get_annotated_url()) \
             .filter(url_annotated__in=urls) \
@@ -93,6 +93,8 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                     Prefetch("category", queryset=category_prefetch),
                 )),
             )
+        url_map = {t.url: t for t in query}
+        return [url_map[n] for n in urls]
 
     def append_snippet(self, queryset, urls):
         for q in queryset:
