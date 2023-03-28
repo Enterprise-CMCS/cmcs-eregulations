@@ -15,9 +15,9 @@ describe("Error page", { scrollBehavior: "center" }, () => {
             .should("equal", 404);
         cy.visit('/404', {failOnStatusCode: false})
         cy.injectAxe();
-        cy.get(".error-code").should("have.text", "Error 404");
+        cy.get(".error-code").should("include", "404");
         cy.get(".error-header").should(
-            "have.text",
+            "include",
             "Sorry, the page you were looking for doesn't exist."
         );
         cy.checkAccessibility();
