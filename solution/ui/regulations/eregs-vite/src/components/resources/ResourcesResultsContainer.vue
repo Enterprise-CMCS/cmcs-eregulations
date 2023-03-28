@@ -107,6 +107,10 @@ export default {
     },
 
     props: {
+        base: {
+            type: String,
+            required: true,
+        },
         content: {
             type: Array,
             required: false,
@@ -183,10 +187,6 @@ export default {
     data() {
         return {
             activeSortMethod: this.sortMethod,
-            base:
-                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-                    ? `/${import.meta.env.VITE_ENV}`
-                    : "",
         };
     },
 
@@ -218,7 +218,7 @@ export default {
             });
         },
         regulationsSearchUrl() {
-            return `${this.base}/search/`;
+            return `${this.base}search/`;
         },
     },
 
