@@ -138,6 +138,7 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 		Workers: config.Workers,
 	}
 	defer func() {
+		result.End = time.Now().Format(time.RFC3339)
 		if _, err := PostParserResultFunc(ctx, &result); err != nil {
 			log.Warn("[main] Failed to post parser results for title ", title, ": ", err)
 		}
@@ -148,6 +149,18 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 	if err != nil {
 		log.Warn("[main] Failed to retrieve existing versions, processing all versions: ", err)
 	}
+
+	var partsList []string
+	var subchapterList []string
+	for _, i := range rawParts {
+		if i.Type == "part" {
+			partsList = append(partsList, i.Value)
+		} else if i.Type == "subchapter" {
+			subchapterList = append(subchapterList, i.Value)
+		}
+	}
+	result.Parts = strings.Join(partsList, ", ")
+	result.Subchapters = strings.Join(subchapterList, ", ")
 
 	log.Info("[main] Computing parts list for title ", title, "...")
 	parts, err := ProcessPartsListFunc(ctx, title, rawParts)
@@ -160,8 +173,6 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 	if err != nil {
 		return err
 	}
-
-	//TODO: fix results struct
 
 	// Create list of versions to process
 	partList := list.New()
