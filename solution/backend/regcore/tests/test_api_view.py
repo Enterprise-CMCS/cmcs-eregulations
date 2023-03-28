@@ -108,6 +108,11 @@ class RegcoreSerializerTestCase(APITestCase):
         synonyms = dict(data)
         self.assertEqual(synonyms['synonyms'], [{'baseWord': "S2", "isActive": True}])
 
+    def test_synonyms_special_characters(self):
+        for i in ["%", "138% FPL", "138 % FPL", "\"", "\"\"", "#", ".", "..", "?"]:
+            response = self.client.get(f"/v3/synonyms?q={i}")
+            self.assertEqual(response.status_code, 200)
+
     def test_get_title_versions(self):
         response = self.client.get("/v3/title/42/versions")
         data = dict(response.data[0])
