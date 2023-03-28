@@ -10,7 +10,10 @@ describe("Error page", { scrollBehavior: "center" }, () => {
 
     it("loads as a 404 page when server returns a 404 error", () => {
         cy.viewport("macbook-15");
-        cy.visit("/asdf");
+        cy.request({ url: "/404", failOnStatusCode: false })
+            .its("status")
+            .should("equal", 404);
+        cy.visit('/404', {failOnStatusCode: false})
         cy.injectAxe();
         cy.get(".error-code").should("have.text", "Error 404");
         cy.get(".error-header").should(
@@ -22,7 +25,10 @@ describe("Error page", { scrollBehavior: "center" }, () => {
 
     it("has a flash banner at the top with a link to a feedback survey", () => {
         cy.viewport("macbook-15");
-        cy.visit("/asdf");
+        cy.request({ url: "/404", failOnStatusCode: false })
+            .its("status")
+            .should("equal", 404);
+        cy.visit('/404', {failOnStatusCode: false})
         cy.get("div.flash-banner").should("be.visible");
 
         cy.get("div.flash-banner .greeting")
@@ -37,7 +43,10 @@ describe("Error page", { scrollBehavior: "center" }, () => {
     it("shows feedback form in modal when clicking feedback link in flash banner", () => {
         // feedback link is in banner
         cy.viewport("macbook-15");
-        cy.visit("/asdf");
+        cy.request({ url: "/404", failOnStatusCode: false })
+            .its("status")
+            .should("equal", 404);
+        cy.visit('/404', {failOnStatusCode: false})
         // modal doesn't exist
         cy.get("div.blocking-modal-content").should("not.be.visible");
         // click link
@@ -80,7 +89,10 @@ describe("Error page", { scrollBehavior: "center" }, () => {
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
-        cy.visit("/asdf");
+        cy.request({ url: "/404", failOnStatusCode: false })
+            .its("status")
+            .should("equal", 404);
+        cy.visit('/404', {failOnStatusCode: false})
         cy.get("#jumpToPart").should("be.visible").select("433");
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
@@ -93,7 +105,10 @@ describe("Error page", { scrollBehavior: "center" }, () => {
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
         cy.viewport("macbook-15");
-        cy.visit("/asdf");
+        cy.request({ url: "/404", failOnStatusCode: false })
+            .its("status")
+            .should("equal", 404);
+        cy.visit('/404', {failOnStatusCode: false})
         cy.contains("Medicaid & CHIP eRegulations").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/");
