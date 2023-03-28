@@ -84,7 +84,10 @@ describe("Error page", { scrollBehavior: "center" }, () => {
 
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
-        cy.visit("/");
+        cy.request({ url: "/404", failOnStatusCode: false })
+            .its("status")
+            .should("equal", 404);
+        cy.visit("/404", { failOnStatusCode: false });
         cy.get("#jumpToPart").select("433");
         cy.get("#jumpBtn").click({ force: true });
 
