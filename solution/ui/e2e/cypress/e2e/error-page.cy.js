@@ -1,5 +1,3 @@
-const mainContentId = "#main-content";
-
 describe("Error page", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
