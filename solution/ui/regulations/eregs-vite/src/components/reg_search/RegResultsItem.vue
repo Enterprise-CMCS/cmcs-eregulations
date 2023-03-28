@@ -56,7 +56,7 @@ export default {
                     ? `?q=${uniqTermsArray.join(",")}`
                     : "";
 
-            return `${base}/${result.title}/${result.part_number}/${
+            return `${base}${result.title}/${result.part_number}/${
                 result.section_number
             }/${result.date}/${highlightParams}#${result.part_number}-${result.section_number}`;
         },
