@@ -13,13 +13,19 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.request({ url: "/404", failOnStatusCode: false })
             .its("status")
             .should("equal", 404);
-        cy.visit('/404', {failOnStatusCode: false})
+        cy.visit("/404", { failOnStatusCode: false });
         cy.injectAxe();
-        cy.get(".error-code").should("include", "404");
-        cy.get(".error-header").should(
-            "include",
-            "Sorry, the page you were looking for doesn't exist."
-        );
+        cy.get(".error-code")
+            .invoke("text")
+
+            .should("include", "404");
+        cy.get(".error-header")
+
+            .invoke("text")
+            .should(
+                "include",
+                "Sorry, the page you were looking for doesn't exist."
+            );
         cy.checkAccessibility();
     });
 
@@ -28,7 +34,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.request({ url: "/404", failOnStatusCode: false })
             .its("status")
             .should("equal", 404);
-        cy.visit('/404', {failOnStatusCode: false})
+        cy.visit("/404", { failOnStatusCode: false });
         cy.get("div.flash-banner").should("be.visible");
 
         cy.get("div.flash-banner .greeting")
@@ -46,7 +52,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.request({ url: "/404", failOnStatusCode: false })
             .its("status")
             .should("equal", 404);
-        cy.visit('/404', {failOnStatusCode: false})
+        cy.visit("/404", { failOnStatusCode: false });
         // modal doesn't exist
         cy.get("div.blocking-modal-content").should("not.be.visible");
         // click link
@@ -92,7 +98,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.request({ url: "/404", failOnStatusCode: false })
             .its("status")
             .should("equal", 404);
-        cy.visit('/404', {failOnStatusCode: false})
+        cy.visit("/404", { failOnStatusCode: false });
         cy.get("#jumpToPart").should("be.visible").select("433");
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
@@ -108,7 +114,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.request({ url: "/404", failOnStatusCode: false })
             .its("status")
             .should("equal", 404);
-        cy.visit('/404', {failOnStatusCode: false})
+        cy.visit("/404", { failOnStatusCode: false });
         cy.contains("Medicaid & CHIP eRegulations").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/");
