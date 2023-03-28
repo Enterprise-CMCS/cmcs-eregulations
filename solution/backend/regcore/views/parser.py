@@ -70,6 +70,8 @@ class PartUploadViewSet(viewsets.ModelViewSet):
         data["id"] = part.pk
         sc = self.get_serializer(part, data=data)
         if sc.is_valid(raise_exception=True):
-            sc.save()
+            instance = sc.save()
             response = sc.validated_data
+            if not data.get("upload_reg_text", False):
+                instance.delete()
             return JsonResponse(response)

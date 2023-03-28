@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
 	"strings"
 	"time"
 
+	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
 	"github.com/cmsgov/cmcs-eregulations/lib/network"
 
 	log "github.com/sirupsen/logrus"
@@ -15,78 +15,26 @@ import (
 
 var configURL = "/parser_config"
 
-// SubchapterArg is an array of type string
-type SubchapterArg []string
-
-func (sc *SubchapterArg) String() string {
-	return strings.Join(*sc, "-")
-}
-
-// Set is to validate and set the subchapter
-func (sc *SubchapterArg) Set(s string) error {
-	*sc = strings.Split(s, "-")
-	if len(*sc) != 2 || strings.TrimSpace((*sc)[0]) == "" || strings.TrimSpace((*sc)[1]) == "" {
-		return fmt.Errorf("subchapter is expected to be of the form <Roman Numeral>-<Letter>")
-	}
-	return nil
-}
-
-// SubchapterList is an array of SubchapterArgs
-type SubchapterList []SubchapterArg
-
-// PartList is an array of strings representing parts
-type PartList []string
-
-// UnmarshalText extracts subchapters (e.g. IV-C) from a provided comma-separated list
-func (sl *SubchapterList) UnmarshalText(data []byte) error {
-	subchapters := strings.Split(string(data), ",")
-	*sl = make([]SubchapterArg, 0, len(subchapters))
-	for _, subchapter := range subchapters {
-		if len(subchapter) > 0 {
-			var sc SubchapterArg
-			err := sc.Set(strings.TrimSpace(subchapter))
-			if err != nil {
-				return err
-			}
-			*sl = append(*sl, sc)
-		}
-	}
-	return nil
-}
-
-// UnmarshalText extracts valid parts (must be numeric) and stores as strings
-func (pl *PartList) UnmarshalText(data []byte) error {
-	tmp := strings.Split(string(data), ",")
-	*pl = make([]string, 0, len(tmp))
-	for _, raw := range tmp {
-		trimmed := strings.TrimSpace(raw)
-		_, err := strconv.Atoi(trimmed)
-		if err != nil {
-			log.Error("[config] ", trimmed, " is not a valid part, skipping.")
-			continue
-		}
-		*pl = append(*pl, trimmed)
-	}
-	return nil
-}
-
-// TitleConfig represents parser configuration for a specific title, i.e. what parts to parse
-type TitleConfig struct {
-	Title       int            `json:"title"`
-	Subchapters SubchapterList `json:"subchapters"`
-	Parts       PartList       `json:"parts"`
+// PartConfig represents parser configuration for a specific title and subchapter/part combo
+type PartConfig struct {
+	Title           int    `json:"title"`
+	Type            string `json:"type"`
+	Value           string `json:"value"`
+	UploadRegText   bool   `json:"upload_reg_text"`
+	UploadLocations bool   `json:"upload_locations"`
+	UploadFRDocs    bool   `json:"upload_fr_docs"`
 }
 
 // ParserConfig represents configuration for the parser as a whole
 type ParserConfig struct {
-	Workers            int            `json:"workers"`
-	Retries            int            `json:"retries"`
-	LogLevel           string         `json:"loglevel"`
-	UploadSupplemental bool           `json:"upload_supplemental_locations"`
-	LogParseErrors     bool           `json:"log_parse_errors"`
-	SkipRegVersions    bool           `json:"skip_reg_versions"`
-	SkipFRDocuments    bool           `json:"skip_fr_documents"`
-	Titles             []*TitleConfig `json:"titles"`
+	Workers            int           `json:"workers"`
+	Retries            int           `json:"retries"`
+	LogLevel           string        `json:"loglevel"`
+	UploadSupplemental bool          `json:"upload_supplemental_locations"`
+	LogParseErrors     bool          `json:"log_parse_errors"`
+	SkipRegVersions    bool          `json:"skip_reg_versions"`
+	SkipFRDocuments    bool          `json:"skip_fr_documents"`
+	Parts              []*PartConfig `json:"parts"`
 }
 
 // RetrieveConfig fetches parser config from eRegs at /v3/parser_config
@@ -133,4 +81,41 @@ func GetLogLevel(l string) log.Level {
 		log.Warn("[main] '", l, "' is an invalid log level, defaulting to 'warn'.")
 		return log.WarnLevel
 	}
+}
+
+var extractSubchapterPartsFunc = ecfr.ExtractSubchapterParts
+
+// ProcessPartsList converts parts and subchapters into just parts
+func ProcessPartsList(ctx context.Context, title int, rawParts []*PartConfig) ([]*PartConfig, error) {
+	var parts []*PartConfig
+	for _, part := range rawParts {
+		if part.Type == "part" {
+			parts = append(parts, part)
+		} else if part.Type == "subchapter" {
+			log.Debug("[main] Fetching parts list for title ", title, " subchapter", part.Value)
+			subchapter := strings.Split(part.Value, "-")
+			subchapterParts, err := extractSubchapterPartsFunc(ctx, title, &ecfr.SubchapterOption{subchapter[0], subchapter[1]})
+			if err != nil {
+				return nil, err
+			}
+			for _, subchapterPart := range subchapterParts {
+				parts = append(parts, &PartConfig{
+					Type:            "part",
+					Title:           part.Title,
+					Value:           subchapterPart,
+					UploadLocations: part.UploadLocations,
+					UploadRegText:   part.UploadRegText,
+					UploadFRDocs:    part.UploadFRDocs,
+				})
+			}
+		} else {
+			return nil, fmt.Errorf("%s is not a valid type for %s", part.Type, part.Value)
+		}
+	}
+
+	if len(parts) < 1 {
+		return nil, fmt.Errorf("some number of parts must be specified")
+	}
+
+	return parts, nil
 }
