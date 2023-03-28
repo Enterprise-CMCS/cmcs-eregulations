@@ -209,6 +209,19 @@ function httpApiGet(urlPath, { params } = {}) {
     });
 }
 
+// use when components used directly in Django templates
+function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
+    return fetchJson(
+        `${urlPath}`,
+        {
+            method: "GET",
+            params,
+        },
+        0, // retryCount, default
+        apiPath
+    );
+}
+
 async function httpApiGetWithPagination(urlPath, { params } = {}) {
     let results = [];
     let url = `${config.apiPath}/${urlPath}`;
@@ -373,9 +386,7 @@ const getSupplementalContent = async (
 
     if (partDict === "all") {
         sString = ""
-    }
-
-    else {
+    } else {
         Object.keys(partDict).forEach(partKey => {
             const part = partDict[partKey]
             part.subparts.forEach(subPart => {
@@ -404,9 +415,10 @@ const getSupplementalContent = async (
 
     sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     sString = `${sString}&fr_grouping=${fr_grouping}`
-    const response = await httpApiGet(`resources/?${sString}`)
-    return response;
 
+    const urlpath = (window.location.href.match('searchgov')) ? `resources/search?${sString}` : `resources/?${sString}`
+    const response =  await httpApiGet(urlpath)
+    return response
 }
 
 const getCategories = async () =>  httpApiGet("resources/categories");
@@ -421,6 +433,32 @@ const getSectionsForPart = async (title, part) => httpApiGet(`title/${title}/par
 const getSubpartTOC = async (title, part, subPart) => httpApiGet(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
 
 const getSynonyms = async(query) => httpApiGet(`synonym/${query}`);
+
+/**
+ * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ *
+ * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
+ */
+const getTitles = async (apiUrl) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}titles`);
+    }
+
+    return httpApiGet("titles");
+};
+
+/**
+ * @param {string} title - Title number.  Ex: `42` or `45`
+ * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ *
+ * @returns {Promise <Array<{date: string, depth: number, id: number, last_updated: string, name: string}>} - Promise that contains array of part objects for provided title when fulfilled
+ */
+const getParts = async (title, apiUrl) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}title/${title}/parts`);
+    }
+    return httpApiGet(`title/${title}/parts`);
+};
 
 export {
     configure,
@@ -443,4 +481,6 @@ export {
     getSubpartTOC,
     getSynonyms,
     getRegSearchResults,
+    getTitles,
+    getParts,
 };

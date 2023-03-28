@@ -1,7 +1,7 @@
 <template>
     <div class="result">
         <div class="results-part">
-            {{ result.part_document_title | partDocumentTitleLabel }}
+            {{ result.part_title | partDocumentTitleLabel }}
         </div>
         <div class="results-section">
             <a
@@ -56,9 +56,9 @@ export default {
                     ? `?q=${uniqTermsArray.join(",")}`
                     : "";
 
-            return `${base}/${result.part_title}/${result.label[0]}/${
-                result.label[1]
-            }/${result.date}/${highlightParams}#${result.label.join("-")}`;
+            return `${base}${result.title}/${result.part_number}/${
+                result.section_number
+            }/${result.date}/${highlightParams}#${result.part_number}-${result.section_number}`;
         },
     },
 

@@ -6,15 +6,6 @@
 
 $collapsed-sidebar-width: 32px; // Update here if the left sidebar collapsed width changes
 
-header {
-    padding: $spacer-2 $spacer-3;
-    border-bottom: 1px solid $primary_color;
-
-    @include screen-lg {
-        padding: $spacer-4;
-    }
-}
-
 html {
     height: 100%;
 }

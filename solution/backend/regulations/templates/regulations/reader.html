@@ -8,6 +8,31 @@
     <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
 {% endblock %}
 
+{% block header %}
+    <header id="header" class="sticky">
+        <header-component
+            home-url="{% url 'homepage' %}"
+        >
+            <jump-to
+                slot="jump-to"
+                part="{{ part }}"
+                title="{{ title }}"
+                api-url="{{ API_BASE }}"
+                home-url="{% url 'homepage' %}"
+            ></jump-to>
+            <header-links
+                slot="links"
+                about-url="{% url 'about' %}"
+                resources-url="{% url 'resources' %}"
+            ></header-links>
+            <header-search
+                slot="search"
+                search-url="{% url 'search' %}"
+            ></header-search>
+        </header-component>
+    </header>
+{% endblock %}
+
 {% block body %}
     <div class="content">
         {% include "regulations/partials/view-and-compare.html" %}

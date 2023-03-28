@@ -129,7 +129,7 @@ aside.left-sidebar {
 
         background: none;
         border: none;
-        color: $reverse_link_color;
+        color: #CCF2FF;;
         cursor: pointer;
         display: flex;
         justify-content: center;
@@ -177,7 +177,7 @@ aside.left-sidebar {
     }
 
     a {
-        color: $reverse_link_color;
+        color: #CCF2FF;
 
         &:hover,
         &:focus {
@@ -232,6 +232,28 @@ aside.left-sidebar {
     }
 }
 
+.toc-header {
+    border-bottom: 1px solid $secondary_border_color;
+    margin: 25px 40px 16px 32px;
+    padding-bottom: 16px;
+    color: white;
+
+    .toc-subchapter {
+        font-size: 14px;
+        line-height: 18px;
+        margin-bottom: 8px;
+    }
+
+    .toc-part {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 25px;
+
+        .description {
+            font-weight: normal;
+        }
+    }
+}
 // Controls (i.e. Collapse)
 
 .toc-controls {
@@ -240,7 +262,7 @@ aside.left-sidebar {
 
     button {
         outline: none;
-        color: $reverse_link_color;
+        color: #CCF2FF;;
         border: none;
         background: none;
         cursor: pointer;

@@ -1,6 +1,5 @@
 <template>
     <div>
-        <div class="jump-to-label">Jump to Regulation Section</div>
         <form @submit.prevent="getLink">
             <div class="jump-to-input">
                 <select
@@ -21,7 +20,7 @@
                         {{ listedTitle }} CFR
                     </option>
                 </select>
-                §
+                <span class="section-symbol">§</span>
                 <select
                     id="jumpToPart"
                     v-model="selectedPart"
@@ -64,13 +63,13 @@
     </div>
 </template>
 <script>
-import { getTitles, getParts } from "../api";
+import { getTitles, getParts } from "../utilities/api.js";
 
 export default {
     name: "JumpTo",
 
     props: {
-        apiurl: {
+        apiUrl: {
             type: String,
             required: true,
         },
@@ -83,6 +82,10 @@ export default {
             type: String,
             required: false,
             default: "",
+        },
+        homeUrl: {
+            type: String,
+            default: "/",
         },
     },
     data() {
@@ -97,16 +100,12 @@ export default {
             isActive: false,
             parts: [],
             link: "",
-            base:
-                import.meta.env.VITE_ENV && import.meta.env.VITE_ENV !== "prod"
-                    ? `/${import.meta.env.VITE_ENV}`
-                    : "",
         };
     },
 
     async created() {
         // When title 45 or another title is added uncomment line below, and remove the hardcoded
-        // this.titles = await getTitles(this.apiurl);
+        // this.titles = await getTitles(this.apiUrl);
         this.titles = ["42"];
 
         if (this.titles.length === 1) {
@@ -145,11 +144,11 @@ export default {
 
     methods: {
         async getParts(title) {
-            const partsList = await getParts(this.apiurl, title);
+            const partsList = await getParts(title, this.apiUrl);
             this.filteredParts = partsList.map((part) => part.name);
         },
         getLink(e) {
-            let link = `${this.base}/goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
+            let link = `${this.homeUrl}goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
             if (this.selectedSection !== "") {
                 link += `&section=${this.selectedSection}&-version='latest'`;
             }

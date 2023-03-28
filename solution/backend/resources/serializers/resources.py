@@ -39,7 +39,7 @@ class AbstractResourceSerializer(serializers.Serializer):
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
     approved = serializers.BooleanField()
-
+    snippet = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     locations = serializers.SerializerMethodField()
 
@@ -56,6 +56,13 @@ class AbstractResourceSerializer(serializers.Serializer):
         if self.context.get("location_details", True):
             return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
         return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
+
+    def get_snippet(self, obj):
+        if 'gov_results' in self.context and hasattr(obj, 'url'):
+            snippet = [r['snippet'] for r in self.context['gov_results'] if r['url'] == obj.url]
+            return snippet[0] if snippet else None
+        else:
+            return None
 
 
 class DateFieldSerializer(serializers.Serializer):
@@ -95,7 +102,7 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
 
     def to_representation(self, instance):
         obj = super().to_representation(instance)
-        if not self.context['fr_grouping']:
+        if not self.context.get("fr_grouping", False):
             del obj["related_docs"]
             return obj
         docs = [obj] + obj["related_docs"]
@@ -103,6 +110,13 @@ class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer)
         docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
         docs[0]["related_docs"] = docs[1:]
         return docs[0]
+
+
+class ResourceSearchSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    next = serializers.CharField()
+    previous = serializers.CharField()
+    results = AbstractResourcePolymorphicSerializer(many=True)
 
 
 MetaResourceSerializer = ProxySerializerWrapper(
