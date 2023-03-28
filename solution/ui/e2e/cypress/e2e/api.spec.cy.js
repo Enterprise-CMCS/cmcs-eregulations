@@ -7,7 +7,7 @@ const SYNONYM = "synonym";
 const SEARCH_TERM = "a+search+term";
 
 const SYNONYMS_ENDPOINT = "/v3/synonyms?q=";
-const SPECIAL_CHARACTERS = ["%", "138% FPL", "138 % FPL", "\"", "\"\"", "#", ".", "..", "?"]
+const SPECIAL_CHARACTERS = ["\%", "138\% FPL", "138 \% FPL", "\"", "\"\"", "#", ".", "..", "?"]
 
 const API_ENDPOINTS_V3 = [
     `/v3/ecfr_parser_result/${TITLE}`,
