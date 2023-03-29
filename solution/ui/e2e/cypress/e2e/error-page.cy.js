@@ -90,7 +90,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
 
-    it("jumps to a regulation Part section using the section number text input", () => {
+    it("NEW -- jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.request({ url: "/404", failOnStatusCode: false })
             .its("status")
