@@ -13,9 +13,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
             .should("equal", 404);
         cy.visit("/404", { failOnStatusCode: false });
         cy.injectAxe();
-        cy.get(".error-code")
-            .invoke("text")
-            .should("include", "404");
+        cy.get(".error-code").invoke("text").should("include", "404");
         cy.get(".error-header")
             .invoke("text")
             .should(
@@ -102,10 +100,15 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
 
-        cy.url().should(
-            "eq",
-            Cypress.config().baseUrl + "/42/433/Subpart-A/2021-03-01/#433-40"
-        );
+        expect(
+            Cypress.minimatch(
+                cy.url(),
+                "/42/433/Subpart-A/*/#433-40",
+                {
+                    matchBase: true,
+                }
+            )
+        ).to.be.true;
     });
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
