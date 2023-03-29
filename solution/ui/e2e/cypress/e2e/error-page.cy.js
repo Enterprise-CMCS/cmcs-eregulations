@@ -15,10 +15,8 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.injectAxe();
         cy.get(".error-code")
             .invoke("text")
-
             .should("include", "404");
         cy.get(".error-header")
-
             .invoke("text")
             .should(
                 "include",
