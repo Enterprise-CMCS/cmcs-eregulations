@@ -100,15 +100,17 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
 
-        expect(
-            Cypress.minimatch(
-                cy.url(),
-                "/42/433/Subpart-A/*/#433-40",
-                {
-                    matchBase: true,
-                }
-            )
-        ).to.be.true;
+        cy.url().then((urlString) => {
+            expect(
+                Cypress.minimatch(
+                    urlString,
+                    Cypress.config().baseUrl + "/42/433/Subpart-A/*/#433-40",
+                    {
+                        matchBase: false,
+                    }
+                )
+            ).to.be.true;
+        });
     });
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
