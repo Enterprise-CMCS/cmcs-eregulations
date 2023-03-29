@@ -82,6 +82,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         for n in urls:
             sorted_vals.append(url_map[n]) if n in url_map else ''
         return sorted_vals
+
     def get_queryset(self, urls):
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
