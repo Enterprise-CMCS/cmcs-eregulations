@@ -76,12 +76,18 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             "results": results,
         }
 
+    def sort_by_url_list(self, urls, query):
+        url_map = {t.url: t for t in query}
+        sorted_vals = []
+        for n in urls:
+            sorted_vals.append(url_map[n]) if n in url_map else ''
+        return sorted_vals
     def get_queryset(self, urls):
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
-
-        return AbstractResource.objects \
+        print("before query")
+        query = AbstractResource.objects \
             .filter(approved=True) \
             .annotate(url_annotated=self.get_annotated_url()) \
             .filter(url_annotated__in=urls) \
@@ -93,6 +99,8 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
                     Prefetch("category", queryset=category_prefetch),
                 )),
             )
+
+        return self.sort_by_url_list(urls, query)
 
     def append_snippet(self, queryset, urls):
         for q in queryset:
