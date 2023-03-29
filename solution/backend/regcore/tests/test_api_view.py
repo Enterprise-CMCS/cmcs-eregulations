@@ -99,14 +99,19 @@ class RegcoreSerializerTestCase(APITestCase):
         self.assertEqual(x['id'], parts[0]['id'])
 
     def test_get_synonyms(self):
-        response = self.client.get("/v3/synonym/S2")
+        response = self.client.get("/v3/synonyms?q=S2")
         data = dict(response.data[0])
         synonyms = dict(data)
         self.assertEqual(synonyms['synonyms'], [{'baseWord': "Syn1", "isActive": True}])
-        response = self.client.get("/v3/synonym/Syn1")
+        response = self.client.get("/v3/synonyms?q=Syn1")
         data = dict(response.data[0])
         synonyms = dict(data)
         self.assertEqual(synonyms['synonyms'], [{'baseWord': "S2", "isActive": True}])
+
+    def test_synonyms_special_characters(self):
+        for i in ["%", "138% FPL", "138 % FPL", "\"", "\"\"", "#", ".", "..", "?"]:
+            response = self.client.get(f"/v3/synonyms?q={i}")
+            self.assertEqual(response.status_code, 200)
 
     def test_get_title_versions(self):
         response = self.client.get("/v3/title/42/versions")
