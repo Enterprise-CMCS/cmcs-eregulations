@@ -6,6 +6,9 @@ const VERSION = "latest";
 const SYNONYM = "synonym";
 const SEARCH_TERM = "a+search+term";
 
+const SYNONYMS_ENDPOINT = "/v3/synonyms?q=";
+const SPECIAL_CHARACTERS = ["%", "138% FPL", "138 % FPL", "\"", "\"\"", "#", ".", "..", "?"]
+
 const API_ENDPOINTS_V3 = [
     `/v3/ecfr_parser_result/${TITLE}`,
     `/v3/parser_config`,
@@ -18,7 +21,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/resources/locations/sections`,
     `/v3/resources/locations/subparts`,
     `/v3/resources/supplemental_content`,
-    `/v3/synonym/${SYNONYM}`,
+    `${SYNONYMS_ENDPOINT}${SYNONYM}`,
     `/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/section/${SECTION}`,
@@ -45,5 +48,18 @@ describe("API testing", () => {
                 expect(response.status).to.eq(200);
             });
         });
+    });
+});
+
+describe("Synonyms endpoint special character testing", () => {
+    SPECIAL_CHARACTERS.forEach(character => {
+        const endpoint = SYNONYMS_ENDPOINT + encodeURIComponent(character);
+        it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
+            cy.request(endpoint).as("request");
+            cy.get("@request").then((response) => {
+                cy.log(`${endpoint} - ${response.status}`);
+                expect(response.status).to.eq(200);
+            });
+        })
     });
 });
