@@ -31,7 +31,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.14
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.8'
       - name: Install dependencies
@@ -52,7 +52,7 @@ jobs:
           cd ..
           popd
       - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1

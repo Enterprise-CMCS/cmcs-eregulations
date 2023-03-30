@@ -21,11 +21,11 @@ jobs:
       name: ${{ github.event.inputs.env }}
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: false
       - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
