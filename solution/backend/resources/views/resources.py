@@ -87,7 +87,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
-        print("before query")
+
         query = AbstractResource.objects \
             .filter(approved=True) \
             .annotate(url_annotated=self.get_annotated_url()) \
