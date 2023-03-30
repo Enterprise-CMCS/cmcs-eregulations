@@ -2,67 +2,13 @@ from django.test import TestCase
 from regcore.models import ParserConfiguration, Part, TitleConfiguration
 from regcore.search.models import Synonym
 from regcore.search.models import create_search
-
+import json
 
 class TestRegoreModels(TestCase):
     @classmethod
     def setUpTestData(cls):
-        doc = {
-            "label": [
-                "400"
-            ],
-            "title": "PART 400 - PAYMENTS FOR SERVICES ",
-            "source": {
-                "header": "Source:",
-                "content": "fizz buzz ",
-                "node_type": ""
-            },
-            "children": [
-                {
-                    "label": [
-                        "400",
-                        "1"
-                    ],
-                    "title": "§ 400.1 Purpose.",
-                    "children": [
-                        {
-                            "text": "fizz buzz",
-                            "label": [
-                                "400",
-                                "1"
-                            ],
-                            "node_type": "Paragraph"
-                        }
-                    ],
-                    "node_type": "SECTION"
-                },
-                {
-                    "label": [
-                        "400",
-                        "10"
-                    ],
-                    "title": "§ 400.10 stuff.",
-                    "children": [
-                        {
-                            "text": "some stuff",
-                            "node_type": "Paragraph"
-                        }
-                    ],
-                    "node_type": "SECTION"
-                }
-            ],
-            "authority": {
-                "header": "Authority:",
-                "content": "42 U.S.C. 1302 and 1396r-8. ",
-                "node_type": ""
-            },
-            "node_type": "PART",
-            "editorial_note": {
-                "header": "",
-                "content": "",
-                "node_type": ""
-            }
-        }
+        with open("regcore/tests/fixtures/part.json") as f:
+            doc = json.load(f)
         structure = {"type": "title", "children": [{"type:": "part", "label": 400, "children": ["part content"]}]}
         Part.objects.create(title='42', date="2020-06-30", last_updated="2022-09-21 08:36:45.735759",
                             depth=2, structure=structure, name=400, document=doc,

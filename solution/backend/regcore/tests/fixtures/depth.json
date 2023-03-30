@@ -1,0 +1,69 @@
+[
+	{
+		"type": "title",
+		"label": "Title 42 - Public Health",
+		"parent": [],
+		"reserved": false,
+		"identifier": [
+			"42"
+		],
+		"label_level": "Title 42",
+		"parent_type": "",
+		"descendant_range": [],
+		"label_description": "Public Health"
+	},
+	{
+		"type": "chapter",
+		"label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
+		"parent": [
+			"42"
+		],
+		"reserved": false,
+		"identifier": [
+			"IV"
+		],
+		"label_level": " Chapter IV",
+		"parent_type": "title",
+		"descendant_range": [
+			"400",
+			"699"
+		],
+		"label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
+	},
+	{
+		"type": "subchapter",
+		"label": "Subchapter C - Medical Assistance Programs",
+		"parent": [
+			"IV"
+		],
+		"reserved": false,
+		"identifier": [
+			"C"
+		],
+		"label_level": "Subchapter C",
+		"parent_type": "chapter",
+		"descendant_range": [
+			"430",
+			"456"
+		],
+		"label_description": "Medical Assistance Programs"
+	},
+	{
+		"type": "part",
+		"label": "Part 432 - State Personnel Administration",
+		"parent": [
+			"C"
+		],
+		"reserved": false,
+		"identifier": [
+			"432"
+		],
+		"label_level": "Part 432",
+		"parent_type": "subchapter",
+		"descendant_range": [
+			"432.1",
+			"432.55"
+		],
+		"label_description": "State Personnel Administration"
+	}
+]

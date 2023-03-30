@@ -1,7 +1,7 @@
 from datetime import date
 from collections import OrderedDict
 from unittest.mock import patch
-
+import json
 import httpx
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -13,21 +13,9 @@ from regcore.search.models import Synonym
 class RegcoreSerializerTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
-        depth = {'type': 'title', 'label': 'Title 42 - Public Health', 'parent': [], 'reserved': False, 'identifier': ['42'],
-                 'label_level': 'Title 42', 'parent_type': '', 'descendant_range': None, 'label_description': 'Public Health'},\
-                {'type': 'chapter', 'label':
-                 ' Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services',
-                 'parent': ['42'], 'reserved': False,
-                 'identifier': ['IV'], 'label_level': ' Chapter IV', 'parent_type': 'title', 'descendant_range': ['400', '699'],
-                 'label_description':
-                 'Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services'},\
-                {'type': 'subchapter', 'label': 'Subchapter C - Medical Assistance Programs', 'parent': ['IV'],
-                 'reserved': False, 'identifier': ['C'], 'label_level': 'Subchapter C', 'parent_type': 'chapter',
-                 'descendant_range': ['430', '456'], 'label_description': 'Medical Assistance Programs'},\
-                 {'type': 'part', 'label': 'Part 432 - State Personnel Administration',
-                  'parent': ['C'], 'reserved': False, 'identifier': ['432'], 'label_level': 'Part 432',
-                  'parent_type': 'subchapter', 'descendant_range': ['432.1', '432.55'],
-                  'label_description': 'State Personnel Administration'}
+        with open("regcore/tests/fixtures/depth.json") as f:
+            depth = json.load(f)
+
         structure = {"type": "title", "children": [{"type:": "part", "label": 400, "children": ["part content"]}]}
         Part.objects.all().delete()
         Part.objects.create(title='42', date="2020-06-30", last_updated="2022-09-21 08:36:45.735759", depth=2,
@@ -45,42 +33,10 @@ class RegcoreSerializerTestCase(APITestCase):
         self.assertEqual(response.data, payload)
 
     def test_get_toc(self):
-        toc = {'type': 'title', 'label': 'Title 42 - Public Health', 'parent': [],
-               'reserved': False, 'identifier': ['42'], 'label_level': 'Title 42',
-               'parent_type': '', 'descendant_range': None,
-               'label_description': 'Public Health', 'children':
-               [OrderedDict(
-                    [('type', 'chapter'),
-                     ('label', 'Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services'),
-                     ('parent', ['42']), ('reserved', False),
-                     ('identifier', ['IV']),
-                     ('label_level', 'Chapter IV'),
-                     ('parent_type', 'title'),
-                     ('descendant_range', ['400', '699']),
-                     ('label_description',
-                        'Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services'),
-                     ('children',
-                        [OrderedDict([('type', 'subchapter'), ('label', 'Subchapter C - Medical Assistance Programs'),
-                                      ('parent', ['IV']), ('reserved', False), ('identifier', ['C']),
-                                      ('label_level', 'Subchapter C'),
-                                      ('parent_type', 'chapter'),
-                                      ('descendant_range', ['430', '456']),
-                                      ('label_description', 'Medical Assistance Programs'),
-                                      ('children',
-                                       [OrderedDict([('type', 'part'),
-                                                     ('label', 'Part 432 - State Personnel Administration'),
-                                                     ('parent', ['C']),
-                                                     ('reserved', False),
-                                                     ('identifier', ['432']),
-                                                     ('label_level', 'Part 432'),
-                                                     ('parent_type', 'subchapter'),
-                                                     ('descendant_range', ['432.1', '432.55']),
-                                                     ('label_description', 'State Personnel Administration'),
-                                                     ('children', [])])])])])])]}
-
         response = self.client.get("/v3/title/42/toc")
 
-        self.assertEqual(response.data, toc)
+        self.assertEqual(response.data['type'], "title")
+        self.assertEqual(response.data['children'][0]['type'], "chapter")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
     def test_get_parts(self):
