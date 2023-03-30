@@ -22,12 +22,11 @@ class SearchIndexQuerySet(models.QuerySet):
             cover_density = True
         search_query = SearchQuery(query, search_type=search_type, config='english')
 
-        return self.annotate(vector_column=RawSQL("vector_column", [], output_field=SearchVectorField()))\
-            .annotate(rank=SearchRank(
-                "vector_column",
+        return self.annotate(rank=SearchRank(
+                RawSQL("vector_column", [], output_field=SearchVectorField()),
                 search_query, cover_density=cover_density)
             )\
-            .filter(rank__gte=0.04)\
+            .filter(rank__gte=0.2)\
             .annotate(
                 headline=SearchHeadline(
                     "content",
