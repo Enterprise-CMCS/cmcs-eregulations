@@ -17,35 +17,42 @@ class SearchIndexQuerySet(models.QuerySet):
     def search(self, query):
         search_type = "plain"
         cover_density = False
+
         if query and query.startswith('"') and query.endswith('"'):
             search_type = "phrase"
             cover_density = True
-        search_query = SearchQuery(query, search_type=search_type, config='english')
-
-        return self.annotate(rank=SearchRank(
+            search_query = SearchQuery(query, search_type=search_type, config='english')
+            si = self.annotate(vector_column=RawSQL("vector_column", [],
+                               output_field=SearchVectorField()))\
+                     .filter(vector_column=search_query)
+        else:
+            search_query = SearchQuery(query, search_type=search_type, config='english')
+            si = self.annotate(rank=SearchRank(
                 RawSQL("vector_column", [], output_field=SearchVectorField()),
-                search_query, cover_density=cover_density)
-            )\
-            .filter(rank__gte=0.2)\
-            .annotate(
-                headline=SearchHeadline(
-                    "content",
-                    search_query,
-                    start_sel='<span class="search-highlight">',
-                    stop_sel='</span>',
-                    config='english'
-                ),
-                parentHeadline=SearchHeadline(
-                    "section_title",
-                    search_query,
-                    start_sel="<span class='search-highlight'>",
-                    stop_sel="</span>",
-                    config='english',
-                    highlight_all=True
-                ),
-            )\
-            .order_by('-rank')\
-            .prefetch_related('part')
+                search_query, cover_density=cover_density))\
+                .filter(rank__gte=0.2)
+
+        si = si.annotate(
+            headline=SearchHeadline(
+                "content",
+                search_query,
+                start_sel='<span class="search-highlight">',
+                stop_sel='</span>',
+                config='english'
+            ),
+            parentHeadline=SearchHeadline(
+                "section_title",
+                search_query,
+                start_sel="<span class='search-highlight'>",
+                stop_sel="</span>",
+                config='english',
+                highlight_all=True
+            ),
+        )
+        if search_type == "plain":
+            si = si.order_by('-rank')
+
+        return si.prefetch_related('part')
 
 
 class SearchIndexManager(models.Manager.from_queryset(SearchIndexQuerySet)):
