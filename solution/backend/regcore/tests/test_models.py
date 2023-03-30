@@ -91,6 +91,6 @@ class TestRegoreModels(TestCase):
         part = Part.objects.get(name=400)
         searchIndexes = create_search(part, part.document, [], parent=None)
         self.assertEqual(searchIndexes[0].part_number, "400")
-        self.assertEqual(len(searchIndexes),2)
+        self.assertEqual(len(searchIndexes), 2)
         self.assertEqual(searchIndexes[1].section_number, "10")
         self.assertEqual(searchIndexes[0].section_string, "400.1")
