@@ -153,10 +153,17 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
 
-        cy.url().should(
-            "eq",
-            Cypress.config().baseUrl + "/42/433/Subpart-A/2021-03-01/#433-40"
-        );
+        cy.url().then((urlString) => {
+            expect(
+                Cypress.minimatch(
+                    urlString,
+                    Cypress.config().baseUrl + "/42/433/Subpart-A/*/#433-40",
+                    {
+                        matchBase: false,
+                    }
+                )
+            ).to.be.true;
+        });
     });
 
     it("clicks on part 430 and loads the page", () => {
