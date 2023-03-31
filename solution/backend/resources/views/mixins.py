@@ -219,7 +219,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         if categories:
             query = query.filter(category__id__in=categories)
 
-        if fr_grouping:
+        if fr_grouping and hasattr(self, "get_final_ids"):
             ids = self.get_final_ids(query)
             query = self.model.objects.filter(id__in=ids)
 
