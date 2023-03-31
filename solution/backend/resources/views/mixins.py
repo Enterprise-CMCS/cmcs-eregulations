@@ -230,7 +230,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         query = query.select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),
-            Prefetch("related_resources", AbstractResource.objects.all().select_subclasses().prefetch_related(
+            Prefetch("related_resources", AbstractResource.objects.filter(approved=True).select_subclasses().prefetch_related(
                 Prefetch("locations", queryset=locations_prefetch),
                 Prefetch("category", queryset=category_prefetch),
             )),
