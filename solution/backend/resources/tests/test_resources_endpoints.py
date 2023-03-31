@@ -1,7 +1,5 @@
 from django.test import TestCase
-from django.db.models import F, Case, When
-from resources.models import FederalRegisterDocument, FederalRegisterDocumentGroup, AbstractResource, SupplementalContent, Section
-from resources.views.mixins import FRDocGroupingMixin
+from resources.models import FederalRegisterDocument, FederalRegisterDocumentGroup, Section
 from datetime import datetime, timedelta
 
 
