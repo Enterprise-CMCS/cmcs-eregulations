@@ -3,7 +3,7 @@ from resources.models import FederalRegisterDocument, FederalRegisterDocumentGro
 from datetime import datetime, timedelta
 
 
-class TestMixinFunctions(TestCase):
+class TestResourcesEndpoint(TestCase):
     def setUp(self):
         s1 = Section.objects.create(title=1, part=1, section_id=1)
         s2 = Section.objects.create(title=1, part=1, section_id=2)
