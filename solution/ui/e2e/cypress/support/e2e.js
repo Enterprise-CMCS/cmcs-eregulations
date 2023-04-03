@@ -27,6 +27,14 @@ import "@testing-library/cypress/add-commands";
 import "cypress-axe";
 import "cypress-plugin-tab";
 
+import { getResources, getSearchGovResources } from "./api-request-commands";
+import { validateSchema } from "./validate-schema-command";
+
+Cypress.Commands.add("getResources", getResources);
+Cypress.Commands.add("getSearchGovResources", getSearchGovResources);
+
+Cypress.Commands.add("validateSchema", validateSchema);
+
 // Print cypress-axe violations to the terminal
 function printA11yViolations(violations) {
     cy.task(
@@ -45,7 +53,7 @@ Cypress.Commands.add(
         prevSubject: "optional",
     },
     (subject, { skipFailures = false } = {}) => {
-        cy.injectAxe()
+        cy.injectAxe();
         cy.checkA11y(
             subject,
             { includedImpacts: ["critical", "serious"] },
@@ -65,21 +73,21 @@ Cypress.Commands.add("setCssMedia", (media) => {
 });
 
 // https://github.com/cypress-io/cypress/issues/1208
-Cypress.Commands.add('clearIndexedDB', async () => {
-  const databases = await window.indexedDB.databases();
+Cypress.Commands.add("clearIndexedDB", async () => {
+    const databases = await window.indexedDB.databases();
 
-  await Promise.all(
-    databases.map(
-      ({ name }) =>
-        new Promise((resolve, reject) => {
-          const request = window.indexedDB.deleteDatabase(name);
+    await Promise.all(
+        databases.map(
+            ({ name }) =>
+                new Promise((resolve, reject) => {
+                    const request = window.indexedDB.deleteDatabase(name);
 
-          request.addEventListener('success', resolve);
-          // Note: we need to also listen to the "blocked" event
-          // (and resolve the promise) due to https://stackoverflow.com/a/35141818
-          request.addEventListener('blocked', resolve);
-          request.addEventListener('error', reject);
-        }),
-    ),
-  );
+                    request.addEventListener("success", resolve);
+                    // Note: we need to also listen to the "blocked" event
+                    // (and resolve the promise) due to https://stackoverflow.com/a/35141818
+                    request.addEventListener("blocked", resolve);
+                    request.addEventListener("error", reject);
+                })
+        )
+    );
 });
