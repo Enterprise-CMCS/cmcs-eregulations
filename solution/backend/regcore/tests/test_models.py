@@ -4,6 +4,7 @@ from regcore.search.models import Synonym
 from regcore.search.models import create_search
 import json
 
+
 class TestRegoreModels(TestCase):
     @classmethod
     def setUpTestData(cls):
