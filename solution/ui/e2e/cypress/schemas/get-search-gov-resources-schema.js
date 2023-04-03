@@ -40,7 +40,7 @@ const searchGovResourcesItemSchema = {
         snippet: { type: "string", nullable: true },
         category: itemCategorySchema,
         locations: { type: "array", items: itemLocationSchema },
-        type: { type: "string" }, // could be enum for supplemental_content, federal_register_doc, et
+        type: { type: "string" }, // could be enum for supplemental_content, federal_register_doc, etc
         date: { type: "string", nullable: true },
         name: { type: "string", nullable: true },
         description: { type: "string" },
@@ -63,5 +63,4 @@ export const getSearchGovResourcesSchema = {
     },
 
     required: ["count", "next", "previous", "results"],
-    additionalProperties: false,
 };
