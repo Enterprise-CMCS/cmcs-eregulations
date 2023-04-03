@@ -174,6 +174,7 @@ import {
     getLastUpdatedDates,
     getRegSearchResults,
     getSupplementalContent,
+    getSearchGovResources,
     getSynonyms,
 } from "@/utilities/api";
 
@@ -351,12 +352,9 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             try {
-                const response = await getSupplementalContent({
-                    partDict: "all",
+                const response = await getSearchGovResources({
                     q: query,
                     page,
-                    page_size: pageSize,
-                    fr_grouping: false,
                 });
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
