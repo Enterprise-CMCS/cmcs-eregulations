@@ -205,7 +205,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         categories = self.request.GET.getlist("categories")
         search_query = self.request.GET.get("q")
         sort_method = self.request.GET.get("sort")
-        fr_grouping = self.request.GET.get("fr_grouping", "false").lower() == "true"
+        fr_grouping = self.request.GET.get("fr_grouping", "true").lower() == "true"
 
         query = self.model.objects\
                     .filter(approved=True)\
@@ -219,7 +219,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         if categories:
             query = query.filter(category__id__in=categories)
 
-        if fr_grouping:
+        if fr_grouping and hasattr(self, "get_final_ids"):
             ids = self.get_final_ids(query)
             query = self.model.objects.filter(id__in=ids)
 
@@ -230,7 +230,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         query = query.select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),
-            Prefetch("related_resources", AbstractResource.objects.all().select_subclasses().prefetch_related(
+            Prefetch("related_resources", AbstractResource.objects.filter(approved=True).select_subclasses().prefetch_related(
                 Prefetch("locations", queryset=locations_prefetch),
                 Prefetch("category", queryset=category_prefetch),
             )),

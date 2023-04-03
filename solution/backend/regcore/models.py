@@ -104,34 +104,43 @@ class ParserConfiguration(SingletonModel):
         verbose_name = "Parser Configuration"
 
 
-class TitleConfiguration(models.Model):
-    title = models.IntegerField(unique=True, help_text="The title of the regulations to parse, e.g. 42.")
-    subchapters = models.TextField(
-        blank=True,
-        help_text="A comma-separated list of subchapters to parse. All parts within the listed subchapters will be included. "
-                  "E.g., \"IV-C, IV-D, IV-F\" or simply \"IV-C\".",
+class PartConfiguration(models.Model):
+    TYPES = [
+        ("subchapter", "Subchapter"),
+        ("part", "Part"),
+    ]
+
+    title = models.IntegerField(help_text="The title of the regulations to parse, e.g. 42.")
+    type = models.CharField(max_length=255, choices=TYPES, default="part")
+    value = models.CharField(
+        max_length=255,
+        help_text="A subchapter or part to parse. E.g., \"IV-C\" or \"400\".",
         validators=[RegexValidator(
-            regex="^([A-Za-z]+-[A-Za-z]+)(,\\s*([A-Za-z]+-[A-Za-z]+))*$",
-            message="Please enter a comma-separated list of subchapters, e.g. \"IV-C, IV-D, IV-F\" or \"IV-C\".",
+            regex="^([A-Za-z]+-[A-Za-z]+)|(\\d+)$",
+            message="Please enter a valid part or subchapter, e.g. \"IV-C\" or \"400\".",
         )]
     )
-    parts = models.TextField(
-        blank=True,
-        help_text="A comma-separated list of individual parts to parse if you do not wish to include the entire subchapter. "
-                  "E.g., \"400, 457, 460\" or simply \"400\".",
-        validators=[RegexValidator(
-            regex="^(\\d+)(,\\s*\\d+)*$",
-            message="Please enter a comma-separated list of part numbers, e.g. \"400, 457, 460\" or \"400\".",
-        )]
+    upload_reg_text = models.BooleanField(
+        default=True,
+        help_text="Should the eCFR parser upload regulation text to eRegs?",
     )
-    parser_config = models.ForeignKey(ParserConfiguration, on_delete=models.CASCADE, related_name="titles")
+    upload_locations = models.BooleanField(
+        default=True,
+        help_text="Should the parser process and upload section and subpart names for use in resource management?",
+    )
+    upload_fr_docs = models.BooleanField(
+        default=True,
+        help_text="Should the FR parser upload Federal Register Documents to eRegs?",
+    )
+
+    parser_config = models.ForeignKey(ParserConfiguration, on_delete=models.CASCADE, related_name="parts")
 
     def __str__(self):
-        return f'Title {self.title} config'
+        return f'Title {self.title} {self.type} {self.value} config'
 
     class Meta:
-        verbose_name = "Title"
-        verbose_name_plural = "Titles"
+        verbose_name = "Part"
+        verbose_name_plural = "Parts"
 
 
 class AbstractParserResult(models.Model):

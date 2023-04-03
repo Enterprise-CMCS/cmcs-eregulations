@@ -28,20 +28,70 @@ func Run(t *testing.T, name string, f func(*testing.T)) bool {
 		LogParseErrors:     true,
 		SkipRegVersions:    true,
 		SkipFRDocuments:    true,
-		Titles: []*eregs.TitleConfig{
-			&eregs.TitleConfig{
-				Title: 42,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"IV", "C"},
-				},
-				Parts: eregs.PartList{"400", "457", "460"},
+		Parts: []*eregs.PartConfig{
+			&eregs.PartConfig{
+				Title:           42,
+				Type:            "subchapter",
+				Value:           "IV-C",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
 			},
-			&eregs.TitleConfig{
-				Title: 43,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"AB", "C"},
-				},
-				Parts: eregs.PartList{"1", "2", "3"},
+			&eregs.PartConfig{
+				Title:           42,
+				Type:            "part",
+				Value:           "400",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
+			},
+			&eregs.PartConfig{
+				Title:           42,
+				Type:            "part",
+				Value:           "457",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
+			},
+			&eregs.PartConfig{
+				Title:           42,
+				Type:            "part",
+				Value:           "460",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
+			},
+			&eregs.PartConfig{
+				Title:           43,
+				Type:            "subchapter",
+				Value:           "AB-C",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
+			},
+			&eregs.PartConfig{
+				Title:           43,
+				Type:            "part",
+				Value:           "1",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
+			},
+			&eregs.PartConfig{
+				Title:           43,
+				Type:            "part",
+				Value:           "2",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
+			},
+			&eregs.PartConfig{
+				Title:           43,
+				Type:            "part",
+				Value:           "3",
+				UploadRegText:   true,
+				UploadLocations: true,
+				UploadFRDocs:    true,
 			},
 		},
 	}
@@ -224,20 +274,20 @@ func TestStart(t *testing.T) {
 func TestParseTitles(t *testing.T) {
 	testTable := []struct {
 		Name               string
-		ParseTitleFunc     func(*eregs.TitleConfig) error
+		ParseTitleFunc     func(int, []*eregs.PartConfig) error
 		RetrieveConfigFunc func() (*eregs.ParserConfig, int, error)
 		Error              bool
 	}{
 		{
 			Name: "test-success",
-			ParseTitleFunc: func(title *eregs.TitleConfig) error {
+			ParseTitleFunc: func(title int, rawParts []*eregs.PartConfig) error {
 				return nil
 			},
 			Error: false,
 		},
 		{
 			Name: "test-parse-title-failure",
-			ParseTitleFunc: func(title *eregs.TitleConfig) error {
+			ParseTitleFunc: func(title int, rawParts []*eregs.PartConfig) error {
 				return fmt.Errorf("something bad happened")
 			},
 			Error: true,
@@ -259,170 +309,7 @@ func TestParseTitles(t *testing.T) {
 
 func TestParseTitle(t *testing.T) {
 	SleepFunc = func(t time.Duration) {}
-
-	ecfrServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "GET" {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Expected GET request, received ` + r.Method + `" }`))
-			return
-		}
-
-		path := strings.Split(r.URL.Path, "/")
-		if len(path) < 3 {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Invalid path length '` + r.URL.Path + `'" }`))
-			return
-		}
-
-		if path[1] == "structure" {
-			//fetch structure
-			chapter, ok := r.URL.Query()["chapter"]
-			if !ok || len(chapter[0]) < 1 {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "chapter missing`))
-				return
-			}
-			subchapter, ok := r.URL.Query()["subchapter"]
-			if !ok || len(chapter[0]) < 1 {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "subchapter missing`))
-				return
-			}
-
-			if string(chapter[0]) == "IV" && string(subchapter[0]) == "C" {
-				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`{
-					"identifier": "42",
-					"label": "Title 42 - Public Health",
-					"label_level": "Title 42",
-					"label_description": "Public Health",
-					"reserved": false,
-					"type": "title",
-					"children": [
-						{
-							"identifier": "IV",
-							"label": " Chapter IV - Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
-							"label_level": " Chapter IV",
-							"label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services",
-							"reserved": false,
-							"type": "chapter",
-							"children": [
-						  		{
-									"identifier": "C",
-									"label": "Subchapter C - Medical Assistance Programs",
-									"label_level": "Subchapter C",
-									"label_description": "Medical Assistance Programs",
-									"reserved": false,
-									"type": "subchapter",
-									"children": [
-										{
-											"identifier": "433",
-											"label": "Part 433 - State Fiscal Administration",
-											"label_level": "Part 433",
-											"label_description": "State Fiscal Administration",
-											"reserved": false,
-											"type": "part",
-											"volumes": [
-												"4"
-											],
-											"children": [
-												{
-													"identifier": "433.1",
-													"label": "§ 433.1 Purpose.",
-													"label_level": "§ 433.1",
-													"label_description": "Purpose.",
-													"reserved": false,
-													"type": "section",
-													"volumes": [
-														"4"
-													],
-													"received_on": "2017-01-03T00:00:00-0500"
-												}
-											]
-										}
-									]
-								}
-							]
-						}
-					]
-				}`))
-				return
-			}
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "No such chapter subchapter combo" }`))
-			return
-		} else if path[1] == "versions" {
-			if path[2] == "title-42" {
-				w.WriteHeader(http.StatusOK)
-				w.Write([]byte(`{
-					"content_versions": [
-						{
-							"date": "2018-01-01",
-							"identifier": "433.1",
-							"name": "§ 433.1 Purpose.",
-							"part": "433",
-							"removed": false,
-							"title": "42",
-							"type": "section"
-						},
-						{
-							"date": "2019-01-01",
-							"identifier": "433.1",
-							"name": "§ 433.1 Purpose.",
-							"part": "433",
-							"removed": false,
-							"title": "42",
-							"type": "section"
-						},
-						{
-							"date": "2020-01-01",
-							"identifier": "433.1",
-							"name": "§ 433.1 Purpose.",
-							"part": "433",
-							"removed": false,
-							"title": "42",
-							"type": "section"
-						}
-					]
-				}`))
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{ "exception": "No such title to get versions for" }`))
-			}
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Invalid path '` + r.URL.Path + `'" }`))
-		}
-	}))
-	defer ecfrServer.Close()
-	ecfr.EcfrSite = ecfrServer.URL
-
-	eregsServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "GET" {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Expected GET request, received ` + r.Method + `" }`))
-			return
-		}
-
-		if r.URL.Path == "/title/42/versions" {
-			w.WriteHeader(http.StatusOK)
-			w.Write([]byte(`[
-				{
-					"date": "2019-01-01",
-					"part_name": [
-						"433"
-					]
-				}
-			]`))
-		} else {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(`{ "exception": "Unrecognized path" }`))
-			return
-		}
-	}))
-	defer eregsServer.Close()
-	eregs.BaseURL = eregsServer.URL
-
+	PostParserResultFunc = func(ctx context.Context, result *eregs.ParserResult) (int, error) { return 200, nil }
 	var WorkerFunc func(*eregs.Part)
 
 	StartVersionWorkerFunc = func(ctx context.Context, thread int, ch chan *list.List, wg *sync.WaitGroup) {
@@ -436,22 +323,45 @@ func TestParseTitle(t *testing.T) {
 	}
 
 	testTable := []struct {
-		Name       string
-		WorkerFunc func(*eregs.Part)
-		Input      eregs.TitleConfig
-		Error      bool
+		Name                 string
+		WorkerFunc           func(*eregs.Part)
+		Title                int
+		RawParts             []*eregs.PartConfig
+		GetExistingPartsFunc func(context.Context, int) (map[string][]string, int, error)
+		ProcessPartsListFunc func(context.Context, int, []*eregs.PartConfig) ([]*eregs.PartConfig, error)
+		ExtractVersionsFunc  func(context.Context, int) (map[string]map[string]struct{}, error)
+		Error                bool
 	}{
 		{
 			Name: "test-valid",
 			WorkerFunc: func(version *eregs.Part) {
-				version.Processed = true
+				if version.Title == 42 && version.Name == "400" && version.Date == "2021-01-01" {
+					version.Processed = true
+				}
 			},
-			Input: eregs.TitleConfig{
-				Title: 42,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"IV", "C"},
+			Title: 42,
+			RawParts: []*eregs.PartConfig{
+				&eregs.PartConfig{
+					Type:            "part",
+					Title:           42,
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+					UploadFRDocs:    true,
 				},
-				Parts: eregs.PartList{"1", "2", "3"},
+			},
+			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
+				return make(map[string][]string), 200, nil
+			},
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return parts, nil
+			},
+			ExtractVersionsFunc: func(ctx context.Context, title int) (map[string]map[string]struct{}, error) {
+				return map[string]map[string]struct{}{
+					"400": map[string]struct{}{
+						"2021-01-01": struct{}{},
+					},
+				}, nil
 			},
 			Error: false,
 		},
@@ -460,62 +370,124 @@ func TestParseTitle(t *testing.T) {
 			WorkerFunc: func(version *eregs.Part) {
 				version.Processed = false
 			},
-			Input: eregs.TitleConfig{
-				Title: 42,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"IV", "C"},
+			Title: 42,
+			RawParts: []*eregs.PartConfig{
+				&eregs.PartConfig{
+					Type:            "part",
+					Title:           42,
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+					UploadFRDocs:    true,
 				},
-				Parts: eregs.PartList{"1", "2", "3"},
+			},
+			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
+				return make(map[string][]string), 200, nil
+			},
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return parts, nil
+			},
+			ExtractVersionsFunc: func(ctx context.Context, title int) (map[string]map[string]struct{}, error) {
+				return map[string]map[string]struct{}{
+					"400": map[string]struct{}{
+						"2021-01-01": struct{}{},
+					},
+				}, nil
 			},
 			Error: true,
 		},
 		{
-			Name: "test-no-parts",
+			Name: "test-existing-parts-fail",
 			WorkerFunc: func(version *eregs.Part) {
-				version.Processed = false
+				if version.Title == 42 && version.Name == "400" && version.Date == "2021-01-01" {
+					version.Processed = true
+				}
 			},
-			Input: eregs.TitleConfig{
-				Title:       42,
-				Subchapters: eregs.SubchapterList{},
-				Parts:       eregs.PartList{},
-			},
-			Error: true,
-		},
-		{
-			Name: "test-no-parts",
-			WorkerFunc: func(version *eregs.Part) {
-				version.Processed = true
-			},
-			Input: eregs.TitleConfig{
-				Title:       42,
-				Subchapters: eregs.SubchapterList{},
-				Parts:       eregs.PartList{},
-			},
-			Error: true,
-		},
-		{
-			Name:       "test-no-toc",
-			WorkerFunc: func(version *eregs.Part) {},
-			Input: eregs.TitleConfig{
-				Title: 43,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"IV", "C"},
+			Title: 42,
+			RawParts: []*eregs.PartConfig{
+				&eregs.PartConfig{
+					Type:            "part",
+					Title:           42,
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+					UploadFRDocs:    true,
 				},
-				Parts: eregs.PartList{"433"},
+			},
+			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
+				return nil, 404, fmt.Errorf("oops")
+			},
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return parts, nil
+			},
+			ExtractVersionsFunc: func(ctx context.Context, title int) (map[string]map[string]struct{}, error) {
+				return map[string]map[string]struct{}{
+					"400": map[string]struct{}{
+						"2021-01-01": struct{}{},
+					},
+				}, nil
+			},
+			Error: false,
+		},
+		{
+			Name: "test-process-parts-list-fail",
+			WorkerFunc: func(version *eregs.Part) {
+				if version.Title == 42 && version.Name == "400" && version.Date == "2021-01-01" {
+					version.Processed = true
+				}
+			},
+			Title: 42,
+			RawParts: []*eregs.PartConfig{
+				&eregs.PartConfig{
+					Type:            "part",
+					Title:           42,
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+					UploadFRDocs:    true,
+				},
+			},
+			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
+				return make(map[string][]string), 200, nil
+			},
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return nil, fmt.Errorf("oops")
+			},
+			ExtractVersionsFunc: func(ctx context.Context, title int) (map[string]map[string]struct{}, error) {
+				return map[string]map[string]struct{}{
+					"400": map[string]struct{}{
+						"2021-01-01": struct{}{},
+					},
+				}, nil
 			},
 			Error: true,
 		},
 		{
-			Name: "test-bad-part",
+			Name: "test-extract-versions-fail",
 			WorkerFunc: func(version *eregs.Part) {
-				version.Processed = true
+				if version.Title == 42 && version.Name == "400" && version.Date == "2021-01-01" {
+					version.Processed = true
+				}
 			},
-			Input: eregs.TitleConfig{
-				Title: 43,
-				Subchapters: eregs.SubchapterList{
-					eregs.SubchapterArg{"IV", "C"},
+			Title: 42,
+			RawParts: []*eregs.PartConfig{
+				&eregs.PartConfig{
+					Type:            "part",
+					Title:           42,
+					Value:           "400",
+					UploadLocations: true,
+					UploadRegText:   true,
+					UploadFRDocs:    true,
 				},
-				Parts: eregs.PartList{"1", "2", "3"},
+			},
+			GetExistingPartsFunc: func(ctx context.Context, title int) (map[string][]string, int, error) {
+				return make(map[string][]string), 200, nil
+			},
+			ProcessPartsListFunc: func(ctx context.Context, title int, parts []*eregs.PartConfig) ([]*eregs.PartConfig, error) {
+				return parts, nil
+			},
+			ExtractVersionsFunc: func(ctx context.Context, title int) (map[string]map[string]struct{}, error) {
+				return nil, fmt.Errorf("oops")
 			},
 			Error: true,
 		},
@@ -524,7 +496,10 @@ func TestParseTitle(t *testing.T) {
 	for _, tc := range testTable {
 		Run(t, tc.Name, func(t *testing.T) {
 			WorkerFunc = tc.WorkerFunc
-			err := parseTitle(&tc.Input)
+			GetExistingPartsFunc = tc.GetExistingPartsFunc
+			ProcessPartsListFunc = tc.ProcessPartsListFunc
+			ExtractVersionsFunc = tc.ExtractVersionsFunc
+			err := parseTitle(tc.Title, tc.RawParts)
 			if err != nil && !tc.Error {
 				t.Errorf("received unexpected error (%+v)", err)
 			} else if err == nil && tc.Error {
@@ -799,6 +774,7 @@ func TestHandleVersion(t *testing.T) {
 				Structure:       &ecfr.Structure{},
 				Document:        &parsexml.Part{},
 				UploadLocations: true,
+				UploadRegText:   true,
 			},
 			Expected: eregs.Part{
 				Title: 42,

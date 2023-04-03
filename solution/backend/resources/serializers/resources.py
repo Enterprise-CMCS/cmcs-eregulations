@@ -137,7 +137,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     docket_numbers = serializers.ListField(child=serializers.CharField())
     document_number = serializers.CharField(allow_blank=True, allow_null=True)
     date = serializers.CharField(allow_blank=True, allow_null=True)
-    approved = serializers.BooleanField(required=False, default=False)
+    approved = serializers.BooleanField(required=False, default=True)
     id = serializers.CharField(required=False)
     doc_type = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 

@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 18.14
       # setup python
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
           python-version: '3.8'
@@ -58,7 +58,7 @@ jobs:
           popd
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
@@ -100,13 +100,13 @@ jobs:
         with:
           node-version: 18.14
       # setup python
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
           python-version: '3.8'
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
@@ -170,7 +170,7 @@ jobs:
           popd
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
@@ -212,7 +212,7 @@ jobs:
           go-version: '^1.16' # The Go version to download (if necessary) and use.
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
@@ -256,7 +256,7 @@ jobs:
           state: open
       # Notify github that this is deployed and ready to look at
       - name: Create deployment comment
-        uses: peter-evans/create-or-update-comment@v1
+        uses: peter-evans/create-or-update-comment@v2
         env:
           django_url: ${{ needs.deploy-django.outputs.url }}
         with:
