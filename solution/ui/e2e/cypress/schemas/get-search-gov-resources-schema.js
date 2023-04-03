@@ -30,7 +30,7 @@ const itemLocationSchema = {
     },
 };
 
-export const searchGovResourcesItemSchema = {
+const searchGovResourcesItemSchema = {
     type: "object",
     properties: {
         id: { type: "number" },

@@ -1,7 +1,4 @@
-import {
-    getSearchGovResourcesSchema,
-    searchGovResourcesItemSchema,
-} from "../schemas/get-search-gov-resources-schema";
+import { getSearchGovResourcesSchema } from "../schemas/get-search-gov-resources-schema";
 
 const TITLE = 42;
 const SUBPART = "A";
