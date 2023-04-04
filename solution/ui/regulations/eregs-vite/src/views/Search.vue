@@ -94,7 +94,7 @@
                         </span>
                     </div>
                     <template v-if="!resourcesLoading">
-                        <ResourcesResults
+                        <SearchGovResults
                             :base="homeUrl"
                             :count="resourcesResults.length"
                             :parts-last-updated="partsLastUpdated"
@@ -117,7 +117,7 @@
                                     />
                                 </template>
                             </template>
-                        </ResourcesResults>
+                        </SearchGovResults>
                     </template>
                 </div>
             </div>
@@ -164,7 +164,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import RegResults from "@/components/reg_search/RegResults.vue";
-import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+import SearchGovResults from "@/components/resources/SearchGovResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
@@ -192,8 +192,8 @@ export default {
         JumpTo,
         PaginationController,
         RegResults,
-        ResourcesResults,
         SearchEmptyState,
+        SearchGovResults,
         SearchInput,
     },
 
