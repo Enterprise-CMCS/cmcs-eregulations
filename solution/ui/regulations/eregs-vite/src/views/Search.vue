@@ -10,7 +10,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl"/>
+                    <JumpTo :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -19,9 +19,7 @@
                     />
                 </template>
                 <template #search>
-                    <HeaderSearch
-                        :search-url="searchUrl"
-                    />
+                    <HeaderSearch :search-url="searchUrl" />
                 </template>
             </HeaderComponent>
         </header>
@@ -217,7 +215,7 @@ export default {
         searchUrl: {
             type: String,
             default: "/search/",
-        }
+        },
     },
 
     beforeCreate() {},
@@ -472,5 +470,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-</style>
+<style></style>

@@ -36,6 +36,26 @@
                 @content;
             }
 
+            .result {
+                &__context {
+                    color: $mid_gray;
+                    font-size: $font-size-sm;
+                    font-weight: 400;
+                    line-height: 22px;
+                    text-transform: capitalize;
+
+                    &--date {
+                        margin-right: 8px;
+
+                        &--bar {
+                            padding-right: 8px;
+                            border-right: 1px solid $mid_gray;
+                        }
+                    }
+
+                }
+            }
+
             .reg-results-content {
                 @include common-results-styles {
                     .result {

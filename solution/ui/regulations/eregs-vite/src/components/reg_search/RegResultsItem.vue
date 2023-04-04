@@ -1,6 +1,6 @@
 <template>
     <div class="result">
-        <div class="results-part">
+        <div class="result__context">
             {{ result.part_title | partDocumentTitleLabel }}
         </div>
         <div class="results-section">
@@ -70,8 +70,4 @@ export default {
 };
 </script>
 
-<style>
-.results-part {
-    text-transform: capitalize;
-}
-</style>
+<style></style>

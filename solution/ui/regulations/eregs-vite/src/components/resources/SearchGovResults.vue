@@ -1,7 +1,13 @@
 <script setup>
-import { locationLabel, locationUrl } from "../../utilities/filters";
+import {
+    formatDate,
+    locationLabel,
+    locationUrl,
+} from "../../utilities/filters";
 
 import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
+
+const needsBar = (item) => item.date && item.name;
 
 defineProps({
     base: {
@@ -44,12 +50,22 @@ defineProps({
                     </div>
                 </div>
                 <div class="result-content-wrapper">
+                    <div class="result__context">
+                        <span
+                            v-if="item.date"
+                            class="result__context--date"
+                            :class="
+                                needsBar(item) && 'result__context--date--bar'
+                            "
+                            >{{ formatDate(item.date) }}</span
+                        >
+                        <span v-if="item.name">{{ item.name }}</span>
+                    </div>
                     <SupplementalContentObject
                         :name="item.name"
                         :description="
                             item.descriptionHeadline || item.description
                         "
-                        :date="item.date"
                         :url="item.url"
                     />
                 </div>
