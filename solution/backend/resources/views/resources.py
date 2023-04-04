@@ -1,37 +1,44 @@
 import json
+import re
 import requests
 import urllib.parse as urlparse
-import re
-from rest_framework import viewsets
+
 from drf_spectacular.utils import extend_schema
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db import transaction
 from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
-from rest_framework.response import Response
+from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
-from .mixins import ResourceExplorerViewSetMixin, FRDocGroupingMixin
-from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+
+from .mixins import (
+    ResourceExplorerViewSetMixin,
+    FRDocGroupingMixin
+)
+from common.mixins import (
+    OptionalPaginationMixin,
+    PAGINATION_PARAMS
+)
+from common.auth import SettingsAuthentication
 
 from resources.models import (
-    AbstractResource,
-    SupplementalContent,
-    FederalRegisterDocument,
-    AbstractLocation,
     AbstractCategory,
+    AbstractLocation,
+    AbstractResource,
+    FederalRegisterDocument,
+    SupplementalContent,
 )
 
 from resources.serializers.resources import (
     AbstractResourcePolymorphicSerializer,
-    SupplementalContentSerializer,
     FederalRegisterDocumentCreateSerializer,
     FederalRegisterDocumentSerializer,
-    StringListSerializer,
     MetaResourceSerializer,
     ResourceSearchSerializer,
+    StringListSerializer,
+    SupplementalContentSerializer,
 )
-
-from common.auth import SettingsAuthentication
 
 
 @extend_schema(
@@ -76,11 +83,12 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             "results": results,
         }
 
-    def sort_by_url_list(self, urls, query):
-        url_map = {t.url: t for t in query}
+    # There might be missing resources in dev than prod so their could be missing urls
+    def sort_by_url_list(self, urls, resources):
+        res_index = {res.url: res for res in resources}
         sorted_vals = []
-        for n in urls:
-            sorted_vals.append(url_map[n]) if n in url_map else ''
+        for url in urls:
+            sorted_vals.append(res_index[url]) if url in res_index else None
         return sorted_vals
 
     def get_queryset(self, urls):
