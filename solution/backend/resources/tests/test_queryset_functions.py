@@ -9,7 +9,6 @@ from resources.models import (
     AbstractResource,
     SupplementalContent,
 )
-from resources.views.resources import ResourceSearchViewSet
 
 
 class TestMixinFunctions(TestCase):
@@ -20,9 +19,9 @@ class TestMixinFunctions(TestCase):
         today = datetime.today().strftime('%Y-%m-%d')
         yesterday = (datetime.now() - timedelta(1)).strftime('%Y-%m-%d')
         twodaysago = (datetime.now() - timedelta(2)).strftime('%Y-%m-%d')
-        FederalRegisterDocument.objects.create(id=1, group=a, date=today, url='site2')
-        FederalRegisterDocument.objects.create(id=2, group=a, date=twodaysago, url='site1')
-        FederalRegisterDocument.objects.create(id=3, group=b, date=yesterday, url='site3')
+        FederalRegisterDocument.objects.create(id=1, group=a, date=today, url='site2 url')
+        FederalRegisterDocument.objects.create(id=2, group=a, date=twodaysago, url='site1 url')
+        FederalRegisterDocument.objects.create(id=3, group=b, date=yesterday, url='site3 url')
         FederalRegisterDocument.objects.create(id=4, group=c, date=today)
         FederalRegisterDocument.objects.create(id=5, group=b, date=today)
         SupplementalContent.objects.create(id=6, date=today)
@@ -76,20 +75,3 @@ class TestMixinFunctions(TestCase):
         ids = self.FRDocGroupingMixin.get_final_ids(docs)
         ids.sort()
         self.assertEqual([1, 4, 5, 6], ids)
-
-    def test_search_gov_ordering(self):
-        urls = ['site1', 'site2', 'site3']
-        resources = FederalRegisterDocument.objects.filter(id__in=[1, 2, 3])
-        test_view_set = ResourceSearchViewSet()
-        ordered_resources = test_view_set.sort_by_url_list(urls, resources)
-        self.assertEqual(ordered_resources[1], FederalRegisterDocument.objects.get(id=1))
-        self.assertEqual(ordered_resources[0], FederalRegisterDocument.objects.get(id=2))
-        self.assertEqual(ordered_resources[2], FederalRegisterDocument.objects.get(id=3))
-
-    # since the rss feed is prod data, dev environments might have less resources
-    def test_missing_gov_resource(self):
-        urls = ['site1', 'site2', 'site3']
-        resources = FederalRegisterDocument.objects.filter(id__in=[1, 2])
-        test_view_set = ResourceSearchViewSet()
-        ordered_resources = test_view_set.sort_by_url_list(urls, resources)
-        self.assertEqual(len(ordered_resources), 2)
