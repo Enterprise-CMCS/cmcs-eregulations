@@ -1,3 +1,7 @@
+/**
+ * @param dateString {string} - a date string in YYYY-MM-DD format
+ * @returns {string} - a date string in Month D/DD, YYYY format
+ */
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     let options = { year: "numeric", timeZone: "UTC" };
@@ -12,12 +16,32 @@ const formatDate = (dateString) => {
     return format.format(date);
 };
 
+/**
+ * @param location {Object} - a Subpart or Section of the Regs
+ * @param location.type {string} - the type of location (ex: Subpart, Section)
+ * @param location.part {string} - the part number for the location
+ * @param location.section_id {?string} - the section number
+ * @param location.subpart_id {?string} - the subpart name
+ * @returns {string} - a properly formatted label
+ */
 const locationLabel = ({ type, part, section_id, subpart_id }) => {
     return type.toLowerCase() === "section"
         ? `${part}.${section_id}`
         : `${part} Subpart ${subpart_id}`;
 };
 
+/**
+ * @param location {Object} - a Subpart or Section of the Regs
+ * @param location.title {string} - the title number of the location (ex: 42)
+ * @param location.type {string} - the type of location (ex: Subpart, Section)
+ * @param location.part {string} - the part number for the location
+ * @param location.section_id {?string} - the section number
+ * @param location.subpart_id {?string} - the subpart name
+ * @param partsList {Array<{label: {string}, name: {string}, sections: {Object}}>} - array of objects describing each part in the app
+ * @param partsLastUpdated {Object} - object containing part numbers as keys and YYYY-MM-DD dates for values
+ * @param base {string} - base to be prepended to returned URL
+ * @returns {string} - URL to location
+ */
 const locationUrl = (
     { title, type, part, section_id, subpart_id },
     partsList,
