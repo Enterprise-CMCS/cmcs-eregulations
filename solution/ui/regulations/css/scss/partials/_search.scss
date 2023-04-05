@@ -52,59 +52,31 @@
                             border-right: 1px solid $mid_gray;
                         }
                     }
+                }
 
+                &__link {
+                    font-size: $font-size-md;
+
+                    a {
+                        text-decoration: none;
+                    }
+                }
+
+                &__snippet {
+                    font-size: $font-size-sm;
+                }
+
+                .search-highlight {
+                    font-weight: bold;
                 }
             }
 
             .reg-results-content {
-                @include common-results-styles {
-                    .result {
-                        margin-top: 0px;
-                        margin: $spacer-3 0;
-                        line-height: $font-size-2xl;
-
-                        .results-part {
-                            font-size: $font-size-xs;
-                        }
-
-                        .results-section {
-                            font-size: $font-size-md;
-
-                            a {
-                                text-decoration: none;
-                            }
-                        }
-
-                        .results-preview {
-                            font-size: $font-size-sm;
-                        }
-
-                        .search-highlight {
-                            font-weight: bold;
-                        }
-                    }
-                }
+                @include common-results-styles;
             }
 
             .resources-results-content {
                 @include common-results-styles;
-
-                .result-content-wrapper {
-                    margin-bottom: 0px;
-
-                    .supplemental-content {
-                        margin-bottom: 5px;
-
-                        a.supplemental-content-link {
-                            .supplemental-content-date,
-                            .supplemental-content-title,
-                            .supplemental-content-description {
-                                font-size: $font-size-md;
-                                line-height: 22px;
-                            }
-                        }
-                    }
-                }
 
                 .related-sections {
                     margin-bottom: 25px;

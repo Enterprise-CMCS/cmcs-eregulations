@@ -52,13 +52,13 @@ describe("Search flow", () => {
             ".resources-results-content .search-results-count > span"
         ).should("be.visible");
         cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section"
+            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link"
         ).should("be.visible");
         cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
+            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
         ).should("have.attr", "href");
         cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
+            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
         ).click({ force: true });
         cy.url().should(
             "include",
