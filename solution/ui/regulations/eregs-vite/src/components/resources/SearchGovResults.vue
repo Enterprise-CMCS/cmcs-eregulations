@@ -28,6 +28,17 @@ defineProps({
 });
 
 const needsBar = (item) => item.date && item.name;
+
+const formatSnippet = (snippet) =>
+    snippet
+        .replace(//g, "<span class='search-highlight'>") // &#xe000;
+        .replace(//g, "</span>"); // &#xe001;
+
+const formatLinkTitle = ({description, descriptionHeadline, snippet }) => {
+    // get emphasised strings from snippet if it exists
+    // format descriptionHeadline or description (whichever exists) to surround these found strings where they exist
+    // return as html for anchor's v-html directive
+};
 </script>
 
 <template>
@@ -67,10 +78,13 @@ const needsBar = (item) => item.date && item.name;
                         target="_blank"
                         rel="noopener noreferrer"
                         v-html="item.descriptionHeadline || item.description"
+                        class="external"
                     >
                     </a>
                 </template>
-                <template #snippet> </template>
+                <template #snippet>
+                    <div v-html="formatSnippet(item.snippet)" />
+                </template>
                 <template #sections>
                     <div class="related-sections">
                         <span class="related-sections-title">
