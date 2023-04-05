@@ -33,6 +33,12 @@ const highlightClass = "search-highlight";
 
 const needsBar = (item) => item.date && item.name;
 
+/**
+ * @param string {string} - string containing substrings surrounded by special characters
+ * @param startChar {string} - character that indicates the start of a substring to get
+ * @param stopChar {string} - character that indicates the end of a substring to get
+ * @returns {Array{string}} - Array of unique substrings
+ */
 const getHighlightTerms = (string, startChar, stopChar) => {
     // pure fns for composition
     const splitString = (str, splitChar) => str.split(splitChar);
@@ -56,10 +62,25 @@ const getHighlightTerms = (string, startChar, stopChar) => {
     );
 };
 
-const formatLinkTitle = ({ description, descriptionHeadline, snippet }) => {
-    const termsToHighlight = getHighlightTerms(snippet, openChar, closeChar);
+/**
+ * https://jsdoc.app/tags-param.html -- see "Documenting a destructuring parameter"
+ *
+ * @param supplementalContentItem {Object} - A piece of supplemental content
+ * @param supplementalContentItem.description {?string} - description of the piece of supplemental content
+ * @param supplementalContentItem.description_headline {?string} - alternate description of the piece of supplemental content.  Usually null
+ * @param supplementalContentItem.snippet {?string} - snippet of descriptive text containing special characters that are surrounding substrings to be emphasized with bold styles
+ * @param startChar {string} - character that indicates the start of a substring to highlight
+ * @param stopChar {string} - character that indicates the end of a substring to highlight
+ * @returns {string} - description with opening and closing span tags surrounding substrings that are to be emphasized
+ */
+const formatLinkTitle = (
+    { description, description_headline, snippet },
+    startChar,
+    stopChar
+) => {
+    const termsToHighlight = getHighlightTerms(snippet, startChar, stopChar);
 
-    let linkTitle = descriptionHeadline || description;
+    let linkTitle = description_headline || description;
     termsToHighlight.forEach((term) => {
         linkTitle = linkTitle.replaceAll(
             term,
@@ -70,9 +91,15 @@ const formatLinkTitle = ({ description, descriptionHeadline, snippet }) => {
     return linkTitle;
 };
 
-const formatSnippet = (snippet) => {
-    const reOpen = new RegExp(openChar, "g");
-    const reClose = new RegExp(closeChar, "g");
+/**
+ * @param snippet {?string} - snippet of descriptive text containing special characters that are surrounding substrings to be emphasized with bold styles
+ * @param startChar {string} - character that indicates the start of a substring to highlight
+ * @param stopChar {string} - character that indicates the end of a substring to highlight
+ * @returns {string} - snippet with special characters replaced with opening and closing span tags with a class used to add highlighting styles
+ */
+const formatSnippet = (snippet, startChar, stopChar) => {
+    const reOpen = new RegExp(startChar, "g");
+    const reClose = new RegExp(stopChar, "g");
 
     return snippet
         .replace(reOpen, `<span class="${highlightClass}">`)
@@ -116,13 +143,17 @@ const formatSnippet = (snippet) => {
                         :href="item.url"
                         target="_blank"
                         rel="noopener noreferrer"
-                        v-html="formatLinkTitle(item)"
+                        v-html="formatLinkTitle(item, openChar, closeChar)"
                         class="external"
                     >
                     </a>
                 </template>
                 <template #snippet>
-                    <div v-html="formatSnippet(item.snippet)" />
+                    <div
+                        v-html="
+                            formatSnippet(item.snippet, openChar, closeChar)
+                        "
+                    />
                 </template>
                 <template #sections>
                     <div class="related-sections">
