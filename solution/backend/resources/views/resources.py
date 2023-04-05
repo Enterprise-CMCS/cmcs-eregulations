@@ -2,7 +2,7 @@ import json
 import re
 import requests
 import urllib.parse as urlparse
-
+import urllib
 from drf_spectacular.utils import extend_schema
 from django.db import transaction
 from django.db.models import Case, When, F, Prefetch
@@ -79,8 +79,10 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
     def get_gov_results(self, query, page):
         key = 'M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4='
         offset = (page - 1) * self.limit
+
         rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
-                  f'&query={query}&limit={self.limit}&offset={offset}'
+                  f'&query={urlparse.quote_plus(query)}&limit={self.limit}&offset={offset}'
+        print(rstring)
         gov_results = json.loads(requests.get(rstring).text)
         self.format_gov_results(gov_results)
 
