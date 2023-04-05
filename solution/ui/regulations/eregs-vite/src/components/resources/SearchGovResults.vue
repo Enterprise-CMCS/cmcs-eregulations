@@ -29,49 +29,54 @@ defineProps({
 
 const openChar = ""; // &#xe000;
 const closeChar = ""; // &#xe001;
+const highlightClass = "search-highlight";
 
 const needsBar = (item) => item.date && item.name;
 
-const formatSnippet = (snippet) => {
-    const reOpen = new RegExp(openChar, "g");
-    const reClose = new RegExp(closeChar, "g");
-
-    return snippet
-        .replace(reOpen, "<span class='search-highlight'>")
-        .replace(reClose, "</span>");
-};
-
 const getHighlightTerms = (string, startChar, stopChar) => {
-    // pure funcs for composition
+    // pure fns for composition
     const splitString = (str, splitChar) => str.split(splitChar);
     const getFirstItem = (arr) => arr.shift();
     const removeFirstItem = (arr) => {
         getFirstItem(arr);
         return arr;
     };
-    const mapFunc = (arr, fn, args = []) =>
-        arr.map((item) => fn(item, ...args));
+    const mapFn = (fn, arr, args = []) => arr.map((item) => fn(item, ...args));
     const uniqArr = (arr) => Array.from(new Set(arr));
 
     return uniqArr(
-        mapFunc(
-            mapFunc(
-                removeFirstItem(splitString(string, startChar)),
+        mapFn(
+            getFirstItem,
+            mapFn(
                 splitString,
+                removeFirstItem(splitString(string, startChar)),
                 [stopChar]
-            ),
-            getFirstItem
+            )
         )
     );
-}
+};
 
 const formatLinkTitle = ({ description, descriptionHeadline, snippet }) => {
-
     const termsToHighlight = getHighlightTerms(snippet, openChar, closeChar);
-    console.log("terms to highlight", termsToHighlight);
-    // format descriptionHeadline or description (whichever exists) to surround these found strings where they exist
-    // return as html for anchor's v-html directive
-    return descriptionHeadline || description;
+
+    let linkTitle = descriptionHeadline || description;
+    termsToHighlight.forEach((term) => {
+        linkTitle = linkTitle.replaceAll(
+            term,
+            `<span class="${highlightClass}">${term}</span>`
+        );
+    });
+
+    return linkTitle;
+};
+
+const formatSnippet = (snippet) => {
+    const reOpen = new RegExp(openChar, "g");
+    const reClose = new RegExp(closeChar, "g");
+
+    return snippet
+        .replace(reOpen, `<span class="${highlightClass}">`)
+        .replace(reClose, "</span>");
 };
 </script>
 
