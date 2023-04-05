@@ -36,6 +36,13 @@
                 @content;
             }
 
+            @mixin common-context-related-sections {
+                color: $mid_gray;
+                font-size: $font-size-sm;
+                font-weight: 400;
+                line-height: 22px;
+            }
+
             .result {
                 margin-bottom: 24px;
 
@@ -48,10 +55,7 @@
                 }
 
                 &__context {
-                    color: $mid_gray;
-                    font-size: $font-size-sm;
-                    font-weight: 400;
-                    line-height: 22px;
+                    @include common-context-related-sections;
                     text-transform: capitalize;
                     margin-bottom: 8px;
 
@@ -103,21 +107,17 @@
                 .related-sections {
                     margin-top: 8px;
                     margin-bottom: 0px;
-                    font-size: $font-size-xs;
-                    color: $mid_gray;
 
                     .related-sections-title {
+                        @include common-context-related-sections;
                         text-transform: uppercase;
-                        font-weight: 600;
-                        color: $dark_gray;
                     }
 
                     .related-section-link {
-                        font-size: $font-size-sm;
-                    }
-
-                    a {
-                        text-decoration: none;
+                        @include common-context-related-sections;
+                        a {
+                            text-decoration: none;
+                        }
                     }
                 }
             }

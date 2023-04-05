@@ -128,34 +128,37 @@ const formatSnippet = (snippet) => {
                     <div class="related-sections">
                         <span class="related-sections-title">
                             Related Section<span
-                                v-if="item.locations.length > 1"
+                                v-if="item.locations.length !== 1"
                                 >s</span
                             >:
                         </span>
-                        <span v-if="item.locations.length > 1">§§ </span>
-                        <span v-else>§ </span>
-                        <template v-for="(location, i) in item.locations">
-                            <span
-                                :key="location.display_name + i"
-                                class="related-section-link"
-                            >
-                                <a
-                                    :href="
-                                        locationUrl(
-                                            location,
-                                            partsList,
-                                            partsLastUpdated,
-                                            base
-                                        )
-                                    "
+                        <template v-if="item.locations.length > 0">
+                            <span v-if="item.locations.length > 1">§§ </span>
+                            <span v-else>§ </span>
+                            <template v-for="(location, i) in item.locations">
+                                <span
+                                    :key="location.display_name + i"
+                                    class="related-section-link"
                                 >
-                                    {{ locationLabel(location) }}
-                                </a>
-                                <span v-if="i + 1 != item.locations.length">
-                                    |
+                                    <a
+                                        :href="
+                                            locationUrl(
+                                                location,
+                                                partsList,
+                                                partsLastUpdated,
+                                                base
+                                            )
+                                        "
+                                    >
+                                        {{ locationLabel(location) }}
+                                    </a>
+                                    <span v-if="i + 1 != item.locations.length">
+                                        |
+                                    </span>
                                 </span>
-                            </span>
+                            </template>
                         </template>
+                        <template v-else>None</template>
                     </div>
                 </template>
             </ResultsItem>
