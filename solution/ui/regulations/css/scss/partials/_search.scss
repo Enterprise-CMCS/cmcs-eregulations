@@ -37,12 +37,23 @@
             }
 
             .result {
+                margin-bottom: 24px;
+
+                .category-labels {
+                    margin-bottom: 4px;
+
+                    .category-label {
+                        margin-bottom: 4px;
+                    }
+                }
+
                 &__context {
                     color: $mid_gray;
                     font-size: $font-size-sm;
                     font-weight: 400;
                     line-height: 22px;
                     text-transform: capitalize;
+                    margin-bottom: 8px;
 
                     &--date {
                         margin-right: 8px;
@@ -56,6 +67,7 @@
 
                 &__link {
                     font-size: $font-size-md;
+                    margin-bottom: 8px;
 
                     a {
                         text-decoration: none;
@@ -73,13 +85,24 @@
 
             .reg-results-content {
                 @include common-results-styles;
+
+                .result {
+                    &__context {
+                        margin-bottom: 4px;
+                    }
+
+                    &__link {
+                        margin-bottom: 4px;
+                    }
+                }
             }
 
             .resources-results-content {
                 @include common-results-styles;
 
                 .related-sections {
-                    margin-bottom: 25px;
+                    margin-top: 8px;
+                    margin-bottom: 0px;
                     font-size: $font-size-xs;
                     color: $mid_gray;
 
