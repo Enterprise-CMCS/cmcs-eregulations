@@ -22,18 +22,16 @@ class SearchIndexQuerySet(models.QuerySet):
             search_type = "phrase"
             cover_density = True
             search_query = SearchQuery(query, search_type=search_type, config='english')
-            si = self.annotate(vector_column=RawSQL("vector_column", [],
-                               output_field=SearchVectorField()))\
-                     .filter(vector_column=search_query)
+            rank_filter = 0.01
         else:
             search_query = SearchQuery(query, search_type=search_type, config='english')
-            si = self.annotate(rank=SearchRank(
-                RawSQL("vector_column", [], output_field=SearchVectorField()),
-                search_query, cover_density=cover_density))\
-                .filter(rank__gte=0.2)
+            rank_filter = .2
 
-        si = si.annotate(
-            headline=SearchHeadline(
+        return self.annotate(rank=SearchRank(
+            RawSQL("vector_column", [], output_field=SearchVectorField()),
+            search_query, cover_density=cover_density))\
+            .filter(rank__gt=rank_filter)\
+            .annotate(headline=SearchHeadline(
                 "content",
                 search_query,
                 start_sel='<span class="search-highlight">',
@@ -48,11 +46,7 @@ class SearchIndexQuerySet(models.QuerySet):
                 config='english',
                 highlight_all=True
             ),
-        )
-        if search_type == "plain":
-            si = si.order_by('-rank')
-
-        return si.prefetch_related('part')
+        ).order_by('-rank').prefetch_related('part')
 
 
 class SearchIndexManager(models.Manager.from_queryset(SearchIndexQuerySet)):
