@@ -10,13 +10,15 @@
                         :list-id="formatListId(value.label)"
                         :button-title="value.buttonTitle"
                         :button-id="value.buttonId"
-                        :disabled="value.disabled || value.listItems.length === 0"
+                        :disabled="
+                            value.disabled || value.listItems.length === 0
+                        "
                     >
                         <component
                             :is="value.listType"
                             :key="value.buttonId"
                             :filter-emitter="filterEmitter"
-                            :list-items=value.listItems
+                            :list-items="value.listItems"
                             :list-id="formatListId(value.label)"
                         ></component>
                     </FancyDropdown>
@@ -30,7 +32,8 @@
 import _camelCase from "lodash/camelCase";
 
 import FancyDropdown from "@/components/custom_elements/FancyDropdown.vue";
-import TitlePartList from "@/components/custom_elements/TitlePartList.vue";
+import TitleList from "@/components/custom_elements/TitleList.vue";
+import PartList from "@/components/custom_elements/PartList.vue";
 import SubpartList from "@/components/custom_elements/SubpartList.vue";
 import SectionList from "@/components/custom_elements/SectionList.vue";
 import CategoryList from "@/components/custom_elements/CategoryList.vue";
@@ -40,7 +43,8 @@ export default {
 
     components: {
         FancyDropdown,
-        TitlePartList,
+        TitleList,
+        PartList,
         SubpartList,
         SectionList,
         CategoryList,
@@ -58,7 +62,7 @@ export default {
             this.$emit("select-filter", payload);
         },
         formatListId(label) {
-            return _camelCase(`${label}List`)
+            return _camelCase(`${label}List`);
         },
     },
 };

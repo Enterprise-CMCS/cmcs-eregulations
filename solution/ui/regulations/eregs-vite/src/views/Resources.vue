@@ -172,12 +172,13 @@ import ResourcesResultsContainer from "@/components/resources/ResourcesResultsCo
 import {
     getCategories,
     getFormattedPartsList,
-    getSubPartsForPart,
-    getSupplementalContent,
     getLastUpdatedDates,
     getSectionsForPart,
+    getSubPartsForPart,
     getSubpartTOC,
+    getSupplementalContent,
     getSynonyms,
+    getTitles,
 } from "@/utilities/api";
 
 export default {
@@ -233,11 +234,18 @@ export default {
             categories: [],
             synonyms: [],
             filters: {
+                title: {
+                    label: "Title",
+                    buttonTitle: "Select Title",
+                    buttonId: "select-title",
+                    listType: "TitleList",
+                    listItems: [],
+                },
                 part: {
                     label: "Part",
                     buttonTitle: "Select Parts",
                     buttonId: "select-parts",
-                    listType: "TitlePartList",
+                    listType: "PartList",
                     listItems: [],
                 },
                 subpart: {
@@ -429,13 +437,22 @@ export default {
             return synonyms ? synonyms : [];
         },
         async updateFilters(payload) {
+            console.log("update filters payload", payload);
             let newQueryParams = { ...this.queryParams, page: undefined };
             const splitSection = payload.selectedIdentifier.split("-");
+
+            if (payload.scope === "title") {
+                newQueryParams.title = payload.selectedIdentifier;
+                this.$router.push({
+                    name: "resources",
+                    query: newQueryParams,
+                });
+            }
 
             //Checks that the part in the query is valid or is a resource category
             if (
                 (await this.checkPart(splitSection, payload.scope)) ||
-                payload.scope == "resourceCategory"
+                payload.scope === "resourceCategory"
             ) {
                 if (newQueryParams[payload.scope]) {
                     if (payload.searchSection) {
@@ -849,6 +866,7 @@ export default {
     async created() {
         this.getPartLastUpdatedDates();
         this.getCategoryList();
+        this.filters.title.listItems = await getTitles();
         this.filters.part.listItems = await getFormattedPartsList();
 
         if (this.queryParams.q) {
