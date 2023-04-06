@@ -17,16 +17,14 @@ class SearchIndexQuerySet(models.QuerySet):
     def search(self, query):
         search_type = "plain"
         cover_density = False
+        rank_filter = .2
 
         if query and query.startswith('"') and query.endswith('"'):
             search_type = "phrase"
             cover_density = True
-            search_query = SearchQuery(query, search_type=search_type, config='english')
             rank_filter = 0.01
-        else:
-            search_query = SearchQuery(query, search_type=search_type, config='english')
-            rank_filter = .2
 
+        search_query = SearchQuery(query, search_type=search_type, config='english')
         return self.annotate(rank=SearchRank(
             RawSQL("vector_column", [], output_field=SearchVectorField()),
             search_query, cover_density=cover_density))\
