@@ -78,9 +78,14 @@ const formatLinkTitle = (
     startChar,
     stopChar
 ) => {
+    let linkTitle = description_headline || description;
+
+    if (!snippet) {
+        return linkTitle;
+    }
+
     const termsToHighlight = getHighlightTerms(snippet, startChar, stopChar);
 
-    let linkTitle = description_headline || description;
     termsToHighlight.forEach((term) => {
         linkTitle = linkTitle.replaceAll(
             term,
@@ -98,6 +103,10 @@ const formatLinkTitle = (
  * @returns {string} - snippet with special characters replaced with opening and closing span tags with a class used to add highlighting styles
  */
 const formatSnippet = (snippet, startChar, stopChar) => {
+    if (!snippet) {
+        return snippet;
+    }
+
     const reOpen = new RegExp(startChar, "g");
     const reClose = new RegExp(stopChar, "g");
 
