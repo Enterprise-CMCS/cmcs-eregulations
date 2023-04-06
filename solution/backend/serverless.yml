@@ -317,6 +317,36 @@ resources:
           Ref: AuroraRDSInstanceParameter
         DBClusterIdentifier:
           Ref: RDSResource
+    RDSResource14:
+      Type: AWS::RDS::DBCluster
+      DeletionPolicy: Retain
+      Properties:
+        MasterUsername: ${self:custom.settings.USERNAME}
+        StorageEncrypted: true
+        MasterUserPassword: ${ssm:/eregulations/db/password}
+        DBSubnetGroupName:
+          Ref: DBSubnetGroup
+        Engine: aurora-postgresql
+        EngineVersion: "14.6"
+        DatabaseName: 'eregs'
+        BackupRetentionPeriod: 3
+        DBClusterParameterGroupName:
+          Ref: AuroraRDSClusterParameter14
+        VpcSecurityGroupIds:
+          - !Ref 'DBSecurityGroup'
+    AuroraRDSInstance14:
+      Type: AWS::RDS::DBInstance
+      DeletionPolicy: Retain
+      Properties:
+        DBInstanceClass: db.r6g.large
+        StorageEncrypted: true
+        Engine: aurora-postgresql
+        EngineVersion: "14.6"
+        PubliclyAccessible: false
+        DBParameterGroupName:
+          Ref: AuroraRDSInstanceParameter14
+        DBClusterIdentifier:
+          Ref: RDSResource14
 
 plugins:
   - serverless-python-requirements
