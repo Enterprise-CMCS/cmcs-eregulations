@@ -59,8 +59,8 @@ class AbstractResourceSerializer(serializers.Serializer):
 
     def get_snippet(self, obj):
         if 'gov_results' in self.context and hasattr(obj, 'url'):
-            snippet = [r['snippet'] for r in self.context['gov_results'] if r['url'] == obj.url]
-            return snippet[0] if snippet else None
+            # Since snippet data is prod and dev environments might not have it it can be none
+            return self.context['gov_results'][obj.url] if obj.url in self.context['gov_results'] else ""
         else:
             return None
 

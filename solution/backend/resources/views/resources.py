@@ -151,7 +151,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         obj = self.result_object(url, records, page)
 
         context = self.get_serializer_context()
-        context["gov_results"] = self.gov_results["results"]
+        context["gov_results"] = urls
 
         return Response(ResourceSearchSerializer(instance=obj, context=context).data)
 
