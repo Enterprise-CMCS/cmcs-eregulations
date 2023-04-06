@@ -114,24 +114,15 @@
                 </template>
             </Banner>
             <div
-                class="resources-content-container"
-                :class="contentContainerResourcesClass"
+                class="resources-content-container resouces-content-container-column"
             >
-                <div :class="filtersResourcesClass">
+                <div class="filters-column">
                     <ResourcesFilters
-                        v-if="resourcesDisplay === 'column'"
-                        :resourcesDisplay="resourcesDisplay"
-                        :filters="filters"
-                        @select-filter="updateFilters"
-                    />
-                    <ResourcesSidebarFilters
-                        v-else
-                        :resourcesDisplay="resourcesDisplay"
                         :filters="filters"
                         @select-filter="updateFilters"
                     />
                 </div>
-                <div :class="resultsResourcesClass">
+                <div class="results-column">
                     <ResourcesSelections
                         :filterParams="filterParams"
                         @chip-filter="removeChip"
@@ -241,8 +232,6 @@ export default {
             partDict: {},
             categories: [],
             synonyms: [],
-            resourcesDisplay:
-                this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
                 part: {
                     label: "Part",
@@ -282,15 +271,6 @@ export default {
     },
 
     computed: {
-        contentContainerResourcesClass() {
-            return `resources-content-container-${this.resourcesDisplay}`;
-        },
-        filtersResourcesClass() {
-            return `filters-${this.resourcesDisplay}`;
-        },
-        resultsResourcesClass() {
-            return `results-${this.resourcesDisplay}`;
-        },
         page() {
             return _isUndefined(this.queryParams.page)
                 ? this.queryParams.page

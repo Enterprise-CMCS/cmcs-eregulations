@@ -1,6 +1,6 @@
 <template>
     <div class="filters-container">
-        <div class="content" :class="resourcesClass">
+        <div class="content content-with-column">
             <h3>Filter Resources</h3>
             <div class="filters">
                 <template v-for="(value, name) in filters">
@@ -47,19 +47,9 @@ export default {
     },
 
     props: {
-        resourcesDisplay: {
-            type: String,
-            required: false,
-            default: "",
-        },
         filters: {
             type: Object,
             required: true,
-        },
-    },
-    computed: {
-        resourcesClass() {
-            return `content-with-${this.resourcesDisplay}`;
         },
     },
 
