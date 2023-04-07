@@ -7,19 +7,19 @@
 		"results": [
 			{
 				"title": "site1",
-				"url": "site1 url",
+				"url": "www.site1url.com",
 				"snippet": "...site1 snippet",
 				"publication_date": "2023-01-27"
 			},
 			{
 				"title": "site2",
-				"url": "site2",
+				"url": "www.site2url.com",
 				"snippet": "...site2 snippet",
 				"publication_date": "2023-01-27"
 			},
 			{
 				"title": "site3",
-				"url": "site3",
+				"url": "wwww.site3url.com",
 				"snippet": "...site3 snippet",
 				"publication_date": "2023-01-27"
 			}

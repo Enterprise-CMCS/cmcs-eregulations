@@ -21,16 +21,16 @@ class TestMixinFunctions(TestCase):
         today = datetime.today().strftime('%Y-%m-%d')
         yesterday = (datetime.now() - timedelta(1)).strftime('%Y-%m-%d')
         twodaysago = (datetime.now() - timedelta(2)).strftime('%Y-%m-%d')
-        FederalRegisterDocument.objects.create(id=1, group=a, date=today, url='site2 url')
-        FederalRegisterDocument.objects.create(id=2, group=a, date=twodaysago, url='site1 url')
-        FederalRegisterDocument.objects.create(id=3, group=b, date=yesterday, url='site3 url')
+        FederalRegisterDocument.objects.create(id=1, group=a, date=today, url='www.site2url.com')
+        FederalRegisterDocument.objects.create(id=2, group=a, date=twodaysago, url='www.site1url.com')
+        FederalRegisterDocument.objects.create(id=3, group=b, date=yesterday, url='www.site3url.com')
         FederalRegisterDocument.objects.create(id=4, group=c, date=today)
         FederalRegisterDocument.objects.create(id=5, group=b, date=today)
         SupplementalContent.objects.create(id=6, date=today)
         self.FRDocGroupingMixin = FRDocGroupingMixin()
 
     def test_search_gov_ordering(self):
-        urls = ['site1 url', 'site2 url', 'site3 url']
+        urls = ['www.site1url.com', 'www.site2url.com', 'www.site3url.com']
         resources = FederalRegisterDocument.objects.filter(id__in=[1, 2, 3])
         test_view_set = ResourceSearchViewSet()
         ordered_resources = test_view_set.sort_by_url_list(urls, resources)
@@ -40,7 +40,7 @@ class TestMixinFunctions(TestCase):
 
     # since the rss feed is prod data, dev environments might have less resources
     def test_missing_gov_resource(self):
-        urls = ['site1 url', 'site2 url', 'site3 url']
+        urls = ['www.site1url.com', 'www.site2url.com', 'www.site3url.com']
         resources = FederalRegisterDocument.objects.filter(id__in=[1, 2])
         test_view_set = ResourceSearchViewSet()
         ordered_resources = test_view_set.sort_by_url_list(urls, resources)
@@ -54,7 +54,7 @@ class TestMixinFunctions(TestCase):
         results = test_view_set.gov_results
         self.assertEqual(results['total'], 3)
         self.assertEqual(results['results'][0]['name'], 'site1')
-        self.assertEqual(results['results'][0]['url'], 'site1 url')
+        self.assertEqual(results['results'][0]['url'], 'www.site1url.com')
         self.assertEqual(results['results'][0]['snippet'], '...site1 snippet')
 
     def test_format_gov_results_failure(self):
