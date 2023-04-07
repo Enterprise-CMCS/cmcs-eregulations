@@ -331,7 +331,7 @@ resources:
         DatabaseName: 'eregs'
         BackupRetentionPeriod: 3
         DBClusterParameterGroupName:
-          Ref: AuroraRDSClusterParameter14
+          Ref: AuroraRDSClusterParameter15
         VpcSecurityGroupIds:
           - !Ref 'DBSecurityGroup'
     AuroraRDSInstance15:
