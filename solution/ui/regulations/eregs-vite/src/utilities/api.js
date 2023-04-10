@@ -381,7 +381,7 @@ const getSupplementalContent = async (
         fr_grouping = true,
     }
 ) => {
-    const queryString = q ? `&q=${q}` : "";
+    const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
 
     if (partDict === "all") {
