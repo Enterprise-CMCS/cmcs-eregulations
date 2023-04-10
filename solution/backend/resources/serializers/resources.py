@@ -59,11 +59,8 @@ class AbstractResourceSerializer(serializers.Serializer):
         return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
     def get_snippet(self, obj):
-        if 'gov_results' in self.context and hasattr(obj, 'url'):
-            # Since snippet data is prod and dev environments might not have it it can be none
-            return self.context['gov_results'][obj.url] if obj.url in self.context['gov_results'] else ""
-        else:
-            return None
+        if hasattr(obj, 'snippet'):
+            return obj.snippet
 
 
 class DateFieldSerializer(serializers.Serializer):
