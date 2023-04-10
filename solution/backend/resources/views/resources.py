@@ -1,37 +1,43 @@
 import json
+import re
 import requests
 import urllib.parse as urlparse
-import re
-from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db import transaction
 from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
-from rest_framework.response import Response
+from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
-from .mixins import ResourceExplorerViewSetMixin, FRDocGroupingMixin
-from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+
+from .mixins import (
+    ResourceExplorerViewSetMixin,
+    FRDocGroupingMixin
+)
+from common.mixins import (
+    OptionalPaginationMixin,
+    PAGINATION_PARAMS
+)
+from common.auth import SettingsAuthentication
 
 from resources.models import (
-    AbstractResource,
-    SupplementalContent,
-    FederalRegisterDocument,
-    AbstractLocation,
     AbstractCategory,
+    AbstractLocation,
+    AbstractResource,
+    FederalRegisterDocument,
+    SupplementalContent,
 )
 
 from resources.serializers.resources import (
     AbstractResourcePolymorphicSerializer,
-    SupplementalContentSerializer,
     FederalRegisterDocumentCreateSerializer,
     FederalRegisterDocumentSerializer,
-    StringListSerializer,
     MetaResourceSerializer,
     ResourceSearchSerializer,
+    StringListSerializer,
+    SupplementalContentSerializer,
 )
-
-from common.auth import SettingsAuthentication
 
 
 @extend_schema(
@@ -54,45 +60,57 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             default=None,
         )
 
-    def get_gov_results(self, query, page):
-        key = 'M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4='
-        offset = (page - 1) * self.limit
-        results = []
-        rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
-                  f'&query={query}&limit={self.limit}&offset={offset}'
-        gov_results = json.loads(requests.get(rstring).text)
+    def format_gov_results(self, gov_results):
         if "errors" in gov_results or (gov_results["web"]["total"] == 0 and not gov_results["web"]["results"]):
             raise NotFound("Invalid page")
-
+        results = []
         for gov_result in gov_results['web']['results']:
-            result = {
+            results.append({
                 'name': gov_result['title'],
                 'snippet': gov_result['snippet'],
                 'url': gov_result['url']
-            }
-            results.append(result)
+            })
         self.gov_results = {
             "total": gov_results["web"]["total"],
             "results": results,
         }
+
+    def get_gov_results(self, query, page):
+        key = 'M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4='
+        offset = (page - 1) * self.limit
+
+        rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
+                  f'&query={urlparse.quote_plus(query)}&limit={self.limit}&offset={offset}'
+        gov_results = json.loads(requests.get(rstring).text)
+        self.format_gov_results(gov_results)
+
+    # There might be missing resources in dev than prod so their could be missing urls
+    def sort_by_url_list(self, urls, resources):
+        res_index = {res.url: res for res in resources}
+        sorted_vals = []
+        for url in urls:
+            sorted_vals.append(res_index[url]) if url in res_index else None
+        return sorted_vals
 
     def get_queryset(self, urls):
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
 
-        return AbstractResource.objects \
+        query = AbstractResource.objects \
             .filter(approved=True) \
             .annotate(url_annotated=self.get_annotated_url()) \
             .filter(url_annotated__in=urls) \
             .select_subclasses().prefetch_related(
                 Prefetch("locations", queryset=locations_prefetch),
                 Prefetch("category", queryset=category_prefetch),
-                Prefetch("related_resources", AbstractResource.objects.all().select_subclasses().prefetch_related(
+                Prefetch("related_resources", AbstractResource.objects.filter(approved=True).select_subclasses().prefetch_related(
                     Prefetch("locations", queryset=locations_prefetch),
                     Prefetch("category", queryset=category_prefetch),
                 )),
             )
+
+        return self.sort_by_url_list(urls, query)
 
     def append_snippet(self, queryset, urls):
         for q in queryset:
@@ -100,12 +118,25 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         return queryset
 
     def generate_page_url(self, url, page):
+        if not page:
+            return None
         parse_url = urlparse.urlparse(url)
         url_parts = parse_url.query.split("&")
         new_url_parts = list(map(lambda x: re.sub(r"page=\d", f"page={page}", x), url_parts))
         query = "&".join(new_url_parts)
         parsed_url = parse_url._replace(query=query)
         return urlparse.urlunparse(parsed_url)
+
+    def result_object(self, url, records, page):
+        next_page = None if page * self.limit >= self.gov_results["total"] else page + 1
+        previous_page = page - 1 if page > 1 else None
+        obj = {
+            "count": self.gov_results["total"],
+            "next": self.generate_page_url(url, next_page),
+            "previous": self.generate_page_url(url, previous_page),
+            "results": records,
+        }
+        return obj
 
     def list(self, request, *args, **kwargs):
         q = self.request.query_params.get("q")
@@ -116,18 +147,10 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset(urls.keys())
         resources = list(queryset)
         records = self.append_snippet(resources, urls)
-        next_page = None if (page + 1) * self.limit >= self.gov_results["total"] else page + 1
-        previous_page = page - 1 if page > 1 else None
 
-        obj = {
-            "count": self.gov_results["total"],
-            "next": self.generate_page_url(url, next_page),
-            "previous": self.generate_page_url(url, previous_page),
-            "results": records,
-        }
+        obj = self.result_object(url, records, page)
 
         context = self.get_serializer_context()
-        context["gov_results"] = self.gov_results["results"]
 
         return Response(ResourceSearchSerializer(instance=obj, context=context).data)
 
