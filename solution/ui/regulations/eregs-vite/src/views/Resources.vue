@@ -348,6 +348,7 @@ export default {
             this.$router.push({
                 name: "resources",
                 query: {
+                    title: this.queryParams.title ?? DEFAULT_TITLE,
                     q: this.searchQuery,
                     sort: this.sortMethod,
                 },
@@ -448,7 +449,7 @@ export default {
                 newQueryParams.title = payload.selectedIdentifier;
                 this.$router.push({
                     name: "resources",
-                    query: newQueryParams,
+                    query: { title: newQueryParams.title },
                 });
             }
 
@@ -828,6 +829,30 @@ export default {
             async handler(newParams, oldParams) {
                 if (this.sortDisabled) {
                     this.sortDisabled = false;
+                }
+
+                // if title changes:
+                if (oldParams.title !== newParams.title) {
+
+                    this.filters.part.listItems = [];
+                    this.filters.subpart.listItems = [];
+                    this.filters.section.listItems = [];
+                    this.supplementalContent = [];
+                    this.supplementalContentCount = 0;
+
+                    console.log("RIGHT HERE");
+                    console.log("this.queryParams", this.queryParams);
+                    this.getSupplementalContent(
+                        this.queryParams,
+                        this.searchQuery,
+                        this.sortMethod
+                    );
+
+                    this.filters.part.listItems = await getFormattedPartsList(
+                        newParams.title
+                    );
+
+                    return;
                 }
 
                 if (
