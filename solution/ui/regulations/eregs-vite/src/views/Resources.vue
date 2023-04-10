@@ -10,7 +10,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl"/>
+                    <JumpTo :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -19,9 +19,7 @@
                     />
                 </template>
                 <template #search>
-                    <HeaderSearch
-                        :search-url="searchUrl"
-                    />
+                    <HeaderSearch :search-url="searchUrl" />
                 </template>
             </HeaderComponent>
         </header>
@@ -183,6 +181,8 @@ import {
     getSynonyms,
     getTitles,
 } from "@/utilities/api";
+
+const DEFAULT_TITLE = "42";
 
 export default {
     name: "ResourcesView",
@@ -479,7 +479,8 @@ export default {
                         .sort()
                         .join(",");
                 } else {
-                    newQueryParams.title = "42"; // hard coding for now
+                    newQueryParams.title =
+                        newQueryParams.title ?? DEFAULT_TITLE;
                     if (payload.scope === "section") {
                         if (newQueryParams.part) {
                             if (
@@ -527,13 +528,14 @@ export default {
 
         async checkPart(payload, scope) {
             const partExist = this.filters.part.listItems.find(
-                (part) => part.name == payload[0]
+                (part) => part.name === payload[0]
             );
 
             if (partExist && scope === "section") {
-                const sectionList = await getSectionsForPart(42, payload[0]);
+                const title = this.queryParams.title ?? DEFAULT_TITLE;
+                const sectionList = await getSectionsForPart(title, payload[0]);
                 return sectionList.find(
-                    (section) => section.identifier[1] == payload[1]
+                    (section) => section.identifier[1] === payload[1]
                 );
             }
             return partExist;
@@ -553,7 +555,7 @@ export default {
         async getSectionsBySubpart(subpart) {
             const splitSubpart = subpart.split("-");
             const allSections = await getSubpartTOC(
-                42,
+                this.queryParams.title ?? DEFAULT_TITLE,
                 splitSubpart[0],
                 splitSubpart[1]
             );
@@ -596,7 +598,7 @@ export default {
 
             parts.forEach((part) => {
                 newPartDict[part] = {
-                    title: "42",
+                    title: this.queryParams.title ?? DEFAULT_TITLE,
                     sections: [],
                     subparts: [],
                 };
@@ -710,14 +712,20 @@ export default {
                 this.isLoading = false;
             }
         },
-        async getFormattedSubpartsList(parts) {
-            this.filters.subpart.listItems = await getSubPartsForPart(parts);
+        async getFormattedSubpartsList(parts, title) {
+            this.filters.subpart.listItems = await getSubPartsForPart(
+                parts,
+                title
+            );
         },
 
         async getFormattedSectionsList() {
             const rawSections = await Promise.all(
                 Object.keys(this.partDict).map(async (part) =>
-                    getSectionsForPart("42", part)
+                    getSectionsForPart(
+                        this.queryParams.title ?? DEFAULT_TITLE,
+                        part
+                    )
                 )
             );
 
@@ -827,7 +835,8 @@ export default {
                     _isEmpty(newParams.q) &&
                     _isEmpty(newParams.resourceCategory) &&
                     _isEmpty(newParams.sort) &&
-                    _isUndefined(newParams.page)
+                    _isUndefined(newParams.page) &&
+                    _isUndefined(newParams.title)
                 ) {
                     // only get content if a part is selected or there's a search query
                     // don't make supp content request here, but clear lists
@@ -848,7 +857,10 @@ export default {
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
-                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSubpartsList(
+                            this.queryParams.part,
+                            this.queryParams.title ?? DEFAULT_TITLE
+                        );
                         this.getFormattedSectionsList();
                     } else if (
                         _isEmpty(oldParams.subpart) &&
@@ -856,7 +868,10 @@ export default {
                     ) {
                         this.getFormattedSectionsList();
                     } else {
-                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSubpartsList(
+                            this.queryParams.part,
+                            this.queryParams.title ?? DEFAULT_TITLE
+                        );
                         this.getFormattedSectionsList();
                     }
                 }
@@ -870,7 +885,10 @@ export default {
         this.getPartLastUpdatedDates();
         this.getCategoryList();
         this.filters.title.listItems = await getTitles();
-        this.filters.part.listItems = await getFormattedPartsList();
+
+        this.filters.part.listItems = await getFormattedPartsList(
+            this.queryParams.title ?? DEFAULT_TITLE
+        );
 
         if (this.queryParams.q) {
             this.searchQuery = this.queryParams.q;
@@ -878,7 +896,10 @@ export default {
         }
 
         if (this.queryParams.part) {
-            this.getFormattedSubpartsList(this.queryParams.part);
+            this.getFormattedSubpartsList(
+                this.queryParams.part,
+                this.queryParams.title ?? DEFAULT_TITLE
+            );
             this.getFormattedSectionsList(
                 this.queryParams.part,
                 this.queryParams.subpart

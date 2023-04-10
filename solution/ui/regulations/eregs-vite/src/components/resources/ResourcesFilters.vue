@@ -3,14 +3,18 @@
         <div class="content content-with-column">
             <h3>Filter Resources</h3>
             <div class="title-filters-chips">
-                <div class="title-selector">
+                <div
+                    v-if="filters.title.listItems.length > 1"
+                    class="title-selector"
+                >
                     <FancyDropdown
                         :label="filters.title.label"
                         :list-id="formatListId(filters.title.label)"
                         :button-title="filters.title.buttonTitle"
                         :button-id="filters.title.buttonId"
                         :disabled="
-                            filters.title.disabled || filters.title.listItems.length === 0
+                            filters.title.disabled ||
+                            filters.title.listItems.length === 0
                         "
                     >
                         <component

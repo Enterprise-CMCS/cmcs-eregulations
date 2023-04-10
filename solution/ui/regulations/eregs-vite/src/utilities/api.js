@@ -281,6 +281,19 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
+const getPartTOC = async (title, part) =>  httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
+
+const getCategories = async () =>  httpApiGet("resources/categories");
+
+const getTOC = async (title) =>
+    httpApiGet(title ? `title/${title}/toc` : `toc`);
+
+const getSectionsForPart = async (title, part) => httpApiGet(`title/${title}/part/${part}/version/latest/sections`)
+
+const getSubpartTOC = async (title, part, subPart) => httpApiGet(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
+
+const getSynonyms = async(query) => httpApiGet(`synonyms?q=${query}`);
+
 const getLastUpdatedDates = async (apiUrl, title = "42") => {
     const result = await httpApiGet(`title/${title}/parts`);
     return Object.fromEntries(new Map(result.map((obj) => [obj.name, obj.date])));
@@ -294,9 +307,9 @@ const getLastUpdatedDates = async (apiUrl, title = "42") => {
  *
  * @returns {Array<{label: string, identifier: string, section: <Object>}>}
  */
-const getFormattedPartsList = async () => {
-    const TOC = await getTOC();
-    const partsList = TOC[0].children[0].children
+const getFormattedPartsList = async (title = "42") => {
+    const TOC = await getTOC(title);
+    const partsList = TOC.children[0].children
         .map((subChapter) =>
             subChapter.children.map((part) => ({
                 label: part.label,
@@ -308,7 +321,7 @@ const getFormattedPartsList = async () => {
     const formattedPartsList = await Promise.all(
         partsList.map(async (part) => {
             const newPart = JSON.parse(JSON.stringify(part));
-            const PartToc = await getPartTOC(42, part.name);
+            const PartToc = await getPartTOC(title, part.name);
             const sections = {};
             PartToc.children
                 .filter((TOCpart) => TOCpart.type === "subpart")
@@ -336,10 +349,10 @@ const getFormattedPartsList = async () => {
  * @param {string} - the name of a part in title 42
  * @returns {Object<{label:string, identifier:string}>}
  */
-const getSubPartsForPart = async (partParam) => {
+const getSubPartsForPart = async (partParam, title = "42") => {
     // if part is string of multiple parts, use final part
     const selectedParts = partParam.split(',')
-    const partTocs = await Promise.all(selectedParts.map(async part => getPartTOC(42, part)))
+    const partTocs = await Promise.all(selectedParts.map(async part => getPartTOC(title, part)))
     return partTocs.map(partToc =>
         partToc.children.filter(sp => sp.type === "subpart").map(subpart => ({
           label:subpart.label,
@@ -420,19 +433,6 @@ const getSupplementalContent = async (
     const response =  await httpApiGet(urlpath)
     return response
 }
-
-const getCategories = async () =>  httpApiGet("resources/categories");
-
-const getTOC = async (title) =>
-    httpApiGet(title ? `title/${title}/toc` : `toc`);
-
-const getPartTOC = async (title, part) =>  httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
-
-const getSectionsForPart = async (title, part) => httpApiGet(`title/${title}/part/${part}/version/latest/sections`)
-
-const getSubpartTOC = async (title, part, subPart) => httpApiGet(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
-
-const getSynonyms = async(query) => httpApiGet(`synonyms?q=${query}`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
