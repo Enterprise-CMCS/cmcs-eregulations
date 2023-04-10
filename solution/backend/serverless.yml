@@ -220,19 +220,19 @@ resources:
           pgaudit.role: "rds_pgaudit"
           pgaudit.log: "ALL"
 
-    AuroraRDSClusterParameter13:
+    AuroraRDSClusterParameter15:
       Type: AWS::RDS::DBClusterParameterGroup
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql13
+        Family: aurora-postgresql15
         Parameters:
           rds.force_ssl: 1
 
-    AuroraRDSInstanceParameter13:
+    AuroraRDSInstanceParameter15:
       Type: AWS::RDS::DBParameterGroup
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
-        Family: aurora-postgresql13
+        Family: aurora-postgresql15
         Parameters:
           shared_preload_libraries: auto_explain,pg_stat_statements,pg_hint_plan,pgaudit
           log_statement: "ddl"
@@ -317,7 +317,7 @@ resources:
           Ref: AuroraRDSInstanceParameter
         DBClusterIdentifier:
           Ref: RDSResource
-    RDSResource14:
+    RDSResource15:
       Type: AWS::RDS::DBCluster
       DeletionPolicy: Retain
       Properties:
@@ -327,26 +327,26 @@ resources:
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
-        EngineVersion: "14.6"
+        EngineVersion: "15.2"
         DatabaseName: 'eregs'
         BackupRetentionPeriod: 3
         DBClusterParameterGroupName:
-          Ref: AuroraRDSClusterParameter14
+          Ref: AuroraRDSClusterParameter15
         VpcSecurityGroupIds:
           - !Ref 'DBSecurityGroup'
-    AuroraRDSInstance14:
+    AuroraRDSInstance15:
       Type: AWS::RDS::DBInstance
       DeletionPolicy: Retain
       Properties:
         DBInstanceClass: db.r6g.large
         StorageEncrypted: true
         Engine: aurora-postgresql
-        EngineVersion: "14.6"
+        EngineVersion: "15.2"
         PubliclyAccessible: false
         DBParameterGroupName:
-          Ref: AuroraRDSInstanceParameter14
+          Ref: AuroraRDSInstanceParameter15
         DBClusterIdentifier:
-          Ref: RDSResource14
+          Ref: RDSResource15
 
 plugins:
   - serverless-python-requirements
