@@ -381,6 +381,7 @@ const getRegSearchResults = async ({
 const getSupplementalContent = async (
     {
         partDict,
+        title,
         categories,
         q = "",
         start,
@@ -398,7 +399,7 @@ const getSupplementalContent = async (
     let sString = "";
 
     if (partDict === "all") {
-        sString = ""
+        sString = title ? `${sString}&locations=${title}` : "";
     } else {
         Object.keys(partDict).forEach(partKey => {
             const part = partDict[partKey]

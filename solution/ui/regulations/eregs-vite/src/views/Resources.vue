@@ -647,13 +647,38 @@ export default {
         async getSupplementalContent(dataQueryParams, searchQuery, sortMethod) {
             this.isLoading = true;
 
+            console.log("inside getSupplementalContent", dataQueryParams);
+
             if (dataQueryParams.resourceCategory) {
                 this.categories = dataQueryParams.resourceCategory.split(",");
             } else {
                 this.categories = [];
             }
 
-            if (dataQueryParams?.part) {
+            if (dataQueryParams?.title && _isEmpty(dataQueryParams.part)) {
+                try {
+                    const searchResults = await getSupplementalContent({
+                        page: this.page,
+                        page_size: this.pageSize,
+                        partDict: "all", // titles
+                        title: dataQueryParams.title ?? DEFAULT_TITLE,
+                        categories: this.categories, // subcategories
+                        q: searchQuery,
+                        fr_grouping: false,
+                        sortMethod,
+                    });
+
+                    this.supplementalContent = searchResults.results;
+                    this.supplementalContentCount = searchResults.count;
+                } catch (error) {
+                    console.error(error);
+                    this.supplementalContent = [];
+                    this.supplementalContentCount = 0;
+                } finally {
+                    this.isLoading = false;
+                }
+
+            } else if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
                 const responseContent = await getSupplementalContent({
                     page: this.page,
