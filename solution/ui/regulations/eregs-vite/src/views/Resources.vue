@@ -441,15 +441,19 @@ export default {
             return synonyms ? synonyms : [];
         },
         async updateFilters(payload) {
-            console.log("update filters payload", payload);
             let newQueryParams = { ...this.queryParams, page: undefined };
             const splitSection = payload.selectedIdentifier.split("-");
 
+            // if title changes, reset all non-title filters (part, subpart, section, category)
             if (payload.scope === "title") {
                 newQueryParams.title = payload.selectedIdentifier;
                 this.$router.push({
                     name: "resources",
-                    query: { title: newQueryParams.title },
+                    query: {
+                        title: newQueryParams.title,
+                        q: this.searchQuery,
+                        sort: this.sortMethod,
+                    },
                 });
             }
 
@@ -647,8 +651,6 @@ export default {
         async getSupplementalContent(dataQueryParams, searchQuery, sortMethod) {
             this.isLoading = true;
 
-            console.log("inside getSupplementalContent", dataQueryParams);
-
             if (dataQueryParams.resourceCategory) {
                 this.categories = dataQueryParams.resourceCategory.split(",");
             } else {
@@ -677,7 +679,6 @@ export default {
                 } finally {
                     this.isLoading = false;
                 }
-
             } else if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
                 const responseContent = await getSupplementalContent({
@@ -858,15 +859,12 @@ export default {
 
                 // if title changes:
                 if (oldParams.title !== newParams.title) {
-
                     this.filters.part.listItems = [];
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
                     this.supplementalContent = [];
                     this.supplementalContentCount = 0;
 
-                    console.log("RIGHT HERE");
-                    console.log("this.queryParams", this.queryParams);
                     this.getSupplementalContent(
                         this.queryParams,
                         this.searchQuery,
