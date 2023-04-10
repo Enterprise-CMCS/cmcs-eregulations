@@ -1,8 +1,19 @@
 import re
-from rest_framework import serializers
+
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 from django.db.models import Q
+from rest_framework import serializers
+
+from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
+from .locations import (
+    SectionCreateSerializer,
+    SectionRangeCreateSerializer,
+    AbstractLocationPolymorphicSerializer,
+    MetaLocationSerializer,
+)
+from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
+from .utils import ProxySerializerWrapper
 
 from resources.models import (
     SupplementalContent,
@@ -14,16 +25,6 @@ from resources.models import (
     Section,
     AbstractLocation,
 )
-
-from .locations import (
-    SectionCreateSerializer,
-    SectionRangeCreateSerializer,
-    AbstractLocationPolymorphicSerializer,
-    MetaLocationSerializer,
-)
-from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
-from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
-from .utils import ProxySerializerWrapper
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
@@ -58,11 +59,8 @@ class AbstractResourceSerializer(serializers.Serializer):
         return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
     def get_snippet(self, obj):
-        if 'gov_results' in self.context and hasattr(obj, 'url'):
-            snippet = [r['snippet'] for r in self.context['gov_results'] if r['url'] == obj.url]
-            return snippet[0] if snippet else None
-        else:
-            return None
+        if hasattr(obj, 'snippet'):
+            return obj.snippet
 
 
 class DateFieldSerializer(serializers.Serializer):

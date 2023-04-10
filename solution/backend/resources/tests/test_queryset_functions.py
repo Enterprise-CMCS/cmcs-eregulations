@@ -1,8 +1,14 @@
+from datetime import datetime, timedelta
 from django.test import TestCase
 from django.db.models import F, Case, When
-from resources.models import FederalRegisterDocument, FederalRegisterDocumentGroup, AbstractResource, SupplementalContent
+
 from resources.views.mixins import FRDocGroupingMixin
-from datetime import datetime, timedelta
+from resources.models import (
+    FederalRegisterDocument,
+    FederalRegisterDocumentGroup,
+    AbstractResource,
+    SupplementalContent,
+)
 
 
 class TestMixinFunctions(TestCase):
@@ -13,9 +19,9 @@ class TestMixinFunctions(TestCase):
         today = datetime.today().strftime('%Y-%m-%d')
         yesterday = (datetime.now() - timedelta(1)).strftime('%Y-%m-%d')
         twodaysago = (datetime.now() - timedelta(2)).strftime('%Y-%m-%d')
-        FederalRegisterDocument.objects.create(id=1, group=a, date=today)
-        FederalRegisterDocument.objects.create(id=2, group=a, date=twodaysago)
-        FederalRegisterDocument.objects.create(id=3, group=b, date=yesterday)
+        FederalRegisterDocument.objects.create(id=1, group=a, date=today, url='site2 url')
+        FederalRegisterDocument.objects.create(id=2, group=a, date=twodaysago, url='site1 url')
+        FederalRegisterDocument.objects.create(id=3, group=b, date=yesterday, url='site3 url')
         FederalRegisterDocument.objects.create(id=4, group=c, date=today)
         FederalRegisterDocument.objects.create(id=5, group=b, date=today)
         SupplementalContent.objects.create(id=6, date=today)

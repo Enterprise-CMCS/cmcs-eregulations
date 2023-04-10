@@ -1,0 +1,16 @@
+{
+	"query": "site",
+	"web": {
+		"total": 0,
+		"next_offset": 0,
+		"spelling_correction": null,
+		"results": []
+	},
+	"text_best_bets": [],
+	"graphic_best_bets": [],
+	"health_topics": [],
+	"job_openings": [],
+	"recent_tweets": [],
+	"federal_register_documents": [],
+	"related_search_terms": []
+}
