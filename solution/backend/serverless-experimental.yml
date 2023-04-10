@@ -65,6 +65,7 @@ custom:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
 
+
 functions:
   reg_site:
     environment:
