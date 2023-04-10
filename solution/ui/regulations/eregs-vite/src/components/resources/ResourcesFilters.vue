@@ -5,11 +5,21 @@
             <div class="title-filters-chips">
                 <div class="title-selector">
                     <FancyDropdown
-                        label="Title"
-                        list-id="formatListId('Title')"
-                        button-title="Select Title"
-                        button-id="select-title"
+                        :label="filters.title.label"
+                        :list-id="formatListId(filters.title.label)"
+                        :button-title="filters.title.buttonTitle"
+                        :button-id="filters.title.buttonId"
+                        :disabled="
+                            filters.title.disabled || filters.title.listItems.length === 0
+                        "
                     >
+                        <component
+                            :is="filters.title.listType"
+                            :key="filters.title.buttonId"
+                            :filter-emitter="filterEmitter"
+                            :list-items="filters.title.listItems"
+                            :list-id="formatListId(filters.title.label)"
+                        ></component>
                     </FancyDropdown>
                 </div>
                 <div class="filters-and-chips">
@@ -89,12 +99,15 @@ export default {
 .filters-container {
     overflow: auto;
     padding: 0 $spacer-5 30px $spacer-5;
+
     @include screen-xl {
         padding: 0 $spacer-4 30px $spacer-4;
     }
+
     .content-with-column {
         margin: 0 auto;
     }
+
     .content {
         max-width: $text-max-width;
 
