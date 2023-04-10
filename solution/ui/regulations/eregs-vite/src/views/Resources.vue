@@ -120,14 +120,17 @@
                     <ResourcesFilters
                         :filters="filters"
                         @select-filter="updateFilters"
-                    />
+                    >
+                        <template #chips>
+                            <ResourcesSelections
+                                :filter-params="filterParams"
+                                @chip-filter="removeChip"
+                                @clear-selections="clearSelections"
+                            />
+                        </template>
+                    </ResourcesFilters>
                 </div>
                 <div class="results-column">
-                    <ResourcesSelections
-                        :filterParams="filterParams"
-                        @chip-filter="removeChip"
-                        @clear-selections="clearSelections"
-                    />
                     <ResourcesResultsContainer
                         :isLoading="isLoading"
                         :base="homeUrl"

@@ -2,27 +2,44 @@
     <div class="filters-container">
         <div class="content content-with-column">
             <h3>Filter Resources</h3>
-            <div class="filters">
-                <template v-for="(value, name) in filters">
+            <div class="title-filters-chips">
+                <div class="title-selector">
                     <FancyDropdown
-                        :key="name"
-                        :label="value.label"
-                        :list-id="formatListId(value.label)"
-                        :button-title="value.buttonTitle"
-                        :button-id="value.buttonId"
-                        :disabled="
-                            value.disabled || value.listItems.length === 0
-                        "
+                        label="Title"
+                        list-id="formatListId('Title')"
+                        button-title="Select Title"
+                        button-id="select-title"
                     >
-                        <component
-                            :is="value.listType"
-                            :key="value.buttonId"
-                            :filter-emitter="filterEmitter"
-                            :list-items="value.listItems"
-                            :list-id="formatListId(value.label)"
-                        ></component>
                     </FancyDropdown>
-                </template>
+                </div>
+                <div class="filters-and-chips">
+                    <div class="filters">
+                        <template v-for="(value, name) in filters">
+                            <template v-if="name !== 'title'">
+                                <FancyDropdown
+                                    :key="name"
+                                    :label="value.label"
+                                    :list-id="formatListId(value.label)"
+                                    :button-title="value.buttonTitle"
+                                    :button-id="value.buttonId"
+                                    :disabled="
+                                        value.disabled ||
+                                        value.listItems.length === 0
+                                    "
+                                >
+                                    <component
+                                        :is="value.listType"
+                                        :key="value.buttonId"
+                                        :filter-emitter="filterEmitter"
+                                        :list-items="value.listItems"
+                                        :list-id="formatListId(value.label)"
+                                    ></component>
+                                </FancyDropdown>
+                            </template>
+                        </template>
+                    </div>
+                    <slot name="chips"></slot>
+                </div>
             </div>
         </div>
     </div>
@@ -80,11 +97,29 @@ export default {
     }
     .content {
         max-width: $text-max-width;
-        .filters {
+
+        .title-filters-chips {
             display: flex;
-            justify-content: space-between;
+
             @include custom-max($mobile-max / 1px) {
                 flex-direction: column;
+            }
+
+            .title-selector {
+                background: lightgray;
+            }
+
+            .filters-and-chips {
+                flex: 1;
+
+                .filters {
+                    display: flex;
+                    justify-content: space-between;
+
+                    @include custom-max($mobile-max / 1px) {
+                        flex-direction: column;
+                    }
+                }
             }
         }
     }

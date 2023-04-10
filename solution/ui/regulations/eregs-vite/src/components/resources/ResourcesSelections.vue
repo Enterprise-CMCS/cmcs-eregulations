@@ -140,7 +140,7 @@ $eregs-image-path: "~legacy-static/images";
 .selections-container {
     overflow: auto;
     width: 100%;
-    margin-bottom: 30px;
+    margin-top: 30px;
 
     .selections-content {
         max-width: $text-max-width;
