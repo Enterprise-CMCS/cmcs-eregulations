@@ -350,22 +350,23 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             try {
-                // SearchGov resources -- disabled for now
-                /*
-                const response = await getSearchGovResources({
-                    q: query,
-                    page,
-                });
-                */
+                const isSearchGov = window.location.href.match("searchgov");
 
-                // Django resources -- enabled for now
-                const response = await getSupplementalContent({
-                    partDict: "all",
+                const commonParams = {
                     q: query,
                     page,
+                };
+
+                const djangoParams = {
+                    ...commonParams,
+                    partDict: "all",
                     page_size: pageSize,
                     fr_grouping: false,
-                });
+                };
+
+                const response = isSearchGov
+                    ? await getSearchGovResources(commonParams)
+                    : await getSupplementalContent(djangoParams);
 
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
