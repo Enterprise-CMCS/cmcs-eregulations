@@ -198,7 +198,9 @@ const formatSnippet = (snippet, startChar, stopChar) => {
                                 </span>
                             </template>
                         </template>
-                        <template v-else>None</template>
+                        <template v-else>
+                            <span class="related-sections-none" >None</span>
+                        </template>
                     </div>
                 </template>
             </ResultsItem>
