@@ -172,6 +172,7 @@ import {
     getLastUpdatedDates,
     getRegSearchResults,
     getSearchGovResources,
+    getSupplementalContent,
     getSynonyms,
 } from "@/utilities/api";
 
@@ -349,10 +350,23 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             try {
+                // SearchGov resources -- disabled for now
+                /*
                 const response = await getSearchGovResources({
                     q: query,
                     page,
                 });
+                */
+
+                // Django resources -- enabled for now
+                const response = await getSupplementalContent({
+                    partDict: "all",
+                    q: query,
+                    page,
+                    page_size: pageSize,
+                    fr_grouping: false,
+                });
+
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {
