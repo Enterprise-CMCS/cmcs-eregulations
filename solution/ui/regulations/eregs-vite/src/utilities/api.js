@@ -283,7 +283,7 @@ const setCacheItem = async (key, data) => {
 // ---------- api calls ---------------
 const getPartTOC = async (title, part) =>  httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
 
-const getCategories = async () =>  httpApiGet("resources/categories");
+const getCategories = async () => httpApiGet("resources/categories");
 
 const getTOC = async (title) =>
     httpApiGet(title ? `title/${title}/toc` : `toc`);
@@ -292,7 +292,7 @@ const getSectionsForPart = async (title, part) => httpApiGet(`title/${title}/par
 
 const getSubpartTOC = async (title, part, subPart) => httpApiGet(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
 
-const getSynonyms = async(query) => httpApiGet(`synonyms?q=${query}`);
+const getSynonyms = async(query) => httpApiGet(`synonyms?q=${encodeURIComponent(query)}`);
 
 const getLastUpdatedDates = async (apiUrl, title = "42") => {
     const result = await httpApiGet(`title/${title}/parts`);
@@ -430,10 +430,18 @@ const getSupplementalContent = async (
     sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
     sString = `${sString}&fr_grouping=${fr_grouping}`
 
-    const urlpath = (window.location.href.match('searchgov')) ? `resources/search?${sString}` : `resources/?${sString}`
-    const response =  await httpApiGet(urlpath)
+    const response =  await httpApiGet(`resources/?${sString}`)
     return response
 }
+
+/**
+ * @param {string} [page=1] - page number of paginated results to return.
+ * @param {string} [q=""] - search querystring
+ *
+ * @returns {Promise<{count: number, next: string, previous: string, results: Array<Object>}>} - Promise that contains response object when fulfilled
+ */
+const getSearchGovResources = async ({ page = 1, q = "" }) =>
+    httpApiGet(`resources/search?q=${encodeURIComponent(q)}&page=${page}`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
@@ -484,4 +492,5 @@ export {
     getRegSearchResults,
     getTitles,
     getParts,
+    getSearchGovResources,
 };

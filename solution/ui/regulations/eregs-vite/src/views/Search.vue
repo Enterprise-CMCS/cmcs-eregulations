@@ -10,7 +10,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl"/>
+                    <JumpTo :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -19,9 +19,7 @@
                     />
                 </template>
                 <template #search>
-                    <HeaderSearch
-                        :search-url="searchUrl"
-                    />
+                    <HeaderSearch :search-url="searchUrl" />
                 </template>
             </HeaderComponent>
         </header>
@@ -94,7 +92,7 @@
                         </span>
                     </div>
                     <template v-if="!resourcesLoading">
-                        <ResourcesResults
+                        <SearchGovResults
                             :base="homeUrl"
                             :count="resourcesResults.length"
                             :parts-last-updated="partsLastUpdated"
@@ -117,7 +115,7 @@
                                     />
                                 </template>
                             </template>
-                        </ResourcesResults>
+                        </SearchGovResults>
                     </template>
                 </div>
             </div>
@@ -163,8 +161,8 @@ import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
-import RegResults from "@/components/reg_search/RegResults.vue";
-import ResourcesResults from "@/components/resources/ResourcesResults.vue";
+import RegResults from "@/components/search/RegResults.vue";
+import SearchGovResults from "@/components/resources/SearchGovResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
@@ -173,6 +171,7 @@ import {
     getFormattedPartsList,
     getLastUpdatedDates,
     getRegSearchResults,
+    getSearchGovResources,
     getSupplementalContent,
     getSynonyms,
 } from "@/utilities/api";
@@ -191,8 +190,8 @@ export default {
         JumpTo,
         PaginationController,
         RegResults,
-        ResourcesResults,
         SearchEmptyState,
+        SearchGovResults,
         SearchInput,
     },
 
@@ -216,7 +215,7 @@ export default {
         searchUrl: {
             type: String,
             default: "/search/",
-        }
+        },
     },
 
     beforeCreate() {},
@@ -351,13 +350,24 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             try {
-                const response = await getSupplementalContent({
-                    partDict: "all",
+                const isSearchGov = window.location.href.match("searchgov");
+
+                const commonParams = {
                     q: query,
                     page,
+                };
+
+                const djangoParams = {
+                    ...commonParams,
+                    partDict: "all",
                     page_size: pageSize,
                     fr_grouping: false,
-                });
+                };
+
+                const response = isSearchGov
+                    ? await getSearchGovResources(commonParams)
+                    : await getSupplementalContent(djangoParams);
+
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {
@@ -474,105 +484,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-#searchApp.search-view {
-    display: flex;
-    flex-direction: column;
-
-    > .nav-container {
-        padding: 0 90px;
-    }
-
-    .search-form {
-        margin-bottom: 30px;
-    }
-
-    .combined-results-container {
-        overflow: auto;
-        margin-bottom: 16px;
-        padding: 0 45px;
-        display: flex;
-        justify-content: space-between;
-
-        @mixin common-results-styles {
-            flex: 1;
-            margin: 0 auto;
-            padding: 0 45px;
-            @content;
-        }
-
-        .reg-results-content {
-            @include common-results-styles {
-                .result {
-                    margin-top: 0px;
-                }
-            }
-        }
-
-        .resources-results-content {
-            @include common-results-styles;
-
-            .result-content-wrapper {
-                margin-bottom: 0px;
-
-                .supplemental-content {
-                    margin-bottom: 5px;
-
-                    a.supplemental-content-link {
-                        .supplemental-content-date,
-                        .supplemental-content-title,
-                        .supplemental-content-description {
-                            font-size: $font-size-md;
-                            line-height: 22px;
-                        }
-                    }
-                }
-            }
-
-            .related-sections {
-                margin-bottom: 25px;
-                font-size: $font-size-xs;
-                color: $mid_gray;
-
-                .related-sections-title {
-                    text-transform: uppercase;
-                    font-weight: 600;
-                    color: $dark_gray;
-                }
-
-                .related-section-link {
-                    font-size: $font-size-sm;
-                }
-
-                a {
-                    text-decoration: none;
-                }
-            }
-        }
-
-        .search-results-count {
-            h2 {
-                border-bottom: 2px solid $mid_blue;
-                margin-block-end: 1em !important;
-            }
-        }
-    }
-
-    .pagination-expand-row {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-bottom: 100px;
-
-        .pagination-expand-container {
-            width: 100%;
-            max-width: 521px;
-            margin: 0 45px;
-
-            .pagination-expand-cta {
-                margin-top: 14px;
-            }
-        }
-    }
-}
-</style>
+<style></style>
