@@ -40,5 +40,3 @@ class HomepagePrototypeView(TemplateView):
         }
 
         return {**context, **c}
-
-
