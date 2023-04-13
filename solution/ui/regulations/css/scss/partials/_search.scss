@@ -5,164 +5,153 @@
 @import "../application_settings";
 
 .search-page {
-    main {
-        width: calc(100% - 450px);
-    }
+    #searchApp.search-view {
+        display: flex;
+        flex-direction: column;
 
-    aside.left-sidebar[data-state="expanded"] + main {
-        width: calc(100% - 800px);
-    }
-
-    aside.left-sidebar {
-        p {
-            margin: 0;
+        > .nav-container {
+            padding: 0 90px;
         }
 
-        .search-sidebar-element {
-            padding: $spacer-1 0;
-            margin: 0 $spacer-2;
-        }
+        .search-form {
+            margin-bottom: 30px;
 
-        h2 {
-            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
-        }
-
-        h3 {
-            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
-        }
-
-        h4 {
-            margin: $spacer-1 $spacer-1 $spacer-1 $spacer-2;
-        }
-    }
-
-    .container {
-        margin: 0 auto $spacer-5;
-    }
-
-    @include screen-xxl {
-        .container {
-            margin: 0 auto $spacer-6;
-        }
-    }
-
-    // Context for what parts we're searching
-
-    .search-context {
-        margin: $spacer-4 0 $spacer-2;
-
-        @include screen-lg {
-            margin: $spacer-6 0 $spacer-2;
-        }
-    }
-
-    .search-suggestion{
-        margin: 0px;
-        font-size: $font-size-sm;
-    }
-
-
-
-    // i.e. "18 results, displayed by relevance"
-
-    .search-results-count {
-        font-weight: bold;
-        margin: $spacer-3 0;
-    }
-
-    // Search Options/Filters
-
-    .search-options {
-        margin: $spacer-2 0 $spacer-3;
-
-        a {
-            text-decoration: none;
-            margin-right: $spacer-2;
-            padding: 0 0.9em 0.3em 0;
-
-            &.selected {
-                border-bottom: 2px solid $primary_link_color;
+            .search-suggestion {
+                margin: 0px;
+                font-size: $font-size-sm;
             }
         }
 
-        .fa-search {
-            margin-right: 0.3em;
-        }
+        .combined-results-container {
+            overflow: auto;
+            margin-bottom: 16px;
+            padding: 0 45px;
+            display: flex;
+            justify-content: space-between;
 
-        .fa-angle-down {
-            margin-left: 0.3em;
-        }
+            @mixin common-results-styles {
+                flex: 1;
+                margin: 0 auto;
+                padding: 0 45px;
+                @content;
+            }
 
-        label {
-            color: $primary_link_color;
-            cursor: pointer;
+            @mixin common-context-related-sections {
+                color: $mid_gray;
+                font-size: $font-size-sm;
+                font-weight: 400;
+                line-height: 22px;
+            }
 
-            &:hover {
-                color: $primary_link_hover;
+            .result {
+                margin-bottom: 24px;
+
+                .category-labels {
+                    margin-bottom: 4px;
+
+                    .category-label {
+                        margin-bottom: 4px;
+                    }
+                }
+
+                &__context {
+                    @include common-context-related-sections;
+                    text-transform: capitalize;
+                    margin-bottom: 8px;
+
+                    &--date {
+                        margin-right: 8px;
+
+                        &--bar {
+                            padding-right: 8px;
+                            border-right: 1px solid $mid_gray;
+                        }
+                    }
+                }
+
+                &__link {
+                    font-size: $font-size-md;
+                    margin-bottom: 8px;
+
+                    a {
+                        text-decoration: none;
+                    }
+                }
+
+                &__snippet {
+                    font-size: $font-size-sm;
+                }
+
+                .search-highlight {
+                    font-weight: bold;
+                }
+            }
+
+            .reg-results-content {
+                @include common-results-styles;
+
+                .result {
+                    &__context {
+                        margin-bottom: 4px;
+                    }
+
+                    &__link {
+                        margin-bottom: 4px;
+                    }
+                }
+            }
+
+            .resources-results-content {
+                @include common-results-styles;
+
+                .related-sections {
+                    margin-top: 8px;
+                    margin-bottom: 0px;
+
+                    .related-sections-title {
+                        @include common-context-related-sections;
+                        text-transform: uppercase;
+                    }
+
+                    .related-section-link {
+                        @include common-context-related-sections;
+                        a {
+                            text-decoration: none;
+                        }
+                    }
+
+                    .related-sections-none {
+                        @include common-context-related-sections;
+                    }
+                }
+            }
+
+            .search-results-count {
+                font-weight: bold;
+                margin: $spacer-3 0;
+
+                h2 {
+                    border-bottom: 2px solid $mid_blue;
+                    margin-block-end: 1em !important;
+                }
             }
         }
-    }
 
-    .hierarchy {
-        float: right;
-    }
+        .pagination-expand-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 100px;
 
-    // Results
+            .pagination-expand-container {
+                width: 100%;
+                max-width: 521px;
+                margin: 0 45px;
 
-    .result {
-        margin: $spacer-3 0;
-        line-height: $font-size-2xl;
-
-        .results-part {
-            font-size: $font-size-xs;
-        }
-
-        .results-section {
-            font-size: $font-size-md;
-
-            a {
-                text-decoration: none;
+                .pagination-expand-cta {
+                    margin-top: 14px;
+                }
             }
-        }
-
-        .results-preview {
-            font-size: $font-size-sm;
-        }
-
-        .search-highlight {
-            font-weight: bold;
-        }
-    }
-
-    // Right Sidebar
-
-    .right-sidebar {
-        h3 {
-            font-size: $font-size-md;
-            font-weight: 600;
-            margin-bottom: $spacer-2;
-        }
-
-        h4 {
-            margin: 0 0 0 $spacer-2;
-            font-weight: 600;
-
-            a {
-                text-decoration: none;
-            }
-        }
-
-        p {
-            margin: 0 0 0 $spacer-2;
-            color: $secondary_text_color;
-            font-size: $font-size-sm;
         }
     }
 }
-
-// Search Text Box
-
-main .search-box {
-    margin-bottom: 16px;
-}
-

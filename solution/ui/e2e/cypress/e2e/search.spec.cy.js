@@ -7,7 +7,7 @@ describe("Search flow", () => {
         });
     });
 
-    it("shows up on the homepage on desktop", () => {
+    it("has a working search box on the homepage on desktop", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".header--search > form > input")
@@ -19,7 +19,7 @@ describe("Search flow", () => {
         cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
     });
 
-    it("shows when mobile search open icon is clicked", () => {
+    it("has a working search box on the desktop on mobile when search open icon is clicked", () => {
         cy.viewport("iphone-x");
         cy.visit("/42/430/");
         cy.get("button.form__button--toggle-mobile-search")
@@ -32,49 +32,6 @@ describe("Search flow", () => {
         cy.get(".header--search > form").submit();
 
         cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
-    });
-
-    it("displays results of the search and highlights search term in regulation text", () => {
-        cy.viewport("macbook-15");
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".reg-results-content .search-results-count > h2").should(
-            "have.text",
-            "Regulations"
-        );
-        cy.get(".reg-results-content .search-results-count > span").should(
-            "be.visible"
-        );
-        cy.get(".resources-results-content .search-results-count > h2").should(
-            "have.text",
-            "Resources"
-        );
-        cy.get(
-            ".resources-results-content .search-results-count > span"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
-        ).should("have.attr", "href");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .results-section a"
-        ).click({ force: true });
-        cy.url().should(
-            "include",
-            `${SEARCH_TERM}#`
-        );
-        cy.focused().then(($el) => {
-            cy.get($el).within(($focusedEl) => {
-                cy.get("mark.highlight")
-                    .contains(`${SEARCH_TERM}`)
-                    .should(
-                        "have.css",
-                        "background-color",
-                        "rgb(252, 229, 175)"
-                    );
-            });
-        });
     });
 
     it("should have a valid link to medicaid.gov", () => {
@@ -123,5 +80,48 @@ describe("Search flow", () => {
         cy.get("input#main-content").clear();
 
         cy.get("input#main-content").should("have.value", "");
+    });
+
+    it("displays results of the search and highlights search term in regulation text", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".reg-results-content .search-results-count > h2").should(
+            "have.text",
+            "Regulations"
+        );
+        cy.get(".reg-results-content .search-results-count > span").should(
+            "be.visible"
+        );
+        cy.get(".resources-results-content .search-results-count > h2").should(
+            "have.text",
+            "Resources"
+        );
+        cy.get(
+            ".resources-results-content .search-results-count > span"
+        ).should("be.visible");
+        cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link"
+        ).should("be.visible");
+        cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
+        ).should("have.attr", "href");
+        cy.get(
+            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
+        ).click({ force: true });
+        cy.url().should(
+            "include",
+            `${SEARCH_TERM}#`
+        );
+        cy.focused().then(($el) => {
+            cy.get($el).within(($focusedEl) => {
+                cy.get("mark.highlight")
+                    .contains(`${SEARCH_TERM}`)
+                    .should(
+                        "have.css",
+                        "background-color",
+                        "rgb(252, 229, 175)"
+                    );
+            });
+        });
     });
 });
