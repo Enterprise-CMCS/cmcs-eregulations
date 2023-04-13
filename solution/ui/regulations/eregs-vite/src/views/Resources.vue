@@ -777,11 +777,7 @@ export default {
                 );
         },
         async getPartLastUpdatedDates(titles) {
-            const lastUpdatedResultsArr = await Promise.all(
-                titles.map((title) => getLastUpdatedDates(this.apiUrl, title))
-            );
-
-            this.partsLastUpdated = Object.assign({}, ...lastUpdatedResultsArr);
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, titles);
         },
         async getCategoryList() {
             const rawCats = await getCategories();

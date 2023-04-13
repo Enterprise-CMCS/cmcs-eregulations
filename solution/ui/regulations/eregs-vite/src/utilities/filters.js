@@ -18,16 +18,17 @@ const formatDate = (dateString) => {
 
 /**
  * @param location {Object} - a Subpart or Section of the Regs
+ * @param location.title {string} - the title number of the location (ex: 42)
  * @param location.type {string} - the type of location (ex: Subpart, Section)
  * @param location.part {string} - the part number for the location
  * @param location.section_id {?string} - the section number
  * @param location.subpart_id {?string} - the subpart name
  * @returns {string} - a properly formatted label
  */
-const locationLabel = ({ type, part, section_id, subpart_id }) => {
+const locationLabel = ({ title, type, part, section_id, subpart_id }) => {
     return type.toLowerCase() === "section"
-        ? `${part}.${section_id}`
-        : `${part} Subpart ${subpart_id}`;
+        ? `${title} CFR ${part}.${section_id}`
+        : `${title} CFR ${part} Subpart ${subpart_id}`;
 };
 
 /**
