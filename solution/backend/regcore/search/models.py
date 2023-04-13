@@ -80,13 +80,13 @@ class Synonym(models.Model):
 def create_search(part, piece, memo, parent=None, ):
     if (piece.get("node_type", None) in ["SECTION", "APPENDIX"]):
         if piece.get("node_type", None) == "SECTION":
-            part_number=piece["label"][0]
-            section_number=piece["label"][1]
-            section_string=".".join(piece["label"])
+            part_number = piece["label"][0]
+            section_number = piece["label"][1]
+            section_string = ".".join(piece["label"])
         else:
-            part_number=piece["label"][6],
-            section_number=piece["label"][3]
-            section_string=" ".join(piece["label"])
+            part_number = piece["label"][6]
+            section_number = piece["label"][3]
+            section_string = " ".join(piece["label"])
 
         si = SearchIndexV2(
             part_number=part_number,
