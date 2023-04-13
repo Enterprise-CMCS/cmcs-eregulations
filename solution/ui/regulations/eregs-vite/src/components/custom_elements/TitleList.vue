@@ -8,6 +8,11 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    selectedTitle: {
+        type: String,
+        required: false,
+        default: undefined,
+    },
 });
 
 const clickMethod = (e) => {
@@ -19,33 +24,38 @@ const clickMethod = (e) => {
 </script>
 
 <template>
-    <v-list class="title-list" role="group">
-        <v-list-item
-            v-for="item in props.listItems"
-            :key="item"
-            :data-value="item"
-            class="title-list-item"
-            @click="clickMethod"
-        >
-            {{ item }}
-        </v-list-item>
-    </v-list>
+    <ul :id="buttonId" class="title__list">
+        <li v-for="title in listItems" :key="title">
+            <a
+                class="list_item__link"
+                :class="{
+                    'list_item__link--selected': title == selectedTitle,
+                }"
+                :data-value="title"
+                @click.prevent="clickMethod"
+                >Title {{ title }} CFR</a
+            >
+        </li>
+    </ul>
 </template>
 
 <style lang="scss">
-.title-list-item {
-    display: block;
-    min-height: unset;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 15px;
+ul.title__list {
+    font-weight: 400;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 
-    .part-number {
-        color: $dark_gray;
-    }
+    li {
+        margin-bottom: 4px;
 
-    .part-text {
-        color: $mid_gray;
+        .list_item__link {
+            text-decoration: none;
+
+            &--selected {
+                font-weight: 700;
+            }
+        }
     }
 }
 </style>

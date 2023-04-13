@@ -5,26 +5,18 @@
             <div class="title-filters-chips">
                 <div
                     v-if="filters.title.listItems.length > 1"
-                    class="title-selector"
+                    class="title--selector"
                 >
-                    <FancyDropdown
-                        :label="filters.title.label"
-                        :list-id="formatListId(filters.title.label)"
-                        :button-title="filters.title.buttonTitle"
-                        :button-id="filters.title.buttonId"
-                        :disabled="
-                            filters.title.disabled ||
-                            filters.title.listItems.length === 0
-                        "
+                    <label
+                        v-if="filters.title.label"
+                        :for="filters.title.buttonId"
+                        >{{ filters.title.label }}</label
                     >
-                        <component
-                            :is="filters.title.listType"
-                            :key="filters.title.buttonId"
-                            :filter-emitter="filterEmitter"
-                            :list-items="filters.title.listItems"
-                            :list-id="formatListId(filters.title.label)"
-                        ></component>
-                    </FancyDropdown>
+                    <TitleList
+                        :selected-title="selectedTitle"
+                        :filter-emitter="filterEmitter"
+                        :list-items="filters.title.listItems"
+                    />
                 </div>
                 <div class="filters-and-chips">
                     <div class="filters">
@@ -86,6 +78,11 @@ export default {
             type: Object,
             required: true,
         },
+        selectedTitle: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
     },
 
     methods: {
@@ -100,6 +97,11 @@ export default {
 </script>
 
 <style lang="scss">
+@mixin filter__text {
+    font-size: 14px;
+    line-height: 22px;
+}
+
 .filters-container {
     overflow: auto;
     padding: 0 $spacer-5 30px $spacer-5;
@@ -122,8 +124,28 @@ export default {
                 flex-direction: column;
             }
 
-            .title-selector {
+            .title--selector {
+                @include filter__text;
+
                 background: lightgray;
+                padding: 2px 4px 8px;
+                margin-right: 18px;
+                width: 150px;
+
+                @include custom-max($tablet-max / 1px) {
+                    width: 85px;
+                }
+
+                @include custom-max($mobile-max / 1px) {
+                    margin-right: 0;
+                    width: 100%;
+                }
+
+                label {
+                    font-weight: 700;
+                    margin-bottom: 4px;
+                }
+
             }
 
             .filters-and-chips {

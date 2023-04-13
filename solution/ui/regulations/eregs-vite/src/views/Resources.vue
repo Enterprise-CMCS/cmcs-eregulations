@@ -117,6 +117,7 @@
                 <div class="filters-column">
                     <ResourcesFilters
                         :filters="filters"
+                        :selected-title="$route.query.title"
                         @select-filter="updateFilters"
                     >
                         <template #chips>
