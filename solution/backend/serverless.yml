@@ -233,7 +233,8 @@ resources:
         Engine: aurora-postgresql
         EngineVersion: "15.2"
         DatabaseName: 'eregs'
-        BackupRetentionPeriod: 3
+        BackupRetentionPeriod: 7
+        BackupRetentionMinimum: 7
         DBClusterParameterGroupName:
           Ref: AuroraRDSClusterParameter15
         VpcSecurityGroupIds:
