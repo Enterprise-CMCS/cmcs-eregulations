@@ -39,6 +39,14 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
+      # Check there are no parsers stacks being built
+      - name: Wait if any parsers are still getting built
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Deploy Experimental'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
       # Remove parsers
       - name: remove parsers
         env:
