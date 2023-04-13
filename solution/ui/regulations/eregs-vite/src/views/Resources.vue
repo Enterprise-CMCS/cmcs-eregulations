@@ -930,6 +930,7 @@ export default {
     beforeCreate() {},
 
     async created() {
+        this.filters.title.buttonTitle = this.queryParams.title ?? DEFAULT_TITLE;
         this.getPartLastUpdatedDates();
         this.getCategoryList();
         this.filters.title.listItems = await getTitles();
