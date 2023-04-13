@@ -51,14 +51,19 @@ export default {
                 new Set([query, ...highlightedTermsArray])
             );
 
+            let section = result.section_number
+            let location = `${result.part_number}-${result.section_number}`
+
+            if (result.section_title.includes("Appendix")){
+                section = `Subpart-${result.section_number}`
+                location = `${result.section_title.split('-')[0].trim().replace(/\s/g,"-")}`
+            }
             const highlightParams =
                 uniqTermsArray.length > 0
                     ? `?q=${uniqTermsArray.join(",")}`
                     : "";
 
-            return `${base}${result.title}/${result.part_number}/${
-                result.section_number
-            }/${result.date}/${highlightParams}#${result.part_number}-${result.section_number}`;
+            return `${base}${result.title}/${result.part_number}/${section}/${result.date}/${highlightParams}#${location}`;
         },
     },
 

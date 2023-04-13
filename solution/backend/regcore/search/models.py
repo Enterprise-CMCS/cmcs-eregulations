@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.db.models.expressions import RawSQL
 from django.contrib.postgres.search import (
@@ -55,7 +57,7 @@ class SearchIndexV2(models.Model):
     part_number = models.CharField(max_length=32)
     section_number = models.CharField(max_length=32)
     content = models.TextField()
-    section_string = models.CharField(max_length=32)
+    section_string = models.CharField(max_length=255)
     section_title = models.TextField(null=True)
     part_title = models.TextField(null=True)
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
@@ -76,19 +78,28 @@ class Synonym(models.Model):
 
 
 def create_search(part, piece, memo, parent=None, ):
-    if piece.get("node_type", None) == "SECTION":
+    if (piece.get("node_type", None) in ["SECTION", "APPENDIX"]):
+        if piece.get("node_type", None) == "SECTION":
+            part_number=piece["label"][0]
+            section_number=piece["label"][1]
+            section_string=".".join(piece["label"])
+        else:
+            part_number=piece["label"][6],
+            section_number=piece["label"][3]
+            section_string=" ".join(piece["label"])
+
         si = SearchIndexV2(
-            part_number=piece["label"][0],
-            section_number=piece["label"][1],
+            part_number=part_number,
+            section_number=section_number,
             section_title=piece["title"],
             part_title=part.document['title'],
             part=part,
-            section_string=piece["label"][0] + "." + piece["label"][1],
+            section_string=section_string,
             content=piece.get("title", piece.get("text", "")),
         )
         children = piece.pop("children", []) or []
         for child in children:
-            si.content = si.content + child.get("text", "")
+            si.content = si.content + child.get("text", "") + re.sub('<[^<]+?>', "", child.get("content", ""))
         memo.append(si)
     else:
         children = piece.pop("children", []) or []
