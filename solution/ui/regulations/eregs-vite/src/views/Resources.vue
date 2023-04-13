@@ -776,8 +776,12 @@ export default {
                         : -1
                 );
         },
-        async getPartLastUpdatedDates() {
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
+        async getPartLastUpdatedDates(titles) {
+            const lastUpdatedResultsArr = await Promise.all(
+                titles.map((title) => getLastUpdatedDates(this.apiUrl, title))
+            );
+
+            this.partsLastUpdated = Object.assign({}, ...lastUpdatedResultsArr);
         },
         async getCategoryList() {
             const rawCats = await getCategories();
@@ -930,10 +934,11 @@ export default {
     beforeCreate() {},
 
     async created() {
-        this.filters.title.buttonTitle = this.queryParams.title ?? DEFAULT_TITLE;
-        this.getPartLastUpdatedDates();
-        this.getCategoryList();
+        this.filters.title.buttonTitle =
+            this.queryParams.title ?? DEFAULT_TITLE;
         this.filters.title.listItems = await getTitles();
+        this.getPartLastUpdatedDates(this.filters.title.listItems);
+        this.getCategoryList();
 
         this.filters.part.listItems = await getFormattedPartsList(
             this.queryParams.title ?? DEFAULT_TITLE
