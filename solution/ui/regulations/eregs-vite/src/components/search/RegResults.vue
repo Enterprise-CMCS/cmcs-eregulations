@@ -22,7 +22,7 @@ const partDocumentTitleLabel = (string) => string.toLowerCase();
 
 const removeQuotes = (string) => stripQuotes(string);
 const createResultLink = (
-    { headline, title, part_number, section_number, date },
+    { headline, title, part_number, section_number, date, section_title },
     base,
     query
 ) => {
@@ -35,13 +35,14 @@ const createResultLink = (
 
     const highlightParams =
         uniqTermsArray.length > 0 ? `?q=${uniqTermsArray.join(",")}` : "";
-        let section = section_number
-        let location = `${part_number}-${section_number}`
 
-        if (title.includes("Appendix")){
-            section = `Subpart-${section}`
-            location = `${title.split('-')[0].trim().replace(/\s/g,"-")}`
-        }
+    let section = section_number
+    let location = `${part_number}-${section_number}`
+
+    if (section_title.includes("Appendix")){
+        section = `Subpart-${section}`
+        location = `${section_title.split('-')[0].trim().replace(/\s/g,"-")}`
+    }
 
     return `${base}${title}/${part_number}/${section}/${date}/${highlightParams}#${location}`;
 };
