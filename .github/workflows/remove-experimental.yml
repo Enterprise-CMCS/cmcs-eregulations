@@ -47,6 +47,8 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
+          aws cloudformation wait stack-create-complete \
+            --stack-name cmcs-eregs-parser-dev${PR} 
           serverless remove --stage dev${PR} --config ./serverless-ecfr.yml
           serverless remove --stage dev${PR} --config ./serverless-fr.yml
           popd
