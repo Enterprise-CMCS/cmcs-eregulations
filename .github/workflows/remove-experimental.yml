@@ -47,7 +47,7 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          
+          chmod +x delete_cloudformation_stacks.sh 
           ./delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
           ./delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR}, $PR "./serverless-fr.yml"
           popd
@@ -65,7 +65,7 @@ jobs:
           npm install serverless -g
           npm install
           serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
-          serverless remove --config ./serverless-experimental.yml --stage dev${PR} 
+          serverless remove --config ./serverless-experimental.yml --stage dev${PR}
           popd
       # Remove the static assets
       - name: remove static assets
