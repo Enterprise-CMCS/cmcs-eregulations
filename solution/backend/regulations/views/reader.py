@@ -188,6 +188,6 @@ class SectionReaderView(View):
 
         url = reverse("reader_view", kwargs=url_kwargs)
 
-        redirect_url = url + "?highlight=" + query_string if query_string else url
+        redirect_url = url + "?highlight=" + query_string.replace('%', '%25') if query_string else url
 
         return HttpResponseRedirect(redirect_url)
