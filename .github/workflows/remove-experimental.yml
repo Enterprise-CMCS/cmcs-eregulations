@@ -44,7 +44,7 @@ jobs:
         env:
           PR: ${{ github.event.number }}
         run: |
-          Echo 'within run now running pwd'
+          echo 'within run now running pwd'
           echo `pwd`
           pushd solution/parser
           npm install serverless -g
