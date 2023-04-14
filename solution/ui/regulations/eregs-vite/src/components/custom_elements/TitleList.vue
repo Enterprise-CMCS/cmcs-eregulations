@@ -50,9 +50,11 @@ ul.title__list {
         margin-bottom: 4px;
 
         .list_item__link {
+            color: $mid_blue;
             text-decoration: none;
 
             &--selected {
+                color: $dark_blue;
                 font-weight: 700;
             }
         }

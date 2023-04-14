@@ -127,7 +127,7 @@ export default {
             .title--selector {
                 @include filter__text;
 
-                background: lightgray;
+                background: $lightest_gray;
                 padding: 2px 4px 8px;
                 margin-right: 18px;
                 width: 150px;
