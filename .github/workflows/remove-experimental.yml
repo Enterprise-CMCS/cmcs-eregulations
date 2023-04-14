@@ -50,9 +50,9 @@ jobs:
           npm install serverless -g
           npm install
           echo `pwd`
-          chmod +x ./.github/workflows/delete_cloudformation_stacks.sh 
-          ./.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
-          ./.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR}, $PR "./serverless-fr.yml"
+          chmod +x ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh 
+          ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
+          ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR}, $PR "./serverless-fr.yml"
           popd
       # remove the regulations site
       - name: remove experimental regulations site server
