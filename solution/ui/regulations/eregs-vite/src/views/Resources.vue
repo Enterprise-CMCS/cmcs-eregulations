@@ -536,7 +536,7 @@ export default {
             );
 
             if (partExist && scope === "section") {
-                const { title } = this.queryParams;
+                const title = this.queryParams.title ?? this.filters.title.listItems[0];
                 const sectionList = await getSectionsForPart(title, payload[0]);
                 return sectionList.find(
                     (section) => section.identifier[1] === payload[1]
@@ -559,7 +559,7 @@ export default {
         async getSectionsBySubpart(subpart) {
             const splitSubpart = subpart.split("-");
             const allSections = await getSubpartTOC(
-                this.queryParams.title,
+                this.queryParams.title ?? this.filters.title.listItems[0],
                 splitSubpart[0],
                 splitSubpart[1]
             );
@@ -602,7 +602,7 @@ export default {
 
             parts.forEach((part) => {
                 newPartDict[part] = {
-                    title: this.queryParams.title,
+                    title: this.queryParams.title ?? this.filters.title.listItems[0],
                     sections: [],
                     subparts: [],
                 };
@@ -662,7 +662,7 @@ export default {
                         page: this.page,
                         page_size: this.pageSize,
                         partDict: "all", // titles
-                        title: dataQueryParams.title,
+                        title: dataQueryParams.title ?? this.filters.title.listItems[0],
                         categories: this.categories, // subcategories
                         q: searchQuery,
                         fr_grouping: false,
@@ -749,7 +749,7 @@ export default {
             const rawSections = await Promise.all(
                 Object.keys(this.partDict).map(async (part) =>
                     getSectionsForPart(
-                        this.queryParams.title,
+                        this.queryParams.title ?? this.filters.title.listItems[0],
                         part
                     )
                 )
@@ -912,7 +912,7 @@ export default {
                     if (_isEmpty(oldParams.part) && newParams.part) {
                         this.getFormattedSubpartsList(
                             this.queryParams.part,
-                            this.queryParams.title
+                            this.queryParams.title ?? this.filters.title.listItems[0]
                         );
                         this.getFormattedSectionsList();
                     } else if (
@@ -923,7 +923,7 @@ export default {
                     } else {
                         this.getFormattedSubpartsList(
                             this.queryParams.part,
-                            this.queryParams.title
+                            this.queryParams.title ?? this.filters.title.listItems[0]
                         );
                         this.getFormattedSectionsList();
                     }
@@ -935,7 +935,7 @@ export default {
     beforeCreate() {},
 
     async created() {
-        /*this.filters.title.listItems = ["42"];*/
+        /*this.filters.title.listItems = [42];*/
         this.filters.title.listItems = await getTitles();
         this.getPartLastUpdatedDates(this.filters.title.listItems);
         this.getCategoryList();
@@ -957,7 +957,7 @@ export default {
         if (this.queryParams.part) {
             this.getFormattedSubpartsList(
                 this.queryParams.part,
-                this.queryParams.title
+                this.queryParams.title ?? this.filters.title.listItems[0]
             );
             this.getFormattedSectionsList(
                 this.queryParams.part,
