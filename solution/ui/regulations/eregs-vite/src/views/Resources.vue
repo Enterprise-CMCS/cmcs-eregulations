@@ -485,8 +485,6 @@ export default {
                         .sort()
                         .join(",");
                 } else {
-                    newQueryParams.title =
-                        newQueryParams.title ?? DEFAULT_TITLE;
                     if (payload.scope === "section") {
                         if (newQueryParams.part) {
                             if (
