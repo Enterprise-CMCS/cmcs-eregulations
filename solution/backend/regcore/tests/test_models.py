@@ -4,7 +4,7 @@ import json
 from django.test import TestCase
 
 from regcore.models import Part
-from regcore.search.models import create_search, Synonym
+from regcore.search.models import create_search, Synonym, SearchIndexQuerySet
 
 
 class TestRegoreModels(TestCase):
@@ -38,3 +38,22 @@ class TestRegoreModels(TestCase):
         self.assertEqual(searchIndexes[1].section_number, "10")
         self.assertEqual(searchIndexes[0].section_string, "400.1")
         self.assertEqual(searchIndexes[2].section_string, "Appendix to Subpart F of Part 441")
+    
+    def test_serach_type(self):
+        si = SearchIndexQuerySet()
+        query = "This is a non-quoted search"
+        si.search_configuration(query)
+        self.assertEqual(si.search_type, "plain")
+        query = '"This is a phrase search"'
+        si.search_configuration(query)
+        self.assertEqual(si.search_type, "phrase")
+        query = '“This is a phrase search”'
+        si.search_configuration(query)
+        self.assertEqual(si.search_type, "phrase")
+        si = SearchIndexQuerySet()
+        query = '“This is a plain search'
+        si.search_configuration(query)
+        self.assertEqual(si.search_type, "plain")
+        query = '“This is a phrase search"'
+        si.search_configuration(query)
+        self.assertEqual(si.search_type, "phrase")
