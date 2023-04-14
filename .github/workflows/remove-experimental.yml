@@ -44,12 +44,16 @@ jobs:
         env:
           PR: ${{ github.event.number }}
         run: |
+          echo `pwd`
           pushd solution/parser
           npm install serverless -g
           npm install
+          echo `pwd`
           chmod +x delete_cloudformation_stacks.sh 
           ./delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
           ./delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR}, $PR "./serverless-fr.yml"
+          ../delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
+          ../delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR}, $PR "./serverless-fr.yml"
           popd
       # remove the regulations site
       - name: remove experimental regulations site server
