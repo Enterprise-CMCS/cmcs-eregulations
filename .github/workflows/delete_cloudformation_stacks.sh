@@ -15,10 +15,9 @@ get_stack_status() {
 }
 
 # Check if the stack exists
-echo "check if stack exists"
 STACK_EXISTS=$(get_stack_status)
+echo "check if stack exists ${STACK_EXISTS}"
 
-echo ${STACK_EXISTS} 
 
 while [[ "${STACK_EXISTS}" == "CREATE_IN_PROGRESS" || "${STACK_EXISTS}" == "UPDATE_IN_PROGRESS" || "${STACK_EXISTS}" == "DELETE_IN_PROGRESS" ]]; do
   echo "Waiting for the stack '${STACK_NAME}' to finish its ongoing operation..."
