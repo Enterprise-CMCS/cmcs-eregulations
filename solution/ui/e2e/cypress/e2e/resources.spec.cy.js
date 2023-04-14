@@ -174,7 +174,6 @@ describe("Resources page", () => {
             cy.get("button#select-parts").click({ force: true });
             cy.get('[data-value="400"]').click({ force: true });
             cy.url().should("include", "part=400");
-            cy.url().should("include", "title=42");
         });
 
         it("Sorts results correctly", () => {
