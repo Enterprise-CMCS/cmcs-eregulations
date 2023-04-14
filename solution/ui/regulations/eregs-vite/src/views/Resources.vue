@@ -416,7 +416,6 @@ export default {
                 ? undefined
                 : newScopeVals.join(",");
             if (_isEmpty(newQueryParams.part)) {
-                newQueryParams.title = undefined;
                 newQueryParams.subpart = undefined;
                 newQueryParams.section = undefined;
             }
@@ -425,6 +424,7 @@ export default {
                 query: newQueryParams,
             });
         },
+
         async retrieveSynonyms(query) {
             if (
                 query &&
