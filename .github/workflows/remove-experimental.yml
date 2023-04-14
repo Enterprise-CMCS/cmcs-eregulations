@@ -47,13 +47,35 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          aws cloudformation describe-stacks --stack-name cmcs-eregs-parser-dev${PR} && \
-            aws cloudformation wait stack-update-complete --stack-name cmcs-eregs-parser-dev${PR} && \ 
-            serverless remove --stage dev${PR} --config ./serverless-ecfr.yml
-
-          aws cloudformation describe-stacks --stack-name cmcs-eregs-fr-parser-dev${PR} && \
-            aws cloudformation wait stack-create-complete --stack-name cmcs-eregs-fr-parser-dev${PR} && \ 
-            serverless remove --stage dev${PR} --config ./serverless-fr.yml
+          
+          # Function to get the stack status
+          get_stack_status(stack_name) {
+            aws cloudformation describe-stacks --stack-name "${stack_name}" --query 'Stacks[0].StackStatus' --output text 2> /dev/null
+          }
+          
+          delete_stack(stack_name, config) { 
+            # Check if the stack exists
+            STACK_EXISTS=$(get_stack_status(stack_name))
+ 
+            while [[ "${STACK_EXISTS}" == "CREATE_IN_PROGRESS" || "${STACK_EXISTS}" == "UPDATE_IN_PROGRESS" || "${STACK_EXISTS}" == "DELETE_IN_PROGRESS" ]]; do
+              echo "Waiting for the stack '${stack_name}' to finish its ongoing operation..."
+              sleep 10
+              STACK_EXISTS=$(get_stack_status)
+            done
+ 
+            if [ -z "${STACK_EXISTS}" ]; then
+              echo "Stack '${stack_name}' does not exist. Nothing to delete."
+            else
+              # Stack exists and is not in an "in progress" state, delete the stack
+              aws cloudformation delete-stack --stack-name "${stack_name}"
+              echo "Deleting the stack '${stack_name}'..."
+              serverless remove --stage dev${PR} --config "${config}" 
+              echo "Stack '${stack_name}' deleted successfully."
+            fi
+          end 
+          
+          delete_stack(cmcs-eregs-parser-dev${PR}, "./serverless-ecfr.yml")
+          delete_stack(cmcs-eregs-fr-parser-dev${PR}, "./serverless-fr.yml")
           popd
       # remove the regulations site
       - name: remove experimental regulations site server

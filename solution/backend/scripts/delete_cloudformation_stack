@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Set variables
+PR_NUMBER=$1
+echo "PR_NUMBER IS ${PR_NUMBER}"
+
+if [[ ${PR_NUMBER} ]]; then
+  STACK_NAMES=("cmcs-eregs-parser-dev${PR_NUMBER}" "cmcs-eregs-site-dev${PR_NUMBER}" "cmcs-eregs-static-assets-dev${PR_NUMBER}" "cmcs-eregs-fr-parser-dev${PR_NUMBER}")
+  REGION="us-east-1"
+
+  # Loop through the list of stack names and delete each stack and associated S3 buckets
+  for STACK_NAME in "${STACK_NAMES[@]}"
+  do
+    echo "stack name is ${STACK_NAME}\n"
+  
+    # Get list of S3 bucket names associated with the stack
+    S3_BUCKETS=$(aws cloudformation describe-stack-resources --stack-name $STACK_NAME --region $REGION --query "StackResources[?ResourceType=='AWS::S3::Bucket'].PhysicalResourceId" --output text)
+  
+    echo "s3 buckets are : ${S3_BUCKETS}"
+    # Loop through the list of S3 bucket names and delete each bucket
+    for BUCKET_NAME in $S3_BUCKETS
+    do
+      aws s3 rb s3://$BUCKET_NAME --force
+    done  
+  
+    # Delete the CloudFormation stack
+    aws cloudformation delete-stack --stack-name $STACK_NAME --region $REGION
+  
+  
+    # Wait for stack deletion to complete
+    aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME --region $REGION
+  done
+else
+  echo "you must pass a pr number"
+  echo "syntax: delete_cloud_formation_stack [ prnumber ]"
+fi
