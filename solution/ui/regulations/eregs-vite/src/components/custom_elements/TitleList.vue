@@ -54,6 +54,7 @@ ul.title__list {
             text-decoration: none;
 
             &--selected {
+                transition: none;
                 color: $dark_blue;
                 font-weight: 700;
             }
