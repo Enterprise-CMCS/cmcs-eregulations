@@ -1,3 +1,6 @@
+const TITLE_42 = 42;
+const TITLE_45 = 45;
+
 describe("Resources page", () => {
     describe("Header Link", () => {
         beforeEach(() => {
@@ -110,6 +113,7 @@ describe("Resources page", () => {
             cy.intercept("**/v3/resources/?&**page=2**", {
                 fixture: "resources-page-2.json",
             }).as("resources2");
+            cy.intercept("**/v3/titles", [TITLE_42]);
         });
 
         it("does not filter locations on the search", () => {
@@ -136,7 +140,31 @@ describe("Resources page", () => {
             });
         });
 
-        it("Selects parts correctly", () => {
+        it("hides the title selection div when only one title is available", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.injectAxe();
+            cy.get(".title--selector").should("not.exist");
+            cy.get("button#select-parts").should("not.have.attr", "disabled");
+        });
+
+        it("Selects parts correctly when more than one title is available", () => {
+            cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]);
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.injectAxe();
+            cy.get(".title--selector").should("exist");
+            cy.get("button#select-parts").should("have.attr", "disabled");
+            cy.get('[data-value="42"]').click({ force: true });
+            cy.get("button#select-parts").should("not.have.attr", "disabled");
+            cy.checkAccessibility();
+            cy.get("button#select-parts").click({ force: true });
+            cy.get('[data-value="400"]').click({ force: true });
+            cy.url().should("include", "part=400");
+            cy.url().should("include", "title=42");
+        });
+
+        it("Selects parts correctly when only one title is available", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.injectAxe();
@@ -147,8 +175,6 @@ describe("Resources page", () => {
             cy.get('[data-value="400"]').click({ force: true });
             cy.url().should("include", "part=400");
             cy.url().should("include", "title=42");
-            cy.get("button#select-parts").click({ force: true });
-            cy.checkAccessibility();
         });
 
         it("Sorts results correctly", () => {
