@@ -54,18 +54,22 @@ jobs:
           }
           
           delete_stack(stack_name, config) { 
+            echo "check if stack exists"
             # Check if the stack exists
             STACK_EXISTS=$(get_stack_status(stack_name))
- 
+
+            echo "before while loop" 
             while [[ "${STACK_EXISTS}" == "CREATE_IN_PROGRESS" || "${STACK_EXISTS}" == "UPDATE_IN_PROGRESS" || "${STACK_EXISTS}" == "DELETE_IN_PROGRESS" ]]; do
               echo "Waiting for the stack '${stack_name}' to finish its ongoing operation..."
               sleep 10
               STACK_EXISTS=$(get_stack_status)
             done
- 
+
+            echo "if stack does not exists then nothing to delete" 
             if [ -z "${STACK_EXISTS}" ]; then
               echo "Stack '${stack_name}' does not exist. Nothing to delete."
             else
+              echo "within stack exists and its not in in progress state delete the stack"
               # Stack exists and is not in an "in progress" state, delete the stack
               aws cloudformation delete-stack --stack-name "${stack_name}"
               echo "Deleting the stack '${stack_name}'..."
@@ -73,7 +77,8 @@ jobs:
               echo "Stack '${stack_name}' deleted successfully."
             fi
           end 
-          
+         
+          echo "deleting stacks" 
           delete_stack(cmcs-eregs-parser-dev${PR}, "./serverless-ecfr.yml")
           delete_stack(cmcs-eregs-fr-parser-dev${PR}, "./serverless-fr.yml")
           popd

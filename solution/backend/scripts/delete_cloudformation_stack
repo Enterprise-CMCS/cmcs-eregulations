@@ -16,7 +16,7 @@ if [[ ${PR_NUMBER} ]]; then
     # Get list of S3 bucket names associated with the stack
     S3_BUCKETS=$(aws cloudformation describe-stack-resources --stack-name $STACK_NAME --region $REGION --query "StackResources[?ResourceType=='AWS::S3::Bucket'].PhysicalResourceId" --output text)
   
-    echo "s3 buckets are : ${S3_BUCKETS}"
+    echo "deleting s3 buckets: ${S3_BUCKETS}"
     # Loop through the list of S3 bucket names and delete each bucket
     for BUCKET_NAME in $S3_BUCKETS
     do
@@ -29,6 +29,15 @@ if [[ ${PR_NUMBER} ]]; then
   
     # Wait for stack deletion to complete
     aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME --region $REGION
+
+    # Delete the associated log groups
+    LOG_GROUPS=$(aws logs describe-log-groups --log-group-name-prefix /aws/cloudformation/$STACK_NAME --query "logGroups[].logGroupName" --output text)
+
+    echo "deleting log groups: ${LOG_GROUPS}\n"
+
+    #for log_group in $LOG_GROUPS; do
+      #aws logs delete-log-group --log-group-name $log_group
+    #done
   done
 else
   echo "you must pass a pr number"
