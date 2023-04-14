@@ -861,8 +861,11 @@ export default {
                     this.sortDisabled = false;
                 }
 
-                // if title changes:
-                if (oldParams.title !== newParams.title) {
+                // if title changes from one explicit title to another:
+                if (
+                    this.filters.title.listItems.length > 1 &&
+                    oldParams.title !== newParams.title
+                ) {
                     this.filters.part.listItems = [];
                     this.filters.subpart.listItems = [];
                     this.filters.section.listItems = [];
@@ -936,11 +939,15 @@ export default {
     async created() {
         this.filters.title.buttonTitle =
             this.queryParams.title ?? DEFAULT_TITLE;
+        /*this.filters.title.listItems = ["42"];*/
         this.filters.title.listItems = await getTitles();
         this.getPartLastUpdatedDates(this.filters.title.listItems);
         this.getCategoryList();
 
-        if (this.queryParams.title) {
+        if (
+            this.filters.title.listItems.length === 1 ||
+            this.queryParams.title
+        ) {
             this.filters.part.listItems = await getFormattedPartsList(
                 this.queryParams.title
             );
