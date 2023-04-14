@@ -778,7 +778,10 @@ export default {
                 );
         },
         async getPartLastUpdatedDates(titles) {
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, titles);
+            this.partsLastUpdated = await getLastUpdatedDates(
+                this.apiUrl,
+                titles
+            );
         },
         async getCategoryList() {
             const rawCats = await getCategories();
@@ -937,9 +940,11 @@ export default {
         this.getPartLastUpdatedDates(this.filters.title.listItems);
         this.getCategoryList();
 
-        this.filters.part.listItems = await getFormattedPartsList(
-            this.queryParams.title ?? DEFAULT_TITLE
-        );
+        if (this.queryParams.title) {
+            this.filters.part.listItems = await getFormattedPartsList(
+                this.queryParams.title
+            );
+        }
 
         if (this.queryParams.q) {
             this.searchQuery = this.queryParams.q;

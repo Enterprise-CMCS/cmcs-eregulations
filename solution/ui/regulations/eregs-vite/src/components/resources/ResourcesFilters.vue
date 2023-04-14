@@ -4,6 +4,7 @@
             <h3>Filter Resources</h3>
             <div class="title-filters-chips">
                 <div
+                    v-if="filters.title.listItems.length > 1"
                     class="title--selector"
                 >
                     <label
