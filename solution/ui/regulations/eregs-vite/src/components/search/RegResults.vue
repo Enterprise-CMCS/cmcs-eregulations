@@ -28,7 +28,7 @@ const createResultLink = (
 ) => {
     // get highlight content from headline
     const highlightedTermsArray = getTagContent(headline, "search-highlight");
-    let q = query.replace("%", "%25")
+    const q = query.replace("%", "%25")
     const uniqTermsArray = Array.from(
         new Set([q, ...highlightedTermsArray])
     );
