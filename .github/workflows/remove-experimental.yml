@@ -54,7 +54,9 @@ jobs:
           }
           
           delete_stack() { 
+            echo "within delete stack"
             stack_name=$1
+            echo "stack name is ${stack_name}"
             config=$2
             echo "check if stack exists"
             # Check if the stack exists
