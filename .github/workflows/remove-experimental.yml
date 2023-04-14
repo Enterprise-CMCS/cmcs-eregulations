@@ -48,7 +48,7 @@ jobs:
           npm install serverless -g
           npm install
           aws cloudformation describe-stacks --stack-name cmcs-eregs-parser-dev${PR} && \
-            aws cloudformation wait stack-create-complete --stack-name cmcs-eregs-parser-dev${PR} && \ 
+            aws cloudformation wait stack-update-complete --stack-name cmcs-eregs-parser-dev${PR} && \ 
             serverless remove --stage dev${PR} --config ./serverless-ecfr.yml
 
           aws cloudformation describe-stacks --stack-name cmcs-eregs-fr-parser-dev${PR} && \
