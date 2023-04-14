@@ -128,7 +128,7 @@ export default {
                 @include filter__text;
 
                 background: $lightest_gray;
-                padding: 2px 4px 8px;
+                padding: 4px 8px;
                 margin-right: 18px;
                 width: 150px;
 
