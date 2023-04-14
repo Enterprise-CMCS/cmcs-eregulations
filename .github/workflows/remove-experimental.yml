@@ -53,7 +53,9 @@ jobs:
             aws cloudformation describe-stacks --stack-name "${stack_name}" --query 'Stacks[0].StackStatus' --output text 2> /dev/null
           }
           
-          delete_stack(stack_name, config) { 
+          delete_stack() { 
+            stack_name=$1
+            config=$2
             echo "check if stack exists"
             # Check if the stack exists
             STACK_EXISTS=$(get_stack_status(stack_name))
@@ -79,8 +81,8 @@ jobs:
           end 
          
           echo "deleting stacks" 
-          delete_stack(cmcs-eregs-parser-dev${PR}, "./serverless-ecfr.yml")
-          delete_stack(cmcs-eregs-fr-parser-dev${PR}, "./serverless-fr.yml")
+          delete_stack() cmcs-eregs-parser-dev${PR}, "./serverless-ecfr.yml"
+          delete_stack() cmcs-eregs-fr-parser-dev${PR}, "./serverless-fr.yml"
           popd
       # remove the regulations site
       - name: remove experimental regulations site server
@@ -96,9 +98,7 @@ jobs:
           npm install serverless -g
           npm install
           serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
-          aws cloudformation describe-stacks --stack-name cmcs-eregs-site-dev${PR} && \
-            aws cloudformation wait stack-create-complete --stack-name cmcs-eregs-site-dev${PR} && \ 
-            serverless remove --config ./serverless-experimental.yml --stage dev${PR} 
+          serverless remove --config ./serverless-experimental.yml --stage dev${PR} 
           popd
       # Remove the static assets
       - name: remove static assets
@@ -108,7 +108,5 @@ jobs:
           pushd solution/static-assets
           npm install serverless -g
           npm install
-          aws cloudformation describe-stacks --stack-name cmcs-eregs-static-assets-dev${PR} && \
-            aws cloudformation wait stack-create-complete --stack-name cmcs-eregs-static-assets-dev${PR} 
-            serverless remove --stage dev${PR}
+          serverless remove --stage dev${PR}
           popd
