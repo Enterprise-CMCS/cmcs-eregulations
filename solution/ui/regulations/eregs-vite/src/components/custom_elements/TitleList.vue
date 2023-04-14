@@ -32,7 +32,9 @@ const clickMethod = (e) => {
                     'list_item__link--selected': title == selectedTitle,
                 }"
                 :data-value="title"
+                tabindex="0"
                 @click.prevent="clickMethod"
+                @keydown.enter.space.prevent="clickMethod"
                 >Title {{ title }} CFR</a
             >
         </li>
