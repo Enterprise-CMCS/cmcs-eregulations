@@ -54,7 +54,7 @@ jobs:
  
           # Function to get the stack status
           get_stack_status() {
-            aws cloudformation describe-stacks --stack-name "${STACK_NAME}" --query 'Stacks[0].StackStatus' --output text 2> /dev/null
+            aws --debug cloudformation describe-stacks --stack-name "${STACK_NAME}" --query 'Stacks[0].StackStatus' --output text 2> /dev/null
           }
  
           # Check if the stack exists
@@ -72,7 +72,7 @@ jobs:
             # Stack exists and is not in an "in progress" state, delete the stack
             echo "Deleting the stack '${STACK_NAME}'..."
             serverless remove --stage dev${PR} --config ./serverless-ecfr.yml 
-            aws cloudformation wait stack-delete-complete --stack-name "${STACK_NAME}"
+            aws --debug cloudformation wait stack-delete-complete --stack-name "${STACK_NAME}"
             echo "Stack '${STACK_NAME}' deleted successfully."
           fi
           #chmod +x ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh 
