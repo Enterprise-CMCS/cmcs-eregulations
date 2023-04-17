@@ -300,8 +300,8 @@ const getSubpartTOC = async (title, part, subPart) =>
 const getSynonyms = async (query) =>
     httpApiGet(`synonyms?q=${encodeURIComponent(query)}`);
 
- /* @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
-  * @param {Array<string>} [titleArr=["42"]] - Array of titlesto map over.
+/* @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {Array<string>} [titleArr=["42"]] - Array of titlesto map over.
  *
  * @returns {Object.<string, string>} - Object with Part numbers as keys and YYYY-MM-DD datestring as values
  */
@@ -310,7 +310,15 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
         titleArr.map((title) => httpApiGet(`title/${title}/parts`))
     );
 
-    const combinedResults = Object.assign({}, ...results);
+    const combinedResults = results
+        .flat(1)
+        .reduce(
+            (accumulator, current) => ({
+                ...accumulator,
+                [current.name]: current,
+            }),
+            {}
+        );
 
     // remove artifact added by front end caching
     delete combinedResults.expiration_date;
