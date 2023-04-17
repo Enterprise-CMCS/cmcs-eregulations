@@ -1,15 +1,10 @@
  #!/bin/bash
  set -e
- set -x
 
 # Function to get the stack status
 STACK_NAME=$1
 PR=$2
 CONFIG=$3
-
-echo $STACK_NAME
-echo $PR
-echo $CONFIG
 
 # Function to get the stack status
 # Function to get the stack status
