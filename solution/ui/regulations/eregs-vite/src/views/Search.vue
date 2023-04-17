@@ -349,34 +349,36 @@ export default {
             }
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
-            try {
-                const isSearchGov = window.location.href.match("searchgov");
-
-                const commonParams = {
+            const isSearchGov = window.location.href.match("searchgov");
+            const commonParams = {
                     q: query,
                     page,
                 };
 
-                const djangoParams = {
-                    ...commonParams,
-                    partDict: "all",
-                    page_size: pageSize,
-                    fr_grouping: false,
-                };
-
+            const djangoParams = {
+                ...commonParams,
+                partDict: "all",
+                page_size: pageSize,
+                fr_grouping: false,
+            };
+            try {
                 const response = isSearchGov
-                    ? await getSearchGovResources(commonParams)
+                    ? await getSearchGovResources(commonParams, djangoParams)
                     : await getSupplementalContent(djangoParams);
 
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {
-                console.error(
-                    "Error retrieving regulation search results: ",
-                    error
-                );
-                this.resourcesResults = [];
-                this.totalResourcesResultsCount = 0;
+                if(isSearchGov){
+                    djangoParams.q = query.slice(0, query.length-10);
+                    const response = await getSupplementalContent(djangoParams);
+                    this.resourcesResults = response?.results ?? [];
+                    this.totalResourcesResultsCount = response?.count ?? 0;
+                }
+                else{
+                    this.resourcesResults = [];
+                    this.totalResourcesResultsCount = 0;
+                }
             }
         },
         async retrieveAllResults({ query, page, pageSize }) {
