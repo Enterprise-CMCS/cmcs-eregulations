@@ -320,7 +320,7 @@ class SupContentForm(ResourceForm):
 
 
 class FederalResourceForm(ResourceForm):
-    doc_types = [('RFI', 'RFI'), ('NPRM', 'NPRM'), ("Final Rule", 'Final Rule'), ('None', None)]
+    doc_types = [('RFI', 'RFI'), ('NPRM', 'NPRM'), ("Final", 'Final')]
 
     class Meta:
         model = FederalRegisterDocument
