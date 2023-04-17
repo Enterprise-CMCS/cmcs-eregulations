@@ -145,6 +145,7 @@
                         :disabledSortOptions="disabledSortOptions"
                         :sortDisabled="sortDisabled"
                         :partDict="partDict"
+                        :title="queryParams.title"
                         @sort="setSortMethod"
                     />
                 </div>
