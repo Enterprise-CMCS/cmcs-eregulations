@@ -8,6 +8,8 @@ PR=$2
 CONFIG=$3
 
 echo $STACK_NAME
+echo $PR
+echo $CONFIG
 
 # Function to get the stack status
 # Function to get the stack status
@@ -28,8 +30,8 @@ if aws cloudformation describe-stacks --stack-name "$STACK_NAME" > /dev/null 2>&
 
    # Stack exists and is not in an "in progress" state, delete the stack
    echo "Deleting the stack '${STACK_NAME}'..."
-   serverless remove --stage dev${PR} --config ./serverless-ecfr.yml
-   aws --debug cloudformation wait stack-delete-complete --stack-name "${STACK_NAME}"
+   serverless remove --stage dev${PR} --config ${CONFIG}
+   aws --debug cloudformation wait stack-delete-complete --stack-name ${STACK_NAME}
    echo "Stack '${STACK_NAME}' deleted successfully."
 else
    echo "Stack '${STACK_NAME}' does not exist. Nothing to delete."
