@@ -351,8 +351,9 @@ export default {
                 name: "resources",
                 query: {
                     ...titleParam,
-                    q: this.searchQuery,
+                    resourceCategory: undefined,
                     sort: this.sortMethod,
+                    q: this.searchQuery,
                 },
             });
         },
