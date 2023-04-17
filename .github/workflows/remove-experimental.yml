@@ -70,6 +70,7 @@ jobs:
           npm install
           serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
           serverless remove --config ./serverless-experimental.yml --stage dev${PR}
+          ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-site-dev${PR}, $PR "./serverless-experimental.yml"
           popd
       # Remove the static assets
       - name: remove static assets
