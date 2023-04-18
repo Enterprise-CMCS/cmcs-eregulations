@@ -41,5 +41,5 @@ if [[ ${PR_NUMBER} ]]; then
   done
 else
   echo "you must pass a pr number"
-  echo "syntax: delete_cloud_formation_stack [ prnumber ]"
+  echo "syntax: delete_cloudformation_stack [ prnumber ]"
 fi
