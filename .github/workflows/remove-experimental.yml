@@ -64,7 +64,11 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
+          if serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}; then
+            echo "database dropped successfully"
+          else
+            echo "database for dev${PR} was not found"
+          fi
           serverless remove --config ./serverless-experimental.yml --stage dev${PR}
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-site-dev${PR}, $PR "./serverless-experimental.yml"
           popd
