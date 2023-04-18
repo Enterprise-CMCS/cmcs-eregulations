@@ -2,7 +2,6 @@ import json
 
 from datetime import datetime, timedelta
 from django.test import TestCase
-from rest_framework.exceptions import NotFound
 
 from resources.models import (
     FederalRegisterDocument,
@@ -61,13 +60,15 @@ class TestMixinFunctions(TestCase):
         with open("resources/tests/fixtures/gov_info_failure.json") as f:
             gov_info = json.load(f)
         test_view_set = ResourceSearchViewSet()
-        self.assertRaises(NotFound, test_view_set.format_gov_results, gov_info)
+        test_view_set.format_gov_results(gov_info)
+        self.assertEqual(0, test_view_set.gov_results['total'])
 
     def test_format_gov_results_zero_results(self):
         with open("resources/tests/fixtures/gov_info_zero.json") as f:
             gov_info = json.load(f)
         test_view_set = ResourceSearchViewSet()
-        self.assertRaises(NotFound, test_view_set.format_gov_results, gov_info)
+        test_view_set.format_gov_results(gov_info)
+        self.assertEqual(0, test_view_set.gov_results['total'])
 
     def test_append_snippet(self):
         test_view_set = ResourceSearchViewSet()

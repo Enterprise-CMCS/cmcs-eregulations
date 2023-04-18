@@ -353,7 +353,7 @@ export default {
             const commonParams = {
                     q: query,
                     page,
-                };
+            };
 
             const djangoParams = {
                 ...commonParams,
@@ -362,23 +362,24 @@ export default {
                 fr_grouping: false,
             };
             try {
-                const response = isSearchGov
-                    ? await getSearchGovResources(commonParams, djangoParams)
-                    : await getSupplementalContent(djangoParams);
+                let response = {
+                    'count': 0
+                };
+
+                if (isSearchGov){
+                    response = await getSearchGovResources(commonParams, djangoParams);
+                    djangoParams.q = query.slice(0, query.length-10);
+                }
+                if (response.count === 0){
+                    response = await getSupplementalContent(djangoParams);
+                }
 
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
-            } catch (error) {
-                if(isSearchGov){
-                    djangoParams.q = query.slice(0, query.length-10);
-                    const response = await getSupplementalContent(djangoParams);
-                    this.resourcesResults = response?.results ?? [];
-                    this.totalResourcesResultsCount = response?.count ?? 0;
-                }
-                else{
-                    this.resourcesResults = [];
-                    this.totalResourcesResultsCount = 0;
-                }
+            } 
+            catch (error) {
+                this.resourcesResults = [];
+                this.totalResourcesResultsCount = 0;
             }
         },
         async retrieveAllResults({ query, page, pageSize }) {
