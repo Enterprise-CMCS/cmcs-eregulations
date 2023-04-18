@@ -61,6 +61,7 @@ jobs:
         env:
           PR: ${{ github.event.number }}
         run: |
+          set -x
           pushd solution/backend
           npm install serverless -g
           npm install
