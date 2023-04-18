@@ -72,7 +72,6 @@ jobs:
           else
             echo "database for dev${PR} was not found"
           fi
-          serverless remove --config ./serverless-experimental.yml --stage dev${PR}
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-site-dev${PR}, $PR "./serverless-experimental.yml"
           popd
       # Remove the static assets
