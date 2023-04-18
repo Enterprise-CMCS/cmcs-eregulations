@@ -65,7 +65,9 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          if serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}; then
+          
+          if aws rds describe-db-instances --db-instance-identifier eregs >/dev/null 2>&1; then
+            serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
             echo "database dropped successfully"
           else
             echo "database for dev${PR} was not found"
