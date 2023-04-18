@@ -2,17 +2,18 @@ import json
 import re
 import requests
 import urllib.parse as urlparse
-from drf_spectacular.utils import extend_schema
+
 from django.db import transaction
 from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .mixins import (
+    FRDocGroupingMixin,
     ResourceExplorerViewSetMixin,
-    FRDocGroupingMixin
 )
 from common.mixins import (
     OptionalPaginationMixin,
