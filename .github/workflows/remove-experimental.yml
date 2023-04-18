@@ -51,6 +51,12 @@ jobs:
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR} $PR "./serverless-fr.yml"
           popd
+
+      # remove the database
+      - name: Invoke Servlerless Function
+        command: serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
+        register: result
+        failed_when: "'Function not found: arn:aws:lambda:us-east-1:***:function:cmcs-eregs-site-dev${PR}-drop_database' not in result.stderr"
       # remove the regulations site
       - name: remove experimental regulations site server
       # If previous step fails the database will not be removed and you cannot rerun it
@@ -64,7 +70,7 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
+          # serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
           serverless remove --config ./serverless-experimental.yml --stage dev${PR}
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-site-dev${PR}, $PR "./serverless-experimental.yml"
           popd
