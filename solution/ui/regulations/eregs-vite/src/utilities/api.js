@@ -281,9 +281,51 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
-const getLastUpdatedDates = async (apiUrl, title = "42") => {
-    const result = await httpApiGet(`title/${title}/parts`);
-    return Object.fromEntries(new Map(result.map((obj) => [obj.name, obj.date])));
+const getPartTOC = async (title, part) =>
+    httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
+
+const getCategories = async () => httpApiGet("resources/categories");
+
+const getTOC = async (title) =>
+    httpApiGet(title ? `title/${title}/toc` : `toc`);
+
+const getSectionsForPart = async (title, part) =>
+    httpApiGet(`title/${title}/part/${part}/version/latest/sections`);
+
+const getSubpartTOC = async (title, part, subPart) =>
+    httpApiGet(
+        `title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
+    );
+
+const getSynonyms = async (query) =>
+    httpApiGet(`synonyms?q=${encodeURIComponent(query)}`);
+
+/* @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {Array<string>} [titleArr=["42"]] - Array of titlesto map over.
+ *
+ * @returns {Object.<string, string>} - Object with Part numbers as keys and YYYY-MM-DD datestring as values
+ */
+const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
+    const results = await Promise.all(
+        titleArr.map((title) => httpApiGet(`title/${title}/parts`))
+    );
+
+    const combinedResults = results
+        .flat(1)
+        .reduce(
+            (accumulator, current) => ({
+                ...accumulator,
+                [current.name]: current,
+            }),
+            {}
+        );
+
+    // remove artifact added by front end caching
+    delete combinedResults.expiration_date;
+
+    return Object.fromEntries(
+        Object.entries(combinedResults).map((arr) => [arr[1].name, arr[1].date])
+    );
 };
 
 /**
@@ -294,9 +336,9 @@ const getLastUpdatedDates = async (apiUrl, title = "42") => {
  *
  * @returns {Array<{label: string, identifier: string, section: <Object>}>}
  */
-const getFormattedPartsList = async () => {
-    const TOC = await getTOC();
-    const partsList = TOC[0].children[0].children
+const getFormattedPartsList = async (title = "42") => {
+    const TOC = await getTOC(title);
+    const partsList = TOC.children[0].children
         .map((subChapter) =>
             subChapter.children.map((part) => ({
                 label: part.label,
@@ -308,7 +350,7 @@ const getFormattedPartsList = async () => {
     const formattedPartsList = await Promise.all(
         partsList.map(async (part) => {
             const newPart = JSON.parse(JSON.stringify(part));
-            const PartToc = await getPartTOC(42, part.name);
+            const PartToc = await getPartTOC(title, part.name);
             const sections = {};
             PartToc.children
                 .filter((TOCpart) => TOCpart.type === "subpart")
@@ -316,9 +358,8 @@ const getFormattedPartsList = async () => {
                     subpart.children
                         .filter((section) => section.type === "section")
                         .forEach((c) => {
-                            sections[
-                                c.identifier[c.identifier.length - 1]
-                            ] = c.parent[0];
+                            sections[c.identifier[c.identifier.length - 1]] =
+                                c.parent[0];
                         });
                 });
             newPart.sections = sections;
@@ -327,7 +368,7 @@ const getFormattedPartsList = async () => {
     );
 
     return formattedPartsList;
-}
+};
 
 /**
  *
@@ -336,18 +377,24 @@ const getFormattedPartsList = async () => {
  * @param {string} - the name of a part in title 42
  * @returns {Object<{label:string, identifier:string}>}
  */
-const getSubPartsForPart = async (partParam) => {
+const getSubPartsForPart = async (partParam, title = "42") => {
     // if part is string of multiple parts, use final part
-    const selectedParts = partParam.split(',')
-    const partTocs = await Promise.all(selectedParts.map(async part => getPartTOC(42, part)))
-    return partTocs.map(partToc =>
-        partToc.children.filter(sp => sp.type === "subpart").map(subpart => ({
-          label:subpart.label,
-          range: subpart.descendant_range,
-          part: subpart.parent[0],
-          identifier: subpart.identifier[0]
-        }))
-    ).flat(1)
+    const selectedParts = partParam.split(",");
+    const partTocs = await Promise.all(
+        selectedParts.map(async (part) => getPartTOC(title, part))
+    );
+    return partTocs
+        .map((partToc) =>
+            partToc.children
+                .filter((sp) => sp.type === "subpart")
+                .map((subpart) => ({
+                    label: subpart.label,
+                    range: subpart.descendant_range,
+                    part: subpart.parent[0],
+                    identifier: subpart.identifier[0],
+                }))
+        )
+        .flat(1);
 };
 
 /**
@@ -359,66 +406,71 @@ const getRegSearchResults = async ({
     page = 1,
     page_size = 100,
 }) => {
-    const response = await httpApiGet(`search?q=${encodeURIComponent(q)}&paginate=${paginate}&page_size=${page_size}&page=${page}`);
+    const response = await httpApiGet(
+        `search?q=${encodeURIComponent(
+            q
+        )}&paginate=${paginate}&page_size=${page_size}&page=${page}`
+    );
 
     return response;
 };
 
 // todo: make these JS style camel case
-const getSupplementalContent = async (
-    {
-        partDict,
-        categories,
-        q = "",
-        start,
-        max_results = 1000,
-        paginate = true,
-        page = 1,
-        cat_details = true,
-        page_size = 100,
-        location_details = true,
-        sortMethod = "newest",
-        fr_grouping = true,
-    }
-) => {
+const getSupplementalContent = async ({
+    partDict,
+    title,
+    categories,
+    q = "",
+    start,
+    max_results = 1000,
+    paginate = true,
+    page = 1,
+    cat_details = true,
+    page_size = 100,
+    location_details = true,
+    sortMethod = "newest",
+    fr_grouping = true,
+}) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
 
     if (partDict === "all") {
-        sString = ""
+        sString = title ? `${sString}&locations=${title}` : "";
     } else {
-        Object.keys(partDict).forEach(partKey => {
-            const part = partDict[partKey]
-            part.subparts.forEach(subPart => {
-                sString = `${sString}&locations=${part.title}.${partKey}.${subPart}`
-            })
-            part.sections.forEach(section => {
-                sString = `${sString}&locations=${part.title}.${partKey}.${section}`
-            })
+        Object.keys(partDict).forEach((partKey) => {
+            const part = partDict[partKey];
+            part.subparts.forEach((subPart) => {
+                sString = `${sString}&locations=${part.title}.${partKey}.${subPart}`;
+            });
+            part.sections.forEach((section) => {
+                sString = `${sString}&locations=${part.title}.${partKey}.${section}`;
+            });
             if (part.sections.length === 0 && part.subparts.length === 0) {
-                sString = `${sString}&locations=${part.title}.${partKey}`
+                sString = `${sString}&locations=${part.title}.${partKey}`;
             }
-        })
+        });
     }
 
     if (categories) {
-        const catList = await getCategories()
-        categories.forEach(category => {
-            sString = `${sString}&categories=${catList.find(x => x.name === category).id}`
-        })
+        const catList = await getCategories();
+        categories.forEach((category) => {
+            sString = `${sString}&categories=${
+                catList.find((x) => x.name === category).id
+            }`;
+        });
     }
 
-    sString = `${sString}&category_details=${cat_details}`
-    sString = `${sString}&location_details=${location_details}`
+    sString = `${sString}&category_details=${cat_details}`;
+    sString = `${sString}&location_details=${location_details}`;
     sString = `${sString}&start=${start}&max_results=${max_results}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
 
-    sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`
-    sString = `${sString}&fr_grouping=${fr_grouping}`
+    sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`;
+    sString = `${sString}&fr_grouping=${fr_grouping}`;
 
-    const response =  await httpApiGet(`resources/?${sString}`)
-    return response
-}
+    const response = await httpApiGet(`resources/?${sString}`);
+    return response;
+};
 
 /**
  * @param {string} [page=1] - page number of paginated results to return.
@@ -428,19 +480,6 @@ const getSupplementalContent = async (
  */
 const getSearchGovResources = async ({ page = 1, q = "" }) =>
     httpApiGet(`resources/search?q=${encodeURIComponent(q)}&page=${page}`);
-
-const getCategories = async () => httpApiGet("resources/categories");
-
-const getTOC = async (title) =>
-    httpApiGet(title ? `title/${title}/toc` : `toc`);
-
-const getPartTOC = async (title, part) =>  httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
-
-const getSectionsForPart = async (title, part) => httpApiGet(`title/${title}/part/${part}/version/latest/sections`)
-
-const getSubpartTOC = async (title, part, subPart) => httpApiGet(`title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`)
-
-const getSynonyms = async(query) => httpApiGet(`synonyms?q=${encodeURIComponent(query)}`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template

@@ -44,6 +44,7 @@
                         :categories="categories"
                         :query="query"
                         :supCount="count"
+                        :title="title"
                     />
                 </div>
             </div>
@@ -181,6 +182,11 @@ export default {
             default() {
                 return [];
             },
+        },
+        title: {
+            type: String,
+            required: false,
+            default: undefined,
         },
     },
 

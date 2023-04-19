@@ -174,7 +174,10 @@ import {
     getSearchGovResources,
     getSupplementalContent,
     getSynonyms,
+    getTitles,
 } from "@/utilities/api";
+
+const DEFAULT_TITLE = "42";
 
 export default {
     name: "SearchView",
@@ -222,8 +225,9 @@ export default {
 
     async created() {
         if (this.searchQuery) {
+            this.titles = await getTitles();
             await Promise.allSettled([
-                this.getPartLastUpdatedDates(),
+                this.getPartLastUpdatedDates(this.titles),
                 getFormattedPartsList(),
             ]).then((data) => {
                 // eslint-disable-next-line
@@ -256,6 +260,7 @@ export default {
             searchInputValue: undefined,
             synonyms: [],
             unquotedSearch: false,
+            titles: [DEFAULT_TITLE],
         };
     },
 
@@ -422,8 +427,8 @@ export default {
                 this.synonyms = [];
             }
         },
-        async getPartLastUpdatedDates() {
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
+        async getPartLastUpdatedDates(titles) {
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, titles);
         },
         executeSearch(payload) {
             this.synonyms = [];
