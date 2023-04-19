@@ -10,7 +10,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl"/>
+                    <JumpTo :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -19,9 +19,7 @@
                     />
                 </template>
                 <template #search>
-                    <HeaderSearch
-                        :search-url="searchUrl"
-                    />
+                    <HeaderSearch :search-url="searchUrl" />
                 </template>
             </HeaderComponent>
         </header>
@@ -114,29 +112,24 @@
                 </template>
             </Banner>
             <div
-                class="resources-content-container"
-                :class="contentContainerResourcesClass"
+                class="resources-content-container resouces-content-container-column"
             >
-                <div :class="filtersResourcesClass">
+                <div class="filters-column">
                     <ResourcesFilters
-                        v-if="resourcesDisplay === 'column'"
-                        :resourcesDisplay="resourcesDisplay"
                         :filters="filters"
+                        :selected-title="$route.query.title"
                         @select-filter="updateFilters"
-                    />
-                    <ResourcesSidebarFilters
-                        v-else
-                        :resourcesDisplay="resourcesDisplay"
-                        :filters="filters"
-                        @select-filter="updateFilters"
-                    />
+                    >
+                        <template #chips>
+                            <ResourcesSelections
+                                :filter-params="filterParams"
+                                @chip-filter="removeChip"
+                                @clear-selections="clearSelections"
+                            />
+                        </template>
+                    </ResourcesFilters>
                 </div>
-                <div :class="resultsResourcesClass">
-                    <ResourcesSelections
-                        :filterParams="filterParams"
-                        @chip-filter="removeChip"
-                        @clear-selections="clearSelections"
-                    />
+                <div class="results-column">
                     <ResourcesResultsContainer
                         :isLoading="isLoading"
                         :base="homeUrl"
@@ -152,6 +145,7 @@
                         :disabledSortOptions="disabledSortOptions"
                         :sortDisabled="sortDisabled"
                         :partDict="partDict"
+                        :title="queryParams.title"
                         @sort="setSortMethod"
                     />
                 </div>
@@ -181,12 +175,13 @@ import ResourcesResultsContainer from "@/components/resources/ResourcesResultsCo
 import {
     getCategories,
     getFormattedPartsList,
-    getSubPartsForPart,
-    getSupplementalContent,
     getLastUpdatedDates,
     getSectionsForPart,
+    getSubPartsForPart,
     getSubpartTOC,
+    getSupplementalContent,
     getSynonyms,
+    getTitles,
 } from "@/utilities/api";
 
 export default {
@@ -241,14 +236,19 @@ export default {
             partDict: {},
             categories: [],
             synonyms: [],
-            resourcesDisplay:
-                this.$route.name === "resources-sidebar" ? "sidebar" : "column",
             filters: {
+                title: {
+                    label: "Title",
+                    buttonTitle: "Select Title",
+                    buttonId: "select-title",
+                    listType: "TitleList",
+                    listItems: [],
+                },
                 part: {
                     label: "Part",
                     buttonTitle: "Select Parts",
                     buttonId: "select-parts",
-                    listType: "TitlePartList",
+                    listType: "PartList",
                     listItems: [],
                 },
                 subpart: {
@@ -282,15 +282,6 @@ export default {
     },
 
     computed: {
-        contentContainerResourcesClass() {
-            return `resources-content-container-${this.resourcesDisplay}`;
-        },
-        filtersResourcesClass() {
-            return `filters-${this.resourcesDisplay}`;
-        },
-        resultsResourcesClass() {
-            return `results-${this.resourcesDisplay}`;
-        },
         page() {
             return _isUndefined(this.queryParams.page)
                 ? this.queryParams.page
@@ -354,11 +345,15 @@ export default {
         },
         clearSelections() {
             this.partDict = {};
+            const titleParam = this.queryParams.title ? { title: this.queryParams.title } : {};
+
             this.$router.push({
                 name: "resources",
                 query: {
-                    q: this.searchQuery,
+                    ...titleParam,
+                    resourceCategory: undefined,
                     sort: this.sortMethod,
+                    q: this.searchQuery,
                 },
             });
         },
@@ -423,7 +418,6 @@ export default {
                 ? undefined
                 : newScopeVals.join(",");
             if (_isEmpty(newQueryParams.part)) {
-                newQueryParams.title = undefined;
                 newQueryParams.subpart = undefined;
                 newQueryParams.section = undefined;
             }
@@ -432,6 +426,7 @@ export default {
                 query: newQueryParams,
             });
         },
+
         async retrieveSynonyms(query) {
             if (
                 query &&
@@ -452,10 +447,23 @@ export default {
             let newQueryParams = { ...this.queryParams, page: undefined };
             const splitSection = payload.selectedIdentifier.split("-");
 
+            // if title changes, reset all non-title filters (part, subpart, section, category)
+            if (payload.scope === "title") {
+                newQueryParams.title = payload.selectedIdentifier;
+                this.$router.push({
+                    name: "resources",
+                    query: {
+                        title: newQueryParams.title,
+                        q: this.searchQuery,
+                        sort: this.sortMethod,
+                    },
+                });
+            }
+
             //Checks that the part in the query is valid or is a resource category
             if (
-                (await this.checkPart(splitSection, payload.scope)) ||
-                payload.scope == "resourceCategory"
+                payload.scope === "resourceCategory" ||
+                (await this.checkPart(splitSection, payload.scope))
             ) {
                 if (newQueryParams[payload.scope]) {
                     if (payload.searchSection) {
@@ -479,7 +487,6 @@ export default {
                         .sort()
                         .join(",");
                 } else {
-                    newQueryParams.title = "42"; // hard coding for now
                     if (payload.scope === "section") {
                         if (newQueryParams.part) {
                             if (
@@ -527,13 +534,14 @@ export default {
 
         async checkPart(payload, scope) {
             const partExist = this.filters.part.listItems.find(
-                (part) => part.name == payload[0]
+                (part) => part.name === payload[0]
             );
 
             if (partExist && scope === "section") {
-                const sectionList = await getSectionsForPart(42, payload[0]);
+                const title = this.queryParams.title ?? this.filters.title.listItems[0];
+                const sectionList = await getSectionsForPart(title, payload[0]);
                 return sectionList.find(
-                    (section) => section.identifier[1] == payload[1]
+                    (section) => section.identifier[1] === payload[1]
                 );
             }
             return partExist;
@@ -553,7 +561,7 @@ export default {
         async getSectionsBySubpart(subpart) {
             const splitSubpart = subpart.split("-");
             const allSections = await getSubpartTOC(
-                42,
+                this.queryParams.title ?? this.filters.title.listItems[0],
                 splitSubpart[0],
                 splitSubpart[1]
             );
@@ -596,7 +604,7 @@ export default {
 
             parts.forEach((part) => {
                 newPartDict[part] = {
-                    title: "42",
+                    title: this.queryParams.title ?? this.filters.title.listItems[0],
                     sections: [],
                     subparts: [],
                 };
@@ -650,7 +658,29 @@ export default {
                 this.categories = [];
             }
 
-            if (dataQueryParams?.part) {
+            if (dataQueryParams?.title && _isEmpty(dataQueryParams.part)) {
+                try {
+                    const searchResults = await getSupplementalContent({
+                        page: this.page,
+                        page_size: this.pageSize,
+                        partDict: "all", // titles
+                        title: dataQueryParams.title ?? this.filters.title.listItems[0],
+                        categories: this.categories, // subcategories
+                        q: searchQuery,
+                        fr_grouping: false,
+                        sortMethod,
+                    });
+
+                    this.supplementalContent = searchResults.results;
+                    this.supplementalContentCount = searchResults.count;
+                } catch (error) {
+                    console.error(error);
+                    this.supplementalContent = [];
+                    this.supplementalContentCount = 0;
+                } finally {
+                    this.isLoading = false;
+                }
+            } else if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
                 const responseContent = await getSupplementalContent({
                     page: this.page,
@@ -710,14 +740,20 @@ export default {
                 this.isLoading = false;
             }
         },
-        async getFormattedSubpartsList(parts) {
-            this.filters.subpart.listItems = await getSubPartsForPart(parts);
+        async getFormattedSubpartsList(parts, title) {
+            this.filters.subpart.listItems = await getSubPartsForPart(
+                parts,
+                title
+            );
         },
 
         async getFormattedSectionsList() {
             const rawSections = await Promise.all(
                 Object.keys(this.partDict).map(async (part) =>
-                    getSectionsForPart("42", part)
+                    getSectionsForPart(
+                        this.queryParams.title ?? this.filters.title.listItems[0],
+                        part
+                    )
                 )
             );
 
@@ -741,8 +777,11 @@ export default {
                         : -1
                 );
         },
-        async getPartLastUpdatedDates() {
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl);
+        async getPartLastUpdatedDates(titles) {
+            this.partsLastUpdated = await getLastUpdatedDates(
+                this.apiUrl,
+                titles
+            );
         },
         async getCategoryList() {
             const rawCats = await getCategories();
@@ -822,12 +861,37 @@ export default {
                     this.sortDisabled = false;
                 }
 
+                // if title changes from one explicit title to another:
+                if (
+                    this.filters.title.listItems.length > 1 &&
+                    oldParams.title !== newParams.title
+                ) {
+                    this.filters.part.listItems = [];
+                    this.filters.subpart.listItems = [];
+                    this.filters.section.listItems = [];
+                    this.supplementalContent = [];
+                    this.supplementalContentCount = 0;
+
+                    this.getSupplementalContent(
+                        this.queryParams,
+                        this.searchQuery,
+                        this.sortMethod
+                    );
+
+                    this.filters.part.listItems = await getFormattedPartsList(
+                        newParams.title
+                    );
+
+                    return;
+                }
+
                 if (
                     _isEmpty(newParams.part) &&
                     _isEmpty(newParams.q) &&
                     _isEmpty(newParams.resourceCategory) &&
                     _isEmpty(newParams.sort) &&
-                    _isUndefined(newParams.page)
+                    _isUndefined(newParams.page) &&
+                    _isUndefined(newParams.title)
                 ) {
                     // only get content if a part is selected or there's a search query
                     // don't make supp content request here, but clear lists
@@ -848,7 +912,10 @@ export default {
                 if (newParams.part) {
                     // logic for populating select dropdowns
                     if (_isEmpty(oldParams.part) && newParams.part) {
-                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSubpartsList(
+                            this.queryParams.part,
+                            this.queryParams.title ?? this.filters.title.listItems[0]
+                        );
                         this.getFormattedSectionsList();
                     } else if (
                         _isEmpty(oldParams.subpart) &&
@@ -856,7 +923,10 @@ export default {
                     ) {
                         this.getFormattedSectionsList();
                     } else {
-                        this.getFormattedSubpartsList(this.queryParams.part);
+                        this.getFormattedSubpartsList(
+                            this.queryParams.part,
+                            this.queryParams.title ?? this.filters.title.listItems[0]
+                        );
                         this.getFormattedSectionsList();
                     }
                 }
@@ -867,9 +937,19 @@ export default {
     beforeCreate() {},
 
     async created() {
-        this.getPartLastUpdatedDates();
+        /*this.filters.title.listItems = [42];*/
+        this.filters.title.listItems = await getTitles();
+        this.getPartLastUpdatedDates(this.filters.title.listItems);
         this.getCategoryList();
-        this.filters.part.listItems = await getFormattedPartsList();
+
+        if (
+            this.filters.title.listItems.length === 1 ||
+            this.queryParams.title
+        ) {
+            this.filters.part.listItems = await getFormattedPartsList(
+                this.queryParams.title
+            );
+        }
 
         if (this.queryParams.q) {
             this.searchQuery = this.queryParams.q;
@@ -877,7 +957,10 @@ export default {
         }
 
         if (this.queryParams.part) {
-            this.getFormattedSubpartsList(this.queryParams.part);
+            this.getFormattedSubpartsList(
+                this.queryParams.part,
+                this.queryParams.title ?? this.filters.title.listItems[0]
+            );
             this.getFormattedSectionsList(
                 this.queryParams.part,
                 this.queryParams.subpart

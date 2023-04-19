@@ -57,6 +57,11 @@ export default {
             type: Number,
             default: 0,
         },
+        title: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
     },
 
     data() {
@@ -107,6 +112,7 @@ export default {
         async getSupplementalContent() {
             let supNum = 0;
             let page = 1;
+            const titleParam = this.title ? { title: this.title } : {};
             let responseContent = [];
             const content = [];
             while (supNum < this.supCount) {
@@ -120,6 +126,7 @@ export default {
                         categories: this.categories,
                         q: this.query,
                         fr_grouping: false,
+                        ...titleParam,
                     })
                 );
                 page += 1;
