@@ -2,7 +2,10 @@
 
 # Set variables
 PR_NUMBER=$1
-echo "PR_NUMBER IS ${PR_NUMBER}"
+if ! command -v aws >/dev/null 2>&1; then
+  echo "you must install aws cli first"
+  exit 1
+end
 
 if [[ ${PR_NUMBER} ]]; then
   STACK_NAMES=("cmcs-eregs-parser-dev${PR_NUMBER}" "cmcs-eregs-site-dev${PR_NUMBER}" "cmcs-eregs-static-assets-dev${PR_NUMBER}" "cmcs-eregs-fr-parser-dev${PR_NUMBER}")
@@ -11,8 +14,7 @@ if [[ ${PR_NUMBER} ]]; then
   # Loop through the list of stack names and delete each stack and associated S3 buckets
   for STACK_NAME in "${STACK_NAMES[@]}"
   do
-    echo "stack name is ${STACK_NAME}\n"
-  
+
     # Get list of S3 bucket names associated with the stack
     S3_BUCKETS=$(aws cloudformation describe-stack-resources --stack-name $STACK_NAME --region $REGION --query "StackResources[?ResourceType=='AWS::S3::Bucket'].PhysicalResourceId" --output text)
   
@@ -24,6 +26,7 @@ if [[ ${PR_NUMBER} ]]; then
     done  
   
     # Delete the CloudFormation stack
+    echo "Delete stack ${STACK_NAME}\n"
     aws cloudformation delete-stack --stack-name $STACK_NAME --region $REGION
   
   
@@ -33,7 +36,7 @@ if [[ ${PR_NUMBER} ]]; then
     # Delete the associated log groups
     LOG_GROUPS=$(aws logs describe-log-groups --log-group-name-prefix /aws/cloudformation/$STACK_NAME --query "logGroups[].logGroupName" --output text)
 
-    echo "deleting log groups: ${LOG_GROUPS}\n"
+    echo "Deleting log groups: ${LOG_GROUPS}\n"
 
     for log_group in $LOG_GROUPS; do
       aws logs delete-log-group --log-group-name $log_group
