@@ -1,3 +1,5 @@
+import re
+
 from django.contrib import admin, messages
 from django.shortcuts import render
 from django.urls import path, reverse
@@ -31,8 +33,19 @@ class SSAToUSCConverterAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    def import_conversions(self, response):
-        return []
+    def import_conversions(self, text):
+        conversions = []
+        text = re.sub("</?[^>]+>", "", text)  # Strips XML tags from the response text
+        matches = re.findall("[Ss][Ee][Cc].?\\s*(\\d+).?\\s*\[(\\d+)\\s*[Uu].?[Ss].?[Cc].?\\s*(\\w+)\]", text)  # Find all conversions
+        for section, title, usc in matches:
+            instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc)
+            if created:
+                conversions.append({
+                    "section": instance.section,
+                    "title": instance.title,
+                    "usc": instance.usc
+                })
+        return conversions, len(matches)
     
     def show_import_conversions(self, request):
         error = None
@@ -43,13 +56,16 @@ class SSAToUSCConverterAdmin(admin.ModelAdmin):
                 URLValidator(schemes=["http", "https"])(url)
                 response = requests.get(url)
                 response.raise_for_status()
-                conversions = self.import_conversions(response.text)
+                conversions, matches = self.import_conversions(response.text)
                 if conversions:
                     return render(request, "admin/conversions_imported.html", context={
                         "num_conversions": len(conversions),
                         "conversions": conversions,
                     })
-                error = f"{url} did not contain any valid conversions!"
+                if matches and not conversions:
+                    error = f"all conversions contained in {url} already exist!"
+                else:
+                    error = f"{url} did not contain any valid conversions!"
             except ValidationError:
                 error = f"{url} is not a valid URL!" if url else "you must enter a URL!"
             except requests.exceptions.RequestException as e:

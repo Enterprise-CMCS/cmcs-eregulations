@@ -1,15 +1,17 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-    <form action="" method="post">
+    <form action="" method="POST">
         {% csrf_token %}
         <p>The following SSA to USC conversions have been imported:</p>
+        <ul>
         {% for c in conversions %}
-            <p>{{ c }}</p>
+            <li>Section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
         {% endfor %}
+        </ul>
 
         <input type="hidden" name="action" value="show_import_conversions" />
-        <input type="hidden" name="num_conversions" value="{{ num_conversions }}"
+        <input type="hidden" name="num_conversions" value="{{ num_conversions }}" />
         <p><input type="submit" name="return" value="Return"/></p>
     </form>
 {% endblock %}
