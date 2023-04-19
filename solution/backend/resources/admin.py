@@ -320,9 +320,18 @@ class SupContentForm(ResourceForm):
 
 
 class FederalResourceForm(ResourceForm):
+    doc_types = [('RFI', 'RFI'), ('NPRM', 'NPRM'), ("Final", 'Final')]
+
     class Meta:
         model = FederalRegisterDocument
         fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super(FederalResourceForm, self).__init__(*args, **kwargs)
+        if self.instance.id:
+            CHOICES_INCLUDING_DB_VALUE = [(self.instance.doc_type,)*2] + self.doc_types
+            self.fields['doc_type'] = forms.ChoiceField(
+                choices=CHOICES_INCLUDING_DB_VALUE)
 
     def save(self, commit=True):
         return super(FederalResourceForm, self).save(commit=commit)
@@ -358,9 +367,6 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         return super().get_queryset(request).prefetch_related(
             Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
         )
-
-    def get_readonly_fields(self, request, obj=None):
-        return self.readonly_fields + (("doc_type",) if obj else ())  # prevent changing name field on existing objects
 
 
 class FederalRegisterDocumentGroupForm(forms.ModelForm):
