@@ -164,7 +164,7 @@ resources:
                          - "Ref" : "ServerlessDeploymentBucket"
                    Condition:
                      Bool:
-                       aws:SecureTransport: "true"
+                       "aws:SecureTransport": true
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
