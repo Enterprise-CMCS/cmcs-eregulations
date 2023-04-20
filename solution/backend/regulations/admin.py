@@ -18,6 +18,7 @@ from .models import SiteConfiguration, StatuteLinkConverter
 class SiteConfigurationAdmin(SingletonModelAdmin):
     pass
 
+
 @admin.register(StatuteLinkConverter)
 class StatuteLinkConverterAdmin(admin.ModelAdmin):
     change_list_template = "admin/import_conversions_button.html"
@@ -35,8 +36,8 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def import_conversions(self, text, act):
         conversions = []
-        text = re.sub("</?[^>]+>", "", text)  # Strips HTML/XML tags from the response text
-        matches = re.findall("[Ss][Ee][Cc].?\\s*(\\d+).?\\s*\[(\\d+)\\s*[Uu].?[Ss].?[Cc].?\\s*(\\w+)\]", text)  # Find all conversions
+        text = re.sub(r"</?[^>]+>", "", text)  # Strips HTML/XML tags from the response text
+        matches = re.findall(r"[Ss][Ee][Cc].?\s*(\d+).?\s*\[(\d+)\s*[Uu].?[Ss].?[Cc].?\s*(\w+)\]", text)  # Find all conversions
         for section, title, usc in matches:
             instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act)
             if created:
@@ -68,7 +69,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             raise Exception(f"all conversions contained in {url} already exist!")
         else:
             raise Exception(f"{url} did not contain any valid conversions!")
-    
+
     def show_import_conversions_page(self, request):
         error = None
 
