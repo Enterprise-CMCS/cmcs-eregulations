@@ -243,6 +243,8 @@ export default {
     },
     data() {
         return {
+            oursearch: [],
+            searchgovsearch: [],
             pageSize: 50,
             regsLoading: true,
             resourcesLoading: true,
@@ -348,8 +350,7 @@ export default {
                 this.totalRegResultsCount = 0;
             }
         },
-        async retrieveResourcesResults({ query, page, pageSize }) {
-            const isSearchGov = window.location.href.match("searchgov");
+        async retrieveResourcesResults({ query, pageSize, page=1 }) {
             const commonParams = {
                     q: query,
                     page,
@@ -362,20 +363,41 @@ export default {
                 fr_grouping: false,
             };
             try {
-                let response = {
-                    'count': 0
-                };
 
-                if (isSearchGov){
-                    response = await getSearchGovResources(commonParams, djangoParams);
-                    djangoParams.q = query.slice(0, query.length-10);
-                }
-                if (response.count === 0){
-                    response = await getSupplementalContent(djangoParams);
-                }
+                const response = await getSupplementalContent(djangoParams);
+                const list = []
+                //  We only want to get searchgov data for page 1
+                if(page === 1){
+                    const searchGovResponse = await getSearchGovResources(commonParams, djangoParams);
+                    const govHash = searchGovResponse.results.reduce((map, obj)=> {
+                        map[obj.id] = obj;
+                        return map;
+                    }, {});
 
-                this.resourcesResults = response?.results ?? [];
-                this.totalResourcesResultsCount = response?.count ?? 0;
+                    const res = response.results
+
+                    for(const r in res){
+                        if(res[r].id in govHash){
+                            res[r].snippet = govHash[res[r].id].snippet
+                            delete govHash[res[r].id]
+                        }
+                        list.push(res[r])
+                    }
+
+                    if(list.length < 50){
+                        const gov = Object.values(govHash)
+                        const govToAdd = 50 - list.length;
+                        if(gov.length < govToAdd){
+                            list.push(...gov)
+                        } else {
+                            list.push(...gov.slice(0, govToAdd))
+                        }
+                    }
+                } else{
+                    list.push(...response.results)
+                }
+                this.resourcesResults = list ?? [];
+                this.totalResourcesResultsCount = response?.count < 50 ? list.length : response?.count;
             } 
             catch (error) {
                 this.resourcesResults = [];
@@ -393,7 +415,7 @@ export default {
             this.regsLoading = true;
             this.resourcesLoading = true;
 
-            this.retrieveResourcesResults({ query, page, pageSize }).then(
+            this.retrieveResourcesResults({ query, pageSize, page }).then(
                 () => {
                     this.resourcesLoading = false;
                 }
