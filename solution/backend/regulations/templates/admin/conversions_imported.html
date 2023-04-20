@@ -3,10 +3,10 @@
 {% block content %}
     <form action="" method="POST">
         {% csrf_token %}
-        <p>The following SSA to USC conversions have been imported:</p>
+        <p>The following Statute Link Conversions have been imported:</p>
         <ul>
         {% for c in conversions %}
-            <li>Section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
+            <li>{{ c.act }} section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
         {% endfor %}
         </ul>
 

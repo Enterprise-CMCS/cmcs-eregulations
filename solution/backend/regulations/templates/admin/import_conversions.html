@@ -3,8 +3,10 @@
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
-        <p><label for="url">Enter a URL containing valid SSA to USC conversions in XML format:</label></p>
-        <p><input type="url" size="50" name="url" id="url" placeholder="https://example.com/doc.xml" required /></p>
+        <p>Enter a URL containing valid Statute Link Conversions.</p>
+        <p>Statute Link Conversions look like this: "<code>Sec. 1900. [42 U.S.C. 1396]</code>".</p>
+        <p><label for="url">URL:</label> <input type="url" size="50" name="url" id="url" placeholder="https://example.com/doc.xml" required /></p>
+        <p><label for="act">Act:</label> <input type="text" size="50" name="act" id="act" placeholder="SSA" required /></p>
         <input type="hidden" name="action" value="import_conversions" />
         <p><input type="submit" name="import" value="Import Conversions"/></p>
     </form>

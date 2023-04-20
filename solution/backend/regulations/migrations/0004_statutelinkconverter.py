@@ -11,16 +11,17 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='SSAToUSCConverter',
+            name='StatuteLinkConverter',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('section', models.IntegerField()),
                 ('title', models.IntegerField()),
                 ('usc', models.CharField(max_length=128)),
+                ('act', models.CharField(max_length=128)),
             ],
             options={
-                'verbose_name': 'SSA to USC Converter',
-                'verbose_name_plural': 'SSA to USC Converters',
+                'verbose_name': 'Statute Link Converter',
+                'verbose_name_plural': 'Statute Link Converters',
             },
         ),
     ]

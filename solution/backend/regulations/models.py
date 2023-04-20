@@ -13,14 +13,15 @@ class SiteConfiguration(SingletonModel):
         verbose_name = "Site Configuration"
 
 
-class SSAToUSCConverter(models.Model):
+class StatuteLinkConverter(models.Model):
     section = models.IntegerField()
     title = models.IntegerField()
     usc = models.CharField(max_length=128)
+    act = models.CharField(max_length=128)
 
     def __str__(self):
         return f"Section {self.section} → {self.title} USC {self.usc}"
 
     class Meta:
-        verbose_name = "SSA to USC Converter"
-        verbose_name_plural = "SSA to USC Converters"
+        verbose_name = "Statute Link Converter"
+        verbose_name_plural = "Statute Link Converters"
