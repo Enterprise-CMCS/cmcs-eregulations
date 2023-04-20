@@ -82,6 +82,9 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
+                   Condition:
+                     Bool:
+                       aws:SecureTransport: "true"
 
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup
