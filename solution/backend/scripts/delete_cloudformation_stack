@@ -16,8 +16,8 @@ if [[ ${PR_NUMBER} ]]; then
   do
     # Get list of S3 bucket names associated with the stack
     S3_BUCKETS=$(aws cloudformation describe-stack-resources --stack-name $STACK_NAME --region $REGION --query "StackResources[?ResourceType=='AWS::S3::Bucket'].PhysicalResourceId" --output text)
-
     echo "deleting s3 buckets: ${S3_BUCKETS}"
+
     # Loop through the list of S3 bucket names and delete each bucket
     for BUCKET_NAME in $S3_BUCKETS
     do
@@ -27,7 +27,6 @@ if [[ ${PR_NUMBER} ]]; then
     # Delete the CloudFormation stack
     echo "Delete stack ${STACK_NAME}\n"
     aws cloudformation delete-stack --stack-name $STACK_NAME --region $REGION
-
 
     # Wait for stack deletion to complete
     aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME --region $REGION
