@@ -41,6 +41,8 @@ class TestStatuteLinkImport(TestCase):
             golden = json.load(f)
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
         conversions = admin.try_import("http://test.com/test.xml", "SSA")
+        # Despite the name, assertCountEqual does make sure all items in the list are the same, not just the count.
+        # It just supports lists that are out of order, unlike assertEqual.
         self.assertCountEqual(conversions, golden)
 
     @mock.patch("requests.get", side_effect=mocked_requests_get)
