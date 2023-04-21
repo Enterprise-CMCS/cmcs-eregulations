@@ -35,9 +35,6 @@ def mocked_requests_get(*args, **kwargs):
 
 
 class TestStatuteLinkImport(TestCase):
-    def test_show_import_page(self):
-        pass
-
     @mock.patch("requests.get", side_effect=mocked_requests_get)
     def test_try_import(self, mocked_get):
         with open("regulations/tests/fixtures/statute_link_golden.json", "r") as f:
