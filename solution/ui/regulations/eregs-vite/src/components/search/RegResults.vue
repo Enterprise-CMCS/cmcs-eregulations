@@ -22,21 +22,29 @@ const partDocumentTitleLabel = (string) => string.toLowerCase();
 
 const removeQuotes = (string) => stripQuotes(string);
 const createResultLink = (
-    { headline, title, part_number, section_number, date },
+    { headline, title, part_number, section_number, date, section_title },
     base,
     query
 ) => {
     // get highlight content from headline
     const highlightedTermsArray = getTagContent(headline, "search-highlight");
-
+    const rawQuery = query.replace("%", "%25")
     const uniqTermsArray = Array.from(
-        new Set([query, ...highlightedTermsArray])
+        new Set([rawQuery, ...highlightedTermsArray])
     );
 
     const highlightParams =
         uniqTermsArray.length > 0 ? `?q=${uniqTermsArray.join(",")}` : "";
 
-    return `${base}${title}/${part_number}/${section_number}/${date}/${highlightParams}#${part_number}-${section_number}`;
+    let section = section_number
+    let location = `${part_number}-${section_number}`
+
+    if (section_title.includes("Appendix")){
+        section = `Subpart-${section}`
+        location = `${section_title.split('-')[0].trim().replace(/\s/g,"-")}`
+    }
+
+    return `${base}${title}/${part_number}/${section}/${date}/${highlightParams}#${location}`;
 };
 </script>
 
