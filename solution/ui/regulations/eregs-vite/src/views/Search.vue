@@ -243,8 +243,6 @@ export default {
     },
     data() {
         return {
-            oursearch: [],
-            searchgovsearch: [],
             pageSize: 50,
             regsLoading: true,
             resourcesLoading: true,
@@ -365,10 +363,10 @@ export default {
             try {
 
                 const response = await getSupplementalContent(djangoParams);
-                const list = []
+                const resources = []
                 //  We only want to get searchgov data for page 1
                 if(page === 1){
-                    const searchGovResponse = await getSearchGovResources(commonParams, djangoParams);
+                    const searchGovResponse = await getSearchGovResources(commonParams);
                     const govHash = searchGovResponse.results.reduce((map, obj)=> {
                         map[obj.id] = obj;
                         return map;
@@ -381,23 +379,23 @@ export default {
                             res[r].snippet = govHash[res[r].id].snippet
                             delete govHash[res[r].id]
                         }
-                        list.push(res[r])
+                        resources.push(res[r])
                     }
 
-                    if(list.length < 50){
-                        const gov = Object.values(govHash)
-                        const govToAdd = 50 - list.length;
-                        if(gov.length < govToAdd){
-                            list.push(...gov)
+                    if(resources.length < 50){
+                        const govResources = Object.values(govHash)
+                        const govToAdd = 50 - resources.length;
+                        if(govResources.length < govToAdd){
+                            resources.push(...govResources)
                         } else {
-                            list.push(...gov.slice(0, govToAdd))
+                            resources.push(...govResources.slice(0, govToAdd))
                         }
                     }
-                } else{
-                    list.push(...response.results)
+                } else {
+                    resources.push(...response.results)
                 }
-                this.resourcesResults = list ?? [];
-                this.totalResourcesResultsCount = response?.count < 50 ? list.length : response?.count;
+                this.resourcesResults = resources ?? [];
+                this.totalResourcesResultsCount = response?.count < 50 ? resources.length : response?.count;
             } 
             catch (error) {
                 this.resourcesResults = [];
