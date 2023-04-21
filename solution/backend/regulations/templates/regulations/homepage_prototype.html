@@ -34,6 +34,24 @@
 {% endblock %}
 
 {% block body %}
+    <main class="homepage">
+        <div class="site-container homepage-main-content" id="main-content">
+            <div class="toc-container">
+
+                {% for title in structure %}
+                    <div class="toc-title-container">
+                        <h1> {{title.label}} </h1>
+
+                        {% for child in title.children %}
+                            {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child API_BASE=API_BASE title=title.identifier.0 %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </main>
+
 {% endblock %}
 
 {% block post_footer %}
