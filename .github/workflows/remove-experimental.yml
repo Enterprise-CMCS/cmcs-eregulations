@@ -47,13 +47,14 @@ jobs:
           pushd solution/parser
           npm install serverless -g
           npm install
-          serverless remove --stage dev${PR} --config ./serverless-ecfr.yml
-          serverless remove --stage dev${PR} --config ./serverless-fr.yml
+          chmod +x ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh 
+          ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
+          ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR} $PR "./serverless-fr.yml"
           popd
       # remove the regulations site
       - name: remove experimental regulations site server
       # If previous step fails the database will not be removed and you cannot rerun it
-      # In this instance we want to just remove the database so that we dont have 
+      # In this instance we want to just remove the database so that we dont have
       # to go into the database and do it manually.
       # If process is manually stopped it will not run this step.
         if: success() || failure()
@@ -63,8 +64,14 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
-          serverless remove --config ./serverless-experimental.yml --stage dev${PR}
+          # remove the database if its there. 
+          if aws rds describe-db-instances --db-instance-identifier eregs >/dev/null 2>&1; then
+            serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
+            echo "database dropped successfully"
+          else
+            echo "database for dev${PR} was not found"
+          fi
+          ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-site-dev${PR} $PR "./serverless-experimental.yml"
           popd
       # Remove the static assets
       - name: remove static assets
