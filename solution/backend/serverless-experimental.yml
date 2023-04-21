@@ -164,7 +164,7 @@ resources:
                          - "Ref" : "ServerlessDeploymentBucket"
                    Condition:
                      Bool:
-                       aws:SecureTransport: "true"
+                       aws:SecureTransport: false
 
 plugins:
   - serverless-wsgi
