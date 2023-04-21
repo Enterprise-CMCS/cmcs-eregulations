@@ -66,9 +66,9 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         if conversions:
             return conversions
         if matches and not conversions:
-            raise Exception(f"all conversions contained in {url} already exist!")
+            raise ValidationError(f"all conversions contained in {url} already exist!")
         else:
-            raise Exception(f"{url} did not contain any valid conversions!")
+            raise ValidationError(f"{url} did not contain any valid conversions!")
 
     def show_import_conversions_page(self, request):
         error = None
