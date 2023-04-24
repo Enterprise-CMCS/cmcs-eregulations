@@ -84,7 +84,7 @@ resources:
                          - "Ref" : "ServerlessDeploymentBucket"
                    Condition:
                      Bool:
-                       aws:SecureTransport: false
+                       aws:SecureTransport: true
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
