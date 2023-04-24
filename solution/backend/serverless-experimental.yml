@@ -148,24 +148,22 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
-                -  Effect: "Allow"
-                   Action:
-                     - "s3:PutObject"
-                   Resource:
-                     Fn::Join:
-                       - ""
-                       - - "arn:aws:s3:::"
-                         - "Ref" : "ServerlessDeploymentBucket"
-                   Condition:
-                     Bool:
-                       aws:SecureTransport: false
-
+                        - ':'
+                        - - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
+                - Effect: "Allow"
+                  Action:
+                    - "s3:PutObject"
+                  Resource:
+                    Fn::Join:
+                      - ""
+                      - - "arn:aws:s3:::"
+                        - !Ref ServerlessDeploymentBucket
+                  Condition:
+                    Bool:
+                      aws:SecureTransport: true
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
