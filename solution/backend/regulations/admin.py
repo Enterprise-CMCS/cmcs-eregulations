@@ -1,11 +1,11 @@
 import re
 
 from django.contrib import admin, messages
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
-from django.http import HttpResponseRedirect
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
 
 import requests
 from solo.admin import SingletonModelAdmin
@@ -66,7 +66,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         conversions, matches = self.import_conversions(response.text, url, act)
         if conversions:
             return conversions
-        if matches and not conversions:
+        if matches:
             raise ValidationError(f"all conversions contained in {url} already exist!")
         else:
             raise ValidationError(f"{url} did not contain any valid conversions!")
