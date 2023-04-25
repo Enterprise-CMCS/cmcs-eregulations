@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
                 ('title', models.IntegerField()),
                 ('usc', models.CharField(max_length=128)),
                 ('act', models.CharField(max_length=128)),
+                ('source_url', models.CharField(max_length=512, blank=True, null=True)),
             ],
             options={
                 'verbose_name': 'Statute Link Converter',

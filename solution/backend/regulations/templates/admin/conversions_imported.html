@@ -6,7 +6,7 @@
         <p>The following Statute Link Conversions have been imported:</p>
         <ul>
         {% for c in conversions %}
-            <li>{{ c.act }} section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
+            <li>{{ c.act }} &mdash; title {{ c.title }} section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
         {% endfor %}
         </ul>
 

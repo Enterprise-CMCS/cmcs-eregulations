@@ -8,7 +8,6 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
 import requests
-
 from solo.admin import SingletonModelAdmin
 
 from .models import SiteConfiguration, StatuteLinkConverter
@@ -23,9 +22,10 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
 class StatuteLinkConverterAdmin(admin.ModelAdmin):
     change_list_template = "admin/import_conversions_button.html"
     list_per_page = 200
-    search_fields = ["section", "title", "usc", "act"]
-    ordering = ("title", "section", "usc", "act")
-    fields = ("section", "title", "usc", "act")
+    search_fields = ["title", "section", "usc", "act", "source_url"]
+    ordering = ("title", "section", "usc", "act", "source_url")
+    fields = ("title", "section", "usc", "act", "source_url")
+    readonly_fields = ("source_url",)
 
     def get_urls(self):
         urls = super().get_urls()
@@ -34,18 +34,19 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    def import_conversions(self, text, act):
+    def import_conversions(self, text, url, act):
         conversions = []
         text = re.sub(r"</?[^>]+>", "", text)  # Strips HTML/XML tags from the response text
         matches = re.findall(r"[Ss][Ee][Cc].?\s*(\d+).?\s*\[(\d+)\s*[Uu].?[Ss].?[Cc].?\s*(\w+)\]", text)  # Find all conversions
         for section, title, usc in matches:
-            instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act)
+            instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act, source_url=url)
             if created:
                 conversions.append({
                     "act": instance.act,
                     "section": instance.section,
                     "title": instance.title,
-                    "usc": instance.usc
+                    "usc": instance.usc,
+                    "source_url": instance.source_url,
                 })
         return conversions, len(matches)
 
@@ -53,7 +54,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         if not url:
             raise ValidationError("you must enter a URL!")
         if not act:
-            raise ValidationError("you must enter an Act like SSA!")
+            raise ValidationError("you must enter an Act, for example \"SSA\"!")
 
         try:
             URLValidator(schemes=["http", "https"])(url)
@@ -62,7 +63,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
         response = requests.get(url)
         response.raise_for_status()
-        conversions, matches = self.import_conversions(response.text, act)
+        conversions, matches = self.import_conversions(response.text, url, act)
         if conversions:
             return conversions
         if matches and not conversions:

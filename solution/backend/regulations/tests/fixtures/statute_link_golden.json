@@ -3,144 +3,168 @@
         "act": "SSA",
         "section": "1900",
         "title": "42",
-        "usc": "1396"
+        "usc": "1396",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1902",
         "title": "42",
-        "usc": "1396a"
+        "usc": "1396a",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1903",
         "title": "42",
-        "usc": "1396b"
+        "usc": "1396b",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1904",
         "title": "42",
-        "usc": "1396c"
+        "usc": "1396c",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1905",
         "title": "42",
-        "usc": "1396d"
+        "usc": "1396d",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1906",
         "title": "42",
-        "usc": "1396e"
+        "usc": "1396e",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1907",
         "title": "42",
-        "usc": "1396f"
+        "usc": "1396f",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1908",
         "title": "42",
-        "usc": "1396g"
+        "usc": "1396g",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1909",
         "title": "42",
-        "usc": "1396h"
+        "usc": "1396h",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1910",
         "title": "42",
-        "usc": "1396i"
+        "usc": "1396i",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1911",
         "title": "42",
-        "usc": "1396j"
+        "usc": "1396j",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1912",
         "title": "42",
-        "usc": "1396k"
+        "usc": "1396k",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1913",
         "title": "42",
-        "usc": "1396l"
+        "usc": "1396l",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1914",
         "title": "42",
-        "usc": "1396m"
+        "usc": "1396m",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1915",
         "title": "42",
-        "usc": "1396n"
+        "usc": "1396n",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1916",
         "title": "42",
-        "usc": "1396o"
+        "usc": "1396o",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1917",
         "title": "42",
-        "usc": "1396p"
+        "usc": "1396p",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1918",
         "title": "42",
-        "usc": "1396q"
+        "usc": "1396q",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1919",
         "title": "42",
-        "usc": "1396r"
+        "usc": "1396r",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1928",
         "title": "42",
-        "usc": "1396s"
+        "usc": "1396s",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1929",
         "title": "42",
-        "usc": "1396t"
+        "usc": "1396t",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1930",
         "title": "42",
-        "usc": "1396u"
+        "usc": "1396u",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1939",
         "title": "42",
-        "usc": "1396v"
+        "usc": "1396v",
+        "source_url": "http://test.com/test.xml"
     },
     {
         "act": "SSA",
         "section": "1940",
         "title": "42",
-        "usc": "1396w"
+        "usc": "1396w",
+        "source_url": "http://test.com/test.xml"
     }
 ]

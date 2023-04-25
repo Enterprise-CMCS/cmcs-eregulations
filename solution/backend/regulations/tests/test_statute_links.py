@@ -4,10 +4,10 @@ from unittest import mock
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
+from requests.exceptions import HTTPError
+
 from regulations.admin import StatuteLinkConverterAdmin
 from regulations.models import StatuteLinkConverter
-
-from requests.exceptions import HTTPError
 
 
 def mocked_requests_get(*args, **kwargs):
@@ -56,7 +56,13 @@ class TestStatuteLinkImport(TestCase):
         with open("regulations/tests/fixtures/statute_link_golden.json", "r") as f:
             golden = json.load(f)
         for i in golden:
-            StatuteLinkConverter.objects.create(title=i["title"], section=i["section"], usc=i["usc"], act=i["act"])
+            StatuteLinkConverter.objects.create(
+                title=i["title"],
+                section=i["section"],
+                usc=i["usc"],
+                act=i["act"],
+                source_url=i["source_url"]
+            )
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
         with self.assertRaises(ValidationError):
             _ = admin.try_import("http://test.com/test.xml", "SSA")

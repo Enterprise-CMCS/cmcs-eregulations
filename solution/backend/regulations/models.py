@@ -18,9 +18,10 @@ class StatuteLinkConverter(models.Model):
     title = models.IntegerField()
     usc = models.CharField(max_length=128)
     act = models.CharField(max_length=128)
+    source_url = models.CharField(max_length=512, blank=True, null=True)
 
     def __str__(self):
-        return f"Section {self.section} → {self.title} USC {self.usc}"
+        return f"Title {self.title} section {self.section} → {self.title} USC {self.usc}"
 
     class Meta:
         verbose_name = "Statute Link Converter"
