@@ -74,10 +74,6 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     url = serializers.CharField()
     internalURL = serializers.SerializerMethodField()
 
-    @extend_schema_field(OpenApiTypes.STR)
-    def get_internalURL(self, obj):
-        return reverse('supplemental_content', kwargs={'id': obj.pk})
-
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     name_headline = HeadlineField("supplementalcontent")
