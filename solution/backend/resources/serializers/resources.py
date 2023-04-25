@@ -1,7 +1,6 @@
 import re
 
-from django.urls import reverse
-from drf_spectacular.utils import extend_schema_field, OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from django.db.models import Q
 from rest_framework import serializers
 
