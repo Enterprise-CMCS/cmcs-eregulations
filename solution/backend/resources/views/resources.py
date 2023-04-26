@@ -78,7 +78,6 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
     def get_gov_results(self, query, page):
         key = os.environ.get('SEARCHGOV_KEY')
-        print(f"-------------- the key is {key}")
         offset = (page - 1) * self.limit
 
         rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
