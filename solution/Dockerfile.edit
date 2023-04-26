@@ -10,7 +10,7 @@ RUN apk --update add ca-certificates build-base postgresql-dev \
 RUN pip install --no-cache-dir --upgrade pip setuptools \
     && pip install -r requirements.txt
 
-ENV SEARCHGOV_KEY="M1igE4Qcfo8LLQr7o_I9KLA6qkybmlC9IRhVCCbFbl4="
+ENV SEARCHGOV_KEY="<checkawsparamstoreforthisvalue>"
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 

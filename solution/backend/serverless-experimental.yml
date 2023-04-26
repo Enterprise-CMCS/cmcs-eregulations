@@ -26,6 +26,7 @@ provider:
     STATIC_URL: ${self:custom.settings.static_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url, ''}
     SURVEY_URL: ${ssm:/eregulations/survey_url}
+    SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
