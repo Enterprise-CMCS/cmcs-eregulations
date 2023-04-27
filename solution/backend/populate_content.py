@@ -9,6 +9,9 @@ def handler(event, context):
     django.setup()
 
     from resources.models import (
+        AbstractCategory,
+        AbstractLocation,
+        AbstractResource,
         Category,
         SubCategory,
         Subpart,
@@ -21,10 +24,13 @@ def handler(event, context):
     from regcore.search.models import Synonym
 
     fixtures = [
+        ("resources.abstractcategory.json", AbstractCategory),
         ("resources.category.json", Category),
         ("resources.subcategory.json", SubCategory),
+        ("resources.abstractlocation.json", AbstractLocation),
         ("resources.subpart.json", Subpart),
         ("resources.section.json", Section),
+        ("resources.abstractresource.json", AbstractResource),
         ("resources.supplementalcontent.json", SupplementalContent),
         ("resources.federalregisterdocumentgroup.json", FederalRegisterDocumentGroup),
         ("resources.federalregisterdocument.json", FederalRegisterDocument),
