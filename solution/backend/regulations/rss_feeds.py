@@ -2,7 +2,7 @@ from django.urls import reverse
 from resources.models import AbstractResource
 from django.contrib.syndication.views import Feed
 from dateutil import parser
-import math
+
 
 class ResourceFeed(Feed):
     title = 'Resources RSS Feed'
