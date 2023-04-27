@@ -10,6 +10,7 @@ from rest_framework import viewsets
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+import os
 
 from .mixins import (
     ResourceExplorerViewSetMixin,
@@ -76,7 +77,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         }
 
     def get_gov_results(self, query, page):
-        key = '""'
+        key = os.environ.get('SEARCHGOV_KEY')
         offset = (page - 1) * self.limit
 
         rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
