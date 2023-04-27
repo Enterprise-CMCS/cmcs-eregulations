@@ -18,7 +18,7 @@ class ResourceFeed(Feed):
         end = feed_number * page_size
         self.feed_number = feed_number
         return {'start': start, 'end': end}
-    
+
     def get_feed(self, obj, request):
         feedgen = super().get_feed(obj, request)
         feedgen.content_type = 'application/xml'  # New standard
