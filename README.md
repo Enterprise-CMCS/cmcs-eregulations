@@ -21,7 +21,15 @@ We have public documentation about our product, design, and research processes i
 ```
 git clone https://github.com/cmsgov/cmcs-eregulations
 ```
+## Create your Dockerfile
 
+- Create the dockerfile
+
+```
+cd solution
+cp DockerFile.template DockerFile
+```
+- Update the dockerfile with correct environment variables values
 ## Running eRegs
 
 A lot of tasks for local development can be accessed through the Makefile.

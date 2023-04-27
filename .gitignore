@@ -11,3 +11,4 @@ solution/static-assets/regulations/*
 !solution/static-assets/regulations/images/*
 !solution/static-assets/regulations/pdfs/*
 solution/ui/regulations/dist
+solution/Dockerfile
