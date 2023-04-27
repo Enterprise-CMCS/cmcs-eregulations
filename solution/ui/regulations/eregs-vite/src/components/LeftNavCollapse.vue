@@ -1,9 +1,19 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 // open or closed
-const drawerOpen = ref(true);
+const navOpen = ref(true);
 
+const toggleClick = () => {
+    navOpen.value = !navOpen.value;
+};
+
+const btnIcon = computed(() => (navOpen.value ? "mdi-close" : "mdi-menu"));
+
+const navClasses = computed(() => ({
+    open: navOpen.value,
+    closed: !navOpen.value,
+}));
 // Russian doll, slots all the way down
 // This component is specifically for left nav with open/close abilities
 // Column that collapses/expands horizontally for wide widths. Will have a max width
@@ -14,21 +24,33 @@ const drawerOpen = ref(true);
 </script>
 
 <template>
-    <nav id="leftNav">
-        <button class="nav-toggle__button">X</button>
-        <v-btn outlined color="indigo">
-            <v-icon>mdi-close</v-icon>
+    <nav id="leftNav" :class="navClasses">
+        <v-btn
+            class="nav-toggle__button"
+            :class="toggleBtnClasses"
+            :ripple="false"
+            :x-small="!navOpen"
+            :icon="navOpen"
+            outlined
+            @click="toggleClick"
+        >
+            <v-icon class="nav-toggle__button--icon">{{ btnIcon }}</v-icon>
+            <span v-if="!navOpen" class="nav-toggle__button--label">Menu</span>
         </v-btn>
-        <slot></slot>
+        <template v-if="navOpen">
+            <slot></slot>
+        </template>
     </nav>
 </template>
 
-<style>
-#leftNav {
-    background-color: #f5f5f5;
-    border-right: 1px solid #e0e0e0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    height: 100%;
-    width: 400px;
+<style lang="scss">
+nav#leftNav {
+    &.open {
+        width: 400px;
+    }
+
+    &.closed {
+        width: 75px;
+    }
 }
 </style>

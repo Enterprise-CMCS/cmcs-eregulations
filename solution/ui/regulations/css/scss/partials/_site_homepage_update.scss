@@ -9,18 +9,29 @@
 
     nav {
         position: relative;
+        color: white;
+        background-color: $dark_blue;
 
         .nav-toggle__button {
-            cursor: pointer;
             position: absolute;
             top: 8px;
+            right: 8px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            color: $secondary_toc_link_color !important;
+            background-color: $mid_blue_2;
+            padding: 0 !important;
 
-            &--open {
-                left: 8px;
+            &:hover {
+                background-color: $mid_blue;
             }
 
-            &--close {
-                right: 8px;
+            .nav-toggle__button--label {
+                font-size: 14px;
+                font-weight: 700;
+                text-transform:capitalize;
+                letter-spacing: normal;
             }
         }
 

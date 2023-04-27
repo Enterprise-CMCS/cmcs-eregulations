@@ -1,4 +1,5 @@
 import Vue from "vue";
+import vuetify from "../../eregs-vite/src/plugins/vuetify";
 
 import {
     ActionBtn,
@@ -185,6 +186,7 @@ function main() {
     Vue.directive("clickaway", Clickaway);
 
     new Vue({
+        vuetify,
         components: {
             ActionBtn,
             BlockingModal,

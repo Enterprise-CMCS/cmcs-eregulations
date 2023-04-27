@@ -56,6 +56,11 @@
         </left-nav-collapse>
         <div class="site-container homepage-main-content" id="main-content">
         </div>
+        <aside class="homepage-updates ds-l-col--4">
+            {% if regulations %}
+                {% include "regulations/partials/recent_changes.html" %}
+            {% endif %}
+        </aside>
     </main>
 
 {% endblock %}
