@@ -4,7 +4,11 @@
 
 {% block title %}Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project{% endblock %}
 
-{% block body_class %}site-homepage{% endblock %}
+{% block spa_styles %}
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body_class %}site-homepage--update{% endblock %}
 
 {% block pre_header %}
     <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
@@ -34,8 +38,8 @@
 {% endblock %}
 
 {% block body %}
-    <main class="homepage">
-        <div class="site-container homepage-main-content" id="main-content">
+    <main>
+        <left-nav-collapse>
             <div class="toc-container">
 
                 {% for title in structure %}
@@ -49,6 +53,8 @@
                 {% endfor %}
 
             </div>
+        </left-nav-collapse>
+        <div class="site-container homepage-main-content" id="main-content">
         </div>
     </main>
 

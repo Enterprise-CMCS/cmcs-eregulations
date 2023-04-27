@@ -1,0 +1,28 @@
+//-----------------------------
+// Site Homepage -- Update
+//-----------------------------
+
+.site-homepage--update {
+    main {
+        display: flex;
+    }
+
+    nav {
+        position: relative;
+
+        .nav-toggle__button {
+            cursor: pointer;
+            position: absolute;
+            top: 8px;
+
+            &--open {
+                left: 8px;
+            }
+
+            &--close {
+                right: 8px;
+            }
+        }
+
+    }
+}
