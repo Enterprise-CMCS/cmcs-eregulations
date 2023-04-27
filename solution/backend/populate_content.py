@@ -13,13 +13,13 @@ def handler(event, context):
         AbstractLocation,
         AbstractResource,
         Category,
+        FederalRegisterDocument,
+        FederalRegisterDocumentGroup,
+        ResourcesConfiguration,
+        Section,
         SubCategory,
         Subpart,
-        Section,
         SupplementalContent,
-        FederalRegisterDocumentGroup,
-        FederalRegisterDocument,
-        ResourcesConfiguration,
     )
     from regcore.search.models import Synonym
 
