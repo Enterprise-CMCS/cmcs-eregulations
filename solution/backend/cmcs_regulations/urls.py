@@ -35,5 +35,5 @@ urlpatterns = [
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('__debug__/', include('debug_toolbar.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('latest/feed/', ResourceFeed()),
+    path('latest/feed/<int:feed_number>/', ResourceFeed(), name='latest_feed'),
 ]
