@@ -83,10 +83,19 @@ Navigate to project root.
 `make watch-all`: SCSS and JS files can be watched an automatically compiled.
 For admin site customizations, please use the icon set at [boxicon](https://boxicons.com).
 
+## Importing resource data
+
+To populate the created database with seed data for resources run the command below in the solution directory.
+
+```
+make local.seed
+```
+
 ## Exporting data from Production
 
-Every type of model has an "Export to JSON" button that will export the data to a JSON format that can be easily imported
-by saving the file to the fixtures folder and importing it with the built in `loaddata` command from Django.
+If the data is seemingly out of sync with production you may want to get a more recent version of the data from production.
+
+In order to update your local data with the most recent version of production you will need to have access to our production database, pg_dump, and access to the cms.gov vpn.  For more information please look at the README file in cmcs-ergulations/solution/scripts/get-seed-data.
 
 ## Running eRegs Prototype
 
