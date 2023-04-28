@@ -1,5 +1,5 @@
 import Vue from "vue";
-import vuetify from "../../eregs-vite/src/plugins/vuetify";
+import vuetify from "./plugins/vuetify";
 
 import {
     ActionBtn,
