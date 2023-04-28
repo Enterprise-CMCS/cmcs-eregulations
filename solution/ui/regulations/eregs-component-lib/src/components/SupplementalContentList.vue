@@ -43,7 +43,7 @@
                 :name="content.name"
                 :description="content.description"
                 :date="content.date"
-                :url="content.internalURL || content.url"
+                :url="content.url"
             >
             </supplemental-content-object>
             <collapse-button

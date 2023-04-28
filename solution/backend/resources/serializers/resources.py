@@ -1,30 +1,39 @@
 import re
 
-from django.urls import reverse
-from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
+from .categories import (
+    AbstractCategoryPolymorphicSerializer,
+    MetaCategorySerializer
+)
+
 from .locations import (
-    SectionCreateSerializer,
-    SectionRangeCreateSerializer,
     AbstractLocationPolymorphicSerializer,
     MetaLocationSerializer,
+    SectionCreateSerializer,
+    SectionRangeCreateSerializer,
 )
-from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
-from .utils import ProxySerializerWrapper
+
+from .mixins import (
+    HeadlineField,
+    PolymorphicSerializer,
+    PolymorphicTypeField
+)
 
 from resources.models import (
-    SupplementalContent,
+    AbstractCategory,
+    AbstractLocation,
+    Category,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
     ResourcesConfiguration,
-    Category,
-    AbstractCategory,
     Section,
-    AbstractLocation,
+    SupplementalContent,
 )
+
+from .utils import ProxySerializerWrapper
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
@@ -72,11 +81,6 @@ class TypicalResourceFieldsSerializer(DateFieldSerializer):
     name = serializers.CharField()
     description = serializers.CharField()
     url = serializers.CharField()
-    internalURL = serializers.SerializerMethodField()
-
-    @extend_schema_field(OpenApiTypes.STR)
-    def get_internalURL(self, obj):
-        return reverse('supplemental_content', kwargs={'id': obj.pk})
 
 
 class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
