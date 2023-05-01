@@ -51,7 +51,8 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
     def import_conversions(self, text, url, act):
         conversions = []
         text = re.sub(r"</?[^>]+>", "", text)  # Strips HTML/XML tags from the response text
-        matches = re.findall(r"[Ss][Ee][Cc].?\s*(\d+).?\s*\[(\d+)\s*[Uu].?[Ss].?[Cc].?\s*(\w+)\]", text)  # Find all conversions
+        text = re.sub(r"[—–]", "-", text)  # Replace em dash and en dash with regular dash
+        matches = re.findall(r"[Ss][Ee][Cc].?\s*(\d+).?\s*\[\s*(\d+)\s*[Uu].?[Ss].?[Cc].?\s*(\w+(?:-+\w+)?)\s*\]", text)
         for section, title, usc in matches:
             instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act, source_url=url)
             if created:
