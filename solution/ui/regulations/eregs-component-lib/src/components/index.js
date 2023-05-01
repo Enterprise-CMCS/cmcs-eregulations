@@ -11,6 +11,7 @@ export { default as DropdownItem } from "./DropdownItem.vue";
 export { default as FlashBanner } from "./FlashBanner.vue";
 export { default as IFrameContainer } from "./IFrameContainer.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
+export { default as LeftNavCollapse } from "./LeftNavCollapse.vue";
 export { default as PartButton } from "./PartButton.vue";
 export { default as PrintBtn } from "./PrintBtn.vue";
 export { default as RecentChangesContainer } from "./RecentChangesContainer.vue";
@@ -37,4 +38,3 @@ export { default as HeaderComponent } from "../../../eregs-vite/src/components/h
 export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
 export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
-export { default as LeftNavCollapse } from "../../../eregs-vite/src/components/navigation/LeftNavCollapse.vue";
