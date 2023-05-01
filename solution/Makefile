@@ -161,6 +161,9 @@ python.unittest:
 python.shell:
 	docker-compose exec regulations python manage.py shell
 
+python.deletetables:
+	docker-compose exec regulations python manage.py cleantables
+
 python.makemigrations:
 	docker-compose exec regulations python manage.py makemigrations
 
