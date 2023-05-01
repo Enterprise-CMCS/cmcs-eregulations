@@ -34,7 +34,7 @@ const navClasses = computed(() => ({
             outlined
             @click="toggleClick"
         >
-            <span class="nav-toggle__button--icon">{{ btnIcon }}</span>
+            <v-icon class="nav-toggle__button--icon">{{ btnIcon }}</v-icon>
             <span v-if="!navOpen" class="nav-toggle__button--label">Menu</span>
         </v-btn>
         <template v-if="navOpen">
