@@ -24,8 +24,22 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
     list_per_page = 200
     search_fields = ["title", "section", "usc", "act", "source_url"]
     ordering = ("title", "section", "usc", "act", "source_url")
-    fields = ("title", "section", "usc", "act", "source_url")
     readonly_fields = ("source_url",)
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                "title",
+                "section",
+                "usc",
+                "act",
+                "source_url",
+            ),
+            "description": 'For a detailed guide on Statute Link Conversions, please <a target="_blank" '
+                           'href="https://docs.google.com/document/d/14se_BSANJ2Q7Y8OjOLpMLSAye5MpIEkOBhA9-_1RpJY/edit#">'
+                           'click here</a>.',
+        }),
+    )
 
     def get_urls(self):
         urls = super().get_urls()
