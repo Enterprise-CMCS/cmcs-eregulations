@@ -35,11 +35,6 @@ export default defineConfig({
     define: {
         "process.env": { NODE_ENV: "production" },
     },
-    resolve: {
-        alias: {
-            plugins: path.resolve(__dirname, "src/plugins"),
-        },
-    },
     build: {
         lib: {
             ...currentConfig,
