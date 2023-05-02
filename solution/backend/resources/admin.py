@@ -321,11 +321,14 @@ class SupContentForm(ResourceForm):
 
 class FederalResourceForm(ResourceForm):
     doc_types = [('RFI', 'RFI'), ('NPRM', 'NPRM'), ("Final", 'Final')]
+    # Normally you would do this in the model but we dont want to force a change.
+    doc_type = forms.ChoiceField(choices=doc_types, label="Doc Type", required=False)
 
     class Meta:
         model = FederalRegisterDocument
         fields = "__all__"
 
+    # We want to make sure that if there was a different value from doc type before that we preserve it.
     def __init__(self, *args, **kwargs):
         super(FederalResourceForm, self).__init__(*args, **kwargs)
         if self.instance.id:
