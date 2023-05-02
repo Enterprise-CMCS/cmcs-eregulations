@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 
-// open or closed
+// Nav open or closed
 const navOpen = ref(true);
 
 const toggleClick = () => {
@@ -10,10 +10,33 @@ const toggleClick = () => {
 
 const btnIcon = computed(() => (navOpen.value ? "mdi-close" : "mdi-menu"));
 
+const btnClasses = computed(() => ({
+    "full-btn": navOpen.value === true,
+    "icon-only": navOpen.value === false,
+}));
+
 const navClasses = computed(() => ({
     open: navOpen.value,
     closed: !navOpen.value,
 }));
+
+const btnHovered = ref(false);
+const btnFocused = ref(false);
+
+// Open/close toggle btn hovered or focused
+
+const toggleHover = () => {
+    btnHovered.value = !btnHovered.value;
+};
+
+const toggleFocus = () => {
+    btnFocused.value = !btnFocused.value;
+};
+
+const btnHoverClasses = computed(() => ({
+    "nav-toggle__button--hovered": btnHovered.value || btnFocused.value,
+}));
+
 // Russian doll, slots all the way down
 // This component is specifically for left nav with open/close abilities
 // Column that collapses/expands horizontally for wide widths. Will have a max width
@@ -27,14 +50,21 @@ const navClasses = computed(() => ({
     <nav id="leftNav" :class="navClasses">
         <v-btn
             class="nav-toggle__button"
-            :class="toggleBtnClasses"
+            :class="btnClasses"
             :ripple="false"
             :x-small="!navOpen"
             :icon="navOpen"
             outlined
+            plain
             @click="toggleClick"
+            @mouseenter="toggleHover"
+            @mouseleave="toggleHover"
+            @focus="toggleFocus"
+            @blur="toggleFocus"
         >
-            <v-icon class="nav-toggle__button--icon">{{ btnIcon }}</v-icon>
+            <v-icon class="nav-toggle__button--icon" :class="btnHoverClasses">{{
+                btnIcon
+            }}</v-icon>
             <span v-if="!navOpen" class="nav-toggle__button--label">Menu</span>
         </v-btn>
         <template v-if="navOpen">

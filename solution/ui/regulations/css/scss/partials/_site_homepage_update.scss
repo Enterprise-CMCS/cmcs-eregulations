@@ -12,6 +12,12 @@
         color: white;
         background-color: $dark_blue;
 
+        @mixin hover-background {
+            &:hover, &:focus {
+                background-color: $mid_blue;
+            }
+        }
+
         .nav-toggle__button {
             position: absolute;
             top: 8px;
@@ -20,20 +26,37 @@
             border: none;
             border-radius: 4px;
             color: $secondary_toc_link_color !important;
-            background-color: $mid_blue_2;
             padding: 0 !important;
 
-            &:hover {
-                background-color: $mid_blue;
+            &.icon-only {
+                background-color: $dark_blue;
+
+                i {
+                    background-color: $mid_blue_2;
+
+                    &.nav-toggle__button--hovered {
+                        background-color: $mid_blue;
+                    }
+                }
+            }
+
+            &.full-btn {
+                @include hover-background;
+
+                background-color: $mid_blue_2;
+            }
+
+            .v-btn__content {
+                opacity: 1 !important;
             }
 
             .nav-toggle__button--label {
                 font-size: 14px;
                 font-weight: 700;
-                text-transform:capitalize;
+                text-transform: capitalize;
                 letter-spacing: normal;
             }
-        }
 
+        }
     }
 }
