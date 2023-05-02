@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
             name='StatuteLinkConverter',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('section', models.CharField(max_length=128)),
-                ('title', models.IntegerField()),
-                ('usc', models.CharField(max_length=128)),
-                ('act', models.CharField(max_length=128)),
-                ('source_url', models.CharField(max_length=512, blank=True, null=True)),
+                ('section', models.CharField(max_length=128, verbose_name="Act Section")),
+                ('title', models.IntegerField(verbose_name="USC Title")),
+                ('usc', models.CharField(max_length=128, verbose_name="USC Section")),
+                ('act', models.CharField(max_length=128, verbose_name="Act Name")),
+                ('source_url', models.CharField(max_length=512, blank=True, null=True, verbose_name="Source URL")),
             ],
             options={
                 'verbose_name': 'Statute Link Converter',

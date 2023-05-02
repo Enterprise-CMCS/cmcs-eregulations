@@ -22,17 +22,17 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
 class StatuteLinkConverterAdmin(admin.ModelAdmin):
     change_list_template = "admin/import_conversions_button.html"
     list_per_page = 200
-    search_fields = ["title", "section", "usc", "act", "source_url"]
-    ordering = ("title", "section", "usc", "act", "source_url")
+    search_fields = ["act", "section", "title", "usc", "source_url"]
+    ordering = ("act", "section", "title", "usc", "source_url")
     readonly_fields = ("source_url",)
 
     fieldsets = (
         (None, {
             "fields": (
-                "title",
-                "section",
-                "usc",
                 "act",
+                "section",
+                "title",
+                "usc",
                 "source_url",
             ),
             "description": 'For a detailed guide on Statute Link Conversions, please <a target="_blank" '

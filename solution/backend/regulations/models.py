@@ -14,11 +14,11 @@ class SiteConfiguration(SingletonModel):
 
 
 class StatuteLinkConverter(models.Model):
-    section = models.CharField(max_length=128)
-    title = models.IntegerField()
-    usc = models.CharField(max_length=128)
-    act = models.CharField(max_length=128)
-    source_url = models.CharField(max_length=512, blank=True, null=True)
+    section = models.CharField(max_length=128, verbose_name="Act Section")
+    title = models.IntegerField(verbose_name="USC Title")
+    usc = models.CharField(max_length=128, verbose_name="USC Section")
+    act = models.CharField(max_length=128, verbose_name="Act Name")
+    source_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="Source URL")
 
     def __str__(self):
         return f"Title {self.title} section {self.section} → {self.title} USC {self.usc}"
