@@ -76,6 +76,7 @@ Running `make test` after `make local` will run the cypress suite of end to end 
 1. Navigate to project root
 2. If project is not already running locally, run `make local`
 3. `make test`
+4. For python unittest run `make python.unittest`
 
 ## Working with assets
 
@@ -95,7 +96,19 @@ make local.seed
 
 If the data is seemingly out of sync with production you may want to get a more recent version of the data from production.
 
-In order to update your local data with the most recent version of production you will need to have access to our production database, pg_dump, and access to the cms.gov vpn.  For more information please look at the README file in cmcs-ergulations/solution/scripts/get-seed-data.
+In order to update your local data with the most recent version of production you will need to have access to our production database, pg_dump, and access to the cms.gov vpn.
+
+1.  Connect to the VPN and run the following command below for postgresql in command line.  Replace db_address and port_number with the database address and port number respectively.  A file called `backup.sql` should popoulate in directory the command is run in.
+```
+pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' --data-only --column-inserts eregs
+```
+2. Run the command `make python.emptyseedtables`.  This will clear out many of our resources tables and the synonym table for population of the database.
+3. Run the postges script `backup.sql` produced in step 2 on your local database.  This will update your database with up to date production data. 
+    - Make sure you are running this on  your local database and not production.
+    - There will be a couple errors for field not found towards the end of the sql script.  This is beause of some fields added by pg_audit.  You can ignore it.
+4.  Go into admin and verify the valeus were updated.  You shoudl see things like supplemental content, federal register documents, sections, subparts, categories, fr_grouping, and synonyms are populated.
+5.  Run the make command `make local.dump`.  This will overwrite the fixture files in the solution with the data now uploaded onto your machine. 
+6.  Push the PR.  Your dev branch should be now using the proper fixture data.
 
 ## Running eRegs Prototype
 
