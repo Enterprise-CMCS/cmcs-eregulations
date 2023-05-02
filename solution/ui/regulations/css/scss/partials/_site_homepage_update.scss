@@ -33,6 +33,10 @@
 
                 i {
                     background-color: $mid_blue_2;
+                    border-radius: 4px;
+                    font-size: 18px;
+                    padding: 1px 1px 0px;
+                    margin-right: 2px;
 
                     &.nav-toggle__button--hovered {
                         background-color: $mid_blue;

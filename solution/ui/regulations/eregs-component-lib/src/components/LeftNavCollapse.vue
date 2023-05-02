@@ -1,6 +1,26 @@
 <script setup>
 import { computed, ref } from "vue";
 
+// Open/close toggle btn hovered or focused
+const btnHovered = ref(false);
+const btnFocused = ref(false);
+
+const hoverOn = () => {
+    btnHovered.value = true;
+};
+
+const hoverOff = () => {
+    btnHovered.value = false;
+};
+
+const toggleFocus = () => {
+    btnFocused.value = !btnFocused.value;
+};
+
+const btnHoverClasses = computed(() => ({
+    "nav-toggle__button--hovered": btnHovered.value || btnFocused.value,
+}));
+
 // Nav open or closed
 const navOpen = ref(true);
 
@@ -18,23 +38,6 @@ const btnClasses = computed(() => ({
 const navClasses = computed(() => ({
     open: navOpen.value,
     closed: !navOpen.value,
-}));
-
-const btnHovered = ref(false);
-const btnFocused = ref(false);
-
-// Open/close toggle btn hovered or focused
-
-const toggleHover = () => {
-    btnHovered.value = !btnHovered.value;
-};
-
-const toggleFocus = () => {
-    btnFocused.value = !btnFocused.value;
-};
-
-const btnHoverClasses = computed(() => ({
-    "nav-toggle__button--hovered": btnHovered.value || btnFocused.value,
 }));
 
 // Russian doll, slots all the way down
@@ -57,8 +60,8 @@ const btnHoverClasses = computed(() => ({
             outlined
             plain
             @click="toggleClick"
-            @mouseenter="toggleHover"
-            @mouseleave="toggleHover"
+            @mouseenter="hoverOn"
+            @mouseleave="hoverOff"
             @focus="toggleFocus"
             @blur="toggleFocus"
         >
