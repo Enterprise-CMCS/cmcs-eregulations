@@ -8,6 +8,13 @@
     },
     {
         "act": "SSA",
+        "section": "1901",
+        "title": "42",
+        "usc": "1396-1",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
         "section": "1902",
         "title": "42",
         "usc": "1396a",
@@ -43,6 +50,13 @@
     },
     {
         "act": "SSA",
+        "section": "1906A",
+        "title": "42",
+        "usc": "1396e-1",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
         "section": "1907",
         "title": "42",
         "usc": "1396f",
@@ -53,6 +67,13 @@
         "section": "1908",
         "title": "42",
         "usc": "1396g",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1908A",
+        "title": "42",
+        "usc": "1396g-1",
         "source_url": "http://test.com/test.xml"
     },
     {
@@ -113,6 +134,13 @@
     },
     {
         "act": "SSA",
+        "section": "1916A",
+        "title": "42",
+        "usc": "1396o-1",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
         "section": "1917",
         "title": "42",
         "usc": "1396p",
@@ -130,6 +158,76 @@
         "section": "1919",
         "title": "42",
         "usc": "1396r",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1920",
+        "title": "42",
+        "usc": "1396r-1",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1920A",
+        "title": "42",
+        "usc": "1396r-1a",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1920B",
+        "title": "42",
+        "usc": "1396r-1b",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1920C",
+        "title": "42",
+        "usc": "1396r-1c",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1921",
+        "title": "42",
+        "usc": "1396r-2",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1922",
+        "title": "42",
+        "usc": "1396r-3",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1923",
+        "title": "42",
+        "usc": "1396r-4",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1924",
+        "title": "42",
+        "usc": "1396r-5",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1925",
+        "title": "42",
+        "usc": "1396r-6",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1927",
+        "title": "42",
+        "usc": "1396r-8",
         "source_url": "http://test.com/test.xml"
     },
     {
@@ -155,6 +253,62 @@
     },
     {
         "act": "SSA",
+        "section": "1931",
+        "title": "42",
+        "usc": "1396u-1",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1932",
+        "title": "42",
+        "usc": "1396u-2",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1933",
+        "title": "42",
+        "usc": "1396u-3",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1934",
+        "title": "42",
+        "usc": "1396u-4",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1935",
+        "title": "42",
+        "usc": "1396u-5",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1936",
+        "title": "42",
+        "usc": "1396u-6",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1937",
+        "title": "42",
+        "usc": "1396u-7",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1938",
+        "title": "42",
+        "usc": "1396u-8",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
         "section": "1939",
         "title": "42",
         "usc": "1396v",
@@ -165,6 +319,62 @@
         "section": "1940",
         "title": "42",
         "usc": "1396w",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1941",
+        "title": "42",
+        "usc": "1396w-1",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1942",
+        "title": "42",
+        "usc": "1396w-2",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1943",
+        "title": "42",
+        "usc": "1396w-3",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1944",
+        "title": "42",
+        "usc": "1396w-3a",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1945",
+        "title": "42",
+        "usc": "1396w-4",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1945A",
+        "title": "42",
+        "usc": "1396w-4a",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1946",
+        "title": "42",
+        "usc": "1396w-5",
+        "source_url": "http://test.com/test.xml"
+    },
+    {
+        "act": "SSA",
+        "section": "1947",
+        "title": "42",
+        "usc": "1396w-6",
         "source_url": "http://test.com/test.xml"
     }
 ]

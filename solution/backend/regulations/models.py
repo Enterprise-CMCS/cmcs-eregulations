@@ -14,7 +14,7 @@ class SiteConfiguration(SingletonModel):
 
 
 class StatuteLinkConverter(models.Model):
-    section = models.IntegerField()
+    section = models.CharField(max_length=128)
     title = models.IntegerField()
     usc = models.CharField(max_length=128)
     act = models.CharField(max_length=128)

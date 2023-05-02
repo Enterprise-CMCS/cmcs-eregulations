@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             name='StatuteLinkConverter',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('section', models.IntegerField()),
+                ('section', models.CharField(max_length=128)),
                 ('title', models.IntegerField()),
                 ('usc', models.CharField(max_length=128)),
                 ('act', models.CharField(max_length=128)),
