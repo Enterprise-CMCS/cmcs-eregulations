@@ -1,5 +1,15 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+
+// Watch window width
+const windowWidth = ref(window.innerWidth);
+
+const onWidthChange = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => window.addEventListener("resize", onWidthChange));
+onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
 // Open/close toggle btn hovered or focused
 const btnHovered = ref(false);
@@ -21,8 +31,9 @@ const btnHoverClasses = computed(() => ({
     "nav-toggle__button--hovered": btnHovered.value || btnFocused.value,
 }));
 
-// Nav open or closed
-const navOpen = ref(true);
+// Nav open or closed to start
+const navOpen = ref(windowWidth.value >= 1024);
+const responsiveOpen = computed(() => (windowWidth.value >= 1024));
 
 const toggleClick = () => {
     navOpen.value = !navOpen.value;
@@ -51,6 +62,7 @@ const navClasses = computed(() => ({
 
 <template>
     <nav id="leftNav" :class="navClasses">
+        responsiveOpen: {{ responsiveOpen }}
         <v-btn
             class="nav-toggle__button"
             :class="btnClasses"
@@ -76,14 +88,4 @@ const navClasses = computed(() => ({
     </nav>
 </template>
 
-<style lang="scss">
-nav#leftNav {
-    &.open {
-        width: 400px;
-    }
-
-    &.closed {
-        width: 75px;
-    }
-}
-</style>
+<style></style>

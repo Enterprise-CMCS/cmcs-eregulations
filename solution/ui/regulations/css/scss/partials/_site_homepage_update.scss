@@ -13,9 +13,18 @@
         background-color: $dark_blue;
 
         @mixin hover-background {
-            &:hover, &:focus {
+            &:hover,
+            &:focus {
                 background-color: $mid_blue;
             }
+        }
+
+        &.open {
+            width: 400px;
+        }
+
+        &.closed {
+            width: 75px;
         }
 
         .nav-toggle__button {
@@ -60,7 +69,6 @@
                 text-transform: capitalize;
                 letter-spacing: normal;
             }
-
         }
     }
 }
