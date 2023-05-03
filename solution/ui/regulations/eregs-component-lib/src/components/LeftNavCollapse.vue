@@ -33,7 +33,7 @@ const btnHoverClasses = computed(() => ({
 
 // Nav open or closed to start
 const explicitOpen = ref(windowWidth.value >= 1024);
-const responsiveOpen = computed(() => (windowWidth.value >= 1024));
+const responsiveOpen = computed(() => windowWidth.value >= 1024);
 
 const userHasClicked = ref(false);
 
@@ -50,9 +50,11 @@ const navOpen = computed(() => {
 const toggleClick = () => {
     if (userHasClicked.value === false) {
         userHasClicked.value = true;
-    }
 
-    explicitOpen.value = !explicitOpen.value;
+        explicitOpen.value = !responsiveOpen.value;
+    } else {
+        explicitOpen.value = !explicitOpen.value;
+    }
 };
 
 const btnIcon = computed(() => (navOpen.value ? "mdi-close" : "mdi-menu"));
