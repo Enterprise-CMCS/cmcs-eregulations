@@ -321,8 +321,6 @@ class SupContentForm(ResourceForm):
 
 class FederalResourceForm(ResourceForm):
     doc_types = [('RFI', 'RFI'), ('NPRM', 'NPRM'), ("Final", 'Final')]
-    # Normally you would do this in the model but we dont want to force a change.
-    doc_type = forms.ChoiceField(choices=doc_types, label="Doc Type", required=False)
 
     class Meta:
         model = FederalRegisterDocument
