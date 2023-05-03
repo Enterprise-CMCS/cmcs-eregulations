@@ -33,13 +33,15 @@ class ResourceFeed(Feed):
         return results
 
     def item_title(self, item):
-        return item['name'] if item['name'] else "-"
+        name = item['name'] if item['name'] else "-"
+        description = item['description']
+        return f"{name}:::{description}"
 
     def item_pubdate(self, item):
         return self.get_date(item['date_published'])
 
     def item_description(self, item):
-        return item['description']
+        return self.item_title(item)
 
     def item_link(self, item):
         return item['url'] if item['url'] else '/'
