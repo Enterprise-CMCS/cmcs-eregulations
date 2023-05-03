@@ -240,7 +240,10 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
         verbose_name = "Supplemental Content"
         verbose_name_plural = "Supplemental Content"
 
+
 doc_types = [('RFI', 'RFI'), ('NPRM', 'NPRM'), ("Final", 'Final')]
+
+
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)
