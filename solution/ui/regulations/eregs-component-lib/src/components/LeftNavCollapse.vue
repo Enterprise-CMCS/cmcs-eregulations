@@ -32,11 +32,27 @@ const btnHoverClasses = computed(() => ({
 }));
 
 // Nav open or closed to start
-const navOpen = ref(windowWidth.value >= 1024);
+const explicitOpen = ref(windowWidth.value >= 1024);
 const responsiveOpen = computed(() => (windowWidth.value >= 1024));
 
+const userHasClicked = ref(false);
+
+// If user has toggled sidebar open or closed, use that value
+// Otherwise, use responsive value
+const navOpen = computed(() => {
+    if (userHasClicked.value) {
+        return explicitOpen.value;
+    }
+
+    return responsiveOpen.value;
+});
+
 const toggleClick = () => {
-    navOpen.value = !navOpen.value;
+    if (userHasClicked.value === false) {
+        userHasClicked.value = true;
+    }
+
+    explicitOpen.value = !explicitOpen.value;
 };
 
 const btnIcon = computed(() => (navOpen.value ? "mdi-close" : "mdi-menu"));
