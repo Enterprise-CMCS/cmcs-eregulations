@@ -62,7 +62,6 @@ const navClasses = computed(() => ({
 
 <template>
     <nav id="leftNav" :class="navClasses">
-        responsiveOpen: {{ responsiveOpen }}
         <v-btn
             class="nav-toggle__button"
             :class="btnClasses"
