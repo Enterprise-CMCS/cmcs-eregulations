@@ -326,6 +326,7 @@ class FederalResourceForm(ResourceForm):
         model = FederalRegisterDocument
         fields = "__all__"
 
+    # We want to make sure that if there was a different value from doc type before that we preserve it.
     def __init__(self, *args, **kwargs):
         super(FederalResourceForm, self).__init__(*args, **kwargs)
         if self.instance.id:
