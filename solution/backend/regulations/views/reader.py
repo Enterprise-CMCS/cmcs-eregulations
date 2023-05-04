@@ -13,6 +13,7 @@ from resources.models import Category, SubCategory, AbstractLocation
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
+from regulations.models import StatuteLinkConverter
 
 from datetime import date, datetime
 
@@ -56,6 +57,14 @@ class ReaderView(CitationContextMixin, TemplateView):
         for location in locations:
             resource_count[location.display_name] = location.num_locations
 
+        conversions = {}
+        for section, usc, act, title in StatuteLinkConverter.objects.values_list("section", "usc", "act", "title"):
+            conversions[section] = {
+                "usc": usc,
+                "act": act,
+                "title": title,
+            }
+
         c = {
             'tree':         tree,
             'title':        reg_title,
@@ -70,6 +79,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'categories':   categories,
             'sub_categories': sub_categories,
             'resource_count': resource_count,
+            'link_conversions': conversions,
         }
 
         end = datetime.now().timestamp()
