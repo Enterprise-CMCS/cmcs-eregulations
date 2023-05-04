@@ -286,8 +286,20 @@ const getPartTOC = async (title, part) =>
 
 const getCategories = async () => httpApiGet("resources/categories");
 
-const getTOC = async (title) =>
-    httpApiGet(title ? `title/${title}/toc` : `toc`);
+/**
+ * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ *
+ * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
+ */
+const getTOC = async ({title, apiUrl}) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(
+            title ? `${apiUrl}title/${title}/toc` : `${apiUrl}toc`
+        );
+    }
+
+    return httpApiGet(title ? `title/${title}/toc` : `toc`);
+};
 
 const getSectionsForPart = async (title, part) =>
     httpApiGet(`title/${title}/part/${part}/version/latest/sections`);
@@ -310,15 +322,13 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
         titleArr.map((title) => httpApiGet(`title/${title}/parts`))
     );
 
-    const combinedResults = results
-        .flat(1)
-        .reduce(
-            (accumulator, current) => ({
-                ...accumulator,
-                [current.name]: current,
-            }),
-            {}
-        );
+    const combinedResults = results.flat(1).reduce(
+        (accumulator, current) => ({
+            ...accumulator,
+            [current.name]: current,
+        }),
+        {}
+    );
 
     // remove artifact added by front end caching
     delete combinedResults.expiration_date;
@@ -337,7 +347,7 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
  * @returns {Array<{label: string, identifier: string, section: <Object>}>}
  */
 const getFormattedPartsList = async (title = "42") => {
-    const TOC = await getTOC(title);
+    const TOC = await getTOC({title});
     const partsList = TOC.children[0].children
         .map((subChapter) =>
             subChapter.children.map((part) => ({
