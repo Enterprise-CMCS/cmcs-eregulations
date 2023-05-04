@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { EventCodes } from "../utils";
+import { EventCodes } from "utilities/utils";
 
 export default {
     name: "ViewResourcesLink",

@@ -39,7 +39,7 @@ import {
 } from "../dist/eregs-components.es";
 
 import { goToVersion } from "./go-to-version";
-import { highlightText, getQueryParam, scrollToElement } from "./utils";
+import { highlightText, getQueryParam, scrollToElement } from "utilities/utils";
 
 import Clickaway from "../../eregs-vite/src/directives/clickaway";
 
