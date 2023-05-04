@@ -11,7 +11,7 @@ export { default as DropdownItem } from "./DropdownItem.vue";
 export { default as FlashBanner } from "./FlashBanner.vue";
 export { default as IFrameContainer } from "./IFrameContainer.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
-export { default as LeftNavCollapse } from "./LeftNavCollapse.vue";
+export { default as LeftNavCollapse } from "./navigation/LeftNavCollapse.vue";
 export { default as PartButton } from "./PartButton.vue";
 export { default as PrintBtn } from "./PrintBtn.vue";
 export { default as RecentChangesContainer } from "./RecentChangesContainer.vue";
@@ -25,6 +25,7 @@ export { default as SupplementalContentCategory } from "./SupplementalContentCat
 export { default as SupplementalContentList } from "./SupplementalContentList.vue";
 export { default as SupplementalContentObject } from "./SupplementalContentObject.vue";
 export { default as TableComponent } from "./TableComponent.vue";
+export { default as TocContainer } from "./navigation/TocContainer.vue";
 export { default as ViewResourcesLink } from "./ViewResourcesLink.vue";
 
 // Tooltips

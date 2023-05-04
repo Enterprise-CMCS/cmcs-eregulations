@@ -92,9 +92,9 @@ const btnClasses = computed(() => ({
             }}</v-icon>
             <span v-if="!navOpen" class="nav-toggle__button--label">Menu</span>
         </v-btn>
-        <template v-if="navOpen">
+        <div v-show="navOpen">
             <slot></slot>
-        </template>
+        </div>
     </nav>
 </template>
 

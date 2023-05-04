@@ -40,17 +40,9 @@
 {% block body %}
     <main>
         <left-nav-collapse>
-            <div class="toc-container">
-
-                {% for title in structure %}
-                    <div class="toc-title-container">
-                        <h1> {{title.label}} </h1>
-                        {{ title.identifier }}
-
-                    </div>
-                {% endfor %}
-
-            </div>
+            <toc-container
+                api-url="{{ API_BASE }}"
+            ></toc-container>
         </left-nav-collapse>
         <div class="site-container homepage-main-content" id="main-content">
         </div>

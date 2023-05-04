@@ -34,6 +34,7 @@ import {
     SupplementalContentList,
     SupplementalContentObject,
     TableComponent,
+    TocContainer,
     TooltipContainer,
     ViewResourcesLink,
 } from "../dist/eregs-components.es";
@@ -220,6 +221,7 @@ function main() {
             SupplementalContentList,
             SupplementalContentObject,
             TableComponent,
+            TocContainer,
             TooltipContainer,
             ViewResourcesLink,
         },
