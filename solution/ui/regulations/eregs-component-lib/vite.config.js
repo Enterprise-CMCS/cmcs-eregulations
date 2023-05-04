@@ -35,6 +35,11 @@ export default defineConfig({
     define: {
         "process.env": { NODE_ENV: "production" },
     },
+    resolve: {
+        alias: {
+            utilities: path.resolve(__dirname, "../utilities"),
+        },
+    },
     build: {
         lib: {
             ...currentConfig,

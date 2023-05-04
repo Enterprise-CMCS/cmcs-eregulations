@@ -22,6 +22,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
+            utilities: path.resolve(__dirname, "../utilities"),
             legacy: path.resolve(__dirname, "../../regulations"),
             eregsComponentLib: path.resolve(
                 __dirname,

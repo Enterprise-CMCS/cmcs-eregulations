@@ -3,7 +3,7 @@ import {
     formatDate,
     locationLabel,
     locationUrl,
-} from "../../utilities/filters";
+} from "utilities/filters";
 
 import ResultsItem from "@/components/search/ResultsItem.vue";
 import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";

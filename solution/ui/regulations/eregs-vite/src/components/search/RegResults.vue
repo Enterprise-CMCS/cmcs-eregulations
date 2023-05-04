@@ -1,5 +1,5 @@
 <script setup>
-import { getTagContent, stripQuotes } from "@/utilities/utils";
+import { getTagContent, stripQuotes } from "utilities/utils";
 
 import ResultsItem from "@/components/search/ResultsItem.vue";
 
