@@ -57,25 +57,18 @@ const toggleClick = () => {
     }
 };
 
+const navClasses = computed(() => ({
+    open: navOpen.value,
+    closed: !navOpen.value,
+}));
+
+// set button icon based on navOpen
 const btnIcon = computed(() => (navOpen.value ? "mdi-close" : "mdi-menu"));
 
 const btnClasses = computed(() => ({
     "full-btn": navOpen.value === true,
     "icon-only": navOpen.value === false,
 }));
-
-const navClasses = computed(() => ({
-    open: navOpen.value,
-    closed: !navOpen.value,
-}));
-
-// Russian doll, slots all the way down
-// This component is specifically for left nav with open/close abilities
-// Column that collapses/expands horizontally for wide widths. Will have a max width
-// Column that collapses/expands vertically from top for narrow widths.  Will be full width
-// this component will:
-// 1. open and close
-// 2. have a max width (prop?)
 </script>
 
 <template>
