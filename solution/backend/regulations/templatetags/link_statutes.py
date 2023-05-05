@@ -22,36 +22,21 @@ linked_paragraph_regex = re.compile(LINKED_PARAGRAPH_PATTERN, re.IGNORECASE)
 paragraph_regex = re.compile(PARAGRAPH_PATTERN, re.IGNORECASE)
 
 
-def extract_sections(text):
-    sections = []
-    for section_match in section_regex.finditer(text):
-        section_text = section_match.group()
-        section = section_id_regex.match(section_text).group()  # extract section
-        linked_paragraphs = linked_paragraph_regex.findall(section_text)  # extract paragraph chains (e.g. (a)(1)(c)...)
-        paragraphs = [paragraph_regex.findall(p) for p in linked_paragraphs]  # extract individual paragraph items
-        sections.append({
-            "text": section_text,
-            "section": section,
-            "paragraphs": paragraphs,
-        })
-    return sections
-
-
 @register.filter
 def link_statutes(paragraph, link_conversions):
-    for match in statute_ref_regex.finditer(paragraph):
+    def replace_section(section):
+        section_text = section.group()
+        section = section_id_regex.match(section_text).group()  # extract section
+        # linked_paragraphs = linked_paragraph_regex.findall(section_text)  # extract paragraph chains (e.g. (a)(1)(c)...)
+        # paragraphs = [paragraph_regex.findall(p) for p in linked_paragraphs]  # extract individual paragraph items
+        if section in link_conversions:
+            conversion = link_conversions[section]
+            return LINK_FORMAT.format(conversion["title"], conversion["usc"], section_text)
+        return section_text
+
+    def replace_section_groups(match):
         # for each match, we have a string containing one or more sections and an optional associated act
-        sections = extract_sections(match.group())
-        # act = match[1] or None
-        for section in sections:
-            if section["section"] in link_conversions:
-                conversion = link_conversions[section["section"]]
-                paragraph = paragraph.replace(
-                    section["text"],
-                    LINK_FORMAT.format(
-                        conversion["title"],
-                        conversion["usc"],
-                        section["text"]
-                    )
-                )
-    return paragraph
+        pos = match.span()
+        return section_regex.sub(replace_section, match.string[pos[0]:pos[1]])
+
+    return statute_ref_regex.sub(replace_section_groups, paragraph)
