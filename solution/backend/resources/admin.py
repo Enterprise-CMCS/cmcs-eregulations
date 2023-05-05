@@ -6,6 +6,9 @@ from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
+from django.apps import apps
+from django.db.models import Prefetch, Count
+from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import Case, Count, When, F, Prefetch, Value
 from django.forms.widgets import Textarea
@@ -37,12 +40,11 @@ from .models import (
 )
 
 from .serializers.locations import AbstractLocationPolymorphicSerializer
-from .mixins import ExportJSONMixin
+
 from . import actions
 
 
-class BaseAdmin(admin.ModelAdmin, ExportJSONMixin):
-    change_list_template = "admin/export_all_json.html"
+class BaseAdmin(admin.ModelAdmin):
     list_per_page = 200
     admin_priority = 20
     actions = ["export_as_json"]
@@ -58,13 +60,6 @@ class BaseAdmin(admin.ModelAdmin, ExportJSONMixin):
         if db_field.name in lookups:
             kwargs["queryset"] = lookups[db_field.name]()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
-
-    def get_urls(self):
-        urls = super().get_urls()
-        my_urls = [
-            path('export_all_json/', self.export_all_as_json),
-        ]
-        return my_urls + urls
 
 
 @admin.register(ResourcesConfiguration)
@@ -361,6 +356,7 @@ class FederalResourceForm(ResourceForm):
         model = FederalRegisterDocument
         fields = "__all__"
 
+    # We want to make sure that if there was a different value from doc type before that we preserve it.
     def __init__(self, *args, **kwargs):
         super(FederalResourceForm, self).__init__(*args, **kwargs)
         if self.instance.id:

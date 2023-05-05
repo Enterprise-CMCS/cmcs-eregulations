@@ -1,10 +1,10 @@
 # About
 
-[![Actions Status](https://github.com/CMSgov/cmcs-eregulations/workflows/eCFR%20Parser%20Checks/badge.svg)](https://github.com/CMSgov/cmcs-eregulations/actions)
+[![Actions Status](https://github.com/Enterprise-CMCS/cmcs-eregulations/workflows/eCFR%20Parser%20Checks/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions)
 
 This is a project for the Center for Medicaid and CHIP Services (CMCS) to meet needs of CMCS and State staff researching regulations and related guidance, building on the [eRegulations](https://eregs.github.io/) open source project.
 
-We have public documentation about our product, design, and research processes in [this repository wiki](https://github.com/CMSgov/cmcs-eregulations/wiki).
+We have public documentation about our product, design, and research processes in [this repository wiki](https://github.com/Enterprise-CMCS/cmcs-eregulations/wiki).
 
 # Prerequisites
 
@@ -19,7 +19,7 @@ We have public documentation about our product, design, and research processes i
 ## Getting the code
 
 ```
-git clone https://github.com/cmsgov/cmcs-eregulations
+git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
 ```
 ## Create your Dockerfile
 
@@ -84,6 +84,7 @@ Running `make test` after `make local` will run the cypress suite of end to end 
 1. Navigate to project root
 2. If project is not already running locally, run `make local`
 3. `make test`
+4. For python unittest run `make python.unittest`
 
 ## Working with assets
 
@@ -91,10 +92,31 @@ Navigate to project root.
 `make watch-all`: SCSS and JS files can be watched an automatically compiled.
 For admin site customizations, please use the icon set at [boxicon](https://boxicons.com).
 
+## Importing resource data
+
+To populate the created database with seed data for resources run the command below in the solution directory.
+
+```
+make local.seed
+```
+
 ## Exporting data from Production
 
-Every type of model has an "Export to JSON" button that will export the data to a JSON format that can be easily imported
-by saving the file to the fixtures folder and importing it with the built in `loaddata` command from Django.
+If the data is seemingly out of sync with production you may want to get a more recent version of the data from production.
+
+In order to update your local data with the most recent version of production you will need to have access to our production database, pg_dump, and access to the cms.gov vpn.
+
+1.  Connect to the VPN and run the following command below for postgresql in the command line.  Replace db_address and port_number with the database address and port number respectively.  A file called `backup.sql` should populate in the directory the command is run in.
+```
+pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' --data-only --column-inserts eregs
+```
+2. Run the command `make python.emptyseedtables`.  This will clear out many of our resources tables and the synonym table for population of the database.
+3. Run the postges script `backup.sql` produced in step 2 on your local database.  This will update your database with up to date production data. 
+    - Make sure you are running this on  your local database and not production.
+    - There will be a couple errors for field not found towards the end of the sql script.  This is because of some fields added by pg_audit.  You can ignore it.
+4.  Go into admin and verify the values were updated.  You should see things like supplemental content, federal register documents, sections, subparts, categories, fr_grouping, and synonyms are populated.
+5.  Run the make command `make local.dump`.  This will overwrite the fixture files in the solution with the data now uploaded onto your machine. 
+6.  Push the PR.  Your dev branch should be now using the proper fixture data.
 
 ## Running eRegs Prototype
 

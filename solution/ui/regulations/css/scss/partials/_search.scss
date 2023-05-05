@@ -33,6 +33,8 @@
                 flex: 1;
                 margin: 0 auto;
                 padding: 0 45px;
+                max-width: calc(50% - 90px);
+                overflow-wrap: break-word;
                 @content;
             }
 

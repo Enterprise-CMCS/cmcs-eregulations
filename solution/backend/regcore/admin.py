@@ -95,6 +95,5 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
 
 @admin.register(Synonym)
 class SynonymAdmin(BaseAdmin):
-    change_list_template = "admin/synonyms.html"
     admin_priority = 20
     ordering = ('baseWord',)
