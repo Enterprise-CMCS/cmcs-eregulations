@@ -93,7 +93,7 @@ const btnClasses = computed(() => ({
             <span v-if="!navOpen" class="nav-toggle__button--label">Menu</span>
         </v-btn>
         <div v-show="navOpen">
-            <slot></slot>
+            <slot name="nav-contents"></slot>
         </div>
     </nav>
 </template>

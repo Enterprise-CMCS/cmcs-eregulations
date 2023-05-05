@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 import { getTitles, getTOC } from "utilities/api";
 
@@ -8,25 +8,35 @@ const props = defineProps({
         type: String,
         default: undefined,
     },
-})
+});
 
-const getTitlesArray = async() => {
-    const x = await getTitles(props.apiUrl);
-    console.log("titles", x);
-}
+const titles = ref([]);
+const getTitlesArray = async () => {
+    const titlesArray = await getTitles(props.apiUrl);
+    titles.value = titlesArray;
+};
 
-const getTableOfContents = async() => {
-    const x = await getTOC({title: 42, apiUrl: props.apiUrl});
-    console.log("42 toc", x);
-}
+const TOCs = ref([]);
+const getTOCs = async (titles) => {
+    const tocArray = await Promise.all(
+        titles.map(async (title) => {
+            const tocStruct = await getTOC({ title, apiUrl: props.apiUrl });
+            return tocStruct;
+        })
+    );
+
+    TOCs.value = tocArray;
+};
+
+watch(titles, (newVal) => {
+    getTOCs(newVal)
+});
 
 getTitlesArray();
-getTableOfContents();
-
 </script>
 
 <template>
-    {{ props.structure }}
+    <div>{{ titles }}</div>
 </template>
 
 <style></style>
