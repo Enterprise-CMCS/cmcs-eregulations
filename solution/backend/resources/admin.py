@@ -1,42 +1,39 @@
 import json
 import re
 
-from django.contrib import admin
-from django.contrib.admin.sites import site
-from django.apps import apps
-from django.urls import path
-from django.db.models import Prefetch, Count
 from django import forms
+from django.apps import apps
+from django.core.exceptions import ValidationError
+from django.contrib import admin, messages
+from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.contrib import messages
-from django.utils.safestring import mark_safe
-from django.urls import reverse
-from solo.admin import SingletonModelAdmin
+from django.db.models import Case, Count, When, F, Prefetch, Value
+from django.forms.widgets import Textarea
+from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from django.forms.widgets import Textarea
-
-# Register your models here.
-
-from .models import (
-    AbstractResource,
-    SupplementalContent,
-    FederalRegisterDocument,
-    AbstractCategory,
-    Category,
-    SubCategory,
-    AbstractLocation,
-    Section,
-    Subpart,
-    FederalRegisterDocumentGroup,
-    ResourcesConfiguration,
-)
+from django.utils.safestring import mark_safe
+from solo.admin import SingletonModelAdmin
 
 from .filters import (
-    TitleFilter,
     PartFilter,
     SectionFilter,
     SubpartFilter,
+    TitleFilter,
+)
+
+from .models import (
+    AbstractCategory,
+    AbstractLocation,
+    AbstractResource,
+    Category,
+    FederalRegisterDocument,
+    FederalRegisterDocumentGroup,
+    ResourcesConfiguration,
+    Section,
+    SubCategory,
+    Subpart,
+    SupplementalContent,
 )
 
 from .serializers.locations import AbstractLocationPolymorphicSerializer
@@ -299,15 +296,52 @@ class ResourceForm(forms.ModelForm):
     bulk_locations = forms.CharField(
                         widget=forms.Textarea,
                         required=False,
-                        help_text=mark_safe("Add a list of locations separated by a comma.  " +
-                                            "ex. 42 430.10, 42 430 Subpart B, 45 18.150 " +
+                        help_text=mark_safe("Add a list of locations sseparated by a comma.  " +
+                                            "ex. 42 430.10, 42 430 Subpart B, 45ss 18.150 " +
                                             "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
-                                            "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
-                                            "target='blank'>Click here for detailed documentation.</a>"))
+                                            "RP98i9xbGy0fPiGqs_0a6p2PRXhwuDbmsiek/edit#' " +
+                                            "target='blank'>Click here for detaisled documentation.</a>"))
     location_history = forms.JSONField(
                         widget=LocationHistoryWidget(attrs={"rows": 10, "cols": 120}),
                         required=False,
                         disabled=True)
+
+    def get_annotated_url(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__url")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__url")),
+            default=None,
+        )
+
+    def get_resource_id(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__id")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__id")),
+            default=None,
+        )
+
+    def get_resource_type(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=Value("Supplemental Content")),
+            When(federalregisterdocument__isnull=False, then=Value("FR Document")),
+            default=None,
+        )
+
+    def check_duplicates(self):
+        query = AbstractResource.objects.all().annotate(url=self.get_annotated_url(),
+                                                        res_id=self.get_resource_id(),
+                                                        type=self.get_resource_type()
+                                                        ).filter(url=self.cleaned_data.get('url'))
+
+        urls = []
+        if query.count() == 0:
+            return False
+        elif query.count() == 1:
+            if self.instance.id:
+                return False
+        for res in query:
+            urls.append(res.type + " " + str(res.res_id))
+        raise ValidationError('Url Already exist at ' + " ".join(urls))
 
 
 class SupContentForm(ResourceForm):
@@ -316,7 +350,8 @@ class SupContentForm(ResourceForm):
         fields = "__all__"
 
     def save(self, commit=True):
-        return super(SupContentForm, self).save(commit=commit)
+        if not self.check_duplicates():
+            return super(SupContentForm, self).save(commit=commit)
 
 
 class FederalResourceForm(ResourceForm):
