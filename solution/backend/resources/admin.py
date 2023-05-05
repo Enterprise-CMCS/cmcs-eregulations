@@ -6,13 +6,10 @@ from django.apps import apps
 from django.core.exceptions import ValidationError
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
-from django.apps import apps
-from django.db.models import Prefetch, Count
-from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import Case, Count, When, F, Prefetch, Value
 from django.forms.widgets import Textarea
-from django.urls import path, reverse
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
@@ -47,7 +44,6 @@ from . import actions
 class BaseAdmin(admin.ModelAdmin):
     list_per_page = 200
     admin_priority = 20
-    actions = ["export_as_json"]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         lookups = getattr(self, "foreignkey_lookups", {})
