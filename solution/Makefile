@@ -161,20 +161,21 @@ python.unittest:
 python.shell:
 	docker-compose exec regulations python manage.py shell
 
+python.emptyseedtables:
+	docker-compose exec regulations python manage.py emptyseedtables
+
 python.makemigrations:
 	docker-compose exec regulations python manage.py makemigrations
 
 python.migrate:
 	docker-compose exec regulations python manage.py migrate
-	
+
+objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
+
 local.seed:
-	docker-compose exec regulations python manage.py loaddata resources.category.json
-	docker-compose exec regulations python manage.py loaddata resources.subcategory.json
-	docker-compose exec regulations python manage.py loaddata resources.subpart.json
-	docker-compose exec regulations python manage.py loaddata resources.section.json
-	docker-compose exec regulations python manage.py loaddata resources.supplementalcontent.json
-	docker-compose exec regulations python manage.py loaddata resources.federalregisterdocumentgroup.json
-	docker-compose exec regulations python manage.py loaddata resources.federalregisterdocument.json
-	docker-compose exec regulations python manage.py loaddata resources.resourcesconfiguration.json
+	$(foreach object, $(objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
 	docker-compose exec regulations python manage.py loaddata search.synonym.json
 
+local.dump:
+	$(foreach object, $(objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
+	docker-compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json
