@@ -287,11 +287,11 @@ class ResourceForm(forms.ModelForm):
     bulk_locations = forms.CharField(
                         widget=forms.Textarea,
                         required=False,
-                        help_text=mark_safe("Add a list of locations sseparated by a comma.  " +
-                                            "ex. 42 430.10, 42 430 Subpart B, 45ss 18.150 " +
+                        help_text=mark_safe("Add a list of locations separated by a comma.  " +
+                                            "ex. 42 430.10, 42 430 Subpart B, 45 18.150 " +
                                             "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
-                                            "RP98i9xbGy0fPiGqs_0a6p2PRXhwuDbmsiek/edit#' " +
-                                            "target='blank'>Click here for detaisled documentation.</a>"))
+                                            "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
+                                            "target='blank'>Click here for detailed documentation.</a>"))
     location_history = forms.JSONField(
                         widget=LocationHistoryWidget(attrs={"rows": 10, "cols": 120}),
                         required=False,
@@ -334,6 +334,8 @@ class ResourceForm(forms.ModelForm):
             urls.append(res.type + " " + str(res.res_id))
         raise ValidationError('Url Already exist at ' + " ".join(urls))
 
+    def clean(self):
+        self.check_duplicates()
 
 class SupContentForm(ResourceForm):
     class Meta:
@@ -341,8 +343,7 @@ class SupContentForm(ResourceForm):
         fields = "__all__"
 
     def save(self, commit=True):
-        if not self.check_duplicates():
-            return super(SupContentForm, self).save(commit=commit)
+        return super(SupContentForm, self).save(commit=commit)
 
 
 class FederalResourceForm(ResourceForm):
