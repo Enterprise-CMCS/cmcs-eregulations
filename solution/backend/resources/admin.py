@@ -337,6 +337,7 @@ class ResourceForm(forms.ModelForm):
     def clean(self):
         self.check_duplicates()
 
+
 class SupContentForm(ResourceForm):
     class Meta:
         model = SupplementalContent
