@@ -1,123 +1,47 @@
 [
-  {
-    "model": "resources.abstractcategory",
-    "pk": 3,
-    "fields": {
-      "name": "Related Statutes",
-      "description": "Statutes that relate to the subject matter of the subpart or section",
-      "order": 200,
-      "show_if_empty": false
-    }
-  },
-  {
-    "model": "resources.abstractcategory",
-    "pk": 67,
-    "fields": {
-      "name": "Proposed and Final Rules",
-      "description": "Federal Register documents with agency policy proposals and decisions",
-      "order": 250,
-      "show_if_empty": false
-    }
-  },
-  {
-    "model": "resources.abstractcategory",
-    "pk": 4,
-    "fields": {
-      "name": "Related Regulations",
-      "description": "Regulations outside the Subpart related to the subject matter",
-      "order": 300,
-      "show_if_empty": false
-    }
-  },
-  {
-    "model": "resources.abstractcategory",
-    "pk": 5,
-    "fields": {
-      "name": "Subregulatory Guidance",
-      "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
-      "order": 400,
-      "show_if_empty": true
-    }
-  },
-  {
-    "model": "resources.abstractcategory",
-    "pk": 11,
-    "fields": {
-      "name": "Implementation Resources",
-      "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
-      "order": 500,
-      "show_if_empty": true
-    }
-  },
-  {
-    "model": "resources.abstractcategory",
-    "pk": 19,
-    "fields": {
-      "name": "Reports to Congress",
-      "description": "CMS policy analysis and research reports sent to Congress",
-      "order": 501,
-      "show_if_empty": true
-    }
-  },
-  {
-    "model": "resources.abstractcategory",
-    "pk": 23,
-    "fields": {
-      "name": "Oversight Reports",
-      "description": "Reports from HHS Office of Inspector General and U.S. Government Accountability Office",
-      "order": 600,
-      "show_if_empty": true
-    }
-  },
-  {
-    "model": "resources.abstractcategory",
-    "pk": 17,
-    "fields": {
-      "name": "Terms",
-      "description": "Key abbreviations and definitions",
-      "order": 700,
-      "show_if_empty": false
-    }
-  },
-  {
+{
     "model": "resources.category",
     "pk": 3,
     "fields": {}
-  },
-  {
+},
+{
     "model": "resources.category",
     "pk": 67,
     "fields": {}
-  },
-  {
+},
+{
     "model": "resources.category",
     "pk": 4,
     "fields": {}
-  },
-  {
+},
+{
     "model": "resources.category",
     "pk": 5,
     "fields": {}
-  },
-  {
+},
+{
     "model": "resources.category",
     "pk": 11,
     "fields": {}
-  },
-  {
+},
+{
     "model": "resources.category",
     "pk": 19,
     "fields": {}
-  },
-  {
+},
+{
+    "model": "resources.category",
+    "pk": 133,
+    "fields": {}
+},
+{
     "model": "resources.category",
     "pk": 23,
     "fields": {}
-  },
-  {
+},
+{
     "model": "resources.category",
     "pk": 17,
     "fields": {}
-  }
-  ]
-  
+}
+]
