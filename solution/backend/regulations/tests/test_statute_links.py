@@ -91,40 +91,66 @@ class LinkStatutesTestCase(SimpleTestCase):
 
     def test_link_statutes(self):
         link_conversions = {
-            "123": {
-                "usc": "abc",
-                "title": "42",
-                "act": "Social Security Act",
+            "Social Security Act": {
+                "123": {
+                    "title": "42",
+                    "usc": "abc",
+                },
+                "456": {
+                    "title": "43",
+                    "usc": "def",
+                },
             },
-            "456": {
-                "usc": "def",
-                "title": "43",
-                "act": "Social Security Act",
-            },
-            "789": {
-                "usc": "xyz",
-                "title": "44",
-                "act": "Affordable Care Act",
+            "Affordable Care Act": {
+                "789": {
+                    "title": "44",
+                    "usc": "xyz",
+                },
             },
         }
 
         test_values = [
             {
                 "input": "Section 123(a) of the Act",
-                "expected": 'Section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-'
-                            'sectionabc&num=0&edition=prelim">123(a)</a> of the Act',
+                "expected": 'Section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
+                            '42-sectionabc&num=0&edition=prelim">123(a)</a> of the Act',
             },
             {
                 "input": "section 123(a)(1)(C) and 456(b)(2) of the Social Security Act",
-                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)(1)(C)</a> and <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(b)(2)</a> of the Social Security Act',
+                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
+                            '42-sectionabc&num=0&edition=prelim">123(a)(1)(C)</a> and <a target="_blank" href="https://uscode.ho'
+                            'use.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(b)(2)</a> '
+                            'of the Social Security Act',
             },
             {
                 "input": "section 123(a)(1)(C), (b)(1), and (b)(2) of the act",
-                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)(1)(C), (b)(1), and (b)(2)</a> of the act',
+                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
+                            '42-sectionabc&num=0&edition=prelim">123(a)(1)(C), (b)(1), and (b)(2)</a> of the act',
             },
             {
-                "input": "sections 123(a)(1)(C), (b)(1), and (b)(2) and 456(a)(1) and (b)(1) and 456(f) or (g) of the act",
-                "expected": 'sections <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(a)(1) and (b)(1)</a> and <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(f) or (g)</a> of the act'
+                "input": "sections 123(a)(1)(C), (b)(1), and (b)(2) and 456(a)(1) and (b)(1) and 456(f) or (g).",
+                "expected": 'sections <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
+                            '42-sectionabc&num=0&edition=prelim">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a target="_blank" href'
+                            '="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prel'
+                            'im">456(a)(1) and (b)(1)</a> and <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=gr'
+                            'anuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(f) or (g)</a>.'
+            },
+            {
+                "input": "section 123(a), (b), and (c) and (d), or (e) or (f)",
+                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
+                            '42-sectionabc&num=0&edition=prelim">123(a), (b), and (c) and (d), or (e) or (f)</a>',
+            },
+            {
+                "input": "section 123(a), 456(b), and 123(c) and 456(d), or 123(e) or 456(f)",
+                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
+                            '42-sectionabc&num=0&edition=prelim">123(a)</a>, <a target="_blank" href="https://uscode.house.gov/v'
+                            'iew.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(b)</a>, and <a targ'
+                            'et="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&n'
+                            'um=0&edition=prelim">123(c)</a> and <a target="_blank" href="https://uscode.house.gov/view.xhtml?re'
+                            'q=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(d)</a>, or <a target="_blank" h'
+                            'ref="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition='
+                            'prelim">123(e)</a> or <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:US'
+                            'C-prelim-title43-sectiondef&num=0&edition=prelim">456(f)</a>'
             }
         ]
 
@@ -132,4 +158,3 @@ class LinkStatutesTestCase(SimpleTestCase):
             template = Template("{% load link_statutes %}{{ paragraph|link_statutes:link_conversions|safe }}")
             context = Context({"paragraph": test["input"], "link_conversions": link_conversions})
             self.assertEqual(template.render(context), test["expected"])
-

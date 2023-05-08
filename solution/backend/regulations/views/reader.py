@@ -59,10 +59,11 @@ class ReaderView(CitationContextMixin, TemplateView):
 
         conversions = {}
         for section, usc, act, title in StatuteLinkConverter.objects.values_list("section", "usc", "act", "title"):
-            conversions[section] = {
-                "usc": usc,
-                "act": act,
+            if act not in conversions:
+                conversions[act] = {}
+            conversions[act][section] = {
                 "title": title,
+                "usc": usc,
             }
 
         c = {
