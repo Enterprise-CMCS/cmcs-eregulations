@@ -10,12 +10,14 @@ const props = defineProps({
     },
 });
 
+// Titles
 const titles = ref([]);
 const getTitlesArray = async () => {
     const titlesArray = await getTitles(props.apiUrl);
     titles.value = titlesArray;
 };
 
+// Table of Contents for each title
 const TOCs = ref([]);
 const getTOCs = async (titles) => {
     const tocArray = await Promise.all(

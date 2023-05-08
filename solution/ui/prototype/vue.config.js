@@ -9,6 +9,7 @@ module.exports = {
     configureWebpack: {
         resolve: {
             alias: {
+                utilities: path.resolve(__dirname, "../regulations/utilities"),
                 legacy: path.resolve(__dirname, "../regulations"),
                 "legacy-static": path.resolve(
                     __dirname,
