@@ -3,7 +3,6 @@ import re
 
 from django import forms
 from django.apps import apps
-from django.core.exceptions import ValidationError
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -313,29 +312,52 @@ class ResourceForm(forms.ModelForm):
 
     def get_resource_type(self):
         return Case(
-            When(supplementalcontent__isnull=False, then=Value("Supplemental Content")),
-            When(federalregisterdocument__isnull=False, then=Value("FR Document")),
+            When(supplementalcontent__isnull=False, then=Value("supplementalcontent")),
+            When(federalregisterdocument__isnull=False, then=Value("FederalRegisterDocument")),
+            default=None,
+        )
+
+    def get_resource_name(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__name")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__name")),
             default=None,
         )
 
     def check_duplicates(self):
         query = AbstractResource.objects.all().annotate(url=self.get_annotated_url(),
                                                         res_id=self.get_resource_id(),
-                                                        type=self.get_resource_type()
+                                                        type=self.get_resource_type(),
+                                                        name=self.get_resource_name(),
                                                         ).filter(url=self.cleaned_data.get('url'))
 
-        urls = []
+        resources = []
         if query.count() == 0:
             return False
         elif query.count() == 1:
             if self.instance.id:
                 return False
         for res in query:
-            urls.append(res.type + " " + str(res.res_id))
-        raise ValidationError('Url Already exist at ' + " ".join(urls))
+            resources.append({'type': res.type, 'id': str(res.res_id), "name": res.name})
+        return resources
+
+    def resource_links(self, resources):
+        display_text = "".join(
+                                 "<a href={}>{}</a><br>".format(
+                                  reverse('admin:{}_{}_change'.format("resources", res['type']),
+                                          args=(res['id'],)), res['type'] + " " + res['id'] + " " + res['name'])
+                                 for res in resources)
+        if display_text:
+            return mark_safe(display_text)
+        return "-"
 
     def clean(self):
-        self.check_duplicates()
+        cleaned_data = super().clean()
+        dup_resources = self.check_duplicates()
+        if dup_resources:
+            urls = self.resource_links(dup_resources)
+            self.add_error('url', urls)
+        return cleaned_data
 
 
 class SupContentForm(ResourceForm):
