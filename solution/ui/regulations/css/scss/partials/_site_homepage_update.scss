@@ -16,6 +16,7 @@
         position: relative;
         color: white;
         background-color: $dark_blue;
+        padding: 0 25px;
 
         @mixin hover-background {
             &:hover,
@@ -115,6 +116,36 @@
         .toc__container > .v-tabs > .v-tabs-bar,
         .toc__container > .v-tabs-items {
             background-color: transparent;
+        }
+
+        .toc__container {
+            .v-tabs {
+                padding-right: 25px;
+
+                .v-tabs-bar {
+                    border-bottom: 1px solid $mid_blue;
+
+                    .v-tab {
+                        padding: 0;
+                        min-width: 50px;
+                        margin-right: 15px;
+                        font-size: 14px;
+                        line-height: 22px;
+                        text-transform: capitalize;
+                        letter-spacing: normal;
+                        color: white;
+                        font-weight: 400;
+
+                        &--active {
+                            font-weight: 700;
+                        }
+                    }
+
+                    .v-tabs-slider {
+                        background-color: $light_blue_2;
+                    }
+                }
+            }
         }
     }
 }

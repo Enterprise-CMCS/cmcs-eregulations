@@ -23,7 +23,10 @@ provide("homeUrl", props.homeUrl);
 const titles = ref([]);
 const getTitlesArray = async () => {
     const titlesArray = await getTitles(props.apiUrl);
-    titles.value = titlesArray;
+    const formattedTitleNamesArray = titlesArray.map(
+        (title) => `Title ${title}`
+    );
+    titles.value = formattedTitleNamesArray;
 };
 
 // Table of Contents for each title
@@ -39,8 +42,9 @@ const getTOCs = async (titlesArr) => {
     TOCs.value = tocArray;
 };
 
-watch(titles, (newVal) => {
-    getTOCs(newVal);
+watch(titles, (newArr) => {
+    const unformattedTitles = newArr.map((title) => title.split(" ")[1]);
+    getTOCs(unformattedTitles);
 });
 
 // tab state, etc
@@ -52,7 +56,7 @@ getTitlesArray();
 
 <template>
     <div class="toc__container">
-        <v-tabs v-model="selectedTitle">
+        <v-tabs v-model="selectedTitle" slider-size="5">
             <v-tab v-for="(title, i) in titles" :key="i">
                 {{ title }}
             </v-tab>
