@@ -25,6 +25,17 @@
             }
         }
 
+        @mixin hover-background--dark {
+            &:hover,
+            &:focus {
+                background-color: $darkest_blue;
+
+                &:before {
+                    opacity: 0;
+                }
+            }
+        }
+
         @media (max-width: $eds-xs-max) {
             display: flex;
             align-items: center;
@@ -63,9 +74,10 @@
                 background-color: $dark_blue;
 
                 @media (max-width: $eds-xs-max) {
-                    position: relative;
+                    position: absolute;
                     top: unset;
                     right: unset;
+                    left: 0;
                     margin-left: 4px;
                 }
 
@@ -126,6 +138,8 @@
                     border-bottom: 1px solid $mid_blue;
 
                     .v-tab {
+                        @include hover-background--dark;
+
                         padding: 0;
                         min-width: 50px;
                         margin-right: 15px;
@@ -137,6 +151,8 @@
                         font-weight: 400;
 
                         &--active {
+                            @include hover-background--dark;
+
                             font-weight: 700;
                         }
                     }
