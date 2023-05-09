@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { provide, ref, watch } from "vue";
 
 import { getTitles, getTOC } from "utilities/api";
 
@@ -10,7 +10,14 @@ const props = defineProps({
         type: String,
         default: undefined,
     },
+    homeUrl: {
+        type: String,
+        default: undefined,
+    },
 });
+
+// allow non-reactive prop to be available to deeply nested children
+provide("homeUrl", props.homeUrl);
 
 // Titles
 const titles = ref([]);
@@ -21,9 +28,9 @@ const getTitlesArray = async () => {
 
 // Table of Contents for each title
 const TOCs = ref([]);
-const getTOCs = async (titles) => {
+const getTOCs = async (titlesArr) => {
     const tocArray = await Promise.all(
-        titles.map(async (title) => {
+        titlesArr.map(async (title) => {
             const tocStruct = await getTOC({ title, apiUrl: props.apiUrl });
             return tocStruct;
         })

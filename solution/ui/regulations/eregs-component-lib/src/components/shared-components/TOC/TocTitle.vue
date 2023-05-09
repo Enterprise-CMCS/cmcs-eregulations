@@ -13,8 +13,10 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="toc-title-container">
-        <h2 class="toc-title-label">{{ title }}</h2>
-        <h3 v-if="subheading" class="toc-title-subheading">{{ subheading }}</h3>
+    <div class="toc-title__container">
+        <h2 class="toc-title__heading">{{ title }}</h2>
+        <h3 v-if="subheading" class="toc-title__subheading">
+            {{ subheading }}
+        </h3>
     </div>
 </template>

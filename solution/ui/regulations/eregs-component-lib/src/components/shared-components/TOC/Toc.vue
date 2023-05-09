@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, provide } from "vue";
 
 import TocTitle from "sharedComponents/TOC/TocTitle.vue";
 import TocSubchapter from "sharedComponents/TOC/TocSubchapter.vue";
@@ -10,6 +10,10 @@ const props = defineProps({
         required: true,
     },
 });
+
+const titleIdentifier = computed(() => props.structure.identifier[0]);
+
+provide("titleIdentifier", titleIdentifier.value);
 
 const titleLabel = computed(
     () =>
@@ -30,7 +34,7 @@ const titleSubheading = computed(() =>
 </script>
 
 <template>
-    <div class="toc-container">
+    <div class="toc__container">
         <TocTitle :title="titleLabel" :subheading="titleSubheading" />
         <TocSubchapter
             v-for="subchapter in directChild.children"

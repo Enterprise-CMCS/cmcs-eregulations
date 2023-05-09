@@ -10,8 +10,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="toc-subchapter-container">
-        <h4 class="toc-subchapter-label">
+    <div class="toc-subchapter__container">
+        <h4 class="toc-subchapter__label">
             {{ subchapter.label_level }} - {{ subchapter.label_description }}
         </h4>
         <TocPart
