@@ -65,6 +65,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         if "errors" in gov_results or (gov_results["web"]["total"] == 0 and not gov_results["web"]["results"]):
             raise NotFound("Invalid page")
         results = []
+
         for gov_result in gov_results['web']['results']:
             results.append({
                 'name': gov_result['title'],
@@ -78,9 +79,11 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
     def get_gov_results(self, query, page):
         key = os.environ.get('SEARCHGOV_KEY')
+        site_name = os.environ.get('SEARCHGOV_SITE_NAME')
+
         offset = (page - 1) * self.limit
 
-        rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
+        rstring = f'https://search.usa.gov/api/v2/search/?affiliate={site_name}&access_key={key}' \
                   f'&query={urlparse.quote_plus(query)}&limit={self.limit}&offset={offset}'
         gov_results = json.loads(requests.get(rstring).text)
         self.format_gov_results(gov_results)
