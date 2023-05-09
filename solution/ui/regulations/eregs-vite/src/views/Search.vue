@@ -360,8 +360,17 @@ export default {
                     page,
                 };
 
-                const response = await getSearchGovResources(commonParams)
+                let response = await getSearchGovResources(commonParams)
 
+                if(response.count === 0){
+                    const djangoParams = {
+                        ...commonParams,
+                        partDict: "all",
+                        page_size: pageSize,
+                        fr_grouping: false,
+                    };
+                    response = await getSupplementalContent(djangoParams);
+                }
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
             } catch (error) {

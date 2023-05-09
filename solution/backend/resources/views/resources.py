@@ -7,7 +7,6 @@ from django.db import transaction
 from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
 from rest_framework import viewsets
-from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 import os
@@ -61,20 +60,24 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             default=None,
         )
 
-    def format_gov_results(self, gov_results):
-        if "errors" in gov_results or (gov_results["web"]["total"] == 0 and not gov_results["web"]["results"]):
-            raise NotFound("Invalid page")
+    def format_gov_results(self, gov_response):
         results = []
-        for gov_result in gov_results['web']['results']:
-            results.append({
-                'name': gov_result['title'],
-                'snippet': gov_result['snippet'],
-                'url': gov_result['url']
-            })
-        self.gov_results = {
-            "total": gov_results["web"]["total"],
-            "results": results,
-        }
+        if "errors" in gov_response or (gov_response["web"]["total"] == 0 and not gov_response["web"]["results"]):
+            self.gov_results = {
+                'total': 0,
+                'results': results
+            }
+        else:
+            for gov_result in gov_response['web']['results']:
+                results.append({
+                    'name': gov_result['title'],
+                    'snippet': gov_result['snippet'],
+                    'url': gov_result['url']
+                })
+            self.gov_results = {
+                "total": gov_response["web"]["total"],
+                "results": results,
+            }
 
     def get_gov_results(self, query, page):
         key = os.environ.get('SEARCHGOV_KEY')
@@ -82,8 +85,12 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
         rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
                   f'&query={urlparse.quote_plus(query)}&limit={self.limit}&offset={offset}'
-        gov_results = json.loads(requests.get(rstring).text)
-        self.format_gov_results(gov_results)
+        try:
+            gov_response = json.loads(requests.get(rstring).text)
+        except ValueError:
+            gov_response = "errors"
+        finally:
+            self.format_gov_results(gov_response)
 
     # There might be missing resources in dev than prod so their could be missing urls
     def sort_by_url_list(self, urls, resources):
