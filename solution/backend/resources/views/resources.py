@@ -1,11 +1,13 @@
 import json
 import re
 import requests
+
 import urllib.parse as urlparse
 from drf_spectacular.utils import extend_schema
 from django.db import transaction
 from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
+from requests.exceptions import ConnectTimeout
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -86,8 +88,10 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         rstring = f'https://search.usa.gov/api/v2/search/?affiliate=reg-pilot-cms-test&access_key={key}' \
                   f'&query={urlparse.quote_plus(query)}&limit={self.limit}&offset={offset}'
         try:
-            gov_response = json.loads(requests.get(rstring).text)
+            gov_response = json.loads(requests.get(rstring, timeout=3).text)
         except ValueError:
+            gov_response = "errors"
+        except ConnectTimeout:
             gov_response = "errors"
         finally:
             self.format_gov_results(gov_response)
