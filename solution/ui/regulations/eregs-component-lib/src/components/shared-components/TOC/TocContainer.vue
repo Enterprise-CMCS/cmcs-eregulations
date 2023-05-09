@@ -3,6 +3,8 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 import { getTitles, getTOC } from "utilities/api";
 
+import Toc from "sharedComponents/TOC/Toc.vue";
+
 const props = defineProps({
     apiUrl: {
         type: String,
@@ -31,14 +33,20 @@ const getTOCs = async (titles) => {
 };
 
 watch(titles, (newVal) => {
-    getTOCs(newVal)
+    getTOCs(newVal);
 });
 
+// On load
 getTitlesArray();
 </script>
 
 <template>
-    <div>{{ titles }}</div>
+    <div>
+        <div>{{ titles }}</div>
+        <template v-for="(toc, i) in TOCs">
+            <Toc :key="i" :structure="toc" />
+        </template>
+    </div>
 </template>
 
 <style></style>
