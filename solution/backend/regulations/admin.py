@@ -79,7 +79,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         if not url:
             raise ValidationError("you must enter a URL!")
         if not act:
-            raise ValidationError("you must enter an Act, for example \"SSA\"!")
+            raise ValidationError("you must enter an Act, for example \"Social Security Act\"!")
 
         try:
             URLValidator(schemes=["http", "https"])(url)

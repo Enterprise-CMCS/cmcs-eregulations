@@ -10,13 +10,13 @@ LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.house.go
               '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim">{}</a>'
 
 # Extracts the section ID only, for example "1902-1G" and its variations.
-SECTION_ID_PATTERN = r"(\d+[a-z]?(?:-+[a-z0-9]+)?)"
+SECTION_ID_PATTERN = r"\d+[a-z]?(?:-+[a-z0-9]+)?"
 
 # Matches ", and", ", or", "and", "or", "&", and more variations.
 AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
 
 # Matches individual sections, for example "Section 1902(a)(2) and (b)(1)" and its variations.
-SECTION_PATTERN = rf"({SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*)"
+SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*"
 
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
@@ -25,8 +25,8 @@ STATUTE_REF_PATTERN = rf"\bsect(?:ion[s]?|s?).?\s*((?:{SECTION_PATTERN}{AND_OR_P
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
 # Regex's are precompiled to improve page load time.
-SECTION_ID_REGEX = re.compile(SECTION_ID_PATTERN, re.IGNORECASE)
-SECTION_REGEX = re.compile(SECTION_PATTERN, re.IGNORECASE)
+SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
+SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
