@@ -111,50 +111,87 @@ class LinkStatutesTestCase(SimpleTestCase):
 
         test_values = [
             {
+                "testing": "a single link with no act",
                 "input": "Section 123(a) of the Act",
-                "expected": 'Section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
-                            '42-sectionabc&num=0&edition=prelim">123(a)</a> of the Act',
+                "expected": 'Section <a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid'
+                            ':USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)</a> of the Act',
             },
             {
+                "testing": "two links within one statute ref",
                 "input": "section 123(a)(1)(C) and 456(b)(2) of the Social Security Act",
-                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
-                            '42-sectionabc&num=0&edition=prelim">123(a)(1)(C)</a> and <a target="_blank" href="https://uscode.ho'
-                            'use.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(b)(2)</a> '
-                            'of the Social Security Act',
+                "expected": 'section <a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid'
+                            ':USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)(1)(C)</a> and <a target="_blank" class='
+                            '"external" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&nu'
+                            'm=0&edition=prelim">456(b)(2)</a> of the Social Security Act',
             },
             {
+                "testing": "multiple comma-separated paragraph refs",
                 "input": "section 123(a)(1)(C), (b)(1), and (b)(2) of the act",
-                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
+                "expected": 'section <a target="_blank" class="external" href="https://'
+                            'uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
                             '42-sectionabc&num=0&edition=prelim">123(a)(1)(C), (b)(1), and (b)(2)</a> of the act',
             },
             {
+                "testing": "multiple paragraphs and sections in the same ref",
                 "input": "sections 123(a)(1)(C), (b)(1), and (b)(2) and 456(a)(1) and (b)(1) and 456(f) or (g).",
-                "expected": 'sections <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
-                            '42-sectionabc&num=0&edition=prelim">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a target="_blank" href'
-                            '="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prel'
-                            'im">456(a)(1) and (b)(1)</a> and <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=gr'
-                            'anuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(f) or (g)</a>.'
+                "expected": 'sections <a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid'
+                            ':USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a tar'
+                            'get="_blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-tit'
+                            'le43-sectiondef&num=0&edition=prelim">456(a)(1) and (b)(1)</a> and <a target="_blank" class="externa'
+                            'l" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&editi'
+                            'on=prelim">456(f) or (g)</a>.',
             },
             {
+                "testing": "all variations of paragraph separation",
                 "input": "section 123(a), (b), and (c) and (d), or (e) or (f)",
-                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
-                            '42-sectionabc&num=0&edition=prelim">123(a), (b), and (c) and (d), or (e) or (f)</a>',
+                "expected": 'section <a target="_blank" class="external" href="https://uscode.house.'
+                            'gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&editio'
+                            'n=prelim">123(a), (b), and (c) and (d), or (e) or (f)</a>',
             },
             {
+                "testing": "all variations of section separation",
                 "input": "section 123(a), 456(b), and 123(c) and 456(d), or 123(e) or 456(f)",
-                "expected": 'section <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title'
-                            '42-sectionabc&num=0&edition=prelim">123(a)</a>, <a target="_blank" href="https://uscode.house.gov/v'
-                            'iew.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(b)</a>, and <a targ'
-                            'et="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&n'
-                            'um=0&edition=prelim">123(c)</a> and <a target="_blank" href="https://uscode.house.gov/view.xhtml?re'
-                            'q=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim">456(d)</a>, or <a target="_blank" h'
-                            'ref="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition='
-                            'prelim">123(e)</a> or <a target="_blank" href="https://uscode.house.gov/view.xhtml?req=granuleid:US'
-                            'C-prelim-title43-sectiondef&num=0&edition=prelim">456(f)</a>'
-            }
+                "expected": 'section <a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid'
+                            ':USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)</a>, <a target="_blank" class="external'
+                            '" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&editi'
+                            'on=prelim">456(b)</a>, and <a target="_blank" class="external" href="https://uscode.house.gov/view.'
+                            'xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim">123(c)</a> and <a target="_'
+                            'blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-'
+                            'sectiondef&num=0&edition=prelim">456(d)</a>, or <a target="_blank" class="external" href="https://u'
+                            'scode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim">123(e)'
+                            '</a> or <a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid'
+                            ':USC-prelim-title43-sectiondef&num=0&edition=prelim">456(f)</a>',
+            },
+            {
+                "testing": "case-insensitivity",
+                "input": "sEcTiOn 123(A) oF tHe aCt",
+                "expected": 'sEcTiOn <a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml?req=granuleid'
+                            ':USC-prelim-title42-sectionabc&num=0&edition=prelim">123(A)</a> oF tHe aCt',
+            },
+            {
+                "testing": "when a section is not found in the referenced act",
+                "input": "Section 1111(a) of the Social Security Act",
+                "expected": "Section 1111(a) of the Social Security Act",
+            },
+            {
+                "testing": "when one section is valid but another is not within the same act",
+                "input": "Section 1111(a) and 123(a) of the Act",
+                "expected": 'Section 1111(a) and <a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml?r'
+                            'eq=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim">123(a)</a> of the Act',
+            },
+            {
+                "testing": "when the section is valid but referencing the wrong act",
+                "input": "Section 123(a) of the Affordable Care Act",
+                "expected": "Section 123(a) of the Affordable Care Act",
+            },
+            {
+                "testing": "when the section is valid but not in the default act",
+                "input": "section 789 of the act",
+                "expected": "section 789 of the act",
+            },
         ]
 
         for test in test_values:
             template = Template("{% load link_statutes %}{{ paragraph|link_statutes:link_conversions|safe }}")
             context = Context({"paragraph": test["input"], "link_conversions": link_conversions})
-            self.assertEqual(template.render(context), test["expected"])
+            self.assertEqual(template.render(context), test["expected"], f"Failed while testing {test['testing']}.")
