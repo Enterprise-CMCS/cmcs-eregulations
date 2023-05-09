@@ -56,6 +56,7 @@
             border-radius: 4px;
             color: $secondary_toc_link_color !important;
             padding: 0 !important;
+            z-index: 1;
 
             &.icon-only {
                 background-color: $dark_blue;
@@ -109,6 +110,11 @@
                     font-size: 16px;
                 }
             }
+        }
+
+        .toc__container > .v-tabs > .v-tabs-bar,
+        .toc__container > .v-tabs-items {
+            background-color: transparent;
         }
     }
 }

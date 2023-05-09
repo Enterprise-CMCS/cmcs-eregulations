@@ -1,5 +1,5 @@
 <script setup>
-import { provide, ref, watch } from "vue";
+import { provide, reactive, ref, watch } from "vue";
 
 import { getTitles, getTOC } from "utilities/api";
 
@@ -43,17 +43,32 @@ watch(titles, (newVal) => {
     getTOCs(newVal);
 });
 
+// tab state, etc
+const selectedTitle = ref(null);
+
 // On load
 getTitlesArray();
 </script>
 
 <template>
-    <div>
-        <div>{{ titles }}</div>
-        <template v-for="(toc, i) in TOCs">
-            <Toc :key="i" :structure="toc" />
-        </template>
+    <div class="toc__container">
+        <v-tabs v-model="selectedTitle">
+            <v-tab v-for="(title, i) in titles" :key="i">
+                {{ title }}
+            </v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="selectedTitle" dark>
+            <v-tab-item v-for="(title, i) in titles" :key="i">
+                <template v-if="TOCs[i]">
+                    <Toc :structure="TOCs[i]" />
+                </template>
+            </v-tab-item>
+        </v-tabs-items>
     </div>
 </template>
 
-<style></style>
+<style>
+.toc__container .v-tabs .v-tabs__bar {
+    background-color: transparent;
+}
+</style>
