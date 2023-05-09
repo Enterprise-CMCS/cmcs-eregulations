@@ -9,11 +9,11 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 from regcore.models import Part
+from regulations.models import StatuteLinkConverter
 from resources.models import Category, SubCategory, AbstractLocation
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
 from regulations.views.errors import NotInSubpart
-from regulations.models import StatuteLinkConverter
 
 from datetime import date, datetime
 
