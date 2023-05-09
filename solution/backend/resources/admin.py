@@ -346,7 +346,7 @@ class ResourceForm(forms.ModelForm):
         display_text = display_text + "".join(
                                  "<a href={}>{}</a><br>".format(
                                   reverse('admin:{}_{}_change'.format("resources", res['type']),
-                                          args=(res['id'],)), res['type'] + " " + res['name'])
+                                          args=(res['id'],)), res['type'] + " " + str(res['name']))
                                  for res in resources)
         if display_text:
             return mark_safe(display_text)
