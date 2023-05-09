@@ -313,7 +313,7 @@ class ResourceForm(forms.ModelForm):
     def get_resource_type(self):
         return Case(
             When(supplementalcontent__isnull=False, then=Value("supplementalcontent")),
-            When(federalregisterdocument__isnull=False, then=Value("FederalRegisterDocument")),
+            When(federalregisterdocument__isnull=False, then=Value("federalregisterdocument")),
             default=None,
         )
 
@@ -342,10 +342,11 @@ class ResourceForm(forms.ModelForm):
         return resources
 
     def resource_links(self, resources):
-        display_text = "".join(
+        display_text = "The url is also used on the following resources:<br>"
+        display_text = display_text + "".join(
                                  "<a href={}>{}</a><br>".format(
                                   reverse('admin:{}_{}_change'.format("resources", res['type']),
-                                          args=(res['id'],)), res['type'] + " " + res['id'] + " " + res['name'])
+                                          args=(res['id'],)), res['type'] + " " + res['name'])
                                  for res in resources)
         if display_text:
             return mark_safe(display_text)
