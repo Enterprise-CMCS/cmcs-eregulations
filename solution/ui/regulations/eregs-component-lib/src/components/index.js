@@ -37,8 +37,8 @@ export { default as LeftNavCollapse } from "./shared-components/LeftNavCollapse.
 export { default as Toc } from "./shared-components/TOC/Toc.vue";
 export { default as TocContainer } from "./shared-components/TOC/TocContainer.vue";
 export { default as TocPart } from "./shared-components/TOC/TocPart.vue";
-export { default as TocTitle } from "./shared-components/TOC/TocTitle.vue";
 export { default as TocSubchapter } from "./shared-components/TOC/TocSubchapter.vue";
+export { default as TocTitle } from "./shared-components/TOC/TocTitle.vue";
 
 // from Single Page App
 export { default as HeaderComponent } from "../../../eregs-vite/src/components/header/HeaderComponent.vue";

@@ -54,7 +54,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get("nav#leftNav").should("have.attr", "class", "closed");
     });
 
-    it("should responsively open and close the left if user does not click open/close button", () => {
+    it("should responsively open and close the left nav if user does not click open/close button", () => {
         cy.viewport("macbook-15");
         cy.visit("/homepage_test/");
         cy.get("nav#leftNav").should("have.attr", "class", "open");
