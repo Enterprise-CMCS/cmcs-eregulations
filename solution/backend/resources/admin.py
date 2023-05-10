@@ -339,17 +339,18 @@ class ResourceForm(forms.ModelForm):
                                                         ).filter(url=self.cleaned_data.get('url'))
 
         resources = []
+        print(query.count())
         if query.count() == 0:
             return False
         elif query.count() == 1:
-            if self.instance.id:
+            if self.instance.id and query.filter(id=self.instance.id).count() == 1:
                 return False
         for res in query:
             resources.append({'type': res.type, 'id': str(res.res_id), "name": res.name})
         return resources
 
     def resource_links(self, resources):
-        display_text = "The url is also used on the following resources:<br>"
+        display_text = "The url is alsso used on the following resources:<br>"
         display_text = display_text + "".join(
                                  "<a href={}>{}</a><br>".format(
                                   reverse('admin:{}_{}_change'.format("resources", res['type']),
