@@ -18,11 +18,13 @@ const partUrl = computed(() => {
 
 <template>
     <div class="toc-part__container">
-        <a class="toc-part__anchor" :href="partUrl"
-            ><span class="toc-part__label--bold">{{
-                props.part.label_level
-            }}</span>
-            - {{ props.part.label_description }}</a
-        >
+        <a class="toc-part__anchor" :href="partUrl">
+            <div class="toc-part__label">
+                <span class="toc-part__label--bold">{{
+                    props.part.label_level
+                }}</span>
+                - {{ props.part.label_description }}
+            </div>
+        </a>
     </div>
 </template>

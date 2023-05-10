@@ -191,8 +191,7 @@
                 }
 
                 .toc-part__container {
-                    margin-left: 16px;
-                    margin-bottom: 12px;
+                    margin-left: 4px;
 
                     .toc-part__anchor {
                         @include hover-background--dark;
@@ -200,11 +199,14 @@
                         display: inline-block;
                         width: 100%;
                         text-decoration: none;
-                        font-size: 16px;
-                        line-height: 24px;
-                        color: $light_blue_2;
+                        border-radius: 4px;
 
                         .toc-part__label {
+                            font-size: 16px;
+                            line-height: 24px;
+                            color: $light_blue_2;
+                            padding: 6px 12px;
+
                             &--bold {
                                 font-weight: 700;
                             }
