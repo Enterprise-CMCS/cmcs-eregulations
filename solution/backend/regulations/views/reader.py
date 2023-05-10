@@ -2,7 +2,7 @@ from datetime import date, datetime
 
 from django.db.models import Q, Count
 from django.http import (
-    HttpResponseRedirect, 
+    HttpResponseRedirect,
     Http404,
 )
 from django.urls import reverse
