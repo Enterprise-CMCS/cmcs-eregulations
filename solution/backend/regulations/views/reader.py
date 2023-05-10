@@ -1,21 +1,26 @@
+from datetime import date, datetime
+
+from django.db.models import Q, Count
+from django.http import (
+    HttpResponseRedirect, 
+    Http404,
+)
+from django.urls import reverse
 from django.views.generic.base import (
     TemplateView,
     View,
 )
-from django.db.models import Q, Count
-
-from django.http import Http404
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 
 from regcore.models import Part
 from regulations.models import StatuteLinkConverter
-from resources.models import Category, SubCategory, AbstractLocation
+from regulations.views.errors import NotInSubpart
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
-from regulations.views.errors import NotInSubpart
-
-from datetime import date, datetime
+from resources.models import (
+    AbstractLocation,
+    Category,
+    SubCategory,
+)
 
 
 class ReaderView(CitationContextMixin, TemplateView):

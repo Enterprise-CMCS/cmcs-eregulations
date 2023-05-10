@@ -1,5 +1,5 @@
-from functools import partial
 import re
+from functools import partial
 
 from django import template
 
