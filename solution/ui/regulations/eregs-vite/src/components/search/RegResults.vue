@@ -54,7 +54,7 @@ const createResultLink = (
         <template v-for="(result, i) in results">
             <ResultsItem :key="i">
                 <template #context>
-                    {{ partDocumentTitleLabel(result.part_title) }}
+                    {{result.title}} CFR {{ partDocumentTitleLabel(result.part_title) }}
                 </template>
                 <template #link>
                     <a
