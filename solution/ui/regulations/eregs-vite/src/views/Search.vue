@@ -354,15 +354,22 @@ export default {
             }
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
-            try {
-                const commonParams = {
+            const commonParams = {
                     q: query,
                     page,
                 };
+            let response = ""
+            try {
+                response = await getSearchGovResources(commonParams);
 
-                let response = await getSearchGovResources(commonParams);
-
-                if (response.count === 0) {
+                this.resourcesResults = response?.results ?? [];
+                this.totalResourcesResultsCount = response?.count ?? 0;
+            } catch (error) {
+                console.error(
+                    "Error retrieving regulation search results: ",
+                    error
+                );
+                if (error.detail !== "Search.gov out of bounds") {
                     const djangoParams = {
                         ...commonParams,
                         partDict: "all",
@@ -373,13 +380,6 @@ export default {
                 }
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
-            } catch (error) {
-                console.error(
-                    "Error retrieving regulation search results: ",
-                    error
-                );
-                this.resourcesResults = [];
-                this.totalResourcesResultsCount = 0;
             }
         },
         async retrieveAllResults({ query, page, pageSize }) {
