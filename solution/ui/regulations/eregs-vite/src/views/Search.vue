@@ -360,9 +360,9 @@ export default {
                     page,
                 };
 
-                let response = await getSearchGovResources(commonParams)
+                let response = await getSearchGovResources(commonParams);
 
-                if(response.count === 0){
+                if (response.count === 0) {
                     const djangoParams = {
                         ...commonParams,
                         partDict: "all",
