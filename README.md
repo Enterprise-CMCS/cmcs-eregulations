@@ -27,7 +27,7 @@ git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
 
 ```
 cd solution
-cp DockerFile.template DockerFile
+cp Dockerfile.template Dockerfile
 ```
 - Update the dockerfile with correct environment variables values
 ## Running eRegs
