@@ -6,13 +6,22 @@ from django.apps import apps
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.db.models import Case, Count, When, F, Prefetch, Value
+from django.db.models import (
+                                Case,
+                                Count,
+                                F,
+                                Prefetch,
+                                Value,
+                                When,
+                            )
 from django.forms.widgets import Textarea
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
 from solo.admin import SingletonModelAdmin
+
+from . import actions
 
 from .filters import (
     PartFilter,
@@ -36,8 +45,6 @@ from .models import (
 )
 
 from .serializers.locations import AbstractLocationPolymorphicSerializer
-
-from . import actions
 
 
 class BaseAdmin(admin.ModelAdmin):
