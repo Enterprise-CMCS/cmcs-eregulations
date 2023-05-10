@@ -21,7 +21,7 @@ SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*"
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
 # Will also match "Section 1902" if the section is contained within the DEFAULT_ACT. See tests for more complete examples.
-STATUTE_REF_PATTERN = rf"\bsect(?:ion[s]?|s?).?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)"\
+STATUTE_REF_PATTERN = rf"\bsect(?:ion[s]?|s?)\.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
 # Regex's are precompiled to improve page load time.
