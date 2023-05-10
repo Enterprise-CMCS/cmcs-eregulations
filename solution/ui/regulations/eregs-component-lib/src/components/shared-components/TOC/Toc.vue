@@ -15,9 +15,11 @@ const titleIdentifier = computed(() => props.structure.identifier[0]);
 
 provide("titleIdentifier", titleIdentifier.value);
 
-const titleLabel = computed(
-    () =>
-        `${props.structure.label_level} - ${props.structure.label_description}`
+const titleLabel = computed(() =>
+    `${props.structure.label_level} - ${props.structure.label_description}`.replace(
+        /&amp;/g,
+        "&"
+    )
 );
 
 const directChild = computed(() =>
@@ -28,7 +30,10 @@ const directChild = computed(() =>
 
 const titleSubheading = computed(() =>
     directChild.value
-        ? `${directChild.value.label_level} - ${directChild.value.label_description}`
+        ? `${directChild.value.label_level} - ${directChild.value.label_description}`.replace(
+              /&amp;/g,
+              "&"
+          )
         : undefined
 );
 </script>
