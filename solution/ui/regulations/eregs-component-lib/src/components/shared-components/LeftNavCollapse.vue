@@ -1,6 +1,14 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
 
+const props = defineProps({
+    contentsDescription: {
+        type: String,
+        required: false,
+        default: "menu",
+    },
+});
+
 // Watch window width
 const windowWidth = ref(window.innerWidth);
 
@@ -69,6 +77,12 @@ const btnClasses = computed(() => ({
     "full-btn": navOpen.value === true,
     "icon-only": navOpen.value === false,
 }));
+
+const btnAriaLabel = computed(() =>
+    navOpen.value
+        ? `Close ${props.contentsDescription}`
+        : `Open ${props.contentsDescription}`
+);
 </script>
 
 <template>
@@ -79,6 +93,7 @@ const btnClasses = computed(() => ({
             :ripple="false"
             :x-small="!navOpen"
             :icon="navOpen"
+            :aria-label="btnAriaLabel"
             outlined
             plain
             @click="toggleClick"
