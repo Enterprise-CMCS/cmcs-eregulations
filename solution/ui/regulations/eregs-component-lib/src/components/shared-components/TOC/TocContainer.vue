@@ -72,7 +72,4 @@ getTitlesArray();
 </template>
 
 <style>
-.toc__container .v-tabs .v-tabs__bar {
-    background-color: transparent;
-}
 </style>
