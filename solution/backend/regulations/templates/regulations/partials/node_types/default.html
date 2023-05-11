@@ -1,5 +1,7 @@
+{% load link_statutes %}
+
 <section>
-    {{node.content | safe}}
+    {{node.content | link_statutes:link_conversions | safe}}
 </section>
 
 {% for node in node.children %}
