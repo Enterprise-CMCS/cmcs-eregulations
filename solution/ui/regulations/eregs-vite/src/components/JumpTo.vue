@@ -105,9 +105,7 @@ export default {
 
     async created() {
         // When title 45 or another title is added uncomment line below, and remove the hardcoded
-        // this.titles = await getTitles(this.apiUrl);
-        this.titles = ["42"];
-
+        this.titles = await getTitles(this.apiUrl);
         if (this.titles.length === 1) {
             this.selectedTitle = this.titles[0];
             this.defaultTitle = this.selectedTitle;
@@ -145,7 +143,10 @@ export default {
     methods: {
         async getParts(title) {
             const partsList = await getParts(title, this.apiUrl);
-            this.filteredParts = partsList.map((part) => part.name);
+            // temporarily filter part 75. See EREGCSC-1397
+            this.filteredParts = partsList
+                .map((part) => part.name)
+                .filter((part) => part !== "75");
         },
         getLink(e) {
             let link = `${this.homeUrl}goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
