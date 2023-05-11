@@ -25,10 +25,10 @@ const formatDate = (dateString) => {
  * @param location.subpart_id {?string} - the subpart name
  * @returns {string} - a properly formatted label
  */
-const locationLabel = ({ title, type, part, section_id, subpart_id }) => {
+const locationLabel = ({ type, part, section_id, subpart_id }) => {
     return type.toLowerCase() === "section"
-        ? `${title} CFR ${part}.${section_id}`
-        : `${title} CFR ${part} Subpart ${subpart_id}`;
+        ? `${part}.${section_id}`
+        : `${part} Subpart ${subpart_id}`;
 };
 
 /**
