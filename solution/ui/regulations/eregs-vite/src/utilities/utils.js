@@ -51,8 +51,8 @@ function parseError(err) {
         error.status = status;
         return error;
     } catch {
-        if(err.detail){
-            return err
+        if (err.detail) {
+            return err;
         }
         return new Error(message);
     }

@@ -92,7 +92,7 @@ describe("Search flow", () => {
         }).as("metadata");
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM2}`, { timeout: 60000 });
-        cy.wait('@resources');
+        cy.wait("@resources");
 
         cy.get(".reg-results-content .search-results-count > h2").should(
             "have.text",
@@ -131,7 +131,7 @@ describe("Search flow", () => {
         }).as("metadata");
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM2}&page=3`, { timeout: 60000 });
-        cy.wait('@resources');
+        cy.wait("@resources");
 
         cy.get(".reg-results-content .search-results-count > h2").should(
             "have.text",
