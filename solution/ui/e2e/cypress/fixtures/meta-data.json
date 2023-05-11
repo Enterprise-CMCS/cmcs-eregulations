@@ -1,0 +1,48 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 2853,
+            "created_at": "2023-05-10 12:00:26.886521",
+            "updated_at": "2023-05-10 12:00:26.903630",
+            "approved": true,
+            "snippet": null,
+            "category": {
+                "id": 12,
+                "name": "SPA Resources",
+                "description": "",
+                "order": 100,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "type": "subcategory",
+                "parent": {
+                    "id": 11,
+                    "name": "Implementation Resources",
+                    "description": "State Technical Assistance, Toolkits, SPA/Waiver Resources",
+                    "order": 500,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false,
+                    "type": ""
+                }
+            },
+            "locations": [
+                {
+                    "id": 1359,
+                    "title": 42,
+                    "part": 400,
+                    "type": "subpart",
+                    "subpart_id": "J"
+                }
+            ],
+            "type": "supplemental_content",
+            "date": null,
+            "name": "covid",
+            "description": "covid",
+            "url": "http://www.google.com",
+            "name_headline": "<span class=\"search-headline\">covid</span>",
+            "description_headline": "<span class=\"search-headline\">covid</span>"
+        }
+    ]
+}
