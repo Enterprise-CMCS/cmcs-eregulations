@@ -30,6 +30,7 @@ provider:
     CUSTOM_URL: ${ssm:/eregulations/custom_url}
     SURVEY_URL: ${ssm:/eregulations/survey_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
+    SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
   tracing:
     apiGateway: true
   vpc:
