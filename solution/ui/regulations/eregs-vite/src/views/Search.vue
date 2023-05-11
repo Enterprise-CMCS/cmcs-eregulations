@@ -355,23 +355,12 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             try {
-                const isSearchGov = window.location.href.match("searchgov");
-
                 const commonParams = {
                     q: query,
                     page,
                 };
 
-                const djangoParams = {
-                    ...commonParams,
-                    partDict: "all",
-                    page_size: pageSize,
-                    fr_grouping: false,
-                };
-
-                const response = isSearchGov
-                    ? await getSearchGovResources(commonParams)
-                    : await getSupplementalContent(djangoParams);
+                const response = await getSearchGovResources(commonParams)
 
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
