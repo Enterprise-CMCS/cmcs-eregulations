@@ -120,7 +120,7 @@ describe("Search flow", () => {
         ).should("have.attr", "href");
     });
 
-    it("should return no resoures when going on page 3 without enough resources returned", () => {
+    it("should return no resources when going on page 3 without enough resources returned", () => {
         cy.intercept(`**/v3/resources/search?q=${SEARCH_TERM2}**page=3**`, {
             fixture: "search-gov-not-enough.json",
             statusCode: 400,
