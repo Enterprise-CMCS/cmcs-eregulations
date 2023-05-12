@@ -141,6 +141,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToTitle").select("45")
+        cy.wait(2000);
         cy.get("#jumpToPart").select("155");
         cy.get("#jumpBtn").click({ force: true });
         cy.url().should("eq", Cypress.config().baseUrl + "/45/155/#155");
@@ -149,7 +150,8 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Title 45 Part 95 using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("#jumpToTitle").select("45")
+        cy.get("#jumpToTitle").select("45");
+        cy.wait(2000);
         cy.get("#jumpToPart").select("95");
         cy.get("#jumpBtn").click({ force: true });
         cy.url().should("eq", Cypress.config().baseUrl + "/45/95/#95");
@@ -159,6 +161,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
        cy.viewport("macbook-15");
        cy.visit("/");
        cy.get("#jumpToTitle").select("45")
+       cy.wait(2000);
        cy.get("#jumpToPart").then(($select) => {
          const options = $select.find('option')
          const values = [...options].map((o) => o.value)
@@ -170,6 +173,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToTitle").select("42")
+        cy.wait(2000);
         cy.get("#jumpToPart").select("433");
         cy.get("#jumpBtn").click({ force: true });
 
