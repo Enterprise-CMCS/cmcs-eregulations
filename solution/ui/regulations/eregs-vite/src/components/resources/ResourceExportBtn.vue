@@ -33,7 +33,7 @@
 <script>
 import exportFromJSON from "export-from-json";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
-import { getSupplementalContent } from "@/utilities/api";
+import { getSupplementalContent } from "utilities/api";
 
 export default {
     name: "ResourceExportBtn",

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { formatDate } from "../utils";
+import { formatDate } from "utilities/utils";
 
 export default {
     name: "RelatedRule",

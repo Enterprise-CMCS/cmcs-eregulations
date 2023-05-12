@@ -51,7 +51,9 @@ $darkest_blue: #102e43;
 $dark_blue: #17415f;
 $mid_dark_blue: #205982;
 $mid_blue: #046791;
+$mid_blue_2: #254c68;
 $light_blue: #a3e8ff;
+$light_blue_2: #ccf2ff;
 $lighter_blue: #ddf5fd;
 $lightest_blue: #eefafe;
 $pale_blue: #c5def0;
@@ -100,6 +102,8 @@ $secondary_reverse_link_color: $white;
 $secondary_reverse_link_hover: $light_blue;
 
 $visited_link_color: $magenta;
+
+$secondary_toc_link_color: $light_blue_2;
 
 // Forms
 
@@ -194,12 +198,17 @@ $eds-width-sm: 780px;
 $eds-width-md: 1024px;
 $eds-width-lg: 1200px;
 
+$eds-xs-max: $eds-width-sm - 1; // 779px
+$eds-sm-max: $eds-width-md - 1; // 1023px
+$eds-md-max: $eds-width-lg - 1; // 1199px
+
 // Uses CMS Design System + a larger screen size
 
 // Custom maxes
-$tablet-max: $width-lg - 1; // 1023px
-$mobile-max: $width-md - 1; // 767px
 $iphoneSE-max: $width-xs - 1; // 374px
+$mobile-max: $width-md - 1; // 767px
+$tablet-max: $width-lg - 1; // 1023px
+
 $hero-tablet-max: 1080px;
 
 $width-xxs: 320px;

@@ -68,10 +68,6 @@ $sidebar-top-margin: 40px;
 
     top: $header_height_mobile;
 
-    @include screen-md {
-        top: $header_height_tablet;
-    }
-
     @include screen-lg {
         top: $header_height;
     }

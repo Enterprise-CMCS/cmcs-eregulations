@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { EventCodes, trapFocus } from "../utils";
+import { EventCodes, trapFocus } from "utilities/utils";
 
 export default {
     name: "BlockingModal",

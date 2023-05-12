@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import SupplementalContentObject from "legacy/js/src/components/SupplementalContentObject.vue";
+import SupplementalContentObject from "legacy/eregs-component-lib/src/components/SupplementalContentObject.vue";
 import _uniq from "lodash/uniq";
 import _has from "lodash/has";
 
