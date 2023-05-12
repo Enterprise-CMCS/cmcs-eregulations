@@ -166,7 +166,7 @@ import SearchGovResults from "@/components/resources/SearchGovResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
-import { getCurrentPageResultsRange, stripQuotes } from "@/utilities/utils";
+import { getCurrentPageResultsRange, stripQuotes } from "utilities/utils";
 import {
     getFormattedPartsList,
     getLastUpdatedDates,
@@ -175,7 +175,7 @@ import {
     getSupplementalContent,
     getSynonyms,
     getTitles,
-} from "@/utilities/api";
+} from "utilities/api";
 
 const DEFAULT_TITLE = "42";
 

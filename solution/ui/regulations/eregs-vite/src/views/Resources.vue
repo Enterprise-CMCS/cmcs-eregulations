@@ -182,7 +182,7 @@ import {
     getSupplementalContent,
     getSynonyms,
     getTitles,
-} from "@/utilities/api";
+} from "utilities/api";
 
 export default {
     name: "ResourcesView",

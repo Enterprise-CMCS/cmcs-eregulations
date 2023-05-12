@@ -10,7 +10,7 @@ import _keys from "lodash/keys";
 import _map from "lodash/map";
 import localforage from "localforage";
 
-import { delay, niceDate, parseError } from "./utils";
+import { delay, niceDate, parseError } from "utilities/utils";
 
 const config = {
     fetchMode: "cors",

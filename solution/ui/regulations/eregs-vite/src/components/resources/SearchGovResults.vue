@@ -1,5 +1,5 @@
 <script setup>
-import { formatDate } from "../../utilities/filters";
+import { formatDate } from "utilities/filters";
 
 import RelatedSections from "@/components/search/RelatedSections.vue";
 import ResultsItem from "@/components/search/ResultsItem.vue";

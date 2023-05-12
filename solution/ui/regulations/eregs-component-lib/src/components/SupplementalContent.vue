@@ -42,7 +42,7 @@ import {
     getSupplementalContent,
     getSubpartTOC
 } from "../api";
-import {EventCodes, flattenSubpart, formatResourceCategories} from "../utils";
+import {EventCodes, flattenSubpart, formatResourceCategories} from "utilities/utils";
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];

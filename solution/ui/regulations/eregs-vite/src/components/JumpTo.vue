@@ -63,7 +63,7 @@
     </div>
 </template>
 <script>
-import { getTitles, getParts } from "../utilities/api.js";
+import { getTitles, getParts } from "utilities/api.js";
 
 export default {
     name: "JumpTo",

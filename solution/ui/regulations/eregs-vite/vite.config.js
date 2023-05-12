@@ -22,7 +22,12 @@ export default defineConfig({
     },
     resolve: {
         alias: {
+            utilities: path.resolve(__dirname, "../utilities"),
             legacy: path.resolve(__dirname, "../../regulations"),
+            sharedComponents: path.resolve(
+                __dirname,
+                "../eregs-component-lib/src/components/shared-components"
+            ),
             eregsComponentLib: path.resolve(
                 __dirname,
                 "../eregs-component-lib"

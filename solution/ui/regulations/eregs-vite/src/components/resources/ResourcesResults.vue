@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { locationLabel, locationUrl } from "../../utilities/filters";
+import { locationLabel, locationUrl } from "utilities/filters";
 
 import RelatedSections from "@/components/search/RelatedSections.vue";
 import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
