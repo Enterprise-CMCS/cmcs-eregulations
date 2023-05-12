@@ -1,5 +1,7 @@
+{% load link_statutes %}
+
 <section class="flush-paragraph-section">
     <fp>
-        {{ node.content | safe }}
+        {{ node.content | link_statutes:link_conversions | safe }}
     </fp>
 </section>

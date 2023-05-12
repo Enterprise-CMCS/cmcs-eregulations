@@ -1,5 +1,6 @@
 {% load paragraphs %}
 {% load string_formatters %}
+{% load link_statutes %}
 
 <p tabindex="-1" {% if node.label and node.label|length > 0 %}id="{{node.label | join:'-'}}"{% endif %} class="reg-section depth-{{node|pdepth}}">
     {% if node.label and node.label|length > 0 %}
@@ -21,5 +22,5 @@
             ></copy-citation>
         </tooltip-container>
     {% endif %}
-    {{node.text | safe}}
+    {{node.text | link_statutes:link_conversions | safe}}
 </p>

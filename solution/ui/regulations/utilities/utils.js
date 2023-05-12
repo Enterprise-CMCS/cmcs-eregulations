@@ -39,6 +39,7 @@ function parseError(err) {
     const errMessage = err.errors
         ? err.errors[Object.keys(err.errors)[0]][0]
         : err.message;
+
     errMessage && alert(errMessage);
 
     const message = errMessage;
@@ -51,9 +52,11 @@ function parseError(err) {
         error.requestId = requestId;
         error.root = err;
         error.status = status;
-
         return error;
     } catch {
+        if (err.detail) {
+            return err;
+        }
         return new Error(message);
     }
 }

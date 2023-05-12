@@ -13,6 +13,16 @@ from solo.admin import SingletonModelAdmin
 from .models import SiteConfiguration, StatuteLinkConverter
 
 
+MARKUP_PATTERN = r"</?[^>]+>"
+DASH_PATTERN = r"[—–]"
+CONVERSION_PATTERN = r"sec.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?).?\s*\[\s*(\d+)\s*u.?s.?c.?\s*"\
+                     r"(\d+[a-z0-9]*(?:-+[a-z0-9]+)?)\s*\]"
+
+markup_regex = re.compile(MARKUP_PATTERN)
+dash_regex = re.compile(DASH_PATTERN)
+conversion_regex = re.compile(CONVERSION_PATTERN, re.IGNORECASE)
+
+
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
     pass
@@ -50,10 +60,9 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def import_conversions(self, text, url, act):
         conversions = []
-        text = re.sub(r"</?[^>]+>", "", text)  # Strips HTML/XML tags from the response text
-        text = re.sub(r"[—–]", "-", text)  # Replace em dash and en dash with regular dash
-        matches = re.findall(r"[Ss][Ee][Cc].?\s*(\d+[A-Za-z0-9]*(?:-+[A-Za-z0-9]+)?).?\s*\[\s*(\d+)\s*[Uu].?[Ss].?[Cc].?\s*"
-                             r"(\d+[A-Za-z0-9]*(?:-+[A-Za-z0-9]+)?)\s*\]", text)
+        text = markup_regex.sub("", text)  # Strips HTML/XML tags from the response text
+        text = dash_regex.sub("-", text)  # Replace em dash and en dash with regular dash
+        matches = conversion_regex.findall(text)
         for section, title, usc in matches:
             instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act, source_url=url)
             if created:
@@ -70,7 +79,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         if not url:
             raise ValidationError("you must enter a URL!")
         if not act:
-            raise ValidationError("you must enter an Act, for example \"SSA\"!")
+            raise ValidationError("you must enter an Act, for example \"Social Security Act\"!")
 
         try:
             URLValidator(schemes=["http", "https"])(url)
