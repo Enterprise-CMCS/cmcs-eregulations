@@ -28,37 +28,12 @@
                         :url="item.url"
                     />
                 </div>
-                <div class="related-sections">
-                    <span class="related-sections-title">
-                        Related Section<span v-if="item.locations.length > 1"
-                            >s</span
-                        >:
-                    </span>
-                    <span v-if="item.locations.length > 1">§§ </span>
-                    <span v-else>§ </span>
-                    <template v-for="(location, i) in item.locations">
-                        <span
-                            :key="location.display_name + i"
-                            class="related-section-link"
-                        >
-                            <a
-                                :href="
-                                    locationUrl(
-                                        location,
-                                        partsList,
-                                        partsLastUpdated,
-                                        base
-                                    )
-                                "
-                            >
-                                {{ locationLabel(location) }}
-                            </a>
-                            <span v-if="i + 1 != item.locations.length">
-                                |
-                            </span>
-                        </span>
-                    </template>
-                </div>
+                <RelatedSections
+                    :base="base"
+                    :item="item"
+                    :parts-last-updated="partsLastUpdated"
+                    :parts-list="partsList"
+                />
             </div>
         </template>
         <slot name="pagination"></slot>
@@ -68,6 +43,7 @@
 <script>
 import { locationLabel, locationUrl } from "../../utilities/filters";
 
+import RelatedSections from "@/components/search/RelatedSections.vue";
 import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
 
 export default {
