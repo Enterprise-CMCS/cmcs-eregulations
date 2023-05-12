@@ -1,32 +1,3 @@
-<script setup>
-import {
-    getDescriptionOnly,
-} from "utilities/filters";
-
-const props = defineProps({
-    filterEmitter: {
-        type: Function,
-        required: true,
-    },
-    listItems: {
-        type: Array,
-        required: true,
-    },
-    listId: {
-        type: String,
-        default: "",
-    },
-});
-
-const clickMethod = (e) => {
-    this.filterEmitter({
-        scope: "part",
-        selectedIdentifier: e.currentTarget.dataset.value,
-    });
-};
-
-</script>
-
 <template>
     <v-list class="title-part-list" role="group">
         <v-list-item
@@ -37,10 +8,48 @@ const clickMethod = (e) => {
             @click="clickMethod"
         >
             <span class="part-number">Part {{ item.name }} - </span>
-            <span class="part-text">{{ getDescriptionOnly(item.label) }}</span>
+            <span class="part-text">{{ item.label | descriptionOnly }}</span>
         </v-list-item>
     </v-list>
 </template>
+
+<script>
+import { getDescriptionOnly } from "utilities/filters";
+
+export default {
+    name: "TitlePartList",
+
+    props: {
+        filterEmitter: {
+            type: Function,
+            required: true,
+        },
+        listItems: {
+            type: Array,
+            required: true,
+        },
+        listId: {
+            type: String,
+            default: "",
+        },
+    },
+
+    methods: {
+        clickMethod(e) {
+            this.filterEmitter({
+                scope: "part",
+                selectedIdentifier: e.currentTarget.dataset.value,
+            });
+        },
+    },
+
+    filters: {
+        descriptionOnly(value) {
+            return getDescriptionOnly(value);
+        },
+    },
+};
+</script>
 
 <style lang="scss">
 .title-part-list-item {

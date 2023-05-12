@@ -1,29 +1,33 @@
 <template>
     <v-list class="subpart-list">
-        <v-list-item
-            v-for="item in listItems"
-            :key="item.part + item.identifier"
-            :data-value="item.part + '-' + item.identifier"
-            class="subpart-list-item"
-            @click="clickMethod"
-        >
-            <div>
-                <span class="subpart-letter"
-                    >Subpart {{ item.identifier }}</span
-                >
-                <span class="subpart-range">
-                    {{ item.range | formatRange }}</span
-                >
-            </div>
-            <div class="subpart-text">
-                {{ item.label | descriptionOnly }}
-            </div>
-        </v-list-item>
+        <v-list-item-group class="subpart-list-item-group">
+            <v-list-item
+                v-for="item in listItems"
+                :key="item.part + item.identifier"
+                @click="clickMethod"
+                :data-value="item.part + '-' + item.identifier"
+                class="subpart-list-item"
+            >
+                <div>
+                    <span class="subpart-letter"
+                        >Subpart {{ item.identifier }}</span
+                    >
+                    <span class="subpart-range"> {{
+                        item.range | formatRange
+                    }}</span>
+                </div>
+                <div class="subpart-text">
+                    {{ item.label | descriptionOnly }}
+                </div>
+            </v-list-item>
+        </v-list-item-group>
     </v-list>
 </template>
 
 <script>
 import _isEmpty from "lodash/isEmpty";
+
+import { getDescriptionOnly } from "utilities/filters";
 
 export default {
     name: "SubpartList",
@@ -37,10 +41,6 @@ export default {
             type: Array,
             required: true,
         },
-        listId: {
-            type: String,
-            default: "",
-        },
     },
 
     methods: {
@@ -53,12 +53,12 @@ export default {
     },
 
     filters: {
-        descriptionOnly(value) {
-            return value.substring(value.indexOf("-") + 1);
-        },
         formatRange(array) {
             if (_isEmpty(array)) return "";
             return `(${array.join(" - ")})`;
+        },
+        descriptionOnly(value) {
+            return getDescriptionOnly(value);
         },
     },
 };
