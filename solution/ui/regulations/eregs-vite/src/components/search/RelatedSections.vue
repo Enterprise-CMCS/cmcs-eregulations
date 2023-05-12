@@ -3,7 +3,7 @@ import _groupBy from "lodash/groupBy";
 
 import { computed, ref } from "vue";
 
-import { locationLabel, locationUrl } from "../../utilities/filters";
+import { locationLabel, locationUrl } from "utilities/filters";
 
 const props = defineProps({
     base: {
