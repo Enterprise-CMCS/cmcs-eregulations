@@ -38,7 +38,7 @@
 import PagesList from "@/components/pagination/PagesList.vue";
 import NavBtn from "@/components/navigation/NavBtn.vue";
 
-import { createOneIndexedArray } from "@/utilities/utils";
+import { createOneIndexedArray } from "utilities/utils";
 
 export default {
     name: "PaginationController",

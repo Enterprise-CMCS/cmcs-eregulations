@@ -55,7 +55,7 @@
 
 <script>
 import ResourcesBtn from "@/components/ResourcesBtn.vue";
-import SupplementalContent from "legacy/js/src/components/SupplementalContent.vue";
+import SupplementalContent from "legacy/eregs-component-lib/src/components/SupplementalContent.vue";
 import _isArray from "lodash/isArray";
 
 export default {

@@ -89,7 +89,7 @@ import PaginationController from "@/components/pagination/PaginationController.v
 import ResourceExportBtn from "@/components/resources/ResourceExportBtn.vue";
 import ResourcesResults from "@/components/resources/ResourcesResults.vue";
 
-import { getCurrentPageResultsRange } from "@/utilities/utils";
+import { getCurrentPageResultsRange } from "utilities/utils";
 
 const SORT_METHODS = {
     newest: "Date (Newest)",

@@ -32,6 +32,14 @@ export { default as CopyCitation } from "./tooltips/CopyCitation.vue";
 export { default as GovInfoLinks } from "./tooltips/GovInfoLinks.vue";
 export { default as TooltipContainer } from "./tooltips/TooltipContainer.vue";
 
+// Shared Components
+export { default as LeftNavCollapse } from "./shared-components/LeftNavCollapse.vue";
+export { default as Toc } from "./shared-components/TOC/Toc.vue";
+export { default as TocContainer } from "./shared-components/TOC/TocContainer.vue";
+export { default as TocPart } from "./shared-components/TOC/TocPart.vue";
+export { default as TocSubchapter } from "./shared-components/TOC/TocSubchapter.vue";
+export { default as TocTitle } from "./shared-components/TOC/TocTitle.vue";
+
 // from Single Page App
 export { default as HeaderComponent } from "../../../eregs-vite/src/components/header/HeaderComponent.vue";
 export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";

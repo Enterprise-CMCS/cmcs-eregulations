@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { locationLabel, locationUrl } from "../../utilities/filters";
+import { locationLabel, locationUrl } from "utilities/filters";
 
 import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
 
