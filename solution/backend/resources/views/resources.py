@@ -1,16 +1,18 @@
 import json
+import os
 import re
 import requests
+
 import urllib.parse as urlparse
 from drf_spectacular.utils import extend_schema
 from django.db import transaction
 from django.db.models import Case, When, F, Prefetch
 from django.http import JsonResponse
+from requests.exceptions import ConnectTimeout
 from rest_framework import viewsets
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-import os
 
 from .mixins import (
     ResourceExplorerViewSetMixin,
@@ -62,16 +64,17 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         )
 
     def format_gov_results(self, gov_results):
-        if "errors" in gov_results or (gov_results["web"]["total"] == 0 and not gov_results["web"]["results"]):
-            raise NotFound("Invalid page")
+        if gov_results["web"]["total"] == 0:
+            raise NotFound("No results from search.gov")
+        elif not gov_results["web"]["results"]:
+            raise NotFound("Search.gov out of bounds")
         results = []
 
         for gov_result in gov_results['web']['results']:
             results.append({
                 'name': gov_result['title'],
                 'snippet': gov_result['snippet'],
-                'url': gov_result['url']
-            })
+                'url': gov_result['url']})
         self.gov_results = {
             "total": gov_results["web"]["total"],
             "results": results,
@@ -85,7 +88,12 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
         rstring = f'https://search.usa.gov/api/v2/search/?affiliate={site_name}&access_key={key}' \
                   f'&query={urlparse.quote_plus(query)}&limit={self.limit}&offset={offset}'
-        gov_results = json.loads(requests.get(rstring).text)
+        try:
+            gov_results = json.loads(requests.get(rstring, timeout=3).text)
+        except ConnectTimeout:
+            raise NotFound("Errors.  Search.gov took to long to return a response.")
+        except ValueError:
+            raise ParseError("Error retrieving proper data from search.gov")
         self.format_gov_results(gov_results)
 
     # There might be missing resources in dev than prod so their could be missing urls
