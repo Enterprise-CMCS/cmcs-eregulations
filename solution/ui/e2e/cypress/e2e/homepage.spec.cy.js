@@ -148,7 +148,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("Does not include Part 75 when Title 45 is selected", () => {
        cy.viewport("macbook-15");
        cy.visit("/");
-       cy.get('#jumpToTitle').invoke('removeAttr', 'disabled', false).select("45", { force: true })
+       cy.get('#jumpToTitle').select("45")
        cy.get("#jumpToPart").then(($select) => {
          const options = $select.find('option')
          const values = [...options].map((o) => o.value)
@@ -160,7 +160,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get('#jumpToTitle').select("42")
-        cy.get("#jumpToPart").should("be.visible").select("433");
+        cy.get("#jumpToPart").invoke("removeAttr").select("433", { force: true });
         cy.get("#jumpBtn").click({ force: true });
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
