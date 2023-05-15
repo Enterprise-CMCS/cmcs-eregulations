@@ -148,7 +148,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("Does not include Part 75 when Title 45 is selected", () => {
        cy.viewport("macbook-15");
        cy.visit("/");
-       cy.get('#jumpToTitle').invoke('prop', 'disabled', false).select("45")
+       cy.get('#jumpToTitle').invoke('removeAttr', 'disabled', false).select("45", { force: true })
        cy.get("#jumpToPart").then(($select) => {
          const options = $select.find('option')
          const values = [...options].map((o) => o.value)
