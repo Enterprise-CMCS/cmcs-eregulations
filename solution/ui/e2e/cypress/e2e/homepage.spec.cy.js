@@ -159,7 +159,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get('#jumpToTitle').invoke('prop', 'disabled', false).select("42")
+        cy.get('#jumpToTitle').select("42")
         cy.get('#jumpToPart')
             .should('not.be.disabled')
             .wait(500) // wait for 500ms to give the page more time to load
