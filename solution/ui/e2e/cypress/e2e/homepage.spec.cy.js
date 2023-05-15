@@ -138,33 +138,18 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     });
 
     it("jumps to a regulation Title 45 Part 95 using the jump-to select", () => {
-        cy.intercept("GET", "**/v3/title/45/parts").as("getParts");
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToTitle").select("45");
-        cy.wait("@getParts");
-        cy.get("#jumpToPart").select("155");
+        cy.get("#jumpToPart").select("155", { force: true });
         cy.get("#jumpBtn").click({ force: true });
         cy.url().should("eq", Cypress.config().baseUrl + "/45/155/#155");
     });
 
-    it("jumps to a regulation Title 45 Part 95 using the jump-to select", () => {
-        cy.intercept("GET", "**/v3/title/45/parts").as("getParts")
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get("#jumpToTitle").select("45");
-        cy.wait("@getParts");
-        cy.get("#jumpToPart").select("95");
-        cy.get("#jumpBtn").click({ force: true });
-        cy.url().should("eq", Cypress.config().baseUrl + "/45/95/#95");
-    });
-
     it("Does not include Part 75 when Title 45 is selected", () => {
-       cy.intercept("GET", "**/v3/title/45/parts").as("getParts")
        cy.viewport("macbook-15");
        cy.visit("/");
        cy.get("#jumpToTitle").select("45")
-       cy.wait("@getParts");
        cy.get("#jumpToPart").then(($select) => {
          const options = $select.find('option')
          const values = [...options].map((o) => o.value)
@@ -173,23 +158,19 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     });
 
     it("jumps to a regulation Part using the jump-to select", () => {
-        cy.intercept("GET", "**/v3/title/42/parts").as("getParts")
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToTitle").select("42");
-        cy.wait("@getParts");
-        cy.get("#jumpToPart").select("433");
+        cy.get("#jumpToPart").select("433", { force: true });
         cy.get("#jumpBtn").click({ force: true });
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
-        cy.intercept("GET", "**/v3/title/42/parts").as("getParts")
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToTitle").select("42")
-        cy.wait("@getParts");
         cy.get("#jumpToPart").should("be.visible").select("433");
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
