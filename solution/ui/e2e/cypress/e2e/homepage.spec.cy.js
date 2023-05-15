@@ -137,6 +137,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         );
     });
 
+    it("Does not allow selction of Part till Title is selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get('#jumpToPart').should('be.disabled');
+        cy.get("#jumpToTitle").select("45");
+    });
     it("jumps to a regulation Title 45 Part 95 using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
@@ -161,9 +167,8 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToTitle").select("42");
-        cy.get("#jumpToPart").select("433", { force: true });
+        cy.get('#jumpToPart').should('not.be.disabled').select('433')
         cy.get("#jumpBtn").click({ force: true });
-
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
 
