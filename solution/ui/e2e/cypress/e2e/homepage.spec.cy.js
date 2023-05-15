@@ -141,7 +141,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get('#jumpToPart').should('be.disabled');
-        cy.get('#jumpToTitle').invoke('prop', 'disabled', false).select("45")
+        cy.get('#jumpToTitle').select("45")
         cy.get('#jumpToPart').should('not.be.disabled');
     });
 
@@ -160,7 +160,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get('#jumpToTitle').invoke('prop', 'disabled', false).select("42")
-        cy.get('#jumpToPart').invoke('prop', 'disabled', false).select("433")
+        cy.get('#jumpToPart')
+            .should('not.be.disabled')
+            .wait(500) // wait for 500ms to give the page more time to load
+            .select('433')
         cy.get("#jumpBtn").click({ force: true });
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
@@ -168,8 +171,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get('#jumpToTitle').invoke('prop', 'disabled', false).select("42")
-        cy.get('#jumpToPart').invoke('prop', 'disabled', false).select("433")
+        cy.get('#jumpToTitle').select("42")
+        cy.get('#jumpToPart')
+          .should('not.be.disabled')
+          .wait(500) // wait for 500ms to give the page more time to load
+          .select('433')
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
 
