@@ -160,10 +160,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get('#jumpToTitle').select("42")
-        cy.get('#jumpToPart')
-            .should('not.be.disabled')
-            .wait(500) // wait for 500ms to give the page more time to load
-            .select('433')
+        cy.get("#jumpToPart").should("be.visible").select("433");
         cy.get("#jumpBtn").click({ force: true });
         cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
     });
@@ -172,10 +169,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get('#jumpToTitle').select("42")
-        cy.get('#jumpToPart')
-          .should('not.be.disabled')
-          .wait(500) // wait for 500ms to give the page more time to load
-          .select('433')
+        cy.get("#jumpToPart").should("be.visible").select("433");
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
 
