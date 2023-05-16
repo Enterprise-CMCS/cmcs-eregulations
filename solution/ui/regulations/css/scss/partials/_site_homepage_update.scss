@@ -10,6 +10,18 @@
         @media (max-width: $eds-xs-max) {
             flex-direction: column;
         }
+
+        .link-btn {
+            text-decoration: none;
+            width: fit-content;
+            color: white;
+            padding-top: 8px;
+            padding-bottom: 8px;
+
+            &:hover {
+                color: white;
+            }
+        }
     }
 
     nav {
@@ -238,28 +250,40 @@
     }
 
     #main-content {
-        .cta-container {
+        .cta__container {
             display: flex;
             flex-direction: row;
 
-            .video-container {
+            .video__container {
                 flex: 2;
+                margin-right: 15px;
 
                 img {
                     width: 100%;
+                    border-radius: 3px;
+                }
+
+                label {
+                    font-size: 12px;
+                    color: $mid_gray;
                 }
             }
 
-            .about-text-container {
+            .about-text__container {
                 flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-left: 15px;
+
+                p {
+                    font-size: 18px;
+                    line-height: 24px;
+                }
             }
-
         }
 
-        .resources-container {
-
+        .resources__container {
         }
-
     }
-
 }

@@ -2,72 +2,90 @@
 {% load static %}
 {% load render_nested %}
 
-{% block title %}Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project{% endblock %}
+{% block title %}
+Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
+{% endblock %}
 
 {% block spa_styles %}
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+<link
+    href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+    rel="stylesheet"
+/>
 {% endblock %}
 
 {% block body_class %}site-homepage--update{% endblock %}
 
 {% block pre_header %}
-    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+<a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
 {% endblock %}
 
 {% block header %}
-    <header id="header" class="sticky">
-        <header-component
+<header id="header" class="sticky">
+    <header-component home-url="{% url 'homepage' %}">
+        <jump-to
+            slot="jump-to"
+            api-url="{{ API_BASE }}"
             home-url="{% url 'homepage' %}"
-        >
-            <jump-to
-                slot="jump-to"
-                api-url="{{ API_BASE }}"
-                home-url="{% url 'homepage' %}"
-            ></jump-to>
-            <header-links
-                slot="links"
-                about-url="{% url 'about' %}"
-                resources-url="{% url 'resources' %}"
-            ></header-links>
-            <header-search
-                slot="search"
-                search-url="{% url 'search' %}"
-            ></header-search>
-        </header-component>
-    </header>
+        ></jump-to>
+        <header-links
+            slot="links"
+            about-url="{% url 'about' %}"
+            resources-url="{% url 'resources' %}"
+        ></header-links>
+        <header-search
+            slot="search"
+            search-url="{% url 'search' %}"
+        ></header-search>
+    </header-component>
+</header>
 {% endblock %}
 
 {% block body %}
-    <main>
-        <nav id="placeholderNav"></nav>
-        <left-nav-collapse contents-description="table of contents">
-            <toc-container
-                slot="nav-contents"
-                api-url="{{ API_BASE }}"
-                home-url="{% url 'homepage' %}"
-            ></toc-container>
-        </left-nav-collapse>
-        <div class="site-container homepage-main-content" id="main-content">
-            <div class="cta-container">
-                <div class="video-container">
-                    <a href="https://www.youtube.com/watch?v=R0U-O7f53kg" target="_blank">
-                        <img src="{% static 'images/home_video.png' %}" alt="Woman reading Part 435 Subpart J on the Medicaid & CHIP eRegulations website" />
-                    </a>
-                </div>
-                <div class="about-text-container">
-                    <span>eRegulations organizes together regulations, subregulatory guidance, and other related policy materials.</span>
-                </div>
+<main>
+    <nav id="placeholderNav"></nav>
+    <left-nav-collapse contents-description="table of contents">
+        <toc-container
+            slot="nav-contents"
+            api-url="{{ API_BASE }}"
+            home-url="{% url 'homepage' %}"
+        ></toc-container>
+    </left-nav-collapse>
+    <div class="site-container homepage-main-content" id="main-content">
+        <div class="cta__container">
+            <div class="video__container">
+                <a
+                    href="https://www.youtube.com/watch?v=dqy8WCFedU4"
+                    target="_blank"
+                >
+                    <img
+                        src="{% static 'images/home_video.png' %}"
+                        alt="View a 3-minute video demonstration."
+                    />
+                </a>
+                <label id="videoLabel">View a 3-minute video demonstration.</label>
             </div>
-            <div class="resources-container">
-                <div class="rules-guidance-container"></div>
-                <div class="search-description-container"></div>
+            <div class="about-text__container">
+                <p>
+                    eRegulations organizes together regulations, subregulatory
+                    guidance, and other related policy materials.
+                </p>
+                <a
+                    href="{% url 'about' %}"
+                    class="action-btn default-btn link-btn"
+                    >Learn About This Tool</a
+                >
             </div>
         </div>
-    </main>
+        <div class="resources__container">
+            <div class="rules-guidance__container"></div>
+            <div class="search-description__container"></div>
+        </div>
+    </div>
+</main>
 
 {% endblock %}
 
 {% block post_footer %}
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
-    <script src="{% static '/js/eregs-main.iife.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<script src="{% static '/js/eregs-main.iife.js' %}"></script>
 {% endblock %}
