@@ -159,8 +159,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("#jumpToTitle").select("45")
-        cy.get("jumpToPart").select("95")
+        cy.get('#jumpToTitle').select("45", { force: true }).then(() => {
+          cy.get("#jumpToPart").should("be.visible").select("95");
+        });
         cy.get("#jumpBtn").click({ force: true });
         cy.url().should("eq", Cypress.config().baseUrl + "/45/95/#95");
     });
