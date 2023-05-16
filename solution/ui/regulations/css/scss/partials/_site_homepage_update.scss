@@ -16,7 +16,6 @@
         position: relative;
         color: white;
         background-color: $dark_blue;
-        padding: 0 25px;
 
         @mixin hover-background {
             &:hover,
@@ -45,6 +44,7 @@
 
         &.open {
             width: 400px;
+            min-width: 400px;
 
             @media (max-width: $eds-xs-max) {
                 width: 100%;
@@ -53,10 +53,28 @@
 
         &.closed {
             width: 75px;
+            min-width: 75px;
 
             @media (max-width: $eds-xs-max) {
                 width: 100%;
                 height: 45px;
+            }
+        }
+
+        &.placeholder {
+            background: red;
+            min-height: 10px;
+
+            @media (min-width: $eds-width-sm) {
+                width: 75px;
+                min-width: 75px;
+                max-width: 75px;
+            }
+
+            @media (min-width: $eds-width-md) {
+                width: 400px;
+                min-width: 400px;
+                max-width: 400px;
             }
         }
 
@@ -132,6 +150,8 @@
         }
 
         .toc__container {
+            padding: 0 25px;
+
             .v-tabs {
                 padding-right: 25px;
                 margin-bottom: 16px;
@@ -216,4 +236,30 @@
             }
         }
     }
+
+    #main-content {
+        .cta-container {
+            display: flex;
+            flex-direction: row;
+
+            .video-container {
+                flex: 2;
+
+                img {
+                    width: 100%;
+                }
+            }
+
+            .about-text-container {
+                flex: 1;
+            }
+
+        }
+
+        .resources-container {
+
+        }
+
+    }
+
 }
