@@ -25,6 +25,8 @@
 <script>
 import _isEmpty from "lodash/isEmpty";
 
+import { getDescriptionOnly } from "utilities/filters";
+
 export default {
     name: "SubpartList",
 
@@ -36,10 +38,6 @@ export default {
         listItems: {
             type: Array,
             required: true,
-        },
-        listId: {
-            type: String,
-            default: "",
         },
     },
 
@@ -53,12 +51,12 @@ export default {
     },
 
     filters: {
-        descriptionOnly(value) {
-            return value.substring(value.indexOf("-") + 1);
-        },
         formatRange(array) {
             if (_isEmpty(array)) return "";
             return `(${array.join(" - ")})`;
+        },
+        descriptionOnly(value) {
+            return getDescriptionOnly(value);
         },
     },
 };
