@@ -84,7 +84,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
             .its("status")
             .should("equal", 404);
         cy.visit("/404", { failOnStatusCode: false });
-        cy.get('#jumpToTitle').select("45", { force: true }).then(() => {
+        cy.get("#jumpToTitle").select("45", { force: true }).then(() => {
           cy.get("#jumpToPart").should("be.visible").select("95");
         });
         cy.get("#jumpBtn").click({ force: true });
