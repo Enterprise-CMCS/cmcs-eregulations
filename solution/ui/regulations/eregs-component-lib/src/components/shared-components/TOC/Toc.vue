@@ -39,7 +39,7 @@ const titleSubheading = computed(() =>
 </script>
 
 <template>
-    <div class="toc__container">
+    <div class="toc__container--inner">
         <TocTitle :title="titleLabel" :subheading="titleSubheading" />
         <TocSubchapter
             v-for="subchapter in directChild.children"

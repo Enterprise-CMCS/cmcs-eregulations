@@ -10,13 +10,24 @@
         @media (max-width: $eds-xs-max) {
             flex-direction: column;
         }
+
+        .link-btn {
+            text-decoration: none;
+            width: fit-content;
+            color: white;
+            padding-top: 8px;
+            padding-bottom: 8px;
+
+            &:hover {
+                color: white;
+            }
+        }
     }
 
     nav {
         position: relative;
         color: white;
         background-color: $dark_blue;
-        padding: 0 25px;
 
         @mixin hover-background {
             &:hover,
@@ -45,6 +56,7 @@
 
         &.open {
             width: 400px;
+            min-width: 400px;
 
             @media (max-width: $eds-xs-max) {
                 width: 100%;
@@ -53,10 +65,27 @@
 
         &.closed {
             width: 75px;
+            min-width: 75px;
 
             @media (max-width: $eds-xs-max) {
                 width: 100%;
                 height: 45px;
+            }
+        }
+
+        &#placeholderNav {
+            min-height: 10px;
+
+            @media (min-width: $eds-width-sm) {
+                width: 75px;
+                min-width: 75px;
+                max-width: 75px;
+            }
+
+            @media (min-width: $eds-width-md) {
+                width: 400px;
+                min-width: 400px;
+                max-width: 400px;
             }
         }
 
@@ -132,6 +161,8 @@
         }
 
         .toc__container {
+            padding: 0 25px;
+
             .v-tabs {
                 padding-right: 25px;
                 margin-bottom: 16px;
@@ -214,6 +245,80 @@
                     }
                 }
             }
+        }
+    }
+
+    #main-content {
+        width: 100%;
+
+        @media (max-width: $eds-xs-max) {
+            box-sizing: border-box;
+        }
+
+        .cta__container {
+            container: cta-container / inline-size;
+
+            @container cta-container (max-width: 629px) {
+                .cta {
+                    flex-direction: column;
+
+                    .video__container {
+                        margin-right: 0;
+                    }
+
+                    .about-text__container {
+                        margin-left: 0;
+                    }
+                }
+            }
+
+            @container cta-container (min-width: 630px) {
+                .cta {
+                    flex-direction: row;
+
+                    .video__container {
+                        margin-right: 15px;
+                    }
+
+                    .about-text__container {
+                        margin-left: 15px;
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+
+            .cta {
+                display: flex;
+
+                .video__container {
+                    flex: 2;
+
+                    img {
+                        width: 100%;
+                        border-radius: 3px;
+                    }
+
+                    label {
+                        font-size: 12px;
+                        color: $mid_gray;
+                    }
+                }
+
+                .about-text__container {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    p {
+                        font-size: 18px;
+                        line-height: 24px;
+                    }
+                }
+            }
+        }
+
+        .resources__container {
         }
     }
 }

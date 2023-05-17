@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, getCurrentInstance, onMounted, onUnmounted, ref } from "vue";
 
 const props = defineProps({
     contentsDescription: {
@@ -7,6 +7,17 @@ const props = defineProps({
         required: false,
         default: "menu",
     },
+});
+
+// replace placeholder nav on mounted to maintain formatting/spacing
+onMounted(() => {
+    // getCurrentInstance works with Vue2,
+    // but will need to use template refs when upgrading to Vue3
+    const { $rootNav } = getCurrentInstance().proxy.$refs;
+
+    const placeholderNav = document.getElementById("placeholderNav");
+
+    placeholderNav.replaceWith($rootNav);
 });
 
 // Watch window width
@@ -86,7 +97,7 @@ const btnAriaLabel = computed(() =>
 </script>
 
 <template>
-    <nav id="leftNav" :class="navClasses">
+    <nav id="leftNav" ref="$rootNav" :class="navClasses">
         <v-btn
             class="nav-toggle__button"
             :class="btnClasses"
