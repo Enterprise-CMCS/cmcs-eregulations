@@ -146,7 +146,7 @@ header {
             }
 
             @include custom-max(($eds-width-md - 1) / 1px) {
-                width: 300px;
+                width: 280px;
                 padding-right: 10px;
             }
 

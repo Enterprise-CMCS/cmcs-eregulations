@@ -137,18 +137,39 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         );
     });
 
+    it("Does not allow selection of Part till Title is selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get("#jumpToPart").should("be.disabled");
+        cy.get("#jumpToTitle").select("45")
+        cy.get("#jumpToPart").should("not.be.disabled");
+    });
+
+    it("Does not include Part 75 when Title 45 is selected", () => {
+       cy.viewport("macbook-15");
+       cy.visit("/");
+       cy.get("#jumpToTitle").select("45")
+       cy.get("#jumpToPart").then(($select) => {
+         const options = $select.find("option")
+         const values = [...options].map((o) => o.value)
+         expect(values).to.not.include("75")
+       })
+    });
+
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("#jumpToPart").select("433");
+        cy.get("#jumpToTitle").select("45", { force: true }).then(() => {
+          cy.get("#jumpToPart").should("be.visible").select("95");
+        });
         cy.get("#jumpBtn").click({ force: true });
-
-        cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
+        cy.url().should("eq", Cypress.config().baseUrl + "/45/95/#95");
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get("#jumpToTitle").select("42")
         cy.get("#jumpToPart").should("be.visible").select("433");
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
