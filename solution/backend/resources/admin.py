@@ -7,13 +7,13 @@ from django.contrib import admin, messages
 from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import (
-                                Case,
-                                Count,
-                                F,
-                                Prefetch,
-                                Value,
-                                When,
-                            )
+    Case,
+    Count,
+    F,
+    Prefetch,
+    Value,
+    When,
+)
 from django.forms.widgets import Textarea
 from django.urls import reverse
 from django.utils import timezone
@@ -339,7 +339,6 @@ class ResourceForm(forms.ModelForm):
                                                         ).filter(url=self.cleaned_data.get('url'))
 
         resources = []
-        print(query.count())
         if query.count() == 0:
             return False
         elif query.count() == 1:
