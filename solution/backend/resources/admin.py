@@ -1,52 +1,55 @@
 import json
 import re
 
-from django.contrib import admin
-from django.contrib.admin.sites import site
-from django.apps import apps
-from django.db.models import Prefetch, Count
 from django import forms
+from django.apps import apps
+from django.contrib import admin, messages
+from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
-from django.contrib import messages
-from django.utils.safestring import mark_safe
+from django.db.models import (
+    Case,
+    Count,
+    F,
+    Prefetch,
+    Value,
+    When,
+)
+from django.forms.widgets import Textarea
 from django.urls import reverse
-from solo.admin import SingletonModelAdmin
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
-from django.forms.widgets import Textarea
+from django.utils.safestring import mark_safe
+from solo.admin import SingletonModelAdmin
 
-# Register your models here.
-
-from .models import (
-    AbstractResource,
-    SupplementalContent,
-    FederalRegisterDocument,
-    AbstractCategory,
-    Category,
-    SubCategory,
-    AbstractLocation,
-    Section,
-    Subpart,
-    FederalRegisterDocumentGroup,
-    ResourcesConfiguration,
-)
+from . import actions
 
 from .filters import (
-    TitleFilter,
     PartFilter,
     SectionFilter,
     SubpartFilter,
+    TitleFilter,
+)
+
+from .models import (
+    AbstractCategory,
+    AbstractLocation,
+    AbstractResource,
+    Category,
+    FederalRegisterDocument,
+    FederalRegisterDocumentGroup,
+    ResourcesConfiguration,
+    Section,
+    SubCategory,
+    Subpart,
+    SupplementalContent,
 )
 
 from .serializers.locations import AbstractLocationPolymorphicSerializer
-
-from . import actions
 
 
 class BaseAdmin(admin.ModelAdmin):
     list_per_page = 200
     admin_priority = 20
-    actions = ["export_as_json"]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         lookups = getattr(self, "foreignkey_lookups", {})
@@ -299,6 +302,70 @@ class ResourceForm(forms.ModelForm):
                         widget=LocationHistoryWidget(attrs={"rows": 10, "cols": 120}),
                         required=False,
                         disabled=True)
+
+    def get_annotated_url(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__url")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__url")),
+            default=None,
+        )
+
+    def get_resource_id(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__id")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__id")),
+            default=None,
+        )
+
+    def get_resource_type(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=Value("supplementalcontent")),
+            When(federalregisterdocument__isnull=False, then=Value("federalregisterdocument")),
+            default=None,
+        )
+
+    def get_resource_name(self):
+        return Case(
+            When(supplementalcontent__isnull=False, then=F("supplementalcontent__name")),
+            When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__name")),
+            default=None,
+        )
+
+    def check_duplicates(self):
+        query = AbstractResource.objects.all().annotate(url=self.get_annotated_url(),
+                                                        res_id=self.get_resource_id(),
+                                                        type=self.get_resource_type(),
+                                                        name=self.get_resource_name(),
+                                                        ).filter(url=self.cleaned_data.get('url'))
+
+        resources = []
+        if query.count() == 0:
+            return False
+        elif query.count() == 1:
+            if self.instance.id and query.filter(id=self.instance.id).count() == 1:
+                return False
+        for res in query:
+            resources.append({'type': res.type, 'id': str(res.res_id), "name": res.name})
+        return resources
+
+    def resource_links(self, resources):
+        display_text = "The url is also used on the following resources:<br>"
+        display_text = display_text + "".join(
+                                 "<a href={}>{}</a><br>".format(
+                                  reverse('admin:{}_{}_change'.format("resources", res['type']),
+                                          args=(res['id'],)), res['type'] + " " + str(res['name']))
+                                 for res in resources)
+        if display_text:
+            return mark_safe(display_text)
+        return "-"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        dup_resources = self.check_duplicates()
+        if dup_resources:
+            urls = self.resource_links(dup_resources)
+            self.add_error('url', urls)
+        return cleaned_data
 
 
 class SupContentForm(ResourceForm):
