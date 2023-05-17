@@ -7,13 +7,15 @@
             class="title-part-list-item"
             @click="clickMethod"
         >
-            <span class="part-number">Part {{ item.name }} -</span>
+            <span class="part-number">Part {{ item.name }} - </span>
             <span class="part-text">{{ item.label | descriptionOnly }}</span>
         </v-list-item>
     </v-list>
 </template>
 
 <script>
+import { getDescriptionOnly } from "utilities/filters";
+
 export default {
     name: "TitlePartList",
 
@@ -43,7 +45,7 @@ export default {
 
     filters: {
         descriptionOnly(value) {
-            return value.substring(value.indexOf("-") + 1);
+            return getDescriptionOnly(value);
         },
     },
 };
