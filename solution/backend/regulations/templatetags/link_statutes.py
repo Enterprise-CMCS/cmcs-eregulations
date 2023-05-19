@@ -16,6 +16,9 @@ SECTION_ID_PATTERN = r"\d+[a-z]?(?:[—–-]+[a-z0-9]+)?"
 # Matches ", and", ", or", "and", "or", "&", and more variations.
 AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
 
+# Extracts a paragraph identifier (e.g. (a) extracts "a").
+PARAGRAPH_PATTERN = r"\(([a-z0-9]+)\)"
+
 # Matches individual sections, for example "Section 1902(a)(2) and (b)(1)" and its variations.
 SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*"
 
@@ -29,9 +32,17 @@ STATUTE_REF_PATTERN = rf"\bsect(?:ion[s]?|s?)\.?\s*((?:{SECTION_PATTERN}{AND_OR_
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
 SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
+PARAGRAPH_REGEX = re.compile(PARAGRAPH_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
 DEFAULT_ACT = "Social Security Act"
+
+
+# Returns the first paragraph identifier in the section.
+# For example, if the section text is "Section 1902(a)(1)(C) and (b)(2)", this will return "a".
+def extract_paragraph(section_text):
+    match = PARAGRAPH_REGEX.search(section_text)
+    return match.group(1) if match else None
 
 
 # This function is run by re.sub() to replace individual section refs with links.
@@ -41,11 +52,12 @@ def replace_section(section, act, link_conversions):
     section = SECTION_ID_REGEX.match(section_text).group()  # extract section
     # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
+        paragraph = extract_paragraph(section_text)
         conversion = link_conversions[act][section]
         return USCODE_LINK_FORMAT.format(
             conversion["title"],
             conversion["usc"],
-            "",
+            USCODE_SUBSTRUCT_FORMAT.format(paragraph) if paragraph else "",
             section_text,
         )
     return section_text
