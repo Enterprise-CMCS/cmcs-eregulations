@@ -6,11 +6,12 @@ from django import template
 register = template.Library()
 
 
-LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml'\
-              '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim">{}</a>'
+USCODE_LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml'\
+                     '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}">{}</a>'
+USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
 # Extracts the section ID only, for example "1902-1G" and its variations.
-SECTION_ID_PATTERN = r"\d+[a-z]?(?:-+[a-z0-9]+)?"
+SECTION_ID_PATTERN = r"\d+[a-z]?(?:[—–-]+[a-z0-9]+)?"
 
 # Matches ", and", ", or", "and", "or", "&", and more variations.
 AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
@@ -38,27 +39,60 @@ DEFAULT_ACT = "Social Security Act"
 def replace_section(section, act, link_conversions):
     section_text = section.group()
     section = SECTION_ID_REGEX.match(section_text).group()  # extract section
-    act = f"{act.strip()} Act" if act else DEFAULT_ACT  # if no act is specified, default to DEFAULT_ACT
+    # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
-        # only link if section exists within the relevant act
         conversion = link_conversions[act][section]
-        return LINK_FORMAT.format(conversion["title"], conversion["usc"], section_text)
+        return USCODE_LINK_FORMAT.format(
+            conversion["title"],
+            conversion["usc"],
+            "",
+            section_text,
+        )
     return section_text
 
 
 # This middleman re.sub() function is run when an entire statute ref is matched. It performs another substition on individual
 # sections within the ref. It is needed to enforce refs starting with "section" but possibly containing more than one section.
 # "link_conversions" must be passed in via a partial function.
-def replace_section_groups(match, link_conversions):
+def replace_sections(match, link_conversions):
+    act = match.group(2)
+    act = f"{act.strip()} Act" if act else DEFAULT_ACT  # if no act is specified, default to DEFAULT_ACT
     return SECTION_REGEX.sub(
-        partial(replace_section, act=match.group(2), link_conversions=link_conversions),
+        partial(replace_section, act=act, link_conversions=link_conversions),
         match.group(),
+    )
+
+
+# This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
+# "42 U.S.C. 1901(a) and 1902(b)" and more variations, similar to STATUTE_REF_PATTERN.
+USC_REF_PATTERN = rf"\b(\d+)\s*u.?\s*s.?\s*c.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)\b"
+USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
+
+
+# Replaces individual USC refs with links, to be run by re.sub().
+# "title" must be passed in via a partial function.
+def replace_usc_citation(match, title):
+    citation_text = match.group()
+    section = SECTION_ID_REGEX.match(citation_text).group()
+    return USCODE_LINK_FORMAT.format(title, section, "", citation_text)
+
+
+# Matches entire USC citations to account for "and", "or" scenarios.
+def replace_usc_citations(match):
+    return match.group().replace(
+        match.group(2),
+        SECTION_REGEX.sub(
+            partial(replace_usc_citation, title=match.group(1)),
+            match.group(2),
+        )
     )
 
 
 @register.filter
 def link_statutes(paragraph, link_conversions):
-    return STATUTE_REF_REGEX.sub(
-        partial(replace_section_groups, link_conversions=link_conversions),
+    paragraph = STATUTE_REF_REGEX.sub(
+        partial(replace_sections, link_conversions=link_conversions),
         paragraph,
     )
+    paragraph = USC_REF_REGEX.sub(replace_usc_citations, paragraph)
+    return paragraph
