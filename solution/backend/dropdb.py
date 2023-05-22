@@ -9,8 +9,11 @@ def handler(event, context):
 
     from django.db import connection
     connection.ensure_connection()
-    if not connection.is_usable():
-        raise Exception("database is unreachable")
+    try:
+        if not connection.is_usable():
+            raise Exception("database is unreachable")
+    except Exception as e:
+        print(e)
 
     with connection.cursor() as cursor:
         cursor.execute(f"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{os.environ.get('STAGE', '')}'")
