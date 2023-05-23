@@ -16,12 +16,17 @@ describe("Jump to", () => {
         const titleDropdown = await wrapper.findByLabelText("Regulation title number");
         let partDropdown = await screen.findByLabelText("Regulation part number");
         expect(partDropdown._vOptions).toStrictEqual([""])
-        fireEvent.change(titleDropdown, {target: {value: 42}})
         expect(titleDropdown._vOptions).toStrictEqual(titles)
+        fireEvent.change(titleDropdown, {target: {value: 42}})
+
 
         await flushPromises();
-        const parts = ['', '400', '430', '431', '432', '433' ]
+        let parts = ['', '400', '430', '431', '432', '433' ]
         partDropdown = await screen.findByLabelText("Regulation part number");
+        expect(partDropdown._vOptions).toStrictEqual(parts)
+        parts = ["", "95", "155"]
+        fireEvent.change(titleDropdown, {target: {value: 45}})
+        await flushPromises();
         expect(partDropdown._vOptions).toStrictEqual(parts)
     })
     it("Checks to see if the snap shot matches", async () => {

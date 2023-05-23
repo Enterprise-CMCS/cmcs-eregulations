@@ -1,4 +1,4 @@
-export const partToc = [
+const partToc42 = [
     {
         id: 245,
         name: "400",
@@ -33,5 +33,32 @@ export const partToc = [
         date: "2021-03-01",
         last_updated: "2023-04-21 11:50:20.066291",
         depth: 3
-    },
+    }
 ];
+const partToc45 = [
+    {
+        id: 153,
+        name: "75",
+        date: "2021-11-15",
+        last_updated: "2023-05-22 16:34:36.116245",
+        depth: 3
+    },
+    {
+        id: 137,
+        name: "95",
+        date: "2019-11-05",
+        last_updated: "2023-05-22 16:33:30.494874",
+        depth: 3
+    },
+    {
+        id: 173,
+        name: "155",
+        date: "2023-04-27",
+        last_updated: "2023-05-22 16:36:01.423101",
+        depth: 3
+    }
+];
+export {
+    partToc42,
+    partToc45
+}

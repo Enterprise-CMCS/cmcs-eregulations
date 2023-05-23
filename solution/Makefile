@@ -161,8 +161,8 @@ test.vite:
 		npm run test-vue;
 test.vite.coverage:
 	cd ui/regulations;\
-		npm install;
-		npm run test-vue-coverage
+		npm install;\
+		npm run test-vue-coverage;
 		
 python.unittest:
 	docker-compose exec regulations python manage.py test
