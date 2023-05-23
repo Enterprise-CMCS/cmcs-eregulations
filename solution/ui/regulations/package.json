@@ -3,6 +3,7 @@
   "description": "",
   "scripts": {
     "test-vue": "vitest --environment jsdom",
+    "test-vue-coverage": "vitest run --coverage",
     "css": "npx sass -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
     "css-deploy": "npx sass -I node_modules css/scss/main-deploy.scss ../../static-assets/regulations/css/main.css",
     "watch-css": "npx sass --watch -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
@@ -41,6 +42,7 @@
     "@storybook/preset-scss": "^1.0.3",
     "@storybook/vue": "^6.5.12",
     "@testing-library/vue": "^5.9.0",
+    "@vitest/coverage-c8": "^0.31.1",
     "@vue/component-compiler": "^4.2.4",
     "babel-loader": "^8.2.2",
     "eslint": "^8.3.0",

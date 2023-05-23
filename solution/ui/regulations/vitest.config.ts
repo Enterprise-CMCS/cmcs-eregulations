@@ -8,7 +8,10 @@ export default defineConfig({
     plugins: [vue()],
     test: {
         globals: true,
-        setupFiles: ["./test/configuration/setup-test.js"]
+        setupFiles: ["./test/configuration/setup-test.js"],
+        coverage: {
+            provider: 'c8'
+          },
     },
     resolve: {
         alias : aliases
