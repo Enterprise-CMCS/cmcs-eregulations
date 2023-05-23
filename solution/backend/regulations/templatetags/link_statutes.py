@@ -11,7 +11,7 @@ USCODE_LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.h
 USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
 # Extracts the section ID only, for example "1902-1G" and its variations.
-SECTION_ID_PATTERN = r"\d+[a-z]?(?:[—–-]+[a-z0-9]+)?"
+SECTION_ID_PATTERN = r"\d+[a-z]*(?:[—–-]+[a-z0-9]+)?"
 
 # Matches ", and", ", or", "and", "or", "&", and more variations.
 AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
@@ -19,7 +19,7 @@ AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
 # Extracts a paragraph identifier (e.g. (a) extracts "a").
 PARAGRAPH_PATTERN = r"\(([a-z0-9]+)\)"
 
-# Matches individual sections, for example "Section 1902(a)(2) and (b)(1)" and its variations.
+# Matches individual sections, for example "1902(a)(2) and (b)(1)" and its variations.
 SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*"
 
 # Matches entire statute references, including one or more sections and an optional Act.
@@ -77,7 +77,9 @@ def replace_sections(match, link_conversions):
 
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
 # "42 U.S.C. 1901(a) and 1902(b)" and more variations, similar to STATUTE_REF_PATTERN.
-USC_REF_PATTERN = rf"\b(\d+)\s*u.?\s*s.?\s*c.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)\b"
+# Negative lookahead ensures "42 U.S.C. 1234 and 41 U.S.C. 4567" doesn't register "1234" and "41" as two sections in one ref.
+USC_PATTERN = r"\s*u.?\s*s.?\s*c.?\s*"
+USC_REF_PATTERN = rf"(\d+){USC_PATTERN}((?:{SECTION_PATTERN}{AND_OR_PATTERN}(?!\d+{USC_PATTERN}))+)"
 USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 
 
