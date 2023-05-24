@@ -155,11 +155,11 @@ test.local: ## run cypress tests locally without docker
 		npm install; \
 		npm run cypress:run;
 .PHONY: test.vite
-test.vite:
+test.vitest:
 	cd ui/regulations;\
 		npm install;\
 		npm run test-vue;
-test.vite.coverage:
+test.vitest.coverage:
 	cd ui/regulations;\
 		npm install;\
 		npm run test-vue-coverage;
