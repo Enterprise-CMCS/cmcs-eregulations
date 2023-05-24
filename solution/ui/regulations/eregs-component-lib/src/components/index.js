@@ -45,3 +45,4 @@ export { default as HeaderComponent } from "../../../eregs-vite/src/components/h
 export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
 export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
+export { default as ResourcesComponent } from "../../../eregs-vite/src/components/ResourcesComponent.vue";
