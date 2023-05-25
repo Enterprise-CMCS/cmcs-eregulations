@@ -1,18 +1,18 @@
 <template>
     <v-tabs>
-        <v-tab>
+        <!-- <v-tab id="content-tabs" grow>
             Recent Subregulatory Guidance
         </v-tab>
-            <v-tab-item>
-                <RecentChangesContainer :apiUrl="api_url"></RecentChangesContainer>
-            </v-tab-item>
+        <v-tab-item>
+            <RecentChangesContainer :apiUrl="api_url" type="supplemental"></RecentChangesContainer>
+        </v-tab-item> -->
 
-        <v-tab>
+        <v-tab  id="content-tabs">
             Recent Rules
         </v-tab>
         <v-tab-item>
-            <RecentChangesContainer :apiUrl="api_url"></RecentChangesContainer>
-            </v-tab-item>
+            <RecentChangesContainer :apiUrl="api_url" type="rules"></RecentChangesContainer>
+        </v-tab-item>
     </v-tabs>
 </template>
 <script>
@@ -40,3 +40,14 @@ export default {
 
 };
 </script>
+<style>
+#content-tabs {
+    color:#17415f;
+    font-family: 'Merriweather';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 36px;
+max-width: 800px;
+}
+</style>

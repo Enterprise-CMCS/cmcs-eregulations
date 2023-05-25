@@ -1,15 +1,16 @@
 <template>
-    <div class="rules-container">
+    <div class="rules-container homepage-updates ds-l-col--4">
         <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading" :rules="rules" />
+        <RelatedRuleList v-if="!loading && type=='rules'" :rules="rules"/>
+        <!-- <ResourceResults v-if="!loading && type!='rules'" :results="rules"/> -->
     </div>
 </template>
 
 <script>
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
-
-import { getFederalRegisterDocs } from "../api";
+// import ResourceResults from "./ResourceResults.vue"
+import { getRecentResources } from "../api";
 
 export default {
     name: "DefaultName",
@@ -17,6 +18,7 @@ export default {
     components: {
         RelatedRuleList,
         SimpleSpinner,
+        // ResourceResults,
     },
 
     props: {
@@ -24,13 +26,18 @@ export default {
             type: String,
             required: true,
         },
+        type: {
+            type: String,
+            required: false,
+            default: ""
+        }
     },
 
     async created() {
-        const rulesResponse = await getFederalRegisterDocs(this.apiUrl, {
+        const rulesResponse = await getRecentResources(this.apiUrl, {
             page: 1,
             pageSize: 3,
-        });
+        }, this.type);
 
         this.rules = rulesResponse.results;
         this.loading = false;

@@ -1,42 +1,7 @@
 <template>
     <div class="resources-results">
         <slot name="empty-state"></slot>
-        <template v-for="(item, idx) in results">
-            <div :key="item.created_at + idx">
-                <div class="category-labels">
-                    <div class="result-label category-label">
-                        {{
-                            item.category.parent
-                                ? item.category.parent.name
-                                : item.category.name
-                        }}
-                    </div>
-                    <div
-                        v-if="item.category.parent"
-                        class="result-label subcategory-label"
-                    >
-                        {{ item.category.name }}
-                    </div>
-                </div>
-                <div class="result-content-wrapper">
-                    <SupplementalContentObject
-                        :name="item.name"
-                        :description="
-                            item.descriptionHeadline || item.description
-                        "
-                        :date="item.date"
-                        :url="item.url"
-                    />
-                </div>
-                <RelatedSections
-                    :base="base"
-                    :item="item"
-                    :parts-last-updated="partsLastUpdated"
-                    :parts-list="partsList"
-                />
-            </div>
-        </template>
-        <slot name="pagination"></slot>
+{{ results }}
     </div>
 </template>
 
