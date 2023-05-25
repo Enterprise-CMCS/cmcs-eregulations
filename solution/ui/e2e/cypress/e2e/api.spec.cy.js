@@ -35,6 +35,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/resources/search?q=${SEARCH_TERM}`,
     `/v3/resources/supplemental_content`,
     `${SYNONYMS_ENDPOINT}${SYNONYM}`,
+    `/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/sections`,
