@@ -39,7 +39,7 @@ jobs:
       - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
-          python-version: '3.8'
+          python-version: '3.9'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -103,7 +103,7 @@ jobs:
       - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
-          python-version: '3.8'
+          python-version: '3.9'
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
