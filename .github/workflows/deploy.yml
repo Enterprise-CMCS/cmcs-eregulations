@@ -45,6 +45,9 @@ jobs:
           # This isn't at all accurate, but it doesn't matter; Django just needs it to run collectstatic
           STATIC_URL: http://localhost:8888/
           VITE_ENV: ${{ matrix.environment }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
         run: |
           pushd solution
           cd backend
