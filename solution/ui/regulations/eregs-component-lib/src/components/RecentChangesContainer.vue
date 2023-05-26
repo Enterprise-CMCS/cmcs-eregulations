@@ -2,14 +2,14 @@
     <div class="rules-container homepage-updates ds-l-col--4">
         <SimpleSpinner v-if="loading" />
         <RelatedRuleList v-if="!loading && type=='rules'" :rules="rules"/>
-        <!-- <ResourceResults v-if="!loading && type!='rules'" :results="rules"/> -->
+        <RecentSupplementalContent v-if="!loading && type!='rules'" :supplemental_content="rules"/>
     </div>
 </template>
 
 <script>
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
-// import ResourceResults from "./ResourceResults.vue"
+import RecentSupplementalContent from "./RecentSupplementalContent.vue"
 import { getRecentResources } from "../api";
 
 export default {
@@ -18,7 +18,7 @@ export default {
     components: {
         RelatedRuleList,
         SimpleSpinner,
-        // ResourceResults,
+        RecentSupplementalContent
     },
 
     props: {

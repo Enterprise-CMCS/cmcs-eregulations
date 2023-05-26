@@ -1,11 +1,11 @@
 <template>
     <v-tabs>
-        <!-- <v-tab id="content-tabs" grow>
+        <v-tab id="content-tabs" grow>
             Recent Subregulatory Guidance
         </v-tab>
         <v-tab-item>
             <RecentChangesContainer :apiUrl="api_url" type="supplemental"></RecentChangesContainer>
-        </v-tab-item> -->
+        </v-tab-item>
 
         <v-tab  id="content-tabs">
             Recent Rules
@@ -18,6 +18,7 @@
 <script>
 
 import RecentChangesContainer from '../../../eregs-component-lib/src/components/RecentChangesContainer.vue';
+
 export default {
     name: "ResourcesComponent",
 
