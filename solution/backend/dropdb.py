@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
-
+import django
+from django.db import connection
 
 def handler(event, context):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
