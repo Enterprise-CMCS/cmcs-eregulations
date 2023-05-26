@@ -8,7 +8,7 @@ provider:
     blockPublicAccess: true
 
 custom:
-  vstage: ${opt:stage, self:provider.stage}
+  stage: ${opt:stage, self:provider.stage}
   s3Sync:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
