@@ -151,6 +151,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.14
+                # setup python
+      - uses: actions/setup-python@v4
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: '3.9'
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
