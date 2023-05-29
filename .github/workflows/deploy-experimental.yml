@@ -327,4 +327,4 @@ jobs:
       # run Python unit tests
       - name: Run Python unit tests
         run: |
-          python manage.py test /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/regulations/tests
+          python ./manage.py test
