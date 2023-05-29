@@ -319,7 +319,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
 
-      # run python unit tests
       - name: Run Python unit tests
-        run: python manage.py test
-
+        uses: pytest-actions/pytest@v2
+        with:
+          paths: |
+            /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/regulations/tests
+            /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/regcore/tests
+            /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/resources/tests
