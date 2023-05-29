@@ -318,6 +318,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
-      # Run tests
+
+      # navigate to the backend directory
+      - name: Navigate to backend directory
+        run: |
+          cd solution/backend
+
+      # run Python unit tests
       - name: Run Python unit tests
-        run:  python manage.py test
+        run: |
+          python manage.py test /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/regulations/tests
