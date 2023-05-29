@@ -300,7 +300,7 @@ jobs:
           name: cypress-videos
           path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/videos/*
   test-python:
-    needs: [deploy-go, deploy-django, build-and-deploy-vue]
+    needs: [ deploy-go, deploy-django, build-and-deploy-vue ]
     runs-on: ubuntu-20.04
     steps:
       # checkout the code
@@ -308,21 +308,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: true
-      # setup python
+      # setup Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
-      # install dependencies
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
-
+      # Run tests
       - name: Run Python unit tests
-        uses: pytest-actions/pytest@v2
-        with:
-          paths: |
-            /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/regulations/tests
-            /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/regcore/tests
-            /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/backend/resources/tests
+        run:  python manage.py test
