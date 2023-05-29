@@ -299,3 +299,26 @@ jobs:
         with:
           name: cypress-videos
           path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/videos/*
+  test-python:
+    needs: [deploy-go, deploy-django, build-and-deploy-vue]
+    runs-on: ubuntu-20.04
+    steps:
+      # checkout the code
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      # setup python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+      # install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./solution/static-assets/requirements.txt
+
+      # run python unit tests
+      - name: Run Python unit tests
+        run: Make python.unittest
