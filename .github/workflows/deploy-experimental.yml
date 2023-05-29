@@ -321,4 +321,5 @@ jobs:
 
       # run python unit tests
       - name: Run Python unit tests
-        run: Make python.unittest
+        run: python manage.py test
+
