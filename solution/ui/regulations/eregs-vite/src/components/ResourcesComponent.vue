@@ -4,14 +4,14 @@
             Recent Subregulatory Guidance
         </v-tab>
         <v-tab-item grow>
-            <RecentChangesContainer :apiUrl="api_url" type="supplemental" prototype="True"></RecentChangesContainer>
+            <RecentChangesContainer :apiUrl="api_url" type="supplemental"></RecentChangesContainer>
         </v-tab-item>
 
         <v-tab  id="content-tabs">
             Recent Rules
         </v-tab>
         <v-tab-item grow>
-            <RecentChangesContainer :apiUrl="api_url" type="rules" prototype="True"></RecentChangesContainer>
+            <RecentChangesContainer :apiUrl="api_url" type="rules"></RecentChangesContainer>
         </v-tab-item>
     </v-tabs>
 </template>

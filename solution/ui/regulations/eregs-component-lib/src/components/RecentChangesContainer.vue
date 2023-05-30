@@ -1,12 +1,8 @@
 <template>
-    <div v-if="prototype" class="rules-container homepage-updates">
+    <div class="rules-container">
         <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading && type=='rules'" :rules="rules"/>
-        <RecentSupplementalContent v-if="!loading && type!='rules'" :supplemental_content="rules"/>
-    </div>
-    <div v-else class="rules-container homepage-updates ds-l-col--4">
-        <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading" :rules="rules"/>
+        <RelatedRuleList v-if="!loading && type!='supplemental'" :rules="rules"/>
+        <RecentSupplementalContent v-if="!loading && type=='supplemental'" :supplemental_content="rules"/>
     </div>
 </template>
 
@@ -33,12 +29,7 @@ export default {
         type: {
             type: String,
             required: false,
-            default: ""
-        },
-        prototype: {
-            type: Boolean,
-            required: false,
-            default: false
+            default: "rules"
         },
     },
 
