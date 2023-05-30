@@ -3,6 +3,11 @@
         <template
             v-for="(content, index) in limitedContent"
         >
+        <div class="category-labels">
+                        <div class="result-label category-label">
+
+            {{content.category.name}}
+                        </div></div>
             <supplemental-content-object
                 :key="index"
                 :name="content.name"
@@ -19,18 +24,12 @@
 
 <script>
 import SupplementalContentObject from "./SupplementalContentObject.vue";
-import ShowMoreButton from "./ShowMoreButton.vue";
-import CollapseButton from "./CollapseButton.vue";
-import Collapsible from "./Collapsible.vue";
 
 export default {
     name: "RecentSupplementalContent",
 
     components: {
-        SupplementalContentObject,
-        ShowMoreButton,
-        CollapseButton,
-        Collapsible,
+        SupplementalContentObject
     },
 
     props: {
@@ -60,3 +59,14 @@ export default {
     },
 };
 </script>
+<style>
+.category-labels{
+    display: inline-block;
+    font-size: 11px;
+    width: fit-content;
+    margin-right: 5px;
+    background: #e3eef0;
+    border-radius: 3px;
+    padding: 2px 5px 3px;
+}
+</style>

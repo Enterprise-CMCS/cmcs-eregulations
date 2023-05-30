@@ -66,7 +66,7 @@ export default {
         background: #e3eef9;
         border-radius: 3px;
         padding: 2px 5px 3px;
-
+        color:#102E43;
         &.category-label {
             font-weight: 600;
         }

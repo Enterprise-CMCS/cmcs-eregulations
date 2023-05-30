@@ -265,7 +265,9 @@
                     .video__container {
                         margin-right: 0;
                     }
-
+                    .resources__container{
+                        margin-right:0;
+                    }
                     .about-text__container {
                         margin-left: 0;
                     }
@@ -279,7 +281,9 @@
                     .video__container {
                         margin-right: 15px;
                     }
-
+                    .resources__container{
+                        margin-right:15px;
+                    }
                     .about-text__container {
                         margin-left: 15px;
                         margin-bottom: 30px;
@@ -303,7 +307,9 @@
                         color: $mid_gray;
                     }
                 }
-
+                .resources__container{
+                    flex: 2;
+                }
                 .about-text__container {
                     flex: 1;
                     display: flex;

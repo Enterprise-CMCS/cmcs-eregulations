@@ -78,14 +78,27 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
                 </div>
             </div>
         </div>
-        <div class="resources__container cta__container">
-            <div class="rules-guidance__container cta">
+        <div class="cta__container">
+            <div class="cta">
+        <div class="resources__container">
+
                 <resources-component 
                     api_url={{ API_BASE }}
                 >
                 </resources-component>
-            </div>
-            <div class="search-description__container"></div>
+        </div>
+        <div class="about-text__container">
+            <p>
+                eRegulations organizes together regulations, subregulatory
+                guidance, and other related policy materials.
+            </p>
+            <a
+                href="{% url 'about' %}"
+                class="action-btn default-btn link-btn"
+                >Learn About This Tool</a
+            >
+
+    </div></div>
         </div>
     </div>
 </main>
