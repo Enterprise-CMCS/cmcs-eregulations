@@ -87,6 +87,12 @@ class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceF
     name_headline = HeadlineField("supplementalcontent")
     description_headline = HeadlineField("supplementalcontent")
 
+class InternalDocumentSerializer(AbstractResourceSerializer):
+    name = serializers.CharField()
+    description = serializers.CharField()
+    author = serializers.CharField()
+    name_headline = HeadlineField("internaldocument")
+    description_headline = HeadlineField("internaldocument")
 
 class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
     docket_numbers = serializers.ListField(child=serializers.CharField())

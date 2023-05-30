@@ -29,6 +29,7 @@ from resources.models import (
     AbstractLocation,
     AbstractResource,
     FederalRegisterDocument,
+    InternalDocument,
     SupplementalContent,
 )
 
@@ -36,6 +37,7 @@ from resources.serializers.resources import (
     AbstractResourcePolymorphicSerializer,
     FederalRegisterDocumentCreateSerializer,
     FederalRegisterDocumentSerializer,
+    InternalDocumentSerializer,
     MetaResourceSerializer,
     ResourceSearchSerializer,
     StringListSerializer,
@@ -217,6 +219,18 @@ class SupplementalContentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnly
 
     def get_search_fields(self):
         return ["name", "description"]
+@extend_schema(
+    description="Retrieve a list of all supplemental content. "
+                "Searching is supported as well as inclusive filtering by title, part, subpart, and section. "
+                "Results are paginated by default.",
+    parameters=ResourceExplorerViewSetMixin.PARAMETERS,
+)
+class InternalDocumentViewSet(ResourceExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = InternalDocumentSerializer
+    model = InternalDocument
+
+    def get_search_fields(self):
+        return ["name", "description", "author"]
 
 
 class FederalRegisterDocsViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixin, viewsets.ModelViewSet):

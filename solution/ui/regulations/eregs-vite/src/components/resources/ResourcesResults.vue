@@ -21,6 +21,7 @@
                 <div class="result-content-wrapper">
                     <SupplementalContentObject
                         :name="item.name"
+                        :author="item.author"
                         :description="
                             item.descriptionHeadline || item.description
                         "

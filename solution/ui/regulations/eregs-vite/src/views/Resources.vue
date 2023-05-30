@@ -182,6 +182,7 @@ import {
     getSupplementalContent,
     getSynonyms,
     getTitles,
+    getInternalDocuments,
 } from "utilities/api";
 
 export default {
@@ -660,7 +661,7 @@ export default {
 
             if (dataQueryParams?.title && _isEmpty(dataQueryParams.part)) {
                 try {
-                    const searchResults = await getSupplementalContent({
+                    const searchResults = await getInternalDocuments({
                         page: this.page,
                         page_size: this.pageSize,
                         partDict: "all", // titles
@@ -682,7 +683,7 @@ export default {
                 }
             } else if (dataQueryParams?.part) {
                 this.getPartDict(dataQueryParams);
-                const responseContent = await getSupplementalContent({
+                const responseContent = await getInternalDocuments({
                     page: this.page,
                     page_size: this.pageSize,
                     partDict: this.partDict,
@@ -704,7 +705,7 @@ export default {
                 }
             } else if (searchQuery) {
                 try {
-                    const searchResults = await getSupplementalContent({
+                    const searchResults = await getInternalDocuments({
                         page: this.page,
                         page_size: this.pageSize,
                         partDict: "all", // titles
@@ -724,7 +725,7 @@ export default {
                     this.isLoading = false;
                 }
             } else {
-                const allResults = await getSupplementalContent({
+                const allResults = await getInternalDocuments({
                     page: this.page,
                     page_size: this.pageSize,
                     partDict: "all", // titles

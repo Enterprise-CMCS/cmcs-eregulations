@@ -2,7 +2,7 @@
   <div class="supplemental-content">
     <a class="supplemental-content-link" :href="url" target="_blank" rel="noopener noreferrer">
       <span class="supplemental-content-date" v-bind:class="{ 'supplemental-content-mid-bar': !isBlank(name) }" v-if="date">{{ date|formatDate }}</span>
-      <span class="supplemental-content-title" v-bind:class="{ 'supplemental-content-external-link': isBlank(description) }" v-if="!isBlank(name)">{{ name }}</span>
+      <span class="supplemental-content-title" v-bind:class="{ 'supplemental-content-external-link': isBlank(description) }" v-if="!isBlank(name)">{{ name }} by {{ author }}</span>
       <div
           v-if="!isBlank(description)"
           class="supplemental-content-description supplemental-content-external-link"
@@ -22,6 +22,10 @@ export default {
     name: {
       type: String,
       required: false,
+    },
+    author: {
+      type: String,
+      required: false
     },
     description: {
         type: String,

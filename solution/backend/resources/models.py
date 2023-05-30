@@ -229,6 +229,13 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
+class InternalDocument(AbstractResource, DateFieldMixin, InternalNotesFieldMixin):
+    name = models.CharField(max_length=512, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    author = models.CharField(max_length=512, null=False, blank=False)
+    name_sort = NaturalSortField('name', null=True)
+    description_sort = NaturalSortField('description', null=True)
+    internal_document = models.FileField(upload_to='documents/')
 
 class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 

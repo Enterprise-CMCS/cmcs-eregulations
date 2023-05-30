@@ -37,6 +37,7 @@ from .models import (
     Category,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
+    InternalDocument,
     ResourcesConfiguration,
     Section,
     SubCategory,
@@ -359,15 +360,21 @@ class ResourceForm(forms.ModelForm):
             return mark_safe(display_text)
         return "-"
 
-    def clean(self):
-        cleaned_data = super().clean()
-        dup_resources = self.check_duplicates()
-        if dup_resources:
-            urls = self.resource_links(dup_resources)
-            self.add_error('url', urls)
-        return cleaned_data
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     dup_resources = self.check_duplicates()
+    #     if dup_resources:
+    #         urls = self.resource_links(dup_resources)
+    #         self.add_error('url', urls)
+    #     return cleaned_data
 
+class InternalDocumentForm(ResourceForm):
+    class Meta:
+        model = InternalDocument
+        fields = "__all__"
 
+    # def save(self, commit=True):
+    #     return super(SupContentForm, self).save(commit=commit)
 class SupContentForm(ResourceForm):
     class Meta:
         model = SupplementalContent
@@ -395,6 +402,14 @@ class FederalResourceForm(ResourceForm):
     def save(self, commit=True):
         return super(FederalResourceForm, self).save(commit=commit)
 
+@admin.register(InternalDocument)
+class InternalDocumentAdmin(AbstractResourceAdmin):
+    form = InternalDocumentForm
+    list_display = ("date", "name", "description", "author", "category", "updated_at", "approved")
+    list_display_links = ("date", "name", "description", "category", "updated_at")
+    search_fields = ["date", "name", "description", "author"]
+    fields = ("approved", "name", "description", "author", "date", "category",
+              "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history", "internal_document")
 
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):

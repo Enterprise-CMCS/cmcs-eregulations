@@ -17,6 +17,12 @@ urlpatterns = [
     path("supplemental_content", resources.SupplementalContentViewSet.as_view({
         "get": "list",
     })),
+    path("internal_document", resources.InternalDocumentViewSet.as_view({
+        "get": "list",
+    })),
+    path("internal_document/search", resources.InternalDocumentViewSet.as_view({
+        "get": "list",
+    })),
     path("federal_register_docs", resources.FederalRegisterDocsViewSet.as_view({
         "get": "list",
         "put": "update",

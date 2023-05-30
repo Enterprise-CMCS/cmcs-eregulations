@@ -479,6 +479,8 @@ const getSupplementalContent = async ({
     return response;
 };
 
+const getInternalDocuments = async ({ page = 1, q = "" }) =>
+    httpApiGet(`resources/internal_document/search?q=${encodeURIComponent(q)}&page=${page}`);
 /**
  * @param {string} [page=1] - page number of paginated results to return.
  * @param {string} [q=""] - search querystring
@@ -523,6 +525,7 @@ export {
     getCategories,
     getDecodedIdToken,
     getFormattedPartsList,
+    getInternalDocuments,
     getLastUpdatedDates,
     getParts,
     getRegSearchResults,
