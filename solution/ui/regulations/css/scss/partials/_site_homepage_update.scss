@@ -267,6 +267,9 @@
                     }
                     .resources__container{
                         margin-right:0;
+                        .content-tabs{
+                            font-size: 16px;
+                        }
                     }
                     .about-text__container {
                         margin-left: 0;
@@ -276,19 +279,24 @@
 
             @container cta-container (min-width: 630px) {
                 .cta {
-                    flex-direction: row;
-
-                    .video__container {
-                        margin-right: 15px;
+                        flex-direction: row;                
+                        .video__container {
+                            margin-right: 15px;
+                        }
+                
+                        .resources__container {
+                            margin-right: 15px;
+                
+                            .content-tabs {
+                                font-size: 24px;
+                            }
+                        }
+                
+                        .about-text__container {
+                            margin-left: 15px;
+                            margin-bottom: 30px;
+                        }
                     }
-                    .resources__container{
-                        margin-right:15px;
-                    }
-                    .about-text__container {
-                        margin-left: 15px;
-                        margin-bottom: 30px;
-                    }
-                }
             }
 
             .cta {
@@ -309,6 +317,15 @@
                 }
                 .resources__container{
                     flex: 2;
+                    .content-tabs {
+                        color: #17415f;
+                        font-family: 'Merriweather';
+                        font-style: normal;
+                        font-weight: 700;
+            
+                        line-height: 36px;
+                        max-width: 800px;
+                    }
                 }
                 .about-text__container {
                     flex: 1;

@@ -269,7 +269,6 @@ const getRecentResources = async (apiURL, { page = 1, pageSize = 3 }, type) => {
     );
 };
 
-
 const getSubpartTOC = async (apiURL, title, part, subPart) => {
     return httpApiGetLegacy(
         `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
