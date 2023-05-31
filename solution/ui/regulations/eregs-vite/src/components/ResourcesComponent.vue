@@ -19,7 +19,7 @@
 </template>
 <script>
 
-import RecentChangesContainer from '../../../eregs-component-lib/src/components/RecentChangesContainer.vue';
+import RecentChangesContainer from 'eregsComponentLib/src/components/RecentChangesContainer.vue';
 
 export default {
     name: "ResourcesComponent",
