@@ -19,7 +19,7 @@ def handler(event, context):
             raise Exception("database connection is not usable")
     except Exception as e:
         raise Exception(f"Failed to connect to the database: {str(e)}")
-    
+
     try:
         with connection.cursor() as cursor:
             db_name = os.environ.get('STAGE', '')
