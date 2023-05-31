@@ -327,4 +327,4 @@ jobs:
       # run Python unit tests
       - name: Run Python unit tests
         run: |
-          python ./manage.py test
+          python manage.py test
