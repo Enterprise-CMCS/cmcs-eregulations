@@ -97,7 +97,11 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         return conversions, len(matches), failures
     
     def parse_toc(self, text):
-        dom = minidom.parseString(text)
+        try:
+            dom = minidom.parseString(text)
+        except Exception as e:
+            raise ValidationError(f"invalid XML detected: {str(e)}")
+        
         # search for a title
         title = None
         for i in dom.getElementsByTagName("containsShortTitle"):
@@ -105,8 +109,9 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             if match:
                 title = match.group(1).upper().strip()
                 break
-        toc = {}
+        
         # parse table of contents
+        toc = {}
         for i in dom.getElementsByTagName("referenceItem"):
             role = i.getAttribute("role")
             if role == "title":
