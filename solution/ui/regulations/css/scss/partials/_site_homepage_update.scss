@@ -294,9 +294,9 @@
                             margin-right: 15px;
                 
                             .content-tabs {
-                                font-size: 24px;
-                                font-family: 'Merriweather';
-                                font-weight: 700;
+                                font-size: 16px;
+                                font-family: 'Open Sans';
+                                font-weight: 400;
                             }
                         }
                 
@@ -306,7 +306,20 @@
                         }
                     }
             }
+            @container cta-container (min-width: 1000px) {
+                .cta{
 
+                    .resources__container {
+
+            
+                        .content-tabs {
+                            font-size: 24px;
+                            font-family: 'Merriweather';
+                            font-weight: 700;
+                        }
+                    }
+                }
+            }
             .cta {
                 display: flex;
 
@@ -326,6 +339,7 @@
                 .resources__container{
                     flex: 2;
                     .content-tabs {
+                        letter-spacing:0;
                         color: #17415f;
                         text-transform: none !important;
                         font-style: normal;
