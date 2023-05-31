@@ -254,7 +254,8 @@
         @media (max-width: $eds-xs-max) {
             box-sizing: border-box;
         }
-
+        padding-left: 18px;
+        padding-right: 18px;
         .cta__container {
             container: cta-container / inline-size;
 
@@ -268,8 +269,13 @@
                     .resources__container{
                         margin-right:0;
                         .content-tabs{
+                            padding-right:12px;
+                            padding-left:0px;
                             font-size: 16px;
+                            font-weight: 400;
+                            font-family: 'Open Sans';
                         }
+
                     }
                     .about-text__container {
                         margin-left: 0;
@@ -289,6 +295,8 @@
                 
                             .content-tabs {
                                 font-size: 24px;
+                                font-family: 'Merriweather';
+                                font-weight: 700;
                             }
                         }
                 
@@ -319,9 +327,8 @@
                     flex: 2;
                     .content-tabs {
                         color: #17415f;
-                        font-family: 'Merriweather';
+                        text-transform: none !important;
                         font-style: normal;
-                        font-weight: 700;
             
                         line-height: 36px;
                         max-width: 800px;
@@ -338,10 +345,10 @@
                         line-height: 24px;
                     }
                 }
+                .v-slide-group__prev {
+                    display: none !important;
+                    }
             }
-        }
-
-        .resources__container {
         }
     }
 }

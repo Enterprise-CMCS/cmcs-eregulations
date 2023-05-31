@@ -80,20 +80,21 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
         </div>
         <div class="cta__container">
             <div class="cta">
-        <div class="resources__container">
-
-                <resources-component 
-                    api_url={{ API_BASE }}
-                >
-                </resources-component>
-        </div>
+                <div class="resources__container">
+                        <resources-component 
+                            api_url={{ API_BASE }}
+                            resource_link='{% url 'resources' %}'
+                            fr_doc_link='{% url 'resources' %}?resourceCategory={{ fr_docs_category_name }}'
+                        />
+                </div>
         <div class="about-text__container">
             <p>
                 Search Policy Materials
             </p>
-<p> placeholder text </p>
+            <p> placeholder text </p>
 
-    </div></div>
+        </div>
+</div>
         </div>
     </div>
 </main>
