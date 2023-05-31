@@ -25,7 +25,7 @@ export { default as SupplementalContentList } from "./SupplementalContentList.vu
 export { default as SupplementalContentObject } from "./SupplementalContentObject.vue";
 export { default as TableComponent } from "./TableComponent.vue";
 export { default as ViewResourcesLink } from "./ViewResourcesLink.vue";
-
+export { default as ResourcesComponent } from "./ResourcesComponent.vue";
 // Tooltips
 export { default as ActionBtn } from "./tooltips/ActionBtn.vue";
 export { default as CopyCitation } from "./tooltips/CopyCitation.vue";
@@ -45,4 +45,3 @@ export { default as HeaderComponent } from "../../../eregs-vite/src/components/h
 export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
 export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
-export { default as ResourcesComponent } from "../../../eregs-vite/src/components/ResourcesComponent.vue";
