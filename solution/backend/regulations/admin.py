@@ -1,4 +1,5 @@
 import re
+from xml.dom import minidom
 
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
@@ -11,8 +12,6 @@ import requests
 from solo.admin import SingletonModelAdmin
 
 from .models import SiteConfiguration, StatuteLinkConverter
-
-from xml.dom import minidom
 
 
 MARKUP_PATTERN = r"</?[^>]+>"
