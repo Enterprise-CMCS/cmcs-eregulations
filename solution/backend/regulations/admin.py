@@ -12,15 +12,20 @@ from solo.admin import SingletonModelAdmin
 
 from .models import SiteConfiguration, StatuteLinkConverter
 
+from xml.dom import minidom
+
 
 MARKUP_PATTERN = r"</?[^>]+>"
 DASH_PATTERN = r"[—–]"
-CONVERSION_PATTERN = r"sec.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?).?\s*\[\s*(\d+)\s*u.?s.?c.?\s*"\
-                     r"(\d+[a-z0-9]*(?:-+[a-z0-9]+)?)\s*\]"
+SECTION_PATTERN = r"sec.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?).?"
+CONVERSION_PATTERN = rf"{SECTION_PATTERN}\s*\[\s*(\d+)\s*u.?s.?c.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?)\s*\]"
+TITLE_PATTERN = r"title\s+([a-z]+)\s*[—–-]*(?:\s+of\s+the\s+[a-z0-9\s]*?(?=\bact\b))?"
 
-markup_regex = re.compile(MARKUP_PATTERN)
-dash_regex = re.compile(DASH_PATTERN)
-conversion_regex = re.compile(CONVERSION_PATTERN, re.IGNORECASE)
+MARKUP_REGEX = re.compile(MARKUP_PATTERN)
+DASH_REGEX = re.compile(DASH_PATTERN)
+SECTION_REGEX = re.compile(SECTION_PATTERN, re.IGNORECASE)
+CONVERSION_REGEX = re.compile(CONVERSION_PATTERN, re.IGNORECASE)
+TITLE_REGEX = re.compile(TITLE_PATTERN, re.IGNORECASE)
 
 
 @admin.register(SiteConfiguration)
@@ -39,8 +44,10 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             "fields": (
+                "statute_title",
                 "act",
                 "section",
+                "name",
                 "title",
                 "usc",
                 "source_url",
@@ -60,11 +67,23 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def import_conversions(self, text, url, act):
         conversions = []
-        text = markup_regex.sub("", text)  # Strips HTML/XML tags from the response text
-        text = dash_regex.sub("-", text)  # Replace em dash and en dash with regular dash
-        matches = conversion_regex.findall(text)
+        failures = []
+        toc = self.parse_toc(text)
+        text = MARKUP_REGEX.sub("", text)  # Strips HTML/XML tags from the response text
+        text = DASH_REGEX.sub("-", text)  # Replace em dash and en dash with regular dash
+        matches = CONVERSION_REGEX.findall(text)
+
         for section, title, usc in matches:
-            instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act, source_url=url)
+            if section not in toc:
+                failures.append({
+                    "section": section,
+                    "title": title,
+                    "usc": usc,
+                })
+                continue
+            name = toc[section]["name"]
+            statute_title = toc[section]["statute_title"]
+            instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act, source_url=url, name=name, statute_title=statute_title)
             if created:
                 conversions.append({
                     "act": instance.act,
@@ -72,8 +91,47 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
                     "title": instance.title,
                     "usc": instance.usc,
                     "source_url": instance.source_url,
+                    "name": instance.name,
+                    "statute_title": instance.statute_title,
                 })
-        return conversions, len(matches)
+            
+        return conversions, len(matches), failures
+    
+    def parse_toc(self, text):
+        dom = minidom.parseString(text)
+        # search for a title
+        title = None
+        for i in dom.getElementsByTagName("containsShortTitle"):
+            match = TITLE_REGEX.search(i.firstChild.nodeValue)
+            if match:
+                title = match.group(1).upper().strip()
+                break
+        toc = {}
+        # parse table of contents
+        for i in dom.getElementsByTagName("referenceItem"):
+            role = i.getAttribute("role")
+            if role == "title":
+                designator = i.getElementsByTagName("designator")
+                if not designator:
+                    raise ValidationError("invalid XML detected: 'referenceItem' does not have a 'designator'.")
+                match = TITLE_REGEX.search(designator[0].firstChild.nodeValue)
+                if not match:
+                    raise ValidationError("invalid XML detected: 'referenceItem' contains an invalid Title.")
+                title = match.group(1)
+            elif role == "section":
+                designator = i.getElementsByTagName("designator")
+                if not designator:
+                    continue
+                section = SECTION_REGEX.search(designator[0].firstChild.nodeValue)
+                label = i.getElementsByTagName("label")
+                if label and section and title:
+                    section = section.group(1)
+                    label = label[0].firstChild.nodeValue.strip()
+                    toc[section] = {
+                        "name": label,
+                        "statute_title": title,
+                    }
+        return toc
 
     def try_import(self, url, act):
         if not url:
@@ -88,9 +146,9 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
         response = requests.get(url)
         response.raise_for_status()
-        conversions, matches = self.import_conversions(response.text, url, act)
+        conversions, matches, failures = self.import_conversions(response.text, url, act)
         if conversions:
-            return conversions
+            return conversions, failures
         if matches:
             raise ValidationError(f"all conversions contained in {url} already exist!")
         else:
@@ -103,10 +161,11 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             url = request.POST.get("url", "").strip()
             act = request.POST.get("act", "").strip()
             try:
-                conversions = self.try_import(url, act)
+                conversions, failures = self.try_import(url, act)
                 return render(request, "admin/conversions_imported.html", context={
                     "num_conversions": len(conversions),
                     "conversions": conversions,
+                    "failures": failures,
                 })
             except ValidationError as e:
                 error = e.message

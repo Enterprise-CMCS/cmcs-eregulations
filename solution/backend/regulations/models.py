@@ -18,6 +18,8 @@ class StatuteLinkConverter(models.Model):
     title = models.IntegerField(verbose_name="USC Title")
     usc = models.CharField(max_length=128, verbose_name="USC Section")
     act = models.CharField(max_length=128, verbose_name="Act Name")
+    name = models.CharField(max_length=512, verbose_name="Section Name")
+    statute_title = models.CharField(max_length=64, verbose_name="Statute Title")
     source_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="Source URL")
 
     def __str__(self):

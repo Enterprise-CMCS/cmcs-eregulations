@@ -10,6 +10,15 @@
         {% endfor %}
         </ul>
 
+        {% if failures %}
+        <p>The following conversions failed to import:</p>
+        <ul>
+        {% for f in failures %}
+            <li>Title {{ c.title }} section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
         <input type="hidden" name="action" value="show_import_conversions" />
         <input type="hidden" name="num_conversions" value="{{ num_conversions }}" />
         <p><input type="submit" name="return" value="Return"/></p>
