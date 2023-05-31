@@ -3,20 +3,23 @@
 {% block content %}
     <form action="" method="POST">
         {% csrf_token %}
-        <p>The following Statute Link Conversions have been imported:</p>
-        <ul>
-        {% for c in conversions %}
-            <li>{{ c.act }} &mdash; title {{ c.title }} section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
-        {% endfor %}
-        </ul>
+
+        {% if conversions %}
+            <p>The following Statute Link Conversions have been imported:</p>
+            <ul>
+            {% for c in conversions %}
+                <li>Title {{ c.statute_title }} section {{ c.section }} of the {{ c.act }} → {{ c.title }} USC {{ c.usc }}: {{ c.name }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
 
         {% if failures %}
-        <p>The following conversions failed to import:</p>
-        <ul>
-        {% for f in failures %}
-            <li>Title {{ c.title }} section {{ c.section }} → {{ c.title }} USC {{ c.usc }}</li>
-        {% endfor %}
-        </ul>
+            <p>The following conversions failed to import:</p>
+            <ul>
+            {% for f in failures %}
+                <li>Title {{ f.title }} section {{ f.section }} → {{ f.title }} USC {{ f.usc }}</li>
+            {% endfor %}
+            </ul>
         {% endif %}
 
         <input type="hidden" name="action" value="show_import_conversions" />

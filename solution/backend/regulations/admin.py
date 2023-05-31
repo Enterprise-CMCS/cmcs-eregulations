@@ -16,16 +16,18 @@ from xml.dom import minidom
 
 
 MARKUP_PATTERN = r"</?[^>]+>"
-DASH_PATTERN = r"[—–]"
-SECTION_PATTERN = r"sec.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?).?"
+DASH_PATTERN = r"[—––]"
+SECTION_PATTERN = r"sec.?\s*(\d+[a-z0-9]*(?:[—–-–]+[a-z0-9]+)?).?"
 CONVERSION_PATTERN = rf"{SECTION_PATTERN}\s*\[\s*(\d+)\s*u.?s.?c.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?)\s*\]"
-TITLE_PATTERN = r"title\s+([a-z]+)\s*[—–-]*(?:\s+of\s+the\s+[a-z0-9\s]*?(?=\bact\b))?"
+TITLE_PATTERN = r"title\s+([a-z]+)\s*[—–-–]*(?:\s+of\s+the\s+[a-z0-9\s]*?(?=\bact\b))?"
+SECTION_APPEND_PATTERN = r"([—–-–]+[a-z0-9]+)."
 
 MARKUP_REGEX = re.compile(MARKUP_PATTERN)
 DASH_REGEX = re.compile(DASH_PATTERN)
 SECTION_REGEX = re.compile(SECTION_PATTERN, re.IGNORECASE)
 CONVERSION_REGEX = re.compile(CONVERSION_PATTERN, re.IGNORECASE)
 TITLE_REGEX = re.compile(TITLE_PATTERN, re.IGNORECASE)
+SECTION_APPEND_REGEX = re.compile(SECTION_APPEND_PATTERN, re.IGNORECASE)
 
 
 @admin.register(SiteConfiguration)
@@ -127,6 +129,10 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
                 if label and section and title:
                     section = section.group(1)
                     label = label[0].firstChild.nodeValue.strip()
+                    section_append = SECTION_APPEND_REGEX.match(label)
+                    if section_append:
+                        section += DASH_REGEX.sub("-", section_append.group(1).strip())
+                        label = SECTION_APPEND_REGEX.sub("", label).strip()
                     toc[section] = {
                         "name": label,
                         "statute_title": title,
@@ -135,24 +141,24 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def try_import(self, url, act):
         if not url:
-            raise ValidationError("you must enter a URL!")
+            raise ValidationError("you must enter a URL.")
         if not act:
-            raise ValidationError("you must enter an Act, for example \"Social Security Act\"!")
+            raise ValidationError("you must enter an Act, for example \"Social Security Act\".")
 
         try:
             URLValidator(schemes=["http", "https"])(url)
         except ValidationError:
-            raise ValidationError(f"{url} is not a valid URL!" if url else "you must enter a URL!")
+            raise ValidationError(f"{url} is not a valid URL." if url else "you must enter a URL.")
 
         response = requests.get(url)
         response.raise_for_status()
         conversions, matches, failures = self.import_conversions(response.text, url, act)
-        if conversions:
+        if conversions or failures:
             return conversions, failures
         if matches:
-            raise ValidationError(f"all conversions contained in {url} already exist!")
+            raise ValidationError(f"all conversions contained in {url} already exist.")
         else:
-            raise ValidationError(f"{url} did not contain any valid conversions!")
+            raise ValidationError(f"{url} did not contain any valid conversions.")
 
     def show_import_conversions_page(self, request):
         error = None
@@ -176,7 +182,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             num_conversions = request.POST.get("num_conversions", 0)
             app = self.model._meta.app_label
             model = self.model._meta.model_name
-            message = f"Failed to import: {error}" if error else f"Successfully imported {num_conversions} conversions!"
+            message = f"Failed to import: {error}" if error else f"Successfully imported {num_conversions} conversions."
             self.message_user(request, message, messages.ERROR if error else messages.SUCCESS)
             return HttpResponseRedirect(reverse(f"admin:{app}_{model}_changelist"))
 
