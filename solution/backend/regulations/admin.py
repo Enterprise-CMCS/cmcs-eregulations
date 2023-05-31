@@ -16,11 +16,11 @@ from xml.dom import minidom
 
 
 MARKUP_PATTERN = r"</?[^>]+>"
-DASH_PATTERN = r"[—––]"
-SECTION_PATTERN = r"sec.?\s*(\d+[a-z0-9]*(?:[—–-–]+[a-z0-9]+)?).?"
-CONVERSION_PATTERN = rf"{SECTION_PATTERN}\s*\[\s*(\d+)\s*u.?s.?c.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?)\s*\]"
-TITLE_PATTERN = r"title\s+([a-z]+)\s*[—–-–]*(?:\s+of\s+the\s+[a-z0-9\s]*?(?=\bact\b))?"
-SECTION_APPEND_PATTERN = r"([—–-–]+[a-z0-9]+)."
+DASH_PATTERN = r"[—–-–-]"
+SECTION_PATTERN = rf"sec.?\s*(\d+[a-z0-9]*(?:{DASH_PATTERN}+[a-z0-9]+)?).?"
+CONVERSION_PATTERN = rf"{SECTION_PATTERN}\s*\[\s*(\d+)\s*u.?s.?c.?\s*(\d+[a-z0-9]*(?:{DASH_PATTERN}+[a-z0-9]+)?)\s*\]"
+TITLE_PATTERN = rf"title\s+([a-z]+)\s*{DASH_PATTERN}*(?:\s+of\s+the\s+[a-z0-9\s]*?(?=\bact\b))?"
+SECTION_APPEND_PATTERN = rf"({DASH_PATTERN}+[a-z0-9]+)."
 
 MARKUP_REGEX = re.compile(MARKUP_PATTERN)
 DASH_REGEX = re.compile(DASH_PATTERN)
@@ -76,26 +76,23 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         matches = CONVERSION_REGEX.findall(text)
 
         for section, title, usc in matches:
-            if section not in toc:
-                failures.append({
-                    "section": section,
-                    "title": title,
-                    "usc": usc,
-                })
-                continue
-            name = toc[section]["name"]
-            statute_title = toc[section]["statute_title"]
-            instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act, source_url=url, name=name, statute_title=statute_title)
+            data = {
+                "section": section,
+                "title": title,
+                "usc": usc,
+                "act": act,
+                "source_url": url,
+            }
+            if section in toc:
+                data["name"] = toc[section]["name"]
+                data["statute_title"] = toc[section]["statute_title"]
+            instance, created = self.model.objects.get_or_create(**data)
             if created:
-                conversions.append({
-                    "act": instance.act,
-                    "section": instance.section,
-                    "title": instance.title,
-                    "usc": instance.usc,
-                    "source_url": instance.source_url,
-                    "name": instance.name,
-                    "statute_title": instance.statute_title,
-                })
+                data["id"] = instance.id
+                if section in toc:
+                    conversions.append(data)
+                else:
+                    failures.append(data)
             
         return conversions, len(matches), failures
     
@@ -169,7 +166,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             try:
                 conversions, failures = self.try_import(url, act)
                 return render(request, "admin/conversions_imported.html", context={
-                    "num_conversions": len(conversions),
+                    "num_conversions": len(conversions) + len(failures),
                     "conversions": conversions,
                     "failures": failures,
                 })
