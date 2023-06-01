@@ -117,8 +117,8 @@
     }
 
     .supplemental-content-date {
-        color: #5B616B;
-        font-weight: 400;
+        color: $primary_link_color;
+        font-weight: bold;
         padding-right: $spacer-1;
         margin-right: $spacer-1;
         font-size: $font-size-sm;
@@ -129,8 +129,8 @@
     }
 
     .supplemental-content-title {
-        color: #5B616B;
-        font-weight: 400;
+        color: $primary_link_color;
+        font-weight: bold;
         font-size: $font-size-sm;
     }
 

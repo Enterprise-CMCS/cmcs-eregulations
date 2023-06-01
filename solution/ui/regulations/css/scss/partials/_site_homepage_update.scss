@@ -309,7 +309,6 @@
 
                         
                         .content-tabs {
-                            font-size: 24px;
                             font-family: 'Merriweather';
                             font-weight: 700;
                             flex: 1 1 auto;
@@ -348,6 +347,18 @@
             
                         line-height: 36px;
 
+                    }
+                    .supplemental-content-date {
+                        color: #5B616B;
+                        font-weight: 400;
+                        padding-right: $spacer-1;
+                        margin-right: $spacer-1;
+                        font-size: $font-size-sm;
+                    }
+                    .supplemental-content-title {
+                        color: #5B616B;
+                        font-weight: 400;
+                        font-size: $font-size-sm;
                     }
                 }
                 .about-text__container {
