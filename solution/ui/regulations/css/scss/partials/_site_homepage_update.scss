@@ -3,6 +3,11 @@
 //-----------------------------
 
 .site-homepage--update {
+    @mixin link-common {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
     main {
         display: flex;
         flex-direction: row;
@@ -12,7 +17,8 @@
         }
 
         .link-btn {
-            text-decoration: none;
+            @include link-common;
+
             width: fit-content;
             color: white;
             padding-top: 8px;
@@ -20,6 +26,26 @@
 
             &:hover {
                 color: white;
+            }
+        }
+
+        a {
+            @include link-common;
+
+            color: $hero_link_hover;
+
+            &:link::after {
+                color: $hero_link_hover;
+                filter: hue-rotate(14deg);
+            }
+
+            &:visited {
+                color: $hero_link_hover;
+
+                &::after {
+                    color: $hero_link_hover;
+                    filter: hue-rotate(14deg);
+                }
             }
         }
     }
@@ -319,6 +345,44 @@
         }
 
         .resources__container {
+        }
+
+        .contact-signup__container {
+            container: contact-signup-container / inline-size;
+
+            @mixin column-common {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                justify-content: center;
+                padding: 40px;
+            }
+
+            @container contact-signup-container (max-width: 629px) {
+                .contact-signup {
+                    flex-direction: column;
+                }
+            }
+
+            @container contact-signup-container (min-width: 630px) {
+                .contact-signup {
+                    flex-direction: row;
+                }
+            }
+
+            .contact-signup {
+                display: flex;
+                background-color: $teal;
+                color: white;
+
+                .contact__column {
+                    @include column-common;
+                }
+
+                .signup__column {
+                    @include column-common;
+                }
+            }
         }
     }
 }
