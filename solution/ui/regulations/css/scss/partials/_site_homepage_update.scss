@@ -311,11 +311,12 @@
 
                     .resources__container {
 
-            
+                        
                         .content-tabs {
                             font-size: 24px;
                             font-family: 'Merriweather';
                             font-weight: 700;
+                            flex: 1 1 auto;
                         }
                     }
                 }
@@ -338,6 +339,11 @@
                 }
                 .resources__container{
                     flex: 2;
+                    .recent-rules-descriptive-text {
+                        font-size: 12px;
+                        line-height: 18px;
+                        color: $mid_gray;
+                    }
                     .content-tabs {
                         letter-spacing:0;
                         color: #17415f;
@@ -345,7 +351,7 @@
                         font-style: normal;
             
                         line-height: 36px;
-                        max-width: 800px;
+
                     }
                 }
                 .about-text__container {
@@ -362,6 +368,9 @@
                 .v-slide-group__prev {
                     display: none !important;
                     }
+                    .v-slide-group__next {
+                        display: none !important;
+                        }
             }
         }
     }

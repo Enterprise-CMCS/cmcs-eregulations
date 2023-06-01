@@ -14,6 +14,7 @@ export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
 export { default as PartButton } from "./PartButton.vue";
 export { default as PrintBtn } from "./PrintBtn.vue";
 export { default as RecentChangesContainer } from "./RecentChangesContainer.vue";
+export { default as RecentResources } from "./RecentResources.vue";
 export { default as RelatedRule } from "./RelatedRule.vue";
 export { default as RelatedRuleList } from "./RelatedRuleList.vue";
 export { default as RelatedRules } from "./RelatedRules.vue";
@@ -25,7 +26,7 @@ export { default as SupplementalContentList } from "./SupplementalContentList.vu
 export { default as SupplementalContentObject } from "./SupplementalContentObject.vue";
 export { default as TableComponent } from "./TableComponent.vue";
 export { default as ViewResourcesLink } from "./ViewResourcesLink.vue";
-export { default as ResourcesComponent } from "./ResourcesComponent.vue";
+
 // Tooltips
 export { default as ActionBtn } from "./tooltips/ActionBtn.vue";
 export { default as CopyCitation } from "./tooltips/CopyCitation.vue";
