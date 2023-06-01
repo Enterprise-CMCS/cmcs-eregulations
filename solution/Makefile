@@ -156,7 +156,7 @@ test.local: ## run cypress tests locally without docker
 		npm run cypress:run;
 
 python.unittest:
-	docker-compose exec regulations python manage.py test
+	docker-compose exec regulations pytest
 
 python.shell:
 	docker-compose exec regulations python manage.py shell

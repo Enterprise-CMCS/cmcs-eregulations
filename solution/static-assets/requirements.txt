@@ -16,3 +16,4 @@ django-jsonform
 django-csp
 httpx
 ruff
+pytest-django
