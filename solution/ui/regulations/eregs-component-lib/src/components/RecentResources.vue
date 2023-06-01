@@ -4,7 +4,7 @@
             Recent Subregulatory Guidance
         </v-tab>
         <v-tab-item>
-            <p class="recent-rules-descriptive-text">Includes 42 CFR 400, 430-460 and 45 CFR 95, 155</p>
+            <p class="recent-rules-descriptive-text">Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155</p>
             <RecentChangesContainer :apiUrl="api_url" type="supplemental"></RecentChangesContainer>
             <a :href="resource_link" class="action-btn default-btn link-btn">View More Guidance</a>
         </v-tab-item>
@@ -13,7 +13,7 @@
             Recent Rules
         </v-tab>
         <v-tab-item>
-            <p class="recent-rules-descriptive-text">Includes 42 CFR 400, 430-460 and 45 CFR 95, 155</p>
+            <p class="recent-rules-descriptive-text">Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155</p>
             <RecentChangesContainer :apiUrl="api_url" type="rules"></RecentChangesContainer>
             <a :href="fr_doc_link" class="action-btn default-btn link-btn">View More Changes</a>
         </v-tab-item>

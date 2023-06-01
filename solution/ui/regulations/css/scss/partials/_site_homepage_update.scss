@@ -288,16 +288,12 @@
                         flex-direction: row;                
                         .video__container {
                             margin-right: 15px;
+                            padding-bottom: 24px;
                         }
                 
                         .resources__container {
                             margin-right: 15px;
-                
-                            .content-tabs {
-                                font-size: 16px;
-                                font-family: 'Open Sans';
-                                font-weight: 400;
-                            }
+                            padding-top: 32px;
                         }
                 
                         .about-text__container {
@@ -368,9 +364,6 @@
                 .v-slide-group__prev {
                     display: none !important;
                     }
-                    .v-slide-group__next {
-                        display: none !important;
-                        }
             }
         }
     }
