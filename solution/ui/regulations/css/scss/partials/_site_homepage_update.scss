@@ -35,16 +35,14 @@
             color: $hero_link_hover;
 
             &:link::after {
-                color: $hero_link_hover;
-                filter: hue-rotate(14deg);
+                background-color: $hero_link_hover;
             }
 
             &:visited {
                 color: $hero_link_hover;
 
                 &::after {
-                    color: $hero_link_hover;
-                    filter: hue-rotate(14deg);
+                    background-color: $hero_link_hover;
                 }
             }
         }
