@@ -50,37 +50,39 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
             home-url="{% url 'homepage' %}"
         ></toc-container>
     </left-nav-collapse>
-    <div class="site-container homepage-main-content" id="main-content">
-        <div class="cta__container">
-            <div class="cta">
-                <div class="video__container">
-                    <a
-                        href="https://www.youtube.com/watch?v=dqy8WCFedU4"
-                        target="_blank"
-                    >
-                        <img
-                            src="{% static 'images/home_video.png' %}"
-                            alt="View a 3-minute video demonstration."
-                        />
-                    </a>
-                    <label id="videoLabel">View a 3-minute video demonstration.</label>
-                </div>
-                <div class="about-text__container">
-                    <p>
-                        eRegulations organizes together regulations, subregulatory
-                        guidance, and other related policy materials.
-                    </p>
-                    <a
-                        href="{% url 'about' %}"
-                        class="action-btn default-btn link-btn"
-                        >Learn About This Tool</a
-                    >
+    <div id="main-content">
+        <div class="top-container">
+            <div class="cta__container">
+                <div class="cta">
+                    <div class="video__container">
+                        <a
+                            href="https://www.youtube.com/watch?v=dqy8WCFedU4"
+                            target="_blank"
+                        >
+                            <img
+                                src="{% static 'images/home_video.png' %}"
+                                alt="View a 3-minute video demonstration."
+                            />
+                        </a>
+                        <label id="videoLabel">View a 3-minute video demonstration.</label>
+                    </div>
+                    <div class="about-text__container">
+                        <p>
+                            eRegulations organizes together regulations, subregulatory
+                            guidance, and other related policy materials.
+                        </p>
+                        <a
+                            href="{% url 'about' %}"
+                            class="action-btn default-btn link-btn"
+                            >Learn About This Tool</a
+                        >
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="resources__container">
-            <div class="rules-guidance__container"></div>
-            <div class="search-description__container"></div>
+            <div class="resources__container">
+                <div class="rules-guidance__container"></div>
+                <div class="search-description__container"></div>
+            </div>
         </div>
         <div class="contact-signup__container">
             <div class="contact-signup">

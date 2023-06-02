@@ -24,7 +24,8 @@
             padding-top: 8px;
             padding-bottom: 8px;
 
-            &:hover, &:visited {
+            &:hover,
+            &:visited {
                 color: white;
             }
         }
@@ -274,9 +275,28 @@
 
     #main-content {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-bottom: 0;
 
         @media (max-width: $eds-xs-max) {
             box-sizing: border-box;
+        }
+
+        .top-container {
+            width: 100%;
+            margin: 0 auto;
+            padding: $spacer-3 $spacer-5;
+
+            @include screen-xl {
+                max-width: $width-xl;
+                padding: $spacer-4;
+            }
+
+            @include screen-xxl {
+                max-width: $width-xxl;
+            }
         }
 
         .cta__container {
