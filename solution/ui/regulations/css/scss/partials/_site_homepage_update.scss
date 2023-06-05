@@ -32,18 +32,19 @@
 
         a {
             @include link-common;
+            text-decoration: underline;
 
-            color: $hero_link_hover;
+            color: $contact_link_color;
 
             &:link::after {
-                background-color: $hero_link_hover;
+                background-color: $contact_link_color;
             }
 
             &:visited {
-                color: $hero_link_hover;
+                color: $contact_link_color;
 
                 &::after {
-                    background-color: $hero_link_hover;
+                    background-color: $contact_link_color;
                 }
             }
         }
