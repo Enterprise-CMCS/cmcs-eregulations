@@ -1,16 +1,9 @@
-<template>
-    <div class="rules-container">
-        <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading && type!='supplemental'" :rules="rules"/>
-        <RecentSupplementalContent v-if="!loading && type=='supplemental'" :supplemental_content="rules"/>
-    </div>
-</template>
-
 <script>
+import { getRecentResources } from "utilities/api";
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import RecentSupplementalContent from "./RecentSupplementalContent.vue"
-import { getRecentResources } from "../api";
+
 
 export default {
     name: "DefaultName",
@@ -57,6 +50,15 @@ export default {
     },
 };
 </script>
+<template>
+    <div class="rules-container">
+        <SimpleSpinner v-if="loading" />
+        <RelatedRuleList v-if="!loading && type!='supplemental'" :rules="rules"/>
+        <RecentSupplementalContent v-if="!loading && type=='supplemental'" :supplemental_content="rules"/>
+    </div>
+</template>
+
+
 
 <style lang="scss">
 .rules-container {

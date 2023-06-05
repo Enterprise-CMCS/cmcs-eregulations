@@ -254,8 +254,10 @@
         @media (max-width: $eds-xs-max) {
             box-sizing: border-box;
         }
+
         padding-left: 18px;
         padding-right: 18px;
+
         .cta__container {
             container: cta-container / inline-size;
 
@@ -266,17 +268,19 @@
                     .video__container {
                         margin-right: 0;
                     }
-                    .resources__container{
-                        margin-right:0;
-                        .content-tabs{
-                            padding-right:12px;
-                            padding-left:0px;
+
+                    .resources__container {
+                        margin-right: 0;
+
+                        .content-tabs {
+                            padding-right: 12px;
+                            padding-left: 0px;
                             font-size: 16px;
                             font-weight: 400;
-                            font-family: 'Open Sans';
+                            font-family: "Open Sans";
                         }
-
                     }
+
                     .about-text__container {
                         margin-left: 0;
                     }
@@ -285,31 +289,30 @@
 
             @container cta-container (min-width: 630px) {
                 .cta {
-                        flex-direction: row;                
-                        .video__container {
-                            margin-right: 15px;
-                            padding-bottom: 24px;
-                        }
-                
-                        .resources__container {
-                            margin-right: 15px;
-                            padding-top: 32px;
-                        }
-                
-                        .about-text__container {
-                            margin-left: 15px;
-                            margin-bottom: 30px;
-                        }
+                    flex-direction: row;
+
+                    .video__container {
+                        margin-right: 15px;
+                        padding-bottom: 24px;
                     }
-            }
-            @container cta-container (min-width: 1000px) {
-                .cta{
 
                     .resources__container {
+                        margin-right: 15px;
+                        padding-top: 32px;
+                    }
 
-                        
+                    .about-text__container {
+                        margin-left: 15px;
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+
+            @container cta-container (min-width: 1000px) {
+                .cta {
+                    .resources__container {
                         .content-tabs {
-                            font-family: 'Merriweather';
+                            font-family: "Merriweather";
                             font-weight: 700;
                             flex: 1 1 auto;
                             font-size: 24px;
@@ -317,6 +320,7 @@
                     }
                 }
             }
+
             .cta {
                 display: flex;
 
@@ -333,35 +337,40 @@
                         color: $mid_gray;
                     }
                 }
-                .resources__container{
+
+                .resources__container {
                     flex: 2;
+
                     .recent-rules-descriptive-text {
                         font-size: 12px;
                         line-height: 18px;
                         color: $mid_gray;
                     }
+
                     .content-tabs {
-                        letter-spacing:0;
-                        color: #17415f;
+                        letter-spacing: 0;
+                        color: $dark_blue;
                         text-transform: none !important;
                         font-style: normal;
-            
-                        line-height: 36px;
 
+                        line-height: 36px;
                     }
+
                     .supplemental-content-date {
-                        color: #5B616B;
+                        color: $mid_gray;
                         font-weight: 400;
                         padding-right: $spacer-1;
                         margin-right: $spacer-1;
                         font-size: $font-size-sm;
                     }
+
                     .supplemental-content-title {
-                        color: #5B616B;
+                        color: #5b616b;
                         font-weight: 400;
                         font-size: $font-size-sm;
                     }
                 }
+
                 .about-text__container {
                     flex: 1;
                     display: flex;
@@ -373,9 +382,10 @@
                         line-height: 24px;
                     }
                 }
+
                 .v-slide-group__prev {
                     display: none !important;
-                    }
+                }
             }
         }
     }
