@@ -317,11 +317,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest
           pip install -r ./solution/static-assets/requirements.txt
-      - name: Test with pytest
-        run: |
-          pytest
       # navigate to the backend directory
       - name: Navigate to backend directory
         run: |
@@ -330,4 +326,4 @@ jobs:
       # run Python unit tests
       - name: Run Python unit tests
         run: |
-          python manage.py test
+          pytest
