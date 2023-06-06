@@ -329,7 +329,7 @@ jobs:
         with:
           name: cypress-videos
           path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/videos/*
-  test-python:
+  test-python2:
     needs: [ deploy-go, deploy-django, build-and-deploy-vue ]
     runs-on: ubuntu-20.04
     steps:
