@@ -341,6 +341,16 @@
                 .resources__container {
                     flex: 2;
 
+                    .category-labels {
+                        display: inline-block;
+                        font-size: 11px;
+                        width: fit-content;
+                        margin-right: 5px;
+                        background: #e3eef0;
+                        border-radius: 3px;
+                        padding: 2px 5px 3px;
+                    }
+
                     .recent-rules-descriptive-text {
                         font-size: 12px;
                         line-height: 18px;
@@ -356,6 +366,16 @@
                         line-height: 36px;
                     }
 
+                    .recent-date {
+                        color: $mid_gray;
+                        font-weight: 400;
+                    }
+
+                    .recent-fr-citation {
+                        color: $mid_gray;
+                        font-weight: 400;
+                    }
+
                     .supplemental-content-date {
                         color: $mid_gray;
                         font-weight: 400;
@@ -365,7 +385,7 @@
                     }
 
                     .supplemental-content-title {
-                        color: #5b616b;
+                        color: $mid_gray;
                         font-weight: 400;
                         font-size: $font-size-sm;
                     }
