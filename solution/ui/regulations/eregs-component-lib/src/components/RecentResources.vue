@@ -5,15 +5,15 @@ export default {
     name: "RecentResources",
 
     props: {
-        api_url: {
+        apiUrl: {
             type: String,
             required: true,
         },
-        resource_link: {
+        resourceLink: {
             type: String,
             required: true,
         },
-        fr_doc_link: {
+        frDocLink: {
             type: String,
             required: true,
         },
@@ -41,10 +41,10 @@ export default {
                     Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155
                 </p>
                 <RecentChangesContainer
-                    :apiUrl="api_url"
+                    :api-url="apiUrl"
                     type="supplemental"
                 ></RecentChangesContainer>
-                <a :href="resource_link" class="action-btn default-btn link-btn"
+                <a :href="resourceLink" class="action-btn default-btn link-btn"
                     >View More Guidance</a
                 >
             </v-tab-item>
@@ -53,10 +53,10 @@ export default {
                     Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155
                 </p>
                 <RecentChangesContainer
-                    :apiUrl="api_url"
+                    :api-url="apiUrl"
                     type="rules"
                 ></RecentChangesContainer>
-                <a :href="fr_doc_link" class="action-btn default-btn link-btn"
+                <a :href="frDocLink" class="action-btn default-btn link-btn"
                     >View More Changes</a
                 >
             </v-tab-item>
