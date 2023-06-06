@@ -348,7 +348,6 @@ jobs:
           ls
           echo "Current directory: $(pwd)"
           cd app/src
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
