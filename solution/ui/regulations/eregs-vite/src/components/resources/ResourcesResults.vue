@@ -7,19 +7,33 @@
                     <div class="result-label category-label">
                         {{
                             item.category.parent
-                            ? item.category.parent.name
-                            : item.category.name
+                                ? item.category.parent.name
+                                : item.category.name
                         }}
                     </div>
-                    <div v-if="item.category.parent" class="result-label subcategory-label">
+                    <div
+                        v-if="item.category.parent"
+                        class="result-label subcategory-label"
+                    >
                         {{ item.category.name }}
                     </div>
                 </div>
                 <div class="result-content-wrapper">
-                    <SupplementalContentObject :name="item.name" :description="item.descriptionHeadline || item.description
-                        " :date="item.date" :url="item.url" />
+                    <SupplementalContentObject
+                        :name="item.name"
+                        :description="
+                            item.descriptionHeadline || item.description
+                        "
+                        :date="item.date"
+                        :url="item.url"
+                    />
                 </div>
-                <RelatedSections :base="base" :item="item" :parts-last-updated="partsLastUpdated" :parts-list="partsList" />
+                <RelatedSections
+                    :base="base"
+                    :item="item"
+                    :parts-last-updated="partsLastUpdated"
+                    :parts-list="partsList"
+                />
             </div>
         </template>
         <slot name="pagination"></slot>
@@ -85,7 +99,6 @@ export default {
     margin-bottom: 20px;
 
     .supplemental-content a.supplemental-content-link {
-
         .supplemental-content-date,
         .supplemental-content-title,
         .supplemental-content-description {
