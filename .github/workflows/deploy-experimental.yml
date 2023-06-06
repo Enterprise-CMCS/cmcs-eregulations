@@ -321,7 +321,7 @@ jobs:
       # navigate to the backend directory
       - name: Navigate to backend directory
         run: |
-          echo *********($pwd)
+          echo "Current directory: $(pwd)"
           cd app/src
 
       # run Python unit tests
