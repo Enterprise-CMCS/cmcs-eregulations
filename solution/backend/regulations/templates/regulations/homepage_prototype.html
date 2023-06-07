@@ -82,17 +82,32 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
             <div class="cta__container">
                 <div class="cta">
                     <div class="resources__container">
-                            <recent-resources
-                                api-url={{ API_BASE }}
-                                resource-link='{% url 'resources' %}?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest'
-                                fr-doc-link='{% url 'resources' %}?resourceCategory={{ fr_docs_category_name }}'
-                            />
+                        <recent-resources
+                            api-url={{ API_BASE }}
+                            resource-link='{% url 'resources' %}?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest'
+                            fr-doc-link='{% url 'resources' %}?resourceCategory={{ fr_docs_category_name }}'
+                        />
                     </div>
-                    <div class="about-text__container">
-                        <p>
-                            Search Policy Materials
-                        </p>
-                        <p> placeholder text </p>
+                    <div class="policy-materials__container">
+                        <div class="policy-materials">
+                            <div class="homepage-component__heading policy-materials__title">Search Policy Materials</div>
+                            <div class="policy-materials__categories">
+                                <span class="policy-materials__category">CFR</span>
+                                <span class="policy-materials__category">Guidance</span>
+                                <span class="policy-materials__category">Rule Preambles</span>
+                            </div>
+                            <div class="policy-materials__text">
+                                <p>
+                                    Look up keywords in the complete text of several
+                                    kinds of policy materials at once.
+                                </p>
+                            </div>
+                            <a
+                                href="{% url 'search' %}?q='public%20health%20emergency'"
+                                class="action-btn default-btn link-btn"
+                                >Try a Sample Search</a
+                            >
+                        </div>
                     </div>
                 </div>
             </div>
@@ -103,7 +118,7 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
                     <div class="column__icon contact__icon">
                         <img
                             src="{% static 'images/home_icon_contact.svg' %}"
-                            alt="View a 3-minute video demonstration."
+                            alt="View a 6-minute video demonstration."
                         />
                     </div>
                     <div>
