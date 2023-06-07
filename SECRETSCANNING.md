@@ -76,6 +76,45 @@ You can scan files and directories by using the  `--no-git`  option.
 The  `protect`  command is used to scan uncommitted changes in a git repo. This command should be used on developer machines in accordance with  [shifting left on security](https://cloud.google.com/architecture/devops/devops-tech-shifting-left-on-security). When running  `protect`  on a git repository, gitleaks will parse the output of a  `git diff`  command (you can see how this executed  [here](https://github.com/zricethezav/gitleaks/blob/7240e16769b92d2a1b137c17d6bf9d55a8562899/git/git.go#L48-L49)). You can set the  `--staged`  flag to check for changes in commits that have been  `git add`ed. The  `--staged`  flag should be used when running Gitleaks as a pre-commit.
 
 **NOTE**: the  `protect`  command can only be used on git repos, running  `protect`  on files or directories will result in an error message.
+## Ignore Configuration
+There are some methods helpful in this regard, each of them is explained below
+### SKIP Command
+Skip command is to use disable gitleaks check on precommit hook for gitleaks. You can perform this using the command below
+```
+➜ SKIP=gitleaks git commit -m "skip gitleaks check"
+Detect hardcoded secrets..........................................Skipped
+```
+### Allow List Config
+In Gitleaks, an allowlist (also known as a whitelist) is a mechanism that allows you to specify certain files, directories, or patterns that should be exempted from being flagged as secrets during the scanning process. It provides a way to mark specific files or patterns as trusted or intentionally included in the repository, even if they match the patterns of secrets.
+
+The allowlist feature is useful when you have legitimate files or patterns that may trigger false positives but should not be treated as secrets. By adding them to the allowlist, you instruct Gitleaks to skip scanning and reporting them.
+#### Guide
+1. Create a *.gitleaks.toml* file for configuring allow list for the repo
+2. Below is a config guide having information about supported keyswords and lists in the toml for the allow list
+```
+[allowlist]
+  commits = [ "somecommitID", "anothercommitID"]
+  files = [ '''go\.(mod|sum)''', "file-with-some-tests.js"]
+  paths = [ '''templates\/(en|es)''', "mock/server"]
+  regexes = ['''auth_test''']
+# Notice the difference between using 
+# regular expressions '''regexp''' 
+# and exact matches "exactMatch"
+```
+### Gitleaks:Allow
+If you are knowingly committing a test secret that gitleaks will catch you can add a  `gitleaks:allow`  comment to that line which will instruct gitleaks to ignore that secret. Ex:
+
+```
+class CustomClass:
+    discord_client_secret = '8dyfuiRyq=vVc3RRr_edRk-fK__JItpZ'  #gitleaks:allow
+
+
+```
+
+#### [](https://github.com/gitleaks/gitleaks#gitleaksignore).gitleaksignore
+
+You can ignore specific findings by creating a  `.gitleaksignore`  file at the root of your repo. In release v8.10.0 Gitleaks added a  `Fingerprint`  value to the Gitleaks report. Each leak, or finding, has a Fingerprint that uniquely identifies a secret. Add this fingerprint to the  `.gitleaksignore`  file to ignore that specific secret. See Gitleaks'  [.gitleaksignore](https://github.com/zricethezav/gitleaks/blob/master/.gitleaksignore)  for an example. Note: this feature is experimental and is subject to change in the future.
+
 # Setup Precommit
 Git hook scripts are useful for identifying simple issues before submission to code review. We run our hooks on every commit to automatically point out issues in code such as missing semicolons, trailing whitespace, and debug statements. By pointing these issues out before code review, this allows a code reviewer to focus on the architecture of a change while not wasting time with trivial style nitpicks.
 ## Installation
