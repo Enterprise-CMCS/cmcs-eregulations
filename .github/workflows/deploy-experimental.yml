@@ -146,7 +146,7 @@ jobs:
           pip install -r ./solution/static-assets/requirements.txt
       # run Python unit tests
       - name: Run Python unit tests
-        working-directory: ./app
+        working-directory: ./solution/backend
         run: |
           pytest
   build-and-deploy-vue:
