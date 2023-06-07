@@ -12,36 +12,6 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  test-python:
-    needs: [ deploy-go, deploy-django, build-and-deploy-vue ]
-    runs-on: ubuntu-20.04
-    steps:
-      # checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # setup Python
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-      - name: Navigate to backend directory
-        run: |
-          ls
-          echo "Current directory: $(pwd)"
-          cd app/src
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r ./solution/static-assets/requirements.txt
-
-      # run Python unit tests
-      - name: Run Python unit tests
-        run: |
-          pytest
-
   deploy-static:
     environment:
       name: "dev"
@@ -103,7 +73,6 @@ jobs:
           npm install
           serverless deploy --stage dev${PR}
           popd
-
   deploy-django:
     environment:
       name: "dev"

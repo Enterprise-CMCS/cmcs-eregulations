@@ -165,7 +165,11 @@ test.vitest.coverage:
 		npm run test-vue-coverage;
 		
 python.unittest:
-	docker-compose exec regulations pytest
+	docker-compose exec regulations python manage.py test 
+
+##uncomment the -vvv if there are errors running pytest. 
+python.pytest:
+	docker-compose exec regulations pytest ##-vvv 
 
 python.shell:
 	docker-compose exec regulations python manage.py shell
