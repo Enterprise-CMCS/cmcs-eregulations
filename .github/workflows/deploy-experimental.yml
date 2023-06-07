@@ -316,7 +316,7 @@ jobs:
         run: |
           ls
           echo "Current directory: $(pwd)"
-          cd app/src
+          pushd solution/backend
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
