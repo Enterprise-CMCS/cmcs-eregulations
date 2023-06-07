@@ -17,18 +17,6 @@ jobs:
       name: "dev"
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-20.04
-    services:
-      postgres:
-        image: postgres
-        env:
-          POSTGRES_HOST: localhost
-          POSTGRES_DB: eregs
-          POSTGRES_USER: eregs
-          POSTGRES_PASSWORD: sgere
-        ports:
-          - 5432:5432
-          # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       # Checkout the code
       - name: Checkout
@@ -141,6 +129,18 @@ jobs:
   test-python:
     needs: [ deploy-django ]
     runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_DB: eregs
+          POSTGRES_USER: eregs
+          POSTGRES_PASSWORD: sgere
+        ports:
+          - 5432:5432
+          # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       # checkout the code
       - name: Checkout
