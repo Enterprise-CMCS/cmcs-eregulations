@@ -341,18 +341,20 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
  * @returns 3 resources
  */
 const getRecentResources = async (apiURL, { page = 1, pageSize = 3 }, type) => {
-    if(type!=="rules"){
+    if (type !== "rules") {
         return httpApiGetLegacy(
             `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true`,
             {}, // params, default
-            apiURL);
-    } 
+            apiURL
+        );
+    }
     return httpApiGetLegacy(
         `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
         {}, // params, default
         apiURL
     );
 };
+
 /**
  *
  * Fetches and formats list of parts to be used as dictionary

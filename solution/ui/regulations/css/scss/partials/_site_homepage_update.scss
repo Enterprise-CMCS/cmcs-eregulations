@@ -30,6 +30,7 @@
         background-color: $dark_blue;
 
         @mixin hover-background {
+
             &:hover,
             &:focus {
                 background-color: $mid_blue;
@@ -37,6 +38,7 @@
         }
 
         @mixin hover-background--dark {
+
             &:hover,
             &:focus {
                 background-color: $darkest_blue;
@@ -155,8 +157,8 @@
             }
         }
 
-        .toc__container > .v-tabs > .v-tabs-bar,
-        .toc__container > .v-tabs-items {
+        .toc__container>.v-tabs>.v-tabs-bar,
+        .toc__container>.v-tabs-items {
             background-color: transparent;
         }
 
@@ -308,11 +310,10 @@
                 }
             }
 
-            @container cta-container (min-width: 1000px) {
+            @container cta-container (min-width: 900px) {
                 .cta {
                     .resources__container {
                         .content-tabs {
-                            font-family: "Merriweather";
                             font-weight: 700;
                             flex: 1 1 auto;
                             font-size: 24px;
@@ -358,6 +359,7 @@
                     }
 
                     .content-tabs {
+                        font-family: "Merriweather";
                         letter-spacing: 0;
                         color: $dark_blue;
                         text-transform: none !important;

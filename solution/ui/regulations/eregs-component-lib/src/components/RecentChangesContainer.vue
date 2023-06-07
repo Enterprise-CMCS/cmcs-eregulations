@@ -53,8 +53,8 @@ export default {
 <template>
     <div class="rules-container">
         <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading && type!='supplemental'" :rules="rules"/>
-        <RecentSupplementalContent v-if="!loading && type=='supplemental'" :supplemental_content="rules"/>
+        <RelatedRuleList v-if="!loading && type != 'supplemental'" :rules="rules" />
+        <RecentSupplementalContent v-if="!loading && type == 'supplemental'" :supplemental-content="rules" />
     </div>
 </template>
 

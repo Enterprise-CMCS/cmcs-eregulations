@@ -9,7 +9,7 @@ export default {
     },
 
     props: {
-        supplemental_content: {
+        supplementalContent: {
             type: Array,
             required: true
         },
@@ -20,17 +20,9 @@ export default {
         }
     },
 
-    data() {
-        return {
-            innerName: Math.random()
-                .toString(36)
-                .replace(/[^a-z]+/g, "")
-        };
-    },
-
     computed: {
         limitedContent() {
-            return this.supplemental_content.slice(0, this.limit);
+            return this.supplementalContent.slice(0, this.limit);
         }
     }
 };
@@ -44,13 +36,8 @@ export default {
                     {{ content.category.name }}
                 </div>
             </div>
-            <supplemental-content-object
-                :key="index"
-                :name="content.name"
-                :description="content.description"
-                :date="content.date"
-                :url="content.url"
-            >
+            <supplemental-content-object :key="index" :name="content.name" :description="content.description"
+                :date="content.date" :url="content.url">
             </supplemental-content-object>
         </template>
     </div>
