@@ -50,51 +50,99 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
             home-url="{% url 'homepage' %}"
         ></toc-container>
     </left-nav-collapse>
-    <div class="site-container homepage-main-content" id="main-content">
-        <div class="cta__container">
-            <div class="cta">
-                <div class="video__container">
-                    <a
-                        href="https://www.youtube.com/watch?v=dqy8WCFedU4"
-                        target="_blank"
-                    >
-                        <img
-                            src="{% static 'images/home_video.png' %}"
-                            alt="View a 3-minute video demonstration."
-                        />
-                    </a>
-                    <label id="videoLabel">View a 3-minute video demonstration.</label>
+    <div id="main-content">
+        <div class="top-container">
+            <div class="cta__container">
+                <div class="cta">
+                    <div class="video__container">
+                        <a
+                            href="https://www.youtube.com/watch?v=dqy8WCFedU4"
+                            target="_blank"
+                        >
+                            <img
+                                src="{% static 'images/home_video.png' %}"
+                                alt="View a 3-minute video demonstration."
+                            />
+                        </a>
+                        <label id="videoLabel">View a 3-minute video demonstration.</label>
+                    </div>
+                    <div class="about-text__container">
+                        <p>
+                            eRegulations organizes together regulations, subregulatory
+                            guidance, and other related policy materials.
+                        </p>
+                        <a
+                            href="{% url 'about' %}"
+                            class="action-btn default-btn link-btn"
+                            >Learn About This Tool</a
+                        >
+                    </div>
                 </div>
-                <div class="about-text__container">
-                    <p>
-                        eRegulations organizes together regulations, subregulatory
-                        guidance, and other related policy materials.
-                    </p>
-                    <a
-                        href="{% url 'about' %}"
-                        class="action-btn default-btn link-btn"
-                        >Learn About This Tool</a
-                    >
+            </div>
+            <div class="cta__container">
+                <div class="cta">
+                    <div class="resources__container">
+                            <recent-resources
+                                api-url={{ API_BASE }}
+                                resource-link='{% url 'resources' %}?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest'
+                                fr-doc-link='{% url 'resources' %}?resourceCategory={{ fr_docs_category_name }}'
+                            />
+                    </div>
+                    <div class="about-text__container">
+                        <p>
+                            Search Policy Materials
+                        </p>
+                        <p> placeholder text </p>
+    
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="cta__container">
-            <div class="cta">
-                <div class="resources__container">
-                        <recent-resources
-                            api-url={{ API_BASE }}
-                            resource-link='{% url 'resources' %}?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest'
-                            fr-doc-link='{% url 'resources' %}?resourceCategory={{ fr_docs_category_name }}'
+        <div class="contact-signup__container">
+            <div class="contact-signup">
+                <div class="contact-signup__column contact__column">
+                    <div class="column__icon contact__icon">
+                        <img
+                            src="{% static 'images/home_icon_contact.svg' %}"
+                            alt="View a 3-minute video demonstration."
                         />
+                    </div>
+                    <div>
+                        <h4>Contact</h4>
+                        <p>
+                            Send questions and suggestions about this website
+                            (including bug reports), or schedule a presentation or
+                            training for your group.
+                        </p>
+                        <a
+                            class="external"
+                            href="{{ SURVEY_URL }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Contact the team</a
+                        >
+                    </div>
                 </div>
-        <div class="about-text__container">
-            <p>
-                Search Policy Materials
-            </p>
-            <p> placeholder text </p>
-
-        </div>
-</div>
+                <div class="contact-signup__column signup__column">
+                    <div class="column__icon signup__icon">
+                        <img
+                            src="{% static 'images/home_icon_testing.svg' %}"
+                            alt="View a 3-minute video demonstration."
+                        />
+                    </div>
+                    <div>
+                        <h4>Sign Up For Testing</h4>
+                        <p>Try new features and help make them better.</p>
+                        <a
+                            class="external"
+                            href="{{ SIGNUP_URL }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Sign up for a session</a
+                        >
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>

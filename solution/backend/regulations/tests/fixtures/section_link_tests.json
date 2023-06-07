@@ -1,0 +1,57 @@
+[
+    {
+        "testing": "a single link with no act",
+        "input": "Section 123(a) of the Act",
+        "expected": "Section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act"
+    },
+    {
+        "testing": "two links within one statute ref",
+        "input": "section 123(a)(1)(C) and 456(b)(2) of the Social Security Act",
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)(1)(C)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_b\">456(b)(2)</a> of the Social Security Act"
+    },
+    {
+        "testing": "multiple comma-separated paragraph refs",
+        "input": "section 123(a)(1)(C), (b)(1), and (b)(2) of the act",
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)(1)(C), (b)(1), and (b)(2)</a> of the act"
+    },
+    {
+        "testing": "multiple paragraphs and sections in the same ref",
+        "input": "sections 123(a)(1)(C), (b)(1), and (b)(2) and 456(a)(1) and (b)(1) and 456(f) or (g).",
+        "expected": "sections <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_a\">456(a)(1) and (b)(1)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_f\">456(f) or (g)</a>."
+    },
+    {
+        "testing": "all variations of paragraph separation",
+        "input": "section 123(a), (b), and (c) and (d), or (e) or (f)",
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a), (b), and (c) and (d), or (e) or (f)</a>"
+    },
+    {
+        "testing": "all variations of section separation",
+        "input": "section 123(a), 456(b), and 123(c) and 456(d), or 123(e) or 456(f)",
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_b\">456(b)</a>, and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_c\">123(c)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_d\">456(d)</a>, or <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_e\">123(e)</a> or <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_f\">456(f)</a>"
+    },
+    {
+        "testing": "case-insensitivity",
+        "input": "sEcTiOn 123(A) oF tHe aCt",
+        "expected": "sEcTiOn <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_A\">123(A)</a> oF tHe aCt"
+    },
+    {
+        "testing": "when a section is not found in the referenced act",
+        "input": "Section 1111(a) of the Social Security Act",
+        "expected": "Section 1111(a) of the Social Security Act"
+    },
+    {
+        "testing": "when one section is valid but another is not within the same act",
+        "input": "Section 1111(a) and 123(a) of the Act",
+        "expected": "Section 1111(a) and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act"
+    },
+    {
+        "testing": "when the section is valid but referencing the wrong act",
+        "input": "Section 123(a) of the Affordable Care Act",
+        "expected": "Section 123(a) of the Affordable Care Act"
+    },
+    {
+        "testing": "when the section is valid but not in the default act",
+        "input": "section 789 of the act",
+        "expected": "section 789 of the act"
+    }
+]

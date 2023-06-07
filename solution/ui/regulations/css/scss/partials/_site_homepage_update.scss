@@ -3,6 +3,11 @@
 //-----------------------------
 
 .site-homepage--update {
+    @mixin link-common {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
     main {
         display: flex;
         flex-direction: row;
@@ -12,14 +17,35 @@
         }
 
         .link-btn {
-            text-decoration: none;
+            @include link-common;
+
             width: fit-content;
             color: white;
             padding-top: 8px;
             padding-bottom: 8px;
 
-            &:hover {
+            &:hover,
+            &:visited {
                 color: white;
+            }
+        }
+
+        a {
+            @include link-common;
+            text-decoration: underline;
+
+            color: $contact_link_color;
+
+            &:link::after {
+                background-color: $contact_link_color;
+            }
+
+            &:visited {
+                color: $contact_link_color;
+
+                &::after {
+                    background-color: $contact_link_color;
+                }
             }
         }
     }
@@ -252,13 +278,29 @@
 
     #main-content {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding-bottom: 0;
 
         @media (max-width: $eds-xs-max) {
             box-sizing: border-box;
         }
 
-        padding-left: 18px;
-        padding-right: 18px;
+        .top-container {
+            width: 100%;
+            margin: 0 auto;
+            padding: $spacer-3 $spacer-5;
+
+            @include screen-xl {
+                max-width: $width-xl;
+                padding: $spacer-4;
+            }
+
+            @include screen-xxl {
+                max-width: $width-xxl;
+            }
+        }
 
         .cta__container {
             container: cta-container / inline-size;
@@ -310,7 +352,7 @@
                 }
             }
 
-            @container cta-container (min-width: 900px) {
+            @container cta-container (min-width: 800px) {
                 .cta {
                     .resources__container {
                         .content-tabs {
@@ -407,6 +449,86 @@
 
                 .v-slide-group__prev {
                     display: none !important;
+                }
+            }
+        }
+
+        .contact-signup__container {
+            container: contact-signup-container / inline-size;
+
+            @mixin column-common {
+                display: flex;
+                flex: 1;
+                flex-direction: row;
+            }
+
+            @container contact-signup-container (max-width: 629px) {
+                .contact-signup {
+                    flex-direction: column;
+
+                    .contact-signup__column {
+                        margin: 0 10px;
+                        padding: 20px 0;
+
+                        &.contact__column {
+                            border-bottom: 1px solid $border_color;
+                        }
+
+                        .column__icon {
+                            margin-right: 10px;
+                        }
+                    }
+                }
+            }
+
+            @container contact-signup-container (min-width: 630px) {
+                .contact-signup {
+                    flex-direction: row;
+
+                    .contact-signup__column {
+                        margin: 40px 0;
+                        padding: 0 40px;
+
+                        &.contact__column {
+                            border-right: 1px solid $border_color;
+                        }
+
+                        .column__icon {
+                            margin-right: 24px;
+                        }
+                    }
+                }
+            }
+
+            h4 {
+                font-size: 18px;
+                line-height: 24px;
+            }
+
+            p {
+                font-size: 14px;
+                line-height: 22px;
+            }
+
+            .contact-signup {
+                display: flex;
+                background-color: $teal;
+                color: white;
+
+                .contact-signup__column {
+                    .column__icon {
+                        img {
+                            height: 90px;
+                        }
+                    }
+
+                    &.contact__column {
+                        @include column-common;
+                    }
+
+                    &.signup__column {
+                        @include column-common;
+                    }
                 }
             }
         }
