@@ -79,9 +79,23 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
                     </div>
                 </div>
             </div>
-            <div class="resources__container">
-                <div class="rules-guidance__container"></div>
-                <div class="search-description__container"></div>
+            <div class="cta__container">
+                <div class="cta">
+                    <div class="resources__container">
+                            <recent-resources
+                                api-url={{ API_BASE }}
+                                resource-link='{% url 'resources' %}?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest'
+                                fr-doc-link='{% url 'resources' %}?resourceCategory={{ fr_docs_category_name }}'
+                            />
+                    </div>
+                    <div class="about-text__container">
+                        <p>
+                            Search Policy Materials
+                        </p>
+                        <p> placeholder text </p>
+    
+                    </div>
+                </div>
             </div>
         </div>
         <div class="contact-signup__container">
@@ -101,7 +115,7 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
                             training for your group.
                         </p>
                         <a
-                            class="external"
+                            class="contact external"
                             href="{{ SURVEY_URL }}"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -120,7 +134,7 @@ Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
                         <h4>Sign Up For Testing</h4>
                         <p>Try new features and help make them better.</p>
                         <a
-                            class="external"
+                            class="contact external"
                             href="{{ SIGNUP_URL }}"
                             target="_blank"
                             rel="noopener noreferrer"

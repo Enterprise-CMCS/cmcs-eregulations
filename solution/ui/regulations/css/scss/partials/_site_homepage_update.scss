@@ -30,7 +30,7 @@
             }
         }
 
-        a {
+        a.contact {
             @include link-common;
             text-decoration: underline;
 
@@ -56,6 +56,7 @@
         background-color: $dark_blue;
 
         @mixin hover-background {
+
             &:hover,
             &:focus {
                 background-color: $mid_blue;
@@ -63,6 +64,7 @@
         }
 
         @mixin hover-background--dark {
+
             &:hover,
             &:focus {
                 background-color: $darkest_blue;
@@ -181,8 +183,8 @@
             }
         }
 
-        .toc__container > .v-tabs > .v-tabs-bar,
-        .toc__container > .v-tabs-items {
+        .toc__container>.v-tabs>.v-tabs-bar,
+        .toc__container>.v-tabs-items {
             background-color: transparent;
         }
 
@@ -311,6 +313,18 @@
                         margin-right: 0;
                     }
 
+                    .resources__container {
+                        margin-right: 0;
+
+                        .content-tabs {
+                            padding-right: 12px;
+                            padding-left: 0px;
+                            font-size: 16px;
+                            font-weight: 400;
+                            font-family: "Open Sans";
+                        }
+                    }
+
                     .about-text__container {
                         margin-left: 0;
                     }
@@ -323,11 +337,29 @@
 
                     .video__container {
                         margin-right: 15px;
+                        padding-bottom: 24px;
+                    }
+
+                    .resources__container {
+                        margin-right: 15px;
+                        padding-top: 32px;
                     }
 
                     .about-text__container {
                         margin-left: 15px;
                         margin-bottom: 30px;
+                    }
+                }
+            }
+
+            @container cta-container (min-width: 800px) {
+                .cta {
+                    .resources__container {
+                        .content-tabs {
+                            font-weight: 700;
+                            flex: 1 1 auto;
+                            font-size: 24px;
+                        }
                     }
                 }
             }
@@ -349,6 +381,60 @@
                     }
                 }
 
+                .resources__container {
+                    flex: 2;
+
+                    .category-labels {
+                        display: inline-block;
+                        font-size: 11px;
+                        width: fit-content;
+                        margin-right: 5px;
+                        background: #e3eef0;
+                        border-radius: 3px;
+                        padding: 2px 5px 3px;
+                    }
+
+                    .recent-rules-descriptive-text {
+                        font-size: 12px;
+                        line-height: 18px;
+                        color: $mid_gray;
+                    }
+
+                    .content-tabs {
+                        font-family: "Merriweather";
+                        letter-spacing: 0;
+                        color: $dark_blue;
+                        text-transform: none !important;
+                        font-style: normal;
+
+                        line-height: 36px;
+                    }
+
+                    .recent-date {
+                        color: $mid_gray;
+                        font-weight: 400;
+                    }
+
+                    .recent-fr-citation {
+                        color: $mid_gray;
+                        font-weight: 400;
+                    }
+
+                    .supplemental-content-date {
+                        color: $mid_gray;
+                        font-weight: 400;
+                        padding-right: $spacer-1;
+                        margin-right: $spacer-1;
+                        font-size: $font-size-sm;
+                    }
+
+                    .supplemental-content-title {
+                        color: $mid_gray;
+                        font-weight: 400;
+                        font-size: $font-size-sm;
+                    }
+                }
+
                 .about-text__container {
                     flex: 1;
                     display: flex;
@@ -360,10 +446,11 @@
                         line-height: 24px;
                     }
                 }
-            }
-        }
 
-        .resources__container {
+                .v-slide-group__prev {
+                    display: none !important;
+                }
+            }
         }
 
         .contact-signup__container {

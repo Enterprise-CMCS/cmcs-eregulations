@@ -1,15 +1,9 @@
-<template>
-    <div class="rules-container">
-        <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading" :rules="rules" />
-    </div>
-</template>
-
 <script>
+import { getRecentResources } from "utilities/api";
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
+import RecentSupplementalContent from "./RecentSupplementalContent.vue"
 
-import { getFederalRegisterDocs } from "../api";
 
 export default {
     name: "DefaultName",
@@ -17,6 +11,7 @@ export default {
     components: {
         RelatedRuleList,
         SimpleSpinner,
+        RecentSupplementalContent
     },
 
     props: {
@@ -24,13 +19,18 @@ export default {
             type: String,
             required: true,
         },
+        type: {
+            type: String,
+            required: false,
+            default: "rules"
+        },
     },
 
     async created() {
-        const rulesResponse = await getFederalRegisterDocs(this.apiUrl, {
+        const rulesResponse = await getRecentResources(this.apiUrl, {
             page: 1,
             pageSize: 3,
-        });
+        }, this.type);
 
         this.rules = rulesResponse.results;
         this.loading = false;
@@ -50,6 +50,15 @@ export default {
     },
 };
 </script>
+<template>
+    <div class="rules-container">
+        <SimpleSpinner v-if="loading" />
+        <RelatedRuleList v-if="!loading && type != 'supplemental'" :rules="rules" />
+        <RecentSupplementalContent v-if="!loading && type == 'supplemental'" :supplemental-content="rules" />
+    </div>
+</template>
+
+
 
 <style lang="scss">
 .rules-container {
