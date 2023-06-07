@@ -14,6 +14,7 @@ export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
 export { default as PartButton } from "./PartButton.vue";
 export { default as PrintBtn } from "./PrintBtn.vue";
 export { default as RecentChangesContainer } from "./RecentChangesContainer.vue";
+export { default as RecentResources } from "./RecentResources.vue";
 export { default as RelatedRule } from "./RelatedRule.vue";
 export { default as RelatedRuleList } from "./RelatedRuleList.vue";
 export { default as RelatedRules } from "./RelatedRules.vue";
