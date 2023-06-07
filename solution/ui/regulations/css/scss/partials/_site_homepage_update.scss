@@ -56,7 +56,6 @@
         background-color: $dark_blue;
 
         @mixin hover-background {
-
             &:hover,
             &:focus {
                 background-color: $mid_blue;
@@ -64,7 +63,6 @@
         }
 
         @mixin hover-background--dark {
-
             &:hover,
             &:focus {
                 background-color: $darkest_blue;
@@ -183,8 +181,8 @@
             }
         }
 
-        .toc__container>.v-tabs>.v-tabs-bar,
-        .toc__container>.v-tabs-items {
+        .toc__container > .v-tabs > .v-tabs-bar,
+        .toc__container > .v-tabs-items {
             background-color: transparent;
         }
 
