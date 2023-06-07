@@ -21,6 +21,7 @@ jobs:
       postgres:
         image: postgres
         env:
+          POSTGRES_HOST: localhost
           POSTGRES_DB: eregs
           POSTGRES_USER: eregs
           POSTGRES_PASSWORD: sgere
