@@ -129,6 +129,13 @@ jobs:
   test-python:
     needs: [ deploy-django ]
     runs-on: ubuntu-20.04
+    env:
+      STATIC_URL: http://localhost:8888/
+      POSTGRES_HOST: localhost
+      POSTGRES_DB: eregs
+      POSTGRES_USER: eregs
+      POSTGRES_PASSWORD: sgere
+      DB_PORT: 5432
     services:
       postgres:
         image: postgres
