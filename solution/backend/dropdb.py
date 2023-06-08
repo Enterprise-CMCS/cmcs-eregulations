@@ -3,19 +3,22 @@
 import os
 
 import django
+from django.db import connections
+from django.db.utils import ProgrammingError
 
-from django.db import connection
-from django.db.utils import ProgrammingError, OperationalError
 
 def handler(event, context):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
     django.setup()
+
     try:
+        connection = connections["postgres"]
+        connection.connect()
         connection.ensure_connection()
-    except OperationalError as e:
-        raise Exception("Could not connect to database: {!s}".format(e))
-    if not connection.is_usuable():
-        raise Exception("database connection is not usable")
+        if not connection.is_usable():
+            raise Exception("database connection is not usable")
+    except Exception as e:
+        raise Exception(f"Failed to connect to the database: {str(e)}")
 
     try:
         with connection.cursor() as cursor:

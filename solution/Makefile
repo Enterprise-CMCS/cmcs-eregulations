@@ -169,7 +169,7 @@ python.unittest:
 
 ##uncomment the -vvv if there are errors running pytest. 
 python.pytest:
-	docker-compose exec regulations pytest ##-vvv 
+	docker-compose exec regulations pytest -vvv 
 
 python.shell:
 	docker-compose exec regulations python manage.py shell
