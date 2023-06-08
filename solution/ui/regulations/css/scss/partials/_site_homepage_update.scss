@@ -349,6 +349,14 @@
                 }
             }
 
+            @container cta-container (max-width: 799px) {
+                .cta {
+                    .about-text__container {
+                        margin-bottom: 24px;
+                    }
+                }
+            }
+
             @container cta-container (min-width: 800px) {
                 .cta {
                     .resources__container {
