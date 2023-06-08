@@ -1,4 +1,4 @@
-from django.template import Library, loader, TemplateDoesNotExist
+from django.template import Library, TemplateDoesNotExist, loader
 
 register = Library()
 

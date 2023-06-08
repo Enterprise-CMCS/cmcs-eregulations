@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from django.http import Http404
+from rest_framework import serializers
 
 
 class FlatTOCSerializer(serializers.Serializer):

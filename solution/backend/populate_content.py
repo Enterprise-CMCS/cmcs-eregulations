@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+
 from django.core.management import call_command
 
 
@@ -8,6 +9,7 @@ def handler(event, context):
     import django
     django.setup()
 
+    from regcore.search.models import Synonym
     from resources.models import (
         AbstractCategory,
         AbstractLocation,
@@ -21,7 +23,6 @@ def handler(event, context):
         Subpart,
         SupplementalContent,
     )
-    from regcore.search.models import Synonym
 
     fixtures = [
         ("resources.abstractcategory.json", AbstractCategory),

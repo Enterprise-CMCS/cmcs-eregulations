@@ -1,17 +1,15 @@
 import re
 
+import requests
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
-
-import requests
 from solo.admin import SingletonModelAdmin
 
 from .models import SiteConfiguration, StatuteLinkConverter
-
 
 MARKUP_PATTERN = r"</?[^>]+>"
 DASH_PATTERN = r"[—–]"

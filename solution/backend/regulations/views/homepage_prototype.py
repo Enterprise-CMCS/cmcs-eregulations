@@ -1,12 +1,11 @@
-from datetime import date
 import logging
+from datetime import date
 
 from django.views.generic.base import TemplateView
 
 from regcore.models import Part
 from regcore.serializers.toc import FrontPageTOCSerializer
 from resources.models import ResourcesConfiguration
-
 
 logger = logging.getLogger(__name__)
 

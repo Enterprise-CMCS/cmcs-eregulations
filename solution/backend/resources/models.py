@@ -1,13 +1,14 @@
 import datetime
-from model_utils.managers import InheritanceManager, InheritanceQuerySet
+import re
+
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.db import models
-from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django_jsonform.models.fields import ArrayField
+from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
-import re
 
 
 # Field mixins

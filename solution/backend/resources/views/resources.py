@@ -1,29 +1,21 @@
 import json
 import os
 import re
-import requests
-
 import urllib.parse as urlparse
-from drf_spectacular.utils import extend_schema
+
+import requests
 from django.db import transaction
-from django.db.models import Case, When, F, Prefetch
+from django.db.models import Case, F, Prefetch, When
 from django.http import JsonResponse
+from drf_spectacular.utils import extend_schema
 from requests.exceptions import ConnectTimeout
 from rest_framework import viewsets
 from rest_framework.exceptions import NotFound, ParseError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from .mixins import (
-    ResourceExplorerViewSetMixin,
-    FRDocGroupingMixin
-)
-from common.mixins import (
-    OptionalPaginationMixin,
-    PAGINATION_PARAMS
-)
 from common.auth import SettingsAuthentication
-
+from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -31,7 +23,6 @@ from resources.models import (
     FederalRegisterDocument,
     SupplementalContent,
 )
-
 from resources.serializers.resources import (
     AbstractResourcePolymorphicSerializer,
     FederalRegisterDocumentCreateSerializer,
@@ -41,6 +32,8 @@ from resources.serializers.resources import (
     StringListSerializer,
     SupplementalContentSerializer,
 )
+
+from .mixins import FRDocGroupingMixin, ResourceExplorerViewSetMixin
 
 
 @extend_schema(

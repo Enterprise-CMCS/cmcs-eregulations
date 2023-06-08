@@ -1,7 +1,8 @@
-from django.test import TestCase
-from resources.admin import AbstractResourceAdmin
 from django.contrib.admin import AdminSite
-from resources.models import AbstractResource, Subpart, Section
+from django.test import TestCase
+
+from resources.admin import AbstractResourceAdmin
+from resources.models import AbstractResource, Section, Subpart
 
 
 class TestAdminFunctions(TestCase):

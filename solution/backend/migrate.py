@@ -16,8 +16,7 @@ def handler(event, context):
     for app in apps.get_app_configs():
         installed_apps.append(app.label)
 
-    from django.core.management import call_command
-    from django.core.management import CommandError
+    from django.core.management import CommandError, call_command
     for app in installed_apps:
         try:
             call_command("migrate", app)

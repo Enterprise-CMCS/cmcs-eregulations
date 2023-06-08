@@ -22,14 +22,12 @@ from django.utils.safestring import mark_safe
 from solo.admin import SingletonModelAdmin
 
 from . import actions
-
 from .filters import (
     PartFilter,
     SectionFilter,
     SubpartFilter,
     TitleFilter,
 )
-
 from .models import (
     AbstractCategory,
     AbstractLocation,
@@ -43,7 +41,6 @@ from .models import (
     Subpart,
     SupplementalContent,
 )
-
 from .serializers.locations import AbstractLocationPolymorphicSerializer
 
 

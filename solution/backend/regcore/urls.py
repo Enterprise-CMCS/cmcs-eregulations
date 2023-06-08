@@ -1,16 +1,15 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from regcore.admin import BulkSynonymView
 from regcore.views import (
-    title,
-    part,
     contents,
-    metadata,
-    synonyms,
-    parser,
     history,
+    metadata,
+    parser,
+    part,
+    synonyms,
+    title,
 )
-
 
 urlpatterns = [
     path("admin/bulk_synonyms", BulkSynonymView.as_view(), name="bulk_synonyms"),

@@ -1,19 +1,17 @@
-from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
 from django.db.models.functions import Cast
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
 
-from .utils import OpenApiPathParameter
 from regcore.models import Part
-
+from regcore.serializers.metadata import PartsSerializer, StringListSerializer, VersionsSerializer
 from regcore.serializers.toc import (
     FrontPageTOCSerializer,
     TitleTOCSerializer,
 )
-from regcore.serializers.metadata import PartsSerializer, VersionsSerializer
 
-from regcore.serializers.metadata import StringListSerializer
+from .utils import OpenApiPathParameter
 
 
 @extend_schema(description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "

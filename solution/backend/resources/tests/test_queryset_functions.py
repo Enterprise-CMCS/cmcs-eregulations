@@ -1,14 +1,15 @@
 from datetime import datetime, timedelta
-from django.test import TestCase
-from django.db.models import F, Case, When
 
-from resources.views.mixins import FRDocGroupingMixin
+from django.db.models import Case, F, When
+from django.test import TestCase
+
 from resources.models import (
+    AbstractResource,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
-    AbstractResource,
     SupplementalContent,
 )
+from resources.views.mixins import FRDocGroupingMixin
 
 
 class TestMixinFunctions(TestCase):

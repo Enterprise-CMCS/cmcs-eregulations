@@ -1,9 +1,9 @@
 from datetime import date, datetime
 
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.http import (
-    HttpResponseRedirect,
     Http404,
+    HttpResponseRedirect,
 )
 from django.urls import reverse
 from django.views.generic.base import (

@@ -1,15 +1,14 @@
 
 from django.core.management.base import BaseCommand
 
+from regcore.search.models import Synonym
 from resources.models import (
     AbstractCategory,
-    AbstractResource,
     AbstractLocation,
+    AbstractResource,
     FederalRegisterDocumentGroup,
     ResourcesConfiguration,
 )
-
-from regcore.search.models import Synonym
 
 
 class Command(BaseCommand):
