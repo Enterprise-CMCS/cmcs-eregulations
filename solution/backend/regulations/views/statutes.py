@@ -1,5 +1,7 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import serializers, viewsets
 
+from common.api import OpenApiQueryParameter
 from regulations.models import StatuteLinkConverter
 
 
@@ -13,6 +15,10 @@ class StatuteLinkConverterSerializer(serializers.Serializer):
     source_url = serializers.CharField()
 
 
+@extend_schema(
+    description="Retrieve a list of Statute Link Converters for a given act or all acts.",
+    parameters=[OpenApiQueryParameter("act", "The act to filter down to.", str, False)],
+)
 class StatuteLinkConverterViewSet(viewsets.ReadOnlyModelViewSet):
     model = StatuteLinkConverter
     serializer_class = StatuteLinkConverterSerializer
