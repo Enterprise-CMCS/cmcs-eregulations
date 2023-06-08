@@ -317,7 +317,6 @@
                         .content-tabs {
                             padding-right: 12px;
                             padding-left: 0px;
-                            font-size: 16px;
                             font-weight: 400;
                             font-family: "Open Sans";
                         }
@@ -356,7 +355,6 @@
                         .content-tabs {
                             font-weight: 700;
                             flex: 1 1 auto;
-                            font-size: 24px;
                         }
                     }
                 }
@@ -420,8 +418,8 @@
                         color: $dark_blue;
                         text-transform: none !important;
                         font-style: normal;
-
                         line-height: 36px;
+                        font-size: clamp(1rem, 2.5cqi, 1.5rem);
                     }
 
                     .recent-date {
