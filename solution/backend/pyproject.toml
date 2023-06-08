@@ -1,2 +1,2 @@
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "cmcs_regulations.settings"
+DJANGO_SETTINGS_MODULE = "cmcs_regulations.test_settings"
