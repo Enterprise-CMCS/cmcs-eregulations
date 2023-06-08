@@ -131,10 +131,10 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       STATIC_URL: http://localhost:8888/
-      POSTGRES_HOST: localhost
-      POSTGRES_DB: eregs
-      POSTGRES_USER: eregs
-      POSTGRES_PASSWORD: sgere
+      DB_HOST: localhost
+      DB_NAME: eregs
+      DB_USER: eregs
+      DB_PASSWORD: sgere
       DB_PORT: 5432
     services:
       postgres:
