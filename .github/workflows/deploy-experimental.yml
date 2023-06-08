@@ -168,7 +168,7 @@ jobs:
       - name: Run Python unit tests
         working-directory: ./solution/backend
         run: |
-          pytest
+          pytest -vv
   build-and-deploy-vue:
     environment:
       name: "dev"
