@@ -87,7 +87,7 @@ prototype.clean: ui/prototype
 
 .PHONY: lint
 lint:
-	flake8;
+	docker-compose exec regulations ruff check .;
 
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: regulations local.docker data.local
