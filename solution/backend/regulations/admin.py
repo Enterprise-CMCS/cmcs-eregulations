@@ -14,11 +14,25 @@ from solo.admin import SingletonModelAdmin
 from .models import SiteConfiguration, StatuteLinkConverter
 
 
+# Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
 MARKUP_PATTERN = r"</?[^>]+>"
+
+# Finds all possible representations of dashes for replacement with the standard ASCII dash "-".
 DASH_PATTERN = r"[—–-–-]"
+
+# Finds section identifiers, e.g. "Sec. 1192", "Sec. 1192A-2g", etc.
 SECTION_PATTERN = rf"sec.?\s*(\d+[a-z0-9]*(?:{DASH_PATTERN}+[a-z0-9]+)?).?"
+
+# Finds section conversion patterns, e.g. "Sec. 1902 [42 U.S.C. 123B-2C]" and similar.
 CONVERSION_PATTERN = rf"{SECTION_PATTERN}\s*\[\s*(\d+)\s*u.?s.?c.?\s*(\d+[a-z0-9]*(?:{DASH_PATTERN}+[a-z0-9]+)?)\s*\]"
+
+# Finds title identifiers, e.g. "Title IX of the Social Security Act", "Title IX", "Title IX of the Act", etc.
 TITLE_PATTERN = rf"title\s+([a-z]+)\s*{DASH_PATTERN}*(?:\s+of\s+the\s+[a-z0-9\s]*?(?=\bact\b))?"
+
+# Finds section parts that are after a dash, e.g. "1902-1G" will match "1G".
+# Used when the "-1G" part is contained within another XML tag.
+# For example "<X>Sec 1902</X><Y>-1G. Name of this section</Y>".
+# This occurs frequently in the XML table of contents and so must be accounted for.
 SECTION_APPEND_PATTERN = rf"({DASH_PATTERN}+[a-z0-9]+)."
 
 MARKUP_REGEX = re.compile(MARKUP_PATTERN)
