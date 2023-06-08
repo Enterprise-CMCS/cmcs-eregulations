@@ -226,6 +226,13 @@ $width-3xl: 1920px; // The largest the site container will get
     }
 }
 
+// 320px
+@mixin screen-eds-xs {
+    @media (min-width: #{$eds-width-xs}) {
+        @content;
+    }
+}
+
 // 375px, or iPhone X
 @mixin screen-xs {
     @media (min-width: #{$width-xs}) {
@@ -247,9 +254,30 @@ $width-3xl: 1920px; // The largest the site container will get
     }
 }
 
+// 780px
+@mixin screen-eds-sm {
+    @media (min-width: #{$eds-width-sm}) {
+        @content;
+    }
+}
+
 // 1024px
 @mixin screen-lg {
     @media (min-width: #{$width-lg}) {
+        @content;
+    }
+}
+
+// 1024px
+@mixin screen-eds-md {
+    @media (min-width: #{$eds-width-md}) {
+        @content;
+    }
+}
+
+// 1200px
+@mixin screen-eds-lg {
+    @media (min-width: #{$eds-width-lg}) {
         @content;
     }
 }

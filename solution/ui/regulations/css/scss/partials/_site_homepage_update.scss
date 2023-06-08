@@ -281,19 +281,18 @@
         justify-content: space-between;
         padding-bottom: 0;
 
-        @media (max-width: $eds-xs-max) {
-            box-sizing: border-box;
-        }
-
         .top-container {
             width: 100%;
             margin: 0 auto;
-            padding: $spacer-3 $spacer-5;
+            padding: $spacer-3;
             box-sizing: border-box;
+
+            @include screen-lg {
+                padding: 40px;
+            }
 
             @include screen-xl {
                 max-width: $width-xl;
-                padding: $spacer-4;
             }
 
             @include screen-xxl {
