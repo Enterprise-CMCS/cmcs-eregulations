@@ -31,7 +31,7 @@ export default {
 
 <template>
     <div>
-        <v-tabs v-model="tab" grow>
+        <v-tabs v-model="tab" slider-size="4" grow>
             <v-tab class="content-tabs"> Recent Subregulatory Guidance </v-tab>
             <v-tab class="content-tabs"> Recent Rules </v-tab>
         </v-tabs>

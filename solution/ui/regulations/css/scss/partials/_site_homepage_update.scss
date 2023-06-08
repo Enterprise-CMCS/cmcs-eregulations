@@ -382,6 +382,22 @@
                 .resources__container {
                     flex: 2;
 
+                    .v-tabs {
+                        .v-tabs-bar {
+                            .v-tab {
+                                border-bottom: 1px solid $light_gray;
+
+                                &--active {
+                                    border-bottom: 1px solid $dark_blue;
+                                }
+                            }
+
+                            .v-tabs-slider {
+                                background-color: $dark_blue;
+                            }
+                        }
+                    }
+
                     .category-labels {
                         display: inline-block;
                         font-size: 11px;
