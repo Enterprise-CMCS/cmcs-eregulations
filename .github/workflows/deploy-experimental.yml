@@ -133,6 +133,7 @@ jobs:
       postgres:
         image: postgres
         env:
+          STATIC_URL: http://localhost:8888/
           POSTGRES_HOST: localhost
           POSTGRES_DB: eregs
           POSTGRES_USER: eregs
