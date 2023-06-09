@@ -2,85 +2,168 @@
 {% load static %}
 {% load render_nested %}
 
-{% block title %}Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project{% endblock %}
+{% block title %}
+Medicaid &amp; CHIP eRegulations - A CMCS Pilot Project
+{% endblock %}
 
-{% block body_class %}site-homepage{% endblock %}
+{% block spa_styles %}
+<link
+    href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+    rel="stylesheet"
+/>
+{% endblock %}
+
+{% block body_class %}site-homepage--update{% endblock %}
 
 {% block pre_header %}
-    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+<a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
 {% endblock %}
 
 {% block header %}
-    <header id="header" class="sticky">
-        <header-component
+<header id="header" class="sticky">
+    <header-component home-url="{% url 'homepage' %}">
+        <jump-to
+            slot="jump-to"
+            api-url="{{ API_BASE }}"
             home-url="{% url 'homepage' %}"
-        >
-            <jump-to
-                slot="jump-to"
-                api-url="{{ API_BASE }}"
-                home-url="{% url 'homepage' %}"
-            ></jump-to>
-            <header-links
-                slot="links"
-                about-url="{% url 'about' %}"
-                resources-url="{% url 'resources' %}"
-            ></header-links>
-            <header-search
-                slot="search"
-                search-url="{% url 'search' %}"
-            ></header-search>
-        </header-component>
-    </header>
+        ></jump-to>
+        <header-links
+            slot="links"
+            about-url="{% url 'about' %}"
+            resources-url="{% url 'resources' %}"
+        ></header-links>
+        <header-search
+            slot="search"
+            search-url="{% url 'search' %}"
+        ></header-search>
+    </header-component>
+</header>
 {% endblock %}
 
 {% block body %}
-    <main class="homepage">
-        <!-- Scroll down button - temporarily commenting out for demo purposes -->
-        <!-- <div class="toc-down smooth-scroll">
-            <a href="#homepage-toc" id="toc-down-arrow"><img src="{% static 'images/down-arrow.svg' %}" alt="Down to Table of Contents"/></a>
-        </div> -->
-
-        <div class="hero-banner">
-            <div class="site-container hero-content">
-                <div class="call-to-action">Look up policy with context.</div>
-                <p class="hero-text">Explore this site as a supplement to existing policy tools. <a href="{% url 'about' %}#automated-updates">How this tool is updated.</a></p>
-            </div>
-        </div>
-
-        <div class="site-container homepage-main-content" id="main-content">
-            <div class="ds-l-row">
-
-                <div class="homepage-toc ds-l-col--8" id="homepage-toc">
-
-                    <div class="toc-container">
-
-                        {% for title in structure %}
-                            <div class="toc-title-container">
-                                <h1> {{title.label}} </h1>
-
-                                {% for child in title.children %}
-                                    {% render_nested "regulations/homepage/"|add:child.type|add:".html" "regulations/homepage/child.html" context=child API_BASE=API_BASE title=title.identifier.0 %}
-                                {% endfor %}
-                            </div>
-                        {% endfor %}
-
-                    </div>    
-
+<main>
+    <nav id="placeholderNav"></nav>
+    <left-nav-collapse contents-description="table of contents">
+        <toc-container
+            slot="nav-contents"
+            api-url="{{ API_BASE }}"
+            home-url="{% url 'homepage' %}"
+        ></toc-container>
+    </left-nav-collapse>
+    <div id="main-content">
+        <div class="top-container">
+            <div class="cta__container">
+                <div class="cta">
+                    <div class="video__container">
+                        <a
+                            href="https://www.youtube.com/watch?v=dqy8WCFedU4"
+                            target="_blank"
+                        >
+                            <img
+                                src="{% static 'images/home_video.png' %}"
+                                alt="View a 6-minute video demonstration."
+                            />
+                        </a>
+                        <label id="videoLabel">View a 6-minute video demonstration.</label>
+                    </div>
+                    <div class="about-text__container">
+                        <p>
+                            eRegulations organizes together regulations, subregulatory
+                            guidance, and other related policy materials.
+                        </p>
+                        <a
+                            href="{% url 'about' %}"
+                            class="action-btn default-btn link-btn"
+                            >Learn About This Tool</a
+                        >
+                    </div>
                 </div>
-
-                <aside class="homepage-updates ds-l-col--4">
-                    {% if regulations %}
-                        {% include "regulations/partials/recent_changes.html" %}
-                    {% endif %}
-                </aside>
-
+            </div>
+            <div class="cta__container">
+                <div class="cta">
+                    <div class="resources__container">
+                        <recent-resources
+                            api-url={{ API_BASE }}
+                            resource-link='{% url 'resources' %}?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest'
+                            fr-doc-link='{% url 'resources' %}?resourceCategory={{ fr_docs_category_name }}'
+                        />
+                    </div>
+                    <div class="policy-materials__container">
+                        <div class="policy-materials">
+                            <div class="homepage-component__heading policy-materials__title">Search Policy Materials</div>
+                            <div class="policy-materials__categories">
+                                <span class="policy-materials__category">CFR</span>
+                                <span class="policy-materials__category">Guidance</span>
+                                <span class="policy-materials__category">Rule Preambles</span>
+                            </div>
+                            <div class="policy-materials__text">
+                                <p>
+                                    Look up keywords in the complete text of several
+                                    kinds of policy materials at once.
+                                </p>
+                            </div>
+                            <a
+                                href='{% url "search" %}?q="public%20health%20emergency"'
+                                class="action-btn default-btn link-btn"
+                                >Try a Sample Search</a
+                            >
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </main>
+        <div class="contact-signup__container">
+            <div class="contact-signup">
+                <div class="contact-signup__column contact__column">
+                    <div class="column__icon contact__icon">
+                        <img
+                            src="{% static 'images/home_icon_contact.svg' %}"
+                            alt="Text messaging bubbles"
+                        />
+                    </div>
+                    <div>
+                        <h4>Contact</h4>
+                        <p>
+                            Send questions and suggestions about this website
+                            (including bug reports), or schedule a presentation or
+                            training for your group.
+                        </p>
+                        <a
+                            class="contact external"
+                            href="{{ SURVEY_URL }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Contact the team</a
+                        >
+                    </div>
+                </div>
+                <div class="contact-signup__column signup__column">
+                    <div class="column__icon signup__icon">
+                        <img
+                            src="{% static 'images/home_icon_testing.svg' %}"
+                            alt="A computer screen displaying two beta testing versions of the website"
+                        />
+                    </div>
+                    <div>
+                        <h4>Sign Up For Testing</h4>
+                        <p>Try new features and help make them better.</p>
+                        <a
+                            class="contact external"
+                            href="{{ SIGNUP_URL }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Sign up for a session</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 {% endblock %}
 
 {% block post_footer %}
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
-    <script src="{% static '/js/eregs-main.iife.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<script src="{% static '/js/eregs-main.iife.js' %}"></script>
 {% endblock %}
