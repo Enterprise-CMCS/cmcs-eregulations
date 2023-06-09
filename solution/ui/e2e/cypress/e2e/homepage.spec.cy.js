@@ -112,24 +112,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get("div.blocking-modal-content").should("not.be.visible");
     });
 
-    it("has the correct descriptive text", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get(".cta .about-text__container p").should(($el) => {
-            expect($el.text().replace(/\s+/g, " ").trim()).to.equal(
-                "eRegulations organizes together regulations, subregulatory guidance, and other related policy materials."
-            );
-        });
-    });
-
-    it("takes you to the about page when clicking 'Learn About This Tool'", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get(".cta .about-text__container a").click();
-        cy.url().should("eq", Cypress.config().baseUrl + "/about/");
-    });
-
-    it("Does not allow selection of Part till Title is selected", () => {
+    it("Does not allow selection of Part till Title is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToPart").should("be.disabled");
@@ -137,7 +120,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get("#jumpToPart").should("not.be.disabled");
     });
 
-    it("Does not include Part 75 when Title 45 is selected", () => {
+    it("Does not include Part 75 when Title 45 is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get("#jumpToTitle").select("45");
@@ -181,7 +164,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("clicks on Title 42 Part 430 and loads the page", () => {
+    it("clicks on Title 42 Part 430 in ToC and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".toc__container").contains("Part 430").click();
@@ -190,7 +173,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.contains("Grants to States for Medical Assistance Programs");
     });
 
-    it("clicks on Title 45 Part 95 and loads the page", () => {
+    it("clicks on Title 45 Part 95 in ToC and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".toc__container .v-tabs").contains("Title 45").click();
@@ -210,14 +193,42 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.url().should("eq", Cypress.config().baseUrl + "/");
     });
 
-    it("has grouped FR docs in Related Rules tab", () => {
+    it("has the correct descriptive text", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".cta .about-text__container p").should(($el) => {
+            expect($el.text().replace(/\s+/g, " ").trim()).to.equal(
+                "eRegulations organizes together regulations, subregulatory guidance, and other related policy materials."
+            );
+        });
+    });
+
+    it("takes you to the about page when clicking 'Learn About This Tool'", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".cta .about-text__container a")
+            .contains("Learn About This Tool")
+            .click();
+        cy.url().should("eq", Cypress.config().baseUrl + "/about/");
+    });
+
+    it("takes you to the proper sample search", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".cta .policy-materials__container a")
+            .contains("Try A Sample Search")
+            .click();
+        cy.url().should(
+            "eq",
+            Cypress.config().baseUrl +
+                `/search/?q="public%20health%20emergency"`
+        );
+    });
+
+    it("has Recent Subregulatory Guidance tab and results", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container").should("exist");
-        cy.get(".resources__container .v-tabs")
-            .contains("Recent Rules")
-            .click();
-
         cy.get(".recent-rules-descriptive-text")
             .first()
             .should(($el) => {
@@ -225,6 +236,22 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     "Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155"
                 );
             });
+        // assert against fixture
+        cy.get(".resources__container").contains("View More Guidance").click();
+        cy.url().should(
+            "eq",
+            Cypress.config().baseUrl +
+                `/resources/?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest`
+        );
+    });
+
+    it("has grouped FR docs in Related Rules tab", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container").should("exist");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
 
         cy.get(".related-rule").should("have.length", 7);
         cy.get(".related-rule.ungrouped").then(($els) => {
@@ -251,6 +278,13 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .and.eq("rgb(255, 255, 255)");
                 });
         });
+
+        cy.get(".resources__container").contains("View More Changes").click();
+        cy.url().should(
+            "eq",
+            Cypress.config().baseUrl +
+                `/resources/?resourceCategory=Proposed%20and%20Final%20Rules`
+        );
     });
 
     it("Sets the label as Final, when correction and withdraw are both set to false", () => {
