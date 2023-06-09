@@ -37,14 +37,14 @@
             color: $contact_link_color;
 
             &:link::after {
-                background-color: $contact_link_color;
+                filter: brightness(0.02) invert(1);
             }
 
             &:visited {
                 color: $contact_link_color;
 
                 &::after {
-                    background-color: $contact_link_color;
+                    filter: brightness(0.02) invert(1);
                 }
             }
         }
