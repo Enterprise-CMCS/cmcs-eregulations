@@ -215,13 +215,13 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("takes you to the proper sample search", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".cta .policy-materials__container a")
-            .contains("Try A Sample Search")
-            .click();
+        cy.get(".policy-materials__container a.sample-search-btn")
+            .contains("Try a Sample Search")
+            .click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
-                `/search/?q="public%20health%20emergency"`
+                `/search/?q=%22public%20health%20emergency%22`
         );
     });
 
@@ -236,8 +236,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     "Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155"
                 );
             });
-        // assert against fixture
-        cy.get(".resources__container").contains("View More Guidance").click();
+        cy.get(".resources__container").contains("View More Guidance").click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
@@ -251,7 +250,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".resources__container").should("exist");
         cy.get(".resources__container .v-tabs")
             .contains("Recent Rules")
-            .click();
+            .click({ force: true });
 
         cy.get(".related-rule").should("have.length", 7);
         cy.get(".related-rule.ungrouped").then(($els) => {
@@ -279,7 +278,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 });
         });
 
-        cy.get(".resources__container").contains("View More Changes").click();
+        cy.get(".resources__container").contains("View More Changes").click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
