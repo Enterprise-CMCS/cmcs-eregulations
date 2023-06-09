@@ -22,7 +22,7 @@ def handler(event, context):
         SupplementalContent,
     )
     from regcore.search.models import Synonym
- #comment to be removed but for the pr is a test
+
     fixtures = [
         ("resources.abstractcategory.json", AbstractCategory),
         ("resources.category.json", Category),
