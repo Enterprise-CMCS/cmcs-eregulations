@@ -320,7 +320,6 @@
                         .content-tabs {
                             padding-right: 12px;
                             padding-left: 0px;
-                            font-weight: 400;
                             font-family: "Open Sans";
                         }
                     }
@@ -364,7 +363,6 @@
                 .cta {
                     .resources__container {
                         .content-tabs {
-                            font-weight: 700;
                             flex: 1 1 auto;
                         }
                     }
@@ -395,6 +393,7 @@
                         .v-tabs-bar {
                             .v-tab {
                                 border-bottom: 1px solid $light_gray;
+                                font-weight: 700;
 
                                 &--active {
                                     border-bottom: 1px solid $dark_blue;
@@ -424,11 +423,10 @@
                     }
 
                     .content-tabs {
-                        font-family: "Merriweather";
+                        font-family: $secondary_site_font;
                         letter-spacing: 0;
                         color: $dark_blue;
                         text-transform: none !important;
-                        font-style: normal;
                         line-height: 36px;
                         font-size: clamp(1rem, 2.5cqi, 1.5rem);
                     }
