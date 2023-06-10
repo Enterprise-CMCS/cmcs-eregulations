@@ -233,7 +233,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .first()
             .should(($el) => {
                 expect($el.text().trim()).to.equal(
-                    "Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155"
+                    "Includes 42 CFR 400, 430-460 and 45 CFR 95"
                 );
             });
         cy.get(".resources__container").contains("View More Guidance").click({ force: true });
