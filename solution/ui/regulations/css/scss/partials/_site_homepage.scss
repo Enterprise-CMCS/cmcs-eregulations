@@ -2,6 +2,8 @@
 // Site Homepage
 //-----------------------------
 
+@import "../application_settings";
+
 .site-homepage--update {
     @mixin link-common {
         text-decoration: none;
