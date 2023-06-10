@@ -38,7 +38,7 @@ export default {
         <v-tabs-items v-model="tab">
             <v-tab-item>
                 <p class="recent-rules-descriptive-text">
-                    Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155
+                    Includes 42 CFR 400, 430-460 and 45 CFR 95
                 </p>
                 <RecentChangesContainer
                     :api-url="apiUrl"
@@ -50,7 +50,7 @@ export default {
             </v-tab-item>
             <v-tab-item>
                 <p class="recent-rules-descriptive-text">
-                    Includes 42 CFR 400, 430-460 and 45 CFR 75, 95, 155
+                    Includes 42 CFR 400, 430-460 and 45 CFR 95
                 </p>
                 <RecentChangesContainer
                     :api-url="apiUrl"
