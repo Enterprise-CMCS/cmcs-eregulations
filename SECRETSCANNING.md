@@ -5,10 +5,15 @@ Gitleaks is a SAST tool for **detecting** and **preventing** hardcoded secrets l
 # Setup GitLeaks
 
 Gitleaks can be installed using Homebrew, Docker, or Go. Gitleaks is also available in binary form for many popular platforms and OS types on the [releases page](https://github.com/zricethezav/gitleaks/releases). In addition, Gitleaks can be implemented as a pre-commit hook directly in your repo or as a GitHub action using [Gitleaks-Action](https://github.com/gitleaks/gitleaks-action).
+
 ## Installing
+
 ### Windows
+
 Download gitleaks locally from [here](https://github.com/gitleaks/gitleaks) for secret scanning. After downloading, add path of the *gitleaks.exe* to system environment variables so that you can use the *gitleaks* command in command prompt and windows shell.
+
 ### Other Operating Systems
+
 ```
 # MacOS
 brew install gitleaks
@@ -26,7 +31,9 @@ git clone https://github.com/gitleaks/gitleaks.git
 cd gitleaks
 make build
 ```
+
 ## Usage
+
 ```
 Usage:
   gitleaks [command]
@@ -60,10 +67,12 @@ Flags:
 
 Use "gitleaks [command] --help" for more information about a command.
 ```
+
 ## Commands
+
 There are two commands you will use to detect secrets;  `detect`  and  `protect`.
 
-#### [](https://github.com/gitleaks/gitleaks#detect)Detect
+#### [Detect](https://github.com/gitleaks/gitleaks#detect)
 
 The  `detect`  command is used to scan repos, directories, and files. This command can be used on developer machines and in CI environments.
 
@@ -71,26 +80,36 @@ When running  `detect`  on a git repository, gitleaks will parse the output of a
 
 You can scan files and directories by using the  `--no-git`  option.
 
-#### [](https://github.com/gitleaks/gitleaks#protect)Protect
+#### [Protect](https://github.com/gitleaks/gitleaks#protect)
 
 The  `protect`  command is used to scan uncommitted changes in a git repo. This command should be used on developer machines in accordance with  [shifting left on security](https://cloud.google.com/architecture/devops/devops-tech-shifting-left-on-security). When running  `protect`  on a git repository, gitleaks will parse the output of a  `git diff`  command (you can see how this executed  [here](https://github.com/zricethezav/gitleaks/blob/7240e16769b92d2a1b137c17d6bf9d55a8562899/git/git.go#L48-L49)). You can set the  `--staged`  flag to check for changes in commits that have been  `git add`ed. The  `--staged`  flag should be used when running Gitleaks as a pre-commit.
 
 **NOTE**: the  `protect`  command can only be used on git repos, running  `protect`  on files or directories will result in an error message.
+
 ## Ignore Configuration
+
 There are some methods helpful in this regard, each of them is explained below
+
 ### SKIP Command
+
 Skip command is to use disable gitleaks check on precommit hook for gitleaks. You can perform this using the command below
+
 ```
 ➜ SKIP=gitleaks git commit -m "skip gitleaks check"
 Detect hardcoded secrets..........................................Skipped
 ```
+
 ### Allow List Config
+
 In Gitleaks, an allowlist (also known as a whitelist) is a mechanism that allows you to specify certain files, directories, or patterns that should be exempted from being flagged as secrets during the scanning process. It provides a way to mark specific files or patterns as trusted or intentionally included in the repository, even if they match the patterns of secrets.
 
 The allowlist feature is useful when you have legitimate files or patterns that may trigger false positives but should not be treated as secrets. By adding them to the allowlist, you instruct Gitleaks to skip scanning and reporting them.
+
 #### Guide
+
 1. Create a *.gitleaks.toml* file for configuring allow list for the repo
 2. Below is a config guide having information about supported keyswords and lists in the toml for the allow list
+
 ```
 [allowlist]
   commits = [ "somecommitID", "anothercommitID"]
@@ -101,14 +120,14 @@ The allowlist feature is useful when you have legitimate files or patterns that 
 # regular expressions '''regexp''' 
 # and exact matches "exactMatch"
 ```
+
 ### Gitleaks:Allow
+
 If you are knowingly committing a test secret that gitleaks will catch you can add a  `gitleaks:allow`  comment to that line which will instruct gitleaks to ignore that secret. Ex:
 
 ```
 class CustomClass:
     discord_client_secret = '8dyfuiRyq=vVc3RRr_edRk-fK__JItpZ'  #gitleaks:allow
-
-
 ```
 
 #### [](https://github.com/gitleaks/gitleaks#gitleaksignore).gitleaksignore
@@ -116,42 +135,54 @@ class CustomClass:
 You can ignore specific findings by creating a  `.gitleaksignore`  file at the root of your repo. In release v8.10.0 Gitleaks added a  `Fingerprint`  value to the Gitleaks report. Each leak, or finding, has a Fingerprint that uniquely identifies a secret. Add this fingerprint to the  `.gitleaksignore`  file to ignore that specific secret. See Gitleaks'  [.gitleaksignore](https://github.com/zricethezav/gitleaks/blob/master/.gitleaksignore)  for an example. Note: this feature is experimental and is subject to change in the future.
 
 # Setup Precommit
+
 Git hook scripts are useful for identifying simple issues before submission to code review. We run our hooks on every commit to automatically point out issues in code such as missing semicolons, trailing whitespace, and debug statements. By pointing these issues out before code review, this allows a code reviewer to focus on the architecture of a change while not wasting time with trivial style nitpicks.
+
 ## Installation
 
 Before you can run hooks, you need to have the pre-commit package manager installed.
 
 Using pip:
+
 ```
 pip  install  pre-commit
 ```
+
 In a python project, add the following to your requirements.txt (or requirements-dev.txt):
+
 ```
 pre-commit
 ```
+
 As a 0-dependency  [zipapp](https://docs.python.org/3/library/zipapp.html):
 
 -   locate and download the  `.pyz`  file from the  [github releases](https://github.com/pre-commit/pre-commit/releases)
 -   run  `python pre-commit-#.#.#.pyz ...`  in place of  `pre-commit ...`
 
 Using  [homebrew](https://brew.sh/):
+
 ```
 brew  install  pre-commit
 ```
+
 Using  [conda](https://conda.io/)  (via  [conda-forge](https://conda-forge.org/)):
+
 ```
 conda  install  -c  conda-forge  pre-commit
 ```
+
 ## Quick start  [¶](https://pre-commit.com/#quick-start)
 
 ### 1. Install pre-commit
 
 -   follow the  [install](https://pre-commit.com/#install)  instructions above
 -   `pre-commit --version`  should show you what version you're using
+
 ```
 $ pre-commit --version
 pre-commit 3.3.2
 ```
+
 ### 2. Add a pre-commit configuration
 
 -   create a file named  `.pre-commit-config.yaml`
@@ -159,6 +190,7 @@ pre-commit 3.3.2
 -   the full set of options for the configuration are listed  [below](https://pre-commit.com/#plugins)
 -   this example uses a formatter for python code, however  `pre-commit`  works for any programming language
 -   other  [supported hooks](https://pre-commit.com/hooks.html)  are available
+
 ```
 repos:
 -  repo:  https://github.com/pre-commit/pre-commit-hooks
@@ -172,18 +204,22 @@ repos:
   hooks:
   -  id:  black
 ```
+
 ### 3. Install the git hook scripts
 
 -   run  `pre-commit install`  to set up the git hook scripts
+
 ```
 $ pre-commit  install
 pre-commit installed at .git/hooks/pre-commit
 ```
+
 -   now  `pre-commit`  will run automatically on  `git commit`!
 
 ### 4. (optional) Run against all the files
 
 -   it's usually a good idea to run the hooks against all of the files when adding new hooks (usually  `pre-commit`  will only run on the changed files during git hooks)
+
 ```
 $ pre-commit run --all-files
 [INFO] Initializing environment for https://github.com/pre-commit/pre-commit-hooks.
@@ -206,10 +242,14 @@ Fixing sample.py
 
 black....................................................................Passed
 ```
+
 -   oops! looks like I had some trailing whitespace
 -   consider running that in  [CI](https://pre-commit.com/#usage-in-continuous-integration)  too
+
 # Test Secret Scanning
+
 To test the secret scanning look at the following test below
+
 ## Prerequisites
 
 GitLeaks: you need to install the gitleaks locally
@@ -219,37 +259,34 @@ Precommit: you need to install the precommit cli
 ## Setup
 
 1.  Run the command “pre-commit install”
-    
 
 ## Steps
 
 1.  To test change the code
-    
+
 2.  If you want to test it for failure cases, add a hardcoded key or secret
-    
+
 3.  Commit the changes
-    
 
 ## Criteria
 
 4.  If you added secrets, commit should fail
-    
+
 5.  If you did not add any secret, commit should succeed
-    
 
 # Test for Gitleaks Github Action
 
 ## Steps
 
 1.  To test change the code
-    
+
 2.  If you want to test it for failure cases, add a hardcoded key or secret
-    
+
 3.  Commit the changes/ Create a PR (pull request)
-    
+
 
 ## Criteria
 
 4.  Gitleaks github action should run on github and succeed, if you did not add any secrets
-    
+
 5.  If you added any secret, Gitleaks github action should run on github and fail
