@@ -115,7 +115,7 @@ jobs:
           serverless deploy --stage ${{ matrix.environment }} --config ./serverless-fr.yml
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage ${{ matrix.environment }} --config ./serverless-fr.yml
           popd
-      -name: run pytest
+      - name: run pytest
         env:
           STATIC_URL: http://localhost:8888/
           DB_HOST: localhost
