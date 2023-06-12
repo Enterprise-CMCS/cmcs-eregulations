@@ -115,7 +115,7 @@ jobs:
           serverless deploy --stage ${{ matrix.environment }} --config ./serverless-fr.yml
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage ${{ matrix.environment }} --config ./serverless-fr.yml
           popd
-      -name: run pytest
+      - name: run pytest
         env:
           STATIC_URL: http://localhost:8888/
           DB_HOST: localhost
@@ -136,8 +136,8 @@ jobs:
               # needed because the postgres container does not provide a healthcheck
             options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
         uses: actions/checkout@v3
-          with:
-            submodules: true
+        with:
+          submodules: true
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
