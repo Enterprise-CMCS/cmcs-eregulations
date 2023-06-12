@@ -1,11 +1,6 @@
 from django.urls import path, register_converter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from regulations.views.reader import SubpartReaderView, SectionReaderView, PartReaderView
-from regulations.views.goto import GoToRedirectView
-from regulations.views.search import SearchView
-from regulations.views.regulation_landing import RegulationLandingView
-from regulations.views.homepage import HomepageView
 from regulations import converters
 from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
