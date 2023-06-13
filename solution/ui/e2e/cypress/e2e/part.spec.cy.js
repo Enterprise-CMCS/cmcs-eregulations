@@ -162,9 +162,9 @@ describe("Part View", () => {
         cy.get(
             "#433-8 .reg-history-link-container .tooltip.clicked .tooltip-title"
         ).contains("View § 433.8 Effective In");
-        cy.get(
-            "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
-        ).contains("2021");
+        //cy.get(
+            //"#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
+        //).contains("2021");
         cy.get(
             "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
         )

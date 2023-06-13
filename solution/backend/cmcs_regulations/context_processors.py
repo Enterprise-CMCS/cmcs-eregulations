@@ -20,6 +20,12 @@ def survey_url(request):
     }
 
 
+def signup_url(request):
+    return {
+        "SIGNUP_URL": settings.SIGNUP_URL
+    }
+
+
 def automated_testing(request):
     return {
         "AUTOMATED_TEST": request.META.get("HTTP_X_AUTOMATED_TEST") == "true"

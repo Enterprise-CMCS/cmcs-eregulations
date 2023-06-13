@@ -18,7 +18,10 @@ async def get_year_data(section, year, client):
 
 
 async def check_year(section, year, client):
-    data = await get_year_data(section, year, client)
+    try:
+        data = await get_year_data(section, year, client)
+    except httpx.TimeoutException:
+        return None
     if data.status_code == 400:
         return None
     elif data.status_code == 302:

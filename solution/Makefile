@@ -154,9 +154,22 @@ test.local: ## run cypress tests locally without docker
 	cd ui/e2e; \
 		npm install; \
 		npm run cypress:run;
-
+.PHONY: test.vite
+test.vitest:
+	cd ui/regulations;\
+		npm install;\
+		npm run test-vue;
+test.vitest.coverage:
+	cd ui/regulations;\
+		npm install;\
+		npm run test-vue-coverage;
+		
 python.unittest:
-	docker-compose exec regulations python manage.py test
+	docker-compose exec regulations python manage.py test 
+
+##uncomment the -vvv if there are errors running pytest. 
+python.pytest:
+	docker-compose exec regulations pytest -vvv 
 
 python.shell:
 	docker-compose exec regulations python manage.py shell

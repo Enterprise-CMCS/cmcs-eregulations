@@ -16,3 +16,5 @@ django-jsonform
 django-csp
 httpx
 ruff
+pytest
+pytest-django==4.5.1
