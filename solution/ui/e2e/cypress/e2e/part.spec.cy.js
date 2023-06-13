@@ -167,7 +167,7 @@ describe("Part View", () => {
         // so I'm commenting it out for now until we can figure out a better way
         //cy.get(
             //"#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
-        //).contains("2022");
+        //).contains("2021");
         cy.get(
             "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
         )
