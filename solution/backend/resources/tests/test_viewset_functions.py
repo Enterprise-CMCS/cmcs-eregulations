@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timedelta
-
+from itertools import chain
 from django.test import TestCase
 from rest_framework.exceptions import NotFound
 
@@ -34,6 +34,7 @@ class TestMixinFunctions(TestCase):
         resources = FederalRegisterDocument.objects.filter(id__in=[1, 2, 3])
         test_view_set = ResourceSearchViewSet()
         ordered_resources = test_view_set.sort_by_url_list(urls, resources)
+        ordered_resources = list(chain.from_iterable(ordered_resources))
         self.assertEqual(ordered_resources[1], FederalRegisterDocument.objects.get(id=1))
         self.assertEqual(ordered_resources[0], FederalRegisterDocument.objects.get(id=2))
         self.assertEqual(ordered_resources[2], FederalRegisterDocument.objects.get(id=3))
@@ -69,7 +70,8 @@ class TestMixinFunctions(TestCase):
         with open("resources/tests/fixtures/url_snippet_dict.json") as f:
             urls = json.load(f)
         ordered_resources = test_view_set.sort_by_url_list(urls.keys(), resources)
-        results = test_view_set.append_snippet(ordered_resources, urls)
+        resources = list(chain.from_iterable(ordered_resources))
+        results = test_view_set.append_snippet(resources, urls)
         num = 1
         for r in results:
             self.assertEqual(f'...site{num} snippet', r.snippet)
