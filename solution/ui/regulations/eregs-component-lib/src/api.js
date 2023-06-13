@@ -255,13 +255,6 @@ const getSupplementalContent = async (
     );
 };
 
-const getFederalRegisterDocs = async (apiURL, { page = 1, pageSize = 3 }) => {
-    return httpApiGetLegacy(
-        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
-        {}, // params, default
-        apiURL
-    );
-};
 
 const getSubpartTOC = async (apiURL, title, part, subPart) => {
     return httpApiGetLegacy(
@@ -272,7 +265,6 @@ const getSubpartTOC = async (apiURL, title, part, subPart) => {
 export {
     getLastParserSuccessDate,
     getSupplementalContent,
-    getFederalRegisterDocs,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,
