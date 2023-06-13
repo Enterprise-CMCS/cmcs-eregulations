@@ -19,7 +19,7 @@ We have public documentation about our product, design, and research processes i
 
 ## Set Up Git pre-commit hooks
 
-See "Quick Start" in [SECRETSCANNING.md](SEACRETSCANNING.md) to ensure that pre-commit hooks are installed and working properly.
+See "Quick Start" in [SECRETSCANNING.md](SECRETSCANNING.md) to ensure that pre-commit hooks are installed and working properly.
 
 ## Getting the code
 
