@@ -171,7 +171,7 @@ Using  [conda](https://conda.io/)  (via  [conda-forge](https://conda-forge.org/)
 conda  install  -c  conda-forge  pre-commit
 ```
 
-## Quick start  [¶](https://pre-commit.com/#quick-start)
+## Quick Start  [¶](https://pre-commit.com/#quick-start)
 
 ### 1. Install pre-commit
 

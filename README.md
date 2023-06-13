@@ -13,14 +13,20 @@ We have public documentation about our product, design, and research processes i
 -   go version 1.16
 -   git
 -   node >= v18 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
+-   pre-commit hooks
 
 # Getting setup
+
+## Set Up Git pre-commit hooks
+
+See "Quick Start" in [SECRETSCANNING.md](SEACRETSCANNING.md) to ensure that pre-commit hooks are installed and working properly.
 
 ## Getting the code
 
 ```
 git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
 ```
+
 ## Create your Dockerfile
 
 - Create the dockerfile
@@ -29,7 +35,9 @@ git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
 cd solution
 cp Dockerfile.template Dockerfile
 ```
+
 - Update the dockerfile with correct environment variables values
+
 ## Running eRegs
 
 A lot of tasks for local development can be accessed through the Makefile.
