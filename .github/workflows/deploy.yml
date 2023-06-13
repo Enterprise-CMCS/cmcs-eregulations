@@ -23,6 +23,18 @@ jobs:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_DB: eregs
+          POSTGRES_USER: eregs
+          POSTGRES_PASSWORD: sgere
+        ports:
+          - 5432:5432
+          # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v3
         with:
@@ -33,7 +45,7 @@ jobs:
           node-version: 18.14
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: "3.8"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -82,7 +94,6 @@ jobs:
           envkey_VITE_ENV: ${{matrix.environment}}
           directory: solution/ui/regulations/eregs-vite
           file_name: .env
-
       - name: build-vue-assets
         id: build-vue-assets
         env:
@@ -96,7 +107,7 @@ jobs:
           popd
       - uses: actions/setup-go@v2
         with:
-          go-version: '^1.16' # The Go version to download (if necessary) and use.
+          go-version: "^1.16" # The Go version to download (if necessary) and use.
       - name: deploy and run eCFR parser
         id: deploy-run-ecfr-parser
         run: |
@@ -123,27 +134,6 @@ jobs:
           DB_USER: eregs
           DB_PASSWORD: sgere
           DB_PORT: 5432
-        services:
-          postgres:
-            image: postgres
-            env:
-              POSTGRES_HOST: localhost
-              POSTGRES_DB: eregs
-              POSTGRES_USER: eregs
-              POSTGRES_PASSWORD: sgere
-            ports:
-              - 5432:5432
-              # needed because the postgres container does not provide a healthcheck
-            options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r ./solution/static-assets/requirements.txt
         working-directory: ./solution/backend
         run: |
           pytest -vv
@@ -154,4 +144,3 @@ jobs:
           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
         env:
           CYPRESS_DEPLOYING: true
-          
