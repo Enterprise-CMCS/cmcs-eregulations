@@ -117,10 +117,11 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
 
         url_filters = [Q(url_annotated__istartswith=url) for url in urls]
-        #gets thes first of the list to sbeing the query set
+        # gets thes first of the list to sbeing the query set
         url_query = url_filters.pop()
-        # now we are comibning the remaing ones by putting an or statement in between.  
-        #So now its like url_annotate_starts with url 1 or url annotated starts with url2 etc.
+
+        # now we are comibning the remaing ones by putting an or statement in between.
+        # So now its like url_annotate_starts with url 1 or url annotated starts with url2 etc.
         for url in url_filters:
             url_query |= url
         query = AbstractResource.objects \
