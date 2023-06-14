@@ -63,9 +63,9 @@ const props = defineProps({
         <div id="statuteApp" class="statute-view">
             <Banner title="Statute Reference">
                 <template #description>
-                    <p>
+                    <h2>
                         Find online versions of codified statue 
-                    </p>
+                    </h2>
                 </template>
             </Banner>
         </div>
