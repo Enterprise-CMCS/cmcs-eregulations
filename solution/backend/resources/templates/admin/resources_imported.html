@@ -1,0 +1,10 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>The following supplemental content have been imported:</p>
+        <ul>
+        </ul>
+    </form>
+{% endblock %}

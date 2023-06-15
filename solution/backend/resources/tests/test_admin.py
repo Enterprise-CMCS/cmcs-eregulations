@@ -1,14 +1,21 @@
 from django.test import TestCase
-from resources.admin import AbstractResourceAdmin
+from resources.admin import AbstractResourceAdmin, SupplementalContentAdmin
 from django.contrib.admin import AdminSite
-from resources.models import AbstractResource, Subpart, Section
+from resources.models import AbstractResource, Section, Subpart, SupplementalContent
 
 
 class TestAdminFunctions(TestCase):
     def setUp(self):
         self.resourcesAdmin = AbstractResourceAdmin(model=AbstractResource, admin_site=AdminSite())
+        self.supplementalAdmin = SupplementalContentAdmin(model=SupplementalContent, admin_site=AdminSite())
         Section.objects.create(title=42, part=400, section_id=200)
         Subpart.objects.create(title=42, part=433, subpart_id="A")
+
+    def test_add_resources(self):
+        bulk_add, bad_locations = self.resourcesAdmin.get_bulk_locations("400.200, 5656565", "42")
+        good_section = Section.objects.get(section_id=200)
+        self.assertEqual(bulk_add, [good_section])
+        self.assertEqual(bad_locations, [" 5656565"])
 
     def test_bulk_section_check(self):
         section = self.resourcesAdmin.build_location("400.200", "42")

@@ -1,8 +1,11 @@
 import json
 import re
-
+import csv
+from django.urls import path, reverse
 from django import forms
+from django.http import HttpResponseRedirect
 from django.apps import apps
+from django.core.exceptions import ValidationError
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -15,7 +18,7 @@ from django.db.models import (
     When,
 )
 from django.forms.widgets import Textarea
-from django.urls import reverse
+from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
@@ -162,6 +165,21 @@ class AbstractResourceAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
+    def get_bulk_locations(self, bulk_locations, bulk_title=""):
+        bulk_adds = []
+        bad_locations = []
+        split_locations = bulk_locations.split(",")
+        print(split_locations)
+        for location in split_locations:
+            a = self.build_location(location.strip(), bulk_title)
+            if a:
+                bulk_adds.append(a)
+                # form.instance.locations.add(a.abstractlocation_ptr)
+                # bulk_adds.append(AbstractLocationPolymorphicSerializer(a).data)
+            else:
+                bad_locations.append(location)
+        return bulk_adds, bad_locations
+
     # Overrides the save method in django admin to handle many to many relationships.
     # Looks at the locations added in bulk uploads and adds them if allowed, sends error message if not.
     def save_related(self, request, form, formsets, change):
@@ -175,24 +193,22 @@ class AbstractResourceAdmin(BaseAdmin):
         bulk_title = form.cleaned_data.get("bulk_title")
         bad_locations = []
         bulk_adds = []
+        bulk_locs = []
 
         super().save_related(request, form, formsets, change)
         if bulk_locations:
-            split_locations = bulk_locations.split(",")
-            for location in split_locations:
-                a = self.build_location(location.strip(), bulk_title)
-                if a:
-                    form.instance.locations.add(a.abstractlocation_ptr)
-                    bulk_adds.append(AbstractLocationPolymorphicSerializer(a).data)
-                else:
-                    bad_locations.append(location)
+            bulk_adds, bad_locations = self.get_bulk_locations(bulk_locations, bulk_title)
+            print(bulk_adds)
             if bad_locations:
                 messages.add_message(
                     request,
                     messages.ERROR,
                     "The following locations were not added %s" % ((", ").join(bad_locations))
                 )
-
+            if bulk_adds:
+                for location in bulk_adds:
+                    form.instance.locations.add(location.abstractlocation_ptr)
+                    bulk_locs.append(AbstractLocationPolymorphicSerializer(location).data)
         # Create and append changelog object, if any location changes occured
         if additions or removals or bulk_adds:
             form.instance.location_history.append({
@@ -200,7 +216,7 @@ class AbstractResourceAdmin(BaseAdmin):
                 "date": str(timezone.now()),
                 "additions": additions,
                 "removals": removals,
-                "bulk_adds": bulk_adds,
+                "bulk_adds": bulk_locs,
             })
             form.instance.save()
 
@@ -398,12 +414,65 @@ class FederalResourceForm(ResourceForm):
 
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):
+    change_list_template = "admin/import_resources_button.html"
     form = SupContentForm
     list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
     fields = ("approved", "name", "description", "date", "url", "category",
               "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history")
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('import_resources/', self.show_import_resources_page),
+        ]
+        return my_urls + urls
+
+    def show_import_resources_page(self, request):
+        error = None
+
+        if "import" in request.POST:
+            try:
+                return render(request, "admin/resources_imported.html", context={
+                    "num_conversions": 1,
+                    "conversions": None,
+                })
+            except ValidationError as e:
+                error = e.message
+            except Exception as e:
+                error = str(e)
+        if "get_template" in request.POST:
+            return
+        if "return" in request.POST or error:
+            num_conversions = request.POST.get("num_conversions", 0)
+            app = self.model._meta.app_label
+            model = self.model._meta.model_name
+            message = f"Failed to import: {error}" if error else f"Successfully imported {num_conversions} conversions!"
+            self.message_user(request, message, messages.ERROR if error else messages.SUCCESS)
+            return HttpResponseRedirect(reverse(f"admin:{app}_{model}_changelist"))
+
+        return render(request, "admin/import_resources.html", context={})
+
+    def open_resource_csv(self, path):
+        with open(path) as f:
+            reader = csv.reader(f)
+            for row in reader:
+                try:
+                    bulk_adds, bad_locations = self.get_bulk_locations(locations=row[4])
+                    _, created = SupplementalContent.objects.get_or_create(
+                        name=row[0],
+                        description=row[1],
+                        url=row[2],
+                        approved=False,
+                        category=row[3],
+                        locations=bulk_adds,
+                    )
+                    if bad_locations:
+                        return 1
+                except Exception as e:
+                    return str(e)
+                return created
 
 
 @admin.register(FederalRegisterDocument)

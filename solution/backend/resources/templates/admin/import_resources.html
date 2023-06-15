@@ -1,0 +1,11 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Get a copy of the template to use by clicking get template. </br> Upload the contnet by using import resources</p>
+        <p><input type="submit" name="get_template" value="Get template"/>
+        <input type="file" name="import" value="Import Resources"/></p>
+        <input type="submit" name="import" value="Import Resources"/></p>
+    </form>
+{% endblock %}
