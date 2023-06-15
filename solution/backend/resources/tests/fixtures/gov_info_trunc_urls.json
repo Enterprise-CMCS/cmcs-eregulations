@@ -1,0 +1,29 @@
+{
+	"query": "site",
+	"web": {
+		"total": 2,
+		"next_offset": 0,
+		"spelling_correction": null,
+		"results": [
+			{
+				"title": "site4",
+				"url": "www.site4url.com",
+				"snippet": "...site4 page 1 snippet",
+				"publication_date": "2023-01-27"
+			},
+			{
+				"title": "site4",
+				"url": "www.site4url.com",
+				"snippet": "...site4 page 2 snippet",
+				"publication_date": "2023-01-27"
+			}
+		]
+	},
+	"text_best_bets": [],
+	"graphic_best_bets": [],
+	"health_topics": [],
+	"job_openings": [],
+	"recent_tweets": [],
+	"federal_register_documents": [],
+	"related_search_terms": []
+}
