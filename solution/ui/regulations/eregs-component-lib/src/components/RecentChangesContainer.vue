@@ -2,8 +2,7 @@
 import { getRecentResources } from "utilities/api";
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
-import RecentSupplementalContent from "./RecentSupplementalContent.vue"
-
+import RecentSupplementalContent from "./RecentSupplementalContent.vue";
 
 export default {
     name: "DefaultName",
@@ -11,7 +10,7 @@ export default {
     components: {
         RelatedRuleList,
         SimpleSpinner,
-        RecentSupplementalContent
+        RecentSupplementalContent,
     },
 
     props: {
@@ -22,15 +21,25 @@ export default {
         type: {
             type: String,
             required: false,
-            default: "rules"
+            default: "rules",
         },
     },
 
     async created() {
+        const categories =
+            this.type === "supplemental"
+                ? {
+                      categories:
+                          "&categories=5&categories=7&categories=6&categories=9&categories=10&categories=138&categories=8",
+                  }
+                : {};
+
         const rulesResponse = await getRecentResources(this.apiUrl, {
             page: 1,
             pageSize: 3,
-        }, this.type);
+            type: this.type,
+            ...categories,
+        });
 
         this.rules = rulesResponse.results;
         this.loading = false;
@@ -53,12 +62,16 @@ export default {
 <template>
     <div class="rules-container">
         <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading && type != 'supplemental'" :rules="rules" />
-        <RecentSupplementalContent v-if="!loading && type == 'supplemental'" :supplemental-content="rules" />
+        <RelatedRuleList
+            v-if="!loading && type != 'supplemental'"
+            :rules="rules"
+        />
+        <RecentSupplementalContent
+            v-if="!loading && type == 'supplemental'"
+            :supplemental-content="rules"
+        />
     </div>
 </template>
-
-
 
 <style lang="scss">
 .rules-container {
