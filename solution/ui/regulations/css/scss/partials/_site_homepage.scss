@@ -480,7 +480,6 @@
                 }
 
                 .policy-materials__container {
-
                     flex: 1;
                     display: flex;
                     flex-direction: column;
@@ -499,41 +498,46 @@
                             margin-bottom: 8px;
                         }
 
-                        .policy-materials__categories {
+                        .policy-materials__categories--parent {
                             container: policy-materials-categories / inline-size;
 
-                            display: flex;
-                            flex-wrap: wrap;
-                            margin-bottom: 8px;
+                            width: 100%;
 
-                            span {
-                                font-weight: bold;
-                                font-size: 14px;
-                                line-height: 22px;
-                                color: $mid_gray;
+                            .policy-materials__categories {
+                                display: flex;
+                                flex-wrap: wrap;
+                                justify-content: center;
+                                margin-bottom: 8px;
 
-                                &:not(:last-child) {
-                                    padding-right: 1em;
-                                    margin-right: 1em;
-                                    border-right: 1px solid $light_gray;
-                                }
-
-                                @container policy-materials-categories (max-width: 274px) {
-                                    font-size: 12px;
-                                    line-height: 20px;
+                                span {
+                                    font-weight: bold;
+                                    font-size: 14px;
+                                    line-height: 22px;
+                                    color: $mid_gray;
 
                                     &:not(:last-child) {
-                                        padding-right: 0.5em;
-                                        margin-right: 0.5em;
+                                        padding-right: 1em;
+                                        margin-right: 1em;
+                                        border-right: 1px solid $light_gray;
                                     }
-                                }
 
-                                @container policy-materials-categories (max-width: 215px) {
-                                    font-size: 11px;
+                                    @container policy-materials-categories (max-width: 274px) {
+                                        font-size: 12px;
+                                        line-height: 20px;
 
-                                    &:not(:last-child) {
-                                        padding-right: 0.3em;
-                                        margin-right: 0.3em;
+                                        &:not(:last-child) {
+                                            padding-right: 0.5em;
+                                            margin-right: 0.5em;
+                                        }
+                                    }
+
+                                    @container policy-materials-categories (max-width: 215px) {
+                                        font-size: 11px;
+
+                                        &:not(:last-child) {
+                                            padding-right: 0.3em;
+                                            margin-right: 0.3em;
+                                        }
                                     }
                                 }
                             }
