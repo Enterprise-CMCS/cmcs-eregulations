@@ -39,7 +39,7 @@ jobs:
       - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
-          python-version: '3.8'
+          python-version: "3.9"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -102,7 +102,7 @@ jobs:
       - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
-          python-version: '3.8'
+          python-version: "3.9"
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
@@ -127,7 +127,7 @@ jobs:
           echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
           popd
   test-python:
-    needs: [ deploy-django ]
+    needs: [deploy-django]
     runs-on: ubuntu-20.04
     env:
       STATIC_URL: http://localhost:8888/
@@ -159,7 +159,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: "3.9"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -191,7 +191,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version:
+            18.14
+            # setup python
+      - uses: actions/setup-python@v4
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: "3.9"
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -250,7 +256,7 @@ jobs:
         if: success() && steps.findPr.outputs.number
         uses: actions/setup-go@v2
         with:
-          go-version: '^1.16' # The Go version to download (if necessary) and use.
+          go-version: "^1.16" # The Go version to download (if necessary) and use.
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
@@ -304,9 +310,9 @@ jobs:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
             :sparkles: See the Django Site [in action][1] :sparkles:
-            
+
             [1]: ${{ env.django_url }}
-          reactions: '+1'
+          reactions: "+1"
   test-cypress:
     needs: [deploy-go, deploy-django, build-and-deploy-vue]
     runs-on: ubuntu-20.04
