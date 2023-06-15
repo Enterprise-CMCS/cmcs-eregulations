@@ -361,6 +361,12 @@
                 }
             }
 
+            @container cta-container (min-width: 630px) and (max-width: 658px) {
+                .policy-materials__title {
+                    line-height: 1.5rem;
+                }
+            }
+
             @container cta-container (max-width: 799px) {
                 .cta {
                     .about-text__container {
