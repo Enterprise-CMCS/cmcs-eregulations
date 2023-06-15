@@ -281,7 +281,13 @@ const setCacheItem = async (key, data) => {
 const getPartTOC = async (title, part) =>
     httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
 
-const getCategories = async () => httpApiGet("resources/categories");
+const getCategories = async (apiUrl) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}resources/categories`);
+    }
+
+    return httpApiGet("resources/categories");
+}
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template

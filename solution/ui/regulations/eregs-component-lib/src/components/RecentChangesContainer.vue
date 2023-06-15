@@ -1,5 +1,5 @@
 <script>
-import { getRecentResources } from "utilities/api";
+import { getCategories, getRecentResources } from "utilities/api";
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import RecentSupplementalContent from "./RecentSupplementalContent.vue";
@@ -26,19 +26,24 @@ export default {
     },
 
     async created() {
-        const categories =
-            this.type === "supplemental"
-                ? {
-                      categories:
-                          "&categories=5&categories=7&categories=6&categories=9&categories=10&categories=138&categories=8",
-                  }
-                : {};
+        let categoriesObj = {}; // eslint-disable-line prefer-const
+
+        if (this.type === "supplemental") {
+            const categoriesResult = await getCategories(this.apiUrl);
+            categoriesObj.categories = categoriesResult
+                .flatMap((cat) =>
+                    cat.parent?.name === "Subregulatory Guidance"
+                        ? `&categories=${cat.id}`
+                        : []
+                )
+                .join("");
+        }
 
         const rulesResponse = await getRecentResources(this.apiUrl, {
             page: 1,
             pageSize: 3,
             type: this.type,
-            ...categories,
+            ...categoriesObj,
         });
 
         this.rules = rulesResponse.results;
