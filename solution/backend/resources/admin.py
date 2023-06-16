@@ -3,9 +3,7 @@ import re
 import csv
 from django.urls import path, reverse
 from django import forms
-from django.http import HttpResponseRedirect
 from django.apps import apps
-from django.core.exceptions import ValidationError
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -18,7 +16,7 @@ from django.db.models import (
     When,
 )
 from django.forms.widgets import Textarea
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
@@ -166,10 +164,10 @@ class AbstractResourceAdmin(BaseAdmin):
         )
 
     def get_bulk_locations(self, bulk_locations, bulk_title=""):
+        ('get_bulks')
         bulk_adds = []
         bad_locations = []
         split_locations = bulk_locations.split(",")
-        print(split_locations)
         for location in split_locations:
             a = self.build_location(location.strip(), bulk_title)
             if a:
@@ -198,7 +196,6 @@ class AbstractResourceAdmin(BaseAdmin):
         super().save_related(request, form, formsets, change)
         if bulk_locations:
             bulk_adds, bad_locations = self.get_bulk_locations(bulk_locations, bulk_title)
-            print(bulk_adds)
             if bad_locations:
                 messages.add_message(
                     request,
@@ -412,6 +409,10 @@ class FederalResourceForm(ResourceForm):
         return super(FederalResourceForm, self).save(commit=commit)
 
 
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField()
+
+
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):
     change_list_template = "admin/import_resources_button.html"
@@ -430,49 +431,47 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
         return my_urls + urls
 
     def show_import_resources_page(self, request):
-        error = None
+        if request.method == "POST":
+            categories = AbstractCategory.objects.all()
 
-        if "import" in request.POST:
-            try:
-                return render(request, "admin/resources_imported.html", context={
-                    "num_conversions": 1,
-                    "conversions": None,
-                })
-            except ValidationError as e:
-                error = e.message
-            except Exception as e:
-                error = str(e)
-        if "get_template" in request.POST:
-            return
-        if "return" in request.POST or error:
-            num_conversions = request.POST.get("num_conversions", 0)
-            app = self.model._meta.app_label
-            model = self.model._meta.model_name
-            message = f"Failed to import: {error}" if error else f"Successfully imported {num_conversions} conversions!"
-            self.message_user(request, message, messages.ERROR if error else messages.SUCCESS)
-            return HttpResponseRedirect(reverse(f"admin:{app}_{model}_changelist"))
-
-        return render(request, "admin/import_resources.html", context={})
-
-    def open_resource_csv(self, path):
-        with open(path) as f:
-            reader = csv.reader(f)
+            csv_file = request.FILES["csv_file"].file
+            reader = csv.reader(csv_file.read().decode('utf8').splitlines(),
+                                quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            next(reader)
+            failed_list = []
+            sucesses_list = []
             for row in reader:
-                try:
-                    bulk_adds, bad_locations = self.get_bulk_locations(locations=row[4])
-                    _, created = SupplementalContent.objects.get_or_create(
-                        name=row[0],
-                        description=row[1],
-                        url=row[2],
-                        approved=False,
-                        category=row[3],
-                        locations=bulk_adds,
-                    )
-                    if bad_locations:
-                        return 1
-                except Exception as e:
-                    return str(e)
-                return created
+                bulk_adds, bad_locations = self.get_bulk_locations(row[4])
+                category = categories.get(name__iexact=row[3])
+                content, created = SupplementalContent.objects.get_or_create(
+                    name=row[0],
+                    description=row[1],
+                    url=row[2],
+                    approved=False,
+                    category=category,
+                )
+                if created and bulk_adds:
+                    for location in bulk_adds:
+                        content.locations.add(location.abstractlocation_ptr)
+                    content.save()
+                    sucesses_list.append("Added resource for " + row[0])
+                if created and bad_locations:
+                    failed_list.append({
+                        "type": "bad locations",
+                        "error message": f'bad locations at {row[0]} {" ,".join(bad_locations)}'
+                    })
+                elif not created:
+                    failed_list.append({
+                        "type": "bad row",
+                        "row name": row[0]
+                    })
+
+            self.message_user(request, ' '.join(sucesses_list))
+            self.message_user(request, ' '.join(failed_list))
+            return redirect("..")
+        form = CsvImportForm()
+        payload = {"form": form}
+        return render(request, "admin/import_resources.html", payload)
 
 
 @admin.register(FederalRegisterDocument)
