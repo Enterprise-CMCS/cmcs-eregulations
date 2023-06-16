@@ -226,6 +226,13 @@ $width-3xl: 1920px; // The largest the site container will get
     }
 }
 
+// 320px
+@mixin screen-eds-xs {
+    @media (min-width: #{$eds-width-xs}) {
+        @content;
+    }
+}
+
 // 375px, or iPhone X
 @mixin screen-xs {
     @media (min-width: #{$width-xs}) {
@@ -247,9 +254,30 @@ $width-3xl: 1920px; // The largest the site container will get
     }
 }
 
+// 780px
+@mixin screen-eds-sm {
+    @media (min-width: #{$eds-width-sm}) {
+        @content;
+    }
+}
+
 // 1024px
 @mixin screen-lg {
     @media (min-width: #{$width-lg}) {
+        @content;
+    }
+}
+
+// 1024px
+@mixin screen-eds-md {
+    @media (min-width: #{$eds-width-md}) {
+        @content;
+    }
+}
+
+// 1200px
+@mixin screen-eds-lg {
+    @media (min-width: #{$eds-width-lg}) {
         @content;
     }
 }
@@ -340,22 +368,13 @@ $width-3xl: 1920px; // The largest the site container will get
 @mixin external-link {
     width: 0.8em;
     height: 0.8em;
+    padding-left: 1px;
     margin-left: 0.1em;
-    padding-left: 1em;
-    content: "";
-    -webkit-mask: url(#{$eregs-image-path}/external-link.svg) no-repeat 50% 50%;
-    mask: url(#{$eregs-image-path}/external-link.svg) no-repeat 50% 50%;
-    -webkit-mask-size: 80%;
-    mask-size: 80%;
-    -webkit-mask-position: center;
-    mask-position: center;
-    background-color: $primary_link_color;
+    content: url(#{$eregs-image-path}/external-link.svg);
 }
 
 @mixin external-link-hover {
     @include external-link;
-
-    background-color: $primary_link_hover;
 }
 
 a {

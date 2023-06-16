@@ -1,0 +1,533 @@
+[
+    {
+        "section": "1004",
+        "title": "42",
+        "usc": "300gg-11",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Effective dates.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1101",
+        "title": "42",
+        "usc": "18001",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Immediate access to insurance for uninsured individuals with a preexisting condition.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1102",
+        "title": "42",
+        "usc": "18002",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Reinsurance for early retirees.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1103",
+        "title": "42",
+        "usc": "18003",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Immediate information that allows consumers to identify affordable coverage options.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1251",
+        "title": "42",
+        "usc": "18011",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Preservation of right to maintain existing coverage.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1252",
+        "title": "42",
+        "usc": "18012",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Rating reforms must apply uniformly to all health insurance issuers and group health plans.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1253",
+        "title": "42",
+        "usc": "18013",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Effective dates.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1301",
+        "title": "42",
+        "usc": "18021",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Qualified health plan defined.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1302",
+        "title": "42",
+        "usc": "18022",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Essential health benefits requirements.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1303",
+        "title": "42",
+        "usc": "18023",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Special rules.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1304",
+        "title": "42",
+        "usc": "18024",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Related definitions.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1311",
+        "title": "42",
+        "usc": "18031",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Affordable choices of health benefit plans.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1312",
+        "title": "42",
+        "usc": "18032",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Consumer choice.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1313",
+        "title": "42",
+        "usc": "18033",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Financial integrity.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1321",
+        "title": "42",
+        "usc": "18041",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "State flexibility in operation and enforcement of Exchanges and related requirements.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1322",
+        "title": "42",
+        "usc": "18042",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Federal program to assist establishment and operation of nonprofit, member-run health insurance issuers.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1323",
+        "title": "42",
+        "usc": "18043",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Community health insurance option.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1324",
+        "title": "42",
+        "usc": "18044",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Level playing field.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1331",
+        "title": "42",
+        "usc": "18051",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "State flexibility to establish basic health programs for low-income individuals not eligible for Medicaid.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1332",
+        "title": "42",
+        "usc": "18052",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Waiver for State innovation.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1333",
+        "title": "42",
+        "usc": "18053",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Provisions relating to offering of plans in more than one State.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1341",
+        "title": "42",
+        "usc": "18061",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Transitional reinsurance program for individual and small group markets in each State.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1342",
+        "title": "42",
+        "usc": "18062",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Establishment of risk corridors for plans in individual and small group markets.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1343",
+        "title": "42",
+        "usc": "18063",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Risk adjustment.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1402",
+        "title": "42",
+        "usc": "18071",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Reduced cost-sharing for individuals enrolling in qualified health plans.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1411",
+        "title": "42",
+        "usc": "18081",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Procedures for determining eligibility for Exchange participation, premium tax credits and reduced cost-sharing, and individual responsibility exemptions.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1412",
+        "title": "42",
+        "usc": "18082",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Advance determination and payment of premium tax credits and cost-sharing reductions.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1413",
+        "title": "42",
+        "usc": "18083",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Streamlining of procedures for enrollment through an exchange and State Medicaid, CHIP, and health subsidy programs.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1415",
+        "title": "42",
+        "usc": "18084",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Premium tax credit and cost-sharing reduction payments disregarded for Federal and Federally-assisted programs.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1551",
+        "title": "42",
+        "usc": "18111",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Definitions.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1552",
+        "title": "42",
+        "usc": "18112",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Transparency in government.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1553",
+        "title": "42",
+        "usc": "18113",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Prohibition against discrimination on assisted suicide.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1554",
+        "title": "42",
+        "usc": "18114",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Access to therapies.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1555",
+        "title": "42",
+        "usc": "18115",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Freedom not to participate in Federal health insurance programs.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1557",
+        "title": "42",
+        "usc": "18116",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Nondiscrimination.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1559",
+        "title": "42",
+        "usc": "18117",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Oversight.",
+        "statute_title": "I"
+    },
+    {
+        "section": "1560",
+        "title": "42",
+        "usc": "18118",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Rules of construction.",
+        "statute_title": "I"
+    },
+    {
+        "section": "2404",
+        "title": "42",
+        "usc": "1396r-5",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Protection for recipients of home and community-based services against spousal impoverishment.",
+        "statute_title": "II"
+    },
+    {
+        "section": "2602",
+        "title": "42",
+        "usc": "1315b",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Providing Federal coverage and payment coordination for dual eligible beneficiaries.",
+        "statute_title": "II"
+    },
+    {
+        "section": "2702",
+        "title": "42",
+        "usc": "1396b-1",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Payment Adjustment for Health Care-Acquired Conditions.",
+        "statute_title": "II"
+    },
+    {
+        "section": "3311",
+        "title": "42",
+        "usc": "1395w-154",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Improved Medicare prescription drug plan and MA\u2013PD plan complaint system.",
+        "statute_title": "III"
+    },
+    {
+        "section": "3502",
+        "title": "42",
+        "usc": "256a-1",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Establishing community health teams to support the patient-centered medical home.",
+        "statute_title": "III"
+    },
+    {
+        "section": "3508",
+        "title": "42",
+        "usc": "294j",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Demonstration program to integrate quality improvement and patient safety training into clinical education of health professionals.",
+        "statute_title": "III"
+    },
+    {
+        "section": "4001",
+        "title": "42",
+        "usc": "300u-10",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "National Prevention, Health Promotion and Public Health Council.",
+        "statute_title": "IV"
+    },
+    {
+        "section": "4002",
+        "title": "42",
+        "usc": "300u-11",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Prevention and Public Health Fund.",
+        "statute_title": "IV"
+    },
+    {
+        "section": "4004",
+        "title": "42",
+        "usc": "300u-12",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Education and outreach campaign regarding preventive benefits.",
+        "statute_title": "IV"
+    },
+    {
+        "section": "4201",
+        "title": "42",
+        "usc": "300u-13",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Community transformation grants.",
+        "statute_title": "IV"
+    },
+    {
+        "section": "4202",
+        "title": "42",
+        "usc": "300u-14",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Healthy aging, living well; evaluation of community-based prevention and wellness programs for Medicare beneficiaries.",
+        "statute_title": "IV"
+    },
+    {
+        "section": "4301",
+        "title": "42",
+        "usc": "300u-15",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Research on optimizing the delivery of public health services.",
+        "statute_title": "IV"
+    },
+    {
+        "section": "5101",
+        "title": "42",
+        "usc": "294q",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "National health care workforce commission.",
+        "statute_title": "V"
+    },
+    {
+        "section": "5102",
+        "title": "42",
+        "usc": "294r",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "State health care workforce development grants.",
+        "statute_title": "V"
+    },
+    {
+        "section": "6201",
+        "title": "42",
+        "usc": "1320a-7l",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Nationwide program for National and State background checks on direct patient access employees of long-term care facilities and providers.",
+        "statute_title": "VI"
+    },
+    {
+        "section": "10211",
+        "title": "42",
+        "usc": "18201",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Definitions.",
+        "statute_title": "X"
+    },
+    {
+        "section": "10212",
+        "title": "42",
+        "usc": "18202",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Establishment of pregnancy assistance fund.",
+        "statute_title": "X"
+    },
+    {
+        "section": "10213",
+        "title": "42",
+        "usc": "18203",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Permissible uses of Fund.",
+        "statute_title": "X"
+    },
+    {
+        "section": "10214",
+        "title": "42",
+        "usc": "18204",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Appropriations.",
+        "statute_title": "X"
+    },
+    {
+        "section": "10331",
+        "title": "42",
+        "usc": "1395w-5",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Public reporting of performance information.",
+        "statute_title": "X"
+    },
+    {
+        "section": "10407",
+        "title": "42",
+        "usc": "247b-9a",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Better diabetes care.",
+        "statute_title": "X"
+    },
+    {
+        "section": "10503",
+        "title": "42",
+        "usc": "254b-2",
+        "act": "Affordable Care Act",
+        "source_url": "http://test.com/test_aca.xml",
+        "name": "Community Health Centers and the National Health Service Corps Fund.",
+        "statute_title": "X"
+    }
+]

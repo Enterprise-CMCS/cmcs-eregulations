@@ -1,4 +1,5 @@
 import re
+from xml.dom import minidom
 
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
@@ -13,14 +14,33 @@ from solo.admin import SingletonModelAdmin
 from .models import SiteConfiguration, StatuteLinkConverter
 
 
+# Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
 MARKUP_PATTERN = r"</?[^>]+>"
-DASH_PATTERN = r"[—–]"
-CONVERSION_PATTERN = r"sec.?\s*(\d+[a-z0-9]*(?:-+[a-z0-9]+)?).?\s*\[\s*(\d+)\s*u.?s.?c.?\s*"\
-                     r"(\d+[a-z0-9]*(?:-+[a-z0-9]+)?)\s*\]"
 
-markup_regex = re.compile(MARKUP_PATTERN)
-dash_regex = re.compile(DASH_PATTERN)
-conversion_regex = re.compile(CONVERSION_PATTERN, re.IGNORECASE)
+# Finds all possible representations of dashes for replacement with the standard ASCII dash "-".
+DASH_PATTERN = r"[—–-–-]"
+
+# Finds section identifiers, e.g. "Sec. 1192", "Sec. 1192A-2g", etc.
+SECTION_PATTERN = rf"sec.?\s*(\d+[a-z0-9]*(?:{DASH_PATTERN}+[a-z0-9]+)?).?"
+
+# Finds section conversion patterns, e.g. "Sec. 1902 [42 U.S.C. 123B-2C]" and similar.
+CONVERSION_PATTERN = rf"{SECTION_PATTERN}\s*\[\s*(\d+)\s*u.?s.?c.?\s*(\d+[a-z0-9]*(?:{DASH_PATTERN}+[a-z0-9]+)?)\s*\]"
+
+# Finds title identifiers, e.g. "Title IX of the Social Security Act", "Title IX", "Title IX of the Act", etc.
+TITLE_PATTERN = rf"title\s+([a-z]+)\s*{DASH_PATTERN}*(?:\s+of\s+the\s+[a-z0-9\s]*?(?=\bact\b))?"
+
+# Finds section parts that are after a dash, e.g. "1902-1G" will match "1G".
+# Used when the "-1G" part is contained within another XML tag.
+# For example "<X>Sec 1902</X><Y>-1G. Name of this section</Y>".
+# This occurs frequently in the XML table of contents and so must be accounted for.
+SECTION_APPEND_PATTERN = rf"({DASH_PATTERN}+[a-z0-9]+)."
+
+MARKUP_REGEX = re.compile(MARKUP_PATTERN)
+DASH_REGEX = re.compile(DASH_PATTERN)
+SECTION_REGEX = re.compile(SECTION_PATTERN, re.IGNORECASE)
+CONVERSION_REGEX = re.compile(CONVERSION_PATTERN, re.IGNORECASE)
+TITLE_REGEX = re.compile(TITLE_PATTERN, re.IGNORECASE)
+SECTION_APPEND_REGEX = re.compile(SECTION_APPEND_PATTERN, re.IGNORECASE)
 
 
 @admin.register(SiteConfiguration)
@@ -39,8 +59,10 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             "fields": (
+                "statute_title",
                 "act",
                 "section",
+                "name",
                 "title",
                 "usc",
                 "source_url",
@@ -60,41 +82,98 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def import_conversions(self, text, url, act):
         conversions = []
-        text = markup_regex.sub("", text)  # Strips HTML/XML tags from the response text
-        text = dash_regex.sub("-", text)  # Replace em dash and en dash with regular dash
-        matches = conversion_regex.findall(text)
+        failures = []
+        toc = self.parse_toc(text)
+        text = MARKUP_REGEX.sub("", text)  # Strips HTML/XML tags from the response text
+        text = DASH_REGEX.sub("-", text)  # Replace em dash and en dash with regular dash
+        matches = CONVERSION_REGEX.findall(text)
+
         for section, title, usc in matches:
-            instance, created = self.model.objects.get_or_create(section=section, title=title, usc=usc, act=act, source_url=url)
+            data = {
+                "section": section,
+                "title": title,
+                "usc": usc,
+                "act": act,
+                "source_url": url,
+            }
+            if section in toc:
+                data["name"] = toc[section]["name"]
+                data["statute_title"] = toc[section]["statute_title"]
+            instance, created = self.model.objects.get_or_create(**data)
             if created:
-                conversions.append({
-                    "act": instance.act,
-                    "section": instance.section,
-                    "title": instance.title,
-                    "usc": instance.usc,
-                    "source_url": instance.source_url,
-                })
-        return conversions, len(matches)
+                data["id"] = instance.id
+                if section in toc:
+                    conversions.append(data)
+                else:
+                    failures.append(data)
+
+        return conversions, len(matches), failures
+
+    def parse_toc(self, text):
+        try:
+            dom = minidom.parseString(text)
+        except Exception as e:
+            raise ValidationError(f"invalid XML detected: {str(e)}")
+
+        # search for a title
+        title = None
+        for i in dom.getElementsByTagName("containsShortTitle"):
+            match = TITLE_REGEX.search(i.firstChild.nodeValue)
+            if match:
+                title = match.group(1).upper().strip()
+                break
+
+        # parse table of contents
+        toc = {}
+        for i in dom.getElementsByTagName("referenceItem"):
+            role = i.getAttribute("role")
+            if role == "title":
+                designator = i.getElementsByTagName("designator")
+                if not designator:
+                    raise ValidationError("invalid XML detected: 'referenceItem' does not have a 'designator'.")
+                match = TITLE_REGEX.search(designator[0].firstChild.nodeValue)
+                if not match:
+                    raise ValidationError("invalid XML detected: 'referenceItem' contains an invalid Title.")
+                title = match.group(1)
+            elif role == "section":
+                designator = i.getElementsByTagName("designator")
+                if not designator:
+                    continue
+                section = SECTION_REGEX.search(designator[0].firstChild.nodeValue)
+                label = i.getElementsByTagName("label")
+                if label and section and title:
+                    section = section.group(1)
+                    label = label[0].firstChild.nodeValue.strip()
+                    section_append = SECTION_APPEND_REGEX.match(label)
+                    if section_append:
+                        section += DASH_REGEX.sub("-", section_append.group(1).strip())
+                        label = SECTION_APPEND_REGEX.sub("", label).strip()
+                    toc[section] = {
+                        "name": label,
+                        "statute_title": title,
+                    }
+        return toc
 
     def try_import(self, url, act):
         if not url:
-            raise ValidationError("you must enter a URL!")
+            raise ValidationError("you must enter a URL.")
         if not act:
-            raise ValidationError("you must enter an Act, for example \"Social Security Act\"!")
+            raise ValidationError("you must enter an Act, for example \"Social Security Act\".")
 
         try:
             URLValidator(schemes=["http", "https"])(url)
         except ValidationError:
-            raise ValidationError(f"{url} is not a valid URL!" if url else "you must enter a URL!")
+            raise ValidationError(f"{url} is not a valid URL." if url else "you must enter a URL.")
 
         response = requests.get(url)
         response.raise_for_status()
-        conversions, matches = self.import_conversions(response.text, url, act)
-        if conversions:
-            return conversions
+        conversions, matches, failures = self.import_conversions(response.text, url, act)
+        if conversions or failures:
+            return conversions, failures
         if matches:
-            raise ValidationError(f"all conversions contained in {url} already exist!")
+            raise ValidationError(f"all conversions contained in {url} already exist.")
         else:
-            raise ValidationError(f"{url} did not contain any valid conversions!")
+            raise ValidationError(f"{url} did not contain any valid conversions.")
 
     def show_import_conversions_page(self, request):
         error = None
@@ -103,10 +182,11 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             url = request.POST.get("url", "").strip()
             act = request.POST.get("act", "").strip()
             try:
-                conversions = self.try_import(url, act)
+                conversions, failures = self.try_import(url, act)
                 return render(request, "admin/conversions_imported.html", context={
-                    "num_conversions": len(conversions),
+                    "num_conversions": len(conversions) + len(failures),
                     "conversions": conversions,
+                    "failures": failures,
                 })
             except ValidationError as e:
                 error = e.message
@@ -117,7 +197,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             num_conversions = request.POST.get("num_conversions", 0)
             app = self.model._meta.app_label
             model = self.model._meta.model_name
-            message = f"Failed to import: {error}" if error else f"Successfully imported {num_conversions} conversions!"
+            message = f"Failed to import: {error}" if error else f"Successfully imported {num_conversions} conversions."
             self.message_user(request, message, messages.ERROR if error else messages.SUCCESS)
             return HttpResponseRedirect(reverse(f"admin:{app}_{model}_changelist"))
 
