@@ -6,7 +6,6 @@ from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
-from regulations.views.homepage_prototype import HomepagePrototypeView
 from regulations.views.reader import (
      PartReaderView,
      SectionReaderView,
@@ -24,7 +23,6 @@ register_converter(converters.VersionConverter, 'version')
 
 urlpatterns = [
     path('', HomepageView.as_view(), name='homepage'),
-    path('homepage_test/', HomepagePrototypeView.as_view(), name='homepage_prototype'),
     path('about/', AboutView.as_view(), name='about'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),
