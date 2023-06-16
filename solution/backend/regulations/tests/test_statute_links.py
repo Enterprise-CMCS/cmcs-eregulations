@@ -30,6 +30,15 @@ def mocked_requests_get(*args, **kwargs):
             return MockResponse(200, data)
         except Exception as e:
             return MockResponse(400, str(e))
+    elif args[0] == "http://test.com/test_aca.xml":
+        try:
+            data = ""
+            with open("regulations/tests/fixtures/statute_link_data_aca.xml", "r") as f:
+                for line in f:
+                    data += line
+            return MockResponse(200, data)
+        except Exception as e:
+            return MockResponse(400, str(e))
     elif args[0] == "http://test.com/invalid.xml":
         return MockResponse(200, "Hello World")
     return MockResponse(404, "invalid URL")
@@ -37,42 +46,52 @@ def mocked_requests_get(*args, **kwargs):
 
 class TestStatuteLinkImport(TestCase):
     @mock.patch("requests.get", side_effect=mocked_requests_get)
-    def test_try_import(self, mocked_get):
+    def test_try_import_single_title(self, mocked_get):
         with open("regulations/tests/fixtures/statute_link_golden.json", "r") as f:
             golden = json.load(f)
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
-        conversions = admin.try_import("http://test.com/test.xml", "SSA")
+        conversions, failures = admin.try_import("http://test.com/test.xml", "Social Security Act")
+        all = conversions + failures
+        for i in all:
+            del i["id"]
         # Despite the name, assertCountEqual does make sure all items in the list are the same, not just the count.
         # It just supports lists that are out of order, unlike assertEqual.
-        self.assertCountEqual(conversions, golden)
+        self.assertCountEqual(all, golden)
+
+    @mock.patch("requests.get", side_effect=mocked_requests_get)
+    def test_try_import_multiple_titles(self, mocked_get):
+        with open("regulations/tests/fixtures/statute_link_golden_aca.json", "r") as f:
+            golden = json.load(f)
+        admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
+        conversions, failures = admin.try_import("http://test.com/test_aca.xml", "Affordable Care Act")
+        all = conversions + failures
+        for i in all:
+            del i["id"]
+        # Despite the name, assertCountEqual does make sure all items in the list are the same, not just the count.
+        # It just supports lists that are out of order, unlike assertEqual.
+        self.assertCountEqual(all, golden)
 
     @mock.patch("requests.get", side_effect=mocked_requests_get)
     def test_try_import_404(self, mocked_get):
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
         with self.assertRaises(HTTPError):
-            _ = admin.try_import("http://test.com/bad-link.xml", "SSA")
+            _ = admin.try_import("http://test.com/bad-link.xml", "Social Security Act")
 
     @mock.patch("requests.get", side_effect=mocked_requests_get)
     def test_try_import_conversions_exist(self, mocked_get):
         with open("regulations/tests/fixtures/statute_link_golden.json", "r") as f:
             golden = json.load(f)
         for i in golden:
-            StatuteLinkConverter.objects.create(
-                title=i["title"],
-                section=i["section"],
-                usc=i["usc"],
-                act=i["act"],
-                source_url=i["source_url"]
-            )
+            StatuteLinkConverter.objects.create(**i)
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
         with self.assertRaises(ValidationError):
-            _ = admin.try_import("http://test.com/test.xml", "SSA")
+            _ = admin.try_import("http://test.com/test.xml", "Social Security Act")
 
     @mock.patch("requests.get", side_effect=mocked_requests_get)
     def test_try_import_no_conversions(self, mocked_get):
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
         with self.assertRaises(ValidationError):
-            _ = admin.try_import("http://test.com/invalid.xml", "SSA")
+            _ = admin.try_import("http://test.com/invalid.xml", "Social Security Act")
 
     @mock.patch("requests.get", side_effect=mocked_requests_get)
     def test_try_import_bad_params(self, mocked_get):
