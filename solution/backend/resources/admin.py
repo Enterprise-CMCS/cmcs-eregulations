@@ -430,17 +430,18 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
         ]
         return my_urls + urls
 
-    def show_import_resources_page(self, request):
-        if request.method == "POST":
-            categories = AbstractCategory.objects.all()
+    def check_required_fields(self, row):
+        print(row)
+        return row[0] and row[2]
 
-            csv_file = request.FILES["csv_file"].file
-            reader = csv.reader(csv_file.read().decode('utf8').splitlines(),
-                                quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
-            next(reader)
-            failed_list = []
-            sucesses_list = []
-            for row in reader:
+    def add_content(self, reader):
+        categories = AbstractCategory.objects.all()
+        successes = []
+        failures = []
+
+        next(reader)
+        for row in reader:
+            if self.check_required_fields(row):
                 bulk_adds, bad_locations = self.get_bulk_locations(row[4])
                 category = categories.get(name__iexact=row[3])
                 content, created = SupplementalContent.objects.get_or_create(
@@ -450,25 +451,34 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                     approved=False,
                     category=category,
                 )
-                if created and bulk_adds:
+            else:
+                created = False
+            if created:
+                if bulk_adds:
                     for location in bulk_adds:
                         content.locations.add(location.abstractlocation_ptr)
                     content.save()
-                    sucesses_list.append("Added resource for " + row[0])
-                if created and bad_locations:
-                    failed_list.append({
-                        "type": "bad locations",
-                        "error message": f'bad locations at {row[0]} {" ,".join(bad_locations)}'
-                    })
-                elif not created:
-                    failed_list.append({
-                        "type": "bad row",
-                        "row name": row[0]
-                    })
+                    successes.append("Added resource for " + row[0])
+                elif bad_locations:
+                    failures.append(f'Bad locations for {row[0]} {" ,".join(bad_locations)}')
+                else:
+                    successes.append(f"Created content for {row[0]}")
+                if not category:
+                    failures.append(f'Could not add category for {row[0]}')
+            elif not created:
+                failures.append(f'Could not add row {row[0]}')
+        return successes, failures
 
-            self.message_user(request, ' '.join(sucesses_list))
-            self.message_user(request, ' '.join(failed_list))
-            return redirect("..")
+    def show_import_resources_page(self, request):
+        if request.method == "POST":
+            csv_file = request.FILES["csv_file"].file
+            reader = csv.reader(csv_file.read().decode('utf8').splitlines(),
+                                quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            successes, failures = self.add_content(reader)
+
+            self.message_user(request, ' '.join(successes))
+            self.message_user(request, ' '.join(failures))
+            return render(request, "admin/resources_imported.html")
         form = CsvImportForm()
         payload = {"form": form}
         return render(request, "admin/import_resources.html", payload)
