@@ -430,9 +430,9 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
         ]
         return my_urls + urls
 
+    # Checks to see that there are atleast name and url
     def check_required_fields(self, row):
-        print(row)
-        return row[0] and row[2]
+        return len(row) >= 3 and row[0]
 
     def add_content(self, reader):
         categories = AbstractCategory.objects.all()
@@ -442,15 +442,21 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
         next(reader)
         for row in reader:
             if self.check_required_fields(row):
-                bulk_adds, bad_locations = self.get_bulk_locations(row[4])
-                category = categories.get(name__iexact=row[3])
-                content, created = SupplementalContent.objects.get_or_create(
-                    name=row[0],
-                    description=row[1],
-                    url=row[2],
-                    approved=False,
-                    category=category,
-                )
+                try:
+                    bulk_adds, bad_locations = self.get_bulk_locations(row[4])
+                    try:
+                        category = categories.get(name__iexact=row[3])
+                    except AbstractCategory.DoesNotExist:
+                        category = None
+                    content, created = SupplementalContent.objects.get_or_create(
+                        name=row[0],
+                        description=row[1],
+                        url=row[2],
+                        approved=False,
+                        category=category,
+                    )
+                except Exception:
+                    created = False
             else:
                 created = False
             if created:
@@ -467,11 +473,14 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                 failed_resources.append(row)
         return added_resources, failed_resources
 
+    def resource_reader(self, csv_file):
+        return csv.reader(csv_file.read().decode('utf8').splitlines(),
+                          quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+
     def show_import_resources_page(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"].file
-            reader = csv.reader(csv_file.read().decode('utf8').splitlines(),
-                                quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            reader = self.resource_reader(csv_file)
             successes, failures = self.add_content(reader)
 
             return render(request, "admin/resources_imported.html", context={
