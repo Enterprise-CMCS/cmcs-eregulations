@@ -16,7 +16,7 @@ from django.db.models import (
     When,
 )
 from django.forms.widgets import Textarea
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
@@ -436,8 +436,8 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
 
     def add_content(self, reader):
         categories = AbstractCategory.objects.all()
-        successes = []
-        failures = []
+        added_resources = []
+        failed_resources = []
 
         next(reader)
         for row in reader:
@@ -454,20 +454,18 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
             else:
                 created = False
             if created:
+                resource = {"name": row[0], "category": "", "added_locations": bulk_adds, "failed_locations": bad_locations}
                 if bulk_adds:
                     for location in bulk_adds:
                         content.locations.add(location.abstractlocation_ptr)
                     content.save()
-                    successes.append("Added resource for " + row[0])
-                elif bad_locations:
-                    failures.append(f'Bad locations for {row[0]} {" ,".join(bad_locations)}')
-                else:
-                    successes.append(f"Created content for {row[0]}")
-                if not category:
-                    failures.append(f'Could not add category for {row[0]}')
+
+                resource["category"] = category if category else f"Invalid category: { row[3] }"
+
+                added_resources.append(resource)
             elif not created:
-                failures.append(f'Could not add row {row[0]}')
-        return successes, failures
+                failed_resources.append(row)
+        return added_resources, failed_resources
 
     def show_import_resources_page(self, request):
         if request.method == "POST":
@@ -476,9 +474,10 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                                 quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             successes, failures = self.add_content(reader)
 
-            self.message_user(request, ' '.join(successes))
-            self.message_user(request, ' '.join(failures))
-            return render(request, "admin/resources_imported.html")
+            return render(request, "admin/resources_imported.html", context={
+                "added_resources": successes,
+                "failures": failures,
+            })
         form = CsvImportForm()
         payload = {"form": form}
         return render(request, "admin/import_resources.html", payload)

@@ -3,7 +3,29 @@
 {% block content %}
     <form action="" method="POST">
         {% csrf_token %}
+        {% if added_resources %}
         <p>The following supplemental content have been imported:</p>
+        <table>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Added locations</th>
+            <th>Unknown locations</th>
+            {% for resource in added_resources %}
+                <tr>
+                    <td>{{ resource.name }}</td>
+                    <td>{{ resource.category }}</td>
+                    <td>{{ resource.added_locations }}</td>
+                    <td>{{ resource.failed_locations }}</td>
+                <tr>
+        </table>
+            {%endfor%}
+        {%endif%}
+        {% if failures %}
+            Unable to add the following rows:
+            {% for failure in failures %}
+                {{ failure }}
+            {% endfor %}
+        {%endif%}
         <ul>
         </ul>
     </form>
