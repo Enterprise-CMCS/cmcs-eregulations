@@ -3,10 +3,12 @@ import os
 import re
 import requests
 
+from itertools import chain
+
 import urllib.parse as urlparse
 from drf_spectacular.utils import extend_schema
 from django.db import transaction
-from django.db.models import Case, When, F, Prefetch
+from django.db.models import Case, When, F, Prefetch, Q
 from django.http import JsonResponse
 from requests.exceptions import ConnectTimeout
 from rest_framework import viewsets
@@ -96,9 +98,14 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             raise ParseError("Error retrieving proper data from search.gov")
         self.format_gov_results(gov_results)
 
-    # There might be missing resources in dev than prod so their could be missing urls
+    # Search.gov does not have the full urls so we need to split at the # for the index
     def sort_by_url_list(self, urls, resources):
-        res_index = {res.url: res for res in resources}
+        res_index = {}
+        for r in resources:
+            if r.url.split("#")[0] in res_index:
+                res_index[r.url.split("#")[0]].append(r)
+            else:
+                res_index[r.url.split("#")[0]] = [r]
         sorted_vals = []
         for url in urls:
             sorted_vals.append(res_index[url]) if url in res_index else None
@@ -109,10 +116,18 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
 
+        url_filters = [Q(url_annotated__istartswith=url) for url in urls]
+        # gets thes first of the list to being the query set
+        url_query = url_filters.pop()
+
+        # now we are combining the remaing ones by putting an or statement in between.
+        # So now its like url_annotate_starts with url 1 or url annotated starts with url2 etc.
+        for url in url_filters:
+            url_query |= url
         query = AbstractResource.objects \
             .filter(approved=True) \
             .annotate(url_annotated=self.get_annotated_url()) \
-            .filter(url_annotated__in=urls) \
+            .filter(url_query) \
             .select_subclasses().prefetch_related(
                 Prefetch("locations", queryset=locations_prefetch),
                 Prefetch("category", queryset=category_prefetch),
@@ -125,8 +140,8 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         return self.sort_by_url_list(urls, query)
 
     def append_snippet(self, queryset, urls):
-        for q in queryset:
-            q.snippet = urls[q.url]
+        for resource in queryset:
+            resource.snippet = urls[resource.url.split("#")[0]]
         return queryset
 
     def generate_page_url(self, url, page):
@@ -157,7 +172,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
         self.get_gov_results(q, page)
         urls = dict([(i['url'], i["snippet"]) for i in self.gov_results["results"]])
         queryset = self.get_queryset(urls.keys())
-        resources = list(queryset)
+        resources = list(chain.from_iterable(queryset))
         records = self.append_snippet(resources, urls)
 
         obj = self.result_object(url, records, page)

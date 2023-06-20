@@ -281,7 +281,13 @@ const setCacheItem = async (key, data) => {
 const getPartTOC = async (title, part) =>
     httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
 
-const getCategories = async () => httpApiGet("resources/categories");
+const getCategories = async (apiUrl) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}resources/categories`);
+    }
+
+    return httpApiGet("resources/categories");
+}
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
@@ -336,14 +342,14 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
 };
 /**
  * Gets the three most recent resources of a type.
- * @param {*} apiURL  -base url for the api
+ * @param {*} apiURL - base url for the api
  * @param {*} type  - type of resource, fr doc or not
  * @returns 3 resources
  */
-const getRecentResources = async (apiURL, { page = 1, pageSize = 3 }, type) => {
+const getRecentResources = async (apiURL, { page = 1, pageSize = 3, type = "rules", categories }) => {
     if (type !== "rules") {
         return httpApiGetLegacy(
-            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true`,
+            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true${categories}`,
             {}, // params, default
             apiURL
         );

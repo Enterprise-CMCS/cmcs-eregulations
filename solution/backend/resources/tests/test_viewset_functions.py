@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, timedelta
-
+from itertools import chain
 from django.test import TestCase
 from rest_framework.exceptions import NotFound
 
@@ -9,7 +9,6 @@ from resources.models import (
     FederalRegisterDocumentGroup,
     SupplementalContent,
 )
-from resources.views.mixins import FRDocGroupingMixin
 from resources.views.resources import ResourceSearchViewSet
 
 
@@ -27,13 +26,15 @@ class TestMixinFunctions(TestCase):
         FederalRegisterDocument.objects.create(id=4, group=c, date=today)
         FederalRegisterDocument.objects.create(id=5, group=b, date=today)
         SupplementalContent.objects.create(id=6, date=today)
-        self.FRDocGroupingMixin = FRDocGroupingMixin()
+        SupplementalContent.objects.create(id=7, date=yesterday, url='www.site4url.com#1')
+        SupplementalContent.objects.create(id=8, date=yesterday, url='www.site4url.com#2')
 
     def test_search_gov_ordering(self):
         urls = ['www.site1url.com', 'www.site2url.com', 'www.site3url.com']
         resources = FederalRegisterDocument.objects.filter(id__in=[1, 2, 3])
         test_view_set = ResourceSearchViewSet()
         ordered_resources = test_view_set.sort_by_url_list(urls, resources)
+        ordered_resources = list(chain.from_iterable(ordered_resources))
         self.assertEqual(ordered_resources[1], FederalRegisterDocument.objects.get(id=1))
         self.assertEqual(ordered_resources[0], FederalRegisterDocument.objects.get(id=2))
         self.assertEqual(ordered_resources[2], FederalRegisterDocument.objects.get(id=3))
@@ -69,11 +70,30 @@ class TestMixinFunctions(TestCase):
         with open("resources/tests/fixtures/url_snippet_dict.json") as f:
             urls = json.load(f)
         ordered_resources = test_view_set.sort_by_url_list(urls.keys(), resources)
-        results = test_view_set.append_snippet(ordered_resources, urls)
+        resources = list(chain.from_iterable(ordered_resources))
+        results = test_view_set.append_snippet(resources, urls)
         num = 1
         for r in results:
             self.assertEqual(f'...site{num} snippet', r.snippet)
             num = num + 1
+
+    def test_append_snippet_dup(self):
+        test_view_set = ResourceSearchViewSet()
+        resources = list(SupplementalContent.objects.filter(id__in=[7, 8]))
+        with open("resources/tests/fixtures/url_snippet_dict_page.json") as f:
+            urls = json.load(f)
+
+        ordered_resources = test_view_set.sort_by_url_list(urls.keys(), resources)
+        resources = list(chain.from_iterable(ordered_resources))
+        results = test_view_set.append_snippet(resources, urls)
+
+        num = 4
+        page = 1
+        self.assertEqual(len(results), 2)
+        for r in results:
+            self.assertEqual(f'...site{num} snippet', r.snippet)
+            self.assertEqual(f'www.site{num}url.com#{page}', r.url)
+            page = page + 1
 
     def test_queryset(self):
         with open("resources/tests/fixtures/url_snippet_dict.json") as f:
