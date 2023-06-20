@@ -39,7 +39,7 @@ def handler(event, context):
     ]
 
     # First delete all instances of models that we're populating
-    for fixture in fixtures:
+    for fixture in reversed(fixtures):
         fixture[1].objects.all().delete()
 
     # Now load the fixtures

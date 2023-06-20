@@ -39,7 +39,7 @@ jobs:
       - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
-          python-version: '3.8'
+          python-version: "3.9"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -73,7 +73,6 @@ jobs:
           npm install
           serverless deploy --stage dev${PR}
           popd
-
   deploy-django:
     environment:
       name: "dev"
@@ -103,7 +102,7 @@ jobs:
       - uses: actions/setup-python@v4
         if: success() && steps.findPr.outputs.number
         with:
-          python-version: '3.8'
+          python-version: "3.9"
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
@@ -127,7 +126,49 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev${PR}
           echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
           popd
-
+  test-python:
+    needs: [deploy-django]
+    runs-on: ubuntu-20.04
+    env:
+      STATIC_URL: http://localhost:8888/
+      DB_HOST: localhost
+      DB_NAME: eregs
+      DB_USER: eregs
+      DB_PASSWORD: sgere
+      DB_PORT: 5432
+    services:
+      postgres:
+        image: postgres
+        env:
+          STATIC_URL: http://localhost:8888/
+          POSTGRES_HOST: localhost
+          POSTGRES_DB: eregs
+          POSTGRES_USER: eregs
+          POSTGRES_PASSWORD: sgere
+        ports:
+          - 5432:5432
+          # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      # checkout the code
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      # setup Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./solution/static-assets/requirements.txt
+      # run Python unit tests
+      - name: Run Python unit tests
+        working-directory: ./solution/backend
+        run: |
+          pytest -vv
   build-and-deploy-vue:
     environment:
       name: "dev"
@@ -150,7 +191,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version:
+            18.14
+            # setup python
+      - uses: actions/setup-python@v4
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: "3.9"
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -209,7 +256,7 @@ jobs:
         if: success() && steps.findPr.outputs.number
         uses: actions/setup-go@v2
         with:
-          go-version: '^1.16' # The Go version to download (if necessary) and use.
+          go-version: "^1.16" # The Go version to download (if necessary) and use.
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
@@ -263,9 +310,9 @@ jobs:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
             :sparkles: See the Django Site [in action][1] :sparkles:
-            
+
             [1]: ${{ env.django_url }}
-          reactions: '+1'
+          reactions: "+1"
   test-cypress:
     needs: [deploy-go, deploy-django, build-and-deploy-vue]
     runs-on: ubuntu-20.04
