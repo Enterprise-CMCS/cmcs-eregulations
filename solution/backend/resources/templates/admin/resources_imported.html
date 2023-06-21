@@ -1,35 +1,29 @@
-{% extends "admin/base_site.html" %}
-
-{% block content %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        {% if error %}
-            {{ error }}
-        {% endif %}
-        {% if added_resources %}
-            <p>The following supplemental content have been imported:</p>
-            <table>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Added locations</th>
-                <th>Unknown locations</th>
-                {% for resource in added_resources %}
-                    <tr>
-                        <td>{{ resource.name }}</td>
-                        <td>{{ resource.category }}</td>
-                        <td>{{ resource.added_locations }}</td>
-                        <td>{{ resource.failed_locations }}</td>
-                    </tr>
-                {%endfor%}
-            </table><br>
-        {%endif%}
-        {% if failures %}
-            Unable to add the following rows:<br>
-            {% for failure in failures %}
-                {{ failure }}
-            {% endfor %}
-        {%endif%}
-        <ul>
-        </ul>
-    </form>
+{% extends "admin/base_site.html" %} {% block content %}
+<form action="" method="POST">
+    {% csrf_token %} {% if error %} {{ error }} {% endif %} {% if
+    added_resources %}
+    <p>The following supplemental content have been imported:</p>
+    <table>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Added locations</th>
+        <th>Unknown locations</th>
+        {% for resource in added_resources %}
+        <tr>
+            <td>{{ resource.name }}</td>
+            <td>{{ resource.category }}</td>
+            <td>{{ resource.added_locations }}</td>
+            <td>{{ resource.failed_locations }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br />
+    {%endif%} {% if failures %} Unable to add the following rows:<br />
+    <ul>
+        {% for failure in failures %}
+        <li>{{ failure }}</li>
+        {% endfor %}
+    </ul>
+    {%endif%}
+</form>
 {% endblock %}
