@@ -1,11 +1,25 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
+<form action="." method="GET" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p>The csv is required to have the following fields in order. Name, decription, url, category, and locations.</p>
+    <p>You can get a copy of the template by clicking get template. </p>
+    <p><input type="submit" name="get_template" value="Get template"/>
+    <p> CSV's seperate fields by commas.  If you use google sheets or excel to make the csv you dont need to worry but if you use a text editor have the format be like below:</p>
+    Name, Description, URL, Category, locations <br>
+    conent-1, description-1, url-1, category-1, "location-1, location-2, location-3"<br><br>
+
+    Locations need to be in the following format: <br>
+    titlenumber CFR Partnumber sectionnumber or subpart(ex 42 CFR 400 200, 42 CFR 400 subpart b) <br>
+    titlenumber partnumber.sectionnumber(ex 42 400.200, 42 400 subpart b)<br>
+
+</form>
     <form action="." method="post" enctype="multipart/form-data">
         {{ form.as_p }}
         {% csrf_token %}
-        <p>Get a copy of the template to use by clicking get template. </br> Upload the content by using import resources</p>
-        <p><input type="submit" name="get_template" value="Get template"/>
+        <p> Upload the content by using import resources</p><br>
+        <p> After submission you will be redirected to a new page to show the results of the import as well as any errors </p>
         <input type="submit" name="import" value="Import Resources"/></p>
     </form>
 {% endblock %}

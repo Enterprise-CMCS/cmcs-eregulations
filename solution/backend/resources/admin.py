@@ -1,6 +1,8 @@
 import json
 import re
 import csv
+
+from django.http import HttpResponse
 from django.urls import path, reverse
 from django import forms
 from django.apps import apps
@@ -410,7 +412,7 @@ class FederalResourceForm(ResourceForm):
 
 
 class CsvImportForm(forms.Form):
-    csv_file = forms.FileField()
+    csv_file = forms.FileField(widget=forms.FileInput(attrs={'accept': ".csv"}))
 
 
 @admin.register(SupplementalContent)
@@ -433,6 +435,14 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     # Checks to see that there are atleast name and url
     def check_required_fields(self, row):
         return len(row) >= 3 and row[0]
+
+    def resource_link(self, obj):
+        display_text = "<a href={}>{}</a>".format(
+                                  reverse('admin:{}_{}_change'.format("resources", "supplementalcontent"),
+                                          args=(obj.id,)), obj.name)
+        if display_text:
+            return mark_safe(display_text)
+        return "-"
 
     def add_content(self, reader):
         categories = AbstractCategory.objects.all()
@@ -460,7 +470,9 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
             else:
                 created = False
             if created:
-                resource = {"name": row[0], "category": "", "added_locations": bulk_adds, "failed_locations": bad_locations}
+                link = self.resource_link(content)
+
+                resource = {"name": link, "category": "", "added_locations": bulk_adds, "failed_locations": bad_locations}
                 if bulk_adds:
                     for location in bulk_adds:
                         content.locations.add(location.abstractlocation_ptr)
@@ -478,6 +490,15 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                           quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
 
     def show_import_resources_page(self, request):
+        if "get_template" in request.GET:
+            columns = ["name", "description", "url", "category", "locations"]
+            response = HttpResponse(
+                content_type="text/csv",
+                headers={"Content-Disposition": 'attachment; filename="content_upload.csv"'},
+            )
+            writer = csv.writer(response)
+            writer.writerow(columns)
+            return response
         if request.method == "POST":
             csv_file = request.FILES["csv_file"].file
             reader = self.resource_reader(csv_file)
