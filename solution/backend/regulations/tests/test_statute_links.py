@@ -140,40 +140,11 @@ class LinkStatutesTestCase(SimpleTestCase):
 
 
 class StatuteConvertersAPITestCase(APITestCase):
-    objects = [
-        {
-            "section": "10211",
-            "title": 42,
-            "usc": "18201",
-            "act": "Affordable Care Act",
-            "name": "Definitions.",
-            "statute_title": "X",
-            "source_url": "https://test.gov/test.xml",
-        },
-        {
-            "section": "11111",
-            "title": 45,
-            "usc": "12345",
-            "act": "Social Security Act",
-            "name": "Something",
-            "statute_title": "Y",
-            "source_url": "https://test.gov/test2.xml",
-        },
-        {
-            "section": "7890",
-            "title": 42,
-            "usc": "77777",
-            "act": "Social Security Act",
-            "name": "Something else.",
-            "statute_title": "Z",
-            "source_url": "https://test.gov/test3.xml",
-        },
-    ]
-
-    @classmethod
-    def setUpTestData(cls):
-        for i in StatuteConvertersAPITestCase.objects:
-            StatuteLinkConverter.objects.create(**i)
+    def setUp(self):
+        with open("regulations/tests/fixtures/statute_link_api_test.json", "r") as f:
+            self.objects = json.load(f)
+            for i in self.objects:
+                StatuteLinkConverter.objects.create(**i)
 
     def test_all_statutes(self):
         response = self.client.get("/v3/statutes")
