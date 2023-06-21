@@ -166,7 +166,6 @@ class AbstractResourceAdmin(BaseAdmin):
         )
 
     def get_bulk_locations(self, bulk_locations, bulk_title=""):
-        ('get_bulks')
         bulk_adds = []
         bad_locations = []
         split_locations = bulk_locations.split(",")
@@ -174,8 +173,6 @@ class AbstractResourceAdmin(BaseAdmin):
             a = self.build_location(location.strip(), bulk_title)
             if a:
                 bulk_adds.append(a)
-                # form.instance.locations.add(a.abstractlocation_ptr)
-                # bulk_adds.append(AbstractLocationPolymorphicSerializer(a).data)
             else:
                 bad_locations.append(location)
         return bulk_adds, bad_locations
