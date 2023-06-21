@@ -100,5 +100,5 @@ class TestAdminFunctions(TestCase):
         row1 = {"name": "<a href=/admin/resources/supplementalcontent/1/change/ target='blank'>content-1</a>",
                 "category": good_category, "added_locations": [good_section], "failed_locations": [" 200"]}
         self.assertEqual(results[0][0], row1)
-        self.assertEqual(results[1], [['content-2']])
+        self.assertEqual(results[1], [{'row': ['content-2'], 'line_number': 3}])
         self.assertEqual(results[0][1]["category"], "Invalid category: dkfjdlkfjd")
