@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %} {% block content %}
 <form action="" method="POST">
-    {% csrf_token %} {% if error %} {{ error }} {% endif %} {% if
-    added_resources %}
+    {% csrf_token %} {% if error %} {{ error }} {% endif %} 
+    {% if added_resources %}
     <p>The following supplemental content have been imported:</p>
     <table>
         <th>Name</th>
@@ -21,7 +21,7 @@
     {%endif%} {% if failures %} Unable to add the following rows:<br />
     <ul>
         {% for failure in failures %}
-        <li>{{ failure }}</li>
+        <li>Row: {{ failure.line_number }} Data: {{ failure.row }}</li>
         {% endfor %}
     </ul>
     {%endif%}
