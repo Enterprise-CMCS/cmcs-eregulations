@@ -434,7 +434,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
         return len(row) >= 3 and row[0]
 
     def resource_link(self, obj):
-        display_text = "<a href={}>{}</a>".format(
+        display_text = "<a href={} target='blank'>{}</a>".format(
                                   reverse('admin:{}_{}_change'.format("resources", "supplementalcontent"),
                                           args=(obj.id,)), obj.name)
         if display_text:
@@ -468,7 +468,6 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                 created = False
             if created:
                 link = self.resource_link(content)
-
                 resource = {"name": link, "category": "", "added_locations": bulk_adds, "failed_locations": bad_locations}
                 if bulk_adds:
                     for location in bulk_adds:
@@ -476,7 +475,6 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                     content.save()
 
                 resource["category"] = category if category else f"Invalid category: { row[3] }"
-
                 added_resources.append(resource)
             elif not created:
                 failed_resources.append(row)
@@ -497,13 +495,19 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
             writer.writerow(columns)
             return response
         if request.method == "POST":
-            csv_file = request.FILES["csv_file"].file
-            reader = self.resource_reader(csv_file)
-            successes, failures = self.add_content(reader)
+            successes, failures = [], []
+            error = None
+            try:
+                csv_file = request.FILES["csv_file"].file
+                reader = self.resource_reader(csv_file)
+                successes, failures = self.add_content(reader)
+            except Exception:
+                error = "Something went wrong.  Please check that the file you are trying to upload is a csv and not corrupted."
 
             return render(request, "admin/resources_imported.html", context={
                 "added_resources": successes,
                 "failures": failures,
+                "error": error
             })
         form = CsvImportForm()
         payload = {"form": form}

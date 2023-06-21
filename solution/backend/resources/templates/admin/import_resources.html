@@ -3,16 +3,27 @@
 {% block content %}
 <form action="." method="GET" enctype="multipart/form-data">
     {% csrf_token %}
-    <p>The csv is required to have the following fields in order. Name, decription, url, category, and locations.</p>
+    <p>The csv is required to have the following fields in order:</p>
+    <table>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Url</th>
+        <th>Category</th>
+        <th>locations</th>
+    </table><br>
     <p>You can get a copy of the template by clicking get template. </p>
     <p><input type="submit" name="get_template" value="Get template"/>
     <p> CSV's seperate fields by commas.  If you use google sheets or excel to make the csv you dont need to worry but if you use a text editor have the format be like below:</p>
+        <code>
     Name, Description, URL, Category, locations <br>
     conent-1, description-1, url-1, category-1, "location-1, location-2, location-3"<br><br>
-
+    </code>
     Locations need to be in the following format: <br>
-    titlenumber CFR Partnumber sectionnumber or subpart(ex 42 CFR 400 200, 42 CFR 400 subpart b) <br>
-    titlenumber partnumber.sectionnumber(ex 42 400.200, 42 400 subpart b)<br>
+    <ul>
+        <li>TitleNumber CFR PartNumber SectionNumber or subpart(ex 42 CFR 400 200, 42 CFR 400 subpart b) </li>
+        <li>TitleNumber PartNumber.SectionNumber(ex 42 400.200)</li>
+        <li>TitleNumber PartNumber SectionNumber or Subpart(ex 42 400 200, 42 400 subpart A)
+    </ul>
 
 </form>
     <form action="." method="post" enctype="multipart/form-data">

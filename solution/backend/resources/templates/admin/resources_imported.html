@@ -3,6 +3,9 @@
 {% block content %}
     <form action="" method="POST">
         {% csrf_token %}
+        {% if error %}
+            {{ error }}
+        {% endif %}
         {% if added_resources %}
         <p>The following supplemental content have been imported:</p>
         <table>
@@ -21,7 +24,7 @@
             {%endfor%}
         {%endif%}
         {% if failures %}
-            Unable to add the following rows:
+            Unable to add the following rows:<br>
             {% for failure in failures %}
                 {{ failure }}
             {% endfor %}
