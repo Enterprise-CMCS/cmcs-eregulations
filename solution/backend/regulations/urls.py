@@ -43,8 +43,8 @@ urlpatterns = [
     path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
     path('cache/', CacheView.as_view(), name='cache'),
     path('resources/', ResourcesView.as_view(), name='resources'),
+    path('statutes/', StatuteView.as_view(), name='statues'),
     path('v3/statutes', StatuteLinkConverterViewSet.as_view({
         "get": "list",
     })),
-    path('statutes/', StatuteView.as_view(), name='statues'),
 ]
