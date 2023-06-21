@@ -477,7 +477,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                 resource["category"] = category if category else f"Invalid category: { row[3] }"
                 added_resources.append(resource)
             elif not created:
-                failed_resources.append({"row":row, "line_number": reader.line_num})
+                failed_resources.append({"row": row, "line_number": reader.line_num})
         return added_resources, failed_resources
 
     def resource_reader(self, csv_file):
