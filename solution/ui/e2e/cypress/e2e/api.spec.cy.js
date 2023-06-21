@@ -7,6 +7,7 @@ const SECTION = 10;
 const VERSION = "latest";
 const SYNONYM = "synonym";
 const SEARCH_TERM = "FMAP";
+const ACT = "Social Security Act";
 
 const SYNONYMS_ENDPOINT = "/v3/synonyms?q=";
 const SPECIAL_CHARACTERS = [
@@ -50,6 +51,8 @@ const API_ENDPOINTS_V3 = [
     `/v3/titles`,
     `/v3/toc`,
     `/v3/search?q=${SEARCH_TERM}`,
+    `/v3/statutes`,
+    `/v3/statutes?act=${ACT}`,
 ];
 
 describe("API testing", () => {
