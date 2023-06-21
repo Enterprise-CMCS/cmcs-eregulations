@@ -1,0 +1,29 @@
+[
+    {
+        "section": "10211",
+        "title": 42,
+        "usc": "18201",
+        "act": "Affordable Care Act",
+        "name": "Definitions.",
+        "statute_title": "X",
+        "source_url": "https://test.gov/test.xml"
+    },
+    {
+        "section": "11111",
+        "title": 45,
+        "usc": "12345",
+        "act": "Social Security Act",
+        "name": "Something",
+        "statute_title": "Y",
+        "source_url": "https://test.gov/test2.xml"
+    },
+    {
+        "section": "7890",
+        "title": 42,
+        "usc": "77777",
+        "act": "Social Security Act",
+        "name": "Something else.",
+        "statute_title": "Z",
+        "source_url": "https://test.gov/test3.xml"
+    }
+]
