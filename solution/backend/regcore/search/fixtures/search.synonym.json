@@ -59,7 +59,7 @@
     "model": "search.synonym",
     "pk": 5,
     "fields": {
-        "isActive": true,
+        "isActive": false,
         "baseWord": "MCPIRS",
         "synonyms": [
             4,
@@ -1239,7 +1239,12 @@
         "isActive": true,
         "baseWord": "public health emergency",
         "synonyms": [
-            141
+            141,
+            536,
+            531,
+            533,
+            534,
+            535
         ]
     }
 },
@@ -1250,7 +1255,12 @@
         "isActive": true,
         "baseWord": "PHE",
         "synonyms": [
-            140
+            140,
+            536,
+            531,
+            533,
+            534,
+            535
         ]
     }
 },
@@ -1991,50 +2001,6 @@
 },
 {
     "model": "search.synonym",
-    "pk": 208,
-    "fields": {
-        "isActive": true,
-        "baseWord": "ADD",
-        "synonyms": [
-            209
-        ]
-    }
-},
-{
-    "model": "search.synonym",
-    "pk": 209,
-    "fields": {
-        "isActive": true,
-        "baseWord": "attention deficit disorder",
-        "synonyms": [
-            208
-        ]
-    }
-},
-{
-    "model": "search.synonym",
-    "pk": 210,
-    "fields": {
-        "isActive": true,
-        "baseWord": "ADHD",
-        "synonyms": [
-            211
-        ]
-    }
-},
-{
-    "model": "search.synonym",
-    "pk": 211,
-    "fields": {
-        "isActive": true,
-        "baseWord": "attention deficit hyperactivity disorder",
-        "synonyms": [
-            210
-        ]
-    }
-},
-{
-    "model": "search.synonym",
     "pk": 212,
     "fields": {
         "isActive": true,
@@ -2085,8 +2051,7 @@
         "isActive": true,
         "baseWord": "addiction and recovery treatment services",
         "synonyms": [
-            216,
-            519
+            216
         ]
     }
 },
@@ -3949,7 +3914,8 @@
         "isActive": true,
         "baseWord": "Families First Coronavirus Response Act",
         "synonyms": [
-            390
+            390,
+            535
         ]
     }
 },
@@ -4763,9 +4729,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HPSA",
-        "synonyms": [
-            467
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4774,9 +4738,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health professional shortage area",
-        "synonyms": [
-            466
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4785,9 +4747,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HRA",
-        "synonyms": [
-            469
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4796,9 +4756,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health risk assessment",
-        "synonyms": [
-            468
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4807,9 +4765,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HRMS",
-        "synonyms": [
-            471
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4818,9 +4774,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Reform Monitoring Survey",
-        "synonyms": [
-            470
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4829,9 +4783,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HRR",
-        "synonyms": [
-            473
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4840,9 +4792,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "hospital referral region",
-        "synonyms": [
-            472
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4851,9 +4801,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HRSA",
-        "synonyms": [
-            475
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4862,9 +4810,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Resources and Services Administration",
-        "synonyms": [
-            474
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4873,9 +4819,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HSI",
-        "synonyms": [
-            477
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4884,9 +4828,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health services initiative",
-        "synonyms": [
-            476
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4895,9 +4837,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "IBNRS",
-        "synonyms": [
-            479
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4906,9 +4846,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Incurred But Not Reported Survey",
-        "synonyms": [
-            478
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4917,9 +4855,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "ICD-10",
-        "synonyms": [
-            481
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4928,9 +4864,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "International Classification of Diseases, 10th Edition",
-        "synonyms": [
-            480
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4939,9 +4873,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "ICF",
-        "synonyms": [
-            483
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4950,9 +4882,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "intermediate care facility",
-        "synonyms": [
-            482
-        ]
+        "synonyms": []
     }
 },
 {
@@ -5206,8 +5136,13 @@
         "isActive": true,
         "baseWord": "COVID-19",
         "synonyms": [
-            512,
-            511
+            536,
+            522,
+            531,
+            533,
+            534,
+            511,
+            535
         ]
     }
 },
@@ -5218,8 +5153,10 @@
         "isActive": true,
         "baseWord": "coronavirus",
         "synonyms": [
+            533,
+            534,
             510,
-            512
+            535
         ]
     }
 },
@@ -5229,10 +5166,7 @@
     "fields": {
         "isActive": false,
         "baseWord": "COVID",
-        "synonyms": [
-            510,
-            511
-        ]
+        "synonyms": []
     }
 },
 {
@@ -5271,56 +5205,12 @@
 },
 {
     "model": "search.synonym",
-    "pk": 516,
-    "fields": {
-        "isActive": true,
-        "baseWord": "\"><img/src=a/onerror=prompt(0)>",
-        "synonyms": [
-            517
-        ]
-    }
-},
-{
-    "model": "search.synonym",
-    "pk": 517,
-    "fields": {
-        "isActive": true,
-        "baseWord": "img",
-        "synonyms": [
-            516,
-            518
-        ]
-    }
-},
-{
-    "model": "search.synonym",
-    "pk": 518,
-    "fields": {
-        "isActive": true,
-        "baseWord": "image",
-        "synonyms": [
-            517
-        ]
-    }
-},
-{
-    "model": "search.synonym",
-    "pk": 519,
-    "fields": {
-        "isActive": true,
-        "baseWord": "<details open ontoggle=prompt(1)>",
-        "synonyms": [
-            217
-        ]
-    }
-},
-{
-    "model": "search.synonym",
     "pk": 522,
     "fields": {
         "isActive": true,
         "baseWord": "continuous enrollment",
         "synonyms": [
+            510,
             536
         ]
     }
@@ -5345,7 +5235,9 @@
         "synonyms": [
             531,
             523,
-            533
+            533,
+            534,
+            535
         ]
     }
 },
@@ -5367,8 +5259,8 @@
         "isActive": true,
         "baseWord": "renewal",
         "synonyms": [
-            536,
-            525
+            525,
+            536
         ]
     }
 },
@@ -5379,7 +5271,9 @@
         "isActive": true,
         "baseWord": "Consolidated Appropriations Act of 2023",
         "synonyms": [
-            536
+            536,
+            528,
+            535
         ]
     }
 },
@@ -5390,7 +5284,9 @@
         "isActive": true,
         "baseWord": "CAA",
         "synonyms": [
-            536
+            536,
+            527,
+            535
         ]
     }
 },
@@ -5423,7 +5319,11 @@
         "isActive": true,
         "baseWord": "Conclusion of the COVID-19 Public Health Emergency",
         "synonyms": [
-            524
+            141,
+            140,
+            524,
+            510,
+            535
         ]
     }
 },
@@ -5434,7 +5334,11 @@
         "isActive": false,
         "baseWord": "pandemic",
         "synonyms": [
-            524
+            141,
+            140,
+            524,
+            510,
+            511
         ]
     }
 },
@@ -5446,7 +5350,10 @@
         "baseWord": "Coronavirus Disease 2019",
         "synonyms": [
             141,
-            140
+            140,
+            524,
+            510,
+            511
         ]
     }
 },
@@ -5456,7 +5363,17 @@
     "fields": {
         "isActive": false,
         "baseWord": "Returning to Regular Operations after COVID-19",
-        "synonyms": []
+        "synonyms": [
+            391,
+            524,
+            141,
+            140,
+            527,
+            528,
+            531,
+            510,
+            511
+        ]
     }
 },
 {
@@ -5467,7 +5384,10 @@
         "baseWord": "unwinding",
         "synonyms": [
             528,
+            510,
             522,
+            140,
+            141,
             526,
             527
         ]
@@ -5488,7 +5408,10 @@
     "fields": {
         "isActive": true,
         "baseWord": "data sharing",
-        "synonyms": []
+        "synonyms": [
+            578,
+            579
+        ]
     }
 },
 {
@@ -5578,7 +5501,10 @@
     "fields": {
         "isActive": true,
         "baseWord": "data exchange",
-        "synonyms": []
+        "synonyms": [
+            567,
+            579
+        ]
     }
 },
 {
@@ -5587,7 +5513,10 @@
     "fields": {
         "isActive": true,
         "baseWord": "exchange of data",
-        "synonyms": []
+        "synonyms": [
+            567,
+            578
+        ]
     }
 },
 {
@@ -5607,7 +5536,9 @@
         "baseWord": "IGT",
         "synonyms": [
             600,
-            601
+            601,
+            602,
+            603
         ]
     }
 },
@@ -5633,7 +5564,9 @@
         "synonyms": [
             600,
             599,
-            601
+            601,
+            602,
+            603
         ]
     }
 },
@@ -5643,7 +5576,11 @@
     "fields": {
         "isActive": true,
         "baseWord": "inter-governmental transfers",
-        "synonyms": []
+        "synonyms": [
+            601,
+            599,
+            603
+        ]
     }
 },
 {
@@ -5652,7 +5589,11 @@
     "fields": {
         "isActive": true,
         "baseWord": "Intergovernmental transfers",
-        "synonyms": []
+        "synonyms": [
+            601,
+            602,
+            599
+        ]
     }
 },
 {
@@ -5698,6 +5639,95 @@
             665,
             666
         ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 668,
+    "fields": {
+        "isActive": true,
+        "baseWord": "dual eligible",
+        "synonyms": [
+            669
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 669,
+    "fields": {
+        "isActive": true,
+        "baseWord": "dually eligible",
+        "synonyms": [
+            668
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 670,
+    "fields": {
+        "isActive": true,
+        "baseWord": "spend down",
+        "synonyms": [
+            671
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 671,
+    "fields": {
+        "isActive": true,
+        "baseWord": "spenddown",
+        "synonyms": [
+            670
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 672,
+    "fields": {
+        "isActive": true,
+        "baseWord": "ILOS",
+        "synonyms": [
+            673,
+            674
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 673,
+    "fields": {
+        "isActive": true,
+        "baseWord": "in lieu of services",
+        "synonyms": [
+            672,
+            674
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 674,
+    "fields": {
+        "isActive": true,
+        "baseWord": "ILOSs",
+        "synonyms": [
+            672,
+            673
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 675,
+    "fields": {
+        "isActive": true,
+        "baseWord": "in lieu of services and settings",
+        "synonyms": []
     }
 }
 ]

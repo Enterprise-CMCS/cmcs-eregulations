@@ -26,12 +26,12 @@
 },
 {
     "model": "resources.category",
-    "pk": 19,
+    "pk": 133,
     "fields": {}
 },
 {
     "model": "resources.category",
-    "pk": 133,
+    "pk": 19,
     "fields": {}
 },
 {
@@ -41,7 +41,7 @@
 },
 {
     "model": "resources.category",
-    "pk": 17,
+    "pk": 134,
     "fields": {}
 }
 ]
