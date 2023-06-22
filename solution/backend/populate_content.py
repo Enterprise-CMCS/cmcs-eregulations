@@ -8,6 +8,8 @@ def handler(event, context):
     import django
     django.setup()
 
+    from regcore.search.models import Synonym
+    from regulations.models import StatuteLinkConverter
     from resources.models import (
         AbstractCategory,
         AbstractLocation,
@@ -21,7 +23,6 @@ def handler(event, context):
         Subpart,
         SupplementalContent,
     )
-    from regcore.search.models import Synonym
 
     fixtures = [
         ("resources.abstractcategory.json", AbstractCategory),
@@ -36,6 +37,7 @@ def handler(event, context):
         ("resources.federalregisterdocument.json", FederalRegisterDocument),
         ("resources.resourcesconfiguration.json", ResourcesConfiguration),
         ("search.synonym.json", Synonym),
+        ("regulations.statutelinkconverter.json", StatuteLinkConverter)
     ]
 
     # First delete all instances of models that we're populating
