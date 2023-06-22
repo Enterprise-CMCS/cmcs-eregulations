@@ -18,12 +18,14 @@
         {% endfor %}
     </table>
     <br />
-    {%endif%} {% if failures %} Unable to add the following rows:<br />
+    {% else %}
+        No resources added from the CSV.  Please check the values.
+    {% endif %} {% if failures %} Unable to add the following rows:<br />
     <ul>
         {% for failure in failures %}
         <li>Row: {{ failure.line_number }} Data: {{ failure.row }}</li>
         {% endfor %}
     </ul>
-    {%endif%}
+    {% endif %}
 </form>
 {% endblock %}
