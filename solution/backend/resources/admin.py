@@ -1,6 +1,9 @@
 import json
 import re
+import csv
 
+from django.http import HttpResponse
+from django.urls import path, reverse
 from django import forms
 from django.apps import apps
 from django.contrib import admin, messages
@@ -15,7 +18,7 @@ from django.db.models import (
     When,
 )
 from django.forms.widgets import Textarea
-from django.urls import reverse
+from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
@@ -162,6 +165,18 @@ class AbstractResourceAdmin(BaseAdmin):
             Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
+    def get_bulk_locations(self, bulk_locations, bulk_title=""):
+        bulk_adds = []
+        bad_locations = []
+        split_locations = bulk_locations.split(",")
+        for location in split_locations:
+            a = self.build_location(location.strip(), bulk_title)
+            if a:
+                bulk_adds.append(a)
+            else:
+                bad_locations.append(location)
+        return bulk_adds, bad_locations
+
     # Overrides the save method in django admin to handle many to many relationships.
     # Looks at the locations added in bulk uploads and adds them if allowed, sends error message if not.
     def save_related(self, request, form, formsets, change):
@@ -175,24 +190,21 @@ class AbstractResourceAdmin(BaseAdmin):
         bulk_title = form.cleaned_data.get("bulk_title")
         bad_locations = []
         bulk_adds = []
+        bulk_locs = []
 
         super().save_related(request, form, formsets, change)
         if bulk_locations:
-            split_locations = bulk_locations.split(",")
-            for location in split_locations:
-                a = self.build_location(location.strip(), bulk_title)
-                if a:
-                    form.instance.locations.add(a.abstractlocation_ptr)
-                    bulk_adds.append(AbstractLocationPolymorphicSerializer(a).data)
-                else:
-                    bad_locations.append(location)
+            bulk_adds, bad_locations = self.get_bulk_locations(bulk_locations, bulk_title)
             if bad_locations:
                 messages.add_message(
                     request,
                     messages.ERROR,
                     "The following locations were not added %s" % ((", ").join(bad_locations))
                 )
-
+            if bulk_adds:
+                for location in bulk_adds:
+                    form.instance.locations.add(location.abstractlocation_ptr)
+                    bulk_locs.append(AbstractLocationPolymorphicSerializer(location).data)
         # Create and append changelog object, if any location changes occured
         if additions or removals or bulk_adds:
             form.instance.location_history.append({
@@ -200,7 +212,7 @@ class AbstractResourceAdmin(BaseAdmin):
                 "date": str(timezone.now()),
                 "additions": additions,
                 "removals": removals,
-                "bulk_adds": bulk_adds,
+                "bulk_adds": bulk_locs,
             })
             form.instance.save()
 
@@ -396,14 +408,110 @@ class FederalResourceForm(ResourceForm):
         return super(FederalResourceForm, self).save(commit=commit)
 
 
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField(widget=forms.FileInput(attrs={'accept': ".csv"}))
+
+
 @admin.register(SupplementalContent)
 class SupplementalContentAdmin(AbstractResourceAdmin):
+    change_list_template = "admin/import_resources_button.html"
     form = SupContentForm
     list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
     fields = ("approved", "name", "description", "date", "url", "category",
               "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history")
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('import_resources/', self.show_import_resources_page),
+        ]
+        return my_urls + urls
+
+    # Checks to see that there are atleast name and url
+    def check_required_fields(self, row):
+        return len(row) >= 3 and row[0]
+
+    def resource_link(self, obj):
+        display_text = "<a href={} target='blank'>{}</a>".format(
+                                  reverse('admin:{}_{}_change'.format("resources", "supplementalcontent"),
+                                          args=(obj.id,)), obj.name)
+        if display_text:
+            return mark_safe(display_text)
+        return "-"
+
+    def add_content(self, reader):
+        categories = AbstractCategory.objects.all()
+        added_resources = []
+        failed_resources = []
+
+        next(reader)
+        for row in reader:
+            if self.check_required_fields(row):
+                try:
+                    bulk_adds, bad_locations = self.get_bulk_locations(row[4])
+                    try:
+                        category = categories.get(name__iexact=row[3])
+                    except AbstractCategory.DoesNotExist:
+                        category = None
+                    content, created = SupplementalContent.objects.get_or_create(
+                        name=row[0],
+                        description=row[1],
+                        url=row[2],
+                        approved=False,
+                        category=category,
+                    )
+                except Exception:
+                    created = False
+            else:
+                created = False
+            if created:
+                link = self.resource_link(content)
+                resource = {"name": link, "category": "", "added_locations": bulk_adds, "failed_locations": bad_locations}
+                if bulk_adds:
+                    for location in bulk_adds:
+                        content.locations.add(location.abstractlocation_ptr)
+                    content.save()
+
+                resource["category"] = category if category else f"Invalid category: { row[3] }"
+                added_resources.append(resource)
+            elif not created:
+                failed_resources.append({"row": row, "line_number": reader.line_num})
+        return added_resources, failed_resources
+
+    def resource_reader(self, csv_file):
+        return csv.reader(csv_file.read().decode('utf8').splitlines(),
+                          quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+
+    def show_import_resources_page(self, request):
+        if "get_template" in request.GET:
+            columns = ["name", "description", "url", "category", "locations"]
+            response = HttpResponse(
+                content_type="text/csv",
+                headers={"Content-Disposition": 'attachment; filename="content_upload.csv"'},
+            )
+            writer = csv.writer(response)
+            writer.writerow(columns)
+            return response
+        if request.method == "POST":
+            successes, failures = [], []
+            error = None
+            try:
+                csv_file = request.FILES["csv_file"].file
+                reader = self.resource_reader(csv_file)
+                successes, failures = self.add_content(reader)
+            except Exception:
+                error = "Something went wrong.  Please check that the file you are trying to upload is a csv and not corrupted."
+
+            return render(request, "admin/resources_imported.html", context={
+                "added_resources": successes,
+                "failures": failures,
+                "error": error
+            })
+        form = CsvImportForm()
+        payload = {"form": form}
+        return render(request, "admin/import_resources.html", payload)
 
 
 @admin.register(FederalRegisterDocument)
