@@ -25,5 +25,14 @@
         "name": "Something else.",
         "statute_title": 3,
         "source_url": "https://test.gov/test3.xml"
+    },
+    {
+        "section": "99999",
+        "title": 44,
+        "usc": "abcdef",
+        "act": "Social Security Act",
+        "name": "",
+        "statute_title": null,
+        "source_url": "https://test.gov/test3.xml"
     }
 ]

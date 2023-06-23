@@ -16,9 +16,11 @@ roman_table = {
 
 def roman_to_int(roman):
     result = 0
+    if not roman.strip():
+        return None
     for i in range(len(roman) - 1, -1, -1):
         if roman[i] not in roman_table:
-            return -1
+            return None
         num = roman_table[roman[i]]
         result = result - num if 3 * num < result else result + num
     return result
