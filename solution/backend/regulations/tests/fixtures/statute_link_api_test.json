@@ -1,14 +1,5 @@
 [
     {
-        "section": "10211",
-        "title": 42,
-        "usc": "18201",
-        "act": "Affordable Care Act",
-        "name": "Definitions.",
-        "statute_title": 10,
-        "source_url": "https://test.gov/test.xml"
-    },
-    {
         "section": "11111",
         "title": 45,
         "usc": "12345",
@@ -16,6 +7,15 @@
         "name": "Something",
         "statute_title": 1,
         "source_url": "https://test.gov/test2.xml"
+    },
+    {
+        "section": "10211",
+        "title": 42,
+        "usc": "18201",
+        "act": "Affordable Care Act",
+        "name": "Definitions.",
+        "statute_title": 10,
+        "source_url": "https://test.gov/test.xml"
     },
     {
         "section": "7890",
