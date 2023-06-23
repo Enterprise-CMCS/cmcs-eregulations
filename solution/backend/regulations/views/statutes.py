@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers, viewsets
+from rest_framework.exceptions import ValidationError
 
 from common.api import OpenApiQueryParameter
 from regulations.models import StatuteLinkConverter
@@ -25,5 +26,12 @@ class StatuteLinkConverterViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         act = self.request.GET.get("act", None)
-        queryset = self.model.objects
-        return queryset.filter(act__iexact=act) if act else queryset.all()
+        title = self.request.GET.get("title", None)
+        if title and not act:
+            raise ValidationError("You may specify either an act by itself, or an act and a title, but not a title by itself.")
+        queryset = self.model.objects.all()
+        if act:
+            queryset = queryset.filter(act__iexact=act)
+        if title:
+            queryset = queryset.filter(statute_title__iexact=title)
+        return queryset
