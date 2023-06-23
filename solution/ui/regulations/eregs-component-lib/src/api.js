@@ -204,20 +204,6 @@ async function httpApiGetWithPagination(urlPath, { params } = {}, apiPath) {
     return results;
 }
 
-// ---------- api calls ---------------
-/**
- * Get formatted date of most recent successful run of the ECFR parser
- *
- * @param {string} apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
- * @param {Object} params - parameters needed for API call
- * @param {string} [params.title=42] - CFR title number.
- *
- * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
- */
-const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
-    const result = await httpApiGetLegacy(`${apiURL}ecfr_parser_result/${title}`);
-    return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
-};
 
 /**
  * Get array of objects containing valid GovInfo docs years with links to the PDF files.
@@ -263,7 +249,6 @@ const getSubpartTOC = async (apiURL, title, part, subPart) => {
 };
 
 export {
-    getLastParserSuccessDate,
     getSupplementalContent,
     getCacheKeys,
     removeCacheItem,

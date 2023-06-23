@@ -288,6 +288,20 @@ const getCategories = async (apiUrl) => {
 
     return httpApiGet("resources/categories");
 }
+// ---------- api calls ---------------
+/**
+ * Get formatted date of most recent successful run of the ECFR parser
+ *
+ * @param {string} apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params - parameters needed for API call
+ * @param {string} [params.title=42] - CFR title number.
+ *
+ * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
+ */
+const getLastParserSuccessDate = async ({ title = "42" }) => {
+    const result = await httpApiGet(`ecfr_parser_result/${title}`);
+    return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
+};
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
@@ -565,4 +579,5 @@ export {
     removeCacheItem,
     setCacheItem,
     setIdToken,
+    getLastParserSuccessDate,
 };
