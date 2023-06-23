@@ -1,0 +1,3 @@
+{
+    "ruff.args": ["--config=./solution/backend/pyproject.toml"]
+}
