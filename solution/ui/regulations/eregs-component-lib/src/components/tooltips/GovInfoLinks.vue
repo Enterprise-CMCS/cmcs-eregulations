@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { getGovInfoLinks } from "../../api";
+import { getGovInfoLinks } from "utilities/api";
 import SimpleSpinner from "../SimpleSpinner.vue";
 
 export default {
@@ -42,10 +42,6 @@ export default {
     },
 
     props: {
-        apiUrl: {
-            type: String,
-            required: true,
-        },
         title: {
             type: String,
             required: true,
@@ -61,7 +57,7 @@ export default {
     },
 
     created() {
-        getGovInfoLinks(this.apiUrl, {
+        getGovInfoLinks({
             title: this.title,
             part: this.part,
             section: this.section,

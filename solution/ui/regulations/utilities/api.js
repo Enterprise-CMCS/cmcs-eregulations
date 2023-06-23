@@ -542,6 +542,27 @@ const getTitles = async (apiUrl) => {
 };
 
 /**
+ * Get array of objects containing valid GovInfo docs years with links to the PDF files.
+ *
+ * @param {string} apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params - parameters needed for API call
+ * @param {string} params.title - CFR title number.
+ * @param {string} params.part - CFR part numer within title.
+ * @param {string} params.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
+ *
+ * @returns {Array<{year: string, link: string}>}
+ */
+const getGovInfoLinks = async (params) => {
+    const result = await httpApiGet(
+        `title/${params.title}/part/${params.part}/history/${
+            Object.keys(params)[2]
+        }/${Object.values(params)[2]}`
+    );
+
+    return result;
+};
+
+/**
  * @param {string} title - Title number.  Ex: `42` or `45`
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
  *
@@ -580,4 +601,5 @@ export {
     setCacheItem,
     setIdToken,
     getLastParserSuccessDate,
+    getGovInfoLinks,
 };
