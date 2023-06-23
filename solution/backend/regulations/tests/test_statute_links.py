@@ -162,10 +162,10 @@ class StatuteConvertersAPITestCase(APITestCase):
         self.assertEqual(response.data, self.objects[1:3])
 
     def test_act_and_title(self):
-        response = self.client.get("/v3/statutes?act=Social Security Act&title=Z")
+        response = self.client.get("/v3/statutes?act=Social Security Act&title=3")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, self.objects[2:3])
 
     def test_title_no_act(self):
-        response = self.client.get("/v3/statutes?title=Z")
+        response = self.client.get("/v3/statutes?title=3")
         self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)

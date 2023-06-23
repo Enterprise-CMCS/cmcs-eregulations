@@ -6,7 +6,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Effective dates.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1101",
@@ -15,7 +15,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Immediate access to insurance for uninsured individuals with a preexisting condition.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1102",
@@ -24,7 +24,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Reinsurance for early retirees.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1103",
@@ -33,7 +33,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Immediate information that allows consumers to identify affordable coverage options.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1251",
@@ -42,7 +42,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Preservation of right to maintain existing coverage.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1252",
@@ -51,7 +51,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Rating reforms must apply uniformly to all health insurance issuers and group health plans.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1253",
@@ -60,7 +60,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Effective dates.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1301",
@@ -69,7 +69,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Qualified health plan defined.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1302",
@@ -78,7 +78,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Essential health benefits requirements.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1303",
@@ -87,7 +87,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Special rules.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1304",
@@ -96,7 +96,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Related definitions.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1311",
@@ -105,7 +105,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Affordable choices of health benefit plans.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1312",
@@ -114,7 +114,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Consumer choice.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1313",
@@ -123,7 +123,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Financial integrity.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1321",
@@ -132,7 +132,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "State flexibility in operation and enforcement of Exchanges and related requirements.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1322",
@@ -141,7 +141,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Federal program to assist establishment and operation of nonprofit, member-run health insurance issuers.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1323",
@@ -150,7 +150,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Community health insurance option.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1324",
@@ -159,7 +159,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Level playing field.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1331",
@@ -168,7 +168,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "State flexibility to establish basic health programs for low-income individuals not eligible for Medicaid.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1332",
@@ -177,7 +177,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Waiver for State innovation.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1333",
@@ -186,7 +186,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Provisions relating to offering of plans in more than one State.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1341",
@@ -195,7 +195,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Transitional reinsurance program for individual and small group markets in each State.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1342",
@@ -204,7 +204,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Establishment of risk corridors for plans in individual and small group markets.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1343",
@@ -213,7 +213,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Risk adjustment.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1402",
@@ -222,7 +222,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Reduced cost-sharing for individuals enrolling in qualified health plans.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1411",
@@ -231,7 +231,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Procedures for determining eligibility for Exchange participation, premium tax credits and reduced cost-sharing, and individual responsibility exemptions.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1412",
@@ -240,7 +240,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Advance determination and payment of premium tax credits and cost-sharing reductions.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1413",
@@ -249,7 +249,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Streamlining of procedures for enrollment through an exchange and State Medicaid, CHIP, and health subsidy programs.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1415",
@@ -258,7 +258,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Premium tax credit and cost-sharing reduction payments disregarded for Federal and Federally-assisted programs.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1551",
@@ -267,7 +267,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Definitions.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1552",
@@ -276,7 +276,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Transparency in government.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1553",
@@ -285,7 +285,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Prohibition against discrimination on assisted suicide.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1554",
@@ -294,7 +294,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Access to therapies.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1555",
@@ -303,7 +303,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Freedom not to participate in Federal health insurance programs.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1557",
@@ -312,7 +312,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Nondiscrimination.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1559",
@@ -321,7 +321,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Oversight.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "1560",
@@ -330,7 +330,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Rules of construction.",
-        "statute_title": "I"
+        "statute_title": 1
     },
     {
         "section": "2404",
@@ -339,7 +339,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Protection for recipients of home and community-based services against spousal impoverishment.",
-        "statute_title": "II"
+        "statute_title": 2
     },
     {
         "section": "2602",
@@ -348,7 +348,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Providing Federal coverage and payment coordination for dual eligible beneficiaries.",
-        "statute_title": "II"
+        "statute_title": 2
     },
     {
         "section": "2702",
@@ -357,7 +357,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Payment Adjustment for Health Care-Acquired Conditions.",
-        "statute_title": "II"
+        "statute_title": 2
     },
     {
         "section": "3311",
@@ -366,7 +366,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Improved Medicare prescription drug plan and MA\u2013PD plan complaint system.",
-        "statute_title": "III"
+        "statute_title": 3
     },
     {
         "section": "3502",
@@ -375,7 +375,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Establishing community health teams to support the patient-centered medical home.",
-        "statute_title": "III"
+        "statute_title": 3
     },
     {
         "section": "3508",
@@ -384,7 +384,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Demonstration program to integrate quality improvement and patient safety training into clinical education of health professionals.",
-        "statute_title": "III"
+        "statute_title": 3
     },
     {
         "section": "4001",
@@ -393,7 +393,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "National Prevention, Health Promotion and Public Health Council.",
-        "statute_title": "IV"
+        "statute_title": 4
     },
     {
         "section": "4002",
@@ -402,7 +402,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Prevention and Public Health Fund.",
-        "statute_title": "IV"
+        "statute_title": 4
     },
     {
         "section": "4004",
@@ -411,7 +411,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Education and outreach campaign regarding preventive benefits.",
-        "statute_title": "IV"
+        "statute_title": 4
     },
     {
         "section": "4201",
@@ -420,7 +420,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Community transformation grants.",
-        "statute_title": "IV"
+        "statute_title": 4
     },
     {
         "section": "4202",
@@ -429,7 +429,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Healthy aging, living well; evaluation of community-based prevention and wellness programs for Medicare beneficiaries.",
-        "statute_title": "IV"
+        "statute_title": 4
     },
     {
         "section": "4301",
@@ -438,7 +438,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Research on optimizing the delivery of public health services.",
-        "statute_title": "IV"
+        "statute_title": 4
     },
     {
         "section": "5101",
@@ -447,7 +447,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "National health care workforce commission.",
-        "statute_title": "V"
+        "statute_title": 5
     },
     {
         "section": "5102",
@@ -456,7 +456,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "State health care workforce development grants.",
-        "statute_title": "V"
+        "statute_title": 5
     },
     {
         "section": "6201",
@@ -465,7 +465,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Nationwide program for National and State background checks on direct patient access employees of long-term care facilities and providers.",
-        "statute_title": "VI"
+        "statute_title": 6
     },
     {
         "section": "10211",
@@ -474,7 +474,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Definitions.",
-        "statute_title": "X"
+        "statute_title": 10
     },
     {
         "section": "10212",
@@ -483,7 +483,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Establishment of pregnancy assistance fund.",
-        "statute_title": "X"
+        "statute_title": 10
     },
     {
         "section": "10213",
@@ -492,7 +492,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Permissible uses of Fund.",
-        "statute_title": "X"
+        "statute_title": 10
     },
     {
         "section": "10214",
@@ -501,7 +501,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Appropriations.",
-        "statute_title": "X"
+        "statute_title": 10
     },
     {
         "section": "10331",
@@ -510,7 +510,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Public reporting of performance information.",
-        "statute_title": "X"
+        "statute_title": 10
     },
     {
         "section": "10407",
@@ -519,7 +519,7 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Better diabetes care.",
-        "statute_title": "X"
+        "statute_title": 10
     },
     {
         "section": "10503",
@@ -528,6 +528,6 @@
         "act": "Affordable Care Act",
         "source_url": "http://test.com/test_aca.xml",
         "name": "Community Health Centers and the National Health Service Corps Fund.",
-        "statute_title": "X"
+        "statute_title": 10
     }
 ]

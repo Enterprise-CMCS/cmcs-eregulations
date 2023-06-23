@@ -12,7 +12,7 @@ class StatuteLinkConverterSerializer(serializers.Serializer):
     usc = serializers.CharField()
     act = serializers.CharField()
     name = serializers.CharField()
-    statute_title = serializers.CharField()
+    statute_title = serializers.IntegerField()
     source_url = serializers.CharField()
 
 

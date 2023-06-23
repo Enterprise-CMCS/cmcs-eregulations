@@ -44,8 +44,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='statutelinkconverter',
             name='statute_title_new',
-            field=models.IntegerField(default=0),
-            preserve_default=False,
+            field=models.IntegerField(null=True, verbose_name='Statute Title'),
         ),
         migrations.RunPython(convert_roman_to_int),
         migrations.RemoveField(

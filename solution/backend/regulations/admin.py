@@ -43,6 +43,28 @@ TITLE_REGEX = re.compile(TITLE_PATTERN, re.IGNORECASE)
 SECTION_APPEND_REGEX = re.compile(SECTION_APPEND_PATTERN, re.IGNORECASE)
 
 
+roman_table = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000,
+}
+
+
+# Convert roman numerals to integers. Returns 0 if invalid.
+def roman_to_int(roman):
+    result = 0
+    for i in range(len(roman) - 1, -1, -1):
+        if roman[i] not in roman_table:
+            return 0
+        num = roman_table[roman[i]]
+        result = result - num if 3 * num < result else result + num
+    return result
+
+
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
     pass
@@ -98,11 +120,17 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             }
             if section in toc:
                 data["name"] = toc[section]["name"]
-                data["statute_title"] = toc[section]["statute_title"]
+                title = toc[section]["statute_title"]
+                try:
+                    title = int(title)
+                except ValueError:
+                    title = roman_to_int(title)
+                if title:
+                    data["statute_title"] = title
             instance, created = self.model.objects.get_or_create(**data)
             if created:
                 data["id"] = instance.id
-                if section in toc:
+                if section in toc and "statute_title" in data:
                     conversions.append(data)
                 else:
                     failures.append(data)
@@ -134,7 +162,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
                 match = TITLE_REGEX.search(designator[0].firstChild.nodeValue)
                 if not match:
                     raise ValidationError("invalid XML detected: 'referenceItem' contains an invalid Title.")
-                title = match.group(1)
+                title = match.group(1).upper().strip()
             elif role == "section":
                 designator = i.getElementsByTagName("designator")
                 if not designator:
