@@ -477,12 +477,15 @@ const getSupplementalContent = async ({
     location_details = true,
     sortMethod = "newest",
     fr_grouping = true,
+    builtLocationString="",
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
 
     if (partDict === "all") {
         sString = title ? `${sString}&locations=${title}` : "";
+    } else if (builtLocationString !== ""){
+        sString = `${sString}&${builtLocationString}`;
     } else {
         Object.keys(partDict).forEach((partKey) => {
             const part = partDict[partKey];

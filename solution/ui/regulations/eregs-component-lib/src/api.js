@@ -205,37 +205,9 @@ async function httpApiGetWithPagination(urlPath, { params } = {}, apiPath) {
 }
 
 
-
-
-const getTitles = async (apiUrl) => httpApiGetLegacy(`${apiUrl}titles`);
-
-const getParts = async (apiURL, title) => httpApiGetLegacy(`${apiURL}title/${title}/parts`);
-
-const getSupplementalContent = async (
-    apiURL,
-    { locations, locationDetails = false }
-) => {
-    return httpApiGetWithPagination(
-        `${apiURL}resources/?${locations}&paginate=true&location_details=${locationDetails}`,
-        {}, // params, default
-        apiURL
-    );
-};
-
-
-const getSubpartTOC = async (apiURL, title, part, subPart) => {
-    return httpApiGetLegacy(
-        `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
-    );
-};
-
 export {
-    getSupplementalContent,
     getCacheKeys,
     removeCacheItem,
     getCacheItem,
     setCacheItem,
-    getSubpartTOC,
-    getTitles,
-    getParts,
 };
