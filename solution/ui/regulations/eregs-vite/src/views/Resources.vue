@@ -662,12 +662,12 @@ export default {
                 try {
                     const searchResults = await getSupplementalContent({
                         page: this.page,
-                        page_size: this.pageSize,
+                        pageSize: this.pageSize,
                         partDict: "all", // titles
                         title: dataQueryParams.title ?? this.filters.title.listItems[0],
                         categories: this.categories, // subcategories
                         q: searchQuery,
-                        fr_grouping: false,
+                        frGrouping: false,
                         sortMethod,
                     });
 
@@ -684,11 +684,11 @@ export default {
                 this.getPartDict(dataQueryParams);
                 const responseContent = await getSupplementalContent({
                     page: this.page,
-                    page_size: this.pageSize,
+                    pageSize: this.pageSize,
                     partDict: this.partDict,
                     categories: this.categories,
                     q: searchQuery,
-                    fr_grouping: false,
+                    frGrouping: false,
                     sortMethod,
                 });
 
@@ -706,11 +706,11 @@ export default {
                 try {
                     const searchResults = await getSupplementalContent({
                         page: this.page,
-                        page_size: this.pageSize,
+                        pageSize: this.pageSize,
                         partDict: "all", // titles
                         categories: this.categories, // subcategories
                         q: searchQuery,
-                        fr_grouping: false,
+                        frGrouping: false,
                         sortMethod,
                     });
 
@@ -726,13 +726,13 @@ export default {
             } else {
                 const allResults = await getSupplementalContent({
                     page: this.page,
-                    page_size: this.pageSize,
+                    pageSize: this.pageSize,
                     partDict: "all", // titles
                     categories: this.categories,
                     q: searchQuery,
                     start: 0, // start
-                    fr_grouping: false,
-                    max_results: 100, // max_results
+                    frGrouping: false,
+                    maxResults: 100,
                     sortMethod,
                 });
                 this.supplementalContent = allResults.results;
