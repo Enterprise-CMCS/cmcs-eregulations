@@ -191,10 +191,10 @@ objects = resources.abstractcategory resources.category resources.subcategory re
 
 local.seed:
 	$(foreach object, $(objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
-	docker-compose exec regulations python manage.py loaddata search.synonym.json \
+	docker-compose exec regulations python manage.py loaddata search.synonym.json 
 	docker-compose exec regulations python manage.py loaddata regulations.statutelinkconverter.json
 
 local.dump:
 	$(foreach object, $(objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
-	docker-compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json \
+	docker-compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json
 	docker-compose exec regulations python manage.py dumpdata regulations.statutelinkconverter --indent 4 > ./backend/regulations/fixtures/regulations.statutelinkconverter.json
