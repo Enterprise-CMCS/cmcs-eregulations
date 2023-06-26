@@ -7,17 +7,17 @@
     {
         "testing": "two links within one statute ref",
         "input": "section 123(a)(1)(C) and 456(b)(2) of the Social Security Act",
-        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)(1)(C)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_b\">456(b)(2)</a> of the Social Security Act"
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a_1_C\">123(a)(1)(C)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_b_2\">456(b)(2)</a> of the Social Security Act"
     },
     {
         "testing": "multiple comma-separated paragraph refs",
         "input": "section 123(a)(1)(C), (b)(1), and (b)(2) of the act",
-        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)(1)(C), (b)(1), and (b)(2)</a> of the act"
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a_1_C\">123(a)(1)(C), (b)(1), and (b)(2)</a> of the act"
     },
     {
         "testing": "multiple paragraphs and sections in the same ref",
         "input": "sections 123(a)(1)(C), (b)(1), and (b)(2) and 456(a)(1) and (b)(1) and 456(f) or (g).",
-        "expected": "sections <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_a\">456(a)(1) and (b)(1)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_f\">456(f) or (g)</a>."
+        "expected": "sections <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a_1_C\">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_a_1\">456(a)(1) and (b)(1)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title43-sectiondef&num=0&edition=prelim#substructure-location_f\">456(f) or (g)</a>."
     },
     {
         "testing": "all variations of paragraph separation",
