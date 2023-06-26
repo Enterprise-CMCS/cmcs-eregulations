@@ -1,4 +1,6 @@
 <script>
+import { getCategories } from "utilities/api";
+
 import RecentChangesContainer from "./RecentChangesContainer.vue";
 
 export default {
@@ -18,11 +20,25 @@ export default {
             required: true,
         },
     },
+
+    async created() {
+        const categoriesResult = await getCategories(this.apiUrl);
+        this.categories = categoriesResult
+            .flatMap((cat) =>
+                cat.parent?.name === "Subregulatory Guidance"
+                    ? `&categories=${cat.id}`
+                    : []
+            )
+            .join("");
+    },
+
     data() {
         return {
             tab: null,
+            categories: null,
         };
     },
+
     components: {
         RecentChangesContainer,
     },
@@ -42,6 +58,7 @@ export default {
                 </p>
                 <RecentChangesContainer
                     :api-url="apiUrl"
+                    :categories="categories"
                     type="supplemental"
                 ></RecentChangesContainer>
                 <a :href="resourceLink" class="action-btn default-btn link-btn"

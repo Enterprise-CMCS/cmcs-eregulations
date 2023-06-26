@@ -1,5 +1,8 @@
 <script>
-import { getCategories, getRecentResources } from "utilities/api";
+import _isNull from "lodash/isNull";
+
+import { getRecentResources } from "utilities/api";
+
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import RecentSupplementalContent from "./RecentSupplementalContent.vue";
@@ -23,31 +26,17 @@ export default {
             required: false,
             default: "rules",
         },
+        categories: {
+            type: String,
+            required: false,
+            default: null,
+        },
     },
 
     async created() {
-        let categoriesObj = {}; // eslint-disable-line prefer-const
-
-        if (this.type === "supplemental") {
-            const categoriesResult = await getCategories(this.apiUrl);
-            categoriesObj.categories = categoriesResult
-                .flatMap((cat) =>
-                    cat.parent?.name === "Subregulatory Guidance"
-                        ? `&categories=${cat.id}`
-                        : []
-                )
-                .join("");
+        if (_isNull(this.categories)) {
+            this.getRules();
         }
-
-        const rulesResponse = await getRecentResources(this.apiUrl, {
-            page: 1,
-            pageSize: 3,
-            type: this.type,
-            ...categoriesObj,
-        });
-
-        this.rules = rulesResponse.results;
-        this.loading = false;
     },
 
     data() {
@@ -61,6 +50,29 @@ export default {
         return {
             itemTitleLineLimit: 3,
         };
+    },
+
+    methods: {
+        async getRules(catsObj = {}) {
+            const args = {
+                page: 1,
+                pageSize: 3,
+                type: this.type,
+                ...catsObj,
+            };
+            const rulesResponse = await getRecentResources(this.apiUrl, args);
+
+            this.rules = rulesResponse.results;
+            this.loading = false;
+        },
+    },
+
+    watch: {
+        async categories(newCats, oldCats) {
+            if (oldCats === null) {
+                this.getRules({ categories: newCats });
+            }
+        },
     },
 };
 </script>
