@@ -210,7 +210,7 @@ export default {
                 if (location) {
                     response = await getSupplementalContent({ "builtLocationString": location })
                 }
-                await this.get_part_dictionary()
+                await this.getPartDictionary()
 
                 const subpartResponse = await getSupplementalContent({ "partDict": this.partDict, });
 
@@ -226,9 +226,10 @@ export default {
                 this.isFetching = false;
             }
         },
-        async get_part_dictionary() {
-            const sections = await getSubpartTOC(this.title, this.part, this.subparts[0]).map(section => section.identifier[1])
-            this.partDict[this.part] = { "title": this.title, "subparts": this.subparts, "sections": sections }
+        async getPartDictionary() {
+            const sections = await getSubpartTOC(this.title, this.part, this.subparts[0])
+            const secList = sections.map(section => section.identifier[1])
+            this.partDict[this.part] = { "title": this.title, "subparts": this.subparts, "sections": secList }
         },
         clearSection() {
             console.log("Clearing Section");
