@@ -469,14 +469,14 @@ const getSupplementalContent = async ({
     categories,
     q = "",
     start,
-    max_results = 1000,
+    maxResults = 1000,
     paginate = true,
     page = 1,
-    cat_details = true,
-    page_size = 100,
-    location_details = true,
+    catDetails = true,
+    pageSize = 100,
+    locationDetails = true,
     sortMethod = "newest",
-    fr_grouping = true,
+    frGrouping = true,
     builtLocationString="",
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
@@ -510,13 +510,12 @@ const getSupplementalContent = async ({
         });
     }
 
-    sString = `${sString}&category_details=${cat_details}`;
-    sString = `${sString}&location_details=${location_details}`;
-    sString = `${sString}&start=${start}&max_results=${max_results}${queryString}`;
+    sString = `${sString}&category_details=${catDetails}`;
+    sString = `${sString}&location_details=${locationDetails}`;
+    sString = `${sString}&start=${start}&max_results=${maxResults}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
-
-    sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`;
-    sString = `${sString}&fr_grouping=${fr_grouping}`;
+    sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;
+    sString = `${sString}&fr_grouping=${frGrouping}`;
 
     const response = await httpApiGet(`resources/?${sString}`);
     return response;
