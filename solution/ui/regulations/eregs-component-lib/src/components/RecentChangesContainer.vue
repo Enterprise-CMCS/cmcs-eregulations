@@ -34,7 +34,7 @@ export default {
     },
 
     async created() {
-        if (_isNull(this.categories)) {
+        if (this.type !== "supplemental") {
             this.getRules();
         }
     },
@@ -69,7 +69,7 @@ export default {
 
     watch: {
         async categories(newCats, oldCats) {
-            if (oldCats === null) {
+            if (_isNull(oldCats)) {
                 this.getRules({ categories: newCats });
             }
         },

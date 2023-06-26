@@ -30,13 +30,26 @@ export default {
                     : []
             )
             .join("");
+
+        this.categoryNames = categoriesResult
+            .flatMap((cat) =>
+                cat.parent?.name === "Subregulatory Guidance" ? cat.name : []
+            )
+            .join(",");
     },
 
     data() {
         return {
             tab: null,
             categories: null,
+            categoryNames: null,
         };
+    },
+
+    computed: {
+        moreGuidanceLink() {
+            return `${this.resourceLink}?resourceCategory=${this.categoryNames}&sort=newest`;
+        },
     },
 
     components: {
@@ -61,7 +74,7 @@ export default {
                     :categories="categories"
                     type="supplemental"
                 ></RecentChangesContainer>
-                <a :href="resourceLink" class="action-btn default-btn link-btn"
+                <a :href="moreGuidanceLink" class="action-btn default-btn link-btn"
                     >View More Guidance</a
                 >
             </v-tab-item>
