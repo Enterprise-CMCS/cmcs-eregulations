@@ -208,6 +208,8 @@ function httpApiGet(urlPath, { params } = {}) {
 
 // use when components used directly in Django templates
 function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
+    console.log(urlPath)
+    console.log(apiPath)
     return fetchJson(
         `${urlPath}`,
         {
@@ -298,11 +300,10 @@ const getCategories = async (apiUrl) => {
  *
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
-const getLastParserSuccessDate = async ({ title = "42" }) => {
-    const result = await httpApiGet(`ecfr_parser_result/${title}`);
+const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
+    const result = await httpApiGetLegacy(`${apiURL}ecfr_parser_result/${title}`);
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
-
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
  *
@@ -554,9 +555,9 @@ const getTitles = async (apiUrl) => {
  *
  * @returns {Array<{year: string, link: string}>}
  */
-const getGovInfoLinks = async (params) => {
-    const result = await httpApiGet(
-        `title/${params.title}/part/${params.part}/history/${
+const getGovInfoLinks = async (apiURL, params) => {
+    const result = await httpApiGetLegacy(
+        `${apiURL}title/${params.title}/part/${params.part}/history/${
             Object.keys(params)[2]
         }/${Object.values(params)[2]}`
     );

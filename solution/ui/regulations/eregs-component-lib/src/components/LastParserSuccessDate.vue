@@ -26,7 +26,7 @@ export default {
     },
 
     created() {
-        getLastParserSuccessDate({ title: 42 })
+        getLastParserSuccessDate(this.apiUrl, { title: 42 })
             .then(
                 (response) => {
                     this.lastParserSuccess = response;

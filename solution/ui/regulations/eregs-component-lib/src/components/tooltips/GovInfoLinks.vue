@@ -42,6 +42,10 @@ export default {
     },
 
     props: {
+        apiUrl: {
+            type: String,
+            required: true,
+        },
         title: {
             type: String,
             required: true,
@@ -57,7 +61,7 @@ export default {
     },
 
     created() {
-        getGovInfoLinks({
+        getGovInfoLinks(this.apiUrl, {
             title: this.title,
             part: this.part,
             section: this.section,
