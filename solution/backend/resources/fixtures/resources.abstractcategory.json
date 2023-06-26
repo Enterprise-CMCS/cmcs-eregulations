@@ -95,7 +95,7 @@
     "fields": {
         "name": "SPA Resources",
         "description": "",
-        "order": 100,
+        "order": 101,
         "show_if_empty": false
     }
 },
@@ -141,21 +141,11 @@
 },
 {
     "model": "resources.abstractcategory",
-    "pk": 17,
-    "fields": {
-        "name": "Terms",
-        "description": "Key abbreviations and definitions",
-        "order": 700,
-        "show_if_empty": false
-    }
-},
-{
-    "model": "resources.abstractcategory",
     "pk": 19,
     "fields": {
-        "name": "Reports to Congress",
-        "description": "CMS policy analysis and research reports sent to Congress",
-        "order": 501,
+        "name": "Reports and Evaluations",
+        "description": "HHS, CMS, and ASPE policy analysis and research reports",
+        "order": 550,
         "show_if_empty": true
     }
 },
@@ -185,7 +175,7 @@
     "fields": {
         "name": "OIG Reports",
         "description": "",
-        "order": 0,
+        "order": 550,
         "show_if_empty": false
     }
 },
@@ -211,21 +201,51 @@
 },
 {
     "model": "resources.abstractcategory",
-    "pk": 69,
-    "fields": {
-        "name": "Other Reports",
-        "description": "",
-        "order": 900,
-        "show_if_empty": false
-    }
-},
-{
-    "model": "resources.abstractcategory",
     "pk": 133,
     "fields": {
         "name": "Informational Summaries",
         "description": "Overview pages from HHS and CMS",
         "order": 520,
+        "show_if_empty": false
+    }
+},
+{
+    "model": "resources.abstractcategory",
+    "pk": 134,
+    "fields": {
+        "name": "Appeals Decisions",
+        "description": "HHS Departmental Appeals Board",
+        "order": 650,
+        "show_if_empty": false
+    }
+},
+{
+    "model": "resources.abstractcategory",
+    "pk": 135,
+    "fields": {
+        "name": "HHS and CMS Reports to Congress",
+        "description": "",
+        "order": 200,
+        "show_if_empty": false
+    }
+},
+{
+    "model": "resources.abstractcategory",
+    "pk": 138,
+    "fields": {
+        "name": "Associate Regional Administrator (ARA) Memo",
+        "description": "",
+        "order": 450,
+        "show_if_empty": false
+    }
+},
+{
+    "model": "resources.abstractcategory",
+    "pk": 139,
+    "fields": {
+        "name": "Topic Briefs and Reports",
+        "description": "",
+        "order": 0,
         "show_if_empty": false
     }
 }

@@ -22,6 +22,76 @@
 },
 {
     "model": "resources.subpart",
+    "pk": 3894,
+    "fields": {
+        "subpart_id": "B"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3895,
+    "fields": {
+        "subpart_id": "C"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3896,
+    "fields": {
+        "subpart_id": "D"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3897,
+    "fields": {
+        "subpart_id": "E"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3900,
+    "fields": {
+        "subpart_id": "H"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3892,
+    "fields": {
+        "subpart_id": "I"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3901,
+    "fields": {
+        "subpart_id": "J"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3902,
+    "fields": {
+        "subpart_id": "R"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3903,
+    "fields": {
+        "subpart_id": "U"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3904,
+    "fields": {
+        "subpart_id": "X"
+    }
+},
+{
+    "model": "resources.subpart",
     "pk": 955,
     "fields": {
         "subpart_id": "A"
@@ -995,6 +1065,34 @@
 },
 {
     "model": "resources.subpart",
+    "pk": 3867,
+    "fields": {
+        "subpart_id": "A"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3868,
+    "fields": {
+        "subpart_id": "B"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3869,
+    "fields": {
+        "subpart_id": "C"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3870,
+    "fields": {
+        "subpart_id": "D"
+    }
+},
+{
+    "model": "resources.subpart",
     "pk": 3103,
     "fields": {
         "subpart_id": "A"
@@ -1278,6 +1376,13 @@
     "pk": 3548,
     "fields": {
         "subpart_id": "O"
+    }
+},
+{
+    "model": "resources.subpart",
+    "pk": 3873,
+    "fields": {
+        "subpart_id": "P"
     }
 },
 {

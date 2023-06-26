@@ -13,14 +13,20 @@ We have public documentation about our product, design, and research processes i
 -   go version 1.16
 -   git
 -   node >= v18 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
+-   pre-commit hooks
 
 # Getting setup
+
+## Set Up Git pre-commit hooks
+
+See "Quick Start" in [SECRETSCANNING.md](SECRETSCANNING.md#quick-start) to ensure that pre-commit hooks are installed and working properly.
 
 ## Getting the code
 
 ```
 git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
 ```
+
 ## Create your Dockerfile
 
 - Create the dockerfile
@@ -29,7 +35,9 @@ git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
 cd solution
 cp Dockerfile.template Dockerfile
 ```
+
 - Update the dockerfile with correct environment variables values
+
 ## Running eRegs
 
 A lot of tasks for local development can be accessed through the Makefile.
@@ -106,9 +114,11 @@ If the data is seemingly out of sync with production you may want to get a more 
 
 In order to update your local data with the most recent version of production you will need to have access to our production database, pg_dump, and access to the cms.gov vpn.
 
+If adding a new model to this process please refer to the adding a new model process below.
+
 1.  Connect to the VPN and run the following command below for postgresql in the command line.  Replace db_address and port_number with the database address and port number respectively.  A file called `backup.sql` should populate in the directory the command is run in.
 ```
-pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' --data-only --column-inserts eregs
+pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' -t 'regulations_statute*' --data-only --column-inserts eregs
 ```
 2. Run the command `make python.emptyseedtables`.  This will clear out many of our resources tables and the synonym table for population of the database.
 3. Run the postges script `backup.sql` produced in step 2 on your local database.  This will update your database with up to date production data. 
@@ -117,6 +127,12 @@ pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_s
 4.  Go into admin and verify the values were updated.  You should see things like supplemental content, federal register documents, sections, subparts, categories, fr_grouping, and synonyms are populated.
 5.  Run the make command `make local.dump`.  This will overwrite the fixture files in the solution with the data now uploaded onto your machine. 
 6.  Push the PR.  Your dev branch should be now using the proper fixture data.
+
+### Adding a new model
+1.  If adding a new model update the following files to do so.
+    - In populate_content.py add it to both the add it to the fixtures list.  1st part of it is the json file, the other is the model
+    - In the make file, either add it to the list of objects, or add a new line for the model.
+    - In the emptyseedtables.py add the model to the handler command.
 
 ## Running eRegs Prototype
 

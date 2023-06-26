@@ -5,6 +5,9 @@ from django.core.exceptions import ValidationError
 from django.template import Context, Template
 from django.test import SimpleTestCase, TestCase
 
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from requests.exceptions import HTTPError
 
 from regulations.admin import StatuteLinkConverterAdmin
@@ -134,3 +137,26 @@ class LinkStatutesTestCase(SimpleTestCase):
             template = Template("{% load link_statutes %}{{ paragraph|link_statutes:link_conversions|safe }}")
             context = Context({"paragraph": test["input"], "link_conversions": link_conversions})
             self.assertEqual(template.render(context), test["expected"], f"Failed while testing {test['testing']}.")
+
+
+class StatuteConvertersAPITestCase(APITestCase):
+    def setUp(self):
+        with open("regulations/tests/fixtures/statute_link_api_test.json", "r") as f:
+            self.objects = json.load(f)
+            for i in self.objects:
+                StatuteLinkConverter.objects.create(**i)
+
+    def test_all_statutes(self):
+        response = self.client.get("/v3/statutes")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, self.objects)
+
+    def test_aca(self):
+        response = self.client.get("/v3/statutes?act=Affordable Care Act")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, self.objects[0:1])
+
+    def test_ssa(self):
+        response = self.client.get("/v3/statutes?act=Social Security Act")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, self.objects[1:3])
