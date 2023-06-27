@@ -8,7 +8,7 @@
         <h2 id="subpart-resources-heading">
             {{ activePart }} Resources
         </h2>
-        <div v-if="resource_display" class="resource_btn_container">
+        <div v-if="resourceDisplay" class="resource_btn_container">
             <a :href="resourceLink" class=" default-btn action-btn search_resource_btn">Search These Resources</a>
         </div>
         <div class="supplemental-content-container">
@@ -23,15 +23,13 @@
 </template>
 
 <script>
-import SimpleSpinner from "./SimpleSpinner.vue";
-import SupplementalContentCategory from "./SupplementalContentCategory.vue";
-
 import {
     getSupplementalContent,
     getSubpartTOC
 } from "utilities/api";
-
 import { EventCodes, formatResourceCategories } from "utilities/utils";
+import SimpleSpinner from "./SimpleSpinner.vue";
+import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];
@@ -59,13 +57,14 @@ export default {
     },
 
     props: {
-        api_url: {
+        apiUrl: {
             type: String,
             required: true,
         },
-        resources_url: {
+        resourcesUrl: {
             type: String,
-            required: false
+            required: false,
+            default: ""
         },
         title: {
             type: String,
@@ -87,11 +86,16 @@ export default {
                 return [];
             },
         },
-        resource_display: {
+        resourceDisplay: {
             type: Boolean,
             required: false,
             default: false
         },
+        djTemplate:{
+            type: Boolean,
+            required: false,
+            default: false
+        }
     },
 
     data() {
@@ -100,7 +104,6 @@ export default {
             isFetching: true,
             selectedPart: undefined,
             resourceCount: 0,
-            joined_locations: "",
             partDict: {}
         };
     },
@@ -121,7 +124,7 @@ export default {
         },
 
         resourceLink() {
-            let qString = `${this.resources_url}\?title=${this.title}&part=${this.part}`
+            let qString = `${this.resourcesUrl}?title=${this.title}&part=${this.part}`
 
             if (this.activePart.includes("Subpart")) {
                 qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}`
@@ -208,11 +211,11 @@ export default {
             try {
                 let response = ""
                 if (location) {
-                    response = await getSupplementalContent({ "builtLocationString": location })
+                    response = await getSupplementalContent({ "apiUrl": this.apiUrl, "builtLocationString": location, "djTemplate": this.djTemplate })
                 }
                 await this.getPartDictionary()
 
-                const subpartResponse = await getSupplementalContent({ "partDict": this.partDict, });
+                const subpartResponse = await getSupplementalContent({ "apiUrl": this.apiUrl, "partDict": this.partDict, "djTemplate": this.djTemplate });
 
                 this.resourceCount = subpartResponse.count;
                 if (response !== '') {

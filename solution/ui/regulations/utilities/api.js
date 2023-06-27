@@ -208,8 +208,6 @@ function httpApiGet(urlPath, { params } = {}) {
 
 // use when components used directly in Django templates
 function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
-    console.log(urlPath)
-    console.log(apiPath)
     return fetchJson(
         `${urlPath}`,
         {
@@ -463,7 +461,6 @@ const getRegSearchResults = async ({
     return response;
 };
 
-// todo: make these JS style camel case
 const getSupplementalContent = async ({
     partDict,
     title,
@@ -478,14 +475,16 @@ const getSupplementalContent = async ({
     locationDetails = true,
     sortMethod = "newest",
     frGrouping = true,
-    builtLocationString="",
+    builtLocationString = "",
+    djTemplate = false,
+    apiUrl = ""
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
 
     if (partDict === "all") {
         sString = title ? `${sString}&locations=${title}` : "";
-    } else if (builtLocationString !== ""){
+    } else if (builtLocationString !== "") {
         sString = `${sString}&${builtLocationString}`;
     } else {
         Object.keys(partDict).forEach((partKey) => {
@@ -518,7 +517,12 @@ const getSupplementalContent = async ({
     sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;
     sString = `${sString}&fr_grouping=${frGrouping}`;
 
-    const response = await httpApiGet(`resources/?${sString}`);
+    let response = "";
+    if (djTemplate) {
+        response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
+    } else {
+        response = await httpApiGet(`resources/?${sString}`);
+    }
     return response;
 };
 
