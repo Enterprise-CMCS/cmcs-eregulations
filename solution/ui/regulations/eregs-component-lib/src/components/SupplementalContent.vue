@@ -59,7 +59,8 @@ export default {
     props: {
         apiUrl: {
             type: String,
-            required: true,
+            required: false,
+            default: ""
         },
         resourcesUrl: {
             type: String,
