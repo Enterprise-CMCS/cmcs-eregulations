@@ -513,9 +513,7 @@ const getSupplementalContent = async ({
     sString = `${sString}&location_details=${locationDetails}`;
     sString = `${sString}&start=${start}&max_results=${maxResults}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
-    if(paginate){
-        sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;  
-    }
+    sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;  
     sString = `${sString}&fr_grouping=${frGrouping}`;
 
     let response = "";
