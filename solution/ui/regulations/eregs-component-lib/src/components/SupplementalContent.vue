@@ -226,7 +226,7 @@ export default {
             }
         },
         async getPartDictionary() {
-            const sections = await getSubpartTOC(this.title, this.part, this.subparts[0])
+            const sections = await getSubpartTOC(this.apiUrl, this.title, this.part, this.subparts[0])
             const secList = sections.map(section => section.identifier[1])
             this.partDict[this.part] = { "title": this.title, "subparts": this.subparts, "sections": secList }
         },

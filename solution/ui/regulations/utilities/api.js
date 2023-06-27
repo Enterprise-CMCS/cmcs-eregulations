@@ -320,9 +320,8 @@ const getTOC = async ({title, apiUrl}) => {
 const getSectionsForPart = async (title, part) =>
     httpApiGet(`title/${title}/part/${part}/version/latest/sections`);
 
-const getSubpartTOC = async (title, part, subPart) =>
-    httpApiGet(
-        `title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
+const getSubpartTOC = async (apiURL, title, part, subPart) => httpApiGetLegacy(
+        `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
 const getSynonyms = async (query) =>
@@ -515,8 +514,9 @@ const getSupplementalContent = async ({
     sString = `${sString}&sort=${sortMethod}`;
     sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;  
     sString = `${sString}&fr_grouping=${frGrouping}`;
-    
+
     let response = "";
+    
     if (apiUrl) {
         response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
     } else {
