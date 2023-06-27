@@ -1,11 +1,12 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 import { getStatutes } from "utilities/api";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
+import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
 
 import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
@@ -77,8 +78,7 @@ getStatutesArray();
                     <h2>Look up statute text in online sources</h2>
                 </template>
             </Banner>
-            Statutes:
-            {{ statutes }}
+            <StatuteTable :filtered-statutes="statutes" />
         </div>
     </body>
 </template>

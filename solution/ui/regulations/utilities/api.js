@@ -551,7 +551,7 @@ const getParts = async (title, apiUrl) => {
  * @returns {Promise <Array<{section: string, title: number, usc: string, act: string, name: string, statute_title: string, source_url: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
 const getStatutes = async ({ act, apiUrl }) => {
-    const actString = act ? `&act=${encodeURIComponent(act)}` : "";
+    const actString = act ? `?act=${encodeURIComponent(act)}` : "";
 
     if (apiUrl) {
         return httpApiGetLegacy(`${apiUrl}statutes${actString}`);
