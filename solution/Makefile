@@ -88,6 +88,10 @@ prototype.clean: ui/prototype
 .PHONY: lint
 lint:
 	flake8;
+ruff:
+	docker-compose exec regulations ruff check .;
+ruff-fix:
+	docker-compose exec regulations ruff --fix .
 
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: regulations local.docker data.local
@@ -154,9 +158,22 @@ test.local: ## run cypress tests locally without docker
 	cd ui/e2e; \
 		npm install; \
 		npm run cypress:run;
-
+.PHONY: test.vite
+test.vitest:
+	cd ui/regulations;\
+		npm install;\
+		npm run test-vue;
+test.vitest.coverage:
+	cd ui/regulations;\
+		npm install;\
+		npm run test-vue-coverage;
+		
 python.unittest:
-	docker-compose exec regulations python manage.py test
+	docker-compose exec regulations python manage.py test 
+
+##uncomment the -vvv if there are errors running pytest. 
+python.pytest:
+	docker-compose exec regulations pytest -vvv 
 
 python.shell:
 	docker-compose exec regulations python manage.py shell
@@ -174,8 +191,10 @@ objects = resources.abstractcategory resources.category resources.subcategory re
 
 local.seed:
 	$(foreach object, $(objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
-	docker-compose exec regulations python manage.py loaddata search.synonym.json
+	docker-compose exec regulations python manage.py loaddata search.synonym.json 
+	docker-compose exec regulations python manage.py loaddata regulations.statutelinkconverter.json
 
 local.dump:
 	$(foreach object, $(objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
 	docker-compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json
+	docker-compose exec regulations python manage.py dumpdata regulations.statutelinkconverter --indent 4 > ./backend/regulations/fixtures/regulations.statutelinkconverter.json

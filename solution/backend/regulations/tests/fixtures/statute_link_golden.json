@@ -1,380 +1,484 @@
 [
     {
-        "act": "SSA",
         "section": "1900",
         "title": "42",
         "usc": "1396",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Medicaid and CHIP Payment and Access Commission.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1901",
         "title": "42",
         "usc": "1396-1",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Appropriation.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1902",
         "title": "42",
         "usc": "1396a",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State plans for medical assistance.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1903",
         "title": "42",
         "usc": "1396b",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Payment to States.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1904",
         "title": "42",
         "usc": "1396c",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Operation of State plans.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1905",
         "title": "42",
         "usc": "1396d",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Definitions.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1906",
         "title": "42",
         "usc": "1396e",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Enrollment of individuals under group health plans.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1906A",
         "title": "42",
         "usc": "1396e-1",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Premium assistance option for children.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1907",
         "title": "42",
         "usc": "1396f",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Observance of religious beliefs.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1908",
         "title": "42",
         "usc": "1396g",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State programs for licensing of administrators of nursing homes.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1908A",
         "title": "42",
         "usc": "1396g-1",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Required laws relating to medical child support.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1909",
         "title": "42",
         "usc": "1396h",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State false claims act requirements for increased state share of recoveries.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1910",
         "title": "42",
         "usc": "1396i",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Certification and approval of rural health clinics and intermediate care facilities for the mentally retarded.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1911",
         "title": "42",
         "usc": "1396j",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Indian Health Service facilities.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1912",
         "title": "42",
         "usc": "1396k",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Assignment of rights of payment.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1913",
         "title": "42",
         "usc": "1396l",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Hospital providers of nursing facility services.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1914",
         "title": "42",
         "usc": "1396m",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Withholding of Federal share of payments for certain medicare providers.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1915",
         "title": "42",
         "usc": "1396n",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Provisions respecting inapplicability and waiver of certain requirements of this title.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1916",
         "title": "42",
         "usc": "1396o",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Use of enrollment fees, premiums, deductions, cost sharing, and similar charges.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1916A",
         "title": "42",
         "usc": "1396o-1",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State option for alternative premiums and cost sharing.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1917",
         "title": "42",
         "usc": "1396p",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Liens, adjustments and recoveries, and transfers of assets.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1918",
         "title": "42",
         "usc": "1396q",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Application of provisions of title II relating to subpoenas.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1919",
         "title": "42",
         "usc": "1396r",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Requirements for nursing facilities.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1920",
         "title": "42",
         "usc": "1396r-1",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Presumptive eligibility for pregnant women.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1920A",
         "title": "42",
         "usc": "1396r-1a",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Presumptive eligibility for children.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1920B",
         "title": "42",
         "usc": "1396r-1b",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Presumptive eligibility for certain breast or cervical cancer patients.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1920C",
         "title": "42",
         "usc": "1396r-1c",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Presumptive eligibility for family planning services.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1921",
         "title": "42",
         "usc": "1396r-2",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Information concerning sanctions taken by State licensing authorities against health care practitioners and providers.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1922",
         "title": "42",
         "usc": "1396r-3",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Correction and reduction plans for intermediate care facilities for the mentally retarded.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1923",
         "title": "42",
         "usc": "1396r-4",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Adjustment in payment for inpatient hospital services furnished by disproportionate share hospitals.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1924",
         "title": "42",
         "usc": "1396r-5",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Treatment of income and resources for certain institutionalized spouses.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1925",
         "title": "42",
         "usc": "1396r-6",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Extension of eligibility for medical assistance.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1927",
         "title": "42",
         "usc": "1396r-8",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Payment for covered outpatient drugs.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1928",
         "title": "42",
         "usc": "1396s",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Program for distribution of pediatric vaccines.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1929",
         "title": "42",
         "usc": "1396t",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Home and community care for functionally disabled elderly individuals.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1930",
         "title": "42",
         "usc": "1396u",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Community supported living arrangements services.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1931",
         "title": "42",
         "usc": "1396u-1",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Assuring coverage for certain low-income families.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1932",
         "title": "42",
         "usc": "1396u-2",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Provisions relating to managed care.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1933",
         "title": "42",
         "usc": "1396u-3",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State coverage of medicare cost-sharing for additional low-income medicare beneficiaries.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1934",
         "title": "42",
         "usc": "1396u-4",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Program of all-inclusive care for the elderly (PACE).",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1935",
         "title": "42",
         "usc": "1396u-5",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Special provisions relating to medicare prescription drug benefit.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1936",
         "title": "42",
         "usc": "1396u-6",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Medicaid integrity program.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1937",
         "title": "42",
         "usc": "1396u-7",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State flexibility in benefit packages.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1938",
         "title": "42",
         "usc": "1396u-8",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Health opportunity accounts.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1939",
         "title": "42",
         "usc": "1396v",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "References to laws directly affecting medicaid program.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1940",
         "title": "42",
         "usc": "1396w",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Asset verification through access to information held by financial institutions.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1941",
         "title": "42",
         "usc": "1396w-1",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Medicaid Improvement Fund.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1942",
         "title": "42",
         "usc": "1396w-2",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Authorization to receive relevant information.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1943",
         "title": "42",
         "usc": "1396w-3",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Enrollment simplification and coordination with state health insurance exchanges.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1944",
         "title": "42",
         "usc": "1396w-3a",
+        "act": "Social Security Act",
         "source_url": "http://test.com/test.xml"
     },
     {
-        "act": "SSA",
         "section": "1945",
         "title": "42",
         "usc": "1396w-4",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State option to provide coordinated care through a health home for individuals with chronic conditions.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1945A",
         "title": "42",
         "usc": "1396w-4a",
+        "act": "Social Security Act",
         "source_url": "http://test.com/test.xml"
     },
     {
-        "act": "SSA",
         "section": "1946",
         "title": "42",
         "usc": "1396w-5",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "Addressing health care disparities.",
+        "statute_title": "XIX"
     },
     {
-        "act": "SSA",
         "section": "1947",
         "title": "42",
         "usc": "1396w-6",
-        "source_url": "http://test.com/test.xml"
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "State option to provide qualifying community-based mobile crisis intervention services.",
+        "statute_title": "XIX"
     }
 ]

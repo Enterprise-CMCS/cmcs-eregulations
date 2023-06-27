@@ -3,7 +3,7 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  runtime: python3.8
+  runtime: python3.9
   region: us-east-1
   iam:
     role: LambdaFunctionRole
@@ -26,6 +26,7 @@ provider:
     STATIC_URL: ${self:custom.settings.static_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url, ''}
     SURVEY_URL: ${ssm:/eregulations/survey_url}
+    SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
   vpc:

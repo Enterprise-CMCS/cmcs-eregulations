@@ -58,7 +58,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             // remove the space char
             .invoke("replace", /\u00a0/g, " ")
             .should("eq", "We welcome questions and suggestions — ");
-
         cy.get("div.flash-banner a").should("have.text", "give us feedback.");
     });
 
@@ -113,42 +112,41 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get("div.blocking-modal-content").should("not.be.visible");
     });
 
-    it("has the correct title and copy text", () => {
+    it("Does not allow selection of Part till Title is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".call-to-action").should(
-            "have.text",
-            "Look up policy with context."
-        );
-        cy.get(".hero-text").should(
-            "have.text",
-            "Explore this site as a supplement to existing policy tools. How this tool is updated."
-        );
+        cy.get("#jumpToPart").should("be.disabled");
+        cy.get("#jumpToTitle").select("45");
+        cy.get("#jumpToPart").should("not.be.disabled");
     });
 
-    it("takes you to the about page when clicking how this tool is updated link", () => {
+    it("Does not include Part 75 when Title 45 is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".hero-text a").click();
-
-        cy.url().should(
-            "eq",
-            Cypress.config().baseUrl + "/about/#automated-updates"
-        );
+        cy.get("#jumpToTitle").select("45");
+        cy.get("#jumpToPart").then(($select) => {
+            const options = $select.find("option");
+            const values = [...options].map((o) => o.value);
+            expect(values).to.not.include("75");
+        });
     });
 
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("#jumpToPart").select("433");
+        cy.get("#jumpToTitle")
+            .select("45", { force: true })
+            .then(() => {
+                cy.get("#jumpToPart").should("be.visible").select("95");
+            });
         cy.get("#jumpBtn").click({ force: true });
-
-        cy.url().should("eq", Cypress.config().baseUrl + "/42/433/#433");
+        cy.url().should("eq", Cypress.config().baseUrl + "/45/95/#95");
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get("#jumpToTitle").select("42");
         cy.get("#jumpToPart").should("be.visible").select("433");
         cy.get("#jumpToSection").type("40");
         cy.get("#jumpBtn").click({ force: true });
@@ -166,13 +164,25 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("clicks on part 430 and loads the page", () => {
+    it("clicks on Title 42 Part 430 in ToC and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get("#homepage-toc").contains("Part 430").click();
+        cy.get(".toc__container").contains("Part 430").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/430/");
         cy.contains("Grants to States for Medical Assistance Programs");
+    });
+
+    it("clicks on Title 45 Part 95 in ToC and loads the page", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".toc__container .v-tabs").contains("Title 45").click();
+        cy.get(".toc__container").contains("Part 95").click();
+
+        cy.url().should("eq", Cypress.config().baseUrl + "/45/95/");
+        cy.contains(
+            "General Administration—Grant Programs (Public Assistance, Medical Assistance and State Children's Health Insurance Programs)"
+        );
     });
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
@@ -183,14 +193,65 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.url().should("eq", Cypress.config().baseUrl + "/");
     });
 
-    it("has grouped FR docs in the right sidebar", () => {
+    it("has the correct descriptive text", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".related-rule-list").should("exist");
-        cy.get(".recent-rules-descriptive-text").should(
-            "have.text",
-            "Includes 42 CFR 400, 430-460"
+        cy.get(".cta .about-text__container p").should(($el) => {
+            expect($el.text().replace(/\s+/g, " ").trim()).to.equal(
+                "eRegulations organizes together regulations, subregulatory guidance, and other related policy materials."
+            );
+        });
+    });
+
+    it("takes you to the about page when clicking 'Learn About This Tool'", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".cta .about-text__container a")
+            .contains("Learn About This Tool")
+            .click();
+        cy.url().should("eq", Cypress.config().baseUrl + "/about/");
+    });
+
+    it("takes you to the proper sample search", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".policy-materials__container a.sample-search-btn")
+            .contains("Try a Sample Search")
+            .click({ force: true });
+        cy.url().should(
+            "eq",
+            Cypress.config().baseUrl +
+                `/search/?q=%22public%20health%20emergency%22`
         );
+    });
+
+    it("has Recent Subregulatory Guidance tab and results", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container").should("exist");
+        cy.get(".recent-rules-descriptive-text")
+            .first()
+            .should(($el) => {
+                expect($el.text().trim()).to.equal(
+                    "Includes 42 CFR 400, 430-460, 600, and 45 CFR 95"
+                );
+            });
+        cy.get(".resources__container").contains("View More Guidance").click({ force: true });
+        cy.url().should(
+            "eq",
+            Cypress.config().baseUrl +
+                `/resources/?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest`
+        );
+    });
+
+    it("has grouped FR docs in Related Rules tab", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container").should("exist");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click({ force: true });
+
         cy.get(".related-rule").should("have.length", 7);
         cy.get(".related-rule.ungrouped").then(($els) => {
             expect($els).to.have.length(3);
@@ -216,11 +277,21 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .and.eq("rgb(255, 255, 255)");
                 });
         });
+
+        cy.get(".resources__container").contains("View More Changes").click({ force: true });
+        cy.url().should(
+            "eq",
+            Cypress.config().baseUrl +
+                `/resources/?resourceCategory=Proposed%20and%20Final%20Rules`
+        );
     });
 
     it("Sets the label as Final, when correction and withdraw are both set to false", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
         cy.get(".related-rule.ungrouped").then(($els) => {
             cy.wrap($els[0]).find(".recent-title").should("exist");
             cy.wrap($els[0])
@@ -237,6 +308,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("Sets the label as WD when Correction is false and Withdrawal is true", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
         cy.get(".related-rule.grouped").then(($els) => {
             cy.wrap($els[0]).find(".recent-title").should("not.exist");
             cy.wrap($els[0])
@@ -261,6 +335,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("Sets the label as WD when Correction is true and Withdrawal is true", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
         cy.get(".related-rule.grouped").then(($els) => {
             cy.wrap($els[3]).find(".recent-title").should("not.exist");
             cy.wrap($els[3])
@@ -285,6 +362,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
         cy.get(".related-rule.grouped").then(($els) => {
             cy.wrap($els[1]).find(".recent-title").should("not.exist");
             cy.wrap($els[1])
@@ -306,5 +386,47 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".last-updated-date")
             .invoke("text")
             .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/);
+    });
+
+    it("should have an open left nav on load on desktop", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get("nav#leftNav").should("have.attr", "class", "open");
+    });
+
+    it("should have a closed left nav on load on tablet", () => {
+        cy.viewport(800, 1024);
+        cy.visit("/");
+        cy.get("nav#leftNav").should("have.attr", "class", "closed");
+    });
+
+    it("should have a closed left nav on mobile", () => {
+        cy.viewport("iphone-x");
+        cy.visit("/");
+        cy.get("nav#leftNav").should("have.attr", "class", "closed");
+    });
+
+    it("should responsively open and close the left nav if user does not click open/close button", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get("nav#leftNav").should("have.attr", "class", "open");
+        cy.viewport(800, 1024);
+        cy.get("nav#leftNav").should("have.attr", "class", "closed");
+        cy.viewport("macbook-15");
+        cy.get("nav#leftNav").should("have.attr", "class", "open");
+    });
+
+    it("should keep left nav open if user explicitly expands it, even if screen width changes", () => {
+        cy.viewport(800, 1024);
+        cy.visit("/");
+        cy.get("nav#leftNav").should("have.attr", "class", "closed");
+        cy.get("button.nav-toggle__button").click({ force: true });
+        cy.get("nav#leftNav").should("have.attr", "class", "open");
+        cy.viewport("macbook-15");
+        cy.get("nav#leftNav").should("have.attr", "class", "open");
+        cy.viewport(800, 1024);
+        cy.get("nav#leftNav").should("have.attr", "class", "open");
+        cy.viewport("iphone-x");
+        cy.get("nav#leftNav").should("have.attr", "class", "open");
     });
 });

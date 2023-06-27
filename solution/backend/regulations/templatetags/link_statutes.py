@@ -28,21 +28,28 @@ SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*"
 STATUTE_REF_PATTERN = rf"\bsect(?:ion[s]?|s?)\.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
+# Matches chains of paragraphs, for example in "Section 1902(a)(1)(C)", "(a)(1)(C)" will match.
+LINKED_PARAGRAPH_PATTERN = r"((?:\([a-z0-9]+\))+)"
+
+# Extracts paragraph identifiers. Running findall() on "(a)(1)(C)" returns ["a", "1", "C"].
+PARAGRAPH_PATTERN = r"\(([a-z0-9]+)\)"
+
 # Regex's are precompiled to improve page load time.
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
 SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
+LINKED_PARAGRAPH_REGEX = re.compile(LINKED_PARAGRAPH_PATTERN, re.IGNORECASE)
 PARAGRAPH_REGEX = re.compile(PARAGRAPH_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
 DEFAULT_ACT = "Social Security Act"
 
 
-# Returns the first paragraph identifier in the section.
-# For example, if the section text is "Section 1902(a)(1)(C) and (b)(2)", this will return "a".
-def extract_paragraph(section_text):
-    match = PARAGRAPH_REGEX.search(section_text)
-    return match.group(1) if match else None
+# Returns a list containing the first paragraph chain in a section ref.
+# For example, if the section text is "Section 1902(a)(1)(C) and (b)(2)", this will return ["a", "1", "C"].
+def extract_paragraphs(section_text):
+    linked_paragraphs = LINKED_PARAGRAPH_REGEX.search(section_text)  # extract the first paragraph chain (e.g. (a)(1)(c)...)
+    return PARAGRAPH_REGEX.findall(linked_paragraphs.group()) if linked_paragraphs else None
 
 
 # This function is run by re.sub() to replace individual section refs with links.
@@ -52,12 +59,12 @@ def replace_section(section, act, link_conversions):
     section = SECTION_ID_REGEX.match(section_text).group()  # extract section
     # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
-        paragraph = extract_paragraph(section_text)
+        paragraphs = extract_paragraphs(section_text)
         conversion = link_conversions[act][section]
         return USCODE_LINK_FORMAT.format(
             conversion["title"],
             conversion["usc"],
-            USCODE_SUBSTRUCT_FORMAT.format(paragraph) if paragraph else "",
+            USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
             section_text,
         )
     return section_text

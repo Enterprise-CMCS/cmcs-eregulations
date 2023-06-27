@@ -7,8 +7,9 @@ solution/ui/e2e/cypress/videos
 .env
 solution/backend/regulations/static/*
 solution/static-assets/regulations/*
-!solution/static-assets/regulations/fonts/*
-!solution/static-assets/regulations/images/*
-!solution/static-assets/regulations/pdfs/*
+!solution/static-assets/regulations/fonts/
+!solution/static-assets/regulations/images/
+!solution/static-assets/regulations/pdfs/
 solution/ui/regulations/dist
 solution/Dockerfile
+solution/ui/regulations/coverage/

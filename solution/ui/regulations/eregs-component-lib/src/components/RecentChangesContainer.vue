@@ -1,15 +1,8 @@
-<template>
-    <div class="rules-container">
-        <SimpleSpinner v-if="loading" />
-        <RelatedRuleList v-if="!loading" :rules="rules" />
-    </div>
-</template>
-
 <script>
+import { getCategories, getRecentResources } from "utilities/api";
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
-
-import { getFederalRegisterDocs } from "../api";
+import RecentSupplementalContent from "./RecentSupplementalContent.vue";
 
 export default {
     name: "DefaultName",
@@ -17,6 +10,7 @@ export default {
     components: {
         RelatedRuleList,
         SimpleSpinner,
+        RecentSupplementalContent,
     },
 
     props: {
@@ -24,12 +18,32 @@ export default {
             type: String,
             required: true,
         },
+        type: {
+            type: String,
+            required: false,
+            default: "rules",
+        },
     },
 
     async created() {
-        const rulesResponse = await getFederalRegisterDocs(this.apiUrl, {
+        let categoriesObj = {}; // eslint-disable-line prefer-const
+
+        if (this.type === "supplemental") {
+            const categoriesResult = await getCategories(this.apiUrl);
+            categoriesObj.categories = categoriesResult
+                .flatMap((cat) =>
+                    cat.parent?.name === "Subregulatory Guidance"
+                        ? `&categories=${cat.id}`
+                        : []
+                )
+                .join("");
+        }
+
+        const rulesResponse = await getRecentResources(this.apiUrl, {
             page: 1,
             pageSize: 3,
+            type: this.type,
+            ...categoriesObj,
         });
 
         this.rules = rulesResponse.results;
@@ -50,6 +64,19 @@ export default {
     },
 };
 </script>
+<template>
+    <div class="rules-container">
+        <SimpleSpinner v-if="loading" />
+        <RelatedRuleList
+            v-if="!loading && type != 'supplemental'"
+            :rules="rules"
+        />
+        <RecentSupplementalContent
+            v-if="!loading && type == 'supplemental'"
+            :supplemental-content="rules"
+        />
+    </div>
+</template>
 
 <style lang="scss">
 .rules-container {

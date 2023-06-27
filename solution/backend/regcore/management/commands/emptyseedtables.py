@@ -1,6 +1,8 @@
 
 from django.core.management.base import BaseCommand
 
+from regcore.search.models import Synonym
+from regulations.models import StatuteLinkConverter
 from resources.models import (
     AbstractCategory,
     AbstractResource,
@@ -8,8 +10,6 @@ from resources.models import (
     FederalRegisterDocumentGroup,
     ResourcesConfiguration,
 )
-
-from regcore.search.models import Synonym
 
 
 class Command(BaseCommand):
@@ -21,3 +21,4 @@ class Command(BaseCommand):
         ResourcesConfiguration.objects.all().delete()
         FederalRegisterDocumentGroup.objects.all().delete()
         Synonym.objects.all().delete()
+        StatuteLinkConverter.objects.all().delete()

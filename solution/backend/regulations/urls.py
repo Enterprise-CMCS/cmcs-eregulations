@@ -1,17 +1,22 @@
 from django.urls import path, register_converter
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from regulations.views.reader import SubpartReaderView, SectionReaderView, PartReaderView
-from regulations.views.goto import GoToRedirectView
-from regulations.views.search import SearchView
-from regulations.views.regulation_landing import RegulationLandingView
-from regulations.views.homepage import HomepageView
-from regulations.views.homepage_prototype import HomepagePrototypeView
+from regulations import converters
 from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
+from regulations.views.goto import GoToRedirectView
+from regulations.views.homepage import HomepageView
+from regulations.views.reader import (
+     PartReaderView,
+     SectionReaderView,
+     SubpartReaderView,
+)
+from regulations.views.regulation_landing import RegulationLandingView
 from regulations.views.resources import ResourcesView
+from regulations.views.search import SearchView
+from regulations.views.statute import StatuteView
 from regulations.views.supplemental_content import SupplementalContentView
-from regulations import converters
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from regulations.views.statutes import StatuteLinkConverterViewSet
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
@@ -19,7 +24,6 @@ register_converter(converters.VersionConverter, 'version')
 
 urlpatterns = [
     path('', HomepageView.as_view(), name='homepage'),
-    path('homepage_test/', HomepagePrototypeView.as_view(), name='homepage_prototype'),
     path('about/', AboutView.as_view(), name='about'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),
@@ -39,4 +43,8 @@ urlpatterns = [
     path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
     path('cache/', CacheView.as_view(), name='cache'),
     path('resources/', ResourcesView.as_view(), name='resources'),
+    path('statutes/', StatuteView.as_view(), name='statues'),
+    path('v3/statutes', StatuteLinkConverterViewSet.as_view({
+        "get": "list",
+    })),
 ]
