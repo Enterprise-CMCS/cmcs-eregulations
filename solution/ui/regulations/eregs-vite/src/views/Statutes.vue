@@ -64,7 +64,7 @@ const props = defineProps({
             <Banner title="Statute Reference">
                 <template #description>
                     <h2>
-                        Find online versions of codified statue 
+                        Look up statute text in online sources
                     </h2>
                 </template>
             </Banner>
