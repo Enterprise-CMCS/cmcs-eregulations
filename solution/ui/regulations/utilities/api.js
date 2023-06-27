@@ -515,9 +515,9 @@ const getSupplementalContent = async ({
     sString = `${sString}&sort=${sortMethod}`;
     sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;  
     sString = `${sString}&fr_grouping=${frGrouping}`;
-
+    
     let response = "";
-    if (!apiUrl) {
+    if (apiUrl) {
         response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
     } else {
         response = await httpApiGet(`resources/?${sString}`);
