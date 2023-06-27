@@ -91,11 +91,6 @@ export default {
             required: false,
             default: false
         },
-        djTemplate:{
-            type: Boolean,
-            required: false,
-            default: false
-        }
     },
 
     data() {
@@ -211,11 +206,11 @@ export default {
             try {
                 let response = ""
                 if (location) {
-                    response = await getSupplementalContent({ "apiUrl": this.apiUrl, "builtLocationString": location, "djTemplate": this.djTemplate })
+                    response = await getSupplementalContent({ "apiUrl": this.apiUrl, "builtLocationString": location })
                 }
                 await this.getPartDictionary()
 
-                const subpartResponse = await getSupplementalContent({ "apiUrl": this.apiUrl, "partDict": this.partDict, "djTemplate": this.djTemplate });
+                const subpartResponse = await getSupplementalContent({ "apiUrl": this.apiUrl, "partDict": this.partDict });
 
                 this.resourceCount = subpartResponse.count;
                 if (response !== '') {

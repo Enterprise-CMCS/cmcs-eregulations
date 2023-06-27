@@ -476,7 +476,6 @@ const getSupplementalContent = async ({
     sortMethod = "newest",
     frGrouping = true,
     builtLocationString = "",
-    djTemplate = false,
     apiUrl = ""
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
@@ -518,7 +517,7 @@ const getSupplementalContent = async ({
     sString = `${sString}&fr_grouping=${frGrouping}`;
 
     let response = "";
-    if (djTemplate) {
+    if (apiUrl !== "") {
         response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
     } else {
         response = await httpApiGet(`resources/?${sString}`);
