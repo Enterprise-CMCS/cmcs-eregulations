@@ -4,71 +4,99 @@
 
 @import "../application_settings";
 
-#statuteTable {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
+.statute__container {
+    padding: 0 $spacer-5;
 
-    .table__row {
-        &--header {
-            background-color: $mid_blue_2;
-            color: #fff;
-            text-align: left;
-            vertical-align: top;
-        }
+    @include screen-xl {
+        padding-left: 0 $spacer-4;
+    }
 
-        &--body {
-            border-bottom: 1px solid $table_border_color;
-        }
+    .content {
+        margin: 0 auto;
+        padding-top: 30px;
+        max-width: $text-max-width;
 
-        &:first-of-type {
-            .row__cell--body {
-                padding-top: 18px;
-            }
-        }
+        .table__parent {
+            padding: 0.75rem;
+            border: 1px solid $table_border_color;
+            border-radius: 4px;
 
-        .row__cell {
-            padding: 0.5rem 0 0.5rem 1.5rem;
-
-            .cell__title {
-                font-weight: bold;
+            .table__caption {
+                padding-bottom: 1.5rem;
+                color: $primary_text_color;
             }
 
-            .cell__subtitle {
-                font-size: 14px;
-                line-height: 22px;
-                font-weight: normal;
-                font-style: italic;
-            }
+            #statuteTable {
+                width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
 
-            .cell__usc-label {
-                padding: 0.5rem 0;
-            }
+                .table__row {
+                    &--header {
+                    }
 
-            .cell__name {
-                font-size: 0.75rem;
-                line-height: 18px;
-            }
+                    &--body {
+                        border-bottom: 1px solid $table_border_color;
+                    }
 
-            &--header {
+                    &:first-of-type {
+                        .row__cell--body {
+                            padding-top: 18px;
+                        }
+                    }
 
-            }
+                    .row__cell {
+                        padding: 0.5rem 0 0.5rem 1.5rem;
 
-            &--body {
-                padding-top: 0.75rem;
-                padding-bottom: 0.75rem;
-            }
+                        .cell__title {
+                            font-weight: bold;
+                        }
 
-            &--primary {
-                width: 220px;
-            }
+                        .cell__subtitle {
+                            font-size: 14px;
+                            line-height: 22px;
+                            font-weight: normal;
+                            font-style: italic;
+                        }
 
-            &:first-of-type {
-                padding-left: 1rem;
-            }
+                        .cell__usc-label {
+                            padding: 0.5rem 0;
+                        }
 
-            &:last-of-type {
-                padding-right: 1rem;
+                        .cell__name {
+                            font-size: 0.75rem;
+                            line-height: 18px;
+                        }
+
+                        &--header {
+                            background-color: $mid_blue_2;
+                            color: #fff;
+                            text-align: left;
+                            vertical-align: top;
+                        }
+
+                        &--body {
+                            padding-top: 0.75rem;
+                            padding-bottom: 0.75rem;
+                        }
+
+                        &--primary {
+                            width: 220px;
+                        }
+
+                        &:first-of-type {
+                            padding-left: 1rem;
+                        }
+
+                        &:last-of-type {
+                            padding-right: 1rem;
+                        }
+                    }
+
+                    .row__cell--body.row__cell--primary {
+                        background-color: $lightest_blue;
+                    }
+                }
             }
         }
     }
