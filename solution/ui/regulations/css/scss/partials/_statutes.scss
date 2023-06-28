@@ -4,3 +4,72 @@
 
 @import "../application_settings";
 
+#statuteTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    .table__row {
+        &--header {
+            background-color: $mid_blue_2;
+            color: #fff;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        &--body {
+            border-bottom: 1px solid $table_border_color;
+        }
+
+        &:first-of-type {
+            .row__cell--body {
+                padding-top: 18px;
+            }
+        }
+
+        .row__cell {
+            padding: 0.5rem 0 0.5rem 1.5rem;
+
+            .cell__title {
+                font-weight: bold;
+            }
+
+            .cell__subtitle {
+                font-size: 14px;
+                line-height: 22px;
+                font-weight: normal;
+                font-style: italic;
+            }
+
+            .cell__usc-label {
+                padding: 0.5rem 0;
+            }
+
+            .cell__name {
+                font-size: 0.75rem;
+                line-height: 18px;
+            }
+
+            &--header {
+
+            }
+
+            &--body {
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+
+            &--primary {
+                width: 220px;
+            }
+
+            &:first-of-type {
+                padding-left: 1rem;
+            }
+
+            &:last-of-type {
+                padding-right: 1rem;
+            }
+        }
+    }
+}
