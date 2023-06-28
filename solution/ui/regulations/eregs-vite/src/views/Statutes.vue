@@ -78,7 +78,15 @@ getStatutesArray();
                     <h2>Look up statute text in online sources</h2>
                 </template>
             </Banner>
-            <StatuteTable :filtered-statutes="statutes" />
+            <div class="statute__container">
+                <div class="content">
+                    <div class="table__parent">
+                        <div class="table__caption">
+                        </div>
+                        <StatuteTable :filtered-statutes="statutes" />
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </template>
