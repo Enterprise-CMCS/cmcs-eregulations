@@ -76,12 +76,13 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
     list_per_page = 200
     search_fields = ["act", "section", "title", "usc", "source_url"]
     ordering = ("act", "section", "title", "usc", "source_url")
-    readonly_fields = ("source_url",)
+    readonly_fields = ("source_url", "statute_title_roman")
 
     fieldsets = (
         (None, {
             "fields": (
                 "statute_title",
+                "statute_title_roman",
                 "act",
                 "section",
                 "name",

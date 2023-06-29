@@ -13,6 +13,7 @@ class StatuteLinkConverterSerializer(serializers.Serializer):
     act = serializers.CharField()
     name = serializers.CharField()
     statute_title = serializers.IntegerField()
+    statute_title_roman = serializers.CharField()
     source_url = serializers.CharField()
 
 
@@ -43,6 +44,7 @@ class StatuteLinkConverterViewSet(viewsets.ReadOnlyModelViewSet):
 class ActListSerializer(serializers.Serializer):
     act = serializers.CharField()
     title = serializers.IntegerField(source="statute_title")
+    title_roman = serializers.CharField(source="statute_title_roman")
 
 
 @extend_schema(description="Retrieve a list of all acts and their titles. Compiled from internal Statute Link Converters.")
@@ -56,5 +58,4 @@ class ActListViewSet(viewsets.ReadOnlyModelViewSet):
             .exclude(act__exact='')\
             .exclude(statute_title__isnull=True)\
             .order_by("act", "statute_title")\
-            .distinct("act", "statute_title")\
-            .values("act", "statute_title")
+            .distinct("act", "statute_title")

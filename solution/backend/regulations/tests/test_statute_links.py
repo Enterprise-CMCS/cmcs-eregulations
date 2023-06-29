@@ -109,7 +109,6 @@ class TestStatuteLinkImport(TestCase):
 
 
 class LinkStatutesTestCase(SimpleTestCase):
-
     def test_link_statutes(self):
         link_conversions = {
             "Social Security Act": {
@@ -144,7 +143,10 @@ class StatuteConvertersAPITestCase(APITestCase):
         with open("regulations/tests/fixtures/statute_link_api_test.json", "r") as f:
             self.objects = json.load(f)
             for i in self.objects:
+                roman = i["statute_title_roman"]
+                del i["statute_title_roman"]
                 StatuteLinkConverter.objects.create(**i)
+                i["statute_title_roman"] = roman
 
     def test_all_statutes(self):
         response = self.client.get("/v3/statutes")
@@ -176,3 +178,22 @@ class StatuteConvertersAPITestCase(APITestCase):
         response = self.client.get("/v3/acts")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected)
+
+
+class RomanConversionTestCase(SimpleTestCase):
+    def test_int_to_roman(self):
+        tests = [
+            [1, "I"],
+            [2, "II"],
+            [3, "III"],
+            [4, "IV"],
+            [5, "V"],
+            [6, "VI"],
+            [11, "XI"],
+            [19, "XIX"],
+            [21, "XXI"],
+        ]
+        object = StatuteLinkConverter()
+        for i in range(len(tests)):
+            object.statute_title = tests[i][0]
+            self.assertEqual(object.statute_title_roman, tests[i][1])

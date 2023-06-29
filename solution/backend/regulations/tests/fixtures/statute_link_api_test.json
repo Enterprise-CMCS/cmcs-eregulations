@@ -6,6 +6,7 @@
         "act": "Social Security Act",
         "name": "Something",
         "statute_title": 1,
+        "statute_title_roman": "I",
         "source_url": "https://test.gov/test2.xml"
     },
     {
@@ -15,6 +16,7 @@
         "act": "Affordable Care Act",
         "name": "Definitions.",
         "statute_title": 10,
+        "statute_title_roman": "X",
         "source_url": "https://test.gov/test.xml"
     },
     {
@@ -24,6 +26,7 @@
         "act": "Social Security Act",
         "name": "Something else.",
         "statute_title": 3,
+        "statute_title_roman": "III",
         "source_url": "https://test.gov/test3.xml"
     },
     {
@@ -33,6 +36,7 @@
         "act": "Social Security Act",
         "name": "",
         "statute_title": null,
+        "statute_title_roman": null,
         "source_url": "https://test.gov/test3.xml"
     }
 ]
