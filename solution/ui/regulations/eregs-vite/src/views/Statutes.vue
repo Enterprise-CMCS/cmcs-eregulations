@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 import { getStatutes } from "utilities/api";
 
@@ -43,6 +43,30 @@ const getStatutesArray = async () => {
     statutes.value = statutesArray;
 };
 
+// Watch Banner left margin
+const windowWidth = ref(window.innerWidth);
+
+const bannerRef = ref(null);
+const bannerLeftMargin = ref(0);
+
+const getBannerLeftMargin = () => {
+    const bannerContent = bannerRef.value.$el
+        .getElementsByClassName("content")
+        .item(0);
+
+    bannerLeftMargin.value = window.getComputedStyle(bannerContent).marginLeft;
+};
+
+const onWidthChange = () => {
+    getBannerLeftMargin();
+};
+
+onMounted(() => {
+    window.addEventListener("resize", onWidthChange);
+    getBannerLeftMargin();
+});
+onUnmounted(() => window.removeEventListener("resize", onWidthChange));
+
 // On load
 getStatutesArray();
 </script>
@@ -73,17 +97,19 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner title="Statute Reference">
+            <Banner ref="bannerRef" title="Statute Reference">
                 <template #description>
                     <h2>Look up statute text in online sources</h2>
                 </template>
             </Banner>
             <div class="statute__container">
-                <div class="content">
+                <div class="content" :style="{ marginLeft: bannerLeftMargin }">
                     <div class="table__parent">
-                        <div class="table__caption">
-                        </div>
-                        <StatuteTable :filtered-statutes="statutes" />
+                        <div class="table__caption"></div>
+                        <StatuteTable
+                            :left-margin="bannerLeftMargin"
+                            :filtered-statutes="statutes"
+                        />
                     </div>
                 </div>
             </div>
