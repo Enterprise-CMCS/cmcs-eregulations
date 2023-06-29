@@ -1,6 +1,8 @@
 import { rest } from "msw";
 import { partToc42, partToc45 } from "./part_toc.js";
 import { titles } from "./titles.js";
+import { subpartResources } from "./resources.js";
+import {subpartA} from "./subpartTOC.js";
 
 const handlers = [
     rest.get("*/title/42/parts", (req, res, ctx) =>
@@ -11,6 +13,12 @@ const handlers = [
     ),
     rest.get("*/titles", (req, res, ctx) =>
         res(ctx.status(200), ctx.json(titles))
-    )
+    ),
+    rest.get("*/title/42/part/433/version/latest/subpart/A/toc", (req, res, ctx) =>
+        res(ctx.status(200), ctx.json(subpartA))
+    ),
+    rest.get("*/resources/?&locations=42.433.A&*", (req, res, ctx) =>
+    res(ctx.status(200), ctx.json(subpartResources))
+),
 ];
 export default handlers;

@@ -17,7 +17,7 @@ export default {
         requestAnimationFrame(() => {
             this.visible = this.state === "expanded";
             if (!this.visible) {
-                this.$refs.target.classList.add("display-none");
+                this.$refs.target?.classList?.add("display-none");
             }
         });
         this.$root.$on("collapse-toggle", this.toggle);

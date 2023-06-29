@@ -1,0 +1,298 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
+{
+  "baseElement": <body>
+    <div
+      id="categories"
+    >
+      [{"id":5,"name":"Subregulatory Guidance","description":"SMDLs, SHOs, CIBs, FAQs, SMM","order":400,"show_if_empty":true,"abstractcategory_ptr_id":5},{"id":11,"name":"Implementation Resources","description":"State Technical Assistance, Toolkits, SPA/Waiver Resources","order":500,"show_if_empty":true,"abstractcategory_ptr_id":11},{"id":19,"name":"Reports to Congress","description":"CMS policy analysis and research reports sent to Congress","order":501,"show_if_empty":true,"abstractcategory_ptr_id":19},{"id":23,"name":"Oversight Reports","description":"Reports from HHS Office of Inspector General and U.S. Government Accountability Office","order":600,"show_if_empty":true,"abstractcategory_ptr_id":23}]
+    </div>
+    <div
+      id="sub_categories"
+    >
+      [{},{}]
+    </div>
+    <div
+      id="categories"
+    >
+      [{"id":5,"name":"Subregulatory Guidance","description":"SMDLs, SHOs, CIBs, FAQs, SMM","order":400,"show_if_empty":true,"abstractcategory_ptr_id":5},{"id":11,"name":"Implementation Resources","description":"State Technical Assistance, Toolkits, SPA/Waiver Resources","order":500,"show_if_empty":true,"abstractcategory_ptr_id":11},{"id":19,"name":"Reports to Congress","description":"CMS policy analysis and research reports sent to Congress","order":501,"show_if_empty":true,"abstractcategory_ptr_id":19},{"id":23,"name":"Oversight Reports","description":"Reports from HHS Office of Inspector General and U.S. Government Accountability Office","order":600,"show_if_empty":true,"abstractcategory_ptr_id":23}]
+    </div>
+    <div
+      id="sub_categories"
+    >
+      [{},{}]
+    </div>
+    <div>
+      <div>
+        <!---->
+        <h2
+          id="subpart-resources-heading"
+        >
+           Subpart A Resources 
+        </h2>
+        <!---->
+        <div
+          class="supplemental-content-container"
+        >
+          <div
+            class="supplemental-content-category"
+          >
+            <div
+              class="category"
+            >
+              <div
+                class="category-title childless collapsible-title"
+              >
+                 Subregulatory Guidance 
+              </div>
+              <span
+                class="childless category-description"
+              >
+                None
+              </span>
+              <div
+                class="category-content invisible display-none"
+                data-test="Subregulatory Guidance"
+                style="transition: 0.5s; overflow: hidden;"
+              />
+            </div>
+          </div>
+          <div
+            class="supplemental-content-category"
+          >
+            <div
+              class="category"
+            >
+              <div
+                class="category-title childless collapsible-title"
+              >
+                 Implementation Resources 
+              </div>
+              <span
+                class="childless category-description"
+              >
+                None
+              </span>
+              <div
+                class="category-content invisible display-none"
+                data-test="Implementation Resources"
+                style="transition: 0.5s; overflow: hidden;"
+              />
+            </div>
+          </div>
+          <div
+            class="supplemental-content-category"
+          >
+            <div
+              class="category"
+            >
+              <div
+                class="category-title childless collapsible-title"
+              >
+                 Reports to Congress 
+              </div>
+              <span
+                class="childless category-description"
+              >
+                None
+              </span>
+              <div
+                class="category-content invisible display-none"
+                data-test="Reports to Congress"
+                style="transition: 0.5s; overflow: hidden;"
+              />
+            </div>
+          </div>
+          <div
+            class="supplemental-content-category"
+          >
+            <div
+              class="category"
+            >
+              <div
+                class="category-title childless collapsible-title"
+              >
+                 Oversight Reports 
+              </div>
+              <span
+                class="childless category-description"
+              >
+                None
+              </span>
+              <div
+                class="category-content invisible display-none"
+                data-test="Oversight Reports"
+                style="transition: 0.5s; overflow: hidden;"
+              />
+            </div>
+          </div>
+          <!---->
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div>
+      <!---->
+      <h2
+        id="subpart-resources-heading"
+      >
+         Subpart A Resources 
+      </h2>
+      <!---->
+      <div
+        class="supplemental-content-container"
+      >
+        <div
+          class="supplemental-content-category"
+        >
+          <div
+            class="category"
+          >
+            <div
+              class="category-title childless collapsible-title"
+            >
+               Subregulatory Guidance 
+            </div>
+            <span
+              class="childless category-description"
+            >
+              None
+            </span>
+            <div
+              class="category-content invisible display-none"
+              data-test="Subregulatory Guidance"
+              style="transition: 0.5s; overflow: hidden;"
+            />
+          </div>
+        </div>
+        <div
+          class="supplemental-content-category"
+        >
+          <div
+            class="category"
+          >
+            <div
+              class="category-title childless collapsible-title"
+            >
+               Implementation Resources 
+            </div>
+            <span
+              class="childless category-description"
+            >
+              None
+            </span>
+            <div
+              class="category-content invisible display-none"
+              data-test="Implementation Resources"
+              style="transition: 0.5s; overflow: hidden;"
+            />
+          </div>
+        </div>
+        <div
+          class="supplemental-content-category"
+        >
+          <div
+            class="category"
+          >
+            <div
+              class="category-title childless collapsible-title"
+            >
+               Reports to Congress 
+            </div>
+            <span
+              class="childless category-description"
+            >
+              None
+            </span>
+            <div
+              class="category-content invisible display-none"
+              data-test="Reports to Congress"
+              style="transition: 0.5s; overflow: hidden;"
+            />
+          </div>
+        </div>
+        <div
+          class="supplemental-content-category"
+        >
+          <div
+            class="category"
+          >
+            <div
+              class="category-title childless collapsible-title"
+            >
+               Oversight Reports 
+            </div>
+            <span
+              class="childless category-description"
+            >
+              None
+            </span>
+            <div
+              class="category-content invisible display-none"
+              data-test="Oversight Reports"
+              style="transition: 0.5s; overflow: hidden;"
+            />
+          </div>
+        </div>
+        <!---->
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
