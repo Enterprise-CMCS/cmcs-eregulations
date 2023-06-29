@@ -365,16 +365,30 @@ $width-3xl: 1920px; // The largest the site container will get
 // Links
 // -------------------------
 
-@mixin external-link {
+@mixin shared-link-rules {
     width: 0.8em;
     height: 0.8em;
     padding-left: 1px;
     margin-left: 0.1em;
+}
+
+@mixin external-link {
+    @include shared-link-rules;
+
     content: url(#{$eregs-image-path}/external-link.svg);
 }
 
 @mixin external-link-hover {
     @include external-link;
+}
+
+@mixin pdf-link {
+    @include shared-link-rules;
+
+    content: url(#{$eregs-image-path}/PDF-icon.svg);
+    position: absolute;
+    top: 2px;
+    padding-left: 3px;
 }
 
 a {
@@ -384,6 +398,14 @@ a {
 
     &:hover.external::after {
         @include external-link-hover;
+    }
+
+    &:link.pdf {
+        position: relative;
+
+        &::after {
+            @include pdf-link;
+        }
     }
 }
 
