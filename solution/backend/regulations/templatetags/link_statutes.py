@@ -95,7 +95,13 @@ USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 def replace_usc_citation(match, title):
     citation_text = match.group()
     section = SECTION_ID_REGEX.match(citation_text).group()
-    return USCODE_LINK_FORMAT.format(title, section, "", citation_text)
+    paragraphs = extract_paragraphs(citation_text)
+    return USCODE_LINK_FORMAT.format(
+        title,
+        section,
+        USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
+        citation_text
+    )
 
 
 # Matches entire USC citations to account for "and", "or" scenarios.
