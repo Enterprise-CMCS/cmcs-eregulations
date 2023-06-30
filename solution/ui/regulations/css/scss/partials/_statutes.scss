@@ -51,6 +51,12 @@
                         .row__cell {
                             padding: 0.5rem 0 0.5rem 1.5rem;
 
+                            a {
+                                &:hover {
+                                    color: $primary_link_hover;
+                                }
+                            }
+
                             .cell__title {
                                 font-weight: bold;
                             }
