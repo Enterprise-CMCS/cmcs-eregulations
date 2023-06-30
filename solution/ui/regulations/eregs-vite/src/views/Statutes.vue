@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 import { getStatutes } from "utilities/api";
 
@@ -54,6 +54,9 @@ const getStatutesArray = async () => {
     }
 };
 
+const windowWidth = ref(window.innerWidth);
+const isNarrow = computed(() => windowWidth.value < 1024);
+
 // Watch Banner left margin
 const bannerRef = ref(null);
 const bannerLeftMargin = ref(0);
@@ -67,6 +70,7 @@ const getBannerLeftMargin = () => {
 };
 
 const onWidthChange = () => {
+    windowWidth.value = window.innerWidth;
     getBannerLeftMargin();
 };
 
@@ -123,6 +127,7 @@ getStatutesArray();
                             <StatuteTable
                                 :left-margin="bannerLeftMargin"
                                 :filtered-statutes="statutes.results"
+                                :display-type="isNarrow ? 'list' : 'table'"
                             />
                         </template>
                     </div>

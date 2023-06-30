@@ -7,34 +7,11 @@ const props = defineProps({
         required: false,
         default: () => [],
     },
+    displayType: {
+        validator: (value) => ["table", "list"].includes(value), // eslint-disable-line vue/valid-define-props
+        default: "table",
+    },
 });
-
-const tableColumnInfo = [
-    {
-        title: "Statute Citation",
-        primary: true,
-    },
-    {
-        title: "House.gov",
-        secondary: true,
-        subtitles: ["Web Page", "Effective Jun 2023"],
-    },
-    {
-        title: "Statute Compilation",
-        secondary: true,
-        subtitles: ["PDF Document", "Amended Dec 2022"],
-    },
-    {
-        title: "US Code Annual",
-        secondary: true,
-        subtitles: ["PDF Document", "Effective Jan 2022"],
-    },
-    {
-        title: "SSA.gov",
-        secondary: true,
-        subtitles: ["Web Page", "Amended Dec 2019"],
-    },
-];
 
 // URL creation methods
 const houseGovUrl = (statuteObj) => {
@@ -59,87 +36,151 @@ const ssaGovUrl = (statuteObj) => {
     const { statute_title, section } = statuteObj;
     return `https://www.ssa.gov/OP_Home/ssact/title${statute_title}/${section}.htm`;
 };
+
+const ssaCells = [
+    {
+        header: {
+            title: "Statute Citation",
+            primary: true,
+        },
+        body: {
+            title: (statute) => `SSA Section ${statute.statute_title}`,
+            label: (statute) => `${statute.title} U. S. C. ${statute.usc}`,
+            name: (statute) => `${statute.name}`,
+            primary: true,
+        },
+    },
+    {
+        header: {
+            title: "House.gov",
+            secondary: true,
+            subtitles: ["Web Page", "Effective Jun 2023"],
+        },
+        body: {
+            url: (statute) => houseGovUrl(statute),
+            text: (statute) => `${statute.usc}`,
+            type: "external",
+            secondary: true,
+        },
+    },
+    {
+        header: {
+            title: "Statute Compilation",
+            secondary: true,
+            subtitles: ["PDF Document", "Amended Dec 2022"],
+        },
+        body: {
+            url: (statute) => statuteCompilationUrl(statute),
+            text: (statute) => `Title ${statute.statute_title}`,
+            type: "pdf",
+            secondary: true,
+        },
+    },
+    {
+        header: {
+            title: "US Code Annual",
+            secondary: true,
+            subtitles: ["PDF Document", "Effective Jan 2022"],
+        },
+        body: {
+            url: (statute) => usCodeUrl(statute),
+            text: (statute) => `${statute.usc}`,
+            type: "pdf",
+            secondary: true,
+        },
+    },
+    {
+        header: {
+            title: "SSA.gov",
+            secondary: true,
+            subtitles: ["Web Page", "Amended Dec 2019"],
+        },
+        body: {
+            url: (statute) => ssaGovUrl(statute),
+            text: (statute) => `${statute.section}`,
+            type: "external",
+            secondary: true,
+        },
+    },
+];
 </script>
 
 <template>
-    <table id="statuteTable">
-        <tr class="table__row table__row--header">
-            <th
-                v-for="(column, i) in tableColumnInfo"
-                :key="i"
-                class="row__cell row__cell--header"
-                :class="{
-                    'row__cell--primary': column.primary,
-                    'row__cell--secondary': column.secondary,
-                }"
-            >
-                <div class="cell__title">{{ column.title }}</div>
-                <template v-if="column.subtitles">
-                    <div
-                        v-for="(subtitle, j) in column.subtitles"
-                        :key="j"
-                        class="cell__subtitle"
-                    >
-                        {{ subtitle }}
-                    </div>
-                </template>
-            </th>
-        </tr>
-        <tbody class="table__body">
-            <tr
-                v-for="(statute, index) in filteredStatutes"
+    <div>
+        <div v-if="props.displayType == 'list'" id="statuteList">
+            <div
+                v-for="(statute, index) in props.filteredStatutes"
                 :key="index"
-                class="table__row table__row--body"
+                class="statute__list-item"
             >
-                <td class="row__cell row__cell--body row__cell--primary">
-                    <div class="cell__title">
-                        SSA Section {{ statute.section }}
-                    </div>
-                    <div class="cell__usc-label">
-                        {{ statute.title }} U. S. C. {{ statute.usc }}
-                    </div>
-                    <div class="cell__name">{{ statute.name }}</div>
-                </td>
-                <td class="row__cell row__cell--body row__cell--secondary">
-                    <a
-                        class="external"
-                        :href="houseGovUrl(statute)"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >{{ statute.usc }}</a
-                    >
-                </td>
-                <td class="row__cell row__cell--body row__cell--secondary">
-                    <a
-                        class="pdf"
-                        :href="statuteCompilationUrl(statute)"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Title {{ statute.statute_title }}
-                    </a>
-                </td>
-                <td class="row__cell row__cell--body row__cell--secondary">
-                    <a
-                        class="pdf"
-                        :href="usCodeUrl(statute)"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >{{ statute.usc }}</a
-                    >
-                </td>
-                <td class="row__cell row__cell--body row__cell--secondary">
-                    <a
-                        class="external"
-                        :href="ssaGovUrl(statute)"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >{{ statute.section }}</a
-                    >
-                </td>
+                <table>
+                    <tr></tr>
+                </table>
+            </div>
+        </div>
+        <table v-else id="statuteTable">
+            <tr class="table__row table__row--header">
+                <th
+                    v-for="(column, i) in ssaCells"
+                    :key="i"
+                    class="row__cell row__cell--header"
+                    :class="{
+                        'row__cell--primary': column.header.primary,
+                        'row__cell--secondary': column.header.secondary,
+                    }"
+                >
+                    <div class="cell__title">{{ column.header.title }}</div>
+                    <template v-if="column.header.subtitles">
+                        <div
+                            v-for="(subtitle, j) in column.header.subtitles"
+                            :key="j"
+                            class="cell__subtitle"
+                        >
+                            {{ subtitle }}
+                        </div>
+                    </template>
+                </th>
             </tr>
-        </tbody>
-    </table>
+            <tbody class="table__body">
+                <tr
+                    v-for="(statute, i) in props.filteredStatutes"
+                    :key="i"
+                    class="table__row table__row--body"
+                >
+                    <td
+                        v-for="(column, j) in ssaCells"
+                        :key="j"
+                        class="row__cell row__cell--body"
+                        :class="{
+                            'row__cell--primary': column.body.primary,
+                            'row__cell--secondary': column.body.secondary,
+                        }"
+                    >
+                        <template v-if="column.body.primary">
+                            <div class="cell__title">
+                                {{ column.body.title(statute) }}
+                            </div>
+                            <div class="cell__usc-label">
+                                {{ column.body.label(statute) }}
+                            </div>
+                            <div class="cell__name">
+                                {{ column.body.name(statute) }}
+                            </div>
+                        </template>
+                        <template v-else>
+                            <a
+                                :class="column.body.type"
+                                :href="column.body.url(statute)"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >{{ column.body.text(statute) }}</a
+                            >
+                        </template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <style></style>
