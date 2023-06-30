@@ -109,7 +109,6 @@ class TestStatuteLinkImport(TestCase):
 
 
 class LinkStatutesTestCase(SimpleTestCase):
-
     def test_link_statutes(self):
         link_conversions = {
             "Social Security Act": {
@@ -144,7 +143,10 @@ class StatuteConvertersAPITestCase(APITestCase):
         with open("regulations/tests/fixtures/statute_link_api_test.json", "r") as f:
             self.objects = json.load(f)
             for i in self.objects:
+                roman = i["statute_title_roman"]
+                del i["statute_title_roman"]
                 StatuteLinkConverter.objects.create(**i)
+                i["statute_title_roman"] = roman
 
     def test_all_statutes(self):
         response = self.client.get("/v3/statutes")
@@ -154,9 +156,44 @@ class StatuteConvertersAPITestCase(APITestCase):
     def test_aca(self):
         response = self.client.get("/v3/statutes?act=Affordable Care Act")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data, self.objects[0:1])
+        self.assertEqual(response.data, self.objects[1:2])
 
     def test_ssa(self):
         response = self.client.get("/v3/statutes?act=Social Security Act")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data, self.objects[1:3])
+        self.assertEqual(response.data, self.objects[0:1] + self.objects[2:4])
+
+    def test_act_and_title(self):
+        response = self.client.get("/v3/statutes?act=Social Security Act&title=3")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, self.objects[2:3])
+
+    def test_title_no_act(self):
+        response = self.client.get("/v3/statutes?title=3")
+        self.assertEqual(status.HTTP_400_BAD_REQUEST, response.status_code)
+
+    def test_act_list_viewset(self):
+        with open("regulations/tests/fixtures/acts_viewset_golden.json", "r") as f:
+            expected = json.load(f)
+        response = self.client.get("/v3/acts")
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, expected)
+
+
+class RomanConversionTestCase(SimpleTestCase):
+    def test_int_to_roman(self):
+        tests = [
+            [1, "I"],
+            [2, "II"],
+            [3, "III"],
+            [4, "IV"],
+            [5, "V"],
+            [6, "VI"],
+            [11, "XI"],
+            [19, "XIX"],
+            [21, "XXI"],
+        ]
+        object = StatuteLinkConverter()
+        for i in range(len(tests)):
+            object.statute_title = tests[i][0]
+            self.assertEqual(object.statute_title_roman, tests[i][1])
