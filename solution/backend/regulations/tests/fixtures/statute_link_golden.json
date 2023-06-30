@@ -6,7 +6,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Medicaid and CHIP Payment and Access Commission.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1901",
@@ -15,7 +15,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Appropriation.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1902",
@@ -24,7 +24,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State plans for medical assistance.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1903",
@@ -33,7 +33,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Payment to States.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1904",
@@ -42,7 +42,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Operation of State plans.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1905",
@@ -51,7 +51,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Definitions.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1906",
@@ -60,7 +60,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Enrollment of individuals under group health plans.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1906A",
@@ -69,7 +69,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Premium assistance option for children.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1907",
@@ -78,7 +78,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Observance of religious beliefs.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1908",
@@ -87,7 +87,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State programs for licensing of administrators of nursing homes.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1908A",
@@ -96,7 +96,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Required laws relating to medical child support.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1909",
@@ -105,7 +105,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State false claims act requirements for increased state share of recoveries.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1910",
@@ -114,7 +114,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Certification and approval of rural health clinics and intermediate care facilities for the mentally retarded.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1911",
@@ -123,7 +123,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Indian Health Service facilities.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1912",
@@ -132,7 +132,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Assignment of rights of payment.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1913",
@@ -141,7 +141,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Hospital providers of nursing facility services.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1914",
@@ -150,7 +150,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Withholding of Federal share of payments for certain medicare providers.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1915",
@@ -159,7 +159,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Provisions respecting inapplicability and waiver of certain requirements of this title.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1916",
@@ -168,7 +168,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Use of enrollment fees, premiums, deductions, cost sharing, and similar charges.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1916A",
@@ -177,7 +177,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State option for alternative premiums and cost sharing.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1917",
@@ -186,7 +186,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Liens, adjustments and recoveries, and transfers of assets.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1918",
@@ -195,7 +195,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Application of provisions of title II relating to subpoenas.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1919",
@@ -204,7 +204,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Requirements for nursing facilities.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1920",
@@ -213,7 +213,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Presumptive eligibility for pregnant women.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1920A",
@@ -222,7 +222,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Presumptive eligibility for children.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1920B",
@@ -231,7 +231,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Presumptive eligibility for certain breast or cervical cancer patients.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1920C",
@@ -240,7 +240,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Presumptive eligibility for family planning services.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1921",
@@ -249,7 +249,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Information concerning sanctions taken by State licensing authorities against health care practitioners and providers.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1922",
@@ -258,7 +258,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Correction and reduction plans for intermediate care facilities for the mentally retarded.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1923",
@@ -267,7 +267,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Adjustment in payment for inpatient hospital services furnished by disproportionate share hospitals.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1924",
@@ -276,7 +276,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Treatment of income and resources for certain institutionalized spouses.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1925",
@@ -285,7 +285,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Extension of eligibility for medical assistance.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1927",
@@ -294,7 +294,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Payment for covered outpatient drugs.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1928",
@@ -303,7 +303,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Program for distribution of pediatric vaccines.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1929",
@@ -312,7 +312,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Home and community care for functionally disabled elderly individuals.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1930",
@@ -321,7 +321,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Community supported living arrangements services.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1931",
@@ -330,7 +330,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Assuring coverage for certain low-income families.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1932",
@@ -339,7 +339,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Provisions relating to managed care.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1933",
@@ -348,7 +348,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State coverage of medicare cost-sharing for additional low-income medicare beneficiaries.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1934",
@@ -357,7 +357,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Program of all-inclusive care for the elderly (PACE).",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1935",
@@ -366,7 +366,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Special provisions relating to medicare prescription drug benefit.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1936",
@@ -375,7 +375,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Medicaid integrity program.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1937",
@@ -384,7 +384,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State flexibility in benefit packages.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1938",
@@ -393,7 +393,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Health opportunity accounts.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1939",
@@ -402,7 +402,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "References to laws directly affecting medicaid program.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1940",
@@ -411,7 +411,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Asset verification through access to information held by financial institutions.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1941",
@@ -420,7 +420,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Medicaid Improvement Fund.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1942",
@@ -429,7 +429,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Authorization to receive relevant information.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1943",
@@ -438,7 +438,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Enrollment simplification and coordination with state health insurance exchanges.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1944",
@@ -454,7 +454,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State option to provide coordinated care through a health home for individuals with chronic conditions.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1945A",
@@ -470,7 +470,7 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "Addressing health care disparities.",
-        "statute_title": "XIX"
+        "statute_title": 19
     },
     {
         "section": "1947",
@@ -479,6 +479,6 @@
         "act": "Social Security Act",
         "source_url": "http://test.com/test.xml",
         "name": "State option to provide qualifying community-based mobile crisis intervention services.",
-        "statute_title": "XIX"
+        "statute_title": 19
     }
 ]
