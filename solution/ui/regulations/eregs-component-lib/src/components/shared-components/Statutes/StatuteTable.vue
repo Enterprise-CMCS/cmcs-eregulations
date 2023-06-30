@@ -9,6 +9,29 @@ const props = defineProps({
     },
 });
 
+const tableColumnInfo = [
+    {
+        title: "Statute Citation",
+        primary: true,
+    },
+    {
+        title: "House.gov",
+        subtitles: ["Web Page", "Effective Jun 2023"],
+    },
+    {
+        title: "Statute Compilation",
+        subtitles: ["PDF Document", "Amended Dec 2022"],
+    },
+    {
+        title: "US Code Annual",
+        subtitles: ["PDF Document", "Effective Jan 2022"],
+    },
+    {
+        title: "SSA.gov",
+        subtitles: ["Web Page", "Amended Dec 2019"],
+    },
+];
+
 // URL creation methods
 const houseGovUrl = (statuteObj) => {
     const { title, usc } = statuteObj;
@@ -37,28 +60,22 @@ const ssaGovUrl = (statuteObj) => {
 <template>
     <table id="statuteTable">
         <tr class="table__row table__row--header">
-            <th class="row__cell row__cell--header row__cell--primary">
-                <div class="cell__title">Statute Citation</div>
-            </th>
-            <th class="row__cell row__cell--header row__cell--secondary">
-                <div class="cell__title">House.gov</div>
-                <div class="cell__subtitle">Web Page</div>
-                <div class="cell__subtitle">Effective Jun 2023</div>
-            </th>
-            <th class="row__cell row__cell--header row__cell--secondary">
-                <div class="cell__title">Statute Compilation</div>
-                <div class="cell__subtitle">PDF Document</div>
-                <div class="cell__subtitle">Amended Dec 2022</div>
-            </th>
-            <th class="row__cell row__cell--header row__cell--secondary">
-                <div class="cell__title">US Code Annual</div>
-                <div class="cell__subtitle">PDF Document</div>
-                <div class="cell__subtitle">Effective Jan 2022</div>
-            </th>
-            <th class="row__cell row__cell--header row__cell--secondary">
-                <div class="cell__title">SSA.gov</div>
-                <div class="cell__subtitle">Web Page</div>
-                <div class="cell__subtitle">Amended Dec 2019</div>
+            <th
+                v-for="(column, i) in tableColumnInfo"
+                :key="i"
+                class="row__cell row__cell--header"
+                :class="{ 'row__cell--primary': column.primary }"
+            >
+                <div class="cell__title">{{ column.title }}</div>
+                <template v-if="column.subtitles">
+                    <div
+                        v-for="(subtitle, j) in column.subtitles"
+                        :key="j"
+                        class="cell__subtitle"
+                    >
+                        {{ subtitle }}
+                    </div>
+                </template>
             </th>
         </tr>
         <tbody class="table__body">
@@ -67,9 +84,7 @@ const ssaGovUrl = (statuteObj) => {
                 :key="index"
                 class="table__row table__row--body"
             >
-                <td
-                    class="row__cell row__cell--body row__cell--primary"
-                >
+                <td class="row__cell row__cell--body row__cell--primary">
                     <div class="cell__title">
                         SSA Section {{ statute.section }}
                     </div>
@@ -78,9 +93,7 @@ const ssaGovUrl = (statuteObj) => {
                     </div>
                     <div class="cell__name">{{ statute.name }}</div>
                 </td>
-                <td
-                    class="row__cell row__cell--body row__cell--secondary"
-                >
+                <td class="row__cell row__cell--body row__cell--secondary">
                     <a
                         class="external"
                         :href="houseGovUrl(statute)"
@@ -89,9 +102,7 @@ const ssaGovUrl = (statuteObj) => {
                         >{{ statute.usc }}</a
                     >
                 </td>
-                <td
-                    class="row__cell row__cell--body row__cell--secondary"
-                >
+                <td class="row__cell row__cell--body row__cell--secondary">
                     <a
                         class="pdf"
                         :href="statuteCompilationUrl(statute)"
@@ -101,9 +112,7 @@ const ssaGovUrl = (statuteObj) => {
                         Title {{ statute.statute_title }}
                     </a>
                 </td>
-                <td
-                    class="row__cell row__cell--body row__cell--secondary"
-                >
+                <td class="row__cell row__cell--body row__cell--secondary">
                     <a
                         class="pdf"
                         :href="usCodeUrl(statute)"
@@ -112,9 +121,7 @@ const ssaGovUrl = (statuteObj) => {
                         >{{ statute.usc }}</a
                     >
                 </td>
-                <td
-                    class="row__cell row__cell--body row__cell--secondary"
-                >
+                <td class="row__cell row__cell--body row__cell--secondary">
                     <a
                         class="external"
                         :href="ssaGovUrl(statute)"
