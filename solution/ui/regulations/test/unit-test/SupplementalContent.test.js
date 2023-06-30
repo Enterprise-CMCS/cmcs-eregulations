@@ -1,15 +1,11 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/vue";
-import { describe, it, expect, beforeEach } from "vitest";
+import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/vue";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import SupplementalContent from "eregsComponentLib/src/components/SupplementalContent.vue";
 import flushPromises from "flush-promises";
 import { categories, subCategories } from "../../msw/mocks/categories";
 
 describe("Supplemental Content", () => {
     beforeEach(() => {
-
-
-     })
-    it("Populates some content", async () => {
         const docCat = document.createElement("div");
         docCat.id = "categories";
         docCat.textContent = JSON.stringify(categories);
@@ -19,7 +15,16 @@ describe("Supplemental Content", () => {
         document.body.appendChild(docCat);
         document.body.appendChild(subcat);
 
-        render(SupplementalContent, {
+     })
+     afterEach(() => {
+        const cat = document.getElementById("categories");
+        const sub = document.getElementById("sub_categories");
+        cat.remove();
+        sub.remove();
+
+     })
+    it("Populates some content", async () => {
+        const wrapper = render(SupplementalContent, {
             props: {
                 apiUrl: "http://localhost:8000/",
                 title: "42",
@@ -33,17 +38,9 @@ describe("Supplemental Content", () => {
         expect(view.id).toBe("subpart-resources-heading");
         const subG = screen.getByText("Subregulatory Guidance");
         expect(subG).toBeTruthy();
+        
     });
-
-    it("Checks to see if the snap shot matches", async () => {
-        const docCat = document.createElement("div");
-        docCat.id = "categories";
-        docCat.textContent = JSON.stringify(categories);
-        const subcat = document.createElement("div");
-        subcat.id = "sub_categories";
-        subcat.textContent = JSON.stringify(subCategories);
-        document.body.appendChild(docCat);
-        document.body.appendChild(subcat);
+    it("Populates some content", async () => {
         const wrapper = render(SupplementalContent, {
             props: {
                 apiUrl: "http://localhost:8000/",
@@ -53,6 +50,24 @@ describe("Supplemental Content", () => {
             }
         });
         await flushPromises();
-        expect(wrapper).toMatchSnapshot();
+        let subG = await screen.getByLabelText("expand Subregulatory Guidance");
+        expect(subG).toBeTruthy();
+        await fireEvent.click(subG)
+        await flushPromises();
+        subG = await screen.getByLabelText("collapse Subregulatory Guidance");
+
+        expect(subG.textContent).toStrictEqual('Subregulatory Guidance ')
     });
+    // it("Checks to see if the snap shot matches", async () => {
+    //     const wrapper = render(SupplementalContent, {
+    //         props: {
+    //             apiUrl: "http://localhost:8000/",
+    //             title: "42",
+    //             part: "433",
+    //             subparts: ["A"]
+    //         }
+    //     });
+    //     await flushPromises();
+    //     expect(wrapper).toMatchSnapshot();
+    // });
 });
