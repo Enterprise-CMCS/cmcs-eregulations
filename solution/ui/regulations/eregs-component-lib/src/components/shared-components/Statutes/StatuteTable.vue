@@ -25,7 +25,6 @@ const statuteCompilationUrl = (statuteObj) => {
     const compsNumber = source_url
         .split("/")
         .find((str) => str.includes("COMPS"));
-    console.log(compsNumber);
     return `https://www.govinfo.gov/content/pkg/${compsNumber}/pdf/${compsNumber}.pdf`;
 };
 
@@ -65,11 +64,11 @@ const ssaGovUrl = (statuteObj) => {
         <tbody class="table__body">
             <tr
                 v-for="(statute, index) in filteredStatutes"
+                :key="index"
                 class="table__row table__row--body"
             >
                 <td
                     class="row__cell row__cell--body row__cell--primary"
-                    :key="index"
                 >
                     <div class="cell__title">
                         SSA Section {{ statute.section }}
@@ -81,7 +80,6 @@ const ssaGovUrl = (statuteObj) => {
                 </td>
                 <td
                     class="row__cell row__cell--body row__cell--secondary"
-                    :key="index"
                 >
                     <a
                         class="external"
@@ -93,7 +91,6 @@ const ssaGovUrl = (statuteObj) => {
                 </td>
                 <td
                     class="row__cell row__cell--body row__cell--secondary"
-                    :key="index"
                 >
                     <a
                         class="pdf"
@@ -106,7 +103,6 @@ const ssaGovUrl = (statuteObj) => {
                 </td>
                 <td
                     class="row__cell row__cell--body row__cell--secondary"
-                    :key="index"
                 >
                     <a
                         class="pdf"
@@ -118,7 +114,6 @@ const ssaGovUrl = (statuteObj) => {
                 </td>
                 <td
                     class="row__cell row__cell--body row__cell--secondary"
-                    :key="index"
                 >
                     <a
                         class="external"
