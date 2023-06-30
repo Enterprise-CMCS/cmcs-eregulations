@@ -6,6 +6,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
+        cy.intercept("**/v3/resources/categories", {
+            fixture: "categories.json",
+        }).as("categories");
         cy.intercept(
             "**/v3/resources/federal_register_docs?page=1&page_size=3&paginate=true",
             { fixture: "frdocs.json" }
@@ -229,6 +232,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container").should("exist");
+        cy.wait("@categories");
         cy.get(".recent-rules-descriptive-text")
             .first()
             .should(($el) => {
@@ -236,11 +240,13 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                     "Includes 42 CFR 400, 430-460, 600, and 45 CFR 95"
                 );
             });
-        cy.get(".resources__container").contains("View More Guidance").click({ force: true });
+        cy.get(".resources__container")
+            .contains("View More Guidance")
+            .click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
-                `/resources/?resourceCategory=Subregulatory%20Guidance,State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,State%20Medicaid%20Manual%20%28SMM%29&sort=newest`
+                "/resources/?resourceCategory=State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,Associate%20Regional%20Administrator%20%28ARA%29%20Memo,State%20Medicaid%20Manual%20%28SMM%29&sort=newest"
         );
     });
 
@@ -278,7 +284,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 });
         });
 
-        cy.get(".resources__container").contains("View More Changes").click({ force: true });
+        cy.get(".resources__container")
+            .contains("View More Changes")
+            .click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
