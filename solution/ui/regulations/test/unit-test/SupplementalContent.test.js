@@ -5,6 +5,10 @@ import flushPromises from "flush-promises";
 import { categories, subCategories } from "../../msw/mocks/categories";
 
 describe("Supplemental Content", () => {
+    beforeEach(() => {
+
+
+     })
     it("Populates some content", async () => {
         const docCat = document.createElement("div");
         docCat.id = "categories";

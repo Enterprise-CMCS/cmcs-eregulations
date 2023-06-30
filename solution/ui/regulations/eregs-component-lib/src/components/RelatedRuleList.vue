@@ -14,7 +14,7 @@
             <template v-if="rule.related_docs && rule.related_docs.length > 0">
                 <related-rule
                     v-for="(related_doc, ii) in rule.related_docs"
-                    :key="ii + 'grouped'"
+                    :key="ii + 'grouped' + related_doc.document_number"
                     :title="ruleTitle(related_doc)"
                     :type="type(related_doc)"
                     :citation="citation(related_doc)"
@@ -68,7 +68,7 @@
                 >
                     <related-rule
                         v-for="(related_doc, ii) in rule.related_docs"
-                        :key="ii + 'grouped'"
+                        :key="ii + 'grouped' + related_doc.document_number"
                         :title="ruleTitle(related_doc)"
                         :type="type(related_doc)"
                         :citation="citation(related_doc)"

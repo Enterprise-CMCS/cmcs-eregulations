@@ -535,7 +535,6 @@ const formatResourceCategories = (resources) => {
     const rawSubCategories = JSON.parse(
         document.getElementById("sub_categories").textContent
     );
-
     resources
         .filter((resource) => resource.category.type === "subcategory")
         .forEach((resource) => {
@@ -559,7 +558,7 @@ const formatResourceCategories = (resources) => {
     const categories = rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
         category.sub_categories = rawSubCategories.filter(
-            (subcategory) => subcategory.parent.id === category.id
+            (subcategory) => subcategory.parent?.id === category?.id
         );
         return category;
     });
