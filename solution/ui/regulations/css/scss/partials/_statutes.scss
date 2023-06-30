@@ -50,64 +50,64 @@
                                 padding-top: 18px;
                             }
                         }
+                    }
 
-                        .row__cell {
-                            padding: 0.5rem 0 0.5rem 1.5rem;
+                    .row__cell {
+                        padding: 0.5rem 0 0.5rem 1.5rem;
 
-                            a {
-                                &:hover {
-                                    color: $primary_link_hover;
-                                }
-                            }
-
-                            .cell__title {
-                                font-weight: bold;
-                            }
-
-                            .cell__subtitle {
-                                font-size: 14px;
-                                line-height: 22px;
-                                font-weight: normal;
-                                font-style: italic;
-                            }
-
-                            .cell__usc-label {
-                                padding: 0.5rem 0;
-                            }
-
-                            .cell__name {
-                                font-size: 0.75rem;
-                                line-height: 18px;
-                            }
-
-                            &--header {
-                                background-color: $mid_blue_2;
-                                color: #fff;
-                                text-align: left;
-                                vertical-align: top;
-                            }
-
-                            &--body {
-                                padding-top: 0.75rem;
-                                padding-bottom: 0.75rem;
-                            }
-
-                            &--primary {
-                                width: 220px;
-                            }
-
-                            &:first-of-type {
-                                padding-left: 1rem;
-                            }
-
-                            &:last-of-type {
-                                padding-right: 1rem;
+                        a {
+                            &:hover {
+                                color: $primary_link_hover;
                             }
                         }
 
-                        .row__cell--body.row__cell--primary {
-                            background-color: $lightest_blue;
+                        .cell__title {
+                            font-weight: bold;
                         }
+
+                        .cell__subtitle {
+                            font-size: 14px;
+                            line-height: 22px;
+                            font-weight: normal;
+                            font-style: italic;
+                        }
+
+                        .cell__usc-label {
+                            padding: 0.5rem 0;
+                        }
+
+                        .cell__name {
+                            font-size: 0.75rem;
+                            line-height: 18px;
+                        }
+
+                        &--header {
+                            background-color: $mid_blue_2;
+                            color: #fff;
+                            text-align: left;
+                            vertical-align: top;
+                        }
+
+                        &--body {
+                            padding-top: 0.75rem;
+                            padding-bottom: 0.75rem;
+                        }
+
+                        &--primary {
+                            width: 220px;
+                        }
+
+                        &:first-of-type {
+                            padding-left: 1rem;
+                        }
+
+                        &:last-of-type {
+                            padding-right: 1rem;
+                        }
+                    }
+
+                    .row__cell--body.row__cell--primary {
+                        background-color: $lightest_blue;
                     }
                 }
             }

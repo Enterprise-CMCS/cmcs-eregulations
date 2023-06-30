@@ -109,12 +109,66 @@ const ssaCells = [
     <div>
         <div v-if="props.displayType == 'list'" id="statuteList">
             <div
-                v-for="(statute, index) in props.filteredStatutes"
-                :key="index"
+                v-for="(statute, i) in props.filteredStatutes"
+                :key="i"
                 class="statute__list-item"
             >
                 <table>
-                    <tr></tr>
+                    <tr
+                        v-for="(column, j) in ssaCells"
+                        :key="j"
+                        class="table__row"
+                    >
+                        <th
+                            class="row__cell row__cell--header"
+                            :class="{
+                                'row__cell--primary': column.header.primary,
+                                'row__cell--secondary': column.header.secondary,
+                            }"
+                        >
+                            <div class="cell__title">
+                                {{ column.header.title }}
+                            </div>
+                            <template v-if="column.header.subtitles">
+                                <div
+                                    v-for="(subtitle, j) in column.header
+                                        .subtitles"
+                                    :key="j"
+                                    class="cell__subtitle"
+                                >
+                                    {{ subtitle }}
+                                </div>
+                            </template>
+                        </th>
+                        <td
+                            class="row__cell row__cell--body"
+                            :class="{
+                                'row__cell--primary': column.header.primary,
+                                'row__cell--secondary': column.header.secondary,
+                            }"
+                        >
+                            <template v-if="column.body.primary">
+                                <div class="cell__title">
+                                    {{ column.body.title(statute) }}
+                                </div>
+                                <div class="cell__usc-label">
+                                    {{ column.body.label(statute) }}
+                                </div>
+                                <div class="cell__name">
+                                    {{ column.body.name(statute) }}
+                                </div>
+                            </template>
+                            <template v-else>
+                                <a
+                                    :class="column.body.type"
+                                    :href="column.body.url(statute)"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >{{ column.body.text(statute) }}</a
+                                >
+                            </template>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
