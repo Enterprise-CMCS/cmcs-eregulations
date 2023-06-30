@@ -119,7 +119,7 @@ getStatutesArray();
                             class="table__spinner"
                         />
                         <template v-else>
-                            <div class="table__caption"></div>
+                            <!--div class="table__caption"></div-->
                             <StatuteTable
                                 :left-margin="bannerLeftMargin"
                                 :filtered-statutes="statutes.results"
