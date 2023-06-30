@@ -1,4 +1,4 @@
-from django.urls import path, register_converter
+from django.urls import include, path, register_converter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from regulations import converters
@@ -16,7 +16,7 @@ from regulations.views.resources import ResourcesView
 from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.supplemental_content import SupplementalContentView
-from regulations.views.statutes import StatuteLinkConverterViewSet
+from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
@@ -44,7 +44,12 @@ urlpatterns = [
     path('cache/', CacheView.as_view(), name='cache'),
     path('resources/', ResourcesView.as_view(), name='resources'),
     path('statutes/', StatuteView.as_view(), name='statues'),
-    path('v3/statutes', StatuteLinkConverterViewSet.as_view({
-        "get": "list",
-    })),
+    path("v3/", include([
+        path("statutes", StatuteLinkConverterViewSet.as_view({
+            "get": "list",
+        })),
+        path("acts", ActListViewSet.as_view({
+            "get": "list",
+        })),
+    ])),
 ]
