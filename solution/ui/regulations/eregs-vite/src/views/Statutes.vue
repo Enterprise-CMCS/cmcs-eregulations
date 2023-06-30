@@ -6,6 +6,7 @@ import { getStatutes } from "utilities/api";
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
+import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
 
 import Banner from "@/components/Banner.vue";
@@ -37,15 +38,23 @@ const props = defineProps({
     },
 });
 
-const statutes = ref([]);
+// Get statutes
+const statutes = ref({
+    results: [],
+    loading: true,
+});
 const getStatutesArray = async () => {
-    const statutesArray = await getStatutes({ apiUrl: props.apiUrl });
-    statutes.value = statutesArray;
+    try {
+        const statutesArray = await getStatutes({ apiUrl: props.apiUrl });
+        statutes.value.results = statutesArray;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        statutes.value.loading = false;
+    }
 };
 
 // Watch Banner left margin
-const windowWidth = ref(window.innerWidth);
-
 const bannerRef = ref(null);
 const bannerLeftMargin = ref(0);
 
@@ -105,11 +114,17 @@ getStatutesArray();
             <div class="statute__container">
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
                     <div class="table__parent">
-                        <div class="table__caption"></div>
-                        <StatuteTable
-                            :left-margin="bannerLeftMargin"
-                            :filtered-statutes="statutes"
+                        <SimpleSpinner
+                            v-if="statutes.loading"
+                            class="table__spinner"
                         />
+                        <template v-else>
+                            <div class="table__caption"></div>
+                            <StatuteTable
+                                :left-margin="bannerLeftMargin"
+                                :filtered-statutes="statutes.results"
+                            />
+                        </template>
                     </div>
                 </div>
             </div>
