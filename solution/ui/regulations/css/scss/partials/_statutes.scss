@@ -33,6 +33,9 @@
 
                     .table__row {
                         &--header {
+                            position: sticky;
+                            top: $header_height;
+                            z-index: 1;
                         }
 
                         &--body {
