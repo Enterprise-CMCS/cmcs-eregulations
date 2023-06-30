@@ -16,18 +16,22 @@ const tableColumnInfo = [
     },
     {
         title: "House.gov",
+        secondary: true,
         subtitles: ["Web Page", "Effective Jun 2023"],
     },
     {
         title: "Statute Compilation",
+        secondary: true,
         subtitles: ["PDF Document", "Amended Dec 2022"],
     },
     {
         title: "US Code Annual",
+        secondary: true,
         subtitles: ["PDF Document", "Effective Jan 2022"],
     },
     {
         title: "SSA.gov",
+        secondary: true,
         subtitles: ["Web Page", "Amended Dec 2019"],
     },
 ];
@@ -64,7 +68,10 @@ const ssaGovUrl = (statuteObj) => {
                 v-for="(column, i) in tableColumnInfo"
                 :key="i"
                 class="row__cell row__cell--header"
-                :class="{ 'row__cell--primary': column.primary }"
+                :class="{
+                    'row__cell--primary': column.primary,
+                    'row__cell--secondary': column.secondary,
+                }"
             >
                 <div class="cell__title">{{ column.title }}</div>
                 <template v-if="column.subtitles">
