@@ -44,7 +44,7 @@ const ssaCells = [
             primary: true,
         },
         body: {
-            title: (statute) => `SSA Section ${statute.statute_title}`,
+            title: (statute) => `SSA Section ${statute.section}`,
             label: (statute) => `${statute.title} U. S. C. ${statute.usc}`,
             name: (statute) => `${statute.name}`,
             primary: true,
@@ -71,7 +71,7 @@ const ssaCells = [
         },
         body: {
             url: (statute) => statuteCompilationUrl(statute),
-            text: (statute) => `Title ${statute.statute_title}`,
+            text: (statute) => `Title ${statute.statute_title_roman}`,
             type: "pdf",
             secondary: true,
         },
