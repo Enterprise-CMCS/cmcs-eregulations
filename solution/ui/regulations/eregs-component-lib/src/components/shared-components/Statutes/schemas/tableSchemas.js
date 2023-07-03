@@ -1,5 +1,33 @@
 import { houseGovUrl, statuteCompilationUrl, usCodeUrl, ssaGovUrl } from "../utils/urlMethods.js";
 
+// placeholder for future schema
+const acaSchema = [
+    {
+        header: {
+            title: "Primary Column",
+            primary: true,
+        },
+        body: {
+            title: "ACA Title",
+            label: "ACA Label",
+            name: "ACA Name",
+            primary: true,
+        }
+    },{
+        header: {
+            title: "Secondary Column",
+            secondary: true,
+            subtitles: ["Subtitle One", "Subtitle Two"],
+        },
+        body: {
+            url: "Link href",
+            text: "Link text",
+            type: "external", // or "pdf"
+            secondary: true,
+        },
+    },
+];
+
 const ssaSchema = [
     {
         header: {
@@ -68,5 +96,6 @@ const ssaSchema = [
 ];
 
 export {
+    acaSchema,
     ssaSchema,
 };
