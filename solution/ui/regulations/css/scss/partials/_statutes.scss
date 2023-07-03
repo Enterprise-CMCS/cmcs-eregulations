@@ -26,6 +26,13 @@
                     color: $primary_text_color;
                 }
 
+                @mixin commonTableStyles {
+                    width: 100%;
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                }
+
+                // list specific styles
                 #statuteList {
                     .statute__list-item {
                         padding: 12px 0;
@@ -40,95 +47,111 @@
                         }
 
                         table {
-                            border-spacing: 0px;
+                            @include commonTableStyles;
 
-                            .row__cell--body {
-                                vertical-align: top;
+                            .table__row {
+
+                                .row__cell {
+                                    &--body {
+                                        vertical-align: top;
+                                        padding-top: 0.5rem;
+                                        padding-bottom: 0.5rem;
+                                    }
+                                }
+
+                                &:first-of-type {
+                                    .row__cell--body {
+                                        padding-top: 0.5rem;
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
-                width: 100%;
-                border-collapse: collapse;
-                border-spacing: 0;
-
-                .table__row {
-                    &--header {
-                        position: sticky;
-                        top: $header_height;
-                        z-index: 1;
-                    }
-
-                    &--body {
-                        border-bottom: 1px solid $table_border_color;
-                    }
-
-                    &:first-of-type {
-                        .row__cell--body {
-                            padding-top: 18px;
-                        }
-                    }
+                #statuteTable {
+                    @include commonTableStyles;
                 }
 
-                .row__cell {
-                    padding: 0.5rem 0 0.5rem 1.5rem;
+                #statuteList,
+                #statuteTable {
+                    .table__row {
+                        &--header {
+                            position: sticky;
+                            top: $header_height;
+                            z-index: 1;
+                        }
 
-                    a {
-                        text-decoration: none;
+                        &--body {
+                            border-bottom: 1px solid $table_border_color;
+                        }
 
-                        &:hover {
-                            color: $primary_link_hover;
+                        &:first-of-type {
+                            .row__cell--body {
+                                padding-top: 18px;
+                            }
                         }
                     }
 
-                    .cell__title {
-                        font-weight: bold;
+                    .row__cell {
+                        padding: 0.5rem 0 0.5rem 1.5rem;
+
+                        a {
+                            text-decoration: none;
+
+                            &:hover {
+                                color: $primary_link_hover;
+                            }
+                        }
+
+                        .cell__title {
+                            font-weight: bold;
+                        }
+
+                        .cell__subtitle {
+                            font-size: 14px;
+                            line-height: 22px;
+                            font-weight: normal;
+                            font-style: italic;
+                        }
+
+                        .cell__usc-label {
+                            padding: 0.5rem 0;
+                        }
+
+                        .cell__name {
+                            font-size: 0.75rem;
+                            line-height: 18px;
+                        }
+
+                        &--header {
+                            background-color: $mid_blue_2;
+                            color: #fff;
+                            text-align: left;
+                            vertical-align: top;
+                        }
+
+                        &--body {
+                            padding-top: 0.75rem;
+                            padding-bottom: 0.75rem;
+                        }
+
+                        &--primary {
+                            width: 220px;
+                        }
+
+                        &:first-of-type {
+                            padding-left: 1rem;
+                        }
+
+                        &:last-of-type {
+                            padding-right: 1rem;
+                        }
                     }
 
-                    .cell__subtitle {
-                        font-size: 14px;
-                        line-height: 22px;
-                        font-weight: normal;
-                        font-style: italic;
+                    .row__cell--body.row__cell--primary {
+                        background-color: $lightest_blue;
                     }
-
-                    .cell__usc-label {
-                        padding: 0.5rem 0;
-                    }
-
-                    .cell__name {
-                        font-size: 0.75rem;
-                        line-height: 18px;
-                    }
-
-                    &--header {
-                        background-color: $mid_blue_2;
-                        color: #fff;
-                        text-align: left;
-                        vertical-align: top;
-                    }
-
-                    &--body {
-                        padding-top: 0.75rem;
-                        padding-bottom: 0.75rem;
-                    }
-
-                    &--primary {
-                        width: 220px;
-                    }
-
-                    &:first-of-type {
-                        padding-left: 1rem;
-                    }
-
-                    &:last-of-type {
-                        padding-right: 1rem;
-                    }
-                }
-
-                .row__cell--body.row__cell--primary {
-                    background-color: $lightest_blue;
                 }
             }
         }
