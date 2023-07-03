@@ -123,7 +123,7 @@ getStatutesArray();
                             class="table__spinner"
                         />
                         <template v-else>
-                            <!--div class="table__caption"></div-->
+                            <div class="table__caption">Caption will go here once it has been workshopped to reflect all SSA titles in a single list.</div>
                             <StatuteTable
                                 :left-margin="bannerLeftMargin"
                                 :filtered-statutes="statutes.results"

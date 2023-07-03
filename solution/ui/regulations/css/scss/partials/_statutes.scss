@@ -40,6 +40,11 @@
                 .table__caption {
                     padding-bottom: 1.5rem;
                     color: $primary_text_color;
+
+                    @include custom-max(($eds-width-sm - 1px) / 1px) {
+                        padding-left: 0.75rem;
+                        padding-right: 0.75rem;
+                    }
                 }
 
                 @mixin commonTableStyles {
