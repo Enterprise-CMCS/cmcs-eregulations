@@ -40,7 +40,7 @@ describe("Supplemental Content", () => {
         expect(subG).toBeTruthy();
         
     });
-    it("Populates some content", async () => {
+    it("Clicks a drop down", async () => {
         const wrapper = render(SupplementalContent, {
             props: {
                 apiUrl: "http://localhost:8000/",
@@ -50,14 +50,20 @@ describe("Supplemental Content", () => {
             }
         });
         await flushPromises();
-        let subG = await screen.getByLabelText("expand Subregulatory Guidance");
+        const subG = await screen.getByLabelText("expand Subregulatory Guidance");
         expect(subG).toBeTruthy();
         await fireEvent.click(subG)
-        await flushPromises();
-        subG = await screen.getByLabelText("collapse Subregulatory Guidance");
 
-        expect(subG.textContent).toStrictEqual('Subregulatory Guidance ')
+        expect(subG.textContent).toStrictEqual('Subregulatory Guidance ');
+        const stateMedBtn = await screen.getByText("State Medicaid Director Letter (SMDL)")
+        await flushPromises();
+        expect(stateMedBtn.classList.contains("visible")).toBe(false)
+        await fireEvent.click(stateMedBtn);
+        
+        expect(stateMedBtn.classList.contains("visible")).toBe(true)
     });
+
+    //  leaving out for now.  test-id is causing issues
     // it("Checks to see if the snap shot matches", async () => {
     //     const wrapper = render(SupplementalContent, {
     //         props: {
