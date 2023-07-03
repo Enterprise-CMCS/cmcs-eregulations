@@ -1,10 +1,17 @@
 <script setup>
-    const props = defineProps({
-        cellData: {
-            type: Object,
-            required: true,
-        },
-    });
+import { DISPLAY_TYPES } from "../utils/enums";
+
+const props = defineProps({
+    cellData: {
+        type: Object,
+        required: true,
+    },
+    displayType: {
+        validator: (value) => DISPLAY_TYPES.includes(value),
+        required: false,
+        default: "table",
+    },
+});
 </script>
 
 <template>
@@ -21,7 +28,7 @@
         <template v-if="cellData.subtitles">
             <div
                 v-for="(subtitle, i) in cellData.subtitles"
-                :key="i"
+                :key="`${displayType}-subtitle-${i}`"
                 class="cell__subtitle"
             >
                 {{ subtitle }}
