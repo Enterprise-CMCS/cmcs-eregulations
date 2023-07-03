@@ -545,7 +545,7 @@ const getParts = async (title, apiUrl) => {
 };
 
 /**
- * @param {string} act - Act on which to filter.  Ex: `Social Security Act`
+ * @param {string} [act] - Act on which to filter.  Ex: `Social Security Act`
  * @param {string} [apiUrl] - API base url passed in from Django template
  *
  * @returns {Promise <Array<{section: string, title: number, usc: string, act: string, name: string, statute_title: string, source_url: string}>} - Promise that contains array of part objects for provided title when fulfilled
