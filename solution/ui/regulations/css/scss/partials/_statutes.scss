@@ -32,7 +32,7 @@
                     border-spacing: 0;
                 }
 
-                // list specific styles
+                // statuteList-specific styles
                 #statuteList {
                     .statute__list-item {
                         padding: 12px 0;
@@ -50,18 +50,17 @@
                             @include commonTableStyles;
 
                             .table__row {
+                                &:first-of-type {
+                                    .row__cell--body {
+                                        padding-top: 0.5rem;
+                                    }
+                                }
 
                                 .row__cell {
                                     &--body {
                                         vertical-align: top;
                                         padding-top: 0.5rem;
                                         padding-bottom: 0.5rem;
-                                    }
-                                }
-
-                                &:first-of-type {
-                                    .row__cell--body {
-                                        padding-top: 0.5rem;
                                     }
                                 }
                             }
