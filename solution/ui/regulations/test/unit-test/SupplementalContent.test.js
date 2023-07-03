@@ -64,16 +64,20 @@ describe("Supplemental Content", () => {
     });
 
     //  leaving out for now.  test-id is causing issues
-    // it("Checks to see if the snap shot matches", async () => {
-    //     const wrapper = render(SupplementalContent, {
-    //         props: {
-    //             apiUrl: "http://localhost:8000/",
-    //             title: "42",
-    //             part: "433",
-    //             subparts: ["A"]
-    //         }
-    //     });
-    //     await flushPromises();
-    //     expect(wrapper).toMatchSnapshot();
-    // });
+    it("Checks to see if the snap shot matches", async () => {
+        const wrapper = render(SupplementalContent, {
+            props: {
+                apiUrl: "http://localhost:8000/",
+                title: "42",
+                part: "433",
+                subparts: ["A"]
+            }
+        });
+        await flushPromises();
+
+        expect(wrapper).toMatchSnapshot({
+        }
+            
+        );
+    });
 });

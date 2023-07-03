@@ -493,9 +493,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                     </a>
                   </div>
                   <button
-                    aria-label="expand mlhylpk"
+                    aria-label="expand RelatedRuleCollapsible"
                     class="collapsible-title category-title"
-                    data-test="mlhylpk"
+                    data-test="RelatedRuleCollapsible"
                   >
                     <!---->
                     <div
@@ -510,7 +510,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                   </button>
                   <div
                     class="category-content additional-rules invisible display-none"
-                    data-test="mlhylpk"
+                    data-test="RelatedRuleCollapsible"
                     style="transition: 0.5s; overflow: hidden;"
                   >
                     <div
@@ -1054,9 +1054,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           </a>
                         </div>
                         <button
-                          aria-label="expand zpphtdmxbs"
+                          aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
-                          data-test="zpphtdmxbs"
+                          data-test="SupplementalContentCollapsible"
                         >
                           <!---->
                           <div
@@ -1071,7 +1071,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </button>
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="zpphtdmxbs"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         >
                           <div
@@ -1463,9 +1463,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             </a>
                           </div>
                           <button
-                            aria-label="expand zpphtdmxbs"
+                            aria-label="expand SupplementalContentCollapsible"
                             class="collapsible-title category-title show-more"
-                            data-test="zpphtdmxbs"
+                            data-test="SupplementalContentCollapsible"
                           >
                             <!---->
                             <div
@@ -1625,7 +1625,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         <!---->
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="raifjfcj"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         />
                       </div>
@@ -1780,9 +1780,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           </a>
                         </div>
                         <button
-                          aria-label="expand bojebdq"
+                          aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
-                          data-test="bojebdq"
+                          data-test="SupplementalContentCollapsible"
                         >
                           <!---->
                           <div
@@ -1797,7 +1797,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </button>
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="bojebdq"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         >
                           <div
@@ -2113,9 +2113,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             </a>
                           </div>
                           <button
-                            aria-label="expand bojebdq"
+                            aria-label="expand SupplementalContentCollapsible"
                             class="collapsible-title category-title show-more"
-                            data-test="bojebdq"
+                            data-test="SupplementalContentCollapsible"
                           >
                             <!---->
                             <div
@@ -2281,9 +2281,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           </a>
                         </div>
                         <button
-                          aria-label="expand ayfadvl"
+                          aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
-                          data-test="ayfadvl"
+                          data-test="SupplementalContentCollapsible"
                         >
                           <!---->
                           <div
@@ -2298,7 +2298,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </button>
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="ayfadvl"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         >
                           <div
@@ -2607,9 +2607,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           </a>
                         </div>
                         <button
-                          aria-label="expand qfdrvred"
+                          aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
-                          data-test="qfdrvred"
+                          data-test="SupplementalContentCollapsible"
                         >
                           <!---->
                           <div
@@ -2624,7 +2624,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </button>
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="qfdrvred"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         >
                           <div
@@ -3224,9 +3224,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             </a>
                           </div>
                           <button
-                            aria-label="expand qfdrvred"
+                            aria-label="expand SupplementalContentCollapsible"
                             class="collapsible-title category-title show-more"
-                            data-test="qfdrvred"
+                            data-test="SupplementalContentCollapsible"
                           >
                             <!---->
                             <div
@@ -3346,7 +3346,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         <!---->
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="xiwnipdc"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         />
                       </div>
@@ -3479,7 +3479,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         <!---->
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="xmnzxlzre"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         />
                       </div>
@@ -3572,7 +3572,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         <!---->
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="pxnrrsspk"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         />
                       </div>
@@ -3633,7 +3633,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         <!---->
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="sdznma"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         />
                       </div>
@@ -3730,7 +3730,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         <!---->
                         <div
                           class="category-content show-more-content invisible display-none"
-                          data-test="ydtxfmihs"
+                          data-test="SupplementalContentCollapsible"
                           style="transition: 0.5s; overflow: hidden;"
                         />
                       </div>
@@ -4226,9 +4226,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                   </a>
                 </div>
                 <button
-                  aria-label="expand mlhylpk"
+                  aria-label="expand RelatedRuleCollapsible"
                   class="collapsible-title category-title"
-                  data-test="mlhylpk"
+                  data-test="RelatedRuleCollapsible"
                 >
                   <!---->
                   <div
@@ -4243,7 +4243,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                 </button>
                 <div
                   class="category-content additional-rules invisible display-none"
-                  data-test="mlhylpk"
+                  data-test="RelatedRuleCollapsible"
                   style="transition: 0.5s; overflow: hidden;"
                 >
                   <div
@@ -4787,9 +4787,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </a>
                       </div>
                       <button
-                        aria-label="expand zpphtdmxbs"
+                        aria-label="expand SupplementalContentCollapsible"
                         class="collapsible-title category-title show-more"
-                        data-test="zpphtdmxbs"
+                        data-test="SupplementalContentCollapsible"
                       >
                         <!---->
                         <div
@@ -4804,7 +4804,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       </button>
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="zpphtdmxbs"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       >
                         <div
@@ -5196,9 +5196,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           </a>
                         </div>
                         <button
-                          aria-label="expand zpphtdmxbs"
+                          aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
-                          data-test="zpphtdmxbs"
+                          data-test="SupplementalContentCollapsible"
                         >
                           <!---->
                           <div
@@ -5358,7 +5358,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <!---->
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="raifjfcj"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       />
                     </div>
@@ -5513,9 +5513,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </a>
                       </div>
                       <button
-                        aria-label="expand bojebdq"
+                        aria-label="expand SupplementalContentCollapsible"
                         class="collapsible-title category-title show-more"
-                        data-test="bojebdq"
+                        data-test="SupplementalContentCollapsible"
                       >
                         <!---->
                         <div
@@ -5530,7 +5530,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       </button>
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="bojebdq"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       >
                         <div
@@ -5846,9 +5846,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           </a>
                         </div>
                         <button
-                          aria-label="expand bojebdq"
+                          aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
-                          data-test="bojebdq"
+                          data-test="SupplementalContentCollapsible"
                         >
                           <!---->
                           <div
@@ -6014,9 +6014,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </a>
                       </div>
                       <button
-                        aria-label="expand ayfadvl"
+                        aria-label="expand SupplementalContentCollapsible"
                         class="collapsible-title category-title show-more"
-                        data-test="ayfadvl"
+                        data-test="SupplementalContentCollapsible"
                       >
                         <!---->
                         <div
@@ -6031,7 +6031,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       </button>
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="ayfadvl"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       >
                         <div
@@ -6340,9 +6340,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         </a>
                       </div>
                       <button
-                        aria-label="expand qfdrvred"
+                        aria-label="expand SupplementalContentCollapsible"
                         class="collapsible-title category-title show-more"
-                        data-test="qfdrvred"
+                        data-test="SupplementalContentCollapsible"
                       >
                         <!---->
                         <div
@@ -6357,7 +6357,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       </button>
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="qfdrvred"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       >
                         <div
@@ -6957,9 +6957,9 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           </a>
                         </div>
                         <button
-                          aria-label="expand qfdrvred"
+                          aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
-                          data-test="qfdrvred"
+                          data-test="SupplementalContentCollapsible"
                         >
                           <!---->
                           <div
@@ -7079,7 +7079,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <!---->
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="xiwnipdc"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       />
                     </div>
@@ -7212,7 +7212,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <!---->
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="xmnzxlzre"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       />
                     </div>
@@ -7305,7 +7305,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <!---->
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="pxnrrsspk"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       />
                     </div>
@@ -7366,7 +7366,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <!---->
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="sdznma"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       />
                     </div>
@@ -7463,7 +7463,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <!---->
                       <div
                         class="category-content show-more-content invisible display-none"
-                        data-test="ydtxfmihs"
+                        data-test="SupplementalContentCollapsible"
                         style="transition: 0.5s; overflow: hidden;"
                       />
                     </div>

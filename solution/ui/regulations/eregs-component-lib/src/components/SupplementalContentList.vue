@@ -105,9 +105,7 @@ export default {
     data() {
         return {
             subcategory: "",
-            innerName: Math.random()
-                .toString(36)
-                .replace(/[^a-z]+/g, ""),
+            innerName: "SupplementalContentCollapsible",
         };
     },
 

@@ -140,9 +140,7 @@ export default {
     data() {
         return {
             limitedList: true,
-            innerName: Math.random()
-                .toString(36)
-                .replace(/[^a-z]+/g, ""),
+            innerName: "RelatedRuleCollapsible",
         };
     },
 
