@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 
-import { ssaSchema } from "./schemas/tableSchemas";
+import { acaSchema, ssaSchema } from "./schemas/tableSchemas";
 import { DISPLAY_TYPES, TABLE_TYPES } from "./utils/enums";
 
 const props = defineProps({
@@ -24,6 +24,8 @@ const props = defineProps({
 
 const tableSchema = computed(() => {
     switch (props.tableType) {
+        case "aca":
+            return acaSchema;
         case "ssa":
             return ssaSchema;
         default:
