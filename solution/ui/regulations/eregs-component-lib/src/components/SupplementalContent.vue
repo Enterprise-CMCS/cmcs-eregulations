@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a v-if="selectedPart && subparts.length === 1" v-on:click="clearSection" class="show-subpart-resources">
+        <a v-if="selectedPart && subparts.length === 1" class="show-subpart-resources" @click="clearSection">
             <span class="bold">
                 View All Subpart {{ subparts[0] }} Resources</span>
             ({{ resourceCount }})
