@@ -125,9 +125,9 @@ getStatutesArray();
                         <template v-else>
                             <div class="table__caption">Caption will go here once it has been workshopped to reflect all SSA titles in a single list.</div>
                             <StatuteTable
-                                :left-margin="bannerLeftMargin"
-                                :filtered-statutes="statutes.results"
                                 :display-type="isNarrow ? 'list' : 'table'"
+                                :filtered-statutes="statutes.results"
+                                table-type="ssa"
                             />
                         </template>
                     </div>

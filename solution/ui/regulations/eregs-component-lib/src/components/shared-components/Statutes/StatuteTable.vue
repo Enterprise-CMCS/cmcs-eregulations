@@ -8,15 +8,15 @@ import BodyCell from "./table-elements/BodyCell.vue";
 import HeaderCell from "./table-elements/HeaderCell.vue";
 
 const props = defineProps({
-    filteredStatutes: {
-        type: Array,
-        required: false,
-        default: () => [],
-    },
     displayType: {
         validator: (value) => DISPLAY_TYPES.includes(value),
         required: false,
         default: "table",
+    },
+    filteredStatutes: {
+        type: Array,
+        required: false,
+        default: () => [],
     },
     tableType: {
         validator: (value) => TABLE_TYPES.includes(value),
