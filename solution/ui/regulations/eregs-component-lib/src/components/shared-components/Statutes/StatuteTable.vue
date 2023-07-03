@@ -4,6 +4,9 @@ import { computed, ref } from "vue";
 import { acaSchema, ssaSchema } from "./schemas/tableSchemas";
 import { DISPLAY_TYPES, TABLE_TYPES } from "./utils/enums";
 
+import BodyCell from "./table-elements/BodyCell.vue";
+import HeaderCell from "./table-elements/HeaderCell.vue";
+
 const props = defineProps({
     filteredStatutes: {
         type: Array,
@@ -48,81 +51,19 @@ const tableSchema = computed(() => {
                         :key="j"
                         class="table__row"
                     >
-                        <th
-                            class="row__cell row__cell--header"
-                            :class="{
-                                'row__cell--primary': column.header.primary,
-                                'row__cell--secondary': column.header.secondary,
-                            }"
-                        >
-                            <div class="cell__title">
-                                {{ column.header.title }}
-                            </div>
-                            <template v-if="column.header.subtitles">
-                                <div
-                                    v-for="(subtitle, j) in column.header
-                                        .subtitles"
-                                    :key="j"
-                                    class="cell__subtitle"
-                                >
-                                    {{ subtitle }}
-                                </div>
-                            </template>
-                        </th>
-                        <td
-                            class="row__cell row__cell--body"
-                            :class="{
-                                'row__cell--primary': column.header.primary,
-                                'row__cell--secondary': column.header.secondary,
-                            }"
-                        >
-                            <template v-if="column.body.primary">
-                                <div class="cell__title">
-                                    {{ column.body.title(statute) }}
-                                </div>
-                                <div class="cell__usc-label">
-                                    {{ column.body.label(statute) }}
-                                </div>
-                                <div class="cell__name">
-                                    {{ column.body.name(statute) }}
-                                </div>
-                            </template>
-                            <template v-else>
-                                <a
-                                    :class="column.body.type"
-                                    :href="column.body.url(statute)"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >{{ column.body.text(statute) }}</a
-                                >
-                            </template>
-                        </td>
+                        <HeaderCell :cell-data="column.header" />
+                        <BodyCell :cell-data="column" :statute="statute" />
                     </tr>
                 </table>
             </div>
         </div>
         <table v-else id="statuteTable">
             <tr class="table__row table__row--header">
-                <th
+                <HeaderCell
                     v-for="(column, i) in tableSchema"
                     :key="i"
-                    class="row__cell row__cell--header"
-                    :class="{
-                        'row__cell--primary': column.header.primary,
-                        'row__cell--secondary': column.header.secondary,
-                    }"
-                >
-                    <div class="cell__title">{{ column.header.title }}</div>
-                    <template v-if="column.header.subtitles">
-                        <div
-                            v-for="(subtitle, j) in column.header.subtitles"
-                            :key="j"
-                            class="cell__subtitle"
-                        >
-                            {{ subtitle }}
-                        </div>
-                    </template>
-                </th>
+                    :cell-data="column.header"
+                />
             </tr>
             <tbody class="table__body">
                 <tr
@@ -130,36 +71,12 @@ const tableSchema = computed(() => {
                     :key="i"
                     class="table__row table__row--body"
                 >
-                    <td
+                    <BodyCell
                         v-for="(column, j) in tableSchema"
                         :key="j"
-                        class="row__cell row__cell--body"
-                        :class="{
-                            'row__cell--primary': column.body.primary,
-                            'row__cell--secondary': column.body.secondary,
-                        }"
-                    >
-                        <template v-if="column.body.primary">
-                            <div class="cell__title">
-                                {{ column.body.title(statute) }}
-                            </div>
-                            <div class="cell__usc-label">
-                                {{ column.body.label(statute) }}
-                            </div>
-                            <div class="cell__name">
-                                {{ column.body.name(statute) }}
-                            </div>
-                        </template>
-                        <template v-else>
-                            <a
-                                :class="column.body.type"
-                                :href="column.body.url(statute)"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >{{ column.body.text(statute) }}</a
-                            >
-                        </template>
-                    </td>
+                        :cell-data="column"
+                        :statute="statute"
+                    />
                 </tr>
             </tbody>
         </table>
