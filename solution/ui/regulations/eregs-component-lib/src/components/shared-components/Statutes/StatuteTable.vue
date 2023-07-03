@@ -1,6 +1,9 @@
 <script setup>
 import { computed, ref } from "vue";
 
+import { ssaSchema } from "./schemas/tableSchemas";
+import { DISPLAY_TYPES, TABLE_TYPES } from "./utils/enums";
+
 const props = defineProps({
     filteredStatutes: {
         type: Array,
@@ -8,101 +11,25 @@ const props = defineProps({
         default: () => [],
     },
     displayType: {
-        validator: (value) => ["table", "list"].includes(value), // eslint-disable-line vue/valid-define-props
+        validator: (value) => DISPLAY_TYPES.includes(value),
+        required: false,
         default: "table",
+    },
+    tableType: {
+        validator: (value) => TABLE_TYPES.includes(value),
+        required: false,
+        default: "ssa",
     },
 });
 
-// URL creation methods
-const houseGovUrl = (statuteObj) => {
-    const { title, usc } = statuteObj;
-    return `https://uscode.house.gov/view.xhtml?hl=false&edition=prelim&req=granuleid%3AUSC-prelim-title${title}-section${usc}`;
-};
-
-const usCodeUrl = (statuteObj) => {
-    const { title, usc } = statuteObj;
-    return `https://www.govinfo.gov/link/uscode/${title}/${usc}`;
-};
-
-const statuteCompilationUrl = (statuteObj) => {
-    const { source_url } = statuteObj;
-    const compsNumber = source_url
-        .split("/")
-        .find((str) => str.includes("COMPS"));
-    return `https://www.govinfo.gov/content/pkg/${compsNumber}/pdf/${compsNumber}.pdf`;
-};
-
-const ssaGovUrl = (statuteObj) => {
-    const { statute_title, section } = statuteObj;
-    return `https://www.ssa.gov/OP_Home/ssact/title${statute_title}/${section}.htm`;
-};
-
-const ssaCells = [
-    {
-        header: {
-            title: "Statute Citation",
-            primary: true,
-        },
-        body: {
-            title: (statute) => `SSA Section ${statute.section}`,
-            label: (statute) => `${statute.title} U. S. C. ${statute.usc}`,
-            name: (statute) => `${statute.name}`,
-            primary: true,
-        },
-    },
-    {
-        header: {
-            title: "House.gov",
-            secondary: true,
-            subtitles: ["Web Page", "Effective Jun 2023"],
-        },
-        body: {
-            url: (statute) => houseGovUrl(statute),
-            text: (statute) => `${statute.usc}`,
-            type: "external",
-            secondary: true,
-        },
-    },
-    {
-        header: {
-            title: "Statute Compilation",
-            secondary: true,
-            subtitles: ["PDF Document", "Amended Dec 2022"],
-        },
-        body: {
-            url: (statute) => statuteCompilationUrl(statute),
-            text: (statute) => `Title ${statute.statute_title_roman}`,
-            type: "pdf",
-            secondary: true,
-        },
-    },
-    {
-        header: {
-            title: "US Code Annual",
-            secondary: true,
-            subtitles: ["PDF Document", "Effective Jan 2022"],
-        },
-        body: {
-            url: (statute) => usCodeUrl(statute),
-            text: (statute) => `${statute.usc}`,
-            type: "pdf",
-            secondary: true,
-        },
-    },
-    {
-        header: {
-            title: "SSA.gov",
-            secondary: true,
-            subtitles: ["Web Page", "Amended Dec 2019"],
-        },
-        body: {
-            url: (statute) => ssaGovUrl(statute),
-            text: (statute) => `${statute.section}`,
-            type: "external",
-            secondary: true,
-        },
-    },
-];
+const tableSchema = computed(() => {
+    switch (props.tableType) {
+        case "ssa":
+            return ssaSchema;
+        default:
+            return ssaSchema;
+    }
+});
 </script>
 
 <template>
@@ -115,7 +42,7 @@ const ssaCells = [
             >
                 <table>
                     <tr
-                        v-for="(column, j) in ssaCells"
+                        v-for="(column, j) in tableSchema"
                         :key="j"
                         class="table__row"
                     >
@@ -175,7 +102,7 @@ const ssaCells = [
         <table v-else id="statuteTable">
             <tr class="table__row table__row--header">
                 <th
-                    v-for="(column, i) in ssaCells"
+                    v-for="(column, i) in tableSchema"
                     :key="i"
                     class="row__cell row__cell--header"
                     :class="{
@@ -202,7 +129,7 @@ const ssaCells = [
                     class="table__row table__row--body"
                 >
                     <td
-                        v-for="(column, j) in ssaCells"
+                        v-for="(column, j) in tableSchema"
                         :key="j"
                         class="row__cell row__cell--body"
                         :class="{
