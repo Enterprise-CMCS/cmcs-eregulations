@@ -67,9 +67,7 @@ export default {
             section: this.section,
         })
             .then((response) => {
-                this.govInfoLinks = response.sort(function (a, b) {
-                    return b.year - a.year;
-                });
+                this.govInfoLinks = response.sort((a, b) => b.year - a.year);
             })
             .catch((error) => {
                 console.error("Error", error);
@@ -88,5 +86,3 @@ export default {
     },
 };
 </script>
-
-<style></style>
