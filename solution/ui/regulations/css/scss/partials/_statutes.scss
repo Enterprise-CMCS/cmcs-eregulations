@@ -144,10 +144,12 @@
 
                         &--primary {
                             width: 220px;
+                            box-sizing: border-box;
                         }
 
                         &:first-of-type {
                             padding-left: 1rem;
+                            padding-right: 1rem;
                         }
 
                         &:last-of-type {
