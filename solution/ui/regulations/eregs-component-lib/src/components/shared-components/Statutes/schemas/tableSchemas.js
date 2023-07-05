@@ -45,7 +45,7 @@ const ssaSchema = [
         header: {
             title: "House.gov",
             secondary: true,
-            subtitles: ["Web Page", "Effective Jun 2023"],
+            subtitles: ["Web Page", "Effective Jul 2023"],
         },
         body: {
             url: (statute) => houseGovUrl(statute),
