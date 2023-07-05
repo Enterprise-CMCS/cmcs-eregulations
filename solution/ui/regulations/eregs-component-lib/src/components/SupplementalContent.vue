@@ -166,7 +166,6 @@ export default {
                     }`
                 );
             } else {
-                console.log('clear')
                 this.fetchContent();
             }
         },
@@ -248,7 +247,6 @@ export default {
                         subpartResponse.results
                     );
                 }
-                console.log(this.categories)
             } catch (error) {
                 console.error(error);
             } finally {
@@ -268,10 +266,8 @@ export default {
                 subparts: this.subparts,
                 sections: secList,
             };
-            console.log(this.partDict)
         },
         clearSection() {
-            console.log("Clearing Section");
             this.selectedPart = undefined;
             this.location = undefined;
         },
