@@ -202,6 +202,10 @@ export default {
     },
 
     props: {
+        apiUrl: {
+            type: String,
+            default: ""
+        },
         aboutUrl: {
             type: String,
             default: "/about/",
@@ -561,6 +565,7 @@ export default {
         async getSectionsBySubpart(subpart) {
             const splitSubpart = subpart.split("-");
             const allSections = await getSubpartTOC(
+                this.apiUrl,
                 this.queryParams.title ?? this.filters.title.listItems[0],
                 splitSubpart[0],
                 splitSubpart[1]

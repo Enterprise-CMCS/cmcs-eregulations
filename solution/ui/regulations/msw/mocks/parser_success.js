@@ -8,8 +8,6 @@ const titleFourtyTwoSuccess = {
     workers: 3,
     totalVersions: 66,
     skippedVersions: 70,
-    errors: 0
-}
-export {
-    titleFourtyTwoSuccess
-}
+    errors: 0,
+};
+export { titleFourtyTwoSuccess };

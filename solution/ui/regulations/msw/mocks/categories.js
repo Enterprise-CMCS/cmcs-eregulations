@@ -5,7 +5,7 @@ const categories = [
         description: "SMDLs, SHOs, CIBs, FAQs, SMM",
         order: 400,
         show_if_empty: true,
-        abstractcategory_ptr_id: 5
+        abstractcategory_ptr_id: 5,
     },
     {
         id: 11,
@@ -14,7 +14,7 @@ const categories = [
             "State Technical Assistance, Toolkits, SPA/Waiver Resources",
         order: 500,
         show_if_empty: true,
-        abstractcategory_ptr_id: 11
+        abstractcategory_ptr_id: 11,
     },
     {
         id: 19,
@@ -23,7 +23,7 @@ const categories = [
             "CMS policy analysis and research reports sent to Congress",
         order: 501,
         show_if_empty: true,
-        abstractcategory_ptr_id: 19
+        abstractcategory_ptr_id: 19,
     },
     {
         id: 23,
@@ -32,8 +32,8 @@ const categories = [
             "Reports from HHS Office of Inspector General and U.S. Government Accountability Office",
         order: 600,
         show_if_empty: true,
-        abstractcategory_ptr_id: 23
-    }
+        abstractcategory_ptr_id: 23,
+    },
 ];
 const subCategories = [{}];
 export { categories, subCategories };

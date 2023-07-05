@@ -1,21 +1,35 @@
 <template>
     <div>
-        <a v-if="selectedPart && subparts.length === 1" class="show-subpart-resources" @click="clearSection">
+        <a
+            v-if="selectedPart && subparts.length === 1"
+            class="show-subpart-resources"
+            @click="clearSection"
+        >
             <span class="bold">
-                View All Subpart {{ subparts[0] }} Resources</span>
+                View All Subpart {{ subparts[0] }} Resources</span
+            >
             ({{ resourceCount }})
         </a>
-        <h2 id="subpart-resources-heading">
-            {{ activePart }} Resources
-        </h2>
+        <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
         <div v-if="resourceDisplay" class="resource_btn_container">
-            <a :href="resourceLink" class=" default-btn action-btn search_resource_btn">Search These Resources</a>
+            <a
+                :href="resourceLink"
+                class="default-btn action-btn search_resource_btn"
+                >Search These Resources</a
+            >
         </div>
         <div class="supplemental-content-container">
-            <supplemental-content-category v-for="category in categories" :key="category.name" :name="category.name"
-                :subcategory="false" :description="category.description"
-                :supplemental_content="category.supplemental_content" :sub_categories="category.sub_categories"
-                :is-fetching="isFetching" :is-fr-doc-category="category.is_fr_doc_category">
+            <supplemental-content-category
+                v-for="category in categories"
+                :key="category.name"
+                :name="category.name"
+                :subcategory="false"
+                :description="category.description"
+                :supplemental_content="category.supplemental_content"
+                :sub_categories="category.sub_categories"
+                :is-fetching="isFetching"
+                :is-fr-doc-category="category.is_fr_doc_category"
+            >
             </supplemental-content-category>
             <simple-spinner v-if="isFetching"></simple-spinner>
         </div>
@@ -23,10 +37,7 @@
 </template>
 
 <script>
-import {
-    getSupplementalContent,
-    getSubpartTOC
-} from "utilities/api";
+import { getSupplementalContent, getSubpartTOC } from "utilities/api";
 import { EventCodes, formatResourceCategories } from "utilities/utils";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
@@ -60,12 +71,12 @@ export default {
         apiUrl: {
             type: String,
             required: false,
-            default: ""
+            default: "",
         },
         resourcesUrl: {
             type: String,
             required: false,
-            default: ""
+            default: "",
         },
         title: {
             type: String,
@@ -90,7 +101,7 @@ export default {
         resourceDisplay: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
     },
 
@@ -100,7 +111,7 @@ export default {
             isFetching: true,
             selectedPart: undefined,
             resourceCount: 0,
-            partDict: {}
+            partDict: {},
         };
     },
 
@@ -120,12 +131,14 @@ export default {
         },
 
         resourceLink() {
-            let qString = `${this.resourcesUrl}?title=${this.title}&part=${this.part}`
+            let qString = `${this.resourcesUrl}?title=${this.title}&part=${this.part}`;
 
             if (this.activePart.includes("Subpart")) {
-                qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}`
-                const sections = `${this.part}-${this.sections.join(`,${this.part}-`)}`
-                return `${qString}&section=${sections}`
+                qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}`;
+                const sections = `${this.part}-${this.sections.join(
+                    `,${this.part}-`
+                )}`;
+                return `${qString}&section=${sections}`;
             }
             const selection = this.activePart.split(" ")[1].replace(".", "-");
             return `${qString}&section=${selection}`;
@@ -136,36 +149,37 @@ export default {
         sections() {
             this.categories = [];
             this.isFetching = true;
-            this.fetch_content();
+            this.fetchContent();
         },
         subparts() {
             this.categories = [];
             this.isFetching = true;
-            this.fetch_content();
+            this.fetchContent();
         },
         selectedPart() {
             this.categories = [];
             this.isFetching = true;
             if (this.selectedPart) {
-                this.fetch_content(
-                    `locations=${this.title}.${this.part}.${this.selectedPart.split(".")[1]
+                this.fetchContent(
+                    `locations=${this.title}.${this.part}.${
+                        this.selectedPart.split(".")[1]
                     }`
                 );
             } else {
-                this.fetch_content();
+                this.fetchContent();
             }
         },
     },
 
     created() {
-        let location = ""
+        let location = "";
         if (window.location.hash) {
-            location = this.parseHash(window.location.hash)
+            location = this.parseHash(window.location.hash);
         } else {
-            this.fetch_content();
+            this.fetchContent();
         }
-        this.fetch_content(location)
-        window.addEventListener('hashchange', this.handleHashChange)
+        this.fetchContent(location);
+        window.addEventListener("hashchange", this.handleHashChange);
     },
     mounted() {
         this.$root.$on(EventCodes.SetSection, (args) => {
@@ -179,8 +193,8 @@ export default {
 
     methods: {
         handleHashChange() {
-            const location = this.parseHash(window.location.hash)
-            this.fetch_content(location)
+            const location = this.parseHash(window.location.hash);
+            this.fetchContent(location);
         },
         parseHash(locationHash) {
             if (window.location.hash === "#main-content") return "";
@@ -203,21 +217,31 @@ export default {
             this.selectedPart = `§ ${section}`;
             return `locations=${this.title}.${section}`;
         },
-        async fetch_content(location) {
+        async fetchContent(location) {
             try {
-                let response = ""
+                let response = "";
                 if (location) {
-                    response = await getSupplementalContent({ "apiUrl": this.apiUrl, "builtLocationString": location })
+                    response = await getSupplementalContent({
+                        apiUrl: this.apiUrl,
+                        builtLocationString: location,
+                    });
                 }
-                await this.getPartDictionary()
+                await this.getPartDictionary();
 
-                const subpartResponse = await getSupplementalContent({ "apiUrl": this.apiUrl, "partDict": this.partDict });
+                const subpartResponse = await getSupplementalContent({
+                    apiUrl: this.apiUrl,
+                    partDict: this.partDict,
+                });
 
                 this.resourceCount = subpartResponse.count;
-                if (response !== '') {
-                    this.categories = formatResourceCategories(response.results);
+                if (response !== "") {
+                    this.categories = formatResourceCategories(
+                        response.results
+                    );
                 } else {
-                    this.categories = formatResourceCategories(subpartResponse.results);
+                    this.categories = formatResourceCategories(
+                        subpartResponse.results
+                    );
                 }
             } catch (error) {
                 console.error(error);
@@ -226,9 +250,18 @@ export default {
             }
         },
         async getPartDictionary() {
-            const sections = await getSubpartTOC(this.apiUrl, this.title, this.part, this.subparts[0])
-            const secList = sections.map(section => section.identifier[1])
-            this.partDict[this.part] = { "title": this.title, "subparts": this.subparts, "sections": secList }
+            const sections = await getSubpartTOC(
+                this.apiUrl,
+                this.title,
+                this.part,
+                this.subparts[0]
+            );
+            const secList = sections.map((section) => section.identifier[1]);
+            this.partDict[this.part] = {
+                title: this.title,
+                subparts: this.subparts,
+                sections: secList,
+            };
         },
         clearSection() {
             console.log("Clearing Section");
@@ -253,7 +286,7 @@ export default {
 }
 
 a.search_resource_btn:visited {
-    color: white
+    color: white;
 }
 
 a.search_resource_btn:hover {

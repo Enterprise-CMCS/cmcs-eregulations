@@ -28,6 +28,6 @@ const handlers = [
     ),
     rest.get("*/title/42/part/431/history/section/10", (req, res, ctx) =>
         res(ctx.status(200), ctx.json(history))
-    )
+    ),
 ];
 export default handlers;

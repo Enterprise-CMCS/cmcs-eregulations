@@ -9,7 +9,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "§ 433.8 [Reserved]",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -21,7 +21,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Rates of FFP for program services.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -33,7 +33,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Enhanced FMAP rate for children.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -45,7 +45,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Rates of FFP for administration.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -57,7 +57,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Fiscal policies and accountability.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -69,7 +69,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Cost allocation.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -81,7 +81,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Equipment—Federal financial participation.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -93,7 +93,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Liens and recoveries.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -107,7 +107,7 @@ const subpartA = [
         descendant_range: null,
         label_description:
             "Reporting provider payments to Internal Revenue Service.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -119,7 +119,7 @@ const subpartA = [
         parent_type: "subpart",
         descendant_range: null,
         label_description: "Interest charge on disallowed claims for FFP.",
-        children: null
+        children: null,
     },
     {
         type: "section",
@@ -133,8 +133,8 @@ const subpartA = [
         descendant_range: null,
         label_description:
             "Treatment of uncashed or cancelled (voided) Medicaid checks.",
-        children: null
-    }
+        children: null,
+    },
 ];
 
 export { subpartA };
