@@ -166,6 +166,7 @@ export default {
                     }`
                 );
             } else {
+                console.log('clear')
                 this.fetchContent();
             }
         },
@@ -227,13 +228,17 @@ export default {
                     });
                 }
                 await this.getPartDictionary();
-
+                
+                // Page size is set to 1000 to attempt to get all subpart resources.  Right now no single subpart hits this number
+                // so this shouldn't be an issue
                 const subpartResponse = await getSupplementalContent({
                     apiUrl: this.apiUrl,
                     partDict: this.partDict,
+                    pageSize: 1000
                 });
 
                 this.resourceCount = subpartResponse.count;
+
                 if (response !== "") {
                     this.categories = formatResourceCategories(
                         response.results
@@ -243,6 +248,7 @@ export default {
                         subpartResponse.results
                     );
                 }
+                console.log(this.categories)
             } catch (error) {
                 console.error(error);
             } finally {
@@ -262,6 +268,7 @@ export default {
                 subparts: this.subparts,
                 sections: secList,
             };
+            console.log(this.partDict)
         },
         clearSection() {
             console.log("Clearing Section");
