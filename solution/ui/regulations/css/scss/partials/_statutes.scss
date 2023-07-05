@@ -19,10 +19,6 @@
             padding-left: $spacer-4;
         }
 
-        @include custom-max(($eds-width-sm - 1) / 1px) {
-            padding: 0;
-        }
-
         .content {
             padding-top: 30px;
             padding-bottom: 30px;
@@ -32,19 +28,9 @@
                 border: 1px solid $table_border_color;
                 border-radius: 4px;
 
-                @include custom-max(($eds-width-sm - 1) / 1px) {
-                    padding: 0;
-                    border: none;
-                }
-
                 .table__caption {
                     padding-bottom: 1.5rem;
                     color: $primary_text_color;
-
-                    @include custom-max(($eds-width-sm - 1px) / 1px) {
-                        padding-left: 0.75rem;
-                        padding-right: 0.75rem;
-                    }
                 }
 
                 @mixin commonTableStyles {
