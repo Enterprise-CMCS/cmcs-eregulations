@@ -53,6 +53,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/search?q=${SEARCH_TERM}`,
     `/v3/statutes`,
     `/v3/statutes?act=${ACT}`,
+    `/v3/acts`,
 ];
 
 describe("API testing", () => {
