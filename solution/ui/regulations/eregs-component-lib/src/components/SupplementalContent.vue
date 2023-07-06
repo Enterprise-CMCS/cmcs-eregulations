@@ -3,13 +3,13 @@
         <a
             v-if="selectedPart && subparts.length === 1"
             class="show-subpart-resources"
+            aria-label="view all subpart resources"
             @click="clearSection"
-            ><span aria-label="view all subpart resources">
-                <span class="bold">
-                    View All Subpart {{ subparts[0] }} Resources</span
-                >
-                ({{ resourceCount }})</span
+        >
+            <span class="bold">
+                View All Subpart {{ subparts[0] }} Resources</span
             >
+            ({{ resourceCount }})
         </a>
         <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
         <div v-if="resourceDisplay" class="resource_btn_container">
