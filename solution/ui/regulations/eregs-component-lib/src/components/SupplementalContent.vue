@@ -4,11 +4,12 @@
             v-if="selectedPart && subparts.length === 1"
             class="show-subpart-resources"
             @click="clearSection"
-        >
-            <span class="bold">
-                View All Subpart {{ subparts[0] }} Resources</span
+            ><span aria-label="view all subpart resources">
+                <span class="bold">
+                    View All Subpart {{ subparts[0] }} Resources</span
+                >
+                ({{ resourceCount }})</span
             >
-            ({{ resourceCount }})
         </a>
         <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
         <div v-if="resourceDisplay" class="resource_btn_container">
@@ -227,13 +228,13 @@ export default {
                     });
                 }
                 await this.getPartDictionary();
-                
+
                 // Page size is set to 1000 to attempt to get all subpart resources.  Right now no single subpart hits this number
                 // so this shouldn't be an issue
                 const subpartResponse = await getSupplementalContent({
                     apiUrl: this.apiUrl,
                     partDict: this.partDict,
-                    pageSize: 1000
+                    pageSize: 1000,
                 });
 
                 this.resourceCount = subpartResponse.count;

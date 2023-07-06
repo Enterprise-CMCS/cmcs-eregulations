@@ -32,6 +32,143 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
               class="category"
             >
               <button
+                aria-label="expand Related Statutes"
+                class="collapsible-title category-title"
+                data-test="Related Statutes"
+              >
+                <!---->
+                Related Statutes 
+                <i
+                  class="fa fa-chevron-down"
+                />
+                <!---->
+              </button>
+              <span
+                class="category-description"
+              >
+                Statutes that relate to the subject matter of the subpart or section
+              </span>
+              <div
+                class="category-content invisible display-none"
+                data-test="Related Statutes"
+                style="transition: 0.5s; overflow: hidden;"
+              >
+                <div
+                  class="supplemental-content-list"
+                >
+                  <div
+                    class="supplemental-content"
+                  >
+                    <a
+                      class="supplemental-content-link"
+                      href="https://www.govinfo.gov/content/pkg/COMPS-9307/pdf/COMPS-9307.pdf#page=807"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <!---->
+                      <span
+                        class="supplemental-content-title"
+                      >
+                        Affordable Care Act Section 10202
+                      </span>
+                      <div
+                        class="supplemental-content-description supplemental-content-external-link"
+                      >
+                        <span>
+                          Incentives for States to Offer Home and Community-based Services as a Long-term Care Alternative to Nursing Homes
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="supplemental-content"
+                  >
+                    <a
+                      class="supplemental-content-link"
+                      href="https://uscode.house.gov/view.xhtml?req=granuleid%3AUSC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_4"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <!---->
+                      <span
+                        class="supplemental-content-title"
+                      >
+                        Social Security Act Section 1902(a)(4)
+                      </span>
+                      <div
+                        class="supplemental-content-description supplemental-content-external-link"
+                      >
+                        <span>
+                          42 U.S.C. 1396a(a)(4)
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="supplemental-content"
+                  >
+                    <a
+                      class="supplemental-content-link"
+                      href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_a"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <!---->
+                      <span
+                        class="supplemental-content-title"
+                      >
+                        Social Security Act Section 1903(a)
+                      </span>
+                      <div
+                        class="supplemental-content-description supplemental-content-external-link"
+                      >
+                        <span>
+                          42 U.S.C. 1396b(a). Computation of Amount
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="supplemental-content"
+                  >
+                    <a
+                      class="supplemental-content-link"
+                      href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396r-4&num=0&edition=prelim"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <!---->
+                      <span
+                        class="supplemental-content-title"
+                      >
+                        Social Security Act Section 1923
+                      </span>
+                      <div
+                        class="supplemental-content-description supplemental-content-external-link"
+                      >
+                        <span>
+                          42 U.S.C. 1396r-4. Adjustment in payment for inpatient hospital services furnished by disproportionate share hospitals
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+                  <!---->
+                  <div
+                    class="category-content show-more-content invisible display-none"
+                    data-test="SupplementalContentCollapsible"
+                    style="transition: 0.5s; overflow: hidden;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="supplemental-content-category"
+          >
+            <div
+              class="category"
+            >
+              <button
                 aria-label="expand Proposed and Final Rules"
                 class="collapsible-title category-title is-fr-doc-btn"
                 data-test="Proposed and Final Rules"
@@ -504,7 +641,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <b>
                         + Show More
                       </b>
-                       (10) 
+                       (28) 
                     </div>
                     <!---->
                   </button>
@@ -856,7 +993,1601 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                         <!---->
                       </a>
                     </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://www.federalregister.gov/documents/1997/10/15/97-27194/medicaid-program-limitation-on-provider-related-donations-and-health-care-related-taxes-revision-of"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Oct 15, 1997
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            62 FR 53571
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Limitation on Provider-Related Donations and Health Care-Related Taxes; Revision of Waiver Criteria for Tax Programs Based Exclusively on Regional Variations; Correction 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1993/8/13/43152-43183.pdf#page=5"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Aug 13, 1993
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            58 FR 43180
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1993/1/26/6092-6103.pdf#page=4"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Jan 26, 1993
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            58 FR 6095
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1992/11/24/55091-55148.pdf#page=28"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Nov 24, 1992
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            57 FR 55138
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1993/4/28/25783-25786.pdf#page=2"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Apr 28, 1993
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            58 FR 25784
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicare-and Medicaid Programs; Preadmission Screening and Annual Resident Review, Correction 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1992/11/30/56448-56514.pdf#page=58"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Nov 30, 1992
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            57 FR 56505
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1990/3/23/10936-10981.pdf#page=16"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Mar 23, 1990
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            55 FR 10951
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1992/10/8/46429-46434.pdf#page=3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Oct 8, 1992
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            57 FR 46431
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicare and Medicaid; Requirements for Long Term Care Facilities, Correction 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1992/9/23/43905-43925.pdf#page=19"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Sep 23, 1992
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            57 FR 43923
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1991/9/26/48822-48922.pdf#page=97"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Sep 26, 1991
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            56 FR 48918
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1989/2/2/5300-5363.pdf#page=17"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Feb 2, 1989
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            54 FR 5316
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1987/10/16/38563-38592.pdf#page=20"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Oct 16, 1987
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            52 FR 38582
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1991/9/26/48822-48922.pdf#page=59"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Sep 26, 1991
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            56 FR 48880
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicare and Medicaid Programs; Nurse Aide Training and Competency Evaluation Programs 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1990/3/23/10935-10951.pdf#page=4"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Mar 23, 1990
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            55 FR 10938
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1989/5/16/21065-21067.pdf#page=2"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            May 16, 1989
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            54 FR 21066
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicare and Medicaid; Approved Information Collection Requirements and Federal Medical Assistance Percentage Computation 
+                        </div>
+                      </a>
+                    </div>
                     <!---->
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1989/2/28/8432-8482.pdf#page=4"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Feb 28, 1989
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            54 FR 8435
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Refunding of Federal Share of Overpayments Made to Medicaid Providers, Correction 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1989/2/3/5451-5462.pdf#page=2"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Feb 3, 1989
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            54 FR 5460
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1987/12/21/48286-48297.pdf#page=5"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Dec 21, 1987
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            52 FR 48290
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1986/11/14/41328-41352.pdf#page=5"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Nov 14, 1986
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            51 FR 41350
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicare and Medicaid Programs; Miscellaneous Conforming Amendments 
+                        </div>
+                      </a>
+                    </div>
+                    <!---->
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1986/10/9/36224-36228.pdf#page=4"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Oct 9, 1986
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            51 FR 36227
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Adjustment of Federal Share for Uncashed or Cancelled (Voided) Checks 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://www.govinfo.gov/content/pkg/FR-1985-05-31/pdf/FR-1985-05-31.pdf"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            May 31, 1985
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            50 FR 23147
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1986/5/2/16317-16321.pdf#page=3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            May 2, 1986
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            51 FR 16319
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Third Party Liability for Medical Assistance; Correction 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1985/12/2/49387-49392.pdf#page=3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Dec 2, 1985
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            50 FR 49389
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1985/11/12/46651-46666.pdf#page=13"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Nov 12, 1985
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            50 FR 46663
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1984/6/4/23074-23085.pdf#page=5"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            June 4, 1984
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            49 FR 23078
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1985/4/17/15275-15335.pdf#page=53"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Apr 17, 1985
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            50 FR 15327
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicare and Medicaid Programs; Utilization and Quality Control Peer Review Organization (PRO): Assumption of Medicare Review Functions and Coordination with Medicaid 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1984/7/17/29014-29039.pdf#page=11"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            July 17, 1984
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            49 FR 29026
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1983/12/19/56044-56058.pdf#page=3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Dec 19, 1983
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            48 FR 56057
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Payment for LongTerm Care Facility Services and Inpatient Hospital Services 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1981/11/4/54742-54745.pdf#page=3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Nov 4, 1981
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            46 FR 54744
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1981/9/30/47906-47967.pdf#page=33"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Sep 30, 1981
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            46 FR 47964
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1983/6/27/29479-29486.pdf#page=7"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            June 27, 1983
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            48 FR 29485
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Interest on Disputed Medicaid Claims 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1982/7/6/29274-29278.pdf#page=2"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            July 6, 1982
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            47 FR 29275
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1982/11/3/49845-49852.pdf#page=3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Nov 3, 1982
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            47 FR 49847
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Liens, Adjustments, and Recoveries, Correction 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://www.govinfo.gov/content/pkg/FR-1982-10-01/pdf/FR-1982-10-01.pdf#page=284"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Oct 1, 1982
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            47 FR 43647
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1982/9/21/41566-41577.pdf#page=10"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Sep 21, 1982
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            47 FR 41576
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Equipment Acquired Under Public Assistance Programs 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1982/9/21/41563-41566.pdf"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Sep 21, 1982
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            47 FR 41564
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1981/7/24/38252-38282.pdf#page=3"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            July 24, 1981
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            46 FR 38280
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1982/4/23/17487-17512.pdf#page=20"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Apr 23, 1982
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            47 FR 17509
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Cost Allocation Plans for Public Assistance Programs 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1982/4/23/17487-17512.pdf#page=4"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Apr 23, 1982
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            47 FR 17490
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1981/1/22/7010-7014.pdf#page=2&duplicate"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Jan 22, 1981
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            46 FR 7011
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1981/1/22/7010-7014.pdf#page=2"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Jan 22, 1981
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            46 FR 7011
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1981/10/1/48553-48571.pdf#page=14"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Oct 1, 1981
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            46 FR 48566
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Professional Standards Review; Professional Standards Review Organizations (PSRO) 
+                        </div>
+                      </a>
+                    </div>
+                    <!---->
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1980/4/11/24877-24890.pdf#page=2"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            CORR
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Apr 11, 1980
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            45 FR 24884
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Medicaid Program; Miscellaneous Corrections 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1978/9/29/45049-45243.pdf#page=90"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Sep 29, 1978
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            43 FR 45176
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043011/fr043011.pdf#page=49"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            NPRM
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Jan 17, 1978
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            43 FR 2413
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change ungrouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://www.govinfo.gov/content/pkg/FR-1979-03-23/pdf/FR-1979-03-23.pdf#page=286"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Mar 23, 1979
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation"
+                          >
+                            44 FR 17926
+                          </span>
+                        </span>
+                        <div
+                          class="recent-title line-clamp-9"
+                        >
+                           Redesignation and Rewrite 
+                        </div>
+                      </a>
+                    </div>
+                    <div
+                      class="related-rule recent-change grouped"
+                    >
+                      <a
+                        class="related-rule-title"
+                        href="https://archives.federalregister.gov/issue_slice/1979/2/15/9744-9754.pdf#page=6"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <span
+                          class="link-heading"
+                        >
+                          <span
+                            class="recent-flag indicator secondary-indicator"
+                          >
+                            Final
+                          </span>
+                          <span
+                            class="recent-date"
+                          >
+                            Feb 15, 1979
+                          </span>
+                           | 
+                          <span
+                            class="recent-fr-citation grouped"
+                          >
+                            44 FR 9753
+                          </span>
+                        </span>
+                        <!---->
+                      </a>
+                    </div>
+                    <button
+                      aria-label="expand RelatedRuleCollapsible"
+                      class="collapsible-title category-title"
+                      data-test="RelatedRuleCollapsible"
+                    >
+                      <!---->
+                      <div
+                        class="show-more-button"
+                      >
+                        <b>
+                          + Show More
+                        </b>
+                         (28) 
+                      </div>
+                      <!---->
+                    </button>
                   </div>
                 </div>
               </div>
@@ -1065,7 +2796,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             <b>
                               + Show More
                             </b>
-                             (19) 
+                             (23) 
                           </div>
                           <!---->
                         </button>
@@ -1462,6 +3193,102 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                               </div>
                             </a>
                           </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/federal-policy-guidance/downloads/smd070600.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <span
+                                class="supplemental-content-date"
+                              >
+                                July 6, 2000
+                              </span>
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Development of Immunization Registries - Medicaid Management Information System (MMIS)
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/federal-policy-guidance/downloads/SMD012098e.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <span
+                                class="supplemental-content-date"
+                              >
+                                January 20, 1998
+                              </span>
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Managed Care Federal Financial Participation (FFP) External Review
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/federal-policy-guidance/downloads/SMD051497.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <span
+                                class="supplemental-content-date"
+                              >
+                                May 14, 1997
+                              </span>
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Administrative Expenditures Reporting (relating to the provision of the Welfare Reform legislation)
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/federal-policy-guidance/downloads/SMD122094.PDF"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <span
+                                class="supplemental-content-date"
+                              >
+                                December 20, 1994
+                              </span>
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Allowable Administrative Costs
+                                </span>
+                              </div>
+                            </a>
+                          </div>
                           <button
                             aria-label="expand SupplementalContentCollapsible"
                             class="collapsible-title category-title show-more"
@@ -1474,7 +3301,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                               <b>
                                 + Show More
                               </b>
-                               (19) 
+                               (23) 
                             </div>
                             <!---->
                           </button>
@@ -2427,6 +4254,128 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                     </div>
                   </div>
                 </div>
+                <div
+                  class="supplemental-content-category"
+                >
+                  <div
+                    class="category"
+                  >
+                    <button
+                      aria-label="expand Associate Regional Administrator (ARA) Memo"
+                      class="collapsible-title category-title subcategory"
+                      data-test="Associate Regional Administrator (ARA) Memo"
+                    >
+                      <!---->
+                      Associate Regional Administrator (ARA) Memo 
+                      <i
+                        class="fa fa-chevron-down"
+                      />
+                      <!---->
+                    </button>
+                    <!---->
+                    <div
+                      class="category-content invisible display-none"
+                      data-test="Associate Regional Administrator (ARA) Memo"
+                      style="transition: 0.5s; overflow: hidden;"
+                    >
+                      <div
+                        class="supplemental-content-list"
+                      >
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.hhs.gov/guidance/sites/default/files/hhs-guidance-documents/1992.ara%2520letter.residency%2520and%2520intent%2520to%2520return%2520home_82.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <span
+                              class="supplemental-content-date"
+                            >
+                              September 3, 1992
+                            </span>
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Impact of Medicaid Residency Requirements on Intent to Return Home Policy
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <!---->
+                        <div
+                          class="category-content show-more-content invisible display-none"
+                          data-test="SupplementalContentCollapsible"
+                          style="transition: 0.5s; overflow: hidden;"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="supplemental-content-category"
+                >
+                  <div
+                    class="category"
+                  >
+                    <button
+                      aria-label="expand State Medicaid Manual (SMM)"
+                      class="collapsible-title category-title subcategory"
+                      data-test="State Medicaid Manual (SMM)"
+                    >
+                      <!---->
+                      State Medicaid Manual (SMM) 
+                      <i
+                        class="fa fa-chevron-down"
+                      />
+                      <!---->
+                    </button>
+                    <!---->
+                    <div
+                      class="category-content invisible display-none"
+                      data-test="State Medicaid Manual (SMM)"
+                      style="transition: 0.5s; overflow: hidden;"
+                    >
+                      <div
+                        class="supplemental-content-list"
+                      >
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927?chapter=3"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <!---->
+                            <span
+                              class="supplemental-content-title"
+                            >
+                              Chapter 3 - State Medicaid Manual
+                            </span>
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Eligibility
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <!---->
+                        <div
+                          class="category-content show-more-content invisible display-none"
+                          data-test="SupplementalContentCollapsible"
+                          style="transition: 0.5s; overflow: hidden;"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <!---->
               </div>
             </div>
@@ -2618,7 +4567,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             <b>
                               + Show More
                             </b>
-                             (29) 
+                             (37) 
                           </div>
                           <!---->
                         </button>
@@ -3223,6 +5172,186 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                               </div>
                             </a>
                           </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.dol.gov/sites/dolgov/files/OASAM/legacy/files/ASMB_C-10.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <span
+                                class="supplemental-content-date supplemental-content-mid-bar"
+                              >
+                                April 8, 1997
+                              </span>
+                              <span
+                                class="supplemental-content-title"
+                              >
+                                ASMB C-10
+                              </span>
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Cost Principles and Procedures for Developing Cost Allocation Plans and Indirect Cost Rates for Agreements with the Federal Government
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.cms.gov/Outreach-and-Education/American-Indian-Alaska-Native/AIAN/LTSS-TA-Center/pdf/memorandum-of-agreement.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <span
+                                class="supplemental-content-date"
+                              >
+                                December 19, 1996
+                              </span>
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Memorandum of Agreement Between the Indian Health Service and the Health Care Financing Administration
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/medicaid/downloads/factsheet-cms2418p.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <!---->
+                              <span
+                                class="supplemental-content-title"
+                              >
+                                Fact Sheet
+                              </span>
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Notice of Proposed Rulemaking – Medicaid Programs: Preadmission Screening and Resident Review (CMS-2418-P)
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://obamawhitehouse.archives.gov/sites/default/files/omb/assets/a133/a133_revised_2007.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <!---->
+                              <span
+                                class="supplemental-content-title"
+                              >
+                                OMB Circular A-133
+                              </span>
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Audits of States, Local Governments, and Non-Profit Organizations
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/sites/default/files/2019-12/bip-case-study.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <!---->
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Balancing Incentive Program — Case Study Introduction: Five State Examples from Mississippi, Massachusetts, New Hampshire, New Jersey, Texas
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/state-resource-center/downloads/program-integrity-strategy-factsheet.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <!---->
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  CMS Medicaid Program Integrity Strategy Fact Sheet
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://aspe.hhs.gov/federal-medical-assistance-percentages-or-federal-financial-participation-state-assistance"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <!---->
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  Federal Medical Assistance Percentages or Federal Financial Participation in State Assistance Expenditures (FMAP)
+                                </span>
+                              </div>
+                            </a>
+                          </div>
+                          <div
+                            class="supplemental-content"
+                          >
+                            <a
+                              class="supplemental-content-link"
+                              href="https://www.medicaid.gov/medicaid/downloads/ltco-workplan.pdf"
+                              rel="noopener noreferrer"
+                              target="_blank"
+                            >
+                              <!---->
+                              <!---->
+                              <div
+                                class="supplemental-content-description supplemental-content-external-link"
+                              >
+                                <span>
+                                  State Work Plan to Seek Federal Financial Participation (FFP) for Long Term Care (LTC) Ombudsman Activities
+                                </span>
+                              </div>
+                            </a>
+                          </div>
                           <button
                             aria-label="expand SupplementalContentCollapsible"
                             class="collapsible-title category-title show-more"
@@ -3235,7 +5364,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                               <b>
                                 + Show More
                               </b>
-                               (29) 
+                               (37) 
                             </div>
                             <!---->
                           </button>
@@ -3765,6 +5894,143 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
             class="category"
           >
             <button
+              aria-label="expand Related Statutes"
+              class="collapsible-title category-title"
+              data-test="Related Statutes"
+            >
+              <!---->
+              Related Statutes 
+              <i
+                class="fa fa-chevron-down"
+              />
+              <!---->
+            </button>
+            <span
+              class="category-description"
+            >
+              Statutes that relate to the subject matter of the subpart or section
+            </span>
+            <div
+              class="category-content invisible display-none"
+              data-test="Related Statutes"
+              style="transition: 0.5s; overflow: hidden;"
+            >
+              <div
+                class="supplemental-content-list"
+              >
+                <div
+                  class="supplemental-content"
+                >
+                  <a
+                    class="supplemental-content-link"
+                    href="https://www.govinfo.gov/content/pkg/COMPS-9307/pdf/COMPS-9307.pdf#page=807"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <!---->
+                    <span
+                      class="supplemental-content-title"
+                    >
+                      Affordable Care Act Section 10202
+                    </span>
+                    <div
+                      class="supplemental-content-description supplemental-content-external-link"
+                    >
+                      <span>
+                        Incentives for States to Offer Home and Community-based Services as a Long-term Care Alternative to Nursing Homes
+                      </span>
+                    </div>
+                  </a>
+                </div>
+                <div
+                  class="supplemental-content"
+                >
+                  <a
+                    class="supplemental-content-link"
+                    href="https://uscode.house.gov/view.xhtml?req=granuleid%3AUSC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_4"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <!---->
+                    <span
+                      class="supplemental-content-title"
+                    >
+                      Social Security Act Section 1902(a)(4)
+                    </span>
+                    <div
+                      class="supplemental-content-description supplemental-content-external-link"
+                    >
+                      <span>
+                        42 U.S.C. 1396a(a)(4)
+                      </span>
+                    </div>
+                  </a>
+                </div>
+                <div
+                  class="supplemental-content"
+                >
+                  <a
+                    class="supplemental-content-link"
+                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_a"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <!---->
+                    <span
+                      class="supplemental-content-title"
+                    >
+                      Social Security Act Section 1903(a)
+                    </span>
+                    <div
+                      class="supplemental-content-description supplemental-content-external-link"
+                    >
+                      <span>
+                        42 U.S.C. 1396b(a). Computation of Amount
+                      </span>
+                    </div>
+                  </a>
+                </div>
+                <div
+                  class="supplemental-content"
+                >
+                  <a
+                    class="supplemental-content-link"
+                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396r-4&num=0&edition=prelim"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <!---->
+                    <span
+                      class="supplemental-content-title"
+                    >
+                      Social Security Act Section 1923
+                    </span>
+                    <div
+                      class="supplemental-content-description supplemental-content-external-link"
+                    >
+                      <span>
+                        42 U.S.C. 1396r-4. Adjustment in payment for inpatient hospital services furnished by disproportionate share hospitals
+                      </span>
+                    </div>
+                  </a>
+                </div>
+                <!---->
+                <div
+                  class="category-content show-more-content invisible display-none"
+                  data-test="SupplementalContentCollapsible"
+                  style="transition: 0.5s; overflow: hidden;"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="supplemental-content-category"
+        >
+          <div
+            class="category"
+          >
+            <button
               aria-label="expand Proposed and Final Rules"
               class="collapsible-title category-title is-fr-doc-btn"
               data-test="Proposed and Final Rules"
@@ -4237,7 +6503,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                     <b>
                       + Show More
                     </b>
-                     (10) 
+                     (28) 
                   </div>
                   <!---->
                 </button>
@@ -4589,7 +6855,1601 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                       <!---->
                     </a>
                   </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://www.federalregister.gov/documents/1997/10/15/97-27194/medicaid-program-limitation-on-provider-related-donations-and-health-care-related-taxes-revision-of"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Oct 15, 1997
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          62 FR 53571
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Limitation on Provider-Related Donations and Health Care-Related Taxes; Revision of Waiver Criteria for Tax Programs Based Exclusively on Regional Variations; Correction 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1993/8/13/43152-43183.pdf#page=5"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Aug 13, 1993
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          58 FR 43180
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1993/1/26/6092-6103.pdf#page=4"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Jan 26, 1993
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          58 FR 6095
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1992/11/24/55091-55148.pdf#page=28"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Nov 24, 1992
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          57 FR 55138
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1993/4/28/25783-25786.pdf#page=2"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Apr 28, 1993
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          58 FR 25784
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicare-and Medicaid Programs; Preadmission Screening and Annual Resident Review, Correction 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1992/11/30/56448-56514.pdf#page=58"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Nov 30, 1992
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          57 FR 56505
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1990/3/23/10936-10981.pdf#page=16"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Mar 23, 1990
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          55 FR 10951
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1992/10/8/46429-46434.pdf#page=3"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Oct 8, 1992
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          57 FR 46431
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicare and Medicaid; Requirements for Long Term Care Facilities, Correction 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1992/9/23/43905-43925.pdf#page=19"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Sep 23, 1992
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          57 FR 43923
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1991/9/26/48822-48922.pdf#page=97"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Sep 26, 1991
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          56 FR 48918
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1989/2/2/5300-5363.pdf#page=17"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Feb 2, 1989
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          54 FR 5316
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1987/10/16/38563-38592.pdf#page=20"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Oct 16, 1987
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          52 FR 38582
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1991/9/26/48822-48922.pdf#page=59"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Sep 26, 1991
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          56 FR 48880
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicare and Medicaid Programs; Nurse Aide Training and Competency Evaluation Programs 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1990/3/23/10935-10951.pdf#page=4"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Mar 23, 1990
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          55 FR 10938
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1989/5/16/21065-21067.pdf#page=2"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          May 16, 1989
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          54 FR 21066
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicare and Medicaid; Approved Information Collection Requirements and Federal Medical Assistance Percentage Computation 
+                      </div>
+                    </a>
+                  </div>
                   <!---->
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1989/2/28/8432-8482.pdf#page=4"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Feb 28, 1989
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          54 FR 8435
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Refunding of Federal Share of Overpayments Made to Medicaid Providers, Correction 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1989/2/3/5451-5462.pdf#page=2"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Feb 3, 1989
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          54 FR 5460
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1987/12/21/48286-48297.pdf#page=5"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Dec 21, 1987
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          52 FR 48290
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1986/11/14/41328-41352.pdf#page=5"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Nov 14, 1986
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          51 FR 41350
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicare and Medicaid Programs; Miscellaneous Conforming Amendments 
+                      </div>
+                    </a>
+                  </div>
+                  <!---->
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1986/10/9/36224-36228.pdf#page=4"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Oct 9, 1986
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          51 FR 36227
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Adjustment of Federal Share for Uncashed or Cancelled (Voided) Checks 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://www.govinfo.gov/content/pkg/FR-1985-05-31/pdf/FR-1985-05-31.pdf"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          May 31, 1985
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          50 FR 23147
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1986/5/2/16317-16321.pdf#page=3"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          May 2, 1986
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          51 FR 16319
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Third Party Liability for Medical Assistance; Correction 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1985/12/2/49387-49392.pdf#page=3"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Dec 2, 1985
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          50 FR 49389
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1985/11/12/46651-46666.pdf#page=13"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Nov 12, 1985
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          50 FR 46663
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1984/6/4/23074-23085.pdf#page=5"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          June 4, 1984
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          49 FR 23078
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1985/4/17/15275-15335.pdf#page=53"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Apr 17, 1985
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          50 FR 15327
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicare and Medicaid Programs; Utilization and Quality Control Peer Review Organization (PRO): Assumption of Medicare Review Functions and Coordination with Medicaid 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1984/7/17/29014-29039.pdf#page=11"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          July 17, 1984
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          49 FR 29026
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1983/12/19/56044-56058.pdf#page=3"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Dec 19, 1983
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          48 FR 56057
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Payment for LongTerm Care Facility Services and Inpatient Hospital Services 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1981/11/4/54742-54745.pdf#page=3"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Nov 4, 1981
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          46 FR 54744
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1981/9/30/47906-47967.pdf#page=33"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Sep 30, 1981
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          46 FR 47964
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1983/6/27/29479-29486.pdf#page=7"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          June 27, 1983
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          48 FR 29485
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Interest on Disputed Medicaid Claims 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1982/7/6/29274-29278.pdf#page=2"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          July 6, 1982
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          47 FR 29275
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1982/11/3/49845-49852.pdf#page=3"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Nov 3, 1982
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          47 FR 49847
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Liens, Adjustments, and Recoveries, Correction 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://www.govinfo.gov/content/pkg/FR-1982-10-01/pdf/FR-1982-10-01.pdf#page=284"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Oct 1, 1982
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          47 FR 43647
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1982/9/21/41566-41577.pdf#page=10"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Sep 21, 1982
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          47 FR 41576
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Equipment Acquired Under Public Assistance Programs 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1982/9/21/41563-41566.pdf"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Sep 21, 1982
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          47 FR 41564
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1981/7/24/38252-38282.pdf#page=3"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          July 24, 1981
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          46 FR 38280
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1982/4/23/17487-17512.pdf#page=20"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Apr 23, 1982
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          47 FR 17509
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Cost Allocation Plans for Public Assistance Programs 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1982/4/23/17487-17512.pdf#page=4"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Apr 23, 1982
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          47 FR 17490
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1981/1/22/7010-7014.pdf#page=2&duplicate"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Jan 22, 1981
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          46 FR 7011
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1981/1/22/7010-7014.pdf#page=2"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Jan 22, 1981
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          46 FR 7011
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1981/10/1/48553-48571.pdf#page=14"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Oct 1, 1981
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          46 FR 48566
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Professional Standards Review; Professional Standards Review Organizations (PSRO) 
+                      </div>
+                    </a>
+                  </div>
+                  <!---->
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1980/4/11/24877-24890.pdf#page=2"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          CORR
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Apr 11, 1980
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          45 FR 24884
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Medicaid Program; Miscellaneous Corrections 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1978/9/29/45049-45243.pdf#page=90"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Sep 29, 1978
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          43 FR 45176
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://tile.loc.gov/storage-services/service/ll/fedreg/fr043/fr043011/fr043011.pdf#page=49"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          NPRM
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Jan 17, 1978
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          43 FR 2413
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change ungrouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://www.govinfo.gov/content/pkg/FR-1979-03-23/pdf/FR-1979-03-23.pdf#page=286"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Mar 23, 1979
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation"
+                        >
+                          44 FR 17926
+                        </span>
+                      </span>
+                      <div
+                        class="recent-title line-clamp-9"
+                      >
+                         Redesignation and Rewrite 
+                      </div>
+                    </a>
+                  </div>
+                  <div
+                    class="related-rule recent-change grouped"
+                  >
+                    <a
+                      class="related-rule-title"
+                      href="https://archives.federalregister.gov/issue_slice/1979/2/15/9744-9754.pdf#page=6"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      <span
+                        class="link-heading"
+                      >
+                        <span
+                          class="recent-flag indicator secondary-indicator"
+                        >
+                          Final
+                        </span>
+                        <span
+                          class="recent-date"
+                        >
+                          Feb 15, 1979
+                        </span>
+                         | 
+                        <span
+                          class="recent-fr-citation grouped"
+                        >
+                          44 FR 9753
+                        </span>
+                      </span>
+                      <!---->
+                    </a>
+                  </div>
+                  <button
+                    aria-label="expand RelatedRuleCollapsible"
+                    class="collapsible-title category-title"
+                    data-test="RelatedRuleCollapsible"
+                  >
+                    <!---->
+                    <div
+                      class="show-more-button"
+                    >
+                      <b>
+                        + Show More
+                      </b>
+                       (28) 
+                    </div>
+                    <!---->
+                  </button>
                 </div>
               </div>
             </div>
@@ -4798,7 +8658,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           <b>
                             + Show More
                           </b>
-                           (19) 
+                           (23) 
                         </div>
                         <!---->
                       </button>
@@ -5195,6 +9055,102 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             </div>
                           </a>
                         </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/federal-policy-guidance/downloads/smd070600.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <span
+                              class="supplemental-content-date"
+                            >
+                              July 6, 2000
+                            </span>
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Development of Immunization Registries - Medicaid Management Information System (MMIS)
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/federal-policy-guidance/downloads/SMD012098e.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <span
+                              class="supplemental-content-date"
+                            >
+                              January 20, 1998
+                            </span>
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Managed Care Federal Financial Participation (FFP) External Review
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/federal-policy-guidance/downloads/SMD051497.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <span
+                              class="supplemental-content-date"
+                            >
+                              May 14, 1997
+                            </span>
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Administrative Expenditures Reporting (relating to the provision of the Welfare Reform legislation)
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/federal-policy-guidance/downloads/SMD122094.PDF"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <span
+                              class="supplemental-content-date"
+                            >
+                              December 20, 1994
+                            </span>
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Allowable Administrative Costs
+                              </span>
+                            </div>
+                          </a>
+                        </div>
                         <button
                           aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
@@ -5207,7 +9163,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             <b>
                               + Show More
                             </b>
-                             (19) 
+                             (23) 
                           </div>
                           <!---->
                         </button>
@@ -6160,6 +10116,128 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                   </div>
                 </div>
               </div>
+              <div
+                class="supplemental-content-category"
+              >
+                <div
+                  class="category"
+                >
+                  <button
+                    aria-label="expand Associate Regional Administrator (ARA) Memo"
+                    class="collapsible-title category-title subcategory"
+                    data-test="Associate Regional Administrator (ARA) Memo"
+                  >
+                    <!---->
+                    Associate Regional Administrator (ARA) Memo 
+                    <i
+                      class="fa fa-chevron-down"
+                    />
+                    <!---->
+                  </button>
+                  <!---->
+                  <div
+                    class="category-content invisible display-none"
+                    data-test="Associate Regional Administrator (ARA) Memo"
+                    style="transition: 0.5s; overflow: hidden;"
+                  >
+                    <div
+                      class="supplemental-content-list"
+                    >
+                      <div
+                        class="supplemental-content"
+                      >
+                        <a
+                          class="supplemental-content-link"
+                          href="https://www.hhs.gov/guidance/sites/default/files/hhs-guidance-documents/1992.ara%2520letter.residency%2520and%2520intent%2520to%2520return%2520home_82.pdf"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <span
+                            class="supplemental-content-date"
+                          >
+                            September 3, 1992
+                          </span>
+                          <!---->
+                          <div
+                            class="supplemental-content-description supplemental-content-external-link"
+                          >
+                            <span>
+                              Impact of Medicaid Residency Requirements on Intent to Return Home Policy
+                            </span>
+                          </div>
+                        </a>
+                      </div>
+                      <!---->
+                      <div
+                        class="category-content show-more-content invisible display-none"
+                        data-test="SupplementalContentCollapsible"
+                        style="transition: 0.5s; overflow: hidden;"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="supplemental-content-category"
+              >
+                <div
+                  class="category"
+                >
+                  <button
+                    aria-label="expand State Medicaid Manual (SMM)"
+                    class="collapsible-title category-title subcategory"
+                    data-test="State Medicaid Manual (SMM)"
+                  >
+                    <!---->
+                    State Medicaid Manual (SMM) 
+                    <i
+                      class="fa fa-chevron-down"
+                    />
+                    <!---->
+                  </button>
+                  <!---->
+                  <div
+                    class="category-content invisible display-none"
+                    data-test="State Medicaid Manual (SMM)"
+                    style="transition: 0.5s; overflow: hidden;"
+                  >
+                    <div
+                      class="supplemental-content-list"
+                    >
+                      <div
+                        class="supplemental-content"
+                      >
+                        <a
+                          class="supplemental-content-link"
+                          href="https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927?chapter=3"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <!---->
+                          <span
+                            class="supplemental-content-title"
+                          >
+                            Chapter 3 - State Medicaid Manual
+                          </span>
+                          <div
+                            class="supplemental-content-description supplemental-content-external-link"
+                          >
+                            <span>
+                              Eligibility
+                            </span>
+                          </div>
+                        </a>
+                      </div>
+                      <!---->
+                      <div
+                        class="category-content show-more-content invisible display-none"
+                        data-test="SupplementalContentCollapsible"
+                        style="transition: 0.5s; overflow: hidden;"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
               <!---->
             </div>
           </div>
@@ -6351,7 +10429,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                           <b>
                             + Show More
                           </b>
-                           (29) 
+                           (37) 
                         </div>
                         <!---->
                       </button>
@@ -6956,6 +11034,186 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             </div>
                           </a>
                         </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.dol.gov/sites/dolgov/files/OASAM/legacy/files/ASMB_C-10.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <span
+                              class="supplemental-content-date supplemental-content-mid-bar"
+                            >
+                              April 8, 1997
+                            </span>
+                            <span
+                              class="supplemental-content-title"
+                            >
+                              ASMB C-10
+                            </span>
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Cost Principles and Procedures for Developing Cost Allocation Plans and Indirect Cost Rates for Agreements with the Federal Government
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.cms.gov/Outreach-and-Education/American-Indian-Alaska-Native/AIAN/LTSS-TA-Center/pdf/memorandum-of-agreement.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <span
+                              class="supplemental-content-date"
+                            >
+                              December 19, 1996
+                            </span>
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Memorandum of Agreement Between the Indian Health Service and the Health Care Financing Administration
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/medicaid/downloads/factsheet-cms2418p.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <!---->
+                            <span
+                              class="supplemental-content-title"
+                            >
+                              Fact Sheet
+                            </span>
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Notice of Proposed Rulemaking – Medicaid Programs: Preadmission Screening and Resident Review (CMS-2418-P)
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://obamawhitehouse.archives.gov/sites/default/files/omb/assets/a133/a133_revised_2007.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <!---->
+                            <span
+                              class="supplemental-content-title"
+                            >
+                              OMB Circular A-133
+                            </span>
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Audits of States, Local Governments, and Non-Profit Organizations
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/sites/default/files/2019-12/bip-case-study.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <!---->
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Balancing Incentive Program — Case Study Introduction: Five State Examples from Mississippi, Massachusetts, New Hampshire, New Jersey, Texas
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/state-resource-center/downloads/program-integrity-strategy-factsheet.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <!---->
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                CMS Medicaid Program Integrity Strategy Fact Sheet
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://aspe.hhs.gov/federal-medical-assistance-percentages-or-federal-financial-participation-state-assistance"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <!---->
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                Federal Medical Assistance Percentages or Federal Financial Participation in State Assistance Expenditures (FMAP)
+                              </span>
+                            </div>
+                          </a>
+                        </div>
+                        <div
+                          class="supplemental-content"
+                        >
+                          <a
+                            class="supplemental-content-link"
+                            href="https://www.medicaid.gov/medicaid/downloads/ltco-workplan.pdf"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                          >
+                            <!---->
+                            <!---->
+                            <div
+                              class="supplemental-content-description supplemental-content-external-link"
+                            >
+                              <span>
+                                State Work Plan to Seek Federal Financial Participation (FFP) for Long Term Care (LTC) Ombudsman Activities
+                              </span>
+                            </div>
+                          </a>
+                        </div>
                         <button
                           aria-label="expand SupplementalContentCollapsible"
                           class="collapsible-title category-title show-more"
@@ -6968,7 +11226,7 @@ exports[`Supplemental Content > Checks to see if the snap shot matches 1`] = `
                             <b>
                               + Show More
                             </b>
-                             (29) 
+                             (37) 
                           </div>
                           <!---->
                         </button>
