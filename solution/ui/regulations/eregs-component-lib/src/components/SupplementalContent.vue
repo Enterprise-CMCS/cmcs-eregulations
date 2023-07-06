@@ -1,20 +1,23 @@
 <template>
     <div>
         <a
-            v-if="selectedPart && subparts.length ===1"
-            v-on:click="clearSection"
+            v-if="selectedPart && subparts.length === 1"
             class="show-subpart-resources"
+            data-testid="view-all-subpart-resources"
+            @click="clearSection"
         >
             <span class="bold">
                 View All Subpart {{ subparts[0] }} Resources</span
             >
             ({{ resourceCount }})
         </a>
-        <h2 id="subpart-resources-heading">
-            {{ activePart }} Resources
-        </h2>
-        <div v-if="resource_display" class="resource_btn_container">
-            <a :href="resourceLink" class=" default-btn action-btn search_resource_btn" >Search These Resources</a>
+        <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
+        <div v-if="resourceDisplay" class="resource_btn_container">
+            <a
+                :href="resourceLink"
+                class="default-btn action-btn search_resource_btn"
+                >Search These Resources</a
+            >
         </div>
         <div class="supplemental-content-container">
             <supplemental-content-category
@@ -35,14 +38,10 @@
 </template>
 
 <script>
+import { getSupplementalContent, getSubpartTOC } from "utilities/api";
+import { EventCodes, formatResourceCategories } from "utilities/utils";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
-
-import {
-    getSupplementalContent,
-    getSubpartTOC
-} from "../api";
-import {EventCodes, flattenSubpart, formatResourceCategories} from "utilities/utils";
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];
@@ -70,13 +69,15 @@ export default {
     },
 
     props: {
-        api_url: {
+        apiUrl: {
             type: String,
-            required: true,
+            required: false,
+            default: "",
         },
-        resources_url: {
+        resourcesUrl: {
             type: String,
-            required: false
+            required: false,
+            default: "",
         },
         title: {
             type: String,
@@ -98,15 +99,10 @@ export default {
                 return [];
             },
         },
-        getSupplementalContent: {
-            type: Function,
-            required: false,
-            default: getSupplementalContent,
-        },
-        resource_display:{
+        resourceDisplay: {
             type: Boolean,
             required: false,
-            default: false
+            default: false,
         },
     },
 
@@ -116,19 +112,19 @@ export default {
             isFetching: true,
             selectedPart: undefined,
             resourceCount: 0,
-            joined_locations:""
+            partDict: {},
         };
     },
 
     computed: {
-        params_array: function () {
+        params_array() {
             return [
                 ["sections", this.sections],
                 ["subparts", this.subparts],
             ];
         },
 
-        activePart: function () {
+        activePart() {
             if (this.selectedPart !== undefined) {
                 return this.selectedPart;
             }
@@ -136,17 +132,17 @@ export default {
         },
 
         resourceLink() {
-            let qString = `${this.resources_url}\?title=${this.title}&part=${this.part}`
+            let qString = `${this.resourcesUrl}?title=${this.title}&part=${this.part}`;
 
-            if (this.activePart.includes("Subpart")){
-                qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}` 
-                let sections = `${this.part}-${this.sections.join(`,${this.part}-`)}`
-                return `${qString}&section=${sections}`
+            if (this.activePart.includes("Subpart")) {
+                qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}`;
+                const sections = `${this.part}-${this.sections.join(
+                    `,${this.part}-`
+                )}`;
+                return `${qString}&section=${sections}`;
             }
-            else{
-                const selection = this.activePart.split(" ")[1].replace(".","-");
-                return `${qString}&section=${selection}`;
-            }
+            const selection = this.activePart.split(" ")[1].replace(".", "-");
+            return `${qString}&section=${selection}`;
         },
     },
 
@@ -154,39 +150,37 @@ export default {
         sections() {
             this.categories = [];
             this.isFetching = true;
-            this.fetch_content(this.title, this.part);
+            this.fetchContent();
         },
         subparts() {
             this.categories = [];
             this.isFetching = true;
-            this.fetch_content(this.title, this.part);
+            this.fetchContent();
         },
         selectedPart() {
             this.categories = [];
             this.isFetching = true;
             if (this.selectedPart) {
-                this.fetch_content(
-                    this.title,
-                    this.part,
+                this.fetchContent(
                     `locations=${this.title}.${this.part}.${
                         this.selectedPart.split(".")[1]
                     }`
                 );
             } else {
-                this.fetch_content(this.title, this.part);
+                this.fetchContent();
             }
         },
     },
 
     created() {
-        let location = ""
+        let location = "";
         if (window.location.hash) {
-          location = this.parseHash(window.location.hash)
-         } else {
-            this.fetch_content(this.title, this.part);
+            location = this.parseHash(window.location.hash);
+        } else {
+            this.fetchContent();
         }
-        this.fetch_content(this.title, this.part, location)
-        window.addEventListener('hashchange', this.handleHashChange)
+        this.fetchContent(location);
+        window.addEventListener("hashchange", this.handleHashChange);
     },
     mounted() {
         this.$root.$on(EventCodes.SetSection, (args) => {
@@ -195,13 +189,13 @@ export default {
         this.categories = getDefaultCategories();
     },
     destroyed() {
-      window.removeEventListener("hashchange", this.handleHashChange);
+        window.removeEventListener("hashchange", this.handleHashChange);
     },
 
     methods: {
         handleHashChange() {
-            const location = this.parseHash(window.location.hash)
-            this.fetch_content(this.title, this.part, location)
+            const location = this.parseHash(window.location.hash);
+            this.fetchContent(location);
         },
         parseHash(locationHash) {
             if (window.location.hash === "#main-content") return "";
@@ -224,38 +218,59 @@ export default {
             this.selectedPart = `§ ${section}`;
             return `locations=${this.title}.${section}`;
         },
-        async fetch_content(title, part, location) {
+        async fetchContent(location) {
             try {
-                await this.get_location_string()
-                const response = await getSupplementalContent(
-                    this.api_url,
-                    {locations: location || this.joined_locations }
-                );
-
-                const subpart_response = await getSupplementalContent(
-                    this.api_url,
-                    {locations: this.joined_locations}
-                )
-                if (!this.resourceCount) {
-                    this.resourceCount = subpart_response.length;
+                let response = "";
+                if (location) {
+                    response = await getSupplementalContent({
+                        apiUrl: this.apiUrl,
+                        builtLocationString: location,
+                    });
                 }
+                await this.getPartDictionary();
 
-                this.categories = formatResourceCategories(response);
+                // Page size is set to 1000 to attempt to get all subpart resources.  Right now no single subpart hits this number
+                // so this shouldn't be an issue
+                const subpartResponse = await getSupplementalContent({
+                    apiUrl: this.apiUrl,
+                    partDict: this.partDict,
+                    pageSize: 1000,
+                });
+
+                this.resourceCount = subpartResponse.count;
+
+                if (response !== "") {
+                    this.categories = formatResourceCategories(
+                        response.results
+                    );
+                } else {
+                    this.categories = formatResourceCategories(
+                        subpartResponse.results
+                    );
+                }
             } catch (error) {
                 console.error(error);
             } finally {
                 this.isFetching = false;
             }
         },
-        async get_location_string(){
-            const sections = await getSubpartTOC(this.api_url, this.title, this.part, this.subparts[0])
-            const flatSections = flattenSubpart({children: sections})
-            this.joined_locations = `${flatSections.children.reduce((previousValue, section) =>  `${previousValue}locations=${this.title}.${this.part}.${section.identifier[1]}&`, "") }locations=${this.title}.${this.part}.${this.subparts[0]}`;
+        async getPartDictionary() {
+            const sections = await getSubpartTOC(
+                this.apiUrl,
+                this.title,
+                this.part,
+                this.subparts[0]
+            );
+            const secList = sections.map((section) => section.identifier[1]);
+            this.partDict[this.part] = {
+                title: this.title,
+                subparts: this.subparts,
+                sections: secList,
+            };
         },
         clearSection() {
-            console.log("Clearing Section");
             this.selectedPart = undefined;
-            this.location= undefined;
+            this.location = undefined;
         },
     },
 };
@@ -265,6 +280,7 @@ export default {
 .resource_btn_container {
     padding: 5px 12px 5px 0px;
 }
+
 .search_resource_btn {
     width: fit-content;
     line-height: 18px;
@@ -272,10 +288,12 @@ export default {
     border: none;
     text-decoration: none;
 }
-a.search_resource_btn:visited{
-    color:white
+
+a.search_resource_btn:visited {
+    color: white;
 }
-a.search_resource_btn:hover{
+
+a.search_resource_btn:hover {
     color: white;
 }
 </style>

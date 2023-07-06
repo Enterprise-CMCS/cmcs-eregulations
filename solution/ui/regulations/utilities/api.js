@@ -289,6 +289,21 @@ const getCategories = async (apiUrl) => {
     return httpApiGet("resources/categories");
 };
 
+// ---------- api calls ---------------
+/**
+ * Get formatted date of most recent successful run of the ECFR parser
+ *
+ * @param {string} apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params - parameters needed for API call
+ * @param {string} [params.title=42] - CFR title number.
+ *
+ * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
+ */
+const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
+    const result = await httpApiGetLegacy(`${apiURL}ecfr_parser_result/${title}`);
+    return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
+};
+
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
  *
@@ -307,9 +322,8 @@ const getTOC = async ({ title, apiUrl }) => {
 const getSectionsForPart = async (title, part) =>
     httpApiGet(`title/${title}/part/${part}/version/latest/sections`);
 
-const getSubpartTOC = async (title, part, subPart) =>
-    httpApiGet(
-        `title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
+const getSubpartTOC = async (apiURL, title, part, subPart) => httpApiGetLegacy(
+        `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
 const getSynonyms = async (query) =>
@@ -451,27 +465,30 @@ const getRegSearchResults = async ({
     return response;
 };
 
-// todo: make these JS style camel case
 const getSupplementalContent = async ({
     partDict,
     title,
     categories,
     q = "",
     start,
-    max_results = 1000,
+    maxResults = 1000,
     paginate = true,
     page = 1,
-    cat_details = true,
-    page_size = 100,
-    location_details = true,
+    catDetails = true,
+    pageSize = 100,
+    locationDetails = true,
     sortMethod = "newest",
-    fr_grouping = true,
+    frGrouping = true,
+    builtLocationString = "",
+    apiUrl = ""
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
 
     if (partDict === "all") {
         sString = title ? `${sString}&locations=${title}` : "";
+    } else if (builtLocationString !== "") {
+        sString = `${sString}&${builtLocationString}`;
     } else {
         Object.keys(partDict).forEach((partKey) => {
             const part = partDict[partKey];
@@ -496,15 +513,20 @@ const getSupplementalContent = async ({
         });
     }
 
-    sString = `${sString}&category_details=${cat_details}`;
-    sString = `${sString}&location_details=${location_details}`;
-    sString = `${sString}&start=${start}&max_results=${max_results}${queryString}`;
+    sString = `${sString}&category_details=${catDetails}`;
+    sString = `${sString}&location_details=${locationDetails}`;
+    sString = `${sString}&start=${start}&max_results=${maxResults}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
+    sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;  
+    sString = `${sString}&fr_grouping=${frGrouping}`;
 
-    sString = `${sString}&paginate=true&page_size=${page_size}&page=${page}`;
-    sString = `${sString}&fr_grouping=${fr_grouping}`;
-
-    const response = await httpApiGet(`resources/?${sString}`);
+    let response = "";
+    
+    if (apiUrl) {
+        response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
+    } else {
+        response = await httpApiGet(`resources/?${sString}`);
+    }
     return response;
 };
 
@@ -528,6 +550,27 @@ const getTitles = async (apiUrl) => {
     }
 
     return httpApiGet("titles");
+};
+
+/**
+ * Get array of objects containing valid GovInfo docs years with links to the PDF files.
+ *
+ * @param {string} apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params - parameters needed for API call
+ * @param {string} params.title - CFR title number.
+ * @param {string} params.part - CFR part numer within title.
+ * @param {string} params.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
+ *
+ * @returns {Array<{year: string, link: string}>}
+ */
+const getGovInfoLinks = async (apiURL, params) => {
+    const result = await httpApiGetLegacy(
+        `${apiURL}title/${params.title}/part/${params.part}/history/${
+            Object.keys(params)[2]
+        }/${Object.values(params)[2]}`
+    );
+
+    return result;
 };
 
 /**
@@ -586,4 +629,6 @@ export {
     removeCacheItem,
     setCacheItem,
     setIdToken,
+    getLastParserSuccessDate,
+    getGovInfoLinks,
 };

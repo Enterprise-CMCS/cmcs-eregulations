@@ -47,9 +47,7 @@
                     :isFetching="isFetching"
                 >
                 </supplemental-content-category>
-                <template
-                    v-if="isFrDocCategory"
-                >
+                <template v-if="isFrDocCategory">
                     <related-rule-list
                         v-if="supplemental_content"
                         :rules="supplemental_content"
@@ -124,7 +122,7 @@ export default {
             return this.description && !/^\s*$/.test(this.description);
         },
         has_sub_categories() {
-            return this?.sub_categories?.length;
+            return this?.sub_categories?.length ?? 0;
         },
         has_children() {
             return (

@@ -374,7 +374,7 @@ export default {
                         ...commonParams,
                         partDict: "all",
                         page_size: pageSize,
-                        fr_grouping: false,
+                        frGrouping: false,
                     };
                     response = await getSupplementalContent(djangoParams);
                 }
