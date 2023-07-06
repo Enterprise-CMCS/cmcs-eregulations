@@ -13,9 +13,19 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    statutesUrl: {
+        type: String,
+        required: true,
+    },
 });
 
 const links = [
+    {
+        name: "statutes",
+        label: "Statutes",
+        active: window.location.pathname.includes("statutes"),
+        href: props.statutesUrl,
+    },
     {
         name: "resources",
         label: "Resources",
