@@ -88,9 +88,9 @@ describe("Supplemental Content", () => {
         expect(viewAllSubpartRes.textContent).toBe(
             " View All Subpart A Resources (136) "
         );
-        const subG = await screen.getByLabelText("expand Subregulatory Guidance")
+        const subG = screen.getByLabelText("expand Subregulatory Guidance")
         await fireEvent.click(subG)
-        const stateHealth = await screen.getByLabelText("expand State Health Official (SHO) Letter")
+        const stateHealth = screen.getByLabelText("expand State Health Official (SHO) Letter")
         await fireEvent.click(stateHealth)
         await fireEvent.click(viewAllSubpartRes);
         await flushPromises();
@@ -99,7 +99,7 @@ describe("Supplemental Content", () => {
         );
         expect(viewAllSubpartRes).toBeFalsy();
         expect(heading.textContent).toBe("Subpart A Resources");
-        const relatedStatues = await screen.getByLabelText(
+        const relatedStatues = screen.getByLabelText(
             "expand Related Statutes"
         );
         expect(relatedStatues).toBeTruthy();
