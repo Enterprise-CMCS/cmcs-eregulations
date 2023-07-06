@@ -88,6 +88,10 @@ describe("Supplemental Content", () => {
         expect(viewAllSubpartRes.textContent).toBe(
             " View All Subpart A Resources (136)"
         );
+        const subG = await screen.getByLabelText("expand Subregulatory Guidance")
+        await fireEvent.click(subG)
+        const stateHealth = await screen.getByLabelText("expand State Health Official (SHO) Letter")
+        await fireEvent.click(stateHealth)
         await fireEvent.click(viewAllSubpartRes);
         await flushPromises();
         viewAllSubpartRes = screen.queryByLabelText(
