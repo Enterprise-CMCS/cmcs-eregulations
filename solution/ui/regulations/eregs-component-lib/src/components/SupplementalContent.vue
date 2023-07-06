@@ -3,7 +3,7 @@
         <a
             v-if="selectedPart && subparts.length === 1"
             class="show-subpart-resources"
-            aria-label="view all subpart resources"
+            data-testid="view-all-subpart-resources"
             @click="clearSection"
         >
             <span class="bold">

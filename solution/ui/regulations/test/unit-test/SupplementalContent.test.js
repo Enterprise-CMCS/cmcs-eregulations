@@ -82,31 +82,28 @@ describe("Supplemental Content", () => {
         await flushPromises();
         const heading = screen.getByText("§ 433.10 Resources");
         expect(heading.id).toBe("subpart-resources-heading");
-        let viewAllSubpartRes = screen.getByLabelText(
-            "view all subpart resources"
+        let viewAllSubpartRes = screen.getByTestId(
+            "view-all-subpart-resources"
         );
         expect(viewAllSubpartRes.textContent).toBe(
             " View All Subpart A Resources (136) "
         );
-        const subG = screen.getByLabelText("expand Subregulatory Guidance")
-        await fireEvent.click(subG)
-        const stateHealth = screen.getByLabelText("expand State Health Official (SHO) Letter")
-        await fireEvent.click(stateHealth)
+        const subG = screen.getByLabelText("expand Subregulatory Guidance");
+        await fireEvent.click(subG);
+        const stateHealth = screen.getByLabelText(
+            "expand State Health Official (SHO) Letter"
+        );
+        await fireEvent.click(stateHealth);
         await fireEvent.click(viewAllSubpartRes);
         await flushPromises();
-        viewAllSubpartRes = screen.queryByLabelText(
-            "view all subpart resources"
-        );
+        viewAllSubpartRes = screen.queryByTestId("view-all-subpart-resources");
         expect(viewAllSubpartRes).toBeFalsy();
         expect(heading.textContent).toBe("Subpart A Resources");
-        const relatedStatues = screen.getByLabelText(
-            "expand Related Statutes"
-        );
+        const relatedStatues = screen.getByLabelText("expand Related Statutes");
         expect(relatedStatues).toBeTruthy();
         await fireEvent.click(relatedStatues);
     });
 
-    //  leaving out for now.  test-id is causing issues
     it("Checks to see if the snap shot matches", async () => {
         const wrapper = render(SupplementalContent, {
             props: {
