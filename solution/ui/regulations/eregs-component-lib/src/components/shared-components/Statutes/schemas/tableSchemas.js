@@ -36,7 +36,7 @@ const ssaSchema = [
         },
         body: {
             title: (statute) => `SSA Section ${statute.section}`,
-            label: (statute) => `${statute.title} U. S. C. ${statute.usc}`,
+            label: (statute) => `${statute.title} U.S.C. ${statute.usc}`,
             name: (statute) => `${statute.name}`,
             primary: true,
         },
