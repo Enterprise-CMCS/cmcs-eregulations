@@ -10,8 +10,12 @@ USCODE_LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.h
                      '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}">{}</a>'
 USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
+DASH_PATTERN = r"[—–-–]|&#x2013;"
+
+NUMBER_PATTERN = r"[0-9]+"
+
 # Extracts the section ID only, for example "1902-1G" and its variations.
-SECTION_ID_PATTERN = r"\d+[a-z]*(?:[—–-]+[a-z0-9]+)?"
+SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 
 # Matches ", and", ", or", "and", "or", "&", and more variations.
 AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
@@ -40,9 +44,33 @@ SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
 LINKED_PARAGRAPH_REGEX = re.compile(LINKED_PARAGRAPH_PATTERN, re.IGNORECASE)
 PARAGRAPH_REGEX = re.compile(PARAGRAPH_PATTERN, re.IGNORECASE)
+DASH_REGEX = re.compile(DASH_PATTERN, re.IGNORECASE)
+NUMBER_REGEX = re.compile(NUMBER_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
 DEFAULT_ACT = "Social Security Act"
+
+
+# This takes a section identifier and tries to determine if a dash within it is part of the ID, or marking continuity.
+# We assume that all section IDs start with a number. So we can extract the numeric parts and, if B >= A, we can conclude that
+# it's continuity, e.g. "section 1000A-1003B" means "1000A through 1003B", versus "1000A-1G" where "1G" is part of the ID.
+# Returns ("A", "-B") if it's continuation, or ("A", "") otherwise. Raises ValueError if section starts without a number.
+def split_citation(citation):
+    dash = DASH_REGEX.search(citation)
+    if not dash:
+        return citation, ""
+    # First part of a citation is always numeric, so compare numeric parts to determine continuity
+    split = DASH_REGEX.split(citation, maxsplit=1)
+    a, b = [NUMBER_REGEX.match(i) for i in split]
+    if not a:
+        raise ValueError
+    if a and not b:
+        # First part of b is not numeric, so likely part of the section ID
+        return citation, ""
+    if int(b.group()) >= int(a.group()):
+        # Numeric part is greater, so likely a section continuation (sec A through sec B)
+        return split[0], dash.group() + split[1]
+    return citation, ""
 
 
 # Returns a list containing the first paragraph chain in a section ref.
@@ -56,17 +84,21 @@ def extract_paragraphs(section_text):
 # "act" and "link_conversions" must be passed in via a partial function.
 def replace_section(section, act, link_conversions):
     section_text = section.group()
-    section = SECTION_ID_REGEX.match(section_text).group()  # extract section
+    try:
+        citation, remainder = split_citation(section_text)
+    except ValueError:
+        return section_text
+    section = SECTION_ID_REGEX.match(citation).group()  # extract section
     # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
         paragraphs = extract_paragraphs(section_text)
         conversion = link_conversions[act][section]
         return USCODE_LINK_FORMAT.format(
             conversion["title"],
-            conversion["usc"],
+            DASH_REGEX.sub("-", conversion["usc"]),
             USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
-            section_text,
-        )
+            citation,
+        ) + remainder
     return section_text
 
 
@@ -94,14 +126,18 @@ USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 # "title" must be passed in via a partial function.
 def replace_usc_citation(match, title):
     citation_text = match.group()
-    section = SECTION_ID_REGEX.match(citation_text).group()
-    paragraphs = extract_paragraphs(citation_text)
+    try:
+        citation, remainder = split_citation(citation_text)
+    except ValueError:
+        return citation_text
+    section = SECTION_ID_REGEX.match(citation).group()
+    paragraphs = extract_paragraphs(citation)
     return USCODE_LINK_FORMAT.format(
         title,
-        section,
+        DASH_REGEX.sub("-", section),
         USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
-        citation_text
-    )
+        citation,
+    ) + remainder
 
 
 # Matches entire USC citations to account for "and", "or" scenarios.
