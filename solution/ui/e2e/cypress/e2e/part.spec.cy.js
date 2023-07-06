@@ -112,7 +112,7 @@ describe("Part View", () => {
     });
 
     it("renders FR Doc category correctly in sidebar", () => {
-        cy.intercept("**/v3/resources/?locations=42.433.10**", {
+        cy.intercept("**/v3/resources/?&locations=42.433.10**", {
             fixture: "42.433.10.resources.json",
         }).as("resources43310");
         cy.viewport("macbook-15");

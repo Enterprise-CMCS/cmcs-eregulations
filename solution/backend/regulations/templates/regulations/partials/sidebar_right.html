@@ -11,11 +11,11 @@
     {% if node_list %}
 
     <supplemental-content
-        api_url="{{ API_BASE }}"
+        api-url="{{ API_BASE }}"
         title="{{ title }}"
         part="{{ reg_part }}"
-        resources_url="{% url 'resources' %}"
-        :resource_display=true
+        resources-url="{% url 'resources' %}"
+        :resource-display=true
         :sections="{{ node_list.sections }}"
         :subparts="{{ node_list.subparts }}"
     ></supplemental-content>
