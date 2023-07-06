@@ -39,7 +39,7 @@ const tableSchema = computed(() => {
 
 <template>
     <div>
-        <div v-if="props.displayType == 'list'" id="statuteList">
+        <div v-if="props.displayType === 'list'" id="statuteList">
             <div
                 v-for="(statute, i) in props.filteredStatutes"
                 :key="`statute-list-${i}`"
