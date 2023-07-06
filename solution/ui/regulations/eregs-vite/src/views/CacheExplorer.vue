@@ -45,7 +45,7 @@ import {
     removeCacheItem,
     getCacheItem,
     setCacheItem,
-} from "eregsComponentLib/src/api.js";
+} from "utilities/api.js";
 
 const formatKey = (key) => key.replace("GET", "");
 

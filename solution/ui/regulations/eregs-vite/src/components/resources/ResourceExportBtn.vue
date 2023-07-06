@@ -125,7 +125,7 @@ export default {
                                 : "all",
                         categories: this.categories,
                         q: this.query,
-                        fr_grouping: false,
+                        frGrouping: false,
                         ...titleParam,
                     })
                 );

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getLastParserSuccessDate } from "../api";
+import { getLastParserSuccessDate } from "utilities/api";
 import SimpleSpinner from "./SimpleSpinner.vue";
 
 export default {
