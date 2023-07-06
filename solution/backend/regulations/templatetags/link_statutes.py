@@ -10,7 +10,7 @@ USCODE_LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.h
                      '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}">{}</a>'
 USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
-DASH_PATTERN = r"[—–-–]|&#x2013;"
+DASH_PATTERN = r"[-—–-–]|&#x2013;"
 
 NUMBER_PATTERN = r"[0-9]+"
 
@@ -64,13 +64,9 @@ def split_citation(citation):
     a, b = [NUMBER_REGEX.match(i) for i in split]
     if not a:
         raise ValueError
-    if a and not b:
-        # First part of b is not numeric, so likely part of the section ID
+    if not b or int(b.group()) < int(a.group()):
         return citation, ""
-    if int(b.group()) >= int(a.group()):
-        # Numeric part is greater, so likely a section continuation (sec A through sec B)
-        return split[0], dash.group() + split[1]
-    return citation, ""
+    return split[0], dash.group() + split[1]
 
 
 # Returns a list containing the first paragraph chain in a section ref.
