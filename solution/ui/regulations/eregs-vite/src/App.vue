@@ -29,6 +29,10 @@ export default {
             type: String,
             default: "",
         },
+        statutesUrl: {
+            type: String,
+            default: "",
+        },
         host: {
             type: String,
             default: "",

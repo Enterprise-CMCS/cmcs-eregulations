@@ -219,6 +219,10 @@ export default {
             type: String,
             default: "/search/",
         },
+        statutesUrl: {
+            type: String,
+            default: "/statutes/",
+        },
     },
 
     beforeCreate() {},
