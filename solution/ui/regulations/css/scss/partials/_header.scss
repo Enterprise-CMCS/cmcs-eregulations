@@ -168,7 +168,7 @@ header {
                 }
 
                 .links--container {
-                    @include custom-max(($eds-width-lg - 1) / 1px) {
+                    @include custom-max(($eds-width-header-links - 1) / 1px) {
                         display: flex;
                         height: 36px;
                         padding: 0 8px;
