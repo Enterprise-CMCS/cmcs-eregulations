@@ -84,7 +84,7 @@ def replace_section(section, act, link_conversions):
         citation, remainder = split_citation(section_text)
     except ValueError:
         return section_text
-    section = SECTION_ID_REGEX.match(citation).group()  # extract section
+    section = DASH_REGEX.sub("-", SECTION_ID_REGEX.match(citation).group())  # extract section
     # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
         paragraphs = extract_paragraphs(section_text)
