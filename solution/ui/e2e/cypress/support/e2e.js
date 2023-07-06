@@ -28,11 +28,15 @@ import "cypress-axe";
 import "cypress-plugin-tab";
 
 import { getResources, getSearchGovResources } from "./api-request-commands";
+import { checkBlockingModal, checkFlashBanner, jumpToRegulationPart, jumpToRegulationPartSection } from "./common-commands";
 import { validateSchema } from "./validate-schema-command";
 
+Cypress.Commands.add("checkBlockingModal", checkBlockingModal);
+Cypress.Commands.add("checkFlashBanner", checkFlashBanner);
 Cypress.Commands.add("getResources", getResources);
 Cypress.Commands.add("getSearchGovResources", getSearchGovResources);
-
+Cypress.Commands.add("jumpToRegulationPart", jumpToRegulationPart);
+Cypress.Commands.add("jumpToRegulationPartSection", jumpToRegulationPartSection);
 Cypress.Commands.add("validateSchema", validateSchema);
 
 // Print cypress-axe violations to the terminal
