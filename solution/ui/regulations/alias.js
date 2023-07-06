@@ -6,7 +6,7 @@ export const aliases = {
     "utilities": r('./utilities'),
     "legacy": r("../../regulations"),
     "sharedComponents": r("../eregs-component-lib/src/components/shared-components"),
-    "eregsComponentLib": r("../eregs-component-lib"),
+    "eregsComponentLib": r("../regulations/eregs-component-lib"),
     "vite": r("../regulations/eregs-vite/src"),
     "@": r("src"),
   }

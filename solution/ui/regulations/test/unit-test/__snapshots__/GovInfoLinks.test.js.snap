@@ -1,0 +1,494 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <div
+        class="gov-info-links-container"
+      >
+        <div
+          class="gov-info-links"
+        >
+          <div
+            class="links-container"
+          >
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2022-title42-vol4/pdf/CFR-2022-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2022
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2021-title42-vol4/pdf/CFR-2021-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2021
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2020-title42-vol4/pdf/CFR-2020-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2020
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2019-title42-vol4/pdf/CFR-2019-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2019
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2018-title42-vol4/pdf/CFR-2018-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2018
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2017-title42-vol4/pdf/CFR-2017-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2017
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2016-title42-vol4/pdf/CFR-2016-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2016
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2015-title42-vol4/pdf/CFR-2015-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2015
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2014-title42-vol4/pdf/CFR-2014-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2014
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2013-title42-vol4/pdf/CFR-2013-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2013
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2012-title42-vol4/pdf/CFR-2012-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2012
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2011-title42-vol4/pdf/CFR-2011-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2011
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2010-title42-vol4/pdf/CFR-2010-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2010
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2009-title42-vol4/pdf/CFR-2009-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2009
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2008-title42-vol4/pdf/CFR-2008-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2008
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2007-title42-vol4/pdf/CFR-2007-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2007
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2006-title42-vol4/pdf/CFR-2006-title42-vol4-sec431-10.pdf"
+              target="_blank"
+            >
+              2006
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2005-title42-vol3/pdf/CFR-2005-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              2005
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2004-title42-vol3/pdf/CFR-2004-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              2004
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2003-title42-vol3/pdf/CFR-2003-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              2003
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2002-title42-vol3/pdf/CFR-2002-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              2002
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2001-title42-vol3/pdf/CFR-2001-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              2001
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-2000-title42-vol3/pdf/CFR-2000-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              2000
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-1999-title42-vol3/pdf/CFR-1999-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              1999
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-1998-title42-vol3/pdf/CFR-1998-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              1998
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-1997-title42-vol3/pdf/CFR-1997-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              1997
+            </a>
+            <a
+              class="external"
+              href="https://www.govinfo.gov/content/pkg/CFR-1996-title42-vol3/pdf/CFR-1996-title42-vol3-sec431-10.pdf"
+              target="_blank"
+            >
+              1996
+            </a>
+          </div>
+        </div>
+        <div
+          class="gov-info-source"
+        >
+           Source: CFR Annual Edition from 
+          <a
+            class="external"
+            href="https://www.govinfo.gov/app/collection/cfr"
+            target="_blank"
+          >
+             GovInfo
+          </a>
+           (1996–Present) 
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="gov-info-links-container"
+    >
+      <div
+        class="gov-info-links"
+      >
+        <div
+          class="links-container"
+        >
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2022-title42-vol4/pdf/CFR-2022-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2022
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2021-title42-vol4/pdf/CFR-2021-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2021
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2020-title42-vol4/pdf/CFR-2020-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2020
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2019-title42-vol4/pdf/CFR-2019-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2019
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2018-title42-vol4/pdf/CFR-2018-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2018
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2017-title42-vol4/pdf/CFR-2017-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2017
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2016-title42-vol4/pdf/CFR-2016-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2016
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2015-title42-vol4/pdf/CFR-2015-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2015
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2014-title42-vol4/pdf/CFR-2014-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2014
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2013-title42-vol4/pdf/CFR-2013-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2013
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2012-title42-vol4/pdf/CFR-2012-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2012
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2011-title42-vol4/pdf/CFR-2011-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2011
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2010-title42-vol4/pdf/CFR-2010-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2010
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2009-title42-vol4/pdf/CFR-2009-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2009
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2008-title42-vol4/pdf/CFR-2008-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2008
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2007-title42-vol4/pdf/CFR-2007-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2007
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2006-title42-vol4/pdf/CFR-2006-title42-vol4-sec431-10.pdf"
+            target="_blank"
+          >
+            2006
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2005-title42-vol3/pdf/CFR-2005-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            2005
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2004-title42-vol3/pdf/CFR-2004-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            2004
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2003-title42-vol3/pdf/CFR-2003-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            2003
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2002-title42-vol3/pdf/CFR-2002-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            2002
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2001-title42-vol3/pdf/CFR-2001-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            2001
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-2000-title42-vol3/pdf/CFR-2000-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            2000
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-1999-title42-vol3/pdf/CFR-1999-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            1999
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-1998-title42-vol3/pdf/CFR-1998-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            1998
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-1997-title42-vol3/pdf/CFR-1997-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            1997
+          </a>
+          <a
+            class="external"
+            href="https://www.govinfo.gov/content/pkg/CFR-1996-title42-vol3/pdf/CFR-1996-title42-vol3-sec431-10.pdf"
+            target="_blank"
+          >
+            1996
+          </a>
+        </div>
+      </div>
+      <div
+        class="gov-info-source"
+      >
+         Source: CFR Annual Edition from 
+        <a
+          class="external"
+          href="https://www.govinfo.gov/app/collection/cfr"
+          target="_blank"
+        >
+           GovInfo
+        </a>
+         (1996–Present) 
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;

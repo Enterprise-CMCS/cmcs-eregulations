@@ -14,7 +14,7 @@
         </template>
         <collapse-button
             v-if="showMoreNeeded"
-            v-bind:class="{ subcategory: subcategory }"
+            :class="{ subcategory: subcategory }"
             :name="innerName"
             state="collapsed"
             class="category-title show-more"
@@ -48,7 +48,7 @@
             </supplemental-content-object>
             <collapse-button
                 v-if="showMoreNeeded && contentCount > 10"
-                v-bind:class="{ subcategory: subcategory }"
+                :class="{ subcategory: subcategory }"
                 :name="innerName"
                 state="collapsed"
                 class="category-title show-more"
@@ -104,9 +104,8 @@ export default {
 
     data() {
         return {
-            innerName: Math.random()
-                .toString(36)
-                .replace(/[^a-z]+/g, ""),
+            subcategory: "",
+            innerName: "SupplementalContentCollapsible",
         };
     },
 
