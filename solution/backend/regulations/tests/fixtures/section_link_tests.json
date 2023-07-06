@@ -55,6 +55,11 @@
         "expected": "section 789 of the act"
     },
     {
+        "testing": "non-standard dash in section name",
+        "input": "section 123–1G of the act",
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionaaaa&num=0&edition=prelim\">123–1G</a> of the act"
+    },
+    {
         "testing": "USC linking",
         "input": "something 10 U.S.C. 2324(e) and 41 USC 1234(f) and also 1 usc 1(a)(2)",
         "expected": "something 10 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title10-section2324&num=0&edition=prelim#substructure-location_e\">2324(e)</a> and 41 USC <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title41-section1234&num=0&edition=prelim#substructure-location_f\">1234(f)</a> and also 1 usc <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section1&num=0&edition=prelim#substructure-location_a_2\">1(a)(2)</a>"
