@@ -17,6 +17,7 @@ from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.supplemental_content import SupplementalContentView
 from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
+from regulations.views.file_manager import FileManagerView
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
@@ -43,6 +44,8 @@ urlpatterns = [
     path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
     path('cache/', CacheView.as_view(), name='cache'),
     path('resources/', ResourcesView.as_view(), name='resources'),
+    path('file_manager/', FileManagerView.as_view(), name='file_manager'),
+    path('box_callback/', FileManagerView.as_view(), name='box_callback'),
     path('statutes/', StatuteView.as_view(), name='statues'),
     path("v3/", include([
         path("statutes", StatuteLinkConverterViewSet.as_view({

@@ -91,9 +91,12 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
+BOX_CLIENT_ID = 'oedraukscg4zf5rlnlxxwmum5y0sgz6b'
+BOX_CLIENT_SECRET = 'suFgqXqTXS36iSmu319nR0jLoFxdOhpA'
+BOX_REDIRECT_URL = 'http://localhost:8000/box_callback'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = os.environ.get("DEBUG", True)
 
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
