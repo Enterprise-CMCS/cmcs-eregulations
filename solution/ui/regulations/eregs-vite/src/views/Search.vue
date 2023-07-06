@@ -16,6 +16,7 @@
                     <HeaderLinks
                         :about-url="aboutUrl"
                         :resources-url="resourcesUrl"
+                        :statutes-url="statutesUrl"
                     />
                 </template>
                 <template #search>
