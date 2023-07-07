@@ -9,9 +9,6 @@ class FileManagerView(TemplateView):
     def get(self, request, *args, **kwargs):
         # Check if the request contains the authorization code
         auth_url, csrf_token = get_authorization_url()
-        print(f"------ the auth url is {auth_url}")
-        print(f"------ the csrf token is {csrf_token}")
-        print(f"------ the code is {request.GET}")
         if 'code' in request.GET:
             # Retrieve the authorization code from the request
             auth_code = request.GET['code']
@@ -26,8 +23,6 @@ class FileManagerView(TemplateView):
         return redirect(auth_url)
 
     def box_callback(self, auth_code):
-        print(f"current_user: {current_user}")
-        print(request.args)
         code = request.args.get('code')
         state = request.args.get('state')
         error = request.args.get('error')
@@ -51,7 +46,6 @@ class FileManagerView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         access_token = self.request.GET.get('access_token')
-        print(f"------ the access token is {access_token}")
         if access_token:
             box_client = get_box_client(access_token)
             root_folder = box_client.folder(folder_id='0')
