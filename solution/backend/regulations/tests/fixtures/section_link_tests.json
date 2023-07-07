@@ -93,5 +93,20 @@
         "testing": "section refs not starting with a number",
         "input": "42 U.S.C. A1234",
         "expected": "42 U.S.C. A1234"
+    },
+    {
+        "testing": "variations of word 'section'",
+        "input": "Section 123(a) of the Act, sections 123(a), section. 123(a), sections. 123(a), sec. 123(a), secs. 123(a), sec 123(a), secs 123(a), sect. 123(a), sects. 123(a), sects 123(a), sects 123(a)",
+        "expected": "Section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act, sections <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, section. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, sections. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, sec. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, secs. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, sec <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, secs <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, sect. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, sects. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, sects <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>, sects <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a>"
+    },
+    {
+        "testing": "section symbol instead of word 'section'",
+        "input": "§ 123(a) of the Act. §. 123(a) of the Act. &#xA7; 123(a) of the act. &#xA7;. 123(a) of the act.",
+        "expected": "§ <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act. §. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act. &#xA7; <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the act. &#xA7;. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the act."
+    },
+    {
+        "testing": "proper word boundaries",
+        "input": "intersection 123(a) of the act. intersects 123(a). intersect 123(a). And it intersects. 123(a) of the act states that.",
+        "expected": "intersection 123(a) of the act. intersects 123(a). intersect 123(a). And it intersects. 123(a) of the act states that."
     }
 ]
