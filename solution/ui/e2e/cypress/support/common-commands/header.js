@@ -43,7 +43,6 @@ export const checkBlockingModal = () => {
 
 export const goHome = () => {
     cy.contains("Medicaid & CHIP eRegulations").click();
-
     cy.url().should("eq", Cypress.config().baseUrl + "/");
 };
 
