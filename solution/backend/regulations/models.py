@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 from solo.models import SingletonModel
 
 
@@ -28,6 +28,8 @@ class SiteConfiguration(SingletonModel):
 
     class Meta:
         verbose_name = "Site Configuration"
+
+    date = models.DateField(default=timezone.now)
 
 
 class StatuteLinkConverter(models.Model):
