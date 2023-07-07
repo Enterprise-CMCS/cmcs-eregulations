@@ -1,4 +1,4 @@
-// Flash Bannder/Blocking Modal
+// Flash Banner/Blocking Modal
 export const checkFlashBanner = () => {
     cy.get("div.flash-banner").should("be.visible");
 
@@ -41,36 +41,8 @@ export const checkBlockingModal = () => {
     cy.get("div.blocking-modal-content").should("not.be.visible");
 };
 
-// Jump To
-export const jumpToRegulationPart = ({ title, part }) => {
-    cy.get("#jumpToTitle")
-        .select(title, { force: true })
-        .then(() => {
-            cy.get("#jumpToPart").should("be.visible").select(part);
-        });
-    cy.get("#jumpBtn").click({ force: true });
-    cy.url().should(
-        "eq",
-        Cypress.config().baseUrl + `/${title}/${part}/#${part}`
-    );
-};
+export const goHome = () => {
+    cy.contains("Medicaid & CHIP eRegulations").click();
 
-export const jumpToRegulationPartSection = ({ title, part, section }) => {
-    cy.get("#jumpToTitle").select(title);
-    cy.get("#jumpToPart").should("be.visible").select(part);
-    cy.get("#jumpToSection").type(section);
-    cy.get("#jumpBtn").click({ force: true });
-
-    cy.url().then((urlString) => {
-        expect(
-            Cypress.minimatch(
-                urlString,
-                Cypress.config().baseUrl +
-                    `/${title}/${part}/Subpart-A/*/#${part}-${section}`,
-                {
-                    matchBase: false,
-                }
-            )
-        ).to.be.true;
-    });
+    cy.url().should("eq", Cypress.config().baseUrl + "/");
 };
