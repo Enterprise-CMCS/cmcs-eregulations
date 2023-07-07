@@ -123,7 +123,42 @@ getStatutesArray();
                             class="table__spinner"
                         />
                         <template v-else>
-                            <div class="table__caption">Caption will go here once it has been workshopped to reflect all SSA titles in a single list.</div>
+                            <div class="table__caption">
+                                In selected Social Security Act titles (XI, XVI,
+                                XVIII, XIX, XXI), find equivalent US Code
+                                citations and read the text in your choice of
+                                government website. Coming up soon: more
+                                navigation options and additional statutes.<br />
+                                Learn more about these sources:
+                                <a
+                                    class="external"
+                                    href="https://uscode.house.gov/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >US Code House.gov</a
+                                >,
+                                <a
+                                    class="external"
+                                    href="https://www.govinfo.gov/app/collection/comps/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Statute Compilation</a
+                                >,
+                                <a
+                                    class="external"
+                                    href="https://www.govinfo.gov/app/collection/uscode"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >US Code Annual</a
+                                >,
+                                <a
+                                    class="external"
+                                    href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >SSA.gov Compilation</a
+                                >.
+                            </div>
                             <StatuteTable
                                 :display-type="isNarrow ? 'list' : 'table'"
                                 :filtered-statutes="statutes.results"

@@ -82,7 +82,7 @@ const ssaSchema = [
     },
     {
         header: {
-            title: "SSA.gov",
+            title: "SSA.gov Compilation",
             secondary: true,
             subtitles: ["Web Page", "Amended Dec 2019"],
         },
