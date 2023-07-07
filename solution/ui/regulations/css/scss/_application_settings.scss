@@ -486,11 +486,20 @@ select {
     }
 }
 
+#main-content:target {
+    // Moves content down so it's not covered by the sticky header
+    scroll-margin-top: $header_height_mobile + 5px;
+
+    @include screen-eds-sm {
+        scroll-margin-top: $header_height + 5px;
+    }
+}
+
 .content :target {
     // Moves content down so it's not covered by the sticky header
     scroll-margin-top: $header_height_mobile + 5px;
 
-    @include screen-lg {
+    @include screen-eds-sm {
         scroll-margin-top: $header_height + 5px;
     }
 }
@@ -500,7 +509,7 @@ select {
     // or by go-to-version bar
     scroll-margin-top: $header_height_mobile + $view_compare_height + 37px;
 
-    @include screen-lg {
+    @include screen-eds-sm {
         scroll-margin-top: $header_height + $view_compare_height + 37px;
     }
 }
