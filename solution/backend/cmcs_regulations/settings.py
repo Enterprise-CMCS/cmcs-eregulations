@@ -96,7 +96,7 @@ BOX_CLIENT_SECRET = 'suFgqXqTXS36iSmu319nR0jLoFxdOhpA'
 BOX_REDIRECT_URL = 'http://localhost:8000/box_callback'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", True)
+DEBUG = os.environ.get("DEBUG", False)
 
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
