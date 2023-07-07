@@ -116,6 +116,10 @@ class LinkStatutesTestCase(SimpleTestCase):
                     "title": "42",
                     "usc": "abc",
                 },
+                "123-1G": {
+                    "title": "42",
+                    "usc": "aaaa",
+                },
                 "456": {
                     "title": "43",
                     "usc": "def",
