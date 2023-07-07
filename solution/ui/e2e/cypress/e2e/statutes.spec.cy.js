@@ -30,4 +30,11 @@ describe("Statute Table", () => {
         cy.clickHeaderLink({ page: "Statutes", screen: "narrow" });
         cy.url().should("include", "/statutes/");
     });
+
+    it("goes to another SPA page from the resources page", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/statutes");
+        cy.clickHeaderLink({ page: "Resources", screen: "wide" });
+        cy.url().should("include", "/resources");
+    });
 });

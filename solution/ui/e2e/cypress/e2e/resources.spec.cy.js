@@ -23,6 +23,13 @@ describe("Resources page", () => {
             cy.clickHeaderLink({ page: "Resources", screen: "narrow" });
             cy.url().should("include", "/resources");
         });
+
+        it("goes to another SPA page from the resources page", () => {
+            cy.viewport("macbook-15");
+            cy.visit("/resources");
+            cy.clickHeaderLink({ page: "Statutes", screen: "wide" });
+            cy.url().should("include", "/statutes");
+        });
     });
 
     describe("Loading and Empty States", () => {
