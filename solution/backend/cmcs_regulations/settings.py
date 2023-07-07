@@ -80,7 +80,6 @@ REST_FRAMEWORK = {
 TEMPLATE_CONTEXT_PROCESSORS = (
 
     # Put your context processors here
-
     'django.core.context_processors.request',
     'regulations.context_processors.site_config',
     'cmcs_regulations.context_processors.api_base',
@@ -91,9 +90,12 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
-BOX_CLIENT_ID = 'oedraukscg4zf5rlnlxxwmum5y0sgz6b'
-BOX_CLIENT_SECRET = 'suFgqXqTXS36iSmu319nR0jLoFxdOhpA'
-BOX_REDIRECT_URL = 'http://localhost:8000/box_callback'
+
+# BOX API SETTINGS
+BOX_CLIENT_ID = os.environ.get("BOX_CLIENT_ID")
+BOX_CLIENT_SECRET = os.environ.get("BOX_CLIENT_SECRET")
+BOX_REDIRECT_URL = os.environ.get("BOX_REDIRECT_URL")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
