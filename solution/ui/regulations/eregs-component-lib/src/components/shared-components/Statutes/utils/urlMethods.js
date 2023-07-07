@@ -29,7 +29,7 @@ const ssaGovUrl = ({ statute_title, section }) => `https://www.ssa.gov/OP_Home/s
 
 /**
  * @param {number} title - CFR title (ex: 42)
- * @param {string} statuteObj.usc - USC section
+ * @param {string} usc - USC section
  *
  * @returns {string} url - url to GovInfo.gov PDF page for USC Code
  */
