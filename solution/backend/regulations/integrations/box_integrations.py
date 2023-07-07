@@ -32,12 +32,3 @@ def get_box_client(access_token=None):
 
         return auth_url
 
-
-def store_tokens_callback(access_token, refresh_token):
-    # Implement your logic to store the tokens
-    # You might want to store them in a secure storage (e.g., database)
-
-    # Example code for demonstration purposes only
-    # Replace with your own logic
-    print("Access Token:", access_token)
-    print("Refresh Token:", refresh_token)
