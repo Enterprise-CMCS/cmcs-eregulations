@@ -50,6 +50,7 @@ export default {
             :home-url="homeUrl"
             :resources-url="resourcesUrl"
             :search-url="searchUrl"
+            :statutes-url="statutesUrl"
             :host="host"
         />
     </v-app>
