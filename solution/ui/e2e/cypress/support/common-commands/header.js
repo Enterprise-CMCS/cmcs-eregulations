@@ -46,3 +46,54 @@ export const goHome = () => {
 
     cy.url().should("eq", Cypress.config().baseUrl + "/");
 };
+
+export const clickHeaderLink = ({ page = "Resources", screen = "wide" }) => {
+    const listLocation =
+        screen === "wide"
+            ? "header .header--links .links--container"
+            : ".more--dropdown-menu";
+
+    if (screen === "wide") {
+        cy.get("button.more__button").should("not.be.visible");
+
+        // not styled as selected
+        cy.get(
+            `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
+        )
+            .should("be.visible")
+            .should("have.attr", "class")
+            .and("not.match", /active/);
+
+        // click
+        cy.get(
+            `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
+        )
+            .should("be.visible")
+            .should("have.text", page)
+            .click({ force: true });
+
+        // styled as selected
+        cy.get(
+            `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
+        )
+            .should("be.visible")
+            .should("have.text", page)
+            .should("have.attr", "class")
+            .and("match", /active/);
+    } else {
+        cy.get(`${listLocation} > ul.links__list`).should("not.be.visible");
+
+        cy.get(".more--dropdown-menu").should("not.be.visible");
+
+        cy.get("button.more__button")
+            .should("be.visible")
+            .click({ force: true });
+
+        cy.get(".more--dropdown-menu").should("be.visible");
+
+        cy.get(`${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`)
+            .should("be.visible")
+            .should("have.text", page)
+            .click({ force: true });
+    }
+};
