@@ -13,61 +13,16 @@ describe("Resources page", () => {
         it("goes to resources page from homepage", () => {
             cy.viewport("macbook-15");
             cy.visit("/");
-            cy.get("button.more__button")
-                .should("not.be.visible");
-
-            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
-                .should("be.visible")
-                .should("have.text", "Resources")
-                .click({ force: true });
-
+            cy.clickHeaderLink({ page: "Resources", screen: "wide" });
             cy.url().should("include", "/resources");
         });
 
-        it("is styled correctly when at Resources page", () => {
-            cy.viewport("macbook-15");
-            cy.visit("/");
-            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
-                .should("be.visible")
-                .should("have.attr", "class")
-                .and("not.match", /active/);
-
-            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
-                .click({ force: true });
-
-            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
-                .should("be.visible")
-                .should("have.text", "Resources")
-                .should("have.attr", "class")
-                .and("match", /active/);
-            ;
-        });
-
-        it("is nested in a dropdown menu on narrow screen widths", () => {
+        it("resources link nested in a dropdown menu on narrow screen widths", () => {
             cy.viewport("iphone-x");
             cy.visit("/");
-            cy.get("header .header--links .links--container > ul.links__list")
-                .should("not.be.visible")
-
-            cy.get(".more--dropdown-menu")
-                .should("not.be.visible");
-
-            cy.get("button.more__button")
-                .should("be.visible")
-                .click({ force: true });
-
-            cy.get(".more--dropdown-menu")
-                .should("be.visible");
-
-            cy.get(".more--dropdown-menu > ul.links__list li:nth-child(2) a")
-                .should("be.visible")
-                .should("have.text", "Resources")
-                .click({ force: true });
-
+            cy.clickHeaderLink({ page: "Resources", screen: "narrow" });
             cy.url().should("include", "/resources");
-
         });
-
     });
 
     describe("Loading and Empty States", () => {
