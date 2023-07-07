@@ -1,0 +1,42 @@
+[
+    {
+        "section": "1101",
+        "title": 42,
+        "usc": "1301",
+        "act": "Social Security Act",
+        "name": "Definitions",
+        "statute_title": 11,
+        "statute_title_roman": "XI",
+        "source_url": "https://www.govinfo.gov/content/pkg/COMPS-8763/uslm/COMPS-8763.xml"
+    },
+    {
+        "section": "1102",
+        "title": 42,
+        "usc": "1302",
+        "act": "Social Security Act",
+        "name": "Rules and regulations.",
+        "statute_title": 11,
+        "statute_title_roman": "XI",
+        "source_url": "https://www.govinfo.gov/content/pkg/COMPS-8763/uslm/COMPS-8763.xml"
+    },
+    {
+        "section": "1103",
+        "title": 42,
+        "usc": "1303",
+        "act": "Social Security Act",
+        "name": "Separability.",
+        "statute_title": 11,
+        "statute_title_roman": "XI",
+        "source_url": "https://www.govinfo.gov/content/pkg/COMPS-8763/uslm/COMPS-8763.xml"
+    },
+    {
+        "section": "1104",
+        "title": 42,
+        "usc": "1304",
+        "act": "Social Security Act",
+        "name": "Reservation of power.",
+        "statute_title": 11,
+        "statute_title_roman": "XI",
+        "source_url": "https://www.govinfo.gov/content/pkg/COMPS-8763/uslm/COMPS-8763.xml"
+    }
+]
