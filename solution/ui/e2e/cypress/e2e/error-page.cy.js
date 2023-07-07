@@ -70,8 +70,6 @@ describe("Error page", { scrollBehavior: "center" }, () => {
             .its("status")
             .should("equal", 404);
         cy.visit("/404", { failOnStatusCode: false });
-        cy.contains("Medicaid & CHIP eRegulations").click();
-
-        cy.url().should("eq", Cypress.config().baseUrl + "/");
+        cy.goHome();
     });
 });
