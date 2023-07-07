@@ -26,13 +26,14 @@
         <h4 class="last-update-footer">
             Regulations up to date from <a href="https://www.ecfr.gov" target="_blank" class="external">
                 eCFR
-            </a> as of <span class="last-updated-date">
-                {% if '/search/' in request.path or '/resources/' in request.path %}
-                    {{ parser_last_success|parser_success_date_formatter }}
+            </a> as of
+                {% if '/search/' in request.path or '/resources/' in request.path or '/statutes' in request.path %}
+                <span class="last-updated-date">{{parser_last_success|parser_success_date_formatter}}</span>.
                 {% else %}
-                    <last-parser-success-date api-url={{ API_BASE }} ></last-parser-success-date>
+                    <span class="last-updated-date">
+                        <last-parser-success-date api-url={{ API_BASE }} ></last-parser-success-date>
+                    </span>.
                 {% endif %}
-            </span>.
         </h4>
         <div class="about-footer"><a href="{% url 'about' %}">About Medicaid &amp; CHIP eRegulations</a></div>
         <p>A federal government managed website by the Centers for Medicare &amp; Medicaid Services.</p>
