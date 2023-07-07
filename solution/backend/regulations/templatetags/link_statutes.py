@@ -10,13 +10,20 @@ USCODE_LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.h
                      '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}">{}</a>'
 USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
+DASH_PATTERN = r"[-—–-–]|&#x2013;"
+
+NUMBER_PATTERN = r"[0-9]+"
+
 # Extracts the section ID only, for example "1902-1G" and its variations.
-SECTION_ID_PATTERN = r"\d+[a-z]?(?:-+[a-z0-9]+)?"
+SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 
 # Matches ", and", ", or", "and", "or", "&", and more variations.
 AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
 
-# Matches individual sections, for example "Section 1902(a)(2) and (b)(1)" and its variations.
+# Extracts a paragraph identifier (e.g. (a) extracts "a").
+PARAGRAPH_PATTERN = r"\(([a-z0-9]+)\)"
+
+# Matches individual sections, for example "1902(a)(2) and (b)(1)" and its variations.
 SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*"
 
 # Matches entire statute references, including one or more sections and an optional Act.
@@ -37,9 +44,29 @@ SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
 LINKED_PARAGRAPH_REGEX = re.compile(LINKED_PARAGRAPH_PATTERN, re.IGNORECASE)
 PARAGRAPH_REGEX = re.compile(PARAGRAPH_PATTERN, re.IGNORECASE)
+DASH_REGEX = re.compile(DASH_PATTERN, re.IGNORECASE)
+NUMBER_REGEX = re.compile(NUMBER_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
 DEFAULT_ACT = "Social Security Act"
+
+
+# This takes a section identifier and tries to determine if a dash within it is part of the ID, or marking continuity.
+# We assume that all section IDs start with a number. So we can extract the numeric parts and, if B >= A, we can conclude that
+# it's continuity, e.g. "section 1000A-1003B" means "1000A through 1003B", versus "1000A-1G" where "1G" is part of the ID.
+# Returns ("A", "-B") if it's continuation, or ("A", "") otherwise. Raises ValueError if section starts without a number.
+def split_citation(citation):
+    dash = DASH_REGEX.search(citation)
+    if not dash:
+        return citation, ""
+    # First part of a citation is always numeric, so compare numeric parts to determine continuity
+    split = DASH_REGEX.split(citation, maxsplit=1)
+    a, b = [NUMBER_REGEX.match(i) for i in split]
+    if not a:
+        raise ValueError
+    if not b or int(b.group()) < int(a.group()):
+        return citation, ""
+    return split[0], dash.group() + split[1]
 
 
 # Returns a list containing the first paragraph chain in a section ref.
@@ -53,24 +80,28 @@ def extract_paragraphs(section_text):
 # "act" and "link_conversions" must be passed in via a partial function.
 def replace_section(section, act, link_conversions):
     section_text = section.group()
-    section = SECTION_ID_REGEX.match(section_text).group()  # extract section
+    try:
+        citation, remainder = split_citation(section_text)
+    except ValueError:
+        return section_text
+    section = DASH_REGEX.sub("-", SECTION_ID_REGEX.match(citation).group())  # extract section
     # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
         paragraphs = extract_paragraphs(section_text)
         conversion = link_conversions[act][section]
         return USCODE_LINK_FORMAT.format(
             conversion["title"],
-            conversion["usc"],
+            DASH_REGEX.sub("-", conversion["usc"]),
             USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
-            section_text,
-        )
+            citation,
+        ) + remainder
     return section_text
 
 
 # This middleman re.sub() function is run when an entire statute ref is matched. It performs another substition on individual
 # sections within the ref. It is needed to enforce refs starting with "section" but possibly containing more than one section.
 # "link_conversions" must be passed in via a partial function.
-def replace_section_groups(match, link_conversions):
+def replace_sections(match, link_conversions):
     act = match.group(2)
     act = f"{act.strip()} Act" if act else DEFAULT_ACT  # if no act is specified, default to DEFAULT_ACT
     return SECTION_REGEX.sub(
@@ -79,9 +110,48 @@ def replace_section_groups(match, link_conversions):
     )
 
 
+# This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
+# "42 U.S.C. 1901(a) and 1902(b)" and more variations, similar to STATUTE_REF_PATTERN.
+# Negative lookahead ensures "42 U.S.C. 1234 and 41 U.S.C. 4567" doesn't register "1234" and "41" as two sections in one ref.
+USC_PATTERN = r"\s*u.?\s*s.?\s*c.?\s*"
+USC_REF_PATTERN = rf"(\d+){USC_PATTERN}((?:{SECTION_PATTERN}{AND_OR_PATTERN}(?!\d+{USC_PATTERN}))+)"
+USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
+
+
+# Replaces individual USC refs with links, to be run by re.sub().
+# "title" must be passed in via a partial function.
+def replace_usc_citation(match, title):
+    citation_text = match.group()
+    try:
+        citation, remainder = split_citation(citation_text)
+    except ValueError:
+        return citation_text
+    section = SECTION_ID_REGEX.match(citation).group()
+    paragraphs = extract_paragraphs(citation)
+    return USCODE_LINK_FORMAT.format(
+        title,
+        DASH_REGEX.sub("-", section),
+        USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
+        citation,
+    ) + remainder
+
+
+# Matches entire USC citations to account for "and", "or" scenarios.
+def replace_usc_citations(match):
+    return match.group().replace(
+        match.group(2),
+        SECTION_REGEX.sub(
+            partial(replace_usc_citation, title=match.group(1)),
+            match.group(2),
+        )
+    )
+
+
 @register.filter
 def link_statutes(paragraph, link_conversions):
-    return STATUTE_REF_REGEX.sub(
-        partial(replace_section_groups, link_conversions=link_conversions),
+    paragraph = STATUTE_REF_REGEX.sub(
+        partial(replace_sections, link_conversions=link_conversions),
         paragraph,
     )
+    paragraph = USC_REF_REGEX.sub(replace_usc_citations, paragraph)
+    return paragraph
