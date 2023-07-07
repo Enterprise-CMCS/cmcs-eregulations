@@ -16,7 +16,7 @@ describe("Resources page", () => {
             cy.get("button.more__button")
                 .should("not.be.visible");
 
-            cy.get("header .header--links .links--container > ul.links__list li:first-child a")
+            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
                 .should("be.visible")
                 .should("have.text", "Resources")
                 .click({ force: true });
@@ -27,15 +27,15 @@ describe("Resources page", () => {
         it("is styled correctly when at Resources page", () => {
             cy.viewport("macbook-15");
             cy.visit("/");
-            cy.get("header .header--links .links--container > ul.links__list li:first-child a")
+            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
                 .should("be.visible")
                 .should("have.attr", "class")
                 .and("not.match", /active/);
 
-            cy.get("header .header--links .links--container > ul.links__list li:first-child a")
+            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
                 .click({ force: true });
 
-            cy.get("header .header--links .links--container > ul.links__list li:first-child a")
+            cy.get("header .header--links .links--container > ul.links__list li:nth-child(2) a")
                 .should("be.visible")
                 .should("have.text", "Resources")
                 .should("have.attr", "class")
@@ -59,7 +59,7 @@ describe("Resources page", () => {
             cy.get(".more--dropdown-menu")
                 .should("be.visible");
 
-            cy.get(".more--dropdown-menu > ul.links__list li:first-child a")
+            cy.get(".more--dropdown-menu > ul.links__list li:nth-child(2) a")
                 .should("be.visible")
                 .should("have.text", "Resources")
                 .click({ force: true });
