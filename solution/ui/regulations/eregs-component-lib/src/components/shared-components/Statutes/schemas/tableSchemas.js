@@ -43,7 +43,7 @@ const ssaSchema = [
     },
     {
         header: {
-            title: "House.gov",
+            title: "US Code House.gov",
             secondary: true,
             subtitles: ["Web Page", "Effective Jul 2023"],
         },
