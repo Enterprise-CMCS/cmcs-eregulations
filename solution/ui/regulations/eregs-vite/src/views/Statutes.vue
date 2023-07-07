@@ -115,7 +115,7 @@ getStatutesArray();
                     <h2>Look up statute text in online sources</h2>
                 </template>
             </Banner>
-            <div class="statute__container">
+            <div id="main-content" class="statute__container">
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
                     <div class="table__parent">
                         <SimpleSpinner
