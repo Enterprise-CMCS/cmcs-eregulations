@@ -171,5 +171,3 @@ getStatutesArray();
         </div>
     </body>
 </template>
-
-<style></style>

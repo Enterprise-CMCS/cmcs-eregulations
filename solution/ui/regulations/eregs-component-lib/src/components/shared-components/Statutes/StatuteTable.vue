@@ -86,5 +86,3 @@ const tableSchema = computed(() => {
         </table>
     </div>
 </template>
-
-<style></style>
