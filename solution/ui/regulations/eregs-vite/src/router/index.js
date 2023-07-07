@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import CacheExplorer from "../views/CacheExplorer.vue";
 import Resources from "../views/Resources.vue";
 import Search from "../views/Search.vue";
+import Statutes from "../views/Statutes.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
         path: "/search",
         name: "search",
         component: Search,
+    },
+    {
+        path: "/statutes",
+        name: "statutes",
+        component: Statutes,
     },
 ];
 

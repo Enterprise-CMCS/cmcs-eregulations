@@ -287,7 +287,8 @@ const getCategories = async (apiUrl) => {
     }
 
     return httpApiGet("resources/categories");
-}
+};
+
 // ---------- api calls ---------------
 /**
  * Get formatted date of most recent successful run of the ECFR parser
@@ -302,12 +303,13 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
     const result = await httpApiGetLegacy(`${apiURL}ecfr_parser_result/${title}`);
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
+
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
  *
  * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
  */
-const getTOC = async ({title, apiUrl}) => {
+const getTOC = async ({ title, apiUrl }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             title ? `${apiUrl}title/${title}/toc` : `${apiUrl}toc`
@@ -358,7 +360,10 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
  * @param {*} type  - type of resource, fr doc or not
  * @returns 3 resources
  */
-const getRecentResources = async (apiURL, { page = 1, pageSize = 3, type = "rules", categories }) => {
+const getRecentResources = async (
+    apiURL,
+    { page = 1, pageSize = 3, type = "rules", categories }
+) => {
     if (type !== "rules") {
         return httpApiGetLegacy(
             `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true${categories}`,
@@ -382,7 +387,7 @@ const getRecentResources = async (apiURL, { page = 1, pageSize = 3, type = "rule
  * @returns {Array<{label: string, identifier: string, section: <Object>}>}
  */
 const getFormattedPartsList = async (title = "42") => {
-    const TOC = await getTOC({title});
+    const TOC = await getTOC({ title });
     const partsList = TOC.children[0].children
         .map((subChapter) =>
             subChapter.children.map((part) => ({
@@ -578,7 +583,24 @@ const getParts = async (title, apiUrl) => {
     if (apiUrl) {
         return httpApiGetLegacy(`${apiUrl}title/${title}/parts`);
     }
+
     return httpApiGet(`title/${title}/parts`);
+};
+
+/**
+ * @param {string} [act] - Act on which to filter.  Ex: `Social Security Act`
+ * @param {string} [apiUrl] - API base url passed in from Django template
+ *
+ * @returns {Promise <Array<{section: string, title: number, usc: string, act: string, name: string, statute_title: string, source_url: string}>} - Promise that contains array of part objects for provided title when fulfilled
+ */
+const getStatutes = async ({ act, apiUrl }) => {
+    const actString = act ? `?act=${encodeURIComponent(act)}` : "";
+
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}statutes${actString}`);
+    }
+
+    return httpApiGet(`statutes${actString}`);
 };
 
 export {
@@ -596,6 +618,7 @@ export {
     getRegSearchResults,
     getSearchGovResources,
     getSectionsForPart,
+    getStatutes,
     getSubPartsForPart,
     getSubpartTOC,
     getSupplementalContent,
