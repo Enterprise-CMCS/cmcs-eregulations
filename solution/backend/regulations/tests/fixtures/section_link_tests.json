@@ -53,5 +53,45 @@
         "testing": "when the section is valid but not in the default act",
         "input": "section 789 of the act",
         "expected": "section 789 of the act"
+    },
+    {
+        "testing": "non-standard dash in section name",
+        "input": "section 123–1G of the act",
+        "expected": "section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionaaaa&num=0&edition=prelim\">123–1G</a> of the act"
+    },
+    {
+        "testing": "USC linking",
+        "input": "something 10 U.S.C. 2324(e) and 41 USC 1234(f) and also 1 usc 1(a)(2)",
+        "expected": "something 10 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title10-section2324&num=0&edition=prelim#substructure-location_e\">2324(e)</a> and 41 USC <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title41-section1234&num=0&edition=prelim#substructure-location_f\">1234(f)</a> and also 1 usc <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section1&num=0&edition=prelim#substructure-location_a_2\">1(a)(2)</a>"
+    },
+    {
+        "testing": "section and USC linking in the same paragraph",
+        "input": "Section 123(a) of the Act (42 U.S.C. 1234(a))",
+        "expected": "Section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act (42 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1234&num=0&edition=prelim#substructure-location_a\">1234(a)</a>)"
+    },
+    {
+        "testing": "non standard dashes in U.S.C. section refs",
+        "input": "42 U.S.C. 1234—1a(a), 42 USC 1234–2b, 42 USC 1234-3c, 42 USC 1234–4d, 42 USC 1234&#x2013;5e",
+        "expected": "42 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1234-1a&num=0&edition=prelim#substructure-location_a\">1234—1a(a)</a>, 42 USC <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1234-2b&num=0&edition=prelim\">1234–2b</a>, 42 USC <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1234-3c&num=0&edition=prelim\">1234-3c</a>, 42 USC <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1234-4d&num=0&edition=prelim\">1234–4d</a>, 42 USC <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1234-5e&num=0&edition=prelim\">1234&#x2013;5e</a>"
+    },
+    {
+        "testing": "U.S.C. section continuity",
+        "input": "25 U.S.C. 450–458ddd–2 and 25 U.S.C. 450-1",
+        "expected": "25 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title25-section450&num=0&edition=prelim\">450</a>–458ddd–2 and 25 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title25-section450-1&num=0&edition=prelim\">450-1</a>"
+    },
+    {
+        "testing": "a selected U.S.C. edge case",
+        "input": "False Claims Act (31 U.S.C. 3729–3732) or the Anti-kickback Act (41 U.S.C. 1320a–7b(b))",
+        "expected": "False Claims Act (31 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title31-section3729&num=0&edition=prelim\">3729</a>–3732) or the Anti-kickback Act (41 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title41-section1320a-7b&num=0&edition=prelim#substructure-location_b\">1320a–7b(b)</a>)"
+    },
+    {
+        "testing": "comma-separated U.S.C. paragraphs and sections",
+        "input": "42 U.S.C. 123(a)(1)(C), (b)(1), and (b)(2) and 456(a)(1) and (b)(1) and 456(f) or (g).",
+        "expected": "42 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section123&num=0&edition=prelim#substructure-location_a_1_C\">123(a)(1)(C), (b)(1), and (b)(2)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section456&num=0&edition=prelim#substructure-location_a_1\">456(a)(1) and (b)(1)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section456&num=0&edition=prelim#substructure-location_f\">456(f) or (g)</a>."
+    },
+    {
+        "testing": "section refs not starting with a number",
+        "input": "42 U.S.C. A1234",
+        "expected": "42 U.S.C. A1234"
     }
 ]
