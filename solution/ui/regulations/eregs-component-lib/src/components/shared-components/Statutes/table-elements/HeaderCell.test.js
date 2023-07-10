@@ -1,5 +1,5 @@
 import flushPromises from "flush-promises";
-import { render, screen } from "@testing-library/vue";
+import { render } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 
 import { ssaSchema } from "../schemas/tableSchemas";
