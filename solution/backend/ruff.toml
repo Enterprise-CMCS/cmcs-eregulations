@@ -30,6 +30,7 @@ exclude = [
     "node_modules",
     "venv",
     "migrations",
+    "settings"
 ]
 
 # Same as Black.

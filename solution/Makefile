@@ -89,7 +89,7 @@ prototype.clean: ui/prototype
 lint:
 	flake8;
 ruff:
-	docker-compose exec regulations ruff check .;
+	docker-compose exec regulations ruff check .
 ruff-fix:
 	docker-compose exec regulations ruff --fix .
 
