@@ -4,6 +4,8 @@ import socket
 
 
 DEBUG = os.environ.get("DEBUG", False)
+
+# turns on django toolbar if debug is true
 if DEBUG:
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
