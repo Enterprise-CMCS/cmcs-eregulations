@@ -87,12 +87,11 @@ Before running the tests for the first time, you may need to install cypress dep
 
 #### Running the tests
 
-Running `make test` after `make local` will run the cypress suite of end to end tests.
-
 1. Navigate to project root
 2. If project is not already running locally, run `make local`
-3. `make test`
-4. For python unittest run `make python.unittest`
+3. For cypress run `make test.cypress` will run our cypress suite.
+4. For python unittest run `make python.pytest` will run our python unittest using pytest.
+5. For vitest run `make test.vitest` will run our vitest suite
 
 ## Working with assets
 
