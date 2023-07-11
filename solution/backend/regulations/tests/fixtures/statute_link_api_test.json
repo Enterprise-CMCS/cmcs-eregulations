@@ -1,15 +1,5 @@
 [
     {
-        "section": "11111",
-        "title": 45,
-        "usc": "12345",
-        "act": "Social Security Act",
-        "name": "Something",
-        "statute_title": 1,
-        "statute_title_roman": "I",
-        "source_url": "https://test.gov/test2.xml"
-    },
-    {
         "section": "10211",
         "title": 42,
         "usc": "18201",
@@ -18,6 +8,16 @@
         "statute_title": 10,
         "statute_title_roman": "X",
         "source_url": "https://test.gov/test.xml"
+    },    
+    {
+        "section": "11111",
+        "title": 45,
+        "usc": "12345",
+        "act": "Social Security Act",
+        "name": "Something",
+        "statute_title": 1,
+        "statute_title_roman": "I",
+        "source_url": "https://test.gov/test2.xml"
     },
     {
         "section": "7890",
