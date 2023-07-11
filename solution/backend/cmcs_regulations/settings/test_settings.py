@@ -1,7 +1,5 @@
-from .base import *
+from .base import * # noqa
 import os
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {

@@ -92,8 +92,6 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", False)
 
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
@@ -273,10 +271,3 @@ CSP_CONNECT_SRC = [
     "http://*.analytics.google.com",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
-
-
-if DEBUG:
-    import os  # only if you haven't already imported this
-    import socket  # only if you haven't already imported this
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']

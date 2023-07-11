@@ -1,7 +1,12 @@
-from .base import *
+from .base import * # noqa
 import os
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+import socket
+
+
+DEBUG = os.environ.get("DEBUG", False)
+if DEBUG:
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[:-1] + '1' for ip in ips] + ['127.0.0.1', '10.0.2.2']
 
 DATABASES = {
     'default': {

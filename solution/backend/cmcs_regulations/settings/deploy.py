@@ -1,7 +1,6 @@
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-from .base import *
+from .base import * # noqa
 import os
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
