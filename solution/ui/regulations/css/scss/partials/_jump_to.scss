@@ -96,7 +96,7 @@ form .jump-to-input {
 
     input#jumpToSection {
         margin-right: 10px;
-        width: 70px;
+        width: 65px;
 
         @include custom-max(($eds-width-sm - 1) / 1px) {
             width: 60px;
