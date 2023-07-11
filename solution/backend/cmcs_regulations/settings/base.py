@@ -113,7 +113,6 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.custom_url",
                 "cmcs_regulations.context_processors.survey_url",
-                "cmcs_regulations.context_processors.signup_url",
                 "cmcs_regulations.context_processors.automated_testing",
                 'cmcs_regulations.context_processors.api_base',
                 'regulations.context_processors.site_config',
@@ -130,27 +129,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cmcs_regulations.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.environ.get('DB_USER', 'eregs'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-        'NAME': os.environ.get('DB_NAME', 'eregs'),
-    },
-    'postgres': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.environ.get('DB_USER', 'eregs'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-        'NAME': "postgres",
-    },
-}
 
 
 # Password validation
@@ -206,11 +184,7 @@ GA_ID = os.environ.get("GA_ID")
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
 SURVEY_URL = os.environ.get(
     "SURVEY_URL",
-    "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform"
-)
-SIGNUP_URL = os.environ.get(
-    "SIGNUP_URL",
-    "https://public.govdelivery.com/accounts/USCMS/subscriber/new?topic_id=USCMS_124"
+    "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
 )
 
 
