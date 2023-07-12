@@ -28,4 +28,3 @@ DATABASES = {
         'NAME': "postgres",
     },
 }
-
