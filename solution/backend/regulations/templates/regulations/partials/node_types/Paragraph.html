@@ -22,5 +22,6 @@
             ></copy-citation>
         </tooltip-container>
     {% endif %}
-    {{node.text | link_statutes:link_conversions | safe}}
+    {% link_statutes node.text link_conversions link_config as content %}
+    {{ content | safe}}
 </p>
