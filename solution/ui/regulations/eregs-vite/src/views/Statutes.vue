@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRouter, useRoute } from "vue-router/composables";
 
 import { getStatutes } from "utilities/api";
 
@@ -37,6 +38,12 @@ const props = defineProps({
         default: "/search/",
     },
 });
+
+const router = useRouter();
+const route = useRoute();
+
+console.log("router", router);
+console.log("route", route);
 
 // Get statutes
 const statutes = ref({
