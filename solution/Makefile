@@ -154,6 +154,7 @@ local.opensearch: ## Run a local opensearch environment
 
 test.cypress: ## run the cypress e2e suite
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml  -f docker-compose.e2e.yml up e2e
+	docker-compose -f docker-compose.yml up -d ## resets the django_settings_module to the default
 test.cypress.local: ## run cypress tests locally without docker
 	cd ui/e2e; \
 		npm install; \
@@ -173,7 +174,9 @@ python.unittest:
 
 ##uncomment the -vvv if there are errors running pytest. 
 test.pytest:
-	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml exec regulations pytest -vvv 
+	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml up -d
+	docker-compose exec regulations pytest -vvv
+	docker-compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 
 python.shell:
 	docker-compose exec regulations python manage.py shell
