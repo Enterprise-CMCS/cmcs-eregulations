@@ -2,7 +2,7 @@
 DJANGO_SETTINGS_MODULE = "cmcs_regulations.test_settings"
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
-select = ["E", "F", "I"]
+select = ["E", "F"]
 ignore = []
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
