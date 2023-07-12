@@ -103,7 +103,7 @@ def replace_section(section, act, link_conversions):
 # "link_conversions" and "do_not_link" must be passed in via a partial function.
 def replace_sections(match, link_conversions, do_not_link):
     text = match.group()
-    if text in do_not_link:  # Do no substitution if text should not be linked
+    if text.lower().strip() in do_not_link:  # Do no substitution if text should not be linked
         return text
     act = match.group(2)
     act = f"{act.strip()} Act" if act else DEFAULT_ACT  # if no act is specified, default to DEFAULT_ACT
@@ -142,7 +142,7 @@ def replace_usc_citation(match, title):
 # Matches entire USC citations to account for "and", "or" scenarios.
 def replace_usc_citations(match, do_not_link):
     text = match.group()
-    if text in do_not_link:
+    if text.lower().strip() in do_not_link:
         return text
     return text.replace(
         match.group(2),
