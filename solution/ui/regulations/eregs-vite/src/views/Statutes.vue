@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 
 import { getStatutes } from "utilities/api";
@@ -39,11 +39,24 @@ const props = defineProps({
     },
 });
 
-const router = useRouter();
-const route = useRoute();
+// get route query params
+const $route = useRoute();
+const $router = useRouter();
 
-console.log("router", router);
-console.log("route", route);
+const fetchParams = ref({
+    act: "Social Security Act",
+    title: "19",
+});
+
+watch(
+    () => $route.query,
+    async (newParams, oldParams) => {
+        fetchParams.value = {
+            act: newParams.act,
+            title: newParams.title,
+        };
+    }
+);
 
 // Get statutes
 const statutes = ref({
@@ -52,7 +65,10 @@ const statutes = ref({
 });
 const getStatutesArray = async () => {
     try {
-        const statutesArray = await getStatutes({ apiUrl: props.apiUrl });
+        const statutesArray = await getStatutes({
+            apiUrl: props.apiUrl,
+            ...fetchParams.value,
+        });
         statutes.value.results = statutesArray;
     } catch (error) {
         console.error(error);
