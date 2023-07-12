@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 
+import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
 import { getStatutes } from "utilities/api";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
@@ -43,31 +44,35 @@ const props = defineProps({
 const $route = useRoute();
 const $router = useRouter();
 
+// validate query params to make sure they're in the enum?
 const queryParams = ref({
-    act: $route?.query?.act ?? "Social Security Act",
+    act: $route?.query?.act ?? "ssa",
     title: $route?.query?.title ?? "19",
 });
 
-watch(
-    () => $route.query,
-    async (newParams, oldParams) => {
-        queryParams.value = {
-            act: newParams.act,
-            title: newParams.title,
-        };
-    }
-);
+// change title on click
+const changeTitle = ({act, title}) => {
+    $router.push({
+        query: {
+            act,
+            title,
+        },
+    });
+};
 
-// Get statutes
+// Statutes -- state and fetch method
 const statutes = ref({
     results: [],
     loading: true,
 });
 const getStatutesArray = async () => {
+    statutes.value.loading = true;
+
     try {
         const statutesArray = await getStatutes({
+            act: ACT_TYPES[queryParams.value.act],
             apiUrl: props.apiUrl,
-            ...queryParams.value,
+            title: queryParams.value.title,
         });
         statutes.value.results = statutesArray;
     } catch (error) {
@@ -77,6 +82,26 @@ const getStatutesArray = async () => {
     }
 };
 
+// watch query params and fetch statutes
+watch(
+    () => $route.query,
+    (newParams, oldParams) => {
+        console.log("watch route", newParams, oldParams)
+        queryParams.value = {
+            act: newParams.act,
+            title: newParams.title,
+        };
+    }
+);
+
+watch(
+    () => queryParams.value,
+    async (newParams, oldParams) => {
+        await getStatutesArray();
+    }
+);
+
+// Watch layout
 const windowWidth = ref(window.innerWidth);
 const isNarrow = computed(() => windowWidth.value < 1024);
 
@@ -181,6 +206,7 @@ getStatutesArray();
                                     rel="noopener noreferrer"
                                     >SSA.gov Compilation</a
                                 >.
+                                <button @click="changeTitle({act: 'ssa', title: '11'})">Click me</button>
                             </div>
                             <StatuteTable
                                 :display-type="isNarrow ? 'list' : 'table'"
