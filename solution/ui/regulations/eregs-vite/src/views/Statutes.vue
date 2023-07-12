@@ -43,15 +43,15 @@ const props = defineProps({
 const $route = useRoute();
 const $router = useRouter();
 
-const fetchParams = ref({
-    act: "Social Security Act",
-    title: "19",
+const queryParams = ref({
+    act: $route?.query?.act ?? "Social Security Act",
+    title: $route?.query?.title ?? "19",
 });
 
 watch(
     () => $route.query,
     async (newParams, oldParams) => {
-        fetchParams.value = {
+        queryParams.value = {
             act: newParams.act,
             title: newParams.title,
         };
@@ -67,7 +67,7 @@ const getStatutesArray = async () => {
     try {
         const statutesArray = await getStatutes({
             apiUrl: props.apiUrl,
-            ...fetchParams.value,
+            ...queryParams.value,
         });
         statutes.value.results = statutesArray;
     } catch (error) {
