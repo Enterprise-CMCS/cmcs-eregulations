@@ -35,12 +35,12 @@ class SiteConfiguration(SingletonModel):
 
 class StatuteLinkConfiguration(SingletonModel):
     link_statute_refs = models.BooleanField(
-        default=False,
+        default=True,
         help_text="Should eRegs link statutes of the form \"Section 1902 of the Act\" to house.gov?",
     )
 
     link_usc_refs = models.BooleanField(
-        default=False,
+        default=True,
         help_text="Should eRegs link statutes of the form \"42 U.S.C. 123(a)\" to house.gov?",
     )
 
