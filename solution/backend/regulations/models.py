@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 
 from django_jsonform.models.fields import ArrayField
@@ -50,9 +52,9 @@ class StatuteLinkConfiguration(SingletonModel):
     )
 
     def save(self, *args, **kwargs):
-        # Convert do_not_link inputs to lowercase to reduce human error in inputs
         for i in range(len(self.do_not_link)):
-            self.do_not_link[i] = self.do_not_link[i].lower().strip()
+            # Convert do_not_link inputs to lowercase and remove "act" from the end, if it exists (needed due to regex limits)
+            self.do_not_link[i] = re.sub(r"\bact\s*$", "", self.do_not_link[i].lower()).strip()
         super().save(*args, **kwargs)
 
     def __str__(self):
