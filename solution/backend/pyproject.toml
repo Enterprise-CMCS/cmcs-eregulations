@@ -1,5 +1,6 @@
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "cmcs_regulations.test_settings"
+
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = ["E", "F"]
