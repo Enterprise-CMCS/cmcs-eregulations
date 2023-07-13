@@ -20,8 +20,45 @@
         }
 
         .content {
+            display: flex;
+            flex-direction: row;
             padding-top: 30px;
             padding-bottom: 30px;
+
+            @include custom-max(($eds-width-md - 1) / 1px) {
+                flex-direction: column;
+            }
+
+            .content__selector {
+                flex: 0 0 200px;
+                margin-right: 25px;
+
+                h3 {
+                    font-size: 1.5rem;
+                    line-height: 36px;
+                    margin: 0 0 16px;
+                }
+
+                h4 {
+                    margin: 0 0 12px;
+                }
+
+                a {
+                    text-decoration: none;
+                }
+
+                ul {
+                    list-style-type: none;
+
+                    &.acts__list {
+                        padding-left: 0;
+                    }
+
+                    &.titles__list {
+                        margin: 0;
+                    }
+                }
+            }
 
             .table__parent {
                 padding: 0.75rem;

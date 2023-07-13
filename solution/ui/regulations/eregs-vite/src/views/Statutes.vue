@@ -9,6 +9,7 @@ import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
+import StatuteSelector from "eregsComponentLib/src/components/shared-components/Statutes/StatuteSelector.vue";
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
 
 import Banner from "@/components/Banner.vue";
@@ -165,6 +166,10 @@ getStatutesArray();
             </Banner>
             <div id="main-content" class="statute__container">
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
+                    <div class="content__selector">
+                        <h3>Included Statute</h3>
+                        <StatuteSelector />
+                    </div>
                     <div class="table__parent">
                         <SimpleSpinner
                             v-if="statutes.loading"
