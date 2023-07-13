@@ -155,14 +155,14 @@ def replace_usc_citations(match, do_not_link):
 
 @register.simple_tag
 def link_statutes(paragraph, link_conversions, link_config):
-    if link_config.link_statute_refs:
+    if link_config["link_statute_refs"]:
         paragraph = STATUTE_REF_REGEX.sub(
-            partial(replace_sections, link_conversions=link_conversions, do_not_link=link_config.do_not_link),
+            partial(replace_sections, link_conversions=link_conversions, do_not_link=link_config["do_not_link"]),
             paragraph,
         )
-    if link_config.link_usc_refs:
+    if link_config["link_usc_refs"]:
         paragraph = USC_REF_REGEX.sub(
-            partial(replace_usc_citations, do_not_link=link_config.do_not_link),
+            partial(replace_usc_citations, do_not_link=link_config["do_not_link"]),
             paragraph
         )
     return paragraph

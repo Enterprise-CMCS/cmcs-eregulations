@@ -73,7 +73,7 @@ class ReaderView(CitationContextMixin, TemplateView):
                 "title": title,
                 "usc": usc,
             }
-        statute_link_config = StatuteLinkConfiguration.objects.first()
+        statute_link_config = StatuteLinkConfiguration.objects.values().first()
 
         c = {
             'tree':         tree,
