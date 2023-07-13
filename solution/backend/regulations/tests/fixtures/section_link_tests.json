@@ -108,5 +108,10 @@
         "testing": "proper word boundaries",
         "input": "intersection 123(a) of the act. intersects 123(a). intersect 123(a). And it intersects. 123(a) of the act states that.",
         "expected": "intersection 123(a) of the act. intersects 123(a). intersect 123(a). And it intersects. 123(a) of the act states that."
+    },
+    {
+        "testing": "negative lookahead for USC matching",
+        "input": "5 U.S.C. 552(a) and 6 U.S.C. 12(a) test. 5 U.S.C. 552(a) and 1 CFR part 51. 5 U.S.C. 552(a) and 12(b) test test test.",
+        "expected": "5 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title5-section552&num=0&edition=prelim#substructure-location_a\">552(a)</a> and 6 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title6-section12&num=0&edition=prelim#substructure-location_a\">12(a)</a> test. 5 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title5-section552&num=0&edition=prelim#substructure-location_a\">552(a)</a> and 1 CFR part 51. 5 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title5-section552&num=0&edition=prelim#substructure-location_a\">552(a)</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title5-section12&num=0&edition=prelim#substructure-location_b\">12(b)</a> test test test."
     }
 ]
