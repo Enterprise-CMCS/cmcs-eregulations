@@ -10,8 +10,8 @@ from django.db import models
 
 def validate_date(value):
     # If a day is entered into the date field, validate for months with less than 31 days.
-    if value and value != "":
-        date_fields = value.split("-")
+    if value and value.strip() != "":
+        date_fields = value.strip().split("-")
         if len(date_fields) == 3:
             (year, month, day) = date_fields
             try:
