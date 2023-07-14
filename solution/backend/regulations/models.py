@@ -1,6 +1,7 @@
 from django.db import models
 from common.fields import VariableDateField
 from django.core.exceptions import ValidationError
+from solo.models import SingletonModel
 
 
 ROMAN_TABLE = [
@@ -19,12 +20,14 @@ ROMAN_TABLE = [
     [1, "I"]
 ]
 
+
 def validate_partial_date(value):
     if value and (value.month is None or value.year is None):
         raise ValidationError("Both year and month are required in the partial date.")
 
 
-class SiteConfiguration(models.Model):
+class SiteConfiguration(SingletonModel):
+
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
 
     DATE_TYPE_CHOICES = (
@@ -33,7 +36,13 @@ class SiteConfiguration(models.Model):
     )
 
     date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES)
+    date_type = models.CharField(
+        max_length=10,
+        choices=DATE_TYPE_CHOICES,
+        default=''
+    )
     date = VariableDateField()
+
     def __str__(self):
         return f"{self.get_date_type_display()} {self.get_formatted_date()}"
 
