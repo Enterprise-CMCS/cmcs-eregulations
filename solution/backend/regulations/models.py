@@ -39,7 +39,9 @@ class SiteConfiguration(SingletonModel):
     date_type = models.CharField(
         max_length=10,
         choices=DATE_TYPE_CHOICES,
-        default=''
+        default='',
+        blank=True,
+        null=True
     )
     date = VariableDateField()
 

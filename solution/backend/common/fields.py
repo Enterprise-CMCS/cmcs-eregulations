@@ -34,4 +34,4 @@ class VariableDateField(models.CharField):
                 ),
             ],
         }}
-        return super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
