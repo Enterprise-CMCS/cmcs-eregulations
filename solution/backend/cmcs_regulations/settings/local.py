@@ -3,7 +3,7 @@ import os
 import socket
 
 
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = os.environ.get("DEBUG", True)
 
 # turns on django toolbar if debug is true
 if DEBUG:
