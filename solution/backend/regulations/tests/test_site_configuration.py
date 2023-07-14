@@ -1,6 +1,7 @@
 from django.test import TestCase
 from regulations.models import SiteConfiguration
 
+
 class SiteConfigurationTest(TestCase):
     def test_site_configuration_str(self):
         site_config = SiteConfiguration.objects.create(date_type='effective', date='2023-07-10')
