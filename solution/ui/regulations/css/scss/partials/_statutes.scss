@@ -52,6 +52,13 @@
                     }
                 }
 
+                .selector__parent {
+                    @include screen-eds-md {
+                        position: sticky;
+                        top: $header_height;
+                    }
+                }
+
                 .titles-list__link {
                     text-decoration: none;
                     transition: none;

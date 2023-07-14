@@ -157,12 +157,14 @@ getStatutesArray();
             <div id="main-content" class="statute__container">
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
                     <div class="content__selector">
-                        <h3>Included Statute</h3>
-                        <StatuteSelector
-                            :loading="statutes.loading"
-                            :selected-act="queryParams.act"
-                            :selected-title="queryParams.title"
-                        />
+                        <div class="selector__parent">
+                            <h3>Included Statute</h3>
+                            <StatuteSelector
+                                :loading="statutes.loading"
+                                :selected-act="queryParams.act"
+                                :selected-title="queryParams.title"
+                            />
+                        </div>
                     </div>
                     <div
                         class="table__parent"
