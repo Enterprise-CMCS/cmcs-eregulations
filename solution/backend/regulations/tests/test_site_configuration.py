@@ -1,8 +1,7 @@
-import unittest
+from django.test import TestCase
 from regulations.models import SiteConfiguration
 
-
-class SiteConfigurationTest(unittest.TestCase):
+class SiteConfigurationTest(TestCase):
     def test_site_configuration_str(self):
         site_config = SiteConfiguration.objects.create(date_type='effective', date='2023-07-10')
         expected_str = 'Effective 2023-07-10'
@@ -15,7 +14,3 @@ class SiteConfigurationTest(unittest.TestCase):
         parsed_site_config = SiteConfiguration.objects.get(pk=site_config.pk)
         self.assertEqual(parsed_site_config.date_type, expected_date_type)
         self.assertEqual(parsed_site_config.date, expected_date)
-
-
-if __name__ == '__main__':
-    unittest.main()
