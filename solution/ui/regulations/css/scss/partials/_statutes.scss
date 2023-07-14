@@ -56,9 +56,15 @@
                     text-decoration: none;
                     transition: none;
 
+                    &:hover,
+                    &:focus,
                     &--active {
                         color: $dark_gray;
                         border-bottom: 1px solid $dark_gray;
+                    }
+
+                    &--loading {
+                        pointer-events: none;
                     }
                 }
 

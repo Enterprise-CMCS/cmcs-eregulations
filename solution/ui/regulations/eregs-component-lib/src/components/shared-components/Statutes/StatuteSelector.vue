@@ -1,8 +1,12 @@
 <script setup>
-import { computed } from "vue";
 import { titleSelectorList } from "./schemas/listSchemas";
 
 const props = defineProps({
+    loading: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
     selectedAct: {
         type: String,
         required: false,
@@ -15,12 +19,9 @@ const props = defineProps({
     },
 });
 
-const isActActive = ({ act }) => {
-    return act == props.selectedAct;
-};
-const isTitleActive = ({ act, title }) => {
-    return act == props.selectedAct && title == props.selectedTitle;
-};
+const isActActive = ({ act }) => act === props.selectedAct;
+const isTitleActive = ({ act, title }) =>
+    act === props.selectedAct && title === props.selectedTitle;
 </script>
 
 <template>
@@ -35,7 +36,9 @@ const isTitleActive = ({ act, title }) => {
                 :class="{
                     'acts-item__heading--active': isActActive({ act: key }),
                 }"
-            >{{ value.name }}</h4>
+            >
+                {{ value.name }}
+            </h4>
             <ul class="titles__list">
                 <li
                     v-for="(title, j) in value.titles"
@@ -50,6 +53,7 @@ const isTitleActive = ({ act, title }) => {
                                     act: key,
                                     title: title.title,
                                 }),
+                                'titles-list__link--loading': loading,
                             }"
                             :to="{
                                 name: 'statutes',

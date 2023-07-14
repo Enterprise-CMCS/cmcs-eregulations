@@ -159,6 +159,7 @@ getStatutesArray();
                     <div class="content__selector">
                         <h3>Included Statute</h3>
                         <StatuteSelector
+                            :loading="statutes.loading"
                             :selected-act="queryParams.act"
                             :selected-title="queryParams.title"
                         />
