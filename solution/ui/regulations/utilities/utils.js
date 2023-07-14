@@ -498,9 +498,7 @@ const getCurrentPageResultsRange = ({ count, page = 1, pageSize }) => {
 
     const firstInRange = minInRange + 1;
     const lastInRange =
-        maxInRange > count
-            ? (count % pageSize) + minInRange
-            : maxInRange;
+        maxInRange > count ? (count % pageSize) + minInRange : maxInRange;
 
     return [firstInRange, lastInRange];
 };
@@ -738,6 +736,40 @@ function trapFocus(element) {
     };
 }
 
+/**
+ * Convert digit to roman numeral.
+ * Adapted from: https://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter#comment-823972
+ *
+ * @param {number} num - number to convert
+ * @returns {string} - roman numeral
+ */
+const romanize = (num) => {
+    var romansObj = {
+        M: 1000,
+        CM: 900,
+        D: 500,
+        CD: 400,
+        C: 100,
+        XC: 90,
+        L: 50,
+        XL: 40,
+        X: 10,
+        IX: 9,
+        V: 5,
+        IV: 4,
+        I: 1,
+    };
+
+    return Object.keys(romansObj).reduce(
+        function (acc, roman) {
+            acc.str += roman.repeat(acc.num / romansObj[roman]);
+            acc.num %= romansObj[roman];
+            return acc;
+        },
+        { str: "", num: num }
+    ).str;
+};
+
 export {
     addMarks,
     addQueryParams,
@@ -774,6 +806,7 @@ export {
     removeFragmentParams,
     removeNulls,
     removeQueryParams,
+    romanize,
     scrollToElement,
     stripQuotes,
     swallowError,
