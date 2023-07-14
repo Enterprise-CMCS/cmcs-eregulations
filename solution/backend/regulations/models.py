@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from solo.models import SingletonModel
 from datetime import date  # Add this import statement
-
+from common.fields import VariableDateField
 
 
 ROMAN_TABLE = [
@@ -21,51 +21,6 @@ ROMAN_TABLE = [
     [1, "I"]
 ]
 
-class PartialDateField(models.DateField):
-    def validate(self, value, model_instance):
-        super().validate(value, model_instance)
-        print(f"Value: {value}")
-        if value and (value.month is None or value.year is None):
-            print(f"within validate: {value}")
-            raise ValidationError("Both year and month are required in the partial date.")
-
-    def to_python(self, value):
-        print(f"within to_python")
-        if isinstance(value, PartialDate):
-            return value
-        return PartialDate.from_date(value)
-
-    def from_db_value(self, value, expression, connection):
-        return self.to_python(value)
-
-    def get_db_prep_value(self, value, connection, prepared=False):
-        if value:
-            return value.to_date()
-        return None
-
-
-class PartialDate:
-    def __init__(self, year, month, day=None):
-        self.year = year
-        self.month = month
-        self.day = day
-
-    @classmethod
-    def from_date(cls, date):
-        if date is None:
-            return None
-        return cls(date.year, date.month, date.day)
-
-    def to_date(self):
-        if self.year is None or self.month is None:
-            return None
-        return date(self.year, self.month, self.day) if self.day else date(self.year, self.month)
-
-    def __str__(self):
-        if self.year is not None and self.month is not None:
-            return f"{self.year}-{self.month:02d}"
-        return ""
-
 def validate_partial_date(value):
     if value and (value.month is None or value.year is None):
         raise ValidationError("Both year and month are required in the partial date.")
@@ -80,8 +35,7 @@ class SiteConfiguration(models.Model):
     )
 
     date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES)
-    date = PartialDateField(null=True, blank=True)
-
+    date = VariableDateField()
     def __str__(self):
         return f"{self.get_date_type_display()} {self.get_formatted_date()}"
 
