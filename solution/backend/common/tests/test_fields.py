@@ -1,8 +1,5 @@
 import unittest
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
-from django.db import models
-
 from .fields import validate_date, VariableDateField
 
 
