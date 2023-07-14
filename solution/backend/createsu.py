@@ -3,7 +3,7 @@ import os
 
 
 def handler(self, *args, **options):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
     import django
     django.setup()
 
