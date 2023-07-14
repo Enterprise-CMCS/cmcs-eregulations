@@ -56,6 +56,7 @@ class SiteConfiguration(SingletonModel):
     class Meta:
         verbose_name = "Site Configuration"
 
+
 class StatuteLinkConverter(models.Model):
     section = models.CharField(max_length=128, verbose_name="Act Section")
     title = models.IntegerField(verbose_name="USC Title")

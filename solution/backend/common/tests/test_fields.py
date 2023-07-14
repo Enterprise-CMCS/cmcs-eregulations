@@ -1,6 +1,6 @@
 import unittest
 from django.core.exceptions import ValidationError
-from .fields import  VariableDateField
+from fields import VariableDateField
 
 
 class VariableDateFieldTest(unittest.TestCase):

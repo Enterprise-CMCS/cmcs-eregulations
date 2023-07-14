@@ -16,5 +16,6 @@ class SiteConfigurationTest(unittest.TestCase):
         self.assertEqual(parsed_site_config.date_type, expected_date_type)
         self.assertEqual(parsed_site_config.date, expected_date)
 
+
 if __name__ == '__main__':
     unittest.main()
