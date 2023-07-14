@@ -89,7 +89,7 @@ prototype.clean: ui/prototype
 lint:
 	flake8;
 ruff:
-	docker-compose exec regulations ruff check .;
+	docker-compose exec regulations ruff check .
 ruff-fix:
 	docker-compose exec regulations ruff --fix .
 
@@ -152,9 +152,10 @@ local.collectstatic: ## Create static assets.
 local.opensearch: ## Run a local opensearch environment
 	docker-compose -f docker-compose.opensearch.yml up -d
 
-test: ## run the cypress e2e suite
-	docker-compose -f docker-compose.yml -f docker-compose.e2e.yml up e2e
-test.local: ## run cypress tests locally without docker
+test.cypress: ## run the cypress e2e suite
+	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml  -f docker-compose.e2e.yml up e2e
+	docker-compose -f docker-compose.yml up -d ## resets the django_settings_module to the default
+test.cypress.local: ## run cypress tests locally without docker
 	cd ui/e2e; \
 		npm install; \
 		npm run cypress:run;
@@ -172,8 +173,10 @@ python.unittest:
 	docker-compose exec regulations python manage.py test 
 
 ##uncomment the -vvv if there are errors running pytest. 
-python.pytest:
-	docker-compose exec regulations pytest -vvv 
+test.pytest:
+	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml up -d
+	docker-compose exec regulations pytest -vvv
+	docker-compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 
 python.shell:
 	docker-compose exec regulations python manage.py shell

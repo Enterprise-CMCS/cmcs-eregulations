@@ -29,7 +29,7 @@ SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}\([a-z0-9]+\))*"
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
 # Will also match "Section 1902" if the section is contained within the DEFAULT_ACT. See tests for more complete examples.
-STATUTE_REF_PATTERN = rf"\bsect(?:ion[s]?|s?)\.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)"\
+STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
 # Matches chains of paragraphs, for example in "Section 1902(a)(1)(C)", "(a)(1)(C)" will match.
@@ -113,8 +113,9 @@ def replace_sections(match, link_conversions):
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
 # "42 U.S.C. 1901(a) and 1902(b)" and more variations, similar to STATUTE_REF_PATTERN.
 # Negative lookahead ensures "42 U.S.C. 1234 and 41 U.S.C. 4567" doesn't register "1234" and "41" as two sections in one ref.
-USC_PATTERN = r"\s*u.?\s*s.?\s*c.?\s*"
-USC_REF_PATTERN = rf"(\d+){USC_PATTERN}((?:{SECTION_PATTERN}{AND_OR_PATTERN}(?!\d+{USC_PATTERN}))+)"
+USC_PATTERN = r"u.?\s*s.?\s*c.?"
+IGNORE_PATTERN = rf"\d+\s*(?:{USC_PATTERN}|c.?\s*f.?\s*r.?)\s*"
+USC_REF_PATTERN = rf"(\d+)\s*{USC_PATTERN}\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN}(?!{IGNORE_PATTERN}))+)"
 USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 
 

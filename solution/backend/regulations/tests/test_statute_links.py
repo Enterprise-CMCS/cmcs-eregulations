@@ -146,11 +146,13 @@ class StatuteConvertersAPITestCase(APITestCase):
     def setUp(self):
         with open("regulations/tests/fixtures/statute_link_api_test.json", "r") as f:
             self.objects = json.load(f)
-            for i in self.objects:
-                roman = i["statute_title_roman"]
-                del i["statute_title_roman"]
-                StatuteLinkConverter.objects.create(**i)
-                i["statute_title_roman"] = roman
+            # Objects are inserted in reverse order to ensure endpoint ordering is correct
+            for i in range(len(self.objects)-1, -1, -1):
+                obj = self.objects[i]
+                roman = obj["statute_title_roman"]
+                del obj["statute_title_roman"]
+                StatuteLinkConverter.objects.create(**obj)
+                obj["statute_title_roman"] = roman
 
     def test_all_statutes(self):
         response = self.client.get("/v3/statutes")
@@ -160,12 +162,12 @@ class StatuteConvertersAPITestCase(APITestCase):
     def test_aca(self):
         response = self.client.get("/v3/statutes?act=Affordable Care Act")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data, self.objects[1:2])
+        self.assertEqual(response.data, self.objects[0:1])
 
     def test_ssa(self):
         response = self.client.get("/v3/statutes?act=Social Security Act")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data, self.objects[0:1] + self.objects[2:4])
+        self.assertEqual(response.data, self.objects[1:4])
 
     def test_act_and_title(self):
         response = self.client.get("/v3/statutes?act=Social Security Act&title=3")

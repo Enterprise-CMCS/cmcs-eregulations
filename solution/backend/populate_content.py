@@ -4,7 +4,7 @@ from django.core.management import call_command
 
 
 def handler(event, context):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
     import django
     django.setup()
 
