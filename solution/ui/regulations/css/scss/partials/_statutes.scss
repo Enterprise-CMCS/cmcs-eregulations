@@ -79,6 +79,13 @@
                 padding: 0.75rem;
                 border: 1px solid $table_border_color;
                 border-radius: 4px;
+                width: 100%;
+
+                &.loading {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
 
                 .table__caption {
                     padding-bottom: 1.5rem;

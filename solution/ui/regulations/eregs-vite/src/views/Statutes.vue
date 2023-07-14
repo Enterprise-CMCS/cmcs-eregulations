@@ -173,7 +173,10 @@ getStatutesArray();
                             :selected-title="queryParams.title"
                         />
                     </div>
-                    <div class="table__parent">
+                    <div
+                        class="table__parent"
+                        :class="{ loading: statutes.loading }"
+                    >
                         <SimpleSpinner
                             v-if="statutes.loading"
                             class="table__spinner"
