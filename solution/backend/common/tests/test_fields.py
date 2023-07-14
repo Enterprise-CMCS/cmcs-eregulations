@@ -1,6 +1,6 @@
 import unittest
 from django.core.exceptions import ValidationError
-from .fields import validate_date, VariableDateField
+from .fields import  VariableDateField
 
 
 class VariableDateFieldTest(unittest.TestCase):
@@ -24,7 +24,7 @@ class VariableDateFieldTest(unittest.TestCase):
         try:
             field.clean(value, None)
         except ValidationError:
-            self.fail(f"Validation error occurred for blank value")
+            self.fail("Validation error occurred for blank value")
 
     def test_variable_date_field_null(self):
         field = VariableDateField(null=True)
@@ -32,7 +32,7 @@ class VariableDateFieldTest(unittest.TestCase):
         try:
             field.clean(value, None)
         except ValidationError:
-            self.fail(f"Validation error occurred for null value")
+            self.fail("Validation error occurred for null value")
 
 
 if __name__ == '__main__':

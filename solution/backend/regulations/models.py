@@ -1,8 +1,6 @@
 from django.db import models
-from django.utils import timezone
-from solo.models import SingletonModel
-from datetime import date  # Add this import statement
 from common.fields import VariableDateField
+from django.core.exceptions import ValidationError
 
 
 ROMAN_TABLE = [

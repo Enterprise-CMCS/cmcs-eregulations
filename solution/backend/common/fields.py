@@ -1,6 +1,4 @@
 # Contains custom fields for use throughout eRegs
-
-
 import datetime
 
 from django.core.exceptions import ValidationError
