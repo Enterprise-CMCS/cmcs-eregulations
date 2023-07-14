@@ -41,10 +41,25 @@
 
                 h4 {
                     margin: 0 0 12px;
+
+                    &.acts-item__heading {
+                        color: $mid_blue;
+                        transition: none;
+
+                        &--active {
+                            color: $dark_gray;
+                        }
+                    }
                 }
 
-                a {
+                .titles-list__link {
                     text-decoration: none;
+                    transition: none;
+
+                    &--active {
+                        color: $dark_gray;
+                        border-bottom: 1px solid $dark_gray;
+                    }
                 }
 
                 ul {

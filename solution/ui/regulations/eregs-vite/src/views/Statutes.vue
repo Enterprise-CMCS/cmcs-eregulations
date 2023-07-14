@@ -52,7 +52,7 @@ const queryParams = ref({
 });
 
 // change title on click
-const changeTitle = ({act, title}) => {
+const changeTitle = ({ act, title }) => {
     $router.push({
         query: {
             act,
@@ -87,7 +87,7 @@ const getStatutesArray = async () => {
 watch(
     () => $route.query,
     (newParams, oldParams) => {
-        console.log("watch route", newParams, oldParams)
+        console.log("watch route", newParams, oldParams);
         queryParams.value = {
             act: newParams.act,
             title: newParams.title,
@@ -168,7 +168,10 @@ getStatutesArray();
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
                     <div class="content__selector">
                         <h3>Included Statute</h3>
-                        <StatuteSelector />
+                        <StatuteSelector
+                            :selected-act="queryParams.act"
+                            :selected-title="queryParams.title"
+                        />
                     </div>
                     <div class="table__parent">
                         <SimpleSpinner
@@ -211,7 +214,13 @@ getStatutesArray();
                                     rel="noopener noreferrer"
                                     >SSA.gov Compilation</a
                                 >.
-                                <button @click="changeTitle({act: 'ssa', title: '11'})">Click me</button>
+                                <button
+                                    @click="
+                                        changeTitle({ act: 'ssa', title: '11' })
+                                    "
+                                >
+                                    Click me
+                                </button>
                             </div>
                             <StatuteTable
                                 :display-type="isNarrow ? 'list' : 'table'"

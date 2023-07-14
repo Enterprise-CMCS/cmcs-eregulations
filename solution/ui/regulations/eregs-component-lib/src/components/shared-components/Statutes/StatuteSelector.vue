@@ -1,5 +1,26 @@
 <script setup>
+import { computed } from "vue";
 import { titleSelectorList } from "./schemas/listSchemas";
+
+const props = defineProps({
+    selectedAct: {
+        type: String,
+        required: false,
+        default: "ssa",
+    },
+    selectedTitle: {
+        type: String,
+        required: false,
+        default: "19",
+    },
+});
+
+const isActActive = ({ act }) => {
+    return act == props.selectedAct;
+};
+const isTitleActive = ({ act, title }) => {
+    return act == props.selectedAct && title == props.selectedTitle;
+};
 </script>
 
 <template>
@@ -9,7 +30,12 @@ import { titleSelectorList } from "./schemas/listSchemas";
             :key="`${key}-${i}`"
             class="acts-list__item"
         >
-            <h4>{{ value.name }}</h4>
+            <h4
+                class="acts-item__heading"
+                :class="{
+                    'acts-item__heading--active': isActActive({ act: key }),
+                }"
+            >{{ value.name }}</h4>
             <ul class="titles__list">
                 <li
                     v-for="(title, j) in value.titles"
@@ -18,6 +44,13 @@ import { titleSelectorList } from "./schemas/listSchemas";
                 >
                     <h4>
                         <router-link
+                            class="titles-list__link"
+                            :class="{
+                                'titles-list__link--active': isTitleActive({
+                                    act: key,
+                                    title: title.title,
+                                }),
+                            }"
                             :to="{
                                 name: 'statutes',
                                 query: {
@@ -32,4 +65,5 @@ import { titleSelectorList } from "./schemas/listSchemas";
                 </li>
             </ul>
         </li>
+    </ul>
 </template>
