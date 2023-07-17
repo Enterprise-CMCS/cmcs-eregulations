@@ -113,8 +113,9 @@ def replace_sections(match, link_conversions):
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
 # "42 U.S.C. 1901(a) and 1902(b)" and more variations, similar to STATUTE_REF_PATTERN.
 # Negative lookahead ensures "42 U.S.C. 1234 and 41 U.S.C. 4567" doesn't register "1234" and "41" as two sections in one ref.
-USC_PATTERN = r"\s*u.?\s*s.?\s*c.?\s*"
-USC_REF_PATTERN = rf"(\d+){USC_PATTERN}((?:{SECTION_PATTERN}{AND_OR_PATTERN}(?!\d+{USC_PATTERN}))+)"
+USC_PATTERN = r"u.?\s*s.?\s*c.?"
+IGNORE_PATTERN = rf"\d+\s*(?:{USC_PATTERN}|c.?\s*f.?\s*r.?)\s*"
+USC_REF_PATTERN = rf"(\d+)\s*{USC_PATTERN}\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN}(?!{IGNORE_PATTERN}))+)"
 USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 
 

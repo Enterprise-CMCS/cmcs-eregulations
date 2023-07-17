@@ -8,7 +8,7 @@ from django.db.utils import ProgrammingError
 
 
 def handler(event, context):
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
     django.setup()
 
     try:
