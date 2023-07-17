@@ -48,6 +48,7 @@ const isTitleActive = ({ act, title }) =>
                     <h4>
                         <router-link
                             class="titles-list__link"
+                            :data-testid="`${key}-${title.titleRoman}-${title.title}`"
                             :class="{
                                 'titles-list__link--active': isTitleActive({
                                     act: key,
