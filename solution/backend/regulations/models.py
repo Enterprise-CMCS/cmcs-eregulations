@@ -21,11 +21,6 @@ ROMAN_TABLE = [
 ]
 
 
-def validate_partial_date(value):
-    if value and (value.month is None or value.year is None):
-        raise ValidationError("Both year and month are required in the partial date.")
-
-
 class SiteConfiguration(SingletonModel):
 
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
@@ -35,7 +30,6 @@ class SiteConfiguration(SingletonModel):
         ('amended', 'Amended'),
     )
 
-    date_type = models.CharField(max_length=10, choices=DATE_TYPE_CHOICES)
     date_type = models.CharField(
         max_length=10,
         choices=DATE_TYPE_CHOICES,
