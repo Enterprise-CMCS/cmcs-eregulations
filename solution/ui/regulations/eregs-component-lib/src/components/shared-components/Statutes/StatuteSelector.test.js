@@ -52,7 +52,7 @@ describe("Statute Table Selector", () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        it(`Creates a snapshot of the Statute Selector with act and title props `, async () => {
+        it(`Creates a snapshot of the Statute Selector when act and title props passed in to component`, async () => {
             const wrapper = render(StatuteSelector, {
                 props: {
                     selectedAct: "ssa",
