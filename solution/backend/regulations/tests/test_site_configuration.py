@@ -1,7 +1,7 @@
 import unittest
 import pytest
 from regulations.models import SiteConfiguration
-from django.core.exceptions import ValidationError
+
 
 @pytest.mark.django_db
 class SiteConfigurationTest(unittest.TestCase):

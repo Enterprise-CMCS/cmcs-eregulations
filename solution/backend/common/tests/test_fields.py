@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 class VariableDateFieldTest(unittest.TestCase):
     def setUp(self):
         self.field = VariableDateField()
+
     def test_valid_date_values(self):
         values = [
             "2022-07-15",

@@ -1,6 +1,5 @@
 from django.db import models
 from common.fields import VariableDateField
-from django.core.exceptions import ValidationError
 from solo.models import SingletonModel
 
 
