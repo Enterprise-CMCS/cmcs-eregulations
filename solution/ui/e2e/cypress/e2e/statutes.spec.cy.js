@@ -9,11 +9,23 @@ describe("Statute Table", () => {
         }).as("statutes");
     });
 
-    it("goes to statutes page from homepage", () => {
+    it("goes to statutes page from homepage and has SSA Title 19 selected by default", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.clickHeaderLink({ page: "Statutes", screen: "wide" });
         cy.url().should("include", "/statutes/");
+
+        cy.get("h1").contains("Statute Reference");
+        cy.get("h2").contains("Look up statute text in online sources");
+
+        cy.get("a[data-testid=ssa-XIX-19]").should(
+            "have.class",
+            "titles-list__link--active"
+        );
+        cy.get("a[data-testid=ssa-XI-11]").should(
+            "not.have.class",
+            "titles-list__link--active"
+        );
     });
 
     it("displays as a table at widths 1024px wide and greater", () => {
@@ -39,6 +51,17 @@ describe("Statute Table", () => {
         cy.visit("/");
         cy.clickHeaderLink({ page: "Statutes", screen: "narrow" });
         cy.url().should("include", "/statutes/");
+    });
+
+    it("loads the correct act and title when the URL is changed", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/statutes");
+
+        cy.clickStatuteLink({ act: "ssa", titleRoman: "XXI", title: "21" });
+        cy.url().should("include", "/statutes?act=ssa&title=21");
+
+        cy.clickStatuteLink({ act: "ssa", titleRoman: "XI", title: "11" });
+        cy.url().should("include", "/statutes?act=ssa&title=11");
     });
 
     it("goes to another SPA page from the statutes page", () => {

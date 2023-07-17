@@ -30,11 +30,13 @@ import "cypress-plugin-tab";
 import { getResources, getSearchGovResources } from "./api-request-commands";
 import { checkBlockingModal, checkFlashBanner, clickHeaderLink, goHome } from"./common-commands/header";
 import { jumpToRegulationPart, jumpToRegulationPartSection } from "./common-commands/jumpTo";
+import { clickStatuteLink } from "./common-commands/statutes";
 import { validateSchema } from "./validate-schema-command";
 
 Cypress.Commands.add("checkBlockingModal", checkBlockingModal);
 Cypress.Commands.add("checkFlashBanner", checkFlashBanner);
 Cypress.Commands.add("clickHeaderLink", clickHeaderLink);
+Cypress.Commands.add("clickStatuteLink", clickStatuteLink);
 Cypress.Commands.add("getResources", getResources);
 Cypress.Commands.add("getSearchGovResources", getSearchGovResources);
 Cypress.Commands.add("goHome", goHome);
