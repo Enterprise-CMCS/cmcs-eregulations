@@ -2,6 +2,8 @@ from django.db import models
 
 from solo.models import SingletonModel
 
+from common.fields import NaturalSortField
+
 
 ROMAN_TABLE = [
     [1000, "M"],
@@ -38,6 +40,8 @@ class StatuteLinkConverter(models.Model):
     name = models.CharField(max_length=512, verbose_name="Section Name")
     statute_title = models.IntegerField(verbose_name="Statute Title", null=True)
     source_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="Source URL")
+
+    usc_sort = NaturalSortField("usc", null=True)
 
     @property
     def statute_title_roman(self):
