@@ -65,11 +65,10 @@ class SiteConfiguration(SingletonModel):
         )
 
     def __str__(self):
-        return f"Site Configuration"
+        return "Site Configuration"
 
     class Meta:
         verbose_name = "Site Configuration"
-
 
 
 class StatuteLinkConverter(models.Model):
