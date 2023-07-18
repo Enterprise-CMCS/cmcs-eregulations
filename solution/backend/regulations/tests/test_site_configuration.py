@@ -50,14 +50,14 @@ class SiteConfigurationTest(unittest.TestCase):
             self.assertEqual(retrieved_date, date)
 
     def test_site_configuration_str(self):
-        site_config = SiteConfiguration.objects.create(pk=2, us_code_house_gov_date_type='effective')
+        site_config = SiteConfiguration.get_solo()
         expected_str = 'Site Configuration'
         self.assertEqual(str(site_config), expected_str)
 
     def test_site_configuration_valid_date_type(self):
-        site_config = SiteConfiguration(us_code_house_gov_date_type='effective')
+        site_config = SiteConfiguration.get_solo()
         site_config.full_clean()  # Should not raise any ValidationError
 
     def test_site_configuration_empty_date_type(self):
-        site_config = SiteConfiguration(us_code_house_gov_date_type='')
+        site_config = SiteConfiguration.get_solo()
         site_config.full_clean()  # Should not raise any ValidationError
