@@ -7,7 +7,6 @@ from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from solo.models import SingletonModel
-import re
 
 from common.fields import NaturalSortField
 
