@@ -46,7 +46,7 @@ const isTitleActive = ({ act, title }) =>
                     class="titles-list__item"
                 >
                     <h4>
-                        <router-link
+                        <RouterLink
                             class="titles-list__link"
                             :data-testid="`${key}-${title.titleRoman}-${title.title}`"
                             :class="{
@@ -65,7 +65,7 @@ const isTitleActive = ({ act, title }) =>
                             }"
                         >
                             Title {{ title.titleRoman }} / {{ title.title }}
-                        </router-link>
+                        </RouterLink>
                     </h4>
                 </li>
             </ul>

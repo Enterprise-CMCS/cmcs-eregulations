@@ -7,7 +7,9 @@ import StatuteSelector from "./StatuteSelector.vue";
 describe("Statute Table Selector", () => {
     describe("SSA table type", () => {
         it(`Creates a snapshot of the Statute Selector with default props`, async () => {
-            const wrapper = render(StatuteSelector);
+            const wrapper = render(StatuteSelector, {
+                stubs: { "RouterLink": true },
+            });
 
             await flushPromises();
 
@@ -32,6 +34,7 @@ describe("Statute Table Selector", () => {
 
         it(`Creates a snapshot of the Statute Selector with a loading prop`, async () => {
             const wrapper = render(StatuteSelector, {
+                stubs: { "RouterLink": true },
                 props: {
                     loading: true,
                 },
@@ -54,6 +57,7 @@ describe("Statute Table Selector", () => {
 
         it(`Creates a snapshot of the Statute Selector when act and title props passed in to component`, async () => {
             const wrapper = render(StatuteSelector, {
+                stubs: { "RouterLink": true },
                 props: {
                     selectedAct: "ssa",
                     selectedTitle: "21",
