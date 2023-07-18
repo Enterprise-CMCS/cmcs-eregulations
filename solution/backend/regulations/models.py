@@ -23,14 +23,6 @@ ROMAN_TABLE = [
 class SiteConfiguration(SingletonModel):
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
 
-    fields = (
-        'allow_indexing',
-        ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
-        ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
-        ('statute_compilation_date_type', 'statute_compilation_date'),
-        ('us_code_annual_date_type', 'us_code_annual_date'),
-    )
-
     DATE_TYPE_CHOICES = (
         ('effective', 'Effective'),
         ('amended', 'Amended'),
