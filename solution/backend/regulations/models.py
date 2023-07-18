@@ -21,33 +21,63 @@ ROMAN_TABLE = [
 
 
 class SiteConfiguration(SingletonModel):
-
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
+
+    fields = (
+        'allow_indexing',
+        ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
+        ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
+        ('statute_compilation_date_type', 'statute_compilation_date'),
+        ('us_code_annual_date_type', 'us_code_annual_date'),
+    )
 
     DATE_TYPE_CHOICES = (
         ('effective', 'Effective'),
         ('amended', 'Amended'),
     )
 
-    date_type = models.CharField(
-        max_length=10,
-        choices=DATE_TYPE_CHOICES,
-        default='',
-        blank=True,
-        null=True
-    )
-    date = VariableDateField()
+    date_fields = [
+        {
+            'name': 'us_code_house_gov',
+            'verbose_name': 'US Code House.gov',
+        },
+        {
+            'name': 'ssa_gov_compilation',
+            'verbose_name': 'SSA.gov Compilation',
+        },
+        {
+            'name': 'statute_compilation',
+            'verbose_name': 'Statute Compilation',
+        },
+        {
+            'name': 'us_code_annual',
+            'verbose_name': 'US Code Annual',
+        },
+    ]
+
+    for field in date_fields:
+        field_name = field['name']
+        field_verbose_name = field['verbose_name']
+
+        locals()[f"{field_name}_date_type"] = models.CharField(
+            max_length=10,
+            choices=DATE_TYPE_CHOICES,
+            default='',
+            blank=True,
+            null=True,
+            verbose_name=f"{field_verbose_name} Date Type"
+        )
+
+        locals()[f"{field_name}_date"] = VariableDateField(
+            verbose_name=f"{field_verbose_name} Date"
+        )
 
     def __str__(self):
-        return f"{self.get_date_type_display()} {self.get_formatted_date()}"
-
-    def get_formatted_date(self):
-        if self.date:
-            return str(self.date)
-        return ""
+        return f"Site Configuration"
 
     class Meta:
         verbose_name = "Site Configuration"
+
 
 
 class StatuteLinkConverter(models.Model):
