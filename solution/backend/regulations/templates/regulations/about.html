@@ -4,27 +4,7 @@
 {% block title %}About This Tool | Medicaid & CHIP eRegulations{% endblock %}
 
 {% block header %}
-    <header id="header" class="sticky">
-        <header-component
-            home-url="{% url 'homepage' %}"
-        >
-            <jump-to
-                slot="jump-to"
-                api-url="{{ API_BASE }}"
-                home-url="{% url 'homepage' %}"
-            ></jump-to>
-            <header-links
-                slot="links"
-                about-url="{% url 'about' %}"
-                resources-url="{% url 'resources' %}"
-                statutes-url="{% url 'statutes' %}"
-            ></header-links>
-            <header-search
-                slot="search"
-                search-url="{% url 'search' %}"
-            ></header-search>
-        </header-component>
-    </header>
+    {% include "regulations/partials/header.html" %}
 {% endblock %}
 
 {% block body %}
