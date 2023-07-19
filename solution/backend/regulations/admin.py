@@ -11,7 +11,11 @@ from django.urls import path, reverse
 import requests
 from solo.admin import SingletonModelAdmin
 
-from .models import SiteConfiguration, StatuteLinkConverter
+from .models import (
+    SiteConfiguration,
+    StatuteLinkConfiguration,
+    StatuteLinkConverter,
+)
 
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
@@ -67,6 +71,11 @@ def roman_to_int(roman):
 
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
+    pass
+
+
+@admin.register(StatuteLinkConfiguration)
+class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
     pass
 
 

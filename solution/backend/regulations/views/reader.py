@@ -12,7 +12,10 @@ from django.views.generic.base import (
 )
 
 from regcore.models import Part
-from regulations.models import StatuteLinkConverter
+from regulations.models import (
+    StatuteLinkConfiguration,
+    StatuteLinkConverter,
+)
 from regulations.views.errors import NotInSubpart
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
@@ -70,6 +73,7 @@ class ReaderView(CitationContextMixin, TemplateView):
                 "title": title,
                 "usc": usc,
             }
+        statute_link_config = StatuteLinkConfiguration.objects.values().first()
 
         c = {
             'tree':         tree,
@@ -86,6 +90,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'sub_categories': sub_categories,
             'resource_count': resource_count,
             'link_conversions': conversions,
+            'link_config': statute_link_config,
         }
 
         end = datetime.now().timestamp()
