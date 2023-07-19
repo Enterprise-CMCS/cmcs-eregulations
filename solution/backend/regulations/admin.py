@@ -76,6 +76,7 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
     )
 
 
+
 @admin.register(StatuteLinkConverter)
 class StatuteLinkConverterAdmin(admin.ModelAdmin):
     change_list_template = "admin/import_conversions_button.html"
