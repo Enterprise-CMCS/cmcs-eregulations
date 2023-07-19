@@ -11,7 +11,10 @@ from rest_framework.test import APITestCase
 from requests.exceptions import HTTPError
 
 from regulations.admin import StatuteLinkConverterAdmin
-from regulations.models import StatuteLinkConverter
+from regulations.models import (
+    StatuteLinkConfiguration,
+    StatuteLinkConverter,
+)
 
 
 def mocked_requests_get(*args, **kwargs):
@@ -133,12 +136,23 @@ class LinkStatutesTestCase(SimpleTestCase):
             },
         }
 
+        link_config = {
+            "link_statute_refs": True,
+            "link_usc_refs": True,
+            "do_not_link": [],
+        }
+
         with open("regulations/tests/fixtures/section_link_tests.json", "r") as f:
             test_values = json.load(f)
 
         for test in test_values:
-            template = Template("{% load link_statutes %}{{ paragraph|link_statutes:link_conversions|safe }}")
-            context = Context({"paragraph": test["input"], "link_conversions": link_conversions})
+            template = Template("{% load link_statutes %}{% link_statutes paragraph link_conversions link_config as text %}"
+                                "{{ text | safe }}")
+            context = Context({
+                "paragraph": test["input"],
+                "link_conversions": link_conversions,
+                "link_config": link_config,
+            })
             self.assertEqual(template.render(context), test["expected"], f"Failed while testing {test['testing']}.")
 
 
@@ -167,12 +181,12 @@ class StatuteConvertersAPITestCase(APITestCase):
     def test_ssa(self):
         response = self.client.get("/v3/statutes?act=Social Security Act")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data, self.objects[1:4])
+        self.assertEqual(response.data, self.objects[1:5])
 
     def test_act_and_title(self):
         response = self.client.get("/v3/statutes?act=Social Security Act&title=3")
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(response.data, self.objects[2:3])
+        self.assertEqual(response.data, self.objects[2:4])
 
     def test_title_no_act(self):
         response = self.client.get("/v3/statutes?title=3")
@@ -203,3 +217,35 @@ class RomanConversionTestCase(SimpleTestCase):
         for i in range(len(tests)):
             object.statute_title = tests[i][0]
             self.assertEqual(object.statute_title_roman, tests[i][1])
+
+
+class TestStatuteLinkConfiguration(TestCase):
+    def setUp(self):
+        self.conversions = {
+            "Social Security Act": {
+                "123": {
+                    "title": "42",
+                    "usc": "abc",
+                },
+            },
+        }
+        self.template = Template("{% load link_statutes %}{% link_statutes paragraph link_conversions link_config as text %}"
+                                 "{{ text | safe }}")
+
+    def test_statute_link_config(self):
+        with open("regulations/tests/fixtures/statute_config_tests.json", "r") as f:
+            tests = json.load(f)
+
+        for test in tests:
+            if StatuteLinkConfiguration.objects.first():
+                StatuteLinkConfiguration.objects.first().delete()
+            StatuteLinkConfiguration.objects.create(**test["config"])
+
+            config = StatuteLinkConfiguration.objects.values().first()
+            context = Context({
+                "paragraph": test["paragraph"],
+                "link_conversions": self.conversions,
+                "link_config": config,
+            })
+
+            self.assertEqual(self.template.render(context), test["expected"], f"Failed while testing {test['testing']}.")
