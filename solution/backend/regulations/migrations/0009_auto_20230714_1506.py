@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('regulations', '0007_statutelinkconverter_usc_sort'),
+        ('regulations', '0008_statutelinkconfiguration'),
     ]
 
     operations = [
