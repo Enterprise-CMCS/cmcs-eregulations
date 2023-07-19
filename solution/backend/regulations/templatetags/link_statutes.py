@@ -100,13 +100,16 @@ def replace_section(section, act, link_conversions):
 
 # This middleman re.sub() function is run when an entire statute ref is matched. It performs another substition on individual
 # sections within the ref. It is needed to enforce refs starting with "section" but possibly containing more than one section.
-# "link_conversions" must be passed in via a partial function.
-def replace_sections(match, link_conversions):
+# "link_conversions" and "do_not_link" must be passed in via a partial function.
+def replace_sections(match, link_conversions, do_not_link):
+    text = match.group()
+    if text.lower().strip() in do_not_link:  # Do no substitution if text should not be linked
+        return text
     act = match.group(2)
     act = f"{act.strip()} Act" if act else DEFAULT_ACT  # if no act is specified, default to DEFAULT_ACT
     return SECTION_REGEX.sub(
         partial(replace_section, act=act, link_conversions=link_conversions),
-        match.group(),
+        text,
     )
 
 
@@ -138,8 +141,11 @@ def replace_usc_citation(match, title):
 
 
 # Matches entire USC citations to account for "and", "or" scenarios.
-def replace_usc_citations(match):
-    return match.group().replace(
+def replace_usc_citations(match, do_not_link):
+    text = match.group()
+    if text.lower().strip() in do_not_link:
+        return text
+    return text.replace(
         match.group(2),
         SECTION_REGEX.sub(
             partial(replace_usc_citation, title=match.group(1)),
@@ -148,11 +154,16 @@ def replace_usc_citations(match):
     )
 
 
-@register.filter
-def link_statutes(paragraph, link_conversions):
-    paragraph = STATUTE_REF_REGEX.sub(
-        partial(replace_sections, link_conversions=link_conversions),
-        paragraph,
-    )
-    paragraph = USC_REF_REGEX.sub(replace_usc_citations, paragraph)
+@register.simple_tag
+def link_statutes(paragraph, link_conversions, link_config):
+    if link_config["link_statute_refs"]:
+        paragraph = STATUTE_REF_REGEX.sub(
+            partial(replace_sections, link_conversions=link_conversions, do_not_link=link_config["do_not_link"]),
+            paragraph,
+        )
+    if link_config["link_usc_refs"]:
+        paragraph = USC_REF_REGEX.sub(
+            partial(replace_usc_citations, do_not_link=link_config["do_not_link"]),
+            paragraph
+        )
     return paragraph
