@@ -7,7 +7,8 @@ from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from solo.models import SingletonModel
-import re
+
+from common.fields import NaturalSortField
 
 
 # Field mixins
@@ -44,35 +45,6 @@ class DateFieldMixin(models.Model):
 
     class Meta:
         abstract = True
-
-
-class NaturalSortField(models.CharField):
-    def __init__(self, for_field, **kwargs):
-        self.for_field = for_field
-        kwargs.setdefault('db_index', True)
-        kwargs.setdefault('editable', False)
-        kwargs.setdefault('max_length', 255)
-        super(NaturalSortField, self).__init__(**kwargs)
-        self.max_length = kwargs['max_length']
-
-    def deconstruct(self):
-        name, path, args, kwargs = super(NaturalSortField, self).deconstruct()
-        args.append(self.for_field)
-        return name, path, args, kwargs
-
-    def pre_save(self, model_instance, add):
-        return self.naturalize(getattr(model_instance, self.for_field))
-
-    def naturalize(self, string):
-        def naturalize_int_match(match):
-            return '%08d' % (int(match.group(0)),)
-        if string:
-            string = string.lower()
-            string = string.strip()
-            string = re.sub(r'\d+', naturalize_int_match, string)
-            string = string[:self.max_length]
-
-        return string
 
 
 class TypicalResourceFieldsMixin(DateFieldMixin, InternalNotesFieldMixin):
