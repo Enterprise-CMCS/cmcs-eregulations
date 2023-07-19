@@ -80,7 +80,6 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
     )
 
 
-
 @admin.register(StatuteLinkConfiguration)
 class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
     pass
