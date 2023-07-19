@@ -11,7 +11,11 @@ from django.urls import path, reverse
 import requests
 from solo.admin import SingletonModelAdmin
 
-from .models import SiteConfiguration, StatuteLinkConverter
+from .models import (
+    SiteConfiguration,
+    StatuteLinkConfiguration,
+    StatuteLinkConverter,
+)
 
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
@@ -75,6 +79,11 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
         ('us_code_annual_date_type', 'us_code_annual_date'),
     )
 
+
+
+@admin.register(StatuteLinkConfiguration)
+class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
+    pass
 
 
 @admin.register(StatuteLinkConverter)

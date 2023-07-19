@@ -2,6 +2,7 @@
 
 <section class="flush-paragraph-section">
     <fp>
-        {{ node.content | link_statutes:link_conversions | safe }}
+        {% link_statutes node.content link_conversions link_config as content %}
+        {{ content | safe }}
     </fp>
 </section>
