@@ -71,7 +71,13 @@ def roman_to_int(roman):
 
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
-    pass
+    fields = (
+        'allow_indexing',
+        ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
+        ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
+        ('statute_compilation_date_type', 'statute_compilation_date'),
+        ('us_code_annual_date_type', 'us_code_annual_date'),
+    )
 
 
 @admin.register(StatuteLinkConfiguration)
