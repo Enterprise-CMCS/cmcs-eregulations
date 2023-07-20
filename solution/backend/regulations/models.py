@@ -1,11 +1,9 @@
 import re
 
 from django.db import models
-
+from common.fields import VariableDateField, NaturalSortField
 from django_jsonform.models.fields import ArrayField
 from solo.models import SingletonModel
-
-from common.fields import NaturalSortField
 
 
 ROMAN_TABLE = [
@@ -28,7 +26,63 @@ ROMAN_TABLE = [
 class SiteConfiguration(SingletonModel):
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
 
+    DATE_TYPE_CHOICES = (
+        ('effective', 'Effective'),
+        ('amended', 'Amended'),
+    )
+
+    date_fields = [
+        {
+            'name': 'us_code_house_gov',
+            'verbose_name': 'US Code House.gov',
+        },
+        {
+            'name': 'ssa_gov_compilation',
+            'verbose_name': 'SSA.gov Compilation',
+        },
+        {
+            'name': 'statute_compilation',
+            'verbose_name': 'Statute Compilation',
+        },
+        {
+            'name': 'us_code_annual',
+            'verbose_name': 'US Code Annual',
+        },
+    ]
+
+    for field in date_fields:
+        field_name = field['name']
+        field_verbose_name = field['verbose_name']
+
+        locals()[f"{field_name}_date_type"] = models.CharField(
+            max_length=10,
+            choices=DATE_TYPE_CHOICES,
+            default='',
+            blank=True,
+            null=True,
+            verbose_name=f"{field_verbose_name} Date Type"
+        )
+
+        locals()[f"{field_name}_date"] = VariableDateField(
+            verbose_name=f"{field_verbose_name} Date"
+        )
+
     def __str__(self):
+        date_info = []
+        for field in self.date_fields:
+            field_name = field['name']
+            field_verbose_name = field['verbose_name']
+            date_type = getattr(self, f"{field_name}_date_type")
+            date = getattr(self, f"{field_name}_date")
+            if date:
+                if date_type:
+                    date_info.append(f"{field_verbose_name} - {date_type.capitalize()} {date}")
+                else:
+                    date_info.append(f"{field_verbose_name} - Date {date}")
+
+        if date_info:
+            return "; \n".join(date_info)
+
         return "Site Configuration"
 
     class Meta:
