@@ -40,8 +40,6 @@ function parseError(err) {
         ? err.errors[Object.keys(err.errors)[0]][0]
         : err.message;
 
-    //errMessage && alert(errMessage);
-
     const message = errMessage;
     try {
         const code = Object.keys(err.errors)[0];
