@@ -5,6 +5,7 @@ describe("Search flow", () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
+        return;
     });
 
     it("has a working search box on the homepage on desktop", () => {

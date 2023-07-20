@@ -10,7 +10,7 @@ describe("Left sidebar", () => {
             req.headers["x-automated-test"] =
                 Cypress.env("DEPLOYING");
         });
-
+        return
     })
 
     it("opens the section when the left nav subsection is clicked", () => {

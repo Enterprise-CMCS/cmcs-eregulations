@@ -9,6 +9,7 @@ describe("Print Styles", () => {
         }).as("headers");
 
         cy.setCssMedia("screen");
+        return;
     });
 
     it("has a print button in subpart view", () => {

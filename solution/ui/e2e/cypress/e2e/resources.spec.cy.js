@@ -8,6 +8,7 @@ describe("Resources page", () => {
             cy.intercept("/**", (req) => {
                 req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
             });
+            return;
         });
 
         it("goes to resources page from homepage", () => {

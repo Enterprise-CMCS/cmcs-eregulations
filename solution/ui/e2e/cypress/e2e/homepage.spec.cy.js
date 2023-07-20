@@ -13,6 +13,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             "**/v3/resources/federal_register_docs?page=1&page_size=3&paginate=true",
             { fixture: "frdocs.json" }
         ).as("frdocs");
+        return
     });
 
     it("loads the homepage", () => {

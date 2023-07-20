@@ -4,6 +4,7 @@ describe("Custom Request Headers", () => {
             req.headers["x-automated-test"] =
                 Cypress.env("DEPLOYING");
         }).as("headers");
+        return
     });
 
     it("has custom testing header x-automated-test added to every request", () => {

@@ -4,6 +4,7 @@ describe("Part View", () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         }).as("headers");
+        return;
     });
 
     it("loads part 433", () => {

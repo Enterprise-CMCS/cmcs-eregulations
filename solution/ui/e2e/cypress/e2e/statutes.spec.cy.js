@@ -7,6 +7,7 @@ describe("Statute Table", () => {
         cy.intercept(`**/v3/statutes`, {
             fixture: "statutes.json"
         }).as("statutes");
+        return;
     });
 
     it("checks a11y for search page", () => {
