@@ -1,10 +1,9 @@
 import re
 
 from django.db import models
-from common.fields import VariableDateField
+from common.fields import VariableDateField, NaturalSortField
 from django_jsonform.models.fields import ArrayField
 from solo.models import SingletonModel
-from common.fields import NaturalSortField
 
 
 ROMAN_TABLE = [
