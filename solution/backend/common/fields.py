@@ -1,6 +1,4 @@
 # Contains custom fields for use throughout eRegs
-
-
 import datetime
 import re
 
@@ -37,7 +35,8 @@ class VariableDateField(models.CharField):
                 ),
             ],
         }}
-        return super().__init__(*args, **kwargs)
+
+        super().__init__(*args, **kwargs)
 
 
 class NaturalSortField(models.CharField):
