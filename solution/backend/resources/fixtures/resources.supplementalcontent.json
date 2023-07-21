@@ -666,8 +666,8 @@
     "model": "resources.supplementalcontent",
     "pk": 52,
     "fields": {
-        "internal_notes": null,
-        "date": null,
+        "internal_notes": "",
+        "date": "2020-03",
         "name": null,
         "description": "Medicaid Disaster Relief for the COVID-19 National Emergency State Plan Amendment Instructions",
         "url": "https://www.medicaid.gov/state-resource-center/downloads/medicaid-disaster-relief-spa-instructions.pdf",
@@ -3657,7 +3657,7 @@
     "pk": 287,
     "fields": {
         "internal_notes": "References 45 CFR part 95; subpart F seems most relevant -BG; added 45 CFR 433 subpart C, 441.725 & other explicit references.",
-        "date": "2021-10-20",
+        "date": "2019-11-27",
         "name": null,
         "description": "Guidance on Coordinating Care Provided by Out-of-State Providers for Children with Medically Complex Conditions",
         "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib102021.pdf",
@@ -3819,19 +3819,6 @@
         "url": "https://www.medicaid.gov/medicaid/quality-of-care/downloads/cmcs-sdf-webinar.pdf",
         "name_sort": "pathways to improving children's oral health using silver diamine fluoride",
         "description_sort": "advancing prevention and reducing childhood caries in medicaid and chip learning collaborative: webinar #00000001"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 300,
-    "fields": {
-        "internal_notes": null,
-        "date": null,
-        "name": null,
-        "description": "Medicaid Disaster Relief for the COVID-19 National Emergency SPA Template",
-        "url": "https://www.medicaid.gov/state-resource-center/downloads/medicaid-disaster-relief-spa-template.docx",
-        "name_sort": null,
-        "description_sort": "medicaid disaster relief for the covid-00000019 national emergency spa template"
     }
 },
 {
@@ -5125,7 +5112,7 @@
     "model": "resources.supplementalcontent",
     "pk": 404,
     "fields": {
-        "internal_notes": null,
+        "internal_notes": "removed 440.130 - not substantially germane",
         "date": "2013-07-05",
         "name": null,
         "description": "Release of Eligibility Final Rule and CHIPRA Outreach Grants",
@@ -5723,7 +5710,7 @@
     "model": "resources.supplementalcontent",
     "pk": 452,
     "fields": {
-        "internal_notes": "Added query string to URL to make it unique -BG",
+        "internal_notes": "Added query string to URL to make it unique -BG\r\nPer DBC request, remove link to 440.100 (Dental Services). State Medicaid Manual (SMM)has incorrect reference to dental services.  Per TOC, Sec 4330 but 4330 is no longer included in publicly available version of Chapter 4 SMM.  Since SMM does not provide relevant info for dental services, removing link to 440.100 to avoid confusion.",
         "date": null,
         "name": "Chapter 4 - State Medicaid Manual",
         "description": "Services",
@@ -7387,7 +7374,7 @@
     "model": "resources.supplementalcontent",
     "pk": 581,
     "fields": {
-        "internal_notes": null,
+        "internal_notes": "REMOVED 440.120  - topic unrelated",
         "date": "2012-03-23",
         "name": null,
         "description": "Initiative to Reduce Avoidable Hospitalizations among Nursing Facility Residents",
@@ -10544,19 +10531,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 834,
-    "fields": {
-        "internal_notes": null,
-        "date": "2019-11-27",
-        "name": null,
-        "description": "New Reporting Measures for Substance Use Disorder (SUD)-focused Health Homes",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib112719.pdf",
-        "name_sort": null,
-        "description_sort": "new reporting measures for substance use disorder (sud)-focused health homes"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 835,
     "fields": {
         "internal_notes": null,
@@ -12145,7 +12119,7 @@
     "model": "resources.supplementalcontent",
     "pk": 960,
     "fields": {
-        "internal_notes": null,
+        "internal_notes": "Removed 440.120; added 440.130  which is more germane to topic",
         "date": "2011-11-18",
         "name": null,
         "description": "Tobacco Cessation Telephone Quitlines",
@@ -12275,7 +12249,7 @@
     "model": "resources.supplementalcontent",
     "pk": 970,
     "fields": {
-        "internal_notes": null,
+        "internal_notes": "remove 440.130 - not substantially related",
         "date": "2013-01-14",
         "name": null,
         "description": "Medicaid Eligibility, Benefits, and Appeals",
@@ -13770,7 +13744,7 @@
     "model": "resources.supplementalcontent",
     "pk": 1087,
     "fields": {
-        "internal_notes": null,
+        "internal_notes": "removed 44.0.120 not  related to topic",
         "date": "2006-09-19",
         "name": "SMDL #06-020",
         "description": "National Provider Identifiers",
@@ -17657,7 +17631,7 @@
     "model": "resources.supplementalcontent",
     "pk": 1396,
     "fields": {
-        "internal_notes": "Corrected typo in description; added abbreviation -BG",
+        "internal_notes": "Corrected typo in description; added abbreviation -BG\r\nPer request by DBC's TDs on 6/26/23 removed as resource for 440.160 & 441.151 (inpatient psych services for under 21)",
         "date": "2020-12-30",
         "name": "SHO# 20-005",
         "description": "RE: Mandatory Medicaid State Plan Coverage of Medication Assisted Treatment (MAT)",
@@ -21193,7 +21167,7 @@
     "model": "resources.supplementalcontent",
     "pk": 1719,
     "fields": {
-        "internal_notes": "",
+        "internal_notes": "Removed references to 440.120 and 440.130 as not substantially germane to doc.  Topic is on Medicare reforms in general.",
         "date": "2014-07",
         "name": null,
         "description": "Medicaid Moving Forward: Improving Care & Transforming Medicaid Delivery Systems, Issue 2",
@@ -24326,7 +24300,7 @@
     "model": "resources.supplementalcontent",
     "pk": 2377,
     "fields": {
-        "internal_notes": "",
+        "internal_notes": "REMOVED 440.130 - not substantially germane",
         "date": "2022-06-03",
         "name": "SMD# 22-002",
         "description": "RE: Updated Reporting Requirements and Extension of Deadline to Fully Expend State Funds Under American Rescue Plan Act of 2021 Section 9817",
@@ -25945,6 +25919,58 @@
         "url": "https://www.medicaid.gov/resources-for-states/downloads/state-strategies-to-prevent-procedural-terminations.pdf",
         "name_sort": null,
         "description_sort": "state strategies to minimize terminations for procedural reasons during the covid-00000019 unwinding period"
+    }
+},
+{
+    "model": "resources.supplementalcontent",
+    "pk": 2919,
+    "fields": {
+        "internal_notes": "",
+        "date": "2023-06-27",
+        "name": "SHO# 23-003",
+        "description": "Mandatory Medicaid and Children’s Health Insurance Program Coverage of Adult Vaccinations under the Inflation Reduction Act",
+        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/sho23003.pdf",
+        "name_sort": "sho# 00000023-00000003",
+        "description_sort": "mandatory medicaid and children’s health insurance program coverage of adult vaccinations under the inflation reduction act"
+    }
+},
+{
+    "model": "resources.supplementalcontent",
+    "pk": 2920,
+    "fields": {
+        "internal_notes": "",
+        "date": "2019-11-17",
+        "name": null,
+        "description": "",
+        "url": null,
+        "name_sort": null,
+        "description_sort": ""
+    }
+},
+{
+    "model": "resources.supplementalcontent",
+    "pk": 2921,
+    "fields": {
+        "internal_notes": "",
+        "date": "2023-06-30",
+        "name": null,
+        "description": "FAQ  for State Medicaid and CHIP Agencies: Consolidated Appropriations Act, 2023: FMAP Reduction for Failure to Meet Reporting Requirements under Section 1902(tt)(1) of the Social Security Act",
+        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/fmap-rdctn-repot-medcid-chip-agncs-06302023.pdf",
+        "name_sort": null,
+        "description_sort": "faq  for state medicaid and chip agencies: consolidated appropriations act, 00002023: fmap reduction for failure to meet reporting requirements under section 00001902(tt)(00000001) of the social security act"
+    }
+},
+{
+    "model": "resources.supplementalcontent",
+    "pk": 2922,
+    "fields": {
+        "internal_notes": "",
+        "date": "2023-06-20",
+        "name": null,
+        "description": "Non-Emergency Medical Transportation in Medicaid, 2018–2021",
+        "url": "https://www.medicaid.gov/medicaid/benefits/downloads/nemt-rtc-2018-2021.pdf",
+        "name_sort": null,
+        "description_sort": "non-emergency medical transportation in medicaid, 00002018–00002021"
     }
 }
 ]
