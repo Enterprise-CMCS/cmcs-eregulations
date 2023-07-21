@@ -35,8 +35,7 @@ class VariableDateField(models.CharField):
                 ),
             ],
         }}
-
-        super().__init__(*args, **kwargs)
+        return super().__init__(*args, **kwargs)
 
 
 class NaturalSortField(models.CharField):
