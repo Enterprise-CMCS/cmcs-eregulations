@@ -1,13 +1,15 @@
-import {resolve} from 'path'
+import { resolve } from "path";
 
-const r = (p) => resolve(__dirname, p)
+const r = (p) => resolve(__dirname, p);
 
-export const aliases = {
-    "utilities": r('./utilities'),
-    "legacy": r("../../regulations"),
-    "sharedComponents": r("../eregs-component-lib/src/components/shared-components"),
-    "eregsComponentLib": r("../regulations/eregs-component-lib"),
-    "vite": r("../regulations/eregs-vite/src"),
+export default {
     "@": r("src"),
-  }
-
+    cypress: r("../e2e/cypress"),
+    eregsComponentLib: r("../regulations/eregs-component-lib"),
+    legacy: r("../../regulations"),
+    sharedComponents: r(
+        "../eregs-component-lib/src/components/shared-components"
+    ),
+    utilities: r("./utilities"),
+    vite: r("../regulations/eregs-vite/src"),
+};
