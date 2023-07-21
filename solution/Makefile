@@ -198,8 +198,8 @@ local.seed:
 	$(foreach object, $(objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
 	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
 	$(foreach object, $(auth_objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
-
 	docker-compose exec regulations python manage.py loaddata search.synonym.json
+	docker-compose exec regulations python manage.py loaddata contenttypes.contenttype.json
 
 
 local.dump:
