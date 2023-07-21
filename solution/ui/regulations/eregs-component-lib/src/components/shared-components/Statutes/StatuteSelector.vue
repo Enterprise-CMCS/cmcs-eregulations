@@ -64,7 +64,7 @@ const isTitleActive = ({ act, title }) =>
                                 },
                             }"
                         >
-                            Title {{ title.titleRoman }} / {{ title.title }}
+                            Title {{ title.titleRoman }} [{{ title.title }}]
                         </RouterLink>
                     </h4>
                 </li>
