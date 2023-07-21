@@ -13,6 +13,7 @@ from resources.models import (
     ResourcesConfiguration,
 )
 
+
 class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
