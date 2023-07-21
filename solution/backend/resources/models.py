@@ -1,7 +1,6 @@
-import datetime
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
-from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from common.fields import VariableDateField
 from django.db import models
 from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
@@ -19,40 +18,13 @@ class InternalNotesFieldMixin(models.Model):
         abstract = True
 
 
-class DateFieldMixin(models.Model):
-    date = models.CharField(
-        max_length=10,
-        null=True,
-        blank=True,
-        help_text="Leave blank or enter one of: \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\".",
-        validators=[RegexValidator(
-            regex="^\\d{4}((-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]))|(-(0[1-9]|1[0-2])))?$",
-            message="Date field must be blank or of format \"YYYY\", \"YYYY-MM\", or \"YYYY-MM-DD\"! "
-                    "For example: 2021, 2021-01, or 2021-01-31.",
-        )],
-    )
-
-    def clean(self):
-        # If a day is entered into the date field, validate for months with less than 31 days.
-        if self.date is not None:
-            date_fields = self.date.split("-")
-            if len(date_fields) == 3:
-                (year, month, day) = date_fields
-                try:
-                    _ = datetime.date(int(year), int(month), int(day))
-                except ValueError:
-                    raise ValidationError(f'{day} is not a valid day for the month of {month}!')
-
-    class Meta:
-        abstract = True
-
-
-class TypicalResourceFieldsMixin(DateFieldMixin, InternalNotesFieldMixin):
+class TypicalResourceFieldsMixin(InternalNotesFieldMixin):
     name = models.CharField(max_length=512, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     url = models.URLField(max_length=512, null=True, blank=True)
     name_sort = NaturalSortField('name', null=True)
     description_sort = NaturalSortField('description', null=True)
+    date = VariableDateField(null=True, blank=True)
 
     class Meta:
         abstract = True
