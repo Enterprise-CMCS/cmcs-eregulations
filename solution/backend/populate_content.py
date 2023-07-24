@@ -7,9 +7,14 @@ def handler(event, context):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
     import django
     django.setup()
-
+    from django.contrib.auth.models import Group, Permission
+    from django.contrib.contenttypes.models import ContentType
     from regcore.search.models import Synonym
-    from regulations.models import StatuteLinkConverter
+    from regulations.models import (
+        SiteConfiguration,
+        StatuteLinkConfiguration,
+        StatuteLinkConverter
+    )
     from resources.models import (
         AbstractCategory,
         AbstractLocation,
@@ -37,7 +42,12 @@ def handler(event, context):
         ("resources.federalregisterdocument.json", FederalRegisterDocument),
         ("resources.resourcesconfiguration.json", ResourcesConfiguration),
         ("search.synonym.json", Synonym),
-        ("regulations.statutelinkconverter.json", StatuteLinkConverter)
+        ("regulations.siteconfiguration.json", SiteConfiguration),
+        ("regulations.statutelinkconverter.json", StatuteLinkConverter),
+        ("regulations.statutelinkconfiguration.json,", StatuteLinkConfiguration),
+        ("contenttypes.contenttype.json", ContentType),
+        ("auth.group.json", Group),
+        ("auth.permission.json", Permission)
     ]
 
     # First delete all instances of models that we're populating
