@@ -44,7 +44,7 @@ def handler(event, context):
         ("search.synonym.json", Synonym),
         ("regulations.siteconfiguration.json", SiteConfiguration),
         ("regulations.statutelinkconverter.json", StatuteLinkConverter),
-        ("regulations.statutelinkconfiguration.json,", StatuteLinkConfiguration),
+        ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
         ("contenttypes.contenttype.json", ContentType),
         ("auth.group.json", Group),
         ("auth.permission.json", Permission)
