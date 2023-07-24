@@ -23,12 +23,12 @@ const props = defineProps({
         }"
     >
         <div class="cell__title">
-            {{ cellData.title }}
+            {{ props.cellData.title }}
         </div>
         <template v-if="cellData.subtitles">
             <div
                 v-for="(subtitle, i) in cellData.subtitles"
-                :key="`${displayType}-subtitle-${i}`"
+                :key="`${props.displayType}-subtitle-${i}`"
                 class="cell__subtitle"
             >
                 {{ subtitle }}

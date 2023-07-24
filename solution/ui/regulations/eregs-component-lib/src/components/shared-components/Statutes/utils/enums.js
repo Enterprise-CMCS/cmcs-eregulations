@@ -1,7 +1,7 @@
+const ACT_TYPES = [
+    { aca: "Affordable Care Act" },
+    { ssa: "Social Security Act" },
+];
 const DISPLAY_TYPES = ["table", "list"];
-const TABLE_TYPES = ["aca", "ssa"];
 
-export {
-    DISPLAY_TYPES,
-    TABLE_TYPES,
-};
+export { ACT_TYPES, DISPLAY_TYPES };

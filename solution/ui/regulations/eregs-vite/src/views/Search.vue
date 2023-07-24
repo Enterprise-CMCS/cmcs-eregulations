@@ -16,6 +16,7 @@
                     <HeaderLinks
                         :about-url="aboutUrl"
                         :resources-url="resourcesUrl"
+                        :statutes-url="statutesUrl"
                     />
                 </template>
                 <template #search>
@@ -218,6 +219,10 @@ export default {
         searchUrl: {
             type: String,
             default: "/search/",
+        },
+        statutesUrl: {
+            type: String,
+            default: "/statutes/",
         },
     },
 
