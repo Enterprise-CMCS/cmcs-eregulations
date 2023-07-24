@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.sitemaps.views import sitemap
-
+from django.contrib.auth import views as auth_views #new
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
 from regulations.rss_feeds import ResourceFeed
 
@@ -31,6 +31,7 @@ urlpatterns = [
     path('', include('regcore.urls')),
     path('', include('regulations.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
+    path('admin/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'), #new
     path('admin/', admin.site.urls, name="admin"),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('__debug__/', include('debug_toolbar.urls')),

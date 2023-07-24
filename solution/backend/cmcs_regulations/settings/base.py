@@ -120,14 +120,37 @@ LOGGING = {
         },
     },
 }
+# In settings.py
 
+# Okta
+OKTA_DOMAIN = os.environ.get("OKTA_DOMAIN")
+OKTA_TOKEN = os.environ.get("OKTA_TOKEN")
+
+# User information
+USER_CRM_ID = None
+USER_EMAIL = None
+
+# Okta Admin
+# OKTA_ADMIN_DOMAIN = OKTA_DOMAIN
+# OIDC_RP_SIGN_ALGO = "RS256"
+# OIDC_OP_JWKS_ENDPOINT = f"{OKTA_ADMIN_DOMAIN}/oauth2/v1/keys"
+# OIDC_OP_AUTHORIZATION_ENDPOINT = f"{OKTA_ADMIN_DOMAIN}/oauth2/v1/authorize"
+# OIDC_OP_TOKEN_ENDPOINT = f"{OKTA_ADMIN_DOMAIN}/oauth2/v1/token"
+# OIDC_OP_USER_ENDPOINT = f"{OKTA_ADMIN_DOMAIN}/oauth2/v1/userinfo"
+# OIDC_RP_SCOPES = "openid profile email groups"
+# OIDC_RP_CLIENT_ID = os.environ.get("OKTA_ADMIN_CLIENT_ID")
+# OIDC_RP_CLIENT_SECRET = os.environ.get("OKTA_ADMIN_CLIENT_SECRET")
+# OIDC_VERIFY_SSL = True
+LOGIN_REDIRECT_URL = f"{STATIC_URL}/admin/"
+OIDC_REDIRECT_URL = f"{STATIC_URL}/admin/oidc/callback/"
+# OIDC_AUTH_REQUEST_EXTRA_PARAMS = {"redirect_uri": OIDC_REDIRECT_URL}
 WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "OPTIONS": {
             "context_processors": (
-                # "django.contrib.auth.context_processors.auth",
+                "django.contrib.auth.context_processors.auth",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
@@ -145,16 +168,14 @@ TEMPLATES = [
                 'regcore.context_processors.regcore_config',
             ),
         },
-        "DIRS": [
-            BASE_DIR / 'templates',
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
     },
 ]
 
 WSGI_APPLICATION = 'cmcs_regulations.wsgi.application'
 
-
+LOGIN_REDIRECT_URL = '/admin'
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
