@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 
 import { acaSchema, ssaSchema } from "./schemas/tableSchemas";
-import { DISPLAY_TYPES, TABLE_TYPES } from "./utils/enums";
+import { ACT_TYPES, DISPLAY_TYPES } from "./utils/enums";
 
 import BodyCell from "./table-elements/BodyCell.vue";
 import HeaderCell from "./table-elements/HeaderCell.vue";
@@ -19,7 +19,8 @@ const props = defineProps({
         default: () => [],
     },
     tableType: {
-        validator: (value) => TABLE_TYPES.includes(value),
+        validator: (value) =>
+            ACT_TYPES.map((act) => Object.keys(act)[0]).includes(value),
         required: false,
         default: "ssa",
     },

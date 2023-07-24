@@ -29,6 +29,10 @@ export default {
             type: String,
             default: "",
         },
+        statutesUrl: {
+            type: String,
+            default: "",
+        },
         host: {
             type: String,
             default: "",
@@ -46,6 +50,7 @@ export default {
             :home-url="homeUrl"
             :resources-url="resourcesUrl"
             :search-url="searchUrl"
+            :statutes-url="statutesUrl"
             :host="host"
         />
     </v-app>

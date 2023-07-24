@@ -12,7 +12,7 @@
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "vue": "^2.7.10",
-    "vue-router": "^3.2.0",
+    "vue-router": "^3.6.5",
     "vue-template-compiler": "^2.7.0",
     "vuetify": "^2.6.10"
   },

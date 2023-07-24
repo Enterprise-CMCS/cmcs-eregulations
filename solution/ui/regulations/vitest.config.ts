@@ -1,6 +1,6 @@
 import vue from "@vitejs/plugin-vue2";
 import { defineConfig } from "vite";
-import { aliases } from './alias.js'
+import aliases from './alias.js'
 
 // This is for vue2.  When we make the transition to 3 this must change.
 
