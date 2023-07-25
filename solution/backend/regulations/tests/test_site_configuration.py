@@ -51,7 +51,7 @@ class SiteConfigurationTest(unittest.TestCase):
 
     def test_site_configuration_str(self):
         site_config = SiteConfiguration.get_solo()
-        expected_str = 'Configure crawling for whole site and dates for statute sources'
+        expected_str = 'Site Configuration'
         self.assertEqual(str(site_config), expected_str)
 
     def test_site_configuration_valid_date_type(self):
