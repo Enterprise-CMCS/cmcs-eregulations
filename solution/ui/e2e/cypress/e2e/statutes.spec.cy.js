@@ -4,7 +4,7 @@ describe("Statute Table", () => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
 
-        cy.intercept(`**/v3/statutes`, {
+        cy.intercept(`**/v3/statutes**`, {
             fixture: "statutes.json",
         }).as("statutes");
     });
@@ -38,7 +38,7 @@ describe("Statute Table", () => {
     });
 
     it("displays as a list at widths narrower than 1024px", () => {
-        cy.viewport(1023, 768);
+        cy.viewport(1023, 1000);
         cy.visit("/statutes");
         cy.get("#statuteTable").should("not.exist");
         cy.get("#statuteList").should("be.visible");
