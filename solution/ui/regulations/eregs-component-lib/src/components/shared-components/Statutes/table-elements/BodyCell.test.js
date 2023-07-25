@@ -10,7 +10,9 @@ import BodyCell from "./BodyCell.vue";
 describe("Statute Table Body Cell", () => {
     describe("SSA table type", () => {
         ssaSchema.forEach((column, index) => {
-            it(`Creates a snapshot of a body cell for column ${index + 1}`, async () => {
+            it(`Creates a snapshot of a body cell for column ${
+                index + 1
+            }`, async () => {
                 const wrapper = render(BodyCell, {
                     props: {
                         cellData: column,
@@ -20,17 +22,23 @@ describe("Statute Table Body Cell", () => {
                 await flushPromises();
                 expect(wrapper).toMatchSnapshot();
             });
+        });
 
-            it(`Creates a snapshot of a body cell for column ${index + 1} with a null source_url`, async () => {
-                const wrapper = render(BodyCell, {
-                    props: {
-                        cellData: column,
-                        statute: statutesFixture[1],
-                    },
-                });
-                await flushPromises();
-                expect(wrapper).toMatchSnapshot();
+        it("displays 'None' in Statute Compilation BodyCell when source_url is null", async () => {
+            const statuteCompilationCellSchema = ssaSchema[2];
+
+            const wrapper = render(BodyCell, {
+                props: {
+                    cellData: statuteCompilationCellSchema,
+                    statute: statutesFixture[1],
+                },
             });
+            await flushPromises();
+
+            const nullCell = wrapper.getByTestId("1302-none").textContent;
+            expect(nullCell).toEqual("None");
+
+            expect(wrapper).toMatchSnapshot();
         });
     });
 });

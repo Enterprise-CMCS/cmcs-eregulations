@@ -39,7 +39,7 @@ const props = defineProps({
                 rel="noopener noreferrer"
                 >{{ cellData.body.text(statute) }}</a
             >
-            <span v-else>None</span>
+            <span v-else :data-testid="statute.usc + '-none'">None</span>
         </template>
     </td>
 </template>
