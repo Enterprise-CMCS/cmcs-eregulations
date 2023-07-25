@@ -68,7 +68,7 @@ class SiteConfiguration(SingletonModel):
         )
 
     def __str__(self):
-        return "Configure crawling for whole site and dates for statute sources"
+        return "Site Configuration"
 
     class Meta:
         verbose_name = "Site Configuration"
