@@ -20,6 +20,17 @@ describe("Statute Table Body Cell", () => {
                 await flushPromises();
                 expect(wrapper).toMatchSnapshot();
             });
+
+            it(`Creates a snapshot of a body cell for column ${index + 1} with a null source_url`, async () => {
+                const wrapper = render(BodyCell, {
+                    props: {
+                        cellData: column,
+                        statute: statutesFixture[1],
+                    },
+                });
+                await flushPromises();
+                expect(wrapper).toMatchSnapshot();
+            });
         });
     });
 });
