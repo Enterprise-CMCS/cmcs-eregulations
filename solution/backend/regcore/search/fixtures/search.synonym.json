@@ -62,9 +62,9 @@
         "isActive": false,
         "baseWord": "MCPIRS",
         "synonyms": [
-            4,
             2,
             3,
+            4,
             75
         ]
     }
@@ -76,8 +76,8 @@
         "isActive": true,
         "baseWord": "APD",
         "synonyms": [
-            53,
-            7
+            7,
+            53
         ]
     }
 },
@@ -100,10 +100,10 @@
         "isActive": true,
         "baseWord": "T-MSIS",
         "synonyms": [
-            54,
-            56,
             9,
-            55
+            54,
+            55,
+            56
         ]
     }
 },
@@ -114,10 +114,10 @@
         "isActive": true,
         "baseWord": "Transformed Medicaid Statistical Information System",
         "synonyms": [
-            54,
             8,
-            56,
-            55
+            54,
+            55,
+            56
         ]
     }
 },
@@ -128,8 +128,8 @@
         "isActive": false,
         "baseWord": "PASRR",
         "synonyms": [
-            57,
             11,
+            57,
             67
         ]
     }
@@ -141,8 +141,8 @@
         "isActive": true,
         "baseWord": "Preadmission Screening and Resident Review",
         "synonyms": [
-            57,
             10,
+            57,
             67
         ]
     }
@@ -154,9 +154,9 @@
         "isActive": true,
         "baseWord": "ICF/ID",
         "synonyms": [
+            13,
             58,
             59,
-            13,
             196
         ]
     }
@@ -168,9 +168,9 @@
         "isActive": true,
         "baseWord": "Intermediate Care Facilities for Individuals with Intellectual Disabilities",
         "synonyms": [
+            12,
             58,
             59,
-            12,
             196
         ]
     }
@@ -183,9 +183,9 @@
         "baseWord": "PE",
         "synonyms": [
             15,
-            62,
             16,
-            17
+            17,
+            62
         ]
     }
 },
@@ -196,10 +196,10 @@
         "isActive": true,
         "baseWord": "Presumptive Eligibility",
         "synonyms": [
-            62,
-            17,
             14,
-            16
+            16,
+            17,
+            62
         ]
     }
 },
@@ -210,10 +210,10 @@
         "isActive": true,
         "baseWord": "Presumptive eligibility determined by hospitals",
         "synonyms": [
-            15,
-            62,
             14,
-            17
+            15,
+            17,
+            62
         ]
     }
 },
@@ -224,10 +224,10 @@
         "isActive": true,
         "baseWord": "Hospital PE",
         "synonyms": [
-            15,
-            62,
             14,
-            16
+            15,
+            16,
+            62
         ]
     }
 },
@@ -254,8 +254,8 @@
         "synonyms": [
             1,
             19,
-            22,
-            21
+            21,
+            22
         ]
     }
 },
@@ -268,8 +268,8 @@
         "synonyms": [
             1,
             19,
-            22,
-            20
+            20,
+            22
         ]
     }
 },
@@ -396,8 +396,8 @@
         "isActive": false,
         "baseWord": "Medicaid Loss Ratio",
         "synonyms": [
-            60,
-            31
+            31,
+            60
         ]
     }
 },
@@ -409,8 +409,8 @@
         "baseWord": "MDR",
         "synonyms": [
             34,
-            136,
-            135
+            135,
+            136
         ]
     }
 },
@@ -422,8 +422,8 @@
         "baseWord": "Medicaid Drug Rebate",
         "synonyms": [
             33,
-            136,
-            135
+            135,
+            136
         ]
     }
 },
@@ -458,8 +458,8 @@
         "isActive": true,
         "baseWord": "ELE",
         "synonyms": [
-            70,
-            38
+            38,
+            70
         ]
     }
 },
@@ -470,8 +470,8 @@
         "isActive": true,
         "baseWord": "Express Lane Eligibility",
         "synonyms": [
-            70,
-            37
+            37,
+            70
         ]
     }
 },
@@ -530,9 +530,9 @@
         "isActive": true,
         "baseWord": "MCE",
         "synonyms": [
+            44,
             63,
-            64,
-            44
+            64
         ]
     }
 },
@@ -654,10 +654,10 @@
         "isActive": true,
         "baseWord": "TMSIS",
         "synonyms": [
-            56,
             8,
             9,
-            55
+            55,
+            56
         ]
     }
 },
@@ -668,9 +668,9 @@
         "isActive": true,
         "baseWord": "Medicaid Statistical Information System",
         "synonyms": [
-            54,
             8,
             9,
+            54,
             56
         ]
     }
@@ -682,9 +682,9 @@
         "isActive": true,
         "baseWord": "MSIS",
         "synonyms": [
-            54,
             8,
             9,
+            54,
             55
         ]
     }
@@ -696,9 +696,9 @@
         "isActive": true,
         "baseWord": "PASARR",
         "synonyms": [
-            67,
             10,
-            11
+            11,
+            67
         ]
     }
 },
@@ -709,9 +709,9 @@
         "isActive": true,
         "baseWord": "ICF/IID",
         "synonyms": [
-            59,
             12,
             13,
+            59,
             196
         ]
     }
@@ -723,9 +723,9 @@
         "isActive": true,
         "baseWord": "ICF/IIDs",
         "synonyms": [
-            58,
             12,
             13,
+            58,
             196
         ]
     }
@@ -737,8 +737,8 @@
         "isActive": true,
         "baseWord": "Medical Loss Ratio",
         "synonyms": [
-            32,
-            31
+            31,
+            32
         ]
     }
 },
@@ -762,10 +762,10 @@
         "isActive": true,
         "baseWord": "HPE",
         "synonyms": [
+            14,
             15,
             16,
-            17,
-            14
+            17
         ]
     }
 },
@@ -776,8 +776,8 @@
         "isActive": true,
         "baseWord": "Managed Care Entity",
         "synonyms": [
-            64,
-            43
+            43,
+            64
         ]
     }
 },
@@ -788,8 +788,8 @@
         "isActive": false,
         "baseWord": "MMCE",
         "synonyms": [
-            63,
-            43
+            43,
+            63
         ]
     }
 },
@@ -800,9 +800,9 @@
         "isActive": true,
         "baseWord": "Preadmission Screening and Annual Resident Review",
         "synonyms": [
-            57,
+            10,
             11,
-            10
+            57
         ]
     }
 },
@@ -979,8 +979,8 @@
         "isActive": true,
         "baseWord": "American Indian and Alaskan Native",
         "synonyms": [
-            107,
             104,
+            107,
             192,
             193
         ]
@@ -1191,9 +1191,9 @@
         "isActive": true,
         "baseWord": "Medicaid Drug Rebate Program",
         "synonyms": [
-            136,
+            33,
             34,
-            33
+            136
         ]
     }
 },
@@ -1240,11 +1240,11 @@
         "baseWord": "public health emergency",
         "synonyms": [
             141,
-            536,
             531,
             533,
             534,
-            535
+            535,
+            536
         ]
     }
 },
@@ -1256,11 +1256,11 @@
         "baseWord": "PHE",
         "synonyms": [
             140,
-            536,
             531,
             533,
             534,
-            535
+            535,
+            536
         ]
     }
 },
@@ -1306,8 +1306,8 @@
         "baseWord": "institutions for mental diseases",
         "synonyms": [
             144,
-            146,
-            145
+            145,
+            146
         ]
     }
 },
@@ -1851,10 +1851,10 @@
         "isActive": true,
         "baseWord": "AIAN",
         "synonyms": [
-            192,
-            107,
             104,
-            109
+            107,
+            109,
+            192
         ]
     }
 },
@@ -1889,10 +1889,10 @@
         "isActive": true,
         "baseWord": "ICF-IIDs",
         "synonyms": [
-            58,
-            59,
             12,
-            13
+            13,
+            58,
+            59
         ]
     }
 },
@@ -2006,8 +2006,8 @@
         "isActive": true,
         "baseWord": "acquired immunodeficiency syndrome",
         "synonyms": [
-            170,
-            169
+            169,
+            170
         ]
     }
 },
@@ -2172,8 +2172,8 @@
         "isActive": true,
         "baseWord": "BHP",
         "synonyms": [
-            504,
-            229
+            229,
+            504
         ]
     }
 },
@@ -2184,8 +2184,8 @@
         "isActive": true,
         "baseWord": "Basic Health Program",
         "synonyms": [
-            504,
-            228
+            228,
+            504
         ]
     }
 },
@@ -3714,9 +3714,9 @@
         "isActive": true,
         "baseWord": "early and periodic screening, diagnostic, and treatment",
         "synonyms": [
+            39,
             40,
-            61,
-            39
+            61
         ]
     }
 },
@@ -4278,8 +4278,8 @@
         "isActive": true,
         "baseWord": "home- and community-based services",
         "synonyms": [
-            36,
-            35
+            35,
+            36
         ]
     }
 },
@@ -4399,9 +4399,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HCRIS",
-        "synonyms": [
-            437
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4410,9 +4408,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care Cost Report Information System",
-        "synonyms": [
-            436
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4421,9 +4417,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HCRP",
-        "synonyms": [
-            439
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4432,9 +4426,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "high-cost risk pool",
-        "synonyms": [
-            438
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4443,9 +4435,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HCUP",
-        "synonyms": [
-            441
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4454,9 +4444,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care Cost and Utilization Project",
-        "synonyms": [
-            440
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4465,9 +4453,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HEAT",
-        "synonyms": [
-            443
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4476,9 +4462,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care Fraud Prevention and Enforcement Action Team",
-        "synonyms": [
-            442
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4487,9 +4471,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HEDIS",
-        "synonyms": [
-            445
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4498,9 +4480,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care Effectiveness Data and Information Set",
-        "synonyms": [
-            444
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4509,9 +4489,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HHS",
-        "synonyms": [
-            447
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4520,9 +4498,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "U.S. Department of Health and Human Services",
-        "synonyms": [
-            446
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4531,9 +4507,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HIDE SNP",
-        "synonyms": [
-            449
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4542,9 +4516,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "highly integrated dual-eligible special needs plan",
-        "synonyms": [
-            448
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4553,9 +4525,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HIE",
-        "synonyms": [
-            451
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4564,9 +4534,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health information exchange",
-        "synonyms": [
-            450
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4575,9 +4543,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HIO",
-        "synonyms": [
-            453
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4586,9 +4552,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health insuring organization",
-        "synonyms": [
-            452
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4597,9 +4561,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HIPAA",
-        "synonyms": [
-            455
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4608,9 +4570,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Insurance Portability and Accountability Act",
-        "synonyms": [
-            454
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4619,9 +4579,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HIT",
-        "synonyms": [
-            457
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4630,9 +4588,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health information technology",
-        "synonyms": [
-            456
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4641,9 +4597,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HIU",
-        "synonyms": [
-            459
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4652,9 +4606,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health insurance unit",
-        "synonyms": [
-            458
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4663,9 +4615,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HMO",
-        "synonyms": [
-            461
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4674,9 +4624,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "health maintenance organization",
-        "synonyms": [
-            460
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4685,9 +4633,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HMOA",
-        "synonyms": [
-            463
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4696,9 +4642,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Maintenance Organization Act",
-        "synonyms": [
-            462
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4707,9 +4651,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HOPD",
-        "synonyms": [
-            465
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4718,9 +4660,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "hospital outpatient department",
-        "synonyms": [
-            464
-        ]
+        "synonyms": []
     }
 },
 {
@@ -5136,13 +5076,12 @@
         "isActive": true,
         "baseWord": "COVID-19",
         "synonyms": [
-            536,
+            511,
             522,
             531,
             533,
             534,
-            511,
-            535
+            536
         ]
     }
 },
@@ -5153,10 +5092,9 @@
         "isActive": true,
         "baseWord": "coronavirus",
         "synonyms": [
-            533,
-            534,
             510,
-            535
+            533,
+            534
         ]
     }
 },
@@ -5233,8 +5171,8 @@
         "isActive": true,
         "baseWord": "Coronavirus Aid, Relief, and Economic Security Act",
         "synonyms": [
-            531,
             523,
+            531,
             533,
             534,
             535
@@ -5271,9 +5209,9 @@
         "isActive": true,
         "baseWord": "Consolidated Appropriations Act of 2023",
         "synonyms": [
-            536,
             528,
-            535
+            535,
+            536
         ]
     }
 },
@@ -5284,9 +5222,9 @@
         "isActive": true,
         "baseWord": "CAA",
         "synonyms": [
-            536,
             527,
-            535
+            535,
+            536
         ]
     }
 },
@@ -5319,11 +5257,10 @@
         "isActive": true,
         "baseWord": "Conclusion of the COVID-19 Public Health Emergency",
         "synonyms": [
-            141,
             140,
-            524,
+            141,
             510,
-            535
+            524
         ]
     }
 },
@@ -5334,11 +5271,11 @@
         "isActive": false,
         "baseWord": "pandemic",
         "synonyms": [
-            141,
             140,
-            524,
+            141,
             510,
-            511
+            511,
+            524
         ]
     }
 },
@@ -5349,11 +5286,11 @@
         "isActive": false,
         "baseWord": "Coronavirus Disease 2019",
         "synonyms": [
-            141,
             140,
-            524,
+            141,
             510,
-            511
+            511,
+            524
         ]
     }
 },
@@ -5364,15 +5301,15 @@
         "isActive": false,
         "baseWord": "Returning to Regular Operations after COVID-19",
         "synonyms": [
-            391,
-            524,
-            141,
             140,
+            141,
+            391,
+            510,
+            511,
+            524,
             527,
             528,
-            531,
-            510,
-            511
+            531
         ]
     }
 },
@@ -5383,13 +5320,13 @@
         "isActive": true,
         "baseWord": "unwinding",
         "synonyms": [
-            528,
-            510,
-            522,
             140,
             141,
+            510,
+            522,
             526,
-            527
+            527,
+            528
         ]
     }
 },
@@ -5409,8 +5346,7 @@
         "isActive": true,
         "baseWord": "data sharing",
         "synonyms": [
-            578,
-            579
+            578
         ]
     }
 },
@@ -5502,8 +5438,7 @@
         "isActive": true,
         "baseWord": "data exchange",
         "synonyms": [
-            567,
-            579
+            567
         ]
     }
 },
@@ -5513,10 +5448,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "exchange of data",
-        "synonyms": [
-            567,
-            578
-        ]
+        "synonyms": []
     }
 },
 {
@@ -5537,8 +5469,7 @@
         "synonyms": [
             600,
             601,
-            602,
-            603
+            602
         ]
     }
 },
@@ -5562,11 +5493,10 @@
         "isActive": true,
         "baseWord": "intergovernmental transfers",
         "synonyms": [
-            600,
             599,
+            600,
             601,
-            602,
-            603
+            602
         ]
     }
 },
@@ -5577,9 +5507,8 @@
         "isActive": true,
         "baseWord": "inter-governmental transfers",
         "synonyms": [
-            601,
             599,
-            603
+            601
         ]
     }
 },
@@ -5589,11 +5518,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Intergovernmental transfers",
-        "synonyms": [
-            601,
-            602,
-            599
-        ]
+        "synonyms": []
     }
 },
 {
@@ -5692,8 +5617,7 @@
         "isActive": true,
         "baseWord": "ILOS",
         "synonyms": [
-            673,
-            674
+            673
         ]
     }
 },
@@ -5704,8 +5628,7 @@
         "isActive": true,
         "baseWord": "in lieu of services",
         "synonyms": [
-            672,
-            674
+            672
         ]
     }
 },
@@ -5715,10 +5638,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "ILOSs",
-        "synonyms": [
-            672,
-            673
-        ]
+        "synonyms": []
     }
 },
 {

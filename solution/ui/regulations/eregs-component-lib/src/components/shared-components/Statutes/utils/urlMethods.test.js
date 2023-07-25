@@ -21,12 +21,18 @@ describe("Statute Table URL methods", () => {
     });
 
     describe("statuteCompilationUrl", () => {
-        it("returns expected URL string", async () => {
+        it("returns expected URL string if source_url is valid", async () => {
             const statuteItem = statutesFixture[0];
             const computedUrl = statuteCompilationUrl(statuteItem);
             expect(computedUrl).toEqual(
                 "https://www.govinfo.gov/content/pkg/COMPS-8763/pdf/COMPS-8763.pdf"
             );
+        });
+
+        it("returns null if source_url is null", async () => {
+            const statuteItem = statutesFixture[1];
+            const computedUrl = statuteCompilationUrl(statuteItem);
+            expect(computedUrl).toBeNull();
         });
     });
 

@@ -10,12 +10,15 @@ const houseGovUrl = ({ title, usc }) =>`https://uscode.house.gov/view.xhtml?hl=f
 /**
  * @param {string} souce_url - URL containing COMPS number
  *
- * @returns {string} url - url to GovInfo.gov page displaying Statute Compilation PDF
+ * @returns {string | null} url - url to GovInfo.gov page displaying Statute Compilation PDF
  */
 const statuteCompilationUrl = ({ source_url }) => {
+    if (!source_url) return null;
+
     const compsNumber = source_url
         .split("/")
         .find((str) => str.includes("COMPS"));
+
     return `https://www.govinfo.gov/content/pkg/${compsNumber}/pdf/${compsNumber}.pdf`;
 };
 
