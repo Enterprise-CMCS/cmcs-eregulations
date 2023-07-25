@@ -117,7 +117,7 @@ If adding a new model to this process please refer to the adding a new model pro
 
 1.  Connect to the VPN and run the following command below for postgresql in the command line.  Replace db_address and port_number with the database address and port number respectively.  A file called `backup.sql` should populate in the directory the command is run in.
 ```
-pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' -t 'regulations_statute*' --data-only --column-inserts eregs
+pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' -t 'regulations_*' -t 'auth_g*' -t 'auth_permission' -t 'django_content_type' --data-only --column-inserts eregs
 ```
 2. Run the command `make python.emptyseedtables`.  This will clear out many of our resources tables and the synonym table for population of the database.
 3. Run the postges script `backup.sql` produced in step 2 on your local database.  This will update your database with up to date production data. 

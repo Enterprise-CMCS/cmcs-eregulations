@@ -77,7 +77,6 @@ const getStatutesArray = async () => {
 watch(
     () => $route.query,
     (newParams, oldParams) => {
-        console.log("watch route", newParams, oldParams);
         queryParams.value = {
             act: newParams.act,
             title: newParams.title,

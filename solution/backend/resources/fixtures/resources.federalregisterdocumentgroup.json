@@ -2077,12 +2077,5 @@
     "fields": {
         "docket_number_prefixes": "[\"CMS-2434-\"]"
     }
-},
-{
-    "model": "resources.federalregisterdocumentgroup",
-    "pk": 402,
-    "fields": {
-        "docket_number_prefixes": "[\"CMS-3415-F, CMS-3414-F, CMS-3401-\"]"
-    }
 }
 ]
