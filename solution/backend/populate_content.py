@@ -45,9 +45,9 @@ def handler(event, context):
         ("regulations.siteconfiguration.json", SiteConfiguration),
         ("regulations.statutelinkconverter.json", StatuteLinkConverter),
         ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
-        ("contenttypes.contenttype.json", ContentType),
-        ("auth.group.json", Group),
-        ("auth.permission.json", Permission)
+        ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
+        ("cmcs_regulations/fixtures/auth.group.json", Group),
+        ("cmcs_regulations/fixtures/auth.permission.json", Permission)
     ]
 
     # First delete all instances of models that we're populating
