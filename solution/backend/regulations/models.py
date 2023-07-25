@@ -1,8 +1,6 @@
-import re
-
 from django.db import models
 from common.fields import VariableDateField, NaturalSortField
-from django_jsonform.models.fields import ArrayField
+from django_jsonform.models.fields import JSONField
 from solo.models import SingletonModel
 
 
@@ -93,25 +91,67 @@ class StatuteLinkConfiguration(SingletonModel):
     link_statute_refs = models.BooleanField(
         default=True,
         help_text="Should eRegs link statutes of the form \"Section 1902 of the Act\" to house.gov?",
+        verbose_name="Link Statute Refs",
     )
 
     link_usc_refs = models.BooleanField(
         default=True,
         help_text="Should eRegs link statutes of the form \"42 U.S.C. 123(a)\" to house.gov?",
+        verbose_name="Link U.S.C. Refs",
     )
 
-    do_not_link = ArrayField(
-        models.TextField(),
+    statute_ref_exceptions = JSONField(
         default=list,
         blank=True,
-        help_text="Regulation text that is listed here will not be automatically linked.",
+        help_text="Statute references that are listed here will not be automatically linked.",
+        verbose_name="Statute Ref Exceptions",
+        schema={
+            "type": "list",
+            "minItems": 0,
+            "items": {
+                "type": "dict",
+                "keys": {
+                    "act": {
+                        "type": "string",
+                        "default": "Social Security Act",
+                        "placeholder": "Social Security Act",
+                        "required": True,
+                    },
+                    "section": {
+                        "type": "string",
+                        "required": True,
+                        "placeholder": "1902(a)(1)(C)",
+                    },
+                },
+            },
+        },
     )
 
-    def save(self, *args, **kwargs):
-        for i in range(len(self.do_not_link)):
-            # Convert do_not_link inputs to lowercase and remove "act" from the end, if it exists (needed due to regex limits)
-            self.do_not_link[i] = re.sub(r"\bact\s*$", "", self.do_not_link[i].lower()).strip()
-        super().save(*args, **kwargs)
+    usc_ref_exceptions = JSONField(
+        default=list,
+        blank=True,
+        help_text="U.S.C. references that are listed here will not be automatically linked.",
+        verbose_name="U.S.C. Ref Exceptions",
+        schema={
+            "type": "list",
+            "minItems": 0,
+            "items": {
+                "type": "dict",
+                "keys": {
+                    "title": {
+                        "type": "integer",
+                        "required": True,
+                        "placeholder": 42,
+                    },
+                    "section": {
+                        "type": "string",
+                        "required": True,
+                        "placeholder": "1902(a)(1)(C)",
+                    },
+                },
+            },
+        },
+    )
 
     def __str__(self):
         return "Statute Link Configuration"
