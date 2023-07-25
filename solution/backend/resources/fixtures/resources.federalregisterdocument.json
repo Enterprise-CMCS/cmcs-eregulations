@@ -801,7 +801,7 @@
     "model": "resources.federalregisterdocument",
     "pk": 1984,
     "fields": {
-        "internal_notes": "I updated the locations in our database that were incorrectly showing \"42\" for the 45 locations; approved. -Britta",
+        "internal_notes": "I updated the locations in our database that were incorrectly showing \"42\" for the 45 locations; approved. -Britta; \r\nremoved 440.130 - mot substamtoially relevatnt",
         "date": "2013-07-15",
         "name": "78 FR 42159",
         "description": "Medicaid and Children's Health Insurance Programs: Essential Health Benefits in Alternative Benefit Plans, Eligibility Notices, Fair Hearing and Appeal Processes, and Premiums and Cost Sharing; Exchanges: Eligibility and Enrollment",
@@ -4278,7 +4278,7 @@
     "model": "resources.federalregisterdocument",
     "pk": 2168,
     "fields": {
-        "internal_notes": null,
+        "internal_notes": "Per DBC/TD's request, added 42 CFR 440.160 as related regulation to this document. SA\r\nRemoved addition of 440.160 as request was not specific to this FR.",
         "date": "2001-01-22",
         "name": "66 FR 7147",
         "description": "Medicaid Program; Use of Restraint and Seclusion in Psychiatric Residential Treatment Facilities Providing Psychiatric Services to Individuals Under Age 21",
@@ -10871,7 +10871,7 @@
     "model": "resources.federalregisterdocument",
     "pk": 2591,
     "fields": {
-        "internal_notes": "",
+        "internal_notes": "removed 440.120 & 440.130  - not substantially germane\r\nThis FR  basically is renumbering regulations - it provides no substantive content.\r\nSuggest removing most of t he regs linked as not substaintailly related.",
         "date": "1978-09-29",
         "name": "43 FR 45176",
         "description": "Reorganization and Rewriting",
@@ -10890,7 +10890,7 @@
     "model": "resources.federalregisterdocument",
     "pk": 2592,
     "fields": {
-        "internal_notes": "",
+        "internal_notes": "Removed references to 440.60, 440.120, 440.130 - FR is only renaming regulations and is not related to the actual topic of the regulations linked.  Recommend delinking currently tagged regs for same reason.\r\nAdded links back per discussion on 7/3/23.",
         "date": "1978-01-17",
         "name": "43 FR 2413",
         "description": "Reorganization and Rewrite of Medicaid Regulations",
@@ -13436,19 +13436,19 @@
     "model": "resources.federalregisterdocument",
     "pk": 2916,
     "fields": {
-        "internal_notes": null,
+        "internal_notes": "",
         "date": "2023-06-05",
         "name": "88 FR 36485",
         "description": "Medicare and Medicaid Programs; Policy and Regulatory Changes to the Omnibus COVID-19 Health Care Staff Vaccination Requirements; Additional Policy and Regulatory Changes to the Requirements for Long-Term Care (LTC) Facilities and Intermediate Care Facilities for Individuals With Intellectual Disabilities (ICFs-IID) To Provide COVID-19 Vaccine Education and Offer Vaccinations to Residents, Clients, and Staff; Policy and Regulatory Changes to the Long Term Care Facility COVID-19 Testing Requirements",
         "url": "https://www.federalregister.gov/documents/2023/06/05/2023-11449/medicare-and-medicaid-programs-policy-and-regulatory-changes-to-the-omnibus-covid-19-health-care",
         "name_sort": "00000088 fr 00036485",
         "description_sort": "medicare and medicaid programs; policy and regulatory changes to the omnibus covid-00000019 health care staff vaccination requirements; additional policy and regulatory changes to the requirements for long-term care (ltc) facilities and intermediate care ",
-        "docket_numbers": "[\"CMS-3415-F, CMS-3414-F, CMS-3401-F\"]",
+        "docket_numbers": "[\"CMS-3415-F\", \"CMS-3414-F\", \"CMS-3401-F\"]",
         "document_number": "2023-11449",
         "correction": false,
         "withdrawal": false,
         "doc_type": "Final",
-        "group": 402
+        "group": 267
     }
 },
 {

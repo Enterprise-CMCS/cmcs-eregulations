@@ -1,0 +1,11 @@
+[
+{
+    "model": "regulations.statutelinkconfiguration",
+    "pk": 1,
+    "fields": {
+        "link_statute_refs": true,
+        "link_usc_refs": true,
+        "do_not_link": "[]"
+    }
+}
+]

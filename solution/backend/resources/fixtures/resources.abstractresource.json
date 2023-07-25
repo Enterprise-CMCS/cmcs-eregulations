@@ -1044,7 +1044,7 @@
     "pk": 52,
     "fields": {
         "created_at": "2021-10-25T16:50:27.720",
-        "updated_at": "2023-03-15T08:02:43.632",
+        "updated_at": "2023-07-01T16:43:48.488",
         "approved": true,
         "category": 12,
         "location_history": [],
@@ -1677,14 +1677,30 @@
     "pk": 81,
     "fields": {
         "created_at": "2021-10-25T16:50:28.153",
-        "updated_at": "2023-04-20T20:10:28.196",
+        "updated_at": "2023-06-30T13:09:03.317",
         "approved": true,
         "category": 7,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-06-30 13:09:03.317374",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 27,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 60
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             359,
             26,
-            27,
             44,
             51,
             29,
@@ -6536,7 +6552,7 @@
     "pk": 287,
     "fields": {
         "created_at": "2021-10-25T16:50:31.303",
-        "updated_at": "2023-05-04T19:29:33.788",
+        "updated_at": "2023-06-30T13:58:19.674",
         "approved": true,
         "category": 9,
         "location_history": [
@@ -6599,6 +6615,38 @@
                     }
                 ],
                 "bulk_adds": []
+            },
+            {
+                "date": "2023-06-30 13:38:08.262128",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            },
+            {
+                "date": "2023-06-30 13:53:47.621645",
+                "user": "sambegaokar",
+                "removals": [],
+                "additions": [
+                    {
+                        "id": 27,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 60
+                    }
+                ],
+                "bulk_adds": []
             }
         ],
         "locations": [
@@ -6608,7 +6656,7 @@
             333,
             364,
             36,
-            44,
+            27,
             405,
             449,
             442,
@@ -6846,50 +6894,6 @@
             450,
             452,
             573
-        ],
-        "related_resources": []
-    }
-},
-{
-    "model": "resources.abstractresource",
-    "pk": 300,
-    "fields": {
-        "created_at": "2021-10-25T16:50:31.245",
-        "updated_at": "2023-03-15T08:02:43.625",
-        "approved": true,
-        "category": 12,
-        "location_history": [],
-        "locations": [
-            122,
-            243,
-            236,
-            108,
-            110,
-            248,
-            116,
-            180,
-            96,
-            100,
-            106,
-            249,
-            255,
-            282,
-            304,
-            313,
-            280,
-            742,
-            44,
-            60,
-            69,
-            787,
-            467,
-            488,
-            497,
-            728,
-            730,
-            738,
-            729,
-            498
         ],
         "related_resources": []
     }
@@ -8904,10 +8908,27 @@
     "pk": 404,
     "fields": {
         "created_at": "2021-10-27T12:16:54.616",
-        "updated_at": "2023-03-15T08:02:46.973",
+        "updated_at": "2023-07-01T19:05:47.656",
         "approved": true,
         "category": 9,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 19:05:47.656506",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             6,
             7,
@@ -8937,7 +8958,6 @@
             314,
             794,
             356,
-            51,
             37,
             41,
             74,
@@ -10147,10 +10167,27 @@
     "pk": 452,
     "fields": {
         "created_at": "2021-12-10T16:33:56.404",
-        "updated_at": "2023-04-04T16:59:23.403",
+        "updated_at": "2023-07-03T15:41:42.640",
         "approved": true,
         "category": 8,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-03 15:41:42.640640",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 32,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 100
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             713,
             737,
@@ -10163,7 +10200,6 @@
             57,
             15,
             2,
-            32,
             50,
             44,
             51,
@@ -12971,12 +13007,28 @@
     "pk": 581,
     "fields": {
         "created_at": "2021-10-27T16:31:48.665",
-        "updated_at": "2023-03-15T08:02:47.298",
+        "updated_at": "2023-07-01T16:08:53.326",
         "approved": true,
         "category": 9,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 16:08:53.326667",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
-            44,
             775,
             52
         ],
@@ -18270,22 +18322,6 @@
 },
 {
     "model": "resources.abstractresource",
-    "pk": 834,
-    "fields": {
-        "created_at": "2021-10-25T16:50:38.797",
-        "updated_at": "2023-03-15T08:02:44.787",
-        "approved": true,
-        "category": 9,
-        "location_history": [],
-        "locations": [
-            200,
-            44
-        ],
-        "related_resources": []
-    }
-},
-{
-    "model": "resources.abstractresource",
     "pk": 835,
     "fields": {
         "created_at": "2021-10-25T16:50:38.813",
@@ -20580,13 +20616,39 @@
     "pk": 960,
     "fields": {
         "created_at": "2021-10-27T17:11:33.288",
-        "updated_at": "2023-03-15T08:02:47.368",
+        "updated_at": "2023-07-01T16:13:06.469",
         "approved": true,
         "category": 9,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 16:13:06.468977",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    }
+                ],
+                "additions": [
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             203,
-            44,
+            51,
             53
         ],
         "related_resources": []
@@ -20778,10 +20840,27 @@
     "pk": 970,
     "fields": {
         "created_at": "2021-10-27T13:49:27.769",
-        "updated_at": "2023-03-15T08:02:47.120",
+        "updated_at": "2023-07-01T19:12:07.101",
         "approved": true,
         "category": 9,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 19:12:07.101137",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             675,
             6,
@@ -20861,7 +20940,6 @@
             255,
             97,
             12,
-            51,
             37,
             41,
             74,
@@ -23096,14 +23174,30 @@
     "pk": 1087,
     "fields": {
         "created_at": "2021-10-25T16:50:41.669",
-        "updated_at": "2023-03-15T08:02:47.920",
+        "updated_at": "2023-07-01T16:20:37.319",
         "approved": true,
         "category": 7,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 16:20:37.319174",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             79,
             75,
-            44,
             520,
             527
         ],
@@ -29961,18 +30055,41 @@
     "pk": 1396,
     "fields": {
         "created_at": "2021-10-25T16:50:33.830",
-        "updated_at": "2023-04-20T20:20:24.378",
+        "updated_at": "2023-07-03T14:26:43.159",
         "approved": true,
         "category": 6,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-03 14:26:43.159434",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 30,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 160
+                    },
+                    {
+                        "id": 403,
+                        "part": 441,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1134,
+                        "section_id": 151
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             51,
             29,
-            30,
             9,
             55,
             402,
-            403,
             472
         ],
         "related_resources": []
@@ -36048,10 +36165,35 @@
     "pk": 1719,
     "fields": {
         "created_at": "2022-04-05T21:23:50.732",
-        "updated_at": "2023-03-15T08:02:46.708",
+        "updated_at": "2023-07-01T15:55:51.754",
         "approved": true,
         "category": 13,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 15:55:51.754361",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    },
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             675,
             670,
@@ -36068,8 +36210,6 @@
             369,
             373,
             352,
-            44,
-            51,
             42,
             18,
             392,
@@ -40088,7 +40228,7 @@
     "pk": 1945,
     "fields": {
         "created_at": "2022-05-20T15:44:04.775",
-        "updated_at": "2023-03-29T13:10:23.642",
+        "updated_at": "2023-07-01T19:02:34.371",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -40265,7 +40405,7 @@
     "pk": 1948,
     "fields": {
         "created_at": "2022-05-20T15:44:06.825",
-        "updated_at": "2023-03-29T13:10:23.759",
+        "updated_at": "2023-07-01T19:02:34.427",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -40286,7 +40426,7 @@
     "pk": 1949,
     "fields": {
         "created_at": "2022-05-20T15:44:07.037",
-        "updated_at": "2023-03-29T13:10:23.780",
+        "updated_at": "2023-07-01T19:02:34.439",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -41524,7 +41664,7 @@
     "pk": 1974,
     "fields": {
         "created_at": "2022-05-20T15:44:23.819",
-        "updated_at": "2023-03-29T13:10:23.625",
+        "updated_at": "2023-07-01T19:02:34.357",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -41581,7 +41721,7 @@
     "pk": 1976,
     "fields": {
         "created_at": "2022-05-20T15:44:30.873",
-        "updated_at": "2023-03-29T13:10:23.658",
+        "updated_at": "2023-07-01T19:02:34.382",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -42125,10 +42265,27 @@
     "pk": 1984,
     "fields": {
         "created_at": "2022-05-20T15:44:55.793",
-        "updated_at": "2023-03-29T13:10:23.690",
+        "updated_at": "2023-07-01T19:02:34.404",
         "approved": true,
         "category": 67,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 19:02:34.340086",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             6,
             7,
@@ -42158,7 +42315,6 @@
             12,
             794,
             356,
-            51,
             37,
             41,
             74,
@@ -46746,7 +46902,7 @@
     "pk": 2151,
     "fields": {
         "created_at": "2022-05-20T15:50:15.363",
-        "updated_at": "2023-03-15T08:02:48.786",
+        "updated_at": "2023-07-12T14:59:28.163",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -46769,7 +46925,9 @@
             2130,
             2191
         ],
-        "related_resources": []
+        "related_resources": [
+            2916
+        ]
     }
 },
 {
@@ -47301,7 +47459,7 @@
     "pk": 2166,
     "fields": {
         "created_at": "2022-05-20T15:50:46.550",
-        "updated_at": "2023-03-15T08:02:49.676",
+        "updated_at": "2023-07-03T17:49:50.899",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -47324,7 +47482,7 @@
     "pk": 2167,
     "fields": {
         "created_at": "2022-05-20T15:50:49.557",
-        "updated_at": "2023-03-15T08:02:49.682",
+        "updated_at": "2023-07-03T17:49:50.905",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -47342,10 +47500,43 @@
     "pk": 2168,
     "fields": {
         "created_at": "2022-05-20T15:50:49.653",
-        "updated_at": "2023-03-15T08:02:49.692",
+        "updated_at": "2023-07-03T17:49:50.913",
         "approved": true,
         "category": 67,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-03 16:54:57.852745",
+                "user": "sambegaokar",
+                "removals": [],
+                "additions": [
+                    {
+                        "id": 30,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 160
+                    }
+                ],
+                "bulk_adds": []
+            },
+            {
+                "date": "2023-07-03 17:49:50.887651",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 30,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 160
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             403,
             2269,
@@ -52662,10 +52853,27 @@
     "pk": 2377,
     "fields": {
         "created_at": "2022-06-08T15:56:56.825",
-        "updated_at": "2023-03-15T08:02:43.927",
+        "updated_at": "2023-07-01T17:46:23.846",
         "approved": true,
         "category": 7,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 17:46:23.846587",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             3,
             16,
@@ -52674,7 +52882,6 @@
             359,
             57,
             15,
-            51,
             1,
             73,
             17,
@@ -53528,15 +53735,15 @@
             3307
         ],
         "related_resources": [
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -54374,15 +54581,15 @@
         "locations": [],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765
@@ -58910,7 +59117,7 @@
     "pk": 2588,
     "fields": {
         "created_at": "2022-08-19T17:32:36.824",
-        "updated_at": "2023-03-15T08:02:50.374",
+        "updated_at": "2023-07-03T17:14:48.455",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -59083,10 +59290,43 @@
     "pk": 2591,
     "fields": {
         "created_at": "2022-08-22T15:29:02.935",
-        "updated_at": "2023-03-15T08:02:50.402",
+        "updated_at": "2023-07-03T17:14:48.463",
         "approved": true,
         "category": 67,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 16:29:21.172319",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            },
+            {
+                "date": "2023-07-01 19:26:57.037707",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             956,
             121,
@@ -59268,8 +59508,6 @@
             2,
             32,
             50,
-            44,
-            51,
             29,
             900,
             30,
@@ -59516,10 +59754,59 @@
     "pk": 2592,
     "fields": {
         "created_at": "2022-08-22T16:43:22.466",
-        "updated_at": "2023-03-15T08:02:50.414",
+        "updated_at": "2023-07-03T17:14:48.471",
         "approved": true,
         "category": 67,
-        "location_history": [],
+        "location_history": [
+            {
+                "date": "2023-07-01 16:31:45.438069",
+                "user": "sambegaokar",
+                "removals": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    },
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "additions": [],
+                "bulk_adds": []
+            },
+            {
+                "date": "2023-07-03 17:14:48.037685",
+                "user": "sambegaokar",
+                "removals": [],
+                "additions": [
+                    {
+                        "id": 44,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 120
+                    },
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    }
+                ],
+                "bulk_adds": []
+            }
+        ],
         "locations": [
             956,
             121,
@@ -65929,14 +66216,14 @@
         ],
         "related_resources": [
             2393,
-            2758,
             2754,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -65956,14 +66243,14 @@
         "locations": [],
         "related_resources": [
             2393,
-            2758,
             2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -65983,14 +66270,14 @@
         "locations": [],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -66010,14 +66297,14 @@
         "locations": [],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -66037,14 +66324,14 @@
         "locations": [],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -66064,14 +66351,14 @@
         "locations": [],
         "related_resources": [
             2393,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -66117,14 +66404,14 @@
         ],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2761,
+            2762,
             2763,
             2764,
             2765,
@@ -66144,14 +66431,14 @@
         "locations": [],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
+            2762,
             2763,
             2764,
             2765,
@@ -66178,12 +66465,12 @@
         ],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
+            2758,
             2760,
             2761,
             2763,
@@ -66213,15 +66500,15 @@
         ],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2764,
             2765,
             2434
@@ -66248,15 +66535,15 @@
         ],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2765,
             2434
@@ -66278,15 +66565,15 @@
         ],
         "related_resources": [
             2393,
-            2758,
-            2753,
             2754,
+            2753,
             2755,
             2756,
             2757,
-            2762,
+            2758,
             2760,
             2761,
+            2762,
             2763,
             2764,
             2434
@@ -68327,7 +68614,7 @@
     "pk": 2814,
     "fields": {
         "created_at": "2023-03-29T13:10:14.169",
-        "updated_at": "2023-03-29T13:10:23.674",
+        "updated_at": "2023-07-01T19:02:34.393",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -68517,7 +68804,7 @@
     "pk": 2818,
     "fields": {
         "created_at": "2023-03-29T13:10:23.465",
-        "updated_at": "2023-03-29T13:10:23.713",
+        "updated_at": "2023-07-01T19:02:34.415",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -74737,7 +75024,7 @@
     "pk": 2905,
     "fields": {
         "created_at": "2023-05-08T21:26:43.887",
-        "updated_at": "2023-05-09T14:28:36.855",
+        "updated_at": "2023-07-03T13:42:55.898",
         "approved": true,
         "category": 9,
         "location_history": [
@@ -74882,6 +75169,22 @@
                     }
                 ],
                 "bulk_adds": []
+            },
+            {
+                "date": "2023-07-03 13:42:55.897999",
+                "user": "rbruno",
+                "removals": [],
+                "additions": [
+                    {
+                        "id": 96,
+                        "part": 435,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 888,
+                        "section_id": 916
+                    }
+                ],
+                "bulk_adds": []
             }
         ],
         "locations": [
@@ -74891,6 +75194,7 @@
             224,
             1039,
             799,
+            96,
             99,
             401,
             1152,
@@ -75948,7 +76252,7 @@
     "pk": 2916,
     "fields": {
         "created_at": "2023-06-03T22:00:38.885",
-        "updated_at": "2023-06-03T22:00:42.637",
+        "updated_at": "2023-07-12T14:59:28.154",
         "approved": true,
         "category": 67,
         "location_history": [],
@@ -75970,7 +76274,9 @@
             2130,
             2191
         ],
-        "related_resources": []
+        "related_resources": [
+            2151
+        ]
     }
 },
 {
@@ -76119,6 +76425,284 @@
             348,
             350,
             577
+        ],
+        "related_resources": []
+    }
+},
+{
+    "model": "resources.abstractresource",
+    "pk": 2919,
+    "fields": {
+        "created_at": "2023-06-27T14:15:40.569",
+        "updated_at": "2023-06-27T14:21:27.514",
+        "approved": true,
+        "category": 6,
+        "location_history": [
+            {
+                "date": "2023-06-27 14:15:40.589004",
+                "user": "sambegaokar",
+                "removals": [],
+                "additions": [
+                    {
+                        "id": 24,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 10
+                    },
+                    {
+                        "id": 25,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 20
+                    },
+                    {
+                        "id": 26,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 50
+                    },
+                    {
+                        "id": 27,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 60
+                    },
+                    {
+                        "id": 2,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 90
+                    },
+                    {
+                        "id": 51,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 130
+                    },
+                    {
+                        "id": 72,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1128,
+                        "section_id": 345
+                    },
+                    {
+                        "id": 60,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1128,
+                        "section_id": 347
+                    },
+                    {
+                        "id": 493,
+                        "part": 447,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1195,
+                        "section_id": 56
+                    },
+                    {
+                        "id": 712,
+                        "part": 447,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1208,
+                        "section_id": 415
+                    },
+                    {
+                        "id": 574,
+                        "part": 457,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1377,
+                        "section_id": 410
+                    },
+                    {
+                        "id": 610,
+                        "part": 457,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1384,
+                        "section_id": 520
+                    },
+                    {
+                        "id": 1845,
+                        "part": 147,
+                        "type": "section",
+                        "title": 45,
+                        "parent": null,
+                        "section_id": 130
+                    },
+                    {
+                        "id": 3709,
+                        "part": 156,
+                        "type": "section",
+                        "title": 45,
+                        "parent": null,
+                        "section_id": 110
+                    },
+                    {
+                        "id": 3601,
+                        "part": 156,
+                        "type": "section",
+                        "title": 45,
+                        "parent": null,
+                        "section_id": 115
+                    }
+                ],
+                "bulk_adds": []
+            },
+            {
+                "date": "2023-06-27 14:21:27.514324",
+                "user": "sambegaokar",
+                "removals": [],
+                "additions": [
+                    {
+                        "id": 380,
+                        "part": 438,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1071,
+                        "section_id": 4
+                    },
+                    {
+                        "id": 359,
+                        "part": 438,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1071,
+                        "section_id": 6
+                    },
+                    {
+                        "id": 708,
+                        "part": 457,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1361,
+                        "section_id": 160
+                    },
+                    {
+                        "id": 174,
+                        "part": 457,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1407,
+                        "section_id": 1203
+                    }
+                ],
+                "bulk_adds": []
+            }
+        ],
+        "locations": [
+            380,
+            359,
+            24,
+            25,
+            26,
+            27,
+            2,
+            51,
+            72,
+            60,
+            493,
+            712,
+            708,
+            574,
+            610,
+            174,
+            1845,
+            3709,
+            3601
+        ],
+        "related_resources": []
+    }
+},
+{
+    "model": "resources.abstractresource",
+    "pk": 2920,
+    "fields": {
+        "created_at": "2023-06-30T13:54:00.573",
+        "updated_at": "2023-06-30T13:54:00.573",
+        "approved": true,
+        "category": null,
+        "location_history": [],
+        "locations": [],
+        "related_resources": []
+    }
+},
+{
+    "model": "resources.abstractresource",
+    "pk": 2921,
+    "fields": {
+        "created_at": "2023-06-30T17:05:20.380",
+        "updated_at": "2023-07-01T15:23:27.992",
+        "approved": true,
+        "category": 10,
+        "location_history": [],
+        "locations": [],
+        "related_resources": []
+    }
+},
+{
+    "model": "resources.abstractresource",
+    "pk": 2922,
+    "fields": {
+        "created_at": "2023-07-10T14:48:57.778",
+        "updated_at": "2023-07-10T14:48:57.791",
+        "approved": true,
+        "category": 19,
+        "location_history": [
+            {
+                "date": "2023-07-10 14:48:57.791490",
+                "user": "rbruno",
+                "removals": [],
+                "additions": [
+                    {
+                        "id": 28,
+                        "part": 431,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 985,
+                        "section_id": 53
+                    },
+                    {
+                        "id": 48,
+                        "part": 440,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 1124,
+                        "section_id": 170
+                    },
+                    {
+                        "id": 453,
+                        "part": 441,
+                        "type": "section",
+                        "title": 42,
+                        "parent": 889,
+                        "section_id": 62
+                    }
+                ],
+                "bulk_adds": []
+            }
+        ],
+        "locations": [
+            28,
+            48,
+            453
         ],
         "related_resources": []
     }
