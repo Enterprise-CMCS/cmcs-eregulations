@@ -17,17 +17,22 @@ const props = defineProps({
         required: false,
         default: "19",
     },
+    titles: {
+        type: Array,
+        required: false,
+        default: () => [],
+    },
 });
 
-const isActActive = ({ act }) => act === props.selectedAct;
+const isActActive = ({ act }) => act == props.selectedAct;
 const isTitleActive = ({ act, title }) =>
-    act === props.selectedAct && title === props.selectedTitle;
+    act === props.selectedAct && title == props.selectedTitle;
 </script>
 
 <template>
     <ul class="acts__list">
         <li
-            v-for="(value, key, i) in titleSelectorList"
+            v-for="(value, key, i) in titles"
             :key="`${key}-${i}`"
             class="acts-list__item"
         >
