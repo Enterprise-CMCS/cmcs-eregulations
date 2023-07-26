@@ -1,11 +1,16 @@
-// SSA
+/* eslint-disable camelcase */
+/* eslint-disable eqeqeq */
+
+// SSA table URL methods
+
 /**
  * @param {number} title - CFR title (ex: 42)
  * @param {string} usc - USC section
  *
  * @returns {string} url - url to the House.gov page for the USC section
  */
-const houseGovUrl = ({ title, usc }) =>`https://uscode.house.gov/view.xhtml?hl=false&edition=prelim&req=granuleid%3AUSC-prelim-title${title}-section${usc}`;
+const houseGovUrl = ({ title, usc }) =>
+    `https://uscode.house.gov/view.xhtml?hl=false&edition=prelim&req=granuleid%3AUSC-prelim-title${title}-section${usc}`;
 
 /**
  * @param {string} souce_url - URL containing COMPS number
