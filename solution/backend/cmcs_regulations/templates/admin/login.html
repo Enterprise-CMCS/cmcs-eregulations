@@ -22,4 +22,7 @@
    <div class="okta_login_container">
        Or Login With&nbsp; <a href="https://www.google.com/">EUA</a>
    </div>
+   {% if form.errors %}
+    <p>Invalid credentials.  Please contact an EREGS administrator if you need access.</p>
+  {% endif %}
 {% endblock %}
