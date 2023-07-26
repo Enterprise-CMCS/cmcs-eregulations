@@ -1,0 +1,25 @@
+{% extends "admin/login.html" %}
+
+{% block title %}E-Regulations Admin Login{% endblock %}
+
+
+{% block content %}
+    {% block extrastyle %}
+        {{ block.super }}
+        <style>
+            #content-main {
+                float: none !important;
+            }
+
+            .okta_login_container {
+                margin-top: 15px;
+                display: flex;
+                justify-content: center;
+            }
+        </style>
+    {% endblock %}
+   {{ block.super }}
+   <div class="okta_login_container">
+       Or Login With&nbsp; <a href="https://www.google.com/">EUA</a>
+   </div>
+{% endblock %}
