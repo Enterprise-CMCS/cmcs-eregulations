@@ -33,7 +33,11 @@ const statuteCompilationUrl = ({ source_url }) => {
  *
  * @returns {string} url - url to the SSA.gov page for the SSA section
  */
-const ssaGovUrl = ({ statute_title, section }) => `https://www.ssa.gov/OP_Home/ssact/title${statute_title}/${section}.htm`;
+const ssaGovUrl = ({ statute_title, section }) => {
+    const title = statute_title == "16" ? "16b" : statute_title;
+
+    return `https://www.ssa.gov/OP_Home/ssact/title${title}/${section}.htm`;
+};
 
 /**
  * @param {number} title - CFR title (ex: 42)
@@ -41,6 +45,7 @@ const ssaGovUrl = ({ statute_title, section }) => `https://www.ssa.gov/OP_Home/s
  *
  * @returns {string} url - url to GovInfo.gov PDF page for USC Code
  */
-const usCodeUrl = ({ title, usc }) => `https://www.govinfo.gov/link/uscode/${title}/${usc}`;
+const usCodeUrl = ({ title, usc }) =>
+    `https://www.govinfo.gov/link/uscode/${title}/${usc}`;
 
 export { houseGovUrl, usCodeUrl, statuteCompilationUrl, ssaGovUrl };
