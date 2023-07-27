@@ -139,9 +139,9 @@ class StatuteLinkConfiguration(SingletonModel):
                 "type": "dict",
                 "keys": {
                     "title": {
-                        "type": "integer",
+                        "type": "string",
                         "required": True,
-                        "placeholder": 42,
+                        "placeholder": "42",
                     },
                     "section": {
                         "type": "string",
@@ -152,6 +152,20 @@ class StatuteLinkConfiguration(SingletonModel):
             },
         },
     )
+
+    @property
+    def statute_ref_exceptions_dict(self):
+        out = {}
+        for i in self.statute_ref_exceptions:
+            out.setdefault(i["act"], []).append(i["section"])
+        return out
+
+    @property
+    def usc_ref_exceptions_dict(self):
+        out = {}
+        for i in self.usc_ref_exceptions:
+            out.setdefault(i["title"], []).append(i["section"])
+        return out
 
     def __str__(self):
         return "Statute Link Configuration"

@@ -73,7 +73,13 @@ class ReaderView(CitationContextMixin, TemplateView):
                 "title": title,
                 "usc": usc,
             }
-        statute_link_config = StatuteLinkConfiguration.objects.values().first()
+        statute_link_config = StatuteLinkConfiguration.get_solo()
+        statute_link_config = {
+            "link_statute_refs": statute_link_config.link_statute_refs,
+            "link_usc_refs": statute_link_config.link_usc_refs,
+            "statute_ref_exceptions": statute_link_config.statute_ref_exceptions_dict,
+            "usc_ref_exceptions": statute_link_config.usc_ref_exceptions_dict,
+        }
 
         c = {
             'tree':         tree,
