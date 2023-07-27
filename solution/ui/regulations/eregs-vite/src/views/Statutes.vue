@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router/composables";
 
 import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
