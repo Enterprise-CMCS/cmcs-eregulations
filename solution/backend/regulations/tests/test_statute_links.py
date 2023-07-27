@@ -228,6 +228,10 @@ class TestStatuteLinkConfiguration(TestCase):
                     "title": "42",
                     "usc": "abc",
                 },
+                "456": {
+                    "title": "42",
+                    "usc": "xyz",
+                },
             },
         }
         self.template = Template("{% load link_statutes %}{% link_statutes paragraph link_conversions link_config as text %}"
