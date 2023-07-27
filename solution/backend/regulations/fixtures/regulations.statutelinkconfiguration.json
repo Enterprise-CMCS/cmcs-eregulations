@@ -5,7 +5,8 @@
     "fields": {
         "link_statute_refs": true,
         "link_usc_refs": true,
-        "do_not_link": "[]"
+        "statute_ref_exceptions": [],
+        "usc_ref_exceptions": []
     }
 }
 ]
