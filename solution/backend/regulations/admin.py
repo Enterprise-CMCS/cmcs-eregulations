@@ -9,7 +9,7 @@ from django.urls import path, reverse
 
 import requests
 from solo.admin import SingletonModelAdmin
-from defusedxml.minidom import parse
+from defusedxml.minidom import parseString
 
 from .models import (
     SiteConfiguration,
@@ -155,7 +155,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def parse_toc(self, text):
         try:
-            dom = parse(text)
+            dom = parseString(text)
         except Exception as e:
             raise ValidationError(f"invalid XML detected: {str(e)}")
 
