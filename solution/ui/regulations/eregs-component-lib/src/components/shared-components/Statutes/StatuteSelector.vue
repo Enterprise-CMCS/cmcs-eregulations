@@ -22,8 +22,6 @@ const props = defineProps({
     },
 });
 
-console.log("Titles", props.titles);
-
 const isActActive = ({ act }) => act === props.selectedAct;
 const isTitleActive = ({ act, title }) =>
     act === props.selectedAct && title === props.selectedTitle;

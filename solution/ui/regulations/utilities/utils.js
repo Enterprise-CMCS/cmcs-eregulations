@@ -768,17 +768,17 @@ const romanize = (num) => {
     ).str;
 };
 
+const getActAbbr = ({ act, actTypes }) =>
+    Object.keys(
+        actTypes.find((actTypeObj) => Object.values(actTypeObj).includes(act))
+    )[0];
+
 const shapeTitlesResponse = ({ actsResults, actTypes }) => {
     const returnObj = {};
 
     // reshape acts response to what we need
     actsResults.forEach((title) => {
-        const actAbbr = Object.keys(
-            actTypes.find((actTypeObj) =>
-                Object.values(actTypeObj).includes(title.act)
-            )
-        )[0];
-
+        const actAbbr = getActAbbr({ act: title.act, actTypes });
         if (!returnObj[actAbbr]) {
             returnObj[actAbbr] = {
                 name: title.act,
@@ -794,7 +794,6 @@ const shapeTitlesResponse = ({ actsResults, actTypes }) => {
 
     return returnObj;
 };
-
 
 export {
     addMarks,
@@ -812,6 +811,7 @@ export {
     formatDate,
     formatResourceCategories,
     generateId,
+    getActAbbr,
     getCategoryTree,
     getCurrentPageResultsRange,
     getDisplayName,
