@@ -20,12 +20,15 @@ def handler(event, context):
     except Exception as e:
         raise Exception(f"Failed to connect to the database: {str(e)}")
 
-    try:
-        with connection.cursor() as cursor:
-            db_name = os.environ.get('STAGE', '')
-            query = f"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{db_name}'"
-            cursor.execute(query)
-            cursor.execute(f"DROP DATABASE {db_name}")
-            print(f"Database {db_name} has been removed")
-    except ProgrammingError as e:
-        print(f"Database was not deleted, most likely because it does not exist: {str(e)}")
+    db_name = os.environ.get('STAGE', '')
+    if db_name.lower() != "prod":
+        try:
+            with connection.cursor() as cursor:
+                query = f"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{db_name}'"  # noqa: S608
+                cursor.execute(query)
+                cursor.execute(f"DROP DATABASE {db_name}")
+                print(f"Database {db_name} has been removed")
+        except ProgrammingError as e:
+            print(f"Database was not deleted, most likely because it does not exist: {str(e)}")
+    else:
+        print("Cannot delete database through this process.")

@@ -19,3 +19,4 @@ ruff
 pytest
 pytest-django==4.5
 pre-commit
+defusedxml
