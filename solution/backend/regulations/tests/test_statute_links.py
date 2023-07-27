@@ -139,7 +139,8 @@ class LinkStatutesTestCase(SimpleTestCase):
         link_config = {
             "link_statute_refs": True,
             "link_usc_refs": True,
-            "do_not_link": [],
+            "statute_ref_exceptions": {},
+            "usc_ref_exceptions": {},
         }
 
         with open("regulations/tests/fixtures/section_link_tests.json", "r") as f:
