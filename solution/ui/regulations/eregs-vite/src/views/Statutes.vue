@@ -4,6 +4,7 @@ import { useRoute } from "vue-router/composables";
 
 import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
 import { getStatutes, getStatutesActs } from "utilities/api";
+import { shapeTitlesResponse } from "utilities/utils";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
@@ -71,32 +72,12 @@ const getActTitles = async () => {
     }
 };
 
-const parsedTitles = computed(() => {
-    const returnObj = {};
-
-    // reshape acts response to what we need
-    acts.value.results.forEach((title) => {
-        const actAbbr = Object.keys(
-            ACT_TYPES.find((actTypeObj) =>
-                Object.values(actTypeObj).includes(title.act)
-            )
-        )[0];
-
-        if (!returnObj[actAbbr]) {
-            returnObj[actAbbr] = {
-                name: title.act,
-                titles: [],
-            };
-        }
-
-        returnObj[actAbbr].titles.push({
-            title: title.title.toString(),
-            titleRoman: title.title_roman,
-        });
-    });
-
-    return returnObj;
-});
+const parsedTitles = computed(() =>
+    shapeTitlesResponse({
+        actsResults: acts.value.results,
+        actTypes: ACT_TYPES,
+    })
+);
 
 // Statutes -- state and fetch method
 const statutes = ref({

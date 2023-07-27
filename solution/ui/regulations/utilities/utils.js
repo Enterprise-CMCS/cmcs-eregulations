@@ -768,6 +768,34 @@ const romanize = (num) => {
     ).str;
 };
 
+const shapeTitlesResponse = ({ actsResults, actTypes }) => {
+    const returnObj = {};
+
+    // reshape acts response to what we need
+    actsResults.forEach((title) => {
+        const actAbbr = Object.keys(
+            actTypes.find((actTypeObj) =>
+                Object.values(actTypeObj).includes(title.act)
+            )
+        )[0];
+
+        if (!returnObj[actAbbr]) {
+            returnObj[actAbbr] = {
+                name: title.act,
+                titles: [],
+            };
+        }
+
+        returnObj[actAbbr].titles.push({
+            title: title.title.toString(),
+            titleRoman: title.title_roman,
+        });
+    });
+
+    return returnObj;
+};
+
+
 export {
     addMarks,
     addQueryParams,
@@ -806,6 +834,7 @@ export {
     removeQueryParams,
     romanize,
     scrollToElement,
+    shapeTitlesResponse,
     stripQuotes,
     swallowError,
     trapFocus,

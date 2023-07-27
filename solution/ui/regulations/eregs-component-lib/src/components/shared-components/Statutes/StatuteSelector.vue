@@ -16,11 +16,13 @@ const props = defineProps({
         default: "19",
     },
     titles: {
-        type: Array,
+        type: Object,
         required: false,
-        default: () => [],
+        default: () => {},
     },
 });
+
+console.log("Titles", props.titles);
 
 const isActActive = ({ act }) => act === props.selectedAct;
 const isTitleActive = ({ act, title }) =>
