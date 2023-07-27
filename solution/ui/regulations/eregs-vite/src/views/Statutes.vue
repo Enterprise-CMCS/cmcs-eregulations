@@ -51,7 +51,7 @@ const queryParams = ref({
     title: $route?.query?.title ?? "19",
 });
 
-// Act titles -- state and fetch method
+// Act titles -- state, fetch method, parse method
 const acts = ref({
     results: [],
     loading: true,
@@ -74,6 +74,7 @@ const getActTitles = async () => {
 const parsedTitles = computed(() => {
     const returnObj = {};
 
+    // reshape acts response to what we need
     acts.value.results.forEach((title) => {
         const actAbbr = Object.keys(
             ACT_TYPES.find((actTypeObj) =>
@@ -89,7 +90,7 @@ const parsedTitles = computed(() => {
         }
 
         returnObj[actAbbr].titles.push({
-            title: title.title,
+            title: title.title.toString(),
             titleRoman: title.title_roman,
         });
     });
@@ -205,16 +206,14 @@ getStatutesArray();
             <div id="main-content" class="statute__container">
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
                     <div class="content__selector">
-                        <div class="selector__parent">
-                            <h3>Included Statute</h3>
-                            <StatuteSelector
-                                v-if="!acts.loading"
-                                :loading="statutes.loading"
-                                :selected-act="queryParams.act"
-                                :selected-title="queryParams.title"
-                                :titles="parsedTitles"
-                            />
-                        </div>
+                        <h3>Included Statute</h3>
+                        <StatuteSelector
+                            v-if="!acts.loading"
+                            :loading="statutes.loading"
+                            :selected-act="queryParams.act"
+                            :selected-title="queryParams.title"
+                            :titles="parsedTitles"
+                        />
                     </div>
                     <div
                         class="table__parent"

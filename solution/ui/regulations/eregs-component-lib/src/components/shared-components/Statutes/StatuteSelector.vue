@@ -1,6 +1,4 @@
 <script setup>
-import { titleSelectorList } from "./schemas/listSchemas";
-
 const props = defineProps({
     loading: {
         type: Boolean,
@@ -24,9 +22,9 @@ const props = defineProps({
     },
 });
 
-const isActActive = ({ act }) => act == props.selectedAct;
+const isActActive = ({ act }) => act === props.selectedAct;
 const isTitleActive = ({ act, title }) =>
-    act === props.selectedAct && title == props.selectedTitle;
+    act === props.selectedAct && title === props.selectedTitle;
 </script>
 
 <template>
