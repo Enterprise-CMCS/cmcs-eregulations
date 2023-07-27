@@ -187,14 +187,16 @@ getStatutesArray();
             <div id="main-content" class="statute__container">
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
                     <div class="content__selector">
-                        <h3>Included Statute</h3>
-                        <StatuteSelector
-                            v-if="!acts.loading"
-                            :loading="statutes.loading"
-                            :selected-act="queryParams.act"
-                            :selected-title="queryParams.title"
-                            :titles="parsedTitles"
-                        />
+                        <div class="selector__parent">
+                            <h3>Included Statute</h3>
+                            <StatuteSelector
+                                v-if="!acts.loading"
+                                :loading="statutes.loading"
+                                :selected-act="queryParams.act"
+                                :selected-title="queryParams.title"
+                                :titles="parsedTitles"
+                            />
+                        </div>
                     </div>
                     <div
                         class="table__parent"
