@@ -1,5 +1,4 @@
 import re
-from xml.dom import minidom
 
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
@@ -10,6 +9,7 @@ from django.urls import path, reverse
 
 import requests
 from solo.admin import SingletonModelAdmin
+from defusedxml.minidom import parseString
 
 from .models import (
     SiteConfiguration,
@@ -155,7 +155,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def parse_toc(self, text):
         try:
-            dom = minidom.parseString(text)
+            dom = parseString(text)
         except Exception as e:
             raise ValidationError(f"invalid XML detected: {str(e)}")
 
@@ -209,7 +209,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         except ValidationError:
             raise ValidationError(f"{url} is not a valid URL." if url else "you must enter a URL.")
 
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
         conversions, matches, failures = self.import_conversions(response.text, url, act)
         if conversions or failures:

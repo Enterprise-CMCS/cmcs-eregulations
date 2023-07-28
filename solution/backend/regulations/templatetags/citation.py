@@ -16,7 +16,7 @@ def citation(citation, autoescape=True):
         citation = conditional_escape(citation)
     citation = linkify(citation)
 
-    return mark_safe(citation)  # nosec
+    return mark_safe(citation)  # nosec # noqa: S308
 
 
 def linkify(citation):
