@@ -36,4 +36,5 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('latest/feed/', ResourceFeed()),
+    path('oidc/', include('mozilla_django_oidc.urls')),
 ]
