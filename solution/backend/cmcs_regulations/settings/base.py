@@ -121,6 +121,7 @@ LOGGING = {
     },
 }
 
+WORKING_DIR = os.environ.get("WORKING_DIR", "/var/lib/eregs")
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
