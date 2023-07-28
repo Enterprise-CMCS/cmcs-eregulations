@@ -38,6 +38,6 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('latest/feed/', ResourceFeed()),
 ]
-admin.site.site_header = "e-Regs"
-admin.site.site_title = 'e-Regs Admin Panel'
-admin.site.index_title = 'Medicaid & CHIP eRgulations Admin Panel'
+admin.site.site_header = "eRegs"
+admin.site.site_title = 'eRegs Admin Panel'
+admin.site.index_title = 'Medicaid & CHIP eRegulations Admin Panel'
