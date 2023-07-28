@@ -3,11 +3,11 @@ DJANGO_SETTINGS_MODULE = "cmcs_regulations.settings.test_settings"
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
-select = ["E", "F"]
+select = ["E", "F", "G", "S", "W", "ASYNC"]
 ignore = []
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["E", "F"]
+fixable = ["E", "F", "W"]
 unfixable = []
 
 # Exclude a variety of commonly ignored directories.

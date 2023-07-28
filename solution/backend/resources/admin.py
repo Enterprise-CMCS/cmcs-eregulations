@@ -87,7 +87,7 @@ class LocationAdmin(BaseAdmin):
                                           args=(child.id,)), str(child))
                                  for child in obj.resources.all()])
         if display_text:
-            return mark_safe(display_text)
+            return mark_safe(display_text)  # noqa: S308
         return "-"
 
     def get_queryset(self, request):
@@ -305,7 +305,7 @@ class ResourceForm(forms.ModelForm):
     bulk_locations = forms.CharField(
                         widget=forms.Textarea,
                         required=False,
-                        help_text=mark_safe("Add a list of locations separated by a comma.  " +
+                        help_text=mark_safe("Add a list of locations separated by a comma.  " +  # noqa: S308
                                             "ex. 42 430.10, 42 430 Subpart B, 45 18.150 " +
                                             "<a href='https://docs.google.com/document/d/1HKjg5pUQn" +
                                             "RP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#' " +
@@ -368,7 +368,7 @@ class ResourceForm(forms.ModelForm):
                                           args=(res['id'],)), res['type'] + " " + str(res['name']))
                                  for res in resources)
         if display_text:
-            return mark_safe(display_text)
+            return mark_safe(display_text)  # noqa: S308
         return "-"
 
     def clean(self):
@@ -438,7 +438,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                                   reverse('admin:{}_{}_change'.format("resources", "supplementalcontent"),
                                           args=(obj.id,)), obj.name)
         if display_text:
-            return mark_safe(display_text)
+            return mark_safe(display_text)  # noqa: S308
         return "-"
 
     def add_content(self, reader):
