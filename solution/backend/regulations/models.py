@@ -1,8 +1,13 @@
+import re
+
 from django.db import models
 from common.fields import VariableDateField, NaturalSortField
 from django_jsonform.models.fields import JSONField
 from solo.models import SingletonModel
 
+
+DASH_PATTERN = r"[-—–-–]|&#x2013;"
+DASH_REGEX = re.compile(DASH_PATTERN, re.IGNORECASE)
 
 ROMAN_TABLE = [
     [1000, "M"],
@@ -87,6 +92,12 @@ class SiteConfiguration(SingletonModel):
         verbose_name = "Site Configuration"
 
 
+def convert_dashes(exceptions):
+    for i in exceptions:
+        i["section"] = DASH_REGEX.sub("-", i["section"])
+    return exceptions
+
+
 class StatuteLinkConfiguration(SingletonModel):
     link_statute_refs = models.BooleanField(
         default=True,
@@ -105,6 +116,7 @@ class StatuteLinkConfiguration(SingletonModel):
         blank=True,
         help_text="Statute references that are listed here will not be automatically linked.",
         verbose_name="Statute Ref Exceptions",
+        pre_save_hook=convert_dashes,
         schema={
             "type": "list",
             "minItems": 0,
@@ -132,6 +144,7 @@ class StatuteLinkConfiguration(SingletonModel):
         blank=True,
         help_text="U.S.C. references that are listed here will not be automatically linked.",
         verbose_name="U.S.C. Ref Exceptions",
+        pre_save_hook=convert_dashes,
         schema={
             "type": "list",
             "minItems": 0,
