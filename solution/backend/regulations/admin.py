@@ -196,7 +196,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
                     section_append = SECTION_APPEND_REGEX.match(label)
                     if section_append:
                         section += DASH_REGEX.sub("-", section_append.group(1).strip())
-                        label = SECTION_APPEND_REGEX.sub("", label).strip()
+                        label = SECTION_APPEND_REGEX.sub("", label, 1).strip()
                     toc[section] = {
                         "name": label,
                         "statute_title": title,
