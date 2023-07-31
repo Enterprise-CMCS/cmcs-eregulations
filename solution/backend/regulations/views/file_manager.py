@@ -1,10 +1,9 @@
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, View
 from django.shortcuts import render
-from ..integrations.box_integrations import  get_authorization_url, get_oauth
+from ..integrations.box_integrations import get_authorization_url, get_oauth
 from boxsdk import Client
 from boxsdk.object.file import File
-
 
 
 class BoxCallbackView(View):
