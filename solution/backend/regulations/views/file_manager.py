@@ -1,61 +1,64 @@
 from django.shortcuts import redirect
-from django.views.generic import TemplateView
-from ..integrations.box_integrations import get_box_client, get_authorization_url
+from django.views.generic import TemplateView, View
+from django.shortcuts import render
+from ..integrations.box_integrations import  get_authorization_url, get_oauth
+from boxsdk import Client
+from boxsdk.object.file import File
+
+
+
+class BoxCallbackView(View):
+    def get(self, request, *args, **kwargs):
+
+        # TBD - Implement the error handling will print the error for now.
+        code = request.GET.get('code')
+        state = request.GET.get('state')
+        error = request.GET.get('error')
+        error_description = request.GET.get('error_description')
+
+        if not state:
+            print("Invalid CSRF token. Authentication failed.")
+        if error == 'access_denied':
+            print("You denied access to this application.")
+
+        if error_description:
+            print(f"Error: {error_description}")
+
+        # Create an instance of OAuth2
+        oauth = get_oauth()
+
+        # Authenticate the box_client
+        oauth.authenticate(code)
+        box_client = Client(oauth)
+
+        # Render the file_manager.html template with the retrieved files
+        context = self.get_context_data(box_client=box_client)
+        return render(request, 'regulations/file_manager.html', context)
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        box_client = kwargs.get('box_client')
+
+        if box_client:
+            # TBD - get the correct folder id. For now its the root folder which is zero.
+            root_folder = box_client.folder(folder_id='0')
+
+            items = root_folder.get_items(limit=10, offset=0)
+
+            files = []
+            for item in items:
+                if isinstance(item, File):
+                    files.append(item)
+
+            context['files'] = files
+
+        return context
 
 
 class FileManagerView(TemplateView):
     template_name = 'regulations/file_manager.html'
 
     def get(self, request, *args, **kwargs):
-        # Check if the request contains the authorization code
-        auth_url, csrf_token = get_authorization_url()
-        if 'code' in request.GET:
-            # Retrieve the authorization code from the request
-            auth_code = request.GET['code']
-            # Call the authenticate method to exchange the auth code for access and refresh tokens
-            access_token, refresh_token = get_box_client().authenticate(auth_code)
-            # Store the tokens in the session
-            request.session['box_access_token'] = access_token
-            # Redirect to the FileManagerView to display the files
-            return redirect('file_manager')
         auth_url, csrf_token = get_authorization_url()
         request.session['box_csrf_token'] = csrf_token
         return redirect(auth_url)
-
-    def box_callback(self, auth_code):
-        code = request.args.get('code')
-        state = request.args.get('state')
-        error = request.args.get('error')
-        error_description = request.args.get('error_description')
-
-        user = Users.query.filter_by(csrf_token=state).first()
-        if user == None:
-            msg = 'User not found'
-        elif state != user.csrf_token:
-            msg = 'CSRF token is invalid'
-        elif error == 'access_denied':
-            msg = 'You denied access to this application'
-        else:
-            msg = error_description
-
-        if msg != None:
-            return render_template('accounts/login-box.html', msg=msg)
-
-        # Redirect to the FileManagerView to display the files
-        return redirect('file_manager')
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        access_token = self.request.GET.get('access_token')
-        if access_token:
-            box_client = get_box_client(access_token)
-            root_folder = box_client.folder(folder_id='0')
-            items = root_folder.get_items(limit=10, offset=0)
-
-            files = []
-            for item in items:
-                if isinstance(item, boxsdk.object.file.File):
-                    files.append(item)
-
-            context['files'] = files
-
-        return context
