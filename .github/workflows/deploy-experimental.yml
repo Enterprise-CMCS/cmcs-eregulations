@@ -126,6 +126,14 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev${PR}
           echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
           popd
+      - name: condtional output for prod
+        id: test2
+        if: 1 == 1
+        run: echo "works"
+      - name: condtional output for prod
+        id: test-2
+        if: 1 == 2
+        run: echo "not working right"
   test-python:
     needs: [deploy-django]
     runs-on: ubuntu-20.04
