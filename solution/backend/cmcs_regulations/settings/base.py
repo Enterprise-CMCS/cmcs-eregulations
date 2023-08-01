@@ -145,15 +145,12 @@ TEMPLATES = [
                 'regcore.context_processors.regcore_config',
             ),
         },
-        "DIRS": [
-            BASE_DIR / 'templates',
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
     },
 ]
 
 WSGI_APPLICATION = 'cmcs_regulations.wsgi.application'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

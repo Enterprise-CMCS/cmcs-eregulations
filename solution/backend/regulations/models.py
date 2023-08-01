@@ -71,21 +71,6 @@ class SiteConfiguration(SingletonModel):
         )
 
     def __str__(self):
-        date_info = []
-        for field in self.date_fields:
-            field_name = field['name']
-            field_verbose_name = field['verbose_name']
-            date_type = getattr(self, f"{field_name}_date_type")
-            date = getattr(self, f"{field_name}_date")
-            if date:
-                if date_type:
-                    date_info.append(f"{field_verbose_name} - {date_type.capitalize()} {date}")
-                else:
-                    date_info.append(f"{field_verbose_name} - Date {date}")
-
-        if date_info:
-            return "; \n".join(date_info)
-
         return "Site Configuration"
 
     class Meta:
