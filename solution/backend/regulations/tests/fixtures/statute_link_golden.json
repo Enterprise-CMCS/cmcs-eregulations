@@ -480,5 +480,14 @@
         "source_url": "http://test.com/test.xml",
         "name": "State option to provide qualifying community-based mobile crisis intervention services.",
         "statute_title": 19
+    },
+    {
+        "section": "1947-G",
+        "title": "42",
+        "usc": "1396w-6A",
+        "act": "Social Security Act",
+        "source_url": "http://test.com/test.xml",
+        "name": "This is a test for section label extensions-hello world",
+        "statute_title": 19
     }
 ]
