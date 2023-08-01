@@ -591,6 +591,19 @@ const getParts = async (title, apiUrl) => {
 };
 
 /**
+ * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ *
+ * @returns {Promise <Array<{act: string, title: number, title_roman: string}>} - Promise that contains array of title objects when fulfilled
+ */
+const getStatutesActs = async ({apiUrl}) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}acts`);
+    }
+
+    return httpApiGet("acts");
+};
+
+/**
  * @param {string} [act=Social Security Act] - Act on which to filter.
  * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {string} [title=19] - Act title number as digits.
@@ -627,6 +640,7 @@ export {
     getSearchGovResources,
     getSectionsForPart,
     getStatutes,
+    getStatutesActs,
     getSubPartsForPart,
     getSubpartTOC,
     getSupplementalContent,

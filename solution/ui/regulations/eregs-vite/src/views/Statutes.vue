@@ -3,7 +3,8 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router/composables";
 
 import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
-import { getStatutes } from "utilities/api";
+import { getStatutes, getStatutesActs } from "utilities/api";
+import { shapeTitlesResponse } from "utilities/utils";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
@@ -51,11 +52,39 @@ const queryParams = ref({
     title: $route?.query?.title ?? "19",
 });
 
+// Act titles -- state, fetch method, parse method
+const acts = ref({
+    results: [],
+    loading: true,
+});
+
+const getActTitles = async () => {
+    try {
+        const actsArray = await getStatutesActs({
+            apiUrl: props.apiUrl,
+        });
+
+        acts.value.results = actsArray;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        acts.value.loading = false;
+    }
+};
+
+const parsedTitles = computed(() =>
+    shapeTitlesResponse({
+        actsResults: acts.value.results,
+        actTypes: ACT_TYPES,
+    })
+);
+
 // Statutes -- state and fetch method
 const statutes = ref({
     results: [],
     loading: true,
 });
+
 const getStatutesArray = async () => {
     statutes.value.loading = true;
 
@@ -65,6 +94,7 @@ const getStatutesArray = async () => {
             apiUrl: props.apiUrl,
             title: queryParams.value.title,
         });
+
         statutes.value.results = statutesArray;
     } catch (error) {
         console.error(error);
@@ -119,6 +149,7 @@ onMounted(() => {
 onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
 // On load
+getActTitles();
 getStatutesArray();
 </script>
 
@@ -159,9 +190,11 @@ getStatutesArray();
                         <div class="selector__parent">
                             <h3>Included Statute</h3>
                             <StatuteSelector
+                                v-if="!acts.loading"
                                 :loading="statutes.loading"
                                 :selected-act="queryParams.act"
                                 :selected-title="queryParams.title"
+                                :titles="parsedTitles"
                             />
                         </div>
                     </div>

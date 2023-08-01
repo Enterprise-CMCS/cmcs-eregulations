@@ -7,6 +7,10 @@ describe("Statute Table", () => {
         cy.intercept(`**/v3/statutes**`, {
             fixture: "statutes.json",
         }).as("statutes");
+
+        cy.intercept(`**/v3/acts`, {
+            fixture: "acts.json",
+        }).as("acts");
     });
 
     it("goes to statutes page from homepage and has SSA Title 19 selected by default", () => {
