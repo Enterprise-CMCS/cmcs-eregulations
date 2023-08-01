@@ -76,8 +76,6 @@ jobs:
   deploy-django:
     environment:
       name: "dev"
-    env:
-      name: "dev"
     outputs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-20.04
