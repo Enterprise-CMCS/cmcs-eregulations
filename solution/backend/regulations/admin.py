@@ -22,7 +22,7 @@ from .models import (
 MARKUP_PATTERN = r"</?[^>]+>"
 
 # Finds all possible representations of dashes for replacement with the standard ASCII dash "-".
-DASH_PATTERN = r"[-—–-–]|&#x2013;"
+DASH_PATTERN = r"[—–-–-]"
 
 # Finds section identifiers, e.g. "Sec. 1192", "Sec. 1192A-2g", etc.
 SECTION_PATTERN = rf"sec.?\s*(\d+[a-z0-9]*(?:{DASH_PATTERN}+[a-z0-9]+)?).?"
