@@ -76,6 +76,8 @@ jobs:
   deploy-django:
     environment:
       name: "dev"
+    env:
+      name: "dev"
     outputs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-20.04
@@ -126,6 +128,14 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev${PR}
           echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
           popd
+      - name: conditional output for other environments
+        id: condtional-output-for-prod
+        if: ${{ env.name  == 'prod' }}
+        run: echo "this is not prod"
+      - name: conditional output for other environments
+        id: condtional-output-for-not-prod
+        if: ${{ env.name  != 'prod' }}
+        run: echo "this is not prod"
   test-python:
     needs: [deploy-django]
     runs-on: ubuntu-20.04
