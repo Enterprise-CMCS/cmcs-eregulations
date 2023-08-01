@@ -246,11 +246,16 @@ class TestStatuteLinkConfiguration(TestCase):
                 StatuteLinkConfiguration.objects.first().delete()
             StatuteLinkConfiguration.objects.create(**test["config"])
 
-            config = StatuteLinkConfiguration.objects.values().first()
+            config = StatuteLinkConfiguration.get_solo()
             context = Context({
                 "paragraph": test["paragraph"],
                 "link_conversions": self.conversions,
-                "link_config": config,
+                "link_config": {
+                    "link_statute_refs": config.link_statute_refs,
+                    "link_usc_refs": config.link_usc_refs,
+                    "statute_ref_exceptions": config.statute_ref_exceptions_dict,
+                    "usc_ref_exceptions": config.usc_ref_exceptions_dict,
+                },
             })
 
             self.assertEqual(self.template.render(context), test["expected"], f"Failed while testing {test['testing']}.")

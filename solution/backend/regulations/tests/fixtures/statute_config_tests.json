@@ -6,8 +6,8 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "statute_ref_exceptions": {},
-            "usc_ref_exceptions": {}
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -17,8 +17,8 @@
         "config": {
             "link_statute_refs": false,
             "link_usc_refs": true,
-            "statute_ref_exceptions": {},
-            "usc_ref_exceptions": {}
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -28,8 +28,8 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "statute_ref_exceptions": {},
-            "usc_ref_exceptions": {}
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -39,8 +39,8 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": false,
-            "statute_ref_exceptions": {},
-            "usc_ref_exceptions": {}
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -50,8 +50,13 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "statute_ref_exceptions": {},
-            "usc_ref_exceptions": {"42": ["123"]}
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": [
+                {
+                    "title": "42",
+                    "section": "123"
+                }
+            ]
         }
     },
     {
@@ -61,8 +66,13 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "statute_ref_exceptions": {"Social Security Act": ["123"]},
-            "usc_ref_exceptions": {}
+            "statute_ref_exceptions": [
+                {
+                    "act": "Social Security Act",
+                    "section": "123"
+                }
+            ],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -72,8 +82,13 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "statute_ref_exceptions": {},
-            "usc_ref_exceptions": {"1": ["2"]}
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": [
+                {
+                    "title": "1",
+                    "section": "2"
+                }
+            ]
         }
     },
     {
@@ -83,8 +98,13 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "statute_ref_exceptions": {"Social Security Act": ["123(a)(1)"]},
-            "usc_ref_exceptions": {}
+            "statute_ref_exceptions": [
+                {
+                    "act": "Social Security Act",
+                    "section": "123(a)(1)"
+                }
+            ],
+            "usc_ref_exceptions": []
         }
     }
 ]
