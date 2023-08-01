@@ -2,13 +2,26 @@ import flushPromises from "flush-promises";
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 
+import actsFixture from "cypress/fixtures/acts.json";
+
+import { ACT_TYPES } from "sharedComponents/Statutes/utils/enums.js";
+import { shapeTitlesResponse } from "utilities/utils";
+
 import StatuteSelector from "./StatuteSelector.vue";
+
+const SHAPED_TITLES = shapeTitlesResponse({
+    actsResults: actsFixture,
+    actTypes: ACT_TYPES,
+});
 
 describe("Statute Table Selector", () => {
     describe("SSA table type", () => {
         it(`Creates a snapshot of the Statute Selector with default props`, async () => {
             const wrapper = render(StatuteSelector, {
-                stubs: { "RouterLink": true },
+                props: {
+                    titles: SHAPED_TITLES,
+                },
+                stubs: { RouterLink: true },
             });
 
             await flushPromises();
@@ -34,9 +47,10 @@ describe("Statute Table Selector", () => {
 
         it(`Creates a snapshot of the Statute Selector with a loading prop`, async () => {
             const wrapper = render(StatuteSelector, {
-                stubs: { "RouterLink": true },
+                stubs: { RouterLink: true },
                 props: {
                     loading: true,
+                    titles: SHAPED_TITLES,
                 },
             });
 
@@ -57,10 +71,11 @@ describe("Statute Table Selector", () => {
 
         it(`Creates a snapshot of the Statute Selector when act and title props passed in to component`, async () => {
             const wrapper = render(StatuteSelector, {
-                stubs: { "RouterLink": true },
+                stubs: { RouterLink: true },
                 props: {
                     selectedAct: "ssa",
                     selectedTitle: "21",
+                    titles: SHAPED_TITLES,
                 },
             });
 
