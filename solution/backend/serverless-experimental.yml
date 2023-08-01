@@ -52,7 +52,7 @@ package:
     - nginx/**
 
 custom:
-  envir: 'experimental'
+  environment: 'experimental'
   stage: ${opt:stage, self:provider.stage}
   wsgi:
     app: handler.application
@@ -70,7 +70,7 @@ custom:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
 
-functions: ${file(serverless_functions/${self:custom.envir}_functions.yml)}
+functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
 resources:
   Resources:
