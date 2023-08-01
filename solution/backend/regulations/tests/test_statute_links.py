@@ -53,6 +53,7 @@ def mocked_requests_get(*args, **kwargs):
 class TestStatuteLinkImport(TestCase):
     @mock.patch("requests.get", side_effect=mocked_requests_get)
     def test_try_import_single_title(self, mocked_get):
+        self.maxDiff = None
         with open("regulations/tests/fixtures/statute_link_golden.json", "r") as f:
             golden = json.load(f)
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
