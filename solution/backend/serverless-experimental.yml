@@ -52,6 +52,7 @@ package:
     - nginx/**
 
 custom:
+  environment: 'experimental'
   stage: ${opt:stage, self:provider.stage}
   wsgi:
     app: handler.application
@@ -69,51 +70,7 @@ custom:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
 
-functions:
-  reg_site:
-    environment:
-      STATIC_URL: ${self:custom.settings.static_url}
-      WORKING_DIR: /var/task
-    handler: wsgi_handler.handler
-    timeout: 30
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-    events:
-      - http: ANY /
-      - http: ANY /{proxy+}
-  reg_core_migrate:
-    environment:
-      STAGE: ${self:custom.stage}
-    handler: migrate.handler
-    timeout: 300
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  populate_content:
-    handler: populate_content.handler
-    timeout: 300
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  create_database:
-    environment:
-      STAGE: ${self:custom.stage}
-      DB_NAME: eregs
-    handler: createdb.handler
-    timeout: 300
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  drop_database:
-    environment:
-      STAGE: ${self:custom.stage}
-      DB_NAME: eregs
-    handler: dropdb.handler
-    timeout: 300
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  create_su:
-    handler: createsu.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-    timeout: 300
+functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
 resources:
   Resources:

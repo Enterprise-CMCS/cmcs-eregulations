@@ -67,35 +67,7 @@ custom:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
 
-functions:
-  reg_site:
-    environment:
-      STATIC_URL: ${self:custom.settings.static_url}
-      WORKING_DIR: /var/task
-    handler: wsgi_handler.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-    events:
-      - http: ANY /
-      - http: ANY {proxy+}
-    timeout: 10
-  reg_core_migrate:
-    handler: migrate.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-    timeout: 300
-  create_su:
-    handler: createsu.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-    timeout: 300
-  populate_content:
-    environment:
-      SUPPLEMENTAL_CONTENT_PATH: /var/task/guidance
-    handler: populate_content.handler
-    layers:
-      - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-    timeout: 300
+functions: ${file(serverless_functions/${self:custom.stage}_functions.yml)}
 
 
 resources:
