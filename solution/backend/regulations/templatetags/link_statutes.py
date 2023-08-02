@@ -78,11 +78,13 @@ def extract_paragraphs(section_text):
 
 # This function is run by re.sub() to replace individual section refs with links.
 # "act" and "link_conversions" must be passed in via a partial function.
-def replace_section(section, act, link_conversions):
+def replace_section(section, act, link_conversions, exceptions):
     section_text = section.group()
     try:
         citation, remainder = split_citation(section_text)
     except ValueError:
+        return section_text
+    if DASH_REGEX.sub("-", citation) in exceptions:
         return section_text
     section = DASH_REGEX.sub("-", SECTION_ID_REGEX.match(citation).group())  # extract section
     # only link if section exists within the relevant act
@@ -101,15 +103,12 @@ def replace_section(section, act, link_conversions):
 # This middleman re.sub() function is run when an entire statute ref is matched. It performs another substition on individual
 # sections within the ref. It is needed to enforce refs starting with "section" but possibly containing more than one section.
 # "link_conversions" and "do_not_link" must be passed in via a partial function.
-def replace_sections(match, link_conversions, do_not_link):
-    text = match.group()
-    if text.lower().strip() in do_not_link:  # Do no substitution if text should not be linked
-        return text
+def replace_sections(match, link_conversions, exceptions):
     act = match.group(2)
     act = f"{act.strip()} Act" if act else DEFAULT_ACT  # if no act is specified, default to DEFAULT_ACT
     return SECTION_REGEX.sub(
-        partial(replace_section, act=act, link_conversions=link_conversions),
-        text,
+        partial(replace_section, act=act, link_conversions=link_conversions, exceptions=exceptions.get(act, [])),
+        match.group(),
     )
 
 
@@ -124,11 +123,13 @@ USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 
 # Replaces individual USC refs with links, to be run by re.sub().
 # "title" must be passed in via a partial function.
-def replace_usc_citation(match, title):
+def replace_usc_citation(match, title, exceptions):
     citation_text = match.group()
     try:
         citation, remainder = split_citation(citation_text)
     except ValueError:
+        return citation_text
+    if DASH_REGEX.sub("-", citation) in exceptions:
         return citation_text
     section = SECTION_ID_REGEX.match(citation).group()
     paragraphs = extract_paragraphs(citation)
@@ -141,15 +142,14 @@ def replace_usc_citation(match, title):
 
 
 # Matches entire USC citations to account for "and", "or" scenarios.
-def replace_usc_citations(match, do_not_link):
-    text = match.group()
-    if text.lower().strip() in do_not_link:
-        return text
-    return text.replace(
-        match.group(2),
+def replace_usc_citations(match, exceptions):
+    title = match.group(1)
+    section = match.group(2)
+    return match.group().replace(
+        section,
         SECTION_REGEX.sub(
-            partial(replace_usc_citation, title=match.group(1)),
-            match.group(2),
+            partial(replace_usc_citation, title=title, exceptions=exceptions.get(title, [])),
+            section,
         )
     )
 
@@ -158,12 +158,12 @@ def replace_usc_citations(match, do_not_link):
 def link_statutes(paragraph, link_conversions, link_config):
     if link_config["link_statute_refs"]:
         paragraph = STATUTE_REF_REGEX.sub(
-            partial(replace_sections, link_conversions=link_conversions, do_not_link=link_config["do_not_link"]),
+            partial(replace_sections, link_conversions=link_conversions, exceptions=link_config["statute_ref_exceptions"]),
             paragraph,
         )
     if link_config["link_usc_refs"]:
         paragraph = USC_REF_REGEX.sub(
-            partial(replace_usc_citations, do_not_link=link_config["do_not_link"]),
+            partial(replace_usc_citations, exceptions=link_config["usc_ref_exceptions"]),
             paragraph
         )
     return paragraph

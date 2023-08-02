@@ -6,7 +6,8 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "do_not_link": []
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -16,7 +17,8 @@
         "config": {
             "link_statute_refs": false,
             "link_usc_refs": true,
-            "do_not_link": []
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -26,7 +28,8 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "do_not_link": []
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
@@ -36,27 +39,72 @@
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": false,
-            "do_not_link": []
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": []
         }
     },
     {
-        "testing": "do_not_link for U.S.C. refs",
+        "testing": "U.S.C. ref exception (single)",
         "paragraph": "1 U.S.C. 2 and 42 U.S.C. 123",
         "expected": "1 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section2&num=0&edition=prelim\">2</a> and 42 U.S.C. 123",
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "do_not_link": ["42 U.S.C. 123"]
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": [
+                {
+                    "title": "42",
+                    "section": "123"
+                }
+            ]
         }
     },
     {
-        "testing": "do_not_link for statute refs",
+        "testing": "Statute ref exception (single)",
         "paragraph": "Section 123 of the Social Security Act",
         "expected": "Section 123 of the Social Security Act",
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
-            "do_not_link": ["section 123 of the social security"]
+            "statute_ref_exceptions": [
+                {
+                    "act": "Social Security Act",
+                    "section": "123"
+                }
+            ],
+            "usc_ref_exceptions": []
+        }
+    },
+    {
+        "testing": "U.S.C. ref exception (multiple)",
+        "paragraph": "1 U.S.C. 2 and 3",
+        "expected": "1 U.S.C. 2 and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section3&num=0&edition=prelim\">3</a>",
+        "config": {
+            "link_statute_refs": true,
+            "link_usc_refs": true,
+            "statute_ref_exceptions": [],
+            "usc_ref_exceptions": [
+                {
+                    "title": "1",
+                    "section": "2"
+                }
+            ]
+        }
+    },
+    {
+        "testing": "Statute ref exception (multiple)",
+        "paragraph": "Sections 123(a)(1) and 123 and 456(b)(2) of the Act",
+        "expected": "Sections 123(a)(1) and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim\">123</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionxyz&num=0&edition=prelim#substructure-location_b_2\">456(b)(2)</a> of the Act",
+        "config": {
+            "link_statute_refs": true,
+            "link_usc_refs": true,
+            "statute_ref_exceptions": [
+                {
+                    "act": "Social Security Act",
+                    "section": "123(a)(1)"
+                }
+            ],
+            "usc_ref_exceptions": []
         }
     }
 ]
