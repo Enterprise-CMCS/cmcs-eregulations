@@ -1,7 +1,19 @@
-<h1>File Manager</h1>
+<!-- file_manager.html -->
 
-<ul>
-  {% for file in files %}
-    <li>{{ file.name }}</li>
-  {% endfor %}
-</ul>
+{% if files %}
+    {% for file, shared_link in files %}
+            <p>File Name:
+                {% if shared_link %}
+                    <a href="{{ shared_link.url }}">{{ file.name }}</a>
+                {% else %}
+                    {{ file.name }}
+                {% endif %}
+            </p>
+        <p>File ID: {{ file.id }}</p>
+        <p>Created At: {{ file.created_at }}</p>
+        <p>Modified At: {{ file.modified_at }}</p>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No files found in the Box folder.</p>
+{% endif %}
