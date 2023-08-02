@@ -6,6 +6,7 @@ def get_oauth(store_tokens=None):
     return OAuth2(
         client_id=settings.BOX_CLIENT_ID,
         client_secret=settings.BOX_CLIENT_SECRET,
+        store_tokens=store_tokens,
     )
 
 

@@ -4,7 +4,6 @@ from django.shortcuts import render
 from ..integrations.box_integrations import get_authorization_url, get_oauth
 from boxsdk import Client
 from boxsdk.object.file import File
-from boxsdk.exception import BoxOAuthException
 
 
 class BoxCallbackView(View):
@@ -47,25 +46,8 @@ class BoxCallbackView(View):
             for item in items:
                 if isinstance(item, File):
                     # Check if the file has a shared link and include it in the context
-                    file_id = item.id
-                    try:
-                        shared_link = item.get().shared_link
-                        shared_link_url = shared_link['url'] if shared_link else None
-                    except BoxOAuthException as e:
-                        if "Auth code doesn't exist or is invalid" in str(e):
-                            try:
-                                # Refresh the token using the refresh token
-                                box_client.auth.refresh()
-                                # box_client.auth.authenticate(refresh_token=box_client.auth.refresh_token)
-                                # Retry getting the shared link after refreshing the token
-                                shared_link = item.get().shared_link
-                                shared_link_url = shared_link['url'] if shared_link else None
-                            except BoxOAuthException as refresh_e:
-                                print(f"Error refreshing token for file {file_id}: {refresh_e}")
-                                shared_link_url = None
-                        else:
-                            print(f"Error retrieving shared link for file {file_id}: {e}")
-                            shared_link_url = None
+                    shared_link = item.get().shared_link
+                    shared_link_url = shared_link['url'] if shared_link else None
 
                     files.append((item, shared_link_url))
             context['files'] = files

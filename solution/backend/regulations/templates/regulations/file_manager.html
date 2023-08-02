@@ -4,7 +4,7 @@
     {% for file, shared_link in files %}
             <p>File Name:
                 {% if shared_link %}
-                    <a href="{{ shared_link.url }}">{{ file.name }}</a>
+                    <a href="{{ shared_link }}">{{ file.name }}</a>
                 {% else %}
                     {{ file.name }}
                 {% endif %}
