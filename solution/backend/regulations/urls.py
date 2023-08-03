@@ -48,7 +48,6 @@ urlpatterns = [
     path('file_manager/', FileManagerView.as_view(), name='file_manager'),
     path('box_callback/', BoxCallbackView.as_view(), name='box_callback'),
 
-    path('statutes/', StatuteView.as_view(), name='statues'),
     path("v3/", include([
         path("statutes", StatuteLinkConverterViewSet.as_view({
             "get": "list",
