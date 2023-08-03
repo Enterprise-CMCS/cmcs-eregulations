@@ -12,6 +12,9 @@ RUN pip install --no-cache-dir --upgrade pip setuptools \
 
 ENV SEARCHGOV_KEY=""
 ENV SEARCHGOV_SITE_NAME=""
+ENV BOX_CLIENT_ID=''
+ENV BOX_CLIENT_SECRET=''
+ENV BOX_REDIRECT_URL=''
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 

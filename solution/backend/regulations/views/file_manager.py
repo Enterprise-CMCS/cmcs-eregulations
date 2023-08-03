@@ -19,7 +19,6 @@ class BoxCallbackView(View):
             print("Invalid CSRF token. Authentication failed.")
         if error == 'access_denied':
             print("You denied access to this application.")
-
         if error_description:
             print(f"Error: {error_description}")
 
@@ -39,9 +38,9 @@ class BoxCallbackView(View):
         box_client = kwargs.get('box_client')
 
         if box_client:
-            root_folder = box_client.folder(folder_id='0')
-            items = root_folder.get_items(limit=10, offset=0)
-
+            folder_id = '219221804791'
+            folder = box_client.folder(folder_id=folder_id)
+            items = folder.get_items(limit=10, offset=0)
             files = []
             for item in items:
                 if isinstance(item, File):
