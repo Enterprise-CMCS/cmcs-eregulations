@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'django.contrib.admin',
     'django.contrib.auth',
-    #'mozilla_django_oidc',
+    # 'mozilla_django_oidc',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
