@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     'django.contrib.admin',
     'django.contrib.auth',
-    'mozilla_django_oidc',
+    #'mozilla_django_oidc',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -67,17 +67,14 @@ MIDDLEWARE = [
     'regulations.middleware.NoIndex',
     'regcore.middleware.HtmlApi',
 ]
-OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
+#  OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
 # Add 'mozilla_django_oidc' authentication backend
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
-)
-OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
-OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
-OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
-OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
-OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
+
+# OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
+# OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
+# OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
+# OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
+# OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
