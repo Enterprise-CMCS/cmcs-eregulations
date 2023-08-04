@@ -1,6 +1,6 @@
-from django.views.generic.base import TemplateView
 from django.http import Http404
 from django.urls import reverse
+from django.views.generic.base import TemplateView
 
 from resources.models import AbstractResource
 

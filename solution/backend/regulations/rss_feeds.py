@@ -1,6 +1,7 @@
-from resources.models import AbstractResource
-from django.contrib.syndication.views import Feed
 from dateutil import parser
+from django.contrib.syndication.views import Feed
+
+from resources.models import AbstractResource
 
 
 class ResourceFeed(Feed):

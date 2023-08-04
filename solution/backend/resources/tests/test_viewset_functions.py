@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, timedelta
 from itertools import chain
+
 from django.test import TestCase
 from rest_framework.exceptions import NotFound
 

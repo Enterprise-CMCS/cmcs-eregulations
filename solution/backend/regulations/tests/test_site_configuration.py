@@ -1,5 +1,7 @@
 import unittest
+
 import pytest
+
 from regulations.models import SiteConfiguration
 
 

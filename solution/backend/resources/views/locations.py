@@ -1,21 +1,20 @@
-from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema
 from django.db.models import Prefetch
-
-from .mixins import LocationExplorerViewSetMixin
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
 
 from resources.models import (
     AbstractLocation,
     Section,
     Subpart,
 )
-
 from resources.serializers.locations import (
     AbstractLocationPolymorphicSerializer,
     FullSectionSerializer,
     FullSubpartSerializer,
     MetaLocationSerializer,
 )
+
+from .mixins import LocationExplorerViewSetMixin
 
 
 @extend_schema(

@@ -1,19 +1,18 @@
-from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
-
-from .utils import OpenApiPathParameter
-
-from .mixins import (
-    PartPropertiesMixin,
-    NodeFinderMixin,
-)
+from rest_framework.response import Response
 
 from regcore.serializers.contents import (
     PartSerializer,
     SectionContentsSerializer,
     SubpartContentsSerializer,
 )
+
+from .mixins import (
+    NodeFinderMixin,
+    PartPropertiesMixin,
+)
+from .utils import OpenApiPathParameter
 
 
 @extend_schema(

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+
 from django.core.management import call_command
 
 
@@ -9,12 +10,9 @@ def handler(event, context):
     django.setup()
     from django.contrib.auth.models import Group, Permission
     from django.contrib.contenttypes.models import ContentType
+
     from regcore.search.models import Synonym
-    from regulations.models import (
-        SiteConfiguration,
-        StatuteLinkConfiguration,
-        StatuteLinkConverter
-    )
+    from regulations.models import SiteConfiguration, StatuteLinkConfiguration, StatuteLinkConverter
     from resources.models import (
         AbstractCategory,
         AbstractLocation,

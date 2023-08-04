@@ -1,5 +1,6 @@
-from django.contrib.sitemaps import Sitemap
 from datetime import datetime
+
+from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
 from regcore.models import Part
