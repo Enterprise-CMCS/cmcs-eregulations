@@ -4,16 +4,74 @@ describe("Statute Table", () => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
 
-        cy.intercept(`**/v3/statutes`, {
-            fixture: "statutes.json"
+        cy.intercept(`**/v3/statutes**`, {
+            fixture: "statutes.json",
         }).as("statutes");
+
+        cy.intercept(`**/v3/acts`, {
+            fixture: "acts.json",
+        }).as("acts");
     });
 
-    it("checks a11y for search page", () => {
+    it("goes to statutes page from homepage and has SSA Title 19 selected by default", () => {
         cy.viewport("macbook-15");
-        cy.visit("/statutes", { timeout: 60000 });
-        cy.wait("@statutes");
+        cy.visit("/");
+        cy.clickHeaderLink({ page: "Statutes", screen: "wide" });
+        cy.url().should("include", "/statutes/");
+
+        cy.get("h1").contains("Statute Reference");
+        cy.get("h2").contains("Look up statute text in online sources");
+
+        cy.get("a[data-testid=ssa-XIX-19]").should(
+            "have.class",
+            "titles-list__link--active"
+        );
+        cy.get("a[data-testid=ssa-XI-11]").should(
+            "not.have.class",
+            "titles-list__link--active"
+        );
+    });
+
+    it("displays as a table at widths 1024px wide and greater", () => {
+        cy.viewport(1024, 768);
+        cy.visit("/statutes");
+        cy.get("#statuteTable").should("be.visible");
+        cy.get("#statuteList").should("not.exist");
         cy.injectAxe();
         cy.checkAccessibility();
+    });
+
+    it("displays as a list at widths narrower than 1024px", () => {
+        cy.viewport(1023, 1000);
+        cy.visit("/statutes");
+        cy.get("#statuteTable").should("not.exist");
+        cy.get("#statuteList").should("be.visible");
+        cy.injectAxe();
+        cy.checkAccessibility();
+    });
+
+    it("statutes link nested in a dropdown menu on mobile screen widths", () => {
+        cy.viewport("iphone-x");
+        cy.visit("/");
+        cy.clickHeaderLink({ page: "Statutes", screen: "narrow" });
+        cy.url().should("include", "/statutes/");
+    });
+
+    it("loads the correct act and title when the URL is changed", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/statutes");
+
+        cy.clickStatuteLink({ act: "ssa", titleRoman: "XXI", title: "21" });
+        cy.url().should("include", "/statutes?act=ssa&title=21");
+
+        cy.clickStatuteLink({ act: "ssa", titleRoman: "XI", title: "11" });
+        cy.url().should("include", "/statutes?act=ssa&title=11");
+    });
+
+    it("goes to another SPA page from the statutes page", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/statutes");
+        cy.clickHeaderLink({ page: "Resources", screen: "wide" });
+        cy.url().should("include", "/resources");
     });
 });

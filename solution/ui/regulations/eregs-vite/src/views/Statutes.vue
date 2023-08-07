@@ -1,13 +1,18 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { useRoute } from "vue-router/composables";
 
-import { getStatutes } from "utilities/api";
+import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
+import { getStatutes, getStatutesActs } from "utilities/api";
+import { shapeTitlesResponse } from "utilities/utils";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
+import StatuteSelector from "eregsComponentLib/src/components/shared-components/Statutes/StatuteSelector.vue";
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
+import TableCaption from "eregsComponentLib/src/components/shared-components/Statutes/TableCaption.vue";
 
 import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
@@ -38,14 +43,58 @@ const props = defineProps({
     },
 });
 
-// Get statutes
+// get route query params
+const $route = useRoute();
+
+// validate query params to make sure they're in the enum?
+const queryParams = ref({
+    act: $route?.query?.act ?? "ssa",
+    title: $route?.query?.title ?? "19",
+});
+
+// Act titles -- state, fetch method, parse method
+const acts = ref({
+    results: [],
+    loading: true,
+});
+
+const getActTitles = async () => {
+    try {
+        const actsArray = await getStatutesActs({
+            apiUrl: props.apiUrl,
+        });
+
+        acts.value.results = actsArray;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        acts.value.loading = false;
+    }
+};
+
+const parsedTitles = computed(() =>
+    shapeTitlesResponse({
+        actsResults: acts.value.results,
+        actTypes: ACT_TYPES,
+    })
+);
+
+// Statutes -- state and fetch method
 const statutes = ref({
     results: [],
     loading: true,
 });
+
 const getStatutesArray = async () => {
+    statutes.value.loading = true;
+
     try {
-        const statutesArray = await getStatutes({ apiUrl: props.apiUrl });
+        const statutesArray = await getStatutes({
+            act: ACT_TYPES[queryParams.value.act],
+            apiUrl: props.apiUrl,
+            title: queryParams.value.title,
+        });
+
         statutes.value.results = statutesArray;
     } catch (error) {
         console.error(error);
@@ -54,6 +103,25 @@ const getStatutesArray = async () => {
     }
 };
 
+// watch query params and fetch statutes
+watch(
+    () => $route.query,
+    (newParams, oldParams) => {
+        queryParams.value = {
+            act: newParams.act,
+            title: newParams.title,
+        };
+    }
+);
+
+watch(
+    () => queryParams.value,
+    async (newParams, oldParams) => {
+        await getStatutesArray();
+    }
+);
+
+// Watch layout
 const windowWidth = ref(window.innerWidth);
 const isNarrow = computed(() => windowWidth.value < 1024);
 
@@ -81,6 +149,7 @@ onMounted(() => {
 onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
 // On load
+getActTitles();
 getStatutesArray();
 </script>
 
@@ -117,48 +186,31 @@ getStatutesArray();
             </Banner>
             <div id="main-content" class="statute__container">
                 <div class="content" :style="{ marginLeft: bannerLeftMargin }">
-                    <div class="table__parent">
+                    <div class="content__selector">
+                        <div class="selector__parent">
+                            <h3>Included Statute</h3>
+                            <StatuteSelector
+                                v-if="!acts.loading"
+                                :loading="statutes.loading"
+                                :selected-act="queryParams.act"
+                                :selected-title="queryParams.title"
+                                :titles="parsedTitles"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        class="table__parent"
+                        :class="{ loading: statutes.loading }"
+                    >
                         <SimpleSpinner
                             v-if="statutes.loading"
                             class="table__spinner"
                         />
                         <template v-else>
-                            <div class="table__caption">
-                                In selected Social Security Act titles (XI, XVI,
-                                XVIII, XIX, XXI), find equivalent US Code
-                                citations and read the text in your choice of
-                                government website. Coming up soon: more
-                                navigation options and additional statutes.<br />
-                                Learn more about these sources:
-                                <a
-                                    class="external"
-                                    href="https://uscode.house.gov/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >US Code House.gov</a
-                                >,
-                                <a
-                                    class="external"
-                                    href="https://www.govinfo.gov/app/collection/comps/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >Statute Compilation</a
-                                >,
-                                <a
-                                    class="external"
-                                    href="https://www.govinfo.gov/app/collection/uscode"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >US Code Annual</a
-                                >,
-                                <a
-                                    class="external"
-                                    href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    >SSA.gov Compilation</a
-                                >.
-                            </div>
+                            <TableCaption
+                                :selected-act="ACT_TYPES[queryParams.act]"
+                                :selected-title="queryParams.title"
+                            />
                             <StatuteTable
                                 :display-type="isNarrow ? 'list' : 'table'"
                                 :filtered-statutes="statutes.results"

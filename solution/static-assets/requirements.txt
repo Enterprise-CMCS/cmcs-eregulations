@@ -17,4 +17,7 @@ django-csp
 httpx
 ruff
 pytest
-pytest-django==4.5.1
+pytest-django==4.5
+pre-commit
+defusedxml
+mozilla-django-oidc

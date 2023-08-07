@@ -1,0 +1,17 @@
+[
+{
+    "model": "regulations.siteconfiguration",
+    "pk": 1,
+    "fields": {
+        "allow_indexing": false,
+        "us_code_house_gov_date_type": "",
+        "us_code_house_gov_date": null,
+        "ssa_gov_compilation_date_type": "",
+        "ssa_gov_compilation_date": null,
+        "statute_compilation_date_type": "",
+        "statute_compilation_date": null,
+        "us_code_annual_date_type": "",
+        "us_code_annual_date": null
+    }
+}
+]

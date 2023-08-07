@@ -496,9 +496,7 @@ const getCurrentPageResultsRange = ({ count, page = 1, pageSize }) => {
 
     const firstInRange = minInRange + 1;
     const lastInRange =
-        maxInRange > count
-            ? (count % pageSize) + minInRange
-            : maxInRange;
+        maxInRange > count ? (count % pageSize) + minInRange : maxInRange;
 
     return [firstInRange, lastInRange];
 };
@@ -736,6 +734,79 @@ function trapFocus(element) {
     };
 }
 
+/**
+ * Convert digit to roman numeral.
+ * Adapted from: https://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter#comment-823972
+ *
+ * @param {number} num - number to convert
+ * @returns {string} - roman numeral
+ */
+const romanize = (num) => {
+    var romansObj = {
+        M: 1000,
+        CM: 900,
+        D: 500,
+        CD: 400,
+        C: 100,
+        XC: 90,
+        L: 50,
+        XL: 40,
+        X: 10,
+        IX: 9,
+        V: 5,
+        IV: 4,
+        I: 1,
+    };
+
+    return Object.keys(romansObj).reduce(
+        function (acc, roman) {
+            acc.str += roman.repeat(acc.num / romansObj[roman]);
+            acc.num %= romansObj[roman];
+            return acc;
+        },
+        { str: "", num: num }
+    ).str;
+};
+
+/**
+ * @param {string} act - full name of act. Ex: "Social Security Act"
+ * @param {Array<{[key: string]: string}>} actTypes - array of objects with act type abbreviations as keys and act type names as values
+ *
+ * @returns {string} - act type abbreviation. Ex: "ssa"
+ */
+const getActAbbr = ({ act, actTypes }) =>
+    Object.keys(
+        actTypes.find((actTypeObj) => Object.values(actTypeObj).includes(act))
+    )[0];
+
+/**
+ * @param {Array<{act: string, title: number, title_roman: string}>} actsResults - array of title objects
+ * @param {Array<{[key: string]: string}>} actTypes - array of objects with act type abbreviations as keys and act type names as values
+ *
+ * @returns {Object<{[key: string]: Object<{name: string, titles: Array<{title: string, titleRoman: string}>}>}>} - object with act type abbreviations as keys and objects with act type names and titles as values
+ */
+const shapeTitlesResponse = ({ actsResults, actTypes }) => {
+    const returnObj = {};
+
+    // reshape acts response to what we need
+    actsResults.forEach((title) => {
+        const actAbbr = getActAbbr({ act: title.act, actTypes });
+        if (!returnObj[actAbbr]) {
+            returnObj[actAbbr] = {
+                name: title.act,
+                titles: [],
+            };
+        }
+
+        returnObj[actAbbr].titles.push({
+            title: title.title.toString(),
+            titleRoman: title.title_roman,
+        });
+    });
+
+    return returnObj;
+};
+
 export {
     addMarks,
     addQueryParams,
@@ -752,6 +823,7 @@ export {
     formatDate,
     formatResourceCategories,
     generateId,
+    getActAbbr,
     getCategoryTree,
     getCurrentPageResultsRange,
     getDisplayName,
@@ -772,7 +844,9 @@ export {
     removeFragmentParams,
     removeNulls,
     removeQueryParams,
+    romanize,
     scrollToElement,
+    shapeTitlesResponse,
     stripQuotes,
     swallowError,
     trapFocus,

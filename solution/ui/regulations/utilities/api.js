@@ -300,7 +300,9 @@ const getCategories = async (apiUrl) => {
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
 const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
-    const result = await httpApiGetLegacy(`${apiURL}ecfr_parser_result/${title}`);
+    const result = await httpApiGetLegacy(
+        `${apiURL}ecfr_parser_result/${title}`
+    );
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
 
@@ -322,7 +324,8 @@ const getTOC = async ({ title, apiUrl }) => {
 const getSectionsForPart = async (title, part) =>
     httpApiGet(`title/${title}/part/${part}/version/latest/sections`);
 
-const getSubpartTOC = async (apiURL, title, part, subPart) => httpApiGetLegacy(
+const getSubpartTOC = async (apiURL, title, part, subPart) =>
+    httpApiGetLegacy(
         `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
@@ -480,7 +483,7 @@ const getSupplementalContent = async ({
     sortMethod = "newest",
     frGrouping = true,
     builtLocationString = "",
-    apiUrl = ""
+    apiUrl = "",
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
@@ -517,11 +520,11 @@ const getSupplementalContent = async ({
     sString = `${sString}&location_details=${locationDetails}`;
     sString = `${sString}&start=${start}&max_results=${maxResults}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
-    sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;  
+    sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;
     sString = `${sString}&fr_grouping=${frGrouping}`;
 
     let response = "";
-    
+
     if (apiUrl) {
         response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
     } else {
@@ -588,19 +591,37 @@ const getParts = async (title, apiUrl) => {
 };
 
 /**
- * @param {string} [act] - Act on which to filter.  Ex: `Social Security Act`
+ * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ *
+ * @returns {Promise <Array<{act: string, title: number, title_roman: string}>} - Promise that contains array of title objects when fulfilled
+ */
+const getStatutesActs = async ({apiUrl}) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}acts`);
+    }
+
+    return httpApiGet("acts");
+};
+
+/**
+ * @param {string} [act=Social Security Act] - Act on which to filter.
  * @param {string} [apiUrl] - API base url passed in from Django template
+ * @param {string} [title=19] - Act title number as digits.
  *
  * @returns {Promise <Array<{section: string, title: number, usc: string, act: string, name: string, statute_title: string, source_url: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
-const getStatutes = async ({ act, apiUrl }) => {
-    const actString = act ? `?act=${encodeURIComponent(act)}` : "";
-
+const getStatutes = async ({
+    act = "Social Security Act",
+    apiUrl,
+    title = "19",
+}) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}statutes${actString}`);
+        return httpApiGetLegacy(
+            `${apiUrl}statutes?act=${encodeURIComponent(act)}&title=${title}`
+        );
     }
 
-    return httpApiGet(`statutes${actString}`);
+    return httpApiGet(`statutes?act=${encodeURIComponent(act)}&title=${title}`);
 };
 
 export {
@@ -619,6 +640,7 @@ export {
     getSearchGovResources,
     getSectionsForPart,
     getStatutes,
+    getStatutesActs,
     getSubPartsForPart,
     getSubpartTOC,
     getSupplementalContent,

@@ -13,9 +13,19 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    statutesUrl: {
+        type: String,
+        required: true,
+    },
 });
 
 const links = [
+    {
+        name: "statutes",
+        label: "Statutes",
+        active: window.location.pathname.includes("statutes"),
+        href: props.statutesUrl,
+    },
     {
         name: "resources",
         label: "Resources",
@@ -46,6 +56,7 @@ const closeClick = () => {
         <ul class="links__list links__list--wide">
             <li v-for="(link, index) in links" :key="index">
                 <a
+                    :data-testid="link.name"
                     class="header--links__anchor"
                     :class="{ active: link.active }"
                     :href="link.href"
@@ -67,6 +78,7 @@ const closeClick = () => {
             <ul class="links__list links__list--dropdown">
                 <li v-for="(link, index) in links" :key="index">
                     <a
+                        :data-testid="link.name"
                         class="header--links__anchor"
                         :class="{ active: link.active }"
                         :href="link.href"

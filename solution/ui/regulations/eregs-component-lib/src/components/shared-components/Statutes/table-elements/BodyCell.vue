@@ -32,12 +32,14 @@ const props = defineProps({
         </template>
         <template v-else>
             <a
+                v-if="cellData.body.url(statute)"
                 :class="cellData.body.type"
                 :href="cellData.body.url(statute)"
                 target="_blank"
                 rel="noopener noreferrer"
                 >{{ cellData.body.text(statute) }}</a
             >
+            <span v-else :data-testid="statute.usc + '-none'">None</span>
         </template>
     </td>
 </template>

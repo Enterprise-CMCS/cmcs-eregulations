@@ -66,6 +66,14 @@ MIDDLEWARE = [
     'regulations.middleware.NoIndex',
     'regcore.middleware.HtmlApi',
 ]
+#  OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
+# Add 'mozilla_django_oidc' authentication backend
+
+# OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
+# OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
+# OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
+# OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
+# OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
@@ -145,15 +153,12 @@ TEMPLATES = [
                 'regcore.context_processors.regcore_config',
             ),
         },
-        "DIRS": [
-            BASE_DIR / 'templates',
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
     },
 ]
 
 WSGI_APPLICATION = 'cmcs_regulations.wsgi.application'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.views.generic.base import RedirectView, TemplateView
 from django.contrib.sitemaps.views import sitemap
-
+from django.contrib.auth import views as auth_views
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
 from regulations.rss_feeds import ResourceFeed
 
@@ -31,9 +31,14 @@ urlpatterns = [
     path('', include('regcore.urls')),
     path('', include('regulations.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
+    path('admin/login/', auth_views.LoginView.as_view(template_name='admin/login.html'), name='login'),
     path('admin/', admin.site.urls, name="admin"),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('__debug__/', include('debug_toolbar.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('latest/feed/', ResourceFeed()),
+    path('oidc/', include('mozilla_django_oidc.urls')),
 ]
+admin.site.site_header = "eRegs"
+admin.site.site_title = 'eRegs Admin Panel'
+admin.site.index_title = 'Medicaid & CHIP eRegulations Admin Panel'

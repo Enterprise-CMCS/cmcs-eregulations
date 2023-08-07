@@ -1,5 +1,4 @@
 import re
-from xml.dom import minidom
 
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
@@ -10,6 +9,7 @@ from django.urls import path, reverse
 
 import requests
 from solo.admin import SingletonModelAdmin
+from defusedxml.minidom import parseString
 
 from .models import (
     SiteConfiguration,
@@ -71,12 +71,17 @@ def roman_to_int(roman):
 
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
-    fields = (
-        'allow_indexing',
-        ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
-        ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
-        ('statute_compilation_date_type', 'statute_compilation_date'),
-        ('us_code_annual_date_type', 'us_code_annual_date'),
+    fieldsets = (
+        (None, {
+            "fields": (
+                'allow_indexing',
+                ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
+                ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
+                ('statute_compilation_date_type', 'statute_compilation_date'),
+                ('us_code_annual_date_type', 'us_code_annual_date'),
+            ),
+            "description": 'Configure crawling for the whole site and dates for statute sources.'
+        }),
     )
 
 
@@ -155,7 +160,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
 
     def parse_toc(self, text):
         try:
-            dom = minidom.parseString(text)
+            dom = parseString(text)
         except Exception as e:
             raise ValidationError(f"invalid XML detected: {str(e)}")
 
@@ -191,7 +196,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
                     section_append = SECTION_APPEND_REGEX.match(label)
                     if section_append:
                         section += DASH_REGEX.sub("-", section_append.group(1).strip())
-                        label = SECTION_APPEND_REGEX.sub("", label).strip()
+                        label = SECTION_APPEND_REGEX.sub("", label, 1).strip()
                     toc[section] = {
                         "name": label,
                         "statute_title": title,
@@ -209,7 +214,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
         except ValidationError:
             raise ValidationError(f"{url} is not a valid URL." if url else "you must enter a URL.")
 
-        response = requests.get(url)
+        response = requests.get(url, timeout=10)
         response.raise_for_status()
         conversions, matches, failures = self.import_conversions(response.text, url, act)
         if conversions or failures:
