@@ -30,7 +30,7 @@ jobs:
         with:
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-username: ${{ secrets.JIRA_USERNAME }}
-          jira-host: jiraent.cms.gov
+          jira-host: mairasamtek.atlassian.net
           jira-project-key: EREGCSC
           #jira-epic-key: EREGCSC-1989
           jira-ignore-statuses: Done, Closed, Canceled
