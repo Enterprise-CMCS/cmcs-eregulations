@@ -26,11 +26,11 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       - name: Sync Security Hub and Jira
-        uses: Enterprise-CMCS/mac-fc-security-hub-visibility-enterprise-jira@v1.0.8
+        uses: Enterprise-CMCS/mac-fc-security-hub-visibility-enterprise-jira@v1.0.9
         with:
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-username: ${{ secrets.JIRA_USERNAME }}
-          jira-host: mairasamtek.atlassian.net
+          jira-host: ${{secrets.JIRA_HOST}}
           jira-project-key: EREGCSC
           #jira-epic-key: EREGCSC-1989
           jira-ignore-statuses: Done, Closed, Canceled
