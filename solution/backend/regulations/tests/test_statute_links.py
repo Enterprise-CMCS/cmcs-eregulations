@@ -53,6 +53,7 @@ def mocked_requests_get(*args, **kwargs):
 class TestStatuteLinkImport(TestCase):
     @mock.patch("requests.get", side_effect=mocked_requests_get)
     def test_try_import_single_title(self, mocked_get):
+        self.maxDiff = None
         with open("regulations/tests/fixtures/statute_link_golden.json", "r") as f:
             golden = json.load(f)
         admin = StatuteLinkConverterAdmin(model=StatuteLinkConverter, admin_site=None)
@@ -139,7 +140,8 @@ class LinkStatutesTestCase(SimpleTestCase):
         link_config = {
             "link_statute_refs": True,
             "link_usc_refs": True,
-            "do_not_link": [],
+            "statute_ref_exceptions": {},
+            "usc_ref_exceptions": {},
         }
 
         with open("regulations/tests/fixtures/section_link_tests.json", "r") as f:
@@ -227,6 +229,10 @@ class TestStatuteLinkConfiguration(TestCase):
                     "title": "42",
                     "usc": "abc",
                 },
+                "456": {
+                    "title": "42",
+                    "usc": "xyz",
+                },
             },
         }
         self.template = Template("{% load link_statutes %}{% link_statutes paragraph link_conversions link_config as text %}"
@@ -241,11 +247,16 @@ class TestStatuteLinkConfiguration(TestCase):
                 StatuteLinkConfiguration.objects.first().delete()
             StatuteLinkConfiguration.objects.create(**test["config"])
 
-            config = StatuteLinkConfiguration.objects.values().first()
+            config = StatuteLinkConfiguration.get_solo()
             context = Context({
                 "paragraph": test["paragraph"],
                 "link_conversions": self.conversions,
-                "link_config": config,
+                "link_config": {
+                    "link_statute_refs": config.link_statute_refs,
+                    "link_usc_refs": config.link_usc_refs,
+                    "statute_ref_exceptions": config.statute_ref_exceptions_dict,
+                    "usc_ref_exceptions": config.usc_ref_exceptions_dict,
+                },
             })
 
             self.assertEqual(self.template.render(context), test["expected"], f"Failed while testing {test['testing']}.")

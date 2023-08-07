@@ -1,6 +1,4 @@
 <script setup>
-import { titleSelectorList } from "./schemas/listSchemas";
-
 const props = defineProps({
     loading: {
         type: Boolean,
@@ -17,6 +15,11 @@ const props = defineProps({
         required: false,
         default: "19",
     },
+    titles: {
+        type: Object,
+        required: false,
+        default: () => {},
+    },
 });
 
 const isActActive = ({ act }) => act === props.selectedAct;
@@ -27,7 +30,7 @@ const isTitleActive = ({ act, title }) =>
 <template>
     <ul class="acts__list">
         <li
-            v-for="(value, key, i) in titleSelectorList"
+            v-for="(value, key, i) in titles"
             :key="`${key}-${i}`"
             class="acts-list__item"
         >

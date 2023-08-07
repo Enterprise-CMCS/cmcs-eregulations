@@ -768,6 +768,45 @@ const romanize = (num) => {
     ).str;
 };
 
+/**
+ * @param {string} act - full name of act. Ex: "Social Security Act"
+ * @param {Array<{[key: string]: string}>} actTypes - array of objects with act type abbreviations as keys and act type names as values
+ *
+ * @returns {string} - act type abbreviation. Ex: "ssa"
+ */
+const getActAbbr = ({ act, actTypes }) =>
+    Object.keys(
+        actTypes.find((actTypeObj) => Object.values(actTypeObj).includes(act))
+    )[0];
+
+/**
+ * @param {Array<{act: string, title: number, title_roman: string}>} actsResults - array of title objects
+ * @param {Array<{[key: string]: string}>} actTypes - array of objects with act type abbreviations as keys and act type names as values
+ *
+ * @returns {Object<{[key: string]: Object<{name: string, titles: Array<{title: string, titleRoman: string}>}>}>} - object with act type abbreviations as keys and objects with act type names and titles as values
+ */
+const shapeTitlesResponse = ({ actsResults, actTypes }) => {
+    const returnObj = {};
+
+    // reshape acts response to what we need
+    actsResults.forEach((title) => {
+        const actAbbr = getActAbbr({ act: title.act, actTypes });
+        if (!returnObj[actAbbr]) {
+            returnObj[actAbbr] = {
+                name: title.act,
+                titles: [],
+            };
+        }
+
+        returnObj[actAbbr].titles.push({
+            title: title.title.toString(),
+            titleRoman: title.title_roman,
+        });
+    });
+
+    return returnObj;
+};
+
 export {
     addMarks,
     addQueryParams,
@@ -784,6 +823,7 @@ export {
     formatDate,
     formatResourceCategories,
     generateId,
+    getActAbbr,
     getCategoryTree,
     getCurrentPageResultsRange,
     getDisplayName,
@@ -806,6 +846,7 @@ export {
     removeQueryParams,
     romanize,
     scrollToElement,
+    shapeTitlesResponse,
     stripQuotes,
     swallowError,
     trapFocus,

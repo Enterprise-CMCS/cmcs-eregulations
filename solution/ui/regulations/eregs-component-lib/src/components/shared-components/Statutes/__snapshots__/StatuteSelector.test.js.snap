@@ -37,6 +37,19 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
               <h4>
                 <routerlink-stub
                   class="titles-list__link"
+                  data-testid="ssa-XVI-16"
+                  to="[object Object]"
+                >
+                   Title XVI 
+                </routerlink-stub>
+              </h4>
+            </li>
+            <li
+              class="titles-list__item"
+            >
+              <h4>
+                <routerlink-stub
+                  class="titles-list__link"
                   data-testid="ssa-XVIII-18"
                   to="[object Object]"
                 >
@@ -100,6 +113,19 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
                 to="[object Object]"
               >
                  Title XI 
+              </routerlink-stub>
+            </h4>
+          </li>
+          <li
+            class="titles-list__item"
+          >
+            <h4>
+              <routerlink-stub
+                class="titles-list__link"
+                data-testid="ssa-XVI-16"
+                to="[object Object]"
+              >
+                 Title XVI 
               </routerlink-stub>
             </h4>
           </li>
@@ -240,6 +266,19 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
               <h4>
                 <routerlink-stub
                   class="titles-list__link titles-list__link--loading"
+                  data-testid="ssa-XVI-16"
+                  to="[object Object]"
+                >
+                   Title XVI 
+                </routerlink-stub>
+              </h4>
+            </li>
+            <li
+              class="titles-list__item"
+            >
+              <h4>
+                <routerlink-stub
+                  class="titles-list__link titles-list__link--loading"
                   data-testid="ssa-XVIII-18"
                   to="[object Object]"
                 >
@@ -303,6 +342,19 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
                 to="[object Object]"
               >
                  Title XI 
+              </routerlink-stub>
+            </h4>
+          </li>
+          <li
+            class="titles-list__item"
+          >
+            <h4>
+              <routerlink-stub
+                class="titles-list__link titles-list__link--loading"
+                data-testid="ssa-XVI-16"
+                to="[object Object]"
+              >
+                 Title XVI 
               </routerlink-stub>
             </h4>
           </li>
@@ -443,6 +495,19 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
               <h4>
                 <routerlink-stub
                   class="titles-list__link"
+                  data-testid="ssa-XVI-16"
+                  to="[object Object]"
+                >
+                   Title XVI 
+                </routerlink-stub>
+              </h4>
+            </li>
+            <li
+              class="titles-list__item"
+            >
+              <h4>
+                <routerlink-stub
+                  class="titles-list__link"
                   data-testid="ssa-XVIII-18"
                   to="[object Object]"
                 >
@@ -506,6 +571,19 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
                 to="[object Object]"
               >
                  Title XI 
+              </routerlink-stub>
+            </h4>
+          </li>
+          <li
+            class="titles-list__item"
+          >
+            <h4>
+              <routerlink-stub
+                class="titles-list__link"
+                data-testid="ssa-XVI-16"
+                to="[object Object]"
+              >
+                 Title XVI 
               </routerlink-stub>
             </h4>
           </li>

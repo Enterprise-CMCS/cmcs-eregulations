@@ -71,12 +71,17 @@ def roman_to_int(roman):
 
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
-    fields = (
-        'allow_indexing',
-        ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
-        ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
-        ('statute_compilation_date_type', 'statute_compilation_date'),
-        ('us_code_annual_date_type', 'us_code_annual_date'),
+    fieldsets = (
+        (None, {
+            "fields": (
+                'allow_indexing',
+                ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
+                ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
+                ('statute_compilation_date_type', 'statute_compilation_date'),
+                ('us_code_annual_date_type', 'us_code_annual_date'),
+            ),
+            "description": 'Configure crawling for the whole site and dates for statute sources.'
+        }),
     )
 
 
@@ -191,7 +196,7 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
                     section_append = SECTION_APPEND_REGEX.match(label)
                     if section_append:
                         section += DASH_REGEX.sub("-", section_append.group(1).strip())
-                        label = SECTION_APPEND_REGEX.sub("", label).strip()
+                        label = SECTION_APPEND_REGEX.sub("", label, 1).strip()
                     toc[section] = {
                         "name": label,
                         "statute_title": title,

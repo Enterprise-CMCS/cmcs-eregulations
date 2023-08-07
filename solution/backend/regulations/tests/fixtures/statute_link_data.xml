@@ -93,6 +93,7 @@ Sec. 1926. Repealed.
                 <referenceItem role="section" style="-uslm-dtd:toc-entry"><designator>Sec. 1945.</designator><label> State option to provide coordinated care through a health home for individuals with chronic conditions.</label></referenceItem>
                 <referenceItem role="section" style="-uslm-dtd:toc-entry"><designator>Sec. 1946.</designator><label> Addressing health care disparities.</label></referenceItem>
                 <referenceItem role="section" style="-uslm-dtd:toc-entry"><designator>Sec. 1947.</designator><label> State option to provide qualifying community-based mobile crisis intervention services.</label></referenceItem>
+                <referenceItem role="section" style="-uslm-dtd:toc-entry"><designator>Sec. 1947</designator><label>-G. This is a test for section label extensions-hello world</label></referenceItem>
             </toc>
             <section identifier="/us/sComp/74/271/tXIX/s1900" style="-uslm-dtd:section" styleType="traditional">
                 <heading style="-uslm-dtd:header">medicaid and chip payment and access commission </heading>
@@ -16207,6 +16208,7 @@ incorrectly paid on behalf of such individual, or</content>
             </section>
             <section identifier="/us/sComp/74/271/tXIX/s1947" style="-uslm-dtd:section" styleType="OLC">
                 <num style="-uslm-dtd:enum" value="1947">SEC. 1947. </num><editorialNote role="uscRef" style="-uslm-dtd:usc-reference"><b>[</b><ref href="/us/usc/t42/s1396w-6">42 U.S.C. 1396w-6</ref><b>]</b> </editorialNote><heading style="-uslm-dtd:header">STATE OPTION TO PROVIDE QUALIFYING COMMUNITY-BASED MOBILE CRISIS INTERVENTION SERVICES. </heading>
+                <num style="-uslm-dtd:enum" value="1947">SEC. 1947-G. </num><editorialNote role="uscRef" style="-uslm-dtd:usc-reference"><b>[</b><ref href="/us/usc/t42/s1396w-6">42 U.S.C. 1396w-6A</ref><b>]</b> </editorialNote><heading style="-uslm-dtd:header">THIS IS A TEST. </heading>
                 <subsection identifier="/us/sComp/74/271/tXIX/s1947/a" style="-uslm-dtd:subsection" styleType="OLC">
                     <num style="-uslm-dtd:enum" value="a">(a) </num><heading style="-uslm-dtd:header">In General.—</heading><content style="-uslm-dtd:text">Notwithstanding section 1902(a)(1) (relating to Statewideness), section 1902(a)(10)(B) (relating to comparability), section 1902(a)(23)(A) (relating to freedom of choice of providers), or section 1902(a)(27) (relating to provider agreements), a State may, during the 5-year period beginning on the first day of the first fiscal year quarter that begins on or after the date that is 1 year after the date of the enactment of this section, provide medical assistance for qualifying community-based mobile crisis intervention services.</content>
                 </subsection>

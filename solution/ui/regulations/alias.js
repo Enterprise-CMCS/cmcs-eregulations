@@ -8,7 +8,7 @@ export default {
     eregsComponentLib: r("../regulations/eregs-component-lib"),
     legacy: r("../../regulations"),
     sharedComponents: r(
-        "../eregs-component-lib/src/components/shared-components"
+        "../regulations/eregs-component-lib/src/components/shared-components"
     ),
     utilities: r("./utilities"),
     vite: r("../regulations/eregs-vite/src"),
