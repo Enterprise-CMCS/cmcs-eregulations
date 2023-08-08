@@ -1,19 +1,19 @@
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django.http import Http404
-from drf_spectacular.utils import extend_schema
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 
-from .utils import OpenApiPathParameter
+from common.auth import SettingsAuthentication
+from regcore.models import ECFRParserResult, ParserConfiguration, Part
 from regcore.serializers.parser import (
+    ParserConfigurationSerializer,
     ParserResultSerializer,
     PartUploadSerializer,
-    ParserConfigurationSerializer,
 )
-from common.auth import SettingsAuthentication
-from regcore.models import ECFRParserResult, Part, ParserConfiguration
+
+from .utils import OpenApiPathParameter
 
 
 @extend_schema(description="Retrieve configuration for the eCFR and Federal Register parsers.")

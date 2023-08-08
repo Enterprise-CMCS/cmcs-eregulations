@@ -2,10 +2,10 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 
-from .utils import OpenApiPathParameter
-
 from regcore.models import Part
 from regcore.serializers.toc import FlatTOCSerializer
+
+from .utils import OpenApiPathParameter
 
 
 # must define lookup_fields mapping with entries like { "field_name": "url_parameter", ... }

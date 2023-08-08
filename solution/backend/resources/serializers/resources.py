@@ -4,24 +4,6 @@ from django.db.models import Q
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from .categories import (
-    AbstractCategoryPolymorphicSerializer,
-    MetaCategorySerializer
-)
-
-from .locations import (
-    AbstractLocationPolymorphicSerializer,
-    MetaLocationSerializer,
-    SectionCreateSerializer,
-    SectionRangeCreateSerializer,
-)
-
-from .mixins import (
-    HeadlineField,
-    PolymorphicSerializer,
-    PolymorphicTypeField
-)
-
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -33,6 +15,14 @@ from resources.models import (
     SupplementalContent,
 )
 
+from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
+from .locations import (
+    AbstractLocationPolymorphicSerializer,
+    MetaLocationSerializer,
+    SectionCreateSerializer,
+    SectionRangeCreateSerializer,
+)
+from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
 from .utils import ProxySerializerWrapper
 
 

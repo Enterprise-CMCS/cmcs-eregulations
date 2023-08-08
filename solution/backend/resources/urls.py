@@ -6,7 +6,6 @@ from resources.views import (
     resources,
 )
 
-
 urlpatterns = [
     path("search", resources.ResourceSearchViewSet.as_view({
         "get": "list",

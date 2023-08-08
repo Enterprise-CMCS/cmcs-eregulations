@@ -1,7 +1,8 @@
+from drf_spectacular.utils import OpenApiTypes, extend_schema_field
 from rest_framework import serializers
-from drf_spectacular.utils import extend_schema_field, OpenApiTypes
 
 from resources.models import Category, SubCategory
+
 from .mixins import PolymorphicSerializer, PolymorphicTypeField
 from .utils import ProxySerializerWrapper
 

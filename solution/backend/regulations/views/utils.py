@@ -2,7 +2,6 @@ import logging
 
 from regulations.views.errors import NotInSubpart
 
-
 logger = logging.getLogger(__name__)
 
 

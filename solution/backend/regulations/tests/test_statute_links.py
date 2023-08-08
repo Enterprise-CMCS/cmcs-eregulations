@@ -4,11 +4,9 @@ from unittest import mock
 from django.core.exceptions import ValidationError
 from django.template import Context, Template
 from django.test import SimpleTestCase, TestCase
-
+from requests.exceptions import HTTPError
 from rest_framework import status
 from rest_framework.test import APITestCase
-
-from requests.exceptions import HTTPError
 
 from regulations.admin import StatuteLinkConverterAdmin
 from regulations.models import (

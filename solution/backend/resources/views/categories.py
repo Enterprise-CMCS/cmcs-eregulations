@@ -1,16 +1,14 @@
-from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema
 from django.db.models import Prefetch
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
 
-from common.mixins import OptionalPaginationMixin, PAGINATION_PARAMS
 from common.api import OpenApiQueryParameter
-
+from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from resources.models import (
     AbstractCategory,
     Category,
     SubCategory,
 )
-
 from resources.serializers.categories import (
     AbstractCategoryPolymorphicSerializer,
     CategoryTreeSerializer,
