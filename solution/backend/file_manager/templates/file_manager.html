@@ -1,0 +1,9 @@
+{% if uploaded_files %}
+    {% for file in uploaded_files %}
+        <p>File Name: {{ file.file.name }}</p>
+        <p>Created At: {{ file.created_at }}</p>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No files found.</p>
+{% endif %}
