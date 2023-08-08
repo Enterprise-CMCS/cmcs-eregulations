@@ -22,25 +22,25 @@ from resources.models import (
 
 def loadSeedData():
     fixtures = [
-    ("regulations.siteconfiguration.json", SiteConfiguration),
-    ("resources.abstractcategory.json", AbstractCategory),
-    ("resources.category.json", Category),
-    ("resources.subcategory.json", SubCategory),
-    ("resources.abstractlocation.json", AbstractLocation),
-    ("resources.subpart.json", Subpart),
-    ("resources.section.json", Section),
-    ("resources.abstractresource.json", AbstractResource),
-    ("resources.supplementalcontent.json", SupplementalContent),
-    ("resources.federalregisterdocumentgroup.json", FederalRegisterDocumentGroup),
-    ("resources.federalregisterdocument.json", FederalRegisterDocument),
-    ("resources.resourcesconfiguration.json", ResourcesConfiguration),
-    ("search.synonym.json", Synonym),
-    ("regulations.statutelinkconverter.json", StatuteLinkConverter),
-    ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
-    ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
-    ("cmcs_regulations/fixtures/auth.permission.json", Permission),
-    ("cmcs_regulations/fixtures/auth.group.json", Group),
-]
+        ("regulations.siteconfiguration.json", SiteConfiguration),
+        ("resources.abstractcategory.json", AbstractCategory),
+        ("resources.category.json", Category),
+        ("resources.subcategory.json", SubCategory),
+        ("resources.abstractlocation.json", AbstractLocation),
+        ("resources.subpart.json", Subpart),
+        ("resources.section.json", Section),
+        ("resources.abstractresource.json", AbstractResource),
+        ("resources.supplementalcontent.json", SupplementalContent),
+        ("resources.federalregisterdocumentgroup.json", FederalRegisterDocumentGroup),
+        ("resources.federalregisterdocument.json", FederalRegisterDocument),
+        ("resources.resourcesconfiguration.json", ResourcesConfiguration),
+        ("search.synonym.json", Synonym),
+        ("regulations.statutelinkconverter.json", StatuteLinkConverter),
+        ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
+        ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
+        ("cmcs_regulations/fixtures/auth.permission.json", Permission),
+        ("cmcs_regulations/fixtures/auth.group.json", Group),
+    ]
 
     for fixture in reversed(fixtures):
         fixture[1].objects.all().delete()
