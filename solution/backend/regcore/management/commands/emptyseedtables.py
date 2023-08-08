@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
 from regcore.search.models import Synonym
-from regulations.models import SiteConfiguration, StatuteLinkConverter
+from regulations.models import SiteConfiguration, StatuteLinkConfiguration, StatuteLinkConverter
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -24,6 +24,7 @@ class Command(BaseCommand):
         FederalRegisterDocumentGroup.objects.all().delete()
         Synonym.objects.all().delete()
         StatuteLinkConverter.objects.all().delete()
+        StatuteLinkConfiguration.objects.all().delete()
         Group.objects.all().delete()
         Permission.objects.all().delete()
         ContentType.objects.all().delete()
