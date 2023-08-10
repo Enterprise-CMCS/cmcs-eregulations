@@ -1,10 +1,10 @@
 import re
 
 from django.db import models
-from common.fields import VariableDateField, NaturalSortField
 from django_jsonform.models.fields import JSONField
 from solo.models import SingletonModel
 
+from common.fields import NaturalSortField, VariableDateField
 
 DASH_PATTERN = r"[-—–-–]|&#x2013;"
 DASH_REGEX = re.compile(DASH_PATTERN, re.IGNORECASE)

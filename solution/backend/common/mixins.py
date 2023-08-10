@@ -2,7 +2,6 @@ from rest_framework.pagination import PageNumberPagination
 
 from .api import OpenApiQueryParameter
 
-
 # For viewsets where pagination is disabled by default
 PAGINATION_PARAMS = [
     OpenApiQueryParameter("page", "A page number within the paginated result set.", int, False),

@@ -7,16 +7,16 @@ from regulations.views.cache import CacheView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
 from regulations.views.reader import (
-     PartReaderView,
-     SectionReaderView,
-     SubpartReaderView,
+    PartReaderView,
+    SectionReaderView,
+    SubpartReaderView,
 )
 from regulations.views.regulation_landing import RegulationLandingView
 from regulations.views.resources import ResourcesView
 from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
-from regulations.views.supplemental_content import SupplementalContentView
 from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
+from regulations.views.supplemental_content import SupplementalContentView
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')

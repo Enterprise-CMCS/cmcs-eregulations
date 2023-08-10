@@ -1,12 +1,13 @@
-import datetime
 import asyncio
-import httpx
+import datetime
 
+import httpx
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema
 
 from regcore.serializers.history import HistorySerializer
+
 from .utils import OpenApiPathParameter
 
 GOVINFO_YEAR_MIN = 1996

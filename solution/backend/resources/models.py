@@ -1,13 +1,12 @@
-from model_utils.managers import InheritanceManager, InheritanceQuerySet
-from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
-from common.fields import VariableDateField
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.db import models
-from django_jsonform.models.fields import ArrayField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django_jsonform.models.fields import ArrayField
+from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
 
-from common.fields import NaturalSortField
+from common.fields import NaturalSortField, VariableDateField
 
 
 # Field mixins

@@ -1,7 +1,8 @@
+from datetime import datetime
+
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.html import strip_tags
-from datetime import datetime
 
 register = template.Library()
 

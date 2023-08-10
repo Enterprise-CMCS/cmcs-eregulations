@@ -1,10 +1,11 @@
 from datetime import date
-from rest_framework import viewsets
-from drf_spectacular.utils import extend_schema
-from django.db.models import F
 
-from common.mixins import OptionalPaginationMixin
+from django.db.models import F
+from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
+
 from common.api import OpenApiQueryParameter
+from common.mixins import OptionalPaginationMixin
 
 from .models import SearchIndexV2
 from .serializers import SearchResultSerializer
