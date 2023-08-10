@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import UploadedFile
 
+
 class UploadedFileAdmin(admin.ModelAdmin):
     # List of fields to display in the admin list view
     list_display = ('file', 'created_at')
