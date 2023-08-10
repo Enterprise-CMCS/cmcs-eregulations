@@ -2,8 +2,9 @@ import boto3
 import uuid
 from django.shortcuts import render
 from django.utils import timezone
-from .models import UploadedFile
 from django.conf import settings
+
+from .models import UploadedFile
 
 
 def file_manager(request):

@@ -80,7 +80,7 @@ MIDDLEWARE = [
 
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", None)
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", None)
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", None)
+AWS_STORAGE_BUCKET_NAME = 'cmcs-eregs-test-file-manager'
 AWS_S3_REGION_NAME = 'us-east-1'
 AWS_DEFAULT_ACL = 'public-read'  # or 'private' if you want to restrict access
 AWS_QUERYSTRING_AUTH = False  # Remove query strings from generated URLs
