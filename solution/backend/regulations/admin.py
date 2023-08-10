@@ -85,7 +85,28 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
 
 @admin.register(StatuteLinkConfiguration)
 class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
-    pass
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["link_statute_refs", "link_usc_refs"],
+            },
+        ),
+        (
+            "Statute Ref Link Exceptions",
+            {
+                "classes": ["collapse"],
+                "fields": ["statute_ref_exceptions"],
+            },
+        ),
+        (
+            "U.S.C. Ref Link Exceptions",
+            {
+                "classes": ["collapse"],
+                "fields": ["usc_ref_exceptions"],
+            },
+        ),
+    ]
 
 
 @admin.register(StatuteLinkConverter)
