@@ -1,6 +1,7 @@
+<h1>File manager</h1>
 {% if uploaded_files %}
     {% for file in uploaded_files %}
-        <p>File Name: {{ file.file.name }}</p>
+        <p><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></p>
         <p>Created At: {{ file.created_at }}</p>
         <hr>
     {% endfor %}
