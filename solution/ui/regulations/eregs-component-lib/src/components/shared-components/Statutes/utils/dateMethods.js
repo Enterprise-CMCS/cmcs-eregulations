@@ -15,7 +15,7 @@ const getDateLabel = ({ type, date }) => {
     if (_isUndefined(type) || _isUndefined(date)) return "";
 
     const rawDate = new Date(date);
-    const formattedDate = rawDate.tolocalestring("default", {
+    const formattedDate = rawDate.toLocaleString("default", {
         month: "short",
         year: "numeric",
     });
