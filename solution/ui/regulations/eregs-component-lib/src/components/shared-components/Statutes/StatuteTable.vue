@@ -40,7 +40,7 @@ const tableSchema = computed(() => {
 
 // Get column dates from Django template
 const getColumnDates = () => {
-    if (!document.getElementById("site_config")) return [];
+    if (!document.getElementById("site_config")) return {};
 
     const rawDates = JSON.parse(
         document.getElementById("site_config").textContent
