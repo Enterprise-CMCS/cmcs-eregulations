@@ -35,4 +35,4 @@ jobs:
           jira-ignore-statuses: Done, Closed, Canceled
           jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
           aws-severities: CRITICAL, HIGH, MEDIUM 
-          auto-close: true
+          #auto-close: false
