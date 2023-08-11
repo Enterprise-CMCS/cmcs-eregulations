@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block body %}
+{{ site_config|json_script:"site_config" }}
 <div
     id="vite-app"
     data-api-url="{{ API_BASE }}"

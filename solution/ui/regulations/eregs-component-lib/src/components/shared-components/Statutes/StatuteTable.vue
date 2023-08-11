@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 import { acaSchema, ssaSchema } from "./schemas/tableSchemas";
 import { ACT_TYPES, DISPLAY_TYPES } from "./utils/enums";
@@ -36,10 +36,25 @@ const tableSchema = computed(() => {
             return ssaSchema;
     }
 });
+
+
+// Get column dates from Django template
+const getColumnDates = () => {
+    if (!document.getElementById("site_config")) return [];
+
+    const rawDates = JSON.parse(
+        document.getElementById("site_config").textContent
+    );
+
+    return rawDates;
+}
+
+const columnDates = getColumnDates();
 </script>
 
 <template>
     <div>
+        Column Dates {{ columnDates }}
         <div v-if="props.displayType === 'list'" id="statuteList">
             <div
                 v-for="(statute, i) in props.filteredStatutes"
