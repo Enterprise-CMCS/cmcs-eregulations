@@ -54,7 +54,6 @@ const columnDates = getColumnDates();
 
 <template>
     <div>
-        Column Dates {{ columnDates }}
         <div v-if="props.displayType === 'list'" id="statuteList">
             <div
                 v-for="(statute, i) in props.filteredStatutes"
@@ -83,6 +82,7 @@ const columnDates = getColumnDates();
                     :key="`statute-table-header-${i}`"
                     :cell-data="column.header"
                     :display-type="props.displayType"
+                    :column-dates="columnDates"
                 />
             </tr>
             <tbody class="table__body">

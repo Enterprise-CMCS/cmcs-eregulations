@@ -11,6 +11,11 @@ const props = defineProps({
         required: false,
         default: "table",
     },
+    columnDates: {
+        type: Object,
+        required: false,
+        default: () => {},
+    },
 });
 </script>
 
@@ -31,7 +36,7 @@ const props = defineProps({
                 :key="`${props.displayType}-subtitle-${i}`"
                 class="cell__subtitle"
             >
-                {{ subtitle }}
+                {{ subtitle(columnDates) }}
             </div>
         </template>
     </th>
