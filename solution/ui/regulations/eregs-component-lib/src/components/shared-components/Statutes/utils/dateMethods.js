@@ -13,7 +13,16 @@ import _isUndefined from "lodash/isUndefined";
  */
 const getDateLabel = ({ type, date }) => {
     if (_isUndefined(type) || _isUndefined(date)) return "";
-    return `${type} ${date}`;
+
+    const rawDate = new Date(date);
+    const formattedDate = rawDate.tolocalestring("default", {
+        month: "short",
+        year: "numeric",
+    });
+
+    if (formattedDate == "Invalid Date") return "";
+
+    return `${type} ${formattedDate}`;
 };
 
 export { getDateLabel };
