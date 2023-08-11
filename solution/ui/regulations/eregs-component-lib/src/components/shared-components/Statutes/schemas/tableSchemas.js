@@ -6,11 +6,6 @@ import {
 } from "../utils/urlMethods.js";
 import { getDateLabel } from "../utils/dateMethods.js";
 
-const defaultDateLabelObj = {
-    title: undefined,
-    date: undefined,
-};
-
 // placeholder for future schema
 const acaSchema = [
     {
@@ -60,9 +55,7 @@ const ssaSchema = [
             subtitles: [
                 () => "Web Page",
                 (columnDates) =>
-                    getDateLabel(
-                        columnDates?.us_code_house_gov ?? defaultDateLabelObj
-                    ),
+                    getDateLabel(columnDates?.us_code_house_gov ?? {}),
             ],
         },
         body: {
@@ -79,9 +72,7 @@ const ssaSchema = [
             subtitles: [
                 () => "PDF Document",
                 (columnDates) =>
-                    getDateLabel(
-                        columnDates?.statute_compilation ?? defaultDateLabelObj
-                    ),
+                    getDateLabel(columnDates?.statute_compilation ?? {}),
             ],
         },
         body: {
@@ -98,9 +89,7 @@ const ssaSchema = [
             subtitles: [
                 () => "PDF Document",
                 (columnDates) =>
-                    getDateLabel(
-                        columnDates?.us_code_annual ?? defaultDateLabelObj
-                    ),
+                    getDateLabel(columnDates?.us_code_annual ?? {}),
             ],
         },
         body: {
@@ -117,9 +106,7 @@ const ssaSchema = [
             subtitles: [
                 () => "Web Page",
                 (columnDates) =>
-                    getDateLabel(
-                        columnDates?.ssa_gov_compilation ?? defaultDateLabelObj
-                    ),
+                    getDateLabel(columnDates?.ssa_gov_compilation ?? {}),
             ],
         },
         body: {
