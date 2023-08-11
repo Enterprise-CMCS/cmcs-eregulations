@@ -11,7 +11,7 @@ import _isUndefined from "lodash/isUndefined";
  *
  * @returns {string} - Formatted date label
  */
-const getDateLabel = ({ type=undefined, date=undefined }) => {
+const getDateLabel = ({ type, date }) => {
     if (_isUndefined(type) || _isUndefined(date)) return "";
     return `${type} ${date}`;
 };

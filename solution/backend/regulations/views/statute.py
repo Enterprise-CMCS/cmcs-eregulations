@@ -4,6 +4,7 @@ from regulations.models import (
     SiteConfiguration,
 )
 
+
 class StatuteView(TemplateView):
     template_name = 'regulations/statute.html'
 
