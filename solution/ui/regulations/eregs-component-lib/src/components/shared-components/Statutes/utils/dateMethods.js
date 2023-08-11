@@ -22,6 +22,8 @@ const getDateLabel = ({ type, date }) => {
         return "";
 
     const rawDate = new Date(date);
+    // add a day to get correct month because Javascript dates are weird
+    rawDate.setDate(rawDate.getDate() + 1);
     const formattedDate = rawDate.toLocaleString("default", {
         month: "short",
         year: "numeric",
