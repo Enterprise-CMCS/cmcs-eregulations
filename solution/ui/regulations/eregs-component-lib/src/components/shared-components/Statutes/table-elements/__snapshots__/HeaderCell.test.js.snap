@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 1 1`] = `
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 1 with dates 1`] = `
 {
   "baseElement": <body>
     <div>
@@ -85,7 +85,92 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
 }
 `;
 
-exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 2 1`] = `
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 1 without dates 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <th
+        class="row__cell row__cell--header row__cell--primary"
+      >
+        <div
+          class="cell__title"
+        >
+           Statute Citation 
+        </div>
+        <!---->
+      </th>
+    </div>
+  </body>,
+  "container": <div>
+    <th
+      class="row__cell row__cell--header row__cell--primary"
+    >
+      <div
+        class="cell__title"
+      >
+         Statute Citation 
+      </div>
+      <!---->
+    </th>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
+
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 2 with dates 1`] = `
 {
   "baseElement": <body>
     <div>
@@ -105,7 +190,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
         >
-           Effective Jul 2023 
+           effective Aug 2023 
         </div>
       </th>
     </div>
@@ -127,7 +212,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
       >
-         Effective Jul 2023 
+         effective Aug 2023 
       </div>
     </th>
   </div>,
@@ -188,7 +273,110 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
 }
 `;
 
-exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 3 1`] = `
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 2 without dates 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <th
+        class="row__cell row__cell--header row__cell--secondary"
+      >
+        <div
+          class="cell__title"
+        >
+           US Code House.gov 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+           Web Page 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+            
+        </div>
+      </th>
+    </div>
+  </body>,
+  "container": <div>
+    <th
+      class="row__cell row__cell--header row__cell--secondary"
+    >
+      <div
+        class="cell__title"
+      >
+         US Code House.gov 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+         Web Page 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+          
+      </div>
+    </th>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
+
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 3 with dates 1`] = `
 {
   "baseElement": <body>
     <div>
@@ -208,7 +396,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
         >
-           Amended Dec 2022 
+           amended Dec 2022 
         </div>
       </th>
     </div>
@@ -230,7 +418,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
       >
-         Amended Dec 2022 
+         amended Dec 2022 
       </div>
     </th>
   </div>,
@@ -291,7 +479,110 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
 }
 `;
 
-exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 4 1`] = `
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 3 without dates 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <th
+        class="row__cell row__cell--header row__cell--secondary"
+      >
+        <div
+          class="cell__title"
+        >
+           Statute Compilation 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+           PDF Document 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+            
+        </div>
+      </th>
+    </div>
+  </body>,
+  "container": <div>
+    <th
+      class="row__cell row__cell--header row__cell--secondary"
+    >
+      <div
+        class="cell__title"
+      >
+         Statute Compilation 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+         PDF Document 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+          
+      </div>
+    </th>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
+
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 4 with dates 1`] = `
 {
   "baseElement": <body>
     <div>
@@ -311,7 +602,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
         >
-           Effective Jan 2022 
+           effective Jan 2022 
         </div>
       </th>
     </div>
@@ -333,7 +624,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
       >
-         Effective Jan 2022 
+         effective Jan 2022 
       </div>
     </th>
   </div>,
@@ -394,7 +685,110 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
 }
 `;
 
-exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 5 1`] = `
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 4 without dates 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <th
+        class="row__cell row__cell--header row__cell--secondary"
+      >
+        <div
+          class="cell__title"
+        >
+           US Code Annual 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+           PDF Document 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+            
+        </div>
+      </th>
+    </div>
+  </body>,
+  "container": <div>
+    <th
+      class="row__cell row__cell--header row__cell--secondary"
+    >
+      <div
+        class="cell__title"
+      >
+         US Code Annual 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+         PDF Document 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+          
+      </div>
+    </th>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
+
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 5 with dates 1`] = `
 {
   "baseElement": <body>
     <div>
@@ -414,7 +808,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
         >
-           Amended Dec 2019 
+           amended Dec 2019 
         </div>
       </th>
     </div>
@@ -436,7 +830,110 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
       >
-         Amended Dec 2019 
+         amended Dec 2019 
+      </div>
+    </th>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
+
+exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 5 without dates 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <th
+        class="row__cell row__cell--header row__cell--secondary"
+      >
+        <div
+          class="cell__title"
+        >
+           SSA.gov Compilation 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+           Web Page 
+        </div>
+        <div
+          class="cell__subtitle"
+        >
+            
+        </div>
+      </th>
+    </div>
+  </body>,
+  "container": <div>
+    <th
+      class="row__cell row__cell--header row__cell--secondary"
+    >
+      <div
+        class="cell__title"
+      >
+         SSA.gov Compilation 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+         Web Page 
+      </div>
+      <div
+        class="cell__subtitle"
+      >
+          
       </div>
     </th>
   </div>,
