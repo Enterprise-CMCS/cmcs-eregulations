@@ -20,10 +20,10 @@
         "isActive": true,
         "baseWord": "MMIS",
         "synonyms": [
+            75,
             3,
             4,
-            5,
-            75
+            5
         ]
     }
 },
@@ -34,10 +34,10 @@
         "isActive": true,
         "baseWord": "Medicaid Management Information System",
         "synonyms": [
+            75,
             2,
             4,
-            5,
-            75
+            5
         ]
     }
 },
@@ -48,10 +48,10 @@
         "isActive": true,
         "baseWord": "Mechanized claims processing and information retrieval system",
         "synonyms": [
+            75,
             2,
             3,
-            5,
-            75
+            5
         ]
     }
 },
@@ -62,10 +62,10 @@
         "isActive": false,
         "baseWord": "MCPIRS",
         "synonyms": [
+            75,
             2,
             3,
-            4,
-            75
+            4
         ]
     }
 },
@@ -76,8 +76,8 @@
         "isActive": true,
         "baseWord": "APD",
         "synonyms": [
-            7,
-            53
+            53,
+            7
         ]
     }
 },
@@ -88,8 +88,8 @@
         "isActive": false,
         "baseWord": "Advanced Planning Document",
         "synonyms": [
-            6,
-            53
+            53,
+            6
         ]
     }
 },
@@ -100,10 +100,10 @@
         "isActive": true,
         "baseWord": "T-MSIS",
         "synonyms": [
-            9,
             54,
             55,
-            56
+            56,
+            9
         ]
     }
 },
@@ -114,10 +114,10 @@
         "isActive": true,
         "baseWord": "Transformed Medicaid Statistical Information System",
         "synonyms": [
-            8,
             54,
             55,
-            56
+            56,
+            8
         ]
     }
 },
@@ -128,9 +128,9 @@
         "isActive": false,
         "baseWord": "PASRR",
         "synonyms": [
-            11,
             57,
-            67
+            67,
+            11
         ]
     }
 },
@@ -141,9 +141,9 @@
         "isActive": true,
         "baseWord": "Preadmission Screening and Resident Review",
         "synonyms": [
-            10,
             57,
-            67
+            67,
+            10
         ]
     }
 },
@@ -238,10 +238,10 @@
         "isActive": true,
         "baseWord": "Post-Eligibility Treatment of Income",
         "synonyms": [
-            1,
             20,
             21,
-            22
+            22,
+            1
         ]
     }
 },
@@ -252,10 +252,10 @@
         "isActive": true,
         "baseWord": "Post-Eligibility Financial Requirements",
         "synonyms": [
-            1,
             19,
             21,
-            22
+            22,
+            1
         ]
     }
 },
@@ -266,10 +266,10 @@
         "isActive": true,
         "baseWord": "Application of patient income to the cost of care",
         "synonyms": [
-            1,
             19,
             20,
-            22
+            22,
+            1
         ]
     }
 },
@@ -280,10 +280,10 @@
         "isActive": true,
         "baseWord": "Personal Needs Allowance",
         "synonyms": [
-            1,
             19,
             20,
-            21
+            21,
+            1
         ]
     }
 },
@@ -654,10 +654,10 @@
         "isActive": true,
         "baseWord": "TMSIS",
         "synonyms": [
-            8,
-            9,
             55,
-            56
+            56,
+            8,
+            9
         ]
     }
 },
@@ -668,10 +668,10 @@
         "isActive": true,
         "baseWord": "Medicaid Statistical Information System",
         "synonyms": [
-            8,
-            9,
             54,
-            56
+            56,
+            8,
+            9
         ]
     }
 },
@@ -682,10 +682,10 @@
         "isActive": true,
         "baseWord": "MSIS",
         "synonyms": [
-            8,
-            9,
             54,
-            55
+            55,
+            8,
+            9
         ]
     }
 },
@@ -696,9 +696,9 @@
         "isActive": true,
         "baseWord": "PASARR",
         "synonyms": [
+            67,
             10,
-            11,
-            67
+            11
         ]
     }
 },
@@ -800,9 +800,9 @@
         "isActive": true,
         "baseWord": "Preadmission Screening and Annual Resident Review",
         "synonyms": [
+            57,
             10,
-            11,
-            57
+            11
         ]
     }
 },
@@ -907,7 +907,8 @@
         "isActive": true,
         "baseWord": "tribe",
         "synonyms": [
-            77
+            77,
+            713
         ]
     }
 },
@@ -918,7 +919,8 @@
         "isActive": true,
         "baseWord": "tribal consultation",
         "synonyms": [
-            76
+            76,
+            713
         ]
     }
 },
@@ -1048,7 +1050,10 @@
         "isActive": true,
         "baseWord": "Ticket to Work",
         "synonyms": [
-            121
+            121,
+            714,
+            715,
+            716
         ]
     }
 },
@@ -1059,7 +1064,10 @@
         "isActive": true,
         "baseWord": "TWWIIA",
         "synonyms": [
-            120
+            120,
+            714,
+            715,
+            716
         ]
     }
 },
@@ -1243,7 +1251,6 @@
             531,
             533,
             534,
-            535,
             536
         ]
     }
@@ -1259,7 +1266,6 @@
             531,
             533,
             534,
-            535,
             536
         ]
     }
@@ -3914,8 +3920,7 @@
         "isActive": true,
         "baseWord": "Families First Coronavirus Response Act",
         "synonyms": [
-            390,
-            535
+            390
         ]
     }
 },
@@ -4311,9 +4316,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HCERA",
-        "synonyms": [
-            429
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4322,9 +4325,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care and Education Reconciliation Act",
-        "synonyms": [
-            428
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4333,9 +4334,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HCFA",
-        "synonyms": [
-            431
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4344,9 +4343,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care Financing Administration",
-        "synonyms": [
-            430
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4355,9 +4352,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HCFAC",
-        "synonyms": [
-            433
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4366,9 +4361,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care Fraud and Abuse Control Program",
-        "synonyms": [
-            432
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4377,9 +4370,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "HCPCS",
-        "synonyms": [
-            435
-        ]
+        "synonyms": []
     }
 },
 {
@@ -4388,9 +4379,7 @@
     "fields": {
         "isActive": true,
         "baseWord": "Health Care Common Procedure Coding System",
-        "synonyms": [
-            434
-        ]
+        "synonyms": []
     }
 },
 {
@@ -5174,8 +5163,7 @@
             523,
             531,
             533,
-            534,
-            535
+            534
         ]
     }
 },
@@ -5210,7 +5198,6 @@
         "baseWord": "Consolidated Appropriations Act of 2023",
         "synonyms": [
             528,
-            535,
             536
         ]
     }
@@ -5223,7 +5210,6 @@
         "baseWord": "CAA",
         "synonyms": [
             527,
-            535,
             536
         ]
     }
@@ -5300,17 +5286,7 @@
     "fields": {
         "isActive": false,
         "baseWord": "Returning to Regular Operations after COVID-19",
-        "synonyms": [
-            140,
-            141,
-            391,
-            510,
-            511,
-            524,
-            527,
-            528,
-            531
-        ]
+        "synonyms": []
     }
 },
 {
@@ -5595,7 +5571,8 @@
         "isActive": true,
         "baseWord": "spend down",
         "synonyms": [
-            671
+            671,
+            704
         ]
     }
 },
@@ -5606,7 +5583,8 @@
         "isActive": true,
         "baseWord": "spenddown",
         "synonyms": [
-            670
+            670,
+            704
         ]
     }
 },
@@ -5648,6 +5626,528 @@
         "isActive": true,
         "baseWord": "in lieu of services and settings",
         "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 676,
+    "fields": {
+        "isActive": true,
+        "baseWord": "IMD exclusion",
+        "synonyms": [
+            677,
+            678,
+            679,
+            680,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 677,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Institution for Mental Diseases exclusion",
+        "synonyms": [
+            676,
+            678,
+            679,
+            680,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 678,
+    "fields": {
+        "isActive": true,
+        "baseWord": "payment exclusion for institutions for mental diseases",
+        "synonyms": [
+            676,
+            677,
+            679,
+            680,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 679,
+    "fields": {
+        "isActive": true,
+        "baseWord": "IMD payment exclusion",
+        "synonyms": [
+            676,
+            677,
+            678,
+            680,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 680,
+    "fields": {
+        "isActive": true,
+        "baseWord": "institution for mental diseases (IMD) exclusion",
+        "synonyms": [
+            676,
+            677,
+            678,
+            679,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 681,
+    "fields": {
+        "isActive": true,
+        "baseWord": "limitation on coverage of services provided in an IMD",
+        "synonyms": [
+            676,
+            677,
+            678,
+            679,
+            680,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 682,
+    "fields": {
+        "isActive": true,
+        "baseWord": "individuals under age 65 who are patients in an institution for mental diseases",
+        "synonyms": [
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 683,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS 64",
+        "synonyms": [
+            685,
+            686,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 684,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS-64",
+        "synonyms": [
+            685,
+            686,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 685,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly Statement of Expenditures",
+        "synonyms": [
+            683,
+            684,
+            686,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 686,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly expenditure report",
+        "synonyms": [
+            683,
+            684,
+            685,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 687,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program",
+        "synonyms": [
+            683,
+            684,
+            685,
+            686
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 688,
+    "fields": {
+        "isActive": true,
+        "baseWord": "out of state",
+        "synonyms": [
+            689
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 689,
+    "fields": {
+        "isActive": true,
+        "baseWord": "out-of-state",
+        "synonyms": [
+            688
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 690,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS 37",
+        "synonyms": [
+            692
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 691,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS-37",
+        "synonyms": [
+            692
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 692,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Medicaid Program Budget Report",
+        "synonyms": [
+            690,
+            691
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 693,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly Distribution of Funding Requirements",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 694,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Extension of eligibility for medical assistance",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 695,
+    "fields": {
+        "isActive": true,
+        "baseWord": "exclusion of FFP",
+        "synonyms": [
+            676,
+            677,
+            678,
+            679,
+            680,
+            681,
+            682
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 696,
+    "fields": {
+        "isActive": true,
+        "baseWord": "spousal impoverishment",
+        "synonyms": [
+            697,
+            698,
+            699
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 697,
+    "fields": {
+        "isActive": true,
+        "baseWord": "institutionalized spouse",
+        "synonyms": [
+            696,
+            698,
+            699
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 698,
+    "fields": {
+        "isActive": true,
+        "baseWord": "community spouse",
+        "synonyms": [
+            696,
+            697,
+            699
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 699,
+    "fields": {
+        "isActive": true,
+        "baseWord": "maintenance needs of spouse",
+        "synonyms": [
+            696,
+            697,
+            698
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 700,
+    "fields": {
+        "isActive": true,
+        "baseWord": "217 group",
+        "synonyms": [
+            701
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 701,
+    "fields": {
+        "isActive": true,
+        "baseWord": "217 category",
+        "synonyms": [
+            700
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 702,
+    "fields": {
+        "isActive": true,
+        "baseWord": "incurred medical expenses",
+        "synonyms": [
+            704
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 703,
+    "fields": {
+        "isActive": true,
+        "baseWord": "individuals receiving home and community-based services",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 704,
+    "fields": {
+        "isActive": true,
+        "baseWord": "medically needy",
+        "synonyms": [
+            670,
+            671,
+            702
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 705,
+    "fields": {
+        "isActive": true,
+        "baseWord": "new adult group",
+        "synonyms": [
+            706,
+            707,
+            708
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 706,
+    "fields": {
+        "isActive": true,
+        "baseWord": "VIII Group",
+        "synonyms": [
+            705,
+            707,
+            708
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 707,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Medicaid expansion",
+        "synonyms": [
+            705,
+            706,
+            708
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 708,
+    "fields": {
+        "isActive": true,
+        "baseWord": "coverage for individuals age 19 or older and under age 65 at or below 133 percent FPL",
+        "synonyms": [
+            705,
+            706,
+            707
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 709,
+    "fields": {
+        "isActive": true,
+        "baseWord": "payer of last resort",
+        "synonyms": [
+            710
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 710,
+    "fields": {
+        "isActive": true,
+        "baseWord": "payor of last resort",
+        "synonyms": [
+            709
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 711,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Medicaid as a secondary payer",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 712,
+    "fields": {
+        "isActive": true,
+        "baseWord": "consultation with Federally-recognized Indian tribes",
+        "synonyms": [
+            713
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 713,
+    "fields": {
+        "isActive": true,
+        "baseWord": "tribal officials",
+        "synonyms": [
+            76,
+            77,
+            712
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 714,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Ticket to Work and Work Incentives Improvement Act",
+        "synonyms": [
+            120,
+            121,
+            715,
+            716
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 715,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Ticket to Work Medical Improvements Group",
+        "synonyms": [
+            120,
+            121,
+            714,
+            716
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 716,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Working Individuals with Medically Improved Disability",
+        "synonyms": [
+            120,
+            121,
+            714,
+            715
+        ]
     }
 }
 ]

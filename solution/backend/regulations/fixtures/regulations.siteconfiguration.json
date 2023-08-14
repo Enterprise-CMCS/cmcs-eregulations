@@ -4,14 +4,14 @@
     "pk": 1,
     "fields": {
         "allow_indexing": false,
-        "us_code_house_gov_date_type": "",
-        "us_code_house_gov_date": null,
-        "ssa_gov_compilation_date_type": "",
-        "ssa_gov_compilation_date": null,
-        "statute_compilation_date_type": "",
-        "statute_compilation_date": null,
-        "us_code_annual_date_type": "",
-        "us_code_annual_date": null
+        "us_code_house_gov_date_type": "effective",
+        "us_code_house_gov_date": "2023-08",
+        "ssa_gov_compilation_date_type": "amended",
+        "ssa_gov_compilation_date": "2019-12",
+        "statute_compilation_date_type": "amended",
+        "statute_compilation_date": "2022-12",
+        "us_code_annual_date_type": "effective",
+        "us_code_annual_date": "2022-01"
     }
 }
 ]
