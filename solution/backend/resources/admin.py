@@ -397,7 +397,7 @@ class FederalResourceForm(ResourceForm):
     def __init__(self, *args, **kwargs):
         super(FederalResourceForm, self).__init__(*args, **kwargs)
         if self.instance.id:
-            CHOICES_INCLUDING_DB_VALUE = [(self.instance.doc_type,)*2] + self.doc_types
+            CHOICES_INCLUDING_DB_VALUE = [(self.instance.doc_type,) * 2] + self.doc_types
             self.fields['doc_type'] = forms.ChoiceField(
                 choices=CHOICES_INCLUDING_DB_VALUE)
 
