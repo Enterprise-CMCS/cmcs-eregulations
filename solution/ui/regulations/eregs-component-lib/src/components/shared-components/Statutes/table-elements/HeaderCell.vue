@@ -35,6 +35,7 @@ const props = defineProps({
                 v-for="(subtitle, i) in cellData.subtitles"
                 :key="`${props.displayType}-subtitle-${i}`"
                 class="cell__subtitle"
+                :data-testid="`${props.cellData.testId}-subtitle-${i}`"
             >
                 {{ subtitle(columnDates) }}
             </div>

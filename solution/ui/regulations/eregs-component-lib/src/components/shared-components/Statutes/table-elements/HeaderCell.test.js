@@ -10,7 +10,9 @@ import HeaderCell from "./HeaderCell.vue";
 
 describe("Statute Table Header Cell", () => {
     describe("SSA table header", () => {
-        ssaSchema.forEach((column, index) => {
+        const secondaryCells = ssaSchema.filter((column) => column.header.secondary);
+
+        secondaryCells.forEach((column, index) => {
             it(`Creates a snapshot of header cell for column ${index + 1} without dates`, async () => {
                 const wrapper = render(HeaderCell, {
                     props: {
@@ -19,6 +21,10 @@ describe("Statute Table Header Cell", () => {
                     },
                 });
                 await flushPromises();
+
+                const dateCell = wrapper.getByTestId(`${column.header.testId}-subtitle-1`).textContent;
+                expect(dateCell.trim()).toEqual("");
+
                 expect(wrapper).toMatchSnapshot();
             });
 
@@ -31,6 +37,10 @@ describe("Statute Table Header Cell", () => {
                     },
                 });
                 await flushPromises();
+
+                const dateCell = wrapper.getByTestId(`${column.header.testId}-subtitle-1`).textContent;
+                expect(dateCell.trim()).toEqual("effective Aug 2023");
+
                 expect(wrapper).toMatchSnapshot();
             });
         });

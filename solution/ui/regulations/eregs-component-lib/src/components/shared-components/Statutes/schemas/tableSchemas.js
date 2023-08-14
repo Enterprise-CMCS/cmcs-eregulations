@@ -50,6 +50,7 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "house-gov-link",
             title: "US Code House.gov",
             secondary: true,
             subtitles: [
@@ -67,6 +68,7 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "statute-compilation-link",
             title: "Statute Compilation",
             secondary: true,
             subtitles: [
@@ -84,6 +86,7 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "us-code-annual-link",
             title: "US Code Annual",
             secondary: true,
             subtitles: [
@@ -101,6 +104,7 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "ssa-gov-link",
             title: "SSA.gov Compilation",
             secondary: true,
             subtitles: [

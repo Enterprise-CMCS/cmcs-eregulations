@@ -5,27 +5,49 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "baseElement": <body>
     <div>
       <th
-        class="row__cell row__cell--header row__cell--primary"
+        class="row__cell row__cell--header row__cell--secondary"
       >
         <div
           class="cell__title"
         >
-           Statute Citation 
+           US Code House.gov 
         </div>
-        <!---->
+        <div
+          class="cell__subtitle"
+          data-testid="house-gov-link-subtitle-0"
+        >
+           Web Page 
+        </div>
+        <div
+          class="cell__subtitle"
+          data-testid="house-gov-link-subtitle-1"
+        >
+           effective Aug 2023 
+        </div>
       </th>
     </div>
   </body>,
   "container": <div>
     <th
-      class="row__cell row__cell--header row__cell--primary"
+      class="row__cell row__cell--header row__cell--secondary"
     >
       <div
         class="cell__title"
       >
-         Statute Citation 
+         US Code House.gov 
       </div>
-      <!---->
+      <div
+        class="cell__subtitle"
+        data-testid="house-gov-link-subtitle-0"
+      >
+         Web Page 
+      </div>
+      <div
+        class="cell__subtitle"
+        data-testid="house-gov-link-subtitle-1"
+      >
+         effective Aug 2023 
+      </div>
     </th>
   </div>,
   "debug": [Function],
@@ -90,27 +112,49 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "baseElement": <body>
     <div>
       <th
-        class="row__cell row__cell--header row__cell--primary"
+        class="row__cell row__cell--header row__cell--secondary"
       >
         <div
           class="cell__title"
         >
-           Statute Citation 
+           US Code House.gov 
         </div>
-        <!---->
+        <div
+          class="cell__subtitle"
+          data-testid="house-gov-link-subtitle-0"
+        >
+           Web Page 
+        </div>
+        <div
+          class="cell__subtitle"
+          data-testid="house-gov-link-subtitle-1"
+        >
+            
+        </div>
       </th>
     </div>
   </body>,
   "container": <div>
     <th
-      class="row__cell row__cell--header row__cell--primary"
+      class="row__cell row__cell--header row__cell--secondary"
     >
       <div
         class="cell__title"
       >
-         Statute Citation 
+         US Code House.gov 
       </div>
-      <!---->
+      <div
+        class="cell__subtitle"
+        data-testid="house-gov-link-subtitle-0"
+      >
+         Web Page 
+      </div>
+      <div
+        class="cell__subtitle"
+        data-testid="house-gov-link-subtitle-1"
+      >
+          
+      </div>
     </th>
   </div>,
   "debug": [Function],
@@ -180,15 +224,17 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code House.gov 
+           Statute Compilation 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="statute-compilation-link-subtitle-0"
         >
-           Web Page 
+           PDF Document 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="statute-compilation-link-subtitle-1"
         >
            effective Aug 2023 
         </div>
@@ -202,15 +248,17 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         US Code House.gov 
+         Statute Compilation 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="statute-compilation-link-subtitle-0"
       >
-         Web Page 
+         PDF Document 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="statute-compilation-link-subtitle-1"
       >
          effective Aug 2023 
       </div>
@@ -283,15 +331,17 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code House.gov 
+           Statute Compilation 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="statute-compilation-link-subtitle-0"
         >
-           Web Page 
+           PDF Document 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="statute-compilation-link-subtitle-1"
         >
             
         </div>
@@ -305,15 +355,17 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         US Code House.gov 
+         Statute Compilation 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="statute-compilation-link-subtitle-0"
       >
-         Web Page 
+         PDF Document 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="statute-compilation-link-subtitle-1"
       >
           
       </div>
@@ -386,17 +438,19 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           Statute Compilation 
+           US Code Annual 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="us-code-annual-link-subtitle-0"
         >
            PDF Document 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="us-code-annual-link-subtitle-1"
         >
-           amended Dec 2022 
+           effective Aug 2023 
         </div>
       </th>
     </div>
@@ -408,17 +462,19 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         Statute Compilation 
+         US Code Annual 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="us-code-annual-link-subtitle-0"
       >
          PDF Document 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="us-code-annual-link-subtitle-1"
       >
-         amended Dec 2022 
+         effective Aug 2023 
       </div>
     </th>
   </div>,
@@ -489,15 +545,17 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           Statute Compilation 
+           US Code Annual 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="us-code-annual-link-subtitle-0"
         >
            PDF Document 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="us-code-annual-link-subtitle-1"
         >
             
         </div>
@@ -511,15 +569,17 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         Statute Compilation 
+         US Code Annual 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="us-code-annual-link-subtitle-0"
       >
          PDF Document 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="us-code-annual-link-subtitle-1"
       >
           
       </div>
@@ -592,17 +652,19 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code Annual 
+           SSA.gov Compilation 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="ssa-gov-link-subtitle-0"
         >
-           PDF Document 
+           Web Page 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="ssa-gov-link-subtitle-1"
         >
-           effective Jan 2022 
+           effective Aug 2023 
         </div>
       </th>
     </div>
@@ -614,17 +676,19 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         US Code Annual 
+         SSA.gov Compilation 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="ssa-gov-link-subtitle-0"
       >
-         PDF Document 
+         Web Page 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="ssa-gov-link-subtitle-1"
       >
-         effective Jan 2022 
+         effective Aug 2023 
       </div>
     </th>
   </div>,
@@ -695,221 +759,17 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code Annual 
-        </div>
-        <div
-          class="cell__subtitle"
-        >
-           PDF Document 
-        </div>
-        <div
-          class="cell__subtitle"
-        >
-            
-        </div>
-      </th>
-    </div>
-  </body>,
-  "container": <div>
-    <th
-      class="row__cell row__cell--header row__cell--secondary"
-    >
-      <div
-        class="cell__title"
-      >
-         US Code Annual 
-      </div>
-      <div
-        class="cell__subtitle"
-      >
-         PDF Document 
-      </div>
-      <div
-        class="cell__subtitle"
-      >
-          
-      </div>
-    </th>
-  </div>,
-  "debug": [Function],
-  "emitted": [Function],
-  "findAllByAltText": [Function],
-  "findAllByDisplayValue": [Function],
-  "findAllByLabelText": [Function],
-  "findAllByPlaceholderText": [Function],
-  "findAllByRole": [Function],
-  "findAllByTestId": [Function],
-  "findAllByText": [Function],
-  "findAllByTitle": [Function],
-  "findByAltText": [Function],
-  "findByDisplayValue": [Function],
-  "findByLabelText": [Function],
-  "findByPlaceholderText": [Function],
-  "findByRole": [Function],
-  "findByTestId": [Function],
-  "findByText": [Function],
-  "findByTitle": [Function],
-  "getAllByAltText": [Function],
-  "getAllByDisplayValue": [Function],
-  "getAllByLabelText": [Function],
-  "getAllByPlaceholderText": [Function],
-  "getAllByRole": [Function],
-  "getAllByTestId": [Function],
-  "getAllByText": [Function],
-  "getAllByTitle": [Function],
-  "getByAltText": [Function],
-  "getByDisplayValue": [Function],
-  "getByLabelText": [Function],
-  "getByPlaceholderText": [Function],
-  "getByRole": [Function],
-  "getByTestId": [Function],
-  "getByText": [Function],
-  "getByTitle": [Function],
-  "html": [Function],
-  "isUnmounted": [Function],
-  "queryAllByAltText": [Function],
-  "queryAllByDisplayValue": [Function],
-  "queryAllByLabelText": [Function],
-  "queryAllByPlaceholderText": [Function],
-  "queryAllByRole": [Function],
-  "queryAllByTestId": [Function],
-  "queryAllByText": [Function],
-  "queryAllByTitle": [Function],
-  "queryByAltText": [Function],
-  "queryByDisplayValue": [Function],
-  "queryByLabelText": [Function],
-  "queryByPlaceholderText": [Function],
-  "queryByRole": [Function],
-  "queryByTestId": [Function],
-  "queryByText": [Function],
-  "queryByTitle": [Function],
-  "unmount": [Function],
-  "updateProps": [Function],
-}
-`;
-
-exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 5 with dates 1`] = `
-{
-  "baseElement": <body>
-    <div>
-      <th
-        class="row__cell row__cell--header row__cell--secondary"
-      >
-        <div
-          class="cell__title"
-        >
            SSA.gov Compilation 
         </div>
         <div
           class="cell__subtitle"
+          data-testid="ssa-gov-link-subtitle-0"
         >
            Web Page 
         </div>
         <div
           class="cell__subtitle"
-        >
-           amended Dec 2019 
-        </div>
-      </th>
-    </div>
-  </body>,
-  "container": <div>
-    <th
-      class="row__cell row__cell--header row__cell--secondary"
-    >
-      <div
-        class="cell__title"
-      >
-         SSA.gov Compilation 
-      </div>
-      <div
-        class="cell__subtitle"
-      >
-         Web Page 
-      </div>
-      <div
-        class="cell__subtitle"
-      >
-         amended Dec 2019 
-      </div>
-    </th>
-  </div>,
-  "debug": [Function],
-  "emitted": [Function],
-  "findAllByAltText": [Function],
-  "findAllByDisplayValue": [Function],
-  "findAllByLabelText": [Function],
-  "findAllByPlaceholderText": [Function],
-  "findAllByRole": [Function],
-  "findAllByTestId": [Function],
-  "findAllByText": [Function],
-  "findAllByTitle": [Function],
-  "findByAltText": [Function],
-  "findByDisplayValue": [Function],
-  "findByLabelText": [Function],
-  "findByPlaceholderText": [Function],
-  "findByRole": [Function],
-  "findByTestId": [Function],
-  "findByText": [Function],
-  "findByTitle": [Function],
-  "getAllByAltText": [Function],
-  "getAllByDisplayValue": [Function],
-  "getAllByLabelText": [Function],
-  "getAllByPlaceholderText": [Function],
-  "getAllByRole": [Function],
-  "getAllByTestId": [Function],
-  "getAllByText": [Function],
-  "getAllByTitle": [Function],
-  "getByAltText": [Function],
-  "getByDisplayValue": [Function],
-  "getByLabelText": [Function],
-  "getByPlaceholderText": [Function],
-  "getByRole": [Function],
-  "getByTestId": [Function],
-  "getByText": [Function],
-  "getByTitle": [Function],
-  "html": [Function],
-  "isUnmounted": [Function],
-  "queryAllByAltText": [Function],
-  "queryAllByDisplayValue": [Function],
-  "queryAllByLabelText": [Function],
-  "queryAllByPlaceholderText": [Function],
-  "queryAllByRole": [Function],
-  "queryAllByTestId": [Function],
-  "queryAllByText": [Function],
-  "queryAllByTitle": [Function],
-  "queryByAltText": [Function],
-  "queryByDisplayValue": [Function],
-  "queryByLabelText": [Function],
-  "queryByPlaceholderText": [Function],
-  "queryByRole": [Function],
-  "queryByTestId": [Function],
-  "queryByText": [Function],
-  "queryByTitle": [Function],
-  "unmount": [Function],
-  "updateProps": [Function],
-}
-`;
-
-exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of header cell for column 5 without dates 1`] = `
-{
-  "baseElement": <body>
-    <div>
-      <th
-        class="row__cell row__cell--header row__cell--secondary"
-      >
-        <div
-          class="cell__title"
-        >
-           SSA.gov Compilation 
-        </div>
-        <div
-          class="cell__subtitle"
-        >
-           Web Page 
-        </div>
-        <div
-          class="cell__subtitle"
+          data-testid="ssa-gov-link-subtitle-1"
         >
             
         </div>
@@ -927,11 +787,13 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       </div>
       <div
         class="cell__subtitle"
+        data-testid="ssa-gov-link-subtitle-0"
       >
          Web Page 
       </div>
       <div
         class="cell__subtitle"
+        data-testid="ssa-gov-link-subtitle-1"
       >
           
       </div>
