@@ -17,7 +17,8 @@ const getDateLabel = ({ type, date }) => {
         _isNull(type) ||
         _isNull(date) ||
         _isUndefined(type) ||
-        _isUndefined(date)
+        _isUndefined(date) ||
+        type === ""
     )
         return "";
 
