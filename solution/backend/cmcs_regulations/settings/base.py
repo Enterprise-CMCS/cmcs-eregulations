@@ -49,6 +49,21 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.syndication.views',
     'django_jsonform',
+    "wagtail.contrib.modeladmin",
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+
+    'modelcluster',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +80,7 @@ MIDDLEWARE = [
     'regulations.middleware.JsonErrors',
     'regulations.middleware.NoIndex',
     'regcore.middleware.HtmlApi',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 #  OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
 # Add 'mozilla_django_oidc' authentication backend
@@ -98,8 +114,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ROOT_URLCONF = 'cmcs_regulations.urls'
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
-STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
-
+STATIC_ROOT = os.environ.get("STATIC_ROOT", 'static')
+WAGTAILDOCS_DOCUMENT_MODEL = 'resources.CustomDocument'
 
 LOGGING = {
     "version": 1,
@@ -191,12 +207,13 @@ USE_I18N = True
 USE_L10N = False
 
 USE_TZ = False
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+WAGTAIL_SITE_NAME = 'My Example Site'
 API_BASE = "v3/"  # Note: never include leading forward-slash
 
 GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")

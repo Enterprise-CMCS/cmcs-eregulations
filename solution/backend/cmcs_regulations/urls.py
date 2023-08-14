@@ -19,10 +19,12 @@ from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic.base import RedirectView, TemplateView
-
+from wagtail.admin import urls as wagtailadmin_urls
+from wagtail import urls as wagtail_urls
+from wagtail.documents import urls as wagtaildocs_urls
 from regulations.rss_feeds import ResourceFeed
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
-
+from django.conf.urls.static import static
 sitemaps = {
     "Parts": PartSitemap,
     "SupplementalContent": SupplementalContentSitemap,
@@ -38,8 +40,11 @@ urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('latest/feed/', ResourceFeed()),
+    path('cms/', include(wagtailadmin_urls)),
+    path('documents/', include(wagtaildocs_urls)),
+    path('pages/', include(wagtail_urls)),
     path('oidc/', include('mozilla_django_oidc.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 admin.site.site_header = "eRegs"
 admin.site.site_title = 'eRegs Admin Panel'
 admin.site.index_title = 'Medicaid & CHIP eRegulations Admin Panel'

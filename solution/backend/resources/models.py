@@ -77,11 +77,20 @@ class SubCategory(AbstractCategory):
         verbose_name = "Sub-category"
         verbose_name_plural = "Sub-categories"
 
-
+class InternalCategory(AbstractCategory):
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
 # Location models
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
-
-
+from wagtail.documents.models import Document, AbstractDocument
+class CustomDocument(AbstractDocument):
+    source = models.CharField(max_length=255,
+                              blank=True,
+                              null=True)
+    admin_form_fields = Document.admin_form_fields + (
+        'source',
+    )
 class AbstractLocation(models.Model, DisplayNameFieldMixin):
     title = models.IntegerField()
     part = models.IntegerField()
@@ -186,7 +195,23 @@ class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 
 doc_types = [('RFI', 'RFI'), ('NPRM', 'NPRM'), ("Final", 'Final')]
 
+class TypicalResource(AbstractResource, TypicalResourceFieldsMixin):
+    def __str__(self):
+        return f"{self.date} {self.name} {self.description[:50]}"
 
+    class Meta:
+        ordering = ["-date", "name", "description"]
+        verbose_name = "TypicalResource"
+        verbose_name_plural = "Typical Resources"
+
+class InternalDocument(TypicalResource):
+    def __str__(self):
+        return f"{self.date} {self.name} {self.description[:50]}"
+
+    class Meta:
+        ordering = ["-date", "name", "description"]
+        verbose_name = "Internal Document"
+        verbose_name_plural = "Internal Documents"
 class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     docket_numbers = ArrayField(models.CharField(max_length=255, blank=True, null=True), default=list, blank=True)
     document_number = models.CharField(max_length=255, blank=True, null=True)

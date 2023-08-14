@@ -37,13 +37,13 @@ def loadSeedData():
         ("search.synonym.json", Synonym),
         ("regulations.statutelinkconverter.json", StatuteLinkConverter),
         ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
-        ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
-        ("cmcs_regulations/fixtures/auth.permission.json", Permission),
-        ("cmcs_regulations/fixtures/auth.group.json", Group),
+        # ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
+        # ("cmcs_regulations/fixtures/auth.permission.json", Permission),
+        # ("cmcs_regulations/fixtures/auth.group.json", Group),
     ]
 
-    for fixture in reversed(fixtures):
-        fixture[1].objects.all().delete()
+    # for fixture in reversed(fixtures):
+    #     fixture[1].objects.all().delete()
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
