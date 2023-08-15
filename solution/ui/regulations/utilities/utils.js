@@ -528,32 +528,20 @@ const formatResourceCategories = (resources) => {
             }
         });
 
-    const rawSubCategories = JSON.parse(
-        document.getElementById("sub_categories").textContent
-    );
+    const subCategories = [];
+
     resources
         .filter((resource) => resource.category.type === "subcategory")
         .forEach((resource) => {
-            const existingSubCategory = rawSubCategories.find(
-                (category) => category.name === resource.category.name
+            const newSubCategory = JSON.parse(
+                JSON.stringify(resource.category)
             );
-
-            if (existingSubCategory) {
-                if (!existingSubCategory.supplemental_content) {
-                    existingSubCategory.supplemental_content = [];
-                }
-                existingSubCategory.supplemental_content.push(resource);
-            } else {
-                const newSubCategory = JSON.parse(
-                    JSON.stringify(resource.category)
-                );
-                newSubCategory.supplemental_content = [resource];
-                rawSubCategories.push(newSubCategory);
-            }
+            newSubCategory.supplemental_content = [resource];
+            subCategories.push(newSubCategory);
         });
     const categories = rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = rawSubCategories.filter(
+        category.sub_categories = subCategories.filter(
             (subcategory) => subcategory.parent?.id === category?.id
         );
         return category;

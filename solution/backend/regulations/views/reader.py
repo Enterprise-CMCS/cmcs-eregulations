@@ -22,7 +22,6 @@ from regulations.views.utils import find_subpart
 from resources.models import (
     AbstractLocation,
     Category,
-    SubCategory,
 )
 
 
@@ -54,7 +53,6 @@ class ReaderView(CitationContextMixin, TemplateView):
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
         categories = list(Category.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
-        sub_categories = list(SubCategory.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
 
         locations = AbstractLocation.objects.filter(part=reg_part).select_subclasses().annotate(
             num_locations=Count(
@@ -93,7 +91,6 @@ class ReaderView(CitationContextMixin, TemplateView):
             'node_list':    node_list,
             'view_type':    self.get_view_type(),
             'categories':   categories,
-            'sub_categories': sub_categories,
             'resource_count': resource_count,
             'link_conversions': conversions,
             'link_config': statute_link_config,

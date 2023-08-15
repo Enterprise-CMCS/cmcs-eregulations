@@ -49,15 +49,10 @@ function getDefaultCategories() {
     const rawCategories = JSON.parse(
         document.getElementById("categories").textContent
     );
-    const rawSubCategories = JSON.parse(
-        document.getElementById("sub_categories").textContent
-    );
 
     return rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = rawSubCategories.filter(
-            (subcategory) => subcategory.parent_id === category.id
-        );
+        category.sub_categories = [];
         return category;
     });
 }
