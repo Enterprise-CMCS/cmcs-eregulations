@@ -3,6 +3,7 @@ from functools import partial
 from urllib.parse import urlencode
 
 from django import template
+from django.urls import reverse
 
 from common.patterns import (
     AND_OR_PATTERN,
@@ -16,7 +17,7 @@ from common.patterns import (
 register = template.Library()
 
 
-REDIRECT_LINK_FORMAT = '<a target="blank" href="/reg_redirect?{}">{}</a>'
+REDIRECT_LINK_FORMAT = '<a target="blank" href="{}?{}">{}</a>'
 
 SECTION_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 CFR_REF_EXTRACT_PATTERN = rf"(\d+)(?:\.({SECTION_PATTERN})((?:{PARAGRAPH_PATTERN})*))?"
@@ -30,10 +31,11 @@ CFR_REGEX = re.compile(CFR_PATTERN, re.IGNORECASE)
 def create_redirect_link(text, *args, **kwargs):
     params = {i: kwargs[i] for i in kwargs if kwargs[i]}
     if "paragraph" in params:
-        params["paragraph"] = ".".join(PARAGRAPH_EXTRACT_REGEX.findall(params["paragraph"]))
+        params["paragraph"] = "-".join(PARAGRAPH_EXTRACT_REGEX.findall(params["paragraph"]))
     if "section" in params:
         params["section"] = DASH_REGEX.sub("-", params["section"])
     return REDIRECT_LINK_FORMAT.format(
+        reverse("reg_redirect"),
         urlencode(params),
         text,
     )
@@ -56,7 +58,7 @@ def replace_cfr_refs(match):
         refs,
         CFR_REF_EXTRACT_REGEX.sub(
             partial(replace_cfr_ref, title=title),
-            refs
+            refs,
         )
     )
 
