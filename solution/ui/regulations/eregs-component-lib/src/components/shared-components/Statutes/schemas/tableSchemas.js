@@ -1,8 +1,8 @@
 import {
     houseGovUrl,
+    ssaGovUrl,
     statuteCompilationUrl,
     usCodeUrl,
-    ssaGovUrl,
 } from "../utils/urlMethods.js";
 import { getDateLabel } from "../utils/dateMethods.js";
 
