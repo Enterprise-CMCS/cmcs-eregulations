@@ -30,6 +30,7 @@
                 :sub_categories="category.sub_categories"
                 :is-fetching="isFetching"
                 :is-fr-doc-category="category.is_fr_doc_category"
+                :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>
             <simple-spinner v-if="isFetching"></simple-spinner>
