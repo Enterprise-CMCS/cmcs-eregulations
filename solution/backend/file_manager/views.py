@@ -15,7 +15,7 @@ def file_manager(request):
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
         )
-        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+        bucket_name = settings.AWS_BUCKET_NAME
 
         response = s3_client.list_objects(Bucket=bucket_name)
         if 'Contents' in response:

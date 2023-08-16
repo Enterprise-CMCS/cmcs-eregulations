@@ -37,7 +37,7 @@ class UploadedFileAdmin(admin.ModelAdmin):
                     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                     aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
                 )
-                bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                bucket_name = settings.AWS_BUCKET_NAME
 
                 for file in files:
                     file_key = file.name  # Use the original file name as the S3 key
