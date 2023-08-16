@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'regcore.search',
     'resources',
     'solo',
+    'storages',
     'django_opensearch_dsl',
     'corsheaders',
     'drf_spectacular',

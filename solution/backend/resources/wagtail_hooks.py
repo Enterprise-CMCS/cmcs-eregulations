@@ -1,6 +1,10 @@
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
-from .models import CustomDocument
+from .models import InternalDocument, CustomDocument
+from django.urls import path, reverse
+
+from wagtail.admin.menu import Menu, MenuItem, SubmenuMenuItem
+from wagtail import hooks
 
 
 class InternalAdmin(ModelAdmin):
