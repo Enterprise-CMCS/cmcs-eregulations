@@ -1,15 +1,13 @@
 import boto3
 from django.conf import settings
+from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import path, reverse
 from django.utils import timezone
-from django.contrib import admin
-from .models import UploadedFile
-from django.urls import path
 from django.utils.html import format_html
 
-
+from .models import UploadedFile
 
 
 class UploadedFileAdmin(admin.ModelAdmin):
