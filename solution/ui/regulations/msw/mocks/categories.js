@@ -35,5 +35,5 @@ const categories = [
         abstractcategory_ptr_id: 23,
     },
 ];
-const subCategories = [{}];
-export { categories, subCategories };
+
+export { categories };
