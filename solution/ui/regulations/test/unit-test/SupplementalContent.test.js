@@ -42,6 +42,25 @@ describe("Supplemental Content", () => {
         expect(subG).toBeTruthy();
     });
 
+    it("Properly shows and hides empty categories", async () => {
+        render(SupplementalContent, {
+            props: {
+                apiUrl: "http://localhost:8000/",
+                title: "42",
+                part: "433",
+                subparts: ["A"],
+            },
+        });
+
+        await flushPromises();
+
+        const subEmptyButVisible = screen.queryByText("Empty but Visible");
+        expect(subEmptyButVisible).toBeTruthy();
+
+        const subEmptyAndHidden = screen.queryByText("Empty and Hidden");
+        expect(subEmptyAndHidden).toBeNull();
+    });
+
     it("Clicks a drop down", async () => {
         render(SupplementalContent, {
             props: {

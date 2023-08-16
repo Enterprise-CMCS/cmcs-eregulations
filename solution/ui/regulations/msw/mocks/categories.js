@@ -34,6 +34,24 @@ const categories = [
         show_if_empty: true,
         abstractcategory_ptr_id: 23,
     },
+    {
+        id: 100,
+        name: "Empty and Hidden",
+        description:
+            "This category is empty and should not be shown in the sidebar",
+        order: 1000,
+        show_if_empty: false,
+        abstractcategory_ptr_id: 100,
+    },
+    {
+        id: 200,
+        name: "Empty but Visible",
+        description:
+            "This category is empty but should be shown in the sidebar",
+        order: 2000,
+        show_if_empty: true,
+        abstractcategory_ptr_id: 200,
+    },
 ];
 
 export { categories };
