@@ -20,6 +20,6 @@ pytest-django==4.5
 
 defusedxml
 mozilla-django-oidc
-wagtail
+
 django-taggit
 django-storages
