@@ -7,6 +7,7 @@ requests
 djangorestframework
 psycopg2-binary
 django-solo
+django-opensearch-dsl
 python-dateutil~=2.8.2
 django-cors-headers
 drf-spectacular==0.24.2
@@ -17,9 +18,10 @@ httpx
 ruff
 pytest
 pytest-django==4.5
-
+pre-commit
 defusedxml
 mozilla-django-oidc
 wagtail
 django-taggit
+django-localflavor
 django-storages
