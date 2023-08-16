@@ -102,6 +102,8 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 AWS_OIDC_ROLE_TO_ASSUME = os.environ.get('AWS_OIDC_ROLE_TO_ASSUME', None)
+AWS_ACCESS_KEY_ID= os.environ.get('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY= os.environ.get('AWS_SECRET_ACCESS_KEY', None)
 
 LOGGING = {
     "version": 1,
