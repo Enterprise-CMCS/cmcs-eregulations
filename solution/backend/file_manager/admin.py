@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
-from django.utils import timezone
 from django.utils.html import format_html
 
 from .models import UploadedFile
@@ -26,6 +25,23 @@ class UploadedFileAdmin(admin.ModelAdmin):
             path('upload_files/', self.upload_files_view, name='upload_files'),
         ]
         return my_urls + urls
+
+    def delete_model(self, request, obj):
+        if settings.AWS_ACCESS_KEY_ID and settings.AWS_SECRET_ACCESS_KEY:
+            s3_client = boto3.client(
+                's3',
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                region_name=settings.AWS_S3_REGION_NAME,
+            )
+            bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+            print(f"---Deleting S3 object: {obj.file.name}")
+            try:
+                s3_client.delete_object(Bucket=bucket_name, Key=obj.file.name)
+            except Exception as e:
+                print("Error deleting S3 object:", str(e))
+
+        obj.delete()
 
     def upload_files_view(self, request):
         if request.method == 'POST':

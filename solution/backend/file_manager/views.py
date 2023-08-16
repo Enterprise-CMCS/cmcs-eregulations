@@ -3,6 +3,7 @@ import boto3
 from django.conf import settings
 from django.shortcuts import render
 
+
 def file_manager(request):
     uploaded_files = []
 
