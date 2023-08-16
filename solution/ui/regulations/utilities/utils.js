@@ -533,23 +533,38 @@ const formatResourceCategories = (resources) => {
     resources
         .filter((resource) => resource.category.type === "subcategory")
         .forEach((resource) => {
-            const newSubCategory = JSON.parse(
-                JSON.stringify(resource.category)
+            const existingSubCategory = subCategories.find(
+                (category) => category.name === resource.category.name
             );
-            newSubCategory.supplemental_content = [resource];
-            subCategories.push(newSubCategory);
+
+            if (existingSubCategory) {
+                if (!existingSubCategory.supplemental_content) {
+                    existingSubCategory.supplemental_content = [];
+                }
+                existingSubCategory.supplemental_content.push(resource);
+            } else {
+                const newSubCategory = JSON.parse(
+                    JSON.stringify(resource.category)
+                );
+                newSubCategory.supplemental_content = [resource];
+                subCategories.push(newSubCategory);
+            }
         });
+
     const categories = rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
         category.sub_categories = subCategories.filter(
             (subcategory) => subcategory.parent?.id === category?.id
         );
+
         return category;
     });
+
     categories.sort((a, b) => a.order - b.order);
     categories.forEach((category) => {
         category.sub_categories.sort((a, b) => a.order - b.order);
     });
+
     return categories;
 };
 
