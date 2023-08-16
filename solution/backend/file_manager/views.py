@@ -3,9 +3,6 @@ import boto3
 from django.conf import settings
 from django.shortcuts import render
 
-from .models import UploadedFile
-
-
 def file_manager(request):
     uploaded_files = []
 
@@ -13,14 +10,14 @@ def file_manager(request):
         s3_client = boto3.client(
             's3',
             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME,
         )
-        bucket_name = settings.AWS_BUCKET_NAME
+        bucket_name = settings.AWS_STORAGE_BUCKET_NAME
 
         response = s3_client.list_objects(Bucket=bucket_name)
         if 'Contents' in response:
             for item in response['Contents']:
                 uploaded_files.append(item['Key'])
     else:
-        uploaded_files = UploadedFile.objects.all()
         return render(request, 'file_manager.html', {'uploaded_files': uploaded_files})

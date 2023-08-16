@@ -35,16 +35,13 @@ class UploadedFileAdmin(admin.ModelAdmin):
                 s3_client = boto3.client(
                     's3',
                     aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                    region_name=settings.AWS_S3_REGION_NAME,
                 )
-                bucket_name = settings.AWS_BUCKET_NAME
-
+                bucket_name = settings.AWS_STORAGE_BUCKET_NAME
                 for file in files:
-                    file_key = file.name  # Use the original file name as the S3 key
+                    file_key = file.name
                     s3_client.upload_fileobj(file, bucket_name, file_key)
-
-                    # Create a record in the database for the uploaded file
-                    UploadedFile.objects.create(file=file_key, created_at=timezone.now())
 
                 return HttpResponseRedirect(reverse('admin:file_manager_uploadedfile_changelist'))
 
@@ -56,5 +53,4 @@ class UploadedFileAdmin(admin.ModelAdmin):
         return render(request, 'admin/file_manager/upload_files.html', context)
 
 
-# Register the model and custom ModelAdmin class
 admin.site.register(UploadedFile, UploadedFileAdmin)
