@@ -33,6 +33,9 @@ provider:
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
+    AWS_ACCESS_KEY_ID: ${ssm:/eregulations/file_manager/AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${ssm:/eregulations/file_manager/AWS_SECRET_ACCESS_KEY}
+
   tracing:
     apiGateway: true
   vpc:
