@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_jsonform.models.fields import ArrayField
-from localflavor.us.models import USStateField
+
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
 from taggit.managers import TaggableManager
@@ -117,7 +117,7 @@ class CustomDocument(AbstractDocument):
         'source', 'locations', 'subjects', 'state', 'date'
     )
     subjects = models.ManyToManyField(Subjects, blank=True)
-    state = USStateField(null=True, blank=True)
+    state = models.CharField(max_length=255, blank=True, null=True)
     date = VariableDateField(null=True, blank=TypicalResourceFieldsMixin)
 class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
