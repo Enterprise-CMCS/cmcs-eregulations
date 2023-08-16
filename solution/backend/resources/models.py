@@ -3,8 +3,11 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_jsonform.models.fields import ArrayField
+from localflavor.us.models import USStateField
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
+from taggit.managers import TaggableManager
+from wagtail.snippets.models import register_snippet
 
 from common.fields import NaturalSortField, VariableDateField
 
@@ -83,14 +86,9 @@ class InternalCategory(AbstractCategory):
         verbose_name_plural = "Categories"
 # Location models
 # Defines where supplemental content is located. All locations must inherit from AbstractLocation.
-from wagtail.documents.models import Document, AbstractDocument
-class CustomDocument(AbstractDocument):
-    source = models.CharField(max_length=255,
-                              blank=True,
-                              null=True)
-    admin_form_fields = Document.admin_form_fields + (
-        'source',
-    )
+from wagtail.documents.models import AbstractDocument, Document
+
+
 class AbstractLocation(models.Model, DisplayNameFieldMixin):
     title = models.IntegerField()
     part = models.IntegerField()
@@ -104,7 +102,23 @@ class AbstractLocation(models.Model, DisplayNameFieldMixin):
     class Meta:
         ordering = ["title", "part", "section__section_id", "subpart__subpart_id"]
 
+@register_snippet
+class Subjects(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self) -> str:
+        return self.name
 
+class CustomDocument(AbstractDocument):
+    source = models.CharField(max_length=255,
+                              blank=True,
+                              null=True)
+    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="document")
+    admin_form_fields = Document.admin_form_fields + (
+        'source', 'locations', 'subjects', 'state', 'date'
+    )
+    subjects = models.ManyToManyField(Subjects, blank=True)
+    state = USStateField(null=True, blank=True)
+    date = VariableDateField(null=True, blank=TypicalResourceFieldsMixin)
 class Subpart(AbstractLocation):
     subpart_id = models.CharField(max_length=12)
 
@@ -177,7 +191,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
-    location_history = models.JSONField(default=list)
+    location_history = models.JSONField(default=list, null=True, blank=True)
 
     objects = InheritanceManager()
 
@@ -204,7 +218,12 @@ class TypicalResource(AbstractResource, TypicalResourceFieldsMixin):
         verbose_name = "TypicalResource"
         verbose_name_plural = "Typical Resources"
 
+
+
+@register_snippet
 class InternalDocument(TypicalResource):
+    tags = TaggableManager()
+    file = models.FileField(upload_to="specs")
     def __str__(self):
         return f"{self.date} {self.name} {self.description[:50]}"
 

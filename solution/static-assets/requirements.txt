@@ -22,3 +22,5 @@ pre-commit
 defusedxml
 mozilla-django-oidc
 wagtail
+django-taggit
+django-localflavor

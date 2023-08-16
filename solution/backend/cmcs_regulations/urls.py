@@ -14,17 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic.base import RedirectView, TemplateView
-from wagtail.admin import urls as wagtailadmin_urls
 from wagtail import urls as wagtail_urls
+from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
+
 from regulations.rss_feeds import ResourceFeed
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
-from django.conf.urls.static import static
+
 sitemaps = {
     "Parts": PartSitemap,
     "SupplementalContent": SupplementalContentSitemap,
