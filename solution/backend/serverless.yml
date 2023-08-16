@@ -36,6 +36,7 @@ provider:
     BUCKET_NAME: ${ssm:/eregulations/file_manager/bucket_name}
     AWS_ACCESS_KEY_ID: ${ssm:/eregulations/file_manager/AWS_ACCESS_KEY_ID}
     AWS_SECRET_ACCESS_KEY: ${ssm:/eregulations/file_manager/AWS_SECRET_ACCESS_KEY}
+  
   tracing:
     apiGateway: true
   vpc:
