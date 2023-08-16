@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'resources',
     'solo',
     'storages',
-    'django_opensearch_dsl',
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
@@ -235,11 +234,7 @@ SURVEY_URL = os.environ.get(
 )
 
 
-OPENSEARCH_DSL = {
-    'default': {
-        'hosts': 'opensearch-node1'
-    },
-}
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",
