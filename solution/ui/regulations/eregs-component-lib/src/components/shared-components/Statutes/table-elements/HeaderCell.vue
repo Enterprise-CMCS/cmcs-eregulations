@@ -11,6 +11,11 @@ const props = defineProps({
         required: false,
         default: "table",
     },
+    columnDates: {
+        type: Object,
+        required: false,
+        default: () => {},
+    },
 });
 </script>
 
@@ -30,8 +35,9 @@ const props = defineProps({
                 v-for="(subtitle, i) in cellData.subtitles"
                 :key="`${props.displayType}-subtitle-${i}`"
                 class="cell__subtitle"
+                :data-testid="`${props.cellData.testId}-subtitle-${i}`"
             >
-                {{ subtitle }}
+                {{ subtitle(columnDates) }}
             </div>
         </template>
     </th>

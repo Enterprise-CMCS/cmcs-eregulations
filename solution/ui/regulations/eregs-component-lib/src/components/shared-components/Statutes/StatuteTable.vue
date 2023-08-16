@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 import { acaSchema, ssaSchema } from "./schemas/tableSchemas";
 import { ACT_TYPES, DISPLAY_TYPES } from "./utils/enums";
@@ -36,6 +36,20 @@ const tableSchema = computed(() => {
             return ssaSchema;
     }
 });
+
+
+// Get column dates from Django template
+const getColumnDates = () => {
+    if (!document.getElementById("site_config")) return {};
+
+    const rawDates = JSON.parse(
+        document.getElementById("site_config").textContent
+    );
+
+    return rawDates;
+}
+
+const columnDates = getColumnDates();
 </script>
 
 <template>
@@ -68,6 +82,7 @@ const tableSchema = computed(() => {
                     :key="`statute-table-header-${i}`"
                     :cell-data="column.header"
                     :display-type="props.displayType"
+                    :column-dates="columnDates"
                 />
             </tr>
             <tbody class="table__body">
