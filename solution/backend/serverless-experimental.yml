@@ -49,7 +49,7 @@ package:
   #  - '!nginx/**'
   #  - '!package.json'
   #  - '!package-lock.json'
-  individually: false
+  individually: true
   exclude:
     - node_modules/**
     - nginx/**
