@@ -1,4 +1,5 @@
 from django.urls import include, path, register_converter
+from django.contrib.auth import views as auth_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from regulations import converters
@@ -52,4 +53,5 @@ urlpatterns = [
             "get": "list",
         })),
     ])),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

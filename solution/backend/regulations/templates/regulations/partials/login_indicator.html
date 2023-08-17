@@ -2,5 +2,6 @@
 <div id="loginIndicator">
     <span class="span__login-lamp span__login-lamp--success"></span>
     <span class="span__login-greeting">Hello, <b>{{ user.username }}</b>!</span>
+    <a href="{% url 'logout' %}?next=/">Log Out</a>
 </div>
 {% endif %}
