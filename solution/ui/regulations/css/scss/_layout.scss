@@ -159,6 +159,9 @@ footer {
     border-top: 1px solid $light_gray;
     border-left: 1px solid $light_gray;
     border-top-left-radius: 10px;
+    box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
+    -webkit-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.08);
 
     .span__login-lamp {
         display: inline-block;
