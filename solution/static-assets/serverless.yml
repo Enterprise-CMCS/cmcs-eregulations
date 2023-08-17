@@ -20,6 +20,8 @@ custom:
     noDeploy:
       - docutils
       - jmespath
+      - boto3
+      - botocore
       - pip
       - python-dateutil
       - s3transfer
@@ -29,6 +31,7 @@ custom:
       - pytest
       - zappa-django-utils
       - pytest-django
+      - ruff
     layer:
       name: python-django
       description: "Layer which contains django requirements"
