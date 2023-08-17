@@ -33,9 +33,9 @@ provider:
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
-    AWS_ACCESS_KEY_ID: ${ssm:/eregulations/file_manager/AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${ssm:/eregulations/file_manager/AWS_SECRET_ACCESS_KEY}
-    AWS_BUCKET_NAME: ${ssm:/eregulations/file_manager/bucket_name}
+    FILE_MANAGER_AWS_ACCESS_KEY_ID: ${ssm:/eregulations/file_manager/AWS_ACCESS_KEY_ID}
+    FILE_MANAGER_AWS_SECRET_ACCESS_KEY: ${ssm:/eregulations/file_manager/AWS_SECRET_ACCESS_KEY}
+    FILE_MANAGER_AWS_BUCKET_NAME: ${ssm:/eregulations/file_manager/bucket_name}
     AWS_S3_SIGNATURE_VERSION: "s3v4"
 
   tracing:

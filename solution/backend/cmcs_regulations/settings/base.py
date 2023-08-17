@@ -103,9 +103,9 @@ STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_DEFAULT_ACL = os.environ.get("AWS_DEFAULT_ACL", default="private")
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", default=None)
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", default=None)
-AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_BUCKET_NAME", default=None)
+AWS_ACCESS_KEY_ID = os.environ.get("FILE_MANAGER_AWS_ACCESS_KEY_ID", default=None)
+AWS_SECRET_ACCESS_KEY = os.environ.get("FILE_MANAGER_AWS_SECRET_ACCESS_KEY", default=None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get("FILE_MANAGER_AWS_BUCKET_NAME", default=None)
 AWS_S3_REGION_NAME = "us-east-1"
 AWS_S3_SIGNATURE_VERSION = os.environ.get("AWS_S3_SIGNATURE_VERSION", default="s3v4")
 
