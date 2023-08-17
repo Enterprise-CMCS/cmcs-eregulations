@@ -14,6 +14,19 @@ custom:
       localDir: ./regulations
       deleteRemoved: false
   pythonRequirements:
+    dockerizePip: non-linux
+    zip: true
+    slim: true
+    noDeploy:
+      - boto3
+      - botocore
+      - docutils
+      - jmespath
+      - pip
+      - python-dateutil
+      - s3transfer
+      - setuptools
+      - six
     layer:
       name: python-django
       description: "Layer which contains django requirements"
