@@ -6,9 +6,10 @@ from django_jsonform.models.fields import ArrayField
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
 from wagtail.documents.models import AbstractDocument, Document
-from common.fields import NaturalSortField, VariableDateField
-from taggit.managers import TaggableManager
 from wagtail.snippets.models import register_snippet
+
+from common.fields import NaturalSortField, VariableDateField
+
 
 # Field mixins
 class InternalNotesFieldMixin(models.Model):

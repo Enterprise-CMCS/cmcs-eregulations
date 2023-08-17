@@ -31,6 +31,7 @@ package:
   exclude:
     - node_modules/**
     - nginx/**
+    - wagtail**
 
 plugins:
   - serverless-s3-sync
