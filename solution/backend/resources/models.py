@@ -5,9 +5,10 @@ from django.dispatch import receiver
 from django_jsonform.models.fields import ArrayField
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
-
+from wagtail.documents.models import AbstractDocument, Document
 from common.fields import NaturalSortField, VariableDateField
-
+from taggit.managers import TaggableManager
+from wagtail.snippets.models import register_snippet
 
 # Field mixins
 class InternalNotesFieldMixin(models.Model):
@@ -34,7 +35,6 @@ class DisplayNameFieldMixin:
     def display_name(self):
         return str(self)
 
-
 # Category types
 # Current choice is one model per level due to constraint of exactly 2 levels.
 
@@ -47,7 +47,11 @@ class AbstractCategoryQuerySet(InheritanceQuerySet):
             )
         )
 
-
+@register_snippet
+class Subject(models.Model):
+    name = models.CharField(max_length=255)
+    def __str__(self) -> str:
+        return self.name
 class AbstractCategory(models.Model, DisplayNameFieldMixin):
     name = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
@@ -172,7 +176,17 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
-
+class CustomDocument(AbstractDocument):
+    source = models.CharField(max_length=255,
+                              blank=True,
+                              null=True)
+    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="document")
+    admin_form_fields = Document.admin_form_fields + (
+        'source', 'locations', 'subject', 'state', 'date'
+    )
+    subjects = models.ManyToManyField(Subject, blank=True)
+    state = models.CharField(max_length=255, blank=True, null=True)
+    date = VariableDateField(null=True, blank=True)
 class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 
     def __str__(self):

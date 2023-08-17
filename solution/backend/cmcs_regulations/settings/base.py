@@ -43,12 +43,26 @@ INSTALLED_APPS = [
     'regcore.search',
     'resources',
     'solo',
-    'django_opensearch_dsl',
+    'storages',
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
     'django.contrib.syndication.views',
     'django_jsonform',
+    "wagtail.contrib.modeladmin",
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+    'modelcluster',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -65,6 +79,7 @@ MIDDLEWARE = [
     'regulations.middleware.JsonErrors',
     'regulations.middleware.NoIndex',
     'regcore.middleware.HtmlApi',
+    'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 #  OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
 # Add 'mozilla_django_oidc' authentication backend
@@ -98,7 +113,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 ROOT_URLCONF = 'cmcs_regulations.urls'
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
-STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
+STATIC_ROOT = os.environ.get("STATIC_ROOT", 'static')
+WAGTAILDOCS_DOCUMENT_MODEL = 'resources.CustomDocument'
 
 
 LOGGING = {
@@ -196,7 +212,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 API_BASE = "v3/"  # Note: never include leading forward-slash
 
 GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
@@ -207,7 +224,7 @@ HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_COLLAPSED': True
 }
-
+WAGTAIL_SITE_NAME = 'My Example Site'
 GA_ID = os.environ.get("GA_ID")
 
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
@@ -216,12 +233,6 @@ SURVEY_URL = os.environ.get(
     "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
 )
 
-
-OPENSEARCH_DSL = {
-    'default': {
-        'hosts': 'opensearch-node1'
-    },
-}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",

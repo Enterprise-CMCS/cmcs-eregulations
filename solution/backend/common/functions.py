@@ -1,6 +1,6 @@
 
-from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
+# from django.contrib.auth.models import Group, Permission
+# from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
 
 from regcore.search.models import Synonym
@@ -37,9 +37,9 @@ def loadSeedData():
         ("search.synonym.json", Synonym),
         ("regulations.statutelinkconverter.json", StatuteLinkConverter),
         ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
-        ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
-        ("cmcs_regulations/fixtures/auth.permission.json", Permission),
-        ("cmcs_regulations/fixtures/auth.group.json", Group),
+        # ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
+        # ("cmcs_regulations/fixtures/auth.permission.json", Permission),
+        # ("cmcs_regulations/fixtures/auth.group.json", Group),
     ]
 
     for fixture in reversed(fixtures):

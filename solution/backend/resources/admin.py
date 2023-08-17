@@ -41,6 +41,7 @@ from .models import (
     ResourcesConfiguration,
     Section,
     SubCategory,
+    # Subjects,
     Subpart,
     SupplementalContent,
 )
@@ -72,7 +73,11 @@ class ResourcesConfigurationAdmin(SingletonModelAdmin):
         if db_field.name == "fr_doc_category":
             kwargs["queryset"] = AbstractCategory.objects.all().select_subclasses()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
+# @admin.register(Subjects)
+# class SubjectAdmin(BaseAdmin):
+#     list_display= ("name",)
+#     search_fields= ("name",)
+#     fields = ("name",)
 
 class LocationAdmin(BaseAdmin):
     readonly_fields = ("linked_resources",)
