@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.views.generic.base import RedirectView
 
 from regcore.models import Part
+from regulations.models import RegulationLinkConfiguration
 
 ECFR_URL_FORMAT = "https://www.ecfr.gov/current/"
 
@@ -32,6 +33,8 @@ class RegulationRedirectView(RedirectView):
         queryset = Part.objects.filter(title=title, name=part).order_by("name", "-date").distinct("name")
 
         if not queryset:
+            if not RegulationLinkConfiguration.get_solo().link_to_ecfr:
+                raise Http404
             # Title/part combo doesn't exist in eRegs, build eCFR URL and redirect
             url = f"{ECFR_URL_FORMAT}"
             if not title:
