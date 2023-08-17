@@ -1,7 +1,9 @@
 import json
 
 from django.template import Context, Template
-from django.test import SimpleTestCase
+from django.test import SimpleTestCase, TestCase
+
+from regcore.models import Part
 
 
 class LinkRegRefsTestCase(SimpleTestCase):
@@ -33,3 +35,17 @@ class LinkRegRefsTestCase(SimpleTestCase):
                 "link_config": test["config"],
             })
             self.assertEqual(template.render(context), test["expected"], f"Failed while testing {test['testing']}.")
+
+
+class RedirectViewTestCase(TestCase):
+    def setUp(self):
+        with open("regulations/tests/fixtures/sample_part.json", "r") as f:
+            Part.objects.create(**json.load(f))
+
+    def test_eregs_redirects(self):
+        with open("regulations/tests/fixtures/redirect_tests.json", "r") as f:
+            tests = json.load(f)
+
+        for test in tests:
+            response = self.client.get(test["input"], follow=False)
+            self.assertRedirects(response, test["expected"], fetch_redirect_response=False)

@@ -1,0 +1,42 @@
+[
+    {
+        "input": "/reg_redirect/?title=42",
+        "expected": "https://www.ecfr.gov/current/title-42/"
+    },    
+    {
+        "input": "/reg_redirect/?title=42&part=400",
+        "expected": "/42/400/"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=400&section=100",
+        "expected": "/42/400/100/#400-100"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=400&section=100&paragraph=a",
+        "expected": "/42/400/100/#400-100-a"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=400&section=100&paragraph=b-2",
+        "expected": "/42/400/100/#400-100-b-2"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=500",
+        "expected": "https://www.ecfr.gov/current/title-42/part-500/"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=500&section=12",
+        "expected": "https://www.ecfr.gov/current/title-42/part-500/section-500.12"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=500&section=12&paragraph=b-2",
+        "expected": "https://www.ecfr.gov/current/title-42/part-500/section-500.12#p-500.12(b)(2)"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=400&section=200",
+        "expected": "/42/400/2023-08-17/"
+    },
+    {
+        "input": "/reg_redirect/?title=42&part=400&section=100&paragraph=c",
+        "expected": "/42/400/100/#400-100"
+    }
+]
