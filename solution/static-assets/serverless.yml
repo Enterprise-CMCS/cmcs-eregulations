@@ -32,7 +32,6 @@ package:
   exclude:
     - node_modules/**
     - nginx/**
-    - venv/**
 
 plugins:
   - serverless-s3-sync
@@ -45,7 +44,7 @@ resources:
       Properties:
         BucketName: eregs-${self:custom.stage}-site-assets
         BucketEncryption:
-          ServerSideEncryptionConfiguration:fp
+          ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
                 SSEAlgorithm: AES256
         PublicAccessBlockConfiguration:
