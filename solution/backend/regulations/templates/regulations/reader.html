@@ -14,6 +14,8 @@
 
 {% block body %}
     <div class="content">
+        <p>Is Superuser: {{ user.is_superuser }}</p>
+        <p>User {{ user.username }} is authenticated: {{ is_user_authenticated }}</p>
         {% include "regulations/partials/view-and-compare.html" %}
         <div class="flexbox">
             <aside tabindex="-1" class="left-sidebar match-sides" data-state="expanded" data-state-name="left-sidebar">
