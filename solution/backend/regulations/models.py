@@ -83,6 +83,27 @@ def convert_dashes(exceptions):
     return exceptions
 
 
+TITLE_SECTION_SCHEMA = {
+    "type": "list",
+    "minItems": 0,
+    "items": {
+        "type": "dict",
+        "keys": {
+            "title": {
+                "type": "string",
+                "required": True,
+                "placeholder": "42",
+            },
+            "section": {
+                "type": "string",
+                "required": True,
+                "placeholder": "1902(a)(1)(C)",
+            },
+        },
+    },
+}
+
+
 class StatuteLinkConfiguration(SingletonModel):
     link_statute_refs = models.BooleanField(
         default=True,
@@ -130,25 +151,7 @@ class StatuteLinkConfiguration(SingletonModel):
         help_text="U.S.C. references that are listed here will not be automatically linked.",
         verbose_name="U.S.C. Ref Exceptions",
         pre_save_hook=convert_dashes,
-        schema={
-            "type": "list",
-            "minItems": 0,
-            "items": {
-                "type": "dict",
-                "keys": {
-                    "title": {
-                        "type": "string",
-                        "required": True,
-                        "placeholder": "42",
-                    },
-                    "section": {
-                        "type": "string",
-                        "required": True,
-                        "placeholder": "1902(a)(1)(C)",
-                    },
-                },
-            },
-        },
+        schema=TITLE_SECTION_SCHEMA,
     )
 
     @property
@@ -201,3 +204,39 @@ class StatuteLinkConverter(models.Model):
     class Meta:
         verbose_name = "Statute Link Converter"
         verbose_name_plural = "Statute Link Converters"
+
+
+class RegulationLinkConfiguration(SingletonModel):
+    link_to_ecfr = models.BooleanField(
+        default=True,
+        help_text="If a regulation does not exist in eRegs, should links redirect to eCFR?",
+        verbose_name="Link to eCFR",
+    )
+
+    link_cfr_refs = models.BooleanField(
+        default=True,
+        help_text="Should eRegs link references of the form \"42 CFR part 123\"?",
+        verbose_name="Link CFR Refs",
+    )
+
+    cfr_ref_exceptions = JSONField(
+        default=list,
+        blank=True,
+        help_text="CFR-type references that are listed here will not be automatically linked.",
+        verbose_name="CFR Ref Exceptions",
+        pre_save_hook=convert_dashes,
+        schema=TITLE_SECTION_SCHEMA,
+    )
+
+    @property
+    def usc_ref_exceptions_dict(self):
+        out = {}
+        for i in self.cfr_ref_exceptions:
+            out.setdefault(i["title"], []).append(i["section"])
+        return out
+
+    def __str__(self):
+        return "Regulation Link Configuration"
+
+    class Meta:
+        verbose_name = "Regulation Link Configuration"

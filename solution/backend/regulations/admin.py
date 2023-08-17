@@ -14,6 +14,7 @@ from .models import (
     SiteConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
+    RegulationLinkConfiguration,
 )
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
@@ -85,6 +86,11 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
 
 @admin.register(StatuteLinkConfiguration)
 class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
+    pass
+
+
+@admin.register(RegulationLinkConfiguration)
+class RegulationLinkConfigurationAdmin(SingletonModelAdmin):
     pass
 
 
