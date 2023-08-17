@@ -174,6 +174,10 @@ footer {
         &--success {
             background-color: $green;
         }
+
+        &--error {
+            background-color: $dark-gray;
+        }
     }
 }
 
