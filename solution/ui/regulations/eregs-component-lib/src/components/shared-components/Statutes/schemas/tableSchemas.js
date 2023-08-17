@@ -1,4 +1,10 @@
-import { houseGovUrl, statuteCompilationUrl, usCodeUrl, ssaGovUrl } from "../utils/urlMethods.js";
+import {
+    houseGovUrl,
+    ssaGovUrl,
+    statuteCompilationUrl,
+    usCodeUrl,
+} from "../utils/urlMethods.js";
+import { getDateLabel } from "../utils/dateMethods.js";
 
 // placeholder for future schema
 const acaSchema = [
@@ -12,8 +18,9 @@ const acaSchema = [
             label: "ACA Label",
             name: "ACA Name",
             primary: true,
-        }
-    },{
+        },
+    },
+    {
         header: {
             title: "Secondary Column",
             secondary: true,
@@ -43,9 +50,14 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "house-gov-link",
             title: "US Code House.gov",
             secondary: true,
-            subtitles: ["Web Page", "Effective Jul 2023"],
+            subtitles: [
+                () => "Web Page",
+                (columnDates) =>
+                    getDateLabel(columnDates?.us_code_house_gov ?? {}),
+            ],
         },
         body: {
             url: (statute) => houseGovUrl(statute),
@@ -56,9 +68,14 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "statute-compilation-link",
             title: "Statute Compilation",
             secondary: true,
-            subtitles: ["PDF Document", "Amended Dec 2022"],
+            subtitles: [
+                () => "PDF Document",
+                (columnDates) =>
+                    getDateLabel(columnDates?.statute_compilation ?? {}),
+            ],
         },
         body: {
             url: (statute) => statuteCompilationUrl(statute),
@@ -69,9 +86,14 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "us-code-annual-link",
             title: "US Code Annual",
             secondary: true,
-            subtitles: ["PDF Document", "Effective Jan 2022"],
+            subtitles: [
+                () => "PDF Document",
+                (columnDates) =>
+                    getDateLabel(columnDates?.us_code_annual ?? {}),
+            ],
         },
         body: {
             url: (statute) => usCodeUrl(statute),
@@ -82,9 +104,14 @@ const ssaSchema = [
     },
     {
         header: {
+            testId: "ssa-gov-link",
             title: "SSA.gov Compilation",
             secondary: true,
-            subtitles: ["Web Page", "Amended Dec 2019"],
+            subtitles: [
+                () => "Web Page",
+                (columnDates) =>
+                    getDateLabel(columnDates?.ssa_gov_compilation ?? {}),
+            ],
         },
         body: {
             url: (statute) => ssaGovUrl(statute),
@@ -95,7 +122,4 @@ const ssaSchema = [
     },
 ];
 
-export {
-    acaSchema,
-    ssaSchema,
-};
+export { acaSchema, ssaSchema };

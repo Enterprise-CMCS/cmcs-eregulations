@@ -190,17 +190,13 @@ python.makemigrations:
 python.migrate:
 	docker-compose exec regulations python manage.py migrate
 
+local.seed:
+	docker-compose exec regulations python manage.py populateseeddata
+
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter
 auth_objects = contenttypes.contenttype auth.permission auth.group
-
-local.seed:
-	$(foreach object, $(resource_objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
-	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
-	$(foreach object, $(auth_objects), docker-compose exec regulations python manage.py loaddata cmcs_regulations/fixtures/$(object).json;) \
-	docker-compose exec regulations python manage.py loaddata search.synonym.json
-
 
 local.dump:
 	$(foreach object, $(objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \

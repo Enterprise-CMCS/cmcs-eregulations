@@ -220,17 +220,20 @@ export default {
         },
         async fetchContent(location) {
             try {
+                // Page size is set to 1000 to attempt to get all resources.
+                // Defualt page size of 100 was omitting resources from the right sidebar.
+                // Right now no single subpart hits this number so this shouldn't be an issue
+
                 let response = "";
                 if (location) {
                     response = await getSupplementalContent({
                         apiUrl: this.apiUrl,
                         builtLocationString: location,
+                        pageSize: 1000,
                     });
                 }
                 await this.getPartDictionary();
 
-                // Page size is set to 1000 to attempt to get all subpart resources.  Right now no single subpart hits this number
-                // so this shouldn't be an issue
                 const subpartResponse = await getSupplementalContent({
                     apiUrl: this.apiUrl,
                     partDict: this.partDict,
