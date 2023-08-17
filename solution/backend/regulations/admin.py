@@ -11,10 +11,10 @@ from django.urls import path, reverse
 from solo.admin import SingletonModelAdmin
 
 from .models import (
+    RegulationLinkConfiguration,
     SiteConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
-    RegulationLinkConfiguration,
 )
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
@@ -112,7 +112,21 @@ class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
 
 @admin.register(RegulationLinkConfiguration)
 class RegulationLinkConfigurationAdmin(SingletonModelAdmin):
-    pass
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["link_to_ecfr", "link_cfr_refs"],
+            },
+        ),
+        (
+            "CFR Ref Link Exceptions",
+            {
+                "classes": ["collapse"],
+                "fields": ["cfr_ref_exceptions"],
+            },
+        ),
+    ]
 
 
 @admin.register(StatuteLinkConverter)
