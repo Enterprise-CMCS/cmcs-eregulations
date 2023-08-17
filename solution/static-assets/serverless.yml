@@ -25,6 +25,10 @@ custom:
       - s3transfer
       - setuptools
       - six
+      - precommit
+      - pytest
+      - zappa-django-utils
+      - pytest-django
     layer:
       name: python-django
       description: "Layer which contains django requirements"
