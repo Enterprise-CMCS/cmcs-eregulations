@@ -16,6 +16,7 @@ custom:
   pythonRequirements:
     layer:
       name: python-django
+      slim: true
       description: "Layer which contains django requirements"
       compatibleRuntimes:
         - python3.9
