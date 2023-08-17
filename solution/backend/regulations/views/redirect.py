@@ -71,11 +71,11 @@ class RegulationRedirectView(RedirectView):
         params["section"] = section
 
         # Attempt to find paragraph
-        if "children" in node and node["children"]:
+        if paragraph and "children" in node and node["children"]:
             node = find_node(node["children"], "paragraph", 2, paragraph)
             if node:
                 # Paragraph found, redirect to it
                 return reverse("reader_view", kwargs=params) + f"#{part}-{section}-" + paragraph
 
-        # Paragraph not found, redirect to section level
+        # Paragraph not defined or not found, redirect to section level
         return reverse("reader_view", kwargs=params) + f"#{part}-{section}"
