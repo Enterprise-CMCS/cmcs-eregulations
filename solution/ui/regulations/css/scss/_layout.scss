@@ -150,6 +150,30 @@ footer {
     }
 }
 
+#loginIndicator {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 1rem 3rem 1rem 1rem;
+    background-color: $lighter_gray;
+    border-top: 1px solid $light_gray;
+    border-left: 1px solid $light_gray;
+    border-top-left-radius: 10px;
+
+    .span__login-lamp {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $teal;
+        margin-right: 0.5rem;
+
+        &--success {
+            background-color: $green;
+        }
+    }
+}
+
 .invisible {
     height: 0px !important;
     margin-top: 0px !important;
