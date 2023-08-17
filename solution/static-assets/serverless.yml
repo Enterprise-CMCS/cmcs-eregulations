@@ -15,7 +15,7 @@ custom:
       deleteRemoved: false
   pythonRequirements:
     slim: true
-    zip: true
+    dockerizePip: non-linux
     layer:
       name: python-django
       description: "Layer which contains django requirements"
