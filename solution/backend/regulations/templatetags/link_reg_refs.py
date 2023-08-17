@@ -41,7 +41,9 @@ def create_redirect_link(text, *args, **kwargs):
     )
 
 
-def replace_cfr_ref(match, title):
+def replace_cfr_ref(match, title, exceptions):
+    if DASH_REGEX.sub("-", match.group()) in exceptions:
+        return match.group()
     return create_redirect_link(
         match.group(),
         title=title,
@@ -51,13 +53,13 @@ def replace_cfr_ref(match, title):
     )
 
 
-def replace_cfr_refs(match):
+def replace_cfr_refs(match, exceptions):
     title = match.group(1)
     refs = match.group(2)
     return match.group().replace(
         refs,
         CFR_REF_EXTRACT_REGEX.sub(
-            partial(replace_cfr_ref, title=title),
+            partial(replace_cfr_ref, title=title, exceptions=exceptions.get(title, [])),
             refs,
         )
     )
@@ -65,5 +67,9 @@ def replace_cfr_refs(match):
 
 @register.simple_tag
 def link_reg_refs(paragraph, link_config):
-    paragraph = CFR_REGEX.sub(replace_cfr_refs, paragraph)
+    if link_config["link_cfr_refs"]:
+        paragraph = CFR_REGEX.sub(
+            partial(replace_cfr_refs, exceptions=link_config["cfr_ref_exceptions"]),
+            paragraph,
+        )
     return paragraph

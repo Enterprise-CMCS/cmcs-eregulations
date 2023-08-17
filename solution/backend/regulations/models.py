@@ -1,4 +1,5 @@
 import re
+from functools import partial
 
 from django.db import models
 from django_jsonform.models.fields import JSONField
@@ -77,31 +78,10 @@ class SiteConfiguration(SingletonModel):
         verbose_name = "Site Configuration"
 
 
-def convert_dashes(exceptions):
+def convert_dashes(exceptions, key):
     for i in exceptions:
-        i["section"] = DASH_REGEX.sub("-", i["section"])
+        i[key] = DASH_REGEX.sub("-", i[key])
     return exceptions
-
-
-TITLE_SECTION_SCHEMA = {
-    "type": "list",
-    "minItems": 0,
-    "items": {
-        "type": "dict",
-        "keys": {
-            "title": {
-                "type": "string",
-                "required": True,
-                "placeholder": "42",
-            },
-            "section": {
-                "type": "string",
-                "required": True,
-                "placeholder": "1902(a)(1)(C)",
-            },
-        },
-    },
-}
 
 
 class StatuteLinkConfiguration(SingletonModel):
@@ -122,7 +102,7 @@ class StatuteLinkConfiguration(SingletonModel):
         blank=True,
         help_text="Statute references that are listed here will not be automatically linked.",
         verbose_name="Statute Ref Exceptions",
-        pre_save_hook=convert_dashes,
+        pre_save_hook=partial(convert_dashes, key="section"),
         schema={
             "type": "list",
             "minItems": 0,
@@ -150,8 +130,26 @@ class StatuteLinkConfiguration(SingletonModel):
         blank=True,
         help_text="U.S.C. references that are listed here will not be automatically linked.",
         verbose_name="U.S.C. Ref Exceptions",
-        pre_save_hook=convert_dashes,
-        schema=TITLE_SECTION_SCHEMA,
+        pre_save_hook=partial(convert_dashes, key="section"),
+        schema={
+            "type": "list",
+            "minItems": 0,
+            "items": {
+                "type": "dict",
+                "keys": {
+                    "title": {
+                        "type": "string",
+                        "required": True,
+                        "placeholder": "42",
+                    },
+                    "section": {
+                        "type": "string",
+                        "required": True,
+                        "placeholder": "1902(a)(1)(C)",
+                    },
+                },
+            },
+        },
     )
 
     @property
@@ -224,15 +222,33 @@ class RegulationLinkConfiguration(SingletonModel):
         blank=True,
         help_text="CFR-type references that are listed here will not be automatically linked.",
         verbose_name="CFR Ref Exceptions",
-        pre_save_hook=convert_dashes,
-        schema=TITLE_SECTION_SCHEMA,
+        pre_save_hook=partial(convert_dashes, key="reference"),
+        schema={
+            "type": "list",
+            "minItems": 0,
+            "items": {
+                "type": "dict",
+                "keys": {
+                    "title": {
+                        "type": "string",
+                        "required": True,
+                        "placeholder": "42",
+                    },
+                    "reference": {
+                        "type": "string",
+                        "required": True,
+                        "placeholder": "123.45(a)(1)",
+                    },
+                },
+            },
+        },
     )
 
     @property
-    def usc_ref_exceptions_dict(self):
+    def cfr_ref_exceptions_dict(self):
         out = {}
         for i in self.cfr_ref_exceptions:
-            out.setdefault(i["title"], []).append(i["section"])
+            out.setdefault(i["title"], []).append(i["reference"])
         return out
 
     def __str__(self):
