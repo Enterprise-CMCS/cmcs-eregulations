@@ -1,5 +1,5 @@
-from django.urls import include, path, register_converter
 from django.contrib.auth import views as auth_views
+from django.urls import include, path, register_converter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from regulations import converters
