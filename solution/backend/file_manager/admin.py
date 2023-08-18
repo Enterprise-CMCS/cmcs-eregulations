@@ -46,7 +46,7 @@ class UploadedFileAdmin(admin.ModelAdmin):
     def upload_files_view(self, request):
         if request.method == 'POST':
             files = request.FILES.getlist('file')
-
+            raise Exception(f"uploading files. Region name: {settings.AWS_S3_REGION_NAME}")
             if settings.AWS_ACCESS_KEY_ID and settings.AWS_SECRET_ACCESS_KEY:
                 s3_client = boto3.client(
                     's3',
