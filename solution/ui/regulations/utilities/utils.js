@@ -528,13 +528,12 @@ const formatResourceCategories = (resources) => {
             }
         });
 
-    const rawSubCategories = JSON.parse(
-        document.getElementById("sub_categories").textContent
-    );
+    const subCategories = [];
+
     resources
         .filter((resource) => resource.category.type === "subcategory")
         .forEach((resource) => {
-            const existingSubCategory = rawSubCategories.find(
+            const existingSubCategory = subCategories.find(
                 (category) => category.name === resource.category.name
             );
 
@@ -548,20 +547,24 @@ const formatResourceCategories = (resources) => {
                     JSON.stringify(resource.category)
                 );
                 newSubCategory.supplemental_content = [resource];
-                rawSubCategories.push(newSubCategory);
+                subCategories.push(newSubCategory);
             }
         });
+
     const categories = rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = rawSubCategories.filter(
+        category.sub_categories = subCategories.filter(
             (subcategory) => subcategory.parent?.id === category?.id
         );
+
         return category;
     });
+
     categories.sort((a, b) => a.order - b.order);
     categories.forEach((category) => {
         category.sub_categories.sort((a, b) => a.order - b.order);
     });
+
     return categories;
 };
 
