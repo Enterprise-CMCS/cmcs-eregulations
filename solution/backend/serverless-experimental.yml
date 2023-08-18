@@ -31,6 +31,8 @@ provider:
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
     BUCKET_NAME: ${ssm:/eregulations/file_manager/bucket_name}
+    AWS_S3_BUCKET_SECRET_ACCESS_KEY: ${ssm:/eregulations/file_manager/AWS_SECRET_ACCESS_KEY}
+    AWS_S3_BUCKET_ACCESS_KEY_ID: ${ssm:/eregulations/file_manager/AWS_ACCESS_KEY_ID}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
