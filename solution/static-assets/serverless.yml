@@ -15,11 +15,12 @@ custom:
       deleteRemoved: false
   pythonRequirements:
     dockerizePip: non-linux
+    slim: true
     noDeploy:
       - docutils
       - jmespath
-      - pip
       - python-dateutil
+      - s3transfer
       - setuptools
       - six
       - precommit
