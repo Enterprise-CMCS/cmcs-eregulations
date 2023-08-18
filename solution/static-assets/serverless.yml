@@ -32,6 +32,7 @@ custom:
       - zappa-django-utils
       - pytest-django
       - ruff
+      - django-debug-toolbar
     layer:
       name: python-django
       description: "Layer which contains django requirements"
