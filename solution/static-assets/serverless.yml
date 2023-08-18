@@ -19,7 +19,6 @@ custom:
     noDeploy:
       - docutils
       - jmespath
-      - botocore
       - pip
       - python-dateutil
       - s3transfer
