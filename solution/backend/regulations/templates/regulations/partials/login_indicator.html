@@ -1,9 +1,10 @@
-<div id="loginIndicator">
 {% if user.is_authenticated %}
+<div id="loginIndicator">
     <span class="span__login-lamp span__login-lamp--success"></span>
     <span class="span__login-greeting">Hello, <b>{{ user.username }}</b>!</span>
     <a href="{% url 'logout' %}?next={{ request.path }}">Log Out</a>
 {% else %}
+<div id="loginIndicator" class="display-none">
     <span class="span__login-lamp span__login-lamp--error"></span>
     <span class="span__login-greeting">Hello, <b>Guest</b>!</span>
     <a href="{% url 'login' %}?next={{ request.path }}">Log In</a>
