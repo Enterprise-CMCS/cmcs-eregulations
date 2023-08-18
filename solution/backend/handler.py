@@ -5,9 +5,10 @@ For more information on this file, see
 https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/
 """
 try:
-  import unzip_requirements
+    import unzip_requirements # noqa
 except ImportError:
-  pass
+    pass
+
 import os
 
 from django.core.wsgi import get_wsgi_application

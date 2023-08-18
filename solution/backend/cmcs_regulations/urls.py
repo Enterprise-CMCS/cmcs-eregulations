@@ -46,7 +46,7 @@ urlpatterns = [
     path('documents/', include(wagtaildocs_urls)),
     path('pages/', include(wagtail_urls)),
     path('oidc/', include('mozilla_django_oidc.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 admin.site.site_header = "eRegs"
 admin.site.site_title = 'eRegs Admin Panel'
 admin.site.index_title = 'Medicaid & CHIP eRegulations Admin Panel'

@@ -39,6 +39,7 @@ class DisplayNameFieldMixin:
 # Category types
 # Current choice is one model per level due to constraint of exactly 2 levels.
 
+
 class AbstractCategoryQuerySet(InheritanceQuerySet):
     def contains_fr_docs(self):
         return self.annotate(
@@ -48,11 +49,15 @@ class AbstractCategoryQuerySet(InheritanceQuerySet):
             )
         )
 
-@register_snippet
-class Subject(models.Model):
-    name = models.CharField(max_length=255)
-    def __str__(self) -> str:
-        return self.name
+
+# @register_snippet
+# class Subject(models.Model):
+#     name = models.CharField(max_length=255)
+
+#     def __str__(self) -> str:
+#         return self.name
+
+
 class AbstractCategory(models.Model, DisplayNameFieldMixin):
     name = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
@@ -177,17 +182,20 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
+
 class CustomDocument(AbstractDocument):
     source = models.CharField(max_length=255,
                               blank=True,
                               null=True)
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="document")
     admin_form_fields = Document.admin_form_fields + (
-        'source', 'locations', 'subject', 'state', 'date'
+        'source', 'locations', 'state', 'date'
     )
-    subjects = models.ManyToManyField(Subject, blank=True)
+    # subjects = models.ManyToManyField(Subject, blank=True)
     state = models.CharField(max_length=255, blank=True, null=True)
     date = VariableDateField(null=True, blank=True)
+
+
 class SupplementalContent(AbstractResource, TypicalResourceFieldsMixin):
 
     def __str__(self):

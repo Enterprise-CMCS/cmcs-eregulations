@@ -79,6 +79,7 @@ class ResourcesConfigurationAdmin(SingletonModelAdmin):
 #     search_fields= ("name",)
 #     fields = ("name",)
 
+
 class LocationAdmin(BaseAdmin):
     readonly_fields = ("linked_resources",)
 

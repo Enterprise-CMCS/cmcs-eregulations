@@ -4,8 +4,12 @@ import socket
 
 
 DEBUG = os.environ.get("DEBUG", False)
-INSTALLED_APPS += ["debug_toolbar",]
-MIDDLEWARE +=["debug_toolbar.middleware.DebugToolbarMiddleware",]
+INSTALLED_APPS += [ # noqa
+    "debug_toolbar",
+    ]
+MIDDLEWARE +=[ # noqa
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    ]
 # turns on django toolbar if debug is true
 if DEBUG:
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
