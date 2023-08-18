@@ -14,6 +14,7 @@ custom:
       localDir: ./regulations
       deleteRemoved: false
   pythonRequirements:
+    dockerizePip: non-linux
     noDeploy:
       - docutils
       - jmespath
