@@ -15,7 +15,6 @@ custom:
       deleteRemoved: false
   pythonRequirements:
     dockerizePip: non-linux
-    zip: true
     slim: true
     noDeploy:
       - docutils
