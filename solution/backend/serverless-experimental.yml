@@ -149,7 +149,7 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-                     - "arn:aws:s3:::MyS3Bucket/*"
+                     - "arn:aws:s3:::wagtail-bucket2/*"
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
