@@ -152,7 +152,7 @@ resources:
 
                          - "Ref" : MyS3Bucket
                          - "/*" 
-                     - "arn:aws:s3:::MyS3Bucket/Download/*"
+                     - "arn:aws:s3:::MyS3Bucket/*"
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
