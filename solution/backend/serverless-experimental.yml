@@ -145,8 +145,14 @@ resources:
                    Action:
                      - "s3:PutObject"
                    Resource: 
-                     - !Sub arn:aws:s3:::${ServerlessDeploymentBucket}
-                     - "Ref" : MyS3Bucket
+                     - Fn::Join:
+                       - ""
+                       - - "arn:aws:s3:::"
+                         - "Ref" : "ServerlessDeploymentBucket"
+
+                         - "Ref" : MyS3Bucket
+                         - "/*" 
+                     - "arn:aws:s3:::MyS3Bucket/Download/*"
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
