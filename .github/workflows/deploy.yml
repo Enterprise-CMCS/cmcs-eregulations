@@ -79,6 +79,8 @@ jobs:
           popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
+        env:
+          RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/backend
           npm install serverless -g
