@@ -32,5 +32,5 @@
 {% endblock %}
 
 {% block post_footer %}
-    <script src="{% static '/vite/index.js' %}"></script>
+    <script src="{% static '/vite/index.js' %}?{% now "Y-m-d" %}"></script>
 {% endblock %}
