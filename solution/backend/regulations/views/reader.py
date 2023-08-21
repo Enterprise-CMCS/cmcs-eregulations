@@ -79,6 +79,9 @@ class ReaderView(CitationContextMixin, TemplateView):
             "usc_ref_exceptions": statute_link_config.usc_ref_exceptions_dict,
         }
 
+        user = self.request.user
+        is_user_authenticated = user.is_authenticated
+
         c = {
             'tree':         tree,
             'title':        reg_title,
@@ -94,6 +97,8 @@ class ReaderView(CitationContextMixin, TemplateView):
             'resource_count': resource_count,
             'link_conversions': conversions,
             'link_config': statute_link_config,
+            'is_user_authenticated': is_user_authenticated,
+            'user': user,
         }
 
         end = datetime.now().timestamp()

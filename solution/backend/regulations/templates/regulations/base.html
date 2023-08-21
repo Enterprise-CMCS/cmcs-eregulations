@@ -62,6 +62,10 @@ CSS/Javascript etc., should inherit from this template.
 
                 {% block body %}{% endblock %}
 
+                {% block login_indicator %}
+                    {% include "regulations/partials/login_indicator.html" %}
+                {% endblock %}
+
                 {% block footer %}
                     <footer>
                         {% include "regulations/partials/footer.html" %}
