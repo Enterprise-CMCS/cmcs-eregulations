@@ -29,10 +29,10 @@ def different(one, two):
 
 
 def merge_children(one, two):
-    if different(one[len(one)-1], two):
+    if different(one[len(one) - 1], two):
         one.append(two)
         return
-    merge_children(one[len(one)-1]['children'], two['children'][0])
+    merge_children(one[len(one) - 1]['children'], two['children'][0])
 
 
 def get_structure(parts):

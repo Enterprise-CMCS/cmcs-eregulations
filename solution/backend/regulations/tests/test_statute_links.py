@@ -161,7 +161,7 @@ class StatuteConvertersAPITestCase(APITestCase):
         with open("regulations/tests/fixtures/statute_link_api_test.json", "r") as f:
             self.objects = json.load(f)
             # Objects are inserted in reverse order to ensure endpoint ordering is correct
-            for i in range(len(self.objects)-1, -1, -1):
+            for i in range(len(self.objects) - 1, -1, -1):
                 obj = self.objects[i]
                 roman = obj["statute_title_roman"]
                 del obj["statute_title_roman"]

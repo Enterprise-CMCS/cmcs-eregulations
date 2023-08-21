@@ -42,7 +42,7 @@ class Part(models.Model):
     @property
     def subchapter(self):
         structure = self.structure
-        for _ in range(self.depth-1):
+        for _ in range(self.depth - 1):
             structure = structure["children"][0]
         return structure["label"]
 
