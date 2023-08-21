@@ -85,6 +85,21 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: wagtail-bucket2
+    MyS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref MyS3Bucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal: '*'
+              Action: 's3:GetObject'
+              Resource: !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref MyS3Bucket
+                  - '/*'
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
