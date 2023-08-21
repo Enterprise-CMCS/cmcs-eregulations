@@ -127,9 +127,10 @@ resources:
                         - Ref: 'AWS::AccountId'
                         - 'log-group:/aws/lambda/*:*:*'
                 -  Effect: "Allow"
-                   Action:
-                     - "s3:PutObject"
-                     - "s3.GetObject"
+                   Action: [
+                      "s3:PutObject",
+                      "s3.GetObject"
+                   ]
                    Resource: 
                      - Fn::Join:
                        - ""
