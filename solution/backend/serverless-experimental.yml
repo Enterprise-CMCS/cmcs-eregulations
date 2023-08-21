@@ -144,11 +144,16 @@ resources:
                 -  Effect: "Allow"
                    Action:
                      - "s3:PutObject"
-                   Resource:
+                   Resource: [
                      Fn::Join:
                        - ""
                        - - "arn:aws:s3:::"
-                         - "Ref" : "ServerlessDeploymentBucket"
+                         - "Ref" : "ServerlessDeploymentBucket",
+                     Fn::Join:
+                       - ""
+                       - - "arn:aws:s3:::"
+                         - "Ref" : MyS3Bucket
+                         - "/*" ]
 plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
