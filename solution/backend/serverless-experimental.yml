@@ -149,9 +149,6 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-                     Fn::Join:
-                       - ""
-                       - - "arn:aws:s3:::"
                          - "Ref" : MyS3Bucket
                          - "/*" 
 plugins:
