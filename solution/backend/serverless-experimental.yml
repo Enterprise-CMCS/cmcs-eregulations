@@ -149,9 +149,6 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-
-                         - "Ref" : MyS3Bucket
-                         - "/*" 
                      - "arn:aws:s3:::MyS3Bucket/*"
 plugins:
   - serverless-wsgi
