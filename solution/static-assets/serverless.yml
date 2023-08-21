@@ -21,7 +21,6 @@ custom:
       - jmespath
       - python-dateutil
       - setuptools
-      - six
       - precommit
       - pytest
       - zappa-django-utils
