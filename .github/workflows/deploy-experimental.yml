@@ -118,6 +118,7 @@ jobs:
         run: |
           pushd solution/backend
           npm install serverless -g
+          npm install serverless-iam-roles-per-function -g
           npm install
           serverless deploy --config ./serverless-experimental.yml --stage dev${PR} | tee output.log
           serverless invoke --config ./serverless-experimental.yml --function create_database --stage dev${PR}

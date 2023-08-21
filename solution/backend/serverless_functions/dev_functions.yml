@@ -1,4 +1,5 @@
 reg_site:
+  iamRoleStatementsInherit: true
   environment:
     STATIC_URL: ${self:custom.settings.static_url}
     WORKING_DIR: /var/task

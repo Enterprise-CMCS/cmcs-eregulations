@@ -1,7 +1,11 @@
 service: cmcs-eregs-site
 variablesResolutionMode: 20210326
 
-provider:
+provider:  
+  iamRoleStatements:
+  - Effect: 'Allow'
+    Action: 's3:*'
+    Resource: '*'
   name: aws
   runtime: python3.9
   region: us-east-1
@@ -131,3 +135,4 @@ plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
   - serverless-associate-waf
+  - serverless-iam-roles-per-function
