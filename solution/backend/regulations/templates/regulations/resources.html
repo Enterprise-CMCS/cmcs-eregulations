@@ -30,5 +30,5 @@
 {% endblock %}
 
 {% block post_footer %}
-    <script src="{% static '/vite/index.js' %}?{% now "Y-m-d" %}"></script>
+    <script src="{% static '/vite/index.js' %}?{% DEPLOY_NUMBER %}"></script>
 {% endblock %}

@@ -31,7 +31,7 @@ CSS/Javascript etc., should inherit from this template.
         </title>
         {% include "regulations/partials/favicon.html" %}
         {% block spa_styles %}{% endblock %}
-        <link rel="stylesheet" href="{% static '/css/main.css' %}?{% now "Y-m-d" %}" />
+        <link rel="stylesheet" href="{% static '/css/main.css' %}?{% DEPLOY_NUMBER %}" />
     </head>
     <body class="ds-base {% block body_class %}{% endblock %}">
         <div id="vue-app">
