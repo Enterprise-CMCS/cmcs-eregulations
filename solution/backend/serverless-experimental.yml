@@ -84,7 +84,7 @@ resources:
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: wagtail-bucket
+        BucketName: wagtail-bucket2
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role

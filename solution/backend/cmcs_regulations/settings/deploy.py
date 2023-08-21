@@ -19,7 +19,7 @@ DATABASES = {
         'NAME': "postgres",
     },
 }
-AWS_STORAGE_BUCKET_NAME = "wagtail-bucket"
+AWS_STORAGE_BUCKET_NAME = "wagtail-bucket2"
 AWS_S3_REGION_NAME = "us-east-1"
 AWS_S3_CUSTOM_DOMAIN = (
     f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
