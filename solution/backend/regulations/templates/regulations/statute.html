@@ -1,4 +1,4 @@
-{% extends "regulations/base.html" %}
+{% extends "regulations/spa_base.html" %}
 {% load static %}
 {% load string_formatters %}
 
@@ -29,8 +29,4 @@
     data-search-url="{% url 'search' %}"
     data-host="{{ host }}"
 ></div>
-{% endblock %}
-
-{% block post_footer %}
-    <script src="{% static '/vite/index.js' %}?{% DEPLOY_NUMBER %}"></script>
 {% endblock %}
