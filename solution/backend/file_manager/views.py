@@ -6,11 +6,11 @@ from django.shortcuts import render
 def file_manager(request):
     uploaded_files = []
 
-    if settings.AWS_ACCESS_KEY_ID and settings.AWS_SECRET_ACCESS_KEY:
+    if settings.S3_AWS_ACCESS_KEY_ID and settings.S3_AWS_SECRET_ACCESS_KEY:
         s3_client = boto3.client(
             's3',
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
             region_name=settings.AWS_S3_REGION_NAME,
         )
         bucket_name = settings.AWS_STORAGE_BUCKET_NAME

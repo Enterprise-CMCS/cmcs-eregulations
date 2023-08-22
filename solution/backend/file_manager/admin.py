@@ -27,14 +27,14 @@ class UploadedFileAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def delete_model(self, request, obj):
-        if settings.AWS_ACCESS_KEY_ID and settings.AWS_SECRET_ACCESS_KEY:
+        if settings.S3_AWS_ACCESS_KEY_ID and settings.S3_AWS_SECRET_ACCESS_KEY:
             s3_client = boto3.client(
                 's3',
-                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
                 region_name=settings.AWS_S3_REGION_NAME,
             )
-            bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+            bucket_name = settings.S3_AWS_STORAGE_BUCKET_NAME
             print(f"---Deleting S3 object: {obj.file.name}")
             try:
                 s3_client.delete_object(Bucket=bucket_name, Key=obj.file.name)
@@ -46,14 +46,14 @@ class UploadedFileAdmin(admin.ModelAdmin):
     def upload_files_view(self, request):
         if request.method == 'POST':
             files = request.FILES.getlist('file')
-            if settings.AWS_ACCESS_KEY_ID and settings.AWS_SECRET_ACCESS_KEY:
+            if settings.S3_AWS_ACCESS_KEY_ID and settings.S3_AWS_SECRET_ACCESS_KEY:
                 s3_client = boto3.client(
                     's3',
-                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                    aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
                     region_name=settings.AWS_S3_REGION_NAME,
                 )
-                bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+                bucket_name = settings.S3_AWS_STORAGE_BUCKET_NAME
                 for file in files:
                     file_key = file.name
                     s3_client.upload_fileobj(file, bucket_name, file_key)
