@@ -89,6 +89,11 @@ resources:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
                 SSEAlgorithm: AES256
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
         CorsConfiguration:
           CorsRules:
             -
@@ -100,21 +105,47 @@ resources:
                 - GET
                 - HEAD
               MaxAge: 3000
-    MyS3BucketPolicy:
+    CloudFrontOriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: OAI to prevent direct public access to the bucket
+
+    BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
-        Bucket: !Ref MyS3Bucket
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
             - Effect: Allow
-              Principal: '*'
               Action: 's3:GetObject'
               Resource: !Join
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref MyS3Bucket
-                  - '/*'
+                  - /*
+              Principal:
+                CanonicalUser:
+                  Fn::GetAtt:
+                  - CloudFrontOriginAccessIdentity
+                  - S3CanonicalUserId
+            - Effect: Deny
+              Action: 's3:*'
+              Resource:
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref MyS3Bucket
+                    - /*
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref MyS3Bucket
+              Principal: '*'
+              Condition:
+                Bool:
+                  aws:SecureTransport: false
+        Bucket: !Ref MyS3Bucket
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
