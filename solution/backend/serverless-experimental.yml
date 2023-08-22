@@ -145,11 +145,6 @@ resources:
                 Bool:
                   aws:SecureTransport: false
         Bucket: !Ref MyS3Bucket
-    CloudFrontOriginAccessIdentity:
-      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-      Properties:
-        CloudFrontOriginAccessIdentityConfig:
-          Comment: OAI to prevent direct public access to the bucket
 
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
