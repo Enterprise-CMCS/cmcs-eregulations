@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools \
 
 ENV SEARCHGOV_KEY=""
 ENV SEARCHGOV_SITE_NAME=""
-
+ENV AWS_ACCESS_KEY_ID=""
+ENV AWS_SECRET_ACCESS_KEY=""
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 

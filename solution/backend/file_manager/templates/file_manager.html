@@ -1,0 +1,10 @@
+<h1>File manager</h1>
+{% if uploaded_files %}
+    {% for file in uploaded_files %}
+        <p><a href="{{ file.file.url }}" download>{{ file.file.name }}</a></p>
+        <p>Created At: {{ file.created_at }}</p>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No files found.</p>
+{% endif %}

@@ -31,6 +31,7 @@ sitemaps = {
 urlpatterns = [
     path('', include('regcore.urls')),
     path('', include('regulations.urls')),
+    path('', include('file_manager.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
     path('admin/login/', auth_views.LoginView.as_view(template_name='admin/login.html'), name='login'),
     path('admin/', admin.site.urls, name="admin"),
