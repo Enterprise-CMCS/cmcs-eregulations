@@ -93,6 +93,8 @@ jobs:
       - name: Populate content for ${{ matrix.environment }}
         id: condtional-output-for-not-prod
         if: ${{ matrix.environment  != 'prod' }}
+        env:
+          RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/backend
           npm install serverless -g
