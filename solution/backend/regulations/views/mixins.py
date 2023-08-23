@@ -20,7 +20,7 @@ class CitationContextMixin:
         return context
 
 
-class IsAuthenticatedMixin():
+class IsAuthenticatedMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(reverse('login') + '?next=%s' % request.path)
