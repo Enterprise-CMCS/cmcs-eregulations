@@ -84,7 +84,7 @@ resources:
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: wagtail-bucket3=4
+        BucketName: wagtail-bucket2
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
@@ -119,7 +119,10 @@ resources:
                   - !Ref MyS3Bucket
                   - /*
               Principal:
-                "*"
+                CanonicalUser:
+                  Fn::GetAtt:
+                  - CloudFrontOriginAccessIdentity
+                  - S3CanonicalUserId
         Bucket: !Ref MyS3Bucket
 
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
