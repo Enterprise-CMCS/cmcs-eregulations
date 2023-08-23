@@ -81,7 +81,7 @@ resources:
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: wagtail-bucket2
+        BucketName: upload-bucket-${self:custom.stage}
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
