@@ -30,6 +30,7 @@ provider:
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
+    DEPLOY_NUMBER: ${env:RUN_ID}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
