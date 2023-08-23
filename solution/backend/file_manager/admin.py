@@ -1,5 +1,6 @@
+from django.contrib import admin
+
 from .models import UploadedFile
-from django.contrib import admin, messages
 
 
 @admin.register(UploadedFile)
