@@ -1,0 +1,58 @@
+[
+    {
+        "input": "42 CFR 123",
+        "expected": "42 CFR <a target=\"blank\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+    },
+    {
+        "input": "42 CFR part 123",
+        "expected": "42 CFR part <a target=\"blank\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+    },
+    {
+        "input": "42 CFR part123",
+        "expected": "42 CFR part<a target=\"blank\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+    },
+    {
+        "input": "42CFRpart123",
+        "expected": "42CFRpart<a target=\"blank\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+    },
+    {
+        "input": "42 CFR parts 123",
+        "expected": "42 CFR parts <a target=\"blank\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+    },
+    {
+        "input": "42 c.f.r. 123",
+        "expected": "42 c.f.r. <a target=\"blank\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+    },
+    {
+        "input": "42 CFR parts 435 and 457",
+        "expected": "42 CFR parts <a target=\"blank\" href=\"/reg_redirect/?title=42&part=435\">435</a> and <a target=\"blank\" href=\"/reg_redirect/?title=42&part=457\">457</a>"
+    },
+    {
+        "input": "42 CFR part 435 and 457",
+        "expected": "42 CFR part <a target=\"blank\" href=\"/reg_redirect/?title=42&part=435\">435</a> and <a target=\"blank\" href=\"/reg_redirect/?title=42&part=457\">457</a>"
+    },
+    {
+        "input": "42 CFR 95.205, and 12.50",
+        "expected": "42 CFR <a target=\"blank\" href=\"/reg_redirect/?title=42&part=95&section=205\">95.205</a>, and <a target=\"blank\" href=\"/reg_redirect/?title=42&part=12&section=50\">12.50</a>"
+    },
+    {
+        "input": "26 CFR 1.36B\u20132(a)(2)",
+        "expected": "26 CFR <a target=\"blank\" href=\"/reg_redirect/?title=26&part=1&section=36B-2&paragraph=a-2\">1.36B\u20132(a)(2)</a>"
+    },
+    {
+        "input": "48 CFR 9905.501, 9905.502, 9905.505, and 9905.506",
+        "expected": "48 CFR <a target=\"blank\" href=\"/reg_redirect/?title=48&part=9905&section=501\">9905.501</a>, <a target=\"blank\" href=\"/reg_redirect/?title=48&part=9905&section=502\">9905.502</a>, <a target=\"blank\" href=\"/reg_redirect/?title=48&part=9905&section=505\">9905.505</a>, and <a target=\"blank\" href=\"/reg_redirect/?title=48&part=9905&section=506\">9905.506</a>"
+    },
+    {
+        "input": "26 CFR 1.5000A\u20132",
+        "expected": "26 CFR <a target=\"blank\" href=\"/reg_redirect/?title=26&part=1&section=5000A-2\">1.5000A\u20132</a>"
+    },
+    {
+        "input": "26 CFR 56.4911\u20132(c)(1)\u2013(c)(3)",
+        "expected": "26 CFR <a target=\"blank\" href=\"/reg_redirect/?title=26&part=56&section=4911-2&paragraph=c-1\">56.4911\u20132(c)(1)</a>\u2013(c)(3)"
+    },
+    {
+        "input": "26 CFR 1.36B-2T",
+        "expected": "26 CFR <a target=\"blank\" href=\"/reg_redirect/?title=26&part=1&section=36B-2T\">1.36B-2T</a>"
+    }
+]

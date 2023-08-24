@@ -13,6 +13,7 @@ from regulations.views.reader import (
     SectionReaderView,
     SubpartReaderView,
 )
+from regulations.views.redirect import RegulationRedirectView
 from regulations.views.regulation_landing import RegulationLandingView
 from regulations.views.resources import ResourcesView
 from regulations.views.search import SearchView
@@ -46,6 +47,7 @@ urlpatterns = [
     path('cache/', CacheView.as_view(), name='cache'),
     path('resources/', ResourcesView.as_view(), name='resources'),
     path('statutes/', StatuteView.as_view(), name='statutes'),
+    path('reg_redirect/', RegulationRedirectView.as_view(), name="reg_redirect"),
     path('policy-repository/', PolicyRepositoryView.as_view(), name='policy-repository'),
     path("v3/", include([
         path("statutes", StatuteLinkConverterViewSet.as_view({
