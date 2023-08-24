@@ -10,18 +10,15 @@ from .models import UploadedFile
 
 @admin.register(UploadedFile)
 class UploadedFileAdmin(admin.ModelAdmin):
-    list_display = ("name", 'delete')
+    list_display = ("name", 'download_file')
     search_fields = ["name"]
     ordering = ("name",)
     fields = ("name", "file",)
 
-    change_form_template = "admin/edit_file.html"
-
     def download(self, obj):
         s3_client = boto3.client('s3',
                                  aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                                 aws_session_token=os.environ["AWS_SESSION_TOKEN"])
+                                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
         try:
             response = s3_client.generate_presigned_url('get_object',
                                                         Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
@@ -31,7 +28,7 @@ class UploadedFileAdmin(admin.ModelAdmin):
             print(e)
         return response
 
-    def delete(self, obj):
+    def download_file(self, obj):
         link = self.download(obj)
         html = '<input type="button" onclick="location.href=\'{}\'" value="download" />'.format(link)
         return format_html(html)
