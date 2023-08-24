@@ -32,7 +32,7 @@ class TestMixinFunctions(TestCase):
     def get_annotated_group(self):
         return Case(
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
-            default=-1*F("pk"),
+            default=-1 * F("pk"),
         )
 
     def test_get_id_one_groups(self):

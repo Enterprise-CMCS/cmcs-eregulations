@@ -1,5 +1,8 @@
 <template>
-    <div class="supplemental-content-category">
+    <div
+        v-if="has_children || (!has_children && showIfEmpty)"
+        class="supplemental-content-category"
+    >
         <div class="category">
             <collapse-button
                 v-if="has_children"
@@ -70,7 +73,6 @@ import RelatedRuleList from "./RelatedRuleList.vue";
 import SupplementalContentList from "./SupplementalContentList.vue";
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
-import SimpleSpinner from "./SimpleSpinner.vue";
 
 export default {
     name: "supplemental-content-category",
@@ -80,7 +82,6 @@ export default {
         SupplementalContentList,
         CollapseButton,
         Collapsible,
-        SimpleSpinner,
     },
 
     props: {
@@ -101,6 +102,11 @@ export default {
         description: {
             type: String,
             required: true,
+        },
+        showIfEmpty: {
+            type: Boolean,
+            required: false,
+            default: false,
         },
         supplemental_content: {
             type: Array,

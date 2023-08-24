@@ -30,6 +30,7 @@
                 :sub_categories="category.sub_categories"
                 :is-fetching="isFetching"
                 :is-fr-doc-category="category.is_fr_doc_category"
+                :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>
             <simple-spinner v-if="isFetching"></simple-spinner>
@@ -49,15 +50,10 @@ function getDefaultCategories() {
     const rawCategories = JSON.parse(
         document.getElementById("categories").textContent
     );
-    const rawSubCategories = JSON.parse(
-        document.getElementById("sub_categories").textContent
-    );
 
     return rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = rawSubCategories.filter(
-            (subcategory) => subcategory.parent_id === category.id
-        );
+        category.sub_categories = [];
         return category;
     });
 }

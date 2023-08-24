@@ -36,3 +36,9 @@ def api_base(request):
     return {
         "API_BASE": f"{reverse('homepage')}{settings.API_BASE}"
     }
+
+
+def deploy_number(request):
+    return {
+        "DEPLOY_NUMBER": settings.DEPLOY_NUMBER
+    }

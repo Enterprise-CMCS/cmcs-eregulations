@@ -155,7 +155,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         return F("description_sort")
 
     def get_annotated_group(self):
-        return -1*F("pk")
+        return -1 * F("pk")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

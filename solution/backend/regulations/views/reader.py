@@ -23,7 +23,6 @@ from regulations.views.utils import find_subpart
 from resources.models import (
     AbstractLocation,
     Category,
-    SubCategory,
 )
 
 
@@ -54,8 +53,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
-        categories = list(Category.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
-        sub_categories = list(SubCategory.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
+        categories = list(Category.objects.contains_fr_docs().order_by('order').values())
 
         locations = AbstractLocation.objects.filter(part=reg_part).select_subclasses().annotate(
             num_locations=Count(
@@ -87,6 +85,9 @@ class ReaderView(CitationContextMixin, TemplateView):
             "cfr_ref_exceptions": reg_link_config.cfr_ref_exceptions_dict,
         }
 
+        user = self.request.user
+        is_user_authenticated = user.is_authenticated
+
         c = {
             'tree':         tree,
             'title':        reg_title,
@@ -99,10 +100,11 @@ class ReaderView(CitationContextMixin, TemplateView):
             'node_list':    node_list,
             'view_type':    self.get_view_type(),
             'categories':   categories,
-            'sub_categories': sub_categories,
             'resource_count': resource_count,
             'link_conversions': conversions,
             'link_config': link_config,
+            'is_user_authenticated': is_user_authenticated,
+            'user': user,
         }
 
         end = datetime.now().timestamp()

@@ -1,3 +1,4 @@
+from django.contrib.auth import views as auth_views
 from django.urls import include, path, register_converter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
@@ -6,6 +7,7 @@ from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
+from regulations.views.policy_repository import PolicyRepositoryView
 from regulations.views.reader import (
     PartReaderView,
     SectionReaderView,
@@ -46,6 +48,7 @@ urlpatterns = [
     path('resources/', ResourcesView.as_view(), name='resources'),
     path('statutes/', StatuteView.as_view(), name='statutes'),
     path('reg_redirect/', RegulationRedirectView.as_view(), name="reg_redirect"),
+    path('policy-repository/', PolicyRepositoryView.as_view(), name='policy-repository'),
     path("v3/", include([
         path("statutes", StatuteLinkConverterViewSet.as_view({
             "get": "list",
@@ -54,4 +57,5 @@ urlpatterns = [
             "get": "list",
         })),
     ])),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
