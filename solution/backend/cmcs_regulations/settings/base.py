@@ -101,7 +101,7 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
-AWS_STORAGE_BUCKET_NAME = "file-upload-dev941"
+AWS_STORAGE_BUCKET_NAME = "cmcs-eregs-test-file-manager"
 AWS_S3_REGION_NAME = "us-east-1"
 AWS_S3_CUSTOM_DOMAIN = (
     f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
