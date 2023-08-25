@@ -13,6 +13,7 @@ from django.views.generic.base import (
 
 from regcore.models import Part
 from regulations.models import (
+    RegulationLinkConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
 )
@@ -71,12 +72,17 @@ class ReaderView(CitationContextMixin, TemplateView):
                 "title": title,
                 "usc": usc,
             }
+
         statute_link_config = StatuteLinkConfiguration.get_solo()
-        statute_link_config = {
+        reg_link_config = RegulationLinkConfiguration.get_solo()
+
+        link_config = {
             "link_statute_refs": statute_link_config.link_statute_refs,
             "link_usc_refs": statute_link_config.link_usc_refs,
             "statute_ref_exceptions": statute_link_config.statute_ref_exceptions_dict,
             "usc_ref_exceptions": statute_link_config.usc_ref_exceptions_dict,
+            "link_cfr_refs": reg_link_config.link_cfr_refs,
+            "cfr_ref_exceptions": reg_link_config.cfr_ref_exceptions_dict,
         }
 
         user = self.request.user
@@ -96,7 +102,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'categories':   categories,
             'resource_count': resource_count,
             'link_conversions': conversions,
-            'link_config': statute_link_config,
+            'link_config': link_config,
             'is_user_authenticated': is_user_authenticated,
             'user': user,
         }

@@ -1,8 +1,8 @@
-{% extends "regulations/spa_base.html" %}
+{% extends "regulations/base.html" %}
 {% load static %}
 {% load string_formatters %}
 
-{% block title %}Statute Reference{% endblock %}
+{% block title %}Policy Repository{% endblock %}
 
 {% block spa_styles %}
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block body %}
-{{ site_config|json_script:"site_config" }}
+<h1>HELLO, YOU HAVE REACHED THE POLICY REPOSITORY PLACEHOLDER.  PLEASE ENJOY YOUR STAY.</h1>
 <div
     id="vite-app"
     data-api-url="{{ API_BASE }}"
@@ -29,4 +29,8 @@
     data-search-url="{% url 'search' %}"
     data-host="{{ host }}"
 ></div>
+{% endblock %}
+
+{% block post_footer %}
+    <script src="{% static '/vite/index.js' %}"></script>
 {% endblock %}

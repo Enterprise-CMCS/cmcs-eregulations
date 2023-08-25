@@ -11,6 +11,7 @@ from django.urls import path, reverse
 from solo.admin import SingletonModelAdmin
 
 from .models import (
+    RegulationLinkConfiguration,
     SiteConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
@@ -104,6 +105,25 @@ class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
             {
                 "classes": ["collapse"],
                 "fields": ["usc_ref_exceptions"],
+            },
+        ),
+    ]
+
+
+@admin.register(RegulationLinkConfiguration)
+class RegulationLinkConfigurationAdmin(SingletonModelAdmin):
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["link_to_ecfr", "link_cfr_refs"],
+            },
+        ),
+        (
+            "CFR Ref Link Exceptions",
+            {
+                "classes": ["collapse"],
+                "fields": ["cfr_ref_exceptions"],
             },
         ),
     ]

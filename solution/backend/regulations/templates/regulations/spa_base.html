@@ -1,0 +1,6 @@
+{% extends "regulations/base.html" %}
+{% load static %}
+
+{% block post_footer %}
+    <script src="{% static '/vite/index.js' %}?{{ DEPLOY_NUMBER }}"></script>
+{% endblock %}

@@ -148,6 +148,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.custom_url",
                 "cmcs_regulations.context_processors.survey_url",
+                "cmcs_regulations.context_processors.deploy_number",
                 "cmcs_regulations.context_processors.automated_testing",
                 'cmcs_regulations.context_processors.api_base',
                 'regulations.context_processors.site_config',
@@ -217,6 +218,7 @@ SURVEY_URL = os.environ.get(
     "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
 )
 
+DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", "0000")
 
 OPENSEARCH_DSL = {
     'default': {
