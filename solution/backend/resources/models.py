@@ -260,3 +260,11 @@ class ResourcesConfiguration(SingletonModel):
 
     class Meta:
         verbose_name = "Resources Configuration"
+
+
+from filer.fields.file import FilerFileField
+
+
+class TestFileModel(models.Model):
+    name = models.CharField(max_length=255)
+    file = FilerFileField(related_name="test_file", on_delete=models.CASCADE)

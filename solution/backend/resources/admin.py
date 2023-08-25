@@ -43,6 +43,7 @@ from .models import (
     SubCategory,
     Subpart,
     SupplementalContent,
+    TestFileModel,
 )
 from .serializers.locations import AbstractLocationPolymorphicSerializer
 
@@ -62,6 +63,11 @@ class BaseAdmin(admin.ModelAdmin):
         if db_field.name in lookups:
             kwargs["queryset"] = lookups[db_field.name]()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+@admin.register(TestFileModel)
+class TestFileAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(ResourcesConfiguration)

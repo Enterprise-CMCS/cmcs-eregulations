@@ -21,3 +21,7 @@ pytest-django==4.5
 pre-commit
 defusedxml
 mozilla-django-oidc
+easy-thumbnails>=2.0
+django-polymorphic>=3.0
+pillow>=2.3.0
+django-filer
