@@ -33,6 +33,9 @@ class UploadedFileAdmin(admin.ModelAdmin):
         return response
 
     def download_file(self, obj):
-        link = self.download(obj)
-        html = '<input type="button" onclick="location.href=\'{}\'" value="Download File" />'.format(link)
+        if obj.id:
+            link = self.download(obj)
+            html = '<input type="button" onclick="location.href=\'{}\'" value="Download File" />'.format(link)
+        else:
+            return "N/A"
         return format_html(html)
