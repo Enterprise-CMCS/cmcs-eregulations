@@ -9,10 +9,11 @@ from .models import UploadedFile
 
 @admin.register(UploadedFile)
 class UploadedFileAdmin(admin.ModelAdmin):
-    list_display = ("name", 'download_file')
+    list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
-    fields = ("name", "file",)
+    readonly_fields = ('download_file',)
+    fields = ("name", "file", 'download_file')
 
     def download(self, obj):
         # for localized testing
@@ -33,5 +34,5 @@ class UploadedFileAdmin(admin.ModelAdmin):
 
     def download_file(self, obj):
         link = self.download(obj)
-        html = '<input type="button" onclick="location.href=\'{}\'" value="download" />'.format(link)
+        html = '<input type="button" onclick="location.href=\'{}\'" value="Download File" />'.format(link)
         return format_html(html)
