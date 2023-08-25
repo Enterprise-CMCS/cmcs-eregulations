@@ -31,6 +31,7 @@ provider:
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
     AWS_STORAGE_BUCKET_NAME: file-upload-${self:custom.stage}
+    DEPLOY_NUMBER: ${env:RUN_ID}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
