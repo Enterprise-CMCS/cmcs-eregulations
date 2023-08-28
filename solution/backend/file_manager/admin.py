@@ -3,9 +3,12 @@ import boto3
 from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
-from resources.models import AbstractLocation
-from .models import Subject, UploadCategory, UploadedFile
+
 from resources.admin import BaseAdmin
+from resources.models import AbstractLocation
+
+from .models import Subject, UploadCategory, UploadedFile
+
 
 @admin.register(UploadCategory)
 class UploadCategoriesAdmin(BaseAdmin):
@@ -28,11 +31,13 @@ class UploadedFileAdmin(BaseAdmin):
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
+    filter_horizontal = ("locations", "categories", "subject")
     readonly_fields = ('download_file',)
     fields = ("name", "file", 'date', 'description', 'categories', 'subject', 'locations', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
+
     def establish_client(self):
         if settings.DEBUG:
             return boto3.client('s3',
