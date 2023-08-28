@@ -3,18 +3,36 @@ import boto3
 from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
+from resources.models import AbstractLocation
+from .models import Subject, UploadCategory, UploadedFile
+from resources.admin import BaseAdmin
 
-from .models import UploadedFile
+@admin.register(UploadCategory)
+class UploadCategoriesAdmin(BaseAdmin):
+    list_display = ("name",)
+    search_fields = ["name"]
+    ordering = ("order", "name")
+    fields = ("name", "description", "order",)
+
+
+@admin.register(Subject)
+class SubjectAdmin(BaseAdmin):
+    list_display = ("name",)
+    search_fields = ["name"]
+    ordering = ("order", "name")
+    fields = ("name", "description", "order",)
 
 
 @admin.register(UploadedFile)
-class UploadedFileAdmin(admin.ModelAdmin):
+class UploadedFileAdmin(BaseAdmin):
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
     readonly_fields = ('download_file',)
-    fields = ("name", "file", 'download_file',)
-
+    fields = ("name", "file", 'date', 'description', 'categories', 'subject', 'locations', 'download_file',)
+    manytomany_lookups = {
+        "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
+    }
     def establish_client(self):
         if settings.DEBUG:
             return boto3.client('s3',
