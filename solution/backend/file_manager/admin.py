@@ -13,7 +13,26 @@ class UploadedFileAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     ordering = ("name",)
     readonly_fields = ('download_file',)
-    fields = ("name", "file", 'download_file')
+    fields = ("name", "file", 'download_file',)
+
+    # this function will delete the object.  Without overwriting the whole form
+    def del_file(self, obj):
+        if settings.DEBUG:
+            s3 = boto3.client('s3',
+                              aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                              aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+            s3.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=f"/{obj.file.name}")
+        else:
+            s3 = boto3.client('s3', config=boto3.session.Config(signature_version='s3v4',))
+            s3.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=f"/{obj.file.name}")
+
+    def delete_model(self, request, obj):
+        print('Deleting from s3')
+        try:
+            self.del_file(obj)
+        except Exception:
+            print('Could not delte from bucket')
+        print('Finished deleting file.')
 
     def download(self, obj):
         # for localized testing
