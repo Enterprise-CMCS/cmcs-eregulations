@@ -229,7 +229,7 @@ function httpApiGet(urlPath, { params } = {}) {
 }
 
 // use when components used directly in Django templates
-function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
+function httpApiGetLegacy(urlPath, { params } = {}) {
     return fetchJson({
         url: `${urlPath}`,
         options: {
@@ -404,13 +404,11 @@ const getRecentResources = async (
         return httpApiGetLegacy(
             `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true${categories}`,
             {}, // params, default
-            apiURL
         );
     }
     return httpApiGetLegacy(
         `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
         {}, // params, default
-        apiURL
     );
 };
 
