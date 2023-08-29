@@ -217,19 +217,20 @@ function httpApiMock(verb, urlPath, { data, params, response } = {}) {
     return response;
 }
 
-function httpApiGet(urlPath, { params } = {}) {
+function httpApiGet(urlPath, { params } = {}, authenticated = false) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
             method: "GET",
             headers: authHeader(token),
             params,
+            authenticated,
         },
     });
 }
 
 // use when components used directly in Django templates
-function httpApiGetLegacy(urlPath, { params } = {}) {
+function httpApiGetLegacy(urlPath, { params } = {}, authenticated = false) {
     return fetchJson({
         url: `${urlPath}`,
         options: {
@@ -237,10 +238,11 @@ function httpApiGetLegacy(urlPath, { params } = {}) {
             params,
         },
         retryCount: 0, // retryCount, default
+        authenticated,
     });
 }
 
-async function httpApiGetWithPagination(urlPath, { params } = {}) {
+async function httpApiGetWithPagination(urlPath, { params } = {}, authenticated = false) {
     let results = [];
     let url = `${config.apiPath}/${urlPath}`;
     while (url) {
@@ -252,6 +254,7 @@ async function httpApiGetWithPagination(urlPath, { params } = {}) {
                 headers: authHeader(token),
                 params,
             },
+            authenticated,
         });
         results = results.concat(response.results ?? []);
         url = response.next;
@@ -260,7 +263,7 @@ async function httpApiGetWithPagination(urlPath, { params } = {}) {
     return results;
 }
 
-function httpApiPost(urlPath, { data = {}, params } = {}) {
+function httpApiPost(urlPath, { data = {}, params } = {}, authenticated = false) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -269,11 +272,12 @@ function httpApiPost(urlPath, { data = {}, params } = {}) {
             params,
             body: JSON.stringify(data),
         },
+        authenticated,
     });
 }
 
 // eslint-disable-next-line no-unused-vars
-function httpApiPut(urlPath, { data, params } = {}) {
+function httpApiPut(urlPath, { data, params } = {}, authenticated = false) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -282,11 +286,12 @@ function httpApiPut(urlPath, { data, params } = {}) {
             params,
             body: JSON.stringify(data),
         },
+        authenticated,
     });
 }
 
 // eslint-disable-next-line no-unused-vars
-function httpApiDelete(urlPath, { data, params } = {}) {
+function httpApiDelete(urlPath, { data, params } = {}, authenticated = false) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -295,6 +300,7 @@ function httpApiDelete(urlPath, { data, params } = {}) {
             params,
             body: JSON.stringify(data),
         },
+        authenticated,
     });
 }
 // ---------- cache helpers -----------
