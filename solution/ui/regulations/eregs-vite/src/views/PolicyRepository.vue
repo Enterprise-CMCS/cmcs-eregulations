@@ -32,6 +32,10 @@ const props = defineProps({
         type: String,
         default: "/statutes/",
     },
+    isAuthenticated: {
+        type: Boolean,
+        default: false,
+    },
 });
 </script>
 
@@ -62,6 +66,7 @@ const props = defineProps({
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
+            is authenticated: {{ isAuthenticated }}
         </div>
     </body>
 </template>
