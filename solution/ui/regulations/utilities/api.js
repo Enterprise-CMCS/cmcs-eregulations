@@ -18,7 +18,7 @@ const apiPath = `${
         : import.meta.env.VITE_API_URL || "http://localhost:8000"
 }/v3`;
 
-const config = {
+let config = {
     apiPath,
     fetchMode: "cors",
     maxRetryCount: 2,
@@ -55,7 +55,7 @@ function configure(obj) {
     config = { ...config, ...obj };
 }
 
-function fetchJson(url, options = {}, retryCount = 0) {
+function fetchJson({ url, options = {}, retryCount = 0 }) {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
     let httpStatus;
@@ -123,7 +123,9 @@ function fetchJson(url, options = {}, retryCount = 0) {
                         )
                     )
                     .then(() => delay(backoff))
-                    .then(() => fetchJson(url, options, retryCount + 1));
+                    .then(() =>
+                        fetchJson({ url, options, retryCount: retryCount + 1 })
+                    );
             }
             throw parseError(err);
         })
@@ -161,7 +163,11 @@ function fetchJson(url, options = {}, retryCount = 0) {
                             )
                             .then(() => delay(backoff))
                             .then(() =>
-                                fetchJson(url, options, retryCount + 1)
+                                fetchJson({
+                                    url,
+                                    options,
+                                    retryCount: retryCount + 1,
+                                })
                             );
                     }
                     throw parseError({
@@ -199,24 +205,26 @@ function httpApiMock(verb, urlPath, { data, params, response } = {}) {
 }
 
 function httpApiGet(urlPath, { params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "GET",
-        headers: authHeader(token),
-        params,
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "GET",
+            headers: authHeader(token),
+            params,
+        },
     });
 }
 
 // use when components used directly in Django templates
 function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
-    return fetchJson(
-        `${urlPath}`,
-        {
+    return fetchJson({
+        url: `${urlPath}`,
+        options: {
             method: "GET",
             params,
         },
-        0, // retryCount, default
-        apiPath
-    );
+        retryCount: 0, // retryCount, default
+    });
 }
 
 async function httpApiGetWithPagination(urlPath, { params } = {}) {
@@ -224,10 +232,13 @@ async function httpApiGetWithPagination(urlPath, { params } = {}) {
     let url = `${config.apiPath}/${urlPath}`;
     while (url) {
         /* eslint-disable no-await-in-loop */
-        const response = await fetchJson(url, {
-            method: "GET",
-            headers: authHeader(token),
-            params,
+        const response = await fetchJson({
+            url,
+            options: {
+                method: "GET",
+                headers: authHeader(token),
+                params,
+            },
         });
         results = results.concat(response.results ?? []);
         url = response.next;
@@ -237,31 +248,40 @@ async function httpApiGetWithPagination(urlPath, { params } = {}) {
 }
 
 function httpApiPost(urlPath, { data = {}, params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "POST",
-        headers: authHeader(token),
-        params,
-        body: JSON.stringify(data),
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "POST",
+            headers: authHeader(token),
+            params,
+            body: JSON.stringify(data),
+        },
     });
 }
 
 // eslint-disable-next-line no-unused-vars
 function httpApiPut(urlPath, { data, params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "PUT",
-        headers: authHeader(token),
-        params,
-        body: JSON.stringify(data),
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "PUT",
+            headers: authHeader(token),
+            params,
+            body: JSON.stringify(data),
+        },
     });
 }
 
 // eslint-disable-next-line no-unused-vars
 function httpApiDelete(urlPath, { data, params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "DELETE",
-        headers: authHeader(token),
-        params,
-        body: JSON.stringify(data),
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "DELETE",
+            headers: authHeader(token),
+            params,
+            body: JSON.stringify(data),
+        },
     });
 }
 // ---------- cache helpers -----------
@@ -595,7 +615,7 @@ const getParts = async (title, apiUrl) => {
  *
  * @returns {Promise <Array<{act: string, title: number, title_roman: string}>} - Promise that contains array of title objects when fulfilled
  */
-const getStatutesActs = async ({apiUrl}) => {
+const getStatutesActs = async ({ apiUrl }) => {
     if (apiUrl) {
         return httpApiGetLegacy(`${apiUrl}acts`);
     }
