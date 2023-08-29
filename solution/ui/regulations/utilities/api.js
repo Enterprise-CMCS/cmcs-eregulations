@@ -55,7 +55,12 @@ function configure(obj) {
     config = { ...config, ...obj };
 }
 
-function fetchJson({ url, options = {}, retryCount = 0 }) {
+function fetchJson({
+    url,
+    options = {},
+    retryCount = 0,
+    authenticated = false,
+}) {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
     let httpStatus;
@@ -100,7 +105,11 @@ function fetchJson({ url, options = {}, retryCount = 0 }) {
     }
 
     return Promise.resolve()
-        .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
+        .then(
+            () =>
+                !authenticated &&
+                localforage.getItem(url.replace(apiPath, merged.method))
+        )
         .then((value) => {
             if (value && Date.now() < value.expiration_date) {
                 console.log("CACHE HIT");
@@ -188,7 +197,11 @@ function fetchJson({ url, options = {}, retryCount = 0 }) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
                 json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-                localforage.setItem(url.replace(apiPath, merged.method), json);
+                if (!authenticated)
+                    localforage.setItem(
+                        url.replace(apiPath, merged.method),
+                        json
+                    );
                 return json;
             }
         });
