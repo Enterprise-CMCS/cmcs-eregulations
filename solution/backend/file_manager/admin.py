@@ -1,12 +1,13 @@
 
 from django.conf import settings
 from django.contrib import admin
+from django.urls import reverse
 from django.utils.html import format_html
 
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
-from .functions import establish_client, generate_download_link
+from .functions import establish_client
 from .models import Subject, UploadCategory, UploadedFile
 
 
@@ -52,7 +53,7 @@ class UploadedFileAdmin(BaseAdmin):
 
     def download_file(self, obj):
         if obj.id:
-            link = generate_download_link(obj)
+            link = reverse("file-download", kwargs={"id": obj.uid})
             html = '<input type="button" onclick="location.href=\'{}\'" value="Download File" />'.format(link)
         else:
             return "N/A"

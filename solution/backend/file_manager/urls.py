@@ -11,5 +11,5 @@ urlpatterns = [
     })),
     path("download/<id>", UploadedFileViewset.as_view({
         "get": "download",
-    })),
+    }), name="file-download"),
 ]
