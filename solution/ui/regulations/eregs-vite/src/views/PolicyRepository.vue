@@ -1,4 +1,7 @@
 <script setup>
+import { ref } from "vue";
+import { getPolicyDocList } from "utilities/api";
+
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
@@ -37,6 +40,21 @@ const props = defineProps({
         default: false,
     },
 });
+
+const policyDocList = ref({
+    results: [],
+    loading: true,
+});
+
+const getDocList = async () => {
+    console.log("isAuthenticated prop: ", props.isAuthenticated);
+    policyDocList.value = await getPolicyDocList({
+        apiUrl: props.apiUrl,
+        authenticated: props.isAuthenticated,
+    });
+};
+
+getDocList();
 </script>
 
 <template>
@@ -67,6 +85,7 @@ const props = defineProps({
         </header>
         <div id="statuteApp" class="statute-view">
             is authenticated: {{ isAuthenticated }}
+            {{ policyDocList }}
         </div>
     </body>
 </template>

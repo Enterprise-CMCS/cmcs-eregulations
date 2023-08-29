@@ -661,6 +661,18 @@ const getStatutes = async ({
     return httpApiGet(`statutes?act=${encodeURIComponent(act)}&title=${title}`);
 };
 
+/**
+ *
+ *
+ */
+const getPolicyDocList = async ({ apiUrl, authenticated = false }) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}statutes`, {}, authenticated);
+    }
+
+    return httpApiGet("file_manager/file_list", authenticated);
+};
+
 export {
     config,
     configure,
@@ -690,4 +702,5 @@ export {
     setIdToken,
     getLastParserSuccessDate,
     getGovInfoLinks,
+    getPolicyDocList,
 };
