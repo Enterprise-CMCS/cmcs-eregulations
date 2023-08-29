@@ -26,7 +26,7 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       - name: Sync Security Hub and Jira
-        uses: Enterprise-CMCS/mac-fc-security-hub-visibility-enterprise-jira@v1.2.4
+        uses: Enterprise-CMCS/mac-fc-security-hub-visibility-enterprise-jira@v1.2.5
         with:
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-username: ${{ secrets.JIRA_USERNAME }}
@@ -34,5 +34,6 @@ jobs:
           jira-project-key: EREGCSC
           jira-ignore-statuses: Done, Closed, Canceled
           jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
-          aws-severities: CRITICAL, HIGH, MEDIUM 
+          aws-severities: CRITICAL, HIGH, MEDIUM
+          assign-jira-ticket-to: VU6Q
           #auto-close: false
