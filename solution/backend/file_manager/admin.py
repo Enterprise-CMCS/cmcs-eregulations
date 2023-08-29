@@ -32,9 +32,9 @@ class UploadedFileAdmin(BaseAdmin):
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
-    filter_horizontal = ("locations", "categories", "subject")
+    filter_horizontal = ("locations", "category", "subject")
     readonly_fields = ('download_file',)
-    fields = ("name", "file", 'date', 'description', 'categories', 'subject', 'locations', 'download_file',)
+    fields = ("name", "file", 'date', 'description', 'category', 'subject', 'locations', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }

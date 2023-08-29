@@ -33,7 +33,7 @@ class UploadedFile(models.Model):
     date = VariableDateField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     subject = models.ManyToManyField(Subject, blank=True, related_name="uploads")
-    categories = models.ManyToManyField(UploadCategory, blank=True, related_name="uploads")
+    category = models.ManyToManyField(UploadCategory, blank=True, related_name="uploads")
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="uploads")
     uid = models.UUIDField(
          primary_key=False,

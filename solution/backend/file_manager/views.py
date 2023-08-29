@@ -1,30 +1,88 @@
 from django.conf import settings
+from django.db.models import Prefetch
 from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
+from resources.models import AbstractLocation
+from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .functions import establish_client
-from .models import UploadedFile
-from .serializers import UploadedFileSerializer
+from .models import Subject, UploadCategory, UploadedFile
+from .serializers import SubjectSerializer, UploadCategorySerializer, UploadedFileSerializer
+
+
+class UploadCategoryViewset(viewsets.ViewSet):
+    model = UploadCategory
+
+    def list(self, request):
+        queryset = self.model.objects.all()
+        serializer = UploadCategorySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class SubjectViewset(viewsets.ViewSet):
+    model = Subject
+
+    def list(self, request):
+        queryset = self.model.objects.all()
+        serializer = SubjectSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 @extend_schema(
     description="Retrieve list of uploaded files",
     parameters=[
-            OpenApiQueryParameter("location_details",
-                                  "Specify whether to show details of a location, or just the ID.",
-                                  bool, False),]
+                OpenApiQueryParameter("location_details", "Specify whether to show details of a location, or just the ID.",
+                                      bool, False),
+                OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
+                                      "\"&categories=X&categories=Y\" for multiple.", int, False),
+                OpenApiQueryParameter("subjects", "Limit results to only resources found within these subjects. Use "
+                                      "\"&subjects=X&subjects=Y\" for multiple.", int, False),
+                ] + LocationExplorerViewSetMixin.PARAMETERS
 )
-class UploadedFileViewset(viewsets.ViewSet):
+class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     serializer_class = UploadedFileSerializer
     model = UploadedFile
+    location_filter_prefix = "locations__"
+
+    def get_queryset(self):
+        locations = self.request.GET.getlist("locations")
+        subjects = self.request.GET.getlist("subjects")
+        categories = self.request.GET.getlist("categories")
+
+        query = self.model.objects.all()
+
+        q_obj = self.get_location_filter(locations)
+
+        if q_obj:
+            query = query.filter(q_obj)
+        if subjects:
+            query = query.filter(subject__id__in=subjects)
+        if categories:
+            query = query.filter(category__id__in=categories)
+
+        locations_prefetch = AbstractLocation.objects.all().select_subclasses()
+        categories_prefetch = UploadCategory.objects.all()
+        subjects_prefetch = Subject.objects.all()
+
+        query = query.prefetch_related(
+            Prefetch("locations", queryset=locations_prefetch),
+            Prefetch("subject", queryset=subjects_prefetch),
+            Prefetch("category", queryset=categories_prefetch)).distinct()
+        return query
+
+    def get_serializer_context(self):
+        context = {}
+        context["location_details"] = self.request.GET.get("location_details", "true").lower() == "true"
+        return context
 
     def list(self, request):
-        queryset = UploadedFile.objects.all()
-        serializer = UploadedFileSerializer(queryset, many=True)
+        queryset = self.get_queryset()
+        context = self.get_serializer_context()
+        serializer = UploadedFileSerializer(queryset, many=True, context=context)
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):

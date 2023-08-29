@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from resources.serializers.locations import MetaLocationSerializer
+from resources.serializers.locations import AbstractLocationPolymorphicSerializer, MetaLocationSerializer
 
 from .models import Subject, UploadCategory
 
@@ -21,10 +21,8 @@ class SubjectSerializer(serializers.Serializer):
     class Meta:
         model = Subject
 
-#     fields = ("nsassmess", "fsiless", d'dsate', 'desscription', 'categoriess', 'subject', 'locations', 'download_file',)
 
-
-class UploadedFileSerializer(serializers.Serializer):
+class UploadedFileSerializer(serializers.Serializer, ):
     name = serializers.CharField()
     date = serializers.DateField()
     description = serializers.CharField()
@@ -35,4 +33,6 @@ class UploadedFileSerializer(serializers.Serializer):
 
     @extend_schema_field(MetaLocationSerializer.many(True))
     def get_locations(self, obj):
+        if self.context.get("location_details", True):
+            return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
         return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
