@@ -6,6 +6,33 @@ import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vu
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+
+const props = defineProps({
+    aboutUrl: {
+        type: String,
+        default: "/about/",
+    },
+    apiUrl: {
+        type: String,
+        default: "/v3/",
+    },
+    homeUrl: {
+        type: String,
+        default: "/",
+    },
+    resourcesUrl: {
+        type: String,
+        default: "/resources/",
+    },
+    searchUrl: {
+        type: String,
+        default: "/search/",
+    },
+    statutesUrl: {
+        type: String,
+        default: "/statutes/",
+    },
+});
 </script>
 
 <template>
@@ -26,6 +53,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
                     <HeaderLinks
                         :about-url="aboutUrl"
                         :resources-url="resourcesUrl"
+                        :statutes-url="statutesUrl"
                     />
                 </template>
                 <template #search>
