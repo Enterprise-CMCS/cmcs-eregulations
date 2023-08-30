@@ -67,7 +67,7 @@ getDocList();
 </script>
 
 <template>
-    <body class="ds-base statute-page">
+    <body class="ds-base policy-repository-page">
         <BlockingModal>
             <IFrameContainer
                 src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
@@ -92,12 +92,20 @@ getDocList();
                 </template>
             </HeaderComponent>
         </header>
-        <div id="statuteApp" class="statute-view">
-            <div v-for="doc in policyDocList.results" :key="doc.uid">
+        <div id="policyRepositoryApp" class="repository-view">
+            <div
+                v-for="doc in policyDocList.results"
+                class="doc-list__item"
+                :key="doc.uid"
+            >
                 <p>Name: {{ doc.name }}</p>
                 <p>Description: {{ doc.description }}</p>
                 <p>UID: {{ doc.uid }}</p>
                 <a :href="getDownloadUrl(doc.uid)">Download</a>
+                <p>Related Citations:</p>
+                <p v-for="loc in doc.locations">
+                    {{ loc.title }} CFR § {{ loc.part }}.{{ loc.section_id }}
+                </p>
             </div>
         </div>
     </body>
