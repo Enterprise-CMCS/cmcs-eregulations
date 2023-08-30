@@ -17,7 +17,7 @@ class DocumentTypeSerializer(serializers.Serializer):
 
 class SubjectSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    name = serializers.CharField()
+    full_name = serializers.CharField()
     short_name = serializers.CharField()
     abbreviation = serializers.CharField()
 

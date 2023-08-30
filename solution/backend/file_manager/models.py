@@ -15,8 +15,7 @@ class DocumentType(models.Model):
     order = models.IntegerField()
 
     def __str__(self) -> str:
-        if self.abbreviation:
-            return self.name
+        return self.name
 
 
 class Subject(models.Model):
@@ -25,7 +24,7 @@ class Subject(models.Model):
     abbreviation = models.CharField(max_length=10, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.full_name
 
 
 class UploadedFile(models.Model):

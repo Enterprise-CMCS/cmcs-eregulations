@@ -12,7 +12,7 @@ from .models import DocumentType, Subject, UploadedFile
 
 
 @admin.register(DocumentType)
-class UploadCategoriesAdmin(BaseAdmin):
+class DocumentTypeAdmin(BaseAdmin):
     list_display = ("name", "order",)
     search_fields = ["name",]
     ordering = ("order", "name",)
@@ -35,7 +35,7 @@ class UploadedFileAdmin(BaseAdmin):
     filter_horizontal = ("locations", "subject")
     readonly_fields = ('download_file',)
     fields = ("name", "file", 'date', 'description',
-              'document_type', 'subject', 'locations', 'inernal_notes', 'download_file',)
+              'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
