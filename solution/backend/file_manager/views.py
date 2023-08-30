@@ -118,11 +118,11 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):
         queryset = UploadedFile.objects.all()
-        id = kwargs.get("id")
+        id = kwargs.get("file_id")
         file = queryset.get(uid=id)
         try:
             url = self.generate_download_link(file)
-            response = HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url, content_type='application/force-download')
             response['Content-Disposition'] = f'attachment; filename="{file.file.name}"'
             return response
         except Exception:

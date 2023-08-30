@@ -54,8 +54,12 @@ class UploadedFileAdmin(BaseAdmin):
 
     def download_file(self, obj):
         if obj.id:
-            link = reverse("file-download", kwargs={"id": obj.uid})
+            link = reverse("file-download", kwargs={"file_id": obj.uid})
             html = '<input type="button" onclick="location.href=\'{}\'" value="Download File" />'.format(link)
         else:
             return "N/A"
         return format_html(html)
+
+    def upload_file(self, obj):
+        s3_client = establish_client()
+        s3_client.upload_file()

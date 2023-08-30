@@ -15,7 +15,7 @@ urlpatterns = [
     path("id/<id>", UploadedFileViewset.as_view({
         "get": "retrieve",
     })),
-    path("file/<id>", UploadedFileViewset.as_view({
+    path("file/<file_id>", UploadedFileViewset.as_view({
         "get": "download",
     }), name="file-download"),
 ]
