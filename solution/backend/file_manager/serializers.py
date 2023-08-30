@@ -29,7 +29,7 @@ class UploadedFileSerializer(serializers.Serializer, ):
     date = serializers.DateField()
     description = serializers.CharField()
     locations = serializers.SerializerMethodField()
-    categories = UploadCategorySerializer(many=True, read_only=True)
+    category = UploadCategorySerializer(many=False, read_only=True)
     subject = SubjectSerializer(many=True, read_only=True)
     uid = serializers.CharField()
 

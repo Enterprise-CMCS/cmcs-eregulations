@@ -12,6 +12,7 @@ class UploadCategory(models.Model):
         verbose_name_plural = "Upload Categories"
     name = models.CharField(max_length=512, null=False, blank=False)
     description = models.CharField(max_length=512, null=False, blank=False)
+    abbreviation = models.CharField(max_length=10, null=True, blank=True)
     order = models.IntegerField()
 
     def __str__(self):
@@ -32,8 +33,9 @@ class UploadedFile(models.Model):
     file = models.FileField(upload_to='uploaded_files/')
     date = VariableDateField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    internal_notes = models.TextField(null=True, blank=True)
     subject = models.ManyToManyField(Subject, blank=True, related_name="uploads")
-    category = models.ManyToManyField(UploadCategory, blank=True, related_name="uploads")
+    category = models.ForeignKey(UploadCategory, blank=True, null=True, related_name="uploads", on_delete=models.SET_NULL)
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="uploads")
     uid = models.UUIDField(
          primary_key=False,

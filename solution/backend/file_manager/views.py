@@ -49,7 +49,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     def get_queryset(self):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
-        categories = self.request.GET.getlist("categories")
+        category = self.request.GET.getlist("category")
 
         query = self.model.objects.all()
 
@@ -59,8 +59,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             query = query.filter(q_obj)
         if subjects:
             query = query.filter(subject__id__in=subjects)
-        if categories:
-            query = query.filter(category__id__in=categories)
+        if category:
+            query = query.filter(category__id=category)
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         categories_prefetch = UploadCategory.objects.all()
@@ -83,9 +83,9 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                     OpenApiQueryParameter("location_details",
                                           "Specify whether to show details of a location, or just the ID.",
                                           bool, False),
-                    OpenApiQueryParameter("categories",
-                                          "Limit results to only resources found within these categories. Use "
-                                          "\"&categories=X&categories=Y\" for multiple.", int, False),
+                    OpenApiQueryParameter("category",
+                                          "Limit results to only resources found within this category. Use "
+                                          "\"&category=X\"", int, False),
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),

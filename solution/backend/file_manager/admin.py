@@ -13,10 +13,10 @@ from .models import Subject, UploadCategory, UploadedFile
 
 @admin.register(UploadCategory)
 class UploadCategoriesAdmin(BaseAdmin):
-    list_display = ("name",)
-    search_fields = ["name"]
+    list_display = ("name", "abbreviation")
+    search_fields = ["name", "abbreviation"]
     ordering = ("order", "name")
-    fields = ("name", "description", "order",)
+    fields = ("name", "abbreviation", "description", "order",)
 
 
 @admin.register(Subject)
@@ -32,7 +32,7 @@ class UploadedFileAdmin(BaseAdmin):
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
-    filter_horizontal = ("locations", "category", "subject")
+    filter_horizontal = ("locations", "subject")
     readonly_fields = ('download_file',)
     fields = ("name", "file", 'date', 'description', 'category', 'subject', 'locations', 'download_file',)
     manytomany_lookups = {
