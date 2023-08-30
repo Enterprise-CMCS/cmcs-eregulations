@@ -59,9 +59,7 @@ const getDocList = async () => {
     }
 };
 
-const getDownloadUrl = (uid) => {
-    return `${props.apiUrl}file_manager/file/${uid}`;
-};
+const getDownloadUrl = (uid) => `${props.apiUrl}file_manager/file/${uid}`;
 
 getDocList();
 </script>
@@ -93,20 +91,27 @@ getDocList();
             </HeaderComponent>
         </header>
         <div id="policyRepositoryApp" class="repository-view">
-            <div
-                v-for="doc in policyDocList.results"
-                class="doc-list__item"
-                :key="doc.uid"
-            >
-                <p>Name: {{ doc.name }}</p>
-                <p>Description: {{ doc.description }}</p>
-                <p>UID: {{ doc.uid }}</p>
-                <a :href="getDownloadUrl(doc.uid)">Download</a>
-                <p>Related Citations:</p>
-                <p v-for="loc in doc.locations">
-                    {{ loc.title }} CFR § {{ loc.part }}.{{ loc.section_id }}
-                </p>
-            </div>
+            <template v-if="policyDocList.loading">
+                <p>Loading...</p>
+            </template>
+            <template v-else-if="policyDocList.results.length > 0">
+                <div
+                    v-for="doc in policyDocList.results"
+                    :key="doc.uid"
+                    class="doc-list__item"
+                >
+                    <p>Name: {{ doc.name }}</p>
+                    <p>Description: {{ doc.description }}</p>
+                    <p>UID: {{ doc.uid }}</p>
+                    <a :href="getDownloadUrl(doc.uid)">Download</a>
+                    <p>Related Citations:</p>
+                    <p v-for="loc in doc.locations">
+                        {{ loc.title }} CFR § {{ loc.part }}.{{ loc.section_id }}
+                    </p>
+                </div>
+            </template>
+            <template v-else>
+                <p>No results found.</p>
         </div>
     </body>
 </template>
