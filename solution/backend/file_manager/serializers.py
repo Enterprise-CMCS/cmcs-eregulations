@@ -7,6 +7,7 @@ from .models import Subject, UploadCategory
 
 
 class UploadCategorySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     name = serializers.CharField()
     description = serializers.CharField()
 
@@ -15,6 +16,7 @@ class UploadCategorySerializer(serializers.Serializer):
 
 
 class SubjectSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     name = serializers.CharField()
     description = serializers.CharField()
 

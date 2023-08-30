@@ -14,6 +14,9 @@ from .models import Subject, UploadCategory, UploadedFile
 from .serializers import SubjectSerializer, UploadCategorySerializer, UploadedFileSerializer
 
 
+@extend_schema(
+    description="Retrieve a list of Upload Categories",
+)
 class UploadCategoryViewset(viewsets.ViewSet):
     model = UploadCategory
 
@@ -23,6 +26,9 @@ class UploadCategoryViewset(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+@extend_schema(
+    description="Retrieve a list of subjects.",
+)
 class SubjectViewset(viewsets.ViewSet):
     model = Subject
 
@@ -32,17 +38,6 @@ class SubjectViewset(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-@extend_schema(
-    description="Retrieve list of uploaded files",
-    parameters=[
-                OpenApiQueryParameter("location_details", "Specify whether to show details of a location, or just the ID.",
-                                      bool, False),
-                OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
-                                      "\"&categories=X&categories=Y\" for multiple.", int, False),
-                OpenApiQueryParameter("subjects", "Limit results to only resources found within these subjects. Use "
-                                      "\"&subjects=X&subjects=Y\" for multiple.", int, False),
-                ] + LocationExplorerViewSetMixin.PARAMETERS
-)
 class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     serializer_class = UploadedFileSerializer
     model = UploadedFile
@@ -79,6 +74,20 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         context["location_details"] = self.request.GET.get("location_details", "true").lower() == "true"
         return context
 
+    @extend_schema(
+        description="Retrieve list of uploaded files",
+        parameters=[
+                    OpenApiQueryParameter("location_details",
+                                          "Specify whether to show details of a location, or just the ID.",
+                                          bool, False),
+                    OpenApiQueryParameter("categories",
+                                          "Limit results to only resources found within these categories. Use "
+                                          "\"&categories=X&categories=Y\" for multiple.", int, False),
+                    OpenApiQueryParameter("subjects",
+                                          "Limit results to only resources found within these subjects. Use "
+                                          "\"&subjects=X&subjects=Y\" for multiple.", int, False),
+                    ] + LocationExplorerViewSetMixin.PARAMETERS
+    )
     def list(self, request):
         queryset = self.get_queryset()
         context = self.get_serializer_context()
@@ -103,6 +112,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             print('Could not set up download url.')
             return 'Not available for download.'
 
+    @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):
         queryset = UploadedFile.objects.all()
         id = kwargs.get("id")
