@@ -3,6 +3,7 @@ from django.db.models import Prefetch
 from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
@@ -18,6 +19,7 @@ from .serializers import SubjectSerializer, UploadCategorySerializer, UploadedFi
     description="Retrieve a list of Upload Categories",
 )
 class UploadCategoryViewset(viewsets.ViewSet):
+    permission_classes = (IsAuthenticated,)
     model = UploadCategory
 
     def list(self, request):
@@ -39,6 +41,7 @@ class SubjectViewset(viewsets.ViewSet):
 
 
 class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
+    permission_classes = (IsAuthenticated,)
     serializer_class = UploadedFileSerializer
     model = UploadedFile
     location_filter_prefix = "locations__"
