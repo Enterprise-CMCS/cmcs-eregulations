@@ -59,7 +59,7 @@ function fetchJson({
     url,
     options = {},
     retryCount = 0,
-    authenticated = false,
+    cacheResponse = true,
 }) {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
@@ -107,7 +107,7 @@ function fetchJson({
     return Promise.resolve()
         .then(
             () =>
-                !authenticated &&
+                cacheResponse &&
                 localforage.getItem(url.replace(apiPath, merged.method))
         )
         .then((value) => {
@@ -197,7 +197,7 @@ function fetchJson({
                 throw parseError({ ...json, status: httpStatus });
             } else {
                 json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-                if (!authenticated)
+                if (cacheResponse)
                     localforage.setItem(
                         url.replace(apiPath, merged.method),
                         json
@@ -217,20 +217,20 @@ function httpApiMock(verb, urlPath, { data, params, response } = {}) {
     return response;
 }
 
-function httpApiGet(urlPath, { params } = {}, authenticated = false) {
+function httpApiGet(urlPath, { params } = {}, cacheResponse = true) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
             method: "GET",
             headers: authHeader(token),
             params,
-            authenticated,
+            cacheResponse,
         },
     });
 }
 
 // use when components used directly in Django templates
-function httpApiGetLegacy(urlPath, { params } = {}, authenticated = false) {
+function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = true) {
     return fetchJson({
         url: `${urlPath}`,
         options: {
@@ -238,11 +238,15 @@ function httpApiGetLegacy(urlPath, { params } = {}, authenticated = false) {
             params,
         },
         retryCount: 0, // retryCount, default
-        authenticated,
+        cacheResponse,
     });
 }
 
-async function httpApiGetWithPagination(urlPath, { params } = {}, authenticated = false) {
+async function httpApiGetWithPagination(
+    urlPath,
+    { params } = {},
+    cacheResponse = true
+) {
     let results = [];
     let url = `${config.apiPath}/${urlPath}`;
     while (url) {
@@ -254,7 +258,7 @@ async function httpApiGetWithPagination(urlPath, { params } = {}, authenticated 
                 headers: authHeader(token),
                 params,
             },
-            authenticated,
+            cacheResponse,
         });
         results = results.concat(response.results ?? []);
         url = response.next;
@@ -263,7 +267,11 @@ async function httpApiGetWithPagination(urlPath, { params } = {}, authenticated 
     return results;
 }
 
-function httpApiPost(urlPath, { data = {}, params } = {}, authenticated = false) {
+function httpApiPost(
+    urlPath,
+    { data = {}, params } = {},
+    cacheResponse = true
+) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -272,12 +280,12 @@ function httpApiPost(urlPath, { data = {}, params } = {}, authenticated = false)
             params,
             body: JSON.stringify(data),
         },
-        authenticated,
+        cacheResponse,
     });
 }
 
 // eslint-disable-next-line no-unused-vars
-function httpApiPut(urlPath, { data, params } = {}, authenticated = false) {
+function httpApiPut(urlPath, { data, params } = {}, cacheResponse = true) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -286,12 +294,12 @@ function httpApiPut(urlPath, { data, params } = {}, authenticated = false) {
             params,
             body: JSON.stringify(data),
         },
-        authenticated,
+        cacheResponse,
     });
 }
 
 // eslint-disable-next-line no-unused-vars
-function httpApiDelete(urlPath, { data, params } = {}, authenticated = false) {
+function httpApiDelete(urlPath, { data, params } = {}, cacheResponse = true) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -300,7 +308,7 @@ function httpApiDelete(urlPath, { data, params } = {}, authenticated = false) {
             params,
             body: JSON.stringify(data),
         },
-        authenticated,
+        cacheResponse,
     });
 }
 // ---------- cache helpers -----------
@@ -409,12 +417,12 @@ const getRecentResources = async (
     if (type !== "rules") {
         return httpApiGetLegacy(
             `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true${categories}`,
-            {}, // params, default
+            {} // params, default
         );
     }
     return httpApiGetLegacy(
         `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
-        {}, // params, default
+        {} // params, default
     );
 };
 
@@ -665,12 +673,12 @@ const getStatutes = async ({
  *
  *
  */
-const getPolicyDocList = async ({ apiUrl, authenticated = false }) => {
+const getPolicyDocList = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}statutes`, {}, authenticated);
+        return httpApiGetLegacy(`${apiUrl}statutes`, {}, cacheResponse);
     }
 
-    return httpApiGet("file_manager/file_list", authenticated);
+    return httpApiGet("file_manager/file_list", cacheResponse);
 };
 
 export {

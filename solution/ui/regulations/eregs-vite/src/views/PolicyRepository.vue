@@ -47,10 +47,9 @@ const policyDocList = ref({
 });
 
 const getDocList = async () => {
-    console.log("isAuthenticated prop: ", props.isAuthenticated);
     policyDocList.value = await getPolicyDocList({
         apiUrl: props.apiUrl,
-        authenticated: props.isAuthenticated,
+        cacheResponse: !props.isAuthenticated,
     });
 };
 
@@ -85,6 +84,7 @@ getDocList();
         </header>
         <div id="statuteApp" class="statute-view">
             is authenticated: {{ isAuthenticated }}
+            <br />
             {{ policyDocList }}
         </div>
     </body>
