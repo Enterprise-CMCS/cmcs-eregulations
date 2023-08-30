@@ -47,10 +47,20 @@ const policyDocList = ref({
 });
 
 const getDocList = async () => {
-    policyDocList.value = await getPolicyDocList({
-        apiUrl: props.apiUrl,
-        cacheResponse: !props.isAuthenticated,
-    });
+    try {
+        policyDocList.value.results = await getPolicyDocList({
+            apiUrl: props.apiUrl,
+            cacheResponse: !props.isAuthenticated,
+        });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        policyDocList.value.loading = false;
+    }
+};
+
+const getDownloadUrl = (uid) => {
+    return `${props.apiUrl}file_manager/file/${uid}`;
 };
 
 getDocList();
@@ -83,9 +93,12 @@ getDocList();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            is authenticated: {{ isAuthenticated }}
-            <br />
-            {{ policyDocList }}
+            <div v-for="doc in policyDocList.results" :key="doc.uid">
+                <p>Name: {{ doc.name }}</p>
+                <p>Description: {{ doc.description }}</p>
+                <p>UID: {{ doc.uid }}</p>
+                <a :href="getDownloadUrl(doc.uid)">Download</a>
+            </div>
         </div>
     </body>
 </template>
