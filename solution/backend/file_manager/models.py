@@ -15,8 +15,11 @@ class UploadCategory(models.Model):
     abbreviation = models.CharField(max_length=10, null=True, blank=True)
     order = models.IntegerField()
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        if self.abbreviation:
+            return self.name + '(' + self.abbreviation + ')'
+        else:
+            return self.name
 
 
 class Subject(models.Model):
@@ -44,3 +47,6 @@ class UploadedFile(models.Model):
 
     def filename(self):
         return os.path.basename(self.file.name)
+
+    def __str__(self) -> str:
+        return self.name + ' ' + self.description
