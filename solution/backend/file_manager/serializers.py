@@ -3,22 +3,23 @@ from rest_framework import serializers
 
 from resources.serializers.locations import AbstractLocationPolymorphicSerializer, MetaLocationSerializer
 
-from .models import Subject, UploadCategory
+from .models import DocumentType, Subject
 
 
-class UploadCategorySerializer(serializers.Serializer):
+class DocumentTypeSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     description = serializers.CharField()
 
     class Meta:
-        model = UploadCategory
+        model = DocumentType
 
 
 class SubjectSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    name = serializers.CharField()
-    description = serializers.CharField()
+    full_name = serializers.CharField()
+    short_name = serializers.CharField()
+    abbreviation = serializers.CharField()
 
     class Meta:
         model = Subject
@@ -29,7 +30,7 @@ class UploadedFileSerializer(serializers.Serializer, ):
     date = serializers.DateField()
     description = serializers.CharField()
     locations = serializers.SerializerMethodField()
-    categories = UploadCategorySerializer(many=True, read_only=True)
+    document_type = DocumentTypeSerializer(many=False, read_only=True)
     subject = SubjectSerializer(many=True, read_only=True)
     uid = serializers.CharField()
 

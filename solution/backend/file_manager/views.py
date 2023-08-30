@@ -11,8 +11,8 @@ from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .functions import establish_client
-from .models import Subject, UploadCategory, UploadedFile
-from .serializers import SubjectSerializer, UploadCategorySerializer, UploadedFileSerializer
+from .models import DocumentType, Subject, UploadedFile
+from .serializers import DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
 
 
 @extend_schema(
@@ -20,11 +20,11 @@ from .serializers import SubjectSerializer, UploadCategorySerializer, UploadedFi
 )
 class UploadCategoryViewset(viewsets.ViewSet):
     permission_classes = (IsAuthenticated,)
-    model = UploadCategory
+    model = DocumentType
 
     def list(self, request):
         queryset = self.model.objects.all()
-        serializer = UploadCategorySerializer(queryset, many=True)
+        serializer = DocumentTypeSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -49,7 +49,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     def get_queryset(self):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
-        categories = self.request.GET.getlist("categories")
+        category = self.request.GET.getlist("category")
 
         query = self.model.objects.all()
 
@@ -59,17 +59,17 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             query = query.filter(q_obj)
         if subjects:
             query = query.filter(subject__id__in=subjects)
-        if categories:
-            query = query.filter(category__id__in=categories)
+        if category:
+            query = query.filter(category__id=category)
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
-        categories_prefetch = UploadCategory.objects.all()
+        doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
 
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subject", queryset=subjects_prefetch),
-            Prefetch("category", queryset=categories_prefetch)).distinct()
+            Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
         return query
 
     def get_serializer_context(self):
@@ -83,9 +83,9 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                     OpenApiQueryParameter("location_details",
                                           "Specify whether to show details of a location, or just the ID.",
                                           bool, False),
-                    OpenApiQueryParameter("categories",
-                                          "Limit results to only resources found within these categories. Use "
-                                          "\"&categories=X&categories=Y\" for multiple.", int, False),
+                    OpenApiQueryParameter("document_type",
+                                          "Limit results to only resources found within this category. Use "
+                                          "\"&document_type=X\"", int, False),
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),
