@@ -9,6 +9,7 @@ from .models import Subject, UploadCategory
 class UploadCategorySerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
+    abbreviation = serializers.CharField()
     description = serializers.CharField()
 
     class Meta:
