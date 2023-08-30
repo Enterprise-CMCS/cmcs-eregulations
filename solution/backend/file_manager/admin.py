@@ -8,23 +8,23 @@ from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
 from .functions import establish_client
-from .models import Subject, UploadCategory, UploadedFile
+from .models import DocumentType, Subject, UploadedFile
 
 
-@admin.register(UploadCategory)
+@admin.register(DocumentType)
 class UploadCategoriesAdmin(BaseAdmin):
-    list_display = ("name", "abbreviation")
-    search_fields = ["name", "abbreviation"]
-    ordering = ("order", "name")
-    fields = ("name", "abbreviation", "description", "order",)
+    list_display = ("name", "order",)
+    search_fields = ["name",]
+    ordering = ("order", "name",)
+    fields = ("order", "name", "description",)
 
 
 @admin.register(Subject)
 class SubjectAdmin(BaseAdmin):
-    list_display = ("name",)
-    search_fields = ["name"]
-    ordering = ("order", "name")
-    fields = ("name", "description", "order",)
+    list_display = ("full_name",)
+    search_fields = ["full_name", "short_name"]
+    ordering = ("full_name", "short_name", "abbreviation")
+    fields = ("full_name", "short_name", "abbreviation")
 
 
 @admin.register(UploadedFile)
@@ -34,7 +34,8 @@ class UploadedFileAdmin(BaseAdmin):
     ordering = ("name",)
     filter_horizontal = ("locations", "subject")
     readonly_fields = ('download_file',)
-    fields = ("name", "file", 'date', 'description', 'category', 'subject', 'locations', 'download_file',)
+    fields = ("name", "file", 'date', 'description',
+              'document_type', 'subject', 'locations', 'inernal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
