@@ -50,14 +50,18 @@ class UploadedFileAdmin(BaseAdmin):
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
 
-    def upload_file(self, file, name):
+    def upload_file(self, file):
         s3_client = establish_client()
-        s3_client.put_object(Body=file, Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key="uploaded_files/" + file._name)
+        s3_client.put_object(Body=file,
+                             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+                             Key="uploaded_files/" + file._name,
+                             ContentType=file.content_type)
 
     def save_model(self, request, obj, form, change):
         file = form.cleaned_data.get("upload_file")
+        print(file.__dict__)
         if file:
-            self.upload_file(file, obj.name)
+            self.upload_file(file)
             obj.filepath = file._name
         super().save_model(request, obj, form, change)
 
