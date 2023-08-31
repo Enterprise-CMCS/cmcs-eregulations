@@ -1,0 +1,21 @@
+//-----------------------------
+// Policy Repository Page
+//-----------------------------
+
+@import "../application_settings";
+
+.policy-repository-page {
+    #policyRepositoryApp.repository-view {
+        overflow: auto;
+        margin-bottom: 16px;
+        padding: 0 45px;
+        display: flex;
+        flex-direction: column;
+
+        .doc-list__item {
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid gray;
+        }
+    }
+}
