@@ -107,13 +107,16 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     def generate_download_link(self, obj):
         s3_client = establish_client()
         try:
+            print('hsersse')
             return s3_client.generate_presigned_url('get_object',
                                                     Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                                                             'Key': obj.file.name},
                                                     ExpiresIn=600)
-        except Exception:
-            print('Could not set up download url.')
-            return 'Not available for download.'
+        
+        except Exception as e:
+            print(e)
+            print('Could not set sup download url.')
+            return 'Not avaislable for download.'
 
     @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):
@@ -121,8 +124,9 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         id = kwargs.get("file_id")
         file = queryset.get(uid=id)
         try:
+            print('his')
             url = self.generate_download_link(file)
-            response = HttpResponseRedirect(url, content_type='application/force-download')
+            response = HttpResponseRedirect(url)
             response['Content-Disposition'] = f'attachment; filename="{file.file.name}"'
             return response
         except Exception:

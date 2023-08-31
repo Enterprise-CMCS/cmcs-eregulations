@@ -27,24 +27,14 @@ class SubjectAdmin(BaseAdmin):
     ordering = ("full_name", "short_name", "abbreviation")
     fields = ("full_name", "short_name", "abbreviation")
 
-
-class UploadFileForm(forms.ModelForm):
-    upload_file = forms.FileField()
-
-    class Meta:
-        model = UploadedFile
-        fields = '__all__'
-
-
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
-    form = UploadFileForm
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
     filter_horizontal = ("locations", "subject")
-    readonly_fields = ('download_file', 'filepath')
-    fields = ("name", "filepath", "upload_file", 'date', 'description',
+    readonly_fields = ('download_file',)
+    fields = ("name", "file", 'date', 'description',
               'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
@@ -57,13 +47,6 @@ class UploadedFileAdmin(BaseAdmin):
                              Key="uploaded_files/" + file._name,
                              ContentType=file.content_type)
 
-    def save_model(self, request, obj, form, change):
-        file = form.cleaned_data.get("upload_file")
-        print(file.__dict__)
-        if file:
-            self.upload_file(file)
-            obj.filepath = file._name
-        super().save_model(request, obj, form, change)
 
     def del_file(self, obj):
         s3_client = establish_client()
