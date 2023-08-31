@@ -1,9 +1,10 @@
 
+from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from django import forms
+
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
@@ -26,8 +27,10 @@ class SubjectAdmin(BaseAdmin):
     ordering = ("full_name", "short_name", "abbreviation")
     fields = ("full_name", "short_name", "abbreviation")
 
+
 class UploadFileForm(forms.ModelForm):
     upload_file = forms.FileField()
+
     class Meta:
         model = UploadedFile
         fields = '__all__'
@@ -80,4 +83,3 @@ class UploadedFileAdmin(BaseAdmin):
         else:
             return "N/A"
         return format_html(html)
-
