@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-
+from django import forms
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
@@ -26,23 +26,44 @@ class SubjectAdmin(BaseAdmin):
     ordering = ("full_name", "short_name", "abbreviation")
     fields = ("full_name", "short_name", "abbreviation")
 
+class UploadFileForm(forms.ModelForm):
+    upload_file = forms.FileField()
+    class Meta:
+        model = UploadedFile
+        fields = '__all__'
+
 
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
+    form = UploadFileForm
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
     filter_horizontal = ("locations", "subject")
-    readonly_fields = ('download_file',)
-    fields = ("name", "file", 'date', 'description',
+    readonly_fields = ('download_file', 'filepath')
+    fields = ("name", "filepath", "upload_file", 'date', 'description',
               'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
 
+    def upload_file(self, file, name):
+        s3_client = establish_client()
+        s3_client.put_object(Body=file, Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key="uploaded_files/" + file._name)
+
+    def save_model(self, request, obj, form, change):
+        file = form.cleaned_data.get("upload_file")
+        if file:
+            self.upload_file(file, obj.name)
+            obj.filepath = file._name
+        super().save_model(request, obj, form, change)
+
     def del_file(self, obj):
         s3_client = establish_client()
-        s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=f"{obj.file.name}")
+        try:
+            s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=f"{obj.file.name}")
+        except Exception:
+            print("Unable to delete")
 
     def delete_model(self, request, obj):
         try:
@@ -60,6 +81,3 @@ class UploadedFileAdmin(BaseAdmin):
             return "N/A"
         return format_html(html)
 
-    def upload_file(self, obj):
-        s3_client = establish_client()
-        s3_client.upload_file()
