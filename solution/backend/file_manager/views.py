@@ -112,7 +112,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                                                     Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                                                             'Key': obj.file.name},
                                                     ExpiresIn=600)
-        
+
         except Exception as e:
             print(e)
             print('Could not set sup download url.')

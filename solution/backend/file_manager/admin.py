@@ -1,5 +1,4 @@
 
-from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
@@ -27,6 +26,7 @@ class SubjectAdmin(BaseAdmin):
     ordering = ("full_name", "short_name", "abbreviation")
     fields = ("full_name", "short_name", "abbreviation")
 
+
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
     list_display = ("name",)
@@ -46,7 +46,6 @@ class UploadedFileAdmin(BaseAdmin):
                              Bucket=settings.AWS_STORAGE_BUCKET_NAME,
                              Key="uploaded_files/" + file._name,
                              ContentType=file.content_type)
-
 
     def del_file(self, obj):
         s3_client = establish_client()
