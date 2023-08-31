@@ -30,6 +30,7 @@ provider:
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
+    AWS_STORAGE_BUCKET_NAME: file-upload-${self:custom.stage}
     DEPLOY_NUMBER: ${env:RUN_ID}
   vpc:
     securityGroupIds:
@@ -75,6 +76,47 @@ functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)
 
 resources:
   Resources:
+    MyS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: file-upload-${self:custom.stage}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - HEAD
+              MaxAge: 3000
+
+    BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: 's3:GetObject'
+              Resource: !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref MyS3Bucket
+                  - /*
+              Principal: "*"
+        Bucket: !Ref MyS3Bucket
+
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
@@ -119,11 +161,14 @@ resources:
                 -  Effect: "Allow"
                    Action:
                      - "s3:PutObject"
+                     - "s3:GetObject"
+                     - "s3:DeleteObject"
                    Resource:
-                     Fn::Join:
+                     - Fn::Join:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
+                     - "arn:aws:s3:::file-upload-${self:custom.stage}/*"
 
 plugins:
   - serverless-wsgi
