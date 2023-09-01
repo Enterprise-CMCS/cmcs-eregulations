@@ -60,8 +60,6 @@ package:
 custom:
   environment: 'experimental'
   stage: ${opt:stage, self:provider.stage}
-  apiGateway:
-
   wsgi:
     app: handler.application
     packRequirements: false
