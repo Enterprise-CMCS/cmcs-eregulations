@@ -12,6 +12,10 @@ provider:
       level: INFO
       roleManagedExternally: true
   lambdaHashingVersion: '20201221'
+  apiGateway:
+    binaryMediaTypes:
+      - 'multipart/form-data'
+      - 'application/pdf'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}

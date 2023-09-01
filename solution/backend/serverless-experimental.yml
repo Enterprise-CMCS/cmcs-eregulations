@@ -7,6 +7,10 @@ provider:
   region: us-east-1
   iam:
     role: LambdaFunctionRole
+  apiGateway:
+    binaryMediaTypes:
+      - 'multipart/form-data'
+      - 'application/pdf'
   logs:
     restApi:
       level: INFO
