@@ -9,8 +9,8 @@ provider:
     role: LambdaFunctionRole
   apiGateway:
     binaryMediaTypes:
-      - 'applicaiton/pdf'
       - 'multipart/form-data'
+      - 'application/pdf'
   logs:
     restApi:
       level: INFO
