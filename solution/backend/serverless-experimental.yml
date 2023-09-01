@@ -30,7 +30,7 @@ provider:
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
-    AWS_STORAGE_BUCKET_NAME: file-upload-${self:custom.stage}
+    AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
     DEPLOY_NUMBER: ${env:RUN_ID}
   vpc:
     securityGroupIds:
@@ -79,7 +79,7 @@ resources:
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: file-upload-${self:custom.stage}
+        BucketName: file-repo-eregs-${self:custom.stage}
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
@@ -168,7 +168,7 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-                     - "arn:aws:s3:::file-upload-${self:custom.stage}/*"
+                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
 
 plugins:
   - serverless-wsgi
