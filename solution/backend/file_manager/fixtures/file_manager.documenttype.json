@@ -1,0 +1,65 @@
+[
+{
+    "model": "file_manager.documenttype",
+    "pk": 1,
+    "fields": {
+        "name": "OGC Opinions",
+        "description": "Non-public legal information, including emails",
+        "order": 2
+    }
+},
+{
+    "model": "file_manager.documenttype",
+    "pk": 2,
+    "fields": {
+        "name": "Curated Formal Guidance",
+        "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual",
+        "order": 1
+    }
+},
+{
+    "model": "file_manager.documenttype",
+    "pk": 3,
+    "fields": {
+        "name": "SOPs and Checklists",
+        "description": "Internal instructional documents (emails, etc) with step-by-step guidance",
+        "order": 3
+    }
+},
+{
+    "model": "file_manager.documenttype",
+    "pk": 4,
+    "fields": {
+        "name": "Informal Guidance",
+        "description": "Useful internal emails and one-pagers",
+        "order": 2
+    }
+},
+{
+    "model": "file_manager.documenttype",
+    "pk": 5,
+    "fields": {
+        "name": "Memos to States",
+        "description": "Non-public memos, such as older ARA memos that are not posted online",
+        "order": 5
+    }
+},
+{
+    "model": "file_manager.documenttype",
+    "pk": 6,
+    "fields": {
+        "name": "Sample Language",
+        "description": "Exemplar SPAs and other model language",
+        "order": 6
+    }
+},
+{
+    "model": "file_manager.documenttype",
+    "pk": 7,
+    "fields": {
+        "name": "Training Material",
+        "description": "Presentations and other non-public training documents",
+        "order": 6
+    }
+}
+]

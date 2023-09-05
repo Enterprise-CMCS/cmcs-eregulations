@@ -3,8 +3,14 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
+from file_manager.models import DocumentType, Subject
 from regcore.search.models import Synonym
-from regulations.models import SiteConfiguration, StatuteLinkConfiguration, StatuteLinkConverter
+from regulations.models import (
+    RegulationLinkConfiguration,
+    SiteConfiguration,
+    StatuteLinkConfiguration,
+    StatuteLinkConverter,
+)
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -28,4 +34,7 @@ class Command(BaseCommand):
         Group.objects.all().delete()
         Permission.objects.all().delete()
         ContentType.objects.all().delete()
+        RegulationLinkConfiguration.objects.all().delete()
         SiteConfiguration.objects.all().delete()
+        Subject.objects.all().delete()
+        DocumentType.objects.all().delete()
