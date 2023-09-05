@@ -2,7 +2,6 @@ from .base import * # noqa
 import os
 
 INSTALLED_APPS += [ # noqa
-    'django.contrib.auth',
     'mozilla_django_oidc',
 ]
 
@@ -10,6 +9,7 @@ OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
 
 AUTHENTICATION_BACKENDS = (
     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
@@ -40,5 +40,5 @@ DATABASES = {
     },
 }
 
-LOGIN_URL = '/auth/login/'
+LOGIN_URL = 'localhost:8000/dev/oidc/callback'
 LOGOUT_URL = '/auth/logout/'
