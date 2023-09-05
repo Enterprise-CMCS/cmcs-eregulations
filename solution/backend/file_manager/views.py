@@ -1,3 +1,5 @@
+import requests
+
 from django.conf import settings
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
@@ -132,3 +134,18 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         except Exception:
             print('Could not set up download url.')
             return 'Not available for download.'
+
+    def upload(self, request, *args, **kwargs):
+        s3_client = establish_client()
+        file_obj = None
+        file_name = ''
+        file = request.FILES['file']
+        try:
+            result = s3_client.generate_presigned_post(bucket_name=settings.AWS_STORAGE_BUCKET_NAME,
+                                                       object_name=file.name,
+                                                       ExpiresIn=20)
+        except:
+            return
+        with open(file_obj,'rb') as f:
+            files = {'file': (file_obj, f)}
+            http_response = requests.post(result['url'], data=result['fields'], file=file)

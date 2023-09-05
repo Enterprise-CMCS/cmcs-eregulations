@@ -1,6 +1,7 @@
 
 from django.conf import settings
 from django.contrib import admin
+from django import forms
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -26,20 +27,30 @@ class SubjectAdmin(BaseAdmin):
     ordering = ("full_name", "short_name", "abbreviation")
     fields = ("full_name", "short_name", "abbreviation")
 
-
+class UploadAdminForm(forms.ModelForm):
+    file_path = forms.FileField()
+    class Meta:
+        model = UploadedFile
+        fields = '__all__'
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
+    form = UploadAdminForm
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
     filter_horizontal = ("locations", "subject")
     readonly_fields = ('download_file',)
-    fields = ("name", "file", 'date', 'description',
+    fields = ("name", "file", 'file_path', 'date', 'description',
               'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
-
+ #s
+    def save_model(self, request, obj, form, change):
+        path = form.cleaned_data.get("file_path")
+        print(path.__dict__)
+        self.upload_file(path)
+        super().save_model(request, obj, form, change)
     def upload_file(self, file):
         s3_client = establish_client()
         s3_client.put_object(Body=file,

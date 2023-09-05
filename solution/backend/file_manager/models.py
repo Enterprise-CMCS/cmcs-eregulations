@@ -29,7 +29,7 @@ class Subject(models.Model):
 
 class UploadedFile(models.Model):
     name = models.CharField(max_length=512, null=True, blank=True)
-    file = models.FileField(upload_to='uploaded_files/')
+    file = models.CharField(max_length=512, null=True, blank=True)
     date = VariableDateField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
