@@ -20,7 +20,7 @@
     {% endblock %}
    {{ block.super }}
    <div class="okta_login_container">
-       Or Login With&nbsp; <a href="https://www.google.com/">EUA</a>
+       Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}">EUA</a>
    </div>
    {% if form.errors %}
     <p>Invalid credentials.  Please contact an eRegs administrator if you need access.</p>

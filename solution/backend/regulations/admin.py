@@ -9,6 +9,11 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
 from solo.admin import SingletonModelAdmin
+from django.db import transaction
+from django.contrib.auth.models import User
+
+from mozilla_django_oidc.auth import OIDCAuthenticationBackend
+
 
 from .models import (
     RegulationLinkConfiguration,
@@ -68,6 +73,41 @@ def roman_to_int(roman):
     return result
 
 
+class OktaClaim:
+    def __init__(self, email, name, preferred_username, jobcodes):
+        self.email = email
+        self.name = name
+        self.preferred_username = preferred_username
+        self.jobcodes = jobcodes
+
+
+class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
+   def verify_claims(self, claims: OktaClaim) -> bool:
+       return (
+           super().verify_claims(claims)
+           and claims.get("email_verified", False)
+       )
+
+   @transaction.atomic
+   def create_user(self, claims: OktaClaim) -> User:
+       user: User = self.UserModel.objects.create_user(
+           claims.get("email"),
+           None,  # password
+           first_name=claims["given_name"],
+           last_name=claims["family_name"],
+       )
+       user.save()
+
+       return user
+
+   @transaction.atomic
+   def update_user(self, user: User, claims: OktaClaim) -> User:
+       """Update existing user with new claims, if necessary save, and return user"""
+       user.first_name = claims["given_name"]
+       user.last_name = claims["family_name"]
+       user.save()
+
+       return user
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
     fieldsets = (

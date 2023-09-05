@@ -39,6 +39,7 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('latest/feed/', ResourceFeed()),
     path('oidc/', include('mozilla_django_oidc.urls')),
+    path('', include('regulations.urls')),
 ]
 admin.site.site_header = "eRegs"
 admin.site.site_title = 'eRegs Admin Panel'
