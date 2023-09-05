@@ -10,8 +10,12 @@ RUN apk --update add ca-certificates build-base postgresql-dev \
 RUN pip install --no-cache-dir --upgrade pip setuptools \
     && pip install -r requirements.txt
 
-ENV SEARCHGOV_KEY=""
-ENV SEARCHGOV_SITE_NAME=""
-
+ENV SEARCHGOV_KEY=''
+ENV SEARCHGOV_SITE_NAME=''
+ENV OIDC_RP_CLIENT_ID=''
+ENV OIDC_RP_CLIENT_SECRET=''
+ENV OIDC_OP_AUTHORIZATION_ENDPOINT=''
+ENV OIDC_OP_TOKEN_ENDPOINT=''
+ENV OIDC_OP_USER_ENDPOINT=''
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
