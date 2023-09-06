@@ -11,7 +11,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["prod"]
       fail-fast: false
     environment:
       name: ${{ matrix.environment }}
