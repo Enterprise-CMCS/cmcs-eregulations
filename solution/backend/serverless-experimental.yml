@@ -75,11 +75,6 @@ custom:
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
-  pythonRequirements:
-    pipCmdExtraArgs:
-      - --platform manylinux2014_x86_64
-      - --only-binary=:all:
-
 
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
@@ -166,4 +161,3 @@ plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
   - serverless-associate-waf
-  - serverless-python-requirements

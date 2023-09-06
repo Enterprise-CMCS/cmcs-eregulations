@@ -44,6 +44,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
+          pip install
+          --platform **manylinux2014_aarch64 **
+          --target=./python/lib/python3.9/site-packages
+          --implementation cp
+          --python 3.9
+          --only-binary=:all: --upgrade
       # build the static assets for the website
       - name: build static assets
         if: success() && steps.findPr.outputs.number
