@@ -42,6 +42,7 @@ jobs:
           python-version: "3.9"
       - name: Install dependencies
         run: |
+          python3.9 -m pip install --platform manylinux2014_x86_64 --only-binary=:all: -t /someOutputFolder -r ./solution/static-assets/requirements.txt
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
       # build the static assets for the website
