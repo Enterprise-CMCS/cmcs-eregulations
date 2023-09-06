@@ -14,14 +14,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-    partsLastUpdated: {
-        type: Object,
-        required: true,
-    },
-    partsList: {
-        type: Array,
-        required: true,
-    },
 });
 
 const locationsCount = props.item.locations.length;
@@ -50,17 +42,9 @@ const groupedLocations = _groupBy(props.item.locations, "title");
                         :key="location.display_name + i"
                         class="related-section-link"
                     >
-                        <a
-                            :href="
-                                locationUrl(
-                                    location,
-                                    partsList,
-                                    partsLastUpdated,
-                                    base
-                                )
-                            "
-                            >{{ locationLabel(location) }}</a
-                        >
+                        <a :href="locationUrl(location, base)">{{
+                            locationLabel(location)
+                        }}</a>
                         <span v-if="i + 1 != locations.length">, </span>
                     </span>
                 </template>

@@ -139,7 +139,6 @@
                         :categories="categories"
                         :content="supplementalContent"
                         :count="supplementalContentCount"
-                        :partsList="filters.part.listItems"
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
                         :sortMethod="sortMethod"
@@ -230,10 +229,6 @@ export default {
         statutesUrl: {
             type: String,
             default: "/statutes/",
-        },
-        host: {
-            type: String,
-            default: "",
         },
     },
 

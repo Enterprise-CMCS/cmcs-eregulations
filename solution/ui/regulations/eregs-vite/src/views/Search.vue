@@ -96,8 +96,6 @@
                         <SearchGovResults
                             :base="homeUrl"
                             :count="resourcesResults.length"
-                            :parts-last-updated="partsLastUpdated"
-                            :parts-list="partsList"
                             :results="filteredContent"
                             :query="searchQuery"
                             view="search"
@@ -169,7 +167,6 @@ import SearchInput from "@/components/SearchInput.vue";
 
 import { getCurrentPageResultsRange, stripQuotes } from "utilities/utils";
 import {
-    getFormattedPartsList,
     getLastUpdatedDates,
     getRegSearchResults,
     getSearchGovResources,
@@ -231,14 +228,7 @@ export default {
     async created() {
         if (this.searchQuery) {
             this.titles = await getTitles();
-            await Promise.allSettled([
-                this.getPartLastUpdatedDates(this.titles),
-                getFormattedPartsList(),
-            ]).then((data) => {
-                // eslint-disable-next-line
-                this.partsList = data[1].value;
-            });
-
+            this.getPartLastUpdatedDates(this.titles);
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
                 query: this.searchQuery,
@@ -256,7 +246,6 @@ export default {
             regsLoading: true,
             resourcesLoading: true,
             partsLastUpdated: {},
-            partsList: [],
             queryParams: this.$route.query,
             regResults: [],
             totalRegResultsCount: 0,

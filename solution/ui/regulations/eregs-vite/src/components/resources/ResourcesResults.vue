@@ -31,8 +31,6 @@
                 <RelatedSections
                     :base="base"
                     :item="item"
-                    :parts-last-updated="partsLastUpdated"
-                    :parts-list="partsList"
                 />
             </div>
         </template>
@@ -56,14 +54,6 @@ export default {
     props: {
         base: {
             type: String,
-            required: true,
-        },
-        partsLastUpdated: {
-            type: Object,
-            required: true,
-        },
-        partsList: {
-            type: Array,
             required: true,
         },
         results: {

@@ -53,7 +53,6 @@
                     :base="base"
                     :results="filteredContent"
                     :parts-last-updated="partsLastUpdated"
-                    :parts-list="partsList"
                     view="resources"
                 >
                     <template #empty-state>
@@ -138,11 +137,6 @@ export default {
             type: Boolean,
             required: false,
             default: false,
-        },
-        partsList: {
-            type: Array,
-            required: true,
-            default: () => [],
         },
         partsLastUpdated: {
             type: Object,
