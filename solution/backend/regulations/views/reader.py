@@ -113,6 +113,15 @@ class ReaderView(CitationContextMixin, TemplateView):
 
         return {**context, **c, **version_info}
 
+    def get(self, request, *args, **kwargs):
+        if kwargs.get('version') is None:
+            versions = Part.objects.versions(kwargs.get("title"), kwargs.get('part'))
+            if versions is None:
+                raise Http404
+            kwargs['version'] = versions[0]['date']
+            return HttpResponseRedirect(reverse('reader_view', kwargs=kwargs))
+        return super().get(request, *args, **kwargs)
+
     def get_view_type(self):
         raise NotImplementedError()
 
