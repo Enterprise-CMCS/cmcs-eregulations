@@ -2,7 +2,13 @@ from datetime import datetime, timedelta
 
 from django.test import TestCase
 
-from resources.models import FederalRegisterDocument, FederalRegisterDocumentGroup, Section
+from resources.models import (
+    FederalRegisterDocument,
+    FederalRegisterDocumentGroup,
+    Section,
+    SupplementalContent,
+)
+
 from file_manager.models import Subject
 
 
@@ -43,6 +49,44 @@ class TestResourcesEndpoint(TestCase):
 
     def test_subjects(self):
         response = self.client.get("/v3/resources/?paginate=false")
+        self.assertIn("subjects", response.data[0])
+        self.assertGreater(len(response.data[0]["subjects"]), 0)
+        subject = response.data[0]["subjects"][0]
+        self.assertEqual(subject["full_name"], "Access to Services")
+        self.assertEqual(subject["short_name"], "Test")
+        self.assertEqual(subject["abbreviation"], "ATS")
+
+
+class TestSupplementalContentEndpoint(TestCase):
+    def setUp(self):
+        subject = Subject.objects.create(full_name="Access to Services", short_name="Test", abbreviation="ATS")
+        section = Section.objects.create(title=1, part=1, section_id=1)
+        resource = SupplementalContent.objects.create(id=1)
+        resource.locations.set([section])
+        resource.subjects.set([subject])
+        resource.save()
+
+    def test_subjects(self):
+        response = self.client.get("/v3/resources/supplemental_content?paginate=false")
+        self.assertIn("subjects", response.data[0])
+        self.assertGreater(len(response.data[0]["subjects"]), 0)
+        subject = response.data[0]["subjects"][0]
+        self.assertEqual(subject["full_name"], "Access to Services")
+        self.assertEqual(subject["short_name"], "Test")
+        self.assertEqual(subject["abbreviation"], "ATS")
+
+
+class TestFRDocEndpoint(TestCase):
+    def setUp(self):
+        subject = Subject.objects.create(full_name="Access to Services", short_name="Test", abbreviation="ATS")
+        section = Section.objects.create(title=1, part=1, section_id=1)
+        resource = FederalRegisterDocument.objects.create(id=1)
+        resource.locations.set([section])
+        resource.subjects.set([subject])
+        resource.save()
+
+    def test_subjects(self):
+        response = self.client.get("/v3/resources/federal_register_docs?paginate=false")
         self.assertIn("subjects", response.data[0])
         self.assertGreater(len(response.data[0]["subjects"]), 0)
         subject = response.data[0]["subjects"][0]
