@@ -37,6 +37,11 @@ provider:
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
+    OIDC_RP_CLIENT_ID:  ${ssm:/eregulations/oidc/client_id}
+    OIDC_RP_CLIENT_SECRET: ${ssm:/eregulations/oidc/client_secret}
+    OIDC_OP_AUTHORIZATION_ENDPOINT: ${ssm:/eregulations/oidc/authorization_endpoint}
+    OIDC_OP_TOKEN_ENDPOINT: ${ssm:/eregulations/oidc/token_endpoint}
+    OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/userinfo_endpoint}
     DEPLOY_NUMBER: ${env:RUN_ID}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
   tracing:
