@@ -105,7 +105,7 @@ getDocList();
                     <p>UID: {{ doc.uid }}</p>
                     <a :href="getDownloadUrl(doc.uid)">Download</a>
                     <p>Related Citations:</p>
-                    <p v-for="loc in doc.locations">
+                    <p v-for="loc in doc.locations" :key="loc.title + loc.part + loc.section_id">
                         {{ loc.title }} CFR § {{ loc.part }}.{{ loc.section_id }}
                     </p>
                 </div>

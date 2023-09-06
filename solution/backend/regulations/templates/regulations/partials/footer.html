@@ -27,7 +27,7 @@
             Regulations up to date from <a href="https://www.ecfr.gov" target="_blank" class="external">
                 eCFR
             </a> as of
-                {% if '/search/' in request.path or '/resources/' in request.path or '/statutes' in request.path %}
+                {% if '/search/' in request.path or '/resources/' in request.path or '/statutes' in request.path or '/policy-repository' in request.path %}
                 <span class="last-updated-date">{{parser_last_success|parser_success_date_formatter}}</span>.
                 {% else %}
                     <span class="last-updated-date">
