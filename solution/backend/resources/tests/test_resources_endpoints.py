@@ -2,14 +2,13 @@ from datetime import datetime, timedelta
 
 from django.test import TestCase
 
+from file_manager.models import Subject
 from resources.models import (
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
     Section,
     SupplementalContent,
 )
-
-from file_manager.models import Subject
 
 
 class TestResourcesEndpoint(TestCase):

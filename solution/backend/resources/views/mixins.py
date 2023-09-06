@@ -4,6 +4,7 @@ from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 
 from common.api import OpenApiQueryParameter
 from common.mixins import OptionalPaginationMixin
+from file_manager.models import Subject
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -11,8 +12,6 @@ from resources.models import (
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
 )
-
-from file_manager.models import Subject
 
 
 def is_int(x):

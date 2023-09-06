@@ -17,6 +17,7 @@ from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
+from file_manager.models import Subject
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -33,8 +34,6 @@ from resources.serializers.resources import (
     StringListSerializer,
     SupplementalContentSerializer,
 )
-
-from file_manager.models import Subject
 
 from .mixins import FRDocGroupingMixin, ResourceExplorerViewSetMixin
 

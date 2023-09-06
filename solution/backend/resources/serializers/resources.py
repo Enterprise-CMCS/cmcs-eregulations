@@ -4,6 +4,7 @@ from django.db.models import Q
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from file_manager.serializers import SubjectSerializer
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -24,8 +25,6 @@ from .locations import (
 )
 from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
 from .utils import ProxySerializerWrapper
-
-from file_manager.serializers import SubjectSerializer
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
