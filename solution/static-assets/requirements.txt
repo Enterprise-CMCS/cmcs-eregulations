@@ -1,4 +1,3 @@
-cryptography==3.4.8
 Werkzeug==0.15.5
 zappa-django-utils==0.4.1
 boto3
