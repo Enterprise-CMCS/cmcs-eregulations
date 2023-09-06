@@ -87,6 +87,10 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
 
     @transaction.atomic
     def create_user(self, claims: OktaClaim) -> User:
+        print(f"Creating user {claims.get('email')}")
+        print(f"Jobcodes: {claims.get('jobcodes')}")
+        print(f"Name: {claims.get('name')}")
+        print(f"Preferred username: {claims.get('preferred_username')}")
         user: User = self.UserModel.objects.create_user(
             claims.get("email"),
             None,  # password
