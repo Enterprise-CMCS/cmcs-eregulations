@@ -49,7 +49,7 @@ jobs:
           --target=./python/lib/python3.9/site-packages
           --implementation cp
           --python 3.9
-          --only-binary=:all: --upgrade
+          --only-binary=:all: --upgrade pandas
       # build the static assets for the website
       - name: build static assets
         if: success() && steps.findPr.outputs.number
