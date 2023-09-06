@@ -2,6 +2,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.apps import apps
 from django_jsonform.models.fields import ArrayField
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
@@ -169,6 +170,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     location_history = models.JSONField(default=list)
+    subjects = models.ManyToManyField("file_manager.Subject", blank=True, related_name="resources")
 
     objects = InheritanceManager()
 
