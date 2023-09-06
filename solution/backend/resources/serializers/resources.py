@@ -25,6 +25,8 @@ from .locations import (
 from .mixins import HeadlineField, PolymorphicSerializer, PolymorphicTypeField
 from .utils import ProxySerializerWrapper
 
+from file_manager.serializers import SubjectSerializer
+
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
@@ -42,6 +44,7 @@ class AbstractResourceSerializer(serializers.Serializer):
     snippet = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     locations = serializers.SerializerMethodField()
+    subjects = SubjectSerializer(many=True)
 
     type = PolymorphicTypeField()
 

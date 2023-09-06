@@ -3,10 +3,12 @@ from datetime import datetime, timedelta
 from django.test import TestCase
 
 from resources.models import FederalRegisterDocument, FederalRegisterDocumentGroup, Section
+from file_manager.models import Subject
 
 
 class TestResourcesEndpoint(TestCase):
     def setUp(self):
+        subject = Subject.objects.create(full_name="Access to Services", short_name="Test", abbreviation="ATS")
         s1 = Section.objects.create(title=1, part=1, section_id=1)
         s2 = Section.objects.create(title=1, part=1, section_id=2)
         g1 = FederalRegisterDocumentGroup.objects.create(id=1)
@@ -15,6 +17,7 @@ class TestResourcesEndpoint(TestCase):
         twodaysago = (datetime.now() - timedelta(2)).strftime('%Y-%m-%d')
         f1 = FederalRegisterDocument.objects.create(id=1, group=g1, date=today)
         f1.locations.set([s1, s2])
+        f1.subjects.set([subject])
         f1.save()
         f2 = FederalRegisterDocument.objects.create(id=2, group=g1, date=twodaysago)
         f2.locations.set([s1, s2])
@@ -37,3 +40,12 @@ class TestResourcesEndpoint(TestCase):
             if "related_docs" in i:
                 for j in i["related_docs"]:
                     self.assertEqual(j["approved"], True)
+
+    def test_subjects(self):
+        response = self.client.get("/v3/resources/?paginate=false")
+        self.assertIn("subjects", response.data[0])
+        self.assertGreater(len(response.data[0]["subjects"]), 0)
+        subject = response.data[0]["subjects"][0]
+        self.assertEqual(subject["full_name"], "Access to Services")
+        self.assertEqual(subject["short_name"], "Test")
+        self.assertEqual(subject["abbreviation"], "ATS")

@@ -12,6 +12,8 @@ from resources.models import (
     FederalRegisterDocumentGroup,
 )
 
+from file_manager.models import Subject
+
 
 def is_int(x):
     try:
@@ -226,12 +228,15 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
                                             .contains_fr_docs()
+        subjects_prefetch = Subject.objects.all()
         query = query.select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),
+            Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("related_resources", AbstractResource.objects.filter(approved=True).select_subclasses().prefetch_related(
                 Prefetch("locations", queryset=locations_prefetch),
                 Prefetch("category", queryset=category_prefetch),
+                Prefetch("subjects", queryset=subjects_prefetch),
             )),
         )
 

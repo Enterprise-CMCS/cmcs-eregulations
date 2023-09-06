@@ -34,6 +34,8 @@ from resources.serializers.resources import (
     SupplementalContentSerializer,
 )
 
+from file_manager.models import Subject
+
 from .mixins import FRDocGroupingMixin, ResourceExplorerViewSetMixin
 
 
@@ -107,6 +109,7 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+        subjects_prefetch = Subject.objects.all()
 
         url_filters = [Q(url_annotated__istartswith=url) for url in urls]
         # gets thes first of the list to being the query set
@@ -123,9 +126,11 @@ class ResourceSearchViewSet(viewsets.ModelViewSet):
             .select_subclasses().prefetch_related(
                 Prefetch("locations", queryset=locations_prefetch),
                 Prefetch("category", queryset=category_prefetch),
+                Prefetch("subjects", queryset=subjects_prefetch),
                 Prefetch("related_resources", AbstractResource.objects.filter(approved=True).select_subclasses().prefetch_related(
                     Prefetch("locations", queryset=locations_prefetch),
                     Prefetch("category", queryset=category_prefetch),
+                    Prefetch("subjects", queryset=subjects_prefetch),
                 )),
             )
 
