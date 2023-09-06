@@ -19,10 +19,6 @@ custom:
       description: "Layer which contains django requirements"
       compatibleRuntimes:
         - python3.9
-      pipCmdExtraArgs:
-        - --platform manylinux2014_x86_64
-        - --only-binary=:all:
-
 
 
 package:
