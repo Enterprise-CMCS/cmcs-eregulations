@@ -18,7 +18,7 @@ const apiPath = `${
         : import.meta.env.VITE_API_URL || "http://localhost:8000"
 }/v3`;
 
-const config = {
+let config = {
     apiPath,
     fetchMode: "cors",
     maxRetryCount: 2,
@@ -55,7 +55,12 @@ function configure(obj) {
     config = { ...config, ...obj };
 }
 
-function fetchJson(url, options = {}, retryCount = 0) {
+function fetchJson({
+    url,
+    options = {},
+    retryCount = 0,
+    cacheResponse = true,
+}) {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
     let httpStatus;
@@ -100,7 +105,11 @@ function fetchJson(url, options = {}, retryCount = 0) {
     }
 
     return Promise.resolve()
-        .then(() => localforage.getItem(url.replace(apiPath, merged.method)))
+        .then(
+            () =>
+                cacheResponse &&
+                localforage.getItem(url.replace(apiPath, merged.method))
+        )
         .then((value) => {
             if (value && Date.now() < value.expiration_date) {
                 console.log("CACHE HIT");
@@ -123,7 +132,9 @@ function fetchJson(url, options = {}, retryCount = 0) {
                         )
                     )
                     .then(() => delay(backoff))
-                    .then(() => fetchJson(url, options, retryCount + 1));
+                    .then(() =>
+                        fetchJson({ url, options, retryCount: retryCount + 1 })
+                    );
             }
             throw parseError(err);
         })
@@ -161,7 +172,11 @@ function fetchJson(url, options = {}, retryCount = 0) {
                             )
                             .then(() => delay(backoff))
                             .then(() =>
-                                fetchJson(url, options, retryCount + 1)
+                                fetchJson({
+                                    url,
+                                    options,
+                                    retryCount: retryCount + 1,
+                                })
                             );
                     }
                     throw parseError({
@@ -182,7 +197,11 @@ function fetchJson(url, options = {}, retryCount = 0) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
                 json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-                localforage.setItem(url.replace(apiPath, merged.method), json);
+                if (cacheResponse)
+                    localforage.setItem(
+                        url.replace(apiPath, merged.method),
+                        json
+                    );
                 return json;
             }
         });
@@ -198,36 +217,48 @@ function httpApiMock(verb, urlPath, { data, params, response } = {}) {
     return response;
 }
 
-function httpApiGet(urlPath, { params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "GET",
-        headers: authHeader(token),
-        params,
+function httpApiGet(urlPath, { params } = {}, cacheResponse = true) {
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "GET",
+            headers: authHeader(token),
+            params,
+            cacheResponse,
+        },
     });
 }
 
 // use when components used directly in Django templates
-function httpApiGetLegacy(urlPath, { params } = {}, apiPath) {
-    return fetchJson(
-        `${urlPath}`,
-        {
+function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = true) {
+    return fetchJson({
+        url: `${urlPath}`,
+        options: {
             method: "GET",
             params,
         },
-        0, // retryCount, default
-        apiPath
-    );
+        retryCount: 0, // retryCount, default
+        cacheResponse,
+    });
 }
 
-async function httpApiGetWithPagination(urlPath, { params } = {}) {
+async function httpApiGetWithPagination(
+    urlPath,
+    { params } = {},
+    cacheResponse = true
+) {
     let results = [];
     let url = `${config.apiPath}/${urlPath}`;
     while (url) {
         /* eslint-disable no-await-in-loop */
-        const response = await fetchJson(url, {
-            method: "GET",
-            headers: authHeader(token),
-            params,
+        const response = await fetchJson({
+            url,
+            options: {
+                method: "GET",
+                headers: authHeader(token),
+                params,
+            },
+            cacheResponse,
         });
         results = results.concat(response.results ?? []);
         url = response.next;
@@ -236,32 +267,48 @@ async function httpApiGetWithPagination(urlPath, { params } = {}) {
     return results;
 }
 
-function httpApiPost(urlPath, { data = {}, params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "POST",
-        headers: authHeader(token),
-        params,
-        body: JSON.stringify(data),
+function httpApiPost(
+    urlPath,
+    { data = {}, params } = {},
+    cacheResponse = true
+) {
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "POST",
+            headers: authHeader(token),
+            params,
+            body: JSON.stringify(data),
+        },
+        cacheResponse,
     });
 }
 
 // eslint-disable-next-line no-unused-vars
-function httpApiPut(urlPath, { data, params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "PUT",
-        headers: authHeader(token),
-        params,
-        body: JSON.stringify(data),
+function httpApiPut(urlPath, { data, params } = {}, cacheResponse = true) {
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "PUT",
+            headers: authHeader(token),
+            params,
+            body: JSON.stringify(data),
+        },
+        cacheResponse,
     });
 }
 
 // eslint-disable-next-line no-unused-vars
-function httpApiDelete(urlPath, { data, params } = {}) {
-    return fetchJson(`${config.apiPath}/${urlPath}`, {
-        method: "DELETE",
-        headers: authHeader(token),
-        params,
-        body: JSON.stringify(data),
+function httpApiDelete(urlPath, { data, params } = {}, cacheResponse = true) {
+    return fetchJson({
+        url: `${config.apiPath}/${urlPath}`,
+        options: {
+            method: "DELETE",
+            headers: authHeader(token),
+            params,
+            body: JSON.stringify(data),
+        },
+        cacheResponse,
     });
 }
 // ---------- cache helpers -----------
@@ -370,14 +417,12 @@ const getRecentResources = async (
     if (type !== "rules") {
         return httpApiGetLegacy(
             `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true${categories}`,
-            {}, // params, default
-            apiURL
+            {} // params, default
         );
     }
     return httpApiGetLegacy(
         `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
-        {}, // params, default
-        apiURL
+        {} // params, default
     );
 };
 
@@ -595,7 +640,7 @@ const getParts = async (title, apiUrl) => {
  *
  * @returns {Promise <Array<{act: string, title: number, title_roman: string}>} - Promise that contains array of title objects when fulfilled
  */
-const getStatutesActs = async ({apiUrl}) => {
+const getStatutesActs = async ({ apiUrl }) => {
     if (apiUrl) {
         return httpApiGetLegacy(`${apiUrl}acts`);
     }
@@ -622,6 +667,18 @@ const getStatutes = async ({
     }
 
     return httpApiGet(`statutes?act=${encodeURIComponent(act)}&title=${title}`);
+};
+
+/**
+ *
+ *
+ */
+const getPolicyDocList = async ({ apiUrl, cacheResponse = true }) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(`${apiUrl}file_manager/file_list`, {}, cacheResponse);
+    }
+
+    return httpApiGet("file_manager/file_list", cacheResponse);
 };
 
 export {
@@ -653,4 +710,5 @@ export {
     setIdToken,
     getLastParserSuccessDate,
     getGovInfoLinks,
+    getPolicyDocList,
 };

@@ -1510,5 +1510,149 @@
         "content_type": 167,
         "codename": "view_statutelinkconfiguration"
     }
+},
+{
+    "model": "auth.permission",
+    "pk": 240,
+    "fields": {
+        "name": "Can add Regulation Link Configuration",
+        "content_type": 168,
+        "codename": "add_regulationlinkconfiguration"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 241,
+    "fields": {
+        "name": "Can change Regulation Link Configuration",
+        "content_type": 168,
+        "codename": "change_regulationlinkconfiguration"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 242,
+    "fields": {
+        "name": "Can delete Regulation Link Configuration",
+        "content_type": 168,
+        "codename": "delete_regulationlinkconfiguration"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 243,
+    "fields": {
+        "name": "Can view Regulation Link Configuration",
+        "content_type": 168,
+        "codename": "view_regulationlinkconfiguration"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 244,
+    "fields": {
+        "name": "Can add uploaded file",
+        "content_type": 169,
+        "codename": "add_uploadedfile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 245,
+    "fields": {
+        "name": "Can change uploaded file",
+        "content_type": 169,
+        "codename": "change_uploadedfile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 246,
+    "fields": {
+        "name": "Can delete uploaded file",
+        "content_type": 169,
+        "codename": "delete_uploadedfile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 247,
+    "fields": {
+        "name": "Can view uploaded file",
+        "content_type": 169,
+        "codename": "view_uploadedfile"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 248,
+    "fields": {
+        "name": "Can add subject",
+        "content_type": 170,
+        "codename": "add_subject"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 249,
+    "fields": {
+        "name": "Can change subject",
+        "content_type": 170,
+        "codename": "change_subject"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 250,
+    "fields": {
+        "name": "Can delete subject",
+        "content_type": 170,
+        "codename": "delete_subject"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 251,
+    "fields": {
+        "name": "Can view subject",
+        "content_type": 170,
+        "codename": "view_subject"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 252,
+    "fields": {
+        "name": "Can add document type",
+        "content_type": 171,
+        "codename": "add_documenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 253,
+    "fields": {
+        "name": "Can change document type",
+        "content_type": 171,
+        "codename": "change_documenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 254,
+    "fields": {
+        "name": "Can delete document type",
+        "content_type": 171,
+        "codename": "delete_documenttype"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 255,
+    "fields": {
+        "name": "Can view document type",
+        "content_type": 171,
+        "codename": "view_documenttype"
+    }
 }
 ]

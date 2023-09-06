@@ -37,6 +37,10 @@ export default {
             type: String,
             default: "",
         },
+        isAuthenticated: {
+            type: Boolean,
+            default: false,
+        },
     },
 };
 </script>
@@ -52,6 +56,7 @@ export default {
             :search-url="searchUrl"
             :statutes-url="statutesUrl"
             :host="host"
+            :is-authenticated="isAuthenticated === 'True'"
         />
     </v-app>
 </template>

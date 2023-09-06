@@ -10,9 +10,11 @@ class PolicyRepositoryView(IsAuthenticatedMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         host = self.request.get_host()
+        is_authenticated = self.request.user.is_authenticated
 
         c = {
-            'host': host
+            'host': host,
+            'is_authenticated': is_authenticated,
         }
 
         return {**context, **c}
