@@ -112,6 +112,7 @@ getDocList();
             </template>
             <template v-else>
                 <p>No results found.</p>
+            </template>
         </div>
     </body>
 </template>
