@@ -9,6 +9,7 @@ import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vu
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -48,18 +49,19 @@ const policyDocList = ref({
 
 const getDocList = async () => {
     try {
-        policyDocList.value.results = await getPolicyDocList({
+        const results = await getPolicyDocList({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
         });
+
+        console.log("results", results);
+        policyDocList.value.results = results;
     } catch (error) {
         console.error(error);
     } finally {
         policyDocList.value.loading = false;
     }
 };
-
-const getDownloadUrl = (uid) => `${props.apiUrl}file_manager/file/${uid}`;
 
 getDocList();
 </script>
@@ -94,24 +96,11 @@ getDocList();
             <template v-if="policyDocList.loading">
                 <p>Loading...</p>
             </template>
-            <template v-else-if="policyDocList.results.length > 0">
-                <div
-                    v-for="doc in policyDocList.results"
-                    :key="doc.uid"
-                    class="doc-list__item"
-                >
-                    <p>Name: {{ doc.name }}</p>
-                    <p>Description: {{ doc.description }}</p>
-                    <p>UID: {{ doc.uid }}</p>
-                    <a :href="getDownloadUrl(doc.uid)">Download</a>
-                    <p>Related Citations:</p>
-                    <p v-for="loc in doc.locations" :key="loc.title + loc.part + loc.section_id">
-                        {{ loc.title }} CFR § {{ loc.part }}.{{ loc.section_id }}
-                    </p>
-                </div>
-            </template>
             <template v-else>
-                <p>No results found.</p>
+                <PolicyResults
+                    :base="homeUrl"
+                    :results="policyDocList.results"
+                />
             </template>
         </div>
     </body>
