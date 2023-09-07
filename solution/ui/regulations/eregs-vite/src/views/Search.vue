@@ -96,8 +96,9 @@
                         <SearchGovResults
                             :base="homeUrl"
                             :count="resourcesResults.length"
-                            :results="filteredContent"
+                            :results="resourcesResults"
                             :query="searchQuery"
+                            :parts-last-updated="partsLastUpdated"
                             view="search"
                         >
                             <template #empty-state>
@@ -228,7 +229,7 @@ export default {
     async created() {
         if (this.searchQuery) {
             this.titles = await getTitles();
-            this.getPartLastUpdatedDates(this.titles);
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, this.titles);
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
                 query: this.searchQuery,
@@ -261,15 +262,6 @@ export default {
     computed: {
         isLoading() {
             return this.regsLoading || this.resourcesLoading;
-        },
-        filteredContent() {
-            return this.resourcesResults.map((item) => {
-                const copiedItem = JSON.parse(JSON.stringify(item));
-                copiedItem.locations = item.locations.filter(
-                    (location) => this.partsLastUpdated[location.part]
-                );
-                return copiedItem;
-            });
         },
         page() {
             return _isUndefined(this.queryParams.page)
@@ -418,9 +410,6 @@ export default {
                 console.error("Error retrieving synonyms");
                 this.synonyms = [];
             }
-        },
-        async getPartLastUpdatedDates(titles) {
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, titles);
         },
         executeSearch(payload) {
             this.synonyms = [];

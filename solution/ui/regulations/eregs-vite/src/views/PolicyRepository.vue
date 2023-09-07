@@ -1,6 +1,10 @@
 <script setup>
-import { ref } from "vue";
-import { getPolicyDocList } from "utilities/api";
+import { ref, onBeforeMount } from "vue";
+import {
+    getLastUpdatedDates,
+    getPolicyDocList,
+    getTitles,
+} from "utilities/api";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
@@ -42,6 +46,13 @@ const props = defineProps({
     },
 });
 
+const partsLastUpdated = ref({});
+
+onBeforeMount(async () => {
+    const titles = await getTitles();
+    partsLastUpdated.value = await getLastUpdatedDates(props.apiUrl, titles);
+});
+
 const policyDocList = ref({
     results: [],
     loading: true,
@@ -54,7 +65,6 @@ const getDocList = async () => {
             cacheResponse: !props.isAuthenticated,
         });
 
-        console.log("results", results);
         policyDocList.value.results = results;
     } catch (error) {
         console.error(error);
@@ -100,6 +110,7 @@ getDocList();
                 <PolicyResults
                     :base="homeUrl"
                     :results="policyDocList.results"
+                    :parts-last-updated="partsLastUpdated"
                 />
             </template>
         </div>

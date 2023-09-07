@@ -14,16 +14,28 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    label: {
+        type: String,
+        default: "Related Section",
+    },
+    partsLastUpdated: {
+        type: Object,
+        default: () => {},
+    },
 });
 
-const locationsCount = props.item.locations.length;
-const groupedLocations = _groupBy(props.item.locations, "title");
+const filteredLocations = props.item.locations.filter(
+    (location) => props.partsLastUpdated[location.part]
+);
+
+const locationsCount = filteredLocations.length;
+const groupedLocations = _groupBy(filteredLocations, "title");
 </script>
 
 <template>
     <div class="related-sections">
         <span class="related-sections-title">
-            Related Section<span v-if="locationsCount !== 1">s</span>:
+            {{ label }}<span v-if="locationsCount !== 1">s</span>:
         </span>
         <template v-if="locationsCount > 0">
             <template v-for="(locations, title, i) in groupedLocations">
@@ -31,21 +43,21 @@ const groupedLocations = _groupBy(props.item.locations, "title");
                     >{{ title }} CFR
                 </span>
                 <span
-                    :key="i + title"
                     v-if="locations.length > 1"
+                    :key="i + title"
                     class="section-sign"
                     >§§
                 </span>
-                <span :key="i + title" v-else class="section-sign">§ </span>
-                <template v-for="(location, i) in locations">
+                <span v-else :key="i + title" class="section-sign">§ </span>
+                <template v-for="(location, j) in locations">
                     <span
-                        :key="location.display_name + i"
+                        :key="location.display_name + j"
                         class="related-section-link"
                     >
                         <a :href="locationUrl(location, base)">{{
                             locationLabel(location)
                         }}</a>
-                        <span v-if="i + 1 != locations.length">, </span>
+                        <span v-if="j + 1 != locations.length">, </span>
                     </span>
                 </template>
                 <span

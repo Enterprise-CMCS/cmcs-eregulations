@@ -31,6 +31,7 @@
                 <RelatedSections
                     :base="base"
                     :item="item"
+                    :parts-last-updated="partsLastUpdated"
                 />
             </div>
         </template>
@@ -59,6 +60,10 @@ export default {
         results: {
             type: Array,
             default: () => [],
+        },
+        partsLastUpdated: {
+            type: Object,
+            default: () => {},
         },
     },
 

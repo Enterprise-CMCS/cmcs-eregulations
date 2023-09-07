@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from "vue";
 
+import RelatedSections from "@/components/search/RelatedSections.vue";
+
 const props = defineProps({
     base: {
         type: String,
@@ -9,6 +11,10 @@ const props = defineProps({
     results: {
         type: Array,
         default: () => [],
+    },
+    partsLastUpdated: {
+        type: Object,
+        default: () => {},
     },
 });
 
@@ -33,13 +39,12 @@ const getDownloadUrl = (uid) => `${props.base}file_manager/file/${uid}`;
             <p>Description: {{ doc.description }}</p>
             <p>UID: {{ doc.uid }}</p>
             <a :href="getDownloadUrl(doc.uid)">Download</a>
-            <p>Related Citations:</p>
-            <p
-                v-for="loc in doc.locations"
-                :key="loc.title + loc.part + loc.section_id"
-            >
-                {{ loc.title }} CFR § {{ loc.part }}.{{ loc.section_id }}
-            </p>
+            <RelatedSections
+                :base="base"
+                :item="doc"
+                :parts-last-updated="partsLastUpdated"
+                label="Related Regulation Citation"
+            />
         </div>
     </div>
 </template>
