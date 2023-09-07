@@ -45,7 +45,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
           PYTHON=python3.9 pip install \
-            --platform manylinux2010_x86_64 \
+            --platform **manylinux2014_aarch64 **\
             --implementation cp \
             --only-binary=:all: --upgrade \
             --target awsbundle \
@@ -173,7 +173,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
           PYTHON=python3.9 pip install \
-            --platform manylinux2010_x86_64 \
+            --platform **manylinux2014_aarch64 ** \
             --implementation cp \
             --only-binary=:all: --upgrade \
             --target awsbundle \
