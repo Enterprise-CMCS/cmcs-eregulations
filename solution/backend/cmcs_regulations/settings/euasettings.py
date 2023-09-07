@@ -42,6 +42,3 @@ DATABASES = {
         'NAME': "postgres",
     },
 }
-
-LOGIN_URL = 'localhost:8000/dev/oidc/callback'
-LOGOUT_URL = '/auth/logout/'
