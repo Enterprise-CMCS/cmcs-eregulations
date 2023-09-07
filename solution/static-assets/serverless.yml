@@ -3,6 +3,7 @@ service: cmcs-eregs-static-assets
 provider:
   name: aws
   runtime: python3.9
+  architecture: arm64 # Specify ARM64 architecture here
   region: us-east-1
   deploymentBucket:
     blockPublicAccess: true
@@ -19,6 +20,18 @@ custom:
       description: "Layer which contains django requirements"
       compatibleRuntimes:
         - python3.9
+    usePip: true
+    zip: true
+    dockerizePip: non-linux
+    pipCmdExtraArgs: >
+      --platform manylinux2014_aarch64
+      --target=./python/lib/python3.9/site-packages
+      --implementation cp
+      --python 3.9
+      --only-binary=:all:
+      --upgrade
+    dockerizePipCommand: "pip install -r requirements.txt -t /var/task/python"
+
 
 
 package:
