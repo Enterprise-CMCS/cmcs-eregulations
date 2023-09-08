@@ -50,7 +50,6 @@
             </div>
             <template v-if="!isLoading">
                 <ResourcesResults
-                    :base="base"
                     :results="content"
                     :parts-last-updated="partsLastUpdated"
                     view="resources"
@@ -107,10 +106,6 @@ export default {
     },
 
     props: {
-        base: {
-            type: String,
-            required: true,
-        },
         content: {
             type: Array,
             required: false,
@@ -183,6 +178,8 @@ export default {
             default: undefined,
         },
     },
+
+    inject: ["base"],
 
     data() {
         return {

@@ -56,7 +56,6 @@
                     </div>
                     <template v-if="!regsLoading">
                         <RegResults
-                            :base="homeUrl"
                             :results="regResults"
                             :query="searchQuery"
                         >
@@ -94,7 +93,6 @@
                     </div>
                     <template v-if="!resourcesLoading">
                         <SearchGovResults
-                            :base="homeUrl"
                             :count="resourcesResults.length"
                             :results="resourcesResults"
                             :query="searchQuery"
@@ -224,6 +222,12 @@ export default {
         },
     },
 
+    provide() {
+        return {
+            base: this.homeUrl,
+        };
+    },
+
     beforeCreate() {},
 
     async created() {
@@ -241,6 +245,7 @@ export default {
             this.resourcesLoading = false;
         }
     },
+
     data() {
         return {
             pageSize: 50,

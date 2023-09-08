@@ -133,7 +133,6 @@
                 <div class="results-column">
                     <ResourcesResultsContainer
                         :isLoading="isLoading"
-                        :base="homeUrl"
                         :page="page"
                         :page-size="pageSize"
                         :categories="categories"
@@ -937,6 +936,12 @@ export default {
                 }
             },
         },
+    },
+
+    provide() {
+        return {
+            base: this.homeUrl,
+        };
     },
 
     beforeCreate() {},
