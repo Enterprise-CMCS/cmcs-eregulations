@@ -1,4 +1,3 @@
-import os
 
 from django.conf import settings
 from django.db.models import Prefetch
@@ -106,13 +105,9 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         serializer = UploadedFileSerializer(file, many=False)
         return Response(serializer.data)
 
-    def get_key(self, obj, extension):
-        return 'uploaded_files/' + str(obj.uid) + extension
-
     def generate_download_link(self, obj):
         s3_client = establish_client()
-        name, extension = os.path.splitext(obj.file_name)
-        key = self.get_key(obj, extension)
+        key = obj.get_key()
         try:
             return s3_client.generate_presigned_url('get_object',
                                                     Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,

@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from django.db import models
@@ -39,6 +40,10 @@ class UploadedFile(models.Model):
          primary_key=False,
          default=uuid.uuid4,
          editable=False)
+
+    def get_key(self):
+        name, extension = os.path.splitext(self.file_name)
+        return 'uploaded_files/' + str(self.uid) + extension
 
     def __str__(self) -> str:
         return str(self.name) + ' ' + str(self.description)

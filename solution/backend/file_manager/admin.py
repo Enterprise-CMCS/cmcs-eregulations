@@ -1,5 +1,4 @@
 
-import os
 
 import requests
 from django import forms
@@ -53,26 +52,21 @@ class UploadedFileAdmin(BaseAdmin):
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
 
-    def get_key(self, uid, extension):
-        return 'uploaded_files/' + str(uid) + extension
-
     def save_model(self, request, obj, form, change):
         path = form.cleaned_data.get("file_path")
         if path:
-            self.upload_file(path, obj)
             obj.file_name = path._name
+            self.upload_file(path, obj)
         super().save_model(request, obj, form, change)
 
     def upload_file(self, file, obj):
-        name, extension = os.path.splitext(file._name)
-        key = self.get_key(obj.uid, extension)
+        key = obj.get_key()
         result = get_upload_link(key)
         requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
 
     def del_file(self, obj):
         s3_client = establish_client()
-        name, extension = os.path.splitext(obj.file_name)
-        key = self.get_key(obj.uid, extension)
+        key = obj.get_key()
 
         try:
             s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key)
