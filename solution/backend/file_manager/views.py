@@ -11,7 +11,7 @@ from common.api import OpenApiQueryParameter
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
-from .functions import establish_client
+from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 from .serializers import DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
 
@@ -118,6 +118,23 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             print(e)
             print('Could not set up a download url.')
             return 'Not available for download.'
+
+    def upload(self, request, *args, **kwargs):
+        id = kwargs.get("file_id")
+        file_name = kwargs.get("file_name")
+        uploaded_file = None
+        if id:
+            uploaded_file = UploadedFile.objects.get(uid=id)
+            uploaded_file.file_name = file_name
+        else:
+            uploaded_file = UploadedFile(file_name=file_name)
+            uploaded_file.save()
+        if uploaded_file:
+            try:
+                result = get_upload_link(uploaded_file.get_key)
+                return HttpResponse(result)
+            except Exception:
+                return "failed to upload"
 
     @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):

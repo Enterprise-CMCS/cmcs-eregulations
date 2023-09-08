@@ -19,6 +19,8 @@ class DocumentType(models.Model):
 
 
 class Subject(models.Model):
+    class Meta:
+        verbose_name_plural = "Subjects"
     full_name = models.CharField(max_length=512, null=False, blank=False)
     short_name = models.CharField(max_length=50, null=True, blank=True)
     abbreviation = models.CharField(max_length=10, null=True, blank=True)
