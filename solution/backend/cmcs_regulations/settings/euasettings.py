@@ -1,4 +1,4 @@
-from .base import * # noqa
+from .deploy import * # noqa
 import os
 
 INSTALLED_APPS += [ # noqa
@@ -20,23 +20,3 @@ OIDC_OP_JWKS_ENDPOINT = os.environ.get("OIDC_OP_JWKS_ENDPOINT", None)
 OIDC_RP_SIGN_ALGO = 'RS256'
 LOGIN_REDIRECT_URL = '/admin/'
 LOGOUT_REDIRECT_URL = '/'
-
-default_database_values = {
-    'ENGINE': 'django.db.backends.postgresql',
-    'USER': os.environ.get('DB_USER', 'eregs'),
-    'HOST': os.environ.get('DB_HOST', 'db'),
-    'PORT': os.environ.get('DB_PORT', '5432'),
-}
-
-DATABASES = {
-    'default': {
-        **default_database_values,
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
-        'NAME': os.environ.get('DB_NAME', 'eregs'),
-    },
-    'postgres': {
-        **default_database_values,
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
-        'NAME': "postgres",
-    },
-}

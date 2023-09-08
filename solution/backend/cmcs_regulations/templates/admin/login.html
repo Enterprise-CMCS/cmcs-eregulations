@@ -19,9 +19,11 @@
         </style>
     {% endblock %}
    {{ block.super }}
-   <div class="okta_login_container">
-       Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}">EUA</a>
-   </div>
+   {% if request.environ.DJANGO_SETTINGS_MODULE == 'cmcs_regulations.settings.euasettings' %}
+      <div class="okta_login_container">
+        Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}">EUA</a>
+      </div>
+   {% endif %}
    {% if form.errors %}
     <p>Invalid credentials.  Please contact an eRegs administrator if you need access.</p>
   {% endif %}
