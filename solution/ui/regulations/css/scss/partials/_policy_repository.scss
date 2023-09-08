@@ -47,14 +47,13 @@
                 .document__subjects {
                     display: flex;
                     flex-wrap: wrap;
-                    row-gap: 4px;
+                    gap: 4px;
 
                     .subject__chip {
                         font-size: $font-size-sm;
                         line-height: 22px;
                         font-weight: 700;
                         padding: 2px 4px;
-                        margin-right: 4px;
                         border-radius: 8px;
                         background: $policy_subject_chip_background;
                         color: $policy_subject_chip_text;
