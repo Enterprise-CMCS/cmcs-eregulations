@@ -1,13 +1,11 @@
 <script setup>
+import { inject } from "vue";
+
 import { getTagContent, stripQuotes } from "utilities/utils";
 
 import ResultsItem from "@/components/search/ResultsItem.vue";
 
 defineProps({
-    base: {
-        type: String,
-        required: true,
-    },
     results: {
         type: Array,
         default: () => [],
@@ -18,12 +16,14 @@ defineProps({
     },
 });
 
+const base = inject("base");
+
 const partDocumentTitleLabel = (string) => string.toLowerCase();
 
 const removeQuotes = (string) => stripQuotes(string);
 const createResultLink = (
     { headline, title, part_number, section_number, date, section_title },
-    base,
+    baseUrl,
     query
 ) => {
     // get highlight content from headline
@@ -44,7 +44,7 @@ const createResultLink = (
         location = `${section_title.split('-')[0].trim().replace(/\s/g,"-")}`
     }
 
-    return `${base}${title}/${part_number}/${section}/${date}/${highlightParams}#${location}`;
+    return `${baseUrl}${title}/${part_number}/${section}/${date}/${highlightParams}#${location}`;
 };
 </script>
 
