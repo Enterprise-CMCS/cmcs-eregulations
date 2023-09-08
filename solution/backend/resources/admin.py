@@ -418,6 +418,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     search_fields = ["date", "name", "description"]
     fields = ("approved", "name", "description", "date", "url", "category", "subjects",
               "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history")
+    filter_horizontal = ("subjects",)
 
     def get_urls(self):
         urls = super().get_urls()
@@ -522,6 +523,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     fields = ("approved", "docket_numbers", "group", "document_number", "name", "correction",
               "withdrawal", "description", "date", "url", "category", "subjects", "doc_type", "locations",
               "bulk_title", "bulk_locations", "internal_notes", "location_history")
+    filter_horizontal = ("subjects",)
 
     def in_group(self, obj):
         group = str(obj.group)
