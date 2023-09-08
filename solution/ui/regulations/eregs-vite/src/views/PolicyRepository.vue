@@ -47,7 +47,7 @@ const props = defineProps({
 });
 
 provide("apiUrl", props.apiUrl);
-provide("base", props.base);
+provide("base", props.homeUrl);
 
 const partsLastUpdated = ref({
     results: {},
