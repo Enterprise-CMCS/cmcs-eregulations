@@ -46,12 +46,21 @@ const props = defineProps({
     },
 });
 
-const partsLastUpdated = ref({});
-
-onBeforeMount(async () => {
-    const titles = await getTitles();
-    partsLastUpdated.value = await getLastUpdatedDates(props.apiUrl, titles);
+const partsLastUpdated = ref({
+    results: {},
+    loading: true,
 });
+
+const getPartsLastUpdated = async () => {
+    try {
+        const titles = await getTitles();
+        partsLastUpdated.value.results = await getLastUpdatedDates(props.apiUrl, titles);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        partsLastUpdated.value.loading = false;
+    }
+};
 
 const policyDocList = ref({
     results: [],
@@ -60,12 +69,10 @@ const policyDocList = ref({
 
 const getDocList = async () => {
     try {
-        const results = await getPolicyDocList({
+        policyDocList.value.results = await getPolicyDocList({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
         });
-
-        policyDocList.value.results = results;
     } catch (error) {
         console.error(error);
     } finally {
@@ -74,6 +81,7 @@ const getDocList = async () => {
 };
 
 getDocList();
+getPartsLastUpdated();
 </script>
 
 <template>
@@ -103,14 +111,14 @@ getDocList();
             </HeaderComponent>
         </header>
         <div id="policyRepositoryApp" class="repository-view">
-            <template v-if="policyDocList.loading">
+            <template v-if="policyDocList.loading || partsLastUpdated.loading">
                 <p>Loading...</p>
             </template>
             <template v-else>
                 <PolicyResults
                     :base="homeUrl"
                     :results="policyDocList.results"
-                    :parts-last-updated="partsLastUpdated"
+                    :parts-last-updated="partsLastUpdated.results"
                 />
             </template>
         </div>
