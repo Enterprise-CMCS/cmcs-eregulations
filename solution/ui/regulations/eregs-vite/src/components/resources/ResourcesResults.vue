@@ -102,18 +102,27 @@ export default {
     }
 }
 
-.related-sections {
-    margin-bottom: 40px;
-    font-size: $font-size-xs;
-    color: $mid_gray;
+.resources-content-container {
+    .related-sections {
+        margin-bottom: 40px;
+        color: $mid_gray;
+        font-size: $font-size-xs;
 
-    .related-sections-title {
-        font-weight: 600;
-        color: $dark_gray;
-    }
+        .related-sections-title {
+            font-weight: 600;
+            color: $dark_gray;
+            text-transform: none;
+            font-size: $font-size-xs;
+        }
 
-    a {
-        text-decoration: none;
+        .title__span, .section-sign, .related-sections-none {
+            font-size: $font-size-xs;
+        }
+
+        a {
+            text-decoration: none;
+            font-size: $font-size-xs;
+        }
     }
 }
 </style>

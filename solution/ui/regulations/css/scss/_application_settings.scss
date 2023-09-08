@@ -515,3 +515,16 @@ select {
         scroll-margin-top: $header_height + $view_compare_height + 37px;
     }
 }
+
+// -------------------------
+// Other Common Settings
+// -------------------------
+
+// Related Sections styles
+// used across Search Results and Policy Repository
+@mixin common-context-related-sections {
+    color: $mid_gray;
+    font-size: $font-size-sm;
+    font-weight: 400;
+    line-height: 22px;
+}

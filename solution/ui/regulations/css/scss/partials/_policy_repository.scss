@@ -7,15 +7,40 @@
 .policy-repository-page {
     #policyRepositoryApp.repository-view {
         overflow: auto;
-        margin-bottom: 16px;
+        margin-bottom: 1em;
         padding: 0 45px;
         display: flex;
         flex-direction: column;
 
-        .doc-list__item {
-            padding-bottom: 5px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid gray;
+        .doc-list__document {
+            padding: 0.75em 1em;
+            border-bottom: 1px solid $border_color;
+
+            h3 {
+                margin: 0;
+            }
+
+            .document__info-block {
+                margin-bottom: 0.75em;
+            }
+
+            .document__link {
+                text-decoration: none;
+            }
+
+            .document__type {
+                color: $mid_gray;
+            }
+
+            .document__filename {
+                margin-top: 0.25em;
+            }
+
+            .related-sections {
+                @include common-context-related-sections;
+
+                margin-bottom: 0px;
+            }
         }
     }
 }
