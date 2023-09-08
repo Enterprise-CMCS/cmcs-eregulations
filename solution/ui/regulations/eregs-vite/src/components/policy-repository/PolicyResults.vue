@@ -3,6 +3,8 @@ import { inject } from "vue";
 
 import RelatedSections from "@/components/search/RelatedSections.vue";
 
+import SubjectChip from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChip.vue";
+
 const props = defineProps({
     results: {
         type: Array,
@@ -30,7 +32,7 @@ const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
                     <h3>
                         <a
                             :href="getDownloadUrl(doc.uid)"
-                            class="document__link"
+                            class="document__link document__link--filename"
                             >File Name {{ name }}</a
                         >
                     </h3>
@@ -39,18 +41,17 @@ const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
             <template v-if="doc.subject.length > 0">
                 <div class="document__info-block">
                     <div class="document__subjects">
-                        <span
+                        <template
                             v-for="(subject, i) in doc.subject"
                             :key="subject.id + 'x' + i"
                         >
-                            {{ subject.full_name }}
-                            <span v-if="i + 1 != doc.subject.length">, </span>
-                        </span>
+                            <SubjectChip :subject-name="subject.full_name" />
+                        </template>
                     </div>
                 </div>
             </template>
             <div class="document__info-block">
-                <a :href="getDownloadUrl(doc.uid)" class="document__link"
+                <a :href="getDownloadUrl(doc.uid)" class="document__link document__link--view"
                     >View Document</a
                 >
             </div>

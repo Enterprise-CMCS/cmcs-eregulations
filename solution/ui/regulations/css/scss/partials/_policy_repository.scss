@@ -12,34 +12,60 @@
         display: flex;
         flex-direction: column;
 
-        .doc-list__document {
-            padding: 0.75em 1em;
-            border-bottom: 1px solid $border_color;
+        .doc-list {
+            margin-top: 36px;
 
-            h3 {
-                margin: 0;
-            }
+            .doc-list__document {
+                padding: 0.75em 1em;
+                border-bottom: 1px solid $border_color;
 
-            .document__info-block {
-                margin-bottom: 0.75em;
-            }
+                h3 {
+                    margin: 0;
+                    line-height: 24px;
+                }
 
-            .document__link {
-                text-decoration: none;
-            }
+                .document__info-block {
+                    margin-bottom: 0.75em;
+                }
 
-            .document__type {
-                color: $mid_gray;
-            }
+                .document__link {
+                    text-decoration: none;
 
-            .document__filename {
-                margin-top: 0.25em;
-            }
+                    &--view {
+                        font-size: $font-size-sm;
+                    }
+                }
 
-            .related-sections {
-                @include common-context-related-sections;
+                .document__type {
+                    color: $mid_gray;
+                }
 
-                margin-bottom: 0px;
+                .document__filename {
+                    margin-top: 0.25em;
+                }
+
+                .document__subjects {
+                    display: flex;
+                    flex-wrap: wrap;
+                    row-gap: 4px;
+
+                    .subject__chip {
+                        font-size: $font-size-sm;
+                        line-height: 22px;
+                        font-weight: 700;
+                        padding: 2px 4px;
+                        margin-right: 4px;
+                        border-radius: 8px;
+                        background: $policy_subject_chip_background;
+                        color: $policy_subject_chip_text;
+                    }
+                }
+
+                .related-sections {
+                    @include common-context-related-sections;
+
+                    margin-bottom: 0px;
+                }
             }
         }
     }

@@ -2,21 +2,13 @@
 import { computed, ref } from "vue";
 
 const props = defineProps({
-    prop1: {
+    subjectName: {
         type: String,
         required: true,
     },
-    prop2: {
-        type: Object,
-        required: true,
-    },
 });
-
 </script>
 
 <template>
-    <div class="skeleton"></div>
+    <div class="subject__chip">{{ subjectName }}</div>
 </template>
-
-<style></style>
-
