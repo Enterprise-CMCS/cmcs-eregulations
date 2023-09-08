@@ -29,7 +29,7 @@ class Subject(models.Model):
 
 class UploadedFile(models.Model):
     name = models.CharField(max_length=512, null=True, blank=True)
-    file = models.CharField(max_length=512, null=True, blank=True)
+    file_name = models.CharField(max_length=512, null=True, blank=True)
     date = VariableDateField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
@@ -41,8 +41,5 @@ class UploadedFile(models.Model):
          default=uuid.uuid4,
          editable=False)
 
-    def filename(self):
-        return os.path.basename(self.file.name)
-
     def __str__(self) -> str:
-        return self.name + ' ' + self.description
+        return str(self.name) + ' ' + str(self.description)
