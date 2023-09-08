@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { provide, ref } from "vue";
 import {
     getLastUpdatedDates,
     getPolicyDocList,
@@ -46,6 +46,9 @@ const props = defineProps({
     },
 });
 
+provide("apiUrl", props.apiUrl);
+provide("base", props.base);
+
 const partsLastUpdated = ref({
     results: {},
     loading: true,
@@ -54,7 +57,10 @@ const partsLastUpdated = ref({
 const getPartsLastUpdated = async () => {
     try {
         const titles = await getTitles();
-        partsLastUpdated.value.results = await getLastUpdatedDates(props.apiUrl, titles);
+        partsLastUpdated.value.results = await getLastUpdatedDates(
+            props.apiUrl,
+            titles
+        );
     } catch (error) {
         console.error(error);
     } finally {
