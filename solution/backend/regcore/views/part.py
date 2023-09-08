@@ -1,10 +1,10 @@
-from rest_framework import viewsets
 from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
+
+from regcore.models import Part
+from regcore.serializers.metadata import StringListSerializer
 
 from .utils import OpenApiPathParameter
-
-from regcore.serializers.metadata import StringListSerializer
-from regcore.models import Part
 
 
 @extend_schema(

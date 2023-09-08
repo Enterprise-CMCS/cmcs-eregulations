@@ -1,17 +1,16 @@
-from django.db.models import Q, F, Prefetch, OuterRef, Subquery
-from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchVector, SearchRank
+from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchRank, SearchVector
 from django.core.exceptions import BadRequest
+from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 
 from common.api import OpenApiQueryParameter
+from common.mixins import OptionalPaginationMixin
 from resources.models import (
+    AbstractCategory,
     AbstractLocation,
     AbstractResource,
-    AbstractCategory,
     FederalRegisterDocument,
-    FederalRegisterDocumentGroup
+    FederalRegisterDocumentGroup,
 )
-
-from common.mixins import OptionalPaginationMixin
 
 
 def is_int(x):
@@ -156,7 +155,7 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         return F("description_sort")
 
     def get_annotated_group(self):
-        return -1*F("pk")
+        return -1 * F("pk")
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

@@ -334,5 +334,37 @@
         "app_label": "regulations",
         "model": "statutelinkconfiguration"
     }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 168,
+    "fields": {
+        "app_label": "regulations",
+        "model": "regulationlinkconfiguration"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 169,
+    "fields": {
+        "app_label": "file_manager",
+        "model": "uploadedfile"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 170,
+    "fields": {
+        "app_label": "file_manager",
+        "model": "subject"
+    }
+},
+{
+    "model": "contenttypes.contenttype",
+    "pk": 171,
+    "fields": {
+        "app_label": "file_manager",
+        "model": "documenttype"
+    }
 }
 ]

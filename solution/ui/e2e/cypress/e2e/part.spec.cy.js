@@ -14,6 +14,8 @@ describe("Part View", () => {
         cy.contains("Part 433 - State Fiscal Administration").should(
             "be.visible"
         );
+        cy.get("#jumpToTitle").invoke("val").should("equal", "42");
+        cy.get("#jumpToPart").invoke("val").should("equal", "433");
         cy.checkAccessibility();
     });
 
@@ -37,6 +39,8 @@ describe("Part View", () => {
         cy.contains("433.51").click({ force: true });
 
         cy.url().should("include", "Subpart-B");
+        cy.get("#jumpToTitle").invoke("val").should("equal", "42");
+        cy.get("#jumpToPart").invoke("val").should("equal", "433");
         cy.get("#433-51-title").should("be.visible");
         cy.get(".latest-version").should("exist");
         cy.get("#subpart-resources-heading").contains("433.51 Resources");
@@ -82,6 +86,8 @@ describe("Part View", () => {
 
         // goes to first part of the appropriate subpart (this is odd)
         cy.url().should("include", "#433-1");
+        cy.get("#jumpToTitle").invoke("val").should("equal", "42");
+        cy.get("#jumpToPart").invoke("val").should("equal", "433");
         cy.get(".latest-version").should("exist");
         cy.get("#433-1-title").should("be.visible");
         cy.focused().then(($el) => {

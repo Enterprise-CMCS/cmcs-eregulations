@@ -1,15 +1,15 @@
 import csv
 
-from django.shortcuts import redirect, render
 from django.contrib import admin, messages
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import models
 from django.forms import TextInput
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import redirect, render
 from django.views import View
-
 from solo.admin import SingletonModelAdmin
 
 from resources.admin import BaseAdmin
+
 from .models import ParserConfiguration, PartConfiguration
 from .search.models import Synonym
 

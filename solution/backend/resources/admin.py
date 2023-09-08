@@ -1,9 +1,7 @@
+import csv
 import json
 import re
-import csv
 
-from django.http import HttpResponse
-from django.urls import path, reverse
 from django import forms
 from django.apps import apps
 from django.contrib import admin, messages
@@ -18,21 +16,21 @@ from django.db.models import (
     When,
 )
 from django.forms.widgets import Textarea
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
 from solo.admin import SingletonModelAdmin
 
 from . import actions
-
 from .filters import (
     PartFilter,
     SectionFilter,
     SubpartFilter,
     TitleFilter,
 )
-
 from .models import (
     AbstractCategory,
     AbstractLocation,
@@ -46,7 +44,6 @@ from .models import (
     Subpart,
     SupplementalContent,
 )
-
 from .serializers.locations import AbstractLocationPolymorphicSerializer
 
 
@@ -400,7 +397,7 @@ class FederalResourceForm(ResourceForm):
     def __init__(self, *args, **kwargs):
         super(FederalResourceForm, self).__init__(*args, **kwargs)
         if self.instance.id:
-            CHOICES_INCLUDING_DB_VALUE = [(self.instance.doc_type,)*2] + self.doc_types
+            CHOICES_INCLUDING_DB_VALUE = [(self.instance.doc_type,) * 2] + self.doc_types
             self.fields['doc_type'] = forms.ChoiceField(
                 choices=CHOICES_INCLUDING_DB_VALUE)
 

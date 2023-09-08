@@ -1,22 +1,21 @@
 import re
 
+import requests
+from defusedxml.minidom import parseString
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
-
-import requests
 from solo.admin import SingletonModelAdmin
-from defusedxml.minidom import parseString
 
 from .models import (
+    RegulationLinkConfiguration,
     SiteConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
 )
-
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
 MARKUP_PATTERN = r"</?[^>]+>"
@@ -87,7 +86,47 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
 
 @admin.register(StatuteLinkConfiguration)
 class StatuteLinkConfigurationAdmin(SingletonModelAdmin):
-    pass
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["link_statute_refs", "link_usc_refs"],
+            },
+        ),
+        (
+            "Statute Ref Link Exceptions",
+            {
+                "classes": ["collapse"],
+                "fields": ["statute_ref_exceptions"],
+            },
+        ),
+        (
+            "U.S.C. Ref Link Exceptions",
+            {
+                "classes": ["collapse"],
+                "fields": ["usc_ref_exceptions"],
+            },
+        ),
+    ]
+
+
+@admin.register(RegulationLinkConfiguration)
+class RegulationLinkConfigurationAdmin(SingletonModelAdmin):
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["link_to_ecfr", "link_cfr_refs"],
+            },
+        ),
+        (
+            "CFR Ref Link Exceptions",
+            {
+                "classes": ["collapse"],
+                "fields": ["cfr_ref_exceptions"],
+            },
+        ),
+    ]
 
 
 @admin.register(StatuteLinkConverter)

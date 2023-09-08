@@ -1,6 +1,7 @@
 {% load paragraphs %}
 {% load string_formatters %}
 {% load link_statutes %}
+{% load link_reg_refs %}
 
 <p tabindex="-1" {% if node.label and node.label|length > 0 %}id="{{node.label | join:'-'}}"{% endif %} class="reg-section depth-{{node|pdepth}}">
     {% if node.label and node.label|length > 0 %}
@@ -23,5 +24,6 @@
         </tooltip-container>
     {% endif %}
     {% link_statutes node.text link_conversions link_config as content %}
-    {{ content | safe}}
+    {% link_reg_refs content link_config as content2 %}
+    {{ content2 | safe}}
 </p>

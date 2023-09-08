@@ -150,6 +150,37 @@ footer {
     }
 }
 
+#loginIndicator {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    padding: 1rem 3rem 1rem 1rem;
+    background-color: $lighter_gray;
+    border-top: 1px solid $light_gray;
+    border-left: 1px solid $light_gray;
+    border-top-left-radius: 10px;
+    box-shadow: -3px 3px 10px 0px rgba(0, 0, 0, 0.08);
+    -webkit-box-shadow: -3px 3px 10px 0px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: -3px 3px 10px 0px rgba(0, 0, 0, 0.08);
+
+    .span__login-lamp {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $teal;
+        margin-right: 0.5rem;
+
+        &--success {
+            background-color: $green;
+        }
+
+        &--error {
+            background-color: $mid_gray_3;
+        }
+    }
+}
+
 .invisible {
     height: 0px !important;
     margin-top: 0px !important;

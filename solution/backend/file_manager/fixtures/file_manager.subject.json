@@ -1,0 +1,704 @@
+[
+{
+    "model": "file_manager.subject",
+    "pk": 1,
+    "fields": {
+        "full_name": "21st Century Cures Act",
+        "short_name": null,
+        "abbreviation": "Cures Act"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 2,
+    "fields": {
+        "full_name": "Alternative Benefit Plan",
+        "short_name": null,
+        "abbreviation": "ABP"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 3,
+    "fields": {
+        "full_name": "Access to Services",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 4,
+    "fields": {
+        "full_name": "Adult Day Health",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 5,
+    "fields": {
+        "full_name": "Ambulatory Prenatal Care",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 6,
+    "fields": {
+        "full_name": "Asthma",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 7,
+    "fields": {
+        "full_name": "Autism Spectrum Disorder",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 8,
+    "fields": {
+        "full_name": "Blood Products",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 9,
+    "fields": {
+        "full_name": "Care Coordination",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 10,
+    "fields": {
+        "full_name": "Certified Community Behavioral Health Clinics",
+        "short_name": null,
+        "abbreviation": "CCBHCs"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 11,
+    "fields": {
+        "full_name": "Certified Nurse Practitioner",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 12,
+    "fields": {
+        "full_name": "Community First Choice",
+        "short_name": null,
+        "abbreviation": "CFC"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 13,
+    "fields": {
+        "full_name": "Clinical Trials and Experimental Policy",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 14,
+    "fields": {
+        "full_name": "Clinic Services",
+        "short_name": "Clinics",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 15,
+    "fields": {
+        "full_name": "\"Case Management and Targeted Case Management\"",
+        "short_name": null,
+        "abbreviation": "CM TCM"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 16,
+    "fields": {
+        "full_name": "Coding",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 17,
+    "fields": {
+        "full_name": "Collaborative Care Model",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 18,
+    "fields": {
+        "full_name": "Collateral Contacts",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 19,
+    "fields": {
+        "full_name": "Community Health Worker",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 20,
+    "fields": {
+        "full_name": "Comparability",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 21,
+    "fields": {
+        "full_name": "Consultations",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 22,
+    "fields": {
+        "full_name": "Contingency Management",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 23,
+    "fields": {
+        "full_name": "Comprehensive Outpatient Rehabilitation Facilities",
+        "short_name": null,
+        "abbreviation": "CORF"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 24,
+    "fields": {
+        "full_name": "Critical Access Hospital",
+        "short_name": null,
+        "abbreviation": "CAH"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 25,
+    "fields": {
+        "full_name": "Dental Services",
+        "short_name": "Dental",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 26,
+    "fields": {
+        "full_name": "Diabetes Prevention",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 27,
+    "fields": {
+        "full_name": "Diagnostic Services",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 28,
+    "fields": {
+        "full_name": "Digital Therapeutics",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 29,
+    "fields": {
+        "full_name": "Disease Management",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 30,
+    "fields": {
+        "full_name": "Donor Milk",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 31,
+    "fields": {
+        "full_name": "Doula Services",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 32,
+    "fields": {
+        "full_name": "Electronic Monitoring",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 33,
+    "fields": {
+        "full_name": "Eligibility",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 34,
+    "fields": {
+        "full_name": "Emergency Hospital Services",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 35,
+    "fields": {
+        "full_name": "Emergency Services for Aliens",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 36,
+    "fields": {
+        "full_name": "Early and Periodic Screening, Diagnostic, and Treatment",
+        "short_name": null,
+        "abbreviation": "EPSDT"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 37,
+    "fields": {
+        "full_name": "Excluded Practitioners",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 38,
+    "fields": {
+        "full_name": "Expedited Partner Therapy",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 39,
+    "fields": {
+        "full_name": "Family Planning Services",
+        "short_name": "Family Planning",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 40,
+    "fields": {
+        "full_name": "Federally Qualified Health Centers",
+        "short_name": null,
+        "abbreviation": "FQHC"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 41,
+    "fields": {
+        "full_name": "Fetal Alcohol Syndrome",
+        "short_name": null,
+        "abbreviation": "FAS"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 42,
+    "fields": {
+        "full_name": "Foster Care",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 43,
+    "fields": {
+        "full_name": "Free Care",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 44,
+    "fields": {
+        "full_name": "Free Choice of Providers",
+        "short_name": "Freedom of Choice",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 45,
+    "fields": {
+        "full_name": "Freestanding Birth Centers",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 46,
+    "fields": {
+        "full_name": "Gender Affirming Care",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 47,
+    "fields": {
+        "full_name": "Habilitative Services",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 48,
+    "fields": {
+        "full_name": "Healthcare Common Procedure Coding System",
+        "short_name": null,
+        "abbreviation": "HCPCS"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 49,
+    "fields": {
+        "full_name": "Health Homes for Enrollees with Chronic Conditions",
+        "short_name": "Health Homes",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 50,
+    "fields": {
+        "full_name": "Home Visiting Services",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 51,
+    "fields": {
+        "full_name": "Homelessness Housing",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 52,
+    "fields": {
+        "full_name": "Hospice",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 53,
+    "fields": {
+        "full_name": "Intermediate Care Facilities for Individuals with Intellectual Disabilities",
+        "short_name": null,
+        "abbreviation": "ICF IID"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 54,
+    "fields": {
+        "full_name": "Institutions for Mental Disease",
+        "short_name": null,
+        "abbreviation": "IMD"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 55,
+    "fields": {
+        "full_name": "Inmates",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 56,
+    "fields": {
+        "full_name": "Inpatient Hospital Services",
+        "short_name": "Inpatient Hospital",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 57,
+    "fields": {
+        "full_name": "Integrated Care Model",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 58,
+    "fields": {
+        "full_name": "Interpreter-Translation Services",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 59,
+    "fields": {
+        "full_name": "Laboratory and X-ray Services",
+        "short_name": "Lab & X-Ray",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 60,
+    "fields": {
+        "full_name": "Lactation Consultant",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 61,
+    "fields": {
+        "full_name": "Long-Term Services and Supports",
+        "short_name": null,
+        "abbreviation": "LTSS"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 62,
+    "fields": {
+        "full_name": "MACPro User Group",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 63,
+    "fields": {
+        "full_name": "Managed Care",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 64,
+    "fields": {
+        "full_name": "Maternal Depression",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 65,
+    "fields": {
+        "full_name": "Medical Marijuana",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 66,
+    "fields": {
+        "full_name": "Medical Necessity",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 67,
+    "fields": {
+        "full_name": "Medication Assisted Treatment",
+        "short_name": null,
+        "abbreviation": "MAT"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 68,
+    "fields": {
+        "full_name": "Minimum Essential Coverage",
+        "short_name": null,
+        "abbreviation": "MEC"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 69,
+    "fields": {
+        "full_name": "Missed Appointments",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 70,
+    "fields": {
+        "full_name": "Mobile Crisis",
+        "short_name": "Mobile Crisis Services",
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 71,
+    "fields": {
+        "full_name": "Neonatal Abstinence Syndrome",
+        "short_name": null,
+        "abbreviation": "NAS"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 72,
+    "fields": {
+        "full_name": "National Correct Coding Initiative",
+        "short_name": null,
+        "abbreviation": "NCCI"
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 73,
+    "fields": {
+        "full_name": "Non-Discrimination",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 74,
+    "fields": {
+        "full_name": "Non-Opioid Pain Management",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 75,
+    "fields": {
+        "full_name": "Notices",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 76,
+    "fields": {
+        "full_name": "Nurse Advice Lines",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 77,
+    "fields": {
+        "full_name": "Nutrition",
+        "short_name": null,
+        "abbreviation": null
+    }
+},
+{
+    "model": "file_manager.subject",
+    "pk": 78,
+    "fields": {
+        "full_name": "Omnibus Budget Reconciliation Act of 1989",
+        "short_name": "OBRA 89",
+        "abbreviation": null
+    }
+}
+]

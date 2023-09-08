@@ -190,21 +190,19 @@ python.makemigrations:
 python.migrate:
 	docker-compose exec regulations python manage.py migrate
 
+local.seed:
+	docker-compose exec regulations python manage.py populateseeddata
+
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
-reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter
+reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration
+file_manager_objects = file_manager.subject file_manager.documenttype
 auth_objects = contenttypes.contenttype auth.permission auth.group
-
-local.seed:
-	$(foreach object, $(resource_objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
-	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py loaddata $(object).json;) \
-	$(foreach object, $(auth_objects), docker-compose exec regulations python manage.py loaddata cmcs_regulations/fixtures/$(object).json;) \
-	docker-compose exec regulations python manage.py loaddata search.synonym.json
-
 
 local.dump:
 	$(foreach object, $(objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
 	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/regulations/fixtures/$(object).json;) \
+	$(foreach object, $(file_manager_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/file_manager/fixtures/$(object).json;) \
 	$(foreach object, $(auth_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/cmcs_regulations/fixtures/$(object).json;) \
 	docker-compose exec regulations python manage.py dumpdata contenttypes.contenttype --indent 4 > ./backend/cmcs_regulations/fixtures/contenttypes.contenttype.json
 	docker-compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json 

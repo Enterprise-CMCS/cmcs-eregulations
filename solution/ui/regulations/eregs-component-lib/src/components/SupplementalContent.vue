@@ -30,6 +30,7 @@
                 :sub_categories="category.sub_categories"
                 :is-fetching="isFetching"
                 :is-fr-doc-category="category.is_fr_doc_category"
+                :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>
             <simple-spinner v-if="isFetching"></simple-spinner>
@@ -49,15 +50,10 @@ function getDefaultCategories() {
     const rawCategories = JSON.parse(
         document.getElementById("categories").textContent
     );
-    const rawSubCategories = JSON.parse(
-        document.getElementById("sub_categories").textContent
-    );
 
     return rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = rawSubCategories.filter(
-            (subcategory) => subcategory.parent_id === category.id
-        );
+        category.sub_categories = [];
         return category;
     });
 }
@@ -220,17 +216,20 @@ export default {
         },
         async fetchContent(location) {
             try {
+                // Page size is set to 1000 to attempt to get all resources.
+                // Defualt page size of 100 was omitting resources from the right sidebar.
+                // Right now no single subpart hits this number so this shouldn't be an issue
+
                 let response = "";
                 if (location) {
                     response = await getSupplementalContent({
                         apiUrl: this.apiUrl,
                         builtLocationString: location,
+                        pageSize: 1000,
                     });
                 }
                 await this.getPartDictionary();
 
-                // Page size is set to 1000 to attempt to get all subpart resources.  Right now no single subpart hits this number
-                // so this shouldn't be an issue
                 const subpartResponse = await getSupplementalContent({
                     apiUrl: this.apiUrl,
                     partDict: this.partDict,

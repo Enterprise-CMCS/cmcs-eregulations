@@ -1,16 +1,15 @@
-from rest_framework.response import Response
 from django.http import Http404
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
+from rest_framework.response import Response
 
-from .utils import OpenApiPathParameter
+from regcore.serializers.toc import TOCSerializer
 
 from .mixins import (
     PartPropertiesMixin,
     PartStructureNodesMixin,
 )
-
-from regcore.serializers.toc import TOCSerializer
+from .utils import OpenApiPathParameter
 
 
 @extend_schema(

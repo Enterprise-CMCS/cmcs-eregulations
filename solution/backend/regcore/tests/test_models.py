@@ -4,7 +4,7 @@ import json
 from django.test import TestCase
 
 from regcore.models import Part
-from regcore.search.models import create_search, Synonym, SearchIndexQuerySet
+from regcore.search.models import SearchIndexQuerySet, Synonym, create_search
 
 
 class TestRegoreModels(TestCase):

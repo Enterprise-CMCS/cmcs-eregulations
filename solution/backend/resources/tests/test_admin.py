@@ -4,7 +4,7 @@ from django.contrib.admin import AdminSite
 from django.test import TestCase
 
 from resources.admin import AbstractResourceAdmin, SupplementalContentAdmin
-from resources.models import AbstractResource, AbstractCategory, Section, Subpart, SupplementalContent
+from resources.models import AbstractCategory, AbstractResource, Section, Subpart, SupplementalContent
 
 
 class TestAdminFunctions(TestCase):

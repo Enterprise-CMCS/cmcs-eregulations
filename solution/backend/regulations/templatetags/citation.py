@@ -1,12 +1,13 @@
 import re
+
 from django import template
 from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-el = ('<a href="https://federalregister.gov/citation/', '" target="_blank" rel="noopener noreferrer">', '</a>')
+el = ('<a href="https://federalregister.gov/citation/', '" target="_blank" rel="noopener noreferrer" class="external">', '</a>')
 
 
 @register.filter(name='citation', needs_autoescape=True, is_safe=True)

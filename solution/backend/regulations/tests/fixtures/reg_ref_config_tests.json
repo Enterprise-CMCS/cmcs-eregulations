@@ -1,0 +1,72 @@
+[
+    {
+        "testing": "link CFR refs is enabled",
+        "config": {
+            "link_cfr_refs": true,
+            "cfr_ref_exceptions": {}
+        },
+        "input": "42 CFR 123",
+        "expected": "42 CFR <a target=\"blank\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+    },
+    {
+        "testing": "link CFR refs is disabled",
+        "config": {
+            "link_cfr_refs": false,
+            "cfr_ref_exceptions": {}
+        },
+        "input": "42 CFR 123",
+        "expected": "42 CFR 123"
+    },
+    {
+        "testing": "part level exception",
+        "config": {
+            "link_cfr_refs": true,
+            "cfr_ref_exceptions": {
+                "42": [
+                    "123"
+                ]
+            }
+        },
+        "input": "42 CFR 1. 42 CFR 123",
+        "expected": "42 CFR <a target=\"blank\" href=\"/reg_redirect/?title=42&part=1\">1</a>. 42 CFR 123"
+    },
+    {
+        "testing": "section level exception",
+        "config": {
+            "link_cfr_refs": true,
+            "cfr_ref_exceptions": {
+                "42": [
+                    "123.456"
+                ]
+            }
+        },
+        "input": "42 CFR 1.23. 42 CFR 123.456",
+        "expected": "42 CFR <a target=\"blank\" href=\"/reg_redirect/?title=42&part=1&section=23\">1.23</a>. 42 CFR 123.456"
+    },
+    {
+        "testing": "paragraph level exception",
+        "config": {
+            "link_cfr_refs": true,
+            "cfr_ref_exceptions": {
+                "42": [
+                    "123.456(a)(1)"
+                ]
+            }
+        },
+        "input": "42 CFR 1.23(a)(1). 42 CFR 123.456(a)(1)",
+        "expected": "42 CFR <a target=\"blank\" href=\"/reg_redirect/?title=42&part=1&section=23&paragraph=a-1\">1.23(a)(1)</a>. 42 CFR 123.456(a)(1)"
+    },
+    {
+        "testing": "single ref in 'and' ref exception",
+        "config": {
+            "link_cfr_refs": true,
+            "cfr_ref_exceptions": {
+                "42": [
+                    "123.456(a)(1)"
+                ]
+            }
+        },
+        "input": "42 CFR parts 123.456(a)(1) and 456.789(b)",
+        "expected": "42 CFR parts 123.456(a)(1) and <a target=\"blank\" href=\"/reg_redirect/?title=42&part=456&section=789&paragraph=b\">456.789(b)</a>"
+    }
+]

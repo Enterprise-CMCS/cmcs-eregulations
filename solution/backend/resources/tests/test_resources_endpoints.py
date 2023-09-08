@@ -1,6 +1,8 @@
-from django.test import TestCase
-from resources.models import FederalRegisterDocument, FederalRegisterDocumentGroup, Section
 from datetime import datetime, timedelta
+
+from django.test import TestCase
+
+from resources.models import FederalRegisterDocument, FederalRegisterDocumentGroup, Section
 
 
 class TestResourcesEndpoint(TestCase):

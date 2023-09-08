@@ -60,6 +60,7 @@ jobs:
         if: success() || failure()
         env:
           PR: ${{ github.event.number }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/backend
           npm install serverless -g
@@ -72,6 +73,7 @@ jobs:
       - name: remove static assets
         env:
           PR: ${{ github.event.number }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/static-assets
           npm install serverless -g

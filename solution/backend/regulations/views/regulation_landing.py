@@ -1,7 +1,8 @@
-from requests import HTTPError
-from django.views.generic.base import TemplateView
-from django.http import Http404
 from datetime import date, datetime
+
+from django.http import Http404
+from django.views.generic.base import TemplateView
+from requests import HTTPError
 
 from regcore.models import Part
 

@@ -4,6 +4,8 @@
             slot="jump-to"
             api-url="{{ API_BASE }}"
             home-url="{% url 'homepage' %}"
+            {% if title %}title="{{ title }}"{% endif %}
+            {% if part %}part="{{ part }}"{% endif %}
         ></jump-to>
         <header-links
             slot="links"

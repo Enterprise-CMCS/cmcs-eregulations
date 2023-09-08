@@ -907,7 +907,8 @@
         "isActive": true,
         "baseWord": "tribe",
         "synonyms": [
-            77
+            77,
+            713
         ]
     }
 },
@@ -918,7 +919,8 @@
         "isActive": true,
         "baseWord": "tribal consultation",
         "synonyms": [
-            76
+            76,
+            713
         ]
     }
 },
@@ -1048,7 +1050,10 @@
         "isActive": true,
         "baseWord": "Ticket to Work",
         "synonyms": [
-            121
+            121,
+            714,
+            715,
+            716
         ]
     }
 },
@@ -1059,7 +1064,10 @@
         "isActive": true,
         "baseWord": "TWWIIA",
         "synonyms": [
-            120
+            120,
+            714,
+            715,
+            716
         ]
     }
 },
@@ -5081,6 +5089,7 @@
             531,
             533,
             534,
+            535,
             536
         ]
     }
@@ -5094,7 +5103,8 @@
         "synonyms": [
             510,
             533,
-            534
+            534,
+            535
         ]
     }
 },
@@ -5260,7 +5270,8 @@
             140,
             141,
             510,
-            524
+            524,
+            535
         ]
     }
 },
@@ -5595,7 +5606,8 @@
         "isActive": true,
         "baseWord": "spend down",
         "synonyms": [
-            671
+            671,
+            704
         ]
     }
 },
@@ -5606,7 +5618,8 @@
         "isActive": true,
         "baseWord": "spenddown",
         "synonyms": [
-            670
+            670,
+            704
         ]
     }
 },
@@ -5647,6 +5660,537 @@
     "fields": {
         "isActive": true,
         "baseWord": "in lieu of services and settings",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 676,
+    "fields": {
+        "isActive": true,
+        "baseWord": "IMD exclusion",
+        "synonyms": [
+            677,
+            678,
+            679,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 677,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Institution for Mental Diseases exclusion",
+        "synonyms": [
+            676,
+            678,
+            679,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 678,
+    "fields": {
+        "isActive": true,
+        "baseWord": "payment exclusion for institutions for mental diseases",
+        "synonyms": [
+            676,
+            677,
+            679,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 679,
+    "fields": {
+        "isActive": true,
+        "baseWord": "IMD payment exclusion",
+        "synonyms": [
+            676,
+            677,
+            678,
+            681,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 681,
+    "fields": {
+        "isActive": true,
+        "baseWord": "limitation on coverage of services provided in an IMD",
+        "synonyms": [
+            676,
+            677,
+            678,
+            679,
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 682,
+    "fields": {
+        "isActive": true,
+        "baseWord": "individuals under age 65 who are patients in an institution for mental diseases",
+        "synonyms": [
+            695
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 683,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS 64",
+        "synonyms": [
+            685,
+            686,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 684,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS-64",
+        "synonyms": [
+            685,
+            686,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 685,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly Statement of Expenditures",
+        "synonyms": [
+            683,
+            684,
+            686,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 686,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly expenditure report",
+        "synonyms": [
+            683,
+            684,
+            685,
+            687
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 687,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program",
+        "synonyms": [
+            683,
+            684,
+            685,
+            686
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 688,
+    "fields": {
+        "isActive": true,
+        "baseWord": "out of state",
+        "synonyms": [
+            689
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 689,
+    "fields": {
+        "isActive": true,
+        "baseWord": "out-of-state",
+        "synonyms": [
+            688
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 690,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS 37",
+        "synonyms": [
+            692
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 691,
+    "fields": {
+        "isActive": true,
+        "baseWord": "CMS-37",
+        "synonyms": [
+            692
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 692,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Medicaid Program Budget Report",
+        "synonyms": [
+            690,
+            691
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 693,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Quarterly Distribution of Funding Requirements",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 694,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Extension of eligibility for medical assistance",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 695,
+    "fields": {
+        "isActive": true,
+        "baseWord": "exclusion of FFP",
+        "synonyms": [
+            676,
+            677,
+            678,
+            679,
+            681,
+            682
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 696,
+    "fields": {
+        "isActive": true,
+        "baseWord": "spousal impoverishment",
+        "synonyms": [
+            697,
+            698,
+            699
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 697,
+    "fields": {
+        "isActive": true,
+        "baseWord": "institutionalized spouse",
+        "synonyms": [
+            696,
+            698,
+            699
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 698,
+    "fields": {
+        "isActive": true,
+        "baseWord": "community spouse",
+        "synonyms": [
+            696,
+            697,
+            699
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 699,
+    "fields": {
+        "isActive": true,
+        "baseWord": "maintenance needs of spouse",
+        "synonyms": [
+            696,
+            697,
+            698
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 700,
+    "fields": {
+        "isActive": true,
+        "baseWord": "217 group",
+        "synonyms": [
+            701
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 701,
+    "fields": {
+        "isActive": true,
+        "baseWord": "217 category",
+        "synonyms": [
+            700
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 702,
+    "fields": {
+        "isActive": true,
+        "baseWord": "incurred medical expenses",
+        "synonyms": [
+            704
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 703,
+    "fields": {
+        "isActive": true,
+        "baseWord": "individuals receiving home and community-based services",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 704,
+    "fields": {
+        "isActive": true,
+        "baseWord": "medically needy",
+        "synonyms": [
+            670,
+            671,
+            702
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 705,
+    "fields": {
+        "isActive": true,
+        "baseWord": "new adult group",
+        "synonyms": [
+            706,
+            707,
+            708
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 706,
+    "fields": {
+        "isActive": true,
+        "baseWord": "VIII Group",
+        "synonyms": [
+            705,
+            707,
+            708
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 707,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Medicaid expansion",
+        "synonyms": [
+            705,
+            706,
+            708
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 708,
+    "fields": {
+        "isActive": true,
+        "baseWord": "coverage for individuals age 19 or older and under age 65 at or below 133 percent FPL",
+        "synonyms": [
+            705,
+            706,
+            707
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 709,
+    "fields": {
+        "isActive": true,
+        "baseWord": "payer of last resort",
+        "synonyms": [
+            710
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 710,
+    "fields": {
+        "isActive": true,
+        "baseWord": "payor of last resort",
+        "synonyms": [
+            709
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 711,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Medicaid as a secondary payer",
+        "synonyms": []
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 712,
+    "fields": {
+        "isActive": true,
+        "baseWord": "consultation with Federally-recognized Indian tribes",
+        "synonyms": [
+            713
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 713,
+    "fields": {
+        "isActive": true,
+        "baseWord": "tribal officials",
+        "synonyms": [
+            76,
+            77,
+            712
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 714,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Ticket to Work and Work Incentives Improvement Act",
+        "synonyms": [
+            120,
+            121,
+            715,
+            716
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 715,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Ticket to Work Medical Improvements Group",
+        "synonyms": [
+            120,
+            121,
+            714,
+            716
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 716,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Working Individuals with Medically Improved Disability",
+        "synonyms": [
+            120,
+            121,
+            714,
+            715
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 717,
+    "fields": {
+        "isActive": true,
+        "baseWord": "electronic service",
+        "synonyms": [
+            718
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 718,
+    "fields": {
+        "isActive": true,
+        "baseWord": "Federal Data Services Hub",
+        "synonyms": [
+            717
+        ]
+    }
+},
+{
+    "model": "search.synonym",
+    "pk": 719,
+    "fields": {
+        "isActive": true,
+        "baseWord": "low-income childless adults",
         "synonyms": []
     }
 }

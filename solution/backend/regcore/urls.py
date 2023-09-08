@@ -1,21 +1,21 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from regcore.admin import BulkSynonymView
 from regcore.views import (
-    title,
-    part,
     contents,
-    metadata,
-    synonyms,
-    parser,
     history,
+    metadata,
+    parser,
+    part,
+    synonyms,
+    title,
 )
-
 
 urlpatterns = [
     path("admin/bulk_synonyms", BulkSynonymView.as_view(), name="bulk_synonyms"),
     path("v3/", include([
         path("resources/", include('resources.urls')),
+        path("file_manager/", include('file_manager.urls')),
         path("search/", include('regcore.search.urls')),
         path("toc", title.TOCViewSet.as_view({
             "get": "list",

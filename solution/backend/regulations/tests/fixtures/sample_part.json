@@ -1,0 +1,35 @@
+{
+    "title": "42",
+    "name": "400",
+    "date": "2023-08-17",
+    "structure": {},
+    "depth_stack": {},
+    "depth": 0,
+    "document": {
+        "node_type": "part",
+        "label": ["400"],
+        "children": [
+            {
+                "node_type": "section",
+                "label": ["400", "100"],
+                "children": [
+                    {
+                        "node_type": "paragraph",
+                        "label": ["400", "100", "a"],
+                        "children": []
+                    },
+                    {
+                        "node_type": "paragraph",
+                        "label": ["400", "100", "b"],
+                        "children": []
+                    },
+                    {
+                        "node_type": "paragraph",
+                        "label": ["400", "100", "b", "2"],
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+}

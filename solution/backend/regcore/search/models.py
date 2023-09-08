@@ -1,13 +1,13 @@
 import re
 
-from django.db import models
-from django.db.models.expressions import RawSQL
 from django.contrib.postgres.search import (
+    SearchHeadline,
     SearchQuery,
     SearchRank,
-    SearchHeadline,
     SearchVectorField,
 )
+from django.db import models
+from django.db.models.expressions import RawSQL
 
 from regcore.models import Part
 

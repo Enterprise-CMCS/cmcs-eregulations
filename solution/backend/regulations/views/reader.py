@@ -1,9 +1,9 @@
 from datetime import date, datetime
 
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.http import (
-    HttpResponseRedirect,
     Http404,
+    HttpResponseRedirect,
 )
 from django.urls import reverse
 from django.views.generic.base import (
@@ -13,6 +13,7 @@ from django.views.generic.base import (
 
 from regcore.models import Part
 from regulations.models import (
+    RegulationLinkConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
 )
@@ -22,7 +23,6 @@ from regulations.views.utils import find_subpart
 from resources.models import (
     AbstractLocation,
     Category,
-    SubCategory,
 )
 
 
@@ -53,8 +53,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
-        categories = list(Category.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
-        sub_categories = list(SubCategory.objects.filter(show_if_empty=True).contains_fr_docs().order_by('order').values())
+        categories = list(Category.objects.contains_fr_docs().order_by('order').values())
 
         locations = AbstractLocation.objects.filter(part=reg_part).select_subclasses().annotate(
             num_locations=Count(
@@ -73,13 +72,21 @@ class ReaderView(CitationContextMixin, TemplateView):
                 "title": title,
                 "usc": usc,
             }
+
         statute_link_config = StatuteLinkConfiguration.get_solo()
-        statute_link_config = {
+        reg_link_config = RegulationLinkConfiguration.get_solo()
+
+        link_config = {
             "link_statute_refs": statute_link_config.link_statute_refs,
             "link_usc_refs": statute_link_config.link_usc_refs,
             "statute_ref_exceptions": statute_link_config.statute_ref_exceptions_dict,
             "usc_ref_exceptions": statute_link_config.usc_ref_exceptions_dict,
+            "link_cfr_refs": reg_link_config.link_cfr_refs,
+            "cfr_ref_exceptions": reg_link_config.cfr_ref_exceptions_dict,
         }
+
+        user = self.request.user
+        is_user_authenticated = user.is_authenticated
 
         c = {
             'tree':         tree,
@@ -93,10 +100,11 @@ class ReaderView(CitationContextMixin, TemplateView):
             'node_list':    node_list,
             'view_type':    self.get_view_type(),
             'categories':   categories,
-            'sub_categories': sub_categories,
             'resource_count': resource_count,
             'link_conversions': conversions,
-            'link_config': statute_link_config,
+            'link_config': link_config,
+            'is_user_authenticated': is_user_authenticated,
+            'user': user,
         }
 
         end = datetime.now().timestamp()

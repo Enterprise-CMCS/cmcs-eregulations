@@ -12,6 +12,10 @@ provider:
       level: INFO
       roleManagedExternally: true
   lambdaHashingVersion: '20201221'
+  apiGateway:
+    binaryMediaTypes:
+      - 'multipart/form-data'
+      - 'application/pdf'
   environment:
     DB_NAME: ${self:custom.settings.DB_NAME}
     DB_USER: ${self:custom.settings.USERNAME}
@@ -33,6 +37,8 @@ provider:
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
+    DEPLOY_NUMBER: ${env:RUN_ID}
+    AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
   tracing:
     apiGateway: true
   vpc:
@@ -72,6 +78,30 @@ functions: ${file(serverless_functions/${self:custom.stage}_functions.yml)}
 
 resources:
   Resources:
+    MyS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: file-repo-eregs-${self:custom.stage}
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: AES256
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - HEAD
+              MaxAge: 3000
     WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
@@ -116,11 +146,14 @@ resources:
                 -  Effect: "Allow"
                    Action:
                      - "s3:PutObject"
+                     - "s3:GetObject"
+                     - "s3:DeleteObject"
                    Resource:
-                     Fn::Join:
+                     - Fn::Join:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
+                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
 
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup

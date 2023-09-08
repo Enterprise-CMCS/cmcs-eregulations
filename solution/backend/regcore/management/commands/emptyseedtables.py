@@ -1,14 +1,20 @@
 
-from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.core.management.base import BaseCommand
 
+from file_manager.models import DocumentType, Subject
 from regcore.search.models import Synonym
-from regulations.models import StatuteLinkConverter, SiteConfiguration
+from regulations.models import (
+    RegulationLinkConfiguration,
+    SiteConfiguration,
+    StatuteLinkConfiguration,
+    StatuteLinkConverter,
+)
 from resources.models import (
     AbstractCategory,
-    AbstractResource,
     AbstractLocation,
+    AbstractResource,
     FederalRegisterDocumentGroup,
     ResourcesConfiguration,
 )
@@ -24,7 +30,11 @@ class Command(BaseCommand):
         FederalRegisterDocumentGroup.objects.all().delete()
         Synonym.objects.all().delete()
         StatuteLinkConverter.objects.all().delete()
+        StatuteLinkConfiguration.objects.all().delete()
         Group.objects.all().delete()
         Permission.objects.all().delete()
         ContentType.objects.all().delete()
+        RegulationLinkConfiguration.objects.all().delete()
         SiteConfiguration.objects.all().delete()
+        Subject.objects.all().delete()
+        DocumentType.objects.all().delete()

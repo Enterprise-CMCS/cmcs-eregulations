@@ -1,14 +1,15 @@
 from datetime import datetime, timedelta
-from django.test import TestCase
-from django.db.models import F, Case, When
 
-from resources.views.mixins import FRDocGroupingMixin
+from django.db.models import Case, F, When
+from django.test import TestCase
+
 from resources.models import (
+    AbstractResource,
     FederalRegisterDocument,
     FederalRegisterDocumentGroup,
-    AbstractResource,
     SupplementalContent,
 )
+from resources.views.mixins import FRDocGroupingMixin
 
 
 class TestMixinFunctions(TestCase):
@@ -31,7 +32,7 @@ class TestMixinFunctions(TestCase):
     def get_annotated_group(self):
         return Case(
             When(federalregisterdocument__isnull=False, then=F("federalregisterdocument__group")),
-            default=-1*F("pk"),
+            default=-1 * F("pk"),
         )
 
     def test_get_id_one_groups(self):
