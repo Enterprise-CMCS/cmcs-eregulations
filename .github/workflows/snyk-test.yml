@@ -1,0 +1,62 @@
+name: Snyk Scan and Report
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ implementsnyk ]
+  schedule:
+    - cron:  '0 4 * * *'  # run every day at midnight
+
+permissions:
+  id-token: write
+
+jobs:
+  snyk_run:
+    name: Snyk Run (for PR and push)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || 'push'
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      
+      - name: Install Snyk and Run Snyk test
+        run: |
+          npm install -g snyk
+          snyk test --all-projects --json > snyk_output.txt || true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      
+  
+  snyk_nightly_run:  
+      name: Snyk Nightly Run (for nightly cron with JIRA)
+      runs-on: ubuntu-latest
+      if: github.event_name == 'schedule' || 'push'
+      steps:
+        - name: Check out repository
+          uses: actions/checkout@v3
+  
+        - name: Install Snyk and Run Snyk test
+          run: |
+            npm install -g snyk
+            snyk test --all-projects --json > snyk_output.txt || true
+          env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          
+        - name: use the custom github  action to parse Snyk output
+          uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.0
+          with:
+              jira-username: ${{ secrets.JIRA_USERNAME }}
+              jira-token: ${{ secrets.JIRA_TOKEN_AT }}
+              jira-host: ${{ secrets.JIRA_HOST_NAME }}
+              jira-project-key: 'EREGCSC'
+              jira-issue-type: 'Bug'
+              #jira-custom-field-key-value: '{ "customfield_10100" : "EREGCSC-2114", "customfield_10100" : [{"id": "16958", "value": "eRegs"}]  }'
+              jira-labels: 'eRegs,snyk'
+              jira-title-prefix: '[EREGCSC] - Snyk :'
+              is_jira_enterprise: true
+              #assign-jira-ticket-to: 'TTHO'
+              scan-output-path: 'snyk_output.txt'
+              scan-type: 'snyk'
+    
