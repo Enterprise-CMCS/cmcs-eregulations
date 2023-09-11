@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   snyk_run:
-    name: Snyk Run (for PR and push)
+    name: Snyk Run (for PR)
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     
