@@ -1,6 +1,3 @@
-
-import logging
-
 from django.conf import settings
 from django.db.models import Prefetch
 from django.http import HttpResponse
@@ -16,7 +13,7 @@ from resources.views.mixins import LocationExplorerViewSetMixin
 from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 from .serializers import DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
-logger = logging.getLogger(__name__)
+
 
 @extend_schema(
     description="Retrieve a list of Upload Categories",
@@ -116,7 +113,6 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                                                         'Key': key},
                                                 ExpiresIn=20)
 
-
     def upload(self, request, *args, **kwargs):
         id = kwargs.get("file_id")
         file_name = kwargs.get("file_name")
@@ -139,4 +135,3 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
         url = self.generate_download_link(file)
         return HttpResponse(url, headers={'Content-Disposition': f'attachment; filename="{file.file_name}"'})
-
