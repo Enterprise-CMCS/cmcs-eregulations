@@ -3,8 +3,8 @@ name: Snyk Scan and Report
 on:
   pull_request:
     branches: [ main ]
-  push:
-    branches: [ implementsnyk ]
+  #push:
+    #branches: [ implementsnyk ]
   schedule:
     - cron:  '0 4 * * *'  # run every day at midnight
 
@@ -15,7 +15,7 @@ jobs:
   snyk_run:
     name: Snyk Run (for PR and push)
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || 'push'
+    if: github.event_name == 'pull_request'
     
     steps:
       - name: Check out repository
@@ -32,7 +32,7 @@ jobs:
   snyk_nightly_run:  
       name: Snyk Nightly Run (for nightly cron with JIRA)
       runs-on: ubuntu-latest
-      if: github.event_name == 'schedule' || 'push'
+      if: github.event_name == 'schedule'
       steps:
         - name: Check out repository
           uses: actions/checkout@v3
@@ -52,11 +52,11 @@ jobs:
               jira-host: ${{ secrets.JIRA_HOST_NAME }}
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
-              #jira-custom-field-key-value: '{ "customfield_10100" : "EREGCSC-2114", "customfield_10100" : [{"id": "16958", "value": "eRegs"}]  }'
+              #jira-custom-field-key-value: ''
               jira-labels: 'eRegs,snyk'
               jira-title-prefix: '[EREGCSC] - Snyk :'
               is_jira_enterprise: true
-              #assign-jira-ticket-to: 'TTHO'
+              #assign-jira-ticket-to: ''
               scan-output-path: 'snyk_output.txt'
               scan-type: 'snyk'
     
