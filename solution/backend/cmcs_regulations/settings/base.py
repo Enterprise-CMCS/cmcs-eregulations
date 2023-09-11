@@ -84,6 +84,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'django.core.context_processors.request',
     'regulations.context_processors.site_config',
+    'regulations.context_processors.eua_config'
     'cmcs_regulations.context_processors.api_base',
     'regcore.context_processors.regcore_config',
 )

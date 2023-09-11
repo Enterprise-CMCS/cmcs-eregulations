@@ -19,7 +19,9 @@
         </style>
     {% endblock %}
    {{ block.super }}
-   {% if request.environ.DJANGO_SETTINGS_MODULE == 'cmcs_regulations.settings.euasettings' %}
+   flag is: {{ EUA_FEATUREFLAG }}
+    {{ OIDC_RP_CLIENT_ID }}
+   {% if EUA_FEATUREFLAG == 'true' %}
       <div class="okta_login_container">
         Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}">EUA</a>
       </div>
