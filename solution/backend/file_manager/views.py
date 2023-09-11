@@ -110,14 +110,12 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     def generate_download_link(self, obj):
         s3_client = establish_client()
         key = obj.get_key()
-        try:
-            return s3_client.generate_presigned_url('get_object',
-                                                    Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                                                            'Key': key},
-                                                    ExpiresIn=20)
 
-        except Exception as e:
-            return e
+        return s3_client.generate_presigned_url('get_object',
+                                                Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                                                        'Key': key},
+                                                ExpiresIn=20)
+
 
     def upload(self, request, *args, **kwargs):
         id = kwargs.get("file_id")
@@ -130,21 +128,15 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             uploaded_file = UploadedFile(file_name=file_name)
             uploaded_file.save()
         if uploaded_file:
-            try:
-                result = get_upload_link(uploaded_file.get_key)
-                return HttpResponse(result)
-            except Exception as e:
-                uploaded_file.delete()
-                raise e
+            result = get_upload_link(uploaded_file.get_key)
+            return HttpResponse(result)
 
     @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):
         queryset = UploadedFile.objects.all()
         id = kwargs.get("file_id")
         file = queryset.get(uid=id)
-        try:
-            url = self.generate_download_link(file)
-            response = HttpResponse(url, headers={'Content-Disposition': f'attachment; filename="{file.file_name}"'})
-            return response
-        except Exception as e:
-            return 'Not available for download.'
+
+        url = self.generate_download_link(file)
+        return HttpResponse(url, headers={'Content-Disposition': f'attachment; filename="{file.file_name}"'})
+
