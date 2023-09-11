@@ -1,7 +1,5 @@
 from .models import SiteConfiguration
-from cmcs_regulations.settings.euasettings import EUA_FEATUREFLAG
-
-
+import os
 def site_config(request):
     config = SiteConfiguration.objects.first()
     return {
