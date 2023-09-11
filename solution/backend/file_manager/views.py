@@ -1,4 +1,6 @@
 
+import logging
+
 from django.conf import settings
 from django.db.models import Prefetch
 from django.http import HttpResponse
@@ -14,7 +16,7 @@ from resources.views.mixins import LocationExplorerViewSetMixin
 from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 from .serializers import DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
-
+logger = logging.getLogger(__name__)
 
 @extend_schema(
     description="Retrieve a list of Upload Categories",
@@ -115,9 +117,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                                                     ExpiresIn=20)
 
         except Exception as e:
-            print(e)
-            print('Could not set up a download url.')
-            return 'Not available for download.'
+            return e
 
     def upload(self, request, *args, **kwargs):
         id = kwargs.get("file_id")
@@ -133,8 +133,9 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             try:
                 result = get_upload_link(uploaded_file.get_key)
                 return HttpResponse(result)
-            except Exception:
-                return "failed to upload"
+            except Exception as e:
+                uploaded_file.delete()
+                raise e
 
     @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):
@@ -145,6 +146,5 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             url = self.generate_download_link(file)
             response = HttpResponse(url, headers={'Content-Disposition': f'attachment; filename="{file.file_name}"'})
             return response
-        except Exception:
-            print('Could not set up download url.')
+        except Exception as e:
             return 'Not available for download.'
