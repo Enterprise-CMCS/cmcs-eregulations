@@ -3,10 +3,8 @@ name: Snyk Scan and Report
 on:
   pull_request:
     branches: [ main ]
-  #push:
-    #branches: [ implementsnyk ]
   schedule:
-    - cron:  '0 4 * * *'  # run every day at midnight
+    - cron:  '0 4 * * *'
 
 permissions:
   id-token: write
@@ -52,7 +50,6 @@ jobs:
               jira-host: ${{ secrets.JIRA_HOST_NAME }}
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
-              #jira-custom-field-key-value: ''
               jira-labels: 'eRegs,snyk'
               jira-title-prefix: '[EREGCSC] - Snyk :'
               is_jira_enterprise: true
