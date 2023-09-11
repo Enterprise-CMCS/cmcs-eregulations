@@ -41,17 +41,18 @@ const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
             <template v-if="doc.subject.length > 0">
                 <div class="document__info-block">
                     <div class="document__subjects">
-                        <template
+                        <SubjectChip
                             v-for="(subject, i) in doc.subject"
                             :key="subject.id + 'x' + i"
-                        >
-                            <SubjectChip :subject-name="subject.full_name" />
-                        </template>
+                            :subject-name="subject.full_name"
+                        />
                     </div>
                 </div>
             </template>
             <div class="document__info-block">
-                <a :href="getDownloadUrl(doc.uid)" class="document__link document__link--view"
+                <a
+                    :href="getDownloadUrl(doc.uid)"
+                    class="document__link document__link--view"
                     >View Document</a
                 >
             </div>
