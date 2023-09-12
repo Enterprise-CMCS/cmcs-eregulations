@@ -19,7 +19,6 @@
         </style>
     {% endblock %}
    {{ block.super }}
-   flag is: {{ EUA_FEATUREFLAG }}
    {% if EUA_FEATUREFLAG == 'true' %}
       <div class="okta_login_container">
         Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}">EUA</a>
