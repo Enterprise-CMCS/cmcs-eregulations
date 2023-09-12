@@ -328,6 +328,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.14
+      # Configure AWS credentials for GitHub Actions
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+      - uses: dkershner6/aws-ssm-getparameters-action@v1
+        with:
+            parameterPairs: "/eregulations/http/test_user = CYPRESS_TEST_USERNAME,
+                /eregulations/http/test_password = CYPRESS_TEST_PASSWORD"
+            withDecryption: "true" # defaults to true
       # Run the cypress tests
       - name: end-to-end tests
         uses: cypress-io/github-action@v5
