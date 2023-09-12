@@ -27,6 +27,7 @@ class SubjectSerializer(serializers.Serializer):
 
 class UploadedFileSerializer(serializers.Serializer, ):
     name = serializers.CharField()
+    file_name = serializers.CharField()
     date = serializers.DateField()
     description = serializers.CharField()
     locations = serializers.SerializerMethodField()
