@@ -439,9 +439,16 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
             },
         ),
         (
+            "Add Bulk Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["bulk_title", "bulk_locations"],
+            },
+        ),
+        (
             None,
             {
-                "fields": ["bulk_title", "bulk_locations", "internal_notes", "location_history"],
+                "fields": ["internal_notes", "location_history"],
             },
         ),
     ]
@@ -570,9 +577,16 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
             },
         ),
         (
+            "Add Bulk Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["bulk_title", "bulk_locations"],
+            },
+        ),
+        (
             None,
             {
-                "fields": ["bulk_title", "bulk_locations", "internal_notes", "location_history"],
+                "fields": ["internal_notes", "location_history"],
             },
         ),
     ]
