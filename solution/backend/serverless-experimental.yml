@@ -35,6 +35,7 @@ provider:
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
+    OIDC_OP_JWKS_ENDPOINT: ${ssm:/eregulations/oidc/jwks_endpoint}
     OIDC_RP_CLIENT_ID: ${ssm:/eregulations/oidc/client_id}
     OIDC_RP_CLIENT_SECRET: ${ssm:/eregulations/oidc/client_secret}
     OIDC_OP_AUTHORIZATION_ENDPOINT: ${ssm:/eregulations/oidc/authorization_endpoint}
