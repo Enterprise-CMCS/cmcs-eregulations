@@ -12,7 +12,7 @@ from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
-from .serializers import DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
+from .serializers import AwsTokenSerializer, DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
 
 
 @extend_schema(
@@ -124,8 +124,9 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             uploaded_file = UploadedFile(file_name=file_name)
             uploaded_file.save()
         if uploaded_file:
-            result = get_upload_link(uploaded_file.get_key)
-            return HttpResponse(result)
+            result = get_upload_link(uploaded_file.get_key())
+            serializer = AwsTokenSerializer(result)
+            return Response(serializer.data)
 
     @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):
