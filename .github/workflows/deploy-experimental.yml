@@ -315,8 +315,10 @@ jobs:
             [1]: ${{ env.django_url }}
           reactions: "+1"
   test-cypress:
-    needs: [deploy-go, deploy-django, build-and-deploy-vue]
+    environment:
+      name: "dev"
     runs-on: ubuntu-20.04
+    needs: [deploy-go, deploy-django, build-and-deploy-vue]
     permissions:
       id-token: write
       contents: read
