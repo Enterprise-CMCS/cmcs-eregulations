@@ -120,9 +120,12 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         if id:
             uploaded_file = UploadedFile.objects.get(uid=id)
             uploaded_file.file_name = file_name
-        else:
+        elif file_name:
             uploaded_file = UploadedFile(file_name=file_name)
             uploaded_file.save()
+        else:
+            raise Exception("File name not provided")
+
         if uploaded_file:
             result = get_upload_link(uploaded_file.get_key())
             serializer = AwsTokenSerializer(result)

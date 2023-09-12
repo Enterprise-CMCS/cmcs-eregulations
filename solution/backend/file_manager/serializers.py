@@ -41,6 +41,7 @@ class UploadedFileSerializer(serializers.Serializer, ):
             return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
         return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
+
 class AwsTokenSerializer(serializers.Serializer):
     url = serializers.CharField()
     fields = serializers.JSONField()

@@ -45,7 +45,10 @@ class UploadedFile(models.Model):
 
     def get_key(self):
         name, extension = os.path.splitext(self.file_name)
-        return 'uploaded_files/' + str(self.uid) + extension
+        if extension:
+            return 'uploaded_files/' + str(self.uid) + extension
+        else:
+            raise Exception("File does not have an extension")
 
     def __str__(self) -> str:
         return str(self.name) + ' ' + str(self.description)
