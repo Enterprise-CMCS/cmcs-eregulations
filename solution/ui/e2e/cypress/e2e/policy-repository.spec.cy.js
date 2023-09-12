@@ -1,6 +1,9 @@
 const TITLE_42 = 42;
 const TITLE_45 = 45;
 
+const username = Cypress.env("ADMIN_USERNAME");
+const password = Cypress.env("ADMIN_PASSWORD");
+
 describe("Policy Repository", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
@@ -26,7 +29,7 @@ describe("Policy Repository", () => {
 
     it("show the policy repository page when logged in", () => {
         cy.viewport("macbook-15");
-        cy.adminLogin({ username: "test", password: "test" });
+        cy.adminLogin({ username, password });
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
@@ -34,7 +37,7 @@ describe("Policy Repository", () => {
 
     it("returns you to the admin login page when you log out", () => {
         cy.viewport("macbook-15");
-        cy.adminLogin({ username: "test", password: "test" });
+        cy.adminLogin({ username, password });
         cy.visit("/policy-repository");
         cy.get("#logout").click();
         cy.get("#login-form").should("be.visible");
