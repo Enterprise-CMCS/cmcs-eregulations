@@ -337,13 +337,6 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      # Get test user credentials from AWS Parameter Store
-      - name: Get test user credentials from AWS Parameter Store
-        uses: dkershner6/aws-ssm-getparameters-action@v1
-        with:
-            parameterPairs: "/eregulations/http/test_user = CYPRESS_TEST_USERNAME,
-                /eregulations/http/test_password = CYPRESS_TEST_PASSWORD"
-            withDecryption: "true" # defaults to true
       # Run the cypress tests
       - name: end-to-end tests
         uses: cypress-io/github-action@v5
