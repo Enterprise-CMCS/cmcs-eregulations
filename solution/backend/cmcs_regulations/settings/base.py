@@ -145,6 +145,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.automated_testing",
                 'cmcs_regulations.context_processors.api_base',
                 'regulations.context_processors.site_config',
+                'regulations.context_processors.eua_config',
                 'regcore.context_processors.regcore_config',
             ),
         },
