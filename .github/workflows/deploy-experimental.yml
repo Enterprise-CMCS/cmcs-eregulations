@@ -315,28 +315,28 @@ jobs:
             [1]: ${{ env.django_url }}
           reactions: "+1"
   test-cypress:
-    permissions:
-      contents: read
-      id-token: write
     needs: [deploy-go, deploy-django, build-and-deploy-vue]
     runs-on: ubuntu-20.04
+    permissions:
+      id-token: write
+      contents: read
     steps:
       # Checkout the code
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: true
+      # Configure AWS credentials for GitHub Actions
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
       # Setup node environment
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18.14
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
       # Run the cypress tests
       - name: end-to-end tests
         uses: cypress-io/github-action@v5
