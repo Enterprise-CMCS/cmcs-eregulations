@@ -551,7 +551,8 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         (
             None,
             {
-                "fields": ["approved", "docket_numbers", "group", "document_number", "name", "correction", "withdrawal", "description", "date", "url", "category", "subjects", "doc_type", "locations"],
+                "fields": ["approved", "docket_numbers", "group", "document_number", "name", "correction", "withdrawal",
+                           "description", "date", "url", "category", "subjects", "doc_type", "locations"],
             },
         ),
         (
