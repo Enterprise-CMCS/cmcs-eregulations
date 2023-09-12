@@ -1,8 +1,8 @@
 const TITLE_42 = 42;
 const TITLE_45 = 45;
 
-const username = Cypress.env("ADMIN_USERNAME");
-const password = Cypress.env("ADMIN_PASSWORD");
+const username = Cypress.env("TEST_USERNAME");
+const password = Cypress.env("TEST_PASSWORD");
 
 describe("Policy Repository", () => {
     beforeEach(() => {
@@ -24,12 +24,12 @@ describe("Policy Repository", () => {
     it("shows the login screen when you visit /policy-repository/ without logging in", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository/");
-        cy.url().should("include", "/admin/");
+        cy.url().should("include", "/admin/login");
     });
 
     it("show the policy repository page when logged in", () => {
         cy.viewport("macbook-15");
-        cy.adminLogin({ username, password });
+        cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
@@ -37,7 +37,7 @@ describe("Policy Repository", () => {
 
     it("returns you to the admin login page when you log out", () => {
         cy.viewport("macbook-15");
-        cy.adminLogin({ username, password });
+        cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
         cy.get("#logout").click();
         cy.get("#login-form").should("be.visible");
