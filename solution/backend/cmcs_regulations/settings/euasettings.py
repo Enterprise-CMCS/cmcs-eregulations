@@ -23,11 +23,13 @@ OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
 OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
 OIDC_OP_JWKS_ENDPOINT = os.environ.get("OIDC_OP_JWKS_ENDPOINT", None)
 OIDC_RP_SIGN_ALGO = 'RS256'
-LOGIN_REDIRECT_URL = BASE_URL + '/admin/'
-LOGOUT_REDIRECT_URL = BASE_URL + '/'
+LOGIN_REDIRECT_URL = '/admin/'
+LOGOUT_REDIRECT_URL = '/'
 
 EUA_FEATUREFLAG = os.environ.get('EUA_FEATUREFLAG', 'false')
 if re.match(r'^dev\d*$', STAGE_ENV):
-    numeric_part = re.sub(r'^dev', '', STAGE_ENV)
-    LOGIN_REDIRECT_URL = BASE_URL.replace('/dev', f'/{numeric_part}') + '/admin/'
-    LOGOUT_REDIRECT_URL = BASE_URL.replace('/dev', f'/{numeric_part}') + '/'
+    LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/admin/"
+    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/"
+elif STAGE_ENV == 'dev' or 'val':
+    LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/admin/"
+    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/"
