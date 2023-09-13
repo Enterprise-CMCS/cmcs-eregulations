@@ -169,6 +169,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="resources")
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     location_history = models.JSONField(default=list)
+    subjects = models.ManyToManyField("file_manager.Subject", blank=True, related_name="resources")
 
     objects = InheritanceManager()
 

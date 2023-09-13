@@ -3,11 +3,14 @@ import re
 import requests
 from defusedxml.minidom import parseString
 from django.contrib import admin, messages
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
+from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
 
 from .models import (
@@ -45,7 +48,6 @@ CONVERSION_REGEX = re.compile(CONVERSION_PATTERN, re.IGNORECASE)
 TITLE_REGEX = re.compile(TITLE_PATTERN, re.IGNORECASE)
 SECTION_APPEND_REGEX = re.compile(SECTION_APPEND_PATTERN, re.IGNORECASE)
 
-
 roman_table = {
     "I": 1,
     "V": 5,
@@ -66,6 +68,47 @@ def roman_to_int(roman):
         num = roman_table[roman[i]]
         result = result - num if 3 * num < result else result + num
     return result
+
+
+class OktaClaim:
+    def __init__(self, email, name, preferred_username, jobcodes):
+        self.email = email
+        self.name = name
+        self.preferred_username = preferred_username
+        self.jobcodes = jobcodes
+
+
+class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
+    def verify_claims(self, claims: OktaClaim) -> bool:
+        return (
+                super().verify_claims(claims)
+                and claims.get("email_verified", False)
+        )
+
+    @transaction.atomic
+    def create_user(self, claims: OktaClaim) -> User:
+        print(f"Creating user {claims.get('email')}")
+        print(f"Jobcodes: {claims.get('jobcodes')}")
+        print(f"Name: {claims.get('name')}")
+        print(f"Preferred username: {claims.get('preferred_username')}")
+        user: User = self.UserModel.objects.create_user(
+            claims.get("email"),
+            None,  # password
+            first_name=claims["given_name"],
+            last_name=claims["family_name"],
+        )
+        user.save()
+
+        return user
+
+    @transaction.atomic
+    def update_user(self, user: User, claims: OktaClaim) -> User:
+        """Update existing user with new claims, if necessary save, and return user"""
+        user.first_name = claims["given_name"]
+        user.last_name = claims["family_name"]
+        user.save()
+
+        return user
 
 
 @admin.register(SiteConfiguration)
