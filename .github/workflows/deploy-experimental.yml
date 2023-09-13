@@ -319,9 +319,6 @@ jobs:
       name: "dev"
     runs-on: ubuntu-20.04
     needs: [deploy-go, deploy-django, build-and-deploy-vue]
-    permissions:
-      id-token: write
-      contents: read
     steps:
       # Checkout the code
       - name: Checkout
