@@ -67,14 +67,6 @@ MIDDLEWARE = [
     'regulations.middleware.NoIndex',
     'regcore.middleware.HtmlApi',
 ]
-#  OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
-# Add 'mozilla_django_oidc' authentication backend
-
-# OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
-# OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
-# OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
-# OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
-# OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
@@ -92,6 +84,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'django.core.context_processors.request',
     'regulations.context_processors.site_config',
+    'regulations.context_processors.eua_config',
     'cmcs_regulations.context_processors.api_base',
     'regcore.context_processors.regcore_config',
 )
@@ -152,6 +145,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.automated_testing",
                 'cmcs_regulations.context_processors.api_base',
                 'regulations.context_processors.site_config',
+                'regulations.context_processors.eua_config',
                 'regcore.context_processors.regcore_config',
             ),
         },
