@@ -136,7 +136,7 @@ class SubCategoryAdmin(CategoryAdmin):
 
 class AbstractResourceAdmin(BaseAdmin):
     actions = [actions.mark_approved, actions.mark_not_approved]
-    filter_horizontal = ("locations",)
+    filter_horizontal = ("locations", "subjects")
     admin_priority = 0
     empty_value_display = "NONE"
     ordering = ("-updated_at", "-date", "name", "category", "-created_at")
@@ -416,7 +416,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
-    fields = ("approved", "name", "description", "date", "url", "category",
+    fields = ("approved", "name", "description", "date", "url", "category", "subjects",
               "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history")
 
     def get_urls(self):
@@ -520,7 +520,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
                           "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
     fields = ("approved", "docket_numbers", "group", "document_number", "name", "correction",
-              "withdrawal", "description", "date", "url", "category", "doc_type", "locations",
+              "withdrawal", "description", "date", "url", "category", "subjects", "doc_type", "locations",
               "bulk_title", "bulk_locations", "internal_notes", "location_history")
 
     def in_group(self, obj):
