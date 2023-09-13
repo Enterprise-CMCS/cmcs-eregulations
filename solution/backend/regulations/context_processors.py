@@ -11,7 +11,7 @@ def site_config(request):
 
 
 def eua_config(request):
-    EUA_FEATUREFLAG = os.environ.get('EUA_FEATUREFLAG', 'false')
+    EUA_FEATUREFLAG = bool(os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true')
     return {
         'EUA_FEATUREFLAG': EUA_FEATUREFLAG,
     }
