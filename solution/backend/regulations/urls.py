@@ -56,6 +56,6 @@ urlpatterns = [
         path("acts", ActListViewSet.as_view({
             "get": "list",
         })),
-        path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     ])),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
