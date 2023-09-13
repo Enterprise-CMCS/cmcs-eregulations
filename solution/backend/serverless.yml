@@ -30,6 +30,7 @@ provider:
     DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password}
     DJANGO_SETTINGS_MODULE: ${ssm:/eregulations/django_settings_module}
     ALLOWED_HOST: '.amazonaws.com'
+    STAGE_ENV: ${self:custom.stage}
     STATIC_URL: ${self:custom.settings.static_url}
     BASE_URL: ${ssm:/eregulations/base_url}
     CUSTOM_URL: ${ssm:/eregulations/custom_url}
