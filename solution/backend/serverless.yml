@@ -43,7 +43,7 @@ provider:
     OIDC_OP_AUTHORIZATION_ENDPOINT: ${ssm:/eregulations/oidc/authorization_endpoint}
     OIDC_OP_TOKEN_ENDPOINT: ${ssm:/eregulations/oidc/token_endpoint}
     OIDC_OP_JWKS_ENDPOINT: ${ssm:/eregulations/oidc/jwks_endpoint}
-    OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/userinfo_endpoint}
+    OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/user_endpoint}
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
     DEPLOY_NUMBER: ${env:RUN_ID}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
