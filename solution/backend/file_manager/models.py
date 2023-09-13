@@ -48,7 +48,7 @@ class UploadedFile(models.Model):
         if extension:
             return 'uploaded_files/' + str(self.uid) + extension
         else:
-            raise Exception("File does not have an extension")
+            raise ValueError("File does not have an extension")
 
     def __str__(self) -> str:
         return str(self.name) + ' ' + str(self.description)

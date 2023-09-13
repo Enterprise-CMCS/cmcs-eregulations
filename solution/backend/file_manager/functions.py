@@ -4,7 +4,7 @@ from django.conf import settings
 
 
 def establish_client():
-    if settings.DEBUG:
+    if settings.USE_AWS_TOKEN:
         return boto3.client('s3',
                             aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
