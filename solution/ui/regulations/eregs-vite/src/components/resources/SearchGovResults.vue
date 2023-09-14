@@ -3,24 +3,19 @@ import { formatDate } from "utilities/filters";
 
 import RelatedSections from "@/components/search/RelatedSections.vue";
 import ResultsItem from "@/components/search/ResultsItem.vue";
-import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
 
-defineProps({
+const props = defineProps({
     base: {
         type: String,
-        required: true,
-    },
-    partsLastUpdated: {
-        type: Object,
-        required: true,
-    },
-    partsList: {
-        type: Array,
         required: true,
     },
     results: {
         type: Array,
         default: () => [],
+    },
+    partsLastUpdated: {
+        type: Object,
+        default: () => {},
     },
 });
 
@@ -166,7 +161,6 @@ const formatSnippet = (snippet, startChar, stopChar) => {
                         :base="base"
                         :item="item"
                         :parts-last-updated="partsLastUpdated"
-                        :parts-list="partsList"
                     />
                 </template>
             </ResultsItem>
