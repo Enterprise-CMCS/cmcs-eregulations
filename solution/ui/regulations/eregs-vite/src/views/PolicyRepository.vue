@@ -59,7 +59,7 @@ const getDocList = async () => {
     }
 };
 
-const getDownloadUrl = (uid) => `${props.apiUrl}file_manager/file/${uid}`;
+const getDownloadUrl = (uid) => `${props.apiUrl}file_manager/files/${uid}`;
 
 getDocList();
 </script>
