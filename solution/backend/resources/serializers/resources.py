@@ -4,6 +4,7 @@ from django.db.models import Q
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from file_manager.serializers import SubjectSerializer
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -42,6 +43,7 @@ class AbstractResourceSerializer(serializers.Serializer):
     snippet = serializers.SerializerMethodField()
     category = serializers.SerializerMethodField()
     locations = serializers.SerializerMethodField()
+    subjects = SubjectSerializer(many=True)
 
     type = PolymorphicTypeField()
 

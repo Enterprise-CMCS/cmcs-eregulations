@@ -1,4 +1,7 @@
 
+
+import requests
+from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
@@ -7,7 +10,7 @@ from django.utils.html import format_html
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
-from .functions import establish_client
+from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 
 
@@ -27,30 +30,46 @@ class SubjectAdmin(BaseAdmin):
     fields = ("full_name", "short_name", "abbreviation")
 
 
+class UploadAdminForm(forms.ModelForm):
+    file_path = forms.FileField(required=False)
+
+    class Meta:
+        model = UploadedFile
+        fields = '__all__'
+
+
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
+    form = UploadAdminForm
     list_display = ("name",)
     search_fields = ["name"]
     ordering = ("name",)
     filter_horizontal = ("locations", "subject")
-    readonly_fields = ('download_file',)
-    fields = ("name", "file", 'date', 'description',
+    readonly_fields = ('download_file', 'file_name')
+    fields = ("name", 'file_name', 'file_path', 'date', 'description',
               'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
 
-    def upload_file(self, file):
-        s3_client = establish_client()
-        s3_client.put_object(Body=file,
-                             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-                             Key="uploaded_files/" + file._name,
-                             ContentType=file.content_type)
+    def save_model(self, request, obj, form, change):
+        path = form.cleaned_data.get("file_path")
+        if path:
+            obj.file_name = path._name
+            self.upload_file(path, obj)
+        super().save_model(request, obj, form, change)
+
+    def upload_file(self, file, obj):
+        key = obj.get_key()
+        result = get_upload_link(key)
+        requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
 
     def del_file(self, obj):
         s3_client = establish_client()
+        key = obj.get_key()
+
         try:
-            s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=f"{obj.file.name}")
+            s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key)
         except Exception:
             print("Unable to delete")
 
