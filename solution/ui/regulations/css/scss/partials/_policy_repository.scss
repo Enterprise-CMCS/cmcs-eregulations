@@ -8,9 +8,13 @@
     #policyRepositoryApp.repository-view {
         overflow: auto;
         margin-bottom: 1em;
-        padding: 0 45px;
         display: flex;
         flex-direction: column;
+
+        &.ds-l-container {
+            margin: 0;
+            max-width: 100%;
+        }
 
         .doc__list {
             margin-top: 36px;

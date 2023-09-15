@@ -116,17 +116,24 @@ getPartsLastUpdated();
                 </template>
             </HeaderComponent>
         </header>
-        <div id="policyRepositoryApp" class="repository-view">
-            <template v-if="policyDocList.loading || partsLastUpdated.loading">
-                <p>Loading...</p>
-            </template>
-            <template v-else>
-                <PolicyResults
-                    :base="homeUrl"
-                    :results="policyDocList.results"
-                    :parts-last-updated="partsLastUpdated.results"
-                />
-            </template>
+        <div id="policyRepositoryApp" class="repository-view ds-l-container">
+            <div class="ds-l-row">
+                <div class="ds-l-md-col--4 ds-l-lg-col--3">Sidebar</div>
+                <div class="ds-l-md-col--8 ds-l-lg-col--9">
+                    <template
+                        v-if="policyDocList.loading || partsLastUpdated.loading"
+                    >
+                        <p>Loading...</p>
+                    </template>
+                    <template v-else>
+                        <PolicyResults
+                            :base="homeUrl"
+                            :results="policyDocList.results"
+                            :parts-last-updated="partsLastUpdated.results"
+                        />
+                    </template>
+                </div>
+            </div>
         </div>
     </body>
 </template>
