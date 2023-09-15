@@ -1,14 +1,13 @@
-import re
-from functools import partial
-
 from django.db import models
-from django_jsonform.models.fields import JSONField
 from solo.models import SingletonModel
 
-from common.fields import NaturalSortField, VariableDateField
-
-DASH_PATTERN = r"[-—–-–]|&#x2013;"
-DASH_REGEX = re.compile(DASH_PATTERN, re.IGNORECASE)
+from common.fields import (
+    CfrRefField,
+    NaturalSortField,
+    StatuteRefField,
+    UscRefField,
+    VariableDateField,
+)
 
 ROMAN_TABLE = [
     [1000, "M"],
@@ -78,12 +77,6 @@ class SiteConfiguration(SingletonModel):
         verbose_name = "Site Configuration"
 
 
-def convert_dashes(exceptions, key):
-    for i in exceptions:
-        i[key] = DASH_REGEX.sub("-", i[key])
-    return exceptions
-
-
 class StatuteLinkConfiguration(SingletonModel):
     link_statute_refs = models.BooleanField(
         default=True,
@@ -97,59 +90,14 @@ class StatuteLinkConfiguration(SingletonModel):
         verbose_name="Link U.S.C. Refs",
     )
 
-    statute_ref_exceptions = JSONField(
-        default=list,
-        blank=True,
+    statute_ref_exceptions = StatuteRefField(
         help_text="Statute references that are listed here will not be automatically linked.",
         verbose_name="Statute Ref Exceptions",
-        pre_save_hook=partial(convert_dashes, key="section"),
-        schema={
-            "type": "list",
-            "minItems": 0,
-            "items": {
-                "type": "dict",
-                "keys": {
-                    "act": {
-                        "type": "string",
-                        "default": "Social Security Act",
-                        "placeholder": "Social Security Act",
-                        "required": True,
-                    },
-                    "section": {
-                        "type": "string",
-                        "required": True,
-                        "placeholder": "1902(a)(1)(C)",
-                    },
-                },
-            },
-        },
     )
 
-    usc_ref_exceptions = JSONField(
-        default=list,
-        blank=True,
+    usc_ref_exceptions = UscRefField(
         help_text="U.S.C. references that are listed here will not be automatically linked.",
         verbose_name="U.S.C. Ref Exceptions",
-        pre_save_hook=partial(convert_dashes, key="section"),
-        schema={
-            "type": "list",
-            "minItems": 0,
-            "items": {
-                "type": "dict",
-                "keys": {
-                    "title": {
-                        "type": "string",
-                        "required": True,
-                        "placeholder": "42",
-                    },
-                    "section": {
-                        "type": "string",
-                        "required": True,
-                        "placeholder": "1902(a)(1)(C)",
-                    },
-                },
-            },
-        },
     )
 
     @property
@@ -217,31 +165,9 @@ class RegulationLinkConfiguration(SingletonModel):
         verbose_name="Link CFR Refs",
     )
 
-    cfr_ref_exceptions = JSONField(
-        default=list,
-        blank=True,
+    cfr_ref_exceptions = CfrRefField(
         help_text="CFR-type references that are listed here will not be automatically linked.",
         verbose_name="CFR Ref Exceptions",
-        pre_save_hook=partial(convert_dashes, key="reference"),
-        schema={
-            "type": "list",
-            "minItems": 0,
-            "items": {
-                "type": "dict",
-                "keys": {
-                    "title": {
-                        "type": "string",
-                        "required": True,
-                        "placeholder": "42",
-                    },
-                    "reference": {
-                        "type": "string",
-                        "required": True,
-                        "placeholder": "123.45(a)(1)",
-                    },
-                },
-            },
-        },
     )
 
     @property

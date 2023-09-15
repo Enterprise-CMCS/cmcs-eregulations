@@ -416,8 +416,42 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
-    fields = ("approved", "name", "description", "date", "url", "category", "subjects",
-              "locations", "bulk_title", "bulk_locations", "internal_notes", "location_history")
+
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["approved", "name", "description", "date", "url", "category", "subjects", "locations"],
+            },
+        ),
+        (
+            "Statute Reference Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["statute_locations"],
+            },
+        ),
+        (
+            "U.S.C. Reference Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["usc_locations"],
+            },
+        ),
+        (
+            "Add Bulk Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["bulk_title", "bulk_locations"],
+            },
+        ),
+        (
+            None,
+            {
+                "fields": ["internal_notes", "location_history"],
+            },
+        ),
+    ]
 
     def get_urls(self):
         urls = super().get_urls()
@@ -519,9 +553,43 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
                           "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]
-    fields = ("approved", "docket_numbers", "group", "document_number", "name", "correction",
-              "withdrawal", "description", "date", "url", "category", "subjects", "doc_type", "locations",
-              "bulk_title", "bulk_locations", "internal_notes", "location_history")
+
+    fieldsets = [
+        (
+            None,
+            {
+                "fields": ["approved", "docket_numbers", "group", "document_number", "name", "correction", "withdrawal",
+                           "description", "date", "url", "category", "subjects", "doc_type", "locations"],
+            },
+        ),
+        (
+            "Statute Reference Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["statute_locations"],
+            },
+        ),
+        (
+            "U.S.C. Reference Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["usc_locations"],
+            },
+        ),
+        (
+            "Add Bulk Locations",
+            {
+                "classes": ["collapse"],
+                "fields": ["bulk_title", "bulk_locations"],
+            },
+        ),
+        (
+            None,
+            {
+                "fields": ["internal_notes", "location_history"],
+            },
+        ),
+    ]
 
     def in_group(self, obj):
         group = str(obj.group)
