@@ -24,9 +24,6 @@ class SubjectSerializer(serializers.Serializer):
     class Meta:
         model = Subject
 
-class DownloadFileSerializer(serializers.Serializer):
-    url = serializers.CharField()
-    file_name = serializers.CharField()
 
 class UploadedFileSerializer(serializers.Serializer, ):
     name = serializers.CharField()

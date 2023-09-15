@@ -1,19 +1,25 @@
+
+import requests
 from django.conf import settings
 from django.db.models import Prefetch
-from django.http import HttpResponse, HttpResponseRedirect, FileResponse
-import urllib
+from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-import requests
+
 from common.api import OpenApiQueryParameter
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
-from .serializers import AwsTokenSerializer, DocumentTypeSerializer, DownloadFileSerializer, SubjectSerializer, UploadedFileSerializer
+from .serializers import (
+    AwsTokenSerializer,
+    DocumentTypeSerializer,
+    SubjectSerializer,
+    UploadedFileSerializer,
+)
 
 
 @extend_schema(
