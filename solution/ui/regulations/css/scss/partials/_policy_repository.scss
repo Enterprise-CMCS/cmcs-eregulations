@@ -12,13 +12,20 @@
         flex-direction: column;
 
         &.ds-l-container {
+            padding-top: 1.5em;
             margin: 0;
             max-width: 100%;
         }
 
-        .doc__list {
-            margin-top: 36px;
+        h2 {
+            font-family: "Open Sans", Helvetica, sans-serif;
+        }
 
+        .sidebar__filters {
+            border-right: 2px solid $border_color;
+        }
+
+        .doc__list {
             .doc-list__document {
                 padding: 0.75em 1em;
                 border-bottom: 1px solid $border_color;

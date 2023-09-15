@@ -118,8 +118,10 @@ getPartsLastUpdated();
         </header>
         <div id="policyRepositoryApp" class="repository-view ds-l-container">
             <div class="ds-l-row">
-                <div class="ds-l-md-col--4 ds-l-lg-col--3">Sidebar</div>
-                <div class="ds-l-md-col--8 ds-l-lg-col--9">
+                <div class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__filters">
+                    <h2>Find Policy Documents</h2>
+                </div>
+                <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
                     <template
                         v-if="policyDocList.loading || partsLastUpdated.loading"
                     >
