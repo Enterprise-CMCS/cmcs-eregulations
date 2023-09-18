@@ -1,8 +1,7 @@
 
-import requests
 from django.conf import settings
 from django.db.models import Prefetch
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
