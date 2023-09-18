@@ -18,4 +18,10 @@ urlpatterns = [
     path("file/<file_id>", UploadedFileViewset.as_view({
         "get": "download",
     }), name="file-download"),
+    path("file_id/<file_id>/file_name/<file_name>", UploadedFileViewset.as_view({
+        "put": "upload",
+    }), name="file-upload"),
+    path("file_name/<file_name>", UploadedFileViewset.as_view({
+        "post": "upload",
+    }), name="file-upload-new"),
 ]

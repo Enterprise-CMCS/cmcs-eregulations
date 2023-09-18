@@ -196,12 +196,13 @@ function fetchJson({
             if (_isBoolean(isOk) && !isOk) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
-                json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-                if (cacheResponse)
+                if (cacheResponse) {
+                    json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
                     localforage.setItem(
                         url.replace(apiPath, merged.method),
                         json
                     );
+                }
                 return json;
             }
         });
@@ -675,7 +676,11 @@ const getStatutes = async ({
  */
 const getPolicyDocList = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}file_manager/file_list`, {}, cacheResponse);
+        return httpApiGetLegacy(
+            `${apiUrl}file_manager/file_list`,
+            {},
+            cacheResponse
+        );
     }
 
     return httpApiGet("file_manager/file_list", cacheResponse);

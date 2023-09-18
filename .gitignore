@@ -4,6 +4,7 @@ node_modules
 __pycache__/
 e2e/cypress/videos
 solution/ui/e2e/cypress/videos
+cypress.env.json
 .env
 solution/backend/regulations/static/*
 solution/static-assets/regulations/*

@@ -1,6 +1,12 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 
+{% block footer %}
+    <footer>
+        {% include "regulations/partials/footer.html" with spa_footer=True %}
+    </footer>
+{% endblock %}
+
 {% block post_footer %}
     <script src="{% static '/vite/index.js' %}?{{ DEPLOY_NUMBER }}"></script>
 {% endblock %}

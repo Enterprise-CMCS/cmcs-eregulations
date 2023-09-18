@@ -22,6 +22,7 @@ $eregs-image-path: "../images" !default;
 @import 'application_settings';
 @import 'layout';
 @import "partials/typography";
+@import "partials/related_sections";
 @import "partials/site_homepage";
 @import "partials/search";
 @import "partials/statutes";

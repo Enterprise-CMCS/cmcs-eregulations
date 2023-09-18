@@ -4,6 +4,7 @@ from django.db.models import F, OuterRef, Prefetch, Q, Subquery
 
 from common.api import OpenApiQueryParameter
 from common.mixins import OptionalPaginationMixin
+from file_manager.models import Subject
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -226,12 +227,15 @@ class ResourceExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixi
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")\
                                             .contains_fr_docs()
+        subjects_prefetch = Subject.objects.all()
         query = query.select_subclasses().prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("category", queryset=category_prefetch),
+            Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("related_resources", AbstractResource.objects.filter(approved=True).select_subclasses().prefetch_related(
                 Prefetch("locations", queryset=locations_prefetch),
                 Prefetch("category", queryset=category_prefetch),
+                Prefetch("subjects", queryset=subjects_prefetch),
             )),
         )
 

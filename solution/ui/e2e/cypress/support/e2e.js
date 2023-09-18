@@ -28,8 +28,17 @@ import "cypress-axe";
 import "cypress-plugin-tab";
 
 import { getResources, getSearchGovResources } from "./api-request-commands";
-import { checkBlockingModal, checkFlashBanner, clickHeaderLink, goHome } from"./common-commands/header";
-import { jumpToRegulationPart, jumpToRegulationPartSection } from "./common-commands/jumpTo";
+import {
+    checkBlockingModal,
+    checkFlashBanner,
+    clickHeaderLink,
+    goHome,
+} from "./common-commands/header";
+import {
+    jumpToRegulationPart,
+    jumpToRegulationPartSection,
+} from "./common-commands/jumpTo";
+import { eregsLogin } from "./common-commands/login";
 import { clickStatuteLink } from "./common-commands/statutes";
 import { validateSchema } from "./validate-schema-command";
 
@@ -41,7 +50,11 @@ Cypress.Commands.add("getResources", getResources);
 Cypress.Commands.add("getSearchGovResources", getSearchGovResources);
 Cypress.Commands.add("goHome", goHome);
 Cypress.Commands.add("jumpToRegulationPart", jumpToRegulationPart);
-Cypress.Commands.add("jumpToRegulationPartSection", jumpToRegulationPartSection);
+Cypress.Commands.add(
+    "jumpToRegulationPartSection",
+    jumpToRegulationPartSection
+);
+Cypress.Commands.add("eregsLogin", eregsLogin);
 Cypress.Commands.add("validateSchema", validateSchema);
 
 // Print cypress-axe violations to the terminal

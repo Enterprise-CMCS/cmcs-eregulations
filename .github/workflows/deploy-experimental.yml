@@ -315,14 +315,29 @@ jobs:
             [1]: ${{ env.django_url }}
           reactions: "+1"
   test-cypress:
-    needs: [deploy-go, deploy-django, build-and-deploy-vue]
+    environment:
+      name: "dev"
     runs-on: ubuntu-20.04
+    needs: [deploy-go, deploy-django, build-and-deploy-vue]
     steps:
       # Checkout the code
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: true
+      # Configure AWS credentials for GitHub Actions
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+      # Get test user credentials from AWS Parameter Store
+      - name: Get test user credentials
+        uses: dkershner6/aws-ssm-getparameters-action@v1
+        with:
+            parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
+                /eregulations/http/password = CYPRESS_TEST_PASSWORD"
+            withDecryption: "true" # defaults to true
       # Setup node environment
       - name: Setup Node
         uses: actions/setup-node@v3

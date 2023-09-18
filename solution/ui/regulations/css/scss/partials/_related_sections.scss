@@ -1,0 +1,35 @@
+//----------------------------------
+// Related Sections component styles
+//----------------------------------
+
+@import "../application_settings";
+
+.related-sections {
+    margin-top: 8px;
+    margin-bottom: 0px;
+
+    .related-sections-title {
+        @include common-context-related-sections;
+
+        text-transform: uppercase;
+    }
+
+    .title__span,
+    .section-sign,
+    .pipe-separator {
+        color: $mid_gray;
+        font-size: 14px;
+    }
+
+    .related-section-link {
+        @include common-context-related-sections;
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    .related-sections-none {
+        @include common-context-related-sections;
+    }
+}
