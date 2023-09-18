@@ -86,8 +86,6 @@ const getDocList = async () => {
     }
 };
 
-const getDownloadUrl = (uid) => `${props.apiUrl}file-manager/files/${uid}`;
-
 getDocList();
 getPartsLastUpdated();
 </script>
