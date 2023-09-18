@@ -3,6 +3,7 @@ import { provide, ref } from "vue";
 import {
     getLastUpdatedDates,
     getPolicyDocList,
+    getPolicyDocSubjects,
     getTitles,
 } from "utilities/api";
 
@@ -86,7 +87,25 @@ const getDocList = async () => {
     }
 };
 
+const policyDocSubjects = ref({
+    results: [],
+    loading: true,
+});
+
+const getDocSubjects = async () => {
+    try {
+        policyDocSubjects.value.results = await getPolicyDocSubjects({
+            apiUrl: props.apiUrl,
+        });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        policyDocSubjects.value.loading = false;
+    }
+};
+
 getDocList();
+getDocSubjects();
 getPartsLastUpdated();
 </script>
 

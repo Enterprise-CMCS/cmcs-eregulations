@@ -686,6 +686,22 @@ const getPolicyDocList = async ({ apiUrl, cacheResponse = true }) => {
     return httpApiGet("file_manager/file_list", cacheResponse);
 };
 
+/**
+ *
+ *
+ */
+const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(
+            `${apiUrl}file_manager/subjects`,
+            {},
+            cacheResponse
+        );
+    }
+
+    return httpApiGet("file_manager/subjects", cacheResponse);
+}
+
 export {
     config,
     configure,
@@ -695,8 +711,12 @@ export {
     getCategories,
     getDecodedIdToken,
     getFormattedPartsList,
+    getGovInfoLinks,
+    getLastParserSuccessDate,
     getLastUpdatedDates,
     getParts,
+    getPolicyDocList,
+    getPolicyDocSubjects,
     getRecentResources,
     getRegSearchResults,
     getSearchGovResources,
@@ -713,7 +733,4 @@ export {
     removeCacheItem,
     setCacheItem,
     setIdToken,
-    getLastParserSuccessDate,
-    getGovInfoLinks,
-    getPolicyDocList,
 };
