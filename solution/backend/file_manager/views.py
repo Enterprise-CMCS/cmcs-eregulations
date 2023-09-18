@@ -117,7 +117,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
         return s3_client.generate_presigned_url('get_object',
                                                 Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                                                        'Key': key},
+                                                        'Key': key,
+                                                        'ResponseContentDisposition': f"attachment;filename={obj.file_name}"},
                                                 ExpiresIn=20)
 
     def upload(self, request, *args, **kwargs):
