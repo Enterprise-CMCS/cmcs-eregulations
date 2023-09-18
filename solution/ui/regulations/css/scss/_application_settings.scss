@@ -129,6 +129,8 @@ $jump_to_submit_disabled: $mid_gray_3;
 $jump_to_submit_active: $mid_blue;
 $jump_to_submit_active_focus: $dark_blue;
 
+$policy_subject_chip_background: $light_blue_2;
+
 // Borders
 
 $border_color: $light_gray;
@@ -142,6 +144,7 @@ $formula_left_border: $light_blue;
 $primary_text_color: $dark_gray;
 $secondary_text_color: $mid_gray;
 $reverse_text_color: $white;
+$policy_subject_chip_text: $mid_blue;
 
 // Indicators
 
@@ -514,4 +517,17 @@ select {
     @include screen-eds-sm {
         scroll-margin-top: $header_height + $view_compare_height + 37px;
     }
+}
+
+// -------------------------
+// Other Common Settings
+// -------------------------
+
+// Related Sections styles
+// used across Search Results and Policy Repository
+@mixin common-context-related-sections {
+    color: $mid_gray;
+    font-size: $font-size-sm;
+    font-weight: 400;
+    line-height: 22px;
 }

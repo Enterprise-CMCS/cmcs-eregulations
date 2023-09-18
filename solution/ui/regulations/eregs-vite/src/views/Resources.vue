@@ -133,13 +133,11 @@
                 <div class="results-column">
                     <ResourcesResultsContainer
                         :isLoading="isLoading"
-                        :base="homeUrl"
                         :page="page"
                         :page-size="pageSize"
                         :categories="categories"
                         :content="supplementalContent"
                         :count="supplementalContentCount"
-                        :partsList="filters.part.listItems"
                         :partsLastUpdated="partsLastUpdated"
                         :query="searchQuery"
                         :sortMethod="sortMethod"
@@ -230,10 +228,6 @@ export default {
         statutesUrl: {
             type: String,
             default: "/statutes/",
-        },
-        host: {
-            type: String,
-            default: "",
         },
     },
 
@@ -942,6 +936,12 @@ export default {
                 }
             },
         },
+    },
+
+    provide() {
+        return {
+            base: this.homeUrl,
+        };
     },
 
     beforeCreate() {},

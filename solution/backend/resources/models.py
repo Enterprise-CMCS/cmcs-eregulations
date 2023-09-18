@@ -6,7 +6,12 @@ from django_jsonform.models.fields import ArrayField
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
 
-from common.fields import NaturalSortField, VariableDateField
+from common.fields import (
+    NaturalSortField,
+    StatuteRefField,
+    UscRefField,
+    VariableDateField,
+)
 
 
 # Field mixins
@@ -170,6 +175,9 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     location_history = models.JSONField(default=list)
     subjects = models.ManyToManyField("file_manager.Subject", blank=True, related_name="resources")
+
+    statute_locations = StatuteRefField(verbose_name="Statute Reference Locations")
+    usc_locations = UscRefField(verbose_name="U.S.C. Reference Locations")
 
     objects = InheritanceManager()
 

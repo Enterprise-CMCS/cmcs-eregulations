@@ -1,6 +1,10 @@
 <script setup>
-import { ref } from "vue";
-import { getPolicyDocList } from "utilities/api";
+import { provide, ref } from "vue";
+import {
+    getLastUpdatedDates,
+    getPolicyDocList,
+    getTitles,
+} from "utilities/api";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
@@ -9,6 +13,7 @@ import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vu
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -41,6 +46,28 @@ const props = defineProps({
     },
 });
 
+provide("apiUrl", props.apiUrl);
+provide("base", props.homeUrl);
+
+const partsLastUpdated = ref({
+    results: {},
+    loading: true,
+});
+
+const getPartsLastUpdated = async () => {
+    try {
+        const titles = await getTitles();
+        partsLastUpdated.value.results = await getLastUpdatedDates(
+            props.apiUrl,
+            titles
+        );
+    } catch (error) {
+        console.error(error);
+    } finally {
+        partsLastUpdated.value.loading = false;
+    }
+};
+
 const policyDocList = ref({
     results: [],
     loading: true,
@@ -59,9 +86,10 @@ const getDocList = async () => {
     }
 };
 
-const getDownloadUrl = (uid) => `${props.apiUrl}file_manager/files/${uid}`;
+const getDownloadUrl = (uid) => `${props.apiUrl}file-manager/files/${uid}`;
 
 getDocList();
+getPartsLastUpdated();
 </script>
 
 <template>
@@ -91,27 +119,16 @@ getDocList();
             </HeaderComponent>
         </header>
         <div id="policyRepositoryApp" class="repository-view">
-            <template v-if="policyDocList.loading">
+            <template v-if="policyDocList.loading || partsLastUpdated.loading">
                 <p>Loading...</p>
             </template>
-            <template v-else-if="policyDocList.results.length > 0">
-                <div
-                    v-for="doc in policyDocList.results"
-                    :key="doc.uid"
-                    class="doc-list__item"
-                >
-                    <p>Name: {{ doc.name }}</p>
-                    <p>Description: {{ doc.description }}</p>
-                    <p>UID: {{ doc.uid }}</p>
-                    <a :href="getDownloadUrl(doc.uid)">Download</a>
-                    <p>Related Citations:</p>
-                    <p v-for="loc in doc.locations">
-                        {{ loc.title }} CFR § {{ loc.part }}.{{ loc.section_id }}
-                    </p>
-                </div>
-            </template>
             <template v-else>
-                <p>No results found.</p>
+                <PolicyResults
+                    :base="homeUrl"
+                    :results="policyDocList.results"
+                    :parts-last-updated="partsLastUpdated.results"
+                />
+            </template>
         </div>
     </body>
 </template>

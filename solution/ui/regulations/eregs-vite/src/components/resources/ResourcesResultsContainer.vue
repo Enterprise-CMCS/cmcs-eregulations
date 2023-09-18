@@ -50,14 +50,12 @@
             </div>
             <template v-if="!isLoading">
                 <ResourcesResults
-                    :base="base"
-                    :results="filteredContent"
+                    :results="content"
                     :parts-last-updated="partsLastUpdated"
-                    :parts-list="partsList"
                     view="resources"
                 >
                     <template #empty-state>
-                        <template v-if="filteredContent && filteredContent.length == 0">
+                        <template v-if="content && content.length == 0">
                             <SearchEmptyState
                                 :eregs_url="regulationsSearchUrl"
                                 eregs_url_label="eRegulations regulation text"
@@ -68,7 +66,7 @@
                         </template>
                     </template>
                     <template #pagination>
-                        <template v-if="filteredContent && filteredContent.length > 0">
+                        <template v-if="content && content.length > 0">
                             <PaginationController
                                 :count="count"
                                 :page="page"
@@ -108,10 +106,6 @@ export default {
     },
 
     props: {
-        base: {
-            type: String,
-            required: true,
-        },
         content: {
             type: Array,
             required: false,
@@ -138,11 +132,6 @@ export default {
             type: Boolean,
             required: false,
             default: false,
-        },
-        partsList: {
-            type: Array,
-            required: true,
-            default: () => [],
         },
         partsLastUpdated: {
             type: Object,
@@ -190,6 +179,8 @@ export default {
         },
     },
 
+    inject: ["base"],
+
     data() {
         return {
             activeSortMethod: this.sortMethod,
@@ -197,15 +188,6 @@ export default {
     },
 
     computed: {
-        filteredContent() {
-            return this.content.map((item) => {
-                const copiedItem = JSON.parse(JSON.stringify(item));
-                copiedItem.locations = item.locations.filter(
-                    (location) => this.partsLastUpdated[location.part]
-                );
-                return copiedItem;
-            });
-        },
         sortMethodTitle() {
             return SORT_METHODS[this.sortMethod];
         },
