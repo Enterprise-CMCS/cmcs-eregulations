@@ -1,8 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
-import {
-    getPolicyDocSubjects,
-} from "utilities/api";
+import { getPolicyDocSubjects } from "utilities/api";
 
 const props = defineProps({
     prop1: {
@@ -14,6 +12,12 @@ const props = defineProps({
         required: true,
     },
 });
+
+const subjectClick = (event) => {
+    console.log("event", event.currentTarget);
+};
+
+const selectedSubject = ref();
 
 const policyDocSubjects = ref({
     results: [],
@@ -37,18 +41,28 @@ getDocSubjects();
 
 <template>
     <div class="subjects__select-container">
-        <select class="ds-c-field subjects__select">
-            <option value="">- Select a subject -</option>
-            <option
+        <h3>By Subject Matter</h3>
+        <ul class="subjects__list">
+            <li
                 v-for="subject in policyDocSubjects.results"
                 :key="subject.id"
-                :value="subject.id"
+                class="subjects__li sidebar__li"
             >
-                {{ subject.full_name }}
-            </option>
-        </select>
+                <button
+                    :data-full-name="subject.full_name"
+                    :data-id="subject.id"
+                    :title="subject.full_name"
+                    @click="subjectClick"
+                >
+                    {{
+                        subject.short_name ||
+                        subject.abbreviation ||
+                        subject.full_name
+                    }}
+                </button>
+            </li>
+        </ul>
     </div>
 </template>
 
 <style></style>
-
