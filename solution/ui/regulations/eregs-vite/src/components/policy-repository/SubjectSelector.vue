@@ -42,7 +42,7 @@ getDocSubjects();
 <template>
     <div class="subjects__select-container">
         <h3>By Subject Matter</h3>
-        <ul class="subjects__list">
+        <ul tabindex="-1" class="subjects__list">
             <li
                 v-for="subject in policyDocSubjects.results"
                 :key="subject.id"
