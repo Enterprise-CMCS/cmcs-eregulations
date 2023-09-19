@@ -3,7 +3,6 @@ import { provide, ref } from "vue";
 import {
     getLastUpdatedDates,
     getPolicyDocList,
-    getPolicyDocSubjects,
     getTitles,
 } from "utilities/api";
 
@@ -15,6 +14,8 @@ import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
+import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
+import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -87,25 +88,7 @@ const getDocList = async () => {
     }
 };
 
-const policyDocSubjects = ref({
-    results: [],
-    loading: true,
-});
-
-const getDocSubjects = async () => {
-    try {
-        policyDocSubjects.value.results = await getPolicyDocSubjects({
-            apiUrl: props.apiUrl,
-        });
-    } catch (error) {
-        console.error(error);
-    } finally {
-        policyDocSubjects.value.loading = false;
-    }
-};
-
 getDocList();
-getDocSubjects();
 getPartsLastUpdated();
 </script>
 
@@ -137,8 +120,15 @@ getPartsLastUpdated();
         </header>
         <div id="policyRepositoryApp" class="repository-view ds-l-container">
             <div class="ds-l-row">
-                <div class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__filters">
-                    <h2>Find Policy Documents</h2>
+                <div class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container">
+                    <PolicySidebar>
+                        <template #title>
+                            <h2>Find Policy Documents</h2>
+                        </template>
+                        <template #filters>
+                            <SubjectSelector />
+                        </template>
+                    <PolicySidebar />
                 </div>
                 <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
                     <template

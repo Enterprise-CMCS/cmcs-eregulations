@@ -21,8 +21,13 @@
             font-family: "Open Sans", Helvetica, sans-serif;
         }
 
-        .sidebar__filters {
+        .sidebar__container {
+            display: flex;
             border-right: 2px solid $border_color;
+        }
+
+        .sidebar__filters {
+            flex: 1;
         }
 
         .doc__list {
