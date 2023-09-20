@@ -20,7 +20,6 @@ custom:
       compatibleRuntimes:
         - python3.9
 
-
 package:
   #patterns:
   #  - '!node_modules/**'

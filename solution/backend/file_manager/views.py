@@ -1,3 +1,4 @@
+
 from django.conf import settings
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
@@ -10,9 +11,14 @@ from common.api import OpenApiQueryParameter
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
-from .functions import establish_client
+from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
-from .serializers import DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
+from .serializers import (
+    AwsTokenSerializer,
+    DocumentTypeSerializer,
+    SubjectSerializer,
+    UploadedFileSerializer,
+)
 
 
 @extend_schema(
@@ -106,29 +112,40 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
     def generate_download_link(self, obj):
         s3_client = establish_client()
-        try:
-            print('hsersse')
-            return s3_client.generate_presigned_url('get_object',
-                                                    Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                                                            'Key': obj.file.name},
-                                                    ExpiresIn=600)
+        key = obj.get_key()
 
-        except Exception as e:
-            print(e)
-            print('Could not set sup download url.')
-            return 'Not avaislable for download.'
+        return s3_client.generate_presigned_url('get_object',
+                                                Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                                                        'Key': key,
+                                                        'ResponseContentDisposition': f"attachment;filename={obj.file_name}"},
+                                                ExpiresIn=20)
+
+    def upload(self, request, *args, **kwargs):
+        id = kwargs.get("file_id")
+        file_name = kwargs.get("file_name")
+        uploaded_file = None
+        if id:
+            uploaded_file = UploadedFile.objects.get(uid=id)
+            uploaded_file.file_name = file_name
+        elif file_name:
+            uploaded_file = UploadedFile(file_name=file_name)
+            uploaded_file.save()
+        else:
+            raise Exception("File name not provided")
+
+        if uploaded_file:
+            result = get_upload_link(uploaded_file.get_key())
+            serializer = AwsTokenSerializer(result)
+            return Response(serializer.data)
 
     @extend_schema(description="Download a piece of internal resource")
     def download(self, request, *args, **kwargs):
         queryset = UploadedFile.objects.all()
         id = kwargs.get("file_id")
         file = queryset.get(uid=id)
-        try:
-            print('his')
-            url = self.generate_download_link(file)
-            response = HttpResponseRedirect(url)
-            response['Content-Disposition'] = f'attachment; filename="{file.file.name}"'
-            return response
-        except Exception:
-            print('Could not set up download url.')
-            return 'Not available for download.'
+
+        url = self.generate_download_link(file)
+        response = HttpResponseRedirect(url)
+        response['Content-Disposition'] = f'attachment; filename="{file.file_name}"'
+
+        return response

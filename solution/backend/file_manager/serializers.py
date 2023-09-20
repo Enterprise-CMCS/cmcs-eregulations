@@ -27,6 +27,7 @@ class SubjectSerializer(serializers.Serializer):
 
 class UploadedFileSerializer(serializers.Serializer, ):
     name = serializers.CharField()
+    file_name = serializers.CharField()
     date = serializers.DateField()
     description = serializers.CharField()
     locations = serializers.SerializerMethodField()
@@ -39,3 +40,8 @@ class UploadedFileSerializer(serializers.Serializer, ):
         if self.context.get("location_details", True):
             return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
         return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
+
+
+class AwsTokenSerializer(serializers.Serializer):
+    url = serializers.CharField()
+    fields = serializers.JSONField()

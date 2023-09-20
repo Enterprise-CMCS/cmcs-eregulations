@@ -1,10 +1,14 @@
 # Contains custom fields for use throughout eRegs
 import datetime
 import re
+from functools import partial
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django_jsonform.models.fields import JSONField
+
+from .patterns import DASH_REGEX
 
 
 def validate_date(value):
@@ -66,3 +70,98 @@ class NaturalSortField(models.CharField):
             string = string[:self.max_length]
 
         return string
+
+
+STATUTE_REF_SCHEMA = {
+    "type": "list",
+    "minItems": 0,
+    "items": {
+        "type": "dict",
+        "keys": {
+            "act": {
+                "type": "string",
+                "default": "Social Security Act",
+                "placeholder": "Social Security Act",
+                "required": True,
+            },
+            "section": {
+                "type": "string",
+                "required": True,
+                "placeholder": "1902(a)(1)(C)",
+            },
+        },
+    },
+}
+
+
+USC_REF_SCHEMA = {
+    "type": "list",
+    "minItems": 0,
+    "items": {
+        "type": "dict",
+        "keys": {
+            "title": {
+                "type": "string",
+                "required": True,
+                "placeholder": "42",
+            },
+            "section": {
+                "type": "string",
+                "required": True,
+                "placeholder": "1902(a)(1)(C)",
+            },
+        },
+    },
+}
+
+CFR_REF_SCHEMA = {
+    "type": "list",
+    "minItems": 0,
+    "items": {
+        "type": "dict",
+        "keys": {
+            "title": {
+                "type": "string",
+                "required": True,
+                "placeholder": "42",
+            },
+            "reference": {
+                "type": "string",
+                "required": True,
+                "placeholder": "123.45(a)(1)",
+            },
+        },
+    },
+}
+
+
+def _convert_dashes(exceptions, key):
+    for i in exceptions:
+        i[key] = DASH_REGEX.sub("-", i[key])
+    return exceptions
+
+
+class _ReferenceField(JSONField):
+    def __init__(self, schema, key, *args, **kwargs):
+        kwargs = {**kwargs, **{
+            "default": list,
+            "blank": True,
+            "pre_save_hook": partial(_convert_dashes, key=key),
+            "schema": schema,
+        }}
+        super().__init__(*args, **kwargs)
+
+
+class StatuteRefField(_ReferenceField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(STATUTE_REF_SCHEMA, "section", *args, **kwargs)
+
+
+class UscRefField(_ReferenceField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(USC_REF_SCHEMA, "section", *args, **kwargs)
+
+
+class CfrRefField(_ReferenceField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(CFR_REF_SCHEMA, "reference", *args, **kwargs)

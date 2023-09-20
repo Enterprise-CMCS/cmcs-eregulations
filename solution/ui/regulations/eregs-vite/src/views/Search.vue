@@ -56,7 +56,6 @@
                     </div>
                     <template v-if="!regsLoading">
                         <RegResults
-                            :base="homeUrl"
                             :results="regResults"
                             :query="searchQuery"
                         >
@@ -94,12 +93,10 @@
                     </div>
                     <template v-if="!resourcesLoading">
                         <SearchGovResults
-                            :base="homeUrl"
                             :count="resourcesResults.length"
-                            :parts-last-updated="partsLastUpdated"
-                            :parts-list="partsList"
-                            :results="filteredContent"
+                            :results="resourcesResults"
                             :query="searchQuery"
+                            :parts-last-updated="partsLastUpdated"
                             view="search"
                         >
                             <template #empty-state>
@@ -169,7 +166,6 @@ import SearchInput from "@/components/SearchInput.vue";
 
 import { getCurrentPageResultsRange, stripQuotes } from "utilities/utils";
 import {
-    getFormattedPartsList,
     getLastUpdatedDates,
     getRegSearchResults,
     getSearchGovResources,
@@ -226,19 +222,18 @@ export default {
         },
     },
 
+    provide() {
+        return {
+            base: this.homeUrl,
+        };
+    },
+
     beforeCreate() {},
 
     async created() {
         if (this.searchQuery) {
             this.titles = await getTitles();
-            await Promise.allSettled([
-                this.getPartLastUpdatedDates(this.titles),
-                getFormattedPartsList(),
-            ]).then((data) => {
-                // eslint-disable-next-line
-                this.partsList = data[1].value;
-            });
-
+            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, this.titles);
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
                 query: this.searchQuery,
@@ -250,13 +245,13 @@ export default {
             this.resourcesLoading = false;
         }
     },
+
     data() {
         return {
             pageSize: 50,
             regsLoading: true,
             resourcesLoading: true,
             partsLastUpdated: {},
-            partsList: [],
             queryParams: this.$route.query,
             regResults: [],
             totalRegResultsCount: 0,
@@ -272,15 +267,6 @@ export default {
     computed: {
         isLoading() {
             return this.regsLoading || this.resourcesLoading;
-        },
-        filteredContent() {
-            return this.resourcesResults.map((item) => {
-                const copiedItem = JSON.parse(JSON.stringify(item));
-                copiedItem.locations = item.locations.filter(
-                    (location) => this.partsLastUpdated[location.part]
-                );
-                return copiedItem;
-            });
         },
         page() {
             return _isUndefined(this.queryParams.page)
@@ -429,9 +415,6 @@ export default {
                 console.error("Error retrieving synonyms");
                 this.synonyms = [];
             }
-        },
-        async getPartLastUpdatedDates(titles) {
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, titles);
         },
         executeSearch(payload) {
             this.synonyms = [];

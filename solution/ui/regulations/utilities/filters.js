@@ -50,35 +50,16 @@ const locationLabel = ({ type, part, section_id, subpart_id }) => {
  * @param location.part {string} - the part number for the location
  * @param location.section_id {?string} - the section number
  * @param location.subpart_id {?string} - the subpart name
- * @param partsList {Array<{label: {string}, name: {string}, sections: {Object}}>} - array of objects describing each part in the app
- * @param partsLastUpdated {Object} - object containing part numbers as keys and YYYY-MM-DD dates for values
  * @param base {string} - base to be prepended to returned URL
  * @returns {string} - URL to location
  */
-const locationUrl = (
-    { title, type, part, section_id, subpart_id },
-    partsList,
-    partsLastUpdated,
-    base
-) => {
-    // getting parent and partDate for proper link to section
-    // e.g. /42/433/Subpart-A/2021-03-01/#433-10
-    // is not straightforward with v2.  See below.
-    // Thankfully v3 will add "latest" for date
-    // and will better provide parent subpart in resource locations array.
-    const partDate = `${partsLastUpdated[part]}/`;
-
+const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
     // early return if related regulation is a subpart and not a section
     if (type.toLowerCase() === "subpart") {
-        return `${base}${title}/${part}/Subpart-${subpart_id}/${partDate}`;
+        return `${base}${title}/${part}/Subpart-${subpart_id}/`;
     }
-    const partObj = partsList.find((parts) => parts.name == part);
-    const subpart = partObj?.sections?.[section_id];
 
-    // todo: Figure out which no subpart sections are invalid and which are orphans
-    return subpart
-        ? `${base}${title}/${part}/Subpart-${subpart}/${partDate}#${part}-${section_id}`
-        : `${base}${title}/${part}/${partDate}#${part}-${section_id}`;
+    return `${base}${title}/${part}/${section_id}#${part}-${section_id}`;
 };
 
 export { formatDate, getDescriptionOnly, locationLabel, locationUrl };

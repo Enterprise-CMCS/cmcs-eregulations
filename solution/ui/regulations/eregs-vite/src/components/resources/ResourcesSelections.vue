@@ -108,18 +108,15 @@ export default {
             switch (name) {
                 case "part":
                     return `Part ${value}`;
-                    break;
-                case "subpart":
+                case "subpart": {
                     const part = value.match(/^\d+/)[0];
                     const subpart = value.match(/\w+$/)[0];
                     return `Part ${part} Subpart ${subpart}`;
-                    break;
+                }
                 case "section":
                     return `§ ${value.replace("-", ".")}`;
-                    break;
                 case "resourceCategory":
                     return `${value}`;
-                    break;
                 default:
                     return `${name} ${value}`;
             }

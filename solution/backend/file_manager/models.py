@@ -19,6 +19,8 @@ class DocumentType(models.Model):
 
 
 class Subject(models.Model):
+    class Meta:
+        verbose_name_plural = "Subjects"
     full_name = models.CharField(max_length=512, null=False, blank=False)
     short_name = models.CharField(max_length=50, null=True, blank=True)
     abbreviation = models.CharField(max_length=10, null=True, blank=True)
@@ -29,7 +31,7 @@ class Subject(models.Model):
 
 class UploadedFile(models.Model):
     name = models.CharField(max_length=512, null=True, blank=True)
-    file = models.FileField(upload_to='uploaded_files/')
+    file_name = models.CharField(max_length=512, null=True, blank=True)
     date = VariableDateField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
@@ -41,8 +43,12 @@ class UploadedFile(models.Model):
          default=uuid.uuid4,
          editable=False)
 
-    def filename(self):
-        return os.path.basename(self.file.name)
+    def get_key(self):
+        name, extension = os.path.splitext(self.file_name)
+        if extension:
+            return 'uploaded_files/' + str(self.uid) + extension
+        else:
+            raise ValueError("File does not have an extension")
 
     def __str__(self) -> str:
-        return self.name + ' ' + self.description
+        return str(self.name) + ' ' + str(self.description)
