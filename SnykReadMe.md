@@ -4,7 +4,7 @@ The snyk-test.yml script is located in the .github/workflows. This document outl
 
 ## Pull Request or Cron Job
 
-At the top, the document checks to see if a pull request was done on the main branch or if it’s the set time for the cron job. The branch can be changed to whichever branch needs testing however, the deployment will also have to be done to that branch. The cron job will run at midnight EST meaning that if you put ‘04***’, that is 4am in a different time zone but midnight here.
+At the top, the document checks to see if a pull request was done on the main branch or if it’s the set time for the cron job. The branch can be changed to whichever branch needs testing however, the deployment will also have to be done to that branch. The cron job will run at midnight EST meaning that if you put ‘04***’, that is 4am in a different time zone but midnight here. If you want to modify the start time, this is what each position inside the quotes, '* * * * *', means. 'Minute Hour Date Month DayInWeek'. So its the minute in the hour, then the hour, then the date (1-30/31), then the month (1-12), then the day of the week (0-6). 
 
 ```
 on:
