@@ -40,10 +40,10 @@ snyk_run:
 
 The last section is for the cron job. This is activated at the time specified above and then runs the snyk scan again. If there are still findings, there is a bug created in jira as shown with the action call at the end. This allows there to be bugs in a pull request and allows the day to get them fixed. If there is no fix made, then the bug is created to notify the user of the issue. 
 The variables for ticket creation that can be modified are as follows: 
-    •	Username, token, host, project-key, and is_jira_enterprise should NOT be touched. They are static for this project.
-    •	Jira-issue-type: this is set to bug since most of the issues found will fall under that. However, this can be changed to any type of work item be it a user story, task, etc.
-    •	Jira-labels: This can be anything you want. It was set to eRegs and snyk to denote all of these bugs as  belonging to the eRegs project and from the snyk scan.
-    •	Jira-title-prefix: This is the prefix given to the ticket name so that it is also easily identifiable as a snyk bug. This can also be changed to anything.
+-	Username, token, host, project-key, and is_jira_enterprise should NOT be touched. They are static for this project.
+-	Jira-issue-type: this is set to bug since most of the issues found will fall under that. However, this can be changed to any type of work item be it a user story, task, etc.
+-	Jira-labels: This can be anything you want. It was set to eRegs and snyk to denote all of these bugs as  belonging to the eRegs project and from the snyk scan.
+-	Jira-title-prefix: This is the prefix given to the ticket name so that it is also easily identifiable as a snyk bug. This can also be changed to anything.
 
 
 ```
