@@ -1,6 +1,11 @@
 
 from django.conf import settings
-from django.db.models import Prefetch
+from django.contrib.postgres.search import (
+    SearchQuery,
+    SearchRank,
+    SearchVector,
+)
+from django.db.models import Prefetch, Q
 from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -56,6 +61,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
         category = self.request.GET.getlist("category")
+        search_query = self.request.GET.get("q")
 
         query = self.model.objects.all()
 
@@ -76,6 +82,23 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subject", queryset=subjects_prefetch),
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
+
+        if search_query:
+            (search_type, cover_density) = (
+                ("phrase", True)
+                if search_query.startswith('"') and search_query.endswith('"')
+                else ("plain", False)
+            )
+            query = query.annotate(
+                rank=SearchRank(
+                    SearchVector("name", "file_name", "date", "description", weight="A", config="english"),
+                    SearchQuery(search_query, search_type=search_type, config="english"),
+                    cover_density=cover_density,
+                ),
+                # **self.get_search_headlines(search_query, search_type),
+            )
+            query = query.filter(Q(rank__gte=0.2) | Q(file_name__icontains=search_query))
+
         return query
 
     def get_serializer_context(self):
