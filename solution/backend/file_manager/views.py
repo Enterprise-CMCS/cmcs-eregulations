@@ -146,6 +146,5 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
         url = self.generate_download_link(file)
         response = HttpResponseRedirect(url)
-        response['Content-Disposition'] = f'attachment; filename="{file.file_name}"'
 
         return response
