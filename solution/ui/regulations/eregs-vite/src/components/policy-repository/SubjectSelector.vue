@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { inject, ref } from "vue";
 import { getPolicyDocSubjects } from "utilities/api";
 
 const props = defineProps({
@@ -13,11 +13,15 @@ const props = defineProps({
     },
 });
 
-const subjectClick = (event) => {
-    console.log("event", event.currentTarget);
-};
+const { urlParamsObj, updateUrlParams } = inject("urlParams");
 
-const selectedSubject = ref();
+const subjectClick = (event) => {
+    updateUrlParams({
+        type: "subjects",
+        id: event.target.dataset.id,
+        name: event.target.dataset.name,
+    });
+};
 
 const policyDocSubjects = ref({
     results: [],
@@ -41,7 +45,8 @@ getDocSubjects();
 
 <template>
     <div class="subjects__select-container">
-        <h3>By Subject Matter</h3>
+        <h3>By Subject</h3>
+        urlParams in sidebar component: {{ urlParamsObj.params }}
         <ul tabindex="-1" class="subjects__list">
             <li
                 v-for="subject in policyDocSubjects.results"
@@ -49,7 +54,11 @@ getDocSubjects();
                 class="subjects__li sidebar__li"
             >
                 <button
-                    :data-full-name="subject.full_name"
+                    :data-name="
+                        subject.short_name ||
+                        subject.abbreviation ||
+                        subject.full_name
+                    "
                     :data-id="subject.id"
                     :title="subject.full_name"
                     @click="subjectClick"

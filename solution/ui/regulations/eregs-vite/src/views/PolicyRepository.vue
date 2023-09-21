@@ -1,5 +1,5 @@
 <script setup>
-import { provide, ref } from "vue";
+import { provide, reactive, ref } from "vue";
 import {
     getLastUpdatedDates,
     getPolicyDocList,
@@ -50,6 +50,21 @@ const props = defineProps({
 
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
+
+// use reactive to make urlParams reactive when provided/injected
+const urlParamsObj = reactive({params: ""});
+provide("urlParams", {
+    urlParamsObj,
+    updateUrlParams: (newParams) => {
+        const { id, name, type } = newParams;
+        if (urlParamsObj.params.includes(`${type}=${id}`)) return;
+        if (urlParamsObj.params) {
+            urlParamsObj.params += `&${type}=${id}`;
+            return;
+        }
+        urlParamsObj.params = `?${type}=${id}`;
+    },
+});
 
 const partsLastUpdated = ref({
     results: {},
