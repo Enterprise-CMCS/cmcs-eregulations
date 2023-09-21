@@ -77,11 +77,12 @@ const policyDocList = ref({
     loading: true,
 });
 
-const getDocList = async (paramString = "") => {
+const getDocList = async (requestParams = "") => {
     try {
         policyDocList.value.results = await getPolicyDocList({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
+            requestParams,
         });
     } catch (error) {
         console.error(error);
@@ -102,15 +103,17 @@ provide("selectedParams", {
     updateSelectedParams: (newParams) => {
         const { id, name, type } = newParams;
 
-        // update paramString
+        // early return if the param is already selected
         if (selectedParamsObj.paramString.includes(`${type}=${id}`)) return;
+
+        // update paramString that is used as reactive prop for watch
         if (selectedParamsObj.paramString) {
             selectedParamsObj.paramString += `&${type}=${id}`;
         } else {
             selectedParamsObj.paramString = `?${type}=${id}`;
         };
 
-        // update paramsObj
+        // update paramsObj that is used to update the url
         if (selectedParamsObj.params[type]) {
             selectedParamsObj.params[type] += `,${id}`;
         } else {
@@ -119,10 +122,10 @@ provide("selectedParams", {
     },
 });
 
+// watch for changes to selectedParamsObj.paramString and update url
 watch(
     () => selectedParamsObj.paramString,
     async () => {
-        console.log("selectedParamsObj.params: ", selectedParamsObj.params);
         $router.push({
             name: "policy-repository",
             query: { ...selectedParamsObj.params },
@@ -130,10 +133,19 @@ watch(
     }
 );
 
+// watch for changes to url and fetch new results
 watch(
     () => $route.query,
-    async () => {
-        await getDocList($route.query);
+    async (newParams) => {
+        // parse $route.query to return `${key}=${value}` string
+        const requestParams = Object.entries(newParams)
+            .map(([key, value]) => {
+                const valueArray = value.split(",");
+                return valueArray.map((v) => `${key}=${v}`).join("&");
+            })
+            .join("&");
+
+        await getDocList(requestParams);
     }
 );
 

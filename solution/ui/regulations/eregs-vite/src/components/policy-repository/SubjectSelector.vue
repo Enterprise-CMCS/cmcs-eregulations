@@ -46,7 +46,6 @@ getDocSubjects();
 <template>
     <div class="subjects__select-container">
         <h3>By Subject</h3>
-        urlParams in sidebar component: {{ selectedParamsObj.params }}
         <ul tabindex="-1" class="subjects__list">
             <li
                 v-for="subject in policyDocSubjects.results"

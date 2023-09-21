@@ -674,16 +674,24 @@ const getStatutes = async ({
  *
  *
  */
-const getPolicyDocList = async ({ apiUrl, cacheResponse = true }) => {
+const getPolicyDocList = async ({
+    apiUrl,
+    requestParams = "",
+    cacheResponse = true,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file_manager/file_list`,
+            `${apiUrl}file_manager/file_list${
+                requestParams ? `?${requestParams}` : ""
+            }`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file_manager/file_list", cacheResponse);
+    return httpApiGet(
+        `file_manager/file_list${requestParams ? `?${requestParams}` : ""}`
+    );
 };
 
 /**
@@ -700,7 +708,7 @@ const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
     }
 
     return httpApiGet("file_manager/subjects", cacheResponse);
-}
+};
 
 export {
     config,
