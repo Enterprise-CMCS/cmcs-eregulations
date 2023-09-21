@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from "vue";
+import { ref } from "vue";
 import { getPolicyDocSubjects } from "utilities/api";
 
 const props = defineProps({
@@ -12,16 +12,6 @@ const props = defineProps({
         required: true,
     },
 });
-
-const { urlParamsObj, updateUrlParams } = inject("urlParams");
-
-const subjectClick = (event) => {
-    updateUrlParams({
-        type: "subjects",
-        id: event.target.dataset.id,
-        name: event.target.dataset.name,
-    });
-};
 
 const policyDocSubjects = ref({
     results: [],
@@ -46,29 +36,28 @@ getDocSubjects();
 <template>
     <div class="subjects__select-container">
         <h3>By Subject</h3>
-        urlParams in sidebar component: {{ urlParamsObj.params }}
         <ul tabindex="-1" class="subjects__list">
             <li
                 v-for="subject in policyDocSubjects.results"
                 :key="subject.id"
                 class="subjects__li sidebar__li"
             >
-                <button
-                    :data-name="
-                        subject.short_name ||
-                        subject.abbreviation ||
-                        subject.full_name
-                    "
-                    :data-id="subject.id"
-                    :title="subject.full_name"
-                    @click="subjectClick"
+                <RouterLink
+                    class="subjects-li__link"
+                    :data-testid="test"
+                    :to="{
+                        name: 'policy-repository',
+                        query: {
+                            subject: subject.id,
+                        },
+                    }"
                 >
                     {{
                         subject.short_name ||
                         subject.abbreviation ||
                         subject.full_name
                     }}
-                </button>
+                </RouterLink>
             </li>
         </ul>
     </div>

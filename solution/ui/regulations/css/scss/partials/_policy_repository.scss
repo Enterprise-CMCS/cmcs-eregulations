@@ -43,8 +43,11 @@
                         margin-bottom: 0;
                     }
 
-                    button {
+                    a {
+                        text-decoration: none;
+                        transition: none;
                         text-align: left;
+                        color: #000;
 
                         &:hover,
                         &:focus,
