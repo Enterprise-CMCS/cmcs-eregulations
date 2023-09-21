@@ -116,7 +116,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         params = {'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                   'Key': key,
                   'ResponseContentDisposition': f"inline;filename={obj.file_name}"}
-        if obj.extension() == 'pdf':
+        if obj.extension() == '.pdf':
             params['ResponseContentType'] = "application/pdf"
         return s3_client.generate_presigned_url('get_object',
                                                 Params=params,
