@@ -1,6 +1,6 @@
 <script setup>
-import { provide, reactive, ref } from "vue";
-import { useRoute } from "vue-router/composables";
+import { provide, reactive, ref, watch } from "vue";
+import { useRouter, useRoute } from "vue-router/composables";
 
 import {
     getLastUpdatedDates,
@@ -53,9 +53,6 @@ const props = defineProps({
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
 
-// get route query params
-const $route = useRoute();
-
 const partsLastUpdated = ref({
     results: {},
     loading: true,
@@ -80,7 +77,7 @@ const policyDocList = ref({
     loading: true,
 });
 
-const getDocList = async () => {
+const getDocList = async (paramString = "") => {
     try {
         policyDocList.value.results = await getPolicyDocList({
             apiUrl: props.apiUrl,
@@ -92,6 +89,53 @@ const getDocList = async () => {
         policyDocList.value.loading = false;
     }
 };
+
+// Router and Route
+const $router = useRouter();
+const $route = useRoute();
+
+// use reactive to make urlParams reactive when provided/injected
+const selectedParamsObj = reactive({ paramString: "", params: {}, });
+
+provide("selectedParams", {
+    selectedParamsObj,
+    updateSelectedParams: (newParams) => {
+        const { id, name, type } = newParams;
+
+        // update paramString
+        if (selectedParamsObj.paramString.includes(`${type}=${id}`)) return;
+        if (selectedParamsObj.paramString) {
+            selectedParamsObj.paramString += `&${type}=${id}`;
+        } else {
+            selectedParamsObj.paramString = `?${type}=${id}`;
+        };
+
+        // update paramsObj
+        if (selectedParamsObj.params[type]) {
+            selectedParamsObj.params[type] += `,${id}`;
+        } else {
+            selectedParamsObj.params[type] = `${id}`;
+        }
+    },
+});
+
+watch(
+    () => selectedParamsObj.paramString,
+    async () => {
+        console.log("selectedParamsObj.params: ", selectedParamsObj.params);
+        $router.push({
+            name: "policy-repository",
+            query: { ...selectedParamsObj.params },
+        });
+    }
+);
+
+watch(
+    () => $route.query,
+    async () => {
+        await getDocList($route.query);
+    }
+);
 
 getDocList();
 getPartsLastUpdated();
