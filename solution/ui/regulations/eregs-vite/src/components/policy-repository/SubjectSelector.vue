@@ -3,7 +3,7 @@ import { inject, ref } from "vue";
 import { getPolicyDocSubjects } from "utilities/api";
 
 const apiUrl = inject("apiUrl");
-const { selectedParamsObj, updateSelectedParams } = inject("selectedParams");
+const { updateSelectedParams } = inject("selectedParams");
 
 const subjectClick = (event) => {
     updateSelectedParams({

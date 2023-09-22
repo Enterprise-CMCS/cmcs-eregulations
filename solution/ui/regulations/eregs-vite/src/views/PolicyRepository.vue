@@ -97,37 +97,48 @@ const $router = useRouter();
 const $route = useRoute();
 
 // use reactive to make urlParams reactive when provided/injected
-const selectedParamsObj = reactive({ paramString: "", params: {} });
+const selectedParams = reactive({
+    paramString: "",
+    queryParamsToSet: {},
+    paramsArray: [],
+});
 
 provide("selectedParams", {
-    selectedParamsObj,
+    selectedParams,
     updateSelectedParams: (paramArgs) => {
         const { action, id, name, type } = paramArgs;
 
         // early return if removing a selected param
         if (action === "remove") {
             // early return if removing a param that is not selected
-            if (!selectedParamsObj.params[type]) return;
+            if (!selectedParams.queryParamsToSet[type]) return;
 
-            // remove from selectedParamsObj.paramString
-             const stringToEdit = selectedParamsObj.paramString
+            // remove from selectedParams.paramString
+            const stringToEdit = selectedParams.paramString
                 .substring(1)
                 .split("&")
                 .filter((param) => param !== `${type}=${id}`)
                 .join("&");
 
-            selectedParamsObj.paramString = `?${stringToEdit}`;
+            selectedParams.paramString = `?${stringToEdit}`;
 
-            // remove from selectedParamsObj.params
-            selectedParamsObj.params[type] = selectedParamsObj.params[type]
+            // remove from selectedParams.queryParamsToSet
+            selectedParams.queryParamsToSet[
+                type
+            ] = selectedParams.queryParamsToSet[type]
                 .split(",")
                 .filter((param) => param !== id)
                 .join(",");
 
-            // remove from selectedParamsObj.params if empty
-            if (!selectedParamsObj.params[type]) {
-                delete selectedParamsObj.params[type];
+            // remove from selectedParams.queryParamsToSet if empty
+            if (!selectedParams.queryParamsToSet[type]) {
+                delete selectedParams.queryParamsToSet[type];
             }
+
+            // remove from selectedParams.paramsArray
+            selectedParams.paramsArray = selectedParams.paramsArray.filter(
+                (param) => param.id !== id
+            );
 
             return;
         }
@@ -135,33 +146,36 @@ provide("selectedParams", {
         // early return if the param is already selected
         if (
             action === "add" &&
-            selectedParamsObj.paramString.includes(`${type}=${id}`)
+            selectedParams.paramString.includes(`${type}=${id}`)
         )
             return;
 
         // update paramString that is used as reactive prop for watch
-        if (selectedParamsObj.paramString) {
-            selectedParamsObj.paramString += `&${type}=${id}`;
+        if (selectedParams.paramString) {
+            selectedParams.paramString += `&${type}=${id}`;
         } else {
-            selectedParamsObj.paramString = `?${type}=${id}`;
+            selectedParams.paramString = `?${type}=${id}`;
         }
 
-        // update paramsObj that is used to update the url
-        if (selectedParamsObj.params[type]) {
-            selectedParamsObj.params[type] += `,${id}`;
+        // update queryParamsToSet that is used to update the url
+        if (selectedParams.queryParamsToSet[type]) {
+            selectedParams.queryParamsToSet[type] += `,${id}`;
         } else {
-            selectedParamsObj.params[type] = `${id}`;
+            selectedParams.queryParamsToSet[type] = `${id}`;
         }
+
+        // create new selectedParams key for array of objects
+        selectedParams.paramsArray.push({ id, name, type });
     },
 });
 
-// watch for changes to selectedParamsObj.paramString and update url
+// watch for changes to selectedParams.paramString and update url
 watch(
-    () => selectedParamsObj.paramString,
+    () => selectedParams.paramString,
     async () => {
         $router.push({
             name: "policy-repository",
-            query: { ...selectedParamsObj.params },
+            query: { ...selectedParams.queryParamsToSet },
         });
     }
 );
