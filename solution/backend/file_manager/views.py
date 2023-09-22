@@ -1,6 +1,7 @@
 
 from django.conf import settings
 from django.contrib.postgres.search import (
+    SearchHeadline,
     SearchQuery,
     SearchRank,
     SearchVector,
@@ -57,6 +58,22 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     model = UploadedFile
     location_filter_prefix = "locations__"
 
+    def make_headline(self, field, search_query, search_type):
+        return SearchHeadline(
+            field,
+            SearchQuery(search_query, search_type=search_type, config="english"),
+            start_sel='<span class="search-headline">',
+            stop_sel='</span>',
+            config="english",
+            highlight_all=True,
+        )
+
+    def get_search_headlines(self, search_query, search_type):
+        return {
+            "name_headline": self.make_headline("name", search_query, search_type),
+            "description_headline": self.make_headline("description", search_query, search_type),
+        }
+
     def get_queryset(self):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
@@ -95,7 +112,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                     SearchQuery(search_query, search_type=search_type, config="english"),
                     cover_density=cover_density,
                 ),
-                # **self.get_search_headlines(search_query, search_type),
+                **self.get_search_headlines(search_query, search_type),
             )
             query = query.filter(Q(rank__gte=0.2) | Q(file_name__icontains=search_query))
 
