@@ -39,7 +39,6 @@ class SearchTest(TestCase):
                     file.subject.set([self.subject2])
                     file.save()
 
-
     def test_no_query(self):
         response = self.client.get("/v3/file-manager/files")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -85,5 +84,3 @@ class SearchTest(TestCase):
 
         response = self.client.get(f"/v3/file-manager/files?q=test&subjects={self.subject1.id}&subjects={self.subject2.id}")
         self.check_exclusive_response(response, 0)
-
-
