@@ -9,13 +9,13 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@testing-library/cypress": "^9.0.0",
+    "@testing-library/cypress": "^10.0.1",
     "axe-core": "^4.6.3",
-    "cypress": "^12.4.1",
+    "cypress": "^13.2.0",
     "cypress-plugin-tab": "^1.0.5"
   },
   "dependencies": {
     "ajv": "^8.12.0",
-    "cypress-axe": "^1.3.0"
+    "cypress-axe": "^1.5.0"
   }
 }
