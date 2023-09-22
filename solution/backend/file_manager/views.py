@@ -135,6 +135,9 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),
+                    OpenApiQueryParameter("q",
+                                          "Search for text within file metadata. Searches name, file name, "
+                                          "date, and description.", str, False),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )
     def list(self, request):
