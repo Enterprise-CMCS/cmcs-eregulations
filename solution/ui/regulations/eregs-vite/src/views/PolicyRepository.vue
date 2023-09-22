@@ -16,6 +16,7 @@ import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
+import PolicySelections from "@/components/policy-repository/PolicySelections.vue";
 import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
 import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
 
@@ -96,22 +97,54 @@ const $router = useRouter();
 const $route = useRoute();
 
 // use reactive to make urlParams reactive when provided/injected
-const selectedParamsObj = reactive({ paramString: "", params: {}, });
+const selectedParamsObj = reactive({ paramString: "", params: {} });
 
 provide("selectedParams", {
     selectedParamsObj,
-    updateSelectedParams: (newParams) => {
-        const { id, name, type } = newParams;
+    updateSelectedParams: (paramArgs) => {
+        const { action, id, name, type } = paramArgs;
+
+        // early return if removing a selected param
+        if (action === "remove") {
+            // early return if removing a param that is not selected
+            if (!selectedParamsObj.params[type]) return;
+
+            // remove from selectedParamsObj.paramString
+             const stringToEdit = selectedParamsObj.paramString
+                .substring(1)
+                .split("&")
+                .filter((param) => param !== `${type}=${id}`)
+                .join("&");
+
+            selectedParamsObj.paramString = `?${stringToEdit}`;
+
+            // remove from selectedParamsObj.params
+            selectedParamsObj.params[type] = selectedParamsObj.params[type]
+                .split(",")
+                .filter((param) => param !== id)
+                .join(",");
+
+            // remove from selectedParamsObj.params if empty
+            if (!selectedParamsObj.params[type]) {
+                delete selectedParamsObj.params[type];
+            }
+
+            return;
+        }
 
         // early return if the param is already selected
-        if (selectedParamsObj.paramString.includes(`${type}=${id}`)) return;
+        if (
+            action === "add" &&
+            selectedParamsObj.paramString.includes(`${type}=${id}`)
+        )
+            return;
 
         // update paramString that is used as reactive prop for watch
         if (selectedParamsObj.paramString) {
             selectedParamsObj.paramString += `&${type}=${id}`;
         } else {
             selectedParamsObj.paramString = `?${type}=${id}`;
-        };
+        }
 
         // update paramsObj that is used to update the url
         if (selectedParamsObj.params[type]) {
@@ -181,15 +214,20 @@ getPartsLastUpdated();
         </header>
         <div id="policyRepositoryApp" class="repository-view ds-l-container">
             <div class="ds-l-row">
-                <div class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container">
+                <div
+                    class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
+                >
                     <PolicySidebar>
                         <template #title>
                             <h2>Find Policy Documents</h2>
                         </template>
+                        <template #selections>
+                            <PolicySelections />
+                        </template>
                         <template #filters>
                             <SubjectSelector />
                         </template>
-                    <PolicySidebar />
+                    </PolicySidebar>
                 </div>
                 <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
                     <template

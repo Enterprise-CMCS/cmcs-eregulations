@@ -2,22 +2,13 @@
 import { inject, ref } from "vue";
 import { getPolicyDocSubjects } from "utilities/api";
 
-const props = defineProps({
-    prop1: {
-        type: String,
-        required: true,
-    },
-    prop2: {
-        type: Object,
-        required: true,
-    },
-});
-
+const apiUrl = inject("apiUrl");
 const { selectedParamsObj, updateSelectedParams } = inject("selectedParams");
 
 const subjectClick = (event) => {
     updateSelectedParams({
         type: "subjects",
+        action: "add",
         id: event.target.dataset.id,
         name: event.target.dataset.name,
     });
@@ -31,7 +22,7 @@ const policyDocSubjects = ref({
 const getDocSubjects = async () => {
     try {
         policyDocSubjects.value.results = await getPolicyDocSubjects({
-            apiUrl: props.apiUrl,
+            apiUrl,
         });
     } catch (error) {
         console.error(error);
@@ -72,5 +63,3 @@ getDocSubjects();
         </ul>
     </div>
 </template>
-
-<style></style>

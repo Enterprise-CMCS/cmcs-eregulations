@@ -19,6 +19,7 @@
 
         h2 {
             font-family: "Open Sans", Helvetica, sans-serif;
+            margin: 0 0 1rem !important; // !important to override the default h2 margin due to vuetify defaults
         }
 
         .sidebar__container {
