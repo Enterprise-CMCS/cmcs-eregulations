@@ -113,11 +113,13 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
     def generate_download_link(self, obj):
         s3_client = establish_client()
         key = obj.get_key()
-
+        params = {'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                  'Key': key,
+                  'ResponseContentDisposition': f"inline;filename={obj.file_name}"}
+        if obj.extension() == '.pdf':
+            params['ResponseContentType'] = "application/pdf"
         return s3_client.generate_presigned_url('get_object',
-                                                Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                                                        'Key': key,
-                                                        'ResponseContentDisposition': f"attachment;filename={obj.file_name}"},
+                                                Params=params,
                                                 ExpiresIn=20)
 
     def upload(self, request, *args, **kwargs):
@@ -146,6 +148,4 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
         url = self.generate_download_link(file)
         response = HttpResponseRedirect(url)
-        response['Content-Disposition'] = f'attachment; filename="{file.file_name}"'
-
         return response
