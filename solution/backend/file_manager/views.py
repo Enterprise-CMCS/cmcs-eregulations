@@ -1,6 +1,7 @@
+
 from django.conf import settings
 from django.db.models import Prefetch
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +13,12 @@ from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
-from .serializers import AwsTokenSerializer, DocumentTypeSerializer, SubjectSerializer, UploadedFileSerializer
+from .serializers import (
+    AwsTokenSerializer,
+    DocumentTypeSerializer,
+    SubjectSerializer,
+    UploadedFileSerializer,
+)
 
 
 @extend_schema(
@@ -110,7 +116,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
         return s3_client.generate_presigned_url('get_object',
                                                 Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
-                                                        'Key': key},
+                                                        'Key': key,
+                                                        'ResponseContentDisposition': f"attachment;filename={obj.file_name}"},
                                                 ExpiresIn=20)
 
     def upload(self, request, *args, **kwargs):
@@ -138,4 +145,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         file = queryset.get(uid=id)
 
         url = self.generate_download_link(file)
-        return HttpResponse(url, headers={'Content-Disposition': f'attachment; filename="{file.file_name}"'})
+        response = HttpResponseRedirect(url)
+        response['Content-Disposition'] = f'attachment; filename="{file.file_name}"'
+
+        return response
