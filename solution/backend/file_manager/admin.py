@@ -84,7 +84,7 @@ class UploadedFileAdmin(BaseAdmin):
     def download_file(self, obj):
         if obj.id:
             link = reverse("file-download", kwargs={"file_id": obj.uid})
-            html = '<input type="button" onclick="location.href=\'{}\'" value="Doswnload File" />'.format(link)
+            html = '<input type="button" onclick="location.href=\'{}\'" value="Download File" />'.format(link)
         else:
             return "N/A"
         return format_html(html)
