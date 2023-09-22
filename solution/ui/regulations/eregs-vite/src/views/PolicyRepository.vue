@@ -121,7 +121,7 @@ const updateSelectedParams = (paramArgs) => {
         const stringToEdit = selectedParams.paramString
             .substring(1)
             .split("&")
-            .filter((param) => param !== `${type}=${id}`)
+            .filter((param) => param != `${type}=${id}`)
             .join("&");
 
         selectedParams.paramString = `?${stringToEdit}`;
@@ -131,7 +131,7 @@ const updateSelectedParams = (paramArgs) => {
             type
         ]
             .split(",")
-            .filter((param) => param !== id)
+            .filter((param) => param != id)
             .join(",");
 
         // remove from selectedParams.queryParamsToSet if empty
@@ -141,7 +141,7 @@ const updateSelectedParams = (paramArgs) => {
 
         // remove from selectedParams.paramsArray
         selectedParams.paramsArray = selectedParams.paramsArray.filter(
-            (param) => param.id !== id
+            (param) => param.id != id
         );
 
         return;
