@@ -2,9 +2,12 @@
 import { provide, reactive, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 
+import _isEmpty from "lodash/isEmpty";
+
 import {
     getLastUpdatedDates,
     getPolicyDocList,
+    getPolicyDocSubjects,
     getTitles,
 } from "utilities/api";
 
@@ -51,9 +54,15 @@ const props = defineProps({
     },
 });
 
+// Router and Route
+const $router = useRouter();
+const $route = useRoute();
+
+// provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
 
+// partsLastUpdated fetch for related regulations citations filtering
 const partsLastUpdated = ref({
     results: {},
     loading: true,
@@ -73,6 +82,7 @@ const getPartsLastUpdated = async () => {
     }
 };
 
+// policyDocList fetch for policy document list
 const policyDocList = ref({
     results: [],
     loading: true,
@@ -92,10 +102,6 @@ const getDocList = async (requestParams = "") => {
     }
 };
 
-// Router and Route
-const $router = useRouter();
-const $route = useRoute();
-
 // use reactive to make urlParams reactive when provided/injected
 const selectedParams = reactive({
     paramString: "",
@@ -103,70 +109,72 @@ const selectedParams = reactive({
     paramsArray: [],
 });
 
+const updateSelectedParams = (paramArgs) => {
+    const { action, id, name, type } = paramArgs;
+
+    // early return if removing a selected param
+    if (action === "remove") {
+        // early return if removing a param that is not selected
+        if (!selectedParams.queryParamsToSet[type]) return;
+
+        // remove from selectedParams.paramString
+        const stringToEdit = selectedParams.paramString
+            .substring(1)
+            .split("&")
+            .filter((param) => param !== `${type}=${id}`)
+            .join("&");
+
+        selectedParams.paramString = `?${stringToEdit}`;
+
+        // remove from selectedParams.queryParamsToSet
+        selectedParams.queryParamsToSet[type] = selectedParams.queryParamsToSet[
+            type
+        ]
+            .split(",")
+            .filter((param) => param !== id)
+            .join(",");
+
+        // remove from selectedParams.queryParamsToSet if empty
+        if (!selectedParams.queryParamsToSet[type]) {
+            delete selectedParams.queryParamsToSet[type];
+        }
+
+        // remove from selectedParams.paramsArray
+        selectedParams.paramsArray = selectedParams.paramsArray.filter(
+            (param) => param.id !== id
+        );
+
+        return;
+    }
+
+    // early return if the param is already selected
+    if (
+        action === "add" &&
+        selectedParams.paramString.includes(`${type}=${id}`)
+    )
+        return;
+
+    // update paramString that is used as reactive prop for watch
+    if (selectedParams.paramString) {
+        selectedParams.paramString += `&${type}=${id}`;
+    } else {
+        selectedParams.paramString = `?${type}=${id}`;
+    }
+
+    // update queryParamsToSet that is used to update the url
+    if (selectedParams.queryParamsToSet[type]) {
+        selectedParams.queryParamsToSet[type] += `,${id}`;
+    } else {
+        selectedParams.queryParamsToSet[type] = `${id}`;
+    }
+
+    // create new selectedParams key for array of objects
+    selectedParams.paramsArray.push({ id, name, type });
+};
+
 provide("selectedParams", {
     selectedParams,
-    updateSelectedParams: (paramArgs) => {
-        const { action, id, name, type } = paramArgs;
-
-        // early return if removing a selected param
-        if (action === "remove") {
-            // early return if removing a param that is not selected
-            if (!selectedParams.queryParamsToSet[type]) return;
-
-            // remove from selectedParams.paramString
-            const stringToEdit = selectedParams.paramString
-                .substring(1)
-                .split("&")
-                .filter((param) => param !== `${type}=${id}`)
-                .join("&");
-
-            selectedParams.paramString = `?${stringToEdit}`;
-
-            // remove from selectedParams.queryParamsToSet
-            selectedParams.queryParamsToSet[
-                type
-            ] = selectedParams.queryParamsToSet[type]
-                .split(",")
-                .filter((param) => param !== id)
-                .join(",");
-
-            // remove from selectedParams.queryParamsToSet if empty
-            if (!selectedParams.queryParamsToSet[type]) {
-                delete selectedParams.queryParamsToSet[type];
-            }
-
-            // remove from selectedParams.paramsArray
-            selectedParams.paramsArray = selectedParams.paramsArray.filter(
-                (param) => param.id !== id
-            );
-
-            return;
-        }
-
-        // early return if the param is already selected
-        if (
-            action === "add" &&
-            selectedParams.paramString.includes(`${type}=${id}`)
-        )
-            return;
-
-        // update paramString that is used as reactive prop for watch
-        if (selectedParams.paramString) {
-            selectedParams.paramString += `&${type}=${id}`;
-        } else {
-            selectedParams.paramString = `?${type}=${id}`;
-        }
-
-        // update queryParamsToSet that is used to update the url
-        if (selectedParams.queryParamsToSet[type]) {
-            selectedParams.queryParamsToSet[type] += `,${id}`;
-        } else {
-            selectedParams.queryParamsToSet[type] = `${id}`;
-        }
-
-        // create new selectedParams key for array of objects
-        selectedParams.paramsArray.push({ id, name, type });
-    },
+    updateSelectedParams,
 });
 
 // watch for changes to selectedParams.paramString and update url
@@ -180,24 +188,77 @@ watch(
     }
 );
 
+// utility method to parse $route.query to return `${key}=${value},${value}` string
+const getRequestParams = (query) => {
+    const requestParams = Object.entries(query)
+        .map(([key, value]) => {
+            const valueArray = value.split(",");
+            return valueArray.map((v) => `${key}=${v}`).join("&");
+        })
+        .join("&");
+
+    return requestParams;
+};
+
 // watch for changes to url and fetch new results
 watch(
     () => $route.query,
     async (newParams) => {
         // parse $route.query to return `${key}=${value}` string
-        const requestParams = Object.entries(newParams)
-            .map(([key, value]) => {
-                const valueArray = value.split(",");
-                return valueArray.map((v) => `${key}=${v}`).join("&");
-            })
-            .join("&");
-
+        const requestParams = getRequestParams(newParams);
         await getDocList(requestParams);
     }
 );
 
-getDocList();
+// policyDocSubjects fetch for subject selector
+// fetch here so we have it in context; pass down to selector via props
+const policyDocSubjects = ref({
+    results: [],
+    loading: true,
+});
+
+const getDocSubjects = async () => {
+    try {
+        policyDocSubjects.value.results = await getPolicyDocSubjects({
+            apiUrl: props.apiUrl,
+        });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        policyDocSubjects.value.loading = false;
+
+        // if there's a $route, call updateSelectedParams
+        if (!_isEmpty($route.query)) {
+            const subjectIds = $route.query.subjects.split(",");
+            const subjects = policyDocSubjects.value.results.filter((subject) =>
+                subjectIds.includes(subject.id.toString())
+            );
+
+            subjects.forEach((subject) => {
+                updateSelectedParams({
+                    type: "subjects",
+                    action: "add",
+                    id: subject.id,
+                    name:
+                        subject.short_name ||
+                        subject.abbreviation ||
+                        subject.full_name,
+                });
+            });
+
+            getDocList(getRequestParams($route.query));
+        }
+    }
+};
+
+getDocSubjects();
+
 getPartsLastUpdated();
+getDocSubjects();
+
+if (_isEmpty($route.query)) {
+    getDocList();
+}
 </script>
 
 <template>
@@ -239,7 +300,9 @@ getPartsLastUpdated();
                             <PolicySelections />
                         </template>
                         <template #filters>
-                            <SubjectSelector />
+                            <SubjectSelector
+                                :policy-doc-subjects="policyDocSubjects"
+                            />
                         </template>
                     </PolicySidebar>
                 </div>

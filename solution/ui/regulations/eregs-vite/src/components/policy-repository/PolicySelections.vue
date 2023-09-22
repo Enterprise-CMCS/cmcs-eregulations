@@ -1,7 +1,7 @@
 <script setup>
 import { inject, ref, watch } from "vue";
 
-const SubjectsEnum = {
+const FilterTypesEnum = {
     subjects: "Subject",
 };
 
@@ -21,7 +21,7 @@ watch(
     () => selectedParams.paramString,
     async () => {
         selections.value = selectedParams.paramsArray.map((param) => {
-            return { label: SubjectsEnum[param.type], id: param.id, name: param.name };
+            return { label: FilterTypesEnum[param.type], id: param.id, name: param.name };
         })
         .sort((a, b) => { // sort by label and then by id
             if (a.label < b.label) return -1;
@@ -32,6 +32,8 @@ watch(
         });
     }
 );
+
+console.log(selectedParams);
 </script>
 
 <template>

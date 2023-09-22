@@ -1,8 +1,13 @@
 <script setup>
-import { inject, ref } from "vue";
-import { getPolicyDocSubjects } from "utilities/api";
+import { inject } from "vue";
 
-const apiUrl = inject("apiUrl");
+const props = defineProps({
+    policyDocSubjects: {
+        type: Object,
+        default: () => ({ results: [], loading: true }),
+    },
+});
+
 const { updateSelectedParams } = inject("selectedParams");
 
 const subjectClick = (event) => {
@@ -13,25 +18,6 @@ const subjectClick = (event) => {
         name: event.target.dataset.name,
     });
 };
-
-const policyDocSubjects = ref({
-    results: [],
-    loading: true,
-});
-
-const getDocSubjects = async () => {
-    try {
-        policyDocSubjects.value.results = await getPolicyDocSubjects({
-            apiUrl,
-        });
-    } catch (error) {
-        console.error(error);
-    } finally {
-        policyDocSubjects.value.loading = false;
-    }
-};
-
-getDocSubjects();
 </script>
 
 <template>
