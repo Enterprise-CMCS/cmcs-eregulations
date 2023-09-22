@@ -2,10 +2,11 @@ import json
 
 from django.contrib.auth.models import User
 from django.test import TestCase
-from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.test import APIClient
 
-from file_manager.models import UploadedFile
+from file_manager.models import Subject, UploadedFile
+from resources.models import Section
 
 
 class SearchTest(TestCase):
@@ -22,10 +23,22 @@ class SearchTest(TestCase):
         self.login()
         self.client.force_authenticate(self.user)
         self.data = []
+
+        self.location1 = Section.objects.create(title="42", part="433", section_id="1")
+        self.location2 = Section.objects.create(title="33", part="31", section_id="22")
+
+        self.subject1 = Subject.objects.create()
+        self.subject2 = Subject.objects.create()
+
         with open("file_manager/tests/fixtures/sample_files.json", "r") as f:
-            for i in json.load(f):
-                self.data.append(i)
-                UploadedFile.objects.create(**i)
+            for i, data in enumerate(json.load(f)):
+                self.data.append(data)
+                file = UploadedFile.objects.create(**data)
+                if i == 0:  # only assign location and subject on item 0
+                    file.locations.set([self.location2])
+                    file.subject.set([self.subject2])
+                    file.save()
+
 
     def test_no_query(self):
         response = self.client.get("/v3/file-manager/files")
@@ -53,7 +66,24 @@ class SearchTest(TestCase):
 
     def test_search_by_filename_variations(self):
         names = ["123_abc.docx", "123_abc", "123", "abc", "docx"]
-        for i in names:            
+        for i in names:
             response = self.client.get(f"/v3/file-manager/files?q={i}")
             self.check_exclusive_response(response, 0)
+
+    def test_inclusive_location_filter(self):
+        response = self.client.get("/v3/file-manager/files?q=test&locations=42.433")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+        response = self.client.get("/v3/file-manager/files?q=test&locations=42.433&locations=33.31")
+        self.check_exclusive_response(response, 0)
+
+    def test_inclusive_subject_filter(self):
+        response = self.client.get(f"/v3/file-manager/files?q=test&subjects={self.subject1.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)
+
+        response = self.client.get(f"/v3/file-manager/files?q=test&subjects={self.subject1.id}&subjects={self.subject2.id}")
+        self.check_exclusive_response(response, 0)
+
 
