@@ -1,6 +1,8 @@
 <script setup>
 import { inject } from "vue";
 
+import { getSubjectName } from "utilities/filters";
+
 import RelatedSections from "@/components/search/RelatedSections.vue";
 
 import SubjectChip from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChip.vue";
@@ -44,7 +46,7 @@ const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
                         <SubjectChip
                             v-for="(subject, i) in doc.subject"
                             :key="subject.id + 'x' + i"
-                            :subject-name="subject.full_name"
+                            :subject-name="getSubjectName(subject)"
                         />
                     </div>
                 </div>

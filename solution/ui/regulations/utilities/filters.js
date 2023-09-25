@@ -62,4 +62,16 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
     return `${base}${title}/${part}/${section_id}#${part}-${section_id}`;
 };
 
-export { formatDate, getDescriptionOnly, locationLabel, locationUrl };
+/**
+ * @param subject {Object} - a subject of the Regs
+ * @param subject.short_name {?string} - the short name of the subject
+ * @param subject.abbreviation {?string} - the abbreviation of the subject
+ * @param subject.full_name {?string} - the full name of the subject
+ * @returns {string} - a properly formatted subject name
+ * @example
+ * getSubjectName({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // "Federal Regulations"
+ */
+const getSubjectName = (subject) =>
+    subject.short_name || subject.abbreviation || subject.full_name;
+
+export { formatDate, getDescriptionOnly, getSubjectName, locationLabel, locationUrl };

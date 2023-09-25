@@ -1,6 +1,8 @@
 <script setup>
 import { inject } from "vue";
 
+import { getSubjectName } from "utilities/filters";
+
 const props = defineProps({
     policyDocSubjects: {
         type: Object,
@@ -30,20 +32,12 @@ const subjectClick = (event) => {
                 class="subjects__li sidebar__li"
             >
                 <button
-                    :data-name="
-                        subject.short_name ||
-                        subject.abbreviation ||
-                        subject.full_name
-                    "
+                    :data-name="getSubjectName(subject)"
                     :data-id="subject.id"
                     :title="subject.full_name"
                     @click="subjectClick"
                 >
-                    {{
-                        subject.short_name ||
-                        subject.abbreviation ||
-                        subject.full_name
-                    }}
+                    {{ getSubjectName(subject) }}
                 </button>
             </li>
         </ul>
