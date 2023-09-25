@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+from datetime import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -212,7 +213,7 @@ SURVEY_URL = os.environ.get(
     "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
 )
 
-DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", "0000")
+DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
 
 OPENSEARCH_DSL = {
     'default': {
