@@ -107,8 +107,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                 else ("plain", False)
             )
             vector = SearchVector("name", weight="A", config="english") + \
-                     SearchVector("description", weight="B", config="english") + \
-                     SearchVector("date", weight="C", config="english")
+                SearchVector("description", weight="B", config="english") + \
+                SearchVector("date", weight="C", config="english")
             query = query.annotate(
                 rank=SearchRank(
                     vector,
