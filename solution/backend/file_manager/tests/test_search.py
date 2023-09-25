@@ -44,19 +44,13 @@ class SearchTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), len(self.data))
 
-    def test_query_1(self):
-        response = self.client.get("/v3/file-manager/files?q=test")
-        self.check_exclusive_response(response, 0)
+    def test_single_response_queries(self):
+        tests = [("test", 0), ("internal+notes", 1), ("policy+hello", 2)]
+        for i in tests:
+            response = self.client.get(f"/v3/file-manager/files?q={i[0]}")
+            self.check_exclusive_response(response, i[1])
 
-    def test_query_2(self):
-        response = self.client.get("/v3/file-manager/files?q=internal+notes")
-        self.check_exclusive_response(response, 1)
-
-    def test_query_3(self):
-        response = self.client.get("/v3/file-manager/files?q=policy+hello")
-        self.check_exclusive_response(response, 2)
-
-    def test_query_4(self):
+    def test_multi_response_query(self):
         response = self.client.get("/v3/file-manager/files?q=file")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)

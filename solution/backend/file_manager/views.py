@@ -106,9 +106,12 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                 if search_query.startswith('"') and search_query.endswith('"')
                 else ("plain", False)
             )
+            vector = SearchVector("name", weight="A", config="english") + \
+                     SearchVector("description", weight="B", config="english") + \
+                     SearchVector("date", weight="C", config="english")
             query = query.annotate(
                 rank=SearchRank(
-                    SearchVector("name", "file_name", "date", "description", weight="A", config="english"),
+                    vector,
                     SearchQuery(search_query, search_type=search_type, config="english"),
                     cover_density=cover_density,
                 ),
