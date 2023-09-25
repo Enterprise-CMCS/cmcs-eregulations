@@ -45,12 +45,14 @@ class SearchTest(TestCase):
         self.assertEqual(len(response.data), len(self.data))
 
     def test_single_response_queries(self):
+        # This tests to ensure files are correctly *excluded* based on search terms
         tests = [("test", 0), ("internal+notes", 1), ("policy+hello", 2)]
         for i in tests:
             response = self.client.get(f"/v3/file-manager/files?q={i[0]}")
             self.check_exclusive_response(response, i[1])
 
     def test_multi_response_query(self):
+        # This tests to ensure files are correctly *included* based on search terms
         response = self.client.get("/v3/file-manager/files?q=file")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
