@@ -33,7 +33,7 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
                         <a
                             :href="getDownloadUrl(doc.uid)"
                             class="document__link document__link--filename"
-                            >{{ doc.name }}</a
+                            >{{ doc.document_id }}</a
                         >
                     </h3>
                 </div>
