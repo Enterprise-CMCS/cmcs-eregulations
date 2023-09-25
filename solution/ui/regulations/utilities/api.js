@@ -677,13 +677,13 @@ const getStatutes = async ({
 const getPolicyDocList = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file_manager/file_list`,
+            `${apiUrl}file-manager/files`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file_manager/file_list", cacheResponse);
+    return httpApiGet("file-manager/files", cacheResponse);
 };
 
 export {
