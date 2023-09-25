@@ -56,4 +56,9 @@ jobs:
               #assign-jira-ticket-to: ''
               scan-output-path: 'snyk_output.txt'
               scan-type: 'snyk'
+              
+        - name: Alert Slack On Failure
+          if: failure()
+          run: |
+            curl -X POST -H 'Content-type: application/json' --data '{"text": "Failure completing scheduled Snyk Scan.","blocks":[{"type": "section","text":{"type": "mrkdwn","text": "The nightly scheduled Snyk Scan for Job: https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/runs/${{ github.run_id  }} has failed to complete successfully "}}]}' ${{ secrets.DEV_BOTS_SLACK_WEBHOOK }}
     
