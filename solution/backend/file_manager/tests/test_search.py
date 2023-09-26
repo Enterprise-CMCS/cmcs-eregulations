@@ -9,6 +9,13 @@ from file_manager.models import Subject, UploadedFile
 from resources.models import Section
 
 
+# This test is separate from the SearchTest class because all tests are authenticated within that class
+class SearchTestNotLoggedIn(TestCase):
+    def test_not_logged_in(self):
+        response = self.client.get("/v3/file-manager/files?q=test+search")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
 class SearchTest(TestCase):
     def check_exclusive_response(self, response, id):
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
+from common.constants import QUOTE_TYPES
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
@@ -103,7 +104,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         if search_query:
             (search_type, cover_density) = (
                 ("phrase", True)
-                if search_query.startswith('"') and search_query.endswith('"')
+                if search_query.startswith(QUOTE_TYPES) and search_query.endswith(QUOTE_TYPES)
                 else ("plain", False)
             )
             vector = SearchVector("name", weight="A", config="english") + \
