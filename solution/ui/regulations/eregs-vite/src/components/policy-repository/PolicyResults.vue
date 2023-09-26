@@ -25,6 +25,15 @@ const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
 
 <template>
     <div class="doc__list">
+        <div class="search-results-count">
+            <span v-if="results.length > 0">
+                Showing 1 -
+                {{ results.length }} of
+            </span>
+            {{ results.length }} document<span v-if="results.length != 1"
+                >s</span
+            >.
+        </div>
         <div v-for="doc in results" :key="doc.uid" class="doc-list__document">
             <div class="document__primary-info document__info-block">
                 <div v-if="doc.document_type" class="document__type">

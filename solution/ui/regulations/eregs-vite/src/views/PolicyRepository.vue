@@ -91,6 +91,8 @@ const policyDocList = ref({
 });
 
 const getDocList = async (requestParams = "") => {
+    policyDocList.value.loading = true;
+
     try {
         policyDocList.value.results = await getPolicyDocList({
             apiUrl: props.apiUrl,
@@ -309,7 +311,7 @@ if (_isEmpty($route.query)) {
                     <template
                         v-if="policyDocList.loading || partsLastUpdated.loading"
                     >
-                        <p>Loading...</p>
+                        <span class="loading__span">Loading...</span>
                     </template>
                     <template v-else>
                         <PolicyResults
