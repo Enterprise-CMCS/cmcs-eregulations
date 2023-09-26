@@ -671,8 +671,10 @@ const getStatutes = async ({
 };
 
 /**
- *
- *
+ * @param {string} [apiUrl] - API base url passed in from Django template
+ * @param {string} [requestParams] - Query string parameters to pass to API
+ * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of file items when fulfilled
  */
 const getPolicyDocList = async ({
     apiUrl,
@@ -690,13 +692,15 @@ const getPolicyDocList = async ({
     }
 
     return httpApiGet(
-        `file-manager/files${requestParams ? `?${requestParams}` : ""}`, cacheResponse
+        `file-manager/files${requestParams ? `?${requestParams}` : ""}`,
+        cacheResponse
     );
 };
 
 /**
- *
- *
+ * @param {string} [apiUrl] - API base url passed in from Django template
+ * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
 const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
