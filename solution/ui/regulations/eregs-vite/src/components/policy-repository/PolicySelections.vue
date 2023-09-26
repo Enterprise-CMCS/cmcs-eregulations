@@ -45,7 +45,7 @@ watch(
                 name: param.name,
             }))
             .sort((a, b) => {
-                // sort by label and then by id
+                // sort by label and then by name
                 if (a.label < b.label) return -1;
                 if (a.label > b.label) return 1;
                 if (a.name < b.name) return -1;

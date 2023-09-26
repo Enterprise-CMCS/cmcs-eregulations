@@ -63,7 +63,7 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
 };
 
 /**
- * @param subject {Object} - a subject of the Regs
+ * @param subject {Object} - a subject
  * @param subject.short_name {?string} - the short name of the subject
  * @param subject.abbreviation {?string} - the abbreviation of the subject
  * @param subject.full_name {?string} - the full name of the subject
@@ -74,4 +74,25 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
 const getSubjectName = (subject) =>
     subject.short_name || subject.abbreviation || subject.full_name;
 
-export { formatDate, getDescriptionOnly, getSubjectName, locationLabel, locationUrl };
+/**
+ * @param subjects {Array} - an array of subjects
+ * @returns {Array} - an array of subjects sorted by name
+ */
+const sortSubjects = (a, b) => {
+    const aName = getSubjectName(a);
+    const bName = getSubjectName(b);
+
+    if (aName < bName) return -1;
+    if (aName > bName) return 1;
+
+    return 0;
+};
+
+export {
+    formatDate,
+    getDescriptionOnly,
+    getSubjectName,
+    locationLabel,
+    locationUrl,
+    sortSubjects,
+};

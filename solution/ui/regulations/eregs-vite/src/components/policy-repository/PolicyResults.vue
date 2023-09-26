@@ -1,11 +1,9 @@
 <script setup>
 import { inject } from "vue";
 
-import { getSubjectName } from "utilities/filters";
-
 import RelatedSections from "@/components/search/RelatedSections.vue";
 
-import SubjectChip from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChip.vue";
+import SubjectChips from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChips.vue";
 
 const props = defineProps({
     results: {
@@ -51,13 +49,9 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
             </div>
             <template v-if="doc.subject.length > 0">
                 <div class="document__info-block">
-                    <div class="document__subjects">
-                        <SubjectChip
-                            v-for="(subject, i) in doc.subject"
-                            :key="subject.id + 'x' + i"
-                            :subject-name="getSubjectName(subject)"
-                        />
-                    </div>
+                    <SubjectChips
+                        :subjects="doc.subject"
+                    />
                 </div>
             </template>
             <div class="document__info-block">

@@ -5,7 +5,7 @@ import { useRoute } from "vue-router/composables";
 import _difference from "lodash/difference";
 import _isEmpty from "lodash/isEmpty";
 
-import { getSubjectName } from "utilities/filters";
+import { getSubjectName, sortSubjects } from "utilities/filters";
 
 import {
     getLastUpdatedDates,
@@ -170,9 +170,11 @@ const policyDocSubjects = ref({
 // called on load
 const getDocSubjects = async () => {
     try {
-        policyDocSubjects.value.results = await getPolicyDocSubjects({
+        const subjectsResponse = await getPolicyDocSubjects({
             apiUrl: props.apiUrl,
         });
+
+        policyDocSubjects.value.results = subjectsResponse.sort(sortSubjects);
     } catch (error) {
         console.error(error);
     } finally {
@@ -290,9 +292,7 @@ if (_isEmpty($route.query)) {
                 <div
                     class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
                 >
-                    <button class="sidebar-toggle__button">
-                        Open/Close
-                    </button>
+                    <button class="sidebar-toggle__button">Open/Close</button>
                     <PolicySidebar>
                         <template #title>
                             <h2>Find Policy Documents</h2>
