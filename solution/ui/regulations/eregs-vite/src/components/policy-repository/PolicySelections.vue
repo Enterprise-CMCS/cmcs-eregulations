@@ -33,7 +33,7 @@ const removeClick = (event) => {
     });
 };
 
-const selections = ref({});
+const selections = ref([]);
 
 watch(
     () => selectedParams.paramString,
@@ -58,7 +58,7 @@ watch(
 
 <template>
     <div class="selections__container">
-        <ul class="selections__list">
+        <ul v-if="selections.length > 0" class="selections__list">
             <li
                 v-for="selection in selections"
                 :key="selection.id"
