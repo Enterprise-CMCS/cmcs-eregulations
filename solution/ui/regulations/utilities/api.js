@@ -681,7 +681,7 @@ const getPolicyDocList = async ({
 }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file_manager/files${
+            `${apiUrl}file-manager/files${
                 requestParams ? `?${requestParams}` : ""
             }`,
             {},
@@ -690,7 +690,7 @@ const getPolicyDocList = async ({
     }
 
     return httpApiGet(
-        `file_manager/files${requestParams ? `?${requestParams}` : ""}`, cacheResponse
+        `file-manager/files${requestParams ? `?${requestParams}` : ""}`, cacheResponse
     );
 };
 
@@ -701,13 +701,13 @@ const getPolicyDocList = async ({
 const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file_manager/subjects`,
+            `${apiUrl}file-manager/subjects`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file_manager/subjects", cacheResponse);
+    return httpApiGet("file-manager/subjects", cacheResponse);
 };
 
 export {
