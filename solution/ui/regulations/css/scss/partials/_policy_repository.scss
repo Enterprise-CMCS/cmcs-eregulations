@@ -28,8 +28,34 @@
         }
 
         .sidebar__container {
+            position: relative;
             display: flex;
-            border-right: 2px solid $border_color;
+            border-right: none;
+            border-bottom: 2px solid $border_color;
+
+            @include screen-md {
+                border-right: 2px solid $border_color;
+                border-bottom: none;
+            }
+
+            .sidebar-toggle__button {
+                position: absolute;
+                top: 0;
+                right: 16px;
+                display: none; // TODO: revisit this when we have a better idea of how the sidebar will work on mobile
+
+                @include screen-md {
+                    display: none;
+                }
+            }
+
+            .sidebar-filters__container {
+                @include custom-max(($eds-width-md - 1) / 1px) {
+                    &--hidden {
+                        display: none;
+                    }
+                }
+            }
         }
 
         .sidebar__filters {
@@ -66,7 +92,6 @@
                             &:focus,
                             &:active {
                                 background-color: #c0c1c3;
-
                             }
 
                             i {

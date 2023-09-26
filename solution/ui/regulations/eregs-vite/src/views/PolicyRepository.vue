@@ -165,6 +165,7 @@ const policyDocSubjects = ref({
     loading: true,
 });
 
+// called on load
 const getDocSubjects = async () => {
     try {
         policyDocSubjects.value.results = await getPolicyDocSubjects({
@@ -214,7 +215,6 @@ watch(
         ) {
             const oldSubjectIds = oldParams.subjects.split(",");
             const newSubjectIds = newParams.subjects.split(",");
-
             const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
 
             removeSelectedParams({
@@ -223,7 +223,6 @@ watch(
             });
 
             const newRequestParams = getRequestParams(newParams);
-
             await getDocList(newRequestParams);
 
             return;
@@ -246,7 +245,6 @@ watch(
 
         // parse $route.query to return `${key}=${value}` string
         const newRequestParams = getRequestParams(newParams);
-
         await getDocList(newRequestParams);
     }
 );
@@ -290,6 +288,9 @@ if (_isEmpty($route.query)) {
                 <div
                     class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
                 >
+                    <button class="sidebar-toggle__button">
+                        Open/Close
+                    </button>
                     <PolicySidebar>
                         <template #title>
                             <h2>Find Policy Documents</h2>
