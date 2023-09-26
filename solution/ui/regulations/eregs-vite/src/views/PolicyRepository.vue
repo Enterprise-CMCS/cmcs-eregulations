@@ -4,6 +4,8 @@ import { useRouter, useRoute } from "vue-router/composables";
 
 import _isEmpty from "lodash/isEmpty";
 
+import { getSubjectName } from "utilities/filters";
+
 import {
     getLastUpdatedDates,
     getPolicyDocList,
@@ -105,54 +107,14 @@ const getDocList = async (requestParams = "") => {
 // use reactive to make urlParams reactive when provided/injected
 const selectedParams = reactive({
     paramString: "",
-    queryParamsToSet: {},
     paramsArray: [],
 });
 
 const updateSelectedParams = (paramArgs) => {
     const { action, id, name, type } = paramArgs;
 
-    // early return if removing a selected param
-    if (action === "remove") {
-        // early return if removing a param that is not selected
-        if (!selectedParams.queryParamsToSet[type]) return;
-
-        // remove from selectedParams.paramString
-        const stringToEdit = selectedParams.paramString
-            .substring(1)
-            .split("&")
-            .filter((param) => param != `${type}=${id}`)
-            .join("&");
-
-        selectedParams.paramString = `?${stringToEdit}`;
-
-        // remove from selectedParams.queryParamsToSet
-        selectedParams.queryParamsToSet[type] = selectedParams.queryParamsToSet[
-            type
-        ]
-            .split(",")
-            .filter((param) => param != id)
-            .join(",");
-
-        // remove from selectedParams.queryParamsToSet if empty
-        if (!selectedParams.queryParamsToSet[type]) {
-            delete selectedParams.queryParamsToSet[type];
-        }
-
-        // remove from selectedParams.paramsArray
-        selectedParams.paramsArray = selectedParams.paramsArray.filter(
-            (param) => param.id != id
-        );
-
-        return;
-    }
-
     // early return if the param is already selected
-    if (
-        action === "add" &&
-        selectedParams.paramString.includes(`${type}=${id}`)
-    )
-        return;
+    if (selectedParams.paramString.includes(`${type}=${id}`)) return;
 
     // update paramString that is used as reactive prop for watch
     if (selectedParams.paramString) {
@@ -161,32 +123,11 @@ const updateSelectedParams = (paramArgs) => {
         selectedParams.paramString = `?${type}=${id}`;
     }
 
-    // update queryParamsToSet that is used to update the url
-    if (selectedParams.queryParamsToSet[type]) {
-        selectedParams.queryParamsToSet[type] += `,${id}`;
-    } else {
-        selectedParams.queryParamsToSet[type] = `${id}`;
-    }
-
-    // create new selectedParams key for array of objects
+    // create new selectedParams key for array of objects for selections
     selectedParams.paramsArray.push({ id, name, type });
 };
 
-provide("selectedParams", {
-    selectedParams,
-    updateSelectedParams,
-});
-
-// watch for changes to selectedParams.paramString and update url
-watch(
-    () => selectedParams.paramString,
-    async () => {
-        $router.push({
-            name: "policy-repository",
-            query: { ...selectedParams.queryParamsToSet },
-        });
-    }
-);
+provide("selectedParams", selectedParams);
 
 // utility method to parse $route.query to return `${key}=${value},${value}` string
 const getRequestParams = (query) => {
@@ -199,16 +140,6 @@ const getRequestParams = (query) => {
 
     return requestParams;
 };
-
-// watch for changes to url and fetch new results
-watch(
-    () => $route.query,
-    async (newParams) => {
-        // parse $route.query to return `${key}=${value}` string
-        const requestParams = getRequestParams(newParams);
-        await getDocList(requestParams);
-    }
-);
 
 // policyDocSubjects fetch for subject selector
 // fetch here so we have it in context; pass down to selector via props
@@ -237,12 +168,8 @@ const getDocSubjects = async () => {
             subjects.forEach((subject) => {
                 updateSelectedParams({
                     type: "subjects",
-                    action: "add",
                     id: subject.id,
-                    name:
-                        subject.short_name ||
-                        subject.abbreviation ||
-                        subject.full_name,
+                    name: getSubjectName(subject),
                 });
             });
 
@@ -251,7 +178,30 @@ const getDocSubjects = async () => {
     }
 };
 
-getDocSubjects();
+watch(
+    () => $route.query,
+    async (newParams, oldParams) => {
+        if (newParams.subjects) {
+            const subjectIds = newParams.subjects.split(",");
+            const subjects = policyDocSubjects.value.results.filter((subject) =>
+                subjectIds.includes(subject.id.toString())
+            );
+
+            subjects.forEach((subject) => {
+                updateSelectedParams({
+                    type: "subjects",
+                    id: subject.id,
+                    name: getSubjectName(subject),
+                });
+            });
+        }
+
+        // parse $route.query to return `${key}=${value}` string
+        const newRequestParams = getRequestParams(newParams);
+
+        await getDocList(newRequestParams);
+    }
+);
 
 getPartsLastUpdated();
 getDocSubjects();

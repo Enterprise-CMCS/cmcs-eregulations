@@ -1,5 +1,5 @@
 <script setup>
-import { inject } from "vue";
+import { useRouter, useRoute } from "vue-router/composables";
 
 import { getSubjectName } from "utilities/filters";
 
@@ -10,14 +10,23 @@ const props = defineProps({
     },
 });
 
-const { updateSelectedParams } = inject("selectedParams");
+const $router = useRouter();
+const $route = useRoute();
 
 const subjectClick = (event) => {
-    updateSelectedParams({
-        type: "subjects",
-        action: "add",
-        id: event.target.dataset.id,
-        name: event.target.dataset.name,
+    const subjects = $route.query.subjects
+        ? $route.query.subjects.split(",")
+        : [];
+
+    if (subjects.includes(event.target.dataset.id)) return;
+
+    subjects.push(event.target.dataset.id);
+
+    $router.push({
+        name: "policy-repository",
+        query: {
+            subjects: subjects.join(","),
+        },
     });
 };
 </script>
