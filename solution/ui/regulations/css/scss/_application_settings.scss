@@ -130,6 +130,7 @@ $jump_to_submit_active: $mid_blue;
 $jump_to_submit_active_focus: $dark_blue;
 
 $policy_subject_chip_background: $light_blue_2;
+$policy_subject_selected_chip_background: $dark_blue;
 
 // Borders
 
@@ -145,6 +146,7 @@ $primary_text_color: $dark_gray;
 $secondary_text_color: $mid_gray;
 $reverse_text_color: $white;
 $policy_subject_chip_text: $mid_blue;
+$policy_subject_selected_chip_text: #FFF;
 
 // Indicators
 
@@ -170,6 +172,8 @@ $main_button_color: $dark_blue;
 $main_button_hover_background: $white;
 
 $copy_button_success: $green;
+
+$policy_subject_close_background: $light_gray;
 
 //--------------------------
 // Fonts

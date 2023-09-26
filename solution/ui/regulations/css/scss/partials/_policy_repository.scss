@@ -22,6 +22,11 @@
             margin: 0 0 1rem !important; // !important to override the default h2 margin due to vuetify defaults
         }
 
+        h3 {
+            margin: 0;
+            line-height: 24px;
+        }
+
         .sidebar__container {
             display: flex;
             border-right: 2px solid $border_color;
@@ -29,6 +34,42 @@
 
         .sidebar__filters {
             flex: 1;
+
+            .selections__container {
+                .selections__list {
+                    list-style: none;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 4px;
+                    margin: 0 0 1rem;
+                    padding-left: 0;
+
+                    .selections__li {
+                        display: flex;
+                        align-items: center;
+                        background-color: $policy_subject_selected_chip_background;
+                        color: $policy_subject_selected_chip_text;
+                        border-radius: 4px;
+                        padding: 4px 8px;
+
+                        button {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 16px;
+                            height: 16px;
+                            margin-left: 8px;
+                            background-color: $policy_subject_close_background;
+                            color: $policy_subject_selected_chip_background;
+                            border-radius: 4px;
+
+                            i {
+                                pointer-events: none;
+                            }
+                        }
+                    }
+                }
+            }
 
             .subjects__list {
                 height: 300px;
@@ -65,11 +106,6 @@
             .doc-list__document {
                 padding: 0.75rem 1rem;
                 border-bottom: 1px solid $border_color;
-
-                h3 {
-                    margin: 0;
-                    line-height: 24px;
-                }
 
                 .document__info-block {
                     margin-bottom: 0.75rem;

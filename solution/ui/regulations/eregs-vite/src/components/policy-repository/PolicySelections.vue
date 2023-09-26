@@ -58,10 +58,14 @@ watch(
 
 <template>
     <div class="selections__container">
-        <ul>
-            <li v-for="selection in selections" :key="selection.id">
-                {{ selection.label }}: {{ selection.name }} {{ selection.id }}
-                <button :data-id="selection.id" @click="removeClick">x</button>
+        <ul class="selections__list">
+            <li
+                v-for="selection in selections"
+                :key="selection.id"
+                class="selections__li"
+            >
+                {{ selection.label }}: {{ selection.name }}
+                <button :data-id="selection.id" @click="removeClick"><i class="mdi mdi-close"></i></button>
             </li>
         </ul>
     </div>
