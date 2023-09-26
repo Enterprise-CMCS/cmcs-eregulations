@@ -38,7 +38,6 @@ const selections = ref({});
 watch(
     () => selectedParams.paramString,
     async () => {
-        console.log("selectedParams.paramString", selectedParams.paramString)
         selections.value = selectedParams.paramsArray
             .map((param) => ({
                 label: FilterTypesEnum[param.type],

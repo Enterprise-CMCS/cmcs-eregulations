@@ -1,7 +1,8 @@
 <script setup>
 import { provide, reactive, ref, watch } from "vue";
-import { useRouter, useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router/composables";
 
+import _difference from "lodash/difference";
 import _isEmpty from "lodash/isEmpty";
 
 import { getSubjectName } from "utilities/filters";
@@ -57,7 +58,6 @@ const props = defineProps({
 });
 
 // Router and Route
-const $router = useRouter();
 const $route = useRoute();
 
 // provide Django template variables
@@ -110,8 +110,8 @@ const selectedParams = reactive({
     paramsArray: [],
 });
 
-const updateSelectedParams = (paramArgs) => {
-    const { action, id, name, type } = paramArgs;
+const addSelectedParams = (paramArgs) => {
+    const { id, name, type } = paramArgs;
 
     // early return if the param is already selected
     if (selectedParams.paramString.includes(`${type}=${id}`)) return;
@@ -125,6 +125,23 @@ const updateSelectedParams = (paramArgs) => {
 
     // create new selectedParams key for array of objects for selections
     selectedParams.paramsArray.push({ id, name, type });
+};
+
+const removeSelectedParams = (paramArgs) => {
+    const { id, type } = paramArgs;
+
+    // update paramString that is used as reactive prop for watch
+    const paramStringArray = selectedParams.paramString.split("&");
+    const paramString = paramStringArray
+        .filter((param) => !param.includes(`${type}=${id}`))
+        .join("&");
+
+    selectedParams.paramString = paramString;
+
+    // create new selectedParams key for array of objects for selections
+    selectedParams.paramsArray = selectedParams.paramsArray.filter(
+        (param) => param.id != id
+    );
 };
 
 provide("selectedParams", selectedParams);
@@ -158,7 +175,7 @@ const getDocSubjects = async () => {
     } finally {
         policyDocSubjects.value.loading = false;
 
-        // if there's a $route, call updateSelectedParams
+        // if there's a $route, call addSelectedParams
         if (!_isEmpty($route.query)) {
             const subjectIds = $route.query.subjects.split(",");
             const subjects = policyDocSubjects.value.results.filter((subject) =>
@@ -166,7 +183,7 @@ const getDocSubjects = async () => {
             );
 
             subjects.forEach((subject) => {
-                updateSelectedParams({
+                addSelectedParams({
                     type: "subjects",
                     id: subject.id,
                     name: getSubjectName(subject),
@@ -181,6 +198,37 @@ const getDocSubjects = async () => {
 watch(
     () => $route.query,
     async (newParams, oldParams) => {
+        if (_isEmpty(newParams)) {
+            selectedParams.paramString = "";
+            selectedParams.paramsArray = [];
+
+            getDocList();
+
+            return;
+        }
+
+        if (
+            newParams.subjects &&
+            oldParams.subjects &&
+            newParams.subjects.length < oldParams.subjects.length
+        ) {
+            const oldSubjectIds = oldParams.subjects.split(",");
+            const newSubjectIds = newParams.subjects.split(",");
+
+            const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
+
+            removeSelectedParams({
+                type: "subjects",
+                id: subjectToRemove[0],
+            });
+
+            const newRequestParams = getRequestParams(newParams);
+
+            await getDocList(newRequestParams);
+
+            return;
+        }
+
         if (newParams.subjects) {
             const subjectIds = newParams.subjects.split(",");
             const subjects = policyDocSubjects.value.results.filter((subject) =>
@@ -188,7 +236,7 @@ watch(
             );
 
             subjects.forEach((subject) => {
-                updateSelectedParams({
+                addSelectedParams({
                     type: "subjects",
                     id: subject.id,
                     name: getSubjectName(subject),
