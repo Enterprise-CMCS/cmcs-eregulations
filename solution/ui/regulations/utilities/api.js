@@ -681,7 +681,7 @@ const getPolicyDocList = async ({
 }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file_manager/file_list${
+            `${apiUrl}file_manager/files${
                 requestParams ? `?${requestParams}` : ""
             }`,
             {},
@@ -690,7 +690,7 @@ const getPolicyDocList = async ({
     }
 
     return httpApiGet(
-        `file_manager/file_list${requestParams ? `?${requestParams}` : ""}`
+        `file_manager/files${requestParams ? `?${requestParams}` : ""}`, cacheResponse
     );
 };
 

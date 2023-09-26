@@ -20,7 +20,7 @@ const props = defineProps({
 
 const apiUrl = inject("apiUrl");
 
-const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
+const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
 </script>
 
 <template>
