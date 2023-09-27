@@ -65,7 +65,13 @@ watch(
                 class="selections__li"
             >
                 {{ selection.label }}: {{ selection.name }}
-                <button :data-id="selection.id" @click="removeClick"><i class="mdi mdi-close"></i></button>
+                <button
+                    :data-id="selection.id"
+                    :data-testid="`remove-subject-${selection.id}`"
+                    @click="removeClick"
+                >
+                    <i class="mdi mdi-close"></i>
+                </button>
             </li>
         </ul>
     </div>

@@ -43,6 +43,7 @@ const subjectClick = (event) => {
                 <button
                     :data-name="getSubjectName(subject)"
                     :data-id="subject.id"
+                    :data-testid="`add-subject-${subject.id}`"
                     :title="subject.full_name"
                     @click="subjectClick"
                 >
