@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from common.fields import HeadlineField
 from resources.serializers.locations import AbstractLocationPolymorphicSerializer, MetaLocationSerializer
 
 from .models import DocumentType, Subject
@@ -34,6 +35,9 @@ class UploadedFileSerializer(serializers.Serializer, ):
     document_type = DocumentTypeSerializer(many=False, read_only=True)
     subject = SubjectSerializer(many=True, read_only=True)
     uid = serializers.CharField()
+
+    document_id_headline = HeadlineField()
+    summary_headline = HeadlineField()
 
     @extend_schema_field(MetaLocationSerializer.many(True))
     def get_locations(self, obj):

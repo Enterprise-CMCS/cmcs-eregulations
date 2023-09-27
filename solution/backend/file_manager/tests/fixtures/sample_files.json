@@ -1,0 +1,20 @@
+[
+    {
+        "document_id": "Test file 1",
+        "file_name": "123_abc.docx",
+        "date": "2023-01-01",
+        "summary": "This is a test file containing test information"
+    },
+    {
+        "document_id": "Internal notes",
+        "file_name": "internal-notes.txt",
+        "date": "2019-05-12",
+        "summary": "Important notes that cannot be public"
+    },
+    {
+        "document_id": "Policy reference file",
+        "file_name": "policyreference.pptx",
+        "date": "2020-02-29",
+        "summary": "Hi hello some policy stuff goes here"
+    }
+]

@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django_jsonform.models.fields import JSONField
+from drf_spectacular.utils import OpenApiTypes, extend_schema_field
+from rest_framework import serializers
 
 from .patterns import DASH_REGEX
 
@@ -165,3 +167,16 @@ class UscRefField(_ReferenceField):
 class CfrRefField(_ReferenceField):
     def __init__(self, *args, **kwargs):
         super().__init__(CFR_REF_SCHEMA, "reference", *args, **kwargs)
+
+
+# Retrieves automatically generated search headlines
+@extend_schema_field(OpenApiTypes.STR)
+class HeadlineField(serializers.Field):
+    def __init__(self, model_name=None, **kwargs):
+        self.model_name = model_name
+        kwargs["source"] = '*'
+        kwargs["read_only"] = True
+        super().__init__(**kwargs)
+
+    def to_representation(self, obj):
+        return getattr(obj, f"{self.model_name}_{self.field_name}", getattr(obj, self.field_name, None))
