@@ -14,7 +14,7 @@ custom:
       localDir: ./regulations
       deleteRemoved: false
   pythonRequirements: 
-      dockerizePip: false
+    - dockerizePip: false
       usePoetry: false
       layer: true
       useDownloadCache: false
