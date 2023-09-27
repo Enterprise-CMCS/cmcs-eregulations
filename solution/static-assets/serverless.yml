@@ -19,7 +19,7 @@ custom:
       layer: true
       useDownloadCache: false
       useStaticCache: false
-      pipCmdExtraArgs: ['--platform manylinux2014_x86_64', --implementation cp, '--only-binary=:all:']
+      pipCmdExtraArgs: ['--platform manylinux2014_x86_64', '--implementation cp', '--only-binary=:all:']
       slim: true
     
 package:
