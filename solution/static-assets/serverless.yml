@@ -13,15 +13,15 @@ custom:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
       deleteRemoved: false
-  pythonRequirements: {
-      dockerizePip: false,
-      usePoetry: false,
-      layer: true,
-      useDownloadCache: false,
-      useStaticCache: false,
-      pipCmdExtraArgs: ['--platform manylinux2014_x86_64', '--only-binary=:all:'],
+  pythonRequirements: 
+      dockerizePip: false
+      usePoetry: false
+      layer: true
+      useDownloadCache: false
+      useStaticCache: false
+      pipCmdExtraArgs: ['--platform manylinux2014_x86_64', '--only-binary=:all:']
       slim: true
-    }
+    
 package:
   #patterns:
   #  - '!node_modules/**'
