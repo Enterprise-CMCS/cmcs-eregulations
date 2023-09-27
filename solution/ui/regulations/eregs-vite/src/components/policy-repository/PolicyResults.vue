@@ -3,7 +3,7 @@ import { inject } from "vue";
 
 import RelatedSections from "@/components/search/RelatedSections.vue";
 
-import SubjectChip from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChip.vue";
+import SubjectChips from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChips.vue";
 
 const props = defineProps({
     results: {
@@ -23,6 +23,15 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
 
 <template>
     <div class="doc__list">
+        <div class="search-results-count">
+            <span v-if="results.length > 0">
+                Showing 1 -
+                {{ results.length }} of
+            </span>
+            {{ results.length }} document<span v-if="results.length != 1"
+                >s</span
+            >.
+        </div>
         <div v-for="doc in results" :key="doc.uid" class="doc-list__document">
             <div class="document__primary-info document__info-block">
                 <div v-if="doc.document_type" class="document__type">
@@ -40,13 +49,9 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
             </div>
             <template v-if="doc.subject.length > 0">
                 <div class="document__info-block">
-                    <div class="document__subjects">
-                        <SubjectChip
-                            v-for="(subject, i) in doc.subject"
-                            :key="subject.id + 'x' + i"
-                            :subject-name="subject.full_name"
-                        />
-                    </div>
+                    <SubjectChips
+                        :subjects="doc.subject"
+                    />
                 </div>
             </template>
             <div class="document__info-block">

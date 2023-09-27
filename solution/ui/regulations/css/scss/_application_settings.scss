@@ -130,6 +130,7 @@ $jump_to_submit_active: $mid_blue;
 $jump_to_submit_active_focus: $dark_blue;
 
 $policy_subject_chip_background: $light_blue_2;
+$policy_subject_selected_chip_background: $dark_blue;
 
 // Borders
 
@@ -145,6 +146,7 @@ $primary_text_color: $dark_gray;
 $secondary_text_color: $mid_gray;
 $reverse_text_color: $white;
 $policy_subject_chip_text: $mid_blue;
+$policy_subject_selected_chip_text: #FFF;
 
 // Indicators
 
@@ -171,6 +173,9 @@ $main_button_hover_background: $white;
 
 $copy_button_success: $green;
 
+$policy_subject_close_background: $light_gray;
+$policy_subject_close_background_hover: $mid_gray_3;
+
 //--------------------------
 // Fonts
 //--------------------------
@@ -191,6 +196,15 @@ $font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable i
 
 $font_size_hero_h1: 26px;
 $font_size_hero_h1_tablet: 20px;
+
+@mixin font-bold-keep-width {
+    text-shadow: -0.06ex 0 0 currentColor, 0.06ex 0 0 currentColor;
+
+    @supports (-webkit-text-stroke-width: 0.04ex) {
+        text-shadow: -0.03ex 0 0 currentColor, 0.03ex 0 0 currentColor;
+        -webkit-text-stroke-width: 0.1ex;
+    }
+}
 
 //--------------------------
 // Breakpoints

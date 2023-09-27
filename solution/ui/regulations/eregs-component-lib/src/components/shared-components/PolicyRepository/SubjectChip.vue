@@ -1,6 +1,4 @@
 <script setup>
-import { computed, ref } from "vue";
-
 const props = defineProps({
     subjectName: {
         type: String,

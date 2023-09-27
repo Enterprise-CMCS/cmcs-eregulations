@@ -23,7 +23,9 @@ const SPECIAL_CHARACTERS = [
 ];
 
 const API_ENDPOINTS_V3 = [
+    `/v3/acts`,
     `/v3/ecfr_parser_result/${TITLE}`,
+    `v3/file-manager/subjects`,
     `/v3/parser_config`,
     `/v3/resources/`,
     `/v3/resources/categories`,
@@ -35,6 +37,9 @@ const API_ENDPOINTS_V3 = [
     `/v3/resources/locations/subparts`,
     `/v3/resources/search?q=${SEARCH_TERM}`,
     `/v3/resources/supplemental_content`,
+    `/v3/search?q=${SEARCH_TERM}`,
+    `/v3/statutes`,
+    `/v3/statutes?act=${ACT}`,
     `${SYNONYMS_ENDPOINT}${SYNONYM}`,
     `/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}`,
@@ -50,10 +55,6 @@ const API_ENDPOINTS_V3 = [
     `/v3/title/${TITLE}/toc`,
     `/v3/titles`,
     `/v3/toc`,
-    `/v3/search?q=${SEARCH_TERM}`,
-    `/v3/statutes`,
-    `/v3/statutes?act=${ACT}`,
-    `/v3/acts`,
 ];
 
 describe("API testing", () => {
