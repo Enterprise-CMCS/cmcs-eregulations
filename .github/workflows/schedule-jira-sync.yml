@@ -1,0 +1,38 @@
+name: Sync Security Hub findings and Jira issues
+on:
+  workflow_dispatch: # for testing and manual runs
+  schedule:
+    - cron: "25 1 * * *" # daily at 6:25 am EST
+permissions:
+  id-token: write
+jobs:
+  sync:
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ["prod"]
+      fail-fast: false
+    environment:
+      name: ${{ matrix.environment }}
+    name: Run sync
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      - name: Sync Security Hub and Jira
+        uses: Enterprise-CMCS/security-hub-visibility@v1.0.5
+        with:
+          jira-token: ${{ secrets.JIRA_TOKEN }}
+          jira-username: ${{ secrets.JIRA_USERNAME }}
+          jira-host: ${{secrets.JIRA_HOST}}
+          jira-project-key: EREGCSC
+          jira-ignore-statuses: Done, Closed, Canceled
+          jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
+          aws-severities: CRITICAL, HIGH, MEDIUM
+          #assign-jira-ticket-to: VU6Q
+          #auto-close: false

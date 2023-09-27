@@ -27,10 +27,10 @@ class SubjectSerializer(serializers.Serializer):
 
 
 class UploadedFileSerializer(serializers.Serializer, ):
-    name = serializers.CharField()
+    document_id = serializers.CharField()
     file_name = serializers.CharField()
     date = serializers.DateField()
-    description = serializers.CharField()
+    summary = serializers.CharField()
     locations = serializers.SerializerMethodField()
     document_type = DocumentTypeSerializer(many=False, read_only=True)
     subject = SubjectSerializer(many=True, read_only=True)

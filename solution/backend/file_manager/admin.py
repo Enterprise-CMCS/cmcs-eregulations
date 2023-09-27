@@ -41,21 +41,27 @@ class UploadAdminForm(forms.ModelForm):
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
     form = UploadAdminForm
-    list_display = ("name",)
-    search_fields = ["name"]
-    ordering = ("name",)
+    list_display = ("document_id",)
+    search_fields = ["document_id"]
+    ordering = ("document_id",)
     filter_horizontal = ("locations", "subject")
     readonly_fields = ('download_file', 'file_name')
-    fields = ("name", 'file_name', 'file_path', 'date', 'description',
+    fields = ("file_name", "file_path", "document_id", 'date', 'summary',
               'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
     }
 
+    # Will remove any characters from file names we do not want in it.
+    # Commas in file name causes issues in chrome on downloads since we rename the file.
+    def clean_file_name(self, name):
+        name = name.replace(',', '')
+        return name
+
     def save_model(self, request, obj, form, change):
         path = form.cleaned_data.get("file_path")
         if path:
-            obj.file_name = path._name
+            obj.file_name = self.clean_file_name(path._name)
             self.upload_file(path, obj)
         super().save_model(request, obj, form, change)
 
