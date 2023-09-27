@@ -1,7 +1,8 @@
 <script setup>
 import { inject, ref, watch } from "vue";
-
 import { useRouter, useRoute } from "vue-router/composables";
+
+import _isArray from "lodash/isArray";
 
 const $router = useRouter();
 const $route = useRoute();
@@ -13,11 +14,15 @@ const FilterTypesEnum = {
 const selectedParams = inject("selectedParams");
 
 const removeClick = (event) => {
-    const subjects = $route.query.subjects
-        ? $route.query.subjects.split(",")
+    const subjects = _isArray($route.query.subjects)
+        ? $route.query.subjects[0]
+        : $route.query.subjects;
+
+    const subjectIds = subjects
+        ? subjects.split(",")
         : [];
 
-    const filteredSubjects = subjects.filter(
+    const filteredSubjects = subjectIds.filter(
         (subject) => subject !== event.target.dataset.id
     );
 

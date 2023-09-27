@@ -3,6 +3,7 @@ import { provide, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router/composables";
 
 import _difference from "lodash/difference";
+import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import { getSubjectName, sortSubjects } from "utilities/filters";
@@ -160,9 +161,14 @@ provide("selectedParams", selectedParams);
 const getRequestParams = (query) => {
     const requestParams = Object.entries(query)
         .map(([key, value]) => {
-            const valueArray = value
+            const sanitizedVal = _isArray(value)
+                ? value[0]
+                : value
+
+            const valueArray = sanitizedVal
                 .split(",")
                 .filter((id) => !Number.isNaN(parseInt(id, 10)));
+
             return valueArray.map((v) => `${key}=${v}`).join("&");
         })
         .join("&");
@@ -192,14 +198,16 @@ const getDocSubjects = async () => {
 
         // if there's a $route, call addSelectedParams
         if (!_isEmpty($route.query)) {
-            const subjectIds = $route.query.subjects
-                ? $route.query.subjects.split(",")
-                : [];
-            const subjects = policyDocSubjects.value.results.filter((subject) =>
-                subjectIds.includes(subject.id.toString())
+            const subjects = _isArray($route.query.subjects)
+                ? $route.query.subjects[0]
+                : $route.query.subjects;
+
+            const subjectIds = subjects ? subjects.split(",") : [];
+            const filteredSubjects = policyDocSubjects.value.results.filter(
+                (subject) => subjectIds.includes(subject.id.toString())
             );
 
-            subjects.forEach((subject) => {
+            filteredSubjects.forEach((subject) => {
                 addSelectedParams({
                     type: "subjects",
                     id: subject.id,
