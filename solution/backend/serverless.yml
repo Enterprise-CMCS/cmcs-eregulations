@@ -143,12 +143,12 @@ resources:
                   Condition:
                     Bool:
                       "aws:SecureTransport": false
-                   Resource:
-                     - Fn::Join:
-                       - ""
-                       - - "arn:aws:s3:::"
-                         - "Ref" : "ServerlessDeploymentBucket"
-                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
+                  Resource:
+                    - Fn::Join:
+                      - ""
+                      - - "arn:aws:s3:::"
+                        - "Ref" : "ServerlessDeploymentBucket"
+                    - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
           - PolicyName: LambdaPolicy
             PolicyDocument:
               Version: '2012-10-17'
