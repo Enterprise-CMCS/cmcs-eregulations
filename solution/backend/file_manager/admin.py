@@ -41,12 +41,12 @@ class UploadAdminForm(forms.ModelForm):
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
     form = UploadAdminForm
-    list_display = ("name",)
-    search_fields = ["name"]
-    ordering = ("name",)
+    list_display = ("document_id",)
+    search_fields = ["document_id"]
+    ordering = ("document_id",)
     filter_horizontal = ("locations", "subject")
     readonly_fields = ('download_file', 'file_name')
-    fields = ("name", 'file_name', 'file_path', 'date', 'description',
+    fields = ("file_name", "file_path", "document_id", 'date', 'summary',
               'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
