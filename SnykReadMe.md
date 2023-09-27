@@ -33,7 +33,13 @@ Next, we need a service account to authenticate with Jira and create the tickets
 
 Once that service account is created, note the username. Then login to jira with that account, go to the upper right where the account icon is and click it. Then click "Profile" and the profile page should load up. Then on the left, there is a navigation bar where you click "Personal Access Tokens". On the left side, there is a blue "Create token" button that you click. Then provide a unique token name and also decide if you want auto expiry or never expires. Then you can also choose how long before the token expires. Then click "create". Then a page loads with the secret value that you should copy and then hit next. Now you have the authentication token and username.
 
-Go back to github and go to the secrets page and create secrets to store the Jira Username, Personal Access Token, and Jira Host name. The Username is the service account ID, the PAT is the token just created in the last step, and the Host name is the first part of the jira url up to ".gov" without the "https://". For example, the homepage URL for eRegs Jira is "https://jiraent.cms.gov/projects/EREGCSC/summary". However, the host name is just "jiraent.cms.gov".
+Go back to github and go to the secrets page and create secrets to store the Jira Username, Personal Access Token, and Jira Host name. The Username is the service account ID, the PAT is the token just created in the last step, and the Host name is the first part of the jira url up to ".gov" without the "https://". For example, the homepage URL for eRegs Jira is "https://jiraent.cms.gov/projects/EREGCSC/summary". However, the host name is just "jiraent.cms.gov". Below is the variables and their descriptions:
+
+```
+    jira-username: This secret needs to hold the email address of the Jira Service Account.
+    jira-token: This secret needs to hold the PAT value of the Jira Service Account.
+    jira-host: The Jira Domain- EX. "jirarent.cms.gov".
+```
 
 # Current Implementation
 
