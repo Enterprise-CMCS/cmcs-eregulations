@@ -160,7 +160,9 @@ provide("selectedParams", selectedParams);
 const getRequestParams = (query) => {
     const requestParams = Object.entries(query)
         .map(([key, value]) => {
-            const valueArray = value.split(",");
+            const valueArray = value
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
             return valueArray.map((v) => `${key}=${v}`).join("&");
         })
         .join("&");
@@ -224,8 +226,13 @@ watch(
             oldQueryParams.subjects &&
             newQueryParams.subjects.length < oldQueryParams.subjects.length
         ) {
-            const oldSubjectIds = oldQueryParams.subjects.split(",");
-            const newSubjectIds = newQueryParams.subjects.split(",");
+            const oldSubjectIds = oldQueryParams.subjects
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
+            const newSubjectIds = newQueryParams.subjects
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
+
             const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
 
             removeSelectedParams({
@@ -240,7 +247,9 @@ watch(
         }
 
         if (newQueryParams.subjects) {
-            const subjectIds = newQueryParams.subjects.split(",");
+            const subjectIds = newQueryParams.subjects
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
             const subjects = policyDocSubjects.value.results.filter((subject) =>
                 subjectIds.includes(subject.id.toString())
             );
