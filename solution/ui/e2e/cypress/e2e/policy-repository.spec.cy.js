@@ -35,6 +35,19 @@ describe("Policy Repository", () => {
         cy.get("#loginIndicator").should("be.visible");
     });
 
+    it("should make a successful request to the file-manager/files endpoint", () => {
+        cy.intercept("**/v3/file-manager/files", (req) => {
+            req.on("response", (res) => {
+                expect(res.statusCode).to.eq(200);
+            });
+        });
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository");
+        cy.url().should("include", "/policy-repository/");
+    });
+
+
     it("returns you to the admin login page when you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
