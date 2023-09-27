@@ -14,12 +14,12 @@ custom:
       localDir: ./regulations
       deleteRemoved: false
   pythonRequirements: 
-    - dockerizePip: false
+      dockerizePip: false
       usePoetry: false
       layer: true
       useDownloadCache: false
       useStaticCache: false
-      pipCmdExtraArgs: ['--platform manylinux2014_x86_64', '--only-binary=:all:']
+      pipCmdExtraArgs: ['--platform manylinux2014_x86_64', --implementation cp, '--only-binary=:all:']
       slim: true
     
 package:
