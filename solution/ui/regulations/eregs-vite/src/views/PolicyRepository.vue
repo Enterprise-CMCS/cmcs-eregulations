@@ -192,7 +192,9 @@ const getDocSubjects = async () => {
 
         // if there's a $route, call addSelectedParams
         if (!_isEmpty($route.query)) {
-            const subjectIds = $route.query.subjects.split(",");
+            const subjectIds = $route.query.subjects
+                ? $route.query.subjects.split(",")
+                : [];
             const subjects = policyDocSubjects.value.results.filter((subject) =>
                 subjectIds.includes(subject.id.toString())
             );
