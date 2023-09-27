@@ -36,8 +36,8 @@ class UploadedFileSerializer(serializers.Serializer, ):
     subject = SubjectSerializer(many=True, read_only=True)
     uid = serializers.CharField()
 
-    name_headline = HeadlineField()
-    description_headline = HeadlineField()
+    document_id_headline = HeadlineField()
+    summary_headline = HeadlineField()
 
     @extend_schema_field(MetaLocationSerializer.many(True))
     def get_locations(self, obj):

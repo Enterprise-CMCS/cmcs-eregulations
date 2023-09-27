@@ -71,8 +71,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
     def get_search_headlines(self, search_query, search_type):
         return {
-            "name_headline": self.make_headline("name", search_query, search_type),
-            "description_headline": self.make_headline("description", search_query, search_type),
+            "document_id_headline": self.make_headline("document_id", search_query, search_type),
+            "summary_headline": self.make_headline("summary", search_query, search_type),
         }
 
     def get_queryset(self):
@@ -107,8 +107,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                 if search_query.startswith(QUOTE_TYPES) and search_query.endswith(QUOTE_TYPES)
                 else ("plain", False)
             )
-            vector = SearchVector("name", weight="A", config="english") + \
-                SearchVector("description", weight="B", config="english") + \
+            vector = SearchVector("document_id", weight="A", config="english") + \
+                SearchVector("summary", weight="B", config="english") + \
                 SearchVector("date", weight="C", config="english")
             query = query.annotate(
                 rank=SearchRank(
@@ -140,8 +140,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),
                     OpenApiQueryParameter("q",
-                                          "Search for text within file metadata. Searches name, file name, "
-                                          "date, and description.", str, False),
+                                          "Search for text within file metadata. Searches document_id, file name, "
+                                          "date, and summary.", str, False),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )
     def list(self, request):

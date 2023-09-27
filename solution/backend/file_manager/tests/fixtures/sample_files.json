@@ -1,20 +1,20 @@
 [
     {
-        "name": "Test file 1",
+        "document_id": "Test file 1",
         "file_name": "123_abc.docx",
         "date": "2023-01-01",
-        "description": "This is a test file containing test information"
+        "summary": "This is a test file containing test information"
     },
     {
-        "name": "Internal notes",
+        "document_id": "Internal notes",
         "file_name": "internal-notes.txt",
         "date": "2019-05-12",
-        "description": "Important notes that cannot be public"
+        "summary": "Important notes that cannot be public"
     },
     {
-        "name": "Policy reference file",
+        "document_id": "Policy reference file",
         "file_name": "policyreference.pptx",
         "date": "2020-02-29",
-        "description": "Hi hello some policy stuff goes here"
+        "summary": "Hi hello some policy stuff goes here"
     }
 ]
