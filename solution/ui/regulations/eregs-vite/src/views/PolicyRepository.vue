@@ -106,12 +106,14 @@ const getDocList = async (requestParams = "") => {
     }
 };
 
-// use reactive to make urlParams reactive when provided/injected
+// use "reactive" method to make urlParams reactive when provided/injected
+// selectedParams.paramString is used as the reactive prop
 const selectedParams = reactive({
     paramString: "",
     paramsArray: [],
 });
 
+// method to add selected params
 const addSelectedParams = (paramArgs) => {
     const { id, name, type } = paramArgs;
 
@@ -129,6 +131,7 @@ const addSelectedParams = (paramArgs) => {
     selectedParams.paramsArray.push({ id, name, type });
 };
 
+// method to remove selected params
 const removeSelectedParams = (paramArgs) => {
     const { id, type } = paramArgs;
 
@@ -144,6 +147,11 @@ const removeSelectedParams = (paramArgs) => {
     selectedParams.paramsArray = selectedParams.paramsArray.filter(
         (param) => param.id != id
     );
+};
+
+const clearSelectedParams = () => {
+    selectedParams.paramString = "";
+    selectedParams.paramsArray = [];
 };
 
 provide("selectedParams", selectedParams);
@@ -202,23 +210,22 @@ const getDocSubjects = async () => {
 
 watch(
     () => $route.query,
-    async (newParams, oldParams) => {
-        if (_isEmpty(newParams)) {
-            selectedParams.paramString = "";
-            selectedParams.paramsArray = [];
-
+    async (newQueryParams, oldQueryParams) => {
+        // if all params are removed, clear selectedParams and getDocList
+        if (_isEmpty(newQueryParams)) {
+            clearSelectedParams();
             getDocList();
-
             return;
         }
 
+        // if there are multiple subjects already selected and one needs to be removed
         if (
-            newParams.subjects &&
-            oldParams.subjects &&
-            newParams.subjects.length < oldParams.subjects.length
+            newQueryParams.subjects &&
+            oldQueryParams.subjects &&
+            newQueryParams.subjects.length < oldQueryParams.subjects.length
         ) {
-            const oldSubjectIds = oldParams.subjects.split(",");
-            const newSubjectIds = newParams.subjects.split(",");
+            const oldSubjectIds = oldQueryParams.subjects.split(",");
+            const newSubjectIds = newQueryParams.subjects.split(",");
             const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
 
             removeSelectedParams({
@@ -226,14 +233,14 @@ watch(
                 id: subjectToRemove[0],
             });
 
-            const newRequestParams = getRequestParams(newParams);
+            const newRequestParams = getRequestParams(newQueryParams);
             await getDocList(newRequestParams);
 
             return;
         }
 
-        if (newParams.subjects) {
-            const subjectIds = newParams.subjects.split(",");
+        if (newQueryParams.subjects) {
+            const subjectIds = newQueryParams.subjects.split(",");
             const subjects = policyDocSubjects.value.results.filter((subject) =>
                 subjectIds.includes(subject.id.toString())
             );
@@ -248,11 +255,12 @@ watch(
         }
 
         // parse $route.query to return `${key}=${value}` string
-        const newRequestParams = getRequestParams(newParams);
+        const newRequestParams = getRequestParams(newQueryParams);
         await getDocList(newRequestParams);
     }
 );
 
+// fetches on page load
 getPartsLastUpdated();
 getDocSubjects();
 
