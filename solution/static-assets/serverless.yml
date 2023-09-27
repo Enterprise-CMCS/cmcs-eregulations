@@ -20,11 +20,12 @@ custom:
     useStaticCache: false,
     pipCmdExtraArgs: ['--platform manylinux2014_x86_64', '--only-binary=:all:'],
     slim: true,
-    layer:
+    layer: {
       name: python-django,
       description: "Layer which contains django requirements",
       compatibleRuntimes:
         - python3.9
+      s}
     }
 
 package:
