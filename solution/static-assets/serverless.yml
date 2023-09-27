@@ -14,6 +14,12 @@ custom:
       localDir: ./regulations
       deleteRemoved: false
   pythonRequirements:
+    dockerizePip: false,
+    usePoetry: false,
+    useDownloadCache: false,
+    useStaticCache: false,
+    pipCmdExtraArgs: ['--platform manylinux2014_x86_64', '--only-binary=:all:'],
+    slim: true,
     layer:
       name: python-django
       description: "Layer which contains django requirements"
