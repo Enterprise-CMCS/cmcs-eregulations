@@ -30,25 +30,28 @@ class Subject(models.Model):
 
 
 class UploadedFile(models.Model):
-    name = models.CharField(max_length=512, null=True, blank=True)
+    document_id = models.CharField(max_length=512, null=True, blank=True)
     file_name = models.CharField(max_length=512, null=True, blank=True)
     date = VariableDateField(null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    summary = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
     subject = models.ManyToManyField(Subject, blank=True, related_name="uploads")
     document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="uploads", on_delete=models.SET_NULL)
-    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="uploads")
+    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="uploads", verbose_name="Regulation Locations")
     uid = models.UUIDField(
          primary_key=False,
          default=uuid.uuid4,
          editable=False)
 
-    def get_key(self):
+    def extension(self):
         name, extension = os.path.splitext(self.file_name)
-        if extension:
-            return 'uploaded_files/' + str(self.uid) + extension
+        return extension
+
+    def get_key(self):
+        if self.extension():
+            return 'uploaded_files/' + str(self.uid) + self.extension()
         else:
             raise ValueError("File does not have an extension")
 
     def __str__(self) -> str:
-        return str(self.name) + ' ' + str(self.description)
+        return str(self.document_id) + ' ' + str(self.summary)

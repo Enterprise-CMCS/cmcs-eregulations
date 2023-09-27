@@ -98,10 +98,10 @@ resources:
             - ServerSideEncryptionByDefault:
                 SSEAlgorithm: AES256
         PublicAccessBlockConfiguration:
-          BlockPublicAcls: false
-          BlockPublicPolicy: false
-          IgnorePublicAcls: false
-          RestrictPublicBuckets: false
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
         CorsConfiguration:
           CorsRules:
             -
@@ -137,6 +137,21 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
+          - PolicyName: StorageBucketPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Deny
+                  Action: "*"
+                  Condition:
+                    Bool:
+                      "aws:SecureTransport": false
+                  Resource:
+                    - Fn::Join:
+                      - ""
+                      - - "arn:aws:s3:::"
+                        - "Ref" : "ServerlessDeploymentBucket"
+                    - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
           - PolicyName: LambdaPolicy
             PolicyDocument:
               Version: '2012-10-17'

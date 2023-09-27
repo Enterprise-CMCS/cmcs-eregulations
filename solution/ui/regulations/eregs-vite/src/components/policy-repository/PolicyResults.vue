@@ -18,7 +18,7 @@ const props = defineProps({
 
 const apiUrl = inject("apiUrl");
 
-const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
+const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const getDownloadUrl = (uid) => `${apiUrl}file_manager/file/${uid}`;
                         <a
                             :href="getDownloadUrl(doc.uid)"
                             class="document__link document__link--filename"
-                            >{{ doc.name }}</a
+                            >{{ doc.document_id }}</a
                         >
                     </h3>
                 </div>
