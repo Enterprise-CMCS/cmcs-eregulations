@@ -13,7 +13,7 @@ custom:
     - bucketName: eregs-${self:custom.stage}-site-assets
       localDir: ./regulations
       deleteRemoved: false
-  pythonRequirements:
+  pythonRequirements: {
     dockerizePip: false,
     usePoetry: false,
     useDownloadCache: false,
@@ -25,6 +25,7 @@ custom:
       description: "Layer which contains django requirements"
       compatibleRuntimes:
         - python3.9
+    }
 
 package:
   #patterns:
