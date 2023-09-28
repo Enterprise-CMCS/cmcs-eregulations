@@ -1,21 +1,10 @@
 # Snyk Scan
 
-First a little overview on what Snyk does and can do. Snyk is a security tool that scans anything from repositories, CICD pipelines, Container Registries, IAC configs, and even the cloud environment. It checks for vulnerabilities within its implementation space and then is able to prioritize the most important, offer insight as to what is going on, and also provide a solution to fix the problem. It can be integrated as a workflow in the code to run and provide the findings, and there is also a dashboard that can be linked and can provide more functionality. Within the workflow, the entire repository is scanned based on the set trigger like a pull request, or a commit, or a time of day. Then the findings can be posted to our Jira as bugs in the backlog so that the team can just pull the ticket and fix the issue. The tickets can also be auto-assigned to a set team member who will fix it or is in charge of delegating the tasks. The dashboard, on the other hand, can provide a centralized view of the issues and insights to improve security. It puts all the data into a nice GUI so that its easy to understand. Reports can be pulled for all resources current security status. The issues are all placed under one tab easily identifiable. There are also governance controls and policies that can be applied to the resources to enforce the security standards and best practices of the organization. And then as usual, there is also control on who has access to all this information and what they are able to do even if provided access.
+Snyk is a security tool that scans anything from repositories, CICD pipelines, Container Registries, IAC configs, and even the cloud environment. It checks for vulnerabilities within its implementation space and then is able to prioritize the most important, offer insight as to what is going on, and also provide a solution to fix the problem. It can be integrated as a workflow in the code to run and provide the findings, and there is also a dashboard that can be linked and can provide more functionality. Within the workflow, the entire repository is scanned based on the set trigger like a pull request, or a commit, or a time of day. The dashboard, on the other hand, can provide a centralized view of the issues and insights to improve security. It puts all the data into a nice GUI so that its easy to understand. Reports can be pulled for all resources current security status. The issues are all placed under one tab easily identifiable. There are also governance controls and policies that can be applied to the resources to enforce the security standards and best practices of the organization. And then as usual, there is also control on who has access to all this information and what they are able to do even if provided access.
 
-## Setup Snyk
+## Setup Enterprise Snyk Organization
 
-To begin the setup, first the CMS Job Code "ENT_APPSEC_TOOLS" is required. This can be requested here: https://eua.cms.gov/iam/im/pri/ .
-Once you have the job code, we can submit a CMS Cloud Access Request via this site: https://eua.cms.gov/iam/im/pri/ . There are multiple boxes to fill out. Here it goes as follows:
-1. Types of Access: Snyk.io
-2. FISMA Acronym: MACPro (subject to change based on team)
-3. Summary: Reason for request
-4. Description: The main request and details. Provide the main Admin and backup admin here as well as other members who need access
-5. Type of Service: ADO Org-Onboarding
-6. Are you maing a new access request or reporting an issue?: Access Request
-7. Is this request for an Individual or group?: Depends on your team
-8. Is access to this system blocking deployment?: Depends on you situation. Mostly No
-
-Upon approval of the request, a dedicated Snyk organization will be created with the details provided. Any member who is added during or after the creation will need the job code mentioned above. The Org admin(s) will be able to add additional users after the org is created.
+To setup Enterprise Snyk organization, please follow the instruction here: https://cloud.cms.gov/getting-started-snyk”.
 
 ## Logging In and Creating Snyk Token
 
@@ -29,21 +18,12 @@ Click the big green "New Repository Secret" button. Then give your secret a uniq
 
 ## Creating a Service Account and Providing the remaining arguments for the Jira Ticket Creation
 
-Next, we need a service account to authenticate with Jira and create the tickets for the bugs Snyk found. Meet with your Jira Environment Admin and request a service account. There may already be one for other services that can be used with Snyk as well but if not, a new one will be created. Depending on your project, there may need to be a ticket created for that service account.
-
-Once that service account is created, note the username. Then login to jira with that account, go to the upper right where the account icon is and click it. Then click "Profile" and the profile page should load up. Then on the left, there is a navigation bar where you click "Personal Access Tokens". On the left side, there is a blue "Create token" button that you click. Then provide a unique token name and also decide if you want auto expiry or never expires. Then you can also choose how long before the token expires. Then click "create". Then a page loads with the secret value that you should copy and then hit next. Now you have the authentication token and username.
-
-Go back to github and go to the secrets page and create secrets to store the Jira Username, Personal Access Token, and Jira Host name. The Username is the service account ID, the PAT is the token just created in the last step, and the Host name is the first part of the jira url up to ".gov" without the "https://". For example, the homepage URL for eRegs Jira is "https://jiraent.cms.gov/projects/EREGCSC/summary". However, the host name is just "jiraent.cms.gov". Below is the variables and their descriptions:
-
-```
-    jira-username: This secret needs to hold the email address of the Jira Service Account.
-    jira-token: This secret needs to hold the PAT value of the Jira Service Account.
-    jira-host: The Jira Domain- EX. "jirarent.cms.gov".
-```
+Create JIRA Service account by following the instruction here: https://confluenceent.cms.gov/display/CAT/Requesting+a+Service+Account+for+JIRA
+Create GitHub Service account by following the instruction here: https://confluenceent.cms.gov/pages/viewpage.action?spaceKey=MDSO&title=GitHub+Guide
 
 # Current Implementation
 
-The snyk-test.yml script is located in the .github/workflows. This document outlines the parts of the file that are modifiable and the controls that are located within. This document has 2 actions within. First is the regular snyk scan that runs on pull request, and the second is a cron job snyk scan and jira ticket creation.
+The snyk-test.yml script is located in the .github/workflows. This document outlines the parts of the file that are modifiable and the controls that are located within. This document has 2 actions within. First is the regular snyk scan that runs on pull request, and the second is a cron job snyk scan and jira ticket creation. In the second action, the findings are posted to Jira as bugs in the backlog so that the team can just pull the ticket and fix the issue. The tickets can also be auto-assigned to a set team member who will fix it or is in charge of delegating the tasks.
 
 ## Pull Request or Cron Job
 
