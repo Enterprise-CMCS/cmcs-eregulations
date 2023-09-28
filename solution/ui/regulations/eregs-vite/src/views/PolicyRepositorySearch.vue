@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router/composables";
 
 import _isArray from "lodash/isArray";
@@ -57,6 +57,10 @@ const props = defineProps({
 // Router and Route
 const $route = useRoute();
 const $router = useRouter();
+
+// provide Django template variables
+provide("apiUrl", props.apiUrl);
+provide("base", props.homeUrl);
 
 // partsLastUpdated fetch for related regulations citations filtering
 const partsLastUpdated = ref({
