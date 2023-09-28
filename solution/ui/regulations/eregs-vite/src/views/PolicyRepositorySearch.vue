@@ -1,6 +1,15 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router/composables";
+
+import _isArray from "lodash/isArray";
+import _isEmpty from "lodash/isEmpty";
+
+import {
+    getLastUpdatedDates,
+    getPolicyDocList,
+    getTitles,
+} from "utilities/api";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
@@ -11,6 +20,7 @@ import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 
 import Banner from "@/components/Banner.vue";
+import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
 const props = defineProps({
@@ -44,6 +54,53 @@ const props = defineProps({
     },
 });
 
+// partsLastUpdated fetch for related regulations citations filtering
+const partsLastUpdated = ref({
+    results: {},
+    loading: true,
+});
+
+const getPartsLastUpdated = async () => {
+    try {
+        const titles = await getTitles();
+        console.log(titles);
+        partsLastUpdated.value.results = await getLastUpdatedDates(
+            props.apiUrl,
+            titles
+        );
+    } catch (error) {
+        console.error(error);
+    } finally {
+        console.log("this should turn the loading spinner off")
+        partsLastUpdated.value.loading = false;
+    }
+};
+
+const searchQuery = ref("");
+
+// policyDocList fetch for policy document list
+const policyDocList = ref({
+    loading: false,
+    results: [],
+});
+
+const getDocList = async (requestParams = "") => {
+    console.log("we should be in getDocList");
+    policyDocList.value.loading = true;
+
+    try {
+        policyDocList.value.results = await getPolicyDocList({
+            apiUrl: props.apiUrl,
+            cacheResponse: !props.isAuthenticated,
+            requestParams,
+        });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        policyDocList.value.loading = false;
+    }
+};
+
 // Router and Route
 const $route = useRoute();
 const $router = useRouter();
@@ -61,11 +118,36 @@ const executeSearch = (payload) => {
 const clearSearchQuery = () => {
     $router.push({
         name: "policy-repository-search",
-        query: {
-            q: undefined,
-        },
+        query: {},
     });
 };
+
+// utility method to parse $route.query to return `${key}=${value},${value}` string
+const getRequestParams = (query) => {
+    const requestParams = Object.entries(query)
+        .map(([key, value]) => {
+            const sanitizedVal = _isArray(value) ? value[0] : value;
+
+            const valueArray = sanitizedVal.split(",");
+
+            return valueArray.map((v) => `${key}=${v}`).join("&");
+        })
+        .join("&");
+
+    return requestParams;
+};
+
+watch(
+    () => $route.query,
+    async (newQueryParams, oldQueryParams) => {
+        if (_isEmpty(newQueryParams)) {
+            policyDocList.value.results = [];
+            return;
+        }
+
+        getDocList(getRequestParams($route.query));
+    }
+);
 </script>
 
 <template>
@@ -107,6 +189,24 @@ const clearSearchQuery = () => {
                     />
                 </template>
             </Banner>
+        </div>
+        <div class="ds-l-container">
+            <div class="ds-l-row">
+                <div class="ds-l-col--12">
+                    <template
+                        v-if="policyDocList.loading"
+                    >
+                        <span class="loading__span">Loading...</span>
+                    </template>
+                    <template v-else>
+                        <PolicyResults
+                            :base="homeUrl"
+                            :results="policyDocList.results"
+                            :parts-last-updated="partsLastUpdated.results"
+                        />
+                    </template>
+                </div>
+            </div>
         </div>
     </body>
 </template>
