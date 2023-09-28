@@ -1,6 +1,13 @@
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "cmcs_regulations.settings.test_settings"
 
+# Folders and directories to ignore.  Migrations should be excluded and tests can also be included in the calculation
+[tool.coverage.run]
+omit = [
+    "*/migrations/*",
+    "*/tests/*"
+    ]
+
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = ["E", "F", "G", "I", "S", "W", "ASYNC",
