@@ -63,7 +63,6 @@ const partsLastUpdated = ref({
 const getPartsLastUpdated = async () => {
     try {
         const titles = await getTitles();
-        console.log(titles);
         partsLastUpdated.value.results = await getLastUpdatedDates(
             props.apiUrl,
             titles
@@ -71,7 +70,6 @@ const getPartsLastUpdated = async () => {
     } catch (error) {
         console.error(error);
     } finally {
-        console.log("this should turn the loading spinner off")
         partsLastUpdated.value.loading = false;
     }
 };
@@ -189,22 +187,20 @@ watch(
                     />
                 </template>
             </Banner>
-        </div>
-        <div class="ds-l-container">
-            <div class="ds-l-row">
-                <div class="ds-l-col--12">
-                    <template
-                        v-if="policyDocList.loading"
-                    >
-                        <span class="loading__span">Loading...</span>
-                    </template>
-                    <template v-else>
-                        <PolicyResults
-                            :base="homeUrl"
-                            :results="policyDocList.results"
-                            :parts-last-updated="partsLastUpdated.results"
-                        />
-                    </template>
+            <div class="ds-l-container">
+                <div class="ds-l-row">
+                    <div class="ds-l-col--12">
+                        <template v-if="policyDocList.loading">
+                            <span class="loading__span">Loading...</span>
+                        </template>
+                        <template v-else>
+                            <PolicyResults
+                                :base="homeUrl"
+                                :results="policyDocList.results"
+                                :parts-last-updated="partsLastUpdated.results"
+                            />
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
